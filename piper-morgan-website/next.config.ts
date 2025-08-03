@@ -16,7 +16,7 @@ const nextConfig: NextConfig = {
 
   // Skip build-time linting (handled separately)
   eslint: {
-    ignoreDuringBuilds: false,
+    ignoreDuringBuilds: true,
   },
 
   // Skip build-time type checking (handled separately)
