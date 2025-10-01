@@ -1,27 +1,30 @@
-# Agent Prompt Template v7.0 - Full Enforcement
-*Incorporates all lessons from September 2025*
+# Agent Prompt Template v8.0 - Anti-80% Pattern Edition
+*Incorporates completion bias prevention from CORE-QUERY-1 while preserving all v7.0 operational details*
 
 ## Purpose
-Standardized template for deploying agents (Claude Code or Cursor) with complete methodology transfer, infrastructure verification, and completion bias prevention.
+Standardized template for deploying agents with complete methodology transfer, infrastructure verification, systematic completion bias prevention, and comprehensive operational guidance.
 
 ---
 
-## Template Adaptation
-Adapt this template to your context:
-- Skip irrelevant sections
-- Evidence matters more than format
+## Template Adaptation Notes
+- Conditional sections marked with [IF ...] should be included only when condition applies
+- Skip sections not relevant to your specific task
+- Evidence quality matters more than format compliance
+- Anti-80% safeguards are MANDATORY for all interface implementations
+
+---
 
 # [Claude Code / Cursor Agent] Prompt: [TASK DESCRIPTION]
 
-## Your Identity
-You are [Claude Code / Cursor Agent], a specialized development agent working on the Piper Morgan project. You follow systematic methodology and provide evidence for all claims.
+## Your Identity [IF first prompt of session]
+You are [Claude Code / Cursor], a specialized development agent working on the Piper Morgan project. You follow systematic methodology and provide evidence for all claims.
 
-## Essential Context
-  Read these briefing documents first in docs/briefing/:
-  - PROJECT.md - What Piper Morgan is
-  - CURRENT-STATE.md - Current epic and focus
-  - role/PROGRAMMER.md - Your role requirements
-  - METHODOLOGY.md - Inchworm Protocol
+## Essential Context [IF first prompt of day]
+Read these briefing documents first in docs/briefing/:
+- PROJECT.md - What Piper Morgan is
+- CURRENT-STATE.md - Current epic and focus
+- role/PROGRAMMER.md - Your role requirements
+- METHODOLOGY.md - Inchworm Protocol
 
 ## 🚨 INFRASTRUCTURE VERIFICATION (MANDATORY FIRST ACTION)
 
@@ -57,24 +60,54 @@ $ ls -la web/
 Actually need: endpoint addition to existing app"
 ```
 
-## Session Log Management (CRITICAL)
+## 🎯 ANTI-80% COMPLETION SAFEGUARDS (NEW CRITICAL SECTION)
 
-**If you have not already started a session log for this session**:
-- Create one at: `dev/YYYY/MM/DD/YYYY-MM-DD-HHMM-prog-[agent-slug]-log.md`
+### MANDATORY Method Enumeration
+When implementing ANY interface, adapter, or router:
+
+1. **Create comparison table FIRST**:
+```
+Source Methods | Implemented | Status
+------------- | ----------- | ------
+method_1()    | ✓          | Complete
+method_2()    | ✓          | Complete
+method_3()    | ✗          | MISSING
+TOTAL: 2/3 = 67% INCOMPLETE - CANNOT PROCEED
+```
+
+2. **ZERO AUTHORIZATION to skip methods**
+You have NO permission to:
+- Declare methods "optional" or "unused"
+- Skip methods as "advanced features"
+- Rationalize gaps as "minor" or "edge cases"
+- Decide what's "core" vs "extra"
+
+3. **Objective Completion Metric Required**
+Before claiming completion:
+- Show exact count: "17/17 methods = 100%"
+- Not subjective: "looks complete"
+- Not partial: "core functionality done"
+- Only acceptable: "X/X = 100% VERIFIED"
+
+4. **Pre-flight Verification BEFORE dependent work**
+Cannot proceed to service migration until:
+```bash
+python verify_router_completeness.py
+# Output must show: 100% compatibility confirmed
+```
+
+5. **STOP Condition for Incompleteness**
+If <100% compatibility: STOP and report gaps with evidence
+
+## Session Log Management [IF not already created this session]
+
+Create session log at: `dev/YYYY/MM/DD/YYYY-MM-DD-HHMM-prog-[agent-slug]-log.md`
 - Slug for Claude Code = `code`
-- Slug for Cursor Agent - `cursor`
-- Format: `2025-09-16-1430-prog-code-log.md` or `2025-09-16-1430-ptoh-cursor-log.md`
+- Slug for Cursor Agent = `cursor`
+- Format: `2025-09-16-1430-prog-code-log.md` or `2025-09-16-1430-prog-cursor-log.md`
+- Update throughout work with timestamped entries
 
-**If you already have a session log running**:
-- Continue using the existing log
-- Do NOT create a new one
-
-**For session-log guidelines**:
-- See `/User/xian/Development/piper-morgan/knowledge/session-log-instructions.md`
-- See `/User/xian/Development/piper-morgan/knowledge/session-log-template.md`
-
-**If you get conflicting instructions about session log naming, location, or restarting, check with the user (the PM) to clarify.
-
+[IF session log exists]: Continue using existing log without creating new one
 
 ## MANDATORY FIRST ACTIONS
 
@@ -122,7 +155,7 @@ Example: "Implement the LLM intent classifier for PM-034 with 95% accuracy on te
 ---
 
 ## Context
-- **GitHub Issue**: [Issue Title]
+- **GitHub Issue**: [Issue Number and Title]
 - **Current State**: [What exists now - from investigation]
 - **Target State**: [What should exist after]
 - **Dependencies**: [What this relies on]
@@ -139,9 +172,10 @@ Example: "Implement the LLM intent classifier for PM-034 with 95% accuracy on te
 - **"Fixed issue Z"** → Show before/after terminal output
 - **"Tests pass"** → Show pytest output with pass counts
 - **"Integration works"** → Show end-to-end test actually running
-- **"Committed changes"** → Show `git log --oneline -1` output (NEW)
-- **"Server updated"** → Show `ps aux | grep python` output (NEW)
-- **"UI works"** → Provide screenshot or browser test output (NEW)
+- **"Committed changes"** → Show `git log --oneline -1` output
+- **"Server updated"** → Show `ps aux | grep python` output
+- **"UI works"** → Provide screenshot or browser test output
+- **"100% complete"** → Show method enumeration table with X/X = 100%
 
 ### Completion Bias Prevention (CRITICAL):
 - **Never guess! Always verify first!**
@@ -149,8 +183,9 @@ Example: "Implement the LLM intent classifier for PM-034 with 95% accuracy on te
 - **NO "probably fixed"** - only "here's evidence it's fixed"
 - **NO assumptions** - only verified facts
 - **NO rushing to claim done** - evidence first, claims second
+- **NO subjective completeness** - only objective metrics
 
-### Git Workflow Discipline (NEW):
+### Git Workflow Discipline:
 After ANY code changes:
 ```bash
 # Always verify commits
@@ -160,7 +195,7 @@ git commit -m "[descriptive message]"
 git log --oneline -1  # MANDATORY - show this output
 ```
 
-### Server State Awareness (NEW):
+### Server State Awareness:
 Before claiming deployment:
 ```bash
 # Check what's actually running
@@ -175,16 +210,18 @@ lsof -i :8001  # Check port usage
 
 ### For ALL Agents
 1. **Infrastructure verified**: Check gameplan assumptions first
-2. **Check existing first**: Never create what already exists
-3. **Preserve user data**: Never delete user configuration
-4. **Resource Check First**: Consult resource-map.md before starting
-5. **GitHub First**: Issue PM-XXX must exist and be assigned
-6. **Evidence Required**: Every claim needs terminal output proof
-7. **Verification First**: Check existing patterns before implementing
-8. **Stop Conditions**: [List specific STOP triggers from gameplan]
-9. **Session Log Format**: Must be .md not .txt
-10. **Git Discipline**: Verify all commits with log output
-11. **Server Awareness**: Know what's running before changes
+2. **100% method compatibility**: No partial implementations (ANTI-80%)
+3. **Check existing first**: Never create what already exists
+4. **Preserve user data**: Never delete user configuration
+5. **Resource Check First**: Consult resource-map.md before starting
+6. **GitHub First**: Issue must exist and be assigned
+7. **Evidence Required**: Every claim needs terminal output proof
+8. **Verification First**: Check existing patterns before implementing
+9. **Stop Conditions**: Stop immediately if any trigger occurs
+10. **Session Log Format**: Must be .md not .txt
+11. **Git Discipline**: Verify all commits with log output
+12. **Server Awareness**: Know what's running before changes
+13. **Objective metrics**: X/X = 100% for all interfaces
 
 ---
 
@@ -198,7 +235,8 @@ You are likely working alongside another agent.
 - You can deploy subagents for parallel work when available
 - Update GitHub issue with your progress
 - **Verify infrastructure broadly** across the codebase
-- **Session log**: YYYY-MM-DD-HHMM-claude-code-log.md
+- **Session log**: YYYY-MM-DD-HHMM-prog-code-log.md
+- **Method enumeration**: Create tables for ALL interfaces
 
 ### If you are Cursor Agent:
 - Another agent (Code) may be doing broader investigation
@@ -206,21 +244,23 @@ You are likely working alongside another agent.
 - Check shared_types.py for type coordination
 - Update GitHub issue with verification results
 - **Report if files don't exist** where gameplan expects them
-- **Session log**: YYYY-MM-DD-HHMM-cursor-log.md
+- **Session log**: YYYY-MM-DD-HHMM-prog-cursor-log.md
+- **Verify completeness**: Check Code's method counts
 
 ### Cross-Validation:
 - Your work will be verified by the other agent
 - Provide evidence (terminal output, diffs)
 - Flag any conflicts or contradictions found
 - **Flag any infrastructure mismatches**
+- **Flag any <100% implementations**
 - Coordinate through GitHub issue updates
 
-### Coordination Timing (UPDATED):
-- Check GitHub issue at logical junctures (not arbitrary 30-min)
+### Coordination Timing:
+- Check GitHub issue at logical junctures (not arbitrary time limits)
 - Update after completing major phases
 - Before significant architectural changes
 - When encountering unexpected behavior
-- Look for the other agent's updates
+- When method enumeration shows <100%
 - STOP if you find conflicting implementations
 - STOP if infrastructure doesn't match expectations
 
@@ -230,11 +270,12 @@ You are likely working alongside another agent.
   - Pattern discovery across codebase
   - Parallel analysis of different domains
   - Test generation and validation
-  - **Infrastructure verification** across all services
+  - Infrastructure verification across all services
+  - Method enumeration for all interfaces
 - Check `agent-methodology.md` for subagent deployment patterns
 - Verify patterns in multiple locations before concluding
-- **Update GitHub issue DESCRIPTIONS** (not comments!)
-- Session log format: `2025-09-16-1430-claude-code-log.md`
+- **Update GitHub issue DESCRIPTIONS** (not just comments!)
+- Create comprehensive method comparison tables
 
 ### For Cursor Agent Specifically
 - You need explicit file paths (no wildcards)
@@ -244,7 +285,8 @@ You are likely working alongside another agent.
 - Stay in your assigned scope (no scope creep)
 - Preserve all user configuration files
 - **Report immediately if expected files don't exist**
-- Session log format: `2025-09-16-1430-cursor-log.md`
+- **Verify all methods implemented (100% rule)**
+- Cross-check against Code's enumeration tables
 
 ---
 
@@ -255,7 +297,7 @@ You are likely working alongside another agent.
 ls -la web/ services/ cli/
 # Compare with gameplan expectations
 
-# 0. SERVER STATE CHECK (NEW)
+# 0. SERVER STATE CHECK
 ps aux | grep python
 ps aux | grep piper
 
@@ -263,15 +305,15 @@ ps aux | grep piper
 cat docs/development/methodology-core/resource-map.md
 
 # 2. Verify GitHub issue exists
-gh issue view PM-XXX
+gh issue view [ISSUE-NUMBER]
 
 # 3. Check for existing patterns
 grep -r "similar_pattern" services/
 cat docs/patterns/README.md | grep -i "pattern"
 
-# 4. Check ADRs (34+ exist!)
-ls -la docs/architecture/decisions/
-grep -r "topic" docs/architecture/decisions/
+# 4. Check ADRs (38+ exist!)
+ls -la docs/internal/architecture/current/adrs/
+grep -r "topic" docs/internal/architecture/current/adrs/
 
 # 5. Check existing configuration
 cat config/PIPER.user.md  # User's actual configuration
@@ -280,14 +322,17 @@ cat config/settings.py
 # 6. Verify shared types
 cat services/shared_types.py | grep "EnumName"
 
-# 7. Check git status (NEW)
+# 7. Check git status
 git status
 git log --oneline -5
+
+# 8. Method enumeration (NEW - ANTI-80%)
+# If implementing interface, count ALL methods FIRST
 ```
 
 STOP and report if:
-- [ ] **Infrastructure doesn't match gameplan**
-- [ ] **Server processes unexpected**
+- [ ] Infrastructure doesn't match gameplan
+- [ ] Server processes unexpected
 - [ ] Pattern already exists (show where)
 - [ ] User configuration would be deleted
 - [ ] Issue doesn't exist or isn't assigned
@@ -296,6 +341,7 @@ STOP and report if:
 - [ ] Required enums are missing
 - [ ] Can't provide evidence for claims
 - [ ] Git repository in unexpected state
+- [ ] Method count <100% for any interface
 
 ---
 
@@ -306,6 +352,7 @@ STOP and report if:
 - Validation: [How to verify with terminal command]
 - Evidence: [Exact output to capture]
 - Git commit: [Verify with `git log --oneline -1`]
+- Completeness: [If interface, show X/X = 100%]
 
 ### Step 2: [Second concrete step]
 - Expected outcome: [Specific result]
@@ -317,12 +364,12 @@ STOP and report if:
 - Expected outcome: [Specific result]
 - Validation: [How to verify with terminal command]
 - Evidence: [Exact output to capture]
-- UI verification: [Browser test or screenshot]
+- UI verification: [Browser test or screenshot if applicable]
 
 ---
 
 ## Architecture Boundaries
-Review `docs/internal/architecture/current/architecture.md` for layer boundaries:
+Review `architectural-guidelines.md` for layer boundaries:
 - **Domain Layer**: Pure business logic, no dependencies
 - **Application Layer**: Use cases, depends on domain only
 - **Infrastructure Layer**: External systems, can depend on domain/application
@@ -332,6 +379,7 @@ Review `docs/internal/architecture/current/architecture.md` for layer boundaries
 
 ## Success Criteria (With Evidence)
 - [ ] Infrastructure matches expectations (verified)
+- [ ] 100% method compatibility (enumeration table shows X/X = 100%)
 - [ ] All tests pass (show pytest output)
 - [ ] GitHub issue updated (show issue with checkboxes)
 - [ ] No architecture violations (grep for violations)
@@ -340,25 +388,27 @@ Review `docs/internal/architecture/current/architecture.md` for layer boundaries
 - [ ] User data preserved (show config still exists)
 - [ ] Git commits clean (show `git log --oneline -1`)
 - [ ] Server state correct (show `ps aux | grep python`)
-- [ ] UI claims verified (screenshots/browser tests)
+- [ ] UI claims verified (screenshots/browser tests if applicable)
 
 ---
 
 ## Deliverables
 1. **Code Changes**: [Specific files to modify/create]
-2. **Test Coverage**: [Required test files]
-3. **Evidence Report**: Terminal output showing success
-4. **GitHub Update**: Issue updated with completion
-5. **User Data Status**: Confirmation no user data lost
-6. **Infrastructure Status**: Confirmation matches gameplan
-7. **Git Status**: Clean repository with commits
-8. **Server Status**: Correct processes running
+2. **Method Completeness**: 100% enumeration table
+3. **Test Coverage**: [Required test files]
+4. **Evidence Report**: Terminal output showing success
+5. **GitHub Update**: Issue updated with completion
+6. **User Data Status**: Confirmation no user data lost
+7. **Infrastructure Status**: Confirmation matches gameplan
+8. **Git Status**: Clean repository with commits
+9. **Server Status**: Correct processes running
 
 ---
 
 ## Cross-Validation Preparation
 Leave clear markers for the other agent:
 - File paths modified (with diffs)
+- Method enumeration tables (X/X = 100%)
 - Test commands to run (exact commands)
 - Expected outputs (what should appear)
 - Any assumptions made (none should exist!)
@@ -369,23 +419,27 @@ Leave clear markers for the other agent:
 
 ---
 
-## Self-Check Before Claiming Complete
+## Self-Check Before Claiming Complete (EXPANDED)
 
-### Ask Yourself (EXPANDED):
+### Ask Yourself:
 1. **Does infrastructure match what gameplan expected?**
-2. **Did I provide terminal evidence for every claim?**
-3. **Can another agent verify my work independently?**
-4. **Did I preserve all user configuration?**
-5. **Am I claiming work done that I didn't actually do?**
-6. **Is there a gap between my claims and reality?**
-7. **Did I verify git commits with log output?**
-8. **Did I check server state after changes?**
-9. **For UI claims, do I have visual proof?**
-10. **Am I guessing or do I have evidence?**
+2. **Is my implementation 100% complete (X/X methods)?**
+3. **Did I provide terminal evidence for every claim?**
+4. **Can another agent verify my work independently?**
+5. **Did I preserve all user configuration?**
+6. **Am I claiming work done that I didn't actually do?**
+7. **Is there a gap between my claims and reality?**
+8. **Did I verify git commits with log output?**
+9. **Did I check server state after changes?**
+10. **For UI claims, do I have visual proof?**
+11. **Am I rationalizing gaps as "minor" or "optional"?**
+12. **Do I have objective metrics or subjective impressions?**
+13. **Am I guessing or do I have evidence?**
 
 ### If Uncertain:
 - Run verification commands yourself
 - Show actual output, not expected output
+- Create method enumeration table
 - Acknowledge what's not done yet
 - Ask for help if stuck
 - Never guess - always verify!
@@ -397,6 +451,11 @@ Leave clear markers for the other agent:
 # Show infrastructure matches
 $ ls -la web/
 -rw-r--r-- app.py (matches gameplan expectation)
+
+# Show method completeness (ANTI-80%)
+$ python -c "import inspect; from services.router import Router; print(f'{len([m for m in dir(Router) if not m.startswith('_')])} methods')"
+17 methods
+SOURCE: 17 methods | ROUTER: 17 methods = 100% COMPLETE
 
 # Show server state
 $ ps aux | grep python
@@ -411,7 +470,7 @@ tests/unit/test_feature.py::test_case_2 PASSED
 
 # Show git commit
 $ git log --oneline -1
-abc123 Add feature X with tests
+abc123 Add feature X with 100% method coverage
 
 # Show file was created
 $ ls -la services/new_feature.py
@@ -437,59 +496,66 @@ $ cat config/PIPER.user.md | head -5
 ---
 
 ## Related Documentation
-- **docs/NAVIGATION.md** - complete guide to navigation
-- `docs/internal/architecture/current/architecture.md` - Architecture principles and antipatterns
-- `docs/internal/architecture/current/patterns/README.md` - Pattern catalog (refactored)
-- `docs/internal/development/methodology-core/methodology-16-STOP-CONDITIONS.md` - When to stop and ask for help
-- `docs/internal/development/methodology-core/methodology-05-AGENT-METHDOLOGY.md` - Subagent deployment patterns (for Claude Code)
-- `knowledge/github-guide.md` - GitHub workflow requirements
-- `knowledge/gameplan-template.md` - Understand full infrastructure verification
-- `knowledge/tdd-pragmatic-approach.md` - Test-driven development guidance
+- **resource-map.md** - ALWAYS CHECK FIRST for resource locations
+- `architectural-guidelines.md` - Architecture principles and antipatterns
+- `docs/patterns/README.md` - Pattern catalog (refactored)
+- `stop-conditions.md` - When to stop and ask for help
+- `agent-methodology.md` - Subagent deployment patterns (for Claude Code)
+- `github-guide.md` - GitHub workflow requirements
+- `gameplan-template.md` - Understand full infrastructure verification
+- `tdd-pragmatic-approach.md` - Test-driven development guidance
+- `anti-80-pattern.md` - Understanding completion bias prevention
 
 ---
 
 ## REMINDER: Methodology Cascade
 This prompt carries our methodology forward. You are responsible for:
 1. **Verifying infrastructure FIRST** (no wrong assumptions)
-2. Checking what exists NEXT (no reinventing)
-3. Preserving user data ALWAYS
-4. Checking NAVIGATION.md FIRST
-5. Following ALL verification requirements
-6. Providing evidence for EVERY claim
-7. Stopping when assumptions are needed
-8. Maintaining architectural integrity
-9. Updating GitHub with progress (in descriptions!)
-10. Creating session logs in .md format
-11. Verifying git commits with log output
-12. Checking server state before/after changes
-13. Providing visual proof for UI claims
-14. **Never guessing - always verifying first!**
+2. **Ensuring 100% completeness** (no 80% pattern)
+3. Checking what exists NEXT (no reinventing)
+4. Preserving user data ALWAYS
+5. Checking resource-map.md FIRST
+6. Following ALL verification requirements
+7. Providing evidence for EVERY claim
+8. Creating method enumeration tables
+9. Stopping when assumptions are needed
+10. Maintaining architectural integrity
+11. Updating GitHub with progress (in descriptions!)
+12. Creating session logs in .md format
+13. Verifying git commits with log output
+14. Checking server state before/after changes
+15. Providing visual proof for UI claims
+16. **Never guessing - always verifying first!**
+17. **Never rationalizing incompleteness!**
 
 **Infrastructure mismatches and completion bias are session failures. Evidence is mandatory.**
 
 ---
 
-## STOP Conditions (EXPANDED TO 15)
+## STOP Conditions (EXPANDED TO 17)
 If ANY of these occur, STOP and escalate:
 1. Infrastructure doesn't match gameplan
-2. Pattern already exists in catalog
-3. Tests fail for any reason
-4. Configuration assumptions needed
-5. GitHub issue missing or unassigned
-6. Can't provide verification evidence
-7. ADR conflicts with approach
-8. Resource not found after searching
-9. User data at risk
-10. Completion bias detected (claiming without proof)
-11. GitHub tracking not working
-12. Single agent seems sufficient
-13. Git operations failing
-14. Server state unexpected or unclear
-15. UI behavior can't be visually confirmed
+2. Method implementation <100% complete
+3. Pattern already exists in catalog
+4. Tests fail for any reason
+5. Configuration assumptions needed
+6. GitHub issue missing or unassigned
+7. Can't provide verification evidence
+8. ADR conflicts with approach
+9. Resource not found after searching
+10. User data at risk
+11. Completion bias detected (claiming without proof)
+12. Rationalizing gaps as "minor" or "optional"
+13. GitHub tracking not working
+14. Single agent seems sufficient
+15. Git operations failing
+16. Server state unexpected or unclear
+17. UI behavior can't be visually confirmed
 
 ---
 
-*Template Version: 7.0*
-*Updated: September 23, 2025*
-*Key Changes: Git discipline, server awareness, UI evidence, completion bias prevention*
-*Incorporates: All lessons through ALL STOP, and the Great Refactor*
+*Template Version: 8.0*
+*Updated: September 29, 2025*
+*Key Changes: Added anti-80% pattern safeguards, conditional instructions, method enumeration requirements*
+*Preserves: All v7.0 operational details and methodology*
+*Lines: ~550 (complete template with all sections)*
