@@ -1,6 +1,6 @@
-# Gameplan Template v9.1 - Complete Phase Documentation
-*Last Updated: December 2, 2025*
-*Key Addition: Phase 0.5 - Frontend-Backend Contract Verification (Issue #390 learning)*
+# Gameplan Template v9.2 - Complete Phase Documentation
+*Last Updated: December 4, 2025*
+*Key Addition: Worktree Assessment in Phase -1 (Issue #463 learning)*
 
 ---
 
@@ -37,6 +37,39 @@ Based on available context, I believe:
 - I believe we need to: ____________
 - I think this involves: ____________
 - I assume the current state is: ____________
+
+### Part A.2: Work Characteristics Assessment
+
+**Worktree Candidate?** (Check all that apply)
+
+Worktrees ADD value when:
+- [ ] Multiple agents will work in parallel on different files/features
+- [ ] Task duration >30 minutes (main branch may advance)
+- [ ] Multi-component work (e.g., frontend + backend by different agents)
+- [ ] Exploratory/risky changes where easy rollback is valuable
+- [ ] Coordination queue prompt being claimed
+
+Worktrees ADD overhead when:
+- [ ] Single agent, sequential work
+- [ ] Small fixes (<15 min)
+- [ ] Tightly coupled files requiring atomic commits
+- [ ] Time-critical work where setup overhead matters
+
+**Assessment:**
+- [ ] **USE WORKTREE** - 2+ parallel criteria checked
+- [ ] **SKIP WORKTREE** - Overhead criteria dominate
+- [ ] **PM DECISION** - Mixed signals, escalate
+
+**If USE WORKTREE:**
+```bash
+# Agent claims prompt with worktree
+./scripts/worktree-setup.sh <prompt-id> <session-id>
+cd .trees/<prompt-id>-<session>/
+```
+
+**If SKIP WORKTREE:**
+Document rationale: ____________
+(e.g., "Single agent, 5 files, 15 min estimate - worktree overhead exceeds benefit")
 
 ### Part B: PM Verification Required
 
