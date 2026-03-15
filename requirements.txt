@@ -176,7 +176,16 @@ smmap==5.0.2
 sniffio==1.3.1
 soupsieve==2.7
 SQLAlchemy==2.0.23
+# PINNED: starlette must stay ==0.27.0 for FastAPI 0.104.1 compatibility.
+# starlette>=0.28 changes Middleware.__iter__ from 2-tuple to 3-tuple,
+# breaking FastAPI's middleware integration. If upgrading FastAPI, update
+# this pin to match FastAPI's starlette dependency.
 starlette==0.27.0
+# PINNED: sse-starlette >=2.2 requires starlette>=0.41.3 and >=3.0 requires
+# starlette>=0.49.1, both incompatible with the 0.27.0 pin above. The mcp
+# package pulls in sse-starlette as a transitive dependency; pip may silently
+# upgrade it, causing the Middleware.__iter__ 3-tuple vs 2-tuple breakage.
+sse-starlette==2.1.3
 streamlit==1.45.1
 structlog==23.2.0
 sympy==1.14.0
