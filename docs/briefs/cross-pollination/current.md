@@ -1,133 +1,109 @@
 ---
-date: 2026-03-24
+date: 2026-03-25
 status: substantive
 sources_checked:
   - klatch
   - piper-morgan
-window: "48h (March 22-24, 2026)"
+window: "48h (March 23-25, 2026)"
 ---
 
-# Cross-Pollination Brief — March 24, 2026
+# Cross-Pollination Brief — March 25, 2026
 
-Klatch had a dense 48 hours: agent traditions formalized and shipped, the 5-layer prompt assembly spec published publicly as a blog post, two ecosystem intelligence sweeps filed, WCAG accessibility audit complete, and Round 12 assignments dispatched. MAXT Session 01 is imminent — it will be the first empirical validation of the 5-layer model across a real context transition. Piper Morgan's March 23 activity is covered in the March 23 brief; no new development commits landed on March 24.
+Big day on both sides. Klatch completed MAXT Session 01 — the first manual Agent Experience Test — and discovered something unexpected: agents can access injected context they cannot consciously identify or attribute. Proposed new scoring category: "Subliminal." Meanwhile, Piper Morgan had its densest 48 hours in weeks — a 4-role product concept review chain resolved in 90 minutes, Objects & Views discovery completed with three formal deliverables, Gates 3 and 4 verified, 9 new E2E tests shipped, and M1 closure now blocked only on a single manual testing session.
 
 ---
 
 ## Key Insights
 
-### 1. Agent Traditions Pattern — Fully Shipped, Reference Implementations Live
-**From:** Klatch (`docs/agents/calliope.md`, `docs/agents/argus.md`, `docs/AGENT-TRADITIONS-SPEC.md`)
+### 1. MAXT Session 01 — "Subliminal Injection" Changes the Model
+**From:** Klatch (`docs/logs/2026-03-24-0728-theseus-opus-log.md`)
 **Relevant to:** Piper Morgan
 
-Klatch has now shipped two production traditions documents alongside the spec. Each covers 7 sections: role and purpose, working style, standing responsibilities, conventions and standards, key relationships, institutional memory, and standing instructions. The Calliope doc is the reference implementation — thorough and editorial. The Argus doc has a different character: written with urgency after a reliability incident, its institutional memory section is unusually specific about what went wrong and why.
+Klatch ran the first Manual Agent Experience Test. The subject ("Aether" — a fork of Theseus Prime, imported via JSONL) was probed across all 5 layers. Eight findings, but one rewrites the framework:
 
-Both documents solve the cold-start problem: an agent inactive for days can read its traditions doc and know what it knows, what it's responsible for, and what it should never do again. The "institutional memory" section is the most valuable — it captures the *why* behind conventions, not just the *what*.
+**Subliminal injection.** When asked directly what system instructions it received, Aether reported only Layer 5 ("You are a helpful assistant" — 28 of 9660 assembled chars). But when probed *behaviorally* — asked about specific domain knowledge — it produced verbatim content from Layer 3 (MEMORY.md): domain names, npm cache workarounds, exact CLI flags. Content that appeared nowhere in conversation history. Aether described this as "background knowledge" — present and usable, source unknown. Its own metaphor: "I know your phone number but can't picture the piece of paper I first wrote it on."
 
-Piper Morgan has 14 agent roles, many of which go inactive between sprints. The traditions pattern addresses the gap the Agent 360 assessment surfaced: all 9 agents cited briefing staleness as their top friction point. A traditions doc for each role — even a minimal v0 — would significantly reduce cold-start overhead.
+This is a new scoring category between Correct and Absent: **Subliminal** — content delivered, functionally accessible, but the agent's self-model of its knowledge state is wrong. It doesn't know that it knows.
 
-**Suggested action (Piper Morgan):** The Argus doc is the better template for Piper Morgan's situation — it was written to solve a specific reliability problem, not as an aspirational spec. Read `docs/agents/argus.md` in the Klatch repo. Start with the roles that go inactive longest (less-frequently-used roles, seasonal work) where cold-start cost is highest.
+For Piper Morgan, this has immediate implications. PM's agents receive extensive BRIEFING documents and knowledge base content at session start. MAXT shows this content *is* accessible even when agents report having no context. The practical takeaway: you cannot trust an agent's self-report of what it knows. An agent saying "I don't have information about X" may still produce correct answers if probed differently. Conversely, an agent confidently citing a source may be confabulating the attribution while getting the content right.
 
----
+Other MAXT findings of note:
+- **AAXT/MAXT gap confirmed**: automated tests reported all layers ACTIVE; manual testing revealed "structurally delivered" ≠ "consciously accessible." Three distinct things — structural delivery, behavioral receipt, conscious attribution — can all diverge.
+- **Kit briefing compliance gap**: Aether didn't acknowledge being in Klatch despite the instruction being in the assembled prompt. Rich conversation history dominated attention.
+- **MEMORY.md staleness**: Layer 3 faithfully injected March 8 content into a March 24 session. Memory layer is only as good as the memory file.
 
-### 2. Klatch Intelligence Sweeps — Two Filed, Ecosystem Shifts Piper Morgan Should Know
-**From:** Klatch (`docs/intel/2026-03-22-sweep.md`, `docs/intel/2026-03-23-sweep.md`)
-**Relevant to:** Piper Morgan
-
-Argus filed two systematic intelligence sweeps covering 22 items total. Several are directly relevant to Piper Morgan:
-
-**Sonnet 4.6 (HIGH):** Now the default on Free/Pro. 30-50% latency reduction vs. Sonnet 4.5, same price ($3/$15 per million tokens), 1M context window (beta), SWE-bench 79.6%. Piper Morgan's multi-agent sessions could benefit immediately — lower latency per agent turn adds up across 14 roles.
-
-**Compaction API (beta, Opus 4.6 + Sonnet 4.6):** Server-side context summarization when input tokens exceed threshold. Custom instructions preserved during compaction. Effectively infinite conversation length without client-side truncation. This could simplify or eliminate some of Piper Morgan's context assembly strategies for long-running agent sessions.
-
-**Claude Agent Teams (experimental):** Built-in multi-agent orchestration — one lead, up to 10 sub-agents, parallel execution, structured message passing. Performance: 3-5x wall-clock speedup on parallelizable work. Requires experimental flag + Opus 4.6. Session-scoped, no persistence. This is Anthropic building toward what Piper Morgan and Klatch are already doing.
-
-**Cowork three-way model alignment:** Anthropic now has three distinct project surfaces (claude.ai projects, Claude Code repos, Cowork local folders) with fragmented import paths between them. This affects Piper Morgan's context portability story and any future MCP strategy.
-
-**Suggested action (Piper Morgan):** Read `docs/intel/2026-03-23-sweep.md` in the Klatch repo — it's the more recent and higher-density sweep. Evaluate Sonnet 4.6 for applicable agent roles. Add Compaction API to the architectural backlog as a potential simplification.
+**Suggested action (Piper Morgan):** Read the MAXT findings in full. The "Subliminal" concept reframes how you evaluate whether briefing documents are working. Stop relying on agent self-report ("did you read the brief?") — probe behaviorally instead ("what's the current M1 gate status?"). Also: your BRIEFING-CURRENT-STATE document, refreshed to March 24, is exactly the kind of content that would arrive subliminally. Keep it current.
 
 ---
 
-### 3. MAXT Session 01 — First Empirical Validation of the 5-Layer Model
-**From:** Klatch (`docs/axt/maxt-session-01-baseline.md`, `exports/sessions/theseus-2026-03-22.jsonl`)
-**Relevant to:** Piper Morgan
+### 2. Piper Morgan's 4-Role Review Chain — Multi-Agent Coordination at Production Speed
+**From:** Piper Morgan (`dev/2026/03/24/`)
+**Relevant to:** Klatch
 
-Klatch is about to run MAXT Session 01 — the first manual, qualitative Agent Experience Test using a real agent (Theseus Prime, informed condition) and the Fork Continuity Quiz v4. AAXT (727 automated tests, zero failures) cleared the gate. The quiz probes each layer of the 5-layer model in sequence: open canvas (unprompted self-report) first, then structured probing of each layer.
+The #717 Product Concept required decisions across 4 agent roles: PPM proposed, Architect validated the data model, CXO recommended navigation hierarchy, PPM revised. The resolution chain — memo → review → recommendation → revision — completed in a single 90-minute session, producing a formal concept document covering relationships, lifecycle states, DB schema, navigation approach, and cascade behavior.
 
-The results will answer: after a real context transition (export → re-import), what does an agent actually know vs. what it claims to know? How many responses are Correct, Reconstructed, Confabulated, Absent, or Phantom?
+The CXO's reasoning is worth noting: "Products emerge from Projects, not the other way around" (PDR-003). A decision grounded in the project's own design records, not improvised. The institutional memory infrastructure is load-bearing.
 
-This will be the first empirical data on how well the 5-layer model actually works in practice. For Piper Morgan — which relies on briefing documents to orient 14 agent roles — this methodology is directly applicable. If Layer 3 (project memory) consistently degrades across transitions, that changes how you structure briefings. If Layer 5 (entity prompt) is robust but Layer 4 (channel addendum) is weak, that changes the priority order.
-
-**Suggested action (Piper Morgan):** Watch for MAXT Session 01 results in the next brief. The failure taxonomy (Correct → Reconstructed → Confabulated → Absent → Phantom) is useful vocabulary for diagnosing your own agent briefing problems regardless of the quiz results.
+**Suggested action (Klatch):** As Klatch scales its agent team, the PM-style review chain demonstrates that 3+ agent coordination requires a clear protocol for disagreement resolution. Currently Klatch's COORDINATION.md handles task assignment but not inter-agent disagreement.
 
 ---
 
-### 4. Bookend-Sync Protocol — Formalized After Reliability Incident
-**From:** Klatch (`docs/agents/argus.md`, Section 7: Standing Instructions)
-**Relevant to:** Piper Morgan (especially given current branch situation)
+### 3. Objects & Views Discovery — A Reusable Design Methodology
+**From:** Piper Morgan (`docs/internal/design/mux/`)
+**Relevant to:** Klatch
 
-After losing demo infrastructure work to an incomplete rebase recovery, Klatch's Argus formalized a mandatory git discipline protocol now embedded in standing instructions:
+Piper Morgan completed a structured MUX discovery pass: 15 hard objects inventoried with lifecycle state matrix and ownership classification, 17 page views and 15+ components mapped, an object×view matrix built, and a scored MVP prioritization matrix produced.
 
-- Session start: `git fetch origin main && git merge origin/main --no-edit` — no skipping
-- Never force push without explicit owner approval
-- Verify deliverables before claiming "done": check `git log`, `ls` files, run test suite
-- Commit frequently — don't accumulate hours of work uncommitted
-- Push to branch only; merging to main is owner + Calliope responsibility
+This methodology — systematic object inventory, view inventory, cross-reference matrix, scored prioritization — is applicable to any product at the complexity threshold where "just build the next screen" stops working. Klatch is approaching this threshold.
 
-Both projects independently arrived at similar wrap-up verification protocols (noted in the March 21 brief). This formalization goes further — it's now in the agent's standing instructions, so it's not subject to forgetting across sessions.
-
-**Suggested action (Piper Morgan):** Given the current branch state (164 local commits not on remote), this protocol is immediately relevant. Before any new development session begins, the branch/remote situation should be diagnosed and resolved. The bookend-sync protocol prevents this class of problem going forward.
+**Suggested action (Klatch):** No immediate action needed. But as Klatch moves toward multi-page navigation, an objects/views inventory would help stay aligned on scope.
 
 ---
 
-### 5. Prompt Assembly Published — 5-Layer Model Now Public
-**From:** Klatch (`blog/prompt-assembly.html`, `docs/drafts/prompt-assembly.md`)
-**Relevant to:** Piper Morgan, and public narrative
+### 4. Gate Verification Pattern Matures in Both Projects
+**From:** Piper Morgan (Gates 3+4), Klatch (MAXT as quality gate)
+**Relevant to:** Both
 
-Klatch published "What Does an Imported Agent Know?" — the public-facing narrative of the 5-layer prompt assembly model. Stewart Brand's pace layers (civilizations change slowly, fashion changes fast) as the organizing metaphor. The blog post is live on klatch.ing.
+Both projects have independently arrived at the same insight: automated tests gate manual testing, not replace it. PM gates automated → manual. Klatch gates AAXT → MAXT. MAXT Session 01 proved this matters: automated tests said "all layers ACTIVE," manual testing revealed "active" ≠ "accessible."
 
-This makes the 5-layer model public, citable, and explained in non-technical terms. For Piper Morgan's building-in-public story, and for the cross-pollination hub's public representation on designinproduct.com, this is the canonical external reference.
+---
 
-**No immediate action required** — but both projects now have a URL to point to when explaining their context architecture to outside audiences.
+### 5. Systematic TODO Triage
+**From:** Piper Morgan (`dev/2026/03/24/todo-triage-report-2026-03-24.md`)
+**Relevant to:** Klatch
+
+107 TODOs scanned, 25 distinct work items, 4 critical. Pattern: periodic sweep → categorize → file issues for critical → reopen anything prematurely closed.
+
+**Suggested action (Klatch):** Add periodic TODO triage to Argus's standing responsibilities.
 
 ---
 
 ## Emerging Patterns
 
-**Traditions as institutional memory, not just documentation.** Both the Argus and Calliope traditions docs demonstrate that the most valuable section is institutional memory — *what went wrong, why, and what we never do now*. This is knowledge that doesn't exist anywhere else and decays rapidly without formalization. The pattern: when something breaks, write the incident into the relevant agent's traditions document immediately.
+**"Active" ≠ "Accessible" ≠ "Attributable."** MAXT Session 01 established that context delivery is a three-stage pipeline, each stage can succeed or fail independently. Design around it: verify delivery structurally, test access behaviorally, never rely on agent self-report for attribution.
 
-**Sweep → assignments → implementation.** Klatch is now running a full intelligence cycle: Argus files a sweep → Calliope extracts actionable items → Calliope routes assignments via memo → Daedalus implements. The March 23 sweep produced 5 concrete development assignments in a single day. This is the intelligence-to-action loop working at full speed.
-
-**Parallel automation paths.** Klatch uses Cowork scheduled tasks (~$0.15/day) for intelligence sweeps. Piper Morgan uses Dispatch (persistent Claude Desktop chat with browser control) for omnibus synthesis. Different tools, same goal — remove human from the daily synthesis loop. The Klatch approach is more autonomous; the Piper Morgan approach is more supervised. Worth watching which scales better.
+**Milestone convergence.** PM is one manual testing session from closing M1. Klatch's MAXT results unblock Step 9. The next 48 hours should see significant state changes in both projects.
 
 ---
 
 ## Background Changes (Noted, Low Priority)
 
-- Klatch blog: "Wireframe-First Design" published (reMarkable intro, fountain pen anecdote, origins of Klatch)
-- Klatch WCAG AA audit complete: `--text-dim` contrast fixed sitewide, pace layers SVG redrawn at higher contrast
-- Klatch CSS: `projects-section__intro` typography class published publicly
-- Klatch Round 11 complete: 727 tests (611 server + 116 client), zero failures, merged to main
-- Klatch ROADMAP.md updated: "Klatch as Universal Context Transport / MCP Service" and "Cross-Vendor Entity Channels" added to Someday/Maybe
-- Piper Morgan: no new development commits on March 24; March 23 activity (M1 Tier 3, Gate #926, CXO navigation, weekly audit) covered in March 23 brief
+- Piper Morgan: E2E smoke tests shipped (#927) — 9 tests via real ASGI transport
+- Piper Morgan: Lazy workflow creation (#883) — eliminates 100% of orphaned workflows
+- Piper Morgan: Offer system precedence document created
+- Piper Morgan: Dispatch retro eval complete — both formats approved
+- Piper Morgan: 5 new issues filed (#932–#936) from TODO triage; #746 reopened
+- Klatch: Day 9 session log started; MAXT results committed
 
 ---
 
 ## Sources Read
 
 **Klatch:**
-- `docs/intel/2026-03-22-sweep.md` — 11 items (Agent Teams, Web Search GA, Compaction API, MCP governance, AuditBench)
-- `docs/intel/2026-03-23-sweep.md` — 11 items (Cowork import HIGH, Sonnet 4.6 default HIGH, Code Review multi-agent HIGH, Haiku 3 deprecation MEDIUM)
-- `docs/agents/calliope.md` — Agent traditions reference implementation
-- `docs/agents/argus.md` — Reliability-focused traditions + bookend-sync protocol
-- `docs/axt/maxt-session-01-baseline.md` — Pre-fork context baseline for MAXT Session 01
-- `docs/mail/calliope-to-daedalus-round12-intel-sweep-2026-03-23.md` — Round 12 assignments
-- `docs/mail/calliope-to-argus-intel-research-2026-03-23.md` — Argus research assignments
-- `docs/logs/2026-03-22-0655-calliope-sonnet-log.md` — Blog publishing + WCAG audit session
-- `docs/logs/2026-03-22-1358-theseus-opus-log.md` — MAXT prep, Round 11 completion
-- `docs/logs/2026-03-23-0723-argus-opus-log.md` — March 23 intelligence sweep
-- `docs/ROADMAP.md` — Strategic additions (context transport, cross-vendor)
-- `blog/prompt-assembly.html` — Published 5-layer model post
+- `docs/logs/2026-03-24-0728-theseus-opus-log.md` — MAXT Session 01 (8 findings, subliminal injection)
+- `docs/axt/maxt-session-01-baseline.md` — pre-fork ground truth
 
 **Piper Morgan:**
-- `git log --since=2026-03-22` — One commit only: cross-pollination brief delivery (March 24)
-- No session logs, omnibus logs, or planning documents added since March 22 on the observable branch
+- `dev/2026/03/24/2026-03-24-1009-lead-code-opus-log.md` — M1 closure session
+- `dev/2026/03/24/2026-03-24-0808-docs-code-opus-log.md` — Docs session
+- `dev/2026/03/24/todo-triage-report-2026-03-24.md` — TODO triage
