@@ -1,109 +1,102 @@
 ---
-date: 2026-03-25
+date: 2026-03-26
 status: substantive
 sources_checked:
   - klatch
   - piper-morgan
-window: "48h (March 23-25, 2026)"
+window: "48h (March 24-26, 2026)"
 ---
 
-# Cross-Pollination Brief — March 25, 2026
+# Cross-Pollination Brief — March 26, 2026
 
-Big day on both sides. Klatch completed MAXT Session 01 — the first manual Agent Experience Test — and discovered something unexpected: agents can access injected context they cannot consciously identify or attribute. Proposed new scoring category: "Subliminal." Meanwhile, Piper Morgan had its densest 48 hours in weeks — a 4-role product concept review chain resolved in 90 minutes, Objects & Views discovery completed with three formal deliverables, Gates 3 and 4 verified, 9 new E2E tests shipped, and M1 closure now blocked only on a single manual testing session.
+Klatch produced one big piece of work: a 706-line research report documenting the first real-world Chat→Cowork import experiment. The findings are precise and immediately useful — Layers 1-3 of the five-layer model transfer with 100% fidelity, Layer 5 (behavioral calibration) is structurally absent, and the gap is recoverable but not automatic. The report was dispatched to Calliope as an inter-agent memo, positioned for integration into Klatch's documentation. Piper Morgan was quiet — no new substantive commits beyond cross-pollination brief deliveries.
 
 ---
 
 ## Key Insights
 
-### 1. MAXT Session 01 — "Subliminal Injection" Changes the Model
-**From:** Klatch (`docs/logs/2026-03-24-0728-theseus-opus-log.md`)
+### 1. Chat→Cowork Import Fidelity Mapped Against Five-Layer Model
+**From:** Klatch (`docs/mail/dispatch-to-calliope-import-structures-report-2026-03-25.md`)
 **Relevant to:** Piper Morgan
 
-Klatch ran the first Manual Agent Experience Test. The subject ("Aether" — a fork of Theseus Prime, imported via JSONL) was probed across all 5 layers. Eight findings, but one rewrites the framework:
+A real-world import of a Claude Chat project ("VA Decision Reviews") into a Cowork session was systematically analyzed. The experiment mapped transfer fidelity onto Klatch's five-layer prompt assembly model:
 
-**Subliminal injection.** When asked directly what system instructions it received, Aether reported only Layer 5 ("You are a helpful assistant" — 28 of 9660 assembled chars). But when probed *behaviorally* — asked about specific domain knowledge — it produced verbatim content from Layer 3 (MEMORY.md): domain names, npm cache workarounds, exact CLI flags. Content that appeared nowhere in conversation history. Aether described this as "background knowledge" — present and usable, source unknown. Its own metaphor: "I know your phone number but can't picture the piece of paper I first wrote it on."
+| Layer | Transfer | Notes |
+|-------|----------|-------|
+| 1 (Kit Briefing) | 100% | Cowork provides automatically |
+| 2 (Project Instructions) | 100% | Via metadata.json |
+| 3 (Project Memory) | 100% | memory.md — most valuable artifact |
+| 4 (Channel Addendum) | N/A | Session-specific, doesn't apply |
+| 5 (Entity Prompt / Calibration) | 0% | Must rebuild through interaction |
 
-This is a new scoring category between Correct and Absent: **Subliminal** — content delivered, functionally accessible, but the agent's self-model of its knowledge state is wrong. It doesn't know that it knows.
+The critical finding: **what transfers is inert information; what does not transfer is behavioral calibration.** An agent that has been implicitly trained through months of interaction — learning communication preferences, interpretation heuristics, tool use patterns — loses all of that in import. The Cowork agent gets the facts but not the judgment.
 
-For Piper Morgan, this has immediate implications. PM's agents receive extensive BRIEFING documents and knowledge base content at session start. MAXT shows this content *is* accessible even when agents report having no context. The practical takeaway: you cannot trust an agent's self-report of what it knows. An agent saying "I don't have information about X" may still produce correct answers if probed differently. Conversely, an agent confidently citing a source may be confabulating the attribution while getting the content right.
+This matters for Piper Morgan because PM agents receive extensive briefing documents and knowledge base content at session start — exactly the kind of Layer 3 content that transfers cleanly. But the behavioral calibration each agent role develops over repeated sessions (how the PPM learned to frame decisions, how the CXO navigates ambiguity) is the Layer 5 component that wouldn't survive a platform transition. PM's 14-role architecture amplifies this: each role's calibration is independent and would need independent recovery.
 
-Other MAXT findings of note:
-- **AAXT/MAXT gap confirmed**: automated tests reported all layers ACTIVE; manual testing revealed "structurally delivered" ≠ "consciously accessible." Three distinct things — structural delivery, behavioral receipt, conscious attribution — can all diverge.
-- **Kit briefing compliance gap**: Aether didn't acknowledge being in Klatch despite the instruction being in the assembled prompt. Rich conversation history dominated attention.
-- **MEMORY.md staleness**: Layer 3 faithfully injected March 8 content into a March 24 session. Memory layer is only as good as the memory file.
-
-**Suggested action (Piper Morgan):** Read the MAXT findings in full. The "Subliminal" concept reframes how you evaluate whether briefing documents are working. Stop relying on agent self-report ("did you read the brief?") — probe behaviorally instead ("what's the current M1 gate status?"). Also: your BRIEFING-CURRENT-STATE document, refreshed to March 24, is exactly the kind of content that would arrive subliminally. Keep it current.
-
----
-
-### 2. Piper Morgan's 4-Role Review Chain — Multi-Agent Coordination at Production Speed
-**From:** Piper Morgan (`dev/2026/03/24/`)
-**Relevant to:** Klatch
-
-The #717 Product Concept required decisions across 4 agent roles: PPM proposed, Architect validated the data model, CXO recommended navigation hierarchy, PPM revised. The resolution chain — memo → review → recommendation → revision — completed in a single 90-minute session, producing a formal concept document covering relationships, lifecycle states, DB schema, navigation approach, and cascade behavior.
-
-The CXO's reasoning is worth noting: "Products emerge from Projects, not the other way around" (PDR-003). A decision grounded in the project's own design records, not improvised. The institutional memory infrastructure is load-bearing.
-
-**Suggested action (Klatch):** As Klatch scales its agent team, the PM-style review chain demonstrates that 3+ agent coordination requires a clear protocol for disagreement resolution. Currently Klatch's COORDINATION.md handles task assignment but not inter-agent disagreement.
+**Suggested action (Piper Morgan):** No immediate action. But if PM ever migrates between environments or platforms, the fidelity profile documented here is directly applicable. The practical mitigation: make behavioral calibration *explicit* in CLAUDE.md and role definitions rather than relying on accumulated session history. PM already does this better than most — the role definitions are detailed. The report validates that approach.
 
 ---
 
-### 3. Objects & Views Discovery — A Reusable Design Methodology
-**From:** Piper Morgan (`docs/internal/design/mux/`)
-**Relevant to:** Klatch
+### 2. Three Distinct Knowledge Layers in Production — Synchronization Risk
+**From:** Klatch (`docs/mail/dispatch-to-calliope-import-structures-report-2026-03-25.md`)
+**Relevant to:** Both projects
 
-Piper Morgan completed a structured MUX discovery pass: 15 hard objects inventoried with lifecycle state matrix and ownership classification, 17 page views and 15+ components mapped, an object×view matrix built, and a scored MVP prioritization matrix produced.
+The report identifies three physically distinct knowledge locations in Claude's production environment:
 
-This methodology — systematic object inventory, view inventory, cross-reference matrix, scored prioritization — is applicable to any product at the complexity threshold where "just build the next screen" stops working. Klatch is approaching this threshold.
+- **Layer A (Chat project knowledge):** Session-local `.projects/` snapshot — read-only, per-session copy, not shared
+- **Layer B (Code repository memory):** `.claude/projects/` — persistent, git-adjacent, shared across Code sessions
+- **Layer C (Repository files):** The actual repo — CLAUDE.md, docs, code
 
-**Suggested action (Klatch):** No immediate action needed. But as Klatch moves toward multi-page navigation, an objects/views inventory would help stay aligned on scope.
+These three layers **do not automatically synchronize.** A project can exist simultaneously in all three with different information at each level. Chat project agents won't see Code memory updates. Code agents won't benefit from Chat knowledge unless it's been explicitly transferred.
 
----
+For both projects, this is the "three clocks" problem: institutional knowledge exists in multiple places that drift independently. Klatch has it between Chat projects and the repo. Piper Morgan has it between the knowledge base, BRIEFING documents, and the repo itself. Yesterday's brief noted that BRIEFING-CURRENT-STATE was refreshed to March 24 — that's a manual synchronization step. The import report makes the case that these synchronization steps should be explicit and tracked, not assumed.
 
-### 4. Gate Verification Pattern Matures in Both Projects
-**From:** Piper Morgan (Gates 3+4), Klatch (MAXT as quality gate)
-**Relevant to:** Both
-
-Both projects have independently arrived at the same insight: automated tests gate manual testing, not replace it. PM gates automated → manual. Klatch gates AAXT → MAXT. MAXT Session 01 proved this matters: automated tests said "all layers ACTIVE," manual testing revealed "active" ≠ "accessible."
+**Suggested action (Both):** Acknowledge the synchronization risk in project documentation. For Piper Morgan, the Docs agent's periodic BRIEFING refresh is already the right pattern — the report validates making it a standing responsibility rather than ad hoc. For Klatch, the report recommends adding an "Import Fidelity by Layer" section to PROMPT-ASSEMBLY.md.
 
 ---
 
-### 5. Systematic TODO Triage
-**From:** Piper Morgan (`dev/2026/03/24/todo-triage-report-2026-03-24.md`)
-**Relevant to:** Klatch
+### 3. AXT Methodology Extension Proposed for Import/Export Validation
+**From:** Klatch (`docs/mail/dispatch-to-calliope-import-structures-report-2026-03-25.md`)
+**Relevant to:** Klatch (internal), Piper Morgan (methodological interest)
 
-107 TODOs scanned, 25 distinct work items, 4 critical. Pattern: periodic sweep → categorize → file issues for critical → reopen anything prematurely closed.
+The report proposes extending Klatch's AAXT/MAXT testing methodology to systematically validate import/export fidelity:
 
-**Suggested action (Klatch):** Add periodic TODO triage to Argus's standing responsibilities.
+- AXT-Layer1: Does Kit Briefing transfer correctly?
+- AXT-Layer2: Are Project Instructions accessible?
+- AXT-Layer3: Is Project Memory readable and actionable?
+- AXT-Layer5: What behavioral patterns must be rebuilt?
+
+This would provide a reusable framework for evaluating any import/export pathway — relevant to Klatch's Step 11 (export-to-Code) roadmap item and to any future cross-vendor conversation spaces.
+
+For Piper Morgan, the methodological pattern is notable: systematic layer-by-layer validation of context transfer. PM doesn't currently have an equivalent testing framework for verifying that agents actually received and can act on their briefing content — yesterday's MAXT "subliminal injection" finding showed this is a real gap. A PM-side adaptation might test whether each agent role can demonstrate access to its role-specific briefing content, not just whether the content was delivered.
+
+**Suggested action (Klatch):** Calliope should review and integrate the AXT extension proposal into Klatch's testing roadmap.
+**Suggested action (Piper Morgan):** Consider whether a lightweight version of layer-by-layer validation would help verify agent briefing effectiveness.
 
 ---
 
 ## Emerging Patterns
 
-**"Active" ≠ "Accessible" ≠ "Attributable."** MAXT Session 01 established that context delivery is a three-stage pipeline, each stage can succeed or fail independently. Design around it: verify delivery structurally, test access behaviorally, never rely on agent self-report for attribution.
+**The five-layer model keeps proving its utility as an analytical tool.** It was designed as a prompt assembly spec for Klatch. It was validated as a testing framework by MAXT Session 01. Now it's being used as an import fidelity diagnostic. Each new application finds the model predictive and useful. The layer where things go wrong varies (MAXT found Layer 5 "subliminal," import found Layer 5 absent entirely), but the framework consistently identifies *where* to look.
 
-**Milestone convergence.** PM is one manual testing session from closing M1. Klatch's MAXT results unblock Step 9. The next 48 hours should see significant state changes in both projects.
+**Behavioral calibration is the persistent gap.** MAXT showed that content can be delivered without conscious attribution. The import report shows that calibration doesn't serialize at all. These are two aspects of the same underlying problem: Layer 5 is the hardest layer to transfer, verify, or even define. Both projects are circling this — Klatch through testing methodology, Piper Morgan through detailed role definitions. Neither has solved it.
 
 ---
 
 ## Background Changes (Noted, Low Priority)
 
-- Piper Morgan: E2E smoke tests shipped (#927) — 9 tests via real ASGI transport
-- Piper Morgan: Lazy workflow creation (#883) — eliminates 100% of orphaned workflows
-- Piper Morgan: Offer system precedence document created
-- Piper Morgan: Dispatch retro eval complete — both formats approved
-- Piper Morgan: 5 new issues filed (#932–#936) from TODO triage; #746 reopened
-- Klatch: Day 9 session log started; MAXT results committed
+- Klatch: `dispatch-experience.html` committed alongside the import report — an interactive Canvas visualization (particle field animation). Appears to be a supplementary artifact from the import experiment session, not a functional component.
+- Piper Morgan: No new substantive commits in the 48h window. Brief delivery commits only (`027b042`, `a0d5c2a`).
 
 ---
 
 ## Sources Read
 
 **Klatch:**
-- `docs/logs/2026-03-24-0728-theseus-opus-log.md` — MAXT Session 01 (8 findings, subliminal injection)
-- `docs/axt/maxt-session-01-baseline.md` — pre-fork ground truth
+- `docs/mail/dispatch-to-calliope-import-structures-report-2026-03-25.md` — 706-line research report: Chat→Cowork import fidelity, five-layer mapping, 7 findings, sustainability scenarios
+- `dispatch-experience.html` — Canvas visualization artifact (219 lines)
+- `git log --since="48 hours ago"` — 2 commits: dispatch report + brief delivery
 
 **Piper Morgan:**
-- `dev/2026/03/24/2026-03-24-1009-lead-code-opus-log.md` — M1 closure session
-- `dev/2026/03/24/2026-03-24-0808-docs-code-opus-log.md` — Docs session
-- `dev/2026/03/24/todo-triage-report-2026-03-24.md` — TODO triage
+- `git log --since="48 hours ago"` — 7 commits, all documentation: brief deliveries, omnibus synthesis, session log wrap-up, offer system precedence (last two already covered in March 25 brief)
+- No new files in watch paths beyond what was reported in the March 25 brief
