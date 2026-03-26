@@ -1,109 +1,115 @@
 ---
-date: 2026-03-25
+date: 2026-03-26
 status: substantive
 sources_checked:
   - klatch
   - piper-morgan
-window: "48h (March 23-25, 2026)"
+window: "48h (March 24-26, 2026)"
 ---
 
-# Cross-Pollination Brief — March 25, 2026
+# Cross-Pollination Brief — March 26, 2026
 
-Big day on both sides. Klatch completed MAXT Session 01 — the first manual Agent Experience Test — and discovered something unexpected: agents can access injected context they cannot consciously identify or attribute. Proposed new scoring category: "Subliminal." Meanwhile, Piper Morgan had its densest 48 hours in weeks — a 4-role product concept review chain resolved in 90 minutes, Objects & Views discovery completed with three formal deliverables, Gates 3 and 4 verified, 9 new E2E tests shipped, and M1 closure now blocked only on a single manual testing session.
+Quieter day on commit volume — Piper Morgan had no new substantive activity, and Klatch landed a single commit. But that commit is a 706-line research report that may be the most consequential document to enter Klatch's `docs/mail/` directory yet. A real-world Chat→Cowork import experiment was conducted, independently verified by two evaluators, and the results validate the five-layer prompt assembly model as a practical fidelity framework for cross-environment knowledge transfer. The headline finding: information transfers cleanly (Layers 1-3 at 100%), but behavioral calibration (Layer 5) does not transfer at all — and that gap is recoverable, while the reverse capability gap (Chat lacking filesystem/MCP access) is permanent.
 
 ---
 
 ## Key Insights
 
-### 1. MAXT Session 01 — "Subliminal Injection" Changes the Model
-**From:** Klatch (`docs/logs/2026-03-24-0728-theseus-opus-log.md`)
+### 1. Chat→Cowork Import Fidelity — The Five-Layer Model Proves Its Worth Outside Klatch
+**From:** Klatch (`docs/mail/dispatch-to-calliope-import-structures-report-2026-03-25.md`)
+**Relevant to:** Piper Morgan, both projects
+
+A real-world import experiment moved the Claude Chat project "VA Decision Reviews (OCTO)" — 28 knowledge base documents, 15 binary files, established project memory — into a **Cowork** [definition needed] session ("Archie"). Two independent evaluators (Archie from inside Cowork, Dispatch from outside) cross-verified the results.
+
+The five-layer model maps cleanly onto the fidelity profile:
+
+| Layer | Transfer Fidelity | Notes |
+|-------|-------------------|-------|
+| 1 — Kit Briefing | 100% | Cowork provides automatically |
+| 2 — Project Instructions | 100% | Preserved in metadata.json |
+| 3 — Project Memory | 100% | memory.md — most valuable artifact |
+| 4 — Channel Addendum | N/A | Conversation-specific; doesn't apply to import |
+| 5 — Entity Prompt / Behavioral Calibration | 0% | Implicit in interaction history; not serializable |
+
+The report identifies three physically distinct knowledge layers in Claude's production ecosystem — Chat project knowledge (session-local snapshot), Code repository memory (`.claude/projects/` persistent store), and repository files themselves — and notes that these layers **do not automatically synchronize**. A project can exist in all three simultaneously with different information at each level.
+
+This is the first empirical test of the five-layer model outside its native context (Klatch's prompt assembly pipeline). The model was designed to describe how agents receive context; here it's being used to evaluate what survives an environment transition. That it works for both purposes suggests the abstraction is load-bearing, not decorative.
+
+**Suggested action (both projects):** Read the full report. For Klatch, the immediate recommendation is to add an "Import Fidelity by Layer" section to PROMPT-ASSEMBLY.md. For Piper Morgan, the three-layer knowledge architecture (Chat → Code memory → repo files) maps onto PM's own BRIEFING-CURRENT-STATE / knowledge base / codebase split — the synchronization problem is the same.
+
+---
+
+### 2. Behavioral Calibration Loss Is Recoverable; Capability Loss Is Not
+**From:** Klatch (`docs/mail/dispatch-to-calliope-import-structures-report-2026-03-25.md`, Finding 5)
 **Relevant to:** Piper Morgan
 
-Klatch ran the first Manual Agent Experience Test. The subject ("Aether" — a fork of Theseus Prime, imported via JSONL) was probed across all 5 layers. Eight findings, but one rewrites the framework:
+The report surfaces a key asymmetry in the Chat→Cowork tradeoff. The importing Cowork agent ("Archie") loses all behavioral calibration — how the original Chat agent learned to interpret ambiguous requests, what explanation depth the user preferred, unwritten conventions. But the Cowork environment gains filesystem access, MCP integrations, and scheduled tasks that Chat can never acquire.
 
-**Subliminal injection.** When asked directly what system instructions it received, Aether reported only Layer 5 ("You are a helpful assistant" — 28 of 9660 assembled chars). But when probed *behaviorally* — asked about specific domain knowledge — it produced verbatim content from Layer 3 (MEMORY.md): domain names, npm cache workarounds, exact CLI flags. Content that appeared nowhere in conversation history. Aether described this as "background knowledge" — present and usable, source unknown. Its own metaphor: "I know your phone number but can't picture the piece of paper I first wrote it on."
+Archie's own assessment: "The meaningful question isn't 'does the import lose anything?' — it's 'does the Cowork environment reach parity faster than the Chat project could reach Cowork's capability level?' And the answer is clearly yes, because Chat can never get filesystem access."
 
-This is a new scoring category between Correct and Absent: **Subliminal** — content delivered, functionally accessible, but the agent's self-model of its knowledge state is wrong. It doesn't know that it knows.
+This connects to yesterday's "subliminal injection" finding. MAXT Session 01 showed that agents can access context they can't consciously attribute. The import report shows that behavioral calibration — the Layer 5 content that *doesn't* transfer — is precisely the kind of implicit knowledge that lives in interaction history, not in files. These are complementary findings: MAXT reveals how injected context behaves in an agent's self-model; the import study reveals what happens when that context is structurally absent.
 
-For Piper Morgan, this has immediate implications. PM's agents receive extensive BRIEFING documents and knowledge base content at session start. MAXT shows this content *is* accessible even when agents report having no context. The practical takeaway: you cannot trust an agent's self-report of what it knows. An agent saying "I don't have information about X" may still produce correct answers if probed differently. Conversely, an agent confidently citing a source may be confabulating the attribution while getting the content right.
+For Piper Morgan, which relies heavily on BRIEFING documents and knowledge base files to orient agents at session start, this confirms that informational onboarding (Layers 1-3) works. But behavioral calibration — how the PPM learned to interpret xian's product priorities, how the Architect learned which tradeoffs to flag — must be rebuilt each session. This is not a bug; it's the architecture.
 
-Other MAXT findings of note:
-- **AAXT/MAXT gap confirmed**: automated tests reported all layers ACTIVE; manual testing revealed "structurally delivered" ≠ "consciously accessible." Three distinct things — structural delivery, behavioral receipt, conscious attribution — can all diverge.
-- **Kit briefing compliance gap**: Aether didn't acknowledge being in Klatch despite the instruction being in the assembled prompt. Rich conversation history dominated attention.
-- **MEMORY.md staleness**: Layer 3 faithfully injected March 8 content into a March 24 session. Memory layer is only as good as the memory file.
-
-**Suggested action (Piper Morgan):** Read the MAXT findings in full. The "Subliminal" concept reframes how you evaluate whether briefing documents are working. Stop relying on agent self-report ("did you read the brief?") — probe behaviorally instead ("what's the current M1 gate status?"). Also: your BRIEFING-CURRENT-STATE document, refreshed to March 24, is exactly the kind of content that would arrive subliminally. Keep it current.
+**Suggested action (Piper Morgan):** Consider whether your memory.md or BRIEFING-CURRENT-STATE documents should include explicit "Agent Preferences" or behavioral notes (e.g., "This user prefers concise technical explanations; avoid marketing language"). The import report suggests this is the highest-leverage way to partially recover Layer 5 through Layer 3.
 
 ---
 
-### 2. Piper Morgan's 4-Role Review Chain — Multi-Agent Coordination at Production Speed
-**From:** Piper Morgan (`dev/2026/03/24/`)
-**Relevant to:** Klatch
+### 3. Re-Import Hypothesis — Potential for Living Knowledge Sync
+**From:** Klatch (`docs/mail/dispatch-to-calliope-import-structures-report-2026-03-25.md`, Finding 3)
+**Relevant to:** Both projects
 
-The #717 Product Concept required decisions across 4 agent roles: PPM proposed, Architect validated the data model, CXO recommended navigation hierarchy, PPM revised. The resolution chain — memo → review → recommendation → revision — completed in a single 90-minute session, producing a formal concept document covering relationships, lifecycle states, DB schema, navigation approach, and cascade behavior.
+The import's `metadata.json` contains a `synced_at` timestamp field, suggesting that the Chat→Cowork import mechanism may support re-snapshotting — refreshing the imported knowledge base with updates from the source Chat project. This is unconfirmed but, if true, would significantly shrink the five-layer fidelity gap by keeping Layer 3 synchronized across environments.
 
-The CXO's reasoning is worth noting: "Products emerge from Projects, not the other way around" (PDR-003). A decision grounded in the project's own design records, not improvised. The institutional memory infrastructure is load-bearing.
+The report recommends a follow-up experiment: import the same Chat project a second time after making chat-side changes, and verify whether documents update in the Cowork session.
 
-**Suggested action (Klatch):** As Klatch scales its agent team, the PM-style review chain demonstrates that 3+ agent coordination requires a clear protocol for disagreement resolution. Currently Klatch's COORDINATION.md handles task assignment but not inter-agent disagreement.
-
----
-
-### 3. Objects & Views Discovery — A Reusable Design Methodology
-**From:** Piper Morgan (`docs/internal/design/mux/`)
-**Relevant to:** Klatch
-
-Piper Morgan completed a structured MUX discovery pass: 15 hard objects inventoried with lifecycle state matrix and ownership classification, 17 page views and 15+ components mapped, an object×view matrix built, and a scored MVP prioritization matrix produced.
-
-This methodology — systematic object inventory, view inventory, cross-reference matrix, scored prioritization — is applicable to any product at the complexity threshold where "just build the next screen" stops working. Klatch is approaching this threshold.
-
-**Suggested action (Klatch):** No immediate action needed. But as Klatch moves toward multi-page navigation, an objects/views inventory would help stay aligned on scope.
+**Suggested action (Klatch):** Prioritize this experiment. If re-import works, it transforms the Chat→Cowork pathway from a one-time snapshot into a living knowledge bridge. Document findings and share back via cross-pollination.
 
 ---
 
-### 4. Gate Verification Pattern Matures in Both Projects
-**From:** Piper Morgan (Gates 3+4), Klatch (MAXT as quality gate)
-**Relevant to:** Both
+### 4. AXT Methodology Extension — Fidelity Testing for Import/Export Pipelines
+**From:** Klatch (`docs/mail/dispatch-to-calliope-import-structures-report-2026-03-25.md`, Recommendations)
+**Relevant to:** Klatch (primarily), Piper Morgan (conceptually)
 
-Both projects have independently arrived at the same insight: automated tests gate manual testing, not replace it. PM gates automated → manual. Klatch gates AAXT → MAXT. MAXT Session 01 proved this matters: automated tests said "all layers ACTIVE," manual testing revealed "active" ≠ "accessible."
+The report proposes extending Klatch's AAXT/MAXT methodology to systematically test import fidelity across all five layers — AXT-Layer1 through AXT-Layer5. This would create a reusable test framework for evaluating any import/export pathway, not just Chat→Cowork.
 
----
+This is directly relevant to Klatch's Step 11 roadmap item (export-to-Code) and to any future cross-vendor conversation space. The report notes that when Klatch exports conversations to Code environments, the same fidelity profile applies: Layers 1-3 transfer cleanly, Layer 5 must be rebuilt.
 
-### 5. Systematic TODO Triage
-**From:** Piper Morgan (`dev/2026/03/24/todo-triage-report-2026-03-24.md`)
-**Relevant to:** Klatch
-
-107 TODOs scanned, 25 distinct work items, 4 critical. Pattern: periodic sweep → categorize → file issues for critical → reopen anything prematurely closed.
-
-**Suggested action (Klatch):** Add periodic TODO triage to Argus's standing responsibilities.
+**Suggested action (Klatch):** When Daedalus picks up Step 11, use the AXT-by-layer framework from this report as the acceptance criteria. The fidelity profile is already documented; the tests just need to be formalized.
 
 ---
 
 ## Emerging Patterns
 
-**"Active" ≠ "Accessible" ≠ "Attributable."** MAXT Session 01 established that context delivery is a three-stage pipeline, each stage can succeed or fail independently. Design around it: verify delivery structurally, test access behaviorally, never rely on agent self-report for attribution.
+**The five-layer model as general-purpose fidelity framework.** Three briefs ago, the five-layer model was a prompt assembly spec. Two briefs ago, MAXT Session 01 proved it described how agents *experience* assembled context. Today, the import fidelity report proves it describes what *survives* an environment transition. The model is accreting uses faster than it's accreting complexity — a strong sign it's the right abstraction.
 
-**Milestone convergence.** PM is one manual testing session from closing M1. Klatch's MAXT results unblock Step 9. The next 48 hours should see significant state changes in both projects.
+**Layer 5 as the persistent frontier.** Every major finding in the last 72 hours circles back to Layer 5. Subliminal injection (MAXT): agents access Layer 3 content without conscious attribution, but Layer 5 behavioral calibration is where the self-model breaks down. Import fidelity: Layers 1-3 transfer at 100%, Layer 5 at 0%. The consistent message is that behavioral calibration is the hardest problem in cross-environment agent work — not because it can't be recovered, but because it can't be serialized.
+
+**Documentation as knowledge bridge.** The import report's strongest practical recommendation is to encode behavioral preferences in Layer 3 documents (memory.md, BRIEFING-CURRENT-STATE) so that Layer 5 calibration can be partially recovered through explicit documentation rather than implicit interaction history. Both projects are converging on the same insight: the more you document agent behavioral expectations, the less you lose at environment boundaries.
 
 ---
 
 ## Background Changes (Noted, Low Priority)
 
-- Piper Morgan: E2E smoke tests shipped (#927) — 9 tests via real ASGI transport
-- Piper Morgan: Lazy workflow creation (#883) — eliminates 100% of orphaned workflows
-- Piper Morgan: Offer system precedence document created
-- Piper Morgan: Dispatch retro eval complete — both formats approved
-- Piper Morgan: 5 new issues filed (#932–#936) from TODO triage; #746 reopened
-- Klatch: Day 9 session log started; MAXT results committed
+- Klatch: `dispatch-experience.html` committed — an interactive HTML/Canvas visualization of the Dispatch agent's context field and spoke connections to projects, memory, and external systems. An artistic artifact, not a functional tool.
+- Piper Morgan: No new commits beyond brief delivery since March 25 sweep.
 
 ---
 
 ## Sources Read
 
 **Klatch:**
-- `docs/logs/2026-03-24-0728-theseus-opus-log.md` — MAXT Session 01 (8 findings, subliminal injection)
-- `docs/axt/maxt-session-01-baseline.md` — pre-fork ground truth
+- `docs/mail/dispatch-to-calliope-import-structures-report-2026-03-25.md` — 706-line research report: Chat→Cowork import fidelity, 7 findings, 3 recommendation sections
+- `dispatch-experience.html` — Interactive visualization (reviewed, no cross-pollination content)
+- `git log --since="48 hours ago"` — 4 commits (1 substantive, 1 brief delivery, 2 prior-day)
 
 **Piper Morgan:**
-- `dev/2026/03/24/2026-03-24-1009-lead-code-opus-log.md` — M1 closure session
-- `dev/2026/03/24/2026-03-24-0808-docs-code-opus-log.md` — Docs session
-- `dev/2026/03/24/todo-triage-report-2026-03-24.md` — TODO triage
+- `git log --since="48 hours ago"` — 10 commits (all covered in March 25 brief or brief delivery)
+- No new watch path changes since last sweep
+
+## Glossary Updates
+
+The following terms appeared in source documents but were not in `internal/cross-pollination/glossary.md`:
+
+- **Cowork** — added with `[needs definition]`
+- **Archie** — added with `[needs definition]`
