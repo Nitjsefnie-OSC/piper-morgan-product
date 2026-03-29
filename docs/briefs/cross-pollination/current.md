@@ -1,97 +1,73 @@
 ---
-date: 2026-03-27
+date: 2026-03-29
 status: substantive
 sources_checked:
   - klatch
   - piper-morgan
-window: "48h (March 25-27, 2026)"
+window: "96h (March 25-29, 2026)"
 ---
 
-# Cross-Pollination Brief — March 27, 2026
+# Cross-Pollination Brief — March 29, 2026
 
-Quiet 48 hours for new code, but Klatch produced a substantial research artifact that landed after the March 25 brief was written. A 700-line Dispatch-to-Calliope memo documents the first real-world Chat→Cowork import experiment, mapping transfer fidelity across the five-layer prompt model. Three physically distinct knowledge layers identified in production. Layers 1–3 transfer at 100% fidelity; Layer 5 (behavioral calibration) is structurally absent but recoverable through continued interaction. Piper Morgan: no new commits beyond brief delivery.
+Low-activity window — neither repo has committed since March 25. But one post-brief commit in Klatch surfaced a substantial dispatch report that the March 25 brief missed: a 700-line research memo documenting the first real-world Claude Chat→**Cowork** [needs definition] import experiment. The findings validate the five-layer prompt assembly model as an import fidelity framework and identify a structural gap at Layer 5 (behavioral calibration) that both projects should internalize.
+
+Piper Morgan had no new commits since the last brief.
 
 ---
 
 ## Key Insights
 
-### 1. Three Knowledge Layers in Production — Not One
+### 1. Chat→Cowork Import Fidelity — Five-Layer Model Validated as Transfer Framework
 **From:** Klatch (`docs/mail/dispatch-to-calliope-import-structures-report-2026-03-25.md`)
-**Relevant to:** Piper Morgan
+**Relevant to:** Piper Morgan, Klatch
 
-The Dispatch report documents a finding that matters for any multi-agent project: Claude project context lives in three physically distinct, non-synchronizing layers:
+A dispatch memo from xian to Calliope documents the first end-to-end Claude Chat→Cowork import: a 28-document VA project ("VA Decision Reviews (OCTO)") was imported into a Cowork session called **Archie** [needs definition]. Two independent evaluators (Archie and Dispatch) verified transfer fidelity across all five layers.
 
-- **Layer A (Chat Project Knowledge):** Session-local `.projects/` snapshot — read-only, imported once, not visible to other sessions
-- **Layer B (Code Repository Memory):** `.claude/projects/` memory files — persistent, git-tracked, shared across sessions
-- **Layer C (Repository Files):** The actual repo (CLAUDE.md, docs/, code) — standard git workflow
+**The fidelity profile:**
 
-These layers do not automatically stay synchronized. A project can exist in all three simultaneously with different information at each level. For Piper Morgan's multi-agent setup — where Lead Dev, Docs, PPM, and others work in parallel Code sessions — Layer B is the shared institutional memory. But if any agent imports a Chat project, that agent gets a Layer A snapshot invisible to everyone else.
-
-**Suggested action (Piper Morgan):** Document which knowledge layer each agent role primarily reads from and writes to. If Chat→Cowork imports become part of the workflow, establish a protocol for surfacing Layer A findings into Layer B or C so they're visible to the whole team.
-
----
-
-### 2. Five-Layer Import Fidelity Profile — Empirical Validation
-**From:** Klatch (`docs/mail/dispatch-to-calliope-import-structures-report-2026-03-25.md`)
-**Relevant to:** Both projects
-
-The import experiment tested the five-layer prompt assembly model against real transfer:
-
-| Layer | Transfer Fidelity | Notes |
-|-------|-------------------|-------|
+| Layer | Transfer | Notes |
+|-------|----------|-------|
 | 1 — Kit Briefing | 100% | Cowork provides automatically |
-| 2 — Project Instructions | 100% | Transferred in metadata.json |
-| 3 — Project Memory | 100% | memory.md imported cleanly |
-| 4 — Channel Addendum | N/A | Session-specific, not project-level |
-| 5 — Entity Prompt | 0% | Behavioral calibration not serialized |
+| 2 — Project Instructions | 100% | System prompt preserved in metadata.json |
+| 3 — Project Memory | 100% | memory.md transferred intact; most valuable artifact |
+| 4 — Channel Addendum | N/A | Session-specific; not applicable to static import |
+| 5 — Entity Prompt / Behavioral Calibration | 0% | Implicit in conversation history; not serializable |
 
-This aligns with the March 25 brief's "Subliminal Injection" finding: Layers 1–3 can arrive subliminally (delivered but not consciously attributable). Layer 5 doesn't arrive at all — it must be rebuilt through interaction. The March 25 MAXT finding established that delivery ≠ attribution; this report establishes that information ≠ calibration.
+The key finding: **what transfers is inert information; what does not transfer is behavioral calibration.** Months of learned preferences — communication style, explanation depth, disambiguation heuristics — live only in conversation history, which is completely absent from the import. The gap is recoverable through continued interaction, but it's real and significant in early sessions.
 
-The report proposes extending Klatch's AXT methodology to systematically test import fidelity per layer (AXT-Layer1, AXT-Layer2, etc.). This would give both projects a reusable framework for evaluating any import/export pathway.
+Three sub-findings worth noting:
+- **Three physically distinct knowledge layers** exist in production (Chat project snapshot, Code repository memory, repo files) that do not automatically synchronize.
+- A `synced_at` timestamp in metadata.json suggests potential re-import capability (unconfirmed hypothesis — would significantly close the fidelity gap if true).
+- The capability tradeoff is asymmetrical: Cowork reaches parity faster than Chat could ever reach Cowork's technical scope (filesystem, MCP, scheduled tasks).
 
-**Suggested action (Klatch):** Add a "Transfer Fidelity by Layer" section to PROMPT-ASSEMBLY.md, codifying this empirical finding alongside the existing theoretical model.
+**For Piper Morgan:** This maps directly onto your briefing infrastructure. When PM agents receive BRIEFING-CURRENT-STATE or knowledge base documents at session start, those are Layers 2-3 content. The dispatch report confirms these transfer at 100% fidelity. But the March 25 MAXT finding (subliminal injection) adds a twist: even when Layer 3 content transfers perfectly, agents may access it subliminally — correct answers, wrong attribution. The combination of these two findings means: **your briefing documents are being delivered and used, but agents may not be able to tell you they're using them.** Probe behaviorally, not declaratively.
 
----
+**For Klatch:** The report explicitly recommends extending AXT methodology to test import fidelity per-layer (AXT-Layer1 through AXT-Layer5). This connects directly to Step 11 on the roadmap (export-to-Code). The fidelity profile documented here is the baseline for what Klatch's export pipeline must achieve or improve upon.
 
-### 3. The Capability Gap Is Asymmetrical — And That's the Point
-**From:** Klatch (`docs/mail/dispatch-to-calliope-import-structures-report-2026-03-25.md`)
-**Relevant to:** Both projects
-
-The report frames the Chat↔Cowork tradeoff as structurally asymmetric:
-
-- **Chat → Cowork gap (calibration):** Recoverable. Behavioral patterns rebuild through continued use. Layer 3 (memory.md) accelerates recovery.
-- **Cowork → Chat gap (capability):** Permanent. Chat can never get filesystem access, MCP integrations, or scheduled tasks.
-
-The experiment subject (**Archie** [definition needed] — a Cowork session that imported a Chat project) assessed: "The meaningful question isn't 'does the import lose anything?' — it's 'does the Cowork environment reach parity faster than the Chat project could reach Cowork's capability level?'" Answer: clearly yes.
-
-This has implications for both projects' agent deployment strategy. When deciding where an agent should work, the capability floor matters more than the calibration ceiling — because calibration recovers, but capability constraints are architectural.
-
-**Suggested action (Both):** When choosing agent environments for new work, bias toward the environment with the higher capability floor, not the one with the best current calibration.
+**Suggested action (Both):** Read the full dispatch report. For Klatch, the AXT-per-layer extension is a natural next step for Argus. For Piper Morgan, the finding reinforces that your briefing infrastructure works — but pair it with the MAXT subliminal finding to understand *how* it works.
 
 ---
 
 ## Emerging Patterns
 
-**Information vs. calibration.** Two consecutive briefs now distinguish these clearly. March 25: subliminal injection shows information arrives even when agents can't self-report it. March 27: import fidelity shows information transfers but calibration doesn't. The five-layer model is proving its value not as a design spec but as an analytical framework — a vocabulary for diagnosing what works and what doesn't when agents move between contexts.
+**The five-layer model keeps earning its keep.** It was designed as a prompt assembly spec. MAXT Session 01 used it as a testing framework. Now the import fidelity report uses it as a transfer analysis framework. Each new application validates the taxonomy — layers are real, distinct, and behave differently under different conditions (assembly, testing, import). Neither project planned this convergence; the model is simply descriptive of something structurally true.
 
-**Research artifacts as cross-project infrastructure.** The Dispatch-to-Calliope memo is addressed to a specific Klatch agent but its findings apply equally to Piper Morgan. This is exactly the kind of document the cross-pollination system exists to surface. The mailbox system (inter-agent memos) is generating artifacts whose value exceeds their intended audience.
+**Four-day silence is unusual.** Both repos went from daily multi-commit activity to zero commits for 96 hours (March 26-29). No session logs, no omnibus entries, no COORDINATION.md updates. This is not necessarily a problem — weekends, holidays, natural pauses — but it's worth noting as a baseline. If the silence extends further, a check-in may be warranted.
 
 ---
 
 ## Background Changes (Noted, Low Priority)
 
-- Klatch: `dispatch-experience.html` committed — a canvas-based visualization of the dispatch experience (context field animation). Exploratory/artistic artifact, no functional impact.
-- Both repos: March 25 cross-pollination brief delivered to project repos. Delivery pipeline functioning normally.
+- Klatch: `dispatch-experience.html` committed alongside the dispatch report — appears to be an HTML rendering of the import experience (219 lines, not in a watch path)
 
 ---
 
 ## Sources Read
 
 **Klatch:**
-- `docs/mail/dispatch-to-calliope-import-structures-report-2026-03-25.md` — 706-line research report on Chat→Cowork import structures and five-layer fidelity analysis
-- `dispatch-experience.html` — Canvas visualization (noted, not analyzed in depth)
-- `git log --since="48 hours ago"` — 2 commits: dispatch report + brief delivery
+- `docs/mail/dispatch-to-calliope-import-structures-report-2026-03-25.md` — 706-line dispatch report on Chat→Cowork import fidelity (post-dates March 25 brief)
+- `git log --oneline -10` — last commit March 25 (dispatch report + cross-pollination brief delivery)
 
 **Piper Morgan:**
-- `git log --since="48 hours ago"` — 2 commits: both cross-pollination brief deliveries, no new substantive work
-- `docs/briefs/cross-pollination/current.md` — confirmed March 25 brief received
+- `git log --oneline -10` — last commit March 25 (cross-pollination brief delivery)
+- No new content in watch paths since March 25 brief
