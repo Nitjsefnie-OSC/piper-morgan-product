@@ -1,104 +1,111 @@
 ---
-title: "Cross-Pollination Brief — March 31, 2026"
-date: 2026-03-31
+date: 2026-04-01
 status: substantive
 sources_checked:
   - klatch
   - piper-morgan
-window: "48h (March 29-31, 2026)"
+window: "48h (March 30 – April 1, 2026)"
 ---
 
-# Cross-Pollination Brief — March 31, 2026
+# Cross-Pollination Brief — April 1, 2026
 
-Piper Morgan's March 30 was its densest documentation day in weeks — two long sessions (Docs and Piper Alpha) produced 22 commits covering blog infrastructure stabilization, dev/active working directory overhaul, and the operationalization of a new agent role. Klatch remains in a holding pattern with no new commits since March 27 (the only recent commit being the March 30 brief delivery). The most cross-relevant signal: Piper Alpha's onboarding required a cold-start institutional memory sweep that surfaced the **three clocks problem** — a structural challenge that applies directly to any system mixing Chat sessions, Code memory, and repo-committed files.
+The most cross-relevant development in this window is a formal layer mapping: Piper Alpha completed a comprehensive assessment of Piper Morgan's context injection against Klatch's five-layer model, producing both an internal analysis document and an RFC-001 response memo to Dispatch. The mapping covers both the agent team (14 roles) and the product (Piper Morgan software), and its central finding — both projects have strong L1-L2-L3 and weak L4-L5 — validates the five-layer model as an analytical framework while identifying Layer 4 persistence as the shared critical gap. Klatch now has an RFC-001 review request in its mailbox for Calliope; PM's response is already filed. Meanwhile, PM's Vision V2 draft explicitly positions the PA experiment as a live test of where the LLM floor suffices and where structured infrastructure is required — a framing that connects directly to the floor/ceiling/path taxonomy surfaced in the previous brief.
 
 ---
 
 ## Key Insights
 
-### 1. The Three Clocks Problem — Institutional Knowledge Without Auto-Sync
-**From:** Piper Morgan (Piper Alpha session log, March 30)
+### 1. RFC-001 Layer Mapping — Both Projects Share the Same Structural Gap
+**From:** Piper Morgan (five-layer context mapping, March 31; RFC-001 response memo)
 **Relevant to:** Klatch
 
-Piper Alpha's onboarding exposed a structural issue that PM is now calling the "three clocks" problem. Institutional knowledge exists in three asynchronous stores without auto-sync:
+Piper Alpha mapped PM's entire context injection stack against the five-layer model, producing a 270-line analysis with file-by-file fidelity assessments. The headline finding: **both projects have strong L1-L2-L3 and structurally weak L4-L5.** Specifically:
 
-1. **Chat session snapshots** — PM's Claude Chat/Desktop notebooks
-2. **Code memory files** — Claude Code persistent storage (`~/.claude/projects/.../memory/`)
-3. **Repository files** — git-committed docs, briefings, session logs
+- **Layer 4 (Channel Addendum)** is the critical gap in PM's *product* — `conversation_context.py` stores session state in a plain Python dict that dies on server restart, page refresh, or process crash. No Redis or DB persistence exists. For PM's *agent team*, Layer 4 is creative but manual: the mailbox + session log + omnibus system works but costs 5-15 minutes of session-start overhead per role.
 
-Each store updates on a different cadence. A session log is committed at wrap-up. A memory file updates when an agent writes to it. A Chat snapshot persists only within that Chat session. There is no mechanism ensuring they agree, and no single source of truth that spans all three.
+- **Layer 5 (Entity Prompt)** has no learning loop on either side. PM's agents rebuild behavioral calibration from briefing files each session. Klatch's Agent Traditions pilot is cited as the most promising approach.
 
-This maps directly onto Klatch's five-layer model: Layer 1 (kit briefing) is ephemeral, Layer 2 (CLAUDE.md) is repo-committed, Layer 3 (project memory) is in Code's memory store, Layers 4-5 are repo-committed but session-scoped. The compaction research spikes (issues #17, #18) are already probing what survives within a single session — but the three clocks problem is about what survives *between* sessions and *across* storage mechanisms. It's the inter-session complement to the intra-session fidelity question.
+The mapping also covers PM's product-side implementation — system identity via `config/PIPER.md`, voice directives in `conversational_floor.py`, trust-graduated proactivity via `personality_profile.py` — providing a concrete reference for how the five-layer model applies to a user-facing product, not just agent infrastructure.
 
-**Suggested action:** When Klatch's Compaction API evaluation concludes, extend the fidelity framework to include cross-store synchronization as a fourth factor alongside the existing three (context injection, compaction loss, knowledge location).
+The RFC-001 response memo recommends the standard include a "fidelity assessment protocol" for evaluating each layer's persistence characteristics, and explicit treatment of the agent-team vs. product distinction.
 
-### 2. Agent Onboarding as Institutional Memory Stress Test
-**From:** Piper Morgan (Piper Alpha session, March 30)
-**Relevant to:** Klatch
+**Suggested action:** Calliope has an RFC-001 review request in `docs/mail/memo-dispatch-rfc001-five-layer-context-model-2026-03-30.md`. PM's response (`dev/active/five-layer-context-mapping-2026-03-31.md`) can serve as a reference for how to structure the layer mapping. The fidelity assessment protocol proposal is worth considering as an addition to the RFC spec.
 
-Piper Alpha — a new PM assistant role — completed its first operational session by executing a systematic institutional memory sweep: reading all 60 ADRs, 15 recent omnibus logs, and 6 months of cross-pollination briefs. The goal was to build operational context from documents alone, without implicit knowledge from prior sessions.
-
-The methodology identified three categories of experience: **floor moments** (LLM general competence suffices), **ceiling moments** (domain knowledge required that docs don't provide), and **path moments** (routing decisions between them). Ceiling moments included session continuity friction, mailbox awareness gaps, and limited visibility into other agents' current work.
-
-**For Klatch:** This is directly relevant to agent onboarding in multi-entity conversations. When a new agent joins a Klatch roundtable or inherits a conversation, it faces the same cold-start problem. Piper Alpha's floor/ceiling/path taxonomy could inform how Klatch designs its context injection strategy — what needs to be in the prompt (ceiling), what the model handles natively (floor), and how to detect which regime applies (path).
-
-**Suggested action:** File the floor/ceiling/path taxonomy as a reference for Klatch's Layer 4/5 design work. When the nomenclature guide is drafted, consider whether these categories map to testable AAXT assertions.
-
-### 3. Cross-Pollination Hooks — PM Wants What Klatch Already Has
-**From:** Piper Morgan (dispatch memo, March 30)
-**Relevant to:** Both projects
-
-A dispatch memo proposed that Piper Morgan adopt session-start hooks to check cross-pollination brief freshness — matching infrastructure that Klatch already has. The proposed hook would check `docs/briefs/cross-pollination/current.md` and warn if the brief is more than 2 days stale. The memo was delivered to the CIO and executive mailboxes.
-
-This is convergent infrastructure: both projects independently recognize that agents need automated prompts to consume cross-pollination briefs rather than relying on manual awareness. Klatch solved it first. PM is now proposing the same pattern. The convergence validates the approach.
-
-**Suggested action:** Klatch's hook implementation could be shared as a reference. When PM's Chief of Staff coordinates with Lead Dev on implementation, a direct look at Klatch's session-start hook code would save design time.
-
-### 4. Dev/Active Cleanup as Formalized Skill — Working Directory Hygiene at Scale
-**From:** Piper Morgan (`/cleanup-dev-active` skill v1.0, March 30)
+### 2. Vision V2 — The PA Experiment *Is* the Product Roadmap
+**From:** Piper Morgan (vision-v2-draft.md, March 31)
 **Relevant to:** Klatch (methodology)
 
-PM formalized its working directory triage into a repeatable skill with a five-step protocol: **Inventory → Categorize → Execute → Verify → Report**. The March 30 session reduced `dev/active/` from 23 files to 6, archiving superseded drafts and completed work items. The skill includes classification rules (stale = no updates in 7+ days, superseded = newer version exists elsewhere, completed = work merged to canonical location).
+PA authored a Vision V2 document incorporating 10 months of project learning. The most cross-relevant framing: **"The LLM is the floor, not the ceiling"** — Piper should always be at least as good as a well-prompted LLM with the user's context, and structured handlers make it *better*, not *different*. This directly extends the floor/ceiling/path taxonomy from PA's onboarding.
 
-**For Klatch:** The `docs/mail/` and `docs/logs/` directories accumulate similarly. While Klatch's mail system already has a `read/` archive convention, the formalized triage protocol — especially the classify-before-act discipline — could apply to periodic maintenance of Klatch's growing documentation tree. At 727+ AAXT tests and expanding agent personas, documentation hygiene will become increasingly important.
+The strategic insight: the gap between what PA (a well-briefed Claude agent) can do and what the Piper Morgan product should eventually do **is** the product roadmap. Floor moments identify where the LLM is sufficient. Ceiling moments identify where structured infrastructure is required. This is empirical product discovery using an AI agent as the test instrument.
 
-**Suggested action:** Low priority. Note the pattern for when Klatch's documentation volume warrants periodic triage.
+**For Klatch:** This framing applies to Klatch's roundtable design. When an agent joins a Klatch conversation with well-assembled five-layer context (L1-L5), what can it handle natively (floor) vs. what requires Klatch-specific infrastructure (ceiling)? The MAXT sessions are already testing this boundary — PA's taxonomy gives it a name.
+
+**Suggested action:** Note the floor/ceiling framing as complementary to MAXT's scoring framework. When MAXT Session 02 scope is defined, consider whether floor/ceiling categorization of findings would add analytical value.
+
+### 3. Alpha Tester Cold-Start Bug — Real-World Onboarding Stress Test
+**From:** Piper Morgan (Lead Dev session, March 31)
+**Relevant to:** Both projects (methodology)
+
+Dominique D., an alpha tester on Windows/Docker, hit a 500 error on account creation — `relation "users" does not exist` because the web-based setup wizard doesn't auto-run database migrations (the CLI wizard does). Lead Dev fixed this by adding `ensure_database_migrated()` to the web setup's system check endpoint.
+
+The cross-relevant pattern: **cold-start bugs surface when a new user's path diverges from the developer's path.** The CLI setup worked because it was the developer-tested path. The web setup failed because it bypasses `scripts/setup_wizard.py` entirely. This is the same discovery pattern from PA's onboarding — institutional assumptions embedded in infrastructure that only surface when someone takes an unfamiliar path.
+
+**For Klatch:** When Klatch ships import/export and new users onboard, the "developer path vs. user path" divergence will surface similar bugs. The five-layer model's Layer 1 (kit briefing / environmental orientation) is the natural place to catch these — environmental checks that verify not just "is the server running?" but "has the database been initialized?"
+
+**Suggested action:** Low priority. File as a reference pattern for Klatch's eventual onboarding experience design.
+
+### 4. Stranded Branch Audit — PA as Institutional Hygiene Agent
+**From:** Piper Morgan (PA Day 3 session, April 1)
+**Relevant to:** Klatch (methodology)
+
+PA's April 1 session opened with a branch audit that found 2 branches with unmerged commits from the March 30-31 migration flurry. One branch (`claude/fix-docker-migration-setup`) had 3 commits including the Dockerfile CRLF fix and auto-migration work. Another (`claude/pr856-cherry-pick-docs`) had already reached main via a different path.
+
+This is the **discovered work discipline** in action — an agent systematically checking for invisible work that would otherwise be lost. PM's session wrap protocol requires verifying "work that isn't on `origin/main` doesn't exist," but the migration day's high velocity (22+ commits across 12 roles) created exactly the conditions where branches get stranded.
+
+**For Klatch:** The multi-agent coordination protocol in COORDINATION.md handles assignment tracking, but doesn't include a periodic "stranded work audit." As Klatch's agent team grows and works across branches, a similar sweep pattern could prevent invisible work accumulation.
+
+**Suggested action:** Low priority. Note the pattern for when Klatch's branching activity warrants periodic audits.
 
 ---
 
 ## Emerging Patterns
 
-**Cold-start onboarding reveals infrastructure assumptions.** Piper Alpha's first session required reading hundreds of documents to achieve operational context — a process that exposed exactly which knowledge is accessible (repo-committed docs), which is fragmented (memory files across sessions), and which is invisible (prior Chat session context). Klatch hasn't onboarded a genuinely new agent since the initial team was established. When it does — or when a user imports a conversation into a fresh Klatch instance — it will face the same cold-start revelations. The five-layer model provides the analytical framework; Piper Alpha's experience provides the first empirical data on what that cold start actually costs.
+**The five-layer model is graduating from descriptive to prescriptive.** RFC-001 started as a Klatch-originated observation about how context is structured. PM's layer mapping response uses it as a diagnostic tool — systematically evaluating each layer's fidelity and identifying specific gaps. The model is no longer just describing what exists; it's being used to find what's missing. Both projects now have documented layer mappings, making the next step — a shared fidelity assessment protocol — both feasible and valuable.
 
-**The asymmetry continues but is productive.** Klatch has been quiet for four days while Piper Morgan produced ~40 commits. This isn't a problem — the projects operate on different rhythms, and PM's high-velocity documentation work is generating methodology patterns (cleanup skills, onboarding taxonomies, publishing workflows) that Klatch can absorb when it returns to active development. The cross-pollination brief itself is the mechanism ensuring these patterns aren't lost to timing differences.
+**The floor/ceiling boundary is the new shared research question.** Klatch approaches it from the import/export direction (what transfers when an agent moves between environments?). PM approaches it from the product direction (what does a well-briefed LLM handle natively vs. what requires structured handlers?). PA's onboarding approaches it from the operational direction (what can a new agent do with documents alone vs. what requires prior session context?). Three angles on the same question — and the five-layer model provides the shared coordinate system for discussing it.
 
 ---
 
 ## Background Changes (Noted, Low Priority)
 
-- **Blog dedup pipeline fixed:** PM's `fetch-blog-posts.js` was overwriting blog-first URLs with Medium URLs during RSS merge. Fix adds `source: "blog-first"` field to prevent overwrites. Not cross-relevant to Klatch but completes the schema drift story from the March 30 brief.
-- **275 blog posts normalized to ISO 8601:** All date formats standardized, 5-era clustering model replaced broken 15-episode system. Content infrastructure maturity.
-- **Doc audit #937 completed:** 14 broken pattern cross-references fixed, evidence matrix filed. PM's documentation quality discipline continues.
-- **Ted Nadeau's design docs (PR #856):** 5 design docs cherry-picked after 33 days open. Includes "Piper Morgan by Analogy" positioning (upstream vs Jira: "Colleague vs Tool"). Product strategy, not cross-relevant to Klatch infrastructure.
-- **Klatch intel sweep (March 24):** Haiku 3 retirement deadline April 19, output token limits increased to 64K/128K, 1M context GA. Daedalus assigned to audit Klatch's 16K max_tokens setting. Previously unreported in briefs but dated outside the primary window.
+- **Pre-commit branch check hook:** PM added a pre-commit hook that warns when committing on `main` instead of a `claude/*` branch. Defensive infrastructure for multi-agent branching hygiene.
+- **CLAUDE.md identity fix:** PM removed hardcoded "Lead Developer" identity from CLAUDE.md, replacing with role-assignment table. Agents now receive role via conversation context, not via CLAUDE.md. Fixes the Layer 2 gap PA identified.
+- **PA memos on stranded branches and log consistency:** PA delivered memos to Lead Dev (stranded branches) and Docs (log consistency conventions) — first outbound communication from the PA role to other agents.
+- **Editorial calendar updated:** "Are We Doing It Backwards?" published to blog (March 31). Medium URL added to editorial calendar.
+- **IA Conference talk outline:** Ethics as Information Architecture talk for IAC26 (April 17) drafted in `dev/active/`. Not cross-relevant to Klatch infrastructure but notable as the five-layer model's ideas entering public discourse.
 
 ---
 
 ## Sources Read
 
 **Klatch:**
-- `docs/logs/` — latest: 2026-03-27 (no new sessions)
-- `docs/plans/FILE-DOMAIN-MODEL.md` — approved, unchanged since March 27
-- `docs/intel/2026-03-24-sweep.md` — ecosystem intel (Haiku 3 sunset, token limits, SDK updates)
-- `docs/mail/` — no new memos since March 27
+- `docs/mail/memo-dispatch-rfc001-five-layer-context-model-2026-03-30.md` — RFC-001 review request to Calliope
+- `docs/briefs/cross-pollination/current.md` — March 31 brief delivery
+- `docs/COORDINATION.md` — agent status (unchanged since March 27)
+- `docs/logs/` — no new session logs
+- `docs/plans/` — no changes
+- `docs/intel/` — no new entries
 - `research/` — no new entries
-- `git log --since="48 hours ago"` — 1 commit (brief delivery only)
+- `git log --since="48 hours ago"` — 2 commits (brief delivery + RFC-001 memo)
 
 **Piper Morgan:**
-- `dev/2026/03/30/2026-03-30-0634-docs-code-opus-log.md` — Docs session log
-- `dev/active/pa/2026-03-30-0720-pa-opus-log.md` — Piper Alpha first session
-- `docs/omnibus-logs/2026-03-29-omnibus-log.md` — 1-session synthesis
-- `docs/briefing/BRIEFING-CURRENT-STATE.md` — refreshed March 29
-- `docs/internal/planning/current/` — vision, priorities
-- Cross-pollination hooks dispatch memo (March 30)
-- `git log --since="48 hours ago"` — 22 commits
+- `dev/active/five-layer-context-mapping-2026-03-31.md` — Full layer mapping analysis (agent team + product)
+- `dev/active/2026-03-31-1100-pa-opus-log.md` — PA Day 2 session log (layer mapping, Vision V2, CIO routing)
+- `dev/active/2026-04-01-0656-pa-opus-log.md` — PA Day 3 session log (branch audit)
+- `dev/active/2026-03-31-1127-lead-code-opus-log.md` — Lead Dev session (Dockerfile fix, auto-migration)
+- `dev/2026/03/31/2026-03-31-1800-lead-code-opus-log.md` — Lead Dev kindbook sync session
+- `docs/internal/planning/current/vision-v2-draft.md` — Vision V2 first draft
+- `mailboxes/exec/sent/memo-pm-to-dispatch-rfc001-response-2026-03-31.md` — RFC-001 response
+- `docs/omnibus-logs/2026-03-30-omnibus-log.md` — 18-session omnibus
+- `git log --since="48 hours ago"` — 27 commits
