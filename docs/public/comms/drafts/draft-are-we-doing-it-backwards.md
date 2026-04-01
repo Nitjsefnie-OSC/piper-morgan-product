@@ -8,13 +8,13 @@
 
 Saturday morning. The day after ten roles had hummed in concert. I was feeling good about the project. M1 was moving. Issues were closing. The Lead Developer had knocked out twenty issues in twenty-four hours.
 
-So I did what I always do when things are going well. I tested it.
+So I did what I always do when things are going well. I did a little testing.
 
-[ADD PERSONAL DETAIL: What was the specific question you asked Piper? What were you expecting to happen? Set up the moment of discovering the rejection.]
+I asked one of our canonical queries, something I wasn't sure if Piper could do yet, but which I expected a good answer for, either way, after building the "conversational glue" layer.
 
-Piper rejected me. Not rudely — politely, in fact. Something like "I don't have that capability yet." A reasonable PM query, the kind of thing any colleague would engage with, and my AI PM assistant told me it couldn't help.
+Piper kinda rejected me. Not in a rude way. It was something like "I don't have that capability yet" and nothing else. It was a reasonable request and I got nothing of value back.
 
-I opened a ChatGPT window. Typed the same question. Got a thoughtful, useful response. Zero configuration. Zero project context. Just a $0 wrapper around an LLM, and it was more helpful than the system we'd spent months building.
+I though about how most generic LLMs could handle any random product management request, at least in a mediocre way, or could explain why they couldn't hI opened a ChatGPT window. Typed the same question. Got a thoughtful, useful response. Zero configuration. Zero project context. Just a $0 wrapper around an LLM, and it was more helpful than the system we'd spent months building.
 
 That's when the question formed: are we doing it backwards?
 
