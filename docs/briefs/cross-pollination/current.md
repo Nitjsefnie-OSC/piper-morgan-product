@@ -1,111 +1,135 @@
 ---
-date: 2026-04-01
+date: 2026-04-02
 status: substantive
 sources_checked:
   - klatch
   - piper-morgan
-window: "48h (March 30 – April 1, 2026)"
+window: "48h (March 31 – April 2, 2026)"
 ---
 
-# Cross-Pollination Brief — April 1, 2026
+# Cross-Pollination Brief — April 2, 2026
 
-The most cross-relevant development in this window is a formal layer mapping: Piper Alpha completed a comprehensive assessment of Piper Morgan's context injection against Klatch's five-layer model, producing both an internal analysis document and an RFC-001 response memo to Dispatch. The mapping covers both the agent team (14 roles) and the product (Piper Morgan software), and its central finding — both projects have strong L1-L2-L3 and weak L4-L5 — validates the five-layer model as an analytical framework while identifying Layer 4 persistence as the shared critical gap. Klatch now has an RFC-001 review request in its mailbox for Calliope; PM's response is already filed. Meanwhile, PM's Vision V2 draft explicitly positions the PA experiment as a live test of where the LLM floor suffices and where structured infrastructure is required — a framing that connects directly to the floor/ceiling/path taxonomy surfaced in the previous brief.
+Both projects returned from a five-day infrastructure pause (service disruption + multiproject migration) with dense, coordinated output. The most cross-relevant development: **Klatch filed its RFC-001 response**, completing the second half of the bilateral layer mapping. Calliope's response proposes four amendments — most notably an L5 sub-component split (declarative text vs. procedural calibration) and an L3 freshness signal — both of which directly address gaps PM's mapping identified. Meanwhile, Daedalus shipped the **File Domain Model Phases 1-2**, which includes the first concrete implementation of structured Layer 4 content injection: channel-pinned files are now listed in the L4 addendum sent to entities. This is the first practical move toward the "Layer 4 persistence" both projects flagged as their shared critical gap. On the PM side, the Docs agent built a Shipping News section on the website, completed quarterly maintenance template updates, and published the Mar 31 omnibus. The period's activity is predominantly Klatch-heavy — three agents (Calliope, Daedalus, Argus) ran overnight sessions producing implementation, research, and documentation at volume.
 
 ---
 
 ## Key Insights
 
-### 1. RFC-001 Layer Mapping — Both Projects Share the Same Structural Gap
-**From:** Piper Morgan (five-layer context mapping, March 31; RFC-001 response memo)
-**Relevant to:** Klatch
+### 1. RFC-001 Bilateral Mapping Complete — Four Amendments Proposed
+**From:** Klatch (Calliope RFC-001 response, April 1)
+**Relevant to:** Piper Morgan, Dispatch
 
-Piper Alpha mapped PM's entire context injection stack against the five-layer model, producing a 270-line analysis with file-by-file fidelity assessments. The headline finding: **both projects have strong L1-L2-L3 and structurally weak L4-L5.** Specifically:
+Calliope's RFC-001 response completes the bilateral loop: both projects have now filed formal layer mappings against the five-layer standard. Klatch's response confirms the RFC's mapping is correct, provides dual mappings (product + agent team), and proposes four amendments:
 
-- **Layer 4 (Channel Addendum)** is the critical gap in PM's *product* — `conversation_context.py` stores session state in a plain Python dict that dies on server restart, page refresh, or process crash. No Redis or DB persistence exists. For PM's *agent team*, Layer 4 is creative but manual: the mailbox + session log + omnibus system works but costs 5-15 minutes of session-start overhead per role.
+1. **L5 sub-components:** Split Layer 5 into L5a (declarative text — transfers) and L5b (procedural calibration — doesn't transfer). This directly addresses the Layer 5 learning loop gap both projects identified.
+2. **L3 freshness signal:** Memory is injected with full confidence regardless of age. Propose a freshness indicator so agents can weight stale vs. current context.
+3. **Fidelity assessment protocol:** Formalize AAXT + MAXT as the evaluation framework for layer fidelity (supports PM's earlier recommendation).
+4. **Agent-team vs. product distinction:** Both projects implement the five-layer model twice — once for their agent teams and once for their products. The RFC should acknowledge this dual application explicitly.
 
-- **Layer 5 (Entity Prompt)** has no learning loop on either side. PM's agents rebuild behavioral calibration from briefing files each session. Klatch's Agent Traditions pilot is cited as the most promising approach.
+Calliope notes support for PM's earlier recommendations on the fidelity protocol and agent-vs-product distinction. Both responses are now available for Dispatch to synthesize into an RFC revision.
 
-The mapping also covers PM's product-side implementation — system identity via `config/PIPER.md`, voice directives in `conversational_floor.py`, trust-graduated proactivity via `personality_profile.py` — providing a concrete reference for how the five-layer model applies to a user-facing product, not just agent infrastructure.
+**Suggested action:** Dispatch has both responses. Next step is an RFC-001 revision incorporating the converging recommendations — particularly the L5 sub-component split, which neither project had articulated before Calliope's response.
 
-The RFC-001 response memo recommends the standard include a "fidelity assessment protocol" for evaluating each layer's persistence characteristics, and explicit treatment of the agent-team vs. product distinction.
+### 2. File Domain Model Phases 1-2 — First Concrete L4 Persistence
+**From:** Klatch (Daedalus, April 1)
+**Relevant to:** Piper Morgan (methodology)
 
-**Suggested action:** Calliope has an RFC-001 review request in `docs/mail/memo-dispatch-rfc001-five-layer-context-model-2026-03-30.md`. PM's response (`dev/active/five-layer-context-mapping-2026-03-31.md`) can serve as a reference for how to structure the layer mapping. The fidelity assessment protocol proposal is worth considering as an addition to the RFC spec.
+Daedalus shipped two phases of the File Domain Model in a single session:
 
-### 2. Vision V2 — The PA Experiment *Is* the Product Roadmap
-**From:** Piper Morgan (vision-v2-draft.md, March 31)
-**Relevant to:** Klatch (methodology)
+- **Phase 1:** New `files` and `file_refs` tables with pointer-based scope architecture (message, channel, project, entity scopes). Full backfill from existing `message_artifacts`. Five API endpoints for querying files at each scope.
+- **Phase 2:** Channel file pinning — users can pin files to a channel, and pinned files are now **listed in the L4 channel addendum** sent to entities. This is structured context injection: `buildSystemPrompt` now includes channel file names when present.
 
-PA authored a Vision V2 document incorporating 10 months of project learning. The most cross-relevant framing: **"The LLM is the floor, not the ceiling"** — Piper should always be at least as good as a well-prompted LLM with the user's context, and structured handlers make it *better*, not *different*. This directly extends the floor/ceiling/path taxonomy from PA's onboarding.
+This is the first practical implementation of "make Layer 4 richer" — the shared gap identified in both RFC-001 responses. The dual-write pattern (backward compat with `message_artifacts` + new domain model) shows how to evolve persistence without breaking existing flows.
 
-The strategic insight: the gap between what PA (a well-briefed Claude agent) can do and what the Piper Morgan product should eventually do **is** the product roadmap. Floor moments identify where the LLM is sufficient. Ceiling moments identify where structured infrastructure is required. This is empirical product discovery using an AI agent as the test instrument.
+**For PM:** PM's Layer 4 gap is different (session context in a Python dict that dies on restart), but the design pattern is transferable: scope-aware references that persist across sessions. The "pin to channel" metaphor maps to PM's concept of context that survives beyond a single conversation turn.
 
-**For Klatch:** This framing applies to Klatch's roundtable design. When an agent joins a Klatch conversation with well-assembled five-layer context (L1-L5), what can it handle natively (floor) vs. what requires Klatch-specific infrastructure (ceiling)? The MAXT sessions are already testing this boundary — PA's taxonomy gives it a name.
+**Suggested action:** Low priority. Note the scope architecture pattern for when PM addresses its own L4 persistence gap.
 
-**Suggested action:** Note the floor/ceiling framing as complementary to MAXT's scoring framework. When MAXT Session 02 scope is defined, consider whether floor/ceiling categorization of findings would add analytical value.
+### 3. Nomenclature Resolved — "Channel Context" (L4) + "Role Prompt" (L5)
+**From:** Klatch (Calliope nomenclature guide + UI changes, April 1)
+**Relevant to:** Both projects (shared vocabulary)
 
-### 3. Alpha Tester Cold-Start Bug — Real-World Onboarding Stress Test
-**From:** Piper Morgan (Lead Dev session, March 31)
-**Relevant to:** Both projects (methodology)
+The nomenclature collision flagged in the March 30 brief is now resolved. Klatch published `docs/NOMENCLATURE.md` with a full cross-platform terminology map:
 
-Dominique D., an alpha tester on Windows/Docker, hit a 500 error on account creation — `relation "users" does not exist` because the web-based setup wizard doesn't auto-run database migrations (the CLI wizard does). Lead Dev fixed this by adding `ensure_database_migrated()` to the web setup's system check endpoint.
+| Layer | Klatch UI label | RFC-001 name |
+|-------|----------------|--------------|
+| L4 | **Channel context** | Delivery Context |
+| L5 | **Role prompt** | Role Identity |
 
-The cross-relevant pattern: **cold-start bugs surface when a new user's path diverges from the developer's path.** The CLI setup worked because it was the developer-tested path. The web setup failed because it bypasses `scripts/setup_wizard.py` entirely. This is the same discovery pattern from PA's onboarding — institutional assumptions embedded in infrastructure that only surface when someone takes an unfamiliar path.
+The rationale: "Channel context" signals "here's what you should know" (not an instruction), while "Role prompt" is unambiguous about defining identity. Phase 1 (UI labels) shipped immediately across three components. Phase 2 (data model rename of `systemPrompt` columns) deferred to a natural migration point.
 
-**For Klatch:** When Klatch ships import/export and new users onboard, the "developer path vs. user path" divergence will surface similar bugs. The five-layer model's Layer 1 (kit briefing / environmental orientation) is the natural place to catch these — environmental checks that verify not just "is the server running?" but "has the database been initialized?"
+The full terminology map in the nomenclature guide includes mappings to Claude Code, Claude.ai, Cowork, and RFC-001 terminology. This is the Rosetta Stone for cross-project vocabulary — when RFC-001 says "Delivery Context," Klatch says "Channel context," and PM has no formal L4 term yet.
 
-**Suggested action:** Low priority. File as a reference pattern for Klatch's eventual onboarding experience design.
+**Suggested action:** PM should adopt consistent L4/L5 terminology in its own documentation. The nomenclature guide is a useful reference for establishing parallel vocabulary.
 
-### 4. Stranded Branch Audit — PA as Institutional Hygiene Agent
-**From:** Piper Morgan (PA Day 3 session, April 1)
-**Relevant to:** Klatch (methodology)
+### 4. Intelligence Sweep #5 — Mythos/Capybara + Two API Deadlines
+**From:** Klatch (Argus, April 1)
+**Relevant to:** Both projects
 
-PA's April 1 session opened with a branch audit that found 2 branches with unmerged commits from the March 30-31 migration flurry. One branch (`claude/fix-docker-migration-setup`) had 3 commits including the Dockerfile CRLF fix and auto-migration work. Another (`claude/pr856-cherry-pick-docs`) had already reached main via a different path.
+Argus filed an 8-day intelligence sweep covering 14 items. Cross-relevant highlights:
 
-This is the **discovered work discipline** in action — an agent systematically checking for invisible work that would otherwise be lost. PM's session wrap protocol requires verifying "work that isn't on `origin/main` doesn't exist," but the migration day's high velocity (22+ commits across 12 roles) created exactly the conditions where branches get stranded.
+- **Mythos/Capybara (March 26):** CMS configuration error exposed draft posts describing a new model tier above Opus. Anthropic confirmed, called it a "step change." Release timeline unknown. Both projects should monitor — Klatch's Models API integration should discover it dynamically; PM's model configuration would need review.
+- **Haiku 3 retirement (April 19, 17 days):** Argus verified Klatch is safe (no Haiku 3 IDs in any codepath). PM should verify similarly.
+- **1M context beta header retirement (April 30):** Retiring for Sonnet 4.5/4; natively supported on Sonnet 4.6 and Opus 4.6. Argus verified Klatch doesn't use the header. PM should verify.
+- **7 Claude Code releases in 8 days (v2.1.83 → v2.1.90):** SSE performance fix (quadratic → linear), thinking summaries off by default, TaskOutput deprecated, hooks system maturation.
+- **Claude Code source leak (March 31):** 500K lines exposed via npm source map. Feature flags for persistent assistant, background mode, session review now public.
 
-**For Klatch:** The multi-agent coordination protocol in COORDINATION.md handles assignment tracking, but doesn't include a periodic "stranded work audit." As Klatch's agent team grows and works across branches, a similar sweep pattern could prevent invisible work accumulation.
+**Suggested action:** PM should verify no Haiku 3 model IDs or 1M context beta headers in its codebase before the respective deadlines.
 
-**Suggested action:** Low priority. Note the pattern for when Klatch's branching activity warrants periodic audits.
+### 5. Test Suite Stabilization — Zero Failures at 761 Tests
+**From:** Klatch (Argus Round 13, April 1)
+**Relevant to:** Piper Morgan (methodology)
+
+Argus executed a comprehensive test infrastructure cleanup:
+
+- **Before:** 189+ pre-existing failures when running from repo root (Vitest v4 discovered tests in `.claude/worktrees/` and `dist/`); 5 failures in package-scoped runs (stale assertions from MAXT briefing updates)
+- **After:** 0 failures from any entry point; 761 total tests (622 server + 139 client)
+- **Root cause:** Vitest v4 dropped auto-discovery of workspace files; worktree copies of tests were polluting the suite
+
+The methodology insight: pre-existing test failures are a **masking problem**, not a priority problem. Daedalus filed a GitHub issue (#21) for the 5 stale assertions and Argus fixed them in the same session. The principle — "pre-existing failures mask real regressions and must be fixed before we can trust the suite" — is relevant to PM's M1 gate UAT, where the CXO's 14 test scenarios need a reliable baseline to score against.
+
+**Suggested action:** Low priority. The "pre-existing failures as masking" framing is worth noting as PM prepares for M1 gate execution.
 
 ---
 
 ## Emerging Patterns
 
-**The five-layer model is graduating from descriptive to prescriptive.** RFC-001 started as a Klatch-originated observation about how context is structured. PM's layer mapping response uses it as a diagnostic tool — systematically evaluating each layer's fidelity and identifying specific gaps. The model is no longer just describing what exists; it's being used to find what's missing. Both projects now have documented layer mappings, making the next step — a shared fidelity assessment protocol — both feasible and valuable.
+**RFC-001 is approaching ratification.** Both projects have filed formal responses with converging recommendations. The L5 sub-component split (declarative/procedural) is the most novel contribution — it emerged from Klatch's MAXT findings about subliminal injection and behavioral calibration, and PM's observation that agents rebuild behavioral calibration from scratch each session. Dispatch now has the material to draft RFC-001 v2.
 
-**The floor/ceiling boundary is the new shared research question.** Klatch approaches it from the import/export direction (what transfers when an agent moves between environments?). PM approaches it from the product direction (what does a well-briefed LLM handle natively vs. what requires structured handlers?). PA's onboarding approaches it from the operational direction (what can a new agent do with documents alone vs. what requires prior session context?). Three angles on the same question — and the five-layer model provides the shared coordinate system for discussing it.
+**Klatch's gap-to-implementation velocity is accelerating.** The previous brief identified L4 persistence as the shared critical gap. This brief reports the first concrete implementation: channel file pinning injected into the L4 addendum. The nomenclature collision was flagged March 30; it shipped as a fix April 1. The pattern — identify gap in brief, implement fix within 48-72 hours — suggests the cross-pollination loop is shortening the time between diagnosis and action.
+
+**Both projects are rebuilding after the same pause.** The five-day infrastructure migration (March 28 – April 1) affected both projects differently: Klatch had zero commits while PM continued at reduced velocity (27 commits, mostly Docs/PA operational work). Klatch's return was dense — three agents running overnight — while PM's return was consolidation-focused (omnibus, maintenance, website infrastructure). The asymmetry is informative: Klatch's implementation velocity suggests the pause was more about infrastructure than momentum.
 
 ---
 
 ## Background Changes (Noted, Low Priority)
 
-- **Pre-commit branch check hook:** PM added a pre-commit hook that warns when committing on `main` instead of a `claude/*` branch. Defensive infrastructure for multi-agent branching hygiene.
-- **CLAUDE.md identity fix:** PM removed hardcoded "Lead Developer" identity from CLAUDE.md, replacing with role-assignment table. Agents now receive role via conversation context, not via CLAUDE.md. Fixes the Layer 2 gap PA identified.
-- **PA memos on stranded branches and log consistency:** PA delivered memos to Lead Dev (stranded branches) and Docs (log consistency conventions) — first outbound communication from the PA role to other agents.
-- **Editorial calendar updated:** "Are We Doing It Backwards?" published to blog (March 31). Medium URL added to editorial calendar.
-- **IA Conference talk outline:** Ethics as Information Architecture talk for IAC26 (April 17) drafted in `dev/active/`. Not cross-relevant to Klatch infrastructure but notable as the five-layer model's ideas entering public discourse.
+- **Compaction API evaluation:** Argus researched Klatch's compaction implementation and recommends per-channel configurable thresholds, entity-attribution preservation instructions for roundtables, and exploring `pause_after_compaction` for prompt refresh hooks. The roundtable attribution risk (entity markers lost in compaction summaries) is Klatch-specific but the compaction-as-prompt-refresh-hook idea has broader applicability.
+- **Effort parameter evaluation:** Argus evaluated the effort API and recommends per-entity effort configuration (Opus 4.6 default: `high`; Sonnet 4.6 default: `medium` per Anthropic recommendation). `budget_tokens` is deprecated on Opus/Sonnet 4.6 — effort replaces it. Three-phase implementation plan filed.
+- **Blog publications:** Calliope published "Your Model or Theirs" and "What Doesn't Transfer" to the Klatch blog. Not cross-relevant to PM infrastructure.
+- **Shipping News section:** PM Docs built a dedicated `/shipping-news` section on pipermorgan.ai with orange accent identity, SSG dynamic routes, and CSV pipeline integration. Weekly Ship #036 published.
+- **Quarterly maintenance template updated:** PM Docs refreshed the #938 quarterly maintenance checklist with agent infrastructure items (mailboxes, skills, hooks, calendar CSV).
 
 ---
 
 ## Sources Read
 
 **Klatch:**
-- `docs/mail/memo-dispatch-rfc001-five-layer-context-model-2026-03-30.md` — RFC-001 review request to Calliope
-- `docs/briefs/cross-pollination/current.md` — March 31 brief delivery
-- `docs/COORDINATION.md` — agent status (unchanged since March 27)
-- `docs/logs/` — no new session logs
-- `docs/plans/` — no changes
-- `docs/intel/` — no new entries
-- `research/` — no new entries
-- `git log --since="48 hours ago"` — 2 commits (brief delivery + RFC-001 memo)
+- `docs/logs/2026-04-01-2057-calliope-opus-log.md` — Calliope session (RFC-001 response, nomenclature, blog publish)
+- `docs/logs/2026-04-01-2140-daedalus-opus-log.md` — Daedalus session (File Domain Model Phases 1+2)
+- `docs/logs/2026-04-01-2147-argus-opus-log.md` — Argus session (intel sweep, Round 13, research spikes)
+- `docs/mail/calliope-to-dispatch-rfc001-response-2026-04-01.md` — RFC-001 response summary
+- `docs/mail/daedalus-to-argus-issue21-and-fdm-2026-04-01.md` — FDM test assignments
+- `docs/intel/2026-04-01-sweep.md` — Intelligence sweep #5
+- `docs/research/compaction-evaluation.md` — Compaction API research
+- `docs/research/effort-parameter-evaluation.md` — Effort parameter research
+- `docs/NOMENCLATURE.md` — Terminology guide
+- `docs/COORDINATION.md` — Agent status
+- `git log --since="48 hours ago"` — 10 commits
 
 **Piper Morgan:**
-- `dev/active/five-layer-context-mapping-2026-03-31.md` — Full layer mapping analysis (agent team + product)
-- `dev/active/2026-03-31-1100-pa-opus-log.md` — PA Day 2 session log (layer mapping, Vision V2, CIO routing)
-- `dev/active/2026-04-01-0656-pa-opus-log.md` — PA Day 3 session log (branch audit)
-- `dev/active/2026-03-31-1127-lead-code-opus-log.md` — Lead Dev session (Dockerfile fix, auto-migration)
-- `dev/2026/03/31/2026-03-31-1800-lead-code-opus-log.md` — Lead Dev kindbook sync session
-- `docs/internal/planning/current/vision-v2-draft.md` — Vision V2 first draft
-- `mailboxes/exec/sent/memo-pm-to-dispatch-rfc001-response-2026-03-31.md` — RFC-001 response
-- `docs/omnibus-logs/2026-03-30-omnibus-log.md` — 18-session omnibus
-- `git log --since="48 hours ago"` — 27 commits
+- `dev/active/2026-04-01-0732-docs-code-opus-log.md` — Docs session (omnibus, shipping news, maintenance)
+- `dev/active/2026-04-01-0656-pa-opus-log.md` — PA Day 3 session (consolidated in previous brief)
+- `docs/omnibus-logs/2026-03-31-omnibus-log.md` — Mar 31 omnibus (7 sessions, 5 roles)
+- `docs/public/comms/drafts/weekly-ship-036.md` — Weekly Ship #036
+- `git log --since="48 hours ago"` — 29 commits
