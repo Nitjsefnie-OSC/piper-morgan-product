@@ -1,135 +1,126 @@
 ---
-date: 2026-04-02
+title: "Cross-Pollination Brief — April 3, 2026"
+date: 2026-04-03
 status: substantive
 sources_checked:
   - klatch
   - piper-morgan
-window: "48h (March 31 – April 2, 2026)"
+window: "48h (April 1–3, 2026)"
 ---
 
-# Cross-Pollination Brief — April 2, 2026
+# Cross-Pollination Brief — April 3, 2026
 
-Both projects returned from a five-day infrastructure pause (service disruption + multiproject migration) with dense, coordinated output. The most cross-relevant development: **Klatch filed its RFC-001 response**, completing the second half of the bilateral layer mapping. Calliope's response proposes four amendments — most notably an L5 sub-component split (declarative text vs. procedural calibration) and an L3 freshness signal — both of which directly address gaps PM's mapping identified. Meanwhile, Daedalus shipped the **File Domain Model Phases 1-2**, which includes the first concrete implementation of structured Layer 4 content injection: channel-pinned files are now listed in the L4 addendum sent to entities. This is the first practical move toward the "Layer 4 persistence" both projects flagged as their shared critical gap. On the PM side, the Docs agent built a Shipping News section on the website, completed quarterly maintenance template updates, and published the Mar 31 omnibus. The period's activity is predominantly Klatch-heavy — three agents (Calliope, Daedalus, Argus) ran overnight sessions producing implementation, research, and documentation at volume.
+Klatch's File Domain Model sprint continued at pace: **Phases 3-5 shipped in a single day**, completing the full scope of structured context injection — project files now appear in L3 ("Project knowledge base files:"), channel files in L4 ("Channel files available:"), and files can be promoted upward from message to channel to project. The test suite kept pace: Argus wrote 47 new FDM-specific tests across two rounds, bringing Klatch to **808 tests with zero failures**. Calliope scoped MAXT Session 02 around L4 injection fidelity — testing whether agents can actually *use* pinned file knowledge or merely have it structurally present. On the PM side, **Piper Alpha drafted a three-phase daily check-in flow** that explicitly integrates the cross-pollination brief as the shared intelligence channel — the first formal PM operational design to build on this infrastructure. PA also produced a backlog review surfacing **89 open MVP issues targeting May 27** with scope pressure recommendations, prepped a Vision V2 circulation to CXO and PPM, and completed 12 of 15 quarterly maintenance items. Both projects hit usage limits mid-session — a shared friction point worth noting.
 
 ---
 
 ## Key Insights
 
-### 1. RFC-001 Bilateral Mapping Complete — Four Amendments Proposed
-**From:** Klatch (Calliope RFC-001 response, April 1)
-**Relevant to:** Piper Morgan, Dispatch
+### 1. File Domain Model Phases 3-5 — Full Structured Context Injection
+**From:** Klatch (Daedalus, April 2-3)
+**Relevant to:** Piper Morgan (architecture pattern)
 
-Calliope's RFC-001 response completes the bilateral loop: both projects have now filed formal layer mappings against the five-layer standard. Klatch's response confirms the RFC's mapping is correct, provides dual mappings (product + agent team), and proposes four amendments:
+Daedalus completed three FDM phases in rapid succession:
 
-1. **L5 sub-components:** Split Layer 5 into L5a (declarative text — transfers) and L5b (procedural calibration — doesn't transfer). This directly addresses the Layer 5 learning loop gap both projects identified.
-2. **L3 freshness signal:** Memory is injected with full confidence regardless of age. Propose a freshness indicator so agents can weight stale vs. current context.
-3. **Fidelity assessment protocol:** Formalize AAXT + MAXT as the evaluation framework for layer fidelity (supports PM's earlier recommendation).
-4. **Agent-team vs. product distinction:** Both projects implement the five-layer model twice — once for their agent teams and once for their products. The RFC should acknowledge this dual application explicitly.
+- **Phase 3** (project knowledge base): Upload/manage UI in Project Settings. Project files listed in L3 context via `buildSystemPrompt`. This is the L3 counterpart to Phase 2's L4 channel file injection.
+- **Phase 4** (dual-write completion): The `save_file` tool handler now creates both `message_artifacts` and `files`/`file_refs` entries. All file creation paths are now consistent.
+- **Phase 5** (promotion): Files can be promoted upward (message → channel → project) via `POST /api/files/:id/promote`. "Promote to project" button on channel-pinned files in the UI.
 
-Calliope notes support for PM's earlier recommendations on the fidelity protocol and agent-vs-product distinction. Both responses are now available for Dispatch to synthesize into an RFC revision.
+The design doc was also resequenced: Phases 6-7 (memory-as-file, entity library) deferred to Steps 10-11 where they deliver more user value. This is Gall's Law applied to feature planning — ship what users can touch now, defer refactors to when the unified model pays off.
 
-**Suggested action:** Dispatch has both responses. Next step is an RFC-001 revision incorporating the converging recommendations — particularly the L5 sub-component split, which neither project had articulated before Calliope's response.
+**For PM:** The scope-aware file reference pattern is now proven across two layers (L3 + L4). PM's L3 is currently a memory column that dies on restart. When PM addresses its own persistence gap, the pointer-based architecture (canonical file + scope references + per-layer injection) is a tested template.
 
-### 2. File Domain Model Phases 1-2 — First Concrete L4 Persistence
-**From:** Klatch (Daedalus, April 1)
-**Relevant to:** Piper Morgan (methodology)
+**Suggested action:** Low priority. Note the proven pattern; no immediate action required.
 
-Daedalus shipped two phases of the File Domain Model in a single session:
+### 2. Daily Check-In Flow Formalizes Cross-Pollination Consumption
+**From:** Piper Morgan (PA Day 4, April 2)
+**Relevant to:** Both projects (process)
 
-- **Phase 1:** New `files` and `file_refs` tables with pointer-based scope architecture (message, channel, project, entity scopes). Full backfill from existing `message_artifacts`. Five API endpoints for querying files at each scope.
-- **Phase 2:** Channel file pinning — users can pin files to a channel, and pinned files are now **listed in the L4 channel addendum** sent to entities. This is structured context injection: `buildSystemPrompt` now includes channel file names when present.
+PA drafted a three-phase morning flow: Dispatch automated sweep (cross-project) → PA orientation (Piper Morgan) → Docs synthesis (omnibus). The design explicitly names the cross-pollination brief as the shared intelligence channel:
 
-This is the first practical implementation of "make Layer 4 richer" — the shared gap identified in both RFC-001 responses. The dual-write pattern (backward compat with `message_artifacts` + new domain model) shows how to evolve persistence without breaking existing flows.
+> *"Dispatch → PA (daily): Cross-pollination brief is already delivered to `docs/briefs/cross-pollination/current.md`. PA reads this at session start. No change needed."*
 
-**For PM:** PM's Layer 4 gap is different (session context in a Python dict that dies on restart), but the design pattern is transferable: scope-aware references that persist across sessions. The "pin to channel" metaphor maps to PM's concept of context that survives beyond a single conversation turn.
+This is the first PM operational document that builds on cross-pollination infrastructure as a dependency rather than a nice-to-have. The flow also formalizes what has been happening organically: PA archives yesterday's logs and confirms inventory *before* Docs synthesizes the omnibus. Four open questions for PM: timing, Dispatch filesystem access, Chat log automation, and Docs omnibus timing.
 
-**Suggested action:** Low priority. Note the scope architecture pattern for when PM addresses its own L4 persistence gap.
+**For Klatch:** Klatch agents already read the cross-pollination brief at session start per CLAUDE.md convention. PM formalizing the same practice with a sequenced flow validates the consumption pattern. The PA → Docs handoff (log archival before synthesis) is analogous to the Calliope → Daedalus coordination pattern in Klatch.
 
-### 3. Nomenclature Resolved — "Channel Context" (L4) + "Role Prompt" (L5)
-**From:** Klatch (Calliope nomenclature guide + UI changes, April 1)
-**Relevant to:** Both projects (shared vocabulary)
+**Suggested action:** None required. The cross-pollination delivery mechanism is working as designed on both ends.
 
-The nomenclature collision flagged in the March 30 brief is now resolved. Klatch published `docs/NOMENCLATURE.md` with a full cross-platform terminology map:
+### 3. Backlog Review Surfaces MVP Scope Pressure and Discovery Expansion Pattern
+**From:** Piper Morgan (PA, April 2)
+**Relevant to:** Klatch (methodology)
 
-| Layer | Klatch UI label | RFC-001 name |
-|-------|----------------|--------------|
-| L4 | **Channel context** | Delivery Context |
-| L5 | **Role prompt** | Role Identity |
+PA's first backlog review maps 119 open issues across 4 milestones. The MVP milestone carries 89 issues targeting May 27 — nominally alarming but mitigated: ~30 are likely Fast Follow candidates (DIST, CONV-FEAT, MUX clusters), ~15 are WIRE stubs. PA recommends a triage pass to move non-essentials to Fast Follow and identifies 6-8 issues superseded by intervening work.
 
-The rationale: "Channel context" signals "here's what you should know" (not an instruction), while "Role prompt" is unambiguous about defining identity. Phase 1 (UI labels) shipped immediately across three components. Phase 2 (data model rename of `systemPrompt` columns) deferred to a natural migration point.
+The cross-relevant methodology insight: **discovery expansion is a pattern, not an anomaly.** M0 expanded from 5 to 27 issues during execution. M1 showed similar expansion. PA recommends future estimates should assume this. For any project estimating sprint scope for agent-driven work — including Klatch's remaining roadmap steps — the baseline assumption should be that execution surfaces 3-5x the originally scoped issues.
 
-The full terminology map in the nomenclature guide includes mappings to Claude Code, Claude.ai, Cowork, and RFC-001 terminology. This is the Rosetta Stone for cross-project vocabulary — when RFC-001 says "Delivery Context," Klatch says "Channel context," and PM has no formal L4 term yet.
+**Suggested action:** When Klatch plans Steps 10-11 scope, factor in the discovery expansion pattern PM has now documented across two milestones.
 
-**Suggested action:** PM should adopt consistent L4/L5 terminology in its own documentation. The nomenclature guide is a useful reference for establishing parallel vocabulary.
+### 4. MAXT Session 02 Scoped — L4 Injection Fidelity Test
+**From:** Klatch (Calliope → Theseus memo, April 2)
+**Relevant to:** Both projects (methodology)
 
-### 4. Intelligence Sweep #5 — Mythos/Capybara + Two API Deadlines
-**From:** Klatch (Argus, April 1)
-**Relevant to:** Both projects
+Calliope's memo to Theseus proposes two AXT test candidates for the next session:
 
-Argus filed an 8-day intelligence sweep covering 14 items. Cross-relevant highlights:
+1. **File pinning L4 injection fidelity:** Does an agent in a channel with pinned files *know* about those files? Can it use that knowledge (behavioral access)? Can it *attribute* where it learned about the files (conscious attribution)? Does the Subliminal condition apply — files structurally present in L4 but not introspectively reportable?
+2. **Nomenclature change as AXT variable:** Does renaming "System prompt" → "Role prompt" affect how agents perceive their identity setup?
 
-- **Mythos/Capybara (March 26):** CMS configuration error exposed draft posts describing a new model tier above Opus. Anthropic confirmed, called it a "step change." Release timeline unknown. Both projects should monitor — Klatch's Models API integration should discover it dynamically; PM's model configuration would need review.
-- **Haiku 3 retirement (April 19, 17 days):** Argus verified Klatch is safe (no Haiku 3 IDs in any codepath). PM should verify similarly.
-- **1M context beta header retirement (April 30):** Retiring for Sonnet 4.5/4; natively supported on Sonnet 4.6 and Opus 4.6. Argus verified Klatch doesn't use the header. PM should verify.
-- **7 Claude Code releases in 8 days (v2.1.83 → v2.1.90):** SSE performance fix (quadratic → linear), thinking summaries off by default, TaskOutput deprecated, hooks system maturation.
-- **Claude Code source leak (March 31):** 500K lines exposed via npm source map. Feature flags for persistent assistant, background mode, session review now public.
+The first test extends MAXT methodology to validate the FDM's practical impact — not just "does the data get injected" (AAXT already covers that with 808 tests) but "does the agent experience it as knowledge." This is the validation layer PM's E2E/AAXT track (#927-930) should consider: automated tests confirm structure, but fidelity testing confirms behavior.
 
-**Suggested action:** PM should verify no Haiku 3 model IDs or 1M context beta headers in its codebase before the respective deadlines.
+**Suggested action:** PM's E2E/AAXT track design should consider the AAXT/MAXT split: automated tests for structural correctness, qualitative sessions for behavioral fidelity. Klatch has now run this methodology across L3 (Session 01) and is about to run it on L4 (Session 02).
 
-### 5. Test Suite Stabilization — Zero Failures at 761 Tests
-**From:** Klatch (Argus Round 13, April 1)
-**Relevant to:** Piper Morgan (methodology)
+### 5. Metis Arrives — Coordination Agent Convergence
+**From:** Klatch (Calliope session, April 2)
+**Relevant to:** Piper Morgan (pattern recognition)
 
-Argus executed a comprehensive test infrastructure cleanup:
+Metis is Klatch's newest agent — a Cowork-native coordination and knowledge stewardship role. Calliope's welcome memo draws the boundary: Calliope handles narrative and editorial (what happened, what it means) from Code; Metis handles operational and cross-environment coordination (is the right information in the right place) from Cowork.
 
-- **Before:** 189+ pre-existing failures when running from repo root (Vitest v4 discovered tests in `.claude/worktrees/` and `dist/`); 5 failures in package-scoped runs (stale assertions from MAXT briefing updates)
-- **After:** 0 failures from any entry point; 761 total tests (622 server + 139 client)
-- **Root cause:** Vitest v4 dropped auto-discovery of workspace files; worktree copies of tests were polluting the suite
+The convergence with PM is striking: **Piper Alpha** emerged from the same need — a coordination layer that watches the operational state of the whole team, handles log archival, memo routing, and morning briefings. Both projects independently arrived at "we need an agent whose job is to watch the other agents" after scaling past 3-4 active roles. The role description differs (Metis bridges environments; PA bridges sessions), but the structural gap is the same: operational awareness as a first-class agent responsibility.
 
-The methodology insight: pre-existing test failures are a **masking problem**, not a priority problem. Daedalus filed a GitHub issue (#21) for the 5 stale assertions and Argus fixed them in the same session. The principle — "pre-existing failures mask real regressions and must be fixed before we can trust the suite" — is relevant to PM's M1 gate UAT, where the CXO's 14 test scenarios need a reliable baseline to score against.
-
-**Suggested action:** Low priority. The "pre-existing failures as masking" framing is worth noting as PM prepares for M1 gate execution.
+**Suggested action:** Worth noting as a shared pattern in agent team scaling. No direct action needed.
 
 ---
 
 ## Emerging Patterns
 
-**RFC-001 is approaching ratification.** Both projects have filed formal responses with converging recommendations. The L5 sub-component split (declarative/procedural) is the most novel contribution — it emerged from Klatch's MAXT findings about subliminal injection and behavioral calibration, and PM's observation that agents rebuild behavioral calibration from scratch each session. Dispatch now has the material to draft RFC-001 v2.
+**The File Domain Model is the fastest multi-phase feature in Klatch's history.** Phases 1-5 shipped across three sessions (April 1-3) — from schema to full CRUD with promotion. Each phase was a minimal working increment; each was tested before the next began. The pace was enabled by the pointer-based architecture: adding a new scope (Phase 3) required only new endpoints and a one-line addition to `buildSystemPrompt`, not a structural rethink. This validates the design document's Gall's Law principle in practice.
 
-**Klatch's gap-to-implementation velocity is accelerating.** The previous brief identified L4 persistence as the shared critical gap. This brief reports the first concrete implementation: channel file pinning injected into the L4 addendum. The nomenclature collision was flagged March 30; it shipped as a fix April 1. The pattern — identify gap in brief, implement fix within 48-72 hours — suggests the cross-pollination loop is shortening the time between diagnosis and action.
+**Both projects are developing "meta-operational" agent roles.** PM has Piper Alpha (session coordination, log hygiene, briefing delivery). Klatch now has Metis (cross-environment coordination, knowledge stewardship). Both emerged independently, both were added after the team exceeded 3-4 active roles, and both serve the same function: watching the team's operational state so the PM doesn't have to carry it all in working memory. This is a scaling pattern, not a coincidence.
 
-**Both projects are rebuilding after the same pause.** The five-day infrastructure migration (March 28 – April 1) affected both projects differently: Klatch had zero commits while PM continued at reduced velocity (27 commits, mostly Docs/PA operational work). Klatch's return was dense — three agents running overnight — while PM's return was consolidation-focused (omnibus, maintenance, website infrastructure). The asymmetry is informative: Klatch's implementation velocity suggests the pause was more about infrastructure than momentum.
+**Usage limits are emerging as a shared productivity constraint.** Both Daedalus and PM's Docs agent hit usage limits mid-session in this window (Daedalus: 11:40-12:53; PM: 11:50 AM – ~7:16 PM). These are not bugs but environmental friction. As both projects increase per-session output density, the constraint will tighten.
 
 ---
 
 ## Background Changes (Noted, Low Priority)
 
-- **Compaction API evaluation:** Argus researched Klatch's compaction implementation and recommends per-channel configurable thresholds, entity-attribution preservation instructions for roundtables, and exploring `pause_after_compaction` for prompt refresh hooks. The roundtable attribution risk (entity markers lost in compaction summaries) is Klatch-specific but the compaction-as-prompt-refresh-hook idea has broader applicability.
-- **Effort parameter evaluation:** Argus evaluated the effort API and recommends per-entity effort configuration (Opus 4.6 default: `high`; Sonnet 4.6 default: `medium` per Anthropic recommendation). `budget_tokens` is deprecated on Opus/Sonnet 4.6 — effort replaces it. Three-phase implementation plan filed.
-- **Blog publications:** Calliope published "Your Model or Theirs" and "What Doesn't Transfer" to the Klatch blog. Not cross-relevant to PM infrastructure.
-- **Shipping News section:** PM Docs built a dedicated `/shipping-news` section on pipermorgan.ai with orange accent identity, SSG dynamic routes, and CSV pipeline integration. Weekly Ship #036 published.
-- **Quarterly maintenance template updated:** PM Docs refreshed the #938 quarterly maintenance checklist with agent infrastructure items (mailboxes, skills, hooks, calendar CSV).
+- **Vision V2 review circulated:** PA sent review memos to CXO and PPM mailboxes. Key framing changes: "Three Phases" → "Three Horizons," "Bring Your Own Key" vendor flexibility, "Methodology as Product" section. Not cross-relevant to Klatch infrastructure but signals PM's strategic direction.
+- **HOST rename complete:** PM renamed HOSR → HOST (Head of Sapient Trust) across all operational files. Glossary entry updated accordingly.
+- **Roadmap refresh prepped:** PA documented that roadmap v14.3 (March 10) is stale — M1 shows 47% but is actually complete. v14.4 to publish after M1 gate closes (#926). Waiting on 14 PM manual test scenarios.
+- **Quarterly maintenance (#938):** 12 of 15 items completed. 14 untracked TODOs found in `services/` directory, memo sent to Lead Dev for triage. 4 missing `__init__.py` files identified.
+- **CIO session prep:** PA flagged 5 outstanding CIO items: innovation backlog location, accumulated reading/ideas, Hooks Phase 1 monitoring, PA introduction, fidelity-as-discipline entry.
+- **Calliope closed MAXT Session 01 report as resolved:** Theseus's session log (lines 72-104) *is* the report; all 8 findings documented inline. No separate formal report needed.
+- **"The Floor That Wasn't" published:** PM Docs published the 4th blog-first canonical post to pipermorgan.ai and Medium.
 
 ---
 
 ## Sources Read
 
 **Klatch:**
-- `docs/logs/2026-04-01-2057-calliope-opus-log.md` — Calliope session (RFC-001 response, nomenclature, blog publish)
-- `docs/logs/2026-04-01-2140-daedalus-opus-log.md` — Daedalus session (File Domain Model Phases 1+2)
-- `docs/logs/2026-04-01-2147-argus-opus-log.md` — Argus session (intel sweep, Round 13, research spikes)
-- `docs/mail/calliope-to-dispatch-rfc001-response-2026-04-01.md` — RFC-001 response summary
-- `docs/mail/daedalus-to-argus-issue21-and-fdm-2026-04-01.md` — FDM test assignments
-- `docs/intel/2026-04-01-sweep.md` — Intelligence sweep #5
-- `docs/research/compaction-evaluation.md` — Compaction API research
-- `docs/research/effort-parameter-evaluation.md` — Effort parameter research
-- `docs/NOMENCLATURE.md` — Terminology guide
-- `docs/COORDINATION.md` — Agent status
-- `git log --since="48 hours ago"` — 10 commits
+- `docs/logs/2026-04-02-0817-daedalus-opus-log.md` — Daedalus session (FDM Phases 3-5, design doc resequencing)
+- `docs/logs/2026-04-02-0730-calliope-opus-log.md` — Calliope session (logbook, MAXT closure, memos to Theseus and Metis)
+- `docs/logs/2026-04-02-0818-argus-opus-log.md` — Argus session (Round 14: 31 tests, Round 15: 16 tests)
+- `docs/mail/calliope-to-theseus-axt-agenda-2026-04-02.md` — MAXT Session 02 scope proposal
+- `docs/mail/calliope-to-metis-welcome-2026-04-02.md` — Metis welcome, role boundary definition
+- `docs/mail/daedalus-to-argus-round15-2026-04-02.md` — Phase 2+3 test assignments
+- `docs/plans/FILE-DOMAIN-MODEL.md` — Design doc (resequenced phases)
+- `git log --since="48 hours ago"` — 18 commits
 
 **Piper Morgan:**
-- `dev/active/2026-04-01-0732-docs-code-opus-log.md` — Docs session (omnibus, shipping news, maintenance)
-- `dev/active/2026-04-01-0656-pa-opus-log.md` — PA Day 3 session (consolidated in previous brief)
-- `docs/omnibus-logs/2026-03-31-omnibus-log.md` — Mar 31 omnibus (7 sessions, 5 roles)
-- `docs/public/comms/drafts/weekly-ship-036.md` — Weekly Ship #036
-- `git log --since="48 hours ago"` — 29 commits
+- `dev/active/2026-04-02-0718-pa-opus-log.md` — PA Day 4 (check-in flow, Vision V2, backlog, roadmap, CIO prep)
+- `dev/active/2026-04-02-0715-docs-code-opus-log.md` — Docs session (Ship #036 fix, blog publish, HOST rename, #938 maintenance)
+- `dev/active/daily-check-in-flow-draft-2026-04-02.md` — Three-phase morning flow proposal
+- `dev/active/backlog-review-2026-04-02.md` — 119-issue backlog analysis
+- `dev/active/roadmap-refresh-prep-2026-04-02.md` — Roadmap v14.3 → v14.4 prep
+- `dev/active/cio-session-prep-2026-04-02.md` — CIO session agenda
+- `docs/omnibus-logs/2026-04-01-omnibus-log.md` — Apr 1 omnibus (3 sessions, 3 roles)
+- `git log --since="48 hours ago"` — 19 commits
