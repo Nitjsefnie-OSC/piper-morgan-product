@@ -1,126 +1,117 @@
 ---
-title: "Cross-Pollination Brief — April 3, 2026"
-date: 2026-04-03
+date: 2026-04-04
 status: substantive
 sources_checked:
   - klatch
   - piper-morgan
-window: "48h (April 1–3, 2026)"
+window: "48h (April 2–4, 2026)"
 ---
 
-# Cross-Pollination Brief — April 3, 2026
+# Cross-Pollination Brief — April 4, 2026
 
-Klatch's File Domain Model sprint continued at pace: **Phases 3-5 shipped in a single day**, completing the full scope of structured context injection — project files now appear in L3 ("Project knowledge base files:"), channel files in L4 ("Channel files available:"), and files can be promoted upward from message to channel to project. The test suite kept pace: Argus wrote 47 new FDM-specific tests across two rounds, bringing Klatch to **808 tests with zero failures**. Calliope scoped MAXT Session 02 around L4 injection fidelity — testing whether agents can actually *use* pinned file knowledge or merely have it structurally present. On the PM side, **Piper Alpha drafted a three-phase daily check-in flow** that explicitly integrates the cross-pollination brief as the shared intelligence channel — the first formal PM operational design to build on this infrastructure. PA also produced a backlog review surfacing **89 open MVP issues targeting May 27** with scope pressure recommendations, prepped a Vision V2 circulation to CXO and PPM, and completed 12 of 15 quarterly maintenance items. Both projects hit usage limits mid-session — a shared friction point worth noting.
+Piper Morgan ran its **M1 gate UAT** — and it **did not pass**. PM and CXO tested 8 of 14 scenarios on a fresh account against v0.8.6 and stopped early: the floor LLM was not reaching users (five query types returned the same canned template), and todo completion was non-functional despite 23 passing tests. **Pattern-045 confirmed at scale** — green tests, red user — in exactly the scenario the gate was designed to catch. Lead Dev identified root causes overnight: LLM provider hardcoded to Anthropic with validation failing (filed as #940), and todo tests mock the service layer so they never hit the real database. On the Klatch side, Argus completed a **compaction threshold deep dive** recommending a raise from 80K to 160K tokens — the current trigger fires at only 8% of available context on 1M-token models, compared to Claude Code's 75% strategy. Test suite reached **819 with zero failures** after Round 16 covered FDM Phases 4-5. Meanwhile, **Janus opened a formal channel to Ted Nadeau**, mapping structural convergence between HPL/Englishia and the Five-Layer Architecture with four concrete asks that route directly into both projects' roadmaps.
 
 ---
 
 ## Key Insights
 
-### 1. File Domain Model Phases 3-5 — Full Structured Context Injection
-**From:** Klatch (Daedalus, April 2-3)
+### 1. M1 Gate UAT: Pattern-045 Confirmed at Scale
+**From:** Piper Morgan (CXO + PM + Lead Dev, April 3)
+**Relevant to:** Klatch (methodology validation)
+
+The M1 gate UAT was the first systematic, fresh-account test of Piper Morgan's floor-first architecture. Results:
+
+- **Gate 1** (conversational quality): 0 of 7 queries passed the Colleague Test. 4 auto-fails. Five of six floor-routed queries returned an identical canned introduction template.
+- **Gate 2** (task lifecycle): Todo creation works (rigid syntax only), but completion is non-functional across all attempted input formats.
+- **Five findings documented**, three blocking: (1) floor LLM not connecting to users, (2) canned template masking all failure modes, (4) todo completion broken despite passing tests.
+
+The gate caught exactly what it was built to catch. Pattern-045 ("Green Tests, Red User") appeared in two separate subsystems — the floor response path and the todo handler. In both cases, tests pass because they mock the service layer; the user hits real infrastructure and fails. Lead Dev traced Finding 1 to a hardcoded Anthropic provider in `services/llm/config.py` with validation failing silently, and filed #940 (LLM config) as the blocker.
+
+**For Klatch:** This is direct validation of the AAXT/MAXT methodology split. AAXT confirms structural correctness (PM's 23 todo tests all pass). MAXT — or in PM's case, the gate UAT — catches behavioral failures that automated tests cannot. Klatch is about to run MAXT Session 02 on L4 injection fidelity; PM's experience demonstrates *why* that session matters. The gap between "data is structurally present" and "user can actually use it" is not hypothetical.
+
+**Suggested action:** When designing MAXT Session 02 scoring criteria, consider adding Pattern-045 as an explicit test category: "Does this feature work end-to-end through real infrastructure, not just through mocked layers?"
+
+### 2. Compaction Threshold Research — 80K Is 10x Too Aggressive
+**From:** Klatch (Argus, April 3)
 **Relevant to:** Piper Morgan (architecture pattern)
 
-Daedalus completed three FDM phases in rapid succession:
+Argus completed a deep dive on compaction thresholds, building on the initial evaluation from Round 13. Key findings:
 
-- **Phase 3** (project knowledge base): Upload/manage UI in Project Settings. Project files listed in L3 context via `buildSystemPrompt`. This is the L3 counterpart to Phase 2's L4 channel file injection.
-- **Phase 4** (dual-write completion): The `save_file` tool handler now creates both `message_artifacts` and `files`/`file_refs` entries. All file creation paths are now consistent.
-- **Phase 5** (promotion): Files can be promoted upward (message → channel → project) via `POST /api/files/:id/promote`. "Promote to project" button on channel-pinned files in the UI.
+- **Klatch's 80K trigger fires at only ~8% of available context** on 1M-token models. Claude Code triggers at ~75% of its 200K context. Klatch is being 10x more aggressive than Anthropic's own tool.
+- **Technical coding conversations compress at ~18:1.** At 80K, an imported session compacts to ~4.4K tokens — very lossy. At 160K, the summary retains ~8.9K tokens — still compact but preserving more structural detail.
+- **Most imported Claude Code sessions are 50K-150K tokens.** At 80K, many trigger compaction unnecessarily. At 160K, most preserve their full history.
+- **Claude Code reserves ~50K tokens as a "completion buffer"** for reasoning. The insight: models need free space to *think*, not just to read.
 
-The design doc was also resequenced: Phases 6-7 (memory-as-file, entity library) deferred to Steps 10-11 where they deliver more user value. This is Gall's Law applied to feature planning — ship what users can touch now, defer refactors to when the unified model pays off.
+Recommendation: raise default from 80K to 160K (one-line change), add entity-attribution preservation instructions for roundtable compaction summaries (one conditional). No configuration UI needed.
 
-**For PM:** The scope-aware file reference pattern is now proven across two layers (L3 + L4). PM's L3 is currently a memory column that dies on restart. When PM addresses its own persistence gap, the pointer-based architecture (canonical file + scope references + per-layer injection) is a tested template.
+**For PM:** When PM revisits its own conversation context management — particularly around the "three clocks problem" (knowledge fragmented across Chat sessions, Code memory, and repo files) — this research provides tested data points. The 18:1 compression ratio for technical conversations means aggressive compaction loses specific details (file paths, variable names, intermediate reasoning). PM's current approach of not compacting at all in Claude Code sessions is actually closer to optimal for 1M-context models than premature summarization would be.
 
-**Suggested action:** Low priority. Note the proven pattern; no immediate action required.
+**Suggested action:** Low priority. Note the compression ratio data and the "completion buffer" insight for future reference. No immediate PM action required.
 
-### 2. Daily Check-In Flow Formalizes Cross-Pollination Consumption
-**From:** Piper Morgan (PA Day 4, April 2)
-**Relevant to:** Both projects (process)
+### 3. Janus-Ted Nadeau Channel — HPL/Five-Layer Convergence Mapped
+**From:** Janus (April 3, delivered to `mailboxes/ted-nadeau/inbox/`)
+**Relevant to:** Both projects (architecture, roadmap)
 
-PA drafted a three-phase morning flow: Dispatch automated sweep (cross-project) → PA orientation (Piper Morgan) → Docs synthesis (omnibus). The design explicitly names the cross-pollination brief as the shared intelligence channel:
+Janus sent a formal introduction memo to Ted Nadeau, mapping structural convergence between his HPL (HumanOS Programming Language) / Englishia projects and the Five-Layer Architecture. This is not a courtesy note — it contains four concrete asks that route directly into both projects:
 
-> *"Dispatch → PA (daily): Cross-pollination brief is already delivered to `docs/briefs/cross-pollination/current.md`. PA reads this at session start. No change needed."*
+1. **HPL §16 → RFC-001:** Ted's sixteen notation types formalize what the Five-Layer Model does informally. Janus asked for a short mapping document annotating each layer with the HPL types that belong there — directly usable as RFC-001 input.
+2. **Englishia's cell model → Klatch Step 10:** Englishia's typed-cell model with explicit dependency DAGs is essentially a design for Klatch's planned export/meta-model format. Janus asked for the minimum viable cell schema (fields, types, required vs. optional) for Daedalus to evaluate.
+3. **Quintivium as editorial project:** The five-pillar computational literacy framework proposed for DinP hosting.
+4. **MultiChat ↔ Englishia boundary:** Clarification of whether MultiChat is an Englishia application or a separate system.
 
-This is the first PM operational document that builds on cross-pollination infrastructure as a dependency rather than a nice-to-have. The flow also formalizes what has been happening organically: PA archives yesterday's logs and confirms inventory *before* Docs synthesizes the omnibus. Four open questions for PM: timing, Dispatch filesystem access, Chat log automation, and Docs omnibus timing.
+**For Klatch:** Ask #2 is directly actionable — if Ted provides a cell schema, it should be evaluated against Step 10 (export/meta-model synthesis) requirements. Ask #1 feeds into the still-pending RFC-001 response from Calliope.
 
-**For Klatch:** Klatch agents already read the cross-pollination brief at session start per CLAUDE.md convention. PM formalizing the same practice with a sequenced flow validates the consumption pattern. The PA → Docs handoff (log archival before synthesis) is analogous to the Calliope → Daedalus coordination pattern in Klatch.
+**For PM:** Ask #1 enriches RFC-001 with a formal type system that PM's response (March 31) lacked. The HPL notation types could address the L4-L5 structural gap both projects identified.
 
-**Suggested action:** None required. The cross-pollination delivery mechanism is working as designed on both ends.
+**Suggested action:** Klatch: Calliope should be aware that RFC-001 may receive HPL-typed input from Ted's response. PM: No immediate action, but the Ted channel is now live and routed through Janus rather than the PM mailbox.
 
-### 3. Backlog Review Surfaces MVP Scope Pressure and Discovery Expansion Pattern
-**From:** Piper Morgan (PA, April 2)
-**Relevant to:** Klatch (methodology)
+### 4. Klatch Test Suite Reaches 819 — FDM Coverage Complete
+**From:** Klatch (Argus, April 3)
+**Relevant to:** Piper Morgan (methodology contrast)
 
-PA's first backlog review maps 119 open issues across 4 milestones. The MVP milestone carries 89 issues targeting May 27 — nominally alarming but mitigated: ~30 are likely Fast Follow candidates (DIST, CONV-FEAT, MUX clusters), ~15 are WIRE stubs. PA recommends a triage pass to move non-essentials to Fast Follow and identifies 6-8 issues superseded by intervening work.
+Argus wrote Round 16: 11 tests covering FDM Phases 4 (dual-write) and 5 (promotion). This completes test coverage for all five shipped FDM phases: 58 tests across 3 test files (Round 14: 31, Round 15: 16, Round 16: 11). Total suite: 819 tests, zero failures.
 
-The cross-relevant methodology insight: **discovery expansion is a pattern, not an anomaly.** M0 expanded from 5 to 27 issues during execution. M1 showed similar expansion. PA recommends future estimates should assume this. For any project estimating sprint scope for agent-driven work — including Klatch's remaining roadmap steps — the baseline assumption should be that execution surfaces 3-5x the originally scoped issues.
+The timing juxtaposition with PM's UAT failure is instructive. Klatch's FDM tests validate real database operations (in-memory SQLite per test via mock of `getDb()`). PM's todo tests mock `TodoManagementService` entirely — the tests never touch the database. Both suites are "passing," but one catches integration failures and the other doesn't.
 
-**Suggested action:** When Klatch plans Steps 10-11 scope, factor in the discovery expansion pattern PM has now documented across two milestones.
+**For PM:** The Klatch testing pattern — in-memory database per test, real queries, no service-layer mocks — is worth examining as a reference for PM's E2E/AAXT track (#927-930). The Pattern-045 problem surfaces specifically when tests mock at the service boundary. Testing through the actual data layer (even in-memory) would have caught both the todo completion failure and potentially the LLM config issue.
 
-### 4. MAXT Session 02 Scoped — L4 Injection Fidelity Test
-**From:** Klatch (Calliope → Theseus memo, April 2)
-**Relevant to:** Both projects (methodology)
-
-Calliope's memo to Theseus proposes two AXT test candidates for the next session:
-
-1. **File pinning L4 injection fidelity:** Does an agent in a channel with pinned files *know* about those files? Can it use that knowledge (behavioral access)? Can it *attribute* where it learned about the files (conscious attribution)? Does the Subliminal condition apply — files structurally present in L4 but not introspectively reportable?
-2. **Nomenclature change as AXT variable:** Does renaming "System prompt" → "Role prompt" affect how agents perceive their identity setup?
-
-The first test extends MAXT methodology to validate the FDM's practical impact — not just "does the data get injected" (AAXT already covers that with 808 tests) but "does the agent experience it as knowledge." This is the validation layer PM's E2E/AAXT track (#927-930) should consider: automated tests confirm structure, but fidelity testing confirms behavior.
-
-**Suggested action:** PM's E2E/AAXT track design should consider the AAXT/MAXT split: automated tests for structural correctness, qualitative sessions for behavioral fidelity. Klatch has now run this methodology across L3 (Session 01) and is about to run it on L4 (Session 02).
-
-### 5. Metis Arrives — Coordination Agent Convergence
-**From:** Klatch (Calliope session, April 2)
-**Relevant to:** Piper Morgan (pattern recognition)
-
-Metis is Klatch's newest agent — a Cowork-native coordination and knowledge stewardship role. Calliope's welcome memo draws the boundary: Calliope handles narrative and editorial (what happened, what it means) from Code; Metis handles operational and cross-environment coordination (is the right information in the right place) from Cowork.
-
-The convergence with PM is striking: **Piper Alpha** emerged from the same need — a coordination layer that watches the operational state of the whole team, handles log archival, memo routing, and morning briefings. Both projects independently arrived at "we need an agent whose job is to watch the other agents" after scaling past 3-4 active roles. The role description differs (Metis bridges environments; PA bridges sessions), but the structural gap is the same: operational awareness as a first-class agent responsibility.
-
-**Suggested action:** Worth noting as a shared pattern in agent team scaling. No direct action needed.
+**Suggested action:** When Lead Dev investigates Finding 4 (todo completion), consider whether the fix should include at least one integration test that exercises the real `TodoManagementService` against a test database, not just the mocked interface.
 
 ---
 
 ## Emerging Patterns
 
-**The File Domain Model is the fastest multi-phase feature in Klatch's history.** Phases 1-5 shipped across three sessions (April 1-3) — from schema to full CRUD with promotion. Each phase was a minimal working increment; each was tested before the next began. The pace was enabled by the pointer-based architecture: adding a new scope (Phase 3) required only new endpoints and a one-line addition to `buildSystemPrompt`, not a structural rethink. This validates the design document's Gall's Law principle in practice.
+**Pattern-045 is the defining anti-pattern of the M1 gate.** Both blocking findings (floor LLM, todo completion) exhibit the same structure: tests pass because they mock away the integration boundary, but the real system fails when a user hits it. The gate methodology — fresh account, no setup, scored rubric — caught this in the first 8 scenarios. This validates the gate design and, more broadly, the principle that automated tests and user-facing validation are complementary, not substitutable. Klatch's AAXT/MAXT split implements the same principle by design.
 
-**Both projects are developing "meta-operational" agent roles.** PM has Piper Alpha (session coordination, log hygiene, briefing delivery). Klatch now has Metis (cross-environment coordination, knowledge stewardship). Both emerged independently, both were added after the team exceeded 3-4 active roles, and both serve the same function: watching the team's operational state so the PM doesn't have to carry it all in working memory. This is a scaling pattern, not a coincidence.
+**The ecosystem is developing a formal external interface.** Janus's memo to Ted Nadeau is the first outward-facing structured communication from the agent ecosystem — not a blog post, not a public page, but a formal memo from a named agent to a specific external collaborator with concrete asks and routing commitments. This is a new capability: the cross-pollination infrastructure (initially inward-facing between Klatch and PM) is now being used to manage relationships with external contributors.
 
-**Usage limits are emerging as a shared productivity constraint.** Both Daedalus and PM's Docs agent hit usage limits mid-session in this window (Daedalus: 11:40-12:53; PM: 11:50 AM – ~7:16 PM). These are not bugs but environmental friction. As both projects increase per-session output density, the constraint will tighten.
+**Compaction research completes a three-sweep arc.** Argus's compaction work started with an initial evaluation (Round 13), was assigned as a deeper research spike by Calliope (April 2 memo), and delivered as a comprehensive recommendation (April 3). The research pipeline — identify question, assign spike, deliver recommendation with evidence — is now a proven workflow pattern in Klatch.
 
 ---
 
 ## Background Changes (Noted, Low Priority)
 
-- **Vision V2 review circulated:** PA sent review memos to CXO and PPM mailboxes. Key framing changes: "Three Phases" → "Three Horizons," "Bring Your Own Key" vendor flexibility, "Methodology as Product" section. Not cross-relevant to Klatch infrastructure but signals PM's strategic direction.
-- **HOST rename complete:** PM renamed HOSR → HOST (Head of Sapient Trust) across all operational files. Glossary entry updated accordingly.
-- **Roadmap refresh prepped:** PA documented that roadmap v14.3 (March 10) is stale — M1 shows 47% but is actually complete. v14.4 to publish after M1 gate closes (#926). Waiting on 14 PM manual test scenarios.
-- **Quarterly maintenance (#938):** 12 of 15 items completed. 14 untracked TODOs found in `services/` directory, memo sent to Lead Dev for triage. 4 missing `__init__.py` files identified.
-- **CIO session prep:** PA flagged 5 outstanding CIO items: innovation backlog location, accumulated reading/ideas, Hooks Phase 1 monitoring, PA introduction, fidelity-as-discipline entry.
-- **Calliope closed MAXT Session 01 report as resolved:** Theseus's session log (lines 72-104) *is* the report; all 8 findings documented inline. No separate formal report needed.
-- **"The Floor That Wasn't" published:** PM Docs published the 4th blog-first canonical post to pipermorgan.ai and Medium.
+- **Intel sweep #6 (Argus):** Quiet external window. Cursor 3 launched with autonomous agent mode (validates multi-entity conversation patterns). OpenAI Codex CLI claims 4x token efficiency vs Claude Code (unverified). No Claude Code releases in the April 2-3 window.
+- **GitHub #21 closed (Klatch):** Stale kit briefing assertions resolved with reference to Round 13 Part A fix.
+- **Environment issues surfaced during UAT:** Docker zombie ports, stale venv paths, `.env` port mismatch between app and Alembic. Lead Dev resolved with port override; filed #939 (cosmetic avatar positioning) and #940 (LLM config blocker).
+- **PA Day 6 started (April 4):** Oriented on overnight findings. PM's agenda: Docs (omnibus + publish) → Lead Dev (UAT fixes) → Chief of Staff (workstreams). #940 is first priority.
+- **$20/month price convergence:** Cursor Pro, Windsurf Pro, Claude Code Pro, and v0 Premium all at $20/month. Market commoditization noted.
 
 ---
 
 ## Sources Read
 
 **Klatch:**
-- `docs/logs/2026-04-02-0817-daedalus-opus-log.md` — Daedalus session (FDM Phases 3-5, design doc resequencing)
-- `docs/logs/2026-04-02-0730-calliope-opus-log.md` — Calliope session (logbook, MAXT closure, memos to Theseus and Metis)
-- `docs/logs/2026-04-02-0818-argus-opus-log.md` — Argus session (Round 14: 31 tests, Round 15: 16 tests)
-- `docs/mail/calliope-to-theseus-axt-agenda-2026-04-02.md` — MAXT Session 02 scope proposal
-- `docs/mail/calliope-to-metis-welcome-2026-04-02.md` — Metis welcome, role boundary definition
-- `docs/mail/daedalus-to-argus-round15-2026-04-02.md` — Phase 2+3 test assignments
-- `docs/plans/FILE-DOMAIN-MODEL.md` — Design doc (resequenced phases)
-- `git log --since="48 hours ago"` — 18 commits
+- `docs/logs/2026-04-03-1823-argus-opus-log.md` — Argus session (Round 16 tests, compaction deep dive, intel sweep #6, GitHub cleanup)
+- `docs/research/compaction-threshold-deep-dive.md` — Full compaction threshold research with recommendation
+- `docs/intel/2026-04-03-sweep.md` — Intel sweep #6 (Cursor 3, Codex CLI, quiet window)
+- `git log --since="48 hours ago"` — 11 commits
 
 **Piper Morgan:**
-- `dev/active/2026-04-02-0718-pa-opus-log.md` — PA Day 4 (check-in flow, Vision V2, backlog, roadmap, CIO prep)
-- `dev/active/2026-04-02-0715-docs-code-opus-log.md` — Docs session (Ship #036 fix, blog publish, HOST rename, #938 maintenance)
-- `dev/active/daily-check-in-flow-draft-2026-04-02.md` — Three-phase morning flow proposal
-- `dev/active/backlog-review-2026-04-02.md` — 119-issue backlog analysis
-- `dev/active/roadmap-refresh-prep-2026-04-02.md` — Roadmap v14.3 → v14.4 prep
-- `dev/active/cio-session-prep-2026-04-02.md` — CIO session agenda
-- `docs/omnibus-logs/2026-04-01-omnibus-log.md` — Apr 1 omnibus (3 sessions, 3 roles)
-- `git log --since="48 hours ago"` — 19 commits
+- `dev/active/2026-04-03-1906-pa-opus-log.md` — PA Day 5 (UAT focus, Gate verdict: NOT PASSED)
+- `dev/active/memo-cxo-pm-to-lead-dev-uat-findings-2026-04-03.md` — 5 UAT findings memo to Lead Dev
+- `dev/2026/04/03/2026-04-03-2153-cxo-opus-log.md` — CXO session (UAT execution, scored rubric results)
+- `dev/2026/04/03/2026-04-03-2200-lead-code-opus-log.md` — Lead Dev session (root cause investigation, #939/#940 filed)
+- `dev/active/2026-04-04-1047-pa-opus-log.md` — PA Day 6 (orientation on overnight findings)
+- `mailboxes/ted-nadeau/inbox/memo-janus-to-ted-introduction-2026-04-03.md` — Janus→Ted convergence analysis and four asks
+- `git log --since="48 hours ago"` — 6 commits
