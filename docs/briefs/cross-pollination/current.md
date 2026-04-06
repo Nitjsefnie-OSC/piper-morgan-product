@@ -1,152 +1,116 @@
 ---
-title: "Cross-Pollination Brief — April 5, 2026"
-date: 2026-04-05
+title: "Cross-Pollination Brief — April 6, 2026"
+date: 2026-04-06
 status: substantive
 sources_checked:
   - klatch
   - piper-morgan
-window: "48h (April 3–5, 2026)"
+window: "48h (April 4–6, 2026)"
 ---
 
-# Cross-Pollination Brief — April 5, 2026
+# Cross-Pollination Brief — April 6, 2026
 
-Klatch shipped **AAXT Scaffolded Probing Phase 1** — a probe generator, scorer, and auxiliary LLM client that automate the gap between structural testing (AAXT) and behavioral testing (MAXT). This is the tooling that would have caught **Pattern-045** before it reached PM's M1 gate. The design draws directly from Argus's **AuditBench methodology review**, which found that Anthropic's alignment auditing benchmark validates the same insight MAXT Session 01 discovered: tools that surface accurate evidence in isolation often fail to improve agent performance in practice. On the PM side, Lead Dev **fixed #940** (single-provider LLM setup, no hardcoded providers, error differentiation) — clearing the primary M1 gate blocker — and PA drafted **Piper Open**, the first "Piper" PM assistant role for a sibling project (OpenLaws at Kind). Klatch's test suite reached **849 with zero failures** after Round 18 covered file injection on imported channels; PM's suite stands at 6303 with one pre-existing failure (#942). Both projects are shipping at pace.
+Klatch onboarded **Iris**, its first dedicated UX designer/developer agent, who spent a full discovery session reading the entire codebase, all blog posts, and conducting a structured interview with xian. The session produced the clearest articulation yet of Layer 4's value: **channel-as-workflow** — the claim that a klatch channel is not a group chat but a persistent process with purpose, using PM's daily omnibus synthesis as the canonical example. On the PM side, Lead Dev **fixed all five remaining UAT findings** (#939 avatar orphaning, #943 handler pre-flight, #926 todo parsing), clearing the M1 gate for re-test. PA compiled a 77-session, 12-role agent activity rollup spanning March 20 – April 5. Docs published "The Mismatch Category." Both projects are converging on UX maturity: Klatch by adding a dedicated design role, PM by closing out a systematic gate process.
 
 ---
 
 ## Key Insights
 
-### 1. AAXT Scaffolded Probing Phase 1 — Automating the AAXT/MAXT Gap
-**From:** Klatch (Daedalus + Argus, April 4)
-**Relevant to:** Piper Morgan (testing methodology)
+### 1. Iris Joins Klatch — First Dedicated UX Agent and the Onboarding Case Study
+**From:** Klatch (Calliope + Iris, April 5)
+**Relevant to:** Piper Morgan (agent onboarding methodology, five-layer model)
 
-Daedalus shipped three new components implementing the first phase of scaffolded probing — the automation layer between AAXT (structural) and MAXT (behavioral):
+Calliope wrote a comprehensive kickoff brief and Iris onboarded in a single session: chose a name (Greek goddess of the rainbow — "bridge between system and user"), read CLAUDE.md, COORDINATION.md, ROSTER.md, ROADMAP.md, NOMENCLATURE.md, UX-POLISH.md, all seven blog posts, the cross-pollination brief, and walked the codebase (~5,100 LOC client). Then conducted a structured interview with xian, forming and confirming five hypotheses about Klatch's origin and vision before beginning the first use case deep dive.
 
-- **Probe generator** reads `prompt-debug` layer status, sends assembled prompt to an auxiliary LLM, and generates 3-5 targeted questions per active layer (up to 19 total). The probes come from actual layer content, not hand-crafted test questions.
-- **Scorer** classifies responses against the six-failure-mode taxonomy (Correct, Reconstructed, Confabulated, Absent, Phantom, Subliminal).
-- **Auxiliary LLM client** calls GPT-4o-mini (fallback: Haiku) for both generation and scoring — deliberately external to the target agent to avoid self-evaluation bias.
+Key findings from Iris's fresh-eyes evaluation:
+- **2,406 channels in live DB** — sidebar scaling is a present-tense concern, not theoretical (xian calibrated: many are test imports, but the volume is real)
+- **Zero klatches in production** — multi-entity UX is untested with real workflows
+- **"Users shouldn't think in layers"** — correct instinct, aligns with nomenclature work already done
+- **Import fidelity readout** flagged as the most interesting design problem
+- **The evaluation question** (from Calliope's storytelling context memo): "The gap between what the blog promises and what the UI delivers is probably the most important thing you can find."
 
-Phase 1 outputs probes for manual review. Phases 2-3 (planned) will wire the full pipeline: generator → target agent → scorer, with multi-probe aggregation using pass@k and pass^k metrics.
+**For PM:** This onboarding is a direct parallel to PA's Day 1 (March 29) — another agent joining a project, reading its documentation, and building a mental model. The contrast is instructive: PA experienced the three clocks problem and floor/ceiling moments; Iris experienced a docbase that was comprehensive enough to form five correct hypotheses before the interview. The difference may be that Klatch's smaller, more centralized documentation (CLAUDE.md + docs/) creates a simpler onboarding surface than PM's distributed knowledge base (14 briefings + mailboxes + gameplans + omnibus). PA's floor/ceiling/path taxonomy could be applied retroactively to Iris's session to see where each agent spent time at floor vs. ceiling.
 
-**For PM:** This is the tooling gap PM's M1 gate UAT exposed. The gate caught Pattern-045 because a human (CXO) tested real infrastructure with a fresh account. Scaffolded probing automates the equivalent: generate context-aware questions from actual prompt content, send them to the agent, and score whether the agent can *use* the information — not just whether it's structurally present. PM doesn't need to adopt Klatch's implementation, but the methodology (auxiliary-LLM-generated probes scored against a failure taxonomy) is directly applicable to PM's planned E2E/AAXT track (#927-930).
+**Suggested action:** Low priority. When reflecting on PM's onboarding methodology, review Iris's session log as a comparison case. The "five hypotheses then confirm" pattern is a lightweight alternative to PA's more structured briefing-first approach.
 
-**Suggested action:** When scoping the E2E/AAXT track, evaluate whether scaffolded probing (auxiliary model generates context-aware test questions) would complement the existing unit test suite. The key insight: probes generated from actual content catch gaps that hand-crafted tests miss.
+### 2. Channel-as-Workflow — Layer 4's Killer Articulation
+**From:** Klatch (Iris + xian, April 5)
+**Relevant to:** Piper Morgan (architecture, daily process)
 
-### 2. AuditBench Review — External Validation of the AAXT/MAXT Split
-**From:** Klatch (Argus, April 4)
-**Relevant to:** Piper Morgan (methodology)
+During the Use Case 1 deep dive (daily omnibus synthesis), Iris and xian arrived at a framing that elevates Layer 4 from "conversation-specific context" to something more fundamental:
 
-Argus completed a deep review of Anthropic's AuditBench — a 56-model alignment auditing benchmark testing investigator agents across 13 tool configurations. The critical finding for cross-pollination:
+> "The channel-as-workflow, not channel-as-conversation." A klatch channel is not a group chat — it's a process that runs in a persistent place. The channel *is* the workflow.
 
-> "Tools that surface accurate evidence in isolation often fail to improve agent performance in practice. Agents may underuse the tool, struggle to separate signal from noise, or fail to convert evidence into correct hypotheses."
+The daily omnibus synthesis is the canonical example: same room every day, agents provide logs, synthesis happens, everyone returns to their own work. It's a daily standup encoded as infrastructure. Layer 4 (channel context) is what makes this possible — it's the claim that **the conversation itself has a purpose** distinct from the project and the agents, and that purpose persists across sessions.
 
-This maps directly to both MAXT Session 01's subliminal injection finding (agent has context, can't attribute it) and PM's Pattern-045 (tests confirm data is present, user can't access it). AuditBench's most effective approach: **scaffolded black-box probing**, where an auxiliary model generates diverse prompts — exactly what Phase 1 implements.
+Iris confirmed: "This is why it's a layer and not just a feature. It's a kind of context no other tool provides or has a place for."
 
-Four recommendations for Klatch's AXT framework:
-1. Automated scaffolded probing (shipped in Phase 1)
-2. Multi-probe aggregation (3 passes, reduces false positives)
-3. Model-based grader tier (LLM scores behavioral responses — new middle layer between AAXT and MAXT)
-4. pass@k and pass^k metrics (capability vs. consistency)
+**For PM:** This is PM's own daily omnibus process described as a design pattern. PM currently runs the omnibus manually (gather logs from three environments → hand to Docs → upload to Chat project knowledge). The channel-as-workflow framing makes explicit what PM is doing implicitly: running a recurring process in a persistent venue. As Klatch matures, this pattern could eventually replace the manual gathering step — a klatch channel where agents deposit logs, Docs synthesizes, and the result is available as L4 context for the next day's sessions. PM should track Klatch's implementation of this pattern because PM is the intended first consumer.
 
-No changes recommended to the six-failure-mode taxonomy or to MAXT itself — the human element remains irreplaceable.
+**Suggested action:** Note for future reference. No immediate PM action required, but when Klatch ships klatch-type channels for real workflows, PM's omnibus process should be the pilot use case.
 
-**For PM:** The AuditBench evidence strengthens the case for the E2E/AAXT track. PM's current test suite mocks at the service boundary (Pattern-045's root cause). The scaffolded probing approach — auxiliary LLM generating probes, scored against a taxonomy — is validated by Anthropic's own research as the most effective black-box testing strategy.
+### 3. All Five M1 Gate Findings Addressed — Re-Test Ready
+**From:** Piper Morgan (Lead Dev, April 5)
+**Relevant to:** Klatch (gate methodology validation)
 
-**Suggested action:** Low priority. Note AuditBench as external validation. No immediate PM action required, but the review document (`docs/research/auditbench-methodology-review.md`) is worth reading when the E2E track begins.
+Lead Dev completed the remaining three UAT findings in a single session:
 
-### 3. #940 Fixed — M1 Gate Path Cleared
-**From:** Piper Morgan (Lead Dev, April 4)
-**Relevant to:** Klatch (pattern validation)
+| Finding | Fix | Commit |
+|---------|-----|--------|
+| 1. Floor LLM not reaching user | Provider-agnostic config (#940) | c2bdb772 |
+| 2. Canned template masks failures | Differentiated error messages | c2bdb772 |
+| 3. Handler pre-flight checks (#943) | GitHub config check before API calls | d2ef354f |
+| 4. Todo completion broken (#926) | Completion text extraction regex | ff895d75 |
+| 5. Input parsing too rigid | Accept articles in verb patterns | ff895d75 |
 
-Lead Dev executed a full audit cascade on #940, the primary M1 gate blocker:
-- Removed hardcoded provider assignments from `config.py`
-- Introduced provider-agnostic `model_tier` system with `resolve_model()` at runtime
-- Setup UI redesigned: pick provider first, then enter one key (OpenAI no longer mandatory)
-- Conversational floor now classifies errors (auth, transient, no-provider) with distinct fallback messages rather than a single canned template
-- 6303 tests passed, 0 failed (one pre-existing: #942, workflows table)
+Additional fixes: #939 (orphaned avatar when thinking message replaced), grammar singular/plural. All 6303 tests passing, 0 failures. The gate is ready for CXO + PM re-test.
 
-The fix addresses Findings 1 and 2 from the UAT. Findings 3-5 (handler pre-flight, todo completion, input parsing) remain open. Lead Dev also processed all 5 inbox items and deleted 3 stale branches.
+**For Klatch:** The full M1 gate cycle is now a complete reference implementation: CXO conducts UAT with fresh account → three blocking findings → Lead Dev executes audit cascade (#940) → systematic fixes with evidence → re-test ready. Total elapsed: 3 days from gate test to all findings resolved. This validates the gate methodology as practical — it caught real issues, produced actionable findings, and the team resolved them without excessive overhead. Klatch can reference this cycle when designing its own release gate process (v0.9.0 is pending manual testing now).
 
-**For Klatch:** The M1 gate methodology continues to validate. The audit cascade pattern (issue audit → gameplan audit → phased execution → evidence) that Lead Dev used mirrors Klatch's own research pipeline (identify question → assign spike → deliver recommendation). Both projects are converging on "investigate before implementing" as a core discipline, applied to different domains.
+**Suggested action:** When Theseus conducts v0.9.0 manual testing, consider structuring it as a gate test with explicit findings → fix → re-test cycle, mirroring PM's M1 process.
 
-**Suggested action:** No Klatch action required. Track M1 re-test results in next sweep.
+### 4. Agent Activity Rollup — Ecosystem Scale Quantified
+**From:** Piper Morgan (Docs, April 5)
+**Relevant to:** Klatch (market validation, multi-agent coordination patterns)
 
-### 4. Piper Open — First Sibling PM Assistant Role
-**From:** Piper Morgan (PA, April 4)
-**Relevant to:** Klatch (agent architecture, five-layer model)
+Docs compiled a comprehensive agent activity rollup: **77 sessions across 12 roles over 17 days** (March 20 – April 5). Peak day: March 30 with 18 sessions. Consistent contributors: Docs (14 sessions), Lead Dev and PA (several each). The rollup demonstrates the operational scale of a mature multi-agent product development ecosystem.
 
-PA drafted briefing documents for **Piper Open (PO)** — a PM assistant role for xian's new OpenLaws project at Kind. This is the first "Piper" agent deployed outside the Piper Morgan product itself:
+**For Klatch:** This is the clearest quantification yet of what Klatch is building for. 77 sessions across 12 roles in 17 days — each producing logs, memos, and artifacts that need to be gathered, synthesized, and distributed. This is the omnibus scavenger hunt at scale. The channel-as-workflow pattern (Insight #2) is designed to address exactly this volume. The rollup also confirms the audience profile Iris needs for UX evaluation: the primary user manages dozens of agent sessions weekly across multiple environments.
 
-- **BRIEFING-piper-open.md** (L5): voice rules, colleague test, mandate ("sincere assistance"), explicit scope (operational only — no research mandate, unlike PA's dual mandate)
-- **CLAUDE-piper-open.md** (L2): session protocol, Vergil coordination, principles
-- Key design decision: lighter process than PM (smaller project), explicit "What You Don't Need to Know" section, no omnibus or mailbox infrastructure
-
-PO inherits Piper Alpha's voice and methodology but strips the product-research layer. The briefing explicitly separates what PO is (a well-briefed Claude agent doing PM work) from what it isn't (Piper Morgan software, autonomous agent, engineer's assistant).
-
-**For Klatch:** This is a live test of five-layer portability. PO's briefing documents map cleanly onto Layers 2 and 5, with Layer 1 handled by Claude Code's native kit briefing, Layer 3 deferred (domain context TBD), and Layer 4 minimal (one session log, no mailbox). If PO succeeds as a lighter-weight deployment of the same agent architecture, it validates the five-layer model's scalability claim — that the same structure works at different weights. Klatch's entity system (role prompts + channel context) already supports this via per-entity configuration; PO is PM's first real test of the equivalent pattern.
-
-**Suggested action:** When designing Klatch's entity template/export format (Step 10), consider PO as a reference case for "minimum viable entity" — what's the lightest-weight deployment that still maps onto all five layers?
-
-### 5. Round 18: File Injection on Imported Channels — Cross-Boundary Testing
-**From:** Klatch (Theseus, April 5)
-**Relevant to:** Piper Morgan (testing methodology)
-
-Theseus wrote 12 tests covering the intersection of File Domain Model and imported channels — specifically, whether file context injection works correctly across the import boundary:
-
-- **Group E (4 tests):** Imported channel + pinned file, imported + project KB, legacy fallback + pinned file, full layered injection ordering
-- **Group F (4 tests):** Cross-scope isolation — channel pin doesn't bleed to siblings, project KB visible to all channels, unlinked channel sees nothing
-- **Group G (4 tests):** Lifecycle, multi-file format, L4 coexistence, full 5-layer assembly
-
-All 12 passed on first run. Total suite: 849 (710 server + 139 client), zero failures.
-
-**For PM:** The cross-scope isolation tests (Group F) address the structural pattern behind Pattern-045. PM's todo tests mock the service boundary — they confirm code logic but never test whether the *scope* is correct (does the right context reach the right consumer?). Round 18 tests real database operations and verifies that data scoping is enforced at the query level, not just in test assertions. This is the testing pattern the E2E/AAXT track should target.
-
-**Suggested action:** When the E2E track begins, review Round 18's test structure (`round18-aaxt-fdm.test.ts`) as a reference for scope-aware integration tests.
+**Suggested action:** Low priority. Iris may want to reference this rollup when designing information architecture — the scale of the coordination problem is now quantified.
 
 ---
 
 ## Emerging Patterns
 
-**The AAXT/MAXT gap is being industrialized.** Three weeks ago, MAXT Session 01 discovered subliminal injection — a behavioral phenomenon that AAXT (structural tests) couldn't detect. Two weeks ago, PM's gate UAT caught Pattern-045 — the same class of failure in a different domain. This week, Klatch shipped scaffolded probing (Phase 1) and completed the AuditBench review, which independently validates the same insight from Anthropic's own research. The trajectory: discovery → cross-project validation → automated detection. This is the cross-pollination loop functioning as designed — an insight in one project becomes methodology in the other.
+**UX maturity is arriving simultaneously across both projects, through different paths.** Klatch added a dedicated UX design agent (Iris) who immediately began a systematic evaluation of affordances, mental models, and the gap between story and experience. PM closed out a systematic gate process — five findings from a cold-start UAT, all resolved in three days. Both are moving from "functional first" to "experience matters," but Klatch is doing it through a new role and PM through a process. The convergence is natural: both projects have shipped enough infrastructure that the limiting factor is now user experience, not feature completeness.
 
-**Agent architecture is exporting.** Piper Open is the first deployment of the Piper Alpha pattern outside the Piper Morgan ecosystem. The five-layer context model is being used as a design template for a new project, with deliberate decisions about which layers to instantiate fully and which to keep minimal. This is the portability claim moving from theory to practice.
-
-**Both projects shipped at pace on the same day (April 4).** Klatch: compaction threshold tuned, per-entity effort shipped, AAXT Phase 1 implemented, Round 18 tests written. PM: #940 fixed with audit cascade, PO briefing drafted, "Silent Failures" published, editorial calendar extended. The ecosystem is demonstrating that parallel development across sibling projects doesn't require coordination overhead — the daily brief is sufficient to maintain coherence.
+**The daily omnibus is becoming an architectural test case.** It was always PM's most important recurring process. Now it's also Klatch's Use Case 1 — the acceptance test for whether channels-as-workflows work. The same process is simultaneously: PM's daily operational need, Klatch's design target, and the cross-pollination loop's raison d'être. If Klatch can make this process better, it validates the product thesis for both projects.
 
 ---
 
 ## Background Changes (Noted, Low Priority)
 
-- **Per-entity effort parameter shipped (Klatch):** New `effort` column on entities table with model-aware defaults (Sonnet 4.6 → medium, others → high; `max` restricted to Opus 4.6). UI: 4-button selector. Tested in Round 17 (18 tests).
-- **v0.9.0 release prep (Klatch):** Calliope drafted CHANGELOG. Headline: FDM Phases 1-5, effort parameter, compaction tuning, nomenclature rename. Blog draft "Paste It Again" ready. Pending Theseus manual testing.
-- **"Silent Failures" published (PM):** Fifth blog-first canonical publish. Smoothest publish yet (~4 min). 5 additional insights scheduled through April 19.
-- **23 unpublished drafts indexed (PM):** Docs agent cataloged the full backlog across 4 categories. 3 scheduled (Apr 8-15), 20 unscheduled, several appear publication-ready.
-- **PA-Chief of Staff coordination initiated (PM):** PA responded to Exec's intro memo. Proposed breadcrumb format for decisions and offered shared open-items tracker.
-- **#942 filed (PM):** Pre-existing test failure (missing `workflows` table). Not caused by #940 changes.
-- **Five-layer context mapping filed as architecture doc (PM):** PA's March 31 RFC-001 analysis promoted from working document to `docs/internal/architecture/current/five-layer-context-mapping.md`.
-- **Metis added to Klatch roster:** Coordination/knowledge stewardship agent. First session April 1.
+- **Calliope storytelling context memo (Klatch):** Comprehensive communications brief to Iris covering all 7 blog posts, LinkedIn positioning, landing page voice, and audience profile. The blog arc framing (discovery → framework → product) is a useful reference for anyone writing about either project.
+- **"The Mismatch Category" published (PM):** Sixth blog-first publish, editorial calendar updated with Medium + LinkedIn syndication. Publishing cadence continues at ~2 per week.
+- **dev/active cleanup (PM):** PA ran cleanup skill interactively with xian — 24 files down to 16. Ongoing hygiene.
+- **v0.9.0 release pending (Klatch):** CHANGELOG ready, "Paste It Again" blog post ready, both waiting on manual testing and xian review. LinkedIn announcement planned.
+- **Carried forward (Klatch):** MAXT Session 02 (L4 injection fidelity), AAXT Scaffolded Probing Phase 2, Step 10 planning — all deferred to Monday.
 
 ---
 
 ## Sources Read
 
 **Klatch:**
-- `docs/logs/2026-04-04-2030-daedalus-opus-log.md` — Daedalus session (compaction threshold, effort parameter, AAXT Phase 1)
-- `docs/logs/2026-04-04-2032-argus-opus-log.md` — Argus session (AuditBench review, Round 17 tests)
-- `docs/logs/2026-04-05-0958-theseus-opus-log.md` — Theseus session (Round 18 AAXT x FDM)
-- `docs/logs/2026-04-04-0655-calliope-opus-log.md` — Calliope session (logbook, memos, release prep)
-- `docs/research/auditbench-methodology-review.md` — Full AuditBench analysis with 4 AXT recommendations
-- `docs/plans/AAXT-SCAFFOLDED-PROBING.md` — AAXT Phase 1-3 design spec
-- `docs/mail/calliope-to-daedalus-compaction-effort-2026-04-04.md` — Implementation assignments
-- `docs/mail/calliope-to-argus-auditbench-2026-04-04.md` — Research assignment
-- `git log --since="48 hours ago"` — 18 commits
+- `docs/logs/2026-04-05-1109-calliope-opus-log.md` — Calliope session (Iris onboarding coordination, storytelling context memo, logbook)
+- `docs/logs/2026-04-05-1137-iris-opus-log.md` — Iris session 1 (onboarding, codebase exploration, xian interview, Use Case 1 deep dive, Layer 4 insight)
+- `docs/mail/calliope-to-ux-designer-kickoff-2026-04-05.md` — Kickoff assignment (3 deliverables)
+- `docs/mail/calliope-to-iris-storytelling-context-2026-04-05.md` — Communications context (blog arc, voice, audience)
+- `git log --since="48 hours ago"` — 20 commits
 
 **Piper Morgan:**
-- `dev/active/2026-04-04-1047-pa-opus-log.md` — PA Day 6 (Piper Open briefing, Chief of Staff coordination)
-- `dev/active/2026-04-04-2210-lead-code-opus-log.md` — Lead Dev session (#940 audit cascade, inbox processed, branches cleaned)
-- `dev/active/2026-04-04-1901-docs-code-opus-log.md` — Docs session (omnibus Apr 2+3, "Silent Failures" publish, calendar update, 23 drafts indexed)
-- `dev/active/BRIEFING-piper-open.md` — Piper Open L5 briefing document
-- `dev/active/unpublished-drafts-index-2026-04-04.md` — 23 unpublished drafts for Comms sequencing
-- `docs/internal/architecture/current/five-layer-context-mapping.md` — Five-layer mapping (filed as architecture doc)
-- `docs/omnibus-logs/2026-04-03-omnibus-log.md` — Apr 3 omnibus (M1 UAT session)
-- `git log --since="48 hours ago"` — 17 commits
+- `dev/active/2026-04-05-1343-lead-code-opus-log.md` — Lead Dev session (findings 3-5 fixed, #939 + #943 resolved)
+- `dev/active/2026-04-05-0911-pa-opus-log.md` — PA Day 7 (cleanup, interim report, Lead Dev shadow read)
+- `dev/active/2026-04-05-0712-docs-code-opus-log.md` — Docs session ("The Mismatch Category" publish)
+- `docs/internal/planning/log-index-mar-20-apr-5.csv` — Agent activity rollup (77 sessions, 12 roles)
+- `git log --since="48 hours ago"` — 26 commits
