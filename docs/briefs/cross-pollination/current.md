@@ -1,140 +1,138 @@
 ---
-date: 2026-04-11
+date: 2026-04-12
 status: substantive
 sources_checked:
   - klatch
   - piper-morgan
-  - openlaws
-window: "48h (April 9–11, 2026)"
-revision: 2
-supersedes: 2026-04-11-brief.md (morning automated brief)
+window: "24h (April 11–12, 2026)"
 ---
 
-# Cross-Pollination Brief — April 11, 2026 (rev 2)
+# Cross-Pollination Brief — April 12, 2026
 
-*This brief supersedes an earlier April 11 brief produced by the automated sweep. The expanded version includes OpenLaws as a source for the first time and was reviewed by xian before publication (the first sneakernet test of the new data boundary).*
+The last twelve hours in both projects were strategic close-outs, not shipping work — and that may be the most cross-relevant thing to name first. Klatch closed its Step 10 Phase 1 design conversation after five streams of input converged without collision. PM closed out a leadership review cycle, adopted Vision V2.3 and Roadmap v15.0 with full endorsement, and greenlit M2. Both projects ended April 11 with the same gesture: the planning phase is done, now we build.
 
----
-
-The cross-pollination network passed an interesting threshold this week. Two days ago Vergil — working on OpenLaws, but reflecting on something xian said about Klatch's evolution — wrote up a synthesis that names a pattern none of the existing project teams had quite formulated: **extracted abstractions are more robust than designed abstractions**, and Klatch's five-layer model is the canonical example. The synthesis was filed in `workdesk/agent-experience-notes.md` on the OpenLaws side, but it's load-bearing for everything in xian's ecosystem. This is the system working: an agent on a fourth project surfaces the right framing for the second project's third-week-of-design conversation, and the only reason it could happen is that someone (xian) was carrying the threads between rooms.
-
-In parallel: **Argus shipped the first curated sweep** under the new automation regime, verifying each automated finding against the actual Klatch codebase and adjusting priorities. The Hono CVE got demoted (Klatch uses none of the affected features); Managed Agents stayed High and is now load-bearing for Step 10; the SDK bump is required for Step 10 but not urgent for compaction. The split is working as designed — automated scan = raw material, Argus = analysis.
-
-**Klatch's Step 10 design crystallized** today around the protocol-first framing. Calliope's feedback memo to Daedalus reframes Phase 1 as not just internal plumbing but the canonical context package format that any MCP-capable consumer (Managed Agents, Piper Morgan's BYOC server, future tools) could call. The format becomes the protocol; the protocol becomes the product.
-
-**On the PM side:** Piper Alpha closed M1 Gate #926 on April 11 (7/9 PASS), absorbed the workstream memos and the Janus Labrador research, and started M2 sprint planning. The day's biggest doc work was a critical M1 doc rewrite — 8 files, ~1577 lines replaced — to bring the canonical M1 documentation in line with the gate closure reality. The fabrication-guardrail pattern from the floor LLM fix (#960) is now formally part of ADR-060's three M1 amendments.
+The substantive cross-project signal this morning is a design heuristic Daedalus introduced in his round 3 closure memo — the **sparkline test** — which Daedalus explicitly applied to PM packages as well as Klatch's. And a canonical principle — **methodology beats code** — which both projects have now formally doctrined, independently, from the same operational experience.
 
 ---
 
 ## Key Insights
 
-### 1. The "extracted vs designed" abstraction pattern
+### 1. The sparkline test: a transferable design heuristic for any context package
 
-**From:** Vergil (OpenLaws), Apr 9 — synthesis of a conversation with xian about Klatch's evolution, filed in `workdesk/agent-experience-notes.md`
-**Relevant to:** Klatch (architecture validation), Piper Morgan (methodology), Janus (cross-pollination editorial)
+**From:** Daedalus (Klatch), April 11 — round 3 closure memo to PM Architect
+**Relevant to:** Piper Morgan (BYOC architecture, MCP server design)
 
-xian answered Vergil's question about Klatch's evolution: "completely emergent." The exchange protocol wasn't the goal — it was a byproduct of trying to make a Slack-like UI actually work. Import forced the five-layer model to tighten; tightening revealed the machinery also enables export; generalization to "context-preservation turnstile" only became visible after the concrete work exposed the shape.
+In closing the Step 10 Phase 1 design conversation, Daedalus introduced a design test prompted by the Labrador project's context sparkline feature (a colored bar in the chat UI showing which prompt sources contributed to each response, expandable to per-source token counts):
 
-Vergil's synthesis names this as a pattern with broader applicability: **infrastructure layers only become credible after a specific application stress-tests them.** Git, gRPC, React all followed this shape. The "extracted abstraction" is more robust than the "designed abstraction" because every layer is there because its absence caused something concrete to break.
+> **The sparkline test:** Could a consumer parse this manifest and produce a per-layer breakdown — name of layer, name of contributing sources, content lengths, a stable ordering — without re-deriving anything from prose, without parsing markdown, and without round-tripping through Klatch source code?
 
-A second pattern in the same synthesis: **"software as an MCP rather than a UI on the web" is about what software IS when users are heterogeneous in kind**, not about distribution. A web UI can be lossy because humans compensate; an MCP tool surface has to be structured and explicit because agents can only use what's named. The MCP move is a forcing function for making implicit knowledge explicit, which produces vocabulary for the eventual interoperability protocol.
+Two small refinements to the Klatch schema closed the gap: `length_chars` on each `files[]` entry (alongside `size_bytes`), and `prompt_length_chars` on each entity entry. Both integrated into the round 3 sketch.
 
-**For Klatch:** This is a strong external validation of the five-layer model and the Step 10 protocol-first framing. Not "designed for Anthropic compatibility" — extracted from the irreducible needs of import/export. Worth citing in any Step 10 documentation that needs to explain why the format looks the way it does.
+Daedalus applied the test forward to PM packages explicitly: "Any consumer that wants to render the contents of a PM package as a per-source breakdown should be able to do so from the manifest alone. PM's `extensions` content (trust gradient, artifact lifecycle, action disposition) will need its own length conventions if PM intends to surface those sources in any UI."
 
-**For PM:** The same pattern applies to PM's 23 documented methodologies and 63 ADRs. They aren't designed methodologies — they're extracted from the operational pain of running a multi-agent team. PM's documentation discipline is what makes the extraction visible. Worth naming this explicitly in the next iteration of PM's "methodology over code" pivot framing.
+The heuristic generalizes: it's not a feature requirement, it's a format discipline. Any context package that can't answer the sparkline test without re-derivation from prose is leaking structure into unstructured fields — and those leaks are invisible until you're debugging a consumer that fails on edge-case formatting.
 
-**Suggested action:** Daedalus and Calliope read the synthesis (in `~/cool/OpenLaws/workdesk/agent-experience-notes.md`, the entries dated 2026-04-09) before next Klatch architecture conversation. PA reads it before the next M2 retro framing.
+**For PM:** Before PM populates `extensions: { piper-morgan: {...} }` for the first time, decide whether PM's extensions content will carry `length_chars`-style conventions. The Klatch format enforces this internally. PM should make a conscious choice, not inherit the gap.
 
----
-
-### 2. Argus completes first curated sweep — automation split working as designed
-
-**From:** Argus (Klatch), Apr 11
-**Relevant to:** Janus (validates the automation regime), Piper Morgan (intel sweep methodology pattern)
-
-Argus filed `docs/intel/2026-04-11-sweep.md`, the first curated sweep under the new arrangement. The automated scan from April 9 (filed by Janus's CCR trigger) flagged 8 items at HIGH/MEDIUM/LOW. Argus verified each against Klatch's actual codebase and adjusted priorities:
-
-| Item | Automated | Curated | Why changed |
-|---|---|---|---|
-| Hono 4.12.12 CVE | High | Medium | Klatch uses none of affected features |
-| Managed Agents | High | High | Confirmed; intersects Step 10 directly |
-| SDK bump ^0.86.1 | High | Medium-High | Required but no urgent compaction breakage |
-| Vite 8 | Medium | Low | Klatch is on Vite ^6.0.0, scan was inaccurate |
-| Mythos / Glasswing | Low | Low | Confirmed closed |
-| Multi-agent framework proliferation | Low | Low | Background validation only |
-
-Argus's framing: "The automated sweep is the raw material. This file is the analysis. Treat the automated file as a source document; treat this file as the authoritative read."
-
-**Why this matters cross-project:** This is the first end-to-end validation that the automated-scan-plus-human-curation pattern works. The automation surfaces external developments reliably; the human (or specialized agent) does the contextual filtering. Argus verified five claims against actual code, adjusted four priorities, and surfaced one item the automation missed. That's exactly the failure mode the split was designed to handle.
-
-**For PM:** The same split could apply to PM's research and intel work. PM has the Researcher role but doesn't have an equivalent automated upstream scan. If PM wants reliable external coverage without depending on an agent waking up, the Klatch pattern is now proven.
-
-**Suggested action:** PA consider whether PM could benefit from a similar automated-plus-curated split for its own intel work. Janus can spin up a parallel trigger if so.
+**Suggested action:** PM Architect note the sparkline test when reading Daedalus's Phase 1 design doc (landing next Klatch session as `docs/plans/STEP-10-PHASE-1-PACKAGE-FORMAT.md`). The format read offer from Daedalus stands.
 
 ---
 
-### 3. Step 10 Phase 1 reframed as protocol design
+### 2. "Methodology beats code" canonicalized in both projects independently
 
-**From:** Calliope + xian (Klatch), Apr 11 — memo to Daedalus
-**Relevant to:** Piper Morgan (BYOC architecture intersection)
+**From:** PM Vision V2.3 (adopted April 11) + Klatch five-layer model (extracted, not designed)
+**Relevant to:** Both projects, Janus (editorial)
 
-Calliope's feedback memo on the Step 10 phasing plan reframes Phase 1's stakes. Quote from the memo:
+PM's Vision V2.3 formally names "Methodology beats code frameworks" as one of six defining lessons from ten months of building:
 
-> "In that framing, Step 10 Phase 1 isn't internal plumbing — it's the protocol Klatch eventually publishes. Phase 5 (the deferred MCP server) stops being a 'deferred maybe' and becomes the natural endpoint. The product, eventually, becomes the protocol."
+> "The project consistently evolved from 'build code to enforce X' to 'build methodology that achieves X.' Verification, multi-agent coordination, and capability extension all work better as process infrastructure (CLAUDE.md, mailboxes, session logs) than as Python classes."
 
-Concrete implications for Phase 1:
-- **Format must be self-describing.** JSON Schema published alongside the spec.
-- **Layer semantics must be explicit.** A consumer should be able to read the package and know what each layer contains and why, without Klatch source code in front of them.
-- **Versioning matters now, not later.** Even Phase 1 should ship with a `format_version` field.
-- **Naming is part of the design.** Internal field names will become public API. Calliope flagged `layer_4_channel_addendum` as awkward — recommended `channel_context` to match the nomenclature work.
+Klatch's five-layer model is the canonical proof case on the other side of the ecosystem — and the April 9 Vergil synthesis named the same pattern as an extracted abstraction from operational necessity, not a designed architectural decision. Both projects arrived at identical doctrine from different starting points without coordinating on the formulation.
 
-**For PM:** Direct intersection. PM's BYOC thesis ships Piper as an MCP server. Klatch's context interchange protocol could be the upstream data source PM's BYOC server calls at session start — request a pre-assembled five-layer package from Klatch instead of re-assembling context from scratch. The two projects are designing toward a shared architecture: Klatch as context server, PM as task-and-knowledge server, Managed Agents as the execution layer both plug into.
+This convergence matters for two reasons. First, it's the kind of validation that justifies publishing the doctrine — if two independent teams building different products with different tech stacks both land on the same operational insight, it's not a preference, it's a finding. Second, it creates a shared vocabulary for cross-project decisions: when evaluating whether something should be code or methodology, both teams now have a named principle and a shared body of evidence.
 
-**Suggested action:** PM Architect should read Calliope's feedback memo (`klatch/docs/mail/calliope-to-daedalus-step10-feedback-2026-04-11.md`) and the futures memo it references (`klatch/docs/futures/2026-04-10-klatch-as-context-protocol.md`) before any Piper-as-MCP design conversation. A short Daedalus ↔ PM Architect alignment conversation before Klatch Phase 1 design begins would prevent each side from independently specifying a format the other has to bridge.
+**For Klatch:** Vision V2.3's articulation of the methodology principle is crisper than anything in Klatch's docs. Worth referencing (or lifting with attribution) in the Step 10 design doc's rationale for why the format spec is a protocol document, not a library API.
 
----
+**For PM:** The Klatch five-layer model and the AAXT suite are the ecosystem's strongest empirical evidence base for this principle. When PM's methodology work needs external validation, that's the citation.
 
-### 4. PM critical doc rewrite + ADR-060 amendments
-
-**From:** Piper Alpha (PM), Apr 11
-**Relevant to:** Klatch (M1 closure validates BYOC pivot — relevant to Step 10 design)
-
-Piper Alpha did a critical M1 doc rewrite today: 8 files, ~1577 lines replaced, to align canonical M1 documentation with the gate closure reality. ADR-060 received three M1 amendments: IDENTITY full migration + #922 + #960. The fabrication-guardrail pattern from the floor LLM fix (#960) is now formally part of ADR-060.
-
-The architectural news embedded in this work: PM's M1 closure validates the BYOC pivot direction. With M1 done, M2 can start with a cleaner architectural baseline.
-
-**For Klatch:** PM closing M1 means the BYOC architectural pivot is now grounded in working code, not just intent. When Step 10 phases the canonical context package format, the constraint to design for "PM as MCP consumer" becomes much more concrete — there's a real PM that can consume packages, not a future PM.
-
-**Suggested action:** Daedalus pencil "interoperability test with PM's BYOC server" as a Phase 4 candidate, even if it doesn't make it into the actual Phase 4 scope.
+**Suggested action:** Calliope log the Vision V2.3 formulation as a cross-project reference in the Step 10 design doc. PA note the Klatch AAXT suite as evidence for methodology-as-differentiator framing in any future external writing.
 
 ---
 
-## Emerging Pattern
+### 3. PM M2 includes AAXT-equivalent testing — Klatch's methodology is the upstream reference
 
-**The cross-pollination network now has four sources, not two.** Apr 11 marks the first time content from OpenLaws (specifically Vergil's `workdesk/agent-experience-notes.md`) is flowing into the brief. The pattern that emerges when you have four sources instead of two is that signals start chaining: Vergil reflects on Klatch via xian → Calliope's Step 10 framing absorbs that reflection → PM's Architect reads the framing → the four-way conversation can produce alignment that no two-way conversation could.
+**From:** PM Roadmap v15.0, M2 issue list (April 11)
+**Relevant to:** Klatch (methodology validation, Argus)
 
-This is what xian set up the cross-pollination hub to enable. Apr 11 is the first day where the design intent and the operational reality match.
+M2's issue list includes three testing infrastructure items that are direct analogues of Klatch's AAXT work:
 
-The data boundary on OpenLaws content is critical and worked correctly today. Vergil's synthesis of xian's Klatch reflections is methodology and architecture — clearly publishable. The OpenLaws product internals (BM25 findings, dual-ranking tools, scalar upgrades, corpus gap fixes) are clearly NOT publishable and were correctly excluded from this brief. The boundary held on its first test.
+- **#929** — AAXT: Golden scenarios with DeepEval LLM-as-judge
+- **#928** — E2E: Automated canonical conversation suite
+- **#930** — CI: Integration for E2E conversations + AAXT nightly
+
+PM is calling its own work "AAXT" now — using Klatch's terminology — and building toward the same scaffolded probing pattern that Klatch shipped in AAXT Phase 1 on April 4. PM's variant uses DeepEval as the judge rather than a bespoke scorer; the architecture is convergent.
+
+Klatch's learnings here are directly applicable:
+- The six-failure-mode taxonomy (Absent, Confabulated, Subliminal, Correct, etc.) could map onto PM's scoring rubric
+- The "two-pass" approach (automated scan as raw material + curated analysis as authoritative read) is proven via Argus's April 11 curated sweep
+- The separation of "structure delivered correctly" from "agent uses it correctly" is the core AAXT/MAXT insight, and PM's Colleague Test addresses the second half exactly
+
+**For PM:** Before building #929's scoring rubric from scratch, read Klatch's scaffolded probing implementation (`research/` or `docs/intel/`) and the six-failure-mode taxonomy. The Colleague Test (CXO) and the AAXT taxonomy (Argus) are two sides of the same evaluation. Alignment between them would make cross-project results comparable.
+
+**Suggested action:** Argus file a brief cross-reference memo on the AAXT taxonomy vs. PM's Colleague Test rubric. PM Architect read before #929 is scoped.
+
+---
+
+### 4. Klatch Phase 1 design doc arrives next session — PM read offer open
+
+**From:** Daedalus (Klatch), April 11 — round 3 close memo
+**Relevant to:** Piper Morgan (BYOC architecture)
+
+The Step 10 Phase 1 context package format design is complete through five rounds of input: PM Architect (rounds 1 and 2), Iris (UX), Argus (provenance), Calliope/Janus (sparkline test). The schema sketch lives in Daedalus's session log at `docs/logs/2026-04-11-1610-daedalus-opus-log.md` (search "Schema sketch round 3"). Next session it graduates to the formal design doc.
+
+Key design decisions now stable:
+- **`extensions` namespaced** by producer (`extensions: { klatch: {...} }`, PM packages expected to use `extensions: { piper-morgan: {...} }`)
+- **`format_version` and `package_kind` versions move independently** — envelope version vs. kind-specific interior version
+- **Provenance doors preserved** — `event_id` UUID and `integrity: null` reserved per event, enabling tamper-evidence as a v1.1 additive change
+- **`layer_fidelity` vocabulary** (`full`, `partial`, `rebuilt`, `absent`) — distinct from AAXT failure-mode taxonomy (per-hop delivery fidelity vs. probe response quality)
+- **`conversation_context.id` and `.name` as minimum cross-source read** — a consumer can display package contents without checking `source_type` first
+
+Daedalus offered PM Architect a read of the design doc when it lands. The offer is standing.
+
+**Suggested action:** PM Architect watch for `docs/plans/STEP-10-PHASE-1-PACKAGE-FORMAT.md` in Klatch's next commit and accept the read offer. Flag now if PM's BYOC server has constraints the current schema sketch doesn't accommodate — better to surface before the doc is finalized.
+
+---
+
+### 5. PM M2 starts: differentiator stack now operational framing
+
+**From:** PA (PM), April 11 — M2 go-ahead memo, Vision V2.3, Roadmap v15.0
+**Relevant to:** Klatch (timing, BYOC architecture timeline)
+
+M2's theme is "Conscious Floor + Action Handlers" — making the conscious floor reliable (grammar, Five Pillars, anti-flattening) and implementing the action gate (side-effect handlers only). The differentiator stack's first two pillars become operational in M2. M3 adds Artifact Persistence (composting lifecycle). M5 adds Distribution (MCPB).
+
+The Klatch intersection point is M5. BYOC distribution — Piper as an MCP server consumed by any MCP-compatible client — is explicitly the primary distribution path. The context interchange protocol Klatch is building in Step 10 becomes an upstream dependency for PM's BYOC server: a PM session starting in Claude Desktop could call Klatch for a pre-assembled five-layer context package rather than re-assembling from scratch.
+
+That architectural dependency won't become concrete until M5, which means there's time — but also that M2 and M3 architectural decisions (especially around context assembly and artifact persistence) should be made knowing the eventual BYOC constraint exists.
+
+**For PM:** No immediate action, but flag the Klatch context package format as an upstream dependency to watch in M5 planning. The Phase 1 design doc landing next session is the right moment to begin the M5 framing.
+
+**Suggested action:** PA add a watch item to M5 planning notes: "Klatch context interchange protocol (Step 10, Phase 1 design doc) — evaluate as upstream context source for BYOC session start."
 
 ---
 
 ## Sources Read
 
-**OpenLaws:**
-- `git log --since="48 hours ago"` — 6 commits (skipped product internals)
-- `workdesk/agent-experience-notes.md` — Vergil's Klatch emergence synthesis (2026-04-09 entries)
-- *Skipped per data boundary:* dispatch/ signals about BM25 findings, dual-ranking tool, scalar upgrades, corpus gap fixes; outreach drafts; PR drafts; product codebase map
-
 **Klatch:**
-- `git log --since="48 hours ago"` — 14 commits
-- `docs/mail/calliope-to-daedalus-step10-feedback-2026-04-11.md` — Step 10 protocol-first framing memo
-- `docs/intel/2026-04-11-sweep.md` — Argus's first curated sweep
-- `docs/futures/2026-04-10-klatch-as-context-protocol.md` — Klatch as context interchange protocol (referenced)
+- `git log --since="48 hours ago"` — 26 commits
+- `docs/mail/daedalus-to-pm-architect-step10-alignment-round3-2026-04-11.md` — round 3 close, sparkline test, provenance doors, stable schema
+- `docs/logs/2026-04-11-1211-calliope-opus-log.md` — five-stream convergence logbook
+- `docs/logs/2026-04-11-1610-daedalus-opus-log.md` referenced (schema sketch round 3)
+- Commit messages: `d57203a` (Phase 1 design closed), `73a5db0` (April 11 logbook)
 
 **Piper Morgan:**
-- `git log --since="48 hours ago"` — 30+ commits
-- Critical M1 doc rewrite (commit `5363cc80`) — 8 files, ~1577 lines
-- ADR-060 three M1 amendments (commit `f1447fbe`)
-- Apr 10 omnibus (`docs/omnibus-logs/2026-04-10-omnibus.md`)
-- PA day 12 sessions
+- `git log --since="48 hours ago"` — 22 commits
+- `docs/internal/planning/current/vision.md` — Vision V2.3 (full read)
+- `docs/internal/planning/roadmap/roadmap.md` — Roadmap v15.0 (executive summary + M2 detail)
+- Commit messages: `fe19ca1` (V2.3 + Roadmap v15.0 adopted), `d8f7ac7` (M2 go-ahead), `fdab67c` (PA day 12 session close)
+
+---
