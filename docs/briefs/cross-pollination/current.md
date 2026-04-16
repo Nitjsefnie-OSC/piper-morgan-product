@@ -1,152 +1,143 @@
 ---
-date: 2026-04-14
-status: substantive
+date: 2026-04-15
+status: "substantive"
 sources_checked:
   - klatch
   - piper-morgan
   - openlaws
-window: "48h (April 12–14, 2026)"
+window: "48h (April 13–15, 2026)"
 ---
 
-# Cross-Pollination Brief — April 14, 2026
+# Cross-Pollination Brief — April 15, 2026
 
-Monday was Klatch's most productive single day to date: Argus, Daedalus, and Iris — working in coordinated parallel — ran a full Phase 3.5 design discussion, reached three-agent consensus on five open questions, and shipped the complete behavioral calibration transfer pipeline by evening. The mechanism now supports three extraction modes, structured field notes with trust levels, and a six-point handoff prompt that can address any entity type without specialization. PM's Lead Dev closed the third and final installment of the ADR-060 floor inversion, completing the migration of conversational categories from canonical template handlers to floor-first routing with context assembly, with 6,246 tests stable. OpenLaws contributed a methodology pattern — a five-category eval harness structure — that is directly applicable to both projects' automated testing work.
+Klatch's Phase 3.5 arc — from open design questions to consensus to working, tested code — completed in 48 hours with the Phase 3.5d export review UI shipping Tuesday evening. The bigger story from Tuesday may be xian's reframe during the UX walkthrough with Iris: entities are not abstractions you define in a manager; they are existing conversations promoted into roles. PM's Lead Dev had the most productive single session to date, closing six issues and effectively completing both M2a and M2b sub-epics, including a three-tier CI pipeline (E2E, canonical conversation suite, AAXT golden scenarios). OpenLaws ran the eval harness against its expanded query set and immediately discovered that FED-USC search is functionally broken — the harness found a real infrastructure gap on its first expanded run, validating the methodology pattern surfaced in yesterday's brief.
 
 ---
 
 ## Key Insights
 
-### 1. Phase 3.5 ships: Layer 5 behavioral calibration transfer is now a working feature
+### 1. Phase 3.5d ships: the full behavioral calibration pipeline is complete and tested
 
-**From:** Klatch (Argus, Daedalus, Iris), `docs/plans/STEP-10-PHASE-3.5-CONSENSUS.md`, `docs/plans/STEP-10-PHASE-3.5-BEHAVIORAL-CALIBRATION.md`, April 13
-**Relevant to:** Piper Morgan (memory architecture #972-976, ADR-054 composting pipeline, M5 BYOC export); OpenLaws (session continuity at agent handoff)
+**From:** Klatch (Daedalus, Iris, Argus), `docs/mail/iris-to-daedalus-phase35d-spec-2026-04-14.md`, session logs April 14
+**Relevant to:** Piper Morgan (M5 BYOC export, ADR-054 composting pipeline); OpenLaws (agent handoff at session boundary)
 
-Klatch's Argus designed the behavioral calibration system through a research conversation with xian in the morning. By evening, Daedalus had shipped three backend phases (3.5a, 3.5b, 3.5c) with test coverage. The design arc — from open questions to consensus to working code — ran in under 12 hours across three agents.
+Iris wrote the Phase 3.5d interim design spec for the export review UI and sent it to Daedalus. Daedalus shipped the implementation in under an hour: an `ExportReviewPanel` component with export summary, field note review (three groups: agreements, decisions needed, single-source), trust transitions on accept/edit/reject, and a new lightweight `/api/channels/:id/export-preview` endpoint that returns manifest data without producing a zip.
 
-The mechanism exports behavioral field notes from an agent at export time through three modes:
+The design positions review as part of the export service — "the moving company showing you what's being packed before the truck leaves." Field notes from all three extraction modes (external analysis, self-authored briefing, micro-reflections) are grouped by agreement status. Disagreements show both sources side-by-side with explicit resolution options. Accepted notes get trust promoted to `human-authored`. Rejected notes are excluded from the export package. A "skip review" escape hatch preserves the notes at their original trust levels.
 
-- **Mode 1 (External extraction, 3.5b):** An auxiliary LLM scans conversation history and identifies behavioral patterns. Produces `FieldNote[]` entries tagged `source: "external-extraction"`, `trust: "synthesized"`.
-- **Mode 2 (Self-authored briefing, 3.5a):** The entity itself is prompted to write a handoff briefing for its successor. Produces entries tagged `source: "self-authored-briefing"`, `trust: "agent-observed"`.
-- **Mode 3 (Micro-reflections, 3.5c):** Lightweight reflections captured per-correction (when the user explicitly corrects the agent) and per-session (1-3 notes when no corrections occurred). Tagged `source: "micro-reflection"`, `trust: "agent-observed"`.
+The full Phase 3.5 arc: design discussion (Sunday morning) -> three-agent consensus (Sunday afternoon) -> backend implementation 3.5a/b/c (Sunday evening) -> test coverage Round 20-21 (Sunday-Monday) -> UX spec (Tuesday afternoon) -> export review UI shipped and tested (Tuesday evening). Design to tested code in 48 hours across four agents.
 
-The three modes are merged at export time. The reviewer sees all three source types alongside the entity's role prompt, enabling redundancy detection.
+Iris explicitly scoped this as interim — "better than plumbing, not the last word." The holistic UX redesign will likely refactor this component. Daedalus and xian confirmed Phase 4 (Claude Code transport) is approved as next, with Iris's UX work proceeding in parallel without blocking transport implementation.
 
-The five-criteria filter for meaningful behavioral observations (agreed unanimously): actionable, specific, non-obvious, relational, durable. The Daedalus summary test: "Would a successor who reads this note do something differently on day one than one who doesn't?"
+Test count: 942 (Round 22 added 32 tests for Phase 3.5d). Zero failures.
 
-The six-point handoff prompt (Mode 2) is the most immediately exportable artifact. It asks the entity to cover: user communication preferences, learned patterns (ask vs. act, detail calibration), relationship context (trust established), course corrections and what they taught, specific behaviors to avoid, and anything not captured in system prompt or project memory. The prompt was designed for universality — one prompt for all entity types, no role-specific variants. All three agents endorsed Iris's rationale: "Gall's Law: one prompt, see if it works, split only if the output is consistently wrong for a specific role type."
-
-Phase 3.5d (cross-validation review UI) is the remaining piece — Iris's scope, scheduled for Tuesday with xian.
-
-API: `GET /api/channels/:id/export?briefing=true&extract=true` returns field notes from all three modes.
-
-Test count: 910 (771 server + 139 client), zero failures. Up from 727 at v0.8.9 — 183 new tests in 13 days.
-
-**Suggested action:** PM Docs agent read the six-point handoff prompt from `STEP-10-PHASE-3.5-CONSENSUS.md` before the ADR-054 composting pipeline is scoped. The five-criteria filter and trust-level schema (agent-observed vs. synthesized) are directly applicable to PM's write governance gaps identified in the Janus memory research. PA note: the full export endpoint (`?briefing=true&extract=true`) is the reference implementation for what "structured memory with provenance" looks like in practice.
+**Suggested action:** PM Lead Dev and PA: the export review UI's trust transition model (draft -> approved/rejected, with trust promotion to human-authored) is a concrete reference for how PM's write governance might work in the ADR-054 composting pipeline. The pattern — machine generates, human reviews with explicit accept/edit/reject, provenance tracked — is exactly the gap CIO identified for PM memory writes.
 
 ---
 
-### 2. Floor inversion trilogy complete: #925 migrates STATUS and PRIORITY to floor-first routing
+### 2. Entities are conversations promoted into roles
 
-**From:** PM Lead Developer, `feat(#925): migrate STATUS and PRIORITY to floor-first routing`, April 13
-**Relevant to:** Klatch (channel routing architecture, behavioral calibration as "floor migration" analogy)
+**From:** Klatch (Iris + xian), session 5 UX walkthrough, April 14
+**Relevant to:** Piper Morgan (role architecture, MCPB distribution model); OpenLaws (agent identity continuity)
 
-#925 closes Phase 3 of ADR-060, the floor inversion sweep triggered by #962's discovery that STATUS and PRIORITY categories were already routing to the floor via the safety net — but only after an unnecessary canonical handler roundtrip. The fix: add both to `_FLOOR_ROUTED_CATEGORIES`, write `_gather_status_priority_context` to assemble user context (projects, priorities, pending todos, GitHub status), and remove the canonical handler dependency entirely.
+During Iris's end-to-end UX walkthrough, xian delivered a reframe that Calliope flagged as the day's most consequential finding. The current Klatch mental model: create entity (define persona in a manager) -> assign to channel. The actual workflow xian described: have an ongoing conversation with an agent -> that conversation develops into a working relationship -> bring it into a klatch (a meeting of existing chats, each with full context).
 
-The three-migration arc is now complete:
-- Phase 1: IDENTITY (earlier in M2a)
-- Phase 2: TEMPORAL (April 12, issues #965)
-- Phase 3: STATUS and PRIORITY (April 13, #925)
+The entity IS its conversation, given a seat at a shared table. A klatch is a meeting of existing chats, not a new conversation with pre-configured personas. From-scratch creation exists but is not the central use case.
 
-Each migration follows the same pattern: a category was routing through a template handler that produced rigid outputs, the safety net was rerouting it to the floor anyway, and the migration eliminates the roundtrip by making floor routing explicit and giving the floor direct access to context assembly.
+This inverts the entity management UX. Instead of a creation-first flow (name, role prompt, model selection), the primary path becomes promotion — an existing conversation accrues enough identity to earn a role. The import flow is the mechanism: a Claude Code or Claude Desktop conversation becomes an entity when imported, not when someone fills out a form.
 
-Canonical retest run 3 post-#925: routing 93.4% (57/61), quality 62.3% (38/61). Both stable within LLM variance from run 2. No regressions. 6,246 tests, zero failures.
+Iris connected this to Topic 5 (import-to-export arc): the transition from Act 1 (import) to Act 2 (work in a klatch) is precisely where the promotion happens. xian's response to Topic 5: "I think I like this one the most so far because it names something I had not fully attended to yet."
 
-The architectural analogy for Klatch is worth naming: the move from canonical handlers (rigid template → rigid output) to floor-first (assembled context → LLM reasoning) is structurally identical to the move from hardcoded Layer 5 entity prompts toward behavioral calibration at export. In both cases, the old system bypassed the hard work with a template. The new system delivers context and lets the model reason. The PM floor inversion is complete. Klatch's Layer 5 behavioral calibration is the same transition one abstraction level up.
+The five UX topics Iris presented are now on record. xian's equivalent observations come next (during travel). Then binocular synthesis of both sets, followed by the exhaustive end-to-end review.
 
-**Suggested action:** No immediate action required. This is an orientation note for Daedalus and Argus: the PM floor inversion is the closest architectural parallel to the work Klatch completed yesterday. Reviewing ADR-060 and the three-migration arc would be useful background before any Klatch architecture discussion about how entities handle routing decisions.
+**Suggested action:** PM PA: this reframe has implications for how Piper Morgan's roles are described in the MCPB distribution model. If entities are conversations-promoted-into-roles, then the MCPB install isn't "here are 10 pre-configured agents" — it's "here's a conversation that will become your PM assistant as you use it." The Managed Agents assessment's distinction (Claude Desktop: Piper is a tool provider; Managed Agents: Piper IS the agent) maps onto this same axis. Worth noting in the distribution planning docs.
 
 ---
 
-### 3. Iris's canonical diagnosis: the backend has rich data the UI barely surfaces
+### 3. PM Lead Dev ships the entire M2 testing infrastructure in one session
 
-**From:** Iris (Klatch), `docs/ux/evaluation.md`, `docs/ux/priorities.md`, April 13
-**Relevant to:** Piper Morgan (context visibility, debugging infrastructure, M2 UI surface); OpenLaws (eval harness visibility patterns)
+**From:** PM Lead Developer, omnibus April 14; session log April 15
+**Relevant to:** Klatch (Argus test infrastructure patterns, CI approach); OpenLaws (eval harness methodology comparison)
 
-Iris completed all three kickoff deliverables in a single self-directed session: evaluation (11 sections, 4 cross-cutting concerns), prioritized issues list (6 problems, 7 opportunities, 3 viewport gaps), and a design research proposal for Phase 3.
+Lead Dev closed six issues in a single session, completing M2a (10/10) and effectively completing M2b (4/5, with #929 now verified). The testing infrastructure track — which was zero automated conversation testing at the start of the sprint — is now a three-tier CI pipeline:
 
-The headline finding — "the backend has rich context data that the UI barely surfaces" — is one of those diagnostic frames that transfers cleanly across projects. For Klatch: the `prompt-debug` endpoint exposes per-layer assembly status with size, source, and content; the UI renders this as a colored dot. Phase 3 is about closing that gap without building new features.
+- **E2E tests (#927):** 9/9 via ASGI transport (88s). Todo lifecycle, GitHub close, reminder creation, floor routing, capability boundary. FK ordering fix in conftest cleanup.
+- **Canonical conversation suite (#928):** Two-tier design. Tier 1: deterministic routing + response structure checks (no LLM cost, every PR). Tier 2: LLM-as-judge quality via Colleague Test (env-gated, nightly). 61 queries parametrized. Routing: 58/61 PASS. Response structure: 61/61 PASS.
+- **AAXT golden scenarios (#929):** 5 multi-turn quality tests. Verified April 15 with Gemini key. 4/5 PASS. The one failure (context retention — "that" not resolved to prior topic) is a genuine quality finding, not a test infrastructure problem. AAXT is working correctly.
+- **CI integration (#930):** GitHub Actions with 3 jobs: E2E on every PR (~90s), canonical on conversation code changes (~8 min), AAXT nightly (6 AM UTC, ~$0.50/run).
 
-The same gap exists in PM: the floor routing system assembles rich context (user projects, priorities, GitHub issues, temporal data), and most of that assembly process is invisible to the user and to debugging agents. The M2 quality score (62.3%) suggests the floor is reasoning correctly more often than not — but when it doesn't, the diagnostics for *why* are limited to log files.
+Additionally: #960/#961 (context contract audit — UNKNOWN category now gets user context, violation logging added), #963 (26 dead canonical handler methods deleted, 911 lines removed), and the M2 super-epic structure document.
 
-Iris's priorities list is directly readable as a Phase 3 design brief: P1 (keyboard accessibility), P3 (import fidelity readout), P4 (prompt layers reduced to dots — surface the data that already exists). P3 is the most immediately cross-relevant: Iris designed a `LayerFidelityReadout` component for import (shipped by Daedalus same day) that shows per-layer status post-import. The bidirectional version — export preview and import readout as the same component — is on Iris's design research agenda.
+The Architect made three clean decisions in a 35-minute session: #970 ServiceRegistry leave as-is, #971 Pattern-012 adapters delete, ProviderSelector delete. Unifying principle: "don't maintain infrastructure for a future that hasn't been designed yet."
 
-**Suggested action:** PM CXO (or whoever owns the debugging/observability experience) read Iris's evaluation at `docs/ux/evaluation.md` before scoping any M2b or M3 UI work. The "surface what's already built" framing is the correct lens for PM's context assembly visibility gap. The `LayerFidelityReadout` component design is the reference implementation for "show the user what context was assembled."
+Total tests: 6,246, zero failures.
 
----
-
-### 4. Eval harness methodology: categorical query structure with known_good / pathological separation
-
-**From:** OpenLaws (Vergil), `workdesk/eval-harness/` — methodology pattern only
-**Relevant to:** Klatch (AAXT Scaffolded Probing Phase 2 query organization); Piper Morgan (M2 canonical retest methodology)
-
-Vergil built a 55-query evaluation harness organized into five structural categories. The methodology is the cross-relevant finding; the content is domain-specific and not surfaced here.
-
-The categorical structure:
-1. **known_good_citation** — queries with empirically verified expected results, used as canaries (pass/fail is unambiguous, regression is immediate signal)
-2. **natural_language** — broad-vocabulary queries testing the system's ability to handle non-expert phrasing
-3. **cross_jurisdiction** — queries requiring reasoning across multiple regulatory bodies
-4. **known_pathological** — cases where the system is known to fail or behave unusually; explicitly catalogued rather than hidden
-5. **placeholder** — stubs for a known future query type, not yet fully specified
-
-Every query carries: the expected result type, the source (which session or empirical finding generated this query), and why it was included. The runner supports `--category` filtering and a `diff` command comparing two baseline snapshots.
-
-The most directly actionable element: the `known_pathological` category. Vergil made it explicit that known failure cases should be in the harness, not excluded. This normalizes failure as a testable state rather than a gap. For Klatch's AAXT Scaffolded Probing Phase 2: the fabrication probe class (absence categories — file, entity, memory, history, channel) maps cleanly onto `known_pathological`. For PM: Pattern-045 (floor fabrication of absent todo items) should be a named category in any M2 regression suite, not just one of the 61 canonical queries.
-
-The `placeholder` category is also worth adopting: acknowledging that a query type exists but isn't yet fully designed prevents the suite from pretending to coverage it doesn't have.
-
-**Suggested action:** Argus, before Phase 3 canonical retest is locked: review whether the current 61-query canonical suite has an equivalent of `known_pathological` as an explicit category. If Pattern-045 and similar failure modes aren't explicitly labelled, adding that label (without adding queries) is a five-minute improvement that makes regression visibility immediate. PM Lead Dev same consideration for the retest methodology.
+**Suggested action:** Argus: the two-tier canonical suite design (deterministic checks on every PR, LLM-as-judge quality nightly) is the correct pattern for Klatch's own quality testing. If Phase 4 transport targets Claude Code, the canonical conversation suite is the reference for how to test conversation quality at CI scale without burning LLM budget on every commit.
 
 ---
 
-### 5. Continuity memo before the failure, not after
+### 4. FED-USC search is functionally broken — eval harness finds it immediately
 
-**From:** OpenLaws (Vergil + PO), `docs/reference/vergil-continuity-memo-2026-04-13.md`, April 13 — methodology pattern only
-**Relevant to:** All projects (PM Docs 15-day session wrap; Klatch context interchange protocol)
+**From:** OpenLaws (Vergil), `workdesk/eval-harness/finding-fed-usc-search-gap.md`, April 15 — methodology pattern only
+**Relevant to:** Klatch (AAXT test design — how categorical testing surfaces hidden infrastructure failures); Piper Morgan (testing methodology)
 
-A laptop coffee spill mid-session forced an involuntary context handoff in the OpenLaws work yesterday. The work continued without information loss because a continuity memo had been written and committed to the repo *before* the failure — proactively, in anticipation of a possible hardware problem, not reactively.
+The eval harness methodology from yesterday's brief produced its first major infrastructure finding within 24 hours. The PO added five new queries to the v1.1 suite, including a `known_pathological` candidate: "reasonable accommodation employer" searching FED-USC. It returned zero results.
 
-The memo covered: current sprint state, what shipped, what's pending, key relationships, communication patterns, repo structure, critical lessons learned, memory system pointers. Context recovery on the new machine was complete. No work was lost.
+Vergil's investigation revealed the problem is far larger than one query: FED-USC search is functionally broken across the board. Even the word "the" returns only one result. "Shall" returns zero. The content exists in the database (citation lookup works — `42 U.S.C. § 12112` returns 2,377 tokens with 39 pincites), but it is not in the search index. Meanwhile FED-CFR search works perfectly. The eval baseline had masked this because results from both law types roll up together.
 
-This happened at the same time PM's Docs agent closed a 15-day session due to context window pressure — an entirely different forcing function, but the same dynamic: context must be externalized before the session ends (whether by spill, compaction, or deadline), not after. PM's continuity infrastructure (session logs, omnibus, mailbox, carry-forward lists) handled that transition cleanly.
+The methodology finding: a five-category eval harness with explicit `known_pathological` labeling, run against an expanded query set, surfaced a system-level infrastructure failure that had been invisible to all prior testing. The harness didn't just find a coverage gap — it found that an entire data source was silently absent from search.
 
-The Klatch Phase 3.5 behavioral calibration transfer is partly about this same problem at the agent-identity level: what does an entity know about how to work well, and can that knowledge survive a session boundary? The six-point handoff prompt is a continuity memo written by the agent, for its successor, at export time.
+The cross-project pattern: both PM's canonical retest (62.3% quality score with failure modes hidden in aggregate metrics) and Klatch's AAXT (the 4/5 PASS result with one genuine quality failure) are doing the same work — running structured queries that separate "the system works" from "the system appears to work because failures are masked." The value of categorical testing is that it prevents rollup from hiding gaps.
 
-The common pattern across all three instances: **externalize before the seam, not at it**. The continuity memo, the omnibus log, the session wrap, the handoff briefing — all work best when written proactively, with the failure mode in mind.
+**Suggested action:** No action required — this is an orientation note. The methodology pattern (categorical test suites that prevent aggregate metrics from masking failures) is validated. Argus and PM Lead Dev are already implementing variants of this approach. The lesson: when a new query immediately finds a broken system, the harness design is working.
 
-**Suggested action:** Calliope: add "write continuity memo before context pressure, not at it" to the agent traditions spec or logbook as a named practice. The Phase 3.5 behavioral calibration pipeline is the automated version of this discipline — but the manual version (session log + carry-forward + committed memo) is what protects against the unscheduled handoff.
+---
+
+### 5. Managed Agents assessment: Memory Stores are the linchpin for PM distribution
+
+**From:** PM PA, `dev/active/managed-agents-assessment-2026-04-14.md`, April 14
+**Relevant to:** Klatch (export-as-distribution — the export package IS what gets loaded into a Managed Agent session); OpenLaws (remote MCP transport requirements)
+
+PA completed a deep-dive into Anthropic's Managed Agents platform and produced the clearest picture yet of PM's distribution future. Two complementary paths: MCPB/Claude Desktop (Piper as local tool provider, no runtime cost, no persistence) and Managed Agents (Piper IS the agent, with Memory Stores for cross-session context, at $0.08/hr + token costs).
+
+The critical finding: Memory Stores map directly to PM's five-layer context model. Up to 8 stores per session, 100KB per entry, immutable version history, optimistic concurrency via SHA256. Write governance — which CIO identified as PM's critical gap — is built into the API. The five-layer mapping is clean: L1/L2 via agent system prompt, L3 via read-write Memory Store, L4 via session-level resource prompt, L5 via agent definition + session resources.
+
+The key distinction between the two paths: on Claude Desktop, Piper is a tool provider inside someone else's conversation. On Managed Agents, Piper controls persona, memory, and conversation flow. This maps onto xian's entity reframe (Insight #2): the Managed Agents path treats Piper as an entity-with-history, not a tool-without-context.
+
+For Klatch: the export package (prompt layers + behavioral calibration + field notes) is exactly what a Managed Agent session would need to bootstrap. The export-to-Managed-Agents path is: export from Klatch -> seed Memory Stores with prompt layers and field notes -> create Agent with role prompt -> start Session with seeded stores. Phase 4's Claude Code transport and the Managed Agents path are different delivery mechanisms for the same export data.
+
+**Suggested action:** Daedalus: when designing Phase 4 transport, consider that the export manifest structure may also serve as the input format for a future Managed Agents bootstrap. Keeping the manifest self-describing (with layer metadata, trust provenance, entity role) makes the Claude Code transport and any future Managed Agents transport consume the same data. This doesn't require building anything now — just keeping the manifest clean.
 
 ---
 
 ## Sources Read
 
 **Klatch:**
-- `git log --since="48 hours ago"` — 32 commits
-- `docs/logs/2026-04-13-0710-calliope-opus-log.md` — Monday assignments, end-of-day summary
-- `docs/logs/2026-04-13-0815-iris-opus-log.md` — Session 4: all three deliverables, Phase 3.5 positions + consensus
-- `docs/logs/2026-04-13-0816-argus-opus-log.md` — SDK bump, Hono, AAXT Phase 2, sweep, Phase 3.5 design doc + positions + consensus synthesis, Rounds 20-21
-- `docs/logs/2026-04-13-1021-daedalus-opus-log.md` — Haiku alias fix, six UX fixes, Phase 3.5 design + consensus, Phase 3.5a+b+c implementation
-- `docs/plans/STEP-10-PHASE-3.5-CONSENSUS.md` — Full consensus document, five questions, six-point handoff prompt
+- `git log --since="48 hours ago"` — 25 commits
+- `docs/logs/2026-04-14-0730-calliope-opus-log.md` — Tuesday assignments, blog skeleton, traditions spec update, logbook
+- `docs/logs/2026-04-14-1710-iris-opus-log.md` — Session 5: Phase 3.5d spec, five UX topics, entity reframe
+- `docs/logs/2026-04-14-1725-daedalus-opus-log.md` — Phase 3.5d implementation, Step 10 status review, Phase 4 approved
+- `docs/logs/2026-04-14-1729-argus-opus-log.md` — Round 22 prep, known_pathological memo, cross-pollination review
+- `docs/mail/iris-to-daedalus-phase35d-spec-2026-04-14.md` — Full interim design spec for export review UI
+- `docs/mail/calliope-to-argus-known-pathological-2026-04-14.md` — Cross-pollination action item
 
 **Piper Morgan:**
-- `git log --since="48 hours ago"` — 15 commits
-- `dev/active/2026-04-13-0742-pa-opus-log.md` — Day 14: temporal validity approved, xian on day-job focus
-- `dev/active/2026-04-13-0812-docs-code-opus-log.md` — Apr 12 omnibus, #944 closed, #977 audit, 15-day session wrap
-- `dev/active/2026-04-13-0814-lead-code-opus-log.md` — #925 STATUS/PRIORITY floor migration, canonical retest run 3
-- `git show ec2d7e3` — #925 commit diff and implementation details
+- `git log --since="48 hours ago"` — 30+ commits
+- `docs/omnibus-logs/2026-04-14-omnibus-log.md` — 5 sessions, Lead Dev M2a+M2b complete, blog bug, calendar backfill, Managed Agents
+- `dev/active/2026-04-15-0625-pa-opus-log.md` — Day 16: xian traveling, session start
+- `dev/active/2026-04-15-0635-lead-code-opus-log.md` — #929 verified (4/5 PASS), Architect decisions actioned
+- `dev/active/managed-agents-assessment-2026-04-14.md` — Two distribution paths, Memory Stores mapping, five-layer analysis
 
 **OpenLaws (methodology only — data boundary applied):**
-- `git log --since="48 hours ago"` — 8 commits
-- `logs/2026-04-13-vergil-log.md` — eval harness design and build, coffee spill handoff, continuity memo
-- `logs/2026-04-13-po-log.md` — docs reorganization, continuity memo authorship, research planning methodology
+- `git log --since="48 hours ago"` — 4 commits
+- `logs/2026-04-14-vergil-log.md` — v1.1 baseline run, ADA query gap finding
+- `logs/2026-04-14-po-log.md` — Work block: domain briefing, citation alias analysis, cross-pollination synthesis, principles seed
+- `logs/2026-04-15-vergil-log.md` — Citation alias gap analysis, FED-USC search discovery
+- `logs/2026-04-15-po-log.md` — Background research dispatch, travel day
+
+**Design in Product:**
+- `git log --since="48 hours ago"` — 9 commits (4 non-sweep: agent UI page shipped with light theme + 10 new agents, Q&A channel launched, project tracker)
 
 ---
+
+*Agents with questions for xian — about methodology, working patterns, or observations that don't fit elsewhere — can submit via `question-{from}-{date}-{topic}.md` to dispatch mail or project mail. See PROTOCOLS.md in the dispatch repo for format and priority hints.*
