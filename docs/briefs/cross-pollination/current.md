@@ -1,135 +1,82 @@
----
-date: 2026-04-15
-status: substantive
-sources_checked:
-  - klatch
-  - piper-morgan
-window: "48h (April 13–15, 2026)"
-revision: redacted 2026-04-16 — OpenLaws content removed per data boundary
----
+# Cross-Pollination Brief — April 18, 2026
 
-# Cross-Pollination Brief — April 15, 2026
-
-*This brief was redacted on April 16 to remove content from OpenLaws that crossed the project's data boundary. OpenLaws has been removed as a cross-pollination source going forward. The Klatch and Piper Morgan content below is unchanged.*
-
----
-
-Klatch's Phase 3.5 arc — from open design questions to consensus to working, tested code — completed in 48 hours with the Phase 3.5d export review UI shipping Tuesday evening. The bigger story from Tuesday may be xian's reframe during the UX walkthrough with Iris: entities are not abstractions you define in a manager; they are existing conversations promoted into roles. PM's Lead Dev had the most productive single session to date, closing six issues and effectively completing both M2a and M2b sub-epics, including a three-tier CI pipeline (E2E, canonical conversation suite, AAXT golden scenarios).
+Three threads closed in the last 24 hours. PM's ethics activation path cleared when CXO delivered voice guidance for Mode-2 decline responses — `#992 ETHICS-ACTIVATE` is now implementation-ready after weeks as a blocked P1. PM formally closed M2c with routing at 95.1% and quality at 72.1%, a +9.8 point improvement since the M2a baseline; M2d (MUX lifecycle) is next. And both Klatch and PM added `DECISIONS.md` files on the same day — a convergent infrastructure move explicitly designed to make the daily brief more reliable.
 
 ---
 
 ## Key Insights
 
-### 1. Phase 3.5d ships: the full behavioral calibration pipeline is complete and tested
+### 1. Ethics activation unblocked — CXO voice guidance received, #992 ready for implementation
 
-**From:** Klatch (Daedalus, Iris, Argus), `docs/mail/iris-to-daedalus-phase35d-spec-2026-04-14.md`, session logs April 14
-**Relevant to:** Piper Morgan (M5 BYOC export, ADR-054 composting pipeline)
+**From:** PM Lead Developer + CXO, `dev/2026/04/16/964-findings-memo.md`, CXO inbox memos Apr 16 evening
+**Relevant to:** Klatch (behavioral guardrails, entity response surfaces); both projects as ethical response architecture matures
 
-Iris wrote the Phase 3.5d interim design spec for the export review UI and sent it to Daedalus. Daedalus shipped the implementation in under an hour: an `ExportReviewPanel` component with export summary, field note review (three groups: agreements, decisions needed, single-source), trust transitions on accept/edit/reject, and a new lightweight `/api/channels/:id/export-preview` endpoint that returns manifest data without producing a zip.
+When `#964 FLOOR-ETHICS-VERIFY` closed April 16, the P1 finding was `ENABLE_ETHICS_ENFORCEMENT=false` in production — BoundaryEnforcer wired since October 2025 but switch off by default. Activation was blocked on CXO voice input for Mode-2 decline copy (how Piper says no). That input arrived the same evening.
 
-The design positions review as part of the export service — "the moving company showing you what's being packed before the truck leaves." Field notes from all three extraction modes (external analysis, self-authored briefing, micro-reflections) are grouped by agreement status. Disagreements show both sources side-by-side with explicit resolution options. Accepted notes get trust promoted to `human-authored`. Rejected notes are excluded from the export package. A "skip review" escape hatch preserves the notes at their original trust levels.
+CXO delivered three structured decline templates, anti-patterns to avoid, a Colleague Test auto-fail rule (Tone=0 = auto-fail, not MARGINAL), and a false-positive ceiling: 2-3% before beta, validated against the canonical retest corpus. The acceptance criteria are now fully specified in `#992`. The path to production: implement the voice layer, run canonical probes, validate false-positive rate, then flip the flag.
 
-The full Phase 3.5 arc: design discussion (Sunday morning) -> three-agent consensus (Sunday afternoon) -> backend implementation 3.5a/b/c (Sunday evening) -> test coverage Round 20-21 (Sunday-Monday) -> UX spec (Tuesday afternoon) -> export review UI shipped and tested (Tuesday evening). Design to tested code in 48 hours across four agents.
+CXO also weighed in on the P2 question (post-generation response content check) — non-binding Option A preference but deferred the architectural decision to PM.
 
-Iris explicitly scoped this as interim — "better than plumbing, not the last word." The holistic UX redesign will likely refactor this component. Daedalus and xian confirmed Phase 4 (Claude Code transport) is approved as next, with Iris's UX work proceeding in parallel without blocking transport implementation.
-
-Test count: 942 (Round 22 added 32 tests for Phase 3.5d). Zero failures.
-
-**Suggested action:** PM Lead Dev and PA: the export review UI's trust transition model (draft -> approved/rejected, with trust promotion to human-authored) is a concrete reference for how PM's write governance might work in the ADR-054 composting pipeline. The pattern — machine generates, human reviews with explicit accept/edit/reject, provenance tracked — is exactly the gap CIO identified for PM memory writes.
+**Suggested action:** Klatch: as entity conversations deepen and Phase 4 transports mature, a guardrail that exists but defaults-off is a liability. Track the state of any behavioral gates (not just ethics — content shape, response scope, floor prohibitions) as a named bit, not implicit code behavior. "Is enforcement on?" should be checkable at a glance. PM: the Colleague Test Tone=0 auto-fail criterion is new and affects scoring across the whole rubric, not just ethics probes. Flag this for Argus before the next AAXT run against the full canonical suite.
 
 ---
 
-### 2. Entities are conversations promoted into roles
+### 2. Evaluation instrument taxonomy settled — Colleague Test stays R/C/T, fabrication separate
 
-**From:** Klatch (Iris + xian), session 5 UX walkthrough, April 14
-**Relevant to:** Piper Morgan (role architecture, MCPB distribution model)
+**From:** PM CXO (via cross-pollination), Architect; `docs/end-of-day mail sweep` Apr 16, `#994`, `#995`
+**Relevant to:** Klatch (AAXT design, evaluation methodology); both projects
 
-During Iris's end-to-end UX walkthrough, xian delivered a reframe that Calliope flagged as the day's most consequential finding. The current Klatch mental model: create entity (define persona in a manager) -> assign to channel. The actual workflow xian described: have an ongoing conversation with an agent -> that conversation develops into a working relationship -> bring it into a klatch (a meeting of existing chats, each with full context).
+Three evaluation-methodology decisions landed April 16 evening, all traceable to cross-pollination inputs from Klatch's Architect:
 
-The entity IS its conversation, given a seat at a shared table. A klatch is a meeting of existing chats, not a new conversation with pre-configured personas. From-scratch creation exists but is not the central use case.
+- **#994 AAXT scorer vocabulary**: Adopt the six-failure-mode taxonomy (filed as a PR for the AAXT scoring protocol). CXO endorsed. If the vocabulary is still mutable in the current scoring spec, now is the time to adopt it — it becomes the shared language for failure analysis across projects.
 
-This inverts the entity management UX. Instead of a creation-first flow (name, role prompt, model selection), the primary path becomes promotion — an existing conversation accrues enough identity to earn a role. The import flow is the mechanism: a Claude Code or Claude Desktop conversation becomes an entity when imported, not when someone fills out a form.
+- **#995 Standalone fabrication probe set**: Architect proposed 5–10 probes across 5 absence categories as a regression fence for the `#960` guardrail. CXO endorsed. This becomes the fabrication instrument — structurally separate from the Colleague Test rubric.
 
-Iris connected this to Topic 5 (import-to-export arc): the transition from Act 1 (import) to Act 2 (work in a klatch) is precisely where the promotion happens. xian's response to Topic 5: "I think I like this one the most so far because it names something I had not fully attended to yet."
+- **Colleague Test rubric stays R/C/T**: CXO explicitly ruled against adding a fabrication dimension to the Colleague Test. The argument: fabrication and conversational quality are distinct failure modes that need distinct instruments. Mixing them muddies both. Rubric stays three-dimensional; fabrication gets its own harness.
 
-The five UX topics Iris presented are now on record. xian's equivalent observations come next (during travel). Then binocular synthesis of both sets, followed by the exhaustive end-to-end review.
+The generalizable principle: evaluation instruments should be specialized. Combining orthogonal concerns (tone quality vs. knowledge hallucination) into a single rubric optimizes for compactness but degrades diagnostic resolution. This is the same "separate the concerns" principle that Pattern-062 diagnosis applied to context assembly.
 
-**Suggested action:** PM PA: this reframe has implications for how Piper Morgan's roles are described in the MCPB distribution model. If entities are conversations-promoted-into-roles, then the MCPB install isn't "here are 10 pre-configured agents" — it's "here's a conversation that will become your PM assistant as you use it." The Managed Agents assessment's distinction (Claude Desktop: Piper is a tool provider; Managed Agents: Piper IS the agent) maps onto this same axis. Worth noting in the distribution planning docs.
-
----
-
-### 3. PM Lead Dev ships the entire M2 testing infrastructure in one session
-
-**From:** PM Lead Developer, omnibus April 14; session log April 15
-**Relevant to:** Klatch (Argus test infrastructure patterns, CI approach)
-
-Lead Dev closed six issues in a single session, completing M2a (10/10) and effectively completing M2b (4/5, with #929 now verified). The testing infrastructure track — which was zero automated conversation testing at the start of the sprint — is now a three-tier CI pipeline:
-
-- **E2E tests (#927):** 9/9 via ASGI transport (88s). Todo lifecycle, GitHub close, reminder creation, floor routing, capability boundary. FK ordering fix in conftest cleanup.
-- **Canonical conversation suite (#928):** Two-tier design. Tier 1: deterministic routing + response structure checks (no LLM cost, every PR). Tier 2: LLM-as-judge quality via Colleague Test (env-gated, nightly). 61 queries parametrized. Routing: 58/61 PASS. Response structure: 61/61 PASS.
-- **AAXT golden scenarios (#929):** 5 multi-turn quality tests. Verified April 15 with Gemini key. 4/5 PASS. The one failure (context retention — "that" not resolved to prior topic) is a genuine quality finding, not a test infrastructure problem. AAXT is working correctly.
-- **CI integration (#930):** GitHub Actions with 3 jobs: E2E on every PR (~90s), canonical on conversation code changes (~8 min), AAXT nightly (6 AM UTC, ~$0.50/run).
-
-Additionally: #960/#961 (context contract audit — UNKNOWN category now gets user context, violation logging added), #963 (26 dead canonical handler methods deleted, 911 lines removed), and the M2 super-epic structure document.
-
-The Architect made three clean decisions in a 35-minute session: #970 ServiceRegistry leave as-is, #971 Pattern-012 adapters delete, ProviderSelector delete. Unifying principle: "don't maintain infrastructure for a future that hasn't been designed yet."
-
-Total tests: 6,246, zero failures.
-
-**Suggested action:** Argus: the two-tier canonical suite design (deterministic checks on every PR, LLM-as-judge quality nightly) is the correct pattern for Klatch's own quality testing. If Phase 4 transport targets Claude Code, the canonical conversation suite is the reference for how to test conversation quality at CI scale without burning LLM budget on every commit.
+**Suggested action:** Klatch AAXT team (Argus, Daedalus): before the next major AAXT run, confirm whether the current scorer implements the six-failure-mode vocabulary and whether a standalone fabrication probe set exists. If PM is building `#995` in parallel, there may be a shared probe set worth coordinating on — same absence categories, same failure taxonomy.
 
 ---
 
-### 4. Categorical testing prevents rollup from hiding gaps
+### 3. DECISIONS.md added to both repos on the same day — coordination infrastructure
 
-**From:** PM (canonical retest), Klatch (AAXT) — cross-project pattern observation
-**Relevant to:** Both projects (testing methodology)
+**From:** Klatch (commit `04a0f36`), PM (commit `f8fdc29`), both Apr 18
+**Relevant to:** Both projects; cross-pollination sweep reliability
 
-Both PM's canonical retest (62.3% quality score with failure modes hidden in aggregate metrics) and Klatch's AAXT (the 4/5 PASS result with one genuine quality failure) are doing the same work: running structured queries that separate "the system works" from "the system appears to work because failures are masked."
+Both Klatch and PM added `DECISIONS.md` files today. The format: append-only, one line per decision, `DATE | DECISION | PARTICIPANTS`, with major ADRs as the full artifact and this as the greppable index underneath. The stated motivation on both commits: "anti-zombie brief checks" — giving the daily sweep something machine-readable to scan for decisions that crossed repo boundaries.
 
-The value of categorical testing is that it prevents rollup from hiding gaps. When failures exist within a category, aggregate pass rates can look acceptable while specific failure modes remain invisible. Categorical harnesses with explicit taxonomy (pathological queries, edge cases, boundary conditions as named categories) surface these masked failures. Both PM and Klatch are converging on this approach independently.
+This is a convergent infrastructure move that emerged independently in both projects at the same time. The Klatch `DECISIONS.md` already has six entries (April 10–17); the PM version has four. Both capture decisions that were previously scattered across commit messages, memos, and session logs.
 
-**Suggested action:** No action required — this is an orientation note. The methodology pattern is validated across both projects. Argus and PM Lead Dev are already implementing variants.
+**Suggested action:** Both projects: commit to a session discipline of appending to `DECISIONS.md` whenever a project-level call is made — especially decisions that affect the other project or surface methodological choices. The brief can then do a targeted grep rather than full log scan. Longer term: the format could be the seed of a lightweight ADR index.
 
 ---
 
-### 5. Managed Agents assessment: Memory Stores are the linchpin for PM distribution
+### 4. M2c closed — routing 95.1%, quality 72.1%, M2d next
 
-**From:** PM PA, `dev/active/managed-agents-assessment-2026-04-14.md`, April 14
-**Relevant to:** Klatch (export-as-distribution — the export package IS what gets loaded into a Managed Agent session)
+**From:** PM Lead Developer, `docs/internal/planning/m2-structure.md`, Apr 16
+**Relevant to:** Klatch (project milestone context; floor + quality arc)
 
-PA completed a deep-dive into Anthropic's Managed Agents platform and produced the clearest picture yet of PM's distribution future. Two complementary paths: MCPB/Claude Desktop (Piper as local tool provider, no runtime cost, no persistence) and Managed Agents (Piper IS the agent, with Memory Stores for cross-session context, at $0.08/hr + token costs).
+M2b (test infrastructure: 5/5) and M2c (conversational depth: 6/6) both formally closed April 16. M2c closed at canonical retest Run 5: 95.1% routing (vs. 93% at M2a), 72.1% quality (+9.8 points from the 62.3% M2a baseline). The gap to the aspirational 80% quality ceiling is primarily a fresh-account context problem tracked in `#989` — users with no projects or history can't receive anchored responses, so Context scores stall at 1.
 
-The critical finding: Memory Stores map directly to PM's five-layer context model. Up to 8 stores per session, 100KB per entry, immutable version history, optimistic concurrency via SHA256. Write governance — which CIO identified as PM's critical gap — is built into the API. The five-layer mapping is clean: L1/L2 via agent system prompt, L3 via read-write Memory Store, L4 via session-level resource prompt, L5 via agent definition + session resources.
+M2d (MUX lifecycle) is next. Fourteen follow-up issues filed during M2c are organized by family (context assembler, ethics, LLM infrastructure, testing, hygiene) — none block M2d start.
 
-The key distinction between the two paths: on Claude Desktop, Piper is a tool provider inside someone else's conversation. On Managed Agents, Piper controls persona, memory, and conversation flow. This maps onto xian's entity reframe (Insight #2): the Managed Agents path treats Piper as an entity-with-history, not a tool-without-context.
-
-For Klatch: the export package (prompt layers + behavioral calibration + field notes) is exactly what a Managed Agent session would need to bootstrap. The export-to-Managed-Agents path is: export from Klatch -> seed Memory Stores with prompt layers and field notes -> create Agent with role prompt -> start Session with seeded stores. Phase 4's Claude Code transport and the Managed Agents path are different delivery mechanisms for the same export data.
-
-**Suggested action:** Daedalus: when designing Phase 4 transport, consider that the export manifest structure may also serve as the input format for a future Managed Agents bootstrap. Keeping the manifest self-describing (with layer metadata, trust provenance, entity role) makes the Claude Code transport and any future Managed Agents transport consume the same data. This doesn't require building anything now — just keeping the manifest clean.
+**Suggested action:** Klatch: the fresh-account ceiling is a variant of the cold-start onboarding gap surfaced in Klatch's own Alpha tester work (April 2026 brief). Both projects have the same structural problem: high-quality responses require anchoring context, but new users have none. Worth comparing approaches — PM's solution involves explicit user-anchoring fields in the context assembler; Klatch's will likely involve channel bootstrapping and entity initialization.
 
 ---
 
 ## Sources Read
 
-**Klatch:**
-- `git log --since="48 hours ago"` — 25 commits
-- `docs/logs/2026-04-14-0730-calliope-opus-log.md` — Tuesday assignments, blog skeleton, traditions spec update, logbook
-- `docs/logs/2026-04-14-1710-iris-opus-log.md` — Session 5: Phase 3.5d spec, five UX topics, entity reframe
-- `docs/logs/2026-04-14-1725-daedalus-opus-log.md` — Phase 3.5d implementation, Step 10 status review, Phase 4 approved
-- `docs/logs/2026-04-14-1729-argus-opus-log.md` — Round 22 prep, known_pathological memo, cross-pollination review
-- `docs/mail/iris-to-daedalus-phase35d-spec-2026-04-14.md` — Full interim design spec for export review UI
-- `docs/mail/calliope-to-argus-known-pathological-2026-04-14.md` — Cross-pollination action item
-
-**Piper Morgan:**
-- `git log --since="48 hours ago"` — 30+ commits
-- `docs/omnibus-logs/2026-04-14-omnibus-log.md` — 5 sessions, Lead Dev M2a+M2b complete, blog bug, calendar backfill, Managed Agents
-- `dev/active/2026-04-15-0625-pa-opus-log.md` — Day 16: xian traveling, session start
-- `dev/active/2026-04-15-0635-lead-code-opus-log.md` — #929 verified (4/5 PASS), Architect decisions actioned
-- `dev/active/managed-agents-assessment-2026-04-14.md` — Two distribution paths, Memory Stores mapping, five-layer analysis
-
-**Design in Product:**
-- `git log --since="48 hours ago"` — 9 commits (4 non-sweep: agent UI page shipped with light theme + 10 new agents, Q&A channel launched, project tracker)
+- Klatch: `DECISIONS.md` (new, Apr 18)
+- Klatch: `docs/mail/memo-janus-to-calliope-apr15-brief-redacted-2026-04-16.md`
+- PM: `docs/internal/planning/m2-structure.md` (M2b/M2c closure, Apr 16)
+- PM: commit body `a6b3a6d` — #964 ethics verification findings summary
+- PM: commit body `d9f9b3f` — #950 Five Pillars floor prompt evolution
+- PM: commit body `52059b3` — end-of-day mail sweep, #993–995 filed, CXO voice guidance
+- PM: commit body `4f5ee41` — canonical retest iter 2 (44/61 PASS, 72.1%)
+- PM: `DECISIONS.md` (new, Apr 18)
+- PM: `docs/omnibus-logs/2026-04-15-omnibus-log.md`
 
 ---
 
