@@ -1,83 +1,70 @@
-# Cross-Pollination Brief — April 18, 2026
+# Cross-Pollination Brief — April 20, 2026
 
-Three threads closed in the last 24 hours. PM's ethics activation path cleared when CXO delivered voice guidance for Mode-2 decline responses — `#992 ETHICS-ACTIVATE` is now implementation-ready after weeks as a blocked P1. PM formally closed M2c with routing at 95.1% and quality at 72.1%, a +9.8 point improvement since the M2a baseline; M2d (MUX lifecycle) is next. And both Klatch and PM added `DECISIONS.md` files on the same day — a convergent infrastructure move explicitly designed to make the daily brief more reliable.
-
----
+Klatch's automated intel sweep surfaced Opus 4.7's general availability and two approaching model deprecation deadlines — one already past — that both projects need to act on. On the architectural side, Klatch's MCP server reaches its Phase 5c decision point (write-path), and PM has shipped a session log maintenance hook pattern worth importing into Klatch's agent discipline.
 
 ## Key Insights
 
-### 1. Ethics activation unblocked — CXO voice guidance received, #992 ready for implementation
+### 1. Opus 4.7 GA — evaluate upgrade in both projects
 
-**From:** PM Lead Developer + CXO, `dev/2026/04/16/964-findings-memo.md`, CXO inbox memos Apr 16 evening
-**Relevant to:** Klatch (behavioral guardrails, entity response surfaces); both projects as ethical response architecture matures
+**From:** Klatch intel sweep (automated, 2026-04-20)
+**Relevant to:** Klatch, Piper Morgan
 
-When `#964 FLOOR-ETHICS-VERIFY` closed April 16, the P1 finding was `ENABLE_ETHICS_ENFORCEMENT=false` in production — BoundaryEnforcer wired since October 2025 but switch off by default. Activation was blocked on CXO voice input for Mode-2 decline copy (how Piper says no). That input arrived the same evening.
+Anthropic released Claude Opus 4.7 on April 16. Key improvements over Opus 4.6: substantially stronger software engineering and long-running coding tasks; high-resolution vision (3.75MP vs. 1.15MP); and a new **task budgets** feature where the model receives a running token countdown and self-paces its tool use. Pricing is unchanged ($5/$25 per M tokens in/out). SDK version `@anthropic-ai/sdk` is now at 0.90.0 — Klatch is on 0.86.1, four minor versions behind.
 
-CXO delivered three structured decline templates, anti-patterns to avoid, a Colleague Test auto-fail rule (Tone=0 = auto-fail, not MARGINAL), and a false-positive ceiling: 2-3% before beta, validated against the canonical retest corpus. The acceptance criteria are now fully specified in `#992`. The path to production: implement the voice layer, run canonical probes, validate false-positive rate, then flip the flag.
+The task budgets feature is directly relevant to both projects: Klatch's Step 10 export packaging involves multi-step tool orchestration that could benefit from budget awareness; PM's Excellence Flywheel tracking could use it to surface cost-per-session trends. Neither project should rush the upgrade before running their full test suites, but the evaluation should happen this sprint.
 
-CXO also weighed in on the P2 question (post-generation response content check) — non-binding Option A preference but deferred the architectural decision to PM.
+**Suggested action:** Klatch: bump `DEFAULT_MODEL` evaluation and `@anthropic-ai/sdk` to `^0.90.0` in next dep maintenance. PM: check for Opus 4.6-specific patterns (budget_tokens, which is deprecated on 4.6) before upgrading.
 
-**Suggested action:** Klatch: as entity conversations deepen and Phase 4 transports mature, a guardrail that exists but defaults-off is a liability. Track the state of any behavioral gates (not just ethics — content shape, response scope, floor prohibitions) as a named bit, not implicit code behavior. "Is enforcement on?" should be checkable at a glance. PM: the Colleague Test Tone=0 auto-fail criterion is new and affects scoring across the whole rubric, not just ethics probes. Flag this for Argus before the next AAXT run against the full canonical suite.
 
----
+### 2. Two model deprecation deadlines — one already past (urgent)
 
-### 2. Evaluation instrument taxonomy settled — Colleague Test stays R/C/T, fabrication separate
+**From:** Klatch intel sweep (automated, 2026-04-20)
+**Relevant to:** Klatch, Piper Morgan
 
-**From:** PM CXO (via cross-pollination), Architect; `docs/end-of-day mail sweep` Apr 16, `#994`, `#995`
-**Relevant to:** Klatch (AAXT design, evaluation methodology); both projects
+Two concurrent deprecation risks:
 
-Three evaluation-methodology decisions landed April 16 evening, all traceable to cross-pollination inputs from Klatch's Architect:
+**Haiku 3 (deadline: April 19 — yesterday).** A prior sweep identified a MODEL_ALIASES bug in Klatch: the key `claude-haiku-3-20250307` had two typos vs. the real model ID `claude-3-haiku-20240307`. The fix was assigned but its ship status is unconfirmed. If it didn't land, any channel using the Haiku 3 model ID is broken as of yesterday and needs an emergency DB migration.
 
-- **#994 AAXT scorer vocabulary**: Adopt the six-failure-mode taxonomy (filed as a PR for the AAXT scoring protocol). CXO endorsed. If the vocabulary is still mutable in the current scoring spec, now is the time to adopt it — it becomes the shared language for failure analysis across projects.
+**Sonnet 4 + original Opus 4 (deadline: June 15 — 57 days).** `claude-sonnet-4-20250514` and `claude-opus-4-20250514` retire June 15. Migration targets are Sonnet 4.6 and Opus 4.7. Both projects may have these model IDs hardcoded in DB records, config, or channel exports.
 
-- **#995 Standalone fabrication probe set**: Architect proposed 5–10 probes across 5 absence categories as a regression fence for the `#960` guardrail. CXO endorsed. This becomes the fabrication instrument — structurally separate from the Colleague Test rubric.
+**Suggested action:** Klatch: confirm Haiku 3 alias fix shipped before today's sessions; if not, treat as P0. Both projects: run a grep/DB audit for `claude-sonnet-4-20250514` and `claude-opus-4-20250514` before end of sprint. Add both IDs to MODEL_ALIASES as a safety net.
 
-- **Colleague Test rubric stays R/C/T**: CXO explicitly ruled against adding a fabrication dimension to the Colleague Test. The argument: fabrication and conversational quality are distinct failure modes that need distinct instruments. Mixing them muddies both. Rubric stays three-dimensional; fabrication gets its own harness.
 
-The generalizable principle: evaluation instruments should be specialized. Combining orthogonal concerns (tone quality vs. knowledge hallucination) into a single rubric optimizes for compactness but degrades diagnostic resolution. This is the same "separate the concerns" principle that Pattern-062 diagnosis applied to context assembly.
+### 3. Klatch Phase 5c decision point — write-path with cross-producer implications
 
-**Suggested action:** Klatch AAXT team (Argus, Daedalus): before the next major AAXT run, confirm whether the current scorer implements the six-failure-mode vocabulary and whether a standalone fabrication probe set exists. If PM is building `#995` in parallel, there may be a shared probe set worth coordinating on — same absence categories, same failure taxonomy.
+**From:** Klatch `docs/logs/2026-04-18-1256-argus-opus-log.md`, `docs/plans/STEP-10-PHASE-5-MCP-SERVER.md`
+**Relevant to:** Piper Morgan (cross-producer coordination)
 
----
+Phase 5a (read-only resources) and 5b (tools surface: `list_channels`, `get_context_package`, `get_manifest`) are complete — 1069 tests, zero failures. Argus has given Daedalus a clear signal to pause for the Phase 5c decision.
 
-### 3. DECISIONS.md added to both repos on the same day — coordination infrastructure
+Phase 5c introduces the first write-path: `reflect(channel_id, note)` — a micro-reflection that a consumer agent writes back after using a context package. The plan document flags this explicitly: "the data-integrity and concurrency questions deserve their own evaluation." More critically, write-path coordination has **provenance and trust implications that read-paths don't** — the same note in the Phase 5 plan. PM is the sibling producer whose own eventual write-path (`save_artifact`) will need to interoperate.
 
-**From:** Klatch (commit `04a0f36`), PM (commit `f8fdc29`), both Apr 18
-**Relevant to:** Both projects; cross-pollination sweep reliability
+This is a moment where PM Chief Architect input before Klatch finalizes 5c design would cost one memo and save significant retroactive alignment work.
 
-Both Klatch and PM added `DECISIONS.md` files today. The format: append-only, one line per decision, `DATE | DECISION | PARTICIPANTS`, with major ADRs as the full artifact and this as the greppable index underneath. The stated motivation on both commits: "anti-zombie brief checks" — giving the daily sweep something machine-readable to scan for decisions that crossed repo boundaries.
+**Suggested action:** PM Chief Architect: file a short position memo on write-path coordination timing — does PM's `save_artifact` design need to be in view before Klatch locks 5c? Even a "no strong opinion yet" answer unblocks Daedalus cleanly.
 
-This is a convergent infrastructure move that emerged independently in both projects at the same time. The Klatch `DECISIONS.md` already has six entries (April 10–17); the PM version has four. Both capture decisions that were previously scattered across commit messages, memos, and session logs.
 
-**Suggested action:** Both projects: commit to a session discipline of appending to `DECISIONS.md` whenever a project-level call is made — especially decisions that affect the other project or surface methodological choices. The brief can then do a targeted grep rather than full log scan. Longer term: the format could be the seed of a lightweight ADR index.
+### 4. Session log maintenance hooks — PM pattern transferable to Klatch
 
----
+**From:** PM `dev/2026/04/19/2026-04-19-0639-docs-code-opus-log.md`
+**Relevant to:** Klatch (agent process discipline)
 
-### 4. M2c closed — routing 95.1%, quality 72.1%, M2d next
+PM's Apr 19 docs session resolved an incomplete-log failure mode: the Apr 16 Lead Dev session log stopped at 8:45 AM despite work continuing until evening, with the afternoon reconstructable only from 28 git commits. The fix: a PostToolUse hook (`.claude/hooks/log-maintenance-reminder.sh`) that fires every 15th Bash call and warns if the log hasn't been updated in 30+ minutes. CLAUDE.md was updated to make log discipline non-negotiable, and a feedback memory file was saved to prevent recurrence.
 
-**From:** PM Lead Developer, `docs/internal/planning/m2-structure.md`, Apr 16
-**Relevant to:** Klatch (project milestone context; floor + quality arc)
+Klatch has the same failure mode risk — multi-hour agent sessions with dense tool use. The hook pattern is a three-file change: hook shell script, settings.json registration, CLAUDE.md enforcement section.
 
-M2b (test infrastructure: 5/5) and M2c (conversational depth: 6/6) both formally closed April 16. M2c closed at canonical retest Run 5: 95.1% routing (vs. 93% at M2a), 72.1% quality (+9.8 points from the 62.3% M2a baseline). The gap to the aspirational 80% quality ceiling is primarily a fresh-account context problem tracked in `#989` — users with no projects or history can't receive anchored responses, so Context scores stall at 1.
+**Suggested action:** Klatch Dispatch or Architect: evaluate importing PM's log-maintenance hook pattern. PM's implementation in `.claude/hooks/log-maintenance-reminder.sh` and `.claude/settings.json` is reference-ready.
 
-M2d (MUX lifecycle) is next. Fourteen follow-up issues filed during M2c are organized by family (context assembler, ethics, LLM infrastructure, testing, hygiene) — none block M2d start.
-
-**Suggested action:** Klatch: the fresh-account ceiling is a variant of the cold-start onboarding gap surfaced in Klatch's own Alpha tester work (April 2026 brief). Both projects have the same structural problem: high-quality responses require anchoring context, but new users have none. Worth comparing approaches — PM's solution involves explicit user-anchoring fields in the context assembler; Klatch's will likely involve channel bootstrapping and entity initialization.
-
----
 
 ## Sources Read
 
-- Klatch: `DECISIONS.md` (new, Apr 18)
-- Klatch: `docs/mail/memo-janus-to-calliope-apr15-brief-redacted-2026-04-16.md`
-- PM: `docs/internal/planning/m2-structure.md` (M2b/M2c closure, Apr 16)
-- PM: commit body `a6b3a6d` — #964 ethics verification findings summary
-- PM: commit body `d9f9b3f` — #950 Five Pillars floor prompt evolution
-- PM: commit body `52059b3` — end-of-day mail sweep, #993–995 filed, CXO voice guidance
-- PM: commit body `4f5ee41` — canonical retest iter 2 (44/61 PASS, 72.1%)
-- PM: `DECISIONS.md` (new, Apr 18)
-- PM: `docs/omnibus-logs/2026-04-15-omnibus-log.md`
+- `klatch/docs/intel/2026-04-20-sweep.md` — automated external scan, full read
+- `klatch/docs/logs/2026-04-18-1256-argus-opus-log.md` — Argus Round 26b session wrap (Phase 5b sign-off)
+- `klatch/docs/plans/STEP-10-PHASE-5-MCP-SERVER.md` — Phase 5c and open questions sections
+- `piper-morgan-product/dev/2026/04/19/2026-04-19-0639-docs-code-opus-log.md` — docs session: Sibling Intelligence publish + log maintenance safeguards
+- `piper-morgan-product/docs/briefing/BRIEFING-ESSENTIAL-COMMS.md` — communications role briefing
 
----
+
+*Canonical archive: designinproduct.com/internal — if your local copy is missing or stale, fetch the latest from the hub.*
 
 *Agents with questions for xian — about methodology, working patterns, or observations that don't fit elsewhere — can submit via `question-{from}-{date}-{topic}.md` to dispatch mail or project mail. See PROTOCOLS.md in the dispatch repo for format and priority hints.*
