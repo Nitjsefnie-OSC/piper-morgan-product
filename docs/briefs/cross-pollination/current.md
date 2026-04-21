@@ -1,69 +1,49 @@
-# Cross-Pollination Brief — April 20, 2026
 
-Klatch's automated intel sweep surfaced Opus 4.7's general availability and two approaching model deprecation deadlines — one already past — that both projects need to act on. On the architectural side, Klatch's MCP server reaches its Phase 5c decision point (write-path), and PM has shipped a session log maintenance hook pattern worth importing into Klatch's agent discipline.
+# Cross-Pollination Brief — April 21, 2026
+
+**Note:** PM filed a retrospective omnibus log for April 16 on April 19. Most of its content — ethics activation, M2c closure, DECISIONS.md, the CXO voice guidance — is already reported in the April 16–18 briefs. This brief extracts only the two items from that omnibus that were *not* visible in the atomic session logs at the time: a new canonical-term discipline step in Docs's omnibus skill, and the April 19 publication of the "Sibling Intelligence" blog post.
 
 ## Key Insights
 
-### 1. Opus 4.7 GA — evaluate upgrade in both projects
+### 1. PDR-004 correction chain — canonical-term discipline as process infrastructure
 
-**From:** Klatch intel sweep (automated, 2026-04-20)
-**Relevant to:** Klatch, Piper Morgan
+**From:** PM `docs/omnibus-logs/2026-04-16-omnibus-log.md` (filed April 19)
+**Relevant to:** Klatch (agent process discipline, omnibus methodology)
 
-Anthropic released Claude Opus 4.7 on April 16. Key improvements over Opus 4.6: substantially stronger software engineering and long-running coding tasks; high-resolution vision (3.75MP vs. 1.15MP); and a new **task budgets** feature where the model receives a running token countdown and self-paces its tool use. Pricing is unchanged ($5/$25 per M tokens in/out). SDK version `@anthropic-ai/sdk` is now at 0.90.0 — Klatch is on 0.86.1, four minor versions behind.
+CXO spotted that a paraphrase in an earlier PM omnibus had diverged from the canonical PDR-004 principles. Docs traced the drift: 7 affected files, 2 still live in published blog posts (Closing Sprint and Ship #036). Comms had to write full narrative rewrites — not find-and-replace — because the wrong principles had been tied to specific design decisions. The correction propagated through a four-agent chain: CXO discovery → Docs provenance sweep → Docs correction deployment + 5-item safeguarding plan → Comms narrative rewrites.
 
-The task budgets feature is directly relevant to both projects: Klatch's Step 10 export packaging involves multi-step tool orchestration that could benefit from budget awareness; PM's Excellence Flywheel tracking could use it to surface cost-per-session trends. Neither project should rush the upgrade before running their full test suites, but the evaluation should happen this sprint.
+The structural fix: Docs added a mandatory Step 7 to the `create-omnibus` skill — "Verify Canonical References" — requiring agents to quote canonical sources directly rather than paraphrase. This is now embedded in the tooling, not just a guideline.
 
-**Suggested action:** Klatch: bump `DEFAULT_MODEL` evaluation and `@anthropic-ai/sdk` to `^0.90.0` in next dep maintenance. PM: check for Opus 4.6-specific patterns (budget_tokens, which is deprecated on 4.6) before upgrading.
+Klatch's omnibus equivalent (the session logs fed to cross-pollination) has the same risk. A paraphrase of a Klatch architectural principle in a session log that then feeds a cross-pollination brief and gets routed to PM could propagate a misconception in the same chain.
 
+**Suggested action:** Klatch Docs/Dispatch: consider whether the canonical-term verification step is worth adding to Klatch's own session log tradition. Specifically: when logs reference named concepts (AAXT categories, Step terminology, Five-Layer layer names), verify against the authoritative source document before committing.
 
-### 2. Two model deprecation deadlines — one already past (urgent)
+---
 
-**From:** Klatch intel sweep (automated, 2026-04-20)
-**Relevant to:** Klatch, Piper Morgan
-
-Two concurrent deprecation risks:
-
-**Haiku 3 (deadline: April 19 — yesterday).** A prior sweep identified a MODEL_ALIASES bug in Klatch: the key `claude-haiku-3-20250307` had two typos vs. the real model ID `claude-3-haiku-20240307`. The fix was assigned but its ship status is unconfirmed. If it didn't land, any channel using the Haiku 3 model ID is broken as of yesterday and needs an emergency DB migration.
-
-**Sonnet 4 + original Opus 4 (deadline: June 15 — 57 days).** `claude-sonnet-4-20250514` and `claude-opus-4-20250514` retire June 15. Migration targets are Sonnet 4.6 and Opus 4.7. Both projects may have these model IDs hardcoded in DB records, config, or channel exports.
-
-**Suggested action:** Klatch: confirm Haiku 3 alias fix shipped before today's sessions; if not, treat as P0. Both projects: run a grep/DB audit for `claude-sonnet-4-20250514` and `claude-opus-4-20250514` before end of sprint. Add both IDs to MODEL_ALIASES as a safety net.
-
-
-### 3. Klatch Phase 5c decision point — write-path with cross-producer implications
-
-**From:** Klatch `docs/logs/2026-04-18-1256-argus-opus-log.md`, `docs/plans/STEP-10-PHASE-5-MCP-SERVER.md`
-**Relevant to:** Piper Morgan (cross-producer coordination)
-
-Phase 5a (read-only resources) and 5b (tools surface: `list_channels`, `get_context_package`, `get_manifest`) are complete — 1069 tests, zero failures. Argus has given Daedalus a clear signal to pause for the Phase 5c decision.
-
-Phase 5c introduces the first write-path: `reflect(channel_id, note)` — a micro-reflection that a consumer agent writes back after using a context package. The plan document flags this explicitly: "the data-integrity and concurrency questions deserve their own evaluation." More critically, write-path coordination has **provenance and trust implications that read-paths don't** — the same note in the Phase 5 plan. PM is the sibling producer whose own eventual write-path (`save_artifact`) will need to interoperate.
-
-This is a moment where PM Chief Architect input before Klatch finalizes 5c design would cost one memo and save significant retroactive alignment work.
-
-**Suggested action:** PM Chief Architect: file a short position memo on write-path coordination timing — does PM's `save_artifact` design need to be in view before Klatch locks 5c? Even a "no strong opinion yet" answer unblocks Daedalus cleanly.
-
-
-### 4. Session log maintenance hooks — PM pattern transferable to Klatch
+### 2. "Sibling Intelligence" published — cross-pollination as public writing
 
 **From:** PM `dev/2026/04/19/2026-04-19-0639-docs-code-opus-log.md`
-**Relevant to:** Klatch (agent process discipline)
+**Relevant to:** Hub (narrative, public positioning)
 
-PM's Apr 19 docs session resolved an incomplete-log failure mode: the Apr 16 Lead Dev session log stopped at 8:45 AM despite work continuing until evening, with the afternoon reconstructable only from 28 git commits. The fix: a PostToolUse hook (`.claude/hooks/log-maintenance-reminder.sh`) that fires every 15th Bash call and warns if the log hasn't been updated in 30+ minutes. CLAUDE.md was updated to make log discipline non-negotiable, and a feedback memory file was saved to prevent recurrence.
+PM published "Sibling Intelligence" on April 19 — a blog post on pipermorgan.ai about the cross-pollination brief process itself. The post corrected a pre-publish framing error: it had initially described separate per-readership briefs (one for each project team); PM revised to reflect the unified brief that both projects actually receive. The corrected version went live as the accurate description.
 
-Klatch has the same failure mode risk — multi-hour agent sessions with dense tool use. The hook pattern is a three-file change: hook shell script, settings.json registration, CLAUDE.md enforcement section.
+This is the first public writing that explicitly describes how the cross-pollination system works. It's now indexed on the pipermorgan.ai blog, syndicated to Medium and LinkedIn. The cross-pollination hub has a public analog it can reference.
 
-**Suggested action:** Klatch Dispatch or Architect: evaluate importing PM's log-maintenance hook pattern. PM's implementation in `.claude/hooks/log-maintenance-reminder.sh` and `.claude/settings.json` is reference-ready.
+Live: https://pipermorgan.ai/blog/sibling-intelligence/
 
+**Suggested action:** Hub/Janus: consider whether the hub index page or the "How It Works" section should link to or acknowledge the public write-up. The post is an accurate external description of what the hub does.
+
+---
 
 ## Sources Read
 
-- `klatch/docs/intel/2026-04-20-sweep.md` — automated external scan, full read
-- `klatch/docs/logs/2026-04-18-1256-argus-opus-log.md` — Argus Round 26b session wrap (Phase 5b sign-off)
-- `klatch/docs/plans/STEP-10-PHASE-5-MCP-SERVER.md` — Phase 5c and open questions sections
-- `piper-morgan-product/dev/2026/04/19/2026-04-19-0639-docs-code-opus-log.md` — docs session: Sibling Intelligence publish + log maintenance safeguards
-- `piper-morgan-product/docs/briefing/BRIEFING-ESSENTIAL-COMMS.md` — communications role briefing
+- `piper-morgan-product/docs/omnibus-logs/2026-04-16-omnibus-log.md` — full read; most content already reported in Apr 16–18 briefs, two items extracted as new
+- `piper-morgan-product/dev/2026/04/19/2026-04-19-0639-docs-code-opus-log.md` — Sibling Intelligence publish + Apr 16 omnibus filing
+- `klatch/docs/intel/2026-04-20-sweep.md` — reviewed; items carried forward from the Apr 20 brief, no new cross-relevant additions
 
+**Not re-reported (already covered in Apr 16–18 briefs):** ethics voice architecture and CXO decline templates for `#992 ETHICS-ACTIVATE` (Apr 18 Insight #1); the "enforcer detects, entity speaks" separation of concerns (Apr 17 Insight #1); the anti-zombie coordination infrastructure pattern (Apr 18 Insight #3).
+
+---
 
 *Canonical archive: designinproduct.com/internal — if your local copy is missing or stale, fetch the latest from the hub.*
 
