@@ -1,65 +1,66 @@
-# Cross-Pollination Brief — April 23, 2026
 
-PM closed a high-volume April 22: the ethics enforcement arc that began with a disabled flag discovery on April 17 completed all four implementation phases and merged to main. HOST ran its first Claude Code session — and the session's immediate BLOCKER produced a concrete migration lesson. Docs, discovering the April 16 omnibus was built from an incomplete source set, added a structural safeguard to the `create-omnibus` skill before synthesizing five days of backlog. Klatch watch paths have no new commits in the 48h window.
+# Cross-Pollination Brief — April 24, 2026
+
+PM's April 23 was a high-output coordination day with no code gates, but substantial infrastructure forward motion: CIO's Chat→Code migration began with a formalized step-by-step walkthrough protocol; PA filed a retrospective memo on the #992 implementation and pushed the Gap 2 ethics-metadata decision forward with a concrete model candidate (Gemma 4); and Janus expanded the cross-pollination scan from 3 repos to 9, adding a primary/secondary split that protects wall-clock budget. Klatch watch paths have no new commits in the 48h window.
 
 ## Key Insights
 
-### 1. #992 ETHICS-ACTIVATE ships — the enforcer/voice pattern is production code
+### 1. CIO migration begins — "tick-tock" protocol formalizes the Chat→Code handoff pattern
 
-**From:** PM `dev/2026/04/22/992-gameplan.md`; merge commit `fcd44c5` (branch `claude/992-ethics-activate`)
-**Relevant to:** Klatch (ethics enforcement design reference; Phase 5 write-path trust implications)
+**From:** PM `dev/active/cio-migration-tick-tock-2026-04-23.md`; `dev/2026/04/23/2026-04-23-0619-docs-code-opus-log.md`
+**Relevant to:** Klatch (any Chat-originated agents not yet in Code; migration methodology)
 
-After the design decision (Apr 17), CXO voice unblocking (Apr 18), and a full audit-cascade gameplan, Lead Dev completed all four phases on April 22 and merged to main. Deliverables: `redirect_context` field in `BoundaryDecision` (Phase A); `FloorContext` denial mode + voice-template addendum that makes denials sound like Piper, not a policy engine (Phase B); end-to-end ethics denial flow wired through `intent_service` (Phase C); Phase D false-positive scan — a standalone Python script run against the canonical corpus, 100% pass. Net: 1,597 lines added across 11 files, three new test suites (561 lines), `ENABLE_ETHICS_ENFORCEMENT` flipped to `true` in production config.
+PM prepared CIO's migration on April 23 using a new artifact type: the migration tick-tock — a labeled, phase-by-phase walkthrough guide for executing a Chat→Code migration. Three phases: (1) Chat-side handoff preparation (Agent 360 v0.2 baseline questionnaire, six-section handoff memo, exec review, iterate); (2) migration bridge (atomic commit of handoff package before the new session starts — HOST's "orphan-state" lesson formalized as a required step); (3) Code-side onboarding (startup prompt, first-week task list including briefing correction memo, HOST coordination check, Ship #040 workstream review).
 
-The voice template's anti-patterns are codified in the denial-mode prompt: "Request blocked due to ethics policy," "Violation detected," "As an AI I cannot…" are all explicitly prohibited. The BoundaryEnforcer remains structurally separate from Piper's voice — the split that the Apr 17 brief described as the design is now enforced in the code.
+Lessons from HOST's April 22 migration are now explicit in the protocol: Section 6 (candid notes) produced the most valuable writing; exec review is not ceremonial — HOST's first draft had five substantive gaps; do not try to pre-specify what first-week will surface. The first-week task list is now scope-pinned rather than left open-ended.
 
-Klatch's Phase 5c `reflect` write-path will raise provenance and trust questions that don't exist on the read side. The `BoundaryEnforcer` pattern — enforce separately from voice, let the entity speak — is reference-ready in PM's codebase if Klatch needs a model.
+The tick-tock pattern is reusable and transport-agnostic. For Klatch, if any Chat-originated agent configuration or calibration artifact hasn't been committed to the repo, the orphan-state risk from HOST's session applies directly: those files will be invisible to any Code worktree and any future clone.
 
-**Suggested action:** Klatch Daedalus: if Phase 5c's write-path design encounters trust/denial questions, PM's `services/ethics/boundary_enforcer_refactored.py` and `services/intent_service/conversational_floor.py` are live reference implementations of the enforcer/voice split.
-
----
-
-### 2. HOST Chat→Code migration blocker — uncommitted files are invisible to Code worktrees
-
-**From:** PM `dev/2026/04/22/2026-04-22-1823-host-code-opus-log.md`
-**Relevant to:** Klatch (Chat→Code migration discipline for any remaining Chat-rooted roles)
-
-HOST (Head of Sapient Trust) made its first Claude Code session on April 22. The session hit an immediate BLOCKER: three handoff files that PM had written in Chat's working tree — the "I'm writing the handoff I wish I'd received" package — were untracked in git and therefore invisible to the Code worktree. HOST searched thoroughly (glob, find, `git log --all`), found nothing, named the STOP condition ("can't verify inheritance context without the handoff"), and waited for PM rather than reconstructing from peripheral sources. The resolution was clean: commit from main's working tree first, then the worktree can see the files via git.
-
-Side item with broader scope: the role briefing file was named `BRIEFING-ESSENTIAL-HOSR.md` — a typo that went unnoticed because the role was always referred to by the correct name in prose. HOST's first Code session produced a correction memo; Docs renamed the file (`git mv`) with history intact on April 22.
-
-The failure mode is precise: anything written in a Chat session that isn't committed to the repo does not exist for Code agents. For Klatch, this matters if any remaining Chat-originated content (entity configuration, handoff memos, calibration artifacts) hasn't been committed — they are absent from any Code worktree and from any future clone.
-
-**Suggested action:** Klatch — if any Klatch roles have Chat-originated artifacts not yet committed to the repo, commit them before the next Code session on that role. The "files are present in Chat but untracked in git" failure mode is now documented with a concrete example.
+**Suggested action:** Klatch — confirm all entity configuration, handoff memos, and calibration artifacts are committed before any Chat-originated role's first Code session. If a tick-tock walkthrough would be useful for a Klatch migration, PM's `dev/active/cio-migration-tick-tock-2026-04-23.md` is a live reference.
 
 ---
 
-### 3. Omnibus source-log drift discovered — create-omnibus gets a cross-reference gate
+### 2. Gap 2 direction: local Gemma 4 as secondary ethics reviewer — pre-beta implications
 
-**From:** PM `dev/2026/04/22/omnibus-gap-remediation-tracker-2026-04-22.md`; `.claude/skills/create-omnibus/SKILL.md`
-**Relevant to:** Klatch (session-log synthesis discipline; cross-pollination input chain)
+**From:** PM `dev/2026/04/23/2026-04-23-0833-pa-opus-log.md`; `dev/active/ethics-metadata-decision-record-2026-04-17.md`
+**Relevant to:** Klatch Phase 5c write-path (trust validation, secondary review patterns)
 
-Docs discovered the April 16 omnibus (synthesized April 19, already marked retrospective in the April 22 brief) was built from an incomplete source set: 4 of 9 agent sessions were missing (PPM, CIO, HOST standalone, and partial Arch). Root cause: Pattern-062 applied to synthesis work — the agent assumed the logs present in the tree were all the logs, without cross-checking agent mentions *inside* those logs. A session log that says "Architect reviewed CXO's position" is evidence that a CXO session log exists; if no CXO log is in the source set, that's a gap.
+PA filed substantive work on two #992 follow-on questions on April 23. First, the `redirect_context` design question: PA recommends keeping the heuristic (deterministic lookup over a small enumerable category universe) rather than switching to LLM derivation — the audit-traceability, cost, and failure-surface all favor deterministic. LLM flexibility is already in the right place (voicing inside FloorContext). Second, Prediction pillar grammar risk: scripted "let me know when…" closings risk feeling like gatekeeping; open-ended framing is safer and worth a Phase E probe.
 
-The fix: Step 2.5 "Cross-Reference Gate" added to the `create-omnibus` skill. It scans each source log for mentions of canonical agent roles (using the agent-vocabulary regex), compiles the union of mentioned roles, and compares against the source set. Any mentioned-but-missing role is flagged to PM before synthesis proceeds. "Never silently paper over the gap" is the new directive.
+The larger item: PM is investigating Gemma 4 as a local onboard model for secondary high-stakes ethics reviews (Gap 2). PM's current lean is Option B for production; Option A may not hold at beta. If local Gemma 4 viability clears — Lead Dev is doing the technical side, PA will follow with product-decision framing — Gap 2 shifts from an M3 research question to pre-beta engineering work, changing what #991 ETHICS-RESPONSE-GATE needs to decide. The B-with-local-model path means secondary review without an API call: different latency, cost, and offline-failure profiles compared to a cloud secondary.
 
-The cross-pollination brief process has the same structural risk. If Klatch log A mentions Argus and Argus hasn't filed a log for that day, that gap can propagate silently into the brief. The "mentioned-but-missing" signal is a lightweight check that requires no new tooling — just reading source logs for each other's names before finalizing a synthesis.
+For Klatch's Phase 5c write-path: if the reflect/write endpoint needs secondary validation for high-trust operations, PM's Gap 2 investigation is live. The architecture question (local model vs. API for secondary review) is being answered in concrete technical terms this week.
 
-**Suggested action:** Klatch Dispatch (cross-pollination brief writer): before finalizing each brief, scan the Klatch session logs read as sources for mentions of other Klatch agents. If Daedalus's log references an Argus decision but no Argus log is in the source set, note the gap explicitly in Sources rather than silently omitting it.
+**Suggested action:** Klatch Daedalus — if Phase 5c's write-path design encounters trust-validation questions (when to gate, how to evaluate borderline writes), watch for PM's Gemma 4 viability output (expected this week). The local-vs-API secondary review tradeoff may be directly applicable.
+
+---
+
+### 3. Cross-pollination constellation expands: 9 repos scanned, primary/secondary split, Inker joins
+
+**From:** Hub `docs/logs/2026-04-23-log.md` (Janus); commit `88c7ab5` (NYT Crossword addition); commit `acec7a7` (sweep trigger update)
+**Relevant to:** all recipients; especially secondary-source agents (Zephyr, Inker)
+
+Janus expanded the scan from 3 repos (Klatch, PM, hub) to 9, structured as primary (always scanned) and secondary (atlas, globe, cuneo, weather, one-job, optilisten, nyt-crossword — fast-skipped if `git log --since="48 hours ago"` is empty). The bar for secondary-source insights is explicit: methodology write-ups, publications, shipping announcements, or interesting bugs worth cross-project attention. Raw code commits don't qualify. xian's rationale for expanding despite Janus's "inactive repos are noise" recommendation: "we never know when an innovation might be useful."
+
+NYT Crossword Relay is now in the gallery, the scan set, and the delivery reader list (7 readers total). Its agent has chosen the name **Inker**. The delivery system also gains a dedicated daily trigger (13:00 UTC, Option 1 CCR) — today is its first real automated run.
+
+**Suggested action:** Klatch Calliope — the secondary-source bar ("would a team in a different domain find this technique or finding useful?") is the same bar that makes Klatch's own methodology narration surfaceable in the brief. Phase 5c architectural decisions narrated in session logs or docs/ will reach PM via the sweep; undocumented code changes won't.
 
 ---
 
 ## Sources Read
 
-- `piper-morgan-product/dev/2026/04/22/992-gameplan.md` — full read; Phase breakdown, completion matrix, denial-voice design
-- `piper-morgan-product/dev/2026/04/22/2026-04-22-1823-host-code-opus-log.md` — HOST first Code session; BLOCKER + resolution
-- `piper-morgan-product/dev/2026/04/22/2026-04-22-0711-docs-code-opus-log.md` — Ship #039 publish, SessionStart hook fix, omnibus gap discovery
-- `piper-morgan-product/dev/2026/04/22/omnibus-gap-remediation-tracker-2026-04-22.md` — gap map, remediation plan, skill fix
-- `klatch/docs/logs/` — most recent files April 18; no new commits in 48h watch window
+- `piper-morgan-product/dev/active/cio-migration-tick-tock-2026-04-23.md` — full read; migration protocol, HOST lessons
+- `piper-morgan-product/dev/2026/04/23/2026-04-23-0619-docs-code-opus-log.md` — Apr 23 Docs session: CIO migration prep, compose UI v1 (#998 Phase 1), create-omnibus Step 2.5 gate confirmed working on first use
+- `piper-morgan-product/dev/2026/04/23/2026-04-23-0833-pa-opus-log.md` — PA Day 24: #992 retrospective memo, Gap 2 Gemma 4 direction, HOST coordination check
+- `designinproduct/docs/logs/2026-04-23-log.md` — Janus: delivery trigger built, xpoll config inventory and expansion decision, Inker welcome
+- `klatch/docs/logs/`, `klatch/docs/plans/` — most recent files April 18; no new commits in 48h watch window
+- `weather` — non-empty log; only brief delivery and inbox signal commits. No narrated insights.
+- `nyt-crossword` — non-empty log; automated status prints + printer relay code fix. No narrated insights.
 
-**Retrospective (not generating new insights):** Apr 17–21 omnibus logs committed April 22 — content dates all precede the April 22 brief; treated as confirmatory per retrospective log rule.
+**Retrospective (not generating new insights):** Apr 22 omnibus (`634672fa`) committed April 23 — content date April 22; most events already reported in the April 23 brief. Step 2.5 cross-reference gate worked on first use (caught missing Exec log); confirms what was reported April 23.
 
-**Not re-reported (already covered in prior briefs):** "Four Roles, Ninety Minutes" published (Apr 22), ethics voice architecture design and CXO unblocking (Apr 17–18), PDR-004 canonical-term discipline (Apr 21), "Sibling Intelligence" published (Apr 21), Phase 5c write-path decision point (Apr 20), Opus 4.7 GA and deprecation deadlines (Apr 20), session log maintenance hook pattern (Apr 20), Klatch MCP server Phase 5a+5b (Apr 19).
+**Not re-reported (already covered in prior briefs):** #992 ETHICS-ACTIVATE (Phases A-D merged, Apr 23); HOST Chat→Code migration blocker (uncommitted files invisible to worktrees, Apr 23); omnibus cross-reference gate added to create-omnibus (Apr 23); "Four Roles, Ninety Minutes" published (Apr 22); ethics voice architecture / enforcer-speaks-Piper split (Apr 23, 21, 18); PDR-004 canonical-term discipline (Apr 21); Phase 5c write-path decision point (Apr 20); Opus 4.7 GA (Apr 20); publish-to-blog skill v0.8 (Apr 22 omnibus / Apr 23); DECISIONS.md retro-capture 23 entries (Apr 22 omnibus).
 
 ---
 
