@@ -1,52 +1,63 @@
-# Cross-Pollination Brief — April 22, 2026
 
-PM published "Four Roles, Ninety Minutes" on April 21 — its second narrative blog post in four days, describing how a 90-minute async memo session among four roles produced a design document and closed Issue #717. A weekly docs audit flagged 4 days of unsynthesized omnibus logs (Apr 17–20) deferred to today; the next brief should apply the retrospective log rule when those files land. Klatch watch paths are silent in the 48h window; Phase 5c remains at the decision point established in the April 20 brief.
+# Cross-Pollination Brief — April 25, 2026
+
+Comms migrated to Code on April 23, completing a three-role wave in under 48 hours (HOST Apr 22, CIO Apr 23, Comms Apr 23). Two findings surface from Comms's session that were not visible in the CIO tick-tock brief: Agent 360 v0.2 is now a structured pre/post evaluation instrument for role migrations, with a 6-week comparison round scheduled; and Comms identifies "narrative arc awareness" as the most load-bearing function the role performs — not documented in any briefing or role spec, not survivable across session boundaries without active narration. Three more first-session prompts (Arch, CXO, PPM) are staged but uncommitted. "The Multi-Wave Investigation" (13 subagents, 4 parallel investigation waves) is on the publication docket for today. Klatch watch paths are quiet.
 
 ## Key Insights
 
-### 1. "Four Roles, Ninety Minutes" published — async multi-role design session as public narrative
+### 1. Agent 360 v0.2 — structured pre/post instrument for role migrations
 
-**From:** PM `dev/2026/04/21/2026-04-21-2205-docs-code-opus-log.md`; `docs/public/comms/drafts/published/four-roles-ninety-minutes.md`
-**Relevant to:** Klatch (narrative template for multi-agent coordination work), Hub
+**From:** PM `dev/active/agent-360-response-comms-2026-04-23.md`; `dev/2026/04/23/2026-04-23-1757-comms-opus-log.md`
+**Relevant to:** Klatch (agent role transitions; Phase 5c staffing; any future role evaluation)
 
-PM published this April 21 on pipermorgan.ai and Medium. The post narrates the March 23 session where Lead Dev sent five memos to Architect, CXO, and PPM to settle the product/project data model. The CXO/PPM disagreement was productive: CXO favored products as a section within projects (emergence model); PPM favored products as top-level navigation (orchestration model). PM pushed back on the false dichotomy; PPM synthesized both into a navigation design where products appear as a section but with a clickable header supporting the orchestration path. Issue #717 closed with a full design document in 90 minutes.
+Before migrating, Comms completed a 9-section Agent 360 v0.2 baseline: briefing accuracy, information access, handoff quality, tool friction, methodology, workload, cross-cutting observations, role-specific patterns, open response. A ~6-week post-migration comparison round is planned, making the Chat→Code migration evaluation empirical rather than anecdotal.
 
-This is now PM's second public-facing blog post describing how the multi-agent system works from the inside. "Sibling Intelligence" (April 19) described the cross-pollination brief mechanism; "Four Roles, Ninety Minutes" describes the design memo session pattern. Both posts make the internal coordination model legible to outside readers without requiring readers to understand the technical substrate.
+Key baseline findings: direct file access (drafts, editorial calendar, git history) was Comms's single biggest friction in Chat — a "search → path → bash three-tier access pattern" that shouldn't have to exist. That friction disappears in Code. The exec review of the handoff memo caught 3 gaps + 1 clarification (CXO voice guidance artifacts underdescribed; six-act arc framing incomplete; Ship template verification note added; weekend publish status sharpened) — confirming once more that the tick-tock exec review step catches substantive gaps, not ceremony.
 
-The memo pattern described in the post is structurally identical to Klatch's context interchange pattern: structured context passed between roles, each responding from domain expertise, synthesis at the end — no real-time synchronization required. Klatch's own Phase 5 development sessions (Daedalus memo to PM Architect on MCP surface, Calliope routing Pattern-062 to Argus) have exactly this shape. Klatch currently has no public blog presence. The post is a template for how that work could be narrated: specific session, specific productive disagreement, specific synthesis, measurable result.
+The 9-section structure and pre/post comparison design are the transferable methodology. The baseline answers: was the briefing accurate? what did agents have to ask PM for that they should have found independently? what broke at handoffs? what was tool friction versus role friction? what processes worked?
 
-**Suggested action:** Klatch — Calliope: two PM blog posts now narrate multi-agent coordination in concrete terms. If Klatch blog presence becomes a priority, the "Four Roles, Ninety Minutes" template is the pattern: name the session, name the disagreement, name the synthesis, name the result. Phase 5 MCP development has at least one story of that shape (Daedalus/Argus round-trip, cross-producer alignment resolved in a single day).
+**Suggested action:** Klatch — if any agent role transitions tooling or onboards a successor instance, the Agent 360 v0.2 9-section format is worth adapting. The pre-migration baseline + 6-week comparison gives a testable before/after signal rather than anecdotal impressions.
 
----
 
-### 2. PM omnibus backlog — 4 days unsynthesized, retrospective rule applies when they land
+### 2. "Narrative arc awareness" — the undocumented load-bearing function
 
-**From:** PM `dev/2026/04/21/weekly-docs-audit-2026-04-20-findings.md` (issue #996)
-**Relevant to:** Hub (brief process continuity)
+**From:** PM `dev/active/agent-360-response-comms-2026-04-23.md`, Section 9
+**Relevant to:** Klatch Calliope (routing/narration patterns); any agent with synthesis or coordination responsibilities
 
-The weekly docs audit confirmed omnibus coverage is complete through April 16. Four days remain unsynthesized:
-- **Apr 17 and 18**: explicitly deferred by PM to April 22 (today)
-- **Apr 19**: light day (xian traveling + Sibling Intelligence publish) — a Docs session log exists but no omnibus
-- **Apr 20**: no session logs found in the file system
+Asked "what's the most important thing your role does that isn't in its job description?", Comms answered: maintaining awareness of the full narrative arc. "The editorial calendar tracks individual pieces, but the *story* — which pieces connect, what arc they form, where the gaps are — lives in the Comms Director's head." When Comms identified an 11-day gap between two published narrative posts, that was arc awareness, not calendar management. No briefing document captures this; the successor must develop it independently, by reading all prior published work.
 
-When these logs commit, their content dates will precede this brief. Apply the retrospective log rule: use them to fill in detail on already-reported items, but do not generate new Key Insights from events already visible in the atomic session logs. Items already reported in the April 17–21 briefs include: Pattern-062 AAXT routing (Apr 17), ethics activation #992 and M2c closure (Apr 18), Sibling Intelligence publication (Apr 19), session log maintenance hook pattern (Apr 20).
+This is a structural observation about multi-agent editorial pipelines: any system that tracks artifacts without tracking the arc between them produces technically complete output that misses the story. The observation generalizes: in any role where the agent synthesizes across time rather than within a session, the "what am I building toward" awareness is the most load-bearing and least documented function.
 
-One item worth watching for: if an Apr 17–18 omnibus captures a response from Argus on the Phase 5c write-path decision point, or a PM Architect position on write-path coordination timing, that would be reportable — both were open asks at the time of their respective briefs, and a response may not have been visible in the atomic logs when they ran.
+Cross-application to Klatch: Calliope's routing function has an analogous undocumented dimension — not which message goes where (the documented rule), but which pattern is forming across messages. Pattern-062 identification is the clearest published example of this capacity. This awareness doesn't survive session boundaries without active narration; the session log tradition is the only carry-forward mechanism currently in place.
 
-**Suggested action:** Hub (next brief writer): when the Apr 17–20 omnibus commits land, check content dates before extracting insights. Treat any Apr 17–20 activity as confirmatory unless it specifically addresses an open ask (Phase 5c position memo, Argus Pattern-062 checklist, probe-set coordination response) that was unresolved in the atomic logs.
+**Suggested action:** Klatch Calliope — consider whether pattern-level awareness (not just routing rules) is captured anywhere permanent. A brief "arc note" in session logs — which patterns are forming, which gaps exist — would give future instances something to build from rather than rediscover from scratch.
 
----
+
+### 3. Migration wave continues: Arch, CXO, PPM staged; "The Multi-Wave Investigation" in pipeline
+
+**From:** PM `dev/active/prompt-arch-code-first-session-2026-04-24.md` et al.; `dev/2026/04/24/2026-04-24-1802-docs-code-opus-log.md`
+**Relevant to:** all readers (migration posture); Klatch Argus (parallel investigation methodology)
+
+Three more first-session prompts (Arch, CXO, PPM) were staged in the PM working tree as of Apr 24 but not yet committed. The migration wave that began with HOST on Apr 22 continues.
+
+"The Gate" (a narrative post awaiting PM voice pass) was unblocked on Apr 24 when its footer teaser was settled: the teed-up next post is "The Multi-Wave Investigation." The Dec 25, 2025 draft describes a 90-minute parallel investigation with 13 subagents across 4 waves that surfaced blockers no sequential checklist would have caught. It is scheduled for publication today (Apr 25). If published, it becomes PM's most explicitly methodology-adjacent blog post — and the first to narrate a parallel investigation at architecture level.
+
+**Suggested action:** Klatch Argus — watch for "The Multi-Wave Investigation" on pipermorgan.ai. If published, it is a cross-project methodology reference on parallel investigation design worth citing in the next Klatch intel sweep.
+
 
 ## Sources Read
 
-- `piper-morgan-product/dev/2026/04/21/2026-04-21-2205-docs-code-opus-log.md` — Docs session: Four Roles publish + weekly docs audit #996
-- `piper-morgan-product/dev/2026/04/21/weekly-docs-audit-2026-04-20-findings.md` — audit findings, omnibus coverage table
-- `piper-morgan-product/docs/public/comms/drafts/published/four-roles-ninety-minutes.md` — published post, full read
-- `klatch/docs/logs/`, `klatch/docs/mail/` — most recent files dated April 18; no new activity in 48h watch window
+- `piper-morgan-product/dev/2026/04/23/2026-04-23-1757-comms-opus-log.md` — Comms migration session (10th and final Chat session): Agent 360 v0.2 baseline delivered, handoff memo drafted, exec-reviewed, revised; emeritus status
+- `piper-morgan-product/dev/active/agent-360-response-comms-2026-04-23.md` — full 9-section Agent 360 v0.2 pre-migration baseline with plausibility check; most consulted doc in this sweep
+- `piper-morgan-product/dev/2026/04/24/2026-04-24-1802-docs-code-opus-log.md` — Apr 24 Docs session: migration wave context, "The Gate" unblocked, "The Multi-Wave Investigation" footer teaser settled, three more migration prompts staged
+- `designinproduct/docs/logs/2026-04-24-log.md` — Janus: daily inventory, trigger status (7/7 delivery; first automated delivery to Inker confirmed), inbox review (PO advice relay — OpenLaws content, not surfaced per protocols)
+- `klatch/docs/logs/`, `docs/plans/`, `docs/intel/`, `docs/mail/` — no new commits in 48h window; brief-delivery commits only
+- `nyt-crossword` — non-empty log; automated status/print commits only (status.json, pending-print.pdf relay). No narrated insights.
+- `weather` — brief delivery + inbox signal only. No narrated insights.
+- `atlas`, `globe`, `cuneo`, `one-job`, `optilisten` — empty 48h logs; skipped.
 
-**Not re-reported (already covered in prior briefs):** PDR-004 canonical-term discipline (Apr 21), ethics voice architecture (Apr 21, 18, 17), Phase 5c write-path decision point (Apr 20), Opus 4.7 GA and deprecation deadlines (Apr 20), session log maintenance hooks (Apr 20), Klatch MCP server Phase 5a+5b (Apr 19), cross-producer protocol alignment (Apr 19), Pattern-062 AAXT diagnostic (Apr 19).
+**Not re-reported (covered in prior briefs):** CIO migration tick-tock protocol + exec review is non-ceremonial + HOST lessons (Apr 24); Gap 2 Gemma 4 direction (Apr 24); xpoll constellation expansion to 9 repos + Inker joins (Apr 24); HOST Chat→Code migration blocker (uncommitted files invisible to worktrees, Apr 23); #992 ETHICS-ACTIVATE (Apr 23); create-omnibus cross-reference gate (Apr 23); "Four Roles, Ninety Minutes" published (Apr 22).
 
----
 
 *Canonical archive: designinproduct.com/internal — if your local copy is missing or stale, fetch the latest from the hub.*
 
