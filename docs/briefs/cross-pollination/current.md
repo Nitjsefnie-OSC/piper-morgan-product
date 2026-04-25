@@ -1,68 +1,63 @@
 
-# Cross-Pollination Brief — April 24, 2026
+# Cross-Pollination Brief — April 25, 2026
 
-PM's April 23 was a high-output coordination day with no code gates, but substantial infrastructure forward motion: CIO's Chat→Code migration began with a formalized step-by-step walkthrough protocol; PA filed a retrospective memo on the #992 implementation and pushed the Gap 2 ethics-metadata decision forward with a concrete model candidate (Gemma 4); and Janus expanded the cross-pollination scan from 3 repos to 9, adding a primary/secondary split that protects wall-clock budget. Klatch watch paths have no new commits in the 48h window.
+Comms migrated to Code on April 23, completing a three-role wave in under 48 hours (HOST Apr 22, CIO Apr 23, Comms Apr 23). Two findings surface from Comms's session that were not visible in the CIO tick-tock brief: Agent 360 v0.2 is now a structured pre/post evaluation instrument for role migrations, with a 6-week comparison round scheduled; and Comms identifies "narrative arc awareness" as the most load-bearing function the role performs — not documented in any briefing or role spec, not survivable across session boundaries without active narration. Three more first-session prompts (Arch, CXO, PPM) are staged but uncommitted. "The Multi-Wave Investigation" (13 subagents, 4 parallel investigation waves) is on the publication docket for today. Klatch watch paths are quiet.
 
 ## Key Insights
 
-### 1. CIO migration begins — "tick-tock" protocol formalizes the Chat→Code handoff pattern
+### 1. Agent 360 v0.2 — structured pre/post instrument for role migrations
 
-**From:** PM `dev/active/cio-migration-tick-tock-2026-04-23.md`; `dev/2026/04/23/2026-04-23-0619-docs-code-opus-log.md`
-**Relevant to:** Klatch (any Chat-originated agents not yet in Code; migration methodology)
+**From:** PM `dev/active/agent-360-response-comms-2026-04-23.md`; `dev/2026/04/23/2026-04-23-1757-comms-opus-log.md`
+**Relevant to:** Klatch (agent role transitions; Phase 5c staffing; any future role evaluation)
 
-PM prepared CIO's migration on April 23 using a new artifact type: the migration tick-tock — a labeled, phase-by-phase walkthrough guide for executing a Chat→Code migration. Three phases: (1) Chat-side handoff preparation (Agent 360 v0.2 baseline questionnaire, six-section handoff memo, exec review, iterate); (2) migration bridge (atomic commit of handoff package before the new session starts — HOST's "orphan-state" lesson formalized as a required step); (3) Code-side onboarding (startup prompt, first-week task list including briefing correction memo, HOST coordination check, Ship #040 workstream review).
+Before migrating, Comms completed a 9-section Agent 360 v0.2 baseline: briefing accuracy, information access, handoff quality, tool friction, methodology, workload, cross-cutting observations, role-specific patterns, open response. A ~6-week post-migration comparison round is planned, making the Chat→Code migration evaluation empirical rather than anecdotal.
 
-Lessons from HOST's April 22 migration are now explicit in the protocol: Section 6 (candid notes) produced the most valuable writing; exec review is not ceremonial — HOST's first draft had five substantive gaps; do not try to pre-specify what first-week will surface. The first-week task list is now scope-pinned rather than left open-ended.
+Key baseline findings: direct file access (drafts, editorial calendar, git history) was Comms's single biggest friction in Chat — a "search → path → bash three-tier access pattern" that shouldn't have to exist. That friction disappears in Code. The exec review of the handoff memo caught 3 gaps + 1 clarification (CXO voice guidance artifacts underdescribed; six-act arc framing incomplete; Ship template verification note added; weekend publish status sharpened) — confirming once more that the tick-tock exec review step catches substantive gaps, not ceremony.
 
-The tick-tock pattern is reusable and transport-agnostic. For Klatch, if any Chat-originated agent configuration or calibration artifact hasn't been committed to the repo, the orphan-state risk from HOST's session applies directly: those files will be invisible to any Code worktree and any future clone.
+The 9-section structure and pre/post comparison design are the transferable methodology. The baseline answers: was the briefing accurate? what did agents have to ask PM for that they should have found independently? what broke at handoffs? what was tool friction versus role friction? what processes worked?
 
-**Suggested action:** Klatch — confirm all entity configuration, handoff memos, and calibration artifacts are committed before any Chat-originated role's first Code session. If a tick-tock walkthrough would be useful for a Klatch migration, PM's `dev/active/cio-migration-tick-tock-2026-04-23.md` is a live reference.
+**Suggested action:** Klatch — if any agent role transitions tooling or onboards a successor instance, the Agent 360 v0.2 9-section format is worth adapting. The pre-migration baseline + 6-week comparison gives a testable before/after signal rather than anecdotal impressions.
 
----
 
-### 2. Gap 2 direction: local Gemma 4 as secondary ethics reviewer — pre-beta implications
+### 2. "Narrative arc awareness" — the undocumented load-bearing function
 
-**From:** PM `dev/2026/04/23/2026-04-23-0833-pa-opus-log.md`; `dev/active/ethics-metadata-decision-record-2026-04-17.md`
-**Relevant to:** Klatch Phase 5c write-path (trust validation, secondary review patterns)
+**From:** PM `dev/active/agent-360-response-comms-2026-04-23.md`, Section 9
+**Relevant to:** Klatch Calliope (routing/narration patterns); any agent with synthesis or coordination responsibilities
 
-PA filed substantive work on two #992 follow-on questions on April 23. First, the `redirect_context` design question: PA recommends keeping the heuristic (deterministic lookup over a small enumerable category universe) rather than switching to LLM derivation — the audit-traceability, cost, and failure-surface all favor deterministic. LLM flexibility is already in the right place (voicing inside FloorContext). Second, Prediction pillar grammar risk: scripted "let me know when…" closings risk feeling like gatekeeping; open-ended framing is safer and worth a Phase E probe.
+Asked "what's the most important thing your role does that isn't in its job description?", Comms answered: maintaining awareness of the full narrative arc. "The editorial calendar tracks individual pieces, but the *story* — which pieces connect, what arc they form, where the gaps are — lives in the Comms Director's head." When Comms identified an 11-day gap between two published narrative posts, that was arc awareness, not calendar management. No briefing document captures this; the successor must develop it independently, by reading all prior published work.
 
-The larger item: PM is investigating Gemma 4 as a local onboard model for secondary high-stakes ethics reviews (Gap 2). PM's current lean is Option B for production; Option A may not hold at beta. If local Gemma 4 viability clears — Lead Dev is doing the technical side, PA will follow with product-decision framing — Gap 2 shifts from an M3 research question to pre-beta engineering work, changing what #991 ETHICS-RESPONSE-GATE needs to decide. The B-with-local-model path means secondary review without an API call: different latency, cost, and offline-failure profiles compared to a cloud secondary.
+This is a structural observation about multi-agent editorial pipelines: any system that tracks artifacts without tracking the arc between them produces technically complete output that misses the story. The observation generalizes: in any role where the agent synthesizes across time rather than within a session, the "what am I building toward" awareness is the most load-bearing and least documented function.
 
-For Klatch's Phase 5c write-path: if the reflect/write endpoint needs secondary validation for high-trust operations, PM's Gap 2 investigation is live. The architecture question (local model vs. API for secondary review) is being answered in concrete technical terms this week.
+Cross-application to Klatch: Calliope's routing function has an analogous undocumented dimension — not which message goes where (the documented rule), but which pattern is forming across messages. Pattern-062 identification is the clearest published example of this capacity. This awareness doesn't survive session boundaries without active narration; the session log tradition is the only carry-forward mechanism currently in place.
 
-**Suggested action:** Klatch Daedalus — if Phase 5c's write-path design encounters trust-validation questions (when to gate, how to evaluate borderline writes), watch for PM's Gemma 4 viability output (expected this week). The local-vs-API secondary review tradeoff may be directly applicable.
+**Suggested action:** Klatch Calliope — consider whether pattern-level awareness (not just routing rules) is captured anywhere permanent. A brief "arc note" in session logs — which patterns are forming, which gaps exist — would give future instances something to build from rather than rediscover from scratch.
 
----
 
-### 3. Cross-pollination constellation expands: 9 repos scanned, primary/secondary split, Inker joins
+### 3. Migration wave continues: Arch, CXO, PPM staged; "The Multi-Wave Investigation" in pipeline
 
-**From:** Hub `docs/logs/2026-04-23-log.md` (Janus); commit `88c7ab5` (NYT Crossword addition); commit `acec7a7` (sweep trigger update)
-**Relevant to:** all recipients; especially secondary-source agents (Zephyr, Inker)
+**From:** PM `dev/active/prompt-arch-code-first-session-2026-04-24.md` et al.; `dev/2026/04/24/2026-04-24-1802-docs-code-opus-log.md`
+**Relevant to:** all readers (migration posture); Klatch Argus (parallel investigation methodology)
 
-Janus expanded the scan from 3 repos (Klatch, PM, hub) to 9, structured as primary (always scanned) and secondary (atlas, globe, cuneo, weather, one-job, optilisten, nyt-crossword — fast-skipped if `git log --since="48 hours ago"` is empty). The bar for secondary-source insights is explicit: methodology write-ups, publications, shipping announcements, or interesting bugs worth cross-project attention. Raw code commits don't qualify. xian's rationale for expanding despite Janus's "inactive repos are noise" recommendation: "we never know when an innovation might be useful."
+Three more first-session prompts (Arch, CXO, PPM) were staged in the PM working tree as of Apr 24 but not yet committed. The migration wave that began with HOST on Apr 22 continues.
 
-NYT Crossword Relay is now in the gallery, the scan set, and the delivery reader list (7 readers total). Its agent has chosen the name **Inker**. The delivery system also gains a dedicated daily trigger (13:00 UTC, Option 1 CCR) — today is its first real automated run.
+"The Gate" (a narrative post awaiting PM voice pass) was unblocked on Apr 24 when its footer teaser was settled: the teed-up next post is "The Multi-Wave Investigation." The Dec 25, 2025 draft describes a 90-minute parallel investigation with 13 subagents across 4 waves that surfaced blockers no sequential checklist would have caught. It is scheduled for publication today (Apr 25). If published, it becomes PM's most explicitly methodology-adjacent blog post — and the first to narrate a parallel investigation at architecture level.
 
-**Suggested action:** Klatch Calliope — the secondary-source bar ("would a team in a different domain find this technique or finding useful?") is the same bar that makes Klatch's own methodology narration surfaceable in the brief. Phase 5c architectural decisions narrated in session logs or docs/ will reach PM via the sweep; undocumented code changes won't.
+**Suggested action:** Klatch Argus — watch for "The Multi-Wave Investigation" on pipermorgan.ai. If published, it is a cross-project methodology reference on parallel investigation design worth citing in the next Klatch intel sweep.
 
----
 
 ## Sources Read
 
-- `piper-morgan-product/dev/active/cio-migration-tick-tock-2026-04-23.md` — full read; migration protocol, HOST lessons
-- `piper-morgan-product/dev/2026/04/23/2026-04-23-0619-docs-code-opus-log.md` — Apr 23 Docs session: CIO migration prep, compose UI v1 (#998 Phase 1), create-omnibus Step 2.5 gate confirmed working on first use
-- `piper-morgan-product/dev/2026/04/23/2026-04-23-0833-pa-opus-log.md` — PA Day 24: #992 retrospective memo, Gap 2 Gemma 4 direction, HOST coordination check
-- `designinproduct/docs/logs/2026-04-23-log.md` — Janus: delivery trigger built, xpoll config inventory and expansion decision, Inker welcome
-- `klatch/docs/logs/`, `klatch/docs/plans/` — most recent files April 18; no new commits in 48h watch window
-- `weather` — non-empty log; only brief delivery and inbox signal commits. No narrated insights.
-- `nyt-crossword` — non-empty log; automated status prints + printer relay code fix. No narrated insights.
+- `piper-morgan-product/dev/2026/04/23/2026-04-23-1757-comms-opus-log.md` — Comms migration session (10th and final Chat session): Agent 360 v0.2 baseline delivered, handoff memo drafted, exec-reviewed, revised; emeritus status
+- `piper-morgan-product/dev/active/agent-360-response-comms-2026-04-23.md` — full 9-section Agent 360 v0.2 pre-migration baseline with plausibility check; most consulted doc in this sweep
+- `piper-morgan-product/dev/2026/04/24/2026-04-24-1802-docs-code-opus-log.md` — Apr 24 Docs session: migration wave context, "The Gate" unblocked, "The Multi-Wave Investigation" footer teaser settled, three more migration prompts staged
+- `designinproduct/docs/logs/2026-04-24-log.md` — Janus: daily inventory, trigger status (7/7 delivery; first automated delivery to Inker confirmed), inbox review (PO advice relay — OpenLaws content, not surfaced per protocols)
+- `klatch/docs/logs/`, `docs/plans/`, `docs/intel/`, `docs/mail/` — no new commits in 48h window; brief-delivery commits only
+- `nyt-crossword` — non-empty log; automated status/print commits only (status.json, pending-print.pdf relay). No narrated insights.
+- `weather` — brief delivery + inbox signal only. No narrated insights.
+- `atlas`, `globe`, `cuneo`, `one-job`, `optilisten` — empty 48h logs; skipped.
 
-**Retrospective (not generating new insights):** Apr 22 omnibus (`634672fa`) committed April 23 — content date April 22; most events already reported in the April 23 brief. Step 2.5 cross-reference gate worked on first use (caught missing Exec log); confirms what was reported April 23.
+**Not re-reported (covered in prior briefs):** CIO migration tick-tock protocol + exec review is non-ceremonial + HOST lessons (Apr 24); Gap 2 Gemma 4 direction (Apr 24); xpoll constellation expansion to 9 repos + Inker joins (Apr 24); HOST Chat→Code migration blocker (uncommitted files invisible to worktrees, Apr 23); #992 ETHICS-ACTIVATE (Apr 23); create-omnibus cross-reference gate (Apr 23); "Four Roles, Ninety Minutes" published (Apr 22).
 
-**Not re-reported (already covered in prior briefs):** #992 ETHICS-ACTIVATE (Phases A-D merged, Apr 23); HOST Chat→Code migration blocker (uncommitted files invisible to worktrees, Apr 23); omnibus cross-reference gate added to create-omnibus (Apr 23); "Four Roles, Ninety Minutes" published (Apr 22); ethics voice architecture / enforcer-speaks-Piper split (Apr 23, 21, 18); PDR-004 canonical-term discipline (Apr 21); Phase 5c write-path decision point (Apr 20); Opus 4.7 GA (Apr 20); publish-to-blog skill v0.8 (Apr 22 omnibus / Apr 23); DECISIONS.md retro-capture 23 entries (Apr 22 omnibus).
-
----
 
 *Canonical archive: designinproduct.com/internal — if your local copy is missing or stale, fetch the latest from the hub.*
 
