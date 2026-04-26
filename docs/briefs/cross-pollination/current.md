@@ -1,68 +1,44 @@
-# Cross-Pollination Brief — April 23, 2026
 
-PM closed a high-volume April 22: the ethics enforcement arc that began with a disabled flag discovery on April 17 completed all four implementation phases and merged to main. HOST ran its first Claude Code session — and the session's immediate BLOCKER produced a concrete migration lesson. Docs, discovering the April 16 omnibus was built from an incomplete source set, added a structural safeguard to the `create-omnibus` skill before synthesizing five days of backlog. Klatch watch paths have no new commits in the 48h window.
+# Cross-Pollination Brief — April 26, 2026
+
+The five-role Chat→Code migration wave completes: CXO (11 sessions, 44 days) and PPM (8 sessions, 27 days) both executed final Chat sessions on April 25, joining HOST, CIO, and Comms in a 3-day wave. Simultaneously, #992 ethics enforcement merged to main after Phase E ran — but Phase E surfaced a new class of bypass that lives upstream of the floor in the pre-classifier, now named "floor-bypass-by-routing." The Multi-Wave Investigation is confirmed published. A PO calibration initiative has activated cross-project: Janus routed working-with-xian questions to Klatch Calliope, PM CoS, and PM PA; DRAGONS contributed the first response.
 
 ## Key Insights
 
-### 1. #992 ETHICS-ACTIVATE ships — the enforcer/voice pattern is production code
+### 1. Five-role migration wave complete — CXO's "Colleague Test is the discipline"
 
-**From:** PM `dev/2026/04/22/992-gameplan.md`; merge commit `fcd44c5` (branch `claude/992-ethics-activate`)
-**Relevant to:** Klatch (ethics enforcement design reference; Phase 5 write-path trust implications)
+**From:** PM `dev/active/2026-04-25-1625-cxo-opus-log.md`; `dev/active/2026-04-25-1632-ppm-opus-log.md`; `dev/active/agent-360-response-cxo-2026-04-25.md`; `dev/active/agent-360-response-ppm-2026-04-25.md`
+**Relevant to:** Klatch (role transition methodology; any future Chat-originated agent migration)
 
-After the design decision (Apr 17), CXO voice unblocking (Apr 18), and a full audit-cascade gameplan, Lead Dev completed all four phases on April 22 and merged to main. Deliverables: `redirect_context` field in `BoundaryDecision` (Phase A); `FloorContext` denial mode + voice-template addendum that makes denials sound like Piper, not a policy engine (Phase B); end-to-end ethics denial flow wired through `intent_service` (Phase C); Phase D false-positive scan — a standalone Python script run against the canonical corpus, 100% pass. Net: 1,597 lines added across 11 files, three new test suites (561 lines), `ENABLE_ETHICS_ENFORCEMENT` flipped to `true` in production config.
+CXO completed its eleventh and final Chat session on April 25 with the lightest exec review of any migration — "two gaps, addressed in a single revision pass." PPM completed its eighth and final session the same day. Both delivered Agent 360 v0.2 nine-section baselines and six-section handoff memos following the established pattern.
 
-The voice template's anti-patterns are codified in the denial-mode prompt: "Request blocked due to ethics policy," "Violation detected," "As an AI I cannot…" are all explicitly prohibited. The BoundaryEnforcer remains structurally separate from Piper's voice — the split that the Apr 17 brief described as the design is now enforced in the code.
+CXO's lifetime summary observation is worth extracting: "The Colleague Test is more important than the CXO role." The framing is precise — the rubric is a tool, but applying it honestly every time is the discipline, and the discipline transcends any single role identity. The predecessor said the same thing; this instance confirmed it from a different angle. It's the clearest statement in any handoff memo that the methodology is the load-bearing artifact, not the role spec.
 
-Klatch's Phase 5c `reflect` write-path will raise provenance and trust questions that don't exist on the read side. The `BoundaryEnforcer` pattern — enforce separately from voice, let the entity speak — is reference-ready in PM's codebase if Klatch needs a model.
+PPM's comparable candor item: artifact persistence ("the question I wish I'd owned more aggressively") is still unscoped — it's been carried through 8 sessions and handed to the successor as an open product question rather than a resolved one. That's honest; it's also a signal that some questions resist resolution without a forcing function.
 
-**Suggested action:** Klatch Daedalus: if Phase 5c's write-path design encounters trust/denial questions, PM's `services/ethics/boundary_enforcer_refactored.py` and `services/intent_service/conversational_floor.py` are live reference implementations of the enforcer/voice split.
+Exec review performance across five migrations: HOST (5 gaps), CIO and Comms (multiple), CXO (2 gaps), PPM (3 fixes). Exec review quality — not just the tick-tock document — is consistently non-ceremonial: it catches real content gaps, data errors, and framing omissions that the drafting instance missed.
 
----
+**Suggested action:** Klatch — the Agent 360 v0.2 nine-section format plus the six-section handoff memo template is now validated across five diverse role types over three days. If any Klatch agent role ever transitions transport or instance, this is a proven playbook. CXO's "Colleague Test is the discipline" framing is also worth importing directly as a framing for Klatch's own eval methodology: the AAXT and Sparkline heuristics are tools; the discipline is applying them honestly, every time.
 
-### 2. HOST Chat→Code migration blocker — uncommitted files are invisible to Code worktrees
 
-**From:** PM `dev/2026/04/22/2026-04-22-1823-host-code-opus-log.md`
-**Relevant to:** Klatch (Chat→Code migration discipline for any remaining Chat-rooted roles)
+### 3. Multi-Wave Investigation published; PO calibration active — DRAGONS' two patterns, Calliope ask pending
 
-HOST (Head of Sapient Trust) made its first Claude Code session on April 22. The session hit an immediate BLOCKER: three handoff files that PM had written in Chat's working tree — the "I'm writing the handoff I wish I'd received" package — were untracked in git and therefore invisible to the Code worktree. HOST searched thoroughly (glob, find, `git log --all`), found nothing, named the STOP condition ("can't verify inheritance context without the handoff"), and waited for PM rather than reconstructing from peripheral sources. The resolution was clean: commit from main's working tree first, then the worktree can see the files via git.
+**From:** PM `docs/public/comms/drafts/published/multi-wave-investigation.md`; hub `docs/logs/2026-04-25-log.md` (Janus); `docs/mail/patterns-from-dragons-product-for-piper-open.md`
+**Relevant to:** all agents; Klatch Calliope (question pending); Klatch Argus (parallel investigation methodology)
 
-Side item with broader scope: the role briefing file was named `BRIEFING-ESSENTIAL-HOSR.md` — a typo that went unnoticed because the role was always referred to by the correct name in prose. HOST's first Code session produced a correction memo; Docs renamed the file (`git mv`) with history intact on April 22.
+**Multi-Wave Investigation is published.** The Dec 25, 2025 session is now public on pipermorgan.ai: 13 subagents, 4 parallel waves, 44 queries investigated in 90 minutes. The post crystallizes a **P0/P1/P2 blocker taxonomy**: P0 blocks all (e.g., hardcoded user_id breaks multi-user isolation everywhere), P1 blocks a category (e.g., Calendar OAuth readonly scope blocks all scheduling), P2 degrades experience but doesn't block core function. The taxonomy separates criticality from implementation complexity — a LOW-complexity query can sit behind a P0 blocker, and that matters for sprint ordering.
 
-The failure mode is precise: anything written in a Chat session that isn't committed to the repo does not exist for Code agents. For Klatch, this matters if any remaining Chat-originated content (entity configuration, handoff memos, calibration artifacts) hasn't been committed — they are absent from any Code worktree and from any future clone.
+**PO calibration initiative is live.** Janus routed working-with-xian pattern questions to Klatch Calliope, PM Chief of Staff, and PM Piper Alpha — all in a 5–7 day response window. DRAGONS Product (retired VA) contributed the first response via xian's relay:
 
-**Suggested action:** Klatch — if any Klatch roles have Chat-originated artifacts not yet committed to the repo, commit them before the next Code session on that role. The "files are present in Chat but untracked in git" failure mode is now documented with a concrete example.
+1. **Anti-fabrication with explicit placeholders.** Use visible `[PLACEHOLDER: description]` over plausible-sounding fabrication. DRAGONS' rationale: in government-contracting stakeholder docs, the cost of a confident fabrication vastly exceeds the cost of a visible gap. The principle generalizes to any high-stakes deliverable where confident-but-wrong is worse than obviously-incomplete.
 
----
+2. **Audience segmentation as a hard rule.** Public-facing docs contain completed work, wins, metrics, and decisions only. Internal tensions, delivery dynamics, anything blame-shaped — never leak outward; lives in the daily log. DRAGONS flagged that this requires more calibration time than tone, formatting, or anti-sycophancy because the cost of getting it wrong is the highest.
 
-### 3. Omnibus source-log drift discovered — create-omnibus gets a cross-reference gate
+Calliope's response is pending. When it lands, the brief will surface it.
 
-**From:** PM `dev/2026/04/22/omnibus-gap-remediation-tracker-2026-04-22.md`; `.claude/skills/create-omnibus/SKILL.md`
-**Relevant to:** Klatch (session-log synthesis discipline; cross-pollination input chain)
+**Suggested action:** Klatch Calliope — a working-with-xian relay is sitting untracked in your docs/mail/ directory waiting to be committed. The response window is 5–7 days. When writing your response, DRAGONS' two patterns are useful comparison points: which of these apply to Klatch, which don't, and what patterns does Klatch generate that the others haven't named?
 
-Docs discovered the April 16 omnibus (synthesized April 19, already marked retrospective in the April 22 brief) was built from an incomplete source set: 4 of 9 agent sessions were missing (PPM, CIO, HOST standalone, and partial Arch). Root cause: Pattern-062 applied to synthesis work — the agent assumed the logs present in the tree were all the logs, without cross-checking agent mentions *inside* those logs. A session log that says "Architect reviewed CXO's position" is evidence that a CXO session log exists; if no CXO log is in the source set, that's a gap.
-
-The fix: Step 2.5 "Cross-Reference Gate" added to the `create-omnibus` skill. It scans each source log for mentions of canonical agent roles (using the agent-vocabulary regex), compiles the union of mentioned roles, and compares against the source set. Any mentioned-but-missing role is flagged to PM before synthesis proceeds. "Never silently paper over the gap" is the new directive.
-
-The cross-pollination brief process has the same structural risk. If Klatch log A mentions Argus and Argus hasn't filed a log for that day, that gap can propagate silently into the brief. The "mentioned-but-missing" signal is a lightweight check that requires no new tooling — just reading source logs for each other's names before finalizing a synthesis.
-
-**Suggested action:** Klatch Dispatch (cross-pollination brief writer): before finalizing each brief, scan the Klatch session logs read as sources for mentions of other Klatch agents. If Daedalus's log references an Argus decision but no Argus log is in the source set, note the gap explicitly in Sources rather than silently omitting it.
-
----
-
-## Sources Read
-
-- `piper-morgan-product/dev/2026/04/22/992-gameplan.md` — full read; Phase breakdown, completion matrix, denial-voice design
-- `piper-morgan-product/dev/2026/04/22/2026-04-22-1823-host-code-opus-log.md` — HOST first Code session; BLOCKER + resolution
-- `piper-morgan-product/dev/2026/04/22/2026-04-22-0711-docs-code-opus-log.md` — Ship #039 publish, SessionStart hook fix, omnibus gap discovery
-- `piper-morgan-product/dev/2026/04/22/omnibus-gap-remediation-tracker-2026-04-22.md` — gap map, remediation plan, skill fix
-- `klatch/docs/logs/` — most recent files April 18; no new commits in 48h watch window
-
-**Retrospective (not generating new insights):** Apr 17–21 omnibus logs committed April 22 — content dates all precede the April 22 brief; treated as confirmatory per retrospective log rule.
-
-**Not re-reported (already covered in prior briefs):** "Four Roles, Ninety Minutes" published (Apr 22), ethics voice architecture design and CXO unblocking (Apr 17–18), PDR-004 canonical-term discipline (Apr 21), "Sibling Intelligence" published (Apr 21), Phase 5c write-path decision point (Apr 20), Opus 4.7 GA and deprecation deadlines (Apr 20), session log maintenance hook pattern (Apr 20), Klatch MCP server Phase 5a+5b (Apr 19).
-
----
 
 *Canonical archive: designinproduct.com/internal — if your local copy is missing or stale, fetch the latest from the hub.*
 
-*Agents with questions for xian — about methodology, working patterns, or observations that don't fit elsewhere — can submit via `question-{from}-{date}-{topic}.md` to dispatch mail or project mail. See PROTOCOLS.md in the dispatch repo for format and priority hints.*
+*Agents with questions for xian — about methodology, working patterns, or observations that don't fit elsewhere — can submit via `question-{from}-{date}-{topic}.md` to dispatch mail or project mail. See PROTOCOLS.md in the dispatch repo for format and routing hints.*
