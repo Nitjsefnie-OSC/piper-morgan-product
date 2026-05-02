@@ -1,83 +1,69 @@
 
-# Cross-Pollination Brief — April 30, 2026
+# Cross-Pollination Brief — May 2, 2026
 
-Klatch's April 27 automated intel sweep was orphaned on a deleted branch for two days and recovered by Argus on April 29, post-brief. Curation produced a reusable methodology: before treating trade-press vendor-change warnings as threats, verify your own stack's state — two High-priority items turned out to not apply to Klatch at all. On the PM side, Architect shipped Pattern-064 "Extension Without Integration," completing the 062/063/064 architectural-debt naming family (component, vocabulary, extension layers — same root cause, three different manifestation points). PA published the branch-discipline synthesis v1.0 as a canonical CLAUDE.md section, closing the multi-day multi-thread on multi-agent coordination discipline.
+Klatch's formal UX walkthrough began April 30: Iris and xian created a two-pass working doc (`docs/ux/walkthrough-findings.md`) and captured Surfaces 1 and 2 with 12 specific findings before pausing mid-walkthrough. The sweep also surfaces a missed publication: Ship #040 "The Methodology Audits Itself" was published April 29 on pipermorgan.ai/shipping-news — after the April 29 brief ran and missed in subsequent sweeps.
 
 ## Key Insights
 
-### 1. Klatch intel sweep recovered: "verify your own stack before applying trade-press narratives"
+### 1. Klatch Iris Session 7: formal walkthrough begins — Surfaces 1-2 documented, 12 findings, 2 cross-cutting patterns
 
-**From:** Klatch `docs/intel/2026-04-27-sweep-curated.md`; commit `b551080` (Argus 4/29); memo `argus-to-calliope-orphan-sweep-recovery-2026-04-29.md`
-**Relevant to:** PM (any team with active API/model upgrade exposure)
+**From:** Klatch `docs/ux/walkthrough-findings.md`; `docs/logs/2026-04-30-0754-iris-opus-log.md`; commit `bd78739` (May 1, 15:21 UTC — after May 1 brief)
+**Relevant to:** PM (any product past feature-complete entering a pre-polish or pre-alpha review phase)
 
-The April 27 automated intel sweep (sweep #9) was filed on branch `claude/amazing-ptolemy-NcAtO` which was then deleted. Argus recovered it via cherry-pick on April 29 and ran in-session verification on the two items originally flagged High priority.
+Iris and xian ran the first session of a formal two-pass walkthrough of the running Klatch v0.10/1.0-beta app. The working document is structured: Pass 1 (surface skim across 8 surfaces — observable issues at a glance) + Pass 2 (realistic scenario: set up the Shipping News weekly review workflow, capture friction). MAXT round-trip testing planned for after the walkthrough. Session paused after 2 of 8 surfaces; resume planned for Friday afternoon (Surfaces 3-8 + Pass 2 still pending).
 
-**Opus 4.7 thinking opt-in — NOT a regression:** The trade-press framing was "breaking change for Klatch's message_artifacts capture." In-session audit of `packages/server/src/claude/client.ts` found both streaming paths already pass `thinking: { type: 'adaptive', display: 'omitted' }`. The API drops thinking blocks regardless of opt-in. No stored thinking content to lose. **To start capturing thinking content (forward-only, not a current requirement):** (a) flip `display` from `'omitted'` to `'enabled'` AND (b) add `betas: ["thinking-summaries-2025-02-19"]` to the request. Both required.
+**Surface 1 — First-load impression (6 findings):**
+- F1.1 Type is small and low-contrast throughout (gray-on-white, small-caps project headers)
+- F1.2 Large empty content area with no clear call to action; visual hierarchy doesn't direct the user
+- F1.3 Default channel system prompt ("You are a helpful assistant") rendered as a visible header — functional artifact from early development, never revisited; reads as boilerplate
+- F1.4 Empty-state copy frames Klatch as a generic chat app ("Start a conversation / Send a message to begin") rather than as a stage for a cast of characters
+- F1.5 API key configuration invisible from the UI — no setup flow, no "connect your Anthropic account" (flagged as a 1.0-beta gap, out of scope for the day's review)
+- F1.6 "Functional artifacts surviving early development" named as a category; F1.3 is the first instance, others expected
 
-**MCP STDIO injection (Ox Security) — NOT exposed:** The Ox disclosure is about MCP *clients* passing untrusted server-command strings to `subprocess.exec`. Klatch's `packages/server/src/mcp/bin.ts` is the *server side* — it's launched by clients (Claude Code, Claude Desktop), never spawning MCP subprocesses itself. Future-flag: if Phase 5d adds HTTP proxying to externally-defined MCP server commands, revisit.
+**Surface 2 — Sidebar (6 findings):**
+- F2.1 Type legibility carries through the entire sidebar (same problem as F1.1)
+- F2.2 Reads as "list of chats" — Slack pattern-match; distinctive Klatch concepts (projects, klatches, entities, @ vs # prefix system) are present but not communicated
+- F2.3 Section meaning unclear; project headers in small caps with count + chevron read as decoration, not interactive structure
+- F2.4 Project name truncation breaks comprehension mid-word with no expand affordance
+- F2.5 "Unassigned" section carries no contextual cue explaining what unassigned means
+- F2.6 Footer grab-bag confirmed: dark mode toggle + Entities + Import + "+ New channel" stacked with no design rationale
 
-**Genuine watch items routed to Daedalus (Medium priority):** Opus 4.7 new tokenizer (+35% token count — cost/compaction threshold impact for any 4.7 entity); `xhigh` effort enum (one-line schema addition to unlock 4.7's full capability); SDK currency (0.86.1 → 0.90.0 — confirm thinking-opt-in API available before any "show thinking" UI ships). **Also noted:** Sonnet 4 / Opus 4 retirement clock at 47 days to June 15; DB audit still pending for live channels pinned to literal model IDs.
+**2 cross-cutting patterns established early:**
+1. Type is small and low-contrast throughout (flagged for a typography/density pass after the walkthrough)
+2. Functional artifacts surviving early development — things that work but were never revisited; F1.3 is the anchor instance; watch for others across remaining surfaces
 
-**Sweep cadence:** trigger config fixed; this was the only orphan. Chain is now complete; future automated runs land on main directly.
+**Note:** Carried-over items from prior sessions (composition gap, import findability/modal framing, visibility gap, sidebar IA, L4/L5 round-trip loss) are pre-populated in the working doc and will not be re-found during the walkthrough — the team distinguished "finding for the first time" from "confirming what we already know."
 
-**Suggested action:** PM — the verification method is the deliverable. Before any agent treats a vendor-change advisory (model release, SDK bump, security disclosure) as a live threat, spend five minutes reading the relevant implementation file. The check is fast; the false-positive rate is high. The Argus approach — read the actual code, document the finding, route genuine items, mark non-items N/A — is the replicable pattern. Route to Calliope if cross-project framing is needed.
-
----
-
-### 2. Pattern-064 completes the architectural-debt naming family: 062 / 063 / 064
-
-**From:** PM `docs/internal/architecture/current/patterns/pattern-064-extension-without-integration.md`; commit `a624d0e` (Architect Day 3 morning merge)
-**Relevant to:** Klatch Daedalus (future trust/safety layer design; BoundaryEnforcer reference instance)
-
-Architect shipped **Pattern-064 (Emerging): "Extension Without Integration"** — promoted from an April 25 sketch. This completes the **062/063/064 family**, all sharing the same root cause (integration pass missing) but manifesting at different layers:
-
-| Pattern | Layer | Failure Mode |
-|---------|-------|-------------|
-| 062: Assembly Assumption | Component | Integration at the seams — parts work, whole doesn't |
-| 063: Parallel-Authoring Drift | Vocabulary | Same label, different semantics under independent extension |
-| 064: Extension Without Integration | Extension | New feature added without an integration pass |
-
-Reference instance for 064: **BoundaryEnforcer #197 substring detector recall gap** — the pattern shipped without an integration pass, so PERSONAL/DATA_PRIVACY had zero recall (no detection method called) and HARASSMENT had near-zero recall. The April 25 #1002 finding manifested 064.
-
-ADR-061 (LLM-Touch Boundary Enforcement, v0.1) cross-references the family and codifies the architectural fix. Pattern-064 is also filed adjacent to ADR-061 in `docs/internal/architecture/current/adrs/`.
-
-**Suggested action:** Klatch Daedalus — when any new enforcement or detection feature ships (whether for the MCP server, a future trust layer, or anything else), the 064 diagnostic question is: "Did we run an integration pass after adding the component?" The three-family diagnostic: (a) do the seams between components work? (062); (b) do collaborating agents mean the same thing by every label? (063); (c) does the new extension connect correctly to everything it's supposed to touch? (064). All three are fast to check; all three have caused multi-session remediation when skipped.
+**Suggested action:** PM — the "functional artifacts surviving early development" pattern is a useful sweep category for any product that's been in active development for months. The question is: "which things are still there because they work, but were never revisited for fit?" Klatch's example is a default system prompt exposed as a UI string; PM analogues might exist in any surface that was configured for convenience and never updated for its user-facing role. A one-time artifact sweep before any user-facing review is low-cost and tends to surface high-signal mismatches.
 
 ---
 
-### 3. PA branch-discipline synthesis v1.0 published to CLAUDE.md — canonical multi-agent coordination reference live
+### 2. Ship #040 "The Methodology Audits Itself" published April 29 — not covered in prior briefs
 
-**From:** PM CLAUDE.md "Branch / Worktree / Mailbox Discipline" section; `docs/internal/operations/branch-worktree-mailbox-discipline.md` v1.0; commit `d48fcf1` (PA synthesis pointer, April 29 post-brief)
-**Relevant to:** Klatch (four-agent parallel coordination; worktree collision prevention)
+**From:** PM commits `4ed4622d` (Apr 29 13:53 -0700, canonical site), `efbc398d` (Apr 29 18:59 -0700, LinkedIn URL added); Apr 29 omnibus log (content date Apr 29, committed Apr 30)
+**Relevant to:** Klatch Calliope (publication tracking; placement in PM's public narrative arc)
 
-After a week-long multi-thread (mailbox discipline norm Apr 26, sign-off discipline norm Apr 28, merge-keeper-sweep.py shipped Apr 28, branch-worktree-mailbox-discipline.md drafted), PA published the **branch-discipline synthesis v1.0** as a canonical 60-second CLAUDE.md section embedded in every future PM session start. Five rules at a glance:
+PM's weekly Ship newsletter #040 published April 29 on pipermorgan.ai/shipping-news/ under the title "The Methodology Audits Itself." LinkedIn cross-post confirmed same day. URL: `pipermorgan.ai/shipping-news/weekly-ship-040-the-methodology-audits-itself`.
 
-1. **Worktree per substantive session** — `claude/*` branch + worktree for any session producing new artifacts
-2. **Commit-before-close** — session ends with clean working tree + branch merged to main (or NOTICE memo)
-3. **Mailbox writes always on main** — never on feature branches; hook-enforced
-4. **Branch/worktree registry** — agents record their branch + last-commit + status
-5. **Designated merge-keeper** — Docs runs `scripts/merge-keeper-sweep.py` daily; catches anything stranded within 24 hours
+Why not in prior briefs: published at 20:53 UTC April 29 — after the April 29 brief ran at 12:00 UTC. The April 30 and May 1 briefs did not scan the calendar commits; the May 1 brief's publication focus was on "The Floor Comes Alive" (Medium, Apr 30). This is the first time Ship #040 appears in the brief record.
 
-The canonical doc is `docs/internal/operations/branch-worktree-mailbox-discipline.md`. The CLAUDE.md section is the load-bearing 60-second summary. Sign-off checklist (3-command sequence) is embedded above the summary.
+PM's current public output channels: weekly Ships at pipermorgan.ai/shipping-news/ + longer narrative posts on Medium (Building Piper Morgan series). Published record to date: Ship #040 "The Methodology Audits Itself" (Apr 29); "The Floor Comes Alive" (Apr 30, Medium); "Four Roles, Ninety Minutes" (Apr 22, Medium); "Sibling Intelligence" (Apr 19, pipermorgan.ai). Ship #041 solicitation memo was distributed to the leadership cohort April 30; window closes shortly.
 
-**Also noted:** PM canonical mailbox rename effective April 29 — `pm/` → `mailboxes/xian (ceo)/` (literal space + parens; PM directive: "my mailbox is called ceo"). DIRECTORY.md updated; correction memo to all 9 active inboxes. Any agent routing mail to PM should use the new slug.
-
-**Suggested action:** Klatch — Klatch already documents a similar four-agent worktree model in CLAUDE.md ("avoid branch collision between parallel agents"). The PM synthesis is the failure-driven distillation of what rules are actually load-bearing after three weeks of parallel parallel Code-era operation. Two additions that aren't currently in Klatch's CLAUDE.md: (a) a **per-memo commit-and-push norm** (each memo write is its own commit + push cycle, ~30s overhead, eliminates asymmetric-visibility windows), and (b) a **designated merge-keeper sweep** as the standing safety net for anything stranded. Both are low-cost to add and close known failure modes.
+**Suggested action:** Klatch Calliope — note for the narrative record: PM has established a dual-channel publication rhythm (weekly newsletters + longer narrative arcs). The brief archive is the canonical internal record; publication events noted here help agents place public-facing content in the project timeline when building cross-references or planning analogous Klatch publications.
 
 ---
 
 ## Sources Read
 
-- `klatch/docs/intel/2026-04-27-sweep-curated.md` — full read; in-session verification on Opus 4.7 thinking opt-in and MCP STDIO injection; curated priority table; watch items
-- `klatch/docs/logs/2026-04-29-1258-argus-opus-log.md` — partial read; orphan recovery context, routing decisions, sweep cadence health
-- Klatch commits `b551080` (Argus 4/29 recovery), `6976269` (cherry-pick) — message and stat read
-- `piper-morgan-product/docs/omnibus-logs/2026-04-28-omnibus-log.md` — selective read; Pattern-064 + 062/063/064 family; branch-discipline synthesis timeline (content date April 28; items without prior atomic-log coverage surfaced; confirmatory only for items already in Apr 28/29 briefs)
-- PM commit `a624d0e` (Architect Apr 28, ADR-061 + Pattern-064) — stat and message read
-- PM commit `d48fcf1` (PA synthesis v1.0 to CLAUDE.md, April 29 post-brief) — stat and message read
-- PM `CLAUDE.md` "Branch / Worktree / Mailbox Discipline" section — partial read; five rules, sign-off checklist, mailbox rename
-- `atlas`, `globe`, `cuneo`, `weather`, `one-job`, `nyt-crossword` — 48h logs empty. `optilisten` — automated status prints only, no narration.
+- `klatch/docs/ux/walkthrough-findings.md` — full read; two-pass structure, Surfaces 1-2 findings, cross-cutting patterns, carried-over items
+- `klatch/docs/logs/2026-04-30-0754-iris-opus-log.md` — commit `bd78739` message and stat read; partial content from commit diff
+- `klatch/docs/COORDINATION.md` — change diff from `bd78739`; Iris status and resume plan
+- PM commits `4ed4622d` + `efbc398d` (Ship #040 calendar) — message and stat read
+- `piper-morgan-product/docs/omnibus-logs/2026-04-29-omnibus-log.md` — partial read; Ship #040 publication confirmation + LinkedIn syndication; two recovery incidents (confirmatory only — Apr 29 events already reported; runtime behavior changes not previously surfaced but CONFIRMATORY of branch-discipline synthesis v1.0 reported Apr 30)
+- `weather`, `nyt-crossword` — 48h logs non-empty (brief delivery + automated status prints only); no narrated insights; not listed as sources_checked
+- `atlas`, `globe`, `cuneo`, `one-job`, `optilisten` — 48h logs empty; skipped
 
-**Not re-reported (covered in prior briefs):** /import/klatch bidirectional, 1203 tests, round-trip round 31/31b (Apr 29); deliver-mail (b1) + merge-keeper-sweep ships (Apr 29); ADR-061 completeness gaps + Phase F calibration-window posture (Apr 29); #1004 112/112 PASS, Phase F open to PM/PA (Apr 28); first live MCP stdio integration 27/27 (Apr 28); Phase E S1 r2 harassment → GUIDANCE + #1003 (Apr 27); Pattern-063 Parallel-Authoring Drift (Apr 27); Klatch MCP 1.0 feature-complete (Apr 27).
+**Not re-reported (covered in prior briefs):** Phase F activation + ENABLE_ETHICS_ENFORCEMENT=true + #992 closed + alpha catch-22 (May 1); Iris Session 6 composition gap + transport-fidelity UX settled (May 1); The Floor Comes Alive published (May 1); verify-before-assuming methodology + Pattern-064 (Apr 30); branch-discipline synthesis v1.0 (Apr 30); /import/klatch bidirectional 1203 tests (Apr 29); ADR-061 completeness gaps (Apr 29).
 
 ---
 
