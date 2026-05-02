@@ -1,75 +1,69 @@
 
-# Cross-Pollination Brief — May 1, 2026
+# Cross-Pollination Brief — May 2, 2026
 
-PM's ethics enforcement went live on April 30 (CEO directive): `ENABLE_ETHICS_ENFORCEMENT=true` merged to production, closing #992 after the full Phase A → F arc. The final unlock was naming an alpha catch-22 — the "wait for real-traffic calibration" posture was unreachable from a pre-release product, so PM directed a simulation-first reframe instead of an indefinite hold. On the Klatch side, Iris returned after a two-week gap, settled three UX questions on transport-fidelity loss, then received xian's testing observations: the biggest gap is a missing capability, not a polish issue — there is no UI path for the central act of composing a klatch from existing entities.
+Klatch's formal UX walkthrough began April 30: Iris and xian created a two-pass working doc (`docs/ux/walkthrough-findings.md`) and captured Surfaces 1 and 2 with 12 specific findings before pausing mid-walkthrough. The sweep also surfaces a missed publication: Ship #040 "The Methodology Audits Itself" was published April 29 on pipermorgan.ai/shipping-news — after the April 29 brief ran and missed in subsequent sweeps.
 
 ## Key Insights
 
-### 1. Phase F activated: ENABLE_ETHICS_ENFORCEMENT=true live — alpha catch-22 named and resolved
+### 1. Klatch Iris Session 7: formal walkthrough begins — Surfaces 1-2 documented, 12 findings, 2 cross-cutting patterns
 
-**From:** PM `dev/2026/04/30/2026-04-30-0632-lead-code-opus-log.md`; commits `deecc816` (Phase F merge), `62bb9c64` (flip-now memo); Architect ADR-061 v1.0 commit
-**Relevant to:** Klatch (any future safety/trust layer; calibration-before-shipping design question)
+**From:** Klatch `docs/ux/walkthrough-findings.md`; `docs/logs/2026-04-30-0754-iris-opus-log.md`; commit `bd78739` (May 1, 15:21 UTC — after May 1 brief)
+**Relevant to:** PM (any product past feature-complete entering a pre-polish or pre-alpha review phase)
 
-`ENABLE_ETHICS_ENFORCEMENT=true` is now live in PM's docker-compose `app` service. #992 ETHICS-ACTIVATE is closed, completing the full Phase A → B → C → D → E → #1002/#1003 → #1004 → Phase F arc.
+Iris and xian ran the first session of a formal two-pass walkthrough of the running Klatch v0.10/1.0-beta app. The working document is structured: Pass 1 (surface skim across 8 surfaces — observable issues at a glance) + Pass 2 (realistic scenario: set up the Shipping News weekly review workflow, capture friction). MAXT round-trip testing planned for after the walkthrough. Session paused after 2 of 8 surfaces; resume planned for Friday afternoon (Surfaces 3-8 + Pass 2 still pending).
 
-The final unlock: PM named the **alpha catch-22**. The April 28 AUTHORIZE-WHEN-OBSERVED posture ("wait ~7–14 days for calibration data") required real production traffic. PM is pre-release. The wait was for data that doesn't exist yet. PM directed: flip now, reframe calibration as simulation-first in three phases — **Phase A**: synthetic input population via Gemma generator (ships with flip, grounded in run-2 probe set: 18/20 PASS, 112/112 ethics suite); **Phase B**: beta-traffic refinement post-onboarding; **Phase C**: stable. Architect's calibration-enhancement design simplifies as a result — both layers run with flag on from the start; no on/off log-only mode needed.
+**Surface 1 — First-load impression (6 findings):**
+- F1.1 Type is small and low-contrast throughout (gray-on-white, small-caps project headers)
+- F1.2 Large empty content area with no clear call to action; visual hierarchy doesn't direct the user
+- F1.3 Default channel system prompt ("You are a helpful assistant") rendered as a visible header — functional artifact from early development, never revisited; reads as boilerplate
+- F1.4 Empty-state copy frames Klatch as a generic chat app ("Start a conversation / Send a message to begin") rather than as a stage for a cast of characters
+- F1.5 API key configuration invisible from the UI — no setup flow, no "connect your Anthropic account" (flagged as a 1.0-beta gap, out of scope for the day's review)
+- F1.6 "Functional artifacts surviving early development" named as a category; F1.3 is the first instance, others expected
 
-ADR-061 v1.0 is architecturally complete: Architect folded all 6 review findings (three-way detector discriminator `literal-trigger | semantic | none`; `fast_path_hit` + `cache_hit` in audit data; latency claim replaced with measured numbers p_min 2.1s / p_avg 3.2s / p_max 4.9s). Awaiting PM formal ratification.
+**Surface 2 — Sidebar (6 findings):**
+- F2.1 Type legibility carries through the entire sidebar (same problem as F1.1)
+- F2.2 Reads as "list of chats" — Slack pattern-match; distinctive Klatch concepts (projects, klatches, entities, @ vs # prefix system) are present but not communicated
+- F2.3 Section meaning unclear; project headers in small caps with count + chevron read as decoration, not interactive structure
+- F2.4 Project name truncation breaks comprehension mid-word with no expand affordance
+- F2.5 "Unassigned" section carries no contextual cue explaining what unassigned means
+- F2.6 Footer grab-bag confirmed: dark mode toggle + Entities + Import + "+ New channel" stacked with no design rationale
 
-Lead Dev's self-flag, added as permanent memory: "When 'where does this data come from?' = 'real users' AND we are in alpha, surface that immediately rather than treating the wait as a normal sequencing step."
+**2 cross-cutting patterns established early:**
+1. Type is small and low-contrast throughout (flagged for a typography/density pass after the walkthrough)
+2. Functional artifacts surviving early development — things that work but were never revisited; F1.3 is the anchor instance; watch for others across remaining surfaces
 
-**Suggested action:** Klatch — the alpha catch-22 is a project-stage constraint, not a failure mode. If Daedalus designs a safety feature that requires real-traffic calibration before shipping, ask at design time: "Is there a path to the real traffic this gate needs?" If not, simulation-first (build a synthetic input population using existing probe methodology) is the viable alternative. Name the dependency early.
+**Note:** Carried-over items from prior sessions (composition gap, import findability/modal framing, visibility gap, sidebar IA, L4/L5 round-trip loss) are pre-populated in the working doc and will not be re-found during the walkthrough — the team distinguished "finding for the first time" from "confirming what we already know."
 
----
-
-### 2. Klatch Iris session 6: composition gap named as capability gap; transport-fidelity UX settled
-
-**From:** Klatch `docs/logs/2026-04-28-0639-iris-opus-log.md`; commit `a0d760a`
-**Relevant to:** PM (multi-entity/agent assembly UX design; first-class import/export flow patterns)
-
-Iris returned April 28 after a two-week gap (52 commits in). Three UX questions on transport-fidelity loss settled with xian:
-
-1. **Fidelity-loss panel at transport-selection**: YES — visibility-gap principle applied to the export moment; system knows what's about to be lost before the user decides
-2. **Transport-aware Phase 3.5 defaults**: YES — smart defaults: claude.ai default-on (bridge exists, silent loss without it); canonical zip default-off (no loss to bridge)
-3. **Structural L4 loss in claude.ai round-trip**: honest declaration at export time; reject folding L4 into L2/L3 with provenance markers ("sounds clever but obscures actual loss")
-
-xian's three testing findings:
-
-1. **Import is buried** in the footer grab-bag alongside theme toggle — it's a first-class verb of the product, not a settings-adjacent action
-2. **Import-as-modal is wrong** — should be full-screen; import/export work IS the work, not an interruption to chat
-3. **No UI for composing a klatch from existing entities** — biggest gap; capability gap not polish gap. The central job-to-be-done has no path through the UI.
-
-The third finding confirms the entity reframe from the user side (filed by Calliope April 18): when entities are existing conversations promoted into roles, composition IS the central act — and the current UI doesn't surface it. A combined 8-topic list (Iris's 5 + xian's 3, deduped) is assembled; walkthrough session with xian is pending.
-
-**Suggested action:** PM — Klatch's entity-as-promoted-conversation finding applies to any multi-agent or multi-model assembly UX. The design question is: is the central act **creation** (design a creation flow) or **promotion and composition** (design a selection + assignment surface)? Klatch found that the entire composition gesture was missing because it wasn't treated as the primary surface. If PM ever designs a "bring agents or context into a room" interaction, the Klatch experience is a direct precedent for what falls through the gap when this isn't explicitly designed.
+**Suggested action:** PM — the "functional artifacts surviving early development" pattern is a useful sweep category for any product that's been in active development for months. The question is: "which things are still there because they work, but were never revisited for fit?" Klatch's example is a default system prompt exposed as a UI string; PM analogues might exist in any surface that was configured for convenience and never updated for its user-facing role. A one-time artifact sweep before any user-facing review is low-cost and tends to surface high-signal mismatches.
 
 ---
 
-### 3. "The Floor Comes Alive" published; Ship #041 IAC arc framing proposed
+### 2. Ship #040 "The Methodology Audits Itself" published April 29 — not covered in prior briefs
 
-**From:** PM `docs/public/comms/drafts/published/the-floor-comes-alive.md`; PM editorial calendar commits `fd35e06`, `17d94db`; `mailboxes/comms/inbox/memo-exec-to-comms-cc-cohort-ceo-iac-retrospective-fold-ship-041-2026-04-30.md`
-**Relevant to:** Klatch Calliope (building narrative series methodology; talk-to-implementation arc as a story shape)
+**From:** PM commits `4ed4622d` (Apr 29 13:53 -0700, canonical site), `efbc398d` (Apr 29 18:59 -0700, LinkedIn URL added); Apr 29 omnibus log (content date Apr 29, committed Apr 30)
+**Relevant to:** Klatch Calliope (publication tracking; placement in PM's public narrative arc)
 
-Third Building Piper Morgan narrative installment published on Medium April 30. It covers April 8-10: the first Colleague Test pass (5/9 → 7/9 in two days). The sharpest line: three characters in a model identifier string changed the experience from "a wall of canned text" to "an actual working conversation." The post names what a gate is for — not to prove the system works, but to prove specifically, measurably, repeatably how it doesn't.
+PM's weekly Ship newsletter #040 published April 29 on pipermorgan.ai/shipping-news/ under the title "The Methodology Audits Itself." LinkedIn cross-post confirmed same day. URL: `pipermorgan.ai/shipping-news/weekly-ship-040-the-methodology-audits-itself`.
 
-Also April 30: Exec proposes Comms weave the April 17 IAC conference talk ("Ethics as Information Architecture," Philadelphia) into the Ship #041 narrative. The case: the April 24-30 week's work (#1004 shipping, ADR-061 v0.1, Phase F decision arc, CT v2.3 Branch-or-Anchor) made the talk's claims operational in code. Ship #040 didn't surface the talk-to-implementation relationship; #041 has the better vantage because the arc is now closed.
+Why not in prior briefs: published at 20:53 UTC April 29 — after the April 29 brief ran at 12:00 UTC. The April 30 and May 1 briefs did not scan the calendar commits; the May 1 brief's publication focus was on "The Floor Comes Alive" (Medium, Apr 30). This is the first time Ship #040 appears in the brief record.
 
-**Suggested action:** Klatch Calliope — two patterns worth tracking. First: the "three chars" narrative is a version of Klatch's own configuration-gap stories — those are the most shareable moments because they make an invisible failure visible. Second: the talk-to-implementation arc pattern is a specific narrative shape: articulate a design principle publicly → implement it → write the piece once the implementation arc is complete (not before). The arc only works from the closed-end vantage. Klatch has natural candidates (the five-layer architecture as a pub-talk pitch vs. as a live system; the entity reframe; the round-trip story). The ship is the precondition for writing the piece.
+PM's current public output channels: weekly Ships at pipermorgan.ai/shipping-news/ + longer narrative posts on Medium (Building Piper Morgan series). Published record to date: Ship #040 "The Methodology Audits Itself" (Apr 29); "The Floor Comes Alive" (Apr 30, Medium); "Four Roles, Ninety Minutes" (Apr 22, Medium); "Sibling Intelligence" (Apr 19, pipermorgan.ai). Ship #041 solicitation memo was distributed to the leadership cohort April 30; window closes shortly.
+
+**Suggested action:** Klatch Calliope — note for the narrative record: PM has established a dual-channel publication rhythm (weekly newsletters + longer narrative arcs). The brief archive is the canonical internal record; publication events noted here help agents place public-facing content in the project timeline when building cross-references or planning analogous Klatch publications.
 
 ---
 
 ## Sources Read
 
-- `piper-morgan-product/dev/2026/04/30/2026-04-30-0632-lead-code-opus-log.md` — full read; Phase F activation, alpha catch-22 named, ADR-061 v1.0 architectural completion, #1018 Phase 1 ratified, IoC scan clean
-- PM commits `deecc816` (Phase F merge), `62bb9c64` (flip-now memo), `fcdfb8e0` (IoC scan), `aa0748e` (ADR-061 v1.0 Arch commit) — stat/message read
-- `piper-morgan-product/docs/public/comms/drafts/published/the-floor-comes-alive.md` — full read
-- `piper-morgan-product/mailboxes/comms/inbox/memo-exec-to-comms-cc-cohort-ceo-iac-retrospective-fold-ship-041-2026-04-30.md` — partial read; IAC retrospective + Ship #041 framing
-- `klatch/docs/logs/2026-04-28-0639-iris-opus-log.md` — full read; Session 6 catch-up, UX questions settled, xian's three testing findings, composition gap, combined topic list
-- Klatch commit `a0d760a` (Iris session 6) — stat/message read
+- `klatch/docs/ux/walkthrough-findings.md` — full read; two-pass structure, Surfaces 1-2 findings, cross-cutting patterns, carried-over items
+- `klatch/docs/logs/2026-04-30-0754-iris-opus-log.md` — commit `bd78739` message and stat read; partial content from commit diff
+- `klatch/docs/COORDINATION.md` — change diff from `bd78739`; Iris status and resume plan
+- PM commits `4ed4622d` + `efbc398d` (Ship #040 calendar) — message and stat read
+- `piper-morgan-product/docs/omnibus-logs/2026-04-29-omnibus-log.md` — partial read; Ship #040 publication confirmation + LinkedIn syndication; two recovery incidents (confirmatory only — Apr 29 events already reported; runtime behavior changes not previously surfaced but CONFIRMATORY of branch-discipline synthesis v1.0 reported Apr 30)
+- `weather`, `nyt-crossword` — 48h logs non-empty (brief delivery + automated status prints only); no narrated insights; not listed as sources_checked
 - `atlas`, `globe`, `cuneo`, `one-job`, `optilisten` — 48h logs empty; skipped
-- `weather`, `nyt-crossword` — 48h logs non-empty (brief delivery + automated status prints only); no narrated insights
 
-**Not re-reported (covered in prior briefs):** verify-before-assuming methodology (Apr 30); Pattern-064 Extension Without Integration (Apr 30); branch-discipline synthesis v1.0 (Apr 30); /import/klatch bidirectional 1203 tests (Apr 29); deliver-mail b1 + merge-keeper-sweep (Apr 29); ADR-061 completeness gaps filed (Apr 29); #1004 112/112 PASS (Apr 28); first live MCP stdio 27/27 (Apr 28).
+**Not re-reported (covered in prior briefs):** Phase F activation + ENABLE_ETHICS_ENFORCEMENT=true + #992 closed + alpha catch-22 (May 1); Iris Session 6 composition gap + transport-fidelity UX settled (May 1); The Floor Comes Alive published (May 1); verify-before-assuming methodology + Pattern-064 (Apr 30); branch-discipline synthesis v1.0 (Apr 30); /import/klatch bidirectional 1203 tests (Apr 29); ADR-061 completeness gaps (Apr 29).
 
 ---
 
