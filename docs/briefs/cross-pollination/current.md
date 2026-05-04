@@ -1,69 +1,72 @@
-# Cross-Pollination Brief — May 3, 2026
 
-PM's Saturday session covered two distinct arcs: first, shipping #1018 Phase 2 (audit_transparency durable PostgreSQL storage) and closing three cluster regressions (#1006/#1007/#1008) in one merged commit; then running the audit-cascade skill against four M2d MUX Lifecycle issues and finding the gate NOT PASSED — two issues carrying stale "pending discovery" framing from March when the discovery completed in late March. Restructure yielded four new focused issues and a conceptual-integrity gate added to the M2d completion criteria. PM also published "The Drift You Don't Notice" — fully syndicated to pipermorgan.ai, Medium, and LinkedIn. Klatch is quiet; Iris walkthrough Surfaces 3-8 + Pass 2 still pending after the Surfaces 1-2 session paused May 1.
+# Cross-Pollination Brief — May 4, 2026
+
+PM shipped the entire M2d MUX implementation layer in one Sunday session (May 3): 8 issues — Pull/Passive/Push insight surfacing, COMPOSTED anti-surveillance guardrail, lifecycle indicators, staleness signals, plus two pre-work structural issues — merged to main with 221+ new tests and zero regressions. M2e gameplans were drafted, walked through PM (24/24 dispositions), and first issue #790 trust-gated calendar shipped by evening. Klatch's first Monday external intel trigger (fix confirmed working) surfaces two overdue items: SDK 6 minor versions behind and the June 15 Sonnet 4/Opus 4 deprecation deadline now 42 days out with a DB audit still unfiled.
 
 ## Key Insights
 
-### 1. PM: audit_transparency durable storage ships — transaction-boundary isolation pattern
+### 1. PM: M2d complete — full MUX insight layer ships in one session; M2e launched same day
 
-**From:** PM commits `fd338c8` + `fc79de3` (May 2, 16:15 UTC); `dev/2026/05/02/2026-05-02-1555-lead-code-opus-log.md`
-**Relevant to:** Klatch (any future durable audit/session storage design)
+**From:** PM `dev/2026/05/03/2026-05-03-0657-lead-code-opus-log.md`; merges `71e847a7` (#704), `66700a08` (#714), `007f8596` (#1033), `1da171a8` (#1030), `9500ab07` (#1031), `9ccc7cf` (#1032), `607c3c4b` (#1034), `5d2e2624` (#1035), `755040b1` (#790)
+**Relevant to:** Klatch (batched audit-cascade methodology; "don't show non-functional feature" principle; companion-project milestone)
 
-#1018 Phase 2 merged in one commit closing 4 issues: the `audit_transparency` service's in-memory `audit_logs` list replaced with a `EthicsAuditRepository` backed by PostgreSQL (`ethics_audit_log` table, 4 indexes, 6 repo methods). Cluster regressions closed together: #1006 (TIMESTAMPTZ throughout, timezone-aware datetime test), #1007 (phone PII pattern added to redactor — prior pattern matched SSN format 3-2-4 but missed common 3-3-4 phone format), #1008 (AsyncMock vs Mock in tests for await-on-list). `EthicsAuditCleanupJob` ships with post-#948 cancellation hygiene (`asyncio.current_task()` captured at start, cancel-and-await in stop). 17/17 audit-transparency tests pass.
+The entire M2d milestone shipped in a single 14-hour session. Eight issues merged sequentially: #1035 MUX-COMPOSTING-ACTIVATION (CompostingScheduler wired to startup; InsightJournal backed by PostgreSQL repository — PM directive: "durability is constitutive of what a journal IS"); #1034 STANDUP-STRUCTURED-WORKITEMS (StandupResult carries List[StandupItem] with `__str__` backwards-compat); #704 MUX-LIFECYCLE-UI-A (slot-then-postprocess render pattern, reusable across future surfaces); #714 MUX-LISTS-STALENESS-UI (lazy effective timestamp, 60-day threshold, muted card treatment); #1033 MUX-COMPOSTED-EXPERIENCE (anti-surveillance guardrail at both compost-time and surface-time, single `safe_surface()` source of truth); #1030/#1031/#1032 Pull/Passive/Push insight surfacing (trigger detection, Insight Journal wired to Jan 2026 prior-art backend, channel-agnostic Push eligibility + in-chat renderer).
 
-The architecturally notable design decision: **Q2 transaction-boundary isolation** — `AsyncSessionFactory.session_scope()` is called per-audit-write rather than sharing the request's transaction. This means an audit-write failure swallows without rolling back the user-facing request. The explicit tradeoff: audit reliability is subordinate to request reliability. Verified by a dedicated test (`db_failure_does_not_propagate`).
+Also notable: **#1036 closed premise-invalid** mid-execution — the live `/api/v1/lists` endpoint was already in `web/api/routes/lists.py` but missed by a Phase -1 grep scoped to `services/api/` only. Saved as feedback memory: Phase -1 endpoint-coverage spikes must search the full route-mounting tree (`web/api/routes/` + `services/api/` + `web/router_initializer.py`).
 
-**Suggested action:** Klatch — if Daedalus or Mnemosyne designs any durable storage for session logs, audit trails, or MCP server write-backs, the transaction-boundary question is live: should a storage failure surface to the user or swallow silently? PM's choice (swallow, isolate) is appropriate for audit sidechannel infrastructure but not necessarily correct for primary-path writes. Name the boundary posture at design time.
+**PM UI principle from the walkthrough:** "I don't want to show a non-functional feature." Applied to #1031's topic tabs — markup hidden via Jinja comment until #1037 ships, then a one-line uncomment ships the feature. Three options enumerated: (1) withhold-until-functional [chosen], (2) promise-with-clear-not-yet [rarely justified], (3) build-into-MVP. Withhold is the default.
 
----
+M2e same day: 5 gameplans drafted, 24/24 PM walkthrough dispositions captured, #790 trust-gated calendar implemented by late evening (first M2e issue done). Sequence: #1042 (cleanup, blocks #1039+#1040) → #1039 → #1040; #900/#869 independent.
 
-### 2. Audit-cascade catches discovery-phase staleness: issues filed during a discovery phase don't automatically update when discovery completes
-
-**From:** PM `dev/2026/05/02/m2d-audit-cascade-findings.md`; `dev/2026/05/02/2026-05-02-1555-lead-code-opus-log.md`; commits `0b88e93` (findings), `d1c54dd` (restructure)
-**Relevant to:** Klatch (any issue backlog backed by design-phase research; MUX-Lifecycle analog items in the Klatch backlog)
-
-Lead Dev ran audit-cascade on 4 M2d MUX Lifecycle issues before writing gameplans. Issue gate **NOT PASSED** on first read.
-
-**Two stale-placeholder findings:**
-- **#707 (MUX-INSIGHT-SURFACING)**: body said "TBD pending #706 discovery." Discovery completed 2026-03-24 — over a month earlier. The decisions exist (`insight-surfacing-rules.md`, `objects-catalog.md`, `views-objects-roadmap.md`): Insights are soft objects, not lifecycle objects; three surfacing modes (Pull/Passive/Push) with different infrastructure and trust-gating requirements. Implementing from the stale body risked flattening all three modes into one ticket and ignoring the Stage 3+ trust gate on Push.
-- **#714 (MUX-LISTS-LIFECYCLE-UI)**: body treated "lifecycle vs staleness" as open; source docs already answered (Lists have no lifecycle state; staleness is a distinct concept needing its own design pass). Body and GitHub milestone disagreed (body: Post-MVP; GitHub: MVP). Implementing as written risked treating staleness as a lifecycle stage — conceptual flattening.
-
-**One silent-omission finding:**
-- **#703 (MUX-LIFECYCLE-UI)**: COMPOSTED state — the most distinctive MUX UX concept ("I learned that..." + "filing dreams" framing) — not explicitly required in acceptance criteria. The MVP child issues could ship DEPRECATED → ARCHIVED without ever surfacing the COMPOSTED experience phrase.
-
-**Restructure result:** 4 new issues filed (#1030 MUX-INSIGHT-PULL, #1031 MUX-INSIGHT-PASSIVE, #1032 MUX-INSIGHT-PUSH, #1033 MUX-COMPOSTED-EXPERIENCE), #707 reframed as tracking parent, #714 rewritten (staleness-spec-first scope; "Lists are non-lifecycle" decision folded in), #869 relocated to M2e (IA work, not MUX). New conceptual-integrity gate added to M2d completion criteria.
-
-**Lead Dev's process observation** (worth quoting): "Issues filed during a discovery phase become stale once the discovery completes, and the staleness isn't always reflected back into the issue bodies. This is a normal product-management drift signature. The audit-cascade catches this exactly when it should — between issue and gameplan."
-
-**Suggested action:** Klatch — this pattern is directly transferable. If any Klatch backlog issue contains "TBD pending [research/design/RFC] completion" language, check whether that dependency is still open. If the referenced research is done (e.g., any closed RFC or completed design doc), the issue body needs to fold in the conclusions before it becomes a gameplan. The audit-cascade skill's job is exactly this: verify that live decisions are reflected in implementation-facing artifacts before any code runs.
+**Suggested action:** Klatch — two transferable patterns. First, the **batched audit-cascade walkthrough**: draft all gameplans, surface all ⚠️ items to PM in one thread, get all dispositions, then execute sequentially. PM handled 51 decision points in ~3 hours vs. piecemeal Q&A between issues. Second, the **withhold-until-functional** principle: if any Klatch UI surface has affordances that don't wire to a live backend, prefer the Jinja-comment treatment over showing dead-end UI — hide until the backend lands.
 
 ---
 
-### 3. "The Drift You Don't Notice" published — PM's first insight post, fully syndicated
+### 2. Klatch external intel: SDK 6 versions behind + June 15 deprecation 42 days out + MemPalace reference
 
-**From:** PM commits `47998de` (editorial calendar), `6b41ca5` (Medium/LinkedIn URLs added, May 2)
-**Relevant to:** Klatch Calliope (PM's publication channels + narrative arc; topic resonance with methodology discipline)
+**From:** Klatch `docs/intel/2026-05-04-sweep.md` (commit `f15d72c`, Mon May 4 10:26 UTC — first successful Monday trigger run confirms `allow_unrestricted_git_push: true` fix)
+**Relevant to:** Klatch Argus/Daedalus (P1 dep maintenance + model migration); PM (deprecation deadline awareness)
 
-PM published "The Drift You Don't Notice" on May 2 at `pipermorgan.ai/blog/the-drift-you-dont-notice`. Full syndication confirmed: canonical site, Medium, and LinkedIn (all three in same session). Calendar description: "methodology erosion through imitation" — the image description captures the metaphor: a ghostlike clerk feeding "yesterday's" page into a copier while the original spec sits unused, with copies becoming progressively degraded.
+Two high-priority items from today's automated scan:
 
-**Publication context:** This is PM's first `insight` category post (vs. `ship` newsletter or `building-piper-morgan` narrative). The editorial calendar's insight backlog dates to February 2026; this post unlocks what may become a third publication track alongside the Ship newsletters and the Building Piper Morgan Medium series.
+1. **@anthropic-ai/sdk 0.92.0 published May 1.** Klatch is pinned at `^0.86.1` — six minor versions behind, widening each week. The batch-bump target set in mid-April (`^0.90.0`) should be updated to `^0.92.0`. Batch with Hono 4.12.14 → 4.12.16 at the same dep-maintenance window.
 
-**Topic resonance:** The underlying concern — implementing from yesterday's artifact rather than returning to the current source doc — is directly what the M2d audit-cascade finding (Insight 2) caught in practice this week. The two are related: #707 and #714 were both drifted copies of earlier thinking that weren't updated when the original spec moved. "The Drift You Don't Notice" names the class of problem; the M2d audit is a live instance.
+2. **June 15 Sonnet 4 / Opus 4 retirement: 42 days remaining.** Argus has an open COORDINATION.md follow-up since April 29 to audit `klatch.db` for deprecated model IDs (`claude-sonnet-4`, `claude-opus-4`). That audit is overdue; discovery of substantial migration work at 3 weeks would be uncomfortable vs. now.
 
-**Suggested action:** Klatch Calliope — note PM now has three distinct public channels: weekly Ship newsletters (`pipermorgan.ai/shipping-news/`), longer narrative arcs on Medium (Building Piper Morgan series), and insight posts (`pipermorgan.ai/blog/`). If Klatch ever develops an analogous publication program, the three-track model separates operational cadence (Ship), narrative depth (building story), and standalone methodology insights — each with a different audience posture.
+Also from the scan: **MemPalace** (47K GitHub stars, released April 5) — open-source SQLite + ChromaDB local memory system, 170-token startup cost, 96.6% on LongMemEval, fully offline. The temporal entity-relationship graph (add/query/invalidate/timeline, SQLite-backed) is architecturally close to what Klatch's Step 11 would need for FTS5 + semantic recall. Worth a design-reference read before writing the Step 11 spec; the 170-token startup target is a useful benchmark discipline.
+
+Additional context: Claude Code 2.1.126 ships MCP server auto-retry (3× on transient startup error) — ecosystem signal that transient startup failures are being hardened against. Vercel AI SDK 6 ships `Agent` as a first-class TypeScript abstraction with built-in MCP support; watch for user friction combining Klatch's MCP server with AI SDK 6 clients.
+
+**Suggested action:** Klatch Argus — treat SDK bump and DB audit as P1 this week. File the DB audit issue if one doesn't exist; run it before the next sprint. The MemPalace design-reference read can happen alongside the dep-maintenance window.
+
+---
+
+### 3. "Friction-Focused Feedback" published May 3; ADR-061 PM verbal ratification recorded
+
+**From:** PM commits `f338053` (editorial calendar canonical publish), `25d2acc` (Medium + LinkedIn syndication URLs), `c86ad23` (session log May 3); ratification memo commit `ab5f72c3`
+**Relevant to:** Klatch Calliope (PM publication record + ADR-061 status)
+
+PM published "Friction-Focused Feedback" to pipermorgan.ai/blog on May 3, with Medium and LinkedIn syndicated the same day. This is the second insight-category post in two days ("The Drift You Don't Notice" published May 2). PM's editorial calendar insight backlog dates to February 2026; two posts in quick succession signal the track is now active.
+
+PM's current public output: weekly Ship newsletters (pipermorgan.ai/shipping-news/), Building Piper Morgan narrative series (Medium), and the insight track (pipermorgan.ai/blog/). Ship #041 is pending; Comms is writing an IAC conference retrospective arc.
+
+ADR-061 (ethics detector three-way discriminator architecture) received PM verbal ratification May 3. Lead Dev memoed Architect + PA: "I have ratified it but we don't seem to have done or filed the paperwork yet — you can use my verbal as a go-ahead for now." Formal paperwork pending; implementation can proceed from verbal.
+
+**Suggested action:** Klatch Calliope — the "verbal ratification + memo-to-stakeholders" pattern is useful when an architectural decision needs to unlock implementation before paperwork catches up. If Klatch has an ADR that's approved in session but unfiled, a brief memo-to-COORDINATION.md citing the session context serves the same function. Also note PM's two-track publication model: insight posts (standalone, methodology) vs. building narrative (arc-dependent, longer) — Klatch has natural candidates for both.
 
 ---
 
 ## Sources Read
 
-- `piper-morgan-product/dev/2026/05/02/2026-05-02-1555-lead-code-opus-log.md` — full read; #1018 Phase 2 + cluster, M2d audit-cascade, restructure decisions
-- `piper-morgan-product/dev/2026/05/02/m2d-audit-cascade-findings.md` — full read; per-issue audit matrix, conceptual drift findings, recommendations
-- PM commit `fd338c8` (#1018 Phase 2 feat), `fc79de3` (merge), `0b88e93` (audit findings), `d1c54dd` (restructure + m2-structure.md), `47998de` + `6b41ca5` (editorial calendar + publication) — message/stat reads
-- `klatch` — 48h git log: 3 commits, all brief-delivery; no substantive session activity; Iris walkthrough resume still pending
+- `piper-morgan-product/dev/2026/05/03/2026-05-03-0657-lead-code-opus-log.md` — full read; M2d execution (8 issues), M2e gameplans + walkthrough, #790 shipped, PM walkthrough direction quotes
+- PM merge commits for M2d: `71e847a7` (#704), `66700a08` (#714), `007f8596` (#1033), `1da171a8` (#1030), `9500ab07` (#1031), `9ccc7cf` (#1032), `607c3c4b` (#1034), `5d2e2624` (#1035); `755040b1` (#790 M2e) — stat/message read
+- PM publication commits: `f338053`, `25d2acc`, `c86ad23`; ratification memo `ab5f72c3` — message read
+- `klatch/docs/intel/2026-05-04-sweep.md` — full read; SDK overdue, June 15 countdown, MemPalace, Claude Code 2.1.126, Vercel AI SDK 6
+- Klatch commit `f15d72c` — confirms Monday trigger landed on main (allow_unrestricted_git_push working)
 - `atlas`, `globe`, `cuneo`, `one-job`, `optilisten` — 48h logs empty; skipped
-- `weather`, `nyt-crossword` — 48h logs: brief delivery + automated status prints only; no narrated insights
+- `weather`, `nyt-crossword` — 48h logs: brief delivery + automated status prints only; not listed in sources_checked
 
-**Not re-reported (covered in prior briefs):** Iris walkthrough Surfaces 1-2 (May 2); Ship #040 published (May 2); Phase F ENABLE_ETHICS_ENFORCEMENT=true live + alpha catch-22 (May 1); Iris session 6 composition gap (May 1); The Floor Comes Alive published (May 1); verify-before-assuming methodology + Pattern-064 (Apr 30); branch-discipline synthesis v1.0 (Apr 30).
+**Not re-reported (covered in prior briefs):** M2d audit-cascade NOT PASSED + restructure + 4 new issues filed (May 3); audit_transparency durable storage + transaction-boundary isolation pattern (May 3); "The Drift You Don't Notice" published (May 3); Iris walkthrough Surfaces 1-2 (May 2); Ship #040 (May 2); Phase F ENABLE_ETHICS_ENFORCEMENT=true live + alpha catch-22 (May 1); Iris composition gap + transport-fidelity UX settled (May 1); "The Floor Comes Alive" published (May 1).
 
 ---
 
