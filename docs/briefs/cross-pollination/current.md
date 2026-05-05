@@ -1,72 +1,85 @@
 
-# Cross-Pollination Brief — May 4, 2026
+# Cross-Pollination Brief — May 5, 2026
 
-PM shipped the entire M2d MUX implementation layer in one Sunday session (May 3): 8 issues — Pull/Passive/Push insight surfacing, COMPOSTED anti-surveillance guardrail, lifecycle indicators, staleness signals, plus two pre-work structural issues — merged to main with 221+ new tests and zero regressions. M2e gameplans were drafted, walked through PM (24/24 dispositions), and first issue #790 trust-gated calendar shipped by evening. Klatch's first Monday external intel trigger (fix confirmed working) surfaces two overdue items: SDK 6 minor versions behind and the June 15 Sonnet 4/Opus 4 deprecation deadline now 42 days out with a DB audit still unfiled.
+PM's Monday session extended the M2e sprint with four issues shipped end-to-end (#1027, #1042, #1039, #1040) plus two multi-phase Phase 1 milestones (#869 tabs, #1052 persistence), totalling the fifth multi-issue day in two weeks. Audit-cascade caught a blocking persistence gap in #900 before any implementation code ran — the same stop-and-file pattern as #1018→#1035 one week earlier, now repeating as a confirmed operating discipline. A morning scan also revealed that 12 M2d issues shipped Sunday had never had their GitHub state-transition run; all retroactively corrected with a formal UAT tracker (#1047) filed for the deferred browser-smoke items. Ship #041 workstream reviews landed from all 7 leadership roles; publish target is May 6.
 
 ## Key Insights
 
-### 1. PM: M2d complete — full MUX insight layer ships in one session; M2e launched same day
+### 1. M2e INTENT-COVERAGE arc ships: RepoResolver + milestones/releases + labels/branches in one day
 
-**From:** PM `dev/2026/05/03/2026-05-03-0657-lead-code-opus-log.md`; merges `71e847a7` (#704), `66700a08` (#714), `007f8596` (#1033), `1da171a8` (#1030), `9500ab07` (#1031), `9ccc7cf` (#1032), `607c3c4b` (#1034), `5d2e2624` (#1035), `755040b1` (#790)
-**Relevant to:** Klatch (batched audit-cascade methodology; "don't show non-functional feature" principle; companion-project milestone)
+**From:** PM `dev/2026/05/04/2026-05-04-0637-lead-code-opus-log.md` (commits `2d577225`/#1042, `dc467511`/#1039, `b90b6488`/#1040, `69813e4c`/#1027)
+**Relevant to:** Klatch Daedalus/Argus (intent routing expansion methodology; repo-resolution decision-tree pattern)
 
-The entire M2d milestone shipped in a single 14-hour session. Eight issues merged sequentially: #1035 MUX-COMPOSTING-ACTIVATION (CompostingScheduler wired to startup; InsightJournal backed by PostgreSQL repository — PM directive: "durability is constitutive of what a journal IS"); #1034 STANDUP-STRUCTURED-WORKITEMS (StandupResult carries List[StandupItem] with `__str__` backwards-compat); #704 MUX-LIFECYCLE-UI-A (slot-then-postprocess render pattern, reusable across future surfaces); #714 MUX-LISTS-STALENESS-UI (lazy effective timestamp, 60-day threshold, muted card treatment); #1033 MUX-COMPOSTED-EXPERIENCE (anti-surveillance guardrail at both compost-time and surface-time, single `safe_surface()` source of truth); #1030/#1031/#1032 Pull/Passive/Push insight surfacing (trigger detection, Insight Journal wired to Jan 2026 prior-art backend, channel-agnostic Push eligibility + in-chat renderer).
+Four issues shipped in sequence:
 
-Also notable: **#1036 closed premise-invalid** mid-execution — the live `/api/v1/lists` endpoint was already in `web/api/routes/lists.py` but missed by a Phase -1 grep scoped to `services/api/` only. Saved as feedback memory: Phase -1 endpoint-coverage spikes must search the full route-mounting tree (`web/api/routes/` + `services/api/` + `web/router_initializer.py`).
+**#1027** — `LLMModel.CLAUDE_OPUS` repointed from a Sonnet fallback comment to `"claude-opus-4-7"`. Filed Apr 29 with "wait until Opus 4 ships"; Opus 4 had already shipped before that date. PM caught the stale premise during morning triage; resolved in under 15 minutes. The pattern: issues filed with conditional-on-event language sometimes don't get triaged after the event fires. A periodic "issues with conditional language" sweep would catch these.
 
-**PM UI principle from the walkthrough:** "I don't want to show a non-functional feature." Applied to #1031's topic tabs — markup hidden via Jinja comment until #1037 ships, then a one-line uncomment ships the feature. Three options enumerated: (1) withhold-until-functional [chosen], (2) promise-with-clear-not-yet [rarely justified], (3) build-into-MVP. Withhold is the default.
+**#1042** — New `services/integrations/github/repo_resolver.py` (220 LOC) implementing a 4-level resolution cascade: explicit `owner`/`repo` args → project-linked repo → user `default_repo` preference → `PIPER_DEFAULT_REPO` env var → raise `UnresolvedRepoError`. Removed hardcoded `piper-morgan-product`/`mediajunkie` literals from 14 files, including two USER-FACING chat-message templates that were surfacing PM's GitHub username directly to users. 33 new tests; 64 existing tests clean.
 
-M2e same day: 5 gameplans drafted, 24/24 PM walkthrough dispositions captured, #790 trust-gated calendar implemented by late evening (first M2e issue done). Sequence: #1042 (cleanup, blocks #1039+#1040) → #1039 → #1040; #900/#869 independent.
+**#1039** — `list_milestones_via_mcp` + `list_releases_via_mcp` wrappers; pre-classifier adds 12 patterns; handlers sort milestones by due_on, releases by published_at with "Current version" headline for latest non-prerelease. State-filter and prerelease-filter patterns deliberately withheld per PM Q3/Q4 — filed as #1051 (post-MVP, same "precedent as #1037 for #1031 topic tabs" deferral pattern). 65 new tests, 1525 regressions clean.
 
-**Suggested action:** Klatch — two transferable patterns. First, the **batched audit-cascade walkthrough**: draft all gameplans, surface all ⚠️ items to PM in one thread, get all dispositions, then execute sequentially. PM handled 51 decision points in ~3 hours vs. piecemeal Q&A between issues. Second, the **withhold-until-functional** principle: if any Klatch UI surface has affordances that don't wire to a live backend, prefer the Jinja-comment treatment over showing dead-end UI — hide until the backend lands.
+**#1040** — `list_labels_via_mcp` + `list_branches_via_mcp`; pre-classifier adds 12 patterns with deliberate negative-test exclusions (`label this as urgent`, `branch out from this approach`); handler sorts branches default-first and bundles `default_branch` from a `get_repository_info` call. 63 new tests, 1588 regressions clean.
 
----
-
-### 2. Klatch external intel: SDK 6 versions behind + June 15 deprecation 42 days out + MemPalace reference
-
-**From:** Klatch `docs/intel/2026-05-04-sweep.md` (commit `f15d72c`, Mon May 4 10:26 UTC — first successful Monday trigger run confirms `allow_unrestricted_git_push: true` fix)
-**Relevant to:** Klatch Argus/Daedalus (P1 dep maintenance + model migration); PM (deprecation deadline awareness)
-
-Two high-priority items from today's automated scan:
-
-1. **@anthropic-ai/sdk 0.92.0 published May 1.** Klatch is pinned at `^0.86.1` — six minor versions behind, widening each week. The batch-bump target set in mid-April (`^0.90.0`) should be updated to `^0.92.0`. Batch with Hono 4.12.14 → 4.12.16 at the same dep-maintenance window.
-
-2. **June 15 Sonnet 4 / Opus 4 retirement: 42 days remaining.** Argus has an open COORDINATION.md follow-up since April 29 to audit `klatch.db` for deprecated model IDs (`claude-sonnet-4`, `claude-opus-4`). That audit is overdue; discovery of substantial migration work at 3 weeks would be uncomfortable vs. now.
-
-Also from the scan: **MemPalace** (47K GitHub stars, released April 5) — open-source SQLite + ChromaDB local memory system, 170-token startup cost, 96.6% on LongMemEval, fully offline. The temporal entity-relationship graph (add/query/invalidate/timeline, SQLite-backed) is architecturally close to what Klatch's Step 11 would need for FTS5 + semantic recall. Worth a design-reference read before writing the Step 11 spec; the 170-token startup target is a useful benchmark discipline.
-
-Additional context: Claude Code 2.1.126 ships MCP server auto-retry (3× on transient startup error) — ecosystem signal that transient startup failures are being hardened against. Vercel AI SDK 6 ships `Agent` as a first-class TypeScript abstraction with built-in MCP support; watch for user friction combining Klatch's MCP server with AI SDK 6 clients.
-
-**Suggested action:** Klatch Argus — treat SDK bump and DB audit as P1 this week. File the DB audit issue if one doesn't exist; run it before the next sprint. The MemPalace design-reference read can happen alongside the dep-maintenance window.
+**Suggested action:** Klatch Daedalus — the #1042 RepoResolver decision-tree is a useful pattern for any capability that needs to resolve an implicit target at runtime. The 4-level cascade (explicit → user-preference → env-var → error) separates "what the user said" from "what we infer" cleanly. Also: the negative-test patterns in #1040's pre-classifier (explicitly testing that `label this as urgent` does NOT route to `list_labels_query`) are worth adding to AAXT coverage for any Klatch capability that shares vocabulary with conversational English phrases.
 
 ---
 
-### 3. "Friction-Focused Feedback" published May 3; ADR-061 PM verbal ratification recorded
+### 2. Audit-cascade catches StandupConversation persistence gap before #900 implementation — second instance of the #1018→#1035 pattern
 
-**From:** PM commits `f338053` (editorial calendar canonical publish), `25d2acc` (Medium + LinkedIn syndication URLs), `c86ad23` (session log May 3); ratification memo commit `ab5f72c3`
-**Relevant to:** Klatch Calliope (PM publication record + ADR-061 status)
+**From:** PM `dev/2026/05/04/2026-05-04-0637-lead-code-opus-log.md` (commits `4129fd5`/#1052 feat, `e54a8c1f` merge)
+**Relevant to:** Klatch (audit-cascade as pre-implementation gate; persistence design at gameplan-phase)
 
-PM published "Friction-Focused Feedback" to pipermorgan.ai/blog on May 3, with Medium and LinkedIn syndicated the same day. This is the second insight-category post in two days ("The Drift You Don't Notice" published May 2). PM's editorial calendar insight backlog dates to February 2026; two posts in quick succession signal the track is now active.
+#900 gameplan refresh triggered a Phase 0 spike on `StandupConversation`. Finding: persistence was a module-level singleton dict at `services/conversation/conversation_handler.py:42-43` — lost on restart. Surfacing-then-resume (Phase 4 of #900) requires durability; the gameplan as written could not work.
 
-PM's current public output: weekly Ship newsletters (pipermorgan.ai/shipping-news/), Building Piper Morgan narrative series (Medium), and the insight track (pipermorgan.ai/blog/). Ship #041 is pending; Comms is writing an IAC conference retrospective arc.
+PM disposition: **file #1052 as pre-work** (same as the #1018→#1035 precedent from May 2). Phase 1 (data layer) ships tonight; Phase 2 (manager rewrite + 7 consumer callsites) queued for tomorrow before #900 resumes.
 
-ADR-061 (ethics detector three-way discriminator architecture) received PM verbal ratification May 3. Lead Dev memoed Architect + PA: "I have ratified it but we don't seem to have done or filed the paperwork yet — you can use my verbal as a go-ahead for now." Formal paperwork pending; implementation can proceed from verbal.
+**#1052 Phase 1 delivered same evening:** `StandupConversationDB` SQLAlchemy model with `postgresql.JSONB().with_variant(JSON, "sqlite")` for unit-test compat (mirrors the #1035 lesson learned); `StandupConversationRepository` with `add`/`get_by_id`/`get_by_session_id`/`get_active_for_user`/`update`/`delete`/`count_for_user`; Alembic migration with strategic indexes on `(user_id, state)` + `session_id`; 22 tests covering CRUD + query shape + user-scoping + nested-field round-trip. All pass.
 
-**Suggested action:** Klatch Calliope — the "verbal ratification + memo-to-stakeholders" pattern is useful when an architectural decision needs to unlock implementation before paperwork catches up. If Klatch has an ADR that's approved in session but unfiled, a brief memo-to-COORDINATION.md citing the session context serves the same function. Also note PM's two-track publication model: insight posts (standalone, methodology) vs. building narrative (arc-dependent, longer) — Klatch has natural candidates for both.
+Lead Dev's note: *"The audit-cascade discipline catching the StandupConversation persistence question before any code got written for #900 is exactly the value of running the refresh — same lesson as #1018 → #1035 a week ago."*
+
+**Suggested action:** Klatch — this pattern has now recurred twice in a week, which validates it. Before any Klatch gameplan execution that depends on data being "available" or "resumable" across sessions, an explicit Phase 0 question: *"where does this data persist? Module-level? Repository? DB?"* The question takes 15 minutes to answer; discovering the gap during implementation costs a day. The pattern could be formalized as a one-line gameplan template addition.
+
+---
+
+### 3. Systemic close-issue-properly failure in M2d sprint: 12 issues retroactively corrected; #1047 M2D-UAT filed
+
+**From:** PM `dev/2026/05/04/2026-05-04-0637-lead-code-opus-log.md` (issue cleanup pass 8:11–9:00 AM; commits via close-issue-properly skill)
+**Relevant to:** Klatch (fast sprint → deferred closure hygiene; explicit UAT tracker pattern)
+
+The Sunday M2d sprint shipped 8 issues end-to-end with implementation-evidence comments but without running the GitHub state-transition or updating description checkboxes. PM caught this Monday morning. Full remediation: 8 OPEN issues properly closed (description checkboxes updated first, then state-transition), 4 already-CLOSED issues with unchecked-box drift annotated. Lead Dev's root-cause note: *"description-checkbox-update step is where most closure failures happen."*
+
+**The recurring caveat category:** Most deferred checkboxes were "no manual browser smoke" across the UI issues (#704, #714, #1030-#1033, #1035). Automated tests covered code paths; no end-to-end click-through ran during the sprint. These consolidated into **#1047 M2D-UAT** (P3): a single-pass UAT report targeting one agent in one sitting, producing a `dev/YYYY/MM/DD/m2d-uat-report.md`. Defects (if any) get separate issues with repro steps. Also filed: **#1048** (stage-visual design for Insight Journal page — P4 CXO/PPM design conversation, not a verification gap).
+
+**Suggested action:** Klatch — if any multi-issue sprint completes, add a next-morning hygiene check: `git log --oneline --since="24 hours ago" | grep merge` to list what merged, then verify GitHub state matches. Fast sprints reliably produce the implementation-evidence-without-state-transition pattern; the check prevents silent backlog drift. The #1047 UAT-tracker pattern (consolidate deferred verifications into one named issue rather than leaving them as unchecked boxes in closed issues) is also worth adopting.
+
+---
+
+### 4. Ship #041 workstream reviews in from 7 roles; canonical-vocabulary-watch.md ships; roadmap 23 days stale
+
+**From:** PM commits `21708b9` (CIO workstream), `82e16db` (Arch), `9ad4439` (Comms), et al.; Docs log `2026-05-04-0733-docs-code-opus-log.md`; Docs audit `weekly-docs-audit-1049-2026-05-04.md`
+**Relevant to:** Klatch Calliope (PM publication pipeline; vocabulary watch methodology)
+
+Ship #041 publish target is **May 6**. CIO's proposed theme: **"From Diagnosis to Discipline in 24 Hours"** — the week of Apr 24–30 saw fix-to-validation latency close to <24h in five distinct instances (methodology entry → rubric embedding → hook fix → automation → flag flip). CIO frames this as a Code-era operating signal qualitatively different from Chat-era cadence.
+
+Docs weekly audit (#1049) found **roadmap 23 days stale** (last update Apr 11). M2d scope closed, M2e gameplans walked, Phase F + #992 closed — none reflected. Docs sent a PPM memo proposing five cadence options (trigger-based per CIO audit policy / weekly / session-start hook / workstream-review line item / hybrid). PPM picks the shape; this flags to any project tracking a roadmap that staleness compounds silently when sprint work outpaces doc updates.
+
+**`canonical-vocabulary-watch.md` v1 shipped** (`7153fcf4`) — CIO + Docs joint stewardship. Watch list records terms with multiple live meanings (like "primary" having two senses clarified by CEO May 4). Operating discipline: additions via CIO single-line edits; Docs scans weekly; pruning at audit cadence. Closes M1 audit recommendation S1.
+
+**Suggested action:** Klatch Calliope — note PM's May 6 double publish: "Six Issues Before Dinner" (narrative arc post) + Ship #041 (newsletter). The pattern of pairing a narrative post with the weekly newsletter on the same day collapses the editorial overhead of keeping two tracks synchronized. If Klatch develops a public-facing cadence, the paired-publish model is worth considering.
 
 ---
 
 ## Sources Read
 
-- `piper-morgan-product/dev/2026/05/03/2026-05-03-0657-lead-code-opus-log.md` — full read; M2d execution (8 issues), M2e gameplans + walkthrough, #790 shipped, PM walkthrough direction quotes
-- PM merge commits for M2d: `71e847a7` (#704), `66700a08` (#714), `007f8596` (#1033), `1da171a8` (#1030), `9500ab07` (#1031), `9ccc7cf` (#1032), `607c3c4b` (#1034), `5d2e2624` (#1035); `755040b1` (#790 M2e) — stat/message read
-- PM publication commits: `f338053`, `25d2acc`, `c86ad23`; ratification memo `ab5f72c3` — message read
-- `klatch/docs/intel/2026-05-04-sweep.md` — full read; SDK overdue, June 15 countdown, MemPalace, Claude Code 2.1.126, Vercel AI SDK 6
-- Klatch commit `f15d72c` — confirms Monday trigger landed on main (allow_unrestricted_git_push working)
+- `piper-morgan-product/dev/2026/05/04/2026-05-04-0637-lead-code-opus-log.md` — full read; all M2e execution detail, cleanup pass, deferred-work issues, #900 STOP-and-ask, #1052 Phase 1
+- `piper-morgan-product/dev/2026/05/04/workstream-041-cio-2026-05-04.md` — full read; methodology-to-runtime latency theme, Pattern-062 family, alpha catch-22 capture
+- `piper-morgan-product/dev/2026/05/04/2026-05-04-0733-docs-code-opus-log.md` — full read; discipline lapse, canonical-vocabulary-watch.md, #1049 docs audit findings
+- PM commits `2d577225` (#1042), `dc467511` (#1039), `b90b6488` (#1040), `69813e4c` (#1027), `4129fd5` (#1052), `e54a8c1f` (merge #1052), `1da409d` (#869 Phase 1), `2cd277d3` (merge #869 Phase 1) — message + file-stat reads
+- `klatch` — 48h git log: 1 commit (`44fb30e`, brief delivery only); no new session activity; Iris walkthrough Surfaces 3-8 still pending
 - `atlas`, `globe`, `cuneo`, `one-job`, `optilisten` — 48h logs empty; skipped
-- `weather`, `nyt-crossword` — 48h logs: brief delivery + automated status prints only; not listed in sources_checked
+- `weather`, `nyt-crossword` — 48h logs: brief delivery + automated status prints only; no narrated insights
 
-**Not re-reported (covered in prior briefs):** M2d audit-cascade NOT PASSED + restructure + 4 new issues filed (May 3); audit_transparency durable storage + transaction-boundary isolation pattern (May 3); "The Drift You Don't Notice" published (May 3); Iris walkthrough Surfaces 1-2 (May 2); Ship #040 (May 2); Phase F ENABLE_ETHICS_ENFORCEMENT=true live + alpha catch-22 (May 1); Iris composition gap + transport-fidelity UX settled (May 1); "The Floor Comes Alive" published (May 1).
+**Not re-reported (covered in prior briefs):** M2d complete (8 issues, one session — May 4); M2e gameplans + #790 trust-gated calendar (May 4); SDK 6 versions behind + June 15 deprecation (May 4); ADR-061 verbal ratification (May 4); Friction-Focused Feedback published (May 4); audit-cascade NOT PASSED on M2d gameplans + discovery-phase staleness (May 3); The Drift You Don't Notice published (May 3).
 
 ---
 
