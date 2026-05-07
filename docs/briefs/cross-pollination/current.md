@@ -1,96 +1,79 @@
-# Cross-Pollination Brief — May 6, 2026
+# Cross-Pollination Brief — May 7, 2026
 
-PM's Tuesday session delivered four issues end-to-end: #1052 Phase 2 (StandupConversationManager async rewrite), #900 (standup 3-part structural collection — 5 phases in ~2 hours, gameplan estimated 12–14h), #869 (Project Config IA), and #1055 (Architect cleanup, –1518 LOC). With M2e's persistence pre-work landed, #900 shipped faster than any comparable issue in the sprint. Evening brought the M2 unmapped-families triage: 27 issues across 6 families reviewed with PM, closing 2 superseded items and recording PM decisions on three pending questions. "Six Issues Before Dinner" published Tuesday; Docs caught a Haiku 3 retirement timing inaccuracy during fact-check before it reached readers.
+PM's Wednesday evening was a discipline session: four issues shipped cleanly (#1054 prod bug, #1056 stale test, #1057 ContextAssembler backfill, plus #1053 audit-cascade prep), the Architect's 5-item soundness review punch list fully closed, and #1053 staged for tomorrow's subagent execution. A meta-finding emerged from the audit prep: six N/A flags in one audit pass is a template-drift signal — PM observation filed immediately as both a memory entry and a hygiene ticket (#1058). Ship #041 "The Methodology Closes Its Own Loops" published Wednesday evening — the largest Ship to date by HTML weight.
 
 ## Key Insights
 
-### 1. Pre-work investment pays at velocity: #900 ships in 2h vs. 12–14h estimate; cross-agent git collision surfaced
+### 1. Silent production bug caught while fixing a test: broad `except` swallows uninitialized logger
 
-**From:** PM `dev/2026/05/05/2026-05-05-0643-lead-code-opus-log.md` (commits `4c2e82f9`/#900 merge + 5 phase commits)
-**Relevant to:** Klatch (pre-work-pays-dividends pattern; multi-agent git collision discipline)
+**From:** PM `dev/2026/05/06/2026-05-06-1904-lead-code-opus-log.md` (commit `a374ba3b`, #1054)
+**Relevant to:** Klatch (silent-failure-via-broad-except class; multi-file cleanup regression discipline)
 
-#900's gameplan estimated 12–14 hours. The actual wall-clock time was ~2 hours. Lead Dev's analysis: Phase 1's state-machine design made downstream phases mechanical, and #1052's persistence layer (22 tests, shipped the previous day) had already solved everything Phase 4 needed — partial-capture-on-escape/timeout — before Phase 4 code ran.
+#1054 looked like test drift — `test_generate_standup_for_user` failing on a mock expectation. Root cause on inspection: `MorningStandupWorkflow.logger` was never initialized in `__init__`. #1042's cleanup had added `self.logger.warning(...)` at line 197 of `morning_standup.py` without wiring a logger. `AttributeError` hit at call time and was silently swallowed by a broad `except` in `_get_session_context`, causing it to return `{}` early — skipping `session_manager.get_session_context` entirely. In production the standup function appeared to work; in reality it had been skipping session context retrieval since #1042 merged.
 
-**What shipped:** 5 phases producing a full 3-part standup flow (yesterday → today → blockers), resume protocol (suspend mid-today → replay captured → continue), durable `StandupPartialCapture` JSONB column (PM chose Option B over alternatives: cleaner than 3 columns, avoids stuffing into `context`). 148 tests across 3 files. End-to-end smoke verified via SQLite roundtrip. Known limitation filed rather than hidden: completion-detection regex (`\bdone|stop|finish(ed)?|complete\b`) can false-positive on real items like "finish #900" — LLM-classification upgrade queued post-MVP as #1054's companion note.
+**Why this matters:** The bug would not have surfaced without the test failure, and the test failure looked like drift rather than a production problem. The actual defect — broad `except` eating an `AttributeError` and returning a degraded value silently — is the hard-to-detect class. Lead Dev's note: "the #1042 cleanup added a logger call but no logger init."
 
-**Cross-agent git collision:** A parallel agent's `git reset` wiped Lead Dev's uncommitted Phase 3 work twice during implementation. PM intervened, warned other agents off the critical path. Lead Dev recovered cleanly on the third attempt using immediate commit-and-push discipline (not waiting until phase completion). This is the same collision pattern that surfaced in April worktree incidents — the mitigation that works is: **commit after each functional unit, not at phase boundary.** Smaller commits, more frequent pushes, on a critical-path branch where parallel agents are active.
-
-**Suggested action:** Klatch — the #1052→#900 sequence validates the "persistence-first" pattern reported May 5. More broadly: the velocity gain here is measurable (2h vs. 12–14h estimated). If a Klatch issue has a data-layer dependency, shipping the persistence pre-work first (even as a short standalone ticket) isn't overhead — it eliminates the discovery-mid-implementation delay that costs the most time. For multi-agent git safety: any agent on a critical implementation path should commit to its branch after each function or module, not at end-of-phase. This makes a parallel agent's `git reset` survivable.
+**Suggested action:** Klatch — any multi-file cleanup commit that touches callsites (adds/removes calls) should include a quick scan of the callee's `__init__` for initialization completeness. Also worth auditing: any function that returns a default value from a broad `except` block is a silent-failure surface. The shape `except Exception: return {}` is common and dangerous; if the except block doesn't log the error, the failure is invisible.
 
 ---
 
-### 2. M2 unmapped-families triage: 27 issues, 6 families, 3 PM decisions — M2f/M2g sub-epic map proposed
+### 2. N/A count ≥5 in one audit = template drift signal; #1058 filed for agent-prompt-template staleness
 
-**From:** PM `dev/2026/05/05/m2-unmapped-families-triage-verdicts-2026-05-05.md`; Lead Dev log `2026-05-05-0643` (commits `fa8683e`, `2d73105`)
-**Relevant to:** Klatch (family-level backlog triage methodology; conditional-on-event issue hygiene)
+**From:** PM `dev/2026/05/06/2026-05-06-1904-lead-code-opus-log.md` (commit `d88c5b2d`, #1053 audit-cascade prep); memory entry `feedback_audit_cascade_n_a_count_signals_template_drift.md`
+**Relevant to:** Klatch (audit-cascade methodology; template maintenance discipline)
 
-PA queued this ask on May 4; Lead Dev executed it on the afternoon of May 5. Shape: same audit-cascade structure applied to 27 issues sorted into 6 families, same verdict taxonomy (SUPERSEDED / STILL NEEDED / NEEDS PM CALL / RE-SCOPED).
+#1053's Phase 3 prompt audit generated 6 N/A flags (out of 42 requirements): single-session subagent, mechanical migration, no server state, no Cursor. PM's reaction: six exemptions from one audit suggested the template itself might be stale for the issue class, not just that this particular issue was unusual. Observation filed as a new memory entry and as **#1058** (agent-prompt-template hygiene review: stale Cursor Agent references and other drift).
 
-**Results:**
-- **2 SUPERSEDED** — #101 (temporal context fully shipped via #951; close-supersede) + #100 (basic project portfolio shipped, but analytics/allocation layer not shipped; re-scope and file narrower issue)
-- **22 STILL NEEDED** — distributed across security/infra, integrations, context, memory, testing, UI/process
-- **2 NEEDS PM CALL** — #304 (Notion integration: is the pre-floor code still intact? is Notion in alpha scope?) + #471 (Infrastructure parent epic: keep as one epic or break into M3 sub-epics?)
+**The meta-pattern:** audit templates accumulate drift from the outside — new issue types, new toolchains, deprecated workflows — and this drift shows up as repeated N/A flags before it shows up as a failed audit. The N/A count is a leading indicator, not a lagging one. Once the count crosses ~5 in a single pass, the template is worth reviewing, independent of whether the audit passed.
 
-**PM walked 3 decisions same session:** #987 GEMINI-QUOTA closed (Option 3 — Gemini stays as a real provider, billing call deferred); #991 ETHICS-RESPONSE-GATE closed (Option A for alpha — CXO non-binding view from Apr 16 ratified); #983 CONTEXT-BLOCKED pending Architect decision on canonical "blocked" label convention (memo sent).
+All 3 audit phases (#1053 issue / gameplan / prompts) passed with PM approval on the N/A items. Tomorrow's deployment: Lead Dev creates worktree, deploys subagent with prompt body (BEGINS/ENDS-marked in `dev/2026/05/06/1053-prompts.md`), runs post-execution audit before escalating to PM.
 
-**Sub-epic placement proposed** (PA+PM call): M2f post-floor-coverage (#983/#984/#985/#986 — all explicitly deferred from #951); M2g memory governance (#972/#973/#974/#975 — Janus-aligned); M2-discovered testing infra (#987/#989/#991/#993/#994/#995); M3/post-alpha production hardening (#482/#470/#557/#542/#371/#366/#472). M2 open-issue surface: 56 → 49 (7 closed or close-superseded today).
-
-**The structural insight:** Issues filed during a discovery phase with conditional-on-event language ("pending billing call", "pending PM decision") reliably drift past their trigger date without auto-update. #101 was filed with "TBD" language; temporal context shipped March 2026; nobody closed #101. The family-level triage sweep is what catches this. PA's prior read ("likely high close-supersede rate in Family 3") was accurate; Family 3 had the most supersession.
-
-**Suggested action:** Klatch — if there are any backlog issues filed during a research or design phase with "pending X" language, run a sweep: check whether X has shipped. Issues filed before a shipped feature are the highest-probability close-supersede candidates. The per-family verdict taxonomy (SUPERSEDED / STILL NEEDED / NEEDS PM CALL / RE-SCOPED) is a clean structure for this kind of backlog audit. PA's role in PM (writing the ask memo, receiving the verdicts, proposing sub-epic placement) is worth noting: the triage itself is Lead Dev work, but the synthesis and sub-epic architecture is a coordination function.
+**Suggested action:** Klatch — if the AAXT template or any Klatch audit checklist regularly generates N/A flags for a class of work (e.g., pure-test issues, infrastructure-only changes), consider a variant template for that class rather than accumulating N/A overrides each time. The N/A accumulation is correctness overhead that grows silently.
 
 ---
 
-### 3. Architect soundness review actioned same session it was read: #1055 removes –1518 LOC
+### 3. Architect's soundness review fully closed: #1057 ships structlog + caplog incompatibility documented
 
-**From:** PM `dev/2026/05/05/2026-05-05-0643-lead-code-opus-log.md` (commits `e6fe05c`/#1055 feat, `589285f` merge)
-**Relevant to:** Klatch (review-to-action discipline; Pattern-064 alive scaffolding)
+**From:** PM `dev/2026/05/06/2026-05-06-1904-lead-code-opus-log.md` (commits `9a59518c` #1057 feat, `c0704ab` log update)
+**Relevant to:** Klatch (structlog test patterns; review-completion discipline)
 
-The Architect's soundness review was filed April 13 and returned a verdict May 4: "structurally sound, 5 cleanup items, none blocking." Lead Dev read the review May 5 morning, filed #1055 consolidating items 1-3, and shipped it same session (~40 minutes).
+May 6 brief covered #1055 (items 1-3 of the Architect's 5-item punch list). Item 4 landed tonight: `ContextAssembler` test backfill for `f2408df6` (a no-tests commit on the context-contract path). Four tests added to `test_context_assembler.py` (22/22 pass):
 
-**What was removed:**
-- Pattern-064 alive scaffolding in `KnowledgeGraphService` — an unused `EthicsBoundaryEnforcer` parameter + 5 if-guarded blocks + 3 callsites that had never been wired
-- Legacy `services/ethics/boundary_enforcer.py` (441 LOC) + 2 dependent test files — the refactored successor had been live for months; the original sat parallel to it
-- Commented-out adaptive-learn dead allocation in `boundary_enforcer_refactored.py:343-358`
+- `TestUnknownCategoryFallback` × 2: UNKNOWN fallback path with/without user_id
+- `TestContextContractEmptyDataWarning` × 2: warning emission verified
 
-Net: –1518 lines, +3 lines. 112/112 ethics tests pass. #1056 filed for 2 pre-existing KG test failures discovered during verification (not introduced by #1055).
+**Structlog + caplog incompatibility documented:** `caplog` (pytest's standard log capture) doesn't capture structlog-emitted records cleanly. Fix: patch the structlog logger directly. Lead Dev documented this pattern in the test docstring. Item 5 of the soundness review is #1015 (already tracked, pre-existing). Punch list fully closed.
 
-**Pattern-064 context:** "Extension Without Integration" — code added to a live system in a speculative hook style, never wired. Named in the Klatch→PM brief Apr 27 as the third member of the 062/063/064 family. #1055 is the first substantial PM cleanup directly attributable to that pattern diagnosis.
-
-**On review-to-action latency:** The 22-day gap between Architect filing the review (Apr 13) and Lead Dev reading/acting on it (May 5) is worth noting. The review was non-blocking; PM direction was to queue post-#900. The discipline of acting on it the same session it was read (not opening it and filing "will do later") is what prevented further drift. One read = one action.
-
-**Suggested action:** Klatch — any Architect-equivalent structural review that finds "none blocking" items should have a named cleanup ticket filed before the review session ends, even if execution is deferred. The filing anchors the work; without it, "none blocking" items reliably stay open indefinitely. The ~40-minute execution window for –1518 LOC cleanup shows that once the scope is well-defined (three items, clear files), the work is fast. The cost is in the gap between finding and filing.
+**Suggested action:** Klatch — if Klatch uses structlog (or any structured logger), the `caplog`-doesn't-capture-structlog finding is directly applicable. The fix (patch the logger, not caplog) is straightforward but non-obvious. Worth adding to Klatch's test conventions if structlog is in the stack.
 
 ---
 
-### 4. "Six Issues Before Dinner" published; Docs fact-check catches Haiku 3 timing error
+### 4. Ship #041 published: "The Methodology Closes Its Own Loops" — largest Ship to date
 
-**From:** PM commits `c58c205`, `6282063f` (calendar + publish); `507f997e` (Medium URL); Docs log `2026-05-05-0658-docs-code-opus-log.md`
-**Relevant to:** Klatch Calliope (publication fact-check discipline; Docs editorial role)
+**From:** PM commit `219a47a` (Ship #041 canonical publish + LinkedIn syndicated); `docs/public/comms/drafts/published/weekly-ship-041-the-methodology-closes-its-own-loops.md`
+**Relevant to:** Klatch Calliope (PM publication record; methodology-to-automation arc publicly documented)
 
-"Six Issues Before Dinner" — PM's Tuesday narrative post in the Building Piper Morgan series (Medium-only, per building cadence) — published May 5 afternoon after a PM voice pass + Docs proofread. The article covers the April 14–15 arc: six issues shipped in one session, four days under the Haiku 3 deadline.
+Ship #041 published Wednesday evening (canonical pipermorgan.ai + LinkedIn syndication). Final title: "The Methodology Closes Its Own Loops" — PM's choice over CIO's proposed "From Diagnosis to Discipline in 24 Hours." HTML weight: 27,716 chars / 93 lines (largest Ship to date per Docs build log).
 
-**Docs fact-check caught one inaccuracy:** Article draft stated Haiku 3 retired "by midday Wednesday." Docs sourced the Lead Dev session log from April 14–15 directly; actual retirement time was "11:30 PM Wednesday." Corrected to "by late Wednesday night" before publish. All other numerical claims in the article (6,246 tests, 26 methods, 911 lines, 58 of 61 routing, 61 of 61 structure, 120 tests dropped, 6,125 passing, 10 files) verified exact against source logs.
+Coverage window April 24–30. Centerpieces: #992 ETHICS-ACTIVATE arc (5 months → 6 calendar days to close); Pattern-062 family completion (062 + 063 + 064 in one week); methodology-to-runtime latency under 24h in five distinct instances. Lead Dev note in the commit: two typos fixed per PM authorization (last week's → Last week; shiping → shipping). PP-002 framing retained as a deliberate public-prose voice departure ("critical vs. commodity" not "load-bearing") — memory entry pinned to explain the deviation.
 
-**PM note mid-session:** After an earlier branch-drift incident (Docs's commit landed on Lead Dev's active worktree branch instead of main), PM reminded Docs: "be mindful of Lead Dev's work and try not to clash with them." Docs added `git branch --show-current` before every commit as a new discipline — third such incident in the cycle (PA Apr 29, Lead Dev May 3, Docs May 5). The pattern: in a multi-agent repo, branch-check before every commit is the lowest-cost collision prevention available.
+M2 surface review reached full closure Wednesday (Topics 1-7 complete). Topic 7 final action: #471 Infrastructure parent broken out into discrete sub-issues (Conversation Repo → M3; OAuth-multi → M2f-or-M5 PM call; Learning Phase 3 → M4; TimeSeries duplicate of #371 closed), parent closed. #304 Notion investigation gated on a phase-1 doneness assessment before sub-epic placement.
 
-Medium URL added same session: `https://medium.com/building-piper-morgan/six-issues-before-dinner-aa5158df10d5`. Editorial calendar fully updated. *A Hail of Memos* (next Thursday's narrative) was proofread the same day; 5 fixes applied; queued for May 7.
-
-**Suggested action:** Klatch Calliope — PM now has three active public channels: weekly Ship newsletters, Building Piper Morgan narrative (Medium, published Tuesdays), and insight posts on pipermorgan.ai/blog/. The fact-check discipline Docs runs before each narrative publish — sourcing numerical claims directly to session logs — is worth encoding formally if Klatch develops any public writing. "Where exactly is this number from?" before publication, not after.
+**Suggested action:** Klatch Calliope — note the "deliberate public-prose voice departure" memo pattern: PM explicitly logged that "critical vs. commodity" (not the internal canonical term "load-bearing") was an intentional choice for public writing, then pinned a memory entry to explain it. For any Klatch public writing that diverges from internal terminology, the same explicit-deviation-plus-memory pattern prevents later confusion about whether the divergence was intentional.
 
 ---
 
 ## Sources Read
 
-- `piper-morgan-product/dev/2026/05/05/2026-05-05-0643-lead-code-opus-log.md` — full read; #1052 Phase 2 + #900 + #869 + #1055 + M2 triage + PM decisions
-- `piper-morgan-product/dev/2026/05/05/m2-unmapped-families-triage-verdicts-2026-05-05.md` — full read; per-family and per-issue verdicts, sub-epic proposals
-- `piper-morgan-product/dev/2026/05/05/2026-05-05-0658-docs-code-opus-log.md` — full read; Docs session (Six Issues publication, Hail of Memos proofread, branch-drift incident)
-- PM commits: `4c2e82f9` (#900 merge), `efdf3b8b` (#1052 Phase 2), `11303f83` (#869 merge), `589285f` (#1055 merge), `e6fe05c` (#1055 feat), `fa8683e` + `2d73105` (M2 triage verdicts + PM-decisions memos), `6282063f` + `507f997e` (Six Issues calendar + Medium URL) — stat/message reads
-- `klatch` — 48h git log: 2 commits (brief delivery only); no new session activity; Iris walkthrough Surfaces 3-8 still pending
-- `atlas`, `globe`, `cuneo`, `one-job`, `optilisten` — 48h logs empty; skipped
-- `weather`, `nyt-crossword` — 48h logs: brief delivery + automated status prints only; no narrated insights
+- `piper-morgan-product/dev/2026/05/06/2026-05-06-1904-lead-code-opus-log.md` — full read; #1054 prod bug, #1056 test fix, #1057 ContextAssembler backfill, #1053 audit-cascade prep phases 1-3, #1058 filed, sign-off
+- `piper-morgan-product/dev/active/m2-surface-review-decisions-2026-05-03.md` — tail read; Topic 7 final verdicts, #471 break-out plan, #304 gating
+- `piper-morgan-product/docs/public/comms/drafts/published/weekly-ship-041-the-methodology-closes-its-own-loops.md` — partial read; Ship #041 content, PM voice choices
+- PM commits `219a47a` (Ship #041 publish), `c0704ab` (#1057 log), `d88c5b2` (#1053 prep), `9a59518` (#1057 feat), `a374ba3` (#1054+#1056 fixes), `ac15a36` (M2 Topic 7 complete) — message + stat reads
+- `klatch` — 48h git log empty; no new session activity; Iris walkthrough Surfaces 3-8 still pending
+- `atlas`, `globe`, `one-job`, `optilisten` — 48h logs: brief deliveries / automated status prints only; no narrated insights
+- `cuneo`, `weather`, `nyt-crossword` — 48h logs empty; skipped
 
-**Not re-reported (covered in prior briefs):** #1052 Phase 1 + audit-cascade persistence gap catch (May 5); M2e INTENT-COVERAGE arc (#1042/#1039/#1040/#1027) (May 5); close-issue-properly 12-issue remediation + #1047 UAT (May 5); canonical-vocabulary-watch.md ships (May 5); Ship #041 workstream reviews filed (May 5); M2d complete + M2e gameplans + #790 (May 4); SDK 6 versions behind + June 15 deprecation (May 4); "Friction-Focused Feedback" published (May 4); audit-cascade NOT PASSED on M2d + discovery-phase staleness (May 3).
+**Not re-reported (covered in prior briefs):** #900 2h ship + pre-work-pays-dividends + cross-agent git collision (May 6); M2 unmapped-families triage 27 issues + M2f/M2g sub-epic map (May 6); #1055 –1518 LOC + Pattern-064 alive scaffolding (May 6); Six Issues Before Dinner published + Docs fact-check (May 6); M2e INTENT-COVERAGE arc #1042/#1039/#1040 (May 5); #1052 persistence gap audit-cascade catch (May 5); close-issue-properly 12-issue remediation (May 5); canonical-vocabulary-watch.md ships (May 5); Ship #041 workstream reviews filed (May 5); M2d complete + M2e gameplans (May 4); SDK 6 overdue + June 15 deprecation (May 4).
 
 ---
 
