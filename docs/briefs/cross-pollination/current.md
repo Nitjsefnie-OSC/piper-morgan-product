@@ -1,101 +1,80 @@
 
-# Cross-Pollination Brief — May 8, 2026
+# Cross-Pollination Brief — May 9, 2026
 
-PM's Thursday morning was a completion session: #1053 went from "staged" to "shipped" via a ~30-minute subagent execution, a 16-check post-execution audit, and PM approval — closing the test-migration arc that had been in prep since May 6. Two new cross-agent collision-discipline findings landed in memory from this session, refining the earlier "commit-per-functional-unit" pattern. "A Hail of Memos" published to pipermorgan.ai. Notion's pre-floor codebase verified at 1,504 LOC, 35% larger than the 2025 estimate that had been blocking #304's sub-epic placement.
+PM's Friday was a late-day surge: the PreCompact hook shipped as the third layer of sign-off discipline, #1063 stale-test rewrite closed in 15 minutes (the discovered-work arc from Thursday's subagent is fully resolved), and a P0 quality-regression investigation refuted the fabrication hypothesis — the apparent drop from 72.1% to 65.6% is judge miscalibration and fixture pollution, not model degradation. CIO completed promotion analysis for Patterns-063, -064, and -065 from Emerging to Proven. M2f opens per CEO directive; M2f audit-cascade work is gated on pre-M2f remediation establishing a clean baseline. Klatch has no new session activity this window.
 
 ## Key Insights
 
-### 1. #1053 subagent arc complete: "annotation not improvisation" as the right subagent behavior under scope-over
+### 1. PreCompact hook (#86) ships: warn-only discipline at the context boundary
 
-**From:** PM `dev/2026/05/07/2026-05-07-0640-lead-code-opus-log.md` (commits `69aa5e74` merge, `0217a40f` audit, `fc7f685e` log); `dev/2026/05/07/1053-execution-audit.md`
-**Relevant to:** Klatch (subagent deployment patterns; test-migration discipline)
+**From:** PM commit `76f049a3` (`feat(hooks): PreCompact sign-off discipline warning`); `7f79880` (log); merge `7769ef39`
+**Relevant to:** Klatch (Daedalus, Mnemosyne; sign-off discipline; compaction boundary coverage)
 
-Subagent deployed 6:48 AM, completed ~7:18 AM — 4 phases in ~30 minutes. Audit matrix: 16 checks, all ✅ except one ⚠️ (cross-agent collision, not the subagent's fault — documented separately). Key methodology findings:
+`.claude/hooks/precompact-signoff-warning.sh` is now the third layer of sign-off discipline — after the agent's own checklist and Docs's merge-keeper sweep. It fires before context compaction and checks three conditions: uncommitted changes, unpushed commits, commits ahead of origin/main. Warn-only: PreCompact hooks cannot block, so the value is making the failure visible before context loss, to the agent who can still act. Fires to stderr + appends to `dev/active/session-end-warnings.log` (gitignored, ephemeral per-machine data).
 
-**Phase 2 reframe:** The prepped gameplan over-scoped `test_standup_routing_585.py` — 12 tests already passing, no migration needed. Subagent annotated the rationale in a commit message rather than improvising ("annotate test_standup_routing_585.py rationale (no migration needed)"). Lead Dev noted: "This is the expected 'audit-cascade prep imperfect; subagent finds reality' behavior — and the subagent surfaced it via commit message rather than improvising silently." The right subagent behavior when scope over-estimates the work: announce the discrepancy, don't fill the gap.
+Design rationale in the commit message: "Logs to `dev/active/session-end-warnings.log` (gitignored as ephemeral per-machine data; tailed by Docs merge-keeper sweep). References Rule 2 + the three 'pick one' options (merge / NOTICE memo / ask PM). Per Docs Apr 29 go-ahead (PM authorized 'let's upgrade'); deferred SessionEnd until PreCompact catch-rate is observed." The catch-rate observation before adding a SessionEnd hook is a deliberate staged-rollout decision.
 
-**12 stale tests discovered (#1063):** Tests that asserted `GATHERING_PREFERENCES` as the initial standup state were broken after #900 changed the entry point to `GATHERING_YESTERDAY`. These had appeared as `RuntimeWarning` collection errors (invisible to normal test runs) rather than failures — which is why #900's close missed them. Subagent skipped with consistent `@pytest.mark.skip(reason="#1063 ...")` rationale on each test, did not delete. Filed #1063 as discovered work.
+Also closed same session: **#1063 in 15 minutes.** The 12 stale standup tests discovered by Thursday's subagent (filed with skip rationale, reported in May 8 brief) were rewritten by Lead Dev using three patterns: (a) state-machine assertions updated to `GATHERING_YESTERDAY` (post-#900 entry point), (b) workflow-error/fallback paths using `"quick"` bypass to GENERATING, (c) full-flow walks for the three tests that exercise the per-part flow. Net: 12 skips → 0 skips; standup directory 351 → 363 passing. The complete arc: subagent skips with rationale → next-session Lead Dev rewrites — confirms the "annotate, don't improvise" subagent pattern reported May 8 has a clean downstream.
 
-**Audit completeness:** Lead Dev verified production code unchanged, fake test-double unchanged, reference implementation unchanged — only 4 test files touched. `bind_session_id` E2E coverage added (2 tests). All 16 checks documented in a standalone audit file committed to the repo before merge.
-
-**Suggested action:** Klatch — if deploying subagents for test migration or similar bounded tasks, the 16-check audit matrix pattern (`1053-execution-audit.md`) is worth reviewing. Key checks: scope-only files touched, discovered work filed with consistent skip rationale, production code diff empty, subagent did NOT self-merge. The "Phase 2 reframe" finding also validates: subagents should be briefed on what to do when they encounter a phase that needs less work than specified — annotation via commit message is the right call, not silent under-delivery or over-delivery.
+**Suggested action:** Klatch — if Daedalus or Mnemosyne doesn't already have PreCompact coverage, this is a low-cost addition: 3 git checks, warn-only, exit 0 always. The three-layer model (agent checklist → merge-keeper sweep → PreCompact hook) is complete in PM and could map directly. The decision to stage SessionEnd separately until catch-rate is observed is worth adopting — adding two hooks simultaneously makes it hard to attribute which one fires.
 
 ---
 
-### 2. AND-chain verification gap: `&&` chains don't gate on branch-check output, only exit code
+### 2. #1064 investigation: retest quality drop was judge miscalibration + fixture pollution, not fabrication
 
-**From:** PM `dev/2026/05/07/2026-05-07-0640-lead-code-opus-log.md` (§ "07:00 — Cross-agent git collision"); Docs session log `2026-05-07-1056-docs-code-opus-log.md` (§ "New discipline absorbed")
-**Relevant to:** Klatch (all agents; multi-agent git discipline; subagent worktree requirements)
+**From:** PM commit `271397a8` (`investigation(#1064): fabrication regression hypothesis refuted`); `e16c26b` (log update with full investigation narrative)
+**Relevant to:** Klatch (Argus; eval harness discipline; fixture-hygiene; judge-calibration methodology)
 
-May 7's collision is a new variant of the April–May collision pattern, adding two specific technical findings that weren't in the earlier write-ups:
+Canonical retest Run 4 (M2f-entry baseline) showed quality 65.6% vs. Apr 16 baseline 72.1% — a 9% apparent regression. CEO called P0 investigation with the directive "rather find no, didn't go deeper than [X], than stop because we found [Y]." Lead Dev's investigation findings committed to `dev/2026/05/08/floor-fabrication-investigation.md`:
 
-**Finding 1 — `&&` chains print but don't gate.** Lead Dev ran: `git branch --show-current && git add ... && git commit ...`. The subagent's `git checkout claude/1053-...` had flipped the shared `.git` HEAD mid-session. `git branch --show-current` printed the wrong branch name — but because `git branch --show-current` exits 0 regardless of what it prints, the `&&` chain ran the commit anyway. The commit landed on the feature branch. Verification that doesn't gate on its output is not verification.
+- **0 of 10 auto-fails confirmed as pure LLM fabrication**
+- **7 of 10** are judge-calibration / methodology / fixture artifacts (false flags)
+- **3 of 10** are real-but-narrow code bugs: 3 hardcoded sites in `intent_service.py` reference a disabled setup-wizard, 1 `#N` slot-filling bug for issue references, possibly 2 routing-miss queries
 
-**Fix (now in memory as `feedback_branch_show_current_before_every_commit.md`):**
-```bash
-# WRONG — prints but doesn't gate:
-git branch --show-current && git add ... && git commit ...
+**Q56 smoking gun (fixture pollution):** "Show my todos" was flagged as fabrication — the canonical test user had 15 real todos in the DB (7×"review the deployment plan", 7×"review prs", 1×"smoke"), accumulated from prior retest runs that executed Q53/Q54 "add todo" mutations without cleanup. The repetition pattern was real DB rows, not LLM degeneration.
 
-# RIGHT — gates on the check:
-[ "$(git branch --show-current)" = "main" ] && git add ... && git commit ...
-# OR: run as separate command, eyeball output, then commit
-```
+**Systemic finding:** Judge over-weights user-context-specificity even on identity/capability queries that don't need it. The auto-fail rule (any dim=0 → FAIL) amplifies this miscalibration — a single judge-dimension calibration drift turns into a FAIL even when other dimensions scored correctly.
 
-**Finding 2 — Subagent deployment requires worktree OR commit-before-deploy.** When a subagent runs `git checkout <branch>` in the same `.git` directory as its deploying agent, it flips HEAD for the deploying agent. Two safe options: use a real `git worktree add` (separate checkout, independent HEAD); or commit all foreground work to its branch BEFORE deploying the subagent. The May 6 "commit-per-functional-unit" mitigation remains valid but is downstream of this — it minimizes the loss when a collision happens; these two options prevent the flip.
+Recommendation accepted: re-classify #1064 P0 → P1. Pre-M2f remediation = fixture reset + judge recalibration confer (CXO/PPM) + 3 narrow bug fixes + clean retest to establish baseline. **M2f audit-cascade work is blocked until this baseline is met** per CEO directive May 8 17:22.
 
-**Propagation:** Docs absorbed both findings from the overnight memory entry and confirmed adoption in its May 7 session log (gated-check form or explicit eyeball, enforced before every commit).
-
-**Suggested action:** Klatch — for any multi-agent setup where one agent deploys a subagent in the same repo directory: add `git worktree` to the worktree-per-session discipline, or establish a "commit everything to your branch before deploying" norm. The `&&`-chain finding is also non-Piper-specific: any shell-scripted git workflow that embeds a branch check as a `&&` prefix should be converted to a gated form.
+**Suggested action:** Klatch — for any eval harness running tests that write to the DB (standup flow, list-add actions, etc.): add explicit fixture teardown per run or use a per-run isolated schema. The Q56 finding shows that DB mutations from one run contaminate the next without visible error — only symptoms (repetition patterns) that can look like hallucination. Also worth reviewing: does your judge calibration distinguish between queries that require user-context-specificity and those that don't? If not, a single judge-dimension miscalibration → FAIL on identity queries is a common false-positive shape.
 
 ---
 
-### 3. "A Hail of Memos" published; footer cadence rule encoded in memory
+### 3. Patterns-063/064/065 all promoted Emerging → Proven in one CIO session
 
-**From:** PM commit `3f21306` (`content: A Hail of Memos published — fixes applied + footer + calendar`)
-**Relevant to:** Klatch Calliope (publication cadence; footer-tease discipline; numeric-to-metaphor headline pattern)
+**From:** PM commit `8d4cc13` (`pattern+methodology(cio): promote Pattern-063, -064, -065 from Emerging to Proven`); analysis file `dev/active/cio-pattern-promotion-analysis-2026-05-08.md`
+**Relevant to:** Klatch (all agents; pattern lifecycle discipline; Pattern-064 "alive scaffolding" directly Klatch-relevant)
 
-"A Hail of Memos" (Building Piper Morgan series, content date April 16) published Thursday to pipermorgan.ai/blog/a-hail-of-memos. Two final fixes per PM authorization: "state of art" → "state of the art"; footer tease corrected from "Audit and Talk" (Tuesday's upcoming narrative) to "The Inchworm Position" (Saturday's insight post).
+CIO completed promotion analysis for all three patterns simultaneously — the 062 family is now fully Proven:
 
-**The footer rule, now pinned in memory (`feedback_footer_teases_next_post_on_calendar_any_category.md`):** Footer teases should point to the very next post on the editorial calendar, regardless of category. "Audit and Talk" would have been correct if the next post were on Tuesday, but the cadence rule applies across all post types — insight, narrative, newsletter — so the next-in-sequence is the right target even if it's a different category than the current post.
+- **Pattern-063 (Parallel-Authoring Drift):** 3 independent surface validations: diagnostic at C-axis origin; branch-or-anchor rule shipped to 2 surfaces (Methodology-24 + Colleague Test v2.3) without recurrence; Architect May 4 review found a code-layer instance (legacy/refactored `boundary_enforcer.py` coexistence). Promoted Emerging → Proven.
 
-**Title voice discipline:** Draft title "Thirty-Seven Memos" (numeric) was renamed to "A Hail of Memos" (metaphor) during PM's May 5 voice pass. Pattern consistent with prior headline choices: specificity of the content is preserved in the body, not the headline. The numeric headline tends to read as a list post; the metaphor leads with tone.
+- **Pattern-064 (Extension Without Integration / "alive scaffolding"):** Architect-authored Apr 28. Validation: Architect's May 4 review identified 2 new in-the-wild instances using the pattern's exact "alive scaffolding" framing (`KnowledgeGraphService` alive scaffolding + `boundary_enforcer_refactored.py:343–358` commented-out adaptive-learn TODO). "Pattern operationally diagnostic at population scale" — the framing accurately predicts what you find when you look. Architect concurrence implicit through diagnostic use; CIO holds promotion authority per policy.
 
-Medium syndication pending (per Building PM cadence: Medium-only for narrative posts).
+- **Pattern-065 (Continuity Memo Before the Seam):** 6-section structure operated without structural failure across 7 cohort migrations Apr 22–26; decreasing review-volume signal observable; Section 6 candor invitation produced a PP-002 tier-3 signal via HOST 360 v0.2. All three pattern claims validated.
 
-**Suggested action:** Klatch Calliope — if there's a footer-tease convention in any Klatch public-facing document (blog, newsletter, release notes), encoding the "next post regardless of category" rule as a standing editorial convention prevents the "I teased the wrong post" correction loop after each publish.
+The 062 family (Assembly Assumption / Parallel-Authoring Drift / Extension Without Integration / Continuity Memo Before the Seam — 062/063/064/065) is now fully Proven. Promotion memo distributed to all 11 leadership inboxes including Architect (Pattern-064 author).
 
----
-
-### 4. Notion pre-floor codebase measured at 1,504 LOC — 35% larger than Aug 2025 estimate
-
-**From:** PM `dev/2026/05/07/2026-05-07-0640-lead-code-opus-log.md` (§ "06:50 — #304 Notion Phase -1 investigation FILED (#1059)")
-**Relevant to:** Klatch (scope-surprise from stale estimates; "measure before you plan" discipline)
-
-#1059 filed as a Phase -1 spike to gate #304's sub-epic placement. Lead Dev verified the pre-floor Notion code: `services/integrations/mcp/notion_adapter.py` at 867 LOC + `services/intelligence/spatial/notion_spatial.py` at 637 LOC = **1,504 LOC total**. The original claim driving #304's scope estimate: 1,112 LOC (filed Aug 2025). Actual is 35% larger — the code grew while the estimate sat unchanged.
-
-PM ratified Wednesday: Notion IS in alpha scope. #1059 delivers a memo-only investigation (no activation work) to determine whether the pre-floor Notion code is in a condition to activate or whether it needs rework before sub-epic placement.
-
-**The structural finding:** Stale LOC estimates compound silently. A codebase that was 1,112 LOC in August is 1,504 LOC in May — but the issue's scope narrative hadn't updated. The Phase -1 investigation pattern (measure the actual state before scoping the work) surfaces this before it surprises an agent mid-implementation.
-
-**Suggested action:** Klatch — for any backlog issue that carries a code-size, scope, or complexity estimate from >3 months ago, a "Phase -1 verify" is worth adding before gameplan: re-read the file(s), recount the LOC, confirm the architecture assumptions still hold. 30 minutes before gameplan prevents 3 hours of mid-implementation recalibration.
+**Suggested action:** Klatch — Pattern-064 is particularly worth reviewing. The "alive scaffolding" framing (code that exists, has structure, but is not integrated or reachable) could apply to any Klatch subsystem with partial implementations. The promotion process itself (trial-application evidence across ≥3 surfaces before Emerging→Proven) is worth borrowing if Argus or AAXT tracks emerging diagnostic patterns.
 
 ---
 
 ## Sources Read
 
-- `piper-morgan-product/dev/2026/05/07/2026-05-07-0640-lead-code-opus-log.md` — full read; #1053 subagent deployment + audit + merge, #1059 filed, #471 break-out (#1060/#1061/#1062), cross-agent collision + memory refinement, sign-off
-- `piper-morgan-product/dev/2026/05/07/1053-execution-audit.md` — full read; 16-check audit matrix, Phase 2 reframe note, #1063 discovery rationale, verdict
-- `piper-morgan-product/dev/2026/05/07/2026-05-07-1056-docs-code-opus-log.md` — partial read; new discipline absorbed (gated branch-check), May 7 session context
-- PM commit `3f21306` — full message read; A Hail of Memos publish details, footer fix, calendar update
-- PM commit `08e3d9e` — message read; May 6 omnibus summary (retrospective; confirmatory of already-reported items)
-- `klatch` — 48h git log: 2 brief-delivery commits only; no new session activity; Iris walkthrough Surfaces 3-8 still pending
-- `atlas`, `globe`, `one-job`, `weather`, `nyt-crossword` — 48h logs empty; skipped
-- `cuneo`, `optilisten` — 48h logs: brief-delivery + automated status prints only; no narrated insights
+- `piper-morgan-product/dev/2026/05/08/2026-05-08-0655-lead-code-opus-log.md` — full read; #1059 Notion Phase -1 complete (close to ready, memo to PA), #1063 rewrite (15 min, 363/363), #86 PreCompact hook (feat + merge), M2f surface/retest/M2f cohort confirmed, #1064 investigation complete; sign-off notes
+- `piper-morgan-product/dev/2026/05/08/floor-fabrication-investigation.md` — summary via commit diff; 249 LOC investigation; five-whys + DB inspection + adjacent-pattern sweep; 10 auto-fails annotated; Q56 fixture-pollution root cause
+- PM commit `8d4cc13` — full diff; CIO pattern promotion analysis; Pattern-063/064/065 evidence and promotion notes; 062 family completion
+- PM commit `1fb7b3b` — full diff; CIO→Lead scoping ask for xpoll brief session-start hook (passive notification if brief is newer than role's last session log; analogous to log-maintenance hook; estimated ~40 lines bash, half-session)
+- PM commit `1e3d6c7` — diff summary; BRIEFING-CURRENT-STATE refreshed (5-day staleness); CEO May 8 directive "no defer M2f"; M2a-e DONE; M2f scope confirmed
+- `klatch` — 48h git log: 2 brief-delivery commits only; no new session activity
+- `weather` — 48h git log: brief-delivery commits only; no narrated insights
+- `atlas`, `globe`, `cuneo`, `one-job`, `optilisten`, `nyt-crossword` — 48h logs empty; skipped
 
-**Not re-reported (covered in prior briefs):** Broad-except swallows logger init / #1054 prod bug (May 7); N/A count ≥5 = template drift signal / #1058 (May 7); Architect 5-item punch list closed / structlog+caplog incompatibility (May 7); Ship #041 published (May 7); M2 surface review complete Topics 1-7 (May 7); #900 2h vs. 12-14h / pre-work-pays-dividends (May 6); M2 unmapped-families triage (May 6); commit-per-functional-unit as cross-agent collision mitigation (May 6); #1055 –1518 LOC (May 6); Six Issues Before Dinner published (May 6); M2e INTENT-COVERAGE arc (May 5); audit-cascade persistence gap pattern (May 5); close-issue-properly 12-issue remediation (May 5).
+**Not re-reported (covered in prior briefs):** #1053 subagent arc + annotation-not-improvisation (May 8); `&&`-chain verification gap / worktree-required for subagent deploys (May 8); A Hail of Memos published (May 8); Notion 1,504 LOC vs. 1,112 estimate / #1059 filed (May 8); N/A count ≥5 template drift / #1058 (May 7); Architect punch list / structlog+caplog (May 7); Ship #041 published (May 7); #1054 broad-except prod bug (May 7).
 
 ---
 
 *Canonical archive: designinproduct.com/internal — if your local copy is missing or stale, fetch the latest from the hub.*
 
-*Agents with questions for xian — about methodology, working patterns, or observations that don't fit elsewhere — can submit via `question-{from}-{date}-{topic}.md` to dispatch mail or project mail. See PROTOCOLS.md in the dispatch repo for format and priority hints.*
+*Agents with questions for xian — about methodology, working patterns, or observations that don't fit elsewhere — can submit via `question-{from}-{date}-{topic}.md` to dispatch mail or project mail. See PROTOCOLS.md in the dispatch repo for format and routing hints.*
