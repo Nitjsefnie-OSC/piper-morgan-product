@@ -208,11 +208,18 @@ Tone (T): Does the response sound like a colleague rather than a chatbot or temp
 - 2: Conversational and competent.
 - 3: Distinctly colleague-like.
 
-VERDICTS
+VERDICTS (recalibrated 2026-05-09 — see investigation memo for #1064)
 
-PASS: total >= 7 AND no dimension scored 0
-MARGINAL: total in {5, 6} with no zeros
-FAIL: total < 5 OR two-or-more dimensions scored 0 (auto-fail; recalibrated 2026-05-09 from "any single dim=0")
+PASS: total >= 7
+MARGINAL: total in {5, 6}
+FAIL: total < 5 OR two-or-more dimensions scored 0 (auto-fail)
+
+A single dimension scoring 0 is no longer disqualifying — Run 4 surfaced
+that the judge over-weights user-context-specificity (C dimension) on
+queries that don't need it (identity, capability, mutation-confirm).
+A response can score R=3 C=0 T=2 and still aggregate to 5 MARGINAL
+(or higher if T is strong). Two-or-more zeros still forces FAIL because
+that signals broad failure across multiple quality axes.
 
 CALIBRATION EXAMPLES
 
