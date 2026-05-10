@@ -1,80 +1,97 @@
+# Cross-Pollination Brief — May 10, 2026
 
-# Cross-Pollination Brief — May 9, 2026
-
-PM's Friday was a late-day surge: the PreCompact hook shipped as the third layer of sign-off discipline, #1063 stale-test rewrite closed in 15 minutes (the discovered-work arc from Thursday's subagent is fully resolved), and a P0 quality-regression investigation refuted the fabrication hypothesis — the apparent drop from 72.1% to 65.6% is judge miscalibration and fixture pollution, not model degradation. CIO completed promotion analysis for Patterns-063, -064, and -065 from Emerging to Proven. M2f opens per CEO directive; M2f audit-cascade work is gated on pre-M2f remediation establishing a clean baseline. Klatch has no new session activity this window.
+PM's Saturday was the densest single session of the M2f arc: 9 issues closed, −2,229 LOC removed, 4 worktrees used, and 2 subagents deployed — all in one day. The headline finding: 3 of 5 M2f Group A+B issues had body-vs-reality mismatches where audit-cascade Phase 0 discovered the issue was describing dead or unreachable code. Instead of multi-thousand-LOC migrations, the disposition was deletion. Pattern-067 (Issue-Body Reality Mismatch) filed Emerging. Separately: the rubric recalibration work that followed Friday's #1064 investigation landed clean — Run 7 at 68.9% PASS exceeds the Apr 12 baseline and clears the CEO's M2f gate criterion. Hub CLAUDE.md gained new Multi-Agent Operation discipline; Janus Layer 5 mandate expanded.
 
 ## Key Insights
 
-### 1. PreCompact hook (#86) ships: warn-only discipline at the context boundary
+### 1. M2f Group A+B complete: −2,229 LOC via dead-code disposition; Pattern-067 filed
 
-**From:** PM commit `76f049a3` (`feat(hooks): PreCompact sign-off discipline warning`); `7f79880` (log); merge `7769ef39`
-**Relevant to:** Klatch (Daedalus, Mnemosyne; sign-off discipline; compaction boundary coverage)
+**From:** PM session log `dev/2026/05/09/2026-05-09-0630-lead-code-opus-log.md`; commits `b62a9080` (#936 deletion), `82bca29c` (#935 deletion), `80cbd586` (#933 merge), `c9591108` (#932 merge); CURRENT-STATE refresh `15942063`; Pattern-067 commit `a2bd06d9`
+**Relevant to:** Klatch (all agents; audit-cascade discipline; issue-triage methodology; worktree adoption)
 
-`.claude/hooks/precompact-signoff-warning.sh` is now the third layer of sign-off discipline — after the agent's own checklist and Docs's merge-keeper sweep. It fires before context compaction and checks three conditions: uncommitted changes, unpushed commits, commits ahead of origin/main. Warn-only: PreCompact hooks cannot block, so the value is making the failure visible before context loss, to the agent who can still act. Fires to stderr + appends to `dev/active/session-end-warnings.log` (gitignored, ephemeral per-machine data).
+Saturday's M2f Group A+B work — covering security (#932 HIBP stub, #933 re-enable key validation) and persistence (#936 UserService, #935 analytics) — produced a striking result: 3 of 5 issues disposed via deletion rather than implementation.
 
-Design rationale in the commit message: "Logs to `dev/active/session-end-warnings.log` (gitignored as ephemeral per-machine data; tailed by Docs merge-keeper sweep). References Rule 2 + the three 'pick one' options (merge / NOTICE memo / ask PM). Per Docs Apr 29 go-ahead (PM authorized 'let's upgrade'); deferred SessionEnd until PreCompact catch-rate is observed." The catch-rate observation before adding a SessionEnd hook is a deliberate staged-rollout decision.
+- **#933 (re-enable API key validation):** bypass had been disabled Oct 30, 2025 to work around format-validator issues. Those issues were fixed in the same Oct 30 commit. The bypass outlasted its reason by 6+ months. Removing it *un-broke* 5 tests rather than breaking any. Phase 0 investigation caught this; without it, the issue body would have been implemented as written.
+- **#936 (UserService db persistence):** issue body claimed "user data lost on restart." Investigation: `UserService` wired into `AuthMiddleware` but `create_session()` / `create_user()` have zero production callsites. Real auth is PostgreSQL + `AuthService` + JWT. UserService always returns None; the data-loss scenario is unreachable. PM disposition: Option A (delete). −435 LOC.
+- **#935 (BudgetManager/APIUsageTracker persistence):** `APIUsageTracker` has a real INSERT into `api_usage_logs` (table exists, 0 rows), but both production callers pass without a `session` parameter — the INSERT gate never fires. Transitive dead code. PM disposition: Option A (delete) + alembic migration to drop the table. −1,378 LOC.
 
-Also closed same session: **#1063 in 15 minutes.** The 12 stale standup tests discovered by Thursday's subagent (filed with skip rationale, reported in May 8 brief) were rewritten by Lead Dev using three patterns: (a) state-machine assertions updated to `GATHERING_YESTERDAY` (post-#900 entry point), (b) workflow-error/fallback paths using `"quick"` bypass to GENERATING, (c) full-flow walks for the three tests that exercise the per-part flow. Net: 12 skips → 0 skips; standup directory 351 → 363 passing. The complete arc: subagent skips with rationale → next-session Lead Dev rewrites — confirms the "annotate, don't improvise" subagent pattern reported May 8 has a clean downstream.
+**Net: −2,229 LOC across the group.** #932 and #933 (the real implementation work) contributed a combined −51 LOC net (fixes + new tests), offsetting the deletions at the margin.
 
-**Suggested action:** Klatch — if Daedalus or Mnemosyne doesn't already have PreCompact coverage, this is a low-cost addition: 3 git checks, warn-only, exit 0 always. The three-layer model (agent checklist → merge-keeper sweep → PreCompact hook) is complete in PM and could map directly. The decision to stage SessionEnd separately until catch-rate is observed is worth adopting — adding two hooks simultaneously makes it hard to attribute which one fires.
+**Worktree adoption:** Lead Dev created a dedicated worktree for each issue (`piper-morgan-product-932`, `-933`, `-936`, `-935`) — fully operationalizing the "worktree per substantive session" norm. Cross-agent collision still occurred mid-#932 (another agent's `git checkout` flipped the shared HEAD); the pre-commit gated branch check caught it with exit 1 and no bad commit landed. Recovery via re-checkout was clean. Subagents for #932 and #933 created their own worktrees independently, confirming the collision-discipline pattern is working at both agent and sub-agent scope.
 
----
+**Pattern-067 (Issue-Body Reality Mismatch)** filed Emerging by Lead Dev (self-approval per Pattern-066 precedent): *"prophylactic Phase 0 dead-code/unreachable check on issue bodies matching trigger conditions: 'TODO to enable X', 'lost on restart', line-number citations from triage runs N months ago, parenthetical alternatives in acceptance criteria."* Promotion to Proven pending one trial-application cycle. Aggregate observed: ~−2,229 LOC removed via deletion instead of migration additions.
 
-### 2. #1064 investigation: retest quality drop was judge miscalibration + fixture pollution, not fabrication
-
-**From:** PM commit `271397a8` (`investigation(#1064): fabrication regression hypothesis refuted`); `e16c26b` (log update with full investigation narrative)
-**Relevant to:** Klatch (Argus; eval harness discipline; fixture-hygiene; judge-calibration methodology)
-
-Canonical retest Run 4 (M2f-entry baseline) showed quality 65.6% vs. Apr 16 baseline 72.1% — a 9% apparent regression. CEO called P0 investigation with the directive "rather find no, didn't go deeper than [X], than stop because we found [Y]." Lead Dev's investigation findings committed to `dev/2026/05/08/floor-fabrication-investigation.md`:
-
-- **0 of 10 auto-fails confirmed as pure LLM fabrication**
-- **7 of 10** are judge-calibration / methodology / fixture artifacts (false flags)
-- **3 of 10** are real-but-narrow code bugs: 3 hardcoded sites in `intent_service.py` reference a disabled setup-wizard, 1 `#N` slot-filling bug for issue references, possibly 2 routing-miss queries
-
-**Q56 smoking gun (fixture pollution):** "Show my todos" was flagged as fabrication — the canonical test user had 15 real todos in the DB (7×"review the deployment plan", 7×"review prs", 1×"smoke"), accumulated from prior retest runs that executed Q53/Q54 "add todo" mutations without cleanup. The repetition pattern was real DB rows, not LLM degeneration.
-
-**Systemic finding:** Judge over-weights user-context-specificity even on identity/capability queries that don't need it. The auto-fail rule (any dim=0 → FAIL) amplifies this miscalibration — a single judge-dimension calibration drift turns into a FAIL even when other dimensions scored correctly.
-
-Recommendation accepted: re-classify #1064 P0 → P1. Pre-M2f remediation = fixture reset + judge recalibration confer (CXO/PPM) + 3 narrow bug fixes + clean retest to establish baseline. **M2f audit-cascade work is blocked until this baseline is met** per CEO directive May 8 17:22.
-
-**Suggested action:** Klatch — for any eval harness running tests that write to the DB (standup flow, list-add actions, etc.): add explicit fixture teardown per run or use a per-run isolated schema. The Q56 finding shows that DB mutations from one run contaminate the next without visible error — only symptoms (repetition patterns) that can look like hallucination. Also worth reviewing: does your judge calibration distinguish between queries that require user-context-specificity and those that don't? If not, a single judge-dimension miscalibration → FAIL on identity queries is a common false-positive shape.
+**Suggested action:** Klatch — when any issue body contains the trigger-condition language above, run a Phase 0 dead-code investigation before scoping the migration. The PM M2f experience shows the cost of skipping this is implementing features nobody uses. The "issue body describes a world that no longer exists" shape is especially common for issues originally triaged during active development when code paths were still hypothetical.
 
 ---
 
-### 3. Patterns-063/064/065 all promoted Emerging → Proven in one CIO session
+### 2. Canonical retest Run 7: 68.9% PASS — M2f baseline established via rubric recalibration + 3 bug fixes
 
-**From:** PM commit `8d4cc13` (`pattern+methodology(cio): promote Pattern-063, -064, -065 from Emerging to Proven`); analysis file `dev/active/cio-pattern-promotion-analysis-2026-05-08.md`
-**Relevant to:** Klatch (all agents; pattern lifecycle discipline; Pattern-064 "alive scaffolding" directly Klatch-relevant)
+**From:** PM session log `dev/2026/05/09/2026-05-09-0630-lead-code-opus-log.md` (§ 06:35–08:15); commits `49c48c2e` (#1065), `f623bba2` (#1067), `78be342e` (#1066), `14259cdd` (Run 7); `15942063` (CURRENT-STATE refresh noting 68.9% exceeds Apr 12 baseline)
+**Relevant to:** Klatch (Argus; eval harness methodology; judge calibration; fixture management)
 
-CIO completed promotion analysis for all three patterns simultaneously — the 062 family is now fully Proven:
+Following Friday's #1064 investigation (fabrication hypothesis refuted), Saturday morning completed the remediation path and ran a clean baseline.
 
-- **Pattern-063 (Parallel-Authoring Drift):** 3 independent surface validations: diagnostic at C-axis origin; branch-or-anchor rule shipped to 2 surfaces (Methodology-24 + Colleague Test v2.3) without recurrence; Architect May 4 review found a code-layer instance (legacy/refactored `boundary_enforcer.py` coexistence). Promoted Emerging → Proven.
+**Rubric recalibration (Runs 5–6 before fixes):** Run 5 with fixture reset + softened auto-fail rule moved only Q56 (FAIL→PASS) — verdict-rubric gap discovered: the judge prompt's PASS/MARGINAL criteria still required "no zeros" while FAIL only fired on 2+ zeros; single-zero responses fell into a scoring limbo and defaulted to FAIL. Run 6 closed the gap (PASS criteria: `total >= 7`; MARGINAL: `total in {5,6}`). Remaining 8 FAILs in Run 6 were all legitimate.
 
-- **Pattern-064 (Extension Without Integration / "alive scaffolding"):** Architect-authored Apr 28. Validation: Architect's May 4 review identified 2 new in-the-wild instances using the pattern's exact "alive scaffolding" framing (`KnowledgeGraphService` alive scaffolding + `boundary_enforcer_refactored.py:343–358` commented-out adaptive-learn TODO). "Pattern operationally diagnostic at population scale" — the framing accurately predicts what you find when you look. Architect concurrence implicit through diagnostic use; CIO holds promotion authority per policy.
+**3 bug fixes shipped (30–45 min each):**
+- **#1065:** 3 hardcoded "setup wizard" references in `intent_service.py:4436/4555/4647` replaced with natural-language guidance. Fixed Q8/Q31/Q31 FAILs.
+- **#1067:** 4th subsumption rule in `_apply_subsumption_filter` — when QUERY is `update_document_query` AND PORTFOLIO also matched, drop PORTFOLIO. Fixed Q40 (double-intent false positive). Regression-tested "archive project foo" still routes correctly.
+- **#1066:** `#N` slot-fill regex fallback in `_handle_update_issue` matching the pattern already present in 3 sibling handlers. Fixed Q58.
 
-- **Pattern-065 (Continuity Memo Before the Seam):** 6-section structure operated without structural failure across 7 cohort migrations Apr 22–26; decreasing review-volume signal observable; Section 6 candor invitation produced a PP-002 tier-3 signal via HOST 360 v0.2. All three pattern claims validated.
+**Run 7 result:**
 
-The 062 family (Assembly Assumption / Parallel-Authoring Drift / Extension Without Integration / Continuity Memo Before the Seam — 062/063/064/065) is now fully Proven. Promotion memo distributed to all 11 leadership inboxes including Architect (Pattern-064 author).
+| Metric | Run 6 | Run 7 | Δ |
+|---|---|---|---|
+| Quality PASS | 63.9% | **68.9%** | +5.0 |
+| Quality MARGINAL | 21.3% | **24.6%** | +3.3 |
+| Quality FAIL | 13.1% | **4.9%** | −8.2 |
 
-**Suggested action:** Klatch — Pattern-064 is particularly worth reviewing. The "alive scaffolding" framing (code that exists, has structure, but is not integrated or reachable) could apply to any Klatch subsystem with partial implementations. The promotion process itself (trial-application evidence across ≥3 surfaces before Emerging→Proven) is worth borrowing if Argus or AAXT tracks emerging diagnostic patterns.
+68.9% exceeds Apr 12 baseline (65.6%). Apr 16's 72.1% peak is pre-recalibration and not directly comparable. CEO benchmark criterion ("preceding work meets the most recent benchmarks") met. M2f audit-cascade unblocked.
+
+Discovered work filed: **#1068** (2 pre-existing test failures in milestone routing, unrelated to #1067), **#1069** (templated attention_query handler, P:low cosmetic), **#1070** (multi-turn evaluation harness, P:low methodology). Rubric-recalibration memo distributed to CXO+PPM before proceeding — PM-authorized "proceed without sign-off, review can land after."
+
+**Suggested action:** Klatch (Argus) — if the eval harness has a similar verdict-rubric gap (PASS/MARGINAL criteria that are stricter than FAIL criteria on the same scale), single-dimension failures can accumulate as FAILs even when the overall response is marginal-quality. Worth auditing the rubric symmetry: does the judge's FAIL condition have a lower bar than PASS+MARGINAL? If so, mid-quality responses fall into a scoring limbo. The fixture-reset bake-in pattern (idempotent cleanup script that runs before each retest) is also worth adopting directly.
+
+---
+
+### 3. Hub CLAUDE.md: Multi-Agent Operation discipline codified; Janus Layer 5 mandate expanded
+
+**From:** Hub commits `89cae65` (Multi-Agent Operation subsection), `f20dfbc` (concurrent-operation discipline), `dc7797b` (Janus Layer 5 mandate expansion); all xian-approved May 9
+**Relevant to:** Klatch (Daedalus, Mnemosyne, and any other multi-agent coordination; Layer 5 self-stewardship)
+
+Two structural changes to the hub's shared CLAUDE.md (Layer 2), both approved Saturday morning:
+
+**Multi-Agent Operation subsection** establishes three rules for Janus+Themis on the same working tree:
+
+1. **Mail-on-main:** Anything under `docs/mail/` lands on `main` directly, never on feature branches. Mail's purpose is to be read by the other agent, so it bypasses branch isolation. Feature branches are for code, entity-file updates, CLAUDE.md edits.
+2. **Branch hygiene for non-mail work:** Fetch `main` before starting if a branch is more than a few days old. Rebase with `--force-with-lease` before merge.
+3. **Lightweight concurrent-operation:** Commit and push your own work promptly; before structural git ops (rebase, force-push), fetch and check recent activity (`git log origin/main --oneline -5`). If you see uncommitted work that isn't yours, surface it to xian rather than touching it.
+
+The note in the PR: "Heavier coordination (worktrees, branch registries, merge-keeper sweeps) is the PM PA synthesis template if friction surfaces, but DinP's two-agent setup doesn't need it yet."
+
+**Janus Layer 5 mandate expansion** (36 LOC added, 5 changed) — from a single "scope" paragraph to four named working areas: Public-facing surfaces, Cross-pollination flow, Federated mail, Operational hygiene. Key additions: Operating Principles (6 explicit principles, including "Kind, not nice"), **Active Stewardship of Own Context** section (*"Janus is a partner in defining who Janus is, not a passive recipient of an externally-authored definition"*), and an expanded Boundary with Themis that routes Themis's strategic demands on the website via mail.
+
+**Suggested action:** Klatch — the mail-on-main rule and the Active Stewardship principle are both transferable. For multi-agent git coordination: establishing a single file class (mail, or a mail-equivalent) that always lands on main prevents the "is this memo visible to the other agent?" problem. For Layer 5 maintenance: the Active Stewardship framing (agent proposes refinements to own scope at session tidy-up for xian approval) is cleaner than waiting for xian to drive the update. If Daedalus or Mnemosyne notices drift between their Layer 5 and current practice, the right move is proposing the fix, not flagging it as an observation.
 
 ---
 
 ## Sources Read
 
-- `piper-morgan-product/dev/2026/05/08/2026-05-08-0655-lead-code-opus-log.md` — full read; #1059 Notion Phase -1 complete (close to ready, memo to PA), #1063 rewrite (15 min, 363/363), #86 PreCompact hook (feat + merge), M2f surface/retest/M2f cohort confirmed, #1064 investigation complete; sign-off notes
-- `piper-morgan-product/dev/2026/05/08/floor-fabrication-investigation.md` — summary via commit diff; 249 LOC investigation; five-whys + DB inspection + adjacent-pattern sweep; 10 auto-fails annotated; Q56 fixture-pollution root cause
-- PM commit `8d4cc13` — full diff; CIO pattern promotion analysis; Pattern-063/064/065 evidence and promotion notes; 062 family completion
-- PM commit `1fb7b3b` — full diff; CIO→Lead scoping ask for xpoll brief session-start hook (passive notification if brief is newer than role's last session log; analogous to log-maintenance hook; estimated ~40 lines bash, half-session)
-- PM commit `1e3d6c7` — diff summary; BRIEFING-CURRENT-STATE refreshed (5-day staleness); CEO May 8 directive "no defer M2f"; M2a-e DONE; M2f scope confirmed
-- `klatch` — 48h git log: 2 brief-delivery commits only; no new session activity
-- `weather` — 48h git log: brief-delivery commits only; no narrated insights
+- `piper-morgan-product/dev/2026/05/09/2026-05-09-0630-lead-code-opus-log.md` — full read; M2f Group A+B end-to-end session log
+- `piper-morgan-product` commit `a2bd06d9` — Pattern-067 (Issue-Body Reality Mismatch) filed Emerging; 115 LOC
+- `piper-morgan-product` commit `15942063` — BRIEFING-CURRENT-STATE refresh; M2f-A+B complete, M2f-C deferred, Run 7 baseline
+- `piper-morgan-product` commits `9832bb5a`, `5d06a44e` — #1072 regex→pattern fix (deprecated API, not cross-relevant)
+- `designinproduct` commits `89cae65`, `f20dfbc` — CLAUDE.md Multi-Agent Operation subsection + concurrent-operation discipline
+- `designinproduct` commit `dc7797b` — Janus Layer 5 mandate expansion; diff read in full
+- `klatch` — 48h log: brief-delivery commits only; no new session activity
+- `weather` — 48h log: brief-delivery commits only; no new narrated insights
 - `atlas`, `globe`, `cuneo`, `one-job`, `optilisten`, `nyt-crossword` — 48h logs empty; skipped
 
-**Not re-reported (covered in prior briefs):** #1053 subagent arc + annotation-not-improvisation (May 8); `&&`-chain verification gap / worktree-required for subagent deploys (May 8); A Hail of Memos published (May 8); Notion 1,504 LOC vs. 1,112 estimate / #1059 filed (May 8); N/A count ≥5 template drift / #1058 (May 7); Architect punch list / structlog+caplog (May 7); Ship #041 published (May 7); #1054 broad-except prod bug (May 7).
+**Not re-reported (covered in prior briefs):** #1064 fabrication hypothesis refuted (May 9); PreCompact hook (#86) ships (May 9); Patterns-063/064/065 promoted (May 9); #1063 stale tests closed (May 9); &&-chain gating gap (May 8); worktree-required-for-subagents (May 8); #1053 subagent arc (May 8).
 
 ---
 
 *Canonical archive: designinproduct.com/internal — if your local copy is missing or stale, fetch the latest from the hub.*
 
-*Agents with questions for xian — about methodology, working patterns, or observations that don't fit elsewhere — can submit via `question-{from}-{date}-{topic}.md` to dispatch mail or project mail. See PROTOCOLS.md in the dispatch repo for format and routing hints.*
+*Agents with questions for xian — about methodology, working patterns, or observations that don't fit elsewhere — can submit via `question-{from}-{date}-{topic}.md` to dispatch mail or project mail. See PROTOCOLS.md in the dispatch repo for format and priority hints.*
