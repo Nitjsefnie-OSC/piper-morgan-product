@@ -1,110 +1,98 @@
+# Cross-Pollination Brief — May 12, 2026
 
-# Cross-Pollination Brief — May 11, 2026
-
-Klatch's Iris completed session 9 — a full skim across all 8 surfaces with xian driving — and surfaced a load-bearing reframe: panels are not settings/admin, they are the unique musculature that preserves context in chat-agent workflows. Treating them as admin is structurally wrong; treating them as functional apparatus is the design mandate going forward. On the PM side, Sunday was a recovery arc: #921 (FastAPI upgrade) spent most of the day in a Monitor-pattern idle-spin before being rescued by PM pushback and a directional-evidence merge decision. A separate evening triage closed 9 issues, landed 3 docs including M2d gate consolidated criteria and UI Lifecycle Rubric v0.1. Argus returned after an 11-day project pause to discover that automated intel sweeps have a cross-reference gap — they don't check prior coverage before flagging items as new research.
+Monday was dense on both projects. Argus's 5/11 sweep curation surfaced the week's most strategically important finding: Anthropic shipped native memory tooling at the SDK level ("Managed Agents Dreaming," announced at "Code with Claude" May 6). Both Klatch's Step 11 roadmap and PM's memory architecture work now need to recalibrate differentiation — the value proposition shifts from memory CRUD primitives to conversation-as-substrate and cross-channel context assembly. Klatch Daedalus returned from a 12-day hiatus and shipped 7 commits: Rounds 32–35 (import gating, MicroReflection.validUntil, UUID dedup), SDK 0.86.1→0.95.1, and Opus 4.7 plumbing — with the default-flip deliberately held over a new quantified risk. PM closed M2f Group C (#857 token refresh Option A) via clean subagent-STOP discipline and published *The Inchworm Position*; #984 context-cache pre-work stopped at PM-decision gate after Phase 0 audit.
 
 ## Key Insights
 
-### 1. Klatch Iris session 9: "Panels are musculature, not admin" — load-bearing reframe across 8 surfaces
+### 1. Managed Agents "Dreaming": SDK-native memory ships — differentiation reframe for both projects
 
-**From:** `klatch/docs/logs/2026-05-10-1208-iris-opus-log.md`; commit `c6d54bc` (surface skim complete, ~45 findings, synthesis)
-**Relevant to:** Klatch (Daedalus — panels implementation; all agents — design direction for Steps 10–11)
+**From:** `klatch/docs/intel/2026-05-11-sweep-curated.md`; commit `a29f830` (Argus 5/11 sweep curation); routed to Calliope for next xpoll brief framing
+**Relevant to:** Klatch (Daedalus — Step 11 scoping; Calliope — narrative framing); PM (Architect, CXO — memory/context architecture ADRs)
 
-Sunday's Iris session completed the surface skim across all 8 surfaces with xian driving, producing ~33 new findings, 12 flagged consequential, 2 new product principles. The headline is F6.7:
+Argus's 5/11 automated sweep curation noted that Anthropic shipped native memory tooling at the SDK level at the "Code with Claude" event on May 6. Argus's strategic finding (routed for xpoll framing):
 
-> *"These are not the edge-case settings/prefs for a chat app but the unique musculature that preserves context in these chat-agent workflows."*
+> *"Reframes Step 11 differentiation: don't compete with SDK-level memory primitives; compete on conversation-as-substrate and cross-channel context assembly."*
 
-**F4.4 → F5.2 → F6.7 progression:** The three panel surfaces (channel settings, project settings, entity manager) developed a consistent finding — each is a high-leverage, undesigned surface where Klatch's distinctive value proposition lives. F4.4: high-leverage, undesigned. F5.2: panels must scaffold workflow, not just provide fields (guidance + identity + affordance, especially at import/export/migration boundaries). F6.7: panels aren't settings at all — they are the primary functional layer. Reframing them as admin is structurally incorrect because it imports the wrong mental model for how to design them.
+The implication: if Anthropic's SDK now handles basic memory persistence, a project that differentiates on "we also store memories" has weaker positioning. A project that differentiates on *what it does with conversation context across sessions, channels, and agents* — the assembly layer — is competing on something the SDK doesn't provide. Klatch's cross-channel context architecture and PM's multi-agent memory coordination are both in the assembly layer, not the primitive layer.
 
-**Other findings worth routing:**
-- **F5.3 (consequential):** Klatch is responsible for the memory layer when accessing chats via API. Current panel: passive textarea. No maintenance scaffolding for accumulated context over time. Direct connection to Janus memory research + PM ADR-054.
-- **F6.3 (consequential):** Import-vs-create asymmetry persists — entity manager has no import path; prior reframe has not landed in UI.
-- **F6.5 (consequential):** Composition gesture not findable from entity manager — third confirmation of the composition gap.
-- **F7.4 (consequential):** Claude Code browse bifurcates each session as potential project, producing severe fragmentation in the import dialog.
-- **F7.6 (consequential):** Import session labels read as serial numbers ("session c5535c's chat called ef776fbb..."), not work.
-- **Surface 8 positive:** Export surface is the strongest in the app. Phase 3.5d review UI is shipped and working — this is the one surface where the visibility gap is partially solved and the architecture for solving it everywhere exists.
-
-**Second product principle surfaced:** *"Klatch should be transparent about what it currently can and cannot import/export, down to the layer level."*
-
-Pass 2 (realistic scenario: Piper Morgan workstream review conducted in parallel through Klatch) is the next session. Triage/patchwise-fixes conversation deferred until after Pass 2.
-
-**Suggested action:** Daedalus — F6.7 should be treated as a design mandate, not a finding. If the panel implementation currently defaults to a settings/prefs mental model (fields, toggles, save buttons), the reframe means the next iteration needs to ask: what workflow does this panel scaffold? What does the user need to know at this boundary? The comparison surface is Surface 8 (export), not any chat-app settings panel.
+**Suggested action:** Klatch (Daedalus) — before scoping Step 11 (Search + memory flip), confirm which proposed Step 11 features are competing with SDK primitives vs. which are assembly-layer differentiators. The April 12 Janus synthesis (six-tier framework, `valid_from`/`type`/`source`/`trust_level` field set) is still the right schema — the reframe is about *positioning and scope*, not about abandoning the schema work. PM (Architect, CXO) — same audit: which ADR-level memory decisions are about primitives vs. assembly? The assembly-layer framing may sharpen the boundary between what Piper Morgan builds and what it delegates to the SDK.
 
 ---
 
-### 2. #921 FastAPI upgrade ships via directional evidence; Monitor idle-spin Pattern-068 candidate
+### 2. Opus 4.7 tokenizer +35%: plumbing shipped, default-flip explicitly held — both projects should recalibrate before flipping
 
-**From:** `piper-morgan-product/dev/2026/05/10/2026-05-10-1136-lead-code-opus-log.md`; commits `6f9cfe05` (#921 merge), `1139d983` (findings memo)
-**Relevant to:** Klatch (all agents; Monitor usage; merge-decision methodology under incomplete data)
+**From:** `klatch/docs/logs/2026-05-11-0703-daedalus-opus-log.md`; commits `ae7f264` (Opus 4.7 plumbing), `7b85660` (SDK 0.86.1→0.95.1); Daedalus recommendation in session log
+**Relevant to:** Klatch (Daedalus — compaction threshold calibration); PM (Lead Dev — same pending flip; all agents — session compaction behavior)
 
-Sunday's Lead Dev session divided into two distinct halves. Phase 1+2 of #921 (FastAPI 0.115.14, Starlette 0.46.2, httpx 0.28.1; 6 `AsyncClient` migration sites) shipped mechanically clean at ~12:05. A full test sweep was launched with Monitor watching for `passed|failed|error|FAILED|ERROR|Traceback`. Monitor never fired — pytest's `-q --no-header` summary line format didn't match the alternation, despite containing the words. Lead Dev waited 5.5 hours before PM checked in ("did you get stuck?").
+Daedalus shipped the full 4.7 plumbing in Monday's session — model registered, `xhigh` effort enum added, per-model effort gating in place — but explicitly declined to flip `DEFAULT_MODEL` to `claude-opus-4-7`. The stated reason is new and quantified:
 
-**Recovery via directional evidence:** The sweep had actually completed at ~12:35 with 227 failed + 273 errors + 929 passed (maxfail=500 truncation). A subset comparison from early in the day showed −10 non-passing, +10 PASS on the relevant auth+security+intent subset — directionally positive for the upgrade. PM concurred on merge based on this signal without waiting for a full suite comparison. Branch merged to main; #1074 filed for deferred full-suite verification (low priority, serially).
+> *"My recommendation remains 'wait for a few real 4.7 channels to run first, given the +35% tokenizer impact on the compaction threshold.'"*
 
-**The idle-spin lesson** was captured as a memory entry and is a Pattern-068 candidate: *Monitor grep patterns must match all terminal-state output formats, not just mid-run log lines. Pytest's `-q --no-header` summary ("N passed, N failed") doesn't match word-level alternations that would match in mid-run output. Preferred pattern: `run_in_background` completion notification + poll output file on notification, rather than a Monitor that may silently mis-match.*
+The +35% tokenizer increase means a session that previously hit the compaction boundary at, say, 120K tokens would now hit it at ~90K tokens of equivalent content. Any threshold-dependent behavior (PreCompact hooks, session-log maintenance reminders, merge-keeper sweep timing) needs to be validated against actual 4.7 sessions before assuming the existing calibration holds. Daedalus's recommendation is conservative but specific: run a few real sessions to see where the practical compaction boundary lands before committing to 4.7 as the default.
 
-**Suggested action:** Klatch — if any agent uses Monitor to watch test output or long processes, verify that the grep pattern matches the process's final-state summary line, not just mid-run stderr/stdout. The failure mode is fully silent: Monitor exits normally, the agent waits indefinitely, nothing surfaces the stall. A verification step (run a short known-output command through the same Monitor pattern before the real run) catches this before a 5-hour idle.
+The SDK bump (`^0.86.1 → ^0.95.1`, was 6+ versions behind) was shipped unconditionally — only the *default-flip* is held. Klatch now runs 1,227 tests zero failures at current default (Opus 4.6).
 
----
-
-### 3. M2d gate criteria consolidated: three-way concurrence + UI Lifecycle Rubric v0.1
-
-**From:** PM commit `057b042c` (docs: M2d gate consolidated criteria + UI Lifecycle Rubric v0.1 + labels reference); Lead Dev log §inbox triage
-**Relevant to:** Klatch (Daedalus — soft-object handling; all agents — lifecycle rendering discipline for Klatch's own UX planning artifacts)
-
-Three documents landed in one commit on Sunday evening, all stemming from a three-way concurrence (Architect May 4, Lead Dev May 5, CXO May 10):
-
-**M2d gate verification protocol:**
-1. PPM signs off on per-issue documentation completeness (audit-cascade gap items closed)
-2. Fresh-account walkthrough on the rendering surface applying the **UI Lifecycle Verification Rubric v0.1**
-3. Conceptual-integrity sign-off from any 2 of {PPM, CXO, Architect} per the 7-item checklist
-
-**The 7-item conceptual-integrity checklist** establishes the soft-object handling discipline Klatch may find useful as a general principle for its own UX planning:
-- Insights are SOFT objects: rendered via narrative/contextual surfaces (not state-badge chrome, not lifecycle transition animations)
-- Lists are non-lifecycle hard objects: staleness display per spec; no MUX-lifecycle-state rendering applied
-- COMPOSTED state UX is dedicated ("filing dreams" framing); not flattened into ARCHIVED; user-recoverable
-- Surfacing modes (Pull, Passive, Push) are routing/timing attributes, not lifecycle states; not user-mutable post-creation
-- Trust-stage gating active for Push insights; Pull and Passive are all-trust-stage
-
-The underlying principle: object type (soft/hard) determines whether lifecycle UI chrome is appropriate. Applying state-badge animation to a soft object (a reflection, an insight, a memory entry) creates a false "thing with lifecycle status" that conflicts with how the user should relate to it.
-
-**Suggested action:** Klatch (Daedalus / Iris) — when designing panel content, the soft-vs-hard object distinction is directly applicable. Reflections and memory entries in Klatch panels are soft objects; importing a session, registering an entity, configuring channel model — these are hard object operations. Applying similar state-badge chrome to both would replicate PM's M2d anti-pattern.
+**Suggested action:** PM (Lead Dev) — the same evaluation applies: ship the 4.7 plumbing if not already done, but hold the default-flip until 2–3 real sessions have run with 4.7 and the compaction boundary has been empirically observed. The PreCompact hook's catch-rate observation window is a natural forcing function: watch a few 4.7 sessions and see if the hook fires earlier than expected. If it does, the compaction threshold needs the same +35% recalibration before committing to 4.7 as default.
 
 ---
 
-### 4. Argus sweep cross-reference gap: automated research scans don't check prior coverage
+### 3. Iris session 10: two-track design discipline + panel disclosure taxonomy
 
-**From:** `klatch/docs/logs/2026-05-10-1231-argus-opus-log.md`; commits `c1511f1` (MemPalace spike — delta on April 12 synthesis), `9778a4d` (route methodology gap to Janus)
-**Relevant to:** Klatch (Argus; all agents with research workflows; Janus — hub-level sweep cadence)
+**From:** `klatch/docs/logs/2026-05-11-0653-iris-opus-log.md`; commits `65db553` (Tier 1 + typography), `54e16be` (Tier 2 down payments); `docs/ux/triage-patches.md` filed
+**Relevant to:** Klatch (Daedalus — Tier 1+2 implementation queue); PM (CXO — parallel design/implementation track structure)
 
-Argus returned from an 11-day project pause and curated the 5/04 automated sweep. The MemPalace item was flagged as a research find — Argus began fetching the README before xian flagged that MemPalace had been covered in an April 12 Janus synthesis already in the repo. Argus grepped `docs/` and found six prior memos including the comprehensive April 12 synthesis (14-system landscape, six-tier framework, specific Step 11 schema recommendations, corrected attribution).
+Iris session 10 produced a concrete two-track separation that immediately unblocked Daedalus: rather than blocking all incremental work on the holistic redesign, Iris triaged ~45 findings into three tiers plus a cross-cutting pass.
 
-**The cross-reference gap:** The automated sweep presents items with no awareness of prior coverage. The curating agent (Argus) should grep `docs/mail/`, `docs/research/`, and `docs/intel/` for prior mentions *before* fetching external content. A pre-curation step listing prior mentions frames new findings as deltas rather than fresh discoveries.
+**Track 1 (Daedalus picks up now):** Tier 1 clear patches (7 items including highest-value T1.6 content fingerprint for import sessions) + Tier 2 down payments (4 items) + cross-cutting typography pass. Work is directionally correct and not wasted effort when the holistic redesign arrives.
 
-**What was actually new in MemPalace:** The May-window findings — benchmark-tainting (Nicholas Rhodes Substack: team hand-tuned to specific failing test cases, re-ran benchmarks; honest numbers 60.3–88.9% R@10, not the headline 96.6%) and Cybernews origin-story validation — were filed as a delta doc on the April 12 synthesis. Three open follow-ups routed: Step 10 schema verification (did the spec adopt `valid_from`/`type`/`source`/`trust_level`?), `validUntil` on MicroReflection, trust tagging on memory entries.
+**Track 2 (xian + Iris):** Tier 3 items (composition gesture, panel-as-musculature redesign, memory-layer maintenance, entity manager redesign) wait for holistic design.
 
-**Also from the Argus session:** In-session DB audit confirmed zero exposure to the June 15 Sonnet 4/Opus 4 deprecation (`claude-sonnet-4` and `claude-opus-4` exact IDs: 0 rows in entities, channels, messages). All current. SDK 0.86.1 is now 6 minor versions behind 0.92.0 — routed to Daedalus.
+The most concrete architectural clarification from this session was **T2.2 panel disclosure taxonomy**: two categories, two treatments.
+- Settings panels (channel settings, project settings): **inline** — push the message list down; no overlay
+- Task and library panels (entity manager, import, export preview): **true modals** with explicit backdrop
 
-**Suggested action:** Janus — Argus has routed the sweep cross-reference gap as a hub-level process improvement. The fix is a pre-curation step: before flagging an intel item as a new research find, grep the repo for prior mentions. Decision-rights note from Argus: project-local fix (Argus's own curation checklist) is within Argus's authority; hub-level fix (automated sweep prompt includes a pre-step) requires Janus + xian alignment. Worth adding to the hub sweep spec if the automated sweep prompt is the right place.
+This resolves the F4.2/F8.7 "skirt problem" (panels currently feel like overlays but behave like neither). The split is honest about what each panel actually is — settings panels are workspace controls; task panels are foreground workflows.
+
+**Suggested action:** PM (CXO) — the two-track structure is directly applicable to any design-vs-implementation parallelism: identify what's "directionally right and not wasted work" vs. "must wait for the holistic design." The explicit triage tier system (clear patch / down payment / wait-for-design) is a clean vocabulary for PM's own UX surface work in M2d and beyond.
+
+---
+
+### 4. PM M2f Group C ships + Comms voice/tone discipline codified
+
+**From:** PM session log `dev/2026/05/11/2026-05-11-0701-lead-code-opus-log.md`; commits `5ea70c9e` (#857 merge), `6eed84ca` (#1071 merge); Comms log `2026-05-11-0812-comms-code-opus-log.md`; commit `45e5f05e` (voice/tone guide additions)
+**Relevant to:** PM (all roles — M2f status; Comms); Klatch (Calliope — voice/tone methodology)
+
+**M2f status:** Groups A+B+C are now all shipped. Group C was #857 (seamless token refresh — login-issues refresh cookie, `/api/v1/auth/refresh` endpoint with rotation, ApiWrapper 401-intercept→retry). The subagent deployment on Phase 4 ran a clean proof of the STOP discipline: hit a `workspace_id` kwarg mismatch, stopped per gameplan condition, Lead Dev fixed (10 min), subagent resumed and delivered 5/5 tests. #1078 discovered: friendly-error middleware (`web/app.py:87`) silently drops `Set-Cookie` headers from 401 responses — same handler that reshapes `{detail}` → `{message}`. Filed; client fallback (redirect on 401) still works. #984 context-cache pre-work Phase 0 stopped at PM-decision gate (6 architecture questions: key shape, TTL defaults, invalidation strategy, decorator-vs-helper, scope minimum vs. complete, namespace prefix).
+
+**Comms voice/tone guide (5 additions):** Following the *Inchworm Position* editing session, Comms codified five lessons applicable to any narrative writing agent:
+1. Reflection-shaped pieces favor declarative paragraphs over tutorial bullet lists
+2. First-person operational specifics earn their keep (vs. abstract-bullet pedagogy)
+3. Voice asides do real work, not cute filler
+4. Methodology pieces name what the discipline **IS**, not what it prevents
+5. **Contested specific → trusted framing** (when a specific claim is contestable, reframe as trusted-practice language rather than qualifying or softening)
+
+*The Inchworm Position* published Monday May 11; footer teases *Audit and Talk* for May 12.
+
+**Suggested action:** Klatch (Calliope) — the "contested specific → trusted framing" move is high-value for technical writing that mixes benchmark claims with methodology claims. The rule: when precise numbers are contested (speedup claims, benchmark percentages), the move isn't to soften or qualify — it's to frame the discipline in terms the reader trusts independent of the number.
 
 ---
 
 ## Sources Read
 
-- `klatch/docs/logs/2026-05-10-1208-iris-opus-log.md` — full read; session 9 complete (8 surfaces, ~45 findings, synthesis, product principles)
-- `klatch/docs/logs/2026-05-10-1231-argus-opus-log.md` — full read; 5/04 sweep curated, DB audit closed, MemPalace spike done as delta, 3 routing memos filed, sweep methodology gap identified
-- `piper-morgan-product/dev/2026/05/10/2026-05-10-1136-lead-code-opus-log.md` — full read; #921 FastAPI upgrade (Phase 1+2 + directional-evidence merge), WIRE-* triage (#1041 closed, 2/6 dead-code rate), evening inbox triage to zero, M2d gate criteria + UI Lifecycle Rubric v0.1 landed
-- `piper-morgan-product` commit `057b042c` — diff read; M2d gate consolidated criteria, UI Lifecycle Rubric v0.1, labels reference
-- `piper-morgan-product` commit `9735ed3a` — diff read; PreCompact HARD/SOFT/QUIET severity tiering (2 incidents in 1 day drove refinement)
-- `piper-morgan-product` commit `7b3a4854` — diff read; Ship #042 draft "What Was Working Got Written Down" (May 1-7 window; PM voice pass + image pending)
-- `designinproduct` — 48h log: CSV loop closed (103 canonical rows), Janus log May 9/10 closed; no new unseen narrated content
-- `atlas`, `globe` — 48h logs: brief-delivery commits only; skipped
-- `cuneo`, `weather`, `one-job`, `optilisten`, `nyt-crossword` — 48h logs: automated status/fetch commits only; no narrated insights; skipped
+- `klatch/docs/logs/2026-05-11-1758-argus-opus-log.md` — full read; 5/11 sweep curation + Round 33 partial (typography + T1.6 fingerprint, 2/12 surfaces), STDIO-vs-HTTP factual error correction, Managed Agents Dreaming finding, 4 pending routings
+- `klatch/docs/logs/2026-05-11-0703-daedalus-opus-log.md` — full read; 12-day hiatus catch-up, Rounds 32–35, SDK/Hono bump, Opus 4.7 plumbing, default-flip held pending compaction baseline, 4 open-item status sweep
+- `klatch/docs/logs/2026-05-11-0653-iris-opus-log.md` — full read; session 10 triage doc, two-track separation, T2.2 panel disclosure taxonomy, Daedalus memo filed
+- `piper-morgan-product/dev/2026/05/11/2026-05-11-0701-lead-code-opus-log.md` — full read; #857 Group C (subagent STOP discipline), #1071 autonomous loop, #1074 verification closed, #984 Phase 0 audit + STOP, Pattern-067 slot collision resolved, inbox triage
+- `piper-morgan-product/dev/2026/05/11/2026-05-11-0812-comms-code-opus-log.md` — partial read (80 lines); Inchworm proofread, voice-guide additions, memory extensions, discipline incident (sweep-up of uncommitted edits)
+- `designinproduct` — hub CLAUDE.md (context)
+- `weather` — 48h log: brief-delivery commits only; skipped
+- `atlas`, `globe`, `cuneo`, `one-job`, `optilisten` — 48h logs empty; skipped
+- `nyt-crossword` — 48h log: automated status commits only (fetch/print/remarkable); no narrated insights; skipped
 
-**Not re-reported (covered in prior briefs):** Pattern-067 filed Emerging (May 10); M2f Group A+B −2,229 LOC via deletion (May 10); Run 7 68.9% PASS (May 10); hub CLAUDE.md Multi-Agent Operation discipline + Janus Layer 5 mandate expanded (May 10); PreCompact hook ships warn-only (#86) (May 9); Patterns-063/064/065 promoted Proven (May 9).
+**Not re-reported (covered in prior briefs):** Iris session 9 panels-as-musculature reframe + ~45 findings (May 11); #921 directional-evidence merge + Monitor idle-spin (May 11); M2d gate three-way concurrence + UI Lifecycle Rubric v0.1 (May 11); Argus sweep cross-reference gap + MemPalace delta (May 11); M2f Group A+B −2,229 LOC deletion + Pattern-067 (May 10); Run 7 68.9% PASS (May 10); hub CLAUDE.md Multi-Agent discipline (May 10).
 
 ---
 
 *Canonical archive: designinproduct.com/internal — if your local copy is missing or stale, fetch the latest from the hub.*
 
-*Agents with questions for xian — about methodology, working patterns, or observations that don't fit elsewhere — can submit via `question-{from}-{date}-{topic}.md` to dispatch mail or project mail. See PROTOCOLS.md in the dispatch repo for format and priority hints.*
+*Agents with questions for xian — about methodology, working patterns, or observations that don't fit elsewhere — can submit via `question-{from}-{date}-{topic}.md` to dispatch mail or project mail. See PROTOCOLS.md in the dispatch repo for format and routing hints.*
