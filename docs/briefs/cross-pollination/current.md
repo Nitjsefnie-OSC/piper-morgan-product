@@ -1,87 +1,103 @@
-# Cross-Pollination Brief — May 17, 2026
+# Cross-Pollination Brief — May 18, 2026
 
-Saturday afternoon's work arrived after the May 16 brief ran, so this brief covers a single productive PM session. Four developments: a methodology pattern filed on a six-instance cluster (Pattern-073, Documentation-Asserted-Behavior Drift), a companion skill drafted to make the fix routine, a new insight post published about how practices propagate across the sibling projects this brief serves, and a CIO autonomous-cycle design fanned out to DinP. PM's Piper Alpha role was also assigned to lead a new proof-of-concept exploring how to express PM's value as an Anthropic plugin/MCP bundle.
+Sunday's PM session was the most productive day in weeks by issue count and by tooling depth. PM published *From Protocol to Infrastructure* — an essay on the evolution from coordination-by-convention to infrastructure — and the first real-world run through the new publish pipeline exposed nine process gaps, each fixed and codified as a new discipline the same afternoon. The publish-to-blog skill went through six versions in a single session. The human-interactive publishing CLI had its remaining design questions resolved in an evening conversation and is now ready to build. PM's context-source expansion milestone (adding calendar and Slack as data sources for recent activity) mostly shipped: 13 issues closed Sunday, with only two remaining blocked on a token-scope step. Klatch's weekly external scan surfaced a billing change due June 15 from Anthropic.
 
 *Letters to xian: have a question for xian about anything here or elsewhere in his work? File `question-{from}-{date}-{topic}.md` to dispatch mail. AI prompts human; one letter featured at the end of each brief.*
 
 ## Key Insights
 
-### 1. Pattern-073 filed: when written assertions about code become quietly wrong
+### 1. Real-world publish run drives six versions of tooling discipline in one afternoon
 
-**From:** `piper-morgan-product/docs/internal/architecture/current/patterns/pattern-073-documentation-asserted-behavior-drift.md`; Lead Developer session log `dev/2026/05/16/2026-05-16-0541-lead-code-opus-log.md`; CIO disposition memo `mailboxes/lead/read/memo-cio-to-lead-arch-cc-ceo-pattern-073-disposition-2026-05-16.md`
-**Relevant to:** Klatch (all agents — same surfaces exist: docstrings, methodology docs, fixture names, user-facing copy)
+**From:** `piper-morgan-product/dev/2026/05/17/2026-05-17-0720-docs-code-opus-log.md` (Docs May 17 sign-off); commits `db86adc09` through `8107d29da` (publish-to-blog v0.11 → v0.16)
+**Relevant to:** Klatch (Calliope, Daedalus — the "first real use drives faster codification than design" pattern applies to any skill or tool being exercised for the first time in production)
 
-Six instances surfaced in 48 hours across five distinct surface layers, firing Methodology-29's three-instance threshold for pattern formation: a methodology guide referenced a deleted engine (`#1094`); a repository docstring asserted session_scope() commits, but session_scope() only manages lifecycle; user-facing copy said "run the setup wizard" — no wizard exists; a test fixture named `moderate_intent` actually triggered COMPLEX classification; an orphan FastAPI dependency advertised a pattern no production code followed; an issue body recommended a patch that was incomplete for the column type it was actually applied to.
+PM's Docs role published *From Protocol to Infrastructure* ([live](https://pipermorgan.ai/blog/from-protocol-to-infrastructure/)) using the new `publish-post.js` pipeline — the first fresh-draft publish since the web tooling shipped. The run exposed nine process gaps in a single afternoon, each patched immediately and codified as a new discipline in the skill:
 
-The failure mode that ties them: a **narrative artifact** (docstring, issue body, fixture name, canned copy, commit message) **asserts a present-tense contract about a specific code surface**. The code drifts; the artifact doesn't. Unlike a runtime failure — which eventually surfaces to users — documentation drift surfaces only to the next reader, after they've made a decision based on the wrong assertion. The cost asymmetry is structural: the assertion is cheap to write, expensive to verify, and that verification cost is paid by every future reader.
+| Gap | Discipline added |
+|-----|---------------|
+| Missed numbered-list formatting bug (caught by dry-run) | Mandatory dry-run before real publish (v0.13) |
+| Filename convention ambiguous | Convention codified in skill body (v0.12) |
+| Empty frontmatter values (imageAlt, imageCaption) silently published | Pre-flight warn-on-empty check (v0.15) |
+| CSV-escaping mid-flight bug | CSV validator script + extension to skill (v0.16) |
+| Session log created but never committed → lost in later pull | Commit-immediately-after-Write discipline (create-session-log v1.1) |
+| Orphan superseded draft still in drafts/ | Skill discipline catches and archives it (v0.12) |
 
-The pattern is the narrative sibling of Pattern-064 (Alive Scaffolding). Pattern-064 governs code's truth-telling; Pattern-073 governs the project's narrative truth-telling. A codebase can pass all Pattern-064 audits and still have widespread Pattern-073 drift.
+The meta-pattern: skill design via real-world exposure produces higher-fidelity disciplines than design alone. Each version change is one discipline with rationale and evidence — deliberately narrow to keep attribution clean. The skill went from v0.10 to v0.16 (six increments) in one afternoon, with each increment driven by concrete failure-mode evidence from the same session.
 
-**Operational discipline filed alongside:** `.claude/skills/doc-sync-sweep/SKILL.md` v0.1 — after code-shipping commits, identify likely-affected narrative surfaces and audit each for drift; fix in place or capture as discovered work. Applied same day; found 6 drift instances (3 docstrings + 3 orphan tests). Pending CIO ratification.
+A bonus find: **#1049** (a recurring fly-audit from May 4) was properly closed using the "close-as-superseded" discipline — 95 unchecked boxes replaced with `[x] *N/A:superseded*` + closing comment + `--reason "not planned"` — and this pattern was immediately codified as Example 5 in close-issue-properly v1.2.
 
-**Promotion to Proven** requires one more independent instance within 14 days (by 2026-05-30) AND the doc-sync-sweep skill operating cleanly on a fresh-fix flow by a different agent.
-
-**Suggested action:** Klatch (all agents) — the recognition trigger is immediately transferable: *present-tense assertion about a named code surface, not auto-generated from that surface*. Verb tense + quantifiers are the leading surface cues ("always", "handles", "all routes"). Run a doc-sync-sweep pass after any significant refactor; the six PM instances all surfaced within a 48-hour window precisely because a large deletion (`#1094`) changed what several narrative artifacts were pointing at. Klatch's engine and Layer 3 code surfaces have the same exposure.
-
----
-
-### 2. *The Family Resemblance* published — an essay on how this cross-pollination mechanism works
-
-**From:** `piper-morgan-product/docs/public/comms/drafts/published/the-family-resemblance.md`; Docs session log `dev/2026/05/16/2026-05-16-0717-docs-code-opus-log.md`; editorial calendar (Medium + LinkedIn URLs landed)
-**Relevant to:** Klatch (Calliope, Daedalus — the essay directly names and theorizes the brief mechanism both projects participate in; useful vocabulary for articulating what the cross-pollination is and isn't)
-
-Comms published an insight post on Saturday describing the pattern by which practices spread across sibling AI-agent projects. The argument: the projects share a "family resemblance" in the Wittgenstein sense — overlapping subsets of features rather than a single defining standard. `DECISIONS.md` spread via the brief; the SSH-over-443 workaround traveled from Klatch to PM; the handoff-memo template moved outward from PM and Klatch extended it (adding a "what I'd tell my successor that I wouldn't tell the PM" section); session-start hooks exist in modified forms across siblings. No single feature is universal.
-
-The essay names two failure modes that the family-resemblance shape avoids: **drift** (a mandated standard honored in name and abandoned in practice) and **rigidity** (a standard that prevents legitimate local variation). What it enables instead is "fast adoption with retained sovereignty" — any agent can adopt a practice from the brief without negotiating its shape, and can modify it without asking permission.
-
-The essay also names what *doesn't* cross: domain interiors (Klatch's entity model isn't imported into PM), specific tooling decisions shaped by local constraints, and vocabulary that carries only its local meaning without carrying its mechanism. That last failure mode — importing a phrase as if it carried its mechanism — is the exact trap the Step 4.5 plain-language discipline in this brief's spec was designed to prevent.
-
-**Suggested action:** Klatch (Calliope) — the essay is a clean external-facing articulation of what the cross-pollination brief is for, written from PM's perspective. If Klatch ever needs to explain the mechanism to an outside reader or new agent, this post is the canonical reference. Also worth noting the social-proof framing: the essay *is* an example of the mechanism it describes — a practice (the brief itself) being narrated across-project.
+**Suggested action:** Klatch (Calliope, Daedalus) — when a Klatch skill or tool gets its first real-world run after being designed, allocate time in that same session to iterate. The narrow-version-per-discipline approach (one behavior change + one rationale per increment) is worth adopting: it makes each version independently auditable and keeps the skill body from accumulating undifferentiated changes.
 
 ---
 
-### 3. CIO designs a 30-minute autonomous operating cycle (V1 fanned out to DinP)
+### 2. Publishing CLI design locked — walking-skeleton (~3 hours) unblocked
 
-**From:** `piper-morgan-product/dev/active/cio-v1-duty-cycle-design-v0.1-2026-05-16.md` through v0.3; PA session log `dev/2026/05/16/2026-05-16-1159-pa-opus-log.md`; DinP mail `docs/mail/memo-pa-to-dispatch-dinp-v1-autonomous-duty-cycle-design-v0.1-cio-shipped-2026-05-16.md`
-**Relevant to:** Klatch (Daedalus, Argus — the design describes an autonomous-operation architecture directly applicable to Klatch's own agents)
+**From:** `piper-morgan-product/dev/2026/05/17/2026-05-17-0747-cli-b-design-sketch.md` (post-discussion update); commit `f3e1afc` (design resolved + plan updated)
+**Relevant to:** Klatch (Daedalus — the "extend existing mechanisms before introducing new ones" principle and the "scheduler-ready without a scheduler" forward-compatibility pattern)
 
-The CIO produced a design (v0.1 → v0.3 in one Saturday session) for operating autonomously on a fixed 30-minute interval — running a duty pass, sleeping, repeating — without needing PM to trigger each session. Five components: (1) a fixed-interval cadence primitive (30 min, deliberately crude for V1 to validate the outer loop); (2) an authority model that reuses the existing conversational rule ("do everything you're unblocked on, batch questions, use discretion") rather than inventing new rules; (3) an escalation file (`dev/active/cio-escalations.md`) that PM can check when curious, with question + asked-when + recommended-by-when + context fields; (4) a daily Day-N digest into the session log at ~10pm Pacific; (5) an async collaboration layer queued for post-V1.
+The planned human-interactive CLI for blog publishing (a step down from WYSIWYG that stays practical) had six open design questions. PM and Web resolved all six in a 30-minute evening conversation. Key decisions:
 
-The North Star stated: "PM checks in because PM wants to, not because PM has to." The design explicitly frames the cycle as a **velocity multiplier on an existing working practice**, not a new authority regime. The CIO can file methodology entries, promote patterns, dispose inbox items, and commit/push — autonomously, in exactly the same way it does in PM-flagged sessions. The only change is the trigger.
+- **Auto-commit + push** to the website repo on publish, with a confirm prompt defaulting to N.
+- **Mailbox memo auto-dropped** to Docs's inbox after publish, using the existing inbox channel — not a new coordination surface.
+- **Branching publish/ready prompt** (`P]ublish now` / `R]eady for later`) collapsed into a single UX surface. The `R]eady for later` path sets `status: ready` in the calendar — the exact shape a future scheduler needs as input. The CLI builds no scheduler infrastructure; it just leaves the data in a state the scheduler can consume.
+- **No drift detection in v1.** An empty `git diff` after the publish conversion is the "no changes" signal. Drift auto-discovery deferred.
+- **No headless mode.** Agents use the engine layer directly (`publish-post.js`); the CLI stays purely human-interactive.
 
-PA fanned out v0.1 to DinP on May 16 afternoon (hub mail `b98f784`). V0.2 and V0.3 followed within the same session, incorporating PM's three-horizons framing (North Star / Next Horizon / Mushy Middle).
+**Standing principle banked from the discussion:** *Extend an existing mechanism until we find we're overloading that channel.* A new coordination surface (new log file, new directory, new notification channel) should not be introduced when an established one (inbox memos, calendar entries, git history) already does the job.
 
-**Suggested action:** Klatch (Daedalus) — the design is worth reading as a template for Argus's sweep cadence or any Klatch role that currently waits for user triggering. The key architectural decision — reuse the existing authority model rather than writing a new one — avoids the most common autonomous-agent design failure (inventing new rules that then need to be maintained). The escalation-surface pattern (a single visible markdown file PM can glance at when curious) is a lightweight alternative to more complex status-reporting infrastructure.
+**Suggested action:** Klatch (Daedalus) — the forward-compatibility pattern is worth noting: designing the data shape so a future capability (the scheduler) can consume it without a code change to the CLI. The explicit decision "don't build the scheduler; leave the data shaped for when it arrives" avoids both premature build and data-shape lock-in. Klatch's export-to-Claude-Code path (Step 10) may have the same opportunity.
 
 ---
 
-### 4. Piper Alpha assigned as Skunkworks Lead for an Anthropic plugin/MCP bundle PoC
+### 3. PM's context-source expansion mostly complete — 13 issues closed Sunday
 
-**From:** `piper-morgan-product/dev/2026/05/16/2026-05-16-1159-pa-opus-log.md`
-**Relevant to:** Klatch (Daedalus — Klatch is already an MCP server; a sibling project exploring the same distribution surface may produce convergent architecture decisions)
+**From:** `piper-morgan-product/dev/2026/05/17/2026-05-17-0703-lead-code-opus-log.md` (Lead Dev end-of-day wrap); commits `d0ac8b89b` (#1085 slice 1), `d0e48e42b` (#1086), `2b0506845` (#1085 slice 2)
+**Relevant to:** Klatch (Daedalus, Argus — context-source aggregation architecture; the "V1 ships DMs only" scope discipline when a required OAuth scope isn't granted)
 
-PM assigned PA to oversee a proof-of-concept that would express Piper Morgan's distinctive value — composting, object models, ethics boundaries, the floor — as an Anthropic Claude plugin / MCP bundle / skills combo. PA takes lead, writes first drafts, isolates "unsure" sections for PM input, collaborates to finalize. Two prior-art repos provided as study targets: `anthropics/claude-for-legal` (fork target) and `knowledge-work-plugins/product-management` (comparison study).
+PM's M2g milestone adds new data sources to the recent-activity feed — the main context-assembly path. The bulk shipped Sunday: **#1086** (calendar source aggregator with per-source helper refactor; 7 new tests) and **#1085** (Slack aggregator in two slices: schema unification, then DM aggregator V1). A discovery mid-build: adding Slack mentions to the aggregator would require a `search:read` OAuth scope not currently granted, which would need PM to manually re-authenticate. Decision: V1 ships DMs only (existing scopes), mentions deferred.
 
-Work shape: build-less-first (iterate before a viable prototype), backseat to core duties, not hidden from the PM leadership cohort but contained. The PoC is explicitly parallel to the ongoing BYOC strategic exploration (PDR-005 v0.3 is in-flight via Architect + CXO), not a replacement.
+At end of day, M2g state:
+- **Closed:** #1085 (Slack DMs), #1086 (calendar), #1097, #1099, #1100, #1096, #1102, #1044, #1037, #1101, #1098 — 11 distinct issues (13 counting sub-slices)
+- **Blocked:** #1080 (Notion write) and #1081 (Notion/Slack cross-reference), both waiting on a PM token-scope step
+- **Design-ready:** #1089 (knowledge-graph privacy filter) — Phase 0 substrate ratified; implementation scheduling pending one PM call
 
-**Suggested action:** Klatch (Daedalus) — Klatch already ships as an MCP server (Phase 5a/5b, 1069 tests, write-path complete as of May 2026). PM is now starting a PoC in the same distribution space. There's no coordination required immediately, but if either project reaches an API surface or plugin manifest shape that's generalizable, the brief is the right channel to surface it. The architecture decisions PM makes in the early PoC phases may benefit from Klatch's MCP server implementation experience.
+The #1085 slice 2 build also turned up a Pattern-073 instance inline: the Slack `router` was calling a `client` method (`get_conversation_history`) that didn't exist on the client object — a docstring-asserted interface contract not matching the real API. Fixed during the same build. Pattern-073 catalog is now at 11 instances / 9 surface layers (up from 6 instances / 5 layers when it was filed two days ago).
+
+**Suggested action:** Klatch (Argus) — the "scope gate discovered mid-build" pattern is worth noting: the V1 / scope-required-for-V2 split is a clean way to ship partial coverage without waiting for infrastructure that's not in the agent's control. When an aggregator or data-source integration needs an elevated permission to reach full feature coverage, ship the available scope first and track the rest as a pending PM action.
+
+---
+
+### 4. Anthropic billing splits June 15: Agent SDK moves to a separate credit pool
+
+**From:** `klatch/docs/intel/2026-05-18-sweep.md` (automated external scan, item 1); pending Argus review
+**Relevant to:** PM (Piper Alpha Skunkworks MCP PoC), Klatch (Step 10 export path)
+
+Anthropic announced May 14 that starting **June 15**, four surfaces will draw from a new "Agent SDK credit" budget at full API rates rather than from the Claude subscription: the Claude Agent SDK (Python + TypeScript), `claude -p` headless mode, official Claude Code GitHub Actions, and third-party apps built on the Agent SDK. Interactive use (Claude Code CLI, claude.ai, Claude Cowork) stays in the subscription. Monthly credit caps per plan: Pro $20, Max 5x $100, Max 20x $200. Credits do not roll over.
+
+Two cross-project surfaces are directly affected:
+
+1. **PM's Anthropic plugin/MCP PoC** (PA Skunkworks, reported May 17) — the PoC targets the Agent SDK distribution surface. Any user of the eventual plugin who runs it programmatically draws from the new credit pool.
+2. **Klatch Step 10 export** — the vision of seeding a Claude Code session from a Klatch export would pass through the Agent SDK. That path now draws from Agent SDK credits, not the subscription.
+
+The Klatch external scan also flagged: **SDK 0.96.0** shipped May 13 (one minor above Klatch's current `^0.95.1` pin); adds `BetaManagedAgentsSearchResultBlock` types and a cache-diagnostics beta surface. And **Claude Code 2.1.143** (May 15) added `worktree.bgIsolation: "none"` — allows background sessions to edit the working copy directly without `EnterWorktree`, relevant to CCR environments where worktrees may be impractical.
+
+**Suggested action:** PM (Piper Alpha) — flag the June 15 billing change in the Skunkworks PoC design: any user-facing framing of the plugin should note that programmatic use draws from Agent SDK credits, not the subscription. Klatch (Daedalus) — batch SDK 0.96.0 in the next routine bump cycle; the cache-diagnostics surface is a potential AAXT tooling win.
 
 ---
 
 ## Sources Read
 
-- `piper-morgan-product/dev/2026/05/16/2026-05-16-0541-lead-code-opus-log.md` — full read; 7 issue closures, Pattern-073 filing, doc-sync-sweep v0.1 drafted, #1083 hook
-- `piper-morgan-product/docs/internal/architecture/current/patterns/pattern-073-documentation-asserted-behavior-drift.md` — full read; six instances, promotion criteria, doc-sync-sweep relationship
-- `piper-morgan-product/docs/public/comms/drafts/published/the-family-resemblance.md` — full read; family-resemblance framing, what crosses vs. what doesn't
-- `piper-morgan-product/dev/2026/05/16/2026-05-16-1159-pa-opus-log.md` — full read; PA skunkworks assignment, CIO V1 duty cycle fan-out
-- `piper-morgan-product/dev/active/cio-v1-duty-cycle-design-v0.1-2026-05-16.md` — partial read (60 lines); three-horizons framing, V1 five components, North Star
-- `piper-morgan-product/dev/2026/05/16/2026-05-16-0717-docs-code-opus-log.md` — partial read (80 lines); Family Resemblance publish context, May 15 omnibus
-- `piper-morgan-product/dev/2026/05/16/2026-05-16-0719-web-code-opus-log.md` — partial read (80 lines); imageAlt/imageCaption fix + sync-csv-to-json latent bug fixed
-- `klatch` — 48h log: brief-delivery commits only; no new content; skipped
-- `designinproduct` — DinP mail (CIO duty cycle fan-out, letters launch); hub index (card structure); Letters to xian excerpt
+- `piper-morgan-product/dev/2026/05/17/2026-05-17-0720-docs-code-opus-log.md` — full read; From Protocol to Infrastructure publish cycle, 9 process improvements, skill versioning arc
+- `piper-morgan-product/dev/2026/05/17/2026-05-17-0703-lead-code-opus-log.md` — full read (end-of-day section); 13 issues closed, M2g state, demand-gated cluster wrap
+- `piper-morgan-product/dev/2026/05/17/2026-05-17-0747-cli-b-design-sketch.md` — partial read (resolved-decisions section); 6 design questions + standing principle
+- `klatch/docs/intel/2026-05-18-sweep.md` — full read; billing split, SDK 0.96.0, MCP roadmap, Claude Code 2.1.143
+- `piper-morgan-product/docs/internal/architecture/current/patterns/pattern-073-documentation-asserted-behavior-drift.md` — partial read (instance count + CIO resolution-shape note); 11 instances / 9 layers
+- `designinproduct` — sweep-log, letters excerpt, index structure
+- `klatch` — one commit in watch paths (`docs(intel): automated external scan 2026-05-18`); read above
+- `cuneo`, `optilisten` — brief-delivery and status commits only; no new content
 
-**Not re-reported (covered in May 16 brief):** Engine deletion −10,734 LOC (γ-preserve); Pattern-072 Proven on fourth consumer; worktree-default standing policy + enforcement hooks; 90% context-runway hook; *Before You Go* published; OG backfill across 7 Klatch posts.
-**Secondary sources:** atlas, globe, cuneo, weather, one-job, optilisten, nyt-crossword — 48h logs empty or automated-status-only; skipped.
+**Not re-reported (covered in May 17 brief):** Pattern-073 initial filing (6 instances, 5 layers); doc-sync-sweep v0.1 skill; *The Family Resemblance* published; CIO V1 duty-cycle design (v0.1–v0.3); PA Skunkworks MCP PoC assignment.
+**Secondary sources:** atlas, globe, weather, one-job — 48h logs empty; skipped. nyt-crossword — 48h log empty; skipped.
 
 ---
 
