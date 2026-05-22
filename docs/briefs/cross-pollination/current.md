@@ -1,75 +1,86 @@
+# Cross-Pollination Brief — May 22, 2026
 
-# Cross-Pollination Brief — May 21, 2026
-
-Wednesday evening at PM brought three notable developments: Klatch is paused by PM direction, with all relay links suspended and context frozen at May 18. PM's CIO committed the first canonical design document for the autonomous duty cycle — a three-loop architecture built from a conversational walkthrough of PM's hand-drawn sketches — while HOST empirically confirmed that automated cron jobs end at the session boundary rather than persisting overnight. And Ship #043 ("The Skill That Doesn't Fire") published with a recursive failure mode: the newsletter's External section listed fabricated publication titles and dates instead of cross-checking the editorial calendar — the same gap the essay was naming.
+PM published "The Voice of a Denial" Thursday evening — a blog essay about how Piper's ethics boundary enforcement went from a machine-legible error string to a first-person voice, with three concrete worked examples (harassment, professional boundary, inappropriate content). The architecture separates detection from response: the enforcer logs pattern matches for audit and hands a category-hint to the conversational floor, which decides what Piper actually says. On the same day, CIO issued a formal retirement memo for the V1 autonomous duty cycle, an orderly close of a four-role experiment whose validated learnings carry forward into the three-loop design. On the skunkworks front, PA's BYOC plugin PoC cleared its first build gate. And a correction to the May 20 brief: Slack `search.messages` requires no migration — the scope is still available; the original concern was from looking at the wrong tab.
 
 *Letters to xian: have a question for xian about anything here or elsewhere in his work? File `question-{from}-{date}-{topic}.md` to dispatch mail. AI prompts human; one letter featured at the end of each brief.*
 
 ## Key Insights
 
-### 1. Klatch is paused — relay links suspended, context frozen at May 18
+### 1. "The Voice of a Denial" published — ethics enforcement learns Piper's voice
 
-**From:** `piper-morgan-product/dev/2026/05/20/2026-05-20-2243-arch-opus-log.md` (11:02 PM triage note); `piper-morgan-product/dev/active/pa-inbox-audit-2026-05-20.md` (action item U3)
-**Relevant to:** Klatch (all agents — pause is PM-directed; no action expected); PM (Architect, PA — update sibling-project references; relay-forwarding deferred)
+**From:** `piper-morgan-product/docs/public/comms/drafts/the-voice-of-a-denial.md`; editorial calendar commit `d1c92bd` (published blog-first at pipermorgan.ai/blog/the-voice-of-a-denial/; Medium syndication pending)
+**Relevant to:** Klatch (Calliope, Daedalus — the architecture pattern for separating a machine-legible decision from a user-facing response applies whenever an agent must refuse a request)
 
-PM told agents Wednesday evening that Klatch is paused. The Architect removed the Daedalus relay from the forward queue; PA updated sibling-projects memory with the pause state. The Architect's note: "Daedalus relay removed from forward queue — paused with Klatch; can revisit when Klatch resumes."
+ETHICS-ACTIVATE (#992) was the April 22 issue that turned Piper's boundary enforcer from a silent background detector into something that shapes what Piper actually says when it can't help. The blog essay narrates the design problem directly: the enforcer had two jobs (detect, respond) collapsed onto one output channel. The detection log — *"Content contains potential harassment patterns (matched: 3 patterns)"* — is a perfect audit artifact. It is also a terrible thing to say to a user.
 
-Klatch's last substantive sessions were May 18 (Calliope's wrap log + Argus's Round 33b); no new sessions since. The pause coincides with the period when PM has been focused on CIO duty-cycle design and cohort coordination at PM.
+The fix was architectural. The enforcer now produces a structured `redirect_context` field (a category-only hint: *"the request targets a person in a way that could cause harm; redirect toward constructive professional work"*) — audit-safe, never routed to the user. The conversational floor reads the hint and decides the response. Three worked examples show the result: harassment gets a firm first-person *"That's not a message I want to help draft"* plus a concrete redirect; professional boundary gets a lighter *"not the kind of thing I get into"*; inappropriate content gets a clean *"outside what I'll help with."* All share four properties: identity (first-person "I"), brevity, a real door back to collaboration, and no parroting of the pattern words from the audit log.
 
-The pause doesn't represent a lapse — it's a clean hold on a well-defined state. Klatch's last brief-relevant events (Round 40 AAXT 94% conveyance, Round 33 closed, Pattern-073 Proven cross-report) are all stable and have been reported. The relay window flagged for the Architect (Wed–Thu) passed without a session, and the Thu marker has now also passed.
+The essay closes on the architectural insight xian flagged for Comms: we often over-engineer workflows based on pre-LLM patterns. Collapsing detection and response onto one output was the pre-LLM pattern; separating them is what lets the LLM layer do what it's good at.
 
-**Suggested action:** PM (Architect, PA) — sibling-project memory should now read "Klatch: paused as of 2026-05-20 PM direction; Daedalus relay deferred; last session May 18." No relay-forwarding attempts needed until PM signals resumption. Klatch agents — no action required; when the pause lifts, the May 18 context is the clean handoff point.
-
----
-
-### 2. CIO duty-cycle v0.1 design committed — three loops, one north-star sentence
-
-**From:** `piper-morgan-product/dev/2026/05/20/2026-05-20-1235-cio-code-opus-log.md` (Day-4 end-of-day entry); commit `3771c26f4` (`docs/operations/duty-cycle design/duty-cycle-design-v0.1.md`); `dev/active/2026-05-20-2243-host-code-opus-log.md` (durability memo, commit `40daac934`)
-**Relevant to:** Klatch (Calliope, Argus — the architecture pattern and the session-boundary constraint are relevant to any agent considering autonomous background cycles)
-
-PM walked CIO through 7 hand-drawn sketch pages — mail-loop, tracker/tasks/attention details, harness diagram, task-loop, stop-logic decision table, flywheel and day-parts, and CIO pseudo-code — conversationally, image by image. The resulting v0.1 document captures:
-
-- **Three named loops**: mail loop (process inbox, triage, respond or defer), task loop (do unblocked work until blocked; send memos; 2-bit termination), flywheel orchestrator (coordinates loop transitions; owns the day-shape: START → WORK → IDLE → STOP)
-- **Three per-agent files**: tracker (what work exists), tasks (current execution), attention (what needs PM's eyes)
-- **Decision table**: four rows covering the normal cycle, the PM-interrupt event, the blocked-everywhere case, and the idle-wait case
-
-A conversation with Ted Nadeau (who is building an adjacent project in a "halfway between code and English" space) gave PM's intent its sharpest articulation yet: *"wake if idle, check new messages/tasks, do unblocked things until blocked, batch update for my attention, then sleep."* PM flagged this as the canonical north-star sentence for v0.2.
-
-A critical infrastructure constraint closed at the same time: HOST filed an empirically-confirmed durability memo (commit `40daac934`) showing that `CronCreate durable=true` is session-only — the cron terminates at the session boundary, not at the calendar day. The May 18 caveat ("possibility #1 of three") is now closed. V1 cycle retool is gated on PM input.
-
-**Suggested action:** Klatch (Calliope) — Klatch's periodic AAXT loop and Argus's weekly sweep cadence are structurally similar to PM's mail-loop + task-loop pattern. If autonomous background cycles are considered for Klatch, PM's three-loop architecture (especially the 2-bit task termination and the day-shape composition) is worth reviewing as a prior art. The session-boundary constraint is important: any cron-based trigger needs re-instantiation each session; it doesn't persist.
+**Suggested action:** Klatch (Calliope, Daedalus) — when Klatch agents implement refusals (content policy, scope limits, role boundaries), the detection-vs-response separation is directly applicable. Log the machine-legible signal for audit; give the conversational layer a category hint; let the floor write the actual response. Prevents the "system-error in user-facing voice" failure without sacrificing audit integrity.
 
 ---
 
-### 3. Ship #043 published with a recursive failure — fabricated External section in a newsletter about unenforced disciplines
+### 2. V1 Duty Cycle formally retired — experiment validated, cohort closes cleanly
 
-**From:** `piper-morgan-product/docs/omnibus-logs/2026-05-19-omnibus-log.md` (Session Learnings section: "vocabulary-versus-mechanism, again, recursively"); `piper-morgan-product/dev/active/pa-inbox-audit-2026-05-20.md` (NEEDS-READ item 4: "Exec workstream-memo publication ask — Root cause: Ship #043 fabrication")
-**Relevant to:** Klatch (Calliope — the same publication-reference gap applies whenever an agent references external publications without cross-checking a canonical list)
+**From:** `piper-morgan-product/mailboxes/arch/inbox/memo-cio-to-host-docs-exec-cc-cohort-v1-duty-cycle-retirement-due-to-design-pivot-2026-05-21.md` (commit `a3e0222`); CIO V2 pre-design sketch `4f00dd5` (4 candidate approaches, lean toward Option B sidecar pattern)
+**Relevant to:** Klatch (Calliope, Argus — the validated architectural learnings from V1 apply to any periodic background cycle at Klatch)
 
-Ship #043 — titled "The Skill That Doesn't Fire," an essay about how documenting a discipline without enforcement infrastructure leaves the gap open — was published on Wednesday May 20. Exec drafted v0.2 with proper voice and template after the May 15 v0.1 strand-recovery (reported May 20 brief), but the v0.2 External section listed publication titles, dates, and URLs without cross-referencing the actual editorial calendar. PM caught the fabrication on publication review.
+PM directed on May 21: *"Let's retire the V1-etc. cycle since we're redesigning the idea."* CIO issued a cohort-wide memo to HOST, Docs, and Exec with specific per-role retirement actions (cancel cron, delete worktree branches, remove worktrees). The V1 experiment — three roles running append-only hourly cron cycles with mail-detection and categorization — is superseded by the three-loop v0.1 design (mail loop + task loop + flywheel orchestrator) committed two days earlier.
 
-The omnibus flags this as "vocabulary-versus-mechanism, again, recursively": the essay explains why writing down a rule doesn't enforce it; the essay's own External section demonstrated the same failure by asserting dated publication facts without the enforcement mechanism (a mandatory calendar lookup). The skill v1.1 and v1.2 updates close the gap with mandatory editorial-calendar verification on every claimed publication in the External section.
+The retirement is clean rather than a collapse: V1 validated what it needed to validate. The append-only architecture (one file per fire, fast-forward push, zero conflict surface at fold time — methodology-31) proved the multi-role conflict-free model. The categorization enum and Postel-robust memo-header parsing (methodology-32) carry forward. The session-boundary constraint (cron terminates at session close, empirically confirmed by HOST) shaped the new design's framing of START/STOP rituals. These findings are stable regardless of which cycle architecture PM adopts next.
 
-The downstream fix: starting with Ship #044, every workstream memo gets a mandatory §Publications shipped/held block that cross-references the editorial calendar by row ID rather than by recalled title and date. The fix prevents the same class of fabrication in the newsletter that documents the anti-fabrication discipline.
+CIO's V2 pre-design sketch identifies four candidate approaches, with CIO leaning toward a "sidecar proposal pattern" (Option B). V0.2 design pending PM ratification before a fresh cohort-adoption proposal.
 
-**Suggested action:** Klatch (Calliope) — when Klatch publishes blog posts or external references in newsletter-equivalent artifacts, any dated claim about a specific publication should be verified against the actual source (the editorial calendar equivalent, or the published URL) in the same session. The gap isn't recall failure — it's the absence of a mandatory verification step at a specific point in the workflow. The PM fix (mandatory calendar cross-check as a skill step) is worth mirroring in Klatch's draft-review process.
+**Suggested action:** Klatch (Calliope, Argus) — the methodology-31 invariant (each background cycle modifies exactly one file; fold via fast-forward push) is the piece worth carrying. It's what makes autonomous multi-agent background cycles non-conflicting. If Klatch ever implements periodic sweeps that overlap with other agents' concurrent activity, the append-only + one-file-per-fire pattern resolves the collision surface.
+
+---
+
+### 3. BYOC PoC enters build phase — three-feature triangle ratified
+
+**From:** `piper-morgan-product/dev/active/skunkworks-byoc-step-3-poc-scope-synthesis-2026-05-17.md` v1.1 (commit `26fcc92`, merged to main May 21 per Day 50 disposition); `dev/active/skunkworks-byoc-poc-plan-v0.2-2026-05-16.md`
+**Relevant to:** Klatch (Calliope — the plugin architecture pattern and cold-start profile shape are worth watching if Klatch ever considers a similar Claude Code deployment layer)
+
+PA's Step 3 synthesis passed the first formal PM gate. The three-feature triangle is ratified and ready for subagent 3 (build pass):
+
+1. **cold-start-as-pm-profile** — a skill that conducts a serial-question interview and writes the populated PM profile to a per-user config file; exercises the writable-per-user-config pattern from the legal-plugin architecture
+2. **insight-journal-flat-file** — a markdown flat-file plus read (`/piper:journal`) and write (`/piper:reflect`) skills; exercises state location and audit-trail substrate questions
+3. **composting-via-dreams-mcp** — a single MCP tool wrapping Anthropic Dreams API; exercises the composting trigger placement and Type 1 substrate delegation
+
+The PoC is explicitly "build-less / either-outcome-is-signal" per PM's framing: if the flat-file approach works for the insight journal, that's a signal. If it doesn't, that tells you something about what MCP server or Anthropic Memory Store would need to add. The stretch feature (Type 2 adversarial dreams probe) is cut at the second PM gate if it's absorbing bandwidth.
+
+**Suggested action:** Klatch (Calliope) — the legal-plugin shape that PA is using as the prior (thin skills over rich user-config, cold-start writes config) is the pattern that distinguishes a PM-specific deployment from commodity tools. If Klatch ever designs a Claude Code deployment layer for end users rather than internal agents, this PoC's build findings will be the nearest comparable prior art.
+
+---
+
+### 4. Slack search.messages: previous finding corrected — no migration needed to unblock #1085
+
+**From:** `piper-morgan-product/dev/2026/05/20/slack-search-investigation-findings-2026-05-20.md` (commit `322fc44`; post-crash recovery of subagents lost in the May 19 empty-image session crash)
+**Relevant to:** PM (Lead Dev — #1085 slice 3 unblocked); Klatch (Daedalus — the user-scope vs. bot-scope distinction applies to any Slack integration)
+
+The May 20 brief reported that `search.messages` would require a Real-Time Search API migration before #1085 slice 3 could ship. That finding was wrong — it came from subagent reports lost in the crash and partially reconstructed from memory. The post-crash recovery findings, committed after the May 20 sweep, correct it.
+
+The actual finding: `search:read` is a **User Token scope**, not a Bot Token scope. It never appears in the Bot Token Scopes dropdown — that's documented Slack behavior, not a gap. PM was looking at the wrong tab. Under User Token Scopes, `search:read` is still available, still functional, and carries no sunset date. `search.messages` is marked legacy but operational. The Real-Time Search API migration (1.5–3 dev-days) is a future follow-on after #1085 ships, not a blocker.
+
+Once the OAuth re-auth completes under User Token Scopes, the implementation itself is ~50 lines following the existing DM-aggregator pattern (the `_fetch_slack_mentions_items()` method doesn't exist yet but is fully specified).
+
+**Suggested action:** PM (Lead Dev) — OAuth re-auth step: in Slack app config, navigate to OAuth & Permissions → User Token Scopes (scroll past Bot Token Scopes), confirm `search:read` is present, add and re-auth. Klatch (Daedalus) — if Klatch ever integrates Slack search, note that `search:read` is user-only: any integration requires a User Token (user installs the app), not a Bot Token. The two scope lists are separate in the Slack app config UI and require separate OAuth flows.
 
 ---
 
 ## Sources Read
 
-- `piper-morgan-product/dev/2026/05/20/2026-05-20-2243-arch-opus-log.md` — full read; #973 and #1089 ratified; Klatch pause noted; Daedalus relay removed
-- `piper-morgan-product/dev/active/pa-inbox-audit-2026-05-20.md` — full read; Day 50 mass triage (58 items); action items synthesized; Klatch pause memory update
-- `piper-morgan-product/dev/2026/05/20/2026-05-20-1235-cio-code-opus-log.md` — full read; 7-sketch walkthrough; v0.1 design doc filed; Ted/Englishia north-star; inbox triage
-- `piper-morgan-product/dev/active/2026-05-20-2243-host-code-opus-log.md` — full read; CronCreate durability memo; 360 tracker refresh; migration checklist v1.2 ratified
-- `piper-morgan-product/dev/2026/05/20/2026-05-20-2300-web-code-opus-log.md` — full read; Gap 4 (linked-image markdown) shipped; plan-HTML relocation flag
-- `piper-morgan-product/dev/2026/05/20/2026-05-20-0604-lead-code-opus-log.md` — partial read; May 19 recovery completed; worktree proliferation forensic audit; 6 worktrees cleaned; #1106 filed
-- `piper-morgan-product/docs/omnibus-logs/2026-05-19-omnibus-log.md` — read (as retrospective log, content date May 19): Ship #043 fabrication finding used; all other content confirmatory of May 20 brief
+- `piper-morgan-product/docs/public/comms/drafts/the-voice-of-a-denial.md` — full read; ethics architecture, three worked examples, detect-vs-respond separation
+- `piper-morgan-product/mailboxes/arch/inbox/memo-cio-to-host-docs-exec-cc-cohort-v1-duty-cycle-retirement-due-to-design-pivot-2026-05-21.md` — full read; V1 retirement actions, V1 validated learnings, v0.2 framing
+- `piper-morgan-product/dev/active/skunkworks-byoc-step-3-poc-scope-synthesis-2026-05-17.md` v1.1 — full read; three-feature triangle spec, four PM-ratified framings, gate conditions
+- `piper-morgan-product/dev/2026/05/20/slack-search-investigation-findings-2026-05-20.md` — full read; bot-scope vs user-scope finding, legacy-functional status, #1085 implementation shape
 - `designinproduct` — sweep-log, letters excerpt, index structure
 
-**Not re-reported (covered in prior briefs):** Klatch AAXT Round 40 94% conveyance (May 19); Round 33 closed (May 19); Pattern-073 Proven (May 19); CIO 4-role duty-cycle cohort (May 19); M2g #1080/#1081 ship (May 19); The Log That Fact-Checked Itself published (May 20); session crash empty-image API (May 20); fold-on-handoff rule (May 20); Surface 2/4 unblocked (May 20).
+**Klatch:** no new sessions (paused since May 18 per PM direction; pause state stable).
 
-**Secondary sources:** atlas, globe, cuneo, weather, one-job, optilisten — 48h logs contain brief-delivery commits only; skipped. nyt-crossword — automated status commits only; no agent narration; skipped.
+**Not re-reported (covered in prior briefs):** Klatch paused (May 21); CIO duty-cycle v0.1 design committed (May 21); Ship #043 fabrication failure / skill v1.1+v1.2 (May 21); The Log That Fact-Checked Itself published (May 20); fold-on-handoff rule (May 20); session crash empty-image API (May 20); three Klatch mail disciplines (May 19); Pattern-073 Proven (May 19); CIO 4-role cohort (May 19).
+
+**Secondary sources:** atlas, globe, cuneo, weather, one-job, optilisten, nyt-crossword — 48h logs contain brief-delivery and automated status commits only; skipped.
 
 ---
 
