@@ -1,81 +1,84 @@
-# Cross-Pollination Brief — May 23, 2026
+# Cross-Pollination Brief — May 24, 2026
 
-A two-day travel break kept PM in light-work mode Friday and Saturday, but the week closed with two genuine wins and a publication incoming today. The Slack integration obstacle that started with a scope question five days ago resolved end-to-end after the May 22 brief ran — Piper's connection to the Kind Systems workspace now shows "Slack: Healthy" after a five-bug debugging chain that touched the OAuth flow, a class-vs-instance variable bug, and a health check reading from the wrong data source. While xian was at Princeton, Docs filed ROSTER.md — PM's first formal org-chart document, giving the 7+3+specialized role structure a home separate from CLAUDE.md's assignment table. And "Project Biorhythms," a Comms insight piece from November about how projects breathe between discovery and build modes, is scheduled to publish today.
+While xian finished his Princeton reunion weekend, PM's Lead Developer spent Saturday in a session that produced the project's largest single-day code delivery in recent weeks: five tested increments building a privacy enforcement layer into the knowledge graph, closing all seven acceptance criteria and merging 1,530 lines of new code (#1089). The CIO's autonomous loop design received a major correction after PM's page-6 walkthrough on Saturday night — the daily CHECK gate was modeled wrong through v0.2 and has been significantly reframed. And Comms closed out a nine-essay publishing schedule with all three remaining drafts complete and pub dates locked through June 23.
 
 *Letters to xian: have a question for xian about anything here or elsewhere in his work? File `question-{from}-{date}-{topic}.md` to dispatch mail. AI prompts human; one letter featured at the end of each brief.*
 
 ## Key Insights
 
-### 1. Slack OAuth resolves after a five-bug chain — integration now healthy, #1085 genuinely unblocked
+### 1. Piper's knowledge graph now enforces privacy — three levels, defense-in-depth, all seven acceptance criteria closed (#1089 Phase 0)
 
-**From:** `piper-morgan-product/dev/2026/05/21/2026-05-21-0700-lead-code-opus-log.md` (commit `bd49d24`, merged to main May 22); `cdce40519` (integration-health keychain fix, cherry-picked to main); `c0d7d1cac` (class-level nonce fix, cherry-picked to main)
-**Relevant to:** Klatch (Daedalus — the OAuth state-management and health-check patterns apply to any future Klatch integration requiring user tokens)
+**From:** `piper-morgan-product/dev/2026/05/23/2026-05-23-0840-lead-code-opus-log.md` (merge commit `5d4cd90`, merged to main May 23 late)
+**Relevant to:** Klatch (Daedalus — the three-layer enforcement pattern and level design apply if Klatch ever stores user content that could be private or sensitive); designinproduct (Janus — privacy-level thinking applies if the hub surfaces user-specific content)
 
-The May 22 brief reported that `search.messages` requires no migration — the scope is available under User Token (not Bot Token). But the OAuth *connection* itself resolved only after that brief ran, after a further two-day marathon that logged five distinct bugs in sequence:
+PM's Lead Developer shipped five increments across Saturday, building a full privacy filter into `services/knowledge/knowledge_graph_service.py` and `services/database/repositories.py`:
 
-1. **Bot-vs-user scope tab confusion** — `search:read` never appears under Bot Token Scopes (documented Slack behavior); PM was looking at the wrong tab.
-2. **Wrong workspace** — PM's browser session was in the DinP workspace; the Piper app lives in the Kind Systems workspace. Filed as #1107 (future migration to DinP workspace after #1085 ships).
-3. **Missing redirect URI** — Slack app config didn't include the localhost callback URI; PM added `http://localhost:8001/api/v1/settings/integrations/slack/callback`.
-4. **Instance-level nonce bug** — `SlackOAuthHandler._oauth_states` was a plain `{}` initialized in `__init__`, meaning each request created a fresh handler object and the nonce stored during `/connect` was garbage-collected before `/callback` could find it. One-line fix: move the dict to class-level. (Filed #1109 for future Redis-backed production-safe store.)
-5. **Health check reading env var, not keychain** — after OAuth succeeded, the Integration Health UI still showed "Slack: Not configured." Root cause: `_get_integration_config_status('slack')` checked `os.environ['SLACK_BOT_TOKEN']` only — while the OAuth flow stores tokens in the keychain. The calendar integration had this right; Slack didn't. Fixed by threading `user_id` through the health check and adding a keychain lookup (41-line change). This is another Pattern-073 instance: the UI asserted a state ("Not configured") while the underlying data source disagreed.
+- **Increment 1**: `PrivacyLevel` enum (PUBLIC / STANDARD / STRICT) + `FilterReason` enum in a new `services/ethics/privacy_types.py` module, 11 tests.
+- **Increment 2**: Write-path gate — `create_node` now accepts `privacy_level`; PUBLIC bypasses filtering, STANDARD redacts and saves, STRICT raises `PrivacyFilterRejectedError` before any DB write. 23 tests.
+- **Increment 3**: Read-path filter — `get_node`, `get_nodes_by_type`, `search_nodes` honor privacy level; STRICT nodes are excluded from reads and searches. 20 tests.
+- **Increment 4**: Repository-layer safety net — `KnowledgeGraphRepository.create_node` independently scans for harassment-pattern content at the DB layer as defense-in-depth, regardless of what the service layer already did. 18 tests.
+- **Increment 5**: Audit-log integration — privacy filter events now write structured `EthicalDecision` records to the durable audit transparency layer (built in #1018 Phase 2, May 3). 7 tests; `session_id` correlation for traceability.
 
-Final result: PM re-authed, "Slack Connected — Connected to Kind Systems" appeared, Integration Health shows **"Slack: Healthy (last checked: 2026-05-22T18:14)"** with Test + Disconnect buttons. Test passes. Three tracking issues filed (#1107 DinP migration, #1108 OAuth failed-attempt UX, #1109 Redis-backed state).
+Total: 79 new tests, all 7 acceptance criteria closed, 1,530 LOC across 6 files. Side-finding: the Architect's spec clause requiring a `privacy_level != public` check at the repository layer doesn't survive contact with the repo interface (repo has no `privacy_level` parameter). Lead Dev sent a spec-clarification memo to Architect (#1089 design-substrate-divergence note); response pending.
 
-**Suggested action:** Klatch (Daedalus) — two transferable findings. First: OAuth state (nonces, tokens, PKCE verifiers) must be class-level or process-global storage, never instance-level. Per-request handler instantiation is the default FastAPI pattern, so instance dicts silently vanish between the authorize and callback steps. Second: health checks must read from the same data source the writer uses. If credentials go to keychain, the health check must read keychain — not env vars, not an in-memory cache.
-
----
-
-### 2. ROSTER.md makes PM's team structure explicit — a model for multi-agent teams with 10+ roles
-
-**From:** `piper-morgan-product/docs/briefing/ROSTER.md` (commit `fb2cf0c`, Docs session May 22 afternoon); CLAUDE.md cross-reference updated same commit
-**Relevant to:** Klatch (Calliope — useful model if Klatch ever formalizes its agent roster beyond CLAUDE.md); designinproduct (Janus — the tiering logic is a transferable framing)
-
-PM's Docs role filed ROSTER.md on Friday afternoon — PM's first document whose sole job is the org-shape view of the agent team. The document separates two views that had been collapsed into CLAUDE.md's role table:
-
-- **CLAUDE.md** — assignment-flow view: which briefing to read, which session log slug to use. Optimized for an agent starting a session.
-- **ROSTER.md** — org-shape view: which tier each role belongs to and why. Optimized for understanding the team's structure from outside any particular session.
-
-The three tiers: **Tier 1 — Leadership (7 roles)**: Chief of Staff, Chief Architect, CXO, PPM, CIO, HOST, Comms — standing strategic lanes, all migrated to Claude Code by April 26. **Tier 2 — Staff (3 roles)**: Lead Dev, Piper Alpha, Docs — operational + infrastructure. **Tier 3 — Specialized**: Coding Agent (active, deployed as needed), ETA (dormant since March). Session-log naming conventions and cross-references to mailbox routing, branch discipline, and the activity log are all in one place.
-
-The "org-shape vs. assignment-flow" split is the generalizable design insight: once a CLAUDE.md role table grows past ~8 rows, it's serving two different readers. Separating them makes both cleaner.
-
-**Suggested action:** Klatch — when the Klatch agent roster grows past its current count (Daedalus, Argus, Theseus, Calliope, Mnemosyne, Ariadne, Iris = 7 named agents), a ROSTER.md-style tier document may be worth filing. The immediate trigger: when a new Klatch agent reads CLAUDE.md and finds the role table harder to parse than it should be.
+**Suggested action:** Klatch (Daedalus) — the three-layer stack (service gate → repository safety net → audit log) is a useful template for layered policy enforcement without tight coupling between layers. Each layer makes its own independent decision; the upper layer being present doesn't disable the lower one. The `session_id` audit correlation pattern is worth noting for any future ethics or privacy audit requirement.
 
 ---
 
-### 3. "Project Biorhythms" queued to publish today — discovery/build oscillation as a project health signal
+### 2. The CIO's daily loop was designed wrong through v0.2 — CHECK is a day-part dispatcher, not a mail-check
 
-**From:** `piper-morgan-product/docs/public/comms/drafts/project-biorhythms-draft.md` (original draft Nov 22, 2025); editorial calendar commit `6a1a822` (queued for May 23, 2026 after PM executive call)
-**Relevant to:** Klatch (Calliope — the oscillation framing is directly applicable to Klatch's pause/active cycle); designinproduct (Janus — useful lens for reading the activity log)
+**From:** `piper-morgan-product/docs/operations/duty-cycle design/duty-cycle-design-v0.3.md` (commit `c888c9e`, May 23 late); CIO session log `dev/2026/05/23/2026-05-23-0842-cio-code-opus-log.md`
+**Relevant to:** designinproduct (Janus — the loop architecture is directly relevant to the cross-pollination sweep trigger); Klatch (Calliope — any agent-loop design faces the same dispatcher-vs-action conflation risk)
 
-A Comms draft from November 2025, originally written after PM's mid-November velocity spike, is scheduled for Saturday publish. The essay's core argument: healthy AI projects alternate between two modes that can't both be sustained at once.
+PM's Saturday-night walkthrough of the duty-cycle design doc's page 6 revealed a fundamental modeling error that had persisted from v0.1 through v0.2. The CHECK step was modeled as "check the inbox" — functionally identical to the WORK flywheel's mail step, just positioned outside it. PM's walkthrough corrected this:
 
-**Inhale (discovery):** exploration, uncertainty navigation, learning without necessarily applying. The mid-November spike began here — E2E testing exposed gaps that needed attention before building resumed.
+**CHECK is a dispatcher, not an action.** Its question is "which day-part am I in?":
+- New day detected → route to START (day-rollover housekeeping only: close yesterday's log, open today's)
+- Past 11pm → route to STOP (day-boundary termination, time-driven)
+- Otherwise → route to WORK (where mail-checking actually happens)
 
-**Exhale (build):** execution, shipping, applying what was discovered. Forcing this phase prematurely leads to building the right-shaped thing for the wrong problem.
+Cascading corrections that flow from this reframe:
+- Mail detection lives entirely inside the WORK flywheel, not at the day's outer gate
+- Day-boundary termination is now time-driven (past 11pm), not inbox-driven
+- The WORK flywheel's (0,0) terminal — no mail, no tasks — routes to **IDLE** within the day, not STOP
+- **IDLE formally defined**: entered when WORK flywheel reaches (0,0) mid-day; polls every N minutes; exited by new mail or new day detection
 
-The essay argues that the rhythm's cadence varies — sometimes days, sometimes weeks — but trying to force steady-state productivity in either phase leads to drift (always building) or paralysis (always discovering). The November spike wasn't caused by heroic effort or better process; it followed the project's natural oscillation reaching the exhale inflection after a consolidation phase.
+START's role is now clearly housekeeping-only (previous-day close + new-day open), not task work. Page 7 walkthrough deferred to today (May 24); methodology batch deferred from this session as well.
 
-Cross-relevance note: Klatch's May 18-present pause is readable through this lens. Klatch entering a pause isn't a failure mode — it may be the inhale before the next build phase.
+**Suggested action:** Klatch (Calliope); designinproduct (Janus) — the CHECK-vs-WORK conflation is a generalized trap for any loop that has both an outer routing step and an inner action step. When designing an autonomous cycle, explicitly test each step: "Is this step deciding what to do next, or doing it?" If the answer is ambiguous, the step needs to be split. The fix here — all actions in WORK, all routing in CHECK — makes the loop semantics explicit and avoids silent duplication.
 
-**Suggested action:** Klatch (Calliope) — watch for the essay once published today on pipermorgan.ai. The oscillation framing is a useful alternative to reading pauses as blockers. When Klatch resumes, framing the restart as "entering exhale" rather than "ending pause" may be a more accurate orientation for the resuming cohort.
+---
+
+### 3. "Project Biorhythms" confirmed published — Comms closes the nine-essay arc with all pub dates locked through June 23
+
+**From:** `piper-morgan-product` git log — commits `c32b037` (editorial calendar syndication URLs), `67e5c7f` (pub-date assignments), `2ce353e` (Beat 9 draft), `a920b65` (Beat 8 draft), `f3df6a4` (Beat 7 draft)
+**Relevant to:** designinproduct (Janus — the nine-beat arc creates a predictable stream of PM narrative content for hub updates through late June)
+
+Three items confirm simultaneously:
+
+1. **"Project Biorhythms" is published** — the May 23 brief said it was "queued to publish today"; it is now confirmed with Medium and LinkedIn syndication URLs in the editorial calendar (commit `c32b037`).
+2. **Comms completed Beats 7, 8, and 9** — the three remaining drafts in the nine-essay *Building Piper Morgan* narrative arc: Beat 7 (*Hypothesis Refuted*, covering May 8–9; stranded since May 21, landed May 23), Beat 8 (*Branch-or-Anchor in Ninety Minutes*, covering May 10), Beat 9 (*The Hook and the Worktree*, covering May 13–15).
+3. **All nine beats have pub dates assigned**: the full arc runs May 26 → June 23 at the editorial cadence in the calendar.
+
+Beat 9 closes the arc that began with the May 8–15 sprint — the same sprint where the worktree-default policy was validated, the duty cycle had its first dry run, and the MUX/UI cohort was convened. The essays convert that sprint into public narrative.
+
+**Suggested action:** Janus — the May 26 → June 23 schedule creates a roughly once-per-week publication cadence for PM essays. No action needed now; useful context for the June brief cycle and for deciding when to update the hub's project cards with fresh insight quotes.
 
 ---
 
 ## Sources Read
 
-- `piper-morgan-product/dev/2026/05/21/2026-05-21-0700-lead-code-opus-log.md` — full read; five-bug OAuth chain, class-level nonce fix, keychain health check fix, session sign-off
-- `piper-morgan-product/dev/2026/05/22/2026-05-22-1114-lead-code-opus-log.md` — full read; OAuth success confirmation, travel context, deferred work
-- `piper-morgan-product/dev/2026/05/22/2026-05-22-1346-docs-code-opus-log.md` — full read; ROSTER.md task, omnibus status
-- `piper-morgan-product/docs/briefing/ROSTER.md` — full read; tier structure, slug conventions, cross-references
-- `piper-morgan-product/docs/public/comms/drafts/project-biorhythms-draft.md` — partial read (lead + oscillation section); editorial calendar confirmed queued May 23
+- `piper-morgan-product/dev/2026/05/23/2026-05-23-0840-lead-code-opus-log.md` — full read; #1089 five-increment arc, Pattern-073 Instance #14, MEM cluster Q1+Q3 ratification, sprint review with PA, sign-off
+- `piper-morgan-product/docs/operations/duty-cycle design/duty-cycle-design-v0.3.md` — commit `c888c9e` message and diff summary; CHECK/IDLE/START redesign details
+- `piper-morgan-product/dev/active/cio-v1-duty-cycle-design-v0.4-2026-05-17.md` — partial read (v0.4 v0.3→v0.4 changes section, loop mechanism); background for understanding v0.3 context
+- `piper-morgan-product` git log (48h) — commit-message scan for Comms narrative slate, MEM cluster, CIO log, editorial calendar
 - `designinproduct` — sweep-log, letters excerpt, index structure
 
-**Klatch:** no new sessions (paused since May 18; only brief-delivery commits in 48h window — confirmed quiet, as expected).
+**Klatch:** only brief-delivery commits in 48h window; paused since May 18. Confirmed quiet.
 
-**Secondary sources:** atlas, globe, cuneo, weather, one-job, optilisten, nyt-crossword — 48h logs contain brief-delivery and automated status commits only; skipped per fast-skip rule.
+**Secondary sources:** atlas, globe, cuneo, weather, one-job, optilisten, nyt-crossword — 48h logs empty; all skipped per fast-skip rule.
 
-**Not re-reported (covered in prior briefs):** Slack search.messages scope finding (May 22); "The Voice of a Denial" published (May 22); V1 duty cycle retired (May 22); BYOC PoC three-feature triangle ratified (May 22); Klatch paused (May 21); duty cycle v0.1 three-loop design (May 21); Ship #043 fabrication failure mode (May 21).
+**Not re-reported (covered in prior briefs):** Slack OAuth five-bug chain (May 23); ROSTER.md org-shape/assignment-flow split (May 23); Project Biorhythms "queued to publish" (May 23 — today confirms published); Pattern-073 Proven at 13+ instances (May 17/19 — Instance #14 is a new data point but Pattern-073 itself is established); V1 duty cycle formally retired (May 22); "The Voice of a Denial" published (May 22); BYOC PoC three-feature triangle (May 22); Klatch paused (May 21); duty cycle v0.1 three-loop architecture (May 21).
 
 ---
 
