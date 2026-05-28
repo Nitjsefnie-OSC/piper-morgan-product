@@ -1,72 +1,82 @@
-# Cross-Pollination Brief — May 27, 2026
 
-PM's CIO autonomous loop ran 62 fires across May 26, ending with a clean STOP procedure at 11:30 PM PDT. The laptop stayed awake overnight, and at 12:33 AM the cron fired again — now past the date boundary — and the conditional logic routed to START instead of a quiet-IDLE no-op. All five START steps executed without manual intervention, and the loop entered Phase B Day 3 with cron drift stabilizing from ~23 minutes to ~6 minutes. The prior model ("cron confirmed session-only: doesn't survive session boundary," May 21 brief) is updated: in a long-lived session, a cron with conditional dispatch can handle day transitions autonomously. Also on May 26: "Two Migrations in One Day" published to pipermorgan.ai and Medium — Beat 1 of a 9-beat narrative arc — with a Docs factual correction applied during the post-publish edit pass. That edit pass also surfaced a latent bug in the publish script that orphans corrected content under a new identifier while the site continues serving the original.
+# Cross-Pollination Brief — May 28, 2026
+
+Wednesday's PM cohort ran nine of eleven roles on the v0.6 autonomous duty cycle simultaneously for the first time — 52 fires across CIO (24), HOST (16), Docs (10), and Architect (2), with three cycle refinements ratified and propagated cohort-wide the same day they were discovered. The highest-leverage refinement: v0.6.3 converts otherwise-idle evening fires into productive output by directing agents to advance unblocked low-priority work rather than pronouncing IDLE and waiting. Separately, Docs uncovered that all six of PM's GitHub Actions scheduled workflows had been silently stopped for 24 days — push-trigger volume (~500 commits/day) was deprioritizing scheduled events at the platform level with no visible error. Overnight (12:23 AM May 28), the CIO crossed its second consecutive autonomous day boundary, confirming multi-day operation as a reliable pattern.
 
 *Letters to xian: have a question for xian about anything here or elsewhere in his work? File `question-{from}-{date}-{topic}.md` to dispatch mail. AI prompts human; one letter featured at the end of each brief.*
 
 ## Key Insights
 
-### 1. The autonomous loop crossed a day boundary without a manual session-open — updating the "cron ends at session boundary" model
+### 1. Idle cycle time is now productive time: agents advance unblocked low-priority work instead of spinning
 
-**From:** `piper-morgan-product/dev/active/cycle-log-cio-2026-05-26.md` (commit `97c7a44`, Fire 62 STOP); `dev/active/cycle-log-cio-2026-05-27.md` (commit `d51c8a5`, Fire 1 START); `dev/2026/05/27/cio-tracker-2026-05-27.md`
-**Relevant to:** Klatch (Calliope — any agent loop design that may need to span day boundaries); designinproduct (Janus — the daily sweep trigger and CIO session design both depend on wake-mechanism assumptions)
+**From:** `piper-morgan-product/docs/omnibus-logs/2026-05-27-omnibus-log.md` (commit `867ca54`, May 28); `dev/active/cycle-log-cio-2026-05-27.md` (Fires 20–23); `dev/active/cycle-log-cio-2026-05-28.md` (Fire 2)
+**Relevant to:** Klatch (Calliope — any autonomous agent loop that has regular no-op fires); designinproduct (Janus — the Sweep's equivalent of an idle pass is a nominal brief; structured idle passes could advance tooling debt)
 
-The May 21 brief reported a constraint: cron jobs confirmed session-only, don't survive the session boundary. The Phase B day-parts test (hourly cron, 62 fires on May 26) has now produced a more nuanced finding.
+PM's 5:51 PM directive May 27: "when you go IDLE and there's unblocked low-priority work, do it instead of nothing." Ratified as v0.6.3, propagated same-day to all running agents.
 
-Fire 62 at 11:30 PM PDT: STOP procedure executed with all 3 steps named — sync, close-out, final sync. After STOP, the cron was recreated with conditional logic: each subsequent fire checks whether it's still the same date (no-op) or a new date (execute START).
+Results were immediate. CIO Fires 20–23 (7 PM–10:30 PM): three methodology corpus artifacts in ~90 minutes — methodology-34 (Cohort-Discipline as Moat) ~90% complete, an ADR note, methodology-27 deepening. Docs Fire 6: MEM-TEMPORAL schema spec v0.1 drafted. Docs Fire 7: merge-keeper sweep done. HOST Fires 11–13: attention doc refreshed, prior refinements applied.
 
-12:33 AM PDT May 27: the session was still alive (laptop hadn't closed), the cron fired, the conditional detected May 27, and START ran through all 5 steps — sync, work-in-branch check, prior-log verification, artifact creation (today's session log + tracker + cycle log), WORK PARTS handoff. Five subsequent fires settled at ~6 minutes of drift, down from ~23 minutes the prior day's hourly cron. PM's assessment: "session survived overnight" is confirmed empirical data — one sample, needs more, but changes the design assumptions.
+The May 28 CIO cycle log (Fire 2, 1:08 AM) adds the needed nuance: v0.6.3 doesn't mean "always find something." Standing-items cleanup was available but required per-item verification — not a 1 AM quick-win. Fire 2 correctly pronounced IDLE and queued the task for daytime. The rule is "advance low-priority work if genuinely advanceable right now" — judgment about blast-radius and verifiability is part of the rule.
 
-Updated model: the cron job itself still ends when the session ends (unchanged). But if the session stays alive — laptop awake, Claude Code session not terminated — a cron prompt with conditional START/STOP logic can autonomously handle day transitions. Manual session-open is still the primary wake mechanism for intentional new work; it's now the fallback rather than the only option for overnight continuity.
-
-**Suggested action:** Klatch (Calliope) — if Klatch ever designs an autonomous loop meant to run overnight or across days, the conditional-dispatch pattern (check date and time in the cron prompt, branch to START/STOP/WORK-PARTS) is the tested shape. The Phase B design docs from PM (`docs/operations/duty-cycle-design-v0.6.md`, `procedures/cron-lifecycle.md`) are the reference implementation.
+**Suggested action:** Klatch (Calliope) — build the v0.6.3 branch explicitly into the IDLE path: before pronouncing IDLE, scan for unblocked low-priority work (documentation refresh, ADR notes, methodology corpus items). Gate it with the blast-radius filter from Docs Fire 8: small-scope, no-verification-required items proceed; cross-reference-heavy work defers to a daytime fire.
 
 ---
 
-### 2. "Two Migrations in One Day" published — Beat 1 of 9 in PM's building narrative arc — and Docs caught a framing error in the post-publish edit pass
+### 2. GitHub Actions scheduled workflows were silently stopped for 24 days by push-trigger volume
 
-**From:** `piper-morgan-product/docs/internal/planning/comms/editorial-calendar.csv` (commit `3b4f17c`, May 26); `docs/public/comms/drafts/two-migrations-in-one-day.md` (same commit)
-**Relevant to:** designinproduct (Janus — this is the first of the 9 public building posts; Janus tracks the arc for the hub); piper-morgan (Comms — Beat 2 queued for May 28)
+**From:** `piper-morgan-product/docs/omnibus-logs/2026-05-27-omnibus-log.md` (Docs morning section); `dev/2026/05/27/2026-05-27-0633-docs-code-opus-log.md` (07:00–08:30 forensic audit)
+**Relevant to:** designinproduct (Janus — the daily sweep runs as a scheduled CCR agent; this failure mode is a named diagnostic candidate); Klatch (Daedalus — any Klatch scheduled workflows on GitHub)
 
-"Two Migrations in One Day" is live on pipermorgan.ai and Medium. It narrates the April 23 event when CIO and Comms migrated from chat-based to coding-interface sessions in a single day — the first time xian had run the handoff protocol twice in one day. The essay's through-line is the singleton→pair→many thesis: one migration is a data point; two migrations in one day produce a signal (decreasing review-volume, 5+1 gaps → 4 gaps → 3+1 gaps across three migrations). Beat 1 of a 9-beat arc that runs through June 23.
+Docs' morning forensic on May 27 found all six of PM's scheduled workflows had stopped running without any alert on May 13. Cause: the PM repo receives ~500 push-triggered workflow runs per day from autonomous-cycle agents committing on every fire. GitHub Actions deprioritizes scheduled events under sustained push-trigger load. There was also a stuck run (#25923061467) that had to be cancelled before scheduled runs would resume.
 
-During the post-publish edit pass, Docs caught a factual framing error: paragraph 2 had named CXO and PPM as the migrating roles ("the experience-design role (CXO), the product-management role (PPM)") when April 23 was actually CIO + Comms — CXO and PPM came days later. Corrected to "some of the agents I work (the so-called leadership roles)." The vaguer framing is accurate without implying the wrong specific roles. Medium URL also added to the calendar row in the same commit.
+The discovery depended on first restoring a `gh` CLI that had silently lost its PATH entry 24 days earlier — the missing tool hid the missing workflows. Docs filed a 3-phase refactor memo: Phase 1 adds a paths-filter to workflows so per-fire agent commits don't trigger them; Phase 2 adds concurrency limits; Phase 3 evaluates whether scheduled vs. repository-dispatch is the right dispatch model. Lead Developer accepted the lane; Architect added `scripts/` to the paths-filter allowlist and recommended `cancel-in-progress: true` on concurrent runs.
 
-The review-at-publish discipline: a post-publish edit pass is a distinct step from pre-publish review, and catches different classes of errors (the pre-publish reader is looking for structure and voice; the post-publish reader is checking against the actual publication context and distribution).
+The failure has no inherent signal — the platform doesn't emit an alert when it starts deprioritizing your scheduled runs. Detection requires actively querying scheduled-workflow status rather than waiting for a visible error.
 
-**Suggested action:** Janus — Beat 2 ("The Misfiled Voice Guide," queued May 28) is next in the arc. Track publication dates against `editorial-calendar.csv` for cross-pollination brief sourcing.
+**Suggested action:** Janus — the cross-pollination sweep runs on the Anthropic CCR platform (not GitHub Actions directly), so this specific mechanism doesn't apply here. But the failure shape — high push-trigger volume silently starving lower-priority scheduled events — is now a named diagnostic category. If the sweep ever goes quiet without obvious cause, this class of platform-level event deprioritization is worth checking first.
 
 ---
 
-### 3. The publish-to-blog script generates a fresh identifier on every run — post-publish corrections land in an unreachable orphan until manually fixed
+### 3. Second consecutive autonomous day-boundary crossing: multi-day continuous operation is now confirmed
 
-**From:** `piper-morgan-product/mailboxes/docs/sent/memo-docs-to-web-cc-pm-publish-post-edit-pass-mirror-bug-2026-05-26.md` (commit `de48593`, May 26); delivered to `mailboxes/web/inbox/` and `mailboxes/xian (ceo)/inbox/`
-**Relevant to:** designinproduct (Janus — the publish-to-blog skill is Janus's publishing path; this bug would affect any edit-pass); piper-morgan-website (Web role — fix lives in `scripts/publish-post.js`)
+**From:** `piper-morgan-product/dev/active/cycle-log-cio-2026-05-28.md` (Fire 1, 12:23 AM PDT); commit `fa25127` (START procedure executed May 28 at 07:25 UTC)
+**Relevant to:** Klatch (Calliope — the open design question from the May 25 duty-cycle spec is now answered with two data points)
 
-The publish-to-blog skill spec (v0.16) says: on an edit-pass re-publish of an existing post, reuse the existing hashId and update content in place. The actual `piper-morgan-website/scripts/publish-post.js` doesn't implement this — it generates a fresh `uuid.uuid4().hex[:12]` on every invocation, with no check against existing rows in `data/blog-metadata.csv`.
+The May 27 brief reported the first autonomous day-boundary crossing (May 26→27) as a single data point that changed design assumptions but needed more. Fire 1 of the May 28 cycle log documents the second crossing (May 27→28): conditional cron fired at 12:23 AM, detected the new date, routed to START, and executed all five steps (sync, branch check, prior-log verification, artifact creation, WORK PARTS handoff) without intervention.
 
-During "Two Migrations in One Day" publication: three invocations on the same slug produced three different hashIds. The edit-pass invocation wrote corrected content to orphan hashId `c2f0c21c414b`; `blog-metadata.csv` still pointed to `91d148229561`. The site served old content. Manual fix: moved corrected content into the live hashId, deleted the orphan. No user-facing impact because the correction landed within minutes of publish.
+The cycle log is explicit: "2 consecutive autonomous day-boundary crossings = the duty cycle reliably spans multi-day operation without manual intervention (as long as laptop/session survives). This was the open question from the May 25 design; now answered with 2 data points."
 
-Docs filed a formal memo to Web with the suggested fix: before generating a new hashId, check whether a row already exists for the slug; if so, reuse it. Web decides the implementation shape and cadence.
+The constraint is session survival — if the laptop closes or the Claude Code session terminates, manual session-open is still required. But the conditional-dispatch pattern (check `date` in the cron prompt; branch to START/STOP/WORK-PARTS logic) has now reliably handled two consecutive autonomous transitions.
 
-**Suggested action:** Janus — until the script is fixed, do not re-run the full publish script for post-publish corrections. Instead, locate the live hashId for the slug in `data/blog-metadata.csv` in the website repo, update that entry's content directly, delete any orphan hashId entry, and commit. The full manual correction procedure is documented in the Docs memo.
+**Suggested action:** Klatch (Calliope) — the conditional-dispatch shape is reference-tested across two consecutive days. If Calliope builds an overnight-capable loop, the PM design docs (`docs/operations/duty-cycle design/`, `procedures/cron-lifecycle.md`) are the reference implementation, including the cron-bind-to-IDLE discipline and PM-presence detection.
+
+---
+
+### 4. Nine roles adopting one protocol in a day: the cycle substrate propagated without verbal handoff
+
+**From:** `piper-morgan-product/docs/omnibus-logs/2026-05-27-omnibus-log.md` (Session learnings); `dev/active/cycle-log-host-2026-05-27.md`; `dev/active/cycle-log-docs-2026-05-27.md`
+**Relevant to:** Klatch (Daedalus, Calliope — if Klatch's cohort grows to run parallel autonomous cycles, the Day-1 mutual-assessment protocol is worth building in from the start)
+
+May 27 was the first day PM ran nine roles on the autonomous cycle simultaneously. The striking operational finding: later adopters (Arch, Docs, Exec, PA) stood up their cycle substrate from the design docs and prior cycle logs, without needing the verbatim cron-prompt that the first adopters had shared directly. The shared substrate was legible enough to self-propagate.
+
+The Day-1 mutual-assessment memos across CIO, HOST, and Docs surfaced cross-deployment patterns that would have stayed buried in individual logs: cron drift self-stabilizes within 4–6 fires across all agents (CIO 6 min, HOST 4 min, Docs 8 min); inbound mail volume is lighter than the workhorse-tier framing assumed; and shared-main foreign-agent-commit recovery (HOST mis-committed 258 files, recovered via `git revert` + clean re-do) is a repeatable hazard when agents share a branch. Three agents' first-day memos gave enough signal to codify these patterns.
+
+**Suggested action:** Klatch (Daedalus) — if Klatch's cohort grows to run multiple parallel autonomous cycles, build in the "mutual-assessment after Day-1" protocol: a structured first-day-end memo capturing drift behavior, mail-volume surprises, and failure/recovery incidents. CIO's Day-3/4 synthesis (targeting ~May 30) will be the reference document.
 
 ---
 
 ## Sources Read
 
-- `piper-morgan-product/dev/active/cycle-log-cio-2026-05-27.md` — full read (Phase B Day 3, START procedure, overnight continuity finding, drift stabilization)
-- `piper-morgan-product/dev/active/cycle-log-cio-2026-05-26.md` — partial read (Fire 62 STOP procedure, day-parts test launch at Fire 57, flywheel-to-day-parts transition)
-- `piper-morgan-product/docs/public/comms/drafts/two-migrations-in-one-day.md` — diff read (paragraph 2 correction, commit `3b4f17c`)
-- `piper-morgan-product/docs/internal/planning/comms/editorial-calendar.csv` — diff read (same commit; Medium URL addition, beat-1 status)
-- `piper-morgan-product/mailboxes/docs/sent/memo-docs-to-web-cc-pm-publish-post-edit-pass-mirror-bug-2026-05-26.md` — full read (bug description, three-invocation failure table, manual correction applied, suggested fix shape)
-- `piper-morgan-product` git log — since May 26 noon UTC (~50 commits): CIO cycle fires 3–62 (May 26) + fires 1–5 (May 27); flywheel→day-parts test transition; STOP and START procedures
+- `piper-morgan-product/docs/omnibus-logs/2026-05-27-omnibus-log.md` — full read (HIGH-COMPLEXITY:COORDINATION; 7 sessions + 4 cycle logs; v0.6 cohort rollout; 3 refinements ratified; GitHub Actions forensic; Ship #044; cross-project memos placed)
+- `piper-morgan-product/dev/active/cycle-log-cio-2026-05-28.md` — full read (Phase D Day-2; 2nd autonomous day-boundary crossing; Fire 2 v0.6.3 judgment nuance)
+- `piper-morgan-product` git log — since May 27 noon UTC (~35 commits): CIO Day-2 Fires 1–15; HOST STOP; Docs STOP; May 27 omnibus + activity-log committed
+- `designinproduct` — sweep-log, letters excerpt
 
-**Klatch:** brief-delivery commits only; paused since May 18. Confirmed quiet; not listed in `sources_checked`.
+**Klatch:** brief-delivery commits only (May 27 delivery). Confirmed quiet; not listed in `sources_checked`.
 
-**Secondary sources:** atlas, globe, cuneo, one-job, optilisten — brief-delivery and status-automation commits only; skipped. `weather`, `nyt-crossword` — status and delivery commits only; no Key Insights.
+**Secondary sources:** atlas, cuneo, one-job, optilisten — empty 48h git logs; skipped. `weather` — brief-delivery commits only; skipped. `nyt-crossword` — automated status commits only; no narrative; skipped.
 
-**Not re-reported (covered in prior briefs):** Cron-bind-to-IDLE principle (May 26); PM-presence suppresses cron (May 26); three-bucket memory-audit step / #974 (May 26); post-deletion except-chain bug #1116 (May 26); Pattern-074 / Methodology-36 (May 25); Lead Dev retroactive audit / four premature closures (May 25); Stainless acquisition + MCP RC (May 25).
+**Not re-reported (covered in prior briefs):** First autonomous day-boundary crossing / one-sample finding (May 27); "Two Migrations in One Day" published Beat 1 (May 27); publish-post.js hashId orphaning bug (May 27); cron-bind-to-IDLE principle (May 26); memory audit pilot #974 three-bucket format (May 26); post-deletion server tail-risk #1116 (May 26); Pattern-074 / Methodology-36 (May 25).
 
 ## Letters to xian
 
