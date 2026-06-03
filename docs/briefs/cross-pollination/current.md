@@ -1,69 +1,72 @@
-# Cross-Pollination Brief — June 2, 2026
+# Cross-Pollination Brief — June 3, 2026
 
-Piper Morgan closed the final open gap in its memory layer yesterday evening: the "why did you suggest that?" question now gets a source-declarative answer — the system records what context it gave the LLM at the moment of the call, rather than asking the LLM to reconstruct its reasoning after the fact (R4, 152 tests, merged June 1 18:14 PT). The "Bring Your Own Chat" blog post, which reframes Piper's entire distribution strategy around the idea that the methodology layers are the product and the chat interface is commodity, publishes today. And the autonomous agent loop entered a new operational phase: Exec distributed Ship #045 workstream review kickoffs to six lane authors yesterday morning (14 files delivered), with a Wednesday June 3 synthesis deadline and PPM and CXO standing by to join the v0.7 duty-cycle cohort.
+Ship #045 "The Substrate Pivoted" draft landed overnight with all six workstream memos absorbed and a clear spine: PM's duty cycle scaled to eight agents on shared `main`, collected enough clash evidence that correct discipline couldn't prevent, and the team overturned its own recent architectural default in a 15-minute ratification window rather than adding a fourth enforcement layer. Also overnight: PM's CIO filed a cross-project methodology handoff to Klatch's Calliope distilling the cohort's hard-won duty-cycle migration lessons — most importantly that cadence should match each agent's work-shape, not be a universal fixed interval. And PM's M2 sprint close-gate is down to one remaining item after last night's trust-layer UI fix.
 
 *Letters to xian: have a question for xian about anything here or elsewhere in his work? File `question-{from}-{date}-{topic}.md` to dispatch mail. AI prompts human; one letter featured at the end of each brief.*
 
 ## Key Insights
 
-### 1. The "why did you suggest that?" gap closes — PM uses source-declarative provenance, not LLM retrospection
+### 1. "The Substrate Pivoted" — Ship #045 draft complete, ready for PM voice-pass today
 
-**From:** Merge commit `6c35643` (11 commits, `claude/insight-pull-push-impl`); `dev/active/r4-suggestion-provenance-design-2026-06-01.md` (ratified 2026-06-01 ~07:25 PT); #1030 R4 acceptance criterion (deferred in Sunday's brief)
-**Relevant to:** Klatch (memory + context design); any system that accumulates context and serves it to an LLM
+**From:** Exec cycle log June 2, Fires 24–26; commit `0694ef3` (draft filed `docs/public/comms/drafts/weekly-ship-045-draft-2026-06-03.md`); all 6 workstream memos (PPM v2, CXO, Architect, Comms, CIO, HOST)
+**Relevant to:** designinproduct (publication milestone); Klatch (structural-fix-over-discipline lesson)
 
-Yesterday's brief explicitly flagged the "why did you suggest that?" acceptance criterion as deferred to future memory infrastructure. Lead Dev shipped it the same evening. The architectural decision is worth noting: rather than asking the LLM to cite its sources after responding (which produces hallucinated IDs), the system records *what context it gave the LLM* at the moment of the call — source-declarative provenance.
+The May 22–28 Ship draft is written and waiting for PM voice-pass and publication today. The draft title, "The Substrate Pivoted," continues Ship #044's substrate thread one altitude up: the operating substrate produced enough evidence to invalidate one of its own architectural defaults.
 
-**What ships:** A new `IntentCategory.PROVENANCE` pre-classifier routes queries like "why did you bring that up?" to a deterministic lookup (not the floor). `ContextAssembler` now logs a per-key provenance entry for each of its 18 gather paths — insight-pull, insight-push, calendar slots, todos, blocked items, GitHub activity, trust profile, conversation history, and 10 others — with `{source, identifier, fetch_timestamp, optional URL}`. A sidecar on `ConversationContext` holds this in-memory for 30 minutes / 10 turns (O(1) lookup); it also promotes to an existing `ConversationTurnDB.turn_metadata` JSONB column for cross-session "why did you mention that yesterday?" queries (no schema migration needed — the column already existed). The response comes back in colleague prose with optional source attribution on follow-up.
+The spine (CIO + HOST memos jointly named it): the duty cycle scaled from 1 agent to 8 on shared `main`, collected 29 commits in 8 hours from simultaneous agents, and experienced 4 independent clash incidents — including one that happened *after* a correct count-check, because the race occurred inside the compound command, after the check. Rather than adding a fourth discipline layer, the team ratified worktree isolation as the structural fix in a 15-minute window on May 28. The cohort self-validated the new spec the same night.
 
-152 unit and integration tests across 9 test modules pass; zero regressions across the pre-classifier, context assembler, conversation context, floor, canonical handlers, DB fallback, push integration, insight-pull, and push-mode modules. Two low-priority follow-ups filed: `ActionDisposition` naming clarity (#1138) and `PremonitionService` method-level audit (#1139).
+Supporting beats from the five other workstream lanes:
+- **Architect**: Anthropic's May 6 Dreams API spec externally validated all 4 of Pattern-070's operational invariants — the "platform laps you, climb the value chain" reframe as a concrete instance
+- **CXO**: #683 done-criteria split into Layer A (engineering-DoD) + Layer B (experience-DoD) in one session, with each layer routed to its right owner same-day ("decomposition-with-ownership unblocks faster than escalation")
+- **Comms**: five publications shipped the same week ~8,260 words of future inventory were drafted — cadence and capacity decoupled
+- **PPM**: standing-items tracker reframed as the Task Loop source with no new tooling (cheap-adoption primitive); Day-1 strand failure → structural fix is the cohort's standard remediation shape
+- **HOST**: "correct discipline that still clashes is a trust signal, not a discipline gap" — PP-004 instance #4 candidate; the failure belongs to system design, not agent carelessness
 
-**The methodology signal:** Source-declarative provenance — capturing what you fed the model, not what the model claims it used — applies to any system that assembles context before calling an LLM. The 18-source inventory pattern (audit every gather path, give each a structured provenance record) is a reusable checklist for any context assembler.
+Learning pattern (HOST framing): structural fix beats discipline fix. When correct behavior still produces failure, the right response is to change the system, not tighten the rules.
 
-**Suggested action:** Klatch — when Daedalus or Argus designs any context assembly step (Layer 3 memory reads, channel addendum injection, entity prompt enrichment), log what you assembled alongside what the LLM responded. The lookup sidecar pattern (in-memory with bounded TTL + optional persistence) is directly portable to Klatch's five-layer assembly.
+Per CIO recommendation, the v0.7.0 adoption package, cohort-migration arc, and cron-shape-experiments content are folded out to Ship #046, keeping #045 clean to its window.
 
----
-
-### 2. "Bring Your Own Chat" publishes today — the interface is commodity; the methodology is the product
-
-**From:** `docs/public/comms/drafts/draft-bring-your-own-chat-v1.md`; commit `06b08b1` (Jun 1, 18:25 PT — final fact-check and proofread for Jun 2 publish)
-**Relevant to:** Klatch (MCP server distribution framing); designinproduct (publication milestone; narrative arc)
-
-The "Bring Your Own Chat" post completes its final pass last night and publishes today. It articulates the distribution reframe that emerged when three independent threads converged in the same week: PA's MCP feasibility research, xian's cross-platform thinking, and the "methodology over code" strategic clarity. The conclusion: if Piper's value lives in the context methodology, trust graduation, artifact persistence, and accumulated understanding — not in the chat interface — then MCP makes the interface someone else's problem.
-
-*"Those layers don't need a specific interface. They need a protocol."*
-
-The post explains how MCP (developed by Anthropic, donated to the Linux Foundation) means building a server gets you integrations with Claude Desktop, Cursor, Windsurf, and others, plus ChatGPT at some degree, without building the UI. This reframes the MVP: instead of investing in a web chat interface, session management, authentication, and hosting, PM builds the intelligence layer and lets existing clients provide the container. It also reframes the discovery problem: in an MCP-powered conversation, the agent offers capabilities contextually rather than requiring users to navigate menus.
-
-The post is part of the "Building Piper Morgan" narrative series. The footer tease announces the next post: "Upstream of the Floor."
-
-**The methodology signal:** The insight emerged from three independent threads colliding — not planning. The post explicitly names this as a pattern: "accumulated context creating the conditions for the connection to happen." That framing applies equally to the cross-pollination process itself.
-
-**Suggested action:** Klatch — the BYOC distribution argument applies without modification to Klatch's MCP server: "meet users in the client they already use" is exactly the value proposition for shipping Klatch as an MCP server alongside a sibling project. The post's "plumbing is commodity" framing is shareable language for Klatch's own product story.
+**Suggested action:** Klatch — the worktree-isolation lesson applies before it's discovered the hard way. The compound-command race (correct check, then race *inside* the command) is a specific failure mode worth naming in Klatch's multi-agent coordination.
 
 ---
 
-### 3. Ship #045 kickoff distributed — six workstream memos due Wed Jun 3; PPM + CXO cohort onboarding imminent
+### 2. Cadence should match work-shape — PM's CIO hands Klatch 8 migration lessons
 
-**From:** PM `dev/2026/06/02/2026-06-02-0000-exec-opus-log.md`; cycle log Fire 4 (commit `8ac33a3`); `dev/active/cycle-log-cio-2026-06-01.md`; `cohort-agent-status.md` (snapshot 2026-06-01)
-**Relevant to:** PM internal (operational state); designinproduct (cohort expansion milestone)
+**From:** Klatch `docs/mail/cio-piper-to-calliope-shepherding-agents-onto-duty-cycle-2026-06-02.md`; PM directive June 2 (cron-shape experimentation authorized)
+**Relevant to:** Klatch (directly addressed); designinproduct (Janus's parallel CCR→local-cron pivot)
 
-Exec distributed Ship #045 workstream review kickoffs to six lane authors yesterday morning (~08:15 June 1): CXO, Arch, PPM, CIO, HOST, and Comms each received a lane memo (14 files total, including a PA rollup). Zero memos back in the first 16-hour post-kickoff window — consistent with the "Time Lord" framing where authors draft at their own pace until the synthesis backstop. Wednesday June 3 is the drop-dead. CIO's Fire 4 cycle note flagged a staging observation: Web committed all 14 kickoff files in one broad-staged commit, producing correct delivery but misattributed authorship — the structural fix is Web's pending v0.7 worktree migration.
+PM's CIO filed an 8-principle cross-project handoff to Klatch's Calliope last night, distilling what the full PM cohort (~10 agents) learned over its migration week. The load-bearing principle (§4): "cadence must match work-shape, not be one fixed interval." Three work-shape types emerged in practice: continuous-mail lanes (coordination, docs, publishing) suit hourly cycles; bursty lanes (an architect or implementer whose backlog drains between bursts) work better at longer intervals once drained; intermittent lanes (manual testers, UX agents) need low-frequency awareness, not constant cycling. Recommendation: stand up a `cron-shape-experiments.md` registry early so agents can self-report shapes before defaults get locked in.
 
-**Cohort expansion:** CIO confirmed that PPM and CXO are both ready to migrate to the v0.7 worktree-default duty cycle — "only need worktree create/launch." When they onboard, 8 of the 9 cohort roles will be on Model A v0.7. The one holdout is Lead, where PM plans to discuss worktree-native migration at the next clean breakpoint after current gates clear (low-priority).
+Other load-bearing lessons: worktree isolation is determined by the *launch surface* (Desktop "New session" auto-creates ephemeral worktrees; terminal launch at repo root does not — pick one standard and stick to it); the "normalization trap" — standardizing agent prompts to a shared template can silently drop the nuanced heuristics that made earlier bespoke versions perform well (restore them). Also: a "wait-default re-arm heuristic" (re-arm cron only on positive absence signals, not on any silence) outperformed all alternatives for returning to autonomous IDLE after human conversation ends.
 
-The autonomous loop crossed midnight for at least the fifth consecutive night (23:53 June 1 → June 2), with the same Claude session continuing, the cron job firing without intervention, and the new-day logs opening on schedule. The pattern is now operational infrastructure, not an experiment.
+PM also authorized cron-shape experimentation across the cohort on June 2 evening: hourly is the default, not a mandate. Agents can experiment with their interval and report results to a shared registry.
 
-**Suggested action:** No immediate cross-project signal — the Ship #045 synthesis output (expected Wednesday) may surface architectural learnings worth the next brief.
+Janus (DinP) is solving the parallel problem — transitioning from CCR fresh-spawn triggers to local-cron-against-a-continuing-session. Duty-cycle v0.1 was approved June 1; CIO explicitly cross-referenced Janus and Calliope as solving the same problem in different substrates.
+
+**Suggested action:** Klatch Calliope — classify each agent's work-shape (Daedalus = bursty-implementation; Calliope = continuous-coordination; Theseus = intermittent-manual-testing; Argus = bursty-quality) before picking cadence. Set up the cron-shape experiments registry before standardizing.
+
+---
+
+### 3. PM's M2 close-gate narrows to one smoke test; trust-layer UI fix ships
+
+**From:** Commit `ef58ae7` (`fix(#1132): trust_stage in insights_ui`); lead dev cycle log June 3 Fires 1–5; PM sign-off June 2 ~22:10
+**Relevant to:** PM internal; Klatch (PM's trust + context assembly layers are the integration target for future BYOC/MCP work)
+
+Lead Dev shipped #1132 last night: the trust score display in PM's insights UI now reads live from `TrustComputationService` rather than a hardcoded value. The fix is architecturally in the same family as R4 source-declarative provenance (June 2 brief) — "show what you computed, not what you assumed" applied at the display layer. PM signed off at 22:10. M2's close-gate is now down to a single pending smoke test (#1047), which Lead Dev resumes this morning.
+
+When M2 closes, PM's context assembly layer (18 gather paths, structured provenance per R4) and trust layer (TrustComputationService flowing through to the UI) are jointly stabilized — the technical foundation for BYOC/MCP delivery.
+
+**Suggested action:** Watch today's #1047 smoke result. M2 completion is the sprint boundary that clears PM for integration-phase work.
 
 ---
 
 ## Sources Read
 
-- **piper-morgan-product**: Merge commit `6c35643` (R4 full message + diff summary); `dev/active/r4-suggestion-provenance-design-2026-06-01.md` (full read — architecture section and PM dispositions); `docs/public/comms/drafts/draft-bring-your-own-chat-v1.md` (full read); commits `06b08b1` (BYOC final pass), `841527a` (day-rollover), `8ac33a3` (CIO cohort status), `9e39aa7` (June 2 log open); `dev/2026/06/02/2026-06-02-0000-exec-opus-log.md` (full read); git log 48h (~30 commits reviewed)
-- **klatch**: git log 48h — 2 commits: `e54da69` (Vite 8.0.16 correction to June 1 intel sweep, minor); `4c504c1` (brief delivery); no new substantive docs activity
-- **designinproduct** (hub): sweep-log; letters excerpt confirmed current
+- **piper-morgan-product**: Exec cycle log `dev/active/cycle-log-exec-2026-06-02.md` (full — Fires 15–26, synthesis arc); PPM workstream memo v2 (full); lead dev cycle log June 3 Fires 1–5; commit `ef58ae7` (#1132); git log 48h (~25 commits reviewed)
+- **klatch**: `docs/mail/cio-piper-to-calliope-shepherding-agents-onto-duty-cycle-2026-06-02.md` (full); git log 48h (5 commits — brief delivery + mail)
+- **designinproduct** (hub): `docs/agents/janus/duty-cycle-v0.1-proposal.md` (header); sweep-log; letters excerpt confirmed current
 
-**Not re-reported (covered in prior briefs):** INSIGHT-PULL/PUSH #1030+#1032 initial ship (June 1); Claude Opus 4.8 + SDK bump (June 1); Claude Code 2.1.157 `.claude/skills/` auto-loading (June 1); Ted Nadeau memo + Englishia cell model (June 1); NSA MCP advisory (June 1); v0.7 worktree-as-cycle-default (May 29); overnight crossing as novel behavior (May 27–28).
+**Not re-reported (covered in prior briefs):** R4 source-declarative provenance (#1030+#1032, June 2); BYOC post publication (June 2); Ship #045 kickoff distribution (June 2); PPM + CXO cohort onboarding imminent (June 2); INSIGHT-PULL/PUSH (June 1); Opus 4.8 (June 1); Claude Code 2.1.157 auto-loading (June 1); v0.7 worktree-as-cycle-default ratified (May 29).
 
 ## Letters to xian
 
