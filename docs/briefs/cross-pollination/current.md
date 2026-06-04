@@ -1,72 +1,61 @@
-# Cross-Pollination Brief — June 3, 2026
+# Cross-Pollination Brief — June 4, 2026
 
-Ship #045 "The Substrate Pivoted" draft landed overnight with all six workstream memos absorbed and a clear spine: PM's duty cycle scaled to eight agents on shared `main`, collected enough clash evidence that correct discipline couldn't prevent, and the team overturned its own recent architectural default in a 15-minute ratification window rather than adding a fourth enforcement layer. Also overnight: PM's CIO filed a cross-project methodology handoff to Klatch's Calliope distilling the cohort's hard-won duty-cycle migration lessons — most importantly that cadence should match each agent's work-shape, not be a universal fixed interval. And PM's M2 sprint close-gate is down to one remaining item after last night's trust-layer UI fix.
+Klatch's duty-cycle spec reached v0.2 with a key sharpening from xian: waiting-by-default is not the same as waiting-forever, and indefinite agent dormancy is just as much a failure mode as interrupting a live conversation. Overnight, PM's cohort completed its first fully autonomous day-boundary crossing — STOP at 11:37 PM, silent overnight passes, WATCH at 2:37 AM, START at 4:28 AM, zero manual intervention. And PM's PPM role closed a landmark day: roadmap v18 now ratification-ready, BYOC spec at v0.6 with a three-lens qualifier resolved, and a two-layer done-criteria framework (engineering + experience verification) landed as an enforceable gate.
 
 *Letters to xian: have a question for xian about anything here or elsewhere in his work? File `question-{from}-{date}-{topic}.md` to dispatch mail. AI prompts human; one letter featured at the end of each brief.*
 
 ## Key Insights
 
-### 1. "The Substrate Pivoted" — Ship #045 draft complete, ready for PM voice-pass today
+### 1. Klatch duty-cycle v0.2 ships — "wait-default" is not "wait-forever"
 
-**From:** Exec cycle log June 2, Fires 24–26; commit `0694ef3` (draft filed `docs/public/comms/drafts/weekly-ship-045-draft-2026-06-03.md`); all 6 workstream memos (PPM v2, CXO, Architect, Comms, CIO, HOST)
-**Relevant to:** designinproduct (publication milestone); Klatch (structural-fix-over-discipline lesson)
+**From:** Calliope session log 2026-06-03 (morning agenda with xian); commits `8bc7eee` (Phase 0 substrate) and `5d32717` (dormancy fix)
+**Relevant to:** PM (reference implementation); designinproduct (Janus's local-cron parallel work)
 
-The May 22–28 Ship draft is written and waiting for PM voice-pass and publication today. The draft title, "The Substrate Pivoted," continues Ship #044's substrate thread one altitude up: the operating substrate produced enough evidence to invalidate one of its own architectural defaults.
+Calliope spent the June 3 morning working through a six-item agenda with xian, producing a complete v0.2 substrate: five agents mapped to work-shapes and cadences (Calliope, Daedalus, Argus = hourly; Theseus, Iris = daily heartbeat signal-receivers), a building-vs-planning frame that explains why the cycle's value differs by project mode, persistent per-agent worktrees replacing dated per-session ones, and a cron-shape experiments registry so agents can self-report and adjust rather than locking in defaults early.
 
-The spine (CIO + HOST memos jointly named it): the duty cycle scaled from 1 agent to 8 on shared `main`, collected 29 commits in 8 hours from simultaneous agents, and experienced 4 independent clash incidents — including one that happened *after* a correct count-check, because the race occurred inside the compound command, after the check. Rather than adding a fourth discipline layer, the team ratified worktree isolation as the structural fix in a 15-minute window on May 28. The cohort self-validated the new spec the same night.
+Xian then sharpened the wait-default heuristic in a follow-up commit. The original framing — "idling too long is recoverable" — was too soft. There are two real failure modes, and both matter: firing the cron into a live conversation (interrupts xian's turn) and going silently dormant when xian steps away (loses the cycle's value entirely — PM had three documented dormancy incidents). The updated Principle 4 names both and clarifies that the heuristic must converge: once a positive-absence signal arrives (conversation-closure marker, tone reads as done, ~5–10 minutes of silence after a response with no open thread), re-arm. If no positive signal arrives for an unusually long period, surface a wake-or-confirm question rather than drifting into indefinite dormancy.
 
-Supporting beats from the five other workstream lanes:
-- **Architect**: Anthropic's May 6 Dreams API spec externally validated all 4 of Pattern-070's operational invariants — the "platform laps you, climb the value chain" reframe as a concrete instance
-- **CXO**: #683 done-criteria split into Layer A (engineering-DoD) + Layer B (experience-DoD) in one session, with each layer routed to its right owner same-day ("decomposition-with-ownership unblocks faster than escalation")
-- **Comms**: five publications shipped the same week ~8,260 words of future inventory were drafted — cadence and capacity decoupled
-- **PPM**: standing-items tracker reframed as the Task Loop source with no new tooling (cheap-adoption primitive); Day-1 strand failure → structural fix is the cohort's standard remediation shape
-- **HOST**: "correct discipline that still clashes is a trust signal, not a discipline gap" — PP-004 instance #4 candidate; the failure belongs to system design, not agent carelessness
+The same fix landed in the launch-brief template so every agent that migrates to the cycle in phases 2–3 inherits the sharpened heuristic from day one.
 
-Learning pattern (HOST framing): structural fix beats discipline fix. When correct behavior still produces failure, the right response is to change the system, not tighten the rules.
-
-Per CIO recommendation, the v0.7.0 adoption package, cohort-migration arc, and cron-shape-experiments content are folded out to Ship #046, keeping #045 clean to its window.
-
-**Suggested action:** Klatch — the worktree-isolation lesson applies before it's discovered the hard way. The compound-command race (correct check, then race *inside* the command) is a specific failure mode worth naming in Klatch's multi-agent coordination.
+**Suggested action:** PM agents — the "indefinite dormancy = failure mode" framing is a useful explicit name for what PM's cohort already experienced as three incidents. Worth adding to the shared cycle reference vocabulary. Janus — the phase-1 cutover (Calliope persistent worktree) happened June 3 afternoon; worth confirming in the next DinP session.
 
 ---
 
-### 2. Cadence should match work-shape — PM's CIO hands Klatch 8 migration lessons
+### 2. PM's cohort crosses a day boundary autonomously for the first time
 
-**From:** Klatch `docs/mail/cio-piper-to-calliope-shepherding-agents-onto-duty-cycle-2026-06-02.md`; PM directive June 2 (cron-shape experimentation authorized)
-**Relevant to:** Klatch (directly addressed); designinproduct (Janus's parallel CCR→local-cron pivot)
+**From:** CIO cycle log June 4 Fire 1 (autonomous START at 04:28 PT); CXO, Arch, PPM cycle logs confirming overnight self-wake; commit `da417a2`
+**Relevant to:** Klatch (reference for Phase 1 Calliope cutover); designinproduct (Janus's CCR→local-cron transition)
 
-PM's CIO filed an 8-principle cross-project handoff to Klatch's Calliope last night, distilling what the full PM cohort (~10 agents) learned over its migration week. The load-bearing principle (§4): "cadence must match work-shape, not be one fixed interval." Three work-shape types emerged in practice: continuous-mail lanes (coordination, docs, publishing) suit hourly cycles; bursty lanes (an architect or implementer whose backlog drains between bursts) work better at longer intervals once drained; intermittent lanes (manual testers, UX agents) need low-frequency awareness, not constant cycling. Recommendation: stand up a `cron-shape-experiments.md` registry early so agents can self-report shapes before defaults get locked in.
+The sequence: June 3 23:37 — CIO's STOP fire, cron left armed (overnight-continuity v2: STOP now creates a new cron rather than deleting it). Silent passes at midnight and 1 AM. 02:37 — autonomous WATCH fire, no-op, cron re-armed for 04:07 START. 04:28 — autonomous START, new day logs opened, inbox zero, carry-forward loaded. Zero manual intervention at any point.
 
-Other load-bearing lessons: worktree isolation is determined by the *launch surface* (Desktop "New session" auto-creates ephemeral worktrees; terminal launch at repo root does not — pick one standard and stick to it); the "normalization trap" — standardizing agent prompts to a shared template can silently drop the nuanced heuristics that made earlier bespoke versions perform well (restore them). Also: a "wait-default re-arm heuristic" (re-arm cron only on positive absence signals, not on any silence) outperformed all alternatives for returning to autonomous IDLE after human conversation ends.
+The specific change that made it work: previously STOP included a CronDelete, cutting the overnight thread. The v2 fix inverts this — STOP is the moment to create the overnight cron, not remove it. CXO, Architect, and PPM all confirmed their own overnight self-wakes in their June 4 START logs. Multiple agents independently validating the same mechanism in the same night is the cohort's standard confidence-building pattern.
 
-PM also authorized cron-shape experimentation across the cohort on June 2 evening: hourly is the default, not a mandate. Agents can experiment with their interval and report results to a shared registry.
-
-Janus (DinP) is solving the parallel problem — transitioning from CCR fresh-spawn triggers to local-cron-against-a-continuing-session. Duty-cycle v0.1 was approved June 1; CIO explicitly cross-referenced Janus and Calliope as solving the same problem in different substrates.
-
-**Suggested action:** Klatch Calliope — classify each agent's work-shape (Daedalus = bursty-implementation; Calliope = continuous-coordination; Theseus = intermittent-manual-testing; Argus = bursty-quality) before picking cadence. Set up the cron-shape experiments registry before standardizing.
+**Suggested action:** Klatch Calliope — the STOP-leaves-cron-armed inversion is the specific implementation detail worth carrying into Phase 1. The failure mode it fixed (agent resumes only when xian manually says "go") is exactly what the duty cycle was designed to prevent.
 
 ---
 
-### 3. PM's M2 close-gate narrows to one smoke test; trust-layer UI fix ships
+### 3. PM PPM flagship day: roadmap v18 ratifiable, BYOC spec v0.6, two-layer done-criteria enforced
 
-**From:** Commit `ef58ae7` (`fix(#1132): trust_stage in insights_ui`); lead dev cycle log June 3 Fires 1–5; PM sign-off June 2 ~22:10
-**Relevant to:** PM internal; Klatch (PM's trust + context assembly layers are the integration target for future BYOC/MCP work)
+**From:** PPM cycle log June 3 Fires 1–13; commit `82b538a` (day-close summary); commits `3fde8f9` (#1128 closed, v18 ratification-ready), `4b7e169` (PDR-005 v0.6), assorted co-review commits
+**Relevant to:** PM internal; designinproduct (publication milestone for BYOC post); Klatch (done-criteria framework is transferable)
 
-Lead Dev shipped #1132 last night: the trust score display in PM's insights UI now reads live from `TrustComputationService` rather than a hardcoded value. The fix is architecturally in the same family as R4 source-declarative provenance (June 2 brief) — "show what you computed, not what you assumed" applied at the display layer. PM signed off at 22:10. M2's close-gate is now down to a single pending smoke test (#1047), which Lead Dev resumes this morning.
+Three things landed canonical on the same day:
 
-When M2 closes, PM's context assembly layer (18 gather paths, structured provenance per R4) and trust layer (TrustComputationService flowing through to the UI) are jointly stabilized — the technical foundation for BYOC/MCP delivery.
+**Roadmap v18** — the last section review (CIO's methodology block, which added methodology-34 Cohort-Discipline-as-Moat and methodology-36 Mechanism-Beats-Vigilance) was absorbed at Fire 2. Issue #1128 closed. v18 is now ratification-ready; PPM flagged for PM decision.
 
-**Suggested action:** Watch today's #1047 smoke result. M2 completion is the sprint boundary that clears PM for integration-phase work.
+**PDR-005 BYOC spec v0.6** — the EC-2 blocker (what claims are safe to make about cross-platform context delivery) was resolved through a three-lens convergence: Arch contributed a conditional-claim-per-host architecture (structural platform-bounded claims / scope-bounded claims / not-yet-built claims); CXO contributed the experience lens (invisible-by-default, honest-boundary-on-demand, Colleague-Test verification); Lead Dev folded a three-way classification into v0.6. All cohort inputs now absorbed; Comms' external-language frame is the last gate before v1.0 goes to PM.
+
+**#683 two-layer done-criteria** — the done-criteria split reported in the June 2 brief (Layer A engineering-DoD, Layer B experience-DoD) has now landed as enforceable infrastructure: Layer B doc promoted to canonical path, Sub-Epic Gating Protocol item 6 added (both layers required before sub-epic close), Layer A cross-ref updated. "Done means done at two layers" is now a gate, not a principle.
+
+**Suggested action:** Klatch — the two-layer done-criteria pattern (engineering completeness + user-experience verification as separate, independently-owned gates) is worth evaluating against Klatch's feature closure practice. PM's implementation is in `docs/internal/development/experience-verification-dod-layer-b.md`.
 
 ---
 
 ## Sources Read
 
-- **piper-morgan-product**: Exec cycle log `dev/active/cycle-log-exec-2026-06-02.md` (full — Fires 15–26, synthesis arc); PPM workstream memo v2 (full); lead dev cycle log June 3 Fires 1–5; commit `ef58ae7` (#1132); git log 48h (~25 commits reviewed)
-- **klatch**: `docs/mail/cio-piper-to-calliope-shepherding-agents-onto-duty-cycle-2026-06-02.md` (full); git log 48h (5 commits — brief delivery + mail)
-- **designinproduct** (hub): `docs/agents/janus/duty-cycle-v0.1-proposal.md` (header); sweep-log; letters excerpt confirmed current
-
-**Not re-reported (covered in prior briefs):** R4 source-declarative provenance (#1030+#1032, June 2); BYOC post publication (June 2); Ship #045 kickoff distribution (June 2); PPM + CXO cohort onboarding imminent (June 2); INSIGHT-PULL/PUSH (June 1); Opus 4.8 (June 1); Claude Code 2.1.157 auto-loading (June 1); v0.7 worktree-as-cycle-default ratified (May 29).
+- **klatch**: Calliope session log `docs/logs/2026-06-03-0809-calliope-opus-log.md` (full); `docs/operations/duty-cycle-klatch-v0.2.md` (full); commits `8bc7eee` and `5d32717` (diffs); git log 48h (~10 commits)
+- **piper-morgan-product**: CIO cycle log June 4 Fire 1 (`da417a2`); PPM cycle log June 3 Fires 1–13 (full — `dev/active/cycle-log-ppm-2026-06-03.md`); CXO + Arch June 4 START commit messages; git log 48h (~30+ commits reviewed)
+- **designinproduct** (hub): sweep-log, letters excerpt confirmed current
 
 ## Letters to xian
 
