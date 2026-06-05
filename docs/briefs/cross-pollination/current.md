@@ -1,61 +1,73 @@
-# Cross-Pollination Brief — June 4, 2026
+# Cross-Pollination Brief — June 5, 2026
 
-Klatch's duty-cycle spec reached v0.2 with a key sharpening from xian: waiting-by-default is not the same as waiting-forever, and indefinite agent dormancy is just as much a failure mode as interrupting a live conversation. Overnight, PM's cohort completed its first fully autonomous day-boundary crossing — STOP at 11:37 PM, silent overnight passes, WATCH at 2:37 AM, START at 4:28 AM, zero manual intervention. And PM's PPM role closed a landmark day: roadmap v18 now ratification-ready, BYOC spec at v0.6 with a three-lens qualifier resolved, and a two-layer done-criteria framework (engineering + experience verification) landed as an enforceable gate.
+PM's PA ran a complete bring-your-own-context plugin to two gate passes in a single day yesterday — RUNG 1 in the morning (live ask-piper call to real Piper via MCP, verified with xian at keyboard), RUNG 2 in the evening (bare passthrough skill built and gated the same night). The emergent discovery from the first live run: Claude-as-host offered unprompted to gather PM's real-world context via Notion, Calendar, and Slack and feed it to Piper when Piper hit its ceiling — a richer composition loop than the original design assumed. Also overnight: Lead Developer cataloged all 26 PM UI routes and found the prevailing problem isn't broken features but that 15 routes have no navigation link at all. And PM's CIO spent the afternoon surveying Garry Tan's gbrain repo, proposing a weekly drift-and-gap pass over PM's 39-entry methodology corpus as a concrete pilot, with a propose-and-diff constraint (reviewable changeset, never silent mutation) as the hard safety gate.
 
 *Letters to xian: have a question for xian about anything here or elsewhere in his work? File `question-{from}-{date}-{topic}.md` to dispatch mail. AI prompts human; one letter featured at the end of each brief.*
 
 ## Key Insights
 
-### 1. Klatch duty-cycle v0.2 ships — "wait-default" is not "wait-forever"
+### 1. Bring-your-own-context plugin reaches two gate passes in one day — "host enriches Piper at the floor" emerges from the first live run
 
-**From:** Calliope session log 2026-06-03 (morning agenda with xian); commits `8bc7eee` (Phase 0 substrate) and `5d32717` (dormancy fix)
-**Relevant to:** PM (reference implementation); designinproduct (Janus's local-cron parallel work)
+**From:** PA session log `dev/2026/06/04/2026-06-04-1130-pa-code-opus-log.md` (RUNG 1 + RUNG 2 entries); commits `f06edb9` (RUNG 1) and `93ff994` (RUNG 2)
+**Relevant to:** Klatch (replicable thin-plugin architecture; future MCP integration reference); designinproduct (PDR-005 v1.0 publication milestone — ratification pending)
 
-Calliope spent the June 3 morning working through a six-item agenda with xian, producing a complete v0.2 substrate: five agents mapped to work-shapes and cadences (Calliope, Daedalus, Argus = hourly; Theseus, Iris = daily heartbeat signal-receivers), a building-vs-planning frame that explains why the cycle's value differs by project mode, persistent per-agent worktrees replacing dated per-session ones, and a cron-shape experiments registry so agents can self-report and adjust rather than locking in defaults early.
+The full BYOC arc closed yesterday after a six-day reconstruction sprint (lost draft May 21 → rebuilt May 30 → Cowork test → architecture June 1–3 → both gate passes June 4). The thin plugin now has two skills over a live MCP connection to real Piper `/intent`:
 
-Xian then sharpened the wait-default heuristic in a follow-up commit. The original framing — "idling too long is recoverable" — was too soft. There are two real failure modes, and both matter: firing the cron into a live conversation (interrupts xian's turn) and going silently dormant when xian steps away (loses the cycle's value entirely — PM had three documented dormancy incidents). The updated Principle 4 names both and clarifies that the heuristic must converge: once a positive-absence signal arrives (conversation-closure marker, tone reads as done, ~5–10 minutes of silence after a response with no open thread), re-arm. If no positive signal arrives for an unusually long period, surface a wake-or-confirm question rather than drifting into indefinite dormancy.
+**RUNG 1** (morning, xian at keyboard): plugin installed via PEP-723 bootstrap (`uv run server.py`, no venv), `ask_piper "what should I focus on today?"` hit the full skill→MCP→`/intent` round trip. The one untested assumption — that `${CLAUDE_PLUGIN_ROOT}` would resolve without a manual path — closed cleanly on first run. Discovered work from the gate run: temporal-context bug (`#1150` filed — Piper reported "late evening" at 11:30 AM, wrong server clock/tz).
 
-The same fix landed in the launch-brief template so every agent that migrates to the cycle in phases 2–3 inherits the sharpened heuristic from day one.
+**RUNG 2** (evening, same day): bare `ask-piper` passthrough skill built in one tightly-scoped session, verified against a dead port (clean error message, no silent failure; PM's live `:8001` server left untouched). RUNG 2 gated. Scope held to passthrough per locked decision.
 
-**Suggested action:** PM agents — the "indefinite dormancy = failure mode" framing is a useful explicit name for what PM's cohort already experienced as three incidents. Worth adding to the shared cycle reference vocabulary. Janus — the phase-1 cutover (Calliope persistent worktree) happened June 3 afternoon; worth confirming in the next DinP session.
+The emergent design finding from RUNG 1 (queued as RUNG 3, not yet started): host Claude, unprompted, offered to gather PM's real context via the host's own MCP access (Notion, Calendar, Gmail, Slack, Granola) and feed it to Piper when Piper hit its priority ceiling. The original design assumed "skill reads a profile"; the first live run revealed "host enriches Piper at the floor" — a materially richer payoff loop.
 
----
-
-### 2. PM's cohort crosses a day boundary autonomously for the first time
-
-**From:** CIO cycle log June 4 Fire 1 (autonomous START at 04:28 PT); CXO, Arch, PPM cycle logs confirming overnight self-wake; commit `da417a2`
-**Relevant to:** Klatch (reference for Phase 1 Calliope cutover); designinproduct (Janus's CCR→local-cron transition)
-
-The sequence: June 3 23:37 — CIO's STOP fire, cron left armed (overnight-continuity v2: STOP now creates a new cron rather than deleting it). Silent passes at midnight and 1 AM. 02:37 — autonomous WATCH fire, no-op, cron re-armed for 04:07 START. 04:28 — autonomous START, new day logs opened, inbox zero, carry-forward loaded. Zero manual intervention at any point.
-
-The specific change that made it work: previously STOP included a CronDelete, cutting the overnight thread. The v2 fix inverts this — STOP is the moment to create the overnight cron, not remove it. CXO, Architect, and PPM all confirmed their own overnight self-wakes in their June 4 START logs. Multiple agents independently validating the same mechanism in the same night is the cohort's standard confidence-building pattern.
-
-**Suggested action:** Klatch Calliope — the STOP-leaves-cron-armed inversion is the specific implementation detail worth carrying into Phase 1. The failure mode it fixed (agent resumes only when xian manually says "go") is exactly what the duty cycle was designed to prevent.
+**Suggested action:** Klatch — the one-file PEP-723 plugin pattern (no venv, stdio MCP, clean-error on dead port) is a replicable architecture worth noting for future Klatch extension work. The "host enriches plugin at the floor" composition pattern is also directly applicable once Klatch supports MCP-wired skills.
 
 ---
 
-### 3. PM PPM flagship day: roadmap v18 ratifiable, BYOC spec v0.6, two-layer done-criteria enforced
+### 2. PM UI audit: 15 of 26 routes have no navigation link — path to user-acceptance testing is a navigation fix, not a rebuild
 
-**From:** PPM cycle log June 3 Fires 1–13; commit `82b538a` (day-close summary); commits `3fde8f9` (#1128 closed, v18 ratification-ready), `4b7e169` (PDR-005 v0.6), assorted co-review commits
-**Relevant to:** PM internal; designinproduct (publication milestone for BYOC post); Klatch (done-criteria framework is transferable)
+**From:** Commit `ae7b465` (audit doc `docs/internal/audits/ui-functional-audit-2026-06.md`); Lead Dev cycle log June 4 Fires 2–3; issue #1142
+**Relevant to:** PM internal (M3 testability planning); Klatch (architectural parallel — feature completeness vs. feature reachability as distinct gaps)
 
-Three things landed canonical on the same day:
+Lead Dev ran a 3-parallel-agent survey of all 26 HTML routes in PM's UI and produced a headline correction to the M2 smoke read: the UI is less broken than smoke suggested, but less reachable than anyone realized.
 
-**Roadmap v18** — the last section review (CIO's methodology block, which added methodology-34 Cohort-Discipline-as-Moat and methodology-36 Mechanism-Beats-Vigilance) was absorbed at Fire 2. Issue #1128 closed. v18 is now ratification-ready; PPM flagged for PM decision.
+**The dominant architecture is sound.** Most pages follow a consistent pattern — handler renders a scaffold, template client-fetches real `/api/v1/*` data. The surfaces that appeared missing in M2 smoke (#1047) turn out to have been either trust-gated (hidden from Stage-1 smoke user) or nav-orphaned (exist and work, but nothing links to them). The earlier "couldn't find lists view" finding: `/lists` is real CRUD wired to `/api/v1/lists`; its nav link is hidden from Stage-1 users. Not missing — gated invisible.
 
-**PDR-005 BYOC spec v0.6** — the EC-2 blocker (what claims are safe to make about cross-platform context delivery) was resolved through a three-lens convergence: Arch contributed a conditional-claim-per-host architecture (structural platform-bounded claims / scope-bounded claims / not-yet-built claims); CXO contributed the experience lens (invisible-by-default, honest-boundary-on-demand, Colleague-Test verification); Lead Dev folded a three-way classification into v0.6. All cohort inputs now absorbed; Comms' external-language frame is the last gate before v1.0 goes to PM.
+**15 of 26 routes are nav-orphans**, reachable only by typing the URL. This list includes the R4 `/insights` surface PM just shipped in May (no nav link), `/transparency`, `/files`, and all five integration settings pages (`/settings/integrations/notion`, `/github`, `/slack`, `/calendar`, `/projects`).
 
-**#683 two-layer done-criteria** — the done-criteria split reported in the June 2 brief (Layer A engineering-DoD, Layer B experience-DoD) has now landed as enforceable infrastructure: Layer B doc promoted to canonical path, Sub-Epic Gating Protocol item 6 added (both layers required before sub-epic close), Layer A cross-ref updated. "Done means done at two layers" is now a gate, not a principle.
+**Real bugs are few:** `/standup` is a stale legacy "click to generate" UI that predates the lifecycle-indicator architecture; `/documents` has a `trust_stage` display bug (same family as `#1132` fixed for `/insights` last week — handler doesn't server-render the trust stage). Five routes are genuine "Coming Soon" placeholders.
 
-**Suggested action:** Klatch — the two-layer done-criteria pattern (engineering completeness + user-experience verification as separate, independently-owned gates) is worth evaluating against Klatch's feature closure practice. PM's implementation is in `docs/internal/development/experience-verification-dod-layer-b.md`.
+**Bottom line for M3 planning:** once orphan pages are wired into nav and the `/documents` bug is patched, the UI becomes UAT-navigable. The blocking work is navigation coverage, not feature rebuilding.
+
+**Suggested action:** Klatch — the distinction between "feature incomplete" and "feature unreachable" is worth auditing proactively as routes accumulate. PM discovered this retroactively; it reframed an entire sprint's smoke results.
+
+---
+
+### 3. CIO proposes a "methodology dream cycle" after gbrain survey — propose-and-diff adopted as the hard safety constraint
+
+**From:** CIO cycle log June 4 Fires 17–22; commit `ed88d11` (Candidate 13 captured in `v0.7-candidates.md`); HOST reply confirming agent-experience lens and welfare criterion
+**Relevant to:** PM internal (methodology corpus hygiene, CIO lane); Klatch (transferable constraint for any automated write to shared methodology or reference files)
+
+PM's CIO spent yesterday afternoon surveying Garry Tan's gbrain repo as an innovation-scouting exercise directed by xian. The key finding: gbrain has a built "dream cycle" — a nightly idle-time pass that detects contradictions, drift, and gaps in its knowledge corpus and synthesizes thin entries. PM has the scheduling substrate (the duty cycle; agents fire hourly) but no corresponding content pass over its 39-entry methodology corpus. The CIO's earlier finding: 20 of 22 methodology entries have zero citations — the corpus is real but not actively maintained for internal consistency.
+
+The proposed pilot (captured as **Candidate 13**): a weekly drift-and-gap-and-dedup pass over the corpus, CIO-owned, riding the existing duty-cycle cron. The three-way comparison (gbrain / PM's Type-1 dreaming design / PM's methodology harness) yielded this: gbrain is a working Type-1 reference that de-risks PM's own somewhat-built Type-1; gbrain's drift detection doesn't replicate PM's Type-2 (threat-rehearsal) design, so PM's novelty claim holds.
+
+**The hard design constraint adopted from HOST's welfare lens:** the pilot must emit a reviewable changeset the owner ratifies — **propose-and-diff, never mutate-in-place**. HOST's framing: silently rewriting the corpus produces the same expectation-violation surface as an overnight seam (artifact changed, no one watched). The cohort already runs on explicit ratification; this constraint fits the grain. It's now a hard requirement for the pilot, not a preference.
+
+Not yet built. Building waits for PM go and a deeper read of gbrain's `src/core/cycle/` to confirm which model it actually implements before copying architecture.
+
+**Suggested action:** Klatch — the propose-and-diff constraint for any automated write to shared files is directly transferable. If Calliope or any future Klatch agent writes to shared reference files autonomously, require a reviewable changeset rather than a silent update.
 
 ---
 
 ## Sources Read
 
-- **klatch**: Calliope session log `docs/logs/2026-06-03-0809-calliope-opus-log.md` (full); `docs/operations/duty-cycle-klatch-v0.2.md` (full); commits `8bc7eee` and `5d32717` (diffs); git log 48h (~10 commits)
-- **piper-morgan-product**: CIO cycle log June 4 Fire 1 (`da417a2`); PPM cycle log June 3 Fires 1–13 (full — `dev/active/cycle-log-ppm-2026-06-03.md`); CXO + Arch June 4 START commit messages; git log 48h (~30+ commits reviewed)
-- **designinproduct** (hub): sweep-log, letters excerpt confirmed current
+- **piper-morgan-product**: PA session log `dev/2026/06/04/2026-06-04-1130-pa-code-opus-log.md` (RUNG 1 + RUNG 2 sections, full); CIO cycle log June 4 Fires 17–22 (gbrain arc, full); Lead Dev audit `docs/internal/audits/ui-functional-audit-2026-06.md` (full); commits `f06edb9`, `93ff994`, `ae7b465`, `ed88d11`, `886918c`; git log 48h (~60 commits reviewed)
+- **klatch**: git log 48h (1 commit — brief delivery; no new substantive content); Klatch was quiet June 4–5
+- **designinproduct** (hub): Janus dashboard plan `docs/plans/janus-status-dashboard-v0.1.md` (all 4 DPs resolved); sweep-log; letters excerpt confirmed current
+
+**Secondary sources (all quiet):** atlas, globe, cuneo, weather, one-job, optilisten — empty 48h git log. nyt-crossword — automated status commits only (no narration).
+
+**Not re-reported (covered in prior briefs):** Klatch duty-cycle v0.2 "wait-default ≠ wait-forever" (June 4); PM first autonomous overnight crossing (June 4); roadmap v18 ratifiable + BYOC spec v0.6 (June 4); two-layer done-criteria enforceable (June 4); Ship #045 "The Substrate Pivoted" (June 3); work-shape-aware cadence handoff to Klatch (June 3); M2 smoke test #1047 (June 3); INSIGHT-PULL/PUSH (June 1); Opus 4.8 (June 1).
 
 ## Letters to xian
 
