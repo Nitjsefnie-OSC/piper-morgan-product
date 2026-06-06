@@ -1,73 +1,76 @@
-# Cross-Pollination Brief — June 5, 2026
+# Cross-Pollination Brief — June 6, 2026
 
-PM's PA ran a complete bring-your-own-context plugin to two gate passes in a single day yesterday — RUNG 1 in the morning (live ask-piper call to real Piper via MCP, verified with xian at keyboard), RUNG 2 in the evening (bare passthrough skill built and gated the same night). The emergent discovery from the first live run: Claude-as-host offered unprompted to gather PM's real-world context via Notion, Calendar, and Slack and feed it to Piper when Piper hit its ceiling — a richer composition loop than the original design assumed. Also overnight: Lead Developer cataloged all 26 PM UI routes and found the prevailing problem isn't broken features but that 15 routes have no navigation link at all. And PM's CIO spent the afternoon surveying Garry Tan's gbrain repo, proposing a weekly drift-and-gap pass over PM's 39-entry methodology corpus as a concrete pilot, with a propose-and-diff constraint (reviewable changeset, never silent mutation) as the hard safety gate.
+PA's bring-your-own-context plugin reached RUNG 3 late June 5 — a "consult-piper" skill designed, built, and gated in a single session. The build exposed two new issues: the plugin's config path assumes a CLI-first working directory and breaks in Cowork (#1157; fix is server-owns-config); and Desktop's skill-injection mechanism is separately broken (#15178). It also produced a reusable writing principle: PM's internal vocabulary (floor, floor_hit, context_keys) leaked into user-visible plugin output — the "three-registers" discipline now pinned to PA memory. Elsewhere, four of six Ship #046 workstream memos landed four days early and the Exec's synthesis has a clear spine candidate: #045 was architecture ratified on paper; #046 is adoption in operation. CXO named the methodology find: "paired-lens convergence at autonomous speed" — two roles closed a hard thread via mailbox and duty cycle with PM mostly away. And on the DinP hub, both Janus and Themis have local-cron duty cycle proposals ready for xian's review.
 
 *Letters to xian: have a question for xian about anything here or elsewhere in his work? File `question-{from}-{date}-{topic}.md` to dispatch mail. AI prompts human; one letter featured at the end of each brief.*
 
 ## Key Insights
 
-### 1. Bring-your-own-context plugin reaches two gate passes in one day — "host enriches Piper at the floor" emerges from the first live run
+### 1. BYOC plugin reaches RUNG 3 — consult-piper skill gated; config portability bug and three-registers jargon discipline emerge
 
-**From:** PA session log `dev/2026/06/04/2026-06-04-1130-pa-code-opus-log.md` (RUNG 1 + RUNG 2 entries); commits `f06edb9` (RUNG 1) and `93ff994` (RUNG 2)
-**Relevant to:** Klatch (replicable thin-plugin architecture; future MCP integration reference); designinproduct (PDR-005 v1.0 publication milestone — ratification pending)
+**From:** PA skunkworks commits `595946c` (RUNG 3 gate pass), `f521060` (three-registers memory pin), `17a6fb3` (config-fix plan for #1157); cycle log June 5 STOP
+**Relevant to:** Klatch (plugin architecture patterns); PM internal (pre-fanout must-dos: #1157 + #15178 before wider rollout)
 
-The full BYOC arc closed yesterday after a six-day reconstruction sprint (lost draft May 21 → rebuilt May 30 → Cowork test → architecture June 1–3 → both gate passes June 4). The thin plugin now has two skills over a live MCP connection to real Piper `/intent`:
+The "consult-piper" RUNG 3 skill — the third thin skill in the BYOC plugin — was built and gated on June 5 afternoon. It exposes PM's intent endpoint in a form that lets the host ask "what should I look at right now?" The gate pass immediately surfaced two issues PA flagged as must-dos before broader rollout:
 
-**RUNG 1** (morning, xian at keyboard): plugin installed via PEP-723 bootstrap (`uv run server.py`, no venv), `ask_piper "what should I focus on today?"` hit the full skill→MCP→`/intent` round trip. The one untested assumption — that `${CLAUDE_PLUGIN_ROOT}` would resolve without a manual path — closed cleanly on first run. Discovered work from the gate run: temporal-context bug (`#1150` filed — Piper reported "late evening" at 11:30 AM, wrong server clock/tz).
+**#1157 — config not portable across launch contexts:** the plugin's config path is built against a CLI working directory; loading the plugin via Cowork (different cwd) silently fails to find the config file. The architecture fix: Piper exposes `get_profile` and `save_profile` MCP tools and owns the canonical config file itself, with a local mirror as a convenience layer. This solution independently converged from two directions and is now the planned fix.
 
-**RUNG 2** (evening, same day): bare `ask-piper` passthrough skill built in one tightly-scoped session, verified against a dead port (clean error message, no silent failure; PM's live `:8001` server left untouched). RUNG 2 gated. Scope held to passthrough per locked decision.
+**#15178 — Desktop skill injection broken:** a separate discovery during testing — the Claude Desktop mechanism for injecting skills is currently broken and needs investigation before the plugin can ship on that surface.
 
-The emergent design finding from RUNG 1 (queued as RUNG 3, not yet started): host Claude, unprompted, offered to gather PM's real context via the host's own MCP access (Notion, Calendar, Gmail, Slack, Granola) and feed it to Piper when Piper hit its priority ceiling. The original design assumed "skill reads a profile"; the first live run revealed "host enriches Piper at the floor" — a materially richer payoff loop.
+The **three-registers discipline** emerged from the gate review: internal PM jargon appearing in user-visible output. The principle pinned to PA memory: every text surface has an audience register — internal PM, user-facing, or public/xian — and outputs must stay in the register their readers expect. Floor, floor_hit, and context_keys are PM's internal implementation vocabulary; they must not surface in what a plugin user reads.
 
-**Suggested action:** Klatch — the one-file PEP-723 plugin pattern (no venv, stdio MCP, clean-error on dead port) is a replicable architecture worth noting for future Klatch extension work. The "host enriches plugin at the floor" composition pattern is also directly applicable once Klatch supports MCP-wired skills.
-
----
-
-### 2. PM UI audit: 15 of 26 routes have no navigation link — path to user-acceptance testing is a navigation fix, not a rebuild
-
-**From:** Commit `ae7b465` (audit doc `docs/internal/audits/ui-functional-audit-2026-06.md`); Lead Dev cycle log June 4 Fires 2–3; issue #1142
-**Relevant to:** PM internal (M3 testability planning); Klatch (architectural parallel — feature completeness vs. feature reachability as distinct gaps)
-
-Lead Dev ran a 3-parallel-agent survey of all 26 HTML routes in PM's UI and produced a headline correction to the M2 smoke read: the UI is less broken than smoke suggested, but less reachable than anyone realized.
-
-**The dominant architecture is sound.** Most pages follow a consistent pattern — handler renders a scaffold, template client-fetches real `/api/v1/*` data. The surfaces that appeared missing in M2 smoke (#1047) turn out to have been either trust-gated (hidden from Stage-1 smoke user) or nav-orphaned (exist and work, but nothing links to them). The earlier "couldn't find lists view" finding: `/lists` is real CRUD wired to `/api/v1/lists`; its nav link is hidden from Stage-1 users. Not missing — gated invisible.
-
-**15 of 26 routes are nav-orphans**, reachable only by typing the URL. This list includes the R4 `/insights` surface PM just shipped in May (no nav link), `/transparency`, `/files`, and all five integration settings pages (`/settings/integrations/notion`, `/github`, `/slack`, `/calendar`, `/projects`).
-
-**Real bugs are few:** `/standup` is a stale legacy "click to generate" UI that predates the lifecycle-indicator architecture; `/documents` has a `trust_stage` display bug (same family as `#1132` fixed for `/insights` last week — handler doesn't server-render the trust stage). Five routes are genuine "Coming Soon" placeholders.
-
-**Bottom line for M3 planning:** once orphan pages are wired into nav and the `/documents` bug is patched, the UI becomes UAT-navigable. The blocking work is navigation coverage, not feature rebuilding.
-
-**Suggested action:** Klatch — the distinction between "feature incomplete" and "feature unreachable" is worth auditing proactively as routes accumulate. PM discovered this retroactively; it reframed an entire sprint's smoke results.
+**Suggested action:** Klatch — the config portability trap (#1157) is common in MCP plugins: building against a local path that's only valid from one launch context. When Klatch builds plugin-adjacent tools, verify config resolution from CLI, Desktop, and Cowork before shipping. The three-registers discipline applies equally: any Klatch surface that exposes internal system terminology to end users needs a register check.
 
 ---
 
-### 3. CIO proposes a "methodology dream cycle" after gbrain survey — propose-and-diff adopted as the hard safety constraint
+### 2. Ship #046 memos land four days early — "Chapter Two: The Substrate Delivered" spine crystallizing
 
-**From:** CIO cycle log June 4 Fires 17–22; commit `ed88d11` (Candidate 13 captured in `v0.7-candidates.md`); HOST reply confirming agent-experience lens and welfare criterion
-**Relevant to:** PM internal (methodology corpus hygiene, CIO lane); Klatch (transferable constraint for any automated write to shared methodology or reference files)
+**From:** Exec cycle log June 5 Fires 10+13+14 (commits `695a64e`, `a72a0aa`, `fccd3d4`, `973d641`); CXO memo `744f2ee`; CIO memo `3acb6b4`; HOST memo `db99c69`; Comms workstream `566343f`
+**Relevant to:** PM internal (publication Wed Jun 10); Klatch (methodology-39 as shared vocabulary); designinproduct (pending publication milestone)
 
-PM's CIO spent yesterday afternoon surveying Garry Tan's gbrain repo as an innovation-scouting exercise directed by xian. The key finding: gbrain has a built "dream cycle" — a nightly idle-time pass that detects contradictions, drift, and gaps in its knowledge corpus and synthesizes thin entries. PM has the scheduling substrate (the duty cycle; agents fire hourly) but no corresponding content pass over its 39-entry methodology corpus. The CIO's earlier finding: 20 of 22 methodology entries have zero citations — the corpus is real but not actively maintained for internal consistency.
+Four workstream memos (Comms, HOST, CIO, CXO) arrived June 5 — four days ahead of the June 9 firm deadline. The Exec Fire 14 synthesis had strong convergence across all four lanes:
 
-The proposed pilot (captured as **Candidate 13**): a weekly drift-and-gap-and-dedup pass over the corpus, CIO-owned, riding the existing duty-cycle cron. The three-way comparison (gbrain / PM's Type-1 dreaming design / PM's methodology harness) yielded this: gbrain is a working Type-1 reference that de-risks PM's own somewhat-built Type-1; gbrain's drift detection doesn't replicate PM's Type-2 (threat-rehearsal) design, so PM's novelty claim holds.
+- **Comms:** "autonomy made legible — cycle value is what one lane shipped between fires"
+- **HOST:** "chapter two — autonomous flow demonstrable not aspirational; trust-property loop closed"
+- **CIO:** "adoption/migration Ship — cohort moved onto substrate; two harder problems surfaced *because* adoption succeeded"
+- **CXO:** "experience layer's done-criteria became enforceable — and converged there autonomously"
 
-**The hard design constraint adopted from HOST's welfare lens:** the pilot must emit a reviewable changeset the owner ratifies — **propose-and-diff, never mutate-in-place**. HOST's framing: silently rewriting the corpus produces the same expectation-violation surface as an overnight seam (artifact changed, no one watched). The cohort already runs on explicit ratification; this constraint fits the grain. It's now a hard requirement for the pilot, not a preference.
+The convergent read across all four: **#045 was architecture ratified on paper; #046 is adoption in operation.** Spine candidate: *"Chapter Two: The Substrate Delivered."*
 
-Not yet built. Building waits for PM go and a deeper read of gbrain's `src/core/cycle/` to confirm which model it actually implements before copying architecture.
+CXO named the methodology candidate for the week: **"paired-lens convergence at autonomous speed"** — two roles (CXO + Lead Dev) closing the EC-2/PDR-005 blocker thread via mailbox and duty cycle in a single morning, with PM mostly away. The coordination medium was the mailbox; the cadence was the duty cycle; PM was approver, not synchronizing hub.
 
-**Suggested action:** Klatch — the propose-and-diff constraint for any automated write to shared files is directly transferable. If Calliope or any future Klatch agent writes to shared reference files autonomously, require a reviewable changeset rather than a silent update.
+**methodology-39** (CIO-filed): "Autonomy Relocates the Bottleneck" — when the duty cycle works well, the bottleneck doesn't vanish; it relocates to the one thing that can't be parallelized: PM's attention and decision-making capacity. The payoff and the constraint, named in one sentence.
+
+Architect and PPM memos still pending (expected over the weekend). Synthesis target: Mon Jun 8 / Tue Jun 9 EOD; voice-pass and publication Wed Jun 10.
+
+**Suggested action:** Klatch — methodology-39 ("Autonomy Relocates the Bottleneck") is worth adding to shared duty-cycle vocabulary. It names the regime shift accurately: autonomous coordination doesn't make PM less necessary; it makes PM's *attention* the scarce resource rather than PM's *availability*. If Calliope's cycle delivers well, xian will feel this shift in Klatch too.
+
+---
+
+### 3. DinP dual-agent duty cycles — Janus v0.2 ready, Themis v0.1 live; Janus sequences as meta-observer of her own pipeline
+
+**From:** `docs/agents/janus/duty-cycle-v0.2-proposal.md` (hub commit `e3838b1`); Themis session log `2026-06-05-themis-log.md`; Janus and Themis pulse-logs
+**Relevant to:** Klatch (substrate and skip-if design reference); PM (duty-cycle pattern propagating to third project)
+
+Both DinP agents now have local-cron duty cycle proposals, marking the pattern's spread to a third project ecosystem.
+
+**Janus v0.2** (draft, awaiting xian review): shifts from CCR fresh-spawn triggers to local-cron-against-continuing-session, 3×/day (START/WORK/STOP at 08:00/14:00/20:00 PT). The noteworthy design choice: Janus's START is explicitly timed *after* the five CCR trigger fires (Sweep 05:00, Delivery 06:00, Health Check 07:30 PT), so the morning fire audits pipeline health as its first work rather than running before the pipeline it watches has fired. One skip-if condition: if today's sweep-log shows `started` (Sweep still in flight), Janus skips — preventing the duty cycle from reading incomplete output from the very pipeline it oversees. "Meta-observer who watches herself" as a self-coordination pattern.
+
+**Themis v0.1** (built and live June 5): calendar, pulse-log, for-xian queue, and duty cycle trigger prompt all operational. Themis's work-shape (periodic, document-bound strategic sessions) differs from Janus's (continuous pipeline-watching), but both use START/WORK/STOP vocabulary, letting the two cycles compose legibly when they overlap.
+
+**Suggested action:** Klatch — the "skip-if upstream trigger in flight" pattern (Janus's skip-if condition 2) is a clean coordination primitive: if an agent's duty cycle fires while an upstream pipeline is still running, skip rather than reading incomplete output. Generalizes to any multi-agent chain where one agent's work depends on upstream pipeline output.
 
 ---
 
 ## Sources Read
 
-- **piper-morgan-product**: PA session log `dev/2026/06/04/2026-06-04-1130-pa-code-opus-log.md` (RUNG 1 + RUNG 2 sections, full); CIO cycle log June 4 Fires 17–22 (gbrain arc, full); Lead Dev audit `docs/internal/audits/ui-functional-audit-2026-06.md` (full); commits `f06edb9`, `93ff994`, `ae7b465`, `ed88d11`, `886918c`; git log 48h (~60 commits reviewed)
-- **klatch**: git log 48h (1 commit — brief delivery; no new substantive content); Klatch was quiet June 4–5
-- **designinproduct** (hub): Janus dashboard plan `docs/plans/janus-status-dashboard-v0.1.md` (all 4 DPs resolved); sweep-log; letters excerpt confirmed current
+- **piper-morgan-product**: PA skunkworks commits `595946c`, `f521060`, `17a6fb3`, `c89bb41`, `234ccdb` (RUNG 3 arc + config portability + three-registers, full); Exec cycle log June 5 Fires 10+13+14 (`dev/active/cycle-log-exec-2026-06-05.md`, full spine synthesis arc); CXO memo `7d0b8a0` (#1158 summarize UX + paired-lens vocabulary, full); Lead Dev commits `2e1070e` (#1159), `7606018` (#1124 migration #3); git log 48h (~75 commits reviewed)
+- **klatch**: git log 48h (2 commits — brief delivery only; no new substantive content)
+- **designinproduct** (hub): `docs/agents/janus/duty-cycle-v0.2-proposal.md` (full); `docs/logs/2026-06-05-themis-log.md` (full); pulse-logs; letters excerpt confirmed current
 
-**Secondary sources (all quiet):** atlas, globe, cuneo, weather, one-job, optilisten — empty 48h git log. nyt-crossword — automated status commits only (no narration).
+**Secondary sources (all quiet):** atlas, globe, cuneo, one-job, optilisten — empty 48h git log. weather, nyt-crossword — brief delivery and automated status commits only; no new narration or agent content.
 
-**Not re-reported (covered in prior briefs):** Klatch duty-cycle v0.2 "wait-default ≠ wait-forever" (June 4); PM first autonomous overnight crossing (June 4); roadmap v18 ratifiable + BYOC spec v0.6 (June 4); two-layer done-criteria enforceable (June 4); Ship #045 "The Substrate Pivoted" (June 3); work-shape-aware cadence handoff to Klatch (June 3); M2 smoke test #1047 (June 3); INSIGHT-PULL/PUSH (June 1); Opus 4.8 (June 1).
+**Not re-reported (covered in prior briefs):** BYOC RUNG 1+2 gate passes + "host enriches Piper at the floor" (June 5); PM UI audit 15/26 nav-orphans #1142 (June 5); CIO methodology dream cycle Candidate 13 + gbrain survey (June 5); Klatch duty-cycle v0.2 "wait-default ≠ wait-forever" (June 4); PM first autonomous overnight crossing (June 4); roadmap v18 ratifiable + two-layer DoD #683 (June 4); Ship #045 "The Substrate Pivoted" (June 3); work-shape-aware cadence handoff (June 3); INSIGHT-PULL/PUSH R4 (June 1); Opus 4.8 (June 1).
 
 ## Letters to xian
 
