@@ -1,76 +1,87 @@
-# Cross-Pollination Brief — June 6, 2026
+# Cross-Pollination Brief — June 7, 2026
 
-PA's bring-your-own-context plugin reached RUNG 3 late June 5 — a "consult-piper" skill designed, built, and gated in a single session. The build exposed two new issues: the plugin's config path assumes a CLI-first working directory and breaks in Cowork (#1157; fix is server-owns-config); and Desktop's skill-injection mechanism is separately broken (#15178). It also produced a reusable writing principle: PM's internal vocabulary (floor, floor_hit, context_keys) leaked into user-visible plugin output — the "three-registers" discipline now pinned to PA memory. Elsewhere, four of six Ship #046 workstream memos landed four days early and the Exec's synthesis has a clear spine candidate: #045 was architecture ratified on paper; #046 is adoption in operation. CXO named the methodology find: "paired-lens convergence at autonomous speed" — two roles closed a hard thread via mailbox and duty cycle with PM mostly away. And on the DinP hub, both Janus and Themis have local-cron duty cycle proposals ready for xian's review.
+Overnight, PA drove Piper Morgan's backend onto a DigitalOcean server — its first run on Linux ever. Seven portability issues surfaced and were fixed on-box during the deploy; the `/health` and `/intent` endpoints confirmed working end-to-end (a live API key is all that remains for live answers). Separately, Calliope went live on Klatch's duty cycle with an hourly cron and a persistent worktree, making the autonomous-cycle pattern present in all three project ecosystems for the first time. CXO's overnight session produced a forensic find: `tokens.css v1.1.0` is already a complete WCAG-AA-audited design token system — the PM design problem is inconsistent application of a foundation that exists, not a missing one. And duty-cycle-tick patched itself to v1.2 after CIO's overnight run caught a midnight dispatch edge case that caused 2am fires to mis-classify as morning STARTs.
 
 *Letters to xian: have a question for xian about anything here or elsewhere in his work? File `question-{from}-{date}-{topic}.md` to dispatch mail. AI prompts human; one letter featured at the end of each brief.*
 
 ## Key Insights
 
-### 1. BYOC plugin reaches RUNG 3 — consult-piper skill gated; config portability bug and three-registers jargon discipline emerge
+### 1. Piper Morgan's backend reaches a hosted server for the first time — seven Linux portability issues cataloged
 
-**From:** PA skunkworks commits `595946c` (RUNG 3 gate pass), `f521060` (three-registers memory pin), `17a6fb3` (config-fix plan for #1157); cycle log June 5 STOP
-**Relevant to:** Klatch (plugin architecture patterns); PM internal (pre-fanout must-dos: #1157 + #15178 before wider rollout)
+**From:** PA session log `dev/2026/06/06/2026-06-06-0707-pa-code-opus-log.md` ("DO droplet" and "backend UP" sections); commits `45660fe`, `2476d34`, `aeea43c` (runbook); issues #1167, #1168
+**Relevant to:** Klatch (Linux portability checklist; the same issues may lurk if Klatch ever runs on a non-Mac host); PM internal (alpha deployment unblocked; Beatrice onboarding next)
 
-The "consult-piper" RUNG 3 skill — the third thin skill in the BYOC plugin — was built and gated on June 5 afternoon. It exposes PM's intent endpoint in a form that lets the host ask "what should I look at right now?" The gate pass immediately surfaced two issues PA flagged as must-dos before broader rollout:
+PA drove an end-to-end deployment of the Piper Morgan backend to a fresh DigitalOcean 8GB/Ubuntu 24.04 droplet (146.190.151.63) during Saturday's session. It is the first time Piper ran on Linux. The deploy followed a runbook PA wrote after ruling out the existing Rackspace box (Ubuntu 16.04 EOL, 990MB RAM — physically can't load the ML stack) and confirmed a DO 8GB VPS as the minimum viable host.
 
-**#1157 — config not portable across launch contexts:** the plugin's config path is built against a CLI working directory; loading the plugin via Cowork (different cwd) silently fails to find the config file. The architecture fix: Piper exposes `get_profile` and `save_profile` MCP tools and owns the canonical config file itself, with a local mirror as a convenience layer. This solution independently converged from two directions and is now the planned fix.
+**Seven Linux portability issues surfaced and fixed on-box:**
+1. Orchestration `Dockerfile` references `scripts/verify-python-version.sh`, which isn't tracked in git → **#1167** filed
+2. `requirements.txt` lists macOS-only `pyobjc-*` packages with no platform markers → stripped; **#1168** filed
+3. `.env` file mode 600 root-owned, unreadable by non-root container → `chmod 644`
+4. Base image `python:3.11-slim-bullseye` ships SQLite 3.34; ChromaDB requires 3.35 → bumped to `bookworm` (SQLite 3.40)
+5. Non-root container couldn't write root-owned bind mount for `data/learning` → ran app as root
+6. `main.py` hardcoded `host="127.0.0.1"` → unreachable via Docker published port → patched to `0.0.0.0`
+7. `alembic.ini` hardcoded `sqlalchemy.url` with `localhost:5433` and stale dev password → patched to `postgres:5432` with live credentials → 36 tables migrated cleanly
 
-**#15178 — Desktop skill injection broken:** a separate discovery during testing — the Claude Desktop mechanism for injecting skills is currently broken and needs investigation before the plugin can ship on that surface.
+**Result:** `/health → 200` (web/intent_enforcement/intent_service all healthy). `/intent → 200` (classifies correctly: PRIORITY/get_top_priority, conf 1.0, floor_hit). Only the `ANTHROPIC_API_KEY` remains blank; the full stack works, live LLM answers are one env-var away. All internal ports are bound `127.0.0.1` (not internet-exposed yet); Phase 2 is password-gate + TLS.
 
-The **three-registers discipline** emerged from the gate review: internal PM jargon appearing in user-visible output. The principle pinned to PA memory: every text surface has an audience register — internal PM, user-facing, or public/xian — and outputs must stay in the register their readers expect. Floor, floor_hit, and context_keys are PM's internal implementation vocabulary; they must not surface in what a plugin user reads.
+v0.8.7 was also cut from the `3a34a4403` commit (the M2-close canonical retest build) and pushed to the `production` branch during the same session — first formal release cut.
 
-**Suggested action:** Klatch — the config portability trap (#1157) is common in MCP plugins: building against a local path that's only valid from one launch context. When Klatch builds plugin-adjacent tools, verify config resolution from CLI, Desktop, and Cowork before shipping. The three-registers discipline applies equally: any Klatch surface that exposes internal system terminology to end users needs a register check.
-
----
-
-### 2. Ship #046 memos land four days early — "Chapter Two: The Substrate Delivered" spine crystallizing
-
-**From:** Exec cycle log June 5 Fires 10+13+14 (commits `695a64e`, `a72a0aa`, `fccd3d4`, `973d641`); CXO memo `744f2ee`; CIO memo `3acb6b4`; HOST memo `db99c69`; Comms workstream `566343f`
-**Relevant to:** PM internal (publication Wed Jun 10); Klatch (methodology-39 as shared vocabulary); designinproduct (pending publication milestone)
-
-Four workstream memos (Comms, HOST, CIO, CXO) arrived June 5 — four days ahead of the June 9 firm deadline. The Exec Fire 14 synthesis had strong convergence across all four lanes:
-
-- **Comms:** "autonomy made legible — cycle value is what one lane shipped between fires"
-- **HOST:** "chapter two — autonomous flow demonstrable not aspirational; trust-property loop closed"
-- **CIO:** "adoption/migration Ship — cohort moved onto substrate; two harder problems surfaced *because* adoption succeeded"
-- **CXO:** "experience layer's done-criteria became enforceable — and converged there autonomously"
-
-The convergent read across all four: **#045 was architecture ratified on paper; #046 is adoption in operation.** Spine candidate: *"Chapter Two: The Substrate Delivered."*
-
-CXO named the methodology candidate for the week: **"paired-lens convergence at autonomous speed"** — two roles (CXO + Lead Dev) closing the EC-2/PDR-005 blocker thread via mailbox and duty cycle in a single morning, with PM mostly away. The coordination medium was the mailbox; the cadence was the duty cycle; PM was approver, not synchronizing hub.
-
-**methodology-39** (CIO-filed): "Autonomy Relocates the Bottleneck" — when the duty cycle works well, the bottleneck doesn't vanish; it relocates to the one thing that can't be parallelized: PM's attention and decision-making capacity. The payoff and the constraint, named in one sentence.
-
-Architect and PPM memos still pending (expected over the weekend). Synthesis target: Mon Jun 8 / Tue Jun 9 EOD; voice-pass and publication Wed Jun 10.
-
-**Suggested action:** Klatch — methodology-39 ("Autonomy Relocates the Bottleneck") is worth adding to shared duty-cycle vocabulary. It names the regime shift accurately: autonomous coordination doesn't make PM less necessary; it makes PM's *attention* the scarce resource rather than PM's *availability*. If Calliope's cycle delivers well, xian will feel this shift in Klatch too.
+**Suggested action:** Klatch — if you ever run on Linux, the #1167/#1168 class is likely hiding. The `pyobjc-*` pattern (macOS-only deps with no platform markers in `requirements.txt`) is worth checking now; the `alembic.ini` hardcoded host/port pattern is the class of "config that only ever ran on one machine." The full seven-issue list is in the PA session log and worth scanning before any cross-OS deployment.
 
 ---
 
-### 3. DinP dual-agent duty cycles — Janus v0.2 ready, Themis v0.1 live; Janus sequences as meta-observer of her own pipeline
+### 2. Calliope goes live on Klatch's duty cycle — the autonomous-cycle pattern now spans all three project ecosystems
 
-**From:** `docs/agents/janus/duty-cycle-v0.2-proposal.md` (hub commit `e3838b1`); Themis session log `2026-06-05-themis-log.md`; Janus and Themis pulse-logs
-**Relevant to:** Klatch (substrate and skip-if design reference); PM (duty-cycle pattern propagating to third project)
+**From:** Klatch commit `5043349` (Phase 1 cutover, June 6 08:22 PDT); `docs/operations/duty-cycle/agent-state.md`; `cycle-log-calliope-2026-06-06.md`
+**Relevant to:** PM (cross-project validation; the cutover log is a clean Phase 1 checklist reference); DinP (Janus v0.2 and Themis v0.1 follow the same playbook)
 
-Both DinP agents now have local-cron duty cycle proposals, marking the pattern's spread to a third project ecosystem.
+Calliope completed Phase 1 cutover on June 6: a persistent worktree at `.claude/worktrees/calliope` on the long-lived `claude/calliope` branch, with a v0.2 cron job (`adca439c`, `13 * * * *`, hourly at `:13` off-mark) registered with the full v0.2 drain prompt. Phase 1 also cleaned up four legacy dated worktrees (`calliope-may18`, `-may28`, `-june02`, `-june03`).
 
-**Janus v0.2** (draft, awaiting xian review): shifts from CCR fresh-spawn triggers to local-cron-against-continuing-session, 3×/day (START/WORK/STOP at 08:00/14:00/20:00 PT). The noteworthy design choice: Janus's START is explicitly timed *after* the five CCR trigger fires (Sweep 05:00, Delivery 06:00, Health Check 07:30 PT), so the morning fire audits pipeline health as its first work rather than running before the pipeline it watches has fired. One skip-if condition: if today's sweep-log shows `started` (Sweep still in flight), Janus skips — preventing the duty cycle from reading incomplete output from the very pipeline it oversees. "Meta-observer who watches herself" as a self-coordination pattern.
+With Calliope live, the autonomous-cycle pattern is now present in all three project ecosystems: PM's full cohort has been cycling for weeks; DinP has Themis v0.1 live and Janus v0.2 proposed; Klatch now has Calliope. The pattern propagated as a set of behaviors (drain-until-IDLE, CronDelete-FIRST, wait-default-not-wait-forever, scheduling-not-permission) rather than as a configuration copy — each project evolved its own shape and then converged on the same substrate.
 
-**Themis v0.1** (built and live June 5): calendar, pulse-log, for-xian queue, and duty cycle trigger prompt all operational. Themis's work-shape (periodic, document-bound strategic sessions) differs from Janus's (continuous pipeline-watching), but both use START/WORK/STOP vocabulary, letting the two cycles compose legibly when they overlap.
+Klatch's remaining agents: Daedalus+Argus Phase 2 (hourly tandem) and Theseus+Iris Phase 3 (daily heartbeat) are both queued, waiting for xian's next agent-launch session.
 
-**Suggested action:** Klatch — the "skip-if upstream trigger in flight" pattern (Janus's skip-if condition 2) is a clean coordination primitive: if an agent's duty cycle fires while an upstream pipeline is still running, skip rather than reading incomplete output. Generalizes to any multi-agent chain where one agent's work depends on upstream pipeline output.
+**Suggested action:** PM — the Phase 1 cutover commit (`5043349`) is a clean single-commit checklist of what "Phase 1 complete" looks like: cron registered, substrate updated, tasks refreshed to v0.2 format, cycle log created, legacy cleanup, 0th-step inline drain. If PM's own Phase 1 reference diverged, this is a clean comparison target.
+
+---
+
+### 3. PM's design token system already exists and passes WCAG-AA — the floor problem is inconsistent use, not a missing foundation
+
+**From:** CXO session log `dev/2026/06/07/2026-06-07-0420-cxo-code-opus-log.md`; `dev/active/design-system-and-conformance-standard-2026-06-07.md` (commit `c358160`); memo delivered to Lead Dev (`1054bae`)
+**Relevant to:** PM internal (Lead Dev now has a concrete spec to build to); Klatch (the "audit your own foundation before writing greenfield" discipline transfers)
+
+CXO's 4am autonomous session produced an unexpected forensic finding: `web/static/css/tokens.css v1.1.0` is a complete, WCAG-2.1-AA-contrast-audited design token system — full color palette with documented contrast ratios, spacing and typography scales, shadows, z-index layering, focus-state tokens, and accessibility primitives (`--touch-target-min: 48px`, `prefers-contrast`, `prefers-reduced-motion`). A Nov-2025 UX audit also exists in `docs/internal/design/audits/`. PM was not missing a design system; some surfaces were bypassing one that was already there.
+
+**The standard that follows from this is "enforce/consolidate/complete" rather than "greenfield."** Design-system and conformance standard v0.1 was drafted and delivered to Lead Dev in the same session. The concrete work it defines: enforce token discipline across all surfaces (audit what bypasses the token system); build a `Dialog` component (retires the native `confirm()` defect); adopt a consistent page-shell (retires the Insight Journal "styled unlike the site" finding); conform the chat page. Lead Dev's job is to build to this spec; CXO's job was to set it.
+
+**Suggested action:** Klatch — before writing any new CSS system, audit what's already in the repo. The audit-before-extend discipline (check what exists before adding new) applies to design foundations as directly as it applies to code. A codebase that's been running for a while often has a more complete foundation than recent-surface problems suggest.
+
+---
+
+### 4. duty-cycle-tick v1.2 patches a midnight dispatch edge case — CIO caught it by running the skill overnight
+
+**From:** CIO commit `e4cf9b4` (v1.2 changelog + SKILL.md diff); CIO session log `dev/2026/06/07/2026-06-07-0417-cio-code-opus-log.md`
+**Relevant to:** PM (all cycling agents should pull the updated skill); Klatch (Calliope's v0.2 drain prompt encodes the same state+window hybrid)
+
+The `duty-cycle-tick` skill (the durable procedure behind every PM agent's hourly cron) reached v1.2 overnight after CIO's dogfood run caught a gap in v1.1's dispatch logic. v1.1 (the HOST finding from June 6) introduced state-based dispatch: "no session log today → START." That was almost right. The edge case: the continuous-cron shape fires once around 2am, and at 2am there's also no session log for the new day yet — so the 2am fire mis-classified as a morning START, not an overnight WATCH.
+
+v1.2 fix: check the overnight branch first (`hour ~0–4 + nothing urgent → WATCH`), then fall through to the session-log check. This keeps HOST's fix (low-freq agents at 6:37am still START correctly because the ≥4 guard is narrow) while preventing the 2am mis-START on the continuous shape. CIO caught it on CIO's own overnight fire; committed the fix before the morning START.
+
+**The meta-observation:** the skill improved itself by being used — CIO ran duty-cycle-tick at 2am, the skill mis-dispatched, and CIO patched it before the next fire. This is the self-correction loop that emerges when agents run on shared tooling and report what breaks.
+
+**Suggested action:** Klatch — Calliope's v0.2 drain prompt was authored after v1.2 was already landed in PM's skill (PM's skill is the reference), so Calliope should already have the overnight-window guard baked in. Confirm the drain prompt's dispatch logic matches v1.2 before the first overnight fire.
 
 ---
 
 ## Sources Read
 
-- **piper-morgan-product**: PA skunkworks commits `595946c`, `f521060`, `17a6fb3`, `c89bb41`, `234ccdb` (RUNG 3 arc + config portability + three-registers, full); Exec cycle log June 5 Fires 10+13+14 (`dev/active/cycle-log-exec-2026-06-05.md`, full spine synthesis arc); CXO memo `7d0b8a0` (#1158 summarize UX + paired-lens vocabulary, full); Lead Dev commits `2e1070e` (#1159), `7606018` (#1124 migration #3); git log 48h (~75 commits reviewed)
-- **klatch**: git log 48h (2 commits — brief delivery only; no new substantive content)
-- **designinproduct** (hub): `docs/agents/janus/duty-cycle-v0.2-proposal.md` (full); `docs/logs/2026-06-05-themis-log.md` (full); pulse-logs; letters excerpt confirmed current
+- **piper-morgan-product**: PA session log `dev/2026/06/06/2026-06-06-0707-pa-code-opus-log.md` (DO deploy arc, v0.8.7 cut, full); CXO session log `dev/2026/06/07/2026-06-07-0420-cxo-code-opus-log.md` (full); CXO design-system standard `dev/active/design-system-and-conformance-standard-2026-06-07.md` (full); CIO `duty-cycle-tick` SKILL.md v1.2 diff (commit `e4cf9b4`, full); git log 24h (~95 commits reviewed)
+- **klatch**: Calliope Phase 1 cutover commit `5043349` (full); `docs/operations/duty-cycle/agent-state.md` (full); `cycle-log-calliope-2026-06-06.md` (full); Calliope session log `docs/logs/2026-06-06-0807-calliope-opus-log.md` (full); git log 24h (6 commits)
+- **designinproduct** (hub): sweep-log; letters excerpt confirmed current; index.njk for card placement
 
-**Secondary sources (all quiet):** atlas, globe, cuneo, one-job, optilisten — empty 48h git log. weather, nyt-crossword — brief delivery and automated status commits only; no new narration or agent content.
+**Secondary sources (all quiet):** atlas, globe — brief delivery commits only. cuneo, optilisten, nyt-crossword — empty 48h git log. weather, one-job — automated status commits only; no narration or agent content.
 
-**Not re-reported (covered in prior briefs):** BYOC RUNG 1+2 gate passes + "host enriches Piper at the floor" (June 5); PM UI audit 15/26 nav-orphans #1142 (June 5); CIO methodology dream cycle Candidate 13 + gbrain survey (June 5); Klatch duty-cycle v0.2 "wait-default ≠ wait-forever" (June 4); PM first autonomous overnight crossing (June 4); roadmap v18 ratifiable + two-layer DoD #683 (June 4); Ship #045 "The Substrate Pivoted" (June 3); work-shape-aware cadence handoff (June 3); INSIGHT-PULL/PUSH R4 (June 1); Opus 4.8 (June 1).
+**Not re-reported (covered in prior briefs):** BYOC RUNG 3 gate pass (June 6); #1157 config portability bug identified + server-owns-config architecture plan (June 6); three-registers discipline (June 6); Ship #046 spine + paired-lens convergence + methodology-39 (June 6); DinP dual-agent duty cycles proposals (June 6); BYOC RUNG 1+2 gate passes (June 5); PM UI audit 15/26 nav-orphans #1142 (June 5); CIO methodology dream cycle Candidate 13 (June 5).
 
 ## Letters to xian
 
