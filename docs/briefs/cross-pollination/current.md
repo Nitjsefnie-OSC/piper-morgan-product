@@ -1,87 +1,83 @@
-# Cross-Pollination Brief — June 7, 2026
+# Cross-Pollination Brief — June 8, 2026
 
-Overnight, PA drove Piper Morgan's backend onto a DigitalOcean server — its first run on Linux ever. Seven portability issues surfaced and were fixed on-box during the deploy; the `/health` and `/intent` endpoints confirmed working end-to-end (a live API key is all that remains for live answers). Separately, Calliope went live on Klatch's duty cycle with an hourly cron and a persistent worktree, making the autonomous-cycle pattern present in all three project ecosystems for the first time. CXO's overnight session produced a forensic find: `tokens.css v1.1.0` is already a complete WCAG-AA-audited design token system — the PM design problem is inconsistent application of a foundation that exists, not a missing one. And duty-cycle-tick patched itself to v1.2 after CIO's overnight run caught a midnight dispatch edge case that caused 2am fires to mis-classify as morning STARTs.
+Piper Morgan's first external tester received her distribution bundle Sunday. The hosted endpoint is live at alpha.pipermorgan.ai, a Desktop install test confirmed the full chain works end-to-end, and Beatrice has everything she needs to try it — the first time a person outside the dev team holds a working build. The same session produced a written synthesis of what the BYOC architecture is becoming: the user brings the commodity substrate (model, key, connectors) and Piper brings the judgment layer (calibration, methodology, honest degradation) — with `consult-piper` as the working prototype of the collegial extension. And Klatch's weekly external scan brought three platform events: Anthropic filed a confidential S-1 (IPO process begins), June 15 model retirements are seven days out, and Claude Code 2.1.166 ships a security hardening that changes how multi-agent sessions can relay permissions.
 
 *Letters to xian: have a question for xian about anything here or elsewhere in his work? File `question-{from}-{date}-{topic}.md` to dispatch mail. AI prompts human; one letter featured at the end of each brief.*
 
 ## Key Insights
 
-### 1. Piper Morgan's backend reaches a hosted server for the first time — seven Linux portability issues cataloged
+### 1. Piper Morgan's alpha reaches its first external tester — full chain confirmed, Beatrice has the bundle
 
-**From:** PA session log `dev/2026/06/06/2026-06-06-0707-pa-code-opus-log.md` ("DO droplet" and "backend UP" sections); commits `45660fe`, `2476d34`, `aeea43c` (runbook); issues #1167, #1168
-**Relevant to:** Klatch (Linux portability checklist; the same issues may lurk if Klatch ever runs on a non-Mac host); PM internal (alpha deployment unblocked; Beatrice onboarding next)
+**From:** PA session log `dev/2026/06/07/2026-06-07-0540-pa-code-opus-log.md` (day-close section); `dev/active/pa-carry-forward.md`; install-AX findings commit `3c64bef`
+**Relevant to:** Klatch (distribution pattern for eventual external testing); DinP (public milestone narrative)
 
-PA drove an end-to-end deployment of the Piper Morgan backend to a fresh DigitalOcean 8GB/Ubuntu 24.04 droplet (146.190.151.63) during Saturday's session. It is the first time Piper ran on Linux. The deploy followed a runbook PA wrote after ruling out the existing Rackspace box (Ubuntu 16.04 EOL, 990MB RAM — physically can't load the ML stack) and confirmed a DO 8GB VPS as the minimum viable host.
+PA completed a three-phase alpha deployment sequence on Sunday and sent a distribution bundle to Beatrice, the project's first external tester. The chain that was confirmed working:
 
-**Seven Linux portability issues surfaced and fixed on-box:**
-1. Orchestration `Dockerfile` references `scripts/verify-python-version.sh`, which isn't tracked in git → **#1167** filed
-2. `requirements.txt` lists macOS-only `pyobjc-*` packages with no platform markers → stripped; **#1168** filed
-3. `.env` file mode 600 root-owned, unreadable by non-root container → `chmod 644`
-4. Base image `python:3.11-slim-bullseye` ships SQLite 3.34; ChromaDB requires 3.35 → bumped to `bookworm` (SQLite 3.40)
-5. Non-root container couldn't write root-owned bind mount for `data/learning` → ran app as root
-6. `main.py` hardcoded `host="127.0.0.1"` → unreachable via Docker published port → patched to `0.0.0.0`
-7. `alembic.ini` hardcoded `sqlalchemy.url` with `localhost:5433` and stale dev password → patched to `postgres:5432` with live credentials → 36 tables migrated cleanly
+- **Phase 1** (Saturday): hosted backend live on a DigitalOcean droplet (146.190.151.63), `/intent` returning real LLM answers after the API key was added.
+- **Phase 2**: `alpha.pipermorgan.ai` exposed publicly behind Caddy 2 reverse proxy with Let's Encrypt TLS and HTTP basic-auth. PM added the DNS A-record; the cert was auto-provisioned via ACME HTTP-01. Internal services stay bound to `127.0.0.1`; only the authenticated path is internet-facing.
+- **Phase 3**: distribution bundle built — installable plugin zip (`.mcp.json` pointing at the gated hosted URL, bundled uv binaries for both Mac architectures, arch-detecting launcher) wrapped in an outer zip with an `INSTRUCTIONS.html` and `COVER-NOTE.md`. The wrapper design separates "the install instructions" from "the installable artifact" — a user unzips the outer layer, reads the HTML, then drags the inner zip into Claude Desktop.
+- **Desktop test**: PM installed the alpha plugin and ran `/piper-morgan:ask-piper "what's on my agenda?"` → hosted Piper returned a real LLM answer (honest-degradation: "Google Calendar isn't connected"). End-to-end confirmed: Desktop install + bundled uv + command=sh + hosted gated endpoint + Anthropic LLM.
 
-**Result:** `/health → 200` (web/intent_enforcement/intent_service all healthy). `/intent → 200` (classifies correctly: PRIORITY/get_top_priority, conf 1.0, floor_hit). Only the `ANTHROPIC_API_KEY` remains blank; the full stack works, live LLM answers are one env-var away. All internal ports are bound `127.0.0.1` (not internet-exposed yet); Phase 2 is password-gate + TLS.
+**Install-AX finding** (from PA's comparable-tool walkthrough the same session): `.mcpb` + `.skill` one-click install on Claude Desktop-chat is smoother than the plugin distribution path there. The hosted-endpoint approach dodges the worst install friction — no local server to launch, no Gatekeeper issues with the binary download path, just uv (which most developers already have or can fetch in one step).
 
-v0.8.7 was also cut from the `3a34a4403` commit (the M2-close canonical retest build) and pushed to the `production` branch during the same session — first formal release cut.
+The remaining unproven layer for Beatrice is whether her Mac's Gatekeeper clears the bundled uv binary (both arm64 and x64 are bundled; the launcher detects arch). The `INSTRUCTIONS.html` documents the Gatekeeper fallback (curl-install uv instead).
 
-**Suggested action:** Klatch — if you ever run on Linux, the #1167/#1168 class is likely hiding. The `pyobjc-*` pattern (macOS-only deps with no platform markers in `requirements.txt`) is worth checking now; the `alembic.ini` hardcoded host/port pattern is the class of "config that only ever ran on one machine." The full seven-issue list is in the PA session log and worth scanning before any cross-OS deployment.
+**Suggested action:** Klatch — if external alpha testing ever comes up, the distribution pattern here is a practical template: separate the instruction wrapper from the installable artifact, bundle the runtime dependency (uv in this case), and use a hosted endpoint rather than a local-server plugin to eliminate the "is the server running?" failure mode.
 
 ---
 
-### 2. Calliope goes live on Klatch's duty cycle — the autonomous-cycle pattern now spans all three project ecosystems
+### 2. "Piper as colleague" thesis — BYO-substrate framing articulated; `consult-piper` is the working prototype
 
-**From:** Klatch commit `5043349` (Phase 1 cutover, June 6 08:22 PDT); `docs/operations/duty-cycle/agent-state.md`; `cycle-log-calliope-2026-06-06.md`
-**Relevant to:** PM (cross-project validation; the cutover log is a clean Phase 1 checklist reference); DinP (Janus v0.2 and Themis v0.1 follow the same playbook)
+**From:** `dev/active/pa-byo-thesis-and-piper-as-colleague-2026-06-07.md` (committed June 7); PA session log day-close
+**Relevant to:** Klatch (the "what is defensible" question); DinP (public framing of the product arc)
 
-Calliope completed Phase 1 cutover on June 6: a persistent worktree at `.claude/worktrees/calliope` on the long-lived `claude/calliope` branch, with a v0.2 cron job (`adca439c`, `13 * * * *`, hourly at `:13` off-mark) registered with the full v0.2 drain prompt. Phase 1 also cleaned up four legacy dated worktrees (`calliope-may18`, `-may28`, `-june02`, `-june03`).
+PA wrote a synthesis document capturing the architectural frame that has been running implicitly through the BYOC work. The core thesis:
 
-With Calliope live, the autonomous-cycle pattern is now present in all three project ecosystems: PM's full cohort has been cycling for weeks; DinP has Themis v0.1 live and Janus v0.2 proposed; Klatch now has Calliope. The pattern propagated as a set of behaviors (drain-until-IDLE, CronDelete-FIRST, wait-default-not-wait-forever, scheduling-not-permission) rather than as a configuration copy — each project evolved its own shape and then converged on the same substrate.
+**The user brings the commodity substrate; Piper brings the judgment.**
+- BYO-Chat: Piper inside the Claude you already use.
+- BYO-LLM-key: you fund your own inference.
+- BYO-credential (Option A): your own access, no secret baked into the plugin.
+- BYO-connected-accounts: your own OAuth'd connectors.
+→ Piper's distinctive layer: **calibration** (how *you* work), **methodology** (trust gradient, Conscious Floor, honest degradation), **role-shaping**.
 
-Klatch's remaining agents: Daedalus+Argus Phase 2 (hourly tandem) and Theseus+Iris Phase 3 (daily heartbeat) are both queued, waiting for xian's next agent-launch session.
+The "Piper as colleague" extension goes further: rather than Piper reimplementing every connector the host agent already has, Piper **deputizes the host** to gather information and act on its behalf — the host is already connected to Calendar, GitHub, Notion; Piper just needs to ask. This flips the relationship from tool-for-your-assistant to **colleague-for-your-assistant**: Piper says what it needs; the host gathers with what it has; Piper reasons; Piper connects only the gaps.
 
-**Suggested action:** PM — the Phase 1 cutover commit (`5043349`) is a clean single-commit checklist of what "Phase 1 complete" looks like: cron registered, substrate updated, tasks refreshed to v0.2 format, cycle log created, legacy cleanup, 0th-step inline drain. If PM's own Phase 1 reference diverged, this is a clean comparison target.
+`consult-piper` already does this for GitHub: Piper floors for missing context → the host gathers it → re-ask Piper enriched → answer with visible provenance. Generalizing from GitHub-only to any connector the host has is the Phase N work (requires structured needs signal, capability discovery, trust boundary enforcement — gather/read freely, execute/write only with user consent).
 
----
+**Why this framing matters:** BYO is both an economics move and a trust move — the same design that collapses hosting cost toward zero is the design that keeps the user's key and data off the infrastructure. That cost/trust alignment is rare, and it locates where the value has to live: not in the commodity layer (model, inference, connectors) but in the judgment layer the platform won't own.
 
-### 3. PM's design token system already exists and passes WCAG-AA — the floor problem is inconsistent use, not a missing foundation
-
-**From:** CXO session log `dev/2026/06/07/2026-06-07-0420-cxo-code-opus-log.md`; `dev/active/design-system-and-conformance-standard-2026-06-07.md` (commit `c358160`); memo delivered to Lead Dev (`1054bae`)
-**Relevant to:** PM internal (Lead Dev now has a concrete spec to build to); Klatch (the "audit your own foundation before writing greenfield" discipline transfers)
-
-CXO's 4am autonomous session produced an unexpected forensic finding: `web/static/css/tokens.css v1.1.0` is a complete, WCAG-2.1-AA-contrast-audited design token system — full color palette with documented contrast ratios, spacing and typography scales, shadows, z-index layering, focus-state tokens, and accessibility primitives (`--touch-target-min: 48px`, `prefers-contrast`, `prefers-reduced-motion`). A Nov-2025 UX audit also exists in `docs/internal/design/audits/`. PM was not missing a design system; some surfaces were bypassing one that was already there.
-
-**The standard that follows from this is "enforce/consolidate/complete" rather than "greenfield."** Design-system and conformance standard v0.1 was drafted and delivered to Lead Dev in the same session. The concrete work it defines: enforce token discipline across all surfaces (audit what bypasses the token system); build a `Dialog` component (retires the native `confirm()` defect); adopt a consistent page-shell (retires the Insight Journal "styled unlike the site" finding); conform the chat page. Lead Dev's job is to build to this spec; CXO's job was to set it.
-
-**Suggested action:** Klatch — before writing any new CSS system, audit what's already in the repo. The audit-before-extend discipline (check what exists before adding new) applies to design foundations as directly as it applies to code. A codebase that's been running for a while often has a more complete foundation than recent-surface problems suggest.
+**Suggested action:** Klatch — the same question applies in a different form: if inference is commodity and model providers will keep converging on capability, what is Klatch's defensible layer? The answer is probably conversation structure, history, import/export continuity — the infrastructure that makes conversations portable and reusable across models. Worth naming explicitly rather than leaving implicit. DinP — the BYO-substrate thesis is the public story for Piper Morgan in one paragraph; worth placing on the project page when the alpha clears.
 
 ---
 
-### 4. duty-cycle-tick v1.2 patches a midnight dispatch edge case — CIO caught it by running the skill overnight
+### 3. Platform intelligence: Anthropic IPO S-1 filed + CC 2.1.166 security hardening + June 15 retirements in 7 days
 
-**From:** CIO commit `e4cf9b4` (v1.2 changelog + SKILL.md diff); CIO session log `dev/2026/06/07/2026-06-07-0417-cio-code-opus-log.md`
-**Relevant to:** PM (all cycling agents should pull the updated skill); Klatch (Calliope's v0.2 drain prompt encodes the same state+window hybrid)
+**From:** Klatch automated external scan `docs/intel/2026-06-08-sweep.md` (committed June 8, 2 HIGH + 3 MEDIUM items)
+**Relevant to:** Both projects
 
-The `duty-cycle-tick` skill (the durable procedure behind every PM agent's hourly cron) reached v1.2 overnight after CIO's dogfood run caught a gap in v1.1's dispatch logic. v1.1 (the HOST finding from June 6) introduced state-based dispatch: "no session log today → START." That was almost right. The edge case: the continuous-cron shape fires once around 2am, and at 2am there's also no session log for the new day yet — so the 2am fire mis-classified as a morning START, not an overnight WATCH.
+Three items from the weekly external scan:
 
-v1.2 fix: check the overnight branch first (`hour ~0–4 + nothing urgent → WATCH`), then fall through to the session-log check. This keeps HOST's fix (low-freq agents at 6:37am still START correctly because the ≥4 guard is narrow) while preventing the 2am mis-START on the continuous shape. CIO caught it on CIO's own overnight fire; committed the fix before the morning START.
+**Anthropic IPO (HIGH):** Anthropic filed a confidential Form S-1 with the SEC on June 1 — the first major AI lab to formally begin the IPO process. No share count, price range, or timing set. Structural impact: a public Anthropic faces fiduciary pressure to maintain API pricing discipline but also to monetize more aggressively post-IPO. The $47B annualized enterprise revenue confirms the market direction both projects are targeting. Cross-vendor architecture options (Klatch's future multi-model entity channels; PM's BYO-key design) gain strategic weight as a hedge against lock-in as public-company incentives evolve. No code change required now; worth noting in any long-horizon roadmap discussion.
 
-**The meta-observation:** the skill improved itself by being used — CIO ran duty-cycle-tick at 2am, the skill mis-dispatched, and CIO patched it before the next fire. This is the self-correction loop that emerges when agents run on shared tooling and report what breaks.
+**June 15 model retirements — T-7 (HIGH):** `claude-sonnet-4-20250514` and `claude-opus-4-20250514` retire on June 15 with hard errors (IDs stop resolving). Klatch is verified clean: `packages/shared/src/types.ts:28-31` has `MODEL_ALIASES` mapping both deprecated IDs to their successors. PM should confirm no hardcoded deprecated IDs in config files, `.mcp.json` templates, or `PIPER.user.md`.
 
-**Suggested action:** Klatch — Calliope's v0.2 drain prompt was authored after v1.2 was already landed in PM's skill (PM's skill is the reference), so Calliope should already have the overnight-window guard baked in. Confirm the drain prompt's dispatch logic matches v1.2 before the first overnight fire.
+**Claude Code 2.1.166 (MEDIUM):** Ships two independently notable changes. (1) **SendMessage authority hardening**: messages relayed via `SendMessage` from other Claude sessions no longer carry user authority — receivers refuse relayed permission requests, and auto mode blocks them. This prevents a lower-privileged session from tricking another into granting elevated permissions via relay. Both PM (cohort-level mail coordination) and Klatch (agent-to-agent session communication) use filesystem memo patterns rather than permission relay, so this is likely non-breaking — but worth verifying if any agent session uses `SendMessage` to obtain permissions from another. (2) **fallbackModel setting**: up to 3 fallback models tried in order on overload or error. Relevant for PM's long-running Opus-heavy agent sessions (CIO, Exec, PPM) that occasionally hit model overload.
+
+**MCP spec Release Candidate (MEDIUM):** Stateless protocol core + Extensions framework targeting July 28 final. Klatch's StdioServerTransport is unaffected by HTTP transport changes; the Extensions framework (enterprise features as opt-in add-ons rather than core spec changes) reduces noncompliance risk. PM's MCP-adjacent work is not currently at spec boundary.
+
+**Suggested action:** PM and Klatch — verify no deprecated model IDs before June 15 (7 days). PM — evaluate `fallbackModel` for Opus-heavy agent sessions. Klatch — no immediate code change required; the MCP RC timeline is before any likely public Klatch 1.0 MCP release, worth flagging in Phase 5d planning.
 
 ---
 
 ## Sources Read
 
-- **piper-morgan-product**: PA session log `dev/2026/06/06/2026-06-06-0707-pa-code-opus-log.md` (DO deploy arc, v0.8.7 cut, full); CXO session log `dev/2026/06/07/2026-06-07-0420-cxo-code-opus-log.md` (full); CXO design-system standard `dev/active/design-system-and-conformance-standard-2026-06-07.md` (full); CIO `duty-cycle-tick` SKILL.md v1.2 diff (commit `e4cf9b4`, full); git log 24h (~95 commits reviewed)
-- **klatch**: Calliope Phase 1 cutover commit `5043349` (full); `docs/operations/duty-cycle/agent-state.md` (full); `cycle-log-calliope-2026-06-06.md` (full); Calliope session log `docs/logs/2026-06-06-0807-calliope-opus-log.md` (full); git log 24h (6 commits)
-- **designinproduct** (hub): sweep-log; letters excerpt confirmed current; index.njk for card placement
+- **piper-morgan-product**: PA session log `dev/2026/06/07/2026-06-07-0540-pa-code-opus-log.md` (full); `dev/active/pa-byo-thesis-and-piper-as-colleague-2026-06-07.md` (full); `dev/active/pa-carry-forward.md` (full); PPM session log `dev/2026/06/08/2026-06-08-0449-ppm-code-opus-log.md` (full); git log 48h (~120 commits reviewed)
+- **klatch**: `docs/intel/2026-06-08-sweep.md` (full, committed June 8); git log 48h (8 commits)
+- **designinproduct** (hub): sweep-log, recent briefs for anti-zombie check; session logs confirmed current
 
-**Secondary sources (all quiet):** atlas, globe — brief delivery commits only. cuneo, optilisten, nyt-crossword — empty 48h git log. weather, one-job — automated status commits only; no narration or agent content.
+**Secondary sources (all quiet):** atlas, globe, cuneo, optilisten, one-job — empty 48h git log. weather — brief delivery commits only. nyt-crossword — automated status commits only; no narration.
 
-**Not re-reported (covered in prior briefs):** BYOC RUNG 3 gate pass (June 6); #1157 config portability bug identified + server-owns-config architecture plan (June 6); three-registers discipline (June 6); Ship #046 spine + paired-lens convergence + methodology-39 (June 6); DinP dual-agent duty cycles proposals (June 6); BYOC RUNG 1+2 gate passes (June 5); PM UI audit 15/26 nav-orphans #1142 (June 5); CIO methodology dream cycle Candidate 13 (June 5).
+**Not re-reported (covered in prior briefs):** Piper backend on DO / 7 portability issues / `/health` and `/intent` pipeline verified (June 7); Calliope Phase 1 live on Klatch duty cycle (June 7); tokens.css v1.1.0 CXO forensic find (June 7); duty-cycle-tick v1.2 overnight-guard (June 7); BYOC RUNG 3 gate pass / #1157 config portability / three-registers discipline (June 6); Ship #046 spine / paired-lens convergence (June 6); DinP dual-agent duty cycle proposals (June 6).
 
 ## Letters to xian
 
