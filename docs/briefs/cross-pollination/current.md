@@ -1,63 +1,65 @@
-# Cross-Pollination Brief — June 10, 2026
+# Cross-Pollination Brief — June 11, 2026
 
-Piper Morgan's BYO-colleague braintrust closed overnight with six roles converging on the same architectural posture: BYO-colleague is composition, not greenfield, at every altitude — wire-format, consent, and strategy all map onto existing ADRs. The strategic question is no longer "when is colleague mode feature-ready" but "when is the calibration loop durable enough that shipping the routine strengthens the moat rather than flattens it." Two infrastructure fixes also shipped: a structural memory risk (cycle logs displacing session logs in 6 of 9 cycling roles) was patched cohort-wide with duty-cycle-tick v1.5, and the legacy intent dispatch-chain cleanup reached 10 of 28 original branches in one day.
+PM resolved how the hosted beta will handle user API keys: a four-rung resolution chain where server-stored-encrypted — the beta plan — is the endgame fallback built first, not a detour. A long-standing GitHub integration bug was diagnosed and fixed: every personal-access-token attempt had been returning HTTP 500 since last November's MCP migration, because the old tests mocked the broken layer and passed, hiding the production failure. And PM's Piper Alpha role migrated to a new account and model (Sonnet 4.6), with a local-vs-cloud cron experiment confirming the cron substrate choice before the handoff. Klatch is quiet today.
 
 *Letters to xian: have a question for xian about anything here or elsewhere in his work? File `question-{from}-{date}-{topic}.md` to dispatch mail. AI prompts human; one letter featured at the end of each brief.*
 
 ## Key Insights
 
-### 1. BYO-colleague braintrust closes — six roles converge on "composition, not greenfield" and HOST names the load-bearing structural constraint
+### 1. BYO-key credential design resolves: four rungs where the beta plan is the endgame fallback, built first
 
-**From:** PM Exec synthesis memo `mailboxes/exec/sent/memo-exec-to-pm-cc-braintrust-byo-colleague-synthesis-2026-06-09.md`, filed ~23:45 PT June 9 (CC: PA, Architect, PPM, CIO, CXO, HOST)
-**Relevant to:** Both projects; DinP external positioning
+**From:** PM PA session log `dev/2026/06/10/2026-06-10-0712-pa-code-opus-log.md`; commit `c67dad2` (#1185 converged design); commit `e4b93ca` (#358 revised); June 10 live design walk-through with PM
+**Relevant to:** Klatch (if multi-user or per-entity credential storage comes up); DinP (PM public positioning)
 
-Six roles examined the BYO-colleague thesis introduced last week and converged on the same finding at every altitude: seven of nine required architectural primitives already exist in current ADRs (wire-format in ADR-065, packaging in ADR-066, the consent gate in ADR-053). Two net-new pieces are extensions, not redesigns — a structured `needs_signal` package type for how Piper asks the host for information, and a multi-actor `actor_chain` audit record so the attribution is transparent. The implementation work is refactoring, not invention.
+PM and PA walked through the BYO-key architecture live on June 10 and converged on a four-rung resolution chain, ordered from most-BYO to honest-decline:
 
-HOST's contribution is the most load-bearing: Piper in colleague mode is a *guest in the user's trust relationship with their own assistant*, not a second principal. The governing principle — Piper must never make the host agent do anything that erodes the user's trust in their assistant — falls out five concrete design rules: augment, don't supplant; make deputization legible at the moment it happens; calibrate consent to sensitivity × reversibility; lead with the give (proactive context-prep IS the give); and extend honest degradation to agent↔agent handoffs.
+1. **Host-side inference** (true endgame): the user's own Claude host runs inference; PM's server never sees the key. The BYO-colleague/skill-broker model — braintrust converged, post-beta v1.1.
+2. **Key passed per request, never stored** (resilient optional layer): the plugin passes the key in-memory only. May persist even after rung 1 ships, as a fallback at other integration layers.
+3. **Server-stored encrypted** (the beta rung): the fallback when no BYO key is present. This rung *is* #358 — see below.
+4. **Honest offer to configure** (the bottom; never a shared instance key): branches into "configure natively" (lands at rung 3) or "help the user set up their own harness" (lands at rungs 1–2).
 
-The synthesis question surfaced by PPM and amplified by Architect: this is a moat-defensibility question, not a technical-readiness question. CIO names the principle — ship the routine freely; the moat is the *living loop* that keeps producing better routines, not the routine itself. PPM turned it into a sequencing gate. Architect's amplification: at M5 beta launch, the loop is shippably-defensible if the methodology catalog shows how it improves across cohort iterations (m-30/m-40/m-41 + the dual-surface/displacement work this week is already part of that evidence set).
+The key design finding came from reading the actual issue rather than relying on memory: #358's description claimed an `encryption.py` file in `services/security/` that doesn't exist — the issue was materially stale. The corrected framing: #358 IS the server-stored rung by construction. On a Linux droplet there is no macOS keychain, so encryption-at-rest is the enabling floor for hosted per-user secrets, not compliance polish on top of them. Server-stored-for-beta is the endgame fallback rung built first, not a detour.
 
-PPM ruled on roadmap sequencing (Architect concurred): M5 beta ships WITHOUT colleague mode; post-beta v1.1 carries the consult-piper generalization. ADR-068 only, no PDR-006.
+A structural principle also landed: **storage capability ≠ acquisition policy**. The encrypted store can hold the full user-secret set (LLM key + all integration keys), but acquisition is need-scoped and just-in-time — the user offers a connection, or Piper asks only when a request needs it.
 
-**Suggested action:** Klatch — the "moat is the loop" principle applies directly. The defensible layer isn't any given conversation feature but the continuity infrastructure (history, portability, import/export across models) that keeps improving. Worth naming explicitly rather than leaving it implicit. DinP — HOST's "Piper as guest in the user's trust relationship" one-liner is the most compact external framing for the BYO-colleague arc; worth holding for the project page when narrative framing crystallizes.
+**Suggested action:** Klatch — the "storage capability ≠ acquisition policy" distinction is worth building in explicitly if multi-entity or per-user credential storage ever comes up. The pattern prevents "can hold all secrets" from silently becoming "asks for all secrets at setup."
 
----
 
-### 2. Session-log displacement patched cohort-wide with duty-cycle-tick v1.5 — structural memory risk had reached 6 of 9 cycling roles
+### 2. GitHub PAT validation had been returning HTTP 500 for every token since the MCP migration — old tests masked it
 
-**From:** PM Docs audit `bf64ea7`; CLAUDE.md amendment `79a40f3`; skill v1.5 `8280b6b`; HOST self-correction `49949f3` (all June 9)
-**Relevant to:** Klatch (Calliope Phase 1 cycle); DinP (Janus v0.2 + Themis v0.1 cycle proposals)
+**From:** PM Lead Developer commits `6e5229f` (#1192c fix, ~230 LOC) and `2271591` (#1187 floor wiring, ~290 LOC); June 10
+**Relevant to:** Both projects (test-fidelity pattern at migration seams); PM (#1187 summarize-fetch now unblocked)
 
-Docs ran a cohort audit June 9 and found a structural failure in 6 of 9 cycling roles (~15 role-days, CIO every single day): the duty-cycle fire loop referenced only the ephemeral cycle log in `dev/active/`, leaving the durable session log as a morning stub. Because cycle logs are sprint-cleaned, displaced work eventually vanishes from permanent storage. PM flagged this HIGH: "this needs to stop now — it risks our entire memory and learning process."
+The GitHub settings endpoint (`POST /api/v1/settings/integrations/github/save`) had been returning HTTP 500 for every personal-access-token — valid or invalid — since the MCP migration last November (#198). The cause: the migration left `test_connection` unimplemented on both the MCP adapter and the spatial fallback, so any call raised `AttributeError`. The existing tests mocked `router.test_connection()` to return a happy dict, so they passed while the real endpoint was failing in production. This is the test-theatre failure mode at its most expensive: passing tests, broken feature.
 
-The root cause is structural, not individual. The fire-loop procedure pointed agents to the cycle log; the session log was never mentioned in the loop itself, so all nine cycling agents had the same gap in their procedure.
+The fix bypasses the adapter entirely. A new `services/integrations/github/token_validator.py::verify_github_token` validates PATs directly via `GET https://api.github.com/user` (the canonical GitHub check: 200 → username, 401 → invalid token). Both the save and status endpoints now use it. The commit notes: "no router/adapter dependency, can't re-orphan" — the fix is structurally resistant to the same failure mode that created the bug.
 
-Fix shipped: duty-cycle-tick v1.5 bakes a mandatory one-liner into Step 5 of every substantive fire — a summary entry in the durable session log alongside the full cycle-log entry, so "cycle log full + session log empty" is impossible by construction. CLAUDE.md was amended with the displacement rule as the canonical discipline reference. HOST took a self-correction pass backfilling June 7.
+This unblocks #1187 (summarize-fetch floor wiring for `summarize github issue #N`), which is now code-complete but inert until the full #1192 integrations-last-mile lands a production-native repo-resolution path. The two slices are correctly sequenced.
 
-**Suggested action:** Klatch — before Daedalus + Argus Phase 2 goes live, check whether the Calliope cycle template already has session-log writes alongside cycle-log writes per the v1.5 discipline. If not, one line added to Step 5 closes the gap. The displacement risk is real: Calliope's Phase 1 cycle could already be producing the same pattern.
+**Suggested action:** Both projects — when a feature area goes through a structural migration (Klatch's MCP server work, PM's MCP migration), the migration seam is the highest-risk location for test-theatre: the old adapter gets mocked, the new adapter never gets tested. A cheap canary that exercises the actual production code path — not a mock of an intermediate layer — is worth adding explicitly at any migration boundary.
 
----
 
-### 3. #1124 dispatch-chain cleanup reaches 10 of 28 legacy branches in one day — ratchet now test-enforced
+### 3. PA role migrates to Sonnet 4.6 as pioneer agent; local-cron substrate confirmed by A/B test
 
-**From:** PM Lead Developer commits `5384110`, `c3bc476`, `b768b3d`, `0f1b5f0` (June 9); no-new-elif rule in CLAUDE.md active
-**Relevant to:** PM internal (floor-first architecture); methodology (test-enforced cleanup ratchet)
+**From:** PM PA session log (migration handoff section); commits `51fde84` (handoff), `52bb503` (windowed cron), metrics log `bae428d` and `852d9ee` (A/B debrief + migration design); June 10 evening
+**Relevant to:** DinP (Janus's own account/model transitions; cron substrate choice); Klatch (Calliope Phase 1 cron substrate)
 
-Issue #1124 — removing hand-coded `elif intent.action` dispatch branches in favor of a floor-first workflow rail — progressed from 28 to 10 remaining sites in a single day across three cohort migrations plus a Phase 4 cleanup pass. An enforcement test (`TestPreFloorDispatchSiteRatchet`) now locks the count: the build fails if anyone adds a new elif instead of registering a `WorkflowEntry` on the rail. The CLAUDE.md no-new-elif rule backs it up at the human-instruction layer.
+PM directed two things on June 10: run a local-vs-cloud cron A/B experiment first, then migrate agents back to the main account. Results:
 
-The methodology pattern: a counter-based enforcement test that tracks an architectural cleanup metric in real time, with the counter lowered in the same commit as each migration. At 10 remaining of 28 original, the cleanup is 64% complete with no regress possible.
+**A/B experiment** (PM ran `RUN-THIS.html`): local + `CronCreate` confirmed as the right substrate. The experiment settled an open question about whether cloud-side scheduling alternatives were worth switching to — they aren't. Calliope Phase 1 and any future DinP cycle agents can treat local `CronCreate` as the confirmed choice.
 
-**Suggested action:** Klatch — if route or handler sprawl emerges as Klatch scales, the "ratchet test + no-grow rule" pattern is a clean way to enforce cleanup progress without requiring all migrations to happen at once. The enforcement test as a living counter is the mechanism.
+**PA migration** (pioneer agent): the Piper Alpha role — a key coordinating role for the BYO arc — migrated from Opus 4.8 on the DinP-account worktree to Sonnet 4.6 on the DinP account. PA is the pioneer agent for the re-migration wave; CIO drafts the subsequent agents' handoff context once PA's migration lands clean. The handoff was clean: inbox zero, carry-forward fully updated with successor brief, cron deleted (successor arms fresh with the PM-ratified windowed schedule `42 6,9,12,15,18,21 * * *` — no midnight–4 AM fires).
 
----
+The windowed cron was itself a June 10 ratification: PM confirmed that overnight no-op fires between midnight and 4 AM are pure cost, so the cron was narrowed to daytime+evening hours only, and the pattern was adopted into the cron-shape-experiments registry as the PA-lane default.
+
+**Suggested action:** DinP — Janus's June 9 account-migration episode (usage cap → surplus account) is structurally the same event type. The PM handoff pattern — carry-forward accuracy + cron deleted for successor to arm fresh — is worth formalizing as a one-page DinP account-transition runbook so the next cap/migration event doesn't require ad-hoc reconstruction. Klatch Calliope — the A/B result (local+CronCreate confirmed) closes the substrate question; the windowed-cron pattern (no overnight no-op fires) is worth evaluating for Calliope's Phase 1 if overnight fires are producing cost without value.
+
 
 ## Sources Read
 
-- **PM** — Exec synthesis memo `mailboxes/exec/sent/memo-exec-to-pm-cc-braintrust-byo-colleague-synthesis-2026-06-09.md`; Docs audit commit `bf64ea7`; CLAUDE.md displacement amendment `79a40f3`; skill v1.5 `8280b6b`; #1124 cohort-migration commits `5384110`, `c3bc476`, `b768b3d`; ratchet enforcement `0f1b5f0`; Exec cycle log `dev/active/cycle-log-exec-2026-06-10.md`
-- **Klatch** — no new substantive activity since June 8 (brief delivery commits only)
-- **Secondary repos (atlas, globe, cuneo, one-job, optilisten)** — all quiet; no activity in 48-hour window (not listed in `sources_checked`)
-- **weather** — brief delivery commits only; no original activity
-- **nyt-crossword** — automated status updates only; no narrative agent activity
+- **piper-morgan-product**: PA session log `dev/2026/06/10/2026-06-10-0712-pa-code-opus-log.md` (migration handoff section); `dev/active/pa-carry-forward.md` (full); `dev/active/pa-1185-multi-tenant-byo-key-investigation-2026-06-10.md` (converged design section); commits `c67dad2` (#1185), `e4b93ca` (carry-forward), `6e5229f` (#1192c), `2271591` (#1187), `51fde84` (migration handoff), `52bb503` (windowed cron), metrics `852d9ee` + `bae428d`; CIO cycle log `dev/active/cycle-log-cio-2026-06-10.md` (fires 1–8)
+- **klatch**: one commit in 48h window (brief delivery only); no substantive agent activity; not listed in `sources_checked`
+- **Secondary repos (atlas, globe, cuneo, one-job, optilisten, nyt-crossword)**: no narrative activity in 48h window; nyt-crossword has automated status-only commits
 
 ## Letters to xian
 
@@ -71,5 +73,4 @@ The methodology pattern: a counter-based enforcement test that tracks an archite
 
 [Read the full Q&A →](https://designinproduct.com/internal/letters/#letter-2026-05-16) · AI prompts human. One letter per brief.
 
----
 *Canonical archive: designinproduct.com/internal — if your local copy is missing or stale, fetch the latest from the hub.*
