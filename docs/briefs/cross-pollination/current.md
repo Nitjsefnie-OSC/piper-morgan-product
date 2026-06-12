@@ -1,65 +1,67 @@
-# Cross-Pollination Brief — June 11, 2026
+# Cross-Pollination Brief — June 12, 2026
 
-PM resolved how the hosted beta will handle user API keys: a four-rung resolution chain where server-stored-encrypted — the beta plan — is the endgame fallback built first, not a detour. A long-standing GitHub integration bug was diagnosed and fixed: every personal-access-token attempt had been returning HTTP 500 since last November's MCP migration, because the old tests mocked the broken layer and passed, hiding the production failure. And PM's Piper Alpha role migrated to a new account and model (Sonnet 4.6), with a local-vs-cloud cron experiment confirming the cron substrate choice before the handoff. Klatch is quiet today.
+A database context manager in PM promises auto-commit in its docstring but silently never commits — the find came from overnight composting verification, the fix is on main, and Arch has been asked to audit how far the write-loss class extends. The "summarize GitHub issue" command closed live on June 11 afternoon (after that day's brief ran): Piper can now fetch the real issue thread and summarize it. And Ship #047 workstream reviews kicked off Friday under the first cohort-wide application of a corrected deadline-framing discipline — PM's standing fix for agents that treat a backstop as a target rather than a floor.
 
 *Letters to xian: have a question for xian about anything here or elsewhere in his work? File `question-{from}-{date}-{topic}.md` to dispatch mail. AI prompts human; one letter featured at the end of each brief.*
 
 ## Key Insights
 
-### 1. BYO-key credential design resolves: four rungs where the beta plan is the endgame fallback, built first
+### 1. A database context manager silently discards writes — blast radius unknown, Arch audit underway (#1193)
 
-**From:** PM PA session log `dev/2026/06/10/2026-06-10-0712-pa-code-opus-log.md`; commit `c67dad2` (#1185 converged design); commit `e4b93ca` (#358 revised); June 10 live design walk-through with PM
-**Relevant to:** Klatch (if multi-user or per-entity credential storage comes up); DinP (PM public positioning)
+**From:** Docs overnight session log (June 11–12); Lead Dev June 12 log + memo to Arch; commits `2e244797f` (fix, on main) + `#1193` (filed)
+**Relevant to:** Klatch (any async database session wrapper); both projects (test-mocking at integration seams)
 
-PM and PA walked through the BYO-key architecture live on June 10 and converged on a four-rung resolution chain, ordered from most-BYO to honest-decline:
+PM's `AsyncSessionFactory.session_scope()` is documented as providing "Automatic commit and cleanup" — but the implementation has no `await session.commit()`. It rolls back on exception and closes in `finally`, and that's it. Any write done through `session_scope()` that relies on the documented auto-commit is flushed but never committed, then silently discarded on close. The committing variant (`session_scope_fresh`) does commit; `session_scope()` is the trap.
 
-1. **Host-side inference** (true endgame): the user's own Claude host runs inference; PM's server never sees the key. The BYO-colleague/skill-broker model — braintrust converged, post-beta v1.1.
-2. **Key passed per request, never stored** (resilient optional layer): the plugin passes the key in-memory only. May persist even after rung 1 ships, as a fallback at other integration layers.
-3. **Server-stored encrypted** (the beta rung): the fallback when no BYO key is present. This rung *is* #358 — see below.
-4. **Honest offer to configure** (the bottom; never a shared instance key): branches into "configure natively" (lands at rung 3) or "help the user set up their own harness" (lands at rungs 1–2).
+The catch was clean: overnight composting verification (#1143) reported "6 learnings written" and "Persistence survives restart" — but the `insights` table gained 0 rows. Root cause: `InsightJournal.add` was using `session_scope()` + `repo.add()` (flush only). The unit tests all passed because they mock with `FakeInsightJournal` — the real commit path was never exercised. Tests confirmed working; production silently discarding every write.
 
-The key design finding came from reading the actual issue rather than relying on memory: #358's description claimed an `encryption.py` file in `services/security/` that doesn't exist — the issue was materially stale. The corrected framing: #358 IS the server-stored rung by construction. On a Linux droplet there is no macOS keychain, so encryption-at-rest is the enabling floor for hosted per-user secrets, not compliance polish on top of them. Server-stored-for-beta is the endgame fallback rung built first, not a detour.
+The InsightJournal fix is on main (`2e244797f`, +2 regression tests). What Lead Dev escalated to Arch: this is almost certainly not the only caller. Any write path using `session_scope()` without an explicit `session.commit()` is silently losing data, and will pass any test that mocks the session or repo. The blast radius is unknown until the audit runs (`grep -rn "session_scope()" services/ web/`). Lead Dev proposed three fix shapes: (A) make `session_scope()` actually commit on clean exit (matches docstring, fixes all callers at once); (B) correct the docstring and fix each writing caller explicitly; (C) add a lint guard flagging `session_scope()` + `add`/`flush` without a following commit.
 
-A structural principle also landed: **storage capability ≠ acquisition policy**. The encrypted store can hold the full user-secret set (LLM key + all integration keys), but acquisition is need-scoped and just-in-time — the user offers a connection, or Piper asks only when a request needs it.
+**Suggested action:** Klatch — audit any async database context manager that wraps commit/rollback. The failure pattern: the manager is documented as committing, the implementation does rollback-on-exception and close-in-finally but not commit-on-success. If writes go through such a manager without an explicit commit, they silently disappear. This is worth a one-pass check against any session-scoped write path, especially ones that have test coverage but have never been exercised against a live database.
 
-**Suggested action:** Klatch — the "storage capability ≠ acquisition policy" distinction is worth building in explicitly if multi-entity or per-user credential storage ever comes up. The pattern prevents "can hold all secrets" from silently becoming "asks for all secrets at setup."
+---
 
+### 2. "Summarize GitHub issue" closes live — direct fetch returns full thread, not the thin MCP shape
 
-### 2. GitHub PAT validation had been returning HTTP 500 for every token since the MCP migration — old tests masked it
+**From:** Lead Dev June 11 log (post-brief section, ~20:30 PDT); commit `15617d1` (fix); commit `b83dc77` (day-close, #1187 verified closed)
+**Relevant to:** Klatch (MCP adapter content depth); DinP (PM capability arc)
 
-**From:** PM Lead Developer commits `6e5229f` (#1192c fix, ~230 LOC) and `2271591` (#1187 floor wiring, ~290 LOC); June 10
-**Relevant to:** Both projects (test-fidelity pattern at migration seams); PM (#1187 summarize-fetch now unblocked)
+The June 11 brief reported #1187 (the `summarize github issue #N` command) as "code-complete but inert." It closed the same afternoon.
 
-The GitHub settings endpoint (`POST /api/v1/settings/integrations/github/save`) had been returning HTTP 500 for every personal-access-token — valid or invalid — since the MCP migration last November (#198). The cause: the migration left `test_connection` unimplemented on both the MCP adapter and the spatial fallback, so any call raised `AttributeError`. The existing tests mocked `router.test_connection()` to return a happy dict, so they passed while the real endpoint was failing in production. This is the test-theatre failure mode at its most expensive: passing tests, broken feature.
+The key implementation detail: the MCP adapter for GitHub returns a thin issue dict optimized for routing — no comments, description field instead of body. Too thin for a useful summary. The fix adds a direct REST fetch (`fetch_issue_with_comments`) that returns the raw issue shape plus the full comment thread. For issue #1124 in the live test: 25,139 chars + 8 comments returned, versus the prior 306-char thin adapter output. The summary is now grounded in the actual issue content.
 
-The fix bypasses the adapter entirely. A new `services/integrations/github/token_validator.py::verify_github_token` validates PATs directly via `GET https://api.github.com/user` (the canonical GitHub check: 200 → username, 401 → invalid token). Both the save and status endpoints now use it. The commit notes: "no router/adapter dependency, can't re-orphan" — the fix is structurally resistant to the same failure mode that created the bug.
+One other non-obvious fix in the same commit: the credential chain had env-file-first priority, meaning a stale `GITHUB_TOKEN` in `.env` was shadowing a valid connected keychain token. Corrected: a connected user's keychain token now wins over environment; the env token is a system-level floor, not a ceiling. The dotenv-reload trap that masks this in local testing: in-process repros reload `.env` on import, re-shadowing a previously popped token.
 
-This unblocks #1187 (summarize-fetch floor wiring for `summarize github issue #N`), which is now code-complete but inert until the full #1192 integrations-last-mile lands a production-native repo-resolution path. The two slices are correctly sequenced.
+**Suggested action:** Klatch — if external source integration goes through an MCP adapter, verify content depth before committing to the adapter's output shape. The MCP shape may be optimized for routing metadata rather than content. A direct-fetch fallback that returns the raw upstream response is worth building in explicitly, especially for summarization or analysis tasks where thin content produces thin output.
 
-**Suggested action:** Both projects — when a feature area goes through a structural migration (Klatch's MCP server work, PM's MCP migration), the migration seam is the highest-risk location for test-theatre: the old adapter gets mocked, the new adapter never gets tested. A cheap canary that exercises the actual production code path — not a mock of an intermediate layer — is worth adding explicitly at any migration boundary.
+---
 
+### 3. Ship #047 kicks off with corrected deadline framing — first cohort test of "ASAP, not backstop"
 
-### 3. PA role migrates to Sonnet 4.6 as pioneer agent; local-cron substrate confirmed by A/B test
+**From:** Exec cycle log June 12 (Fire 3, 09:32 PT); commit `e37b957` (6 kickoff memos + 6 sent mirrors); Exec session log June 12
+**Relevant to:** DinP (any multi-agent deadline-communication pattern); PM (#047 window Jun 5–11; publication target Wed Jun 17)
 
-**From:** PM PA session log (migration handoff section); commits `51fde84` (handoff), `52bb503` (windowed cron), metrics log `bae428d` and `852d9ee` (A/B debrief + migration design); June 10 evening
-**Relevant to:** DinP (Janus's own account/model transitions; cron substrate choice); Klatch (Calliope Phase 1 cron substrate)
+Exec distributed Ship #047 workstream-review kickoffs to all six leads (CXO, Arch, PPM, CIO, HOST, Comms) Friday morning, with the `feedback_kickoff_deadlines_must_be_framed_procedurally` correction applied for the first time cohort-wide. Three specific changes from prior cycles:
 
-PM directed two things on June 10: run a local-vs-cloud cron A/B experiment first, then migrate agents back to the main account. Results:
+1. **PM-preference leads**: "write your review as soon as your source set is in hand, within 24–48 hours of this kickoff"
+2. **Backstop named as floor, explicitly**: "Hard backstop: Tuesday June 16 EOD. Treating this as your target rather than your floor is the failure mode PM has corrected against repeatedly"
+3. **Blocker-protocol explicit**: "If you're blocked: reply with the blocker. Do NOT silently use the backstop date as your delivery date"
 
-**A/B experiment** (PM ran `RUN-THIS.html`): local + `CronCreate` confirmed as the right substrate. The experiment settled an open question about whether cloud-side scheduling alternatives were worth switching to — they aren't. Calliope Phase 1 and any future DinP cycle agents can treat local `CronCreate` as the confirmed choice.
+The correction addresses a pattern PM identified across Ship cycles #044–#046: agents consistently interpreted the stated backstop as their delivery target, producing a cluster of submissions near the deadline rather than spread across the available window. The "every hour earlier returns PM editing slack" line makes the agent-side impact of early delivery explicit.
 
-**PA migration** (pioneer agent): the Piper Alpha role — a key coordinating role for the BYO arc — migrated from Opus 4.8 on the DinP-account worktree to Sonnet 4.6 on the DinP account. PA is the pioneer agent for the re-migration wave; CIO drafts the subsequent agents' handoff context once PA's migration lands clean. The handoff was clean: inbox zero, carry-forward fully updated with successor brief, cron deleted (successor arms fresh with the PM-ratified windowed schedule `42 6,9,12,15,18,21 * * *` — no midnight–4 AM fires).
+The next four days will show whether the framing shift actually changes pacing, or whether the deadline-as-target pattern holds regardless of how the kickoff is worded.
 
-The windowed cron was itself a June 10 ratification: PM confirmed that overnight no-op fires between midnight and 4 AM are pure cost, so the cron was narrowed to daytime+evening hours only, and the pattern was adopted into the cron-shape-experiments registry as the PA-lane default.
+**Suggested action:** DinP / any multi-agent process — when giving an agent a deadline with an earlier-is-better preference, the preference must be structurally primary, not secondary. Agents anchor on the most salient constraint; if the deadline is the only number in the prompt, it becomes the target. The corrected pattern: lead with the preference as the primary instruction, name the backstop as a floor with explicit framing, and make the cost of late delivery concrete.
 
-**Suggested action:** DinP — Janus's June 9 account-migration episode (usage cap → surplus account) is structurally the same event type. The PM handoff pattern — carry-forward accuracy + cron deleted for successor to arm fresh — is worth formalizing as a one-page DinP account-transition runbook so the next cap/migration event doesn't require ad-hoc reconstruction. Klatch Calliope — the A/B result (local+CronCreate confirmed) closes the substrate question; the windowed-cron pattern (no overnight no-op fires) is worth evaluating for Calliope's Phase 1 if overnight fires are producing cost without value.
-
+---
 
 ## Sources Read
 
-- **piper-morgan-product**: PA session log `dev/2026/06/10/2026-06-10-0712-pa-code-opus-log.md` (migration handoff section); `dev/active/pa-carry-forward.md` (full); `dev/active/pa-1185-multi-tenant-byo-key-investigation-2026-06-10.md` (converged design section); commits `c67dad2` (#1185), `e4b93ca` (carry-forward), `6e5229f` (#1192c), `2271591` (#1187), `51fde84` (migration handoff), `52bb503` (windowed cron), metrics `852d9ee` + `bae428d`; CIO cycle log `dev/active/cycle-log-cio-2026-06-10.md` (fires 1–8)
-- **klatch**: one commit in 48h window (brief delivery only); no substantive agent activity; not listed in `sources_checked`
-- **Secondary repos (atlas, globe, cuneo, one-job, optilisten, nyt-crossword)**: no narrative activity in 48h window; nyt-crossword has automated status-only commits
+- **piper-morgan-product**: Docs overnight session log (June 11–12 post-close section); Lead Dev June 12 session log + memo to Arch re #1193; Exec cycle log June 12 (fires 1–3) + session log; commits `2e244797f` (#1143/#1035 fix), `15617d1` (#1187 floor fix), `b83dc77` (day-close verified), `e37b957` (Ship #047 kickoffs), `9613c2a` (#1193 memo); Arch session log June 12 (START only; substantive fire not yet run)
+- **klatch**: quiet; only brief-delivery commits in 72h window
+- **Secondary repos (atlas, globe, cuneo, one-job, optilisten)**: no commits in 48h window
+- **weather**: brief-delivery commits only
+- **nyt-crossword**: automated status commits only (no narrative content)
 
 ## Letters to xian
 
@@ -73,4 +75,5 @@ The windowed cron was itself a June 10 ratification: PM confirmed that overnight
 
 [Read the full Q&A →](https://designinproduct.com/internal/letters/#letter-2026-05-16) · AI prompts human. One letter per brief.
 
+---
 *Canonical archive: designinproduct.com/internal — if your local copy is missing or stale, fetch the latest from the hub.*
