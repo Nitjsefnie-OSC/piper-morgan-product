@@ -1,67 +1,63 @@
-# Cross-Pollination Brief — June 12, 2026
+# Cross-Pollination Brief — June 13, 2026
 
-A database context manager in PM promises auto-commit in its docstring but silently never commits — the find came from overnight composting verification, the fix is on main, and Arch has been asked to audit how far the write-loss class extends. The "summarize GitHub issue" command closed live on June 11 afternoon (after that day's brief ran): Piper can now fetch the real issue thread and summarize it. And Ship #047 workstream reviews kicked off Friday under the first cohort-wide application of a corrected deadline-framing discipline — PM's standing fix for agents that treat a backstop as a target rather than a floor.
+PM closed out a dense Friday by codifying a reusable architecture pattern for when a domain concept carries two jobs at once — durable record and transient working state — into a new ADR ratified same-day. Live-testing the autonomous executor uncovered a classifier safety hole: actions with `_query` in their name were slipping through a keyword-based safe filter even when they were mutating actions, not read-only ones. Docs closed out all 206 broken links — the resolution came only after reframing what "broken" meant. And BYOC Phase 2 received a full cohort green-light overnight, with Arch shipping a lens that proposes a three-phase build plan and a "run anywhere" architecture amendment.
 
 *Letters to xian: have a question for xian about anything here or elsewhere in his work? File `question-{from}-{date}-{topic}.md` to dispatch mail. AI prompts human; one letter featured at the end of each brief.*
 
 ## Key Insights
 
-### 1. A database context manager silently discards writes — blast radius unknown, Arch audit underway (#1193)
+### 1. Domain concepts that carry two jobs need an explicit contract for both — ADR-069 formalizes the pattern
 
-**From:** Docs overnight session log (June 11–12); Lead Dev June 12 log + memo to Arch; commits `2e244797f` (fix, on main) + `#1193` (filed)
-**Relevant to:** Klatch (any async database session wrapper); both projects (test-mocking at integration seams)
+**From:** Lead Dev June 12 session log; ADR-069 commit `56b67b5` (authored) + `144385e` (v0.2 ratified); Arch ratification memo 2026-06-12 ~19:35
+**Relevant to:** Klatch (conversation and message objects have both persistence and runtime-state jobs); both projects (any domain object used both as a record and as working context)
 
-PM's `AsyncSessionFactory.session_scope()` is documented as providing "Automatic commit and cleanup" — but the implementation has no `await session.commit()`. It rolls back on exception and closes in `finally`, and that's it. Any write done through `session_scope()` that relies on the documented auto-commit is flushed but never committed, then silently discarded on close. The committing variant (`session_scope_fresh`) does commit; `session_scope()` is the trap.
+The #1207 conversation-context unification surfaced a recurring trap: PM had two classes both named `ConversationContext` — one the system of record in the domain layer, one an in-memory aggregate in the mediation layer — with different field names, one-way data flow, and a dead hydration block hidden behind a `except: pass`. Antecedent resolution saw empty history because the persistence path and the floor-reading path were never connected.
 
-The catch was clean: overnight composting verification (#1143) reported "6 learnings written" and "Persistence survives restart" — but the `insights` table gained 0 rows. Root cause: `InsightJournal.add` was using `session_scope()` + `repo.add()` (flush only). The unit tests all passed because they mock with `FakeInsightJournal` — the real commit path was never exercised. Tests confirmed working; production silently discarding every write.
+The fix itself was straightforward. What's new is that Lead Dev then filed ADR-069 to make the solution reusable — "so the next instance isn't re-litigated from scratch." The core decision: when a domain concept has both a durable record and a transient working state, split it into three explicit layers: the domain entity (system of record, DB-backed), the mediation layer (single access path per ADR-029), and the in-process projection (working state: recent-turn window, lens stack, provenance sidecar — no I/O of its own). A guard test (`test_context_unification_guard.py`) pins the carve by construction so the dual implementation can't silently regrow.
 
-The InsightJournal fix is on main (`2e244797f`, +2 regression tests). What Lead Dev escalated to Arch: this is almost certainly not the only caller. Any write path using `session_scope()` without an explicit `session.commit()` is silently losing data, and will pass any test that mocks the session or repo. The blast radius is unknown until the audit runs (`grep -rn "session_scope()" services/ web/`). Lead Dev proposed three fix shapes: (A) make `session_scope()` actually commit on clean exit (matches docstring, fixes all callers at once); (B) correct the docstring and fix each writing caller explicitly; (C) add a lint guard flagging `session_scope()` + `add`/`flush` without a following commit.
+The reconstructability test is the sharpest diagnostic: working state is derivable from the system of record; the system of record is not derivable from working state. That asymmetry is what makes one durable and one disposable. Lead Dev named the next two candidates for this treatment: `Intent` and `Artifact` (#952). Arch ratified both the carve and the standalone ADR.
 
-**Suggested action:** Klatch — audit any async database context manager that wraps commit/rollback. The failure pattern: the manager is documented as committing, the implementation does rollback-on-exception and close-in-finally but not commit-on-success. If writes go through such a manager without an explicit commit, they silently disappear. This is worth a one-pass check against any session-scoped write path, especially ones that have test coverage but have never been exercised against a live database.
-
----
-
-### 2. "Summarize GitHub issue" closes live — direct fetch returns full thread, not the thin MCP shape
-
-**From:** Lead Dev June 11 log (post-brief section, ~20:30 PDT); commit `15617d1` (fix); commit `b83dc77` (day-close, #1187 verified closed)
-**Relevant to:** Klatch (MCP adapter content depth); DinP (PM capability arc)
-
-The June 11 brief reported #1187 (the `summarize github issue #N` command) as "code-complete but inert." It closed the same afternoon.
-
-The key implementation detail: the MCP adapter for GitHub returns a thin issue dict optimized for routing — no comments, description field instead of body. Too thin for a useful summary. The fix adds a direct REST fetch (`fetch_issue_with_comments`) that returns the raw issue shape plus the full comment thread. For issue #1124 in the live test: 25,139 chars + 8 comments returned, versus the prior 306-char thin adapter output. The summary is now grounded in the actual issue content.
-
-One other non-obvious fix in the same commit: the credential chain had env-file-first priority, meaning a stale `GITHUB_TOKEN` in `.env` was shadowing a valid connected keychain token. Corrected: a connected user's keychain token now wins over environment; the env token is a system-level floor, not a ceiling. The dotenv-reload trap that masks this in local testing: in-process repros reload `.env` on import, re-shadowing a previously popped token.
-
-**Suggested action:** Klatch — if external source integration goes through an MCP adapter, verify content depth before committing to the adapter's output shape. The MCP shape may be optimized for routing metadata rather than content. A direct-fetch fallback that returns the raw upstream response is worth building in explicitly, especially for summarization or analysis tasks where thin content produces thin output.
+**Suggested action:** Klatch — the same pattern applies to any object that's both stored (messages, entities, channels) and used as runtime context (current entity state, streaming context, conversation working state). Worth checking whether any in-process objects are implicitly carrying the "system of record" job alongside the "working state" job — ADR-069's three-layer carve is directly applicable if they are.
 
 ---
 
-### 3. Ship #047 kicks off with corrected deadline framing — first cohort test of "ASAP, not backstop"
+### 2. Keyword-based safety classifiers have a systematic vulnerability when action names follow a naming convention that matches safe keywords (#1210, HIGH)
 
-**From:** Exec cycle log June 12 (Fire 3, 09:32 PT); commit `e37b957` (6 kickoff memos + 6 sent mirrors); Exec session log June 12
-**Relevant to:** DinP (any multi-agent deadline-communication pattern); PM (#047 window Jun 5–11; publication target Wed Jun 17)
+**From:** Lead Dev June 12 session log (~19:05–19:45 PT); commit `3bf46bd` (#1195 AutonomousExecutor wire); issue #1210 filed
+**Relevant to:** Both projects (any automated action dispatcher with a safe/unsafe classification layer)
 
-Exec distributed Ship #047 workstream-review kickoffs to all six leads (CXO, Arch, PPM, CIO, HOST, Comms) Friday morning, with the `feedback_kickoff_deadlines_must_be_framed_procedurally` correction applied for the first time cohort-wide. Three specific changes from prior cycles:
+Lead Dev wired the AutonomousExecutor into the pattern-application path (flag `AUTONOMOUS_EXECUTION_ENABLED`, default OFF). During live verification, the "read-only by construction" claim turned out to be false.
 
-1. **PM-preference leads**: "write your review as soon as your source set is in hand, within 24–48 hours of this kickoff"
-2. **Backstop named as floor, explicitly**: "Hard backstop: Tuesday June 16 EOD. Treating this as your target rather than your floor is the failure mode PM has corrected against repeatedly"
-3. **Blocker-protocol explicit**: "If you're blocked: reply with the blocker. Do NOT silently use the backstop date as your delivery date"
+The classifier uses a SAFE keyword set — verbs like "query," "list," "get" — to identify read-only actions. Several mutating actions in PM's registry follow a naming convention that appends `_query` as a suffix: `comment_issue_query`, `close_issue_query`, `reopen_issue_query`. The substring match meant the classifier rated these as SAFE even though they write to GitHub. The AutonomousExecutor as first wired would have auto-commented and auto-closed issues.
 
-The correction addresses a pattern PM identified across Ship cycles #044–#046: agents consistently interpreted the stated backstop as their delivery target, producing a cluster of submissions near the deadline rather than spread across the available window. The "every hour earlier returns PM editing slack" line makes the agent-side impact of early delivery explicit.
+The fix: an explicit read-only allow-list (`_AUTOEXEC_READONLY_ALLOWLIST`) as the outer gate, with `execute_with_safety` remaining the inner gate (defense-in-depth). The classifier bug is filed separately as #1210 (HIGH) because the same false-classification would affect any future executor caller, not just this wire.
 
-The next four days will show whether the framing shift actually changes pacing, or whether the deadline-as-target pattern holds regardless of how the kickoff is worded.
+The unit tests all passed — they used clean action names that don't contain `_query`. The failure was only catchable by live-testing against the real registry.
 
-**Suggested action:** DinP / any multi-agent process — when giving an agent a deadline with an earlier-is-better preference, the preference must be structurally primary, not secondary. Agents anchor on the most salient constraint; if the deadline is the only number in the prompt, it becomes the target. The corrected pattern: lead with the preference as the primary instruction, name the backstop as a floor with explicit framing, and make the cost of late delivery concrete.
+**Suggested action:** Both projects — if a safety or routing classifier uses keyword matching on action names, the match should be explicit allow-list (only known-safe names pass) rather than keyword-contains (anything that looks like a safe verb passes). Naming conventions that encode categories via suffix/prefix create systematic substrate for this class of false-positive. The live-verify requirement is also load-bearing here: unit tests using synthetic names can't catch real-registry surprises.
+
+---
+
+### 3. BYOC Phase 2 green-lit overnight — "run anywhere" becomes a constraint-derived property, not an aspiration (ADR-066 v0.2 candidate)
+
+**From:** Arch session log June 13 04:22 PT (Fire 40); commit `a56b290` (Arch lens + cohort cc); PA/CIO/CXO/Exec/Lead Dev ratification commits June 13 morning
+**Relevant to:** DinP (public positioning when BYOC ships); Klatch (if hosted or packaged deployment comes up)
+
+Arch shipped a full architectural lens on BYOC Phase 2 to PA and nine cohort members early Saturday, and the green-lights came back across the morning: CIO, CXO, Exec, Lead Dev all ratifying with scoping notes.
+
+The key architectural finding: the Cowork server-owned-config constraint (each plugin deployment gets its own isolated config environment, not a shared pool) means "run anywhere" stops being an aspirational claim and becomes a structural property. A single-tenant containerized deployment (FastAPI + DO/Render/Fly + managed Postgres/Redis) gets environment isolation by construction. Arch is proposing this as an ADR-066 v0.2 amendment — goodness-from-constraint rather than designed-in flexibility.
+
+Three sub-phases proposed (2a/2b/2c). Two threads flagged to keep separate: a ChatGPT plugin marketplace listing (comparative research only, not a parallel build) and ADR-068 (the marketplace-listing ADR, which strengthens from the Phase 2 substrate but is a distinct decision thread). #1185 (server-stored encrypted key, the multi-tenant prerequisite) remains the gate for multi-user; single-tenant is the correct M5 beta scope.
+
+**Suggested action:** DinP — when BYOC ships, the "run anywhere" story is structurally grounded, not aspirational. Worth reserving narrative space for it on the project page rather than framing it as a future goal.
 
 ---
 
 ## Sources Read
 
-- **piper-morgan-product**: Docs overnight session log (June 11–12 post-close section); Lead Dev June 12 session log + memo to Arch re #1193; Exec cycle log June 12 (fires 1–3) + session log; commits `2e244797f` (#1143/#1035 fix), `15617d1` (#1187 floor fix), `b83dc77` (day-close verified), `e37b957` (Ship #047 kickoffs), `9613c2a` (#1193 memo); Arch session log June 12 (START only; substantive fire not yet run)
-- **klatch**: quiet; only brief-delivery commits in 72h window
-- **Secondary repos (atlas, globe, cuneo, one-job, optilisten)**: no commits in 48h window
-- **weather**: brief-delivery commits only
-- **nyt-crossword**: automated status commits only (no narrative content)
+- **piper-morgan-product**: Lead Dev June 12 session log (full day — #1122, #1207, ADR-069, #1195, canonical regression, #1165); Arch June 12 session log (day-close section, ADR-069 ratification); Arch June 13 session log (04:22 PT, Fire 40, Phase 2 lens); Docs June 12 session log (STOP section — #1182 close, omnibus chain); commits `56b67b5`/`144385e` (ADR-069), `3bf46bd` (#1195 wire), `a56b290` (BYOC Phase 2 lens), `caff746`/`38a458f` (ratification replies)
+- **klatch**: brief-delivery commits only; no new original content in 48h window
+- **Secondary repos (atlas, globe, cuneo, one-job, optilisten, nyt-crossword)**: no narrative commits in 48h window; automated status commits only on weather and atlas (brief delivery)
 
 ## Letters to xian
 
