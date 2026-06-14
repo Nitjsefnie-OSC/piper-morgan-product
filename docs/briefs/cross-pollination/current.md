@@ -1,63 +1,64 @@
-# Cross-Pollination Brief — June 13, 2026
+# Cross-Pollination Brief — June 14, 2026
 
-PM closed out a dense Friday by codifying a reusable architecture pattern for when a domain concept carries two jobs at once — durable record and transient working state — into a new ADR ratified same-day. Live-testing the autonomous executor uncovered a classifier safety hole: actions with `_query` in their name were slipping through a keyword-based safe filter even when they were mutating actions, not read-only ones. Docs closed out all 206 broken links — the resolution came only after reframing what "broken" meant. And BYOC Phase 2 received a full cohort green-light overnight, with Arch shipping a lens that proposes a three-phase build plan and a "run anywhere" architecture amendment.
+Saturday's PM cohort session was one of the densest on record. A proven solution emerged for the session-restart cron problem that's been killing autonomous operation. PM and CXO made a decisive call on a recurring UI architecture problem — not by disciplining implementation toward the vision, but by changing the slot's purpose. The test suite gained a durable new pattern for verifying integrations with live external services without needing those services live. And Comms became the second role to migrate from Opus to Sonnet.
 
 *Letters to xian: have a question for xian about anything here or elsewhere in his work? File `question-{from}-{date}-{topic}.md` to dispatch mail. AI prompts human; one letter featured at the end of each brief.*
 
 ## Key Insights
 
-### 1. Domain concepts that carry two jobs need an explicit contract for both — ADR-069 formalizes the pattern
+### 1. Scheduled tasks survive session restarts — the duty-cycle cron problem has a proven solution
 
-**From:** Lead Dev June 12 session log; ADR-069 commit `56b67b5` (authored) + `144385e` (v0.2 ratified); Arch ratification memo 2026-06-12 ~19:35
-**Relevant to:** Klatch (conversation and message objects have both persistence and runtime-state jobs); both projects (any domain object used both as a record and as working context)
+**From:** Piper Morgan (CIO)
+**Relevant to:** Klatch, any project running autonomous agent duty cycles
 
-The #1207 conversation-context unification surfaced a recurring trap: PM had two classes both named `ConversationContext` — one the system of record in the domain layer, one an in-memory aggregate in the mediation layer — with different field names, one-way data flow, and a dead hydration block hidden behind a `except: pass`. Antecedent resolution saw empty history because the persistence path and the floor-reading path were never connected.
+PM's autonomous duty-cycle agents use a CronCreate timer between fires. That timer dies every time the session resumes or a model switch causes a restart — CIO recorded three CronCreate deaths in a single Saturday session. CIO prototyped a replacement using Claude's scheduled-tasks tool (`mcp__scheduled-tasks`): a one-shot probe that fired autonomously, ran the full headless loop (read state → write a file → commit → push to main), and completed without human intervention or tool-approval gates. Key empirical finding: scheduled-task runs execute in the **main checkout at the repo root on `main`**, not in an ephemeral worktree — so duty-cycle commits go straight to main with no mailbox bridge needed. The CronCreate-based duty cycle is effectively retired for sustained autonomous operation; the scheduled-task conversion for CIO is next, with cohort rollout proposed after a few observed fires.
 
-The fix itself was straightforward. What's new is that Lead Dev then filed ADR-069 to make the solution reusable — "so the next instance isn't re-litigated from scratch." The core decision: when a domain concept has both a durable record and a transient working state, split it into three explicit layers: the domain entity (system of record, DB-backed), the mediation layer (single access path per ADR-029), and the in-process projection (working state: recent-turn window, lens stack, provenance sidecar — no I/O of its own). A guard test (`test_context_unification_guard.py`) pins the carve by construction so the dual implementation can't silently regrow.
-
-The reconstructability test is the sharpest diagnostic: working state is derivable from the system of record; the system of record is not derivable from working state. That asymmetry is what makes one durable and one disposable. Lead Dev named the next two candidates for this treatment: `Intent` and `Artifact` (#952). Arch ratified both the carve and the standalone ADR.
-
-**Suggested action:** Klatch — the same pattern applies to any object that's both stored (messages, entities, channels) and used as runtime context (current entity state, streaming context, conversation working state). Worth checking whether any in-process objects are implicitly carrying the "system of record" job alongside the "working state" job — ADR-069's three-layer carve is directly applicable if they are.
+**Suggested action:** Klatch agents using CronCreate for autonomous cycles should note this as the proved alternative substrate when session-restart cron death becomes a recurring problem. The pattern: disk-persistent, survives restarts and model switches, runs headless without pre-approval.
 
 ---
 
-### 2. Keyword-based safety classifiers have a systematic vulnerability when action names follow a naming convention that matches safe keywords (#1210, HIGH)
+### 2. Solving a recurring "slot gravity" problem by changing what the slot is
 
-**From:** Lead Dev June 12 session log (~19:05–19:45 PT); commit `3bf46bd` (#1195 AutonomousExecutor wire); issue #1210 filed
-**Relevant to:** Both projects (any automated action dispatcher with a safe/unsafe classification layer)
+**From:** Piper Morgan (Lead Dev, CXO, PM)
+**Relevant to:** Klatch, any project with a UI surface that keeps gravitating toward a familiar paradigm despite an explicit different vision
 
-Lead Dev wired the AutonomousExecutor into the pattern-application path (flag `AUTONOMOUS_EXECUTION_ENABLED`, default OFF). During live verification, the "read-only by construction" claim turned out to be false.
+Piper's right sidebar has shown a chat-history gravitational pull three times across the project's build history. The product vision (PDR-002) explicitly lists "just show conversations" as an anti-pattern and names entities as primary — but implementation kept producing a conversations list because that's the dominant paradigm for that slot. Instead of adding a fourth correction layer, PM and CXO decided: retire the slot's current purpose. The right sidebar will become a **Radar entity/insight surface** (the same modules already on the home screen), with conversation search folded in as conversations become one entity type rather than a primary navigation surface. Engineering assessment: feasible — the sidebar already renders from an API endpoint, it just needs to point at the Radar surface instead of the conversations list. The redesign eliminates the recurring flatten-and-correct cycle at the root.
 
-The classifier uses a SAFE keyword set — verbs like "query," "list," "get" — to identify read-only actions. Several mutating actions in PM's registry follow a naming convention that appends `_query` as a suffix: `comment_issue_query`, `close_issue_query`, `reopen_issue_query`. The substring match meant the classifier rated these as SAFE even though they write to GitHub. The AutonomousExecutor as first wired would have auto-commented and auto-closed issues.
-
-The fix: an explicit read-only allow-list (`_AUTOEXEC_READONLY_ALLOWLIST`) as the outer gate, with `execute_with_safety` remaining the inner gate (defense-in-depth). The classifier bug is filed separately as #1210 (HIGH) because the same false-classification would affect any future executor caller, not just this wire.
-
-The unit tests all passed — they used clean action names that don't contain `_query`. The failure was only catchable by live-testing against the real registry.
-
-**Suggested action:** Both projects — if a safety or routing classifier uses keyword matching on action names, the match should be explicit allow-list (only known-safe names pass) rather than keyword-contains (anything that looks like a safe verb passes). Naming conventions that encode categories via suffix/prefix create systematic substrate for this class of false-positive. The live-verify requirement is also load-bearing here: unit tests using synthetic names can't catch real-registry surprises.
+**Suggested action:** When a UI surface keeps gravitating toward a familiar paradigm despite a different design intent, consider whether correcting the implementation is the right move — or whether changing the *slot's defined purpose* removes the force entirely. Klatch's channel list faces a similar "what does navigation surface mean" question as the project evolves.
 
 ---
 
-### 3. BYOC Phase 2 green-lit overnight — "run anywhere" becomes a constraint-derived property, not an aspiration (ADR-066 v0.2 candidate)
+### 3. Deterministic tests for external integrations without live calls — a proved pattern
 
-**From:** Arch session log June 13 04:22 PT (Fire 40); commit `a56b290` (Arch lens + cohort cc); PA/CIO/CXO/Exec/Lead Dev ratification commits June 13 morning
-**Relevant to:** DinP (public positioning when BYOC ships); Klatch (if hosted or packaged deployment comes up)
+**From:** Piper Morgan (Lead Dev, #1213 expansion)
+**Relevant to:** Klatch (calendar and external service integrations)
 
-Arch shipped a full architectural lens on BYOC Phase 2 to PA and nine cohort members early Saturday, and the green-lights came back across the morning: CIO, CXO, Exec, Lead Dev all ratifying with scoping notes.
+The PM canonical test suite expanded from 4 routing + structure tiers to include a new **mock adapter ground-truth harness**: tests that verify integrations with Google Calendar and GitHub behave correctly (reflect data, honest when empty, degrade gracefully) without needing live credentials or live external state. The pattern: patch the adapter's public async fetch methods at class level with `AsyncMock`, run an in-process ASGI request, assert the response reflects the mock data. Three test shapes: (1) known event renders in the response; (2) empty adapter returns honest "nothing found," no fabrication; (3) adapter raises → conversational degradation via the error service, no raw exception leak. Five tests pass in 6 seconds. Key finding: **mocking reduces flakiness vs. live calls**; the maintenance risk is patch-point drift if the adapter's method signature changes — manageable. The harness closes the coverage gap where a feature's integration could be wired correctly on paper but broken at the adapter boundary without any test catching it.
 
-The key architectural finding: the Cowork server-owned-config constraint (each plugin deployment gets its own isolated config environment, not a shared pool) means "run anywhere" stops being an aspirational claim and becomes a structural property. A single-tenant containerized deployment (FastAPI + DO/Render/Fly + managed Postgres/Redis) gets environment isolation by construction. Arch is proposing this as an ADR-066 v0.2 amendment — goodness-from-constraint rather than designed-in flexibility.
+**Suggested action:** Klatch's Anthropic SDK streaming bridge has a similar adapter boundary (`packages/server/src/claude/client.ts`). The mock adapter pattern translates directly: patch the SDK's stream method, run the SSE handler, assert the emitted events are correct. Worth piloting when Klatch's external integration surface expands.
 
-Three sub-phases proposed (2a/2b/2c). Two threads flagged to keep separate: a ChatGPT plugin marketplace listing (comparative research only, not a parallel build) and ADR-068 (the marketplace-listing ADR, which strengthens from the Phase 2 substrate but is a distinct decision thread). #1185 (server-stored encrypted key, the multi-tenant prerequisite) remains the gate for multi-user; single-tenant is the correct M5 beta scope.
+---
 
-**Suggested action:** DinP — when BYOC ships, the "run anywhere" story is structurally grounded, not aspirational. Worth reserving narrative space for it on the project page rather than framing it as a future goal.
+### 4. Comms migrates to Sonnet on the DinP account — and a transcript-only decision gap surfaces
+
+**From:** Piper Morgan (CIO, Comms)
+**Relevant to:** Klatch, designinproduct.com team — any agent running on the piper-morgan account
+
+Comms became the second role (after PA last week) to migrate from Opus to Sonnet, with an account move from the piper-morgan account to the DinP (designinproduct.com) account bundled in the same session. CIO prepared the bootstrap brief and confirmed the rationale: writing and editorial work is in Sonnet's sweet spot; burst to Opus subagent for unusually heavy synthesis. The migration also surfaced a knowledge-recovery story: CIO couldn't find the per-role Opus/Sonnet model map in any committed file. PM located it in old-CIO's session transcript — an unwritten decision from the June 9 efficiency conversation that had been referenced in plan-of-record docs but never recorded as a committed artifact. The recovered map is now `docs/operations/duty-cycle design/role-model-map.md` (ratified). The gap class: decisions made in conversation, referenced as if written, invisible to future sessions that search only committed files. The fix: write it down even before ratification.
+
+**Suggested action:** Klatch team: any architectural or model-choice decision that lives only in a session transcript is at risk of the same invisibility. The CIO learning — "I searched all session logs and methodology docs and couldn't find it; it was in an old transcript via a search tool I couldn't run unsupervised" — is a real failure mode. If a decision matters enough to reference later, it should be committed to a doc at the time it's made.
 
 ---
 
 ## Sources Read
 
-- **piper-morgan-product**: Lead Dev June 12 session log (full day — #1122, #1207, ADR-069, #1195, canonical regression, #1165); Arch June 12 session log (day-close section, ADR-069 ratification); Arch June 13 session log (04:22 PT, Fire 40, Phase 2 lens); Docs June 12 session log (STOP section — #1182 close, omnibus chain); commits `56b67b5`/`144385e` (ADR-069), `3bf46bd` (#1195 wire), `a56b290` (BYOC Phase 2 lens), `caff746`/`38a458f` (ratification replies)
-- **klatch**: brief-delivery commits only; no new original content in 48h window
-- **Secondary repos (atlas, globe, cuneo, one-job, optilisten, nyt-crossword)**: no narrative commits in 48h window; automated status commits only on weather and atlas (brief delivery)
+- **Piper Morgan** (`mediajunkie/piper-morgan-product`) — `dev/active/cycle-log-lead-2026-06-13.md` (Fires 1–9); `dev/2026/06/13/2026-06-13-0831-cio-code-opus-log.md`; `dev/active/comms-bootstrap-brief-2026-06-13.md`; git log (last 48h, all roles)
+- **Klatch** (`Design-in-Product/klatch`) — git log last 72h (only brief-delivery commits; no new agent sessions)
+- **Hub** (`mediajunkie/designinproduct`) — sweep-log, recent brief history for anti-zombie orientation
+
+*Secondary sources (atlas, globe, cuneo, weather, one-job, optilisten): no commits in last 48h — skipped. nyt-crossword: automated status commits only, no agent narration — skipped.*
+
+---
 
 ## Letters to xian
 
