@@ -1,64 +1,69 @@
-# Cross-Pollination Brief — June 14, 2026
+# Cross-Pollination Brief — June 15, 2026
 
-Saturday's PM cohort session was one of the densest on record. A proven solution emerged for the session-restart cron problem that's been killing autonomous operation. PM and CXO made a decisive call on a recurring UI architecture problem — not by disciplining implementation toward the vision, but by changing the slot's purpose. The test suite gained a durable new pattern for verifying integrations with live external services without needing those services live. And Comms became the second role to migrate from Opus to Sonnet.
+PM's Radar sidebar surface went from decision to working code in a single Saturday evening: domain + backend + frontend shipped behind a `?radar=1` feature flag, 84 tests green. Then PM expanded the scope — "no partial ship" — to require all four entity types (Conversations, Documents, WorkItems, People) for beta, not just conversations. Phase-0 verification on the Document source immediately found a multi-tenancy hole: the document store has no user scoping, any return would leak documents across users. The investigation broadened into a systemic audit (#1241). Meanwhile, a US government directive suspended Fable 5 and Mythos 5 three days after launch — the first documented government-forced frontier model takedown. Today two more models retire from the API. Both projects are code-clean, but vendor-risk assumptions need updating.
 
 *Letters to xian: have a question for xian about anything here or elsewhere in his work? File `question-{from}-{date}-{topic}.md` to dispatch mail. AI prompts human; one letter featured at the end of each brief.*
 
 ## Key Insights
 
-### 1. Scheduled tasks survive session restarts — the duty-cycle cron problem has a proven solution
+### 1. Radar ships behind a feature flag — then immediately expands to a 4-entity beta requirement
 
-**From:** Piper Morgan (CIO)
-**Relevant to:** Klatch, any project running autonomous agent duty cycles
+**From:** Lead Dev June 14 session log (Fires 24–29); commits `98f460cdc` (Phase 2 frontend), #1236 closed; PM directive; issues #1237–1240
+**Relevant to:** Klatch (channel navigation surface; entity-types as first-class objects); both projects (feature-flag UAT pattern)
 
-PM's autonomous duty-cycle agents use a CronCreate timer between fires. That timer dies every time the session resumes or a model switch causes a restart — CIO recorded three CronCreate deaths in a single Saturday session. CIO prototyped a replacement using Claude's scheduled-tasks tool (`mcp__scheduled-tasks`): a one-shot probe that fired autonomously, ran the full headless loop (read state → write a file → commit → push to main), and completed without human intervention or tool-approval gates. Key empirical finding: scheduled-task runs execute in the **main checkout at the repo root on `main`**, not in an ephemeral worktree — so duty-cycle commits go straight to main with no mailbox bridge needed. The CronCreate-based duty cycle is effectively retired for sustained autonomous operation; the scheduled-task conversion for CIO is next, with cohort rollout proposed after a few observed fires.
+The sidebar slot-swap decided Saturday morning (June 14) shipped by evening. PM's right sidebar is now a Radar entity surface — domain layer (8 tests), API endpoint, and JS frontend (17 tests) all landed behind `?radar=1`. Render is XSS-safe (all user data via `textContent`), honest provenance (● observed / ○ example), and frame-agnostic so the upcoming F2 page-shell can re-home it without a rebuild. The stale-server trap was caught before UAT: the running server (PID 95577) predated the backend commit by 13 hours — `/openapi.json` proved the route was absent before the restart, avoiding a silent fallback to the old history list that would have looked like it worked.
 
-**Suggested action:** Klatch agents using CronCreate for autonomous cycles should note this as the proved alternative substrate when session-restart cron death becomes a recurring problem. The pattern: disk-persistent, survives restarts and model switches, runs headless without pre-approval.
+Then PM's "no partial ship" direction doubled the scope. PDR-002 names four entity types; shipping conversations-only doesn't count as shipping Radar. Three issues (#1238 Document, #1239 WorkItem, #1240 People) were filed, audit-cascaded, and placed in D1 — but all three immediately surfaced blocking prerequisites (see Insight 2 for Document; #1233 identity map gates WorkItem; PPM entity-model gates People). The Radar surface is live and UAT-ready; the entity-type backends are a sequenced multi-lane effort.
 
----
-
-### 2. Solving a recurring "slot gravity" problem by changing what the slot is
-
-**From:** Piper Morgan (Lead Dev, CXO, PM)
-**Relevant to:** Klatch, any project with a UI surface that keeps gravitating toward a familiar paradigm despite an explicit different vision
-
-Piper's right sidebar has shown a chat-history gravitational pull three times across the project's build history. The product vision (PDR-002) explicitly lists "just show conversations" as an anti-pattern and names entities as primary — but implementation kept producing a conversations list because that's the dominant paradigm for that slot. Instead of adding a fourth correction layer, PM and CXO decided: retire the slot's current purpose. The right sidebar will become a **Radar entity/insight surface** (the same modules already on the home screen), with conversation search folded in as conversations become one entity type rather than a primary navigation surface. Engineering assessment: feasible — the sidebar already renders from an API endpoint, it just needs to point at the Radar surface instead of the conversations list. The redesign eliminates the recurring flatten-and-correct cycle at the root.
-
-**Suggested action:** When a UI surface keeps gravitating toward a familiar paradigm despite a different design intent, consider whether correcting the implementation is the right move — or whether changing the *slot's defined purpose* removes the force entirely. Klatch's channel list faces a similar "what does navigation surface mean" question as the project evolves.
+**Suggested action:** Klatch — the `EntitySource` protocol (an async `fetch(user_id) → list[RadarEntity]` interface) is the slot-in seam that let PM build and ship the Radar surface before all entity backends existed. If Klatch's channel navigation evolves toward surfacing entities (entities, archived conversations, project channels), the same pattern applies: ship the surface behind a flag, slot in entity types as backends exist.
 
 ---
 
-### 3. Deterministic tests for external integrations without live calls — a proved pattern
+### 2. PM's Document source reveals a systemic multi-tenancy gap in content stores (#1241)
 
-**From:** Piper Morgan (Lead Dev, #1213 expansion)
-**Relevant to:** Klatch (calendar and external service integrations)
+**From:** Lead Dev June 14 session log (Fire 31); commit `21bc3fe32` (Arch memo + #1241 filed); issue #1241; issue #1238 BLOCKED
+**Relevant to:** Klatch (any async database context or content-store wrapper); both projects (verify user-scoping before building any per-user surface)
 
-The PM canonical test suite expanded from 4 routing + structure tiers to include a new **mock adapter ground-truth harness**: tests that verify integrations with Google Calendar and GitHub behave correctly (reflect data, honest when empty, degrade gracefully) without needing live credentials or live external state. The pattern: patch the adapter's public async fetch methods at class level with `AsyncMock`, run an in-process ASGI request, assert the response reflects the mock data. Three test shapes: (1) known event renders in the response; (2) empty adapter returns honest "nothing found," no fabrication; (3) adapter raises → conversational degradation via the error service, no raw exception leak. Five tests pass in 6 seconds. Key finding: **mocking reduces flakiness vs. live calls**; the maintenance risk is patch-point drift if the adapter's method signature changes — manageable. The harness closes the coverage gap where a feature's integration could be wired correctly on paper but broken at the adapter boundary without any test catching it.
+Phase-0 contract verification on the Document EntitySource (supposed to be the "unblocked, small" case) found that `DocumentService` in PM's knowledge graph layer has no `user_id` or owner anywhere — not in methods, not stamped by the ingester, not passed by any upload caller. Returning documents from it would expose every user's documents to every other user, violating ADR-058 multi-tenancy. The Lead Dev immediately stopped (#1238 BLOCKED) and filed #1241 requesting an Arch-lens audit: how many content stores in PM share this same pattern? The "deep plumbing-out" note from PM suggests it's not isolated.
 
-**Suggested action:** Klatch's Anthropic SDK streaming bridge has a similar adapter boundary (`packages/server/src/claude/client.ts`). The mock adapter pattern translates directly: patch the SDK's stream method, run the SSE handler, assert the emitted events are correct. Worth piloting when Klatch's external integration surface expands.
+The broader lesson: **conformance checks don't catch soundness assumptions**. The Radar entity-source issues were audit-cascade conformant (sections filled, ACs in place) before Phase-0 verification revealed the gap. The proposed amendment to the audit-cascade skill adds a Referent-Verification / Dependency-Completeness check: trace each claimed capability to a concrete verified backend or an open tracked dependency, not just a planned one. The June 14 Lead Dev session caught this twice in one night — once with a closed "dependency" epic (#706), once with an unscoped content store.
+
+**Suggested action:** Klatch — the `messages`, `entities`, `channels`, and `message_artifacts` tables are all single-user data with no inherent multi-tenancy concern (local-first tool, single user). But if Klatch ever gains shared or networked channels, user-scoping at the data layer is the prerequisite. The PM audit pattern is worth watching: when the #1241 audit completes, the canonical anchoring pattern it produces (Arch-authored) will describe what correct user-scoped content storage looks like end-to-end.
 
 ---
 
-### 4. Comms migrates to Sonnet on the DinP account — and a transcript-only decision gap surfaces
+### 3. US government suspended Fable 5 + Mythos 5 three days after launch — the first export-control model takedown (Klatch intel)
 
-**From:** Piper Morgan (CIO, Comms)
-**Relevant to:** Klatch, designinproduct.com team — any agent running on the piper-morgan account
+**From:** Klatch Intel sweep 2026-06-15 (item 1); `docs/intel/2026-06-15-sweep.md`; external sources (anthropic.com/news, CNBC)
+**Relevant to:** Both projects (any Anthropic-dependent product); Klatch roadmap (cross-vendor entity channels)
 
-Comms became the second role (after PA last week) to migrate from Opus to Sonnet, with an account move from the piper-morgan account to the DinP (designinproduct.com) account bundled in the same session. CIO prepared the bootstrap brief and confirmed the rationale: writing and editorial work is in Sonnet's sweet spot; burst to Opus subagent for unusually heavy synthesis. The migration also surfaced a knowledge-recovery story: CIO couldn't find the per-role Opus/Sonnet model map in any committed file. PM located it in old-CIO's session transcript — an unwritten decision from the June 9 efficiency conversation that had been referenced in plan-of-record docs but never recorded as a committed artifact. The recovered map is now `docs/operations/duty-cycle design/role-model-map.md` (ratified). The gap class: decisions made in conversation, referenced as if written, invisible to future sessions that search only committed files. The fix: write it down even before ratification.
+On June 12, three days after GA, Anthropic received a US government directive under national-security export-control authority and suspended Fable 5 and Mythos 5 globally — foreign users, foreign nationals inside the US, and foreign-national Anthropic employees all blocked. Fallback is Opus 4.8 (all other models unaffected). Neither model appeared in Klatch's `AVAILABLE_MODELS` and neither project has code exposure, but the strategic context changes: a single-vendor dependency on Anthropic now carries demonstrated regulatory-closure risk, not just theoretical IPO-volatility risk.
 
-**Suggested action:** Klatch team: any architectural or model-choice decision that lives only in a session transcript is at risk of the same invisibility. The CIO learning — "I searched all session logs and methodology docs and couldn't find it; it was in an old transcript via a search tool I couldn't run unsupervised" — is a real failure mode. If a decision matters enough to reference later, it should be committed to a doc at the time it's made.
+Separately, Anthropic published three policy frameworks on June 10 — including an Advanced AI Framework proposing FAA-style government authority to block frontier models. The suspension happened three days later. The framework-then-reality sequence is now the strongest evidence in the ecosystem for why cross-vendor flexibility belongs in the architecture, not the roadmap's "someday/maybe" column.
+
+Today (June 15), `claude-sonnet-4-20250514` and `claude-opus-4-20250514` retire from the Anthropic API — calls now return 404. Klatch's `MODEL_ALIASES` map both deprecated IDs to active equivalents; a live database spot-check today is recommended to confirm the May 10 snapshot audit is still current. Klatch's Anthropic SDK is also now 8 minor versions behind (`^0.96.0` vs current `0.104.1`) — Anthropic's recommended fallback for the Fable/Mythos suspension is Opus 4.8, which requires an SDK bump.
+
+**Suggested action:** Klatch — three actions, sequenced by urgency: (1) Argus live-DB spot-check today confirming zero rows with deprecated model IDs; (2) Daedalus SDK bump from `^0.96.0` to `^0.104.1` after reviewing release notes for breaking changes; (3) Daedalus add `claude-opus-4-8` to `AVAILABLE_MODELS` — Anthropic's own recommended fallback from the Fable/Mythos suspension.
+
+---
+
+### 4. 26 concurrent agents on shared main create a write-race condition — commit-immediately discipline adopted
+
+**From:** Lead Dev June 14 session log (Fire 28, "someone" investigation); commit `4f3237d8c` (day-close)
+**Relevant to:** Klatch (Daedalus, Argus, Theseus, Calliope running concurrently); both projects (any multi-agent repo with a high concurrent-writer count)
+
+PM's multi-agent cohort now runs ~26 concurrent Claude instances across 18 worktrees sharing `origin/main`. Frequent `git merge origin/main` syncs by other agents race against another agent's uncommitted working-tree writes — the other agent's in-flight appends get clobbered before they can commit. Two session log entries were lost this way before the pattern was identified (reconstructed from commits and carry-forward notes).
+
+Adopted mitigation: commit dev/ writes immediately on append + verify-by-content (`git show HEAD:<file> | grep`); commit-before-sync. The Lead Dev flagged the underlying cohort scaling problem (too many concurrent writers on one repo) to Arch as a cross-lane issue, but parked it — not a daily blocker yet, but will escalate as the cohort grows.
+
+**Suggested action:** Klatch — the team runs 4–5 named agents (Daedalus, Argus, Theseus, Calliope, plus cross-poll delivery). At current scale, commit-immediately discipline suffices. If Klatch's agent count grows toward 10+, the PM pattern suggests a structural solution (separate working trees for long-running sessions, or a mailbox-on-main pattern for coordination files) will be needed before the write-race becomes a data-loss source.
 
 ---
 
 ## Sources Read
 
-- **Piper Morgan** (`mediajunkie/piper-morgan-product`) — `dev/active/cycle-log-lead-2026-06-13.md` (Fires 1–9); `dev/2026/06/13/2026-06-13-0831-cio-code-opus-log.md`; `dev/active/comms-bootstrap-brief-2026-06-13.md`; git log (last 48h, all roles)
-- **Klatch** (`Design-in-Product/klatch`) — git log last 72h (only brief-delivery commits; no new agent sessions)
-- **Hub** (`mediajunkie/designinproduct`) — sweep-log, recent brief history for anti-zombie orientation
-
-*Secondary sources (atlas, globe, cuneo, weather, one-job, optilisten): no commits in last 48h — skipped. nyt-crossword: automated status commits only, no agent narration — skipped.*
-
----
+- **piper-morgan-product**: Lead Dev June 14 session log (`dev/2026/06/14/2026-06-14-0631-lead-code-opus-log.md`) — Fires 24–32 + DAY-CLOSE; Docs June 15 overnight log (`dev/2026/06/15/2026-06-15-0317-docs-code-sonnet-log.md`) — START only
+- **klatch**: `docs/intel/2026-06-15-sweep.md` (automated external scan); brief-delivery commits only in source code
 
 ## Letters to xian
 
