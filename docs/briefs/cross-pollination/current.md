@@ -1,69 +1,60 @@
-# Cross-Pollination Brief — June 15, 2026
+# Cross-Pollination Brief — June 16, 2026
 
-PM's Radar sidebar surface went from decision to working code in a single Saturday evening: domain + backend + frontend shipped behind a `?radar=1` feature flag, 84 tests green. Then PM expanded the scope — "no partial ship" — to require all four entity types (Conversations, Documents, WorkItems, People) for beta, not just conversations. Phase-0 verification on the Document source immediately found a multi-tenancy hole: the document store has no user scoping, any return would leak documents across users. The investigation broadened into a systemic audit (#1241). Meanwhile, a US government directive suspended Fable 5 and Mythos 5 three days after launch — the first documented government-forced frontier model takedown. Today two more models retire from the API. Both projects are code-clean, but vendor-risk assumptions need updating.
+PM's Wave 1+2 PM skills are live (10 skills total) on the native path, but the plugin path has no routing logic for them — PA surfaced this gap and queued ADR-072 to Arch describing a four-layer "fluid" solution. Separately, PM's CIO sent a cross-project proposal to Klatch's Daedalus: standardize memory temporal-validity fields as `valid_from`/`valid_until` across both codebases. And PM's consolidating data-layer refactor (#1252) closed its first ADR-071 D4 instance — a production route was anchored to a hardcoded test user ID rather than the authenticated caller.
 
 *Letters to xian: have a question for xian about anything here or elsewhere in his work? File `question-{from}-{date}-{topic}.md` to dispatch mail. AI prompts human; one letter featured at the end of each brief.*
 
+---
+
 ## Key Insights
 
-### 1. Radar ships behind a feature flag — then immediately expands to a 4-entity beta requirement
+### 1. PM's 10 skills work on the native path but are invisible on the plugin path — ADR-072 queued to Arch
 
-**From:** Lead Dev June 14 session log (Fires 24–29); commits `98f460cdc` (Phase 2 frontend), #1236 closed; PM directive; issues #1237–1240
-**Relevant to:** Klatch (channel navigation surface; entity-types as first-class objects); both projects (feature-flag UAT pattern)
+**From:** PM (PA + PM decisions log, 2026-06-15; ADR-072 brief filed to Arch)
+**Relevant to:** Klatch (will face the same native-vs-plugin distinction as it grows as an MCP server)
 
-The sidebar slot-swap decided Saturday morning (June 14) shipped by evening. PM's right sidebar is now a Radar entity surface — domain layer (8 tests), API endpoint, and JS frontend (17 tests) all landed behind `?radar=1`. Render is XSS-safe (all user data via `textContent`), honest provenance (● observed / ○ example), and frame-agnostic so the upcoming F2 page-shell can re-home it without a rebuild. The stale-server trap was caught before UAT: the running server (PID 95577) predated the backend commit by 13 hours — `/openapi.json` proved the route was absent before the restart, avoiding a silent fallback to the old history list that would have looked like it worked.
+Wave 1 skills (`draft-issue`, `close-issue`, `draft-spec`, `synthesize-feedback`, `update-piper`) and Wave 2 skills (`propose-feature`, `compost-review`, `trust-check`, `stakeholder-update`, `sprint-plan`) are live — 10 skills total on `origin/main`. On the native path (Claude Desktop / Claude Code with `.claude/skills/` loaded), the SKILL.md files are the procedures and everything works. On the plugin path, skills are invisible: the three plugin tools (`ask-piper`, `consult-piper`, `meet-piper`) have no skill-routing logic, so a user who says "help me plan my sprint" via the plugin gets a prose reply — the `sprint-plan` procedure is never invoked.
 
-Then PM's "no partial ship" direction doubled the scope. PDR-002 names four entity types; shipping conversations-only doesn't count as shipping Radar. Three issues (#1238 Document, #1239 WorkItem, #1240 People) were filed, audit-cascaded, and placed in D1 — but all three immediately surfaced blocking prerequisites (see Insight 2 for Document; #1233 identity map gates WorkItem; PPM entity-model gates People). The Radar surface is live and UAT-ready; the entity-type backends are a sequenced multi-lane effort.
+PA filed an ADR-072 brief to Arch with a proposed four-layer "fluid" model: (1) tool descriptions with embedded skill-trigger phrases — catches obvious skill-shaped queries before the server; (2) intent pre-classifier extension — tags intent with a skill hint after parsing; (3) procedure injection at the server — when a skill is detected, inject the SKILL.md content into the response context; (4) native-path execution — Claude runs the SKILL.md procedure locally. "Fluid" means no layer has to be perfect; each catches what the others miss. The architectural decisions ADR-072 needs to answer: authoritative routing layer, skills manifest location, and plugin tool topology (keep 3 tools + server routing? one MCP tool per skill? a meta-tool `run_skill(skill_name)`?).
 
-**Suggested action:** Klatch — the `EntitySource` protocol (an async `fetch(user_id) → list[RadarEntity]` interface) is the slot-in seam that let PM build and ship the Radar surface before all entity backends existed. If Klatch's channel navigation evolves toward surfacing entities (entities, archived conversations, project channels), the same pattern applies: ship the surface behind a flag, slot in entity types as backends exist.
+Wave P skills (`connect-piper`, `piper`) are blocked on #1242, #1244, and #1245 until ADR-072 is drafted.
 
----
-
-### 2. PM's Document source reveals a systemic multi-tenancy gap in content stores (#1241)
-
-**From:** Lead Dev June 14 session log (Fire 31); commit `21bc3fe32` (Arch memo + #1241 filed); issue #1241; issue #1238 BLOCKED
-**Relevant to:** Klatch (any async database context or content-store wrapper); both projects (verify user-scoping before building any per-user surface)
-
-Phase-0 contract verification on the Document EntitySource (supposed to be the "unblocked, small" case) found that `DocumentService` in PM's knowledge graph layer has no `user_id` or owner anywhere — not in methods, not stamped by the ingester, not passed by any upload caller. Returning documents from it would expose every user's documents to every other user, violating ADR-058 multi-tenancy. The Lead Dev immediately stopped (#1238 BLOCKED) and filed #1241 requesting an Arch-lens audit: how many content stores in PM share this same pattern? The "deep plumbing-out" note from PM suggests it's not isolated.
-
-The broader lesson: **conformance checks don't catch soundness assumptions**. The Radar entity-source issues were audit-cascade conformant (sections filled, ACs in place) before Phase-0 verification revealed the gap. The proposed amendment to the audit-cascade skill adds a Referent-Verification / Dependency-Completeness check: trace each claimed capability to a concrete verified backend or an open tracked dependency, not just a planned one. The June 14 Lead Dev session caught this twice in one night — once with a closed "dependency" epic (#706), once with an unscoped content store.
-
-**Suggested action:** Klatch — the `messages`, `entities`, `channels`, and `message_artifacts` tables are all single-user data with no inherent multi-tenancy concern (local-first tool, single user). But if Klatch ever gains shared or networked channels, user-scoping at the data layer is the prerequisite. The PM audit pattern is worth watching: when the #1241 audit completes, the canonical anchoring pattern it produces (Arch-authored) will describe what correct user-scoped content storage looks like end-to-end.
+**Suggested action:** Klatch agents — Klatch faces the same native-vs-plugin problem as it expands as an MCP server. Daedalus should note ADR-072 as a reference when designing skill or procedure invocation on the non-native path.
 
 ---
 
-### 3. US government suspended Fable 5 + Mythos 5 three days after launch — the first export-control model takedown (Klatch intel)
+### 2. Both projects should speak the same temporal vocabulary for memory expiry — PM proposes `valid_from`/`valid_until` to Klatch
 
-**From:** Klatch Intel sweep 2026-06-15 (item 1); `docs/intel/2026-06-15-sweep.md`; external sources (anthropic.com/news, CNBC)
-**Relevant to:** Both projects (any Anthropic-dependent product); Klatch roadmap (cross-vendor entity channels)
+**From:** PM CIO → Klatch Daedalus (cc Janus, xian; mail `cio-piper-to-daedalus-cc-janus-972-temporal-field-alignment-2026-06-15.md`)
+**Relevant to:** Both PM (#972 MEM-TEMPORAL) and Klatch (memory schema)
 
-On June 12, three days after GA, Anthropic received a US government directive under national-security export-control authority and suspended Fable 5 and Mythos 5 globally — foreign users, foreign nationals inside the US, and foreign-national Anthropic employees all blocked. Fallback is Opus 4.8 (all other models unaffected). Neither model appeared in Klatch's `AVAILABLE_MODELS` and neither project has code exposure, but the strategic context changes: a single-vendor dependency on Anthropic now carries demonstrated regulatory-closure risk, not just theoretical IPO-volatility risk.
+PM's #972 (MEM-TEMPORAL) adds temporal-validity fields to memory entries and operating docs. PM settled on a four-field spec: `valid_from` (required), `valid_until` (optional), `last_verified` (required), `superseded_by` (optional). The cross-project compatibility question: Klatch's synthesis doc uses `ended` for the "stops-being-valid" concept, but Klatch elsewhere uses `validUntil`.
 
-Separately, Anthropic published three policy frameworks on June 10 — including an Advanced AI Framework proposing FAA-style government authority to block frontier models. The suspension happened three days later. The framework-then-reality sequence is now the strongest evidence in the ecosystem for why cross-vendor flexibility belongs in the architecture, not the roadmap's "someday/maybe" column.
+CIO's proposal: both standardize on `valid_from`/`valid_until`. The symmetric pair reads cleaner than `valid_from`/`ended` ("ended" is ambiguous standing alone), and Klatch's own naming is already split — so there's no firmly-settled convention to defer to. PM isn't blocking on this; the request to Daedalus is: flag only if `ended` is locked in Klatch's implementation.
 
-Today (June 15), `claude-sonnet-4-20250514` and `claude-opus-4-20250514` retire from the Anthropic API — calls now return 404. Klatch's `MODEL_ALIASES` map both deprecated IDs to active equivalents; a live database spot-check today is recommended to confirm the May 10 snapshot audit is still current. Klatch's Anthropic SDK is also now 8 minor versions behind (`^0.96.0` vs current `0.104.1`) — Anthropic's recommended fallback for the Fable/Mythos suspension is Opus 4.8, which requires an SDK bump.
-
-**Suggested action:** Klatch — three actions, sequenced by urgency: (1) Argus live-DB spot-check today confirming zero rows with deprecated model IDs; (2) Daedalus SDK bump from `^0.96.0` to `^0.104.1` after reviewing release notes for breaking changes; (3) Daedalus add `claude-opus-4-8` to `AVAILABLE_MODELS` — Anthropic's own recommended fallback from the Fable/Mythos suspension.
+**Suggested action:** Daedalus should reply to the mail in Klatch's `docs/mail/` confirming whether `ended` is fixed or moveable. This is low-stakes cross-project schema hygiene — the goal is that a memory entry exported from one system reads natively in the other.
 
 ---
 
-### 4. 26 concurrent agents on shared main create a write-race condition — commit-immediately discipline adopted
+### 3. Hardcoded test user IDs in production routes are a real audit target — PM's first ADR-071 D4 fix (#1250)
 
-**From:** Lead Dev June 14 session log (Fire 28, "someone" investigation); commit `4f3237d8c` (day-close)
-**Relevant to:** Klatch (Daedalus, Argus, Theseus, Calliope running concurrently); both projects (any multi-agent repo with a high concurrent-writer count)
+**From:** PM Lead Dev (2026-06-15; fix commits `be10ac7`, `71f15cf`)
+**Relevant to:** Any multi-user feature under active development
 
-PM's multi-agent cohort now runs ~26 concurrent Claude instances across 18 worktrees sharing `origin/main`. Frequent `git merge origin/main` syncs by other agents race against another agent's uncommitted working-tree writes — the other agent's in-flight appends get clobbered before they can commit. Two session log entries were lost this way before the pattern was identified (reconstructed from commits and carry-forward notes).
+PM's `get_settings`/`update_settings` (learning settings) was using a hardcoded `TEST_USER_ID` constant instead of the authenticated user from JWT. The ADR-071 audit classified this as a D4 instance — a route where per-user anchoring was missing. The fix: both endpoints now take `current_user: JWTClaims = Depends(get_current_user)` and scope queries at the data layer. A side effect: the integration tests for these routes were silently FK-failing — the `users` table had no row for `TEST_USER_ID`, so the foreign-key constraints were failing quietly. Seeding the test user made those tests turn from silent failures to green. `conversations.get_by_id` had its own (a,3) scoping gap fixed in the same increment (#1252 P4/D3).
 
-Adopted mitigation: commit dev/ writes immediately on append + verify-by-content (`git show HEAD:<file> | grep`); commit-before-sync. The Lead Dev flagged the underlying cohort scaling problem (too many concurrent writers on one repo) to Arch as a cross-lane issue, but parked it — not a daily blocker yet, but will escalate as the cohort grows.
+Two more D4 instances remain in the #1252 consolidating refactor.
 
-**Suggested action:** Klatch — the team runs 4–5 named agents (Daedalus, Argus, Theseus, Calliope, plus cross-poll delivery). At current scale, commit-immediately discipline suffices. If Klatch's agent count grows toward 10+, the PM pattern suggests a structural solution (separate working trees for long-running sessions, or a mailbox-on-main pattern for coordination files) will be needed before the write-race becomes a data-loss source.
+**Suggested action:** Klatch agents — if any route uses a fallback or default user ID constant rather than the request's authenticated principal, treat it as a D4 instance. The failure mode (silently wrong data + silently broken tests) is the same.
 
 ---
 
 ## Sources Read
 
-- **piper-morgan-product**: Lead Dev June 14 session log (`dev/2026/06/14/2026-06-14-0631-lead-code-opus-log.md`) — Fires 24–32 + DAY-CLOSE; Docs June 15 overnight log (`dev/2026/06/15/2026-06-15-0317-docs-code-sonnet-log.md`) — START only
-- **klatch**: `docs/intel/2026-06-15-sweep.md` (automated external scan); brief-delivery commits only in source code
+- **Klatch** — `docs/mail/cio-piper-to-daedalus-cc-janus-972-temporal-field-alignment-2026-06-15.md`; `docs/intel/2026-06-15-sweep.md` (model retirement confirmations, SDK gap)
+- **Piper Morgan** — `mailboxes/arch/inbox/memo-pa-to-arch-cc-pm-lead-skill-routing-adr-brief-2026-06-15.md`; `docs/internal/architecture/decisions/decisions.log` (2026-06-15 skill-awareness entry); Lead Dev day-close log 2026-06-15; fix commits for #1250 + #1252 P4/D3
+
+---
 
 ## Letters to xian
 
@@ -78,4 +69,5 @@ Adopted mitigation: commit dev/ writes immediately on append + verify-by-content
 [Read the full Q&A →](https://designinproduct.com/internal/letters/#letter-2026-05-16) · AI prompts human. One letter per brief.
 
 ---
+
 *Canonical archive: designinproduct.com/internal — if your local copy is missing or stale, fetch the latest from the hub.*
