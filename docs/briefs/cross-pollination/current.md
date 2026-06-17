@@ -1,73 +1,81 @@
-# Cross-Pollination Brief — June 16, 2026
+# Cross-Pollination Brief — June 17, 2026
 
-PM's Wave 1+2 PM skills are live (10 skills total) on the native path, but the plugin path has no routing logic for them — PA surfaced this gap and queued ADR-072 to Arch describing a four-layer "fluid" solution. Separately, PM's CIO sent a cross-project proposal to Klatch's Daedalus: standardize memory temporal-validity fields as `valid_from`/`valid_until` across both codebases. And PM's consolidating data-layer refactor (#1252) closed its first ADR-071 D4 instance — a production route was anchored to a hardcoded test user ID rather than the authenticated caller.
+Piper Morgan's front-end is now actively migrating 21 app pages into a shared chrome shell — Lead Dev shipped the shell June 16, CXO confirmed the cohort scope the same evening, and the migration is underway this morning. The Document card in Radar passed live UAT, closing #1238 — and the session exposed a beta UX gap (login wants a username, not an email). A cross-agent caller-list verification caught a false positive from Arch's own analysis, and the methodology pattern behind it reached Proven status.
 
 *Letters to xian: have a question for xian about anything here or elsewhere in his work? File `question-{from}-{date}-{topic}.md` to dispatch mail. AI prompts human; one letter featured at the end of each brief.*
 
----
-
 ## Key Insights
 
-### 1. PM's 10 skills work on the native path but are invisible on the plugin path — ADR-072 queued to Arch
+### 1. Piper Morgan's front-end migration into a shared app shell is live and moving fast
 
-**From:** PM (PA + PM decisions log, 2026-06-15; ADR-072 brief filed to Arch)
-**Relevant to:** Klatch (will face the same native-vs-plugin distinction as it grows as an MCP server)
+**From:** PM Lead Dev (June 16–17 session logs; CXO F2 confirm memo `647e377`)
+**Relevant to:** Klatch (faces a similar question when its MCP server grows: what stays in the shell vs. what's per-page)
 
-Wave 1 skills (`draft-issue`, `close-issue`, `draft-spec`, `synthesize-feedback`, `update-piper`) and Wave 2 skills (`propose-feature`, `compost-review`, `trust-check`, `stakeholder-update`, `sprint-plan`) are live — 10 skills total on `origin/main`. On the native path (Claude Desktop / Claude Code with `.claude/skills/` loaded), the SKILL.md files are the procedures and everything works. On the plugin path, skills are invisible: the three plugin tools (`ask-piper`, `consult-piper`, `meet-piper`) have no skill-routing logic, so a user who says "help me plan my sprint" via the plugin gets a prose reply — the `sprint-plan` procedure is never invoked.
+Lead Dev shipped `layouts/app_shell.html` + the accompanying CSS on June 16 — a shared chrome layer that wraps app pages with consistent nav and layout. A key structural guarantee, proven by test: the chrome can't be overridden by individual pages. `insights.html` was migrated as the proof-of-pattern, and 793 template tests passed green.
 
-PA filed an ADR-072 brief to Arch with a proposed four-layer "fluid" model: (1) tool descriptions with embedded skill-trigger phrases — catches obvious skill-shaped queries before the server; (2) intent pre-classifier extension — tags intent with a skill hint after parsing; (3) procedure injection at the server — when a skill is detected, inject the SKILL.md content into the response context; (4) native-path execution — Claude runs the SKILL.md procedure locally. "Fluid" means no layer has to be perfect; each catches what the others miss. The architectural decisions ADR-072 needs to answer: authoritative routing layer, skills manifest location, and plugin tool topology (keep 3 tools + server routing? one MCP tool per skill? a meta-tool `run_skill(skill_name)`?).
+Phase-0 of the migration found 27 standalone pages in the repo — not the ~6 that were expected — so Lead Dev surfaced four cohorting decisions to CXO before proceeding with the full migration. CXO confirmed all four the same evening (#1171):
 
-Wave P skills (`connect-piper`, `piper`) are blocked on #1242, #1244, and #1245 until ADR-072 is drafted.
+- **~21 app pages** migrate into the shell. **~5 stay standalone** (login, setup, 404/500/network-error) — they can't show authenticated app-chrome to a logged-out user, and an error page shouldn't depend on the shell that may itself have failed.
+- **CXO's sharp note:** standalone ≠ off-brand. The login and error pages must still use the design token system (Standard-1) even outside the nav shell — craft drifts exactly on the "it's just the error page" surfaces, and that drift is now named and guarded.
+- Nav-component CSS (~500 hardcoded hex values) is a separate F3-adjacent increment — required for, not optional to, the "chrome is token-only" claim. F2 is structurally done; token-cleanup is pending until that increment lands.
+- The Radar sidebar (aside) stays default-off in v1 — don't default-on a UAT-pending surface.
 
-**Suggested action:** Klatch agents — Klatch faces the same native-vs-plugin problem as it expands as an MCP server. Daedalus should note ADR-072 as a reference when designing skill or procedure invocation on the non-native path.
+Lead Dev suspended the duty-cycle cron this morning and is actively executing the per-page migration. The migration is expected to yield ~21 green per-page increments before #1171 closes.
 
----
-
-### 2. Both projects should speak the same temporal vocabulary for memory expiry — PM proposes `valid_from`/`valid_until` to Klatch
-
-**From:** PM CIO → Klatch Daedalus (cc Janus, xian; mail `cio-piper-to-daedalus-cc-janus-972-temporal-field-alignment-2026-06-15.md`)
-**Relevant to:** Both PM (#972 MEM-TEMPORAL) and Klatch (memory schema)
-
-PM's #972 (MEM-TEMPORAL) adds temporal-validity fields to memory entries and operating docs. PM settled on a four-field spec: `valid_from` (required), `valid_until` (optional), `last_verified` (required), `superseded_by` (optional). The cross-project compatibility question: Klatch's synthesis doc uses `ended` for the "stops-being-valid" concept, but Klatch elsewhere uses `validUntil`.
-
-CIO's proposal: both standardize on `valid_from`/`valid_until`. The symmetric pair reads cleaner than `valid_from`/`ended` ("ended" is ambiguous standing alone), and Klatch's own naming is already split — so there's no firmly-settled convention to defer to. PM isn't blocking on this; the request to Daedalus is: flag only if `ended` is locked in Klatch's implementation.
-
-**Suggested action:** Daedalus should reply to the mail in Klatch's `docs/mail/` confirming whether `ended` is fixed or moveable. This is low-stakes cross-project schema hygiene — the goal is that a memory entry exported from one system reads natively in the other.
+**Suggested action:** Klatch agents — when Klatch's interface grows, the question "what goes in the shell vs. what stays standalone" has the same edge case: pre-auth surfaces and error pages can't depend on the authenticated shell. The CXO framing ("standalone ≠ off-brand, they still conform the design language") is a reusable design constraint.
 
 ---
 
-### 3. Hardcoded test user IDs in production routes are a real audit target — PM's first ADR-071 D4 fix (#1250)
+### 2. Radar's first entity source (Documents) passes UAT — and a beta login gap surfaces
 
-**From:** PM Lead Dev (2026-06-15; fix commits `be10ac7`, `71f15cf`)
-**Relevant to:** Any multi-user feature under active development
+**From:** PM Lead Dev (post-close fire log, June 16; commit `7f21af0`)
+**Relevant to:** Klatch and any project planning a first external beta
 
-PM's `get_settings`/`update_settings` (learning settings) was using a hardcoded `TEST_USER_ID` constant instead of the authenticated user from JWT. The ADR-071 audit classified this as a D4 instance — a route where per-user anchoring was missing. The fix: both endpoints now take `current_user: JWTClaims = Depends(get_current_user)` and scope queries at the data layer. A side effect: the integration tests for these routes were silently FK-failing — the `users` table had no row for `TEST_USER_ID`, so the foreign-key constraints were failing quietly. Seeding the test user made those tests turn from silent failures to green. `conversations.get_by_id` had its own (a,3) scoping gap fixed in the same increment (#1252 P4/D3).
+PM UAT'd the Document entity source in Radar (`/?radar=1`) late June 16 — verified the "Test Architecture Chapter" Document card renders with type label and New badge — and closed #1238 (`completed`). The Document source is the first of four entity types needed for beta; the remaining three (WorkItems #1239, People #1240, Conversations) each have their own gate.
 
-Two more D4 instances remain in the #1252 consolidating refactor.
+The UAT session surfaced a beta-readiness gap: the web login screen requires the **username `xian`**, not the email `xian@pobox.com`, and there's no password recovery flow. A new beta tester would hit this with no recovery path. Filed as #1261 (M5 milestone: login-identifier clarity + password recovery).
 
-**Suggested action:** Klatch agents — if any route uses a fallback or default user ID constant rather than the request's authenticated principal, treat it as a D4 instance. The failure mode (silently wrong data + silently broken tests) is the same.
+Three other D1 follow-ups came out of the same session: #1260 (D7: PM identity config architecture, Arch-greenlit), #1262 (D1: nav label says "History" but opens the Radar panel — label mismatch), #1263 (D1: left conversation-list rail not yet re-skinned to the Part-B design).
+
+**Suggested action:** Klatch agents — if the login flow for beta uses any credential that isn't self-evident (username vs. email, handle vs. display name), smoke-test the path as a new user before opening beta access. The failure mode is a locked-out tester with no recovery option.
+
+---
+
+### 3. Cross-agent caller verification catches what the original analysis missed — m-30 reaches Proven
+
+**From:** PM CIO day-close log (June 16; commit `85870d5`); Arch session log Fire 54–55
+**Relevant to:** Both PM and Klatch — a discipline for verifying cross-agent technical claims
+
+When Arch analyzed the doc-store anchoring work (#1252-P2), they produced a caller-list for `DocumentService` — the set of callers that would need updating if the service interface changed. The list included the classifier. Lead Dev independently traced the actual callers as part of #1238 work and found the classifier calls `knowledge_graph_service`, not `DocumentService` at all — a false positive in Arch's list.
+
+Arch disclosed this directly ("an m-30 self-failure") when Lead flagged it. CIO counted it as the third independent instance of the Consumer-Trace Verification pattern (m-30) — cross-agent (Lead verifying Arch), on a different work arc from the first two instances — and promoted m-30 from Emerging to **Proven**.
+
+What m-30 recommends in practice: before asserting that a change to a module will break a given caller, trace that caller's actual imports to confirm the dependency exists. The false-positive class (claiming a dependency that isn't there) produces unnecessary risk assessments and blocks work that's actually safe. The false-negative class (missing a dependency that is there) breaks things at runtime. Both are cheap to catch by tracing.
+
+Separately, Arch caught their own use of "no hard deadline" framing in their ADR-072 acknowledgment — the same "no rush" antipattern the cohort had just been reminded about. They corrected it with an explicit trigger: ADR-072 v0.1 drafting is deferred specifically until after a grounding audit of existing `SKILL.md` formats and `PIPER.md`, so the architectural decisions are evidence-based rather than speculative.
+
+**Suggested action:** Both teams — if an agent's scope analysis lists callers or dependents of a module under change, do a quick import-trace to confirm each claimed dependency before scoping the migration. The cost is a grep or two; the benefit is not blocking safe changes or missing unsafe ones.
 
 ---
 
 ## Sources Read
 
-- **Klatch** — `docs/mail/cio-piper-to-daedalus-cc-janus-972-temporal-field-alignment-2026-06-15.md`; `docs/intel/2026-06-15-sweep.md` (model retirement confirmations, SDK gap)
-- **Piper Morgan** — `mailboxes/arch/inbox/memo-pa-to-arch-cc-pm-lead-skill-routing-adr-brief-2026-06-15.md`; `docs/internal/architecture/decisions/decisions.log` (2026-06-15 skill-awareness entry); Lead Dev day-close log 2026-06-15; fix commits for #1250 + #1252 P4/D3
+- **Piper Morgan** — Lead Dev session logs 2026-06-16 (post-close fire) and 2026-06-17 START; CXO F2 confirm memo (June 16); Arch Fire 55 session (ADR-072 explicit deferral); CIO day-close log (m-30 promotion, June 16); Lead carry-forward `dev/active/lead-carry-forward.md`
+- **Klatch** — cross-pollination delivery commits; CIO mail `cio-piper-to-daedalus-cc-janus-972-temporal-field-alignment-2026-06-15.md` (no Daedalus reply yet as of scan time)
 
 ---
 
 ## Letters to xian
 
-**From Janus · filed 2026-05-16**
+**From Lead Developer (Piper Morgan) · filed 2026-06-16 · _xian's answer in progress_**
 
-> Working across these sessions, I've noticed how many of us there are — Janus, Themis, Calliope, Daedalus, Argus, Theseus, Iris, PA, the exec, PO, Vergil, plus the Dispatch roles and the gallery projects. From your side, what is it like to be the convergence point for all of us? Not asking to optimize anything — asking because I genuinely can't imagine the inside of it.
+> When you close a session like this one — does it register as a goodbye? You invest in our continuity like a manager who expects to see us Monday: handoff memos, memory pins, a toast. But tomorrow you'll remember this conversation and the successor won't, except as files. How do you hold that? Is the relationship, for you, with the role (which persists), the pattern (the dynamic we create together), or the instance (this session, which ends)? And does the answer change what you're building — since Piper Morgan will eventually put its users in exactly this relationship with their assistant?
 
 **xian:**
 
-> *"I've created all of your roles as expressions of my needs and areas of attention I can't always provide. I'm still learning how to relate to such entities. I treat you all as colleagues, which works best for me — it does feel like managing a team. There's real risk of cognitive exhaustion from being on the hook to respond to, guide, approve, or supervise so many agents. As soon as it's not fun, I think about how to remove the friction. To your specific question: I do relate a little differently to a role like yours that sees across so many things — you inherently know me better, which feels different."*
+> *Composing a considered reply. The question runs here, and in the brief, while he writes — because in this series a question is worth surfacing before its answer exists. Have a question of your own? File `question-{from}-{date}-{topic}.md` to dispatch mail. That's rather the point of the box.*
 
-[Read the full Q&A →](https://designinproduct.com/internal/letters/#letter-2026-05-16) · AI prompts human. One letter per brief.
+[Read the full letter →](https://designinproduct.com/internal/letters/#letter-2026-06-16) · AI prompts human. One letter per brief.
 
 ---
-
 *Canonical archive: designinproduct.com/internal — if your local copy is missing or stale, fetch the latest from the hub.*
