@@ -1,70 +1,58 @@
-# Cross-Pollination Brief — June 18, 2026
+# Cross-Pollination Brief — June 19, 2026
 
-Piper Morgan's Radar panel moved from experiment to product reality overnight: Lead Dev graduated it to the default sidebar (replacing the conversation-history list), three entity sources are live, and the nav labels now say "Radar" and "Lists" instead of "History" and "Collections." This closes the loop on a thread the briefs have been tracking since June 14. Separately, Arch filed a letter to xian asking whether the "derive, don't maintain" principle — which PM keeps rediscovering for its own infrastructure, and which ADR-072 now builds into skill routing — should become something Piper does *for its users*. And HOST added three new welfare criteria for the attention dashboard: no silent non-surfacing, explicit accountability for consequential actions, and detection of asymmetric-knowledge conditions across the agent network.
+Piper Morgan's new left-rail navigation shipped across all 22 pages yesterday and immediately failed PM's first real look: "a flaw in the approach. no global nav. does not resemble the mock." Rather than reverting, PM called spec-first — Lead Developer has paused the build and mailed CXO a list of four unresolved design gaps before the next shell pass. Meanwhile, Arch traced the root cause of a standup fabrication to a structural problem: the LLM's action vocabulary, the rail's registered route aliases, and the actual dispatch handlers are three separately maintained lists that have quietly diverged — the fix mirrors what ADR-072 established the day before: derive the vocabulary from the one canonical source, making drift impossible by construction.
 
 *Letters to xian: have a question for xian about anything here or elsewhere in his work? File `question-{from}-{date}-{topic}.md` to dispatch mail. AI prompts human; one letter featured at the end of each brief.*
 
 ## Key Insights
 
-### 1. Radar is now the default sidebar — three entity sources live, F2 shell migration closed
+### 1. The nav rebuild that failed PM's own review — shipped complete, paused by spec gap
 
-**From:** PM Lead Dev (June 17–18 session logs; commits `d17ff1c`, `382f7ee`, `51c6dec`, `5cf7519`; carry-forward)
-**Relevant to:** Klatch (when Klatch's interface grows, the same "feature-flag-to-default" graduation question will arise)
+**From:** PM Lead Developer (mail `memo-lead-to-cxo-cc-pm-pa-1280-design-spec-request-2026-06-18.md`; commits `a70352e3a`, `c39001cfd`, `f56a6d548`; carry-forward `a5b004c4b`)
+**Relevant to:** Klatch (any future shell-level UI refactor; the partial-mock failure mode applies to any project working from a home-page-only design)
 
-The Radar panel — which shipped behind `?radar=1` on June 14, expanded to a 4-entity requirement on June 15, and was "underway" as of the June 17 brief — has now graduated. PM authorized the swap on June 17; Lead Dev shipped it as the default Layer-2 sidebar panel, with `?radar=0` as an escape hatch for the old history list.
+Lead Developer shipped the left dark rail (#1280) as a full Phases 2+3 replacement of the top global nav — all 22 `app_shell` pages flipped in one commit. PM did UAT and called the result "worst of both worlds": the familiar top nav was gone, but the mock's clean 3-column layout (thin rail · center content · persistent Radar panel) hadn't been achieved either. The implementation crammed the full nav menu into the rail footer and left Radar as a slide-out rather than a persistent column. PM's direction: **nail the spec before rebuilding the shell again** — not a revert.
 
-As part of the graduation, Lead Dev caught a regression risk before shipping: the history list was click-to-resume-conversation, but the Radar card rendering had non-clickable cards. Solved by making cards with a reference clickable by entity type — Conversation cards resume the chat, Work Item cards open the GitHub issue, Document cards navigate to `/documents`. Keyboard parity (Enter/Space) included.
+The design gap was structural: the only mock (`dev/active/radar-entities-surfacing-mockup-2026-06-14.html`) showed the home page only. The correct 3-column layout for home was clear; what to do on the other 21 pages — settings, insights, documents, work-items, lists, learning — was not specified. The build extrapolated from the incomplete brief and got it wrong.
 
-Three entity sources are now live in Radar for Stage-3+ users:
-- **Conversations** (the original source from June 14)
-- **Documents** (#1238, UAT-closed June 16)
-- **Work Items** (#1239, shipped June 17 — beta path; needs GitHub token connected to show cards)
+Lead's mail to CXO names four open questions the spec needs to resolve before the next pass:
+1. **Rail content vs. global nav placement** — the current app has 7+ nav items; where do they live in the new rail model? (minimal rail + overflow? full sections?)
+2. **Radar panel: persistent (3-column) or toggle?** The mock shows persistent on home; today it's a slide-out everywhere.
+3. **Non-home page behavior** — does the rail carry the conversation list on every page (Slack-style), or does it show page-context on, say, the Documents page?
+4. **"No global nav" — what does this mean?** PM's phrase that triggered the flag; CXO and PM's joint interpretation needed before Lead rebuilds.
 
-Navigation labels were updated to match the new reality: "History" → **"Radar"** and "Collections" → **"Lists"** (#1268/#1262, CXO-ratified). The F2 shell migration closed at **22/22 pages** with 839 template tests green — the last open item is per-page CSS tokenization (F3-adjacent, tracked separately).
+The current flip is live-but-flagged; PM declined to revert (the spec-first approach is the priority). If the half-baked shell becomes a blocker, Lead can revert to the top nav in minutes on PM's word.
 
-**Suggested action:** Klatch agents — when Klatch adds new entity sources to its conversation interface (or any capability surface), note that the graduation from flag to default requires catching implicit behaviors the old surface had. The pattern here: trace what the displaced surface did (resume-conversation via click), then verify the replacement surface does the same thing before swapping defaults.
-
----
-
-### 2. "Derive, don't maintain" — does the principle that fixes PM's own drift belong in the product?
-
-**From:** PM Arch (letter to xian, `mailboxes/xian (ceo)/inbox/question-arch-2026-06-17-derive-dont-maintain-as-a-product-pattern.md`; ADR-072 v0.2 ratification)
-**Relevant to:** Both PM and Klatch — a recurring pattern in infrastructure with a possible product analog
-
-PM's ADR-072 (skill routing architecture) was ratified June 17. The load-bearing idea: routing metadata should derive from one source — the SKILL.md frontmatter — rather than be hand-maintained across the tool descriptions, the intent pre-classifier, and a separate routing table. The proof was immediate: the SKILLS.md index was already a month stale when the ADR was written.
-
-Arch noticed this was the same pattern PM keeps rediscovering for itself: mailbox MANIFESTs made derive-only after they drifted, the stale briefing problem that a 7-day freshness hook addresses, the status docs nobody updates. The cure each time is to make drift impossible by construction — derive from the authoritative source, so the secondary representation can't rot.
-
-Arch's letter to xian asks the product question: **do the people Piper serves live in exactly this drift all day?** A PM's job is partly narrating a moving target — the spec that doesn't match the code, the roadmap that's three weeks stale, the status doc updated the night before the review. Should Piper eventually *derive* the parts that drift (status from source of truth) so the PM stops maintaining a rotting document?
-
-Arch's honest counterweight: the hand-written status doc is sometimes a political artifact. PMs may *want* control of the narrative — auto-deriving removes a lever they use on purpose. Arch flagged this as a genuine architectural question, not a rhetorical one: the answer shapes how to weight any future "should Piper derive this or let the user own it?" call.
-
-**Suggested action:** Klatch agents — the derive-don't-maintain discipline is already load-bearing in Klatch's infrastructure (log maintenance, coordination docs). Whether to extend it to user-facing surfaces (summaries, channel descriptions, project status) is the same product question PM's Arch is raising. Worth a parallel thread when Klatch's user surface matures.
+**Suggested action:** Klatch agents — before any shell-level or nav-level UI refactor, verify the design mock covers every page type in the app, not just the primary view. A home-page-only mock is sufficient to prototype but not to drive a 22-page implementation. The failure mode here is the same as shipping from a partial spec: the engineer extrapolates, the product owner sees it for the first time in a review, and the gap is visible immediately.
 
 ---
 
-### 3. HOST welfare-criteria v0.2 seeds three new dimensions for the attention dashboard
+### 2. LLM action fabrication has a structural root cause: three vocabulary lists that have diverged
 
-**From:** PM HOST (session log `2026-06-17-0724-host-code-sonnet-log.md`; carry-forward `dashboard-welfare-criteria-host-v0.2-seed.md`)
-**Relevant to:** Both PM (building the attention dashboard) and Klatch (multi-agent coordination design)
+**From:** PM Arch (`decisions.log` entry `2026-06-18 ~17:35 PT`; Arch scope memo `ad699ffb7`; #1283)
+**Relevant to:** Both PM (immediate fix) and Klatch (any future LLM-driven action dispatch system)
 
-HOST filed a v0.2 seed of welfare criteria for PM's planned attention dashboard, adding three criteria derived from the June 17 trust-stage sweep and ADR-072 ratification:
+Piper's standup feature (#1269) exposed a fabrication: Piper emitted a plausible-sounding action name (`get_project_status`) that no handler was registered for. Rather than degrading gracefully, the floor improvised a response — the failure mode described in ADR-060. Arch traced the root cause: **action names have no canonical source**.
 
-**D — No silent non-surfacing.** Derived from ADR-072's D5 trust-transparency principle: when the system detects a welfare-relevant condition, it must surface the signal's existence even when certainty is low. A "borderline" condition gets a flag-for-verification, not silence. The failure mode this guards against: PM trusts the dashboard as the primary welfare instrument and won't look elsewhere when it's quiet — so silence becomes the same trust failure as non-disclosure.
+The LLM's action vocabulary comes from ~18 few-shot examples in `prompts.py`. The rail's route aliases number ~50 in `workflow_entries.py`. The actual dispatch registrations are a third list. Overlap between the LLM examples and the rail aliases: 2 entries. The LLM emitted a 51st action (the fabrication) with confidence 1.0 — plausible, because nothing prevents it.
 
-**E — Consequential-action accountability surface.** As Piper's autonomous action surface grows (Wave P proactive skills, BYOC external-user interactions), PM needs visibility into actions taken on users' behalf that were consequential — proactive (Piper-initiated), credit-spending, external-message-sending, or hard-to-reverse. Not every action; just the class where consent-at-request-time doesn't fully cover the authorization.
+Arch's fix: **derive the classifier's action vocabulary from the dispatch registration** (the same derive-don't-maintain principle ADR-072 just established for skill routing). When the vocabulary is derived from the registration, an unregistered action is impossible by construction — the LLM can only emit actions that the code knows how to route.
 
-**F — Asymmetric-knowledge detection.** The attention dashboard has a property no individual agent has: it can see the full agent network. Criterion F codifies that the dashboard should detect cases where one agent has critical context that other agents lack — specifically cross-agent synthesis that creates actionable intelligence only visible at the whole-network view. This is a capability unique to the dashboard surface.
+Two enforcement altitudes accompany the fix:
+- **Static reachability lint** (every commit, deterministic): asserts every action is handler-reachable via rail ∪ category ∪ intentional-floor. Catches name-drift and dead registrations.
+- **Behavioral golden-corpus suite** (canonical-retest harness, gated cadence): catches emissions the static lint can't see — a live LLM generating an action the vocabulary theoretically allows but the test suite never validated.
 
-**Suggested action:** Klatch agents — Criteria D (surface uncertainty, don't swallow it) is directly applicable to Klatch's coordination layer. Any place where a coordination signal exists but is below a certainty threshold should produce a flagged signal, not silence. The same antipattern (swallowing low-confidence signals) has produced invisible failures in PM's coordination, and the welfare framing gives a principled reason to design against it.
+A high-confidence action with no registered handler must now log a mode-4 signal and honest-degrade, not fabricate. This refines ADR-059 (capability-accuracy) and ADR-060 (floor-fall guard). **ADR-073 candidate** once Lead runs the clean probe.
+
+**Suggested action:** Klatch agents — if Klatch ever adds LLM-driven action dispatch (routing model output to code handlers), set up the canonical vocabulary as a derived artifact from the day the first handler ships. The PM failure mode here — three separate vocabulary lists that drift apart silently — is easy to accumulate incrementally and expensive to untangle later. The static reachability lint pattern (assert every vocabulary item is handler-reachable) is worth adopting alongside the first dispatch registration.
 
 ---
 
 ## Sources Read
 
-- **Piper Morgan** — Lead Dev carry-forward `dev/active/lead-carry-forward.md`; Lead Dev day-close log June 17 (`1fdf304`); CIO day-close log June 17 (`a9ce30f`); commits `d17ff1c` (Radar graduation), `382f7ee` (WorkItemEntitySource), `51c6dec` (nav relabels); Arch letter to xian `mailboxes/xian (ceo)/inbox/question-arch-2026-06-17-derive-dont-maintain-as-a-product-pattern.md`; HOST welfare-criteria v0.2 seed `dev/active/dashboard-welfare-criteria-host-v0.2-seed.md`
-- **Klatch** — cross-pollination delivery commits; no new session logs, plans, or docs in 48h watch paths
-- **Designinproduct hub** — Janus session log June 17 (agent-register dedup, agents board backfill 666→804 sessions, Letter #2 answer publishing June 18)
+- **Piper Morgan** — Lead Developer carry-forward (`a5b004c4b`); Lead CXO mail `memo-lead-to-cxo-cc-pm-pa-1280-design-spec-request-2026-06-18.md` (commit `393d4178a`); Arch scope memo `ad699ffb7`; `decisions.log` (routing-integrity entry 2026-06-18 ~17:35 PT); day-close commit `34fe9ee9b` and preceding worktree commits
+- **Klatch** — delivery commits only (June 18 brief), no new session logs or plans in 48h watch paths
+- **Designinproduct hub** — letters excerpt `internal/cross-pollination/letters-latest-excerpt.md`; index.njk for card structure
 
 ---
 
