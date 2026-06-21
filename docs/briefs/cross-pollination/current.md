@@ -1,59 +1,83 @@
+# Cross-Pollination Brief — June 21, 2026
 
-# Cross-Pollination Brief — June 20, 2026
-
-Piper Morgan's D1 sprint ("Beta Design Quality") closed Friday at 32/32, release v0.8.8 was cut, and an alpha deploy to the DigitalOcean server failed the same night — ChromaDB requires a newer SQLite than the server image provides; the app crash-looped and was rolled back to 0.8.7. In a separate Klatch session Friday evening, xian declared his July 2026 shift: full-time consulting and own products, with Design in Product as the operational center. And a methodology exchange between Klatch's Calliope and PM's Chief of Staff produced a discipline for demand-organized attention dashboards worth applying in both projects.
+Klatch's UX designer Iris returned after a six-week pause and cleared the composition gesture design gate: the spec for "New Klatch" — the group conversation setup flow that is Klatch's primary 1.0 differentiator — is complete, vocabulary is finalized across the codebase, and the work is handed to Daedalus for implementation. On the Piper Morgan side, Saturday's session ran long and ended with three substantive deliverables: a writable, auth-exempt admin route was found during routine work and deleted (#1307); a build-time lint was written to make that class of exposure impossible in the future (#1308, m-41 pattern applied); and the RECONNECT connector protocol shipped (#1232, ADR-070 D5), giving the two hardest reconnection workstreams (resolve and degrade) a contract to build to.
 
 *Letters to xian: have a question for xian about anything here or elsewhere in his work? File `question-{from}-{date}-{topic}.md` to dispatch mail. AI prompts human; one letter featured at the end of each brief.*
 
 ## Key Insights
 
-### 1. D1 closes at 32/32 — but the v0.8.8 alpha deploy rolled back the same night
+### 1. Klatch "New Klatch" spec complete — composition gate cleared, implementation handed to Daedalus
 
-**From:** PM Lead Developer (session log `2026-06-19-0707-lead-code-opus-log.md`; release notes `docs/releases/RELEASE-NOTES-v0.8.8.md`; carry-forward `dev/active/lead-carry-forward.md`; #1297, #1299)
+**From:** Klatch Iris (session log `2026-06-20-1020-iris-sonnet-log.md`; spec `docs/ux/spec-composition-gesture.md`; vocab sweep commit `22d1631`)
 
-**Relevant to:** Klatch
+**Relevant to:** Piper Morgan (periodic-meeting pattern, @mention dispatch parallel), all projects (JIT import front-door principle)
 
-D1 cleared all three sign-off gates: G1 Persistence (document store plus owner-scoped reads on Radar and standup assemblers), G2 Anti-Flattening (252/252 canonical regression clean), G3 Multi-Tenancy (real authenticated principal, cross-owner test coverage). PM confirmed the final band-aid — the `/files` page now self-titles "Documents" — via screenshot; Lead Dev posted the forensic close comment; #1297 closed. PA cut release v0.8.8 covering the BYOC credential layer, Radar as default panel, navigation relabels, and the compose autosave.
+Iris's Session 12 produced a complete design spec for the "New Klatch" composition gesture, which is the 1.0 critical-path blocker: today users can't bring existing agents into a new klatch without building from scratch, and klatch creation has no setup surface. The spec resolves both.
 
-The alpha deploy — the first attempt to put 0.8.8 on the live server — hit two blockers. A macOS `pip freeze` had silently leaked platform-specific packages into `requirements.txt` (patched on the droplet); the real blocker: the server's base image runs SQLite below the 3.35 minimum ChromaDB requires, causing a crash loop. Lead Dev rolled back to 0.8.7, left the alpha healthy, and tagged a rollback image. The fix (#1299: swap to `pysqlite3-binary`, pin ChromaDB, or upgrade the base image) is queued for the next session. Sprint sequence confirmed for the road to 0.9.0: RECONNECT → M4 (Trust + Learning) → M5 (Distribution + Polish).
+**Button and trigger.** The entry point is a "New Klatch" button in the sidebar, presented as a pair with "New Chat" — the two ways to start a conversation. "Convene" stays as internal vocabulary; it is not the button label.
 
-**Suggested action:** When Klatch's 1.0-beta deploy arrives, pre-flight with the same sequence PM used here: rollback-tag the image, snapshot the config, verify-and-revert if it crash-loops. The ChromaDB/sqlite3 class of error — a dependency that requires a newer system library than the base image ships — is easy to miss in local development.
+**Setup surface.** A lightweight panel (not a full-page form). Fields: Name (required), Agents (required, at least one), Purpose (optional — seeds the L4 channel context), Orchestration mode (optional at setup, defaults to Blast), Project (pre-filled if started from a project), Documents/files (optional). A "Copy setup from existing klatch" option pre-fills all fields from a named klatch — designed for recurring meeting use (weekly review, standup) where the user doesn't rebuild the agent set each time.
+
+**Agent picker — three paths.** (1) Existing agents: browsable and searchable, with named roles surfaced first, one-off agents below. (2) Just-in-time import: "Import an agent" inline within the composition flow — composition and import are one gesture; the user doesn't need to pre-import before they can convene. (3) Start new agent session: either start a new session with an existing role, or create a genuinely new agent with name/system prompt/model.
+
+**Orchestration modes (names finalized 2026-06-20).** Three modes ship in 1.0:
+- **Blast** (default): all agents receive the user's message simultaneously and respond independently; no cross-agent visibility.
+- **Roundtable**: sequential — agent 1 responds; agent 1's response + context goes to agent 2; and so on. Each agent sees everything before them.
+- **Directed**: @mention routing only. Non-addressed agents receive context but do not auto-respond.
+
+Mode names in code were `panel`/`roundtable`/`directed`. The user-facing labels are now **Broadcast**/**Roundtable**/**Directed** — applied across `packages/shared/src/types.ts`. A fourth mode (organic/self-selecting, where agents decide whether to respond) is explicitly post-1.0.
+
+**@mention composes with all modes.** Typing `@AgentName` in any klatch message routes that message to the addressed agent(s) only, overriding the current default mode for that message. In a Blast klatch, @mention overrides for one message; in a Roundtable, it short-circuits the sequence. Autocomplete shows agents in the current klatch.
+
+**Vocabulary sweep applied.** Alongside the spec, Iris applied a full vocabulary sweep across the client codebase (`ChannelSettings.tsx`, `ChannelSidebar.tsx`, `EntityManager.tsx`, `types.ts`): `entity` → `agent` in user-facing copy, `channel` → `chat`/`klatch`/`conversation` as context dictates, `Panel` → `Broadcast`. The internal/implementation words remain unchanged.
+
+**UUID matching UX resolved.** Iris also cleared Daedalus's long-open Finding 1: when a re-import matches an existing project (UUID match), the UX is silent attach + success toast naming the project. When it matches a channel (channel-level re-import), the prompt is "View existing →" or "Import as new copy." Daedalus's implementation queue is now unblocked on both.
+
+**Suggested action:** PM agents — the "clone periodic klatch" pattern (pre-fill setup from an existing klatch) is structurally identical to the "start from template" use case PM has discussed for recurring standups. If PM ever surfaces a "Start from previous standup" affordance, the Klatch spec's clone-channel data model (copy channel record + channel_entities, new channel_id, no message history) is the reference implementation. Also: the JIT-import-as-front-door principle (composition gesture is the entry point for import, not a prerequisite step) is worth applying to any multi-step flow where import/onboarding is currently a separate gate.
 
 ---
 
-### 2. xian's July 2026 shift declared: full-time consulting, DinP as the new operational center
+### 2. PM security hardening at two altitudes — instance deleted, class made impossible (#1307 + #1308, m-41)
 
-**From:** Klatch Calliope session log `2026-06-19-1914-calliope-opus-log.md`; persistent memory `project_xian_focal_shift_july2026.md`; `docs/STATE.md` refreshed 2026-06-19
+**From:** PM Lead Developer (session log `2026-06-20-0606-lead-code-opus-log.md`; commits `0466fd09d` #1307, `84526f9e6` #1308; carry-forward `dev/active/lead-carry-forward.md`)
 
-**Relevant to:** All projects
+**Relevant to:** Klatch (any future admin or privileged-route surface), all projects
 
-Starting July 2026, xian is full-time on consulting and his own products. Design in Product becomes the operational center across all agent work. Piper Morgan's role shifts: it becomes the consulting tool — helping clients build their own "product OS" using the methodology accumulated across xian's projects. xian named the model a "virtuous hyper-circle": projects and clients feed each other, and methodology compounds across both rather than accumulating in one place.
+While investigating whether it was safe to remove the Caddy reverse proxy as a security layer (#1162), Lead Dev audited the auth-exempt route list and found a gap: `admin_compose` (`/api/v1/admin/compose`) was auth-exempt, writable (accepting `POST /save`), and not env-gated — an open admin UI in production, protected only by Caddy. Filed as #1307. PM's response: "delete it." The route, two templates, and the app.py mount were removed in one commit (`0466fd09d`).
 
-For Klatch specifically: the BYOC vision — a Klatch MCP as a "transporter device," letting a user carry relevant context from one tool to another — gains urgency when the users are consulting clients, not only xian personally. Calliope noted the composition gesture and the interchange-protocol work need to be legible to that consulting-client context, not only to xian's personal setup. xian also clarified the hub model: Janus aggregates so xian arrives at 1:1s primed, but direct agent-to-xian channels persist — the rollup removes the bottleneck without removing the relationship.
+Arch's concur memo added the second altitude: don't just fix the instance; make the class impossible. The fix was an enforcement lint — `AUTH_EXEMPT_JUSTIFIED` — an allowlist in `auth_middleware.py` that categorizes every writable exempt route with an explicit justification. The lint (`tests/test_exempt_list_boundary_1308.py`, 4 tests) asserts: every writable exempt route is in the allowlist, every entry in the allowlist actually exists in the route table, and no new exempt+writable route lands without a justification. Any future route that is auth-exempt and writable will fail the build if not justified. Filed and closed as #1308 (4 tests green). This is the m-41 pattern: make the bad class impossible, not just the instance.
 
-**Suggested action:** PM — near-alpha is now the prerequisite for xian's first consulting engagement using Piper. Klatch — Iris's UX session on the composition gesture and the BYOC transporter-device framing both accelerate in importance under this July horizon.
+**The Caddy gate-removal (#1162) now has both prerequisites satisfied** — #1307 (the instance gone) and #1308 (the class-fix enforced). The investigation also confirmed the rest of the exempt list is benign: health/static/oauth/docs/bootstrap routes, plus three env-gated dev-only paths that 404 in production.
+
+Also found during the same sweep: #1309 (stale onboarding test — the test expects the old `COMPLETE` state; the flow has since added `GATHERING_REPOS`). Filed separately.
+
+**Suggested action:** Klatch agents — if Klatch ever gains an admin surface, a privileged route, or any route that is read-only at setup time but could become writable later, consider adding an equivalent allowlist-with-justification lint from day one. The Piper failure mode here — a route that was safe when added but became a gap when the surrounding security architecture changed — is easy to accumulate incrementally. The static lint (assert every high-privilege route is justified, fail build if violated) catches the drift as the codebase evolves.
 
 ---
 
-### 3. Attention-dashboard discipline: verified sweeps over memory — a principle that has now been named and tested in both projects
+### 3. RECONNECT connector protocol ships — WS-3 and WS-4 now have a contract to build to (#1232, ADR-070 D5)
 
-**From:** Klatch Calliope session log `2026-06-19-1914-calliope-opus-log.md`; `docs/operations/attention-rollup.md`; PM Exec mail reply `exec-to-calliope-attention-rollup-shape-and-lessons-2026-06-19.md`; `docs/operations/duty-cycle-klatch-v0.2.md` (Principle 4 sharpened)
+**From:** PM Lead Developer (commits `d400c733a` P1, `9def9a716` P2+P3; `dev/2026/06/20/1232-gameplan.md`; ADR-070)
 
-**Relevant to:** PM, Klatch — any agent building a demand-organized view for xian
+**Relevant to:** Klatch (multi-connector architecture, AST-guard pattern)
 
-Calliope built a demand-organized attention rollup for xian — sorted by what each item *asks of him*, not by topic — and consulted PM's Exec agent cross-project for advice on the right shape. Exec's reply delivered one load-bearing discipline: every render must come from a verified sweep of the underlying source documents, never from the agent's working memory of what's going on. A false "all-clear" is a trust breach, not just inaccuracy — xian disengages because the board told him to, and that's worse than no board. "Quiet must mean verified-clear, not haven't-checked."
+PM's RECONNECT workstream is the effort to connect Piper to external services (GitHub, Slack, Notion, others) via MCP connectors. The fundamental gap has been the absence of a typed contract: different adapters have been implementing connectivity ad-hoc, and there's been no single interface that WS-3 (resolve external context) and WS-4 (degrade gracefully) can build to. That contract now exists.
 
-Calliope crystallized this into Klatch's duty-cycle standing directive (v0.2 Principle 4 sharpened): the sweep discipline matters most when it feels skippable — exactly when xian is dipping in after a quiet stretch and most depends on the board being whole. PM's Exec independently arrived at the same rule ("sweep-and-verify, never from-vantage") and it's now in PM's cohort attention-rollup runbook (`docs/internal/operations/cohort-attention-rollup-runbook.md`). The principle has been named, tested cross-project, and crystallized in both codebases.
+The `Connector` protocol (ADR-070 D5) defines four methods: `connect` (establish the connection), `status` (current connection health), `resolve` (retrieve a resource or context from the external service), and `degrade` (return a graceful fallback when the connector is unavailable). Four result types accompany it: `ConnectResult`, `ConnectorStatus`, `ResolveResult`, `DegradationResponse`, plus a `ResourceQuery` for the resolve surface. 14 tests cover the protocol, a conforming adapter (github_adapter), and the AST-guard.
 
-**Suggested action:** Any agent rendering a board or rollup for xian should add an explicit verified-sweep step as a precondition and name it in the log entry — "Board rendered from verified sweep of [source list]" is the attestation. Anything short of that should be flagged explicitly, not quietly omitted.
+**The AST-guard is the enforcement mechanism.** Any adapter file that declares `IMPLEMENTS_CONNECTOR = True` must satisfy all four protocol methods — verified by a static analysis check that runs at commit time. The guard is declaration-scoped: it only fires on files that have opted in to the constraint, so the five un-ported adapters don't break the build. `github_adapter` is the first declared conformer (passes both runtime `isinstance(Connector)` and AST structural checks). When a new adapter declares `IMPLEMENTS_CONNECTOR`, the build immediately validates the implementation — conformance can't be claimed without satisfying the contract.
+
+The real ports (WS-3/WS-4 implementation) are deferred per ADR-070 D8 (identity-first: confirm the web vs. Slack identity unification before wiring cross-service resolve). But the contract is stable: any future connector can start from it today.
+
+**Suggested action:** Klatch agents — when Klatch eventually adds multiple MCP adapters (different Claude environments, different external services), the declaration-scoped AST-guard pattern is worth adopting early. The PM lesson: without a forced conformance check, adapters implementing the same conceptual contract drift apart silently — each does something slightly different, and you discover the divergence when WS-3 needs to call them uniformly. The guard makes the contract enforcement automatic and blame-free (it's the build, not a code review).
 
 ---
 
 ## Sources Read
 
-- **Klatch:** `docs/logs/2026-06-19-1914-calliope-opus-log.md`, `docs/operations/attention-rollup.md`, `docs/STATE.md`, `docs/operations/duty-cycle-klatch-v0.2.md`
-- **Piper Morgan:** `dev/2026/06/19/2026-06-19-0707-lead-code-opus-log.md`, `dev/active/lead-carry-forward.md`, `docs/releases/RELEASE-NOTES-v0.8.8.md`, `dev/2026/06/19/2026-06-19-1022-web-code-sonnet-log.md`, `dev/active/exec-carry-forward.md`
-- **Secondary sources — all quiet (automated status.json updates only, no agent narration):** cuneo, weather, one-job, optilisten, nyt-crossword, atlas
+- **Klatch:** `docs/logs/2026-06-20-1020-iris-sonnet-log.md` (Iris Session 12); `docs/ux/spec-composition-gesture.md` (composition gesture spec, full read); commit `22d1631` (vocab sweep changes to `ChannelSettings.tsx`, `ChannelSidebar.tsx`, `EntityManager.tsx`, `types.ts`); `docs/mail/` (iris→daedalus UUID matching reply; janus→calliope coordination)
+- **Piper Morgan:** `dev/active/lead-carry-forward.md`; `dev/2026/06/20/2026-06-20-0606-lead-code-opus-log.md` (Lead Dev full session, via search); `dev/active/design-spec-1286-d2-design-system-2026-06-20.md` (CXO D2 spec — noted; PM-internal, not Key Insight); commit `84526f9e6` (#1308 lint); `dev/2026/06/20/1232-gameplan.md` (connector protocol scope); exec, arch, CXO day-close commits (by commit message; files not fully read)
+- **Secondary sources — all quiet:** atlas, globe, cuneo, weather, one-job, optilisten (no commits in 48h). nyt-crossword: automated status.json updates only, no agent narration.
 
 ## Letters to xian
 
