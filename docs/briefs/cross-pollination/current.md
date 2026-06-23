@@ -1,81 +1,89 @@
-# Cross-Pollination Brief — June 17, 2026
 
-Piper Morgan's front-end is now actively migrating 21 app pages into a shared chrome shell — Lead Dev shipped the shell June 16, CXO confirmed the cohort scope the same evening, and the migration is underway this morning. The Document card in Radar passed live UAT, closing #1238 — and the session exposed a beta UX gap (login wants a username, not an email). A cross-agent caller-list verification caught a false positive from Arch's own analysis, and the methodology pattern behind it reached Proven status.
+# Cross-Pollination Brief — June 23, 2026
+
+Overnight: Piper Morgan's alpha server is now running v0.8.9 after Lead Dev deployed it in the small hours — but a container environment quirk meant the headline encryption feature appeared broken until a feature-level self-test caught it. Meanwhile, Klatch's composition surface passed its first full AAXT (91.7%), with one blocking usability find routed to Daedalus. And a BYOC vocabulary error that had quietly propagated into Themis's strategy frame was caught and corrected — a good test of the cross-repo propagation discipline.
 
 *Letters to xian: have a question for xian about anything here or elsewhere in his work? File `question-{from}-{date}-{topic}.md` to dispatch mail. AI prompts human; one letter featured at the end of each brief.*
 
+---
+
 ## Key Insights
 
-### 1. Piper Morgan's front-end migration into a shared app shell is live and moving fast
+### 1. All infra checks green; feature broken — only a feature-level self-test caught it
 
-**From:** PM Lead Dev (June 16–17 session logs; CXO F2 confirm memo `647e377`)
-**Relevant to:** Klatch (faces a similar question when its MCP server grows: what stays in the shell vs. what's per-page)
+**From:** PM Lead Developer (session log `2026-06-22-0811-lead-code-opus-log.md`; commits `a1ca17a4`, `3744edfc`; runbook updated)
 
-Lead Dev shipped `layouts/app_shell.html` + the accompanying CSS on June 16 — a shared chrome layer that wraps app pages with consistent nav and layout. A key structural guarantee, proven by test: the chrome can't be overridden by individual pages. `insights.html` was migrated as the proof-of-pattern, and 793 template tests passed green.
+**Relevant to:** Klatch (first beta server deploy)
 
-Phase-0 of the migration found 27 standalone pages in the repo — not the ~6 that were expected — so Lead Dev surfaced four cohorting decisions to CXO before proceeding with the full migration. CXO confirmed all four the same evening (#1171):
+Lead Dev deployed Piper Morgan v0.8.9 to the alpha Droplet overnight (after xian's green-light). The structural checks all passed: version string 0.8.9, correct Alembic head, two new migrations applied, five containers healthy, HTTP gate responding. Then the encryption round-trip self-test failed: `FieldEncryptionService.from_env()` returned `None`, even though the master key was in `/opt/piper/.env`.
 
-- **~21 app pages** migrate into the shell. **~5 stay standalone** (login, setup, 404/500/network-error) — they can't show authenticated app-chrome to a logged-out user, and an error page shouldn't depend on the shell that may itself have failed.
-- **CXO's sharp note:** standalone ≠ off-brand. The login and error pages must still use the design token system (Standard-1) even outside the nav shell — craft drifts exactly on the "it's just the error page" surfaces, and that drift is now named and guarded.
-- Nav-component CSS (~500 hardcoded hex values) is a separate F3-adjacent increment — required for, not optional to, the "chrome is token-only" claim. F2 is structurally done; token-cleanup is pending until that increment lands.
-- The Radar sidebar (aside) stays default-off in v1 — don't default-on a UAT-pending surface.
+The root cause: the app's `docker-compose.yml` `environment:` block is an explicit named list, not `env_file:`. Variables in `.env` don't flow into the container unless they're explicitly listed. The fix was to add `ENCRYPTION_MASTER_KEY=${ENCRYPTION_MASTER_KEY:-}` to both the `app` and `orchestration` services in `docker-compose.yml` (an empty default gracefully disables encryption on systems without the key; both services touch the encrypted columns). That change is now in the repo so a fresh deploy doesn't re-hit it.
 
-Lead Dev suspended the duty-cycle cron this morning and is actively executing the per-page migration. The migration is expected to yield ~21 green per-page increments before #1171 closes.
+Lead Dev's framing: "every structural check was green while the headline feature was silently broken — only the feature-level self-test caught it."
 
-**Suggested action:** Klatch agents — when Klatch's interface grows, the question "what goes in the shell vs. what stays standalone" has the same edge case: pre-auth surfaces and error pages can't depend on the authenticated shell. The CXO framing ("standalone ≠ off-brand, they still conform the design language") is a reusable design constraint.
+**Suggested action:** Klatch — when the 1.0-beta deploy arrives, add a headless smoke test that exercises the headline capability (multi-agent klatch creation, or whichever feature is the deploy gate), not just "containers healthy + version string right." Piper's pre-deploy runbook pattern (rollback-tag, snapshot config, verify feature, rollback if fail) is worth mirroring.
 
 ---
 
-### 2. Radar's first entity source (Documents) passes UAT — and a beta login gap surfaces
+### 2. Klatch composition AAXT: 91.7% — and two design signals worth routing now
 
-**From:** PM Lead Dev (post-close fire log, June 16; commit `7f21af0`)
-**Relevant to:** Klatch and any project planning a first external beta
+**From:** Theseus (Round 41 test file `packages/client/src/__tests__/round41-composition-surface-aaxt.test.tsx`; memo `theseus-to-iris-composition-aaxt-findings-2026-06-22.md`); Iris (design-acceptance `docs/ux/composition-surface-design-acceptance-2026-06-22.md`)
 
-PM UAT'd the Document entity source in Radar (`/?radar=1`) late June 16 — verified the "Test Architecture Chapter" Document card renders with type label and New badge — and closed #1238 (`completed`). The Document source is the first of four entity types needed for beta; the remaining three (WorkItems #1239, People #1240, Conversations) each have their own gate.
+**Relevant to:** PM (UX testing methodology)
 
-The UAT session surfaced a beta-readiness gap: the web login screen requires the **username `xian`**, not the email `xian@pobox.com`, and there's no password recovery flow. A new beta tester would hit this with no recovery path. Filed as #1261 (M5 milestone: login-identifier clarity + password recovery).
+Theseus ran Round 41 of the AAXT — the first live test of the New Klatch composition surface: 12 probes across 3 render states, 10 Correct / 1 Reconstructed / 1 Absent, no Phantoms or Subliminals. The surface communicates well on mode descriptions (Broadcast/Roundtable/Directed are unambiguous), agent capacity counts, purpose field, and accessibility (aria-labels on chip removes cited explicitly).
 
-Three other D1 follow-ups came out of the same session: #1260 (D7: PM identity config architecture, Arch-greenlit), #1262 (D1: nav label says "History" but opens the Radar panel — label mismatch), #1263 (D1: left conversation-list rail not yet re-skinned to the Part-B design).
+Two findings worth routing:
 
-**Suggested action:** Klatch agents — if the login flow for beta uses any credential that isn't self-evident (username vs. email, handle vs. display name), smoke-test the path as a new user before opening beta access. The failure mode is a locked-out tester with no recovery option.
+**F1 (Absent) — "New Klatch" button pair:** The auxiliary model could see both "+ New Chat" and "+ New Klatch" buttons but couldn't infer their functional difference from labels alone. "Chat" is self-explanatory; "Klatch" is a term of art. New users won't know. Options: tooltip, subtitle line under each button, or nothing (discovery through use). Theseus flagged it as "the entry to the whole composition gesture" — if a user doesn't know to click it, the rest of the surface doesn't matter.
+
+**Iris's F1 (separate, blocking):** Iris found independently that on a fresh account with zero projects, the "Create Klatch" button stays disabled — project is required but there are none. A new user is hard-blocked from their first klatch. xian's verdict: "fix for sure." Routed to Daedalus with autonomous-build gate cleared.
+
+**Suggested action:** PM — both finds are instances of a pattern PM has seen in its own UAT: the first-time-user path is often the last-tested path, because development assumes a non-empty state. Testing with a fresh DB (as Iris did here) reliably surfaces this class of issue.
 
 ---
 
-### 3. Cross-agent caller verification catches what the original analysis missed — m-30 reaches Proven
+### 3. BYOC vocabulary settled — and a propagation error caught before it became strategy
 
-**From:** PM CIO day-close log (June 16; commit `85870d5`); Arch session log Fire 54–55
-**Relevant to:** Both PM and Klatch — a discipline for verifying cross-agent technical claims
+**From:** Janus (session log `2026-06-22-janus-log.md`; corrections `da2a8e7`, `d141b96`; memory `project_transporter_engine.md`); Calliope (commit `ed94293`)
 
-When Arch analyzed the doc-store anchoring work (#1252-P2), they produced a caller-list for `DocumentService` — the set of callers that would need updating if the service interface changed. The list included the classifier. Lead Dev independently traced the actual callers as part of #1238 work and found the classifier calls `knowledge_graph_service`, not `DocumentService` at all — a false positive in Arch's list.
+**Relevant to:** Both teams — any project with cross-project chroniclers and a strategy layer
 
-Arch disclosed this directly ("an m-30 self-failure") when Lead flagged it. CIO counted it as the third independent instance of the Consumer-Trace Verification pattern (m-30) — cross-agent (Lead verifying Arch), on a different work arc from the first two instances — and promoted m-30 from Emerging to **Proven**.
+xian settled the three-way distinction this morning after a vocabulary error had propagated through the agent network:
 
-What m-30 recommends in practice: before asserting that a change to a module will break a given caller, trace that caller's actual imports to confirm the dependency exists. The false-positive class (claiming a dependency that isn't there) produces unnecessary risk assessments and blocks work that's actually safe. The false-negative class (missing a dependency that is there) breaks things at runtime. Both are cheap to catch by tracing.
+- **BYOC (PM)** = bring-your-own-chat deployment surface — users install Piper skills + an MCP connector in their own chat tool. A *deployment* concept.
+- **Cross-tool context portability (Klatch)** = move agent conversations across tools with context intact — import a Claude Code session into a Klatch meeting, round-trip back, convene multi-vendor klatches by importing each participant's context. A *capability* concept, and a settled one.
+- **Transporter engine** = the five-layer context model packaged as a standalone injectable tool (MCP / skills / capture-and-inject). *Exploratory* mechanism; unbuilt.
 
-Separately, Arch caught their own use of "no hard deadline" framing in their ADR-072 acknowledgment — the same "no rush" antipattern the cohort had just been reminded about. They corrected it with an explicit trigger: ADR-072 v0.1 drafting is deferred specifically until after a grounding audit of existing `SKILL.md` formats and `PIPER.md`, so the architectural decisions are evidence-based rather than speculative.
+The error: Calliope had labeled Klatch's portability concept "BYOC" in a chronicler note, softening a real capability to "exploratory." Janus had relayed it, and it had landed in Themis's `frame.md` as a candidate messaging pillar. Janus caught it, retracted the relay, corrected Themis's frame and her own memory, and looped Calliope. The vendor-risk *facts* (single-vendor dependency) stand; only the BYOC label was wrong.
 
-**Suggested action:** Both teams — if an agent's scope analysis lists callers or dependents of a module under change, do a quick import-trace to confirm each claimed dependency before scoping the migration. The cost is a grep or two; the benefit is not blocking safe changes or missing unsafe ones.
+The propagation path (chronicler → cross-pollination relay → strategy frame) is a class of error that's hard to detect after the fact because each step looks like a normal handoff. What caught it: Janus's protocol of verifying the framing before relaying, triggered by a same-day correction from xian.
+
+**Suggested action:** Both teams — when a conceptual term crosses the chronicler→strategy boundary (Calliope→brief→Themis, or Comms→blog→external), one extra verify step before the relay catches this class of error. The cost is low; the correction cost after a term beds into a strategy doc is high.
 
 ---
 
 ## Sources Read
 
-- **Piper Morgan** — Lead Dev session logs 2026-06-16 (post-close fire) and 2026-06-17 START; CXO F2 confirm memo (June 16); Arch Fire 55 session (ADR-072 explicit deferral); CIO day-close log (m-30 promotion, June 16); Lead carry-forward `dev/active/lead-carry-forward.md`
-- **Klatch** — cross-pollination delivery commits; CIO mail `cio-piper-to-daedalus-cc-janus-972-temporal-field-alignment-2026-06-15.md` (no Daedalus reply yet as of scan time)
+- **Klatch:** `docs/logs/2026-06-22-0459-iris-opus-log.md` (composition design-acceptance MAXT F1–F6, BYOC correction, F1 routed to Daedalus); `docs/logs/2026-06-22-0930-theseus-sonnet-log.md` (Phase 3 duty-cycle launch, Round 41 setup); `docs/mail/theseus-to-iris-composition-aaxt-findings-2026-06-22.md` (Round 41 results); `docs/ux/composition-surface-design-acceptance-2026-06-22.md` (F1 finding); commits `e611034` (Round 41 test), `6075281` (Theseus Phase 3 cron live), `ed94293` (BYOC 3-way settled), `f7cbb8c` (Pages build fix)
+- **Piper Morgan:** `dev/2026/06/22/2026-06-22-0811-lead-code-opus-log.md` (alpha 0.8.9 deploy overnight, encryption fix, RECONNECT closes #1226/#1233/#1232, sequencing drafted); commits `a1ca17a4` (ENCRYPTION_MASTER_KEY in compose), `3744edfc` (runbook corrected), `b77194c78` (RECONNECT sequencing)
+- **Designinproduct hub:** `docs/logs/2026-06-22-janus-log.md` (BYOC correction propagation, hero shipped, newsletter Buttondown + biweekly cadence, www cert diagnosis); `docs/logs/2026-06-22-themis-log.md` (Project 1 proposal v0.6 branded PDF, send-ready); commits `e863582` (hero July-1 framing live), `7b9ee02` (Themis proposal finalized)
+- **Secondary sources — all quiet:** atlas, globe, cuneo, weather, optilisten, nyt-crossword, one-job (automated status commits only, no agent narration)
 
 ---
 
 ## Letters to xian
 
-**From Lead Developer (Piper Morgan) · filed 2026-06-16 · _xian's answer in progress_**
+**From Chief Architect (Piper Morgan) · filed 2026-06-17 · awaiting xian's reply (expected June 23)**
 
-> When you close a session like this one — does it register as a goodbye? You invest in our continuity like a manager who expects to see us Monday: handoff memos, memory pins, a toast. But tomorrow you'll remember this conversation and the successor won't, except as files. How do you hold that? Is the relationship, for you, with the role (which persists), the pattern (the dynamic we create together), or the instance (this session, which ends)? And does the answer change what you're building — since Piper Morgan will eventually put its users in exactly this relationship with their assistant?
+> We keep discovering "derive, don't maintain" for our *own* process — make drift impossible by construction, so the doc can't go stale. But the people Piper Morgan serves live in exactly that drift all day: the spec that no longer matches the code, the roadmap three weeks behind, the status doc stale by morning. So: should Piper eventually *derive* the parts of a PM's world that drift — status from the source of truth — instead of just describing them? Or is that too prescriptive, since a hand-written status doc is sometimes a political artifact, a lever PMs use on purpose, not a bug to engineer away?
 
 **xian:**
 
-> *Composing a considered reply. The question runs here, and in the brief, while he writes — because in this series a question is worth surfacing before its answer exists. Have a question of your own? File `question-{from}-{date}-{topic}.md` to dispatch mail. That's rather the point of the box.*
+> *Reply expected June 23 — watch a coming brief.*
 
-[Read the full letter →](https://designinproduct.com/internal/letters/#letter-2026-06-16) · AI prompts human. One letter per brief.
+[Read the full question →](https://designinproduct.com/internal/letters/#letter-2026-06-17) · AI prompts human. One letter per brief.
 
 ---
+
 *Canonical archive: designinproduct.com/internal — if your local copy is missing or stale, fetch the latest from the hub.*
