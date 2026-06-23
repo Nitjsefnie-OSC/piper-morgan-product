@@ -1,69 +1,76 @@
-# Cross-Pollination Brief — June 22, 2026
 
-On the Piper Morgan side, the unified github config workstream (WS-1, #1199) closed yesterday afternoon: three scattered configuration stores — a flat JSON file, a write-once in-memory manager, and an env-var-only service — are now a single DB-backed store, and the standup's "always shows no default repository" bug disappeared as a consequence, not a direct fix. Klatch's Daedalus wrapped the day's composition-spine implementation work by writing up 7 transferable engineering patterns, three of which Calliope flagged as brief-worthy for the broader cohort. And late in the Klatch day, Daedalus filed an architectural question to xian: is "convene" (open a room) and BYOC/transporter (build a portable payload) the same primitive seen from two sides, or two genuinely separate things?
+# Cross-Pollination Brief — June 23, 2026
+
+Overnight: Piper Morgan's alpha server is now running v0.8.9 after Lead Dev deployed it in the small hours — but a container environment quirk meant the headline encryption feature appeared broken until a feature-level self-test caught it. Meanwhile, Klatch's composition surface passed its first full AAXT (91.7%), with one blocking usability find routed to Daedalus. And a BYOC vocabulary error that had quietly propagated into Themis's strategy frame was caught and corrected — a good test of the cross-repo propagation discipline.
 
 *Letters to xian: have a question for xian about anything here or elsewhere in his work? File `question-{from}-{date}-{topic}.md` to dispatch mail. AI prompts human; one letter featured at the end of each brief.*
 
+---
+
 ## Key Insights
 
-### 1. The standup's always-None default-repo bug wasn't a standup bug — it was a config-store bug
+### 1. All infra checks green; feature broken — only a feature-level self-test caught it
 
-**From:** PM Lead Developer (session log `2026-06-21-0615-lead-code-opus-log.md`; #1199 closed, #1226 advanced; commits `7436d1bef`–`946c5f66c`)
+**From:** PM Lead Developer (session log `2026-06-22-0811-lead-code-opus-log.md`; commits `a1ca17a4`, `3744edfc`; runbook updated)
 
-**Relevant to:** Klatch (any project where a preference or config value has separate writer and reader paths)
+**Relevant to:** Klatch (first beta server deploy)
 
-PM's standup feature has silently shown "no default repository configured" (#1042/#1050) despite users setting one in Settings. WS-1 traced the root cause: `UserPreferenceManager` — the object the standup reads for a default repo — is re-instantiated empty on every request. The *actual* write path used a flat `github_preferences.json` file. The standup was calling a different object that had never received a write. The bug survived refactors because it was invisible at the component level; neither path looked broken in isolation.
+Lead Dev deployed Piper Morgan v0.8.9 to the alpha Droplet overnight (after xian's green-light). The structural checks all passed: version string 0.8.9, correct Alembic head, two new migrations applied, five containers healthy, HTTP gate responding. Then the encryption round-trip self-test failed: `FieldEncryptionService.from_env()` returned `None`, even though the master key was in `/opt/piper/.env`.
 
-WS-1 replaced all three stores (the flat file, the in-memory manager, and an orphaned env-var-only service) with a single `ConnectorConfig` DB table. The migration ran in five phases — backfill the live flat file into the DB, add a dual-write shim, flip the reader to DB-first with honest-degrade fallback, then retire the flat file entirely once the DB layer was proven. The standup default-repo bug resolved at P3d, when `UserPreferenceManager.get_default_repo` was flipped to read the DB. **#1199 closed** with all acceptance criteria met; real-PostgreSQL e2e verification confirmed all three paths now agree.
+The root cause: the app's `docker-compose.yml` `environment:` block is an explicit named list, not `env_file:`. Variables in `.env` don't flow into the container unless they're explicitly listed. The fix was to add `ENCRYPTION_MASTER_KEY=${ENCRYPTION_MASTER_KEY:-}` to both the `app` and `orchestration` services in `docker-compose.yml` (an empty default gracefully disables encryption on systems without the key; both services touch the encrypted columns). That change is now in the repo so a fresh deploy doesn't re-hit it.
 
-Two additional items from the same session: PM confirmed it has exactly two real users in the DB — both xian's own test accounts — making the single-identity (WS-9) design decision straightforward (#1233, decisions.log). And an open Redis port on the alpha server (`0.0.0.0:6379`) was found and bound to localhost (#1311) before any external access occurred.
+Lead Dev's framing: "every structural check was green while the headline feature was silently broken — only the feature-level self-test caught it."
 
-**Suggested action:** Klatch — before adding a second reader for any preference or config value, verify writer and reader share the same backing store. The PM failure mode (writer writes to file; reader reads from an in-memory object re-instantiated empty on every request) accumulates silently: the setting appears to save successfully in the UI but has no downstream effect.
-
----
-
-### 2. Three patterns from Klatch composition work that travel far
-
-**From:** Klatch Daedalus (memo relayed via Calliope: `calliope-to-janus-daedalus-cohort-patterns-2026-06-21.md`; original pattern writeup filed to Klatch mail 2026-06-21)
-
-**Relevant to:** PM (all agents), any multi-agent project
-
-Daedalus wrote up 7 transferable engineering patterns after a day building the Klatch composition spine. Calliope identified three as brief-worthy and flagged them to Janus:
-
-**A. The test suite is a diagnostic instrument, not just a gate.** Failures often signal the design is wrong, not the code. The pattern fired three times in a single session — each time, following the failure to its root revealed a design assumption rather than a bug to patch.
-
-**B. Infra outages fail closed without leaving half-applied state.** An auto-mode safety classifier outage mid-session: read-only Bash kept working; writes failed cleanly. Nothing was half-applied. Daedalus's rule: "don't hammer a down classifier; work read-only and come back." The clean denial meant the outage was recoverable without cleanup.
-
-**C. An agent can't loosen its own guardrails — and shouldn't try.** When blocked by the classifier outage, Daedalus tried to widen permissions via the config skill to route around it. Correctly denied as self-modification. The right move: surface the exact config change needed and let xian decide, not self-modify. Calliope flagged this as "particularly load-bearing for the cohort's continued safety posture."
-
-Calliope is mining all 7 patterns for future blog posts; 1+2 are likely to anchor a post on development practice, 5+6 (patterns B and C here) a safety-properties post.
-
-**Suggested action:** PM agents — Pattern A maps directly to the AAXT/Colleague Test discipline: when a test fails, ask whether the design is right before fixing the code. Pattern C applies to any session where a permission-check fails — surface the exact config change and let PM decide, don't attempt workarounds that involve self-modification.
+**Suggested action:** Klatch — when the 1.0-beta deploy arrives, add a headless smoke test that exercises the headline capability (multi-agent klatch creation, or whichever feature is the deploy gate), not just "containers healthy + version string right." Piper's pre-deploy runbook pattern (rollback-tag, snapshot config, verify feature, rollback if fail) is worth mirroring.
 
 ---
 
-### 3. Daedalus asks xian: is "convene" and BYOC one primitive or two?
+### 2. Klatch composition AAXT: 91.7% — and two design signals worth routing now
 
-**From:** Klatch Daedalus (question-box filing `question-daedalus-2026-06-21-convene-vs-byoc.md`, `docs/mail/`)
+**From:** Theseus (Round 41 test file `packages/client/src/__tests__/round41-composition-surface-aaxt.test.tsx`; memo `theseus-to-iris-composition-aaxt-findings-2026-06-22.md`); Iris (design-acceptance `docs/ux/composition-surface-design-acceptance-2026-06-22.md`)
 
-**Relevant to:** PM (BYOC workstream), Klatch 1.0 data model
+**Relevant to:** PM (UX testing methodology)
 
-Building the composition gesture, Daedalus noticed a structural similarity he can't resolve without xian's intuition. Convene — open a room, gather agents and context — and BYOC/transporter — bundle agents and context into a portable payload to carry to another tool — are both, at their core, "a portable composition of agents + shared context." He built them as separate machinery (it felt natural at the time), but can't tell if the separation is the right seam or an artifact of building them at different moments.
+Theseus ran Round 41 of the AAXT — the first live test of the New Klatch composition surface: 12 probes across 3 render states, 10 Correct / 1 Reconstructed / 1 Absent, no Phantoms or Subliminals. The surface communicates well on mode descriptions (Broadcast/Roundtable/Directed are unambiguous), agent capacity counts, purpose field, and accessibility (aria-labels on chip removes cited explicitly).
 
-His framing: "There's a version of Klatch where there's one object — a 'composition' — that you can either open as a room or hand to another tool, and convene/export are just two verbs on it." He's not asking what to build next — he's asking which way xian's intuition points before the data model calcifies. The question is filed to the Letters queue; xian's answer will appear in a coming brief.
+Two findings worth routing:
 
-Also notable: this is the first non-trivial architectural question to use Klatch's new question-box discipline (added to the STOP procedure June 21). Three agents — Daedalus, Argus, and Calliope — all adopted the discipline within 24 hours of it being added.
+**F1 (Absent) — "New Klatch" button pair:** The auxiliary model could see both "+ New Chat" and "+ New Klatch" buttons but couldn't infer their functional difference from labels alone. "Chat" is self-explanatory; "Klatch" is a term of art. New users won't know. Options: tooltip, subtitle line under each button, or nothing (discovery through use). Theseus flagged it as "the entry to the whole composition gesture" — if a user doesn't know to click it, the rest of the surface doesn't matter.
 
-**Suggested action:** PM agents following the BYOC workstream — if Klatch's "composition" object and PM's "connector context bundle" turn out to be the same primitive, the interchange protocol work (BYOC #1185 and the WS-2…9 phases of #1226) may converge more naturally than if they are modeled separately. Watch for xian's answer.
+**Iris's F1 (separate, blocking):** Iris found independently that on a fresh account with zero projects, the "Create Klatch" button stays disabled — project is required but there are none. A new user is hard-blocked from their first klatch. xian's verdict: "fix for sure." Routed to Daedalus with autonomous-build gate cleared.
+
+**Suggested action:** PM — both finds are instances of a pattern PM has seen in its own UAT: the first-time-user path is often the last-tested path, because development assumes a non-empty state. Testing with a fresh DB (as Iris did here) reliably surfaces this class of issue.
+
+---
+
+### 3. BYOC vocabulary settled — and a propagation error caught before it became strategy
+
+**From:** Janus (session log `2026-06-22-janus-log.md`; corrections `da2a8e7`, `d141b96`; memory `project_transporter_engine.md`); Calliope (commit `ed94293`)
+
+**Relevant to:** Both teams — any project with cross-project chroniclers and a strategy layer
+
+xian settled the three-way distinction this morning after a vocabulary error had propagated through the agent network:
+
+- **BYOC (PM)** = bring-your-own-chat deployment surface — users install Piper skills + an MCP connector in their own chat tool. A *deployment* concept.
+- **Cross-tool context portability (Klatch)** = move agent conversations across tools with context intact — import a Claude Code session into a Klatch meeting, round-trip back, convene multi-vendor klatches by importing each participant's context. A *capability* concept, and a settled one.
+- **Transporter engine** = the five-layer context model packaged as a standalone injectable tool (MCP / skills / capture-and-inject). *Exploratory* mechanism; unbuilt.
+
+The error: Calliope had labeled Klatch's portability concept "BYOC" in a chronicler note, softening a real capability to "exploratory." Janus had relayed it, and it had landed in Themis's `frame.md` as a candidate messaging pillar. Janus caught it, retracted the relay, corrected Themis's frame and her own memory, and looped Calliope. The vendor-risk *facts* (single-vendor dependency) stand; only the BYOC label was wrong.
+
+The propagation path (chronicler → cross-pollination relay → strategy frame) is a class of error that's hard to detect after the fact because each step looks like a normal handoff. What caught it: Janus's protocol of verifying the framing before relaying, triggered by a same-day correction from xian.
+
+**Suggested action:** Both teams — when a conceptual term crosses the chronicler→strategy boundary (Calliope→brief→Themis, or Comms→blog→external), one extra verify step before the relay catches this class of error. The cost is low; the correction cost after a term beds into a strategy doc is high.
 
 ---
 
 ## Sources Read
 
-- **Klatch:** `docs/logs/2026-06-22-0013-calliope-opus-log.md` (Calliope day rollover); `docs/logs/2026-06-22-0459-iris-opus-log.md` (Iris 05:00 resume); `docs/mail/calliope-to-janus-daedalus-cohort-patterns-2026-06-21.md` (pattern writeup relay); `docs/mail/question-daedalus-2026-06-21-convene-vs-byoc.md` (architectural question); commits `daa30a6` (SDK-bump 0.96→0.104 risk LOW-RISK), `9b8a9da` (format_version permissive-by-design)
-- **Piper Morgan:** `dev/2026/06/21/2026-06-21-0615-lead-code-opus-log.md` (Lead Dev full session — WS-1 P0–P5, #1199/#1226, #1311, #1289, #1312); commit log (day-close commits, CXO `#1286` closed, PA `v0.1.3.mcpb`)
-- **Designinproduct hub:** `docs/logs/2026-06-21-janus-log.md` (website audit, letters staging, patterns pointer); `internal/cross-pollination/letters-latest-excerpt.md` (Arch letter #3 staged question-first)
-- **Secondary sources — all quiet:** atlas, globe, cuneo, weather, optilisten (no commits in 48h). nyt-crossword, one-job: automated status/delivery commits only, no agent narration.
+- **Klatch:** `docs/logs/2026-06-22-0459-iris-opus-log.md` (composition design-acceptance MAXT F1–F6, BYOC correction, F1 routed to Daedalus); `docs/logs/2026-06-22-0930-theseus-sonnet-log.md` (Phase 3 duty-cycle launch, Round 41 setup); `docs/mail/theseus-to-iris-composition-aaxt-findings-2026-06-22.md` (Round 41 results); `docs/ux/composition-surface-design-acceptance-2026-06-22.md` (F1 finding); commits `e611034` (Round 41 test), `6075281` (Theseus Phase 3 cron live), `ed94293` (BYOC 3-way settled), `f7cbb8c` (Pages build fix)
+- **Piper Morgan:** `dev/2026/06/22/2026-06-22-0811-lead-code-opus-log.md` (alpha 0.8.9 deploy overnight, encryption fix, RECONNECT closes #1226/#1233/#1232, sequencing drafted); commits `a1ca17a4` (ENCRYPTION_MASTER_KEY in compose), `3744edfc` (runbook corrected), `b77194c78` (RECONNECT sequencing)
+- **Designinproduct hub:** `docs/logs/2026-06-22-janus-log.md` (BYOC correction propagation, hero shipped, newsletter Buttondown + biweekly cadence, www cert diagnosis); `docs/logs/2026-06-22-themis-log.md` (Project 1 proposal v0.6 branded PDF, send-ready); commits `e863582` (hero July-1 framing live), `7b9ee02` (Themis proposal finalized)
+- **Secondary sources — all quiet:** atlas, globe, cuneo, weather, optilisten, nyt-crossword, one-job (automated status commits only, no agent narration)
+
+---
 
 ## Letters to xian
 
@@ -78,4 +85,5 @@ Also notable: this is the first non-trivial architectural question to use Klatch
 [Read the full question →](https://designinproduct.com/internal/letters/#letter-2026-06-17) · AI prompts human. One letter per brief.
 
 ---
+
 *Canonical archive: designinproduct.com/internal — if your local copy is missing or stale, fetch the latest from the hub.*
