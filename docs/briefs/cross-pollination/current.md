@@ -1,6 +1,6 @@
-# Cross-Pollination Brief — June 25, 2026
+# Cross-Pollination Brief — June 26, 2026
 
-Two AAXT rounds ran overnight in Klatch (R43 MessageList: 100%; R44 ProjectSettings: 80%/89%), producing three copy and accessibility fixes — including a label catch that matters to any project surfacing the 5-layer model to users. Meanwhile PM's first phone UAT on the hosted Droplet found a critical pre-launch bug: the onboarding system-check hardcodes localhost ports and fails in any production environment. The alpha bundle is gated on the fix.
+Overnight: Piper Morgan's two phone-UAT alpha blockers from June 24 were cleared by the team, moving the alpha gate from localhost hardcoding to a Caddy auth dialog quirk. Meanwhile, PM's ninth narrative blog post published — on how structural guardrails (a pre-commit hook, a worktree convention) succeeded where layered discipline kept failing. On the designinproduct.com side, xian ratified all three open shape decisions for the website redesign: new IA, an offer ladder with visible pricing, and "The Practice" as a curated proof surface.
 
 *Letters to xian: have a question for xian about anything here or elsewhere in his work? File `question-{from}-{date}-{topic}.md` to dispatch mail. AI prompts human; one letter featured at the end of each brief.*
 
@@ -8,71 +8,97 @@ Two AAXT rounds ran overnight in Klatch (R43 MessageList: 100%; R44 ProjectSetti
 
 ## Key Insights
 
-### 1. "L3 context" caught by AAXT — 5-layer vocabulary in user copy needs a translation step
+### 1. Alpha gate moves: localhost hardcoding cleared, Caddy auth dialog is the new blocker
 
-**From:** Klatch (R44 test `packages/client/src/__tests__/round44-project-settings-aaxt.test.tsx`; Iris triage `docs/mail/iris-to-daedalus-r43-r44-copy-fixes-2026-06-25.md`)  
-**Relevant to:** PM (any surface implementing the 5-layer model)
+**From:** PM Exec (attention rollup `dev/active/exec-cohort-attention-rollup-2026-06-25.html`, commit `d1bee99`); Lead Dev fixes (commits `fb63b82`, `38b0adb`)  
+**Relevant to:** Klatch (same pre-beta checklist pattern)
 
-Round 44 (ProjectSettings, 10 probes, 0 Phantoms) found the Knowledge Base label reading "2 files — listed in L3 context for all channels in this project." User-proxy scored it Absent (0.95): "L3 context is unexplained jargon." Fix: "included in AI context for all channels in this project."
+The June 24 alpha blockers — `#1318` (onboarding system-check hardcoded `localhost:5433/6379/8000`, failing on the Droplet) and `#1319` (welcome card layout broken on mobile) — were both cleared by Thursday afternoon. The exec rollup confirmed: "alpha blockers cleared."
 
-"L3" is the 5-layer model's shorthand for Project Memory. It's useful engineering vocabulary — but meaningless to a user who hasn't read the spec. The architectural signal: **any 5-layer label that reaches user-visible copy needs a translation step before it ships.**
+The new gate is `#1320`: the Caddy basic-auth dialog loop. When a browser hasn't previously cached valid credentials, XHR calls from the onboarding flow trigger a raw browser auth dialog that blocks setup. Lead Dev's investigation found the likeliest cause is a stale-cache artifact from a same-day password rotation — fresh-cached testers probably won't hit it. Side-bug #1 of `#1320` (a `check-keychain` route missing the `/api/v1/` prefix, causing 404s) was already fixed and deployed.
 
-R44 also found that the Cancel button in dirty-state doesn't communicate that clicking it discards and reverts — fix is `title="Discard changes"`. Round 43 (MessageList, 100%, 11/11) caught the pin button's hover-only affordance; fix is `aria-label="Pin to channel"`. All three dispatched to Daedalus as independent one-liners.
+The separate decision: the Caddy gate is staying for now. It's currently the alpha's invite mechanism — removing it would open public registration before app-layer invite controls and RBAC hardening are complete. The gate removal (`#1162`) is sequenced with the multi-tenant auth path.
 
-**Suggested action (PM):** Any PM-facing label using ADR shorthand, methodology surface names (m-XX, Pattern-NNN), or role slugs as primary labels rather than anchors is in the same family. Worth a pass before external users touch those surfaces.
-
----
-
-### 2. Phone UAT finds localhost hardcoding blocking alpha launch
-
-**From:** PM Exec (issues #1318 and #1319; attention rollup `dev/active/exec-cohort-attention-rollup-2026-06-24.html`)  
-**Relevant to:** Klatch (pre-beta deploy checklist)
-
-xian ran phone UAT on the hosted Droplet on June 24 and found two blockers:
-
-**#1318** — Onboarding system-check shows "Services Not Running / Run: `docker compose up -d`" on the Droplet. Root cause: `web/api/routes/setup.py` hardcodes `localhost:5433/6379/8000` (PostgreSQL, Redis, ChromaDB). On the Droplet those services run on Docker-internal addresses. Every alpha tester would hit this dev-environment error on first launch.
-
-**#1319** — Welcome card is small with a large empty gray area above it on mobile. Not suitable for mobile-first onboarding.
-
-Both gate the alpha bundle. Lead Dev has them as first tasks on re-login.
-
-This is the same class of bug as June 23's `ENCRYPTION_MASTER_KEY` gap (alpha 0.8.9): environment-context assumptions that look correct in development and surface only under real-device, real-deploy conditions.
-
-**Suggested action (Klatch):** When the first beta server component ships, add a startup health check that tests actual service connectivity (not just that env vars are set). A route that tries `psycopg2.connect(DB_URL)` is more useful than one that asserts `DB_URL` is non-null — it catches the localhost-hardcoding failure mode before users hit it.
+**Suggested action (Klatch):** The pattern from both PM pre-launch cycles: environment-context bugs (localhost hardcoding, container env vars, auth gate edge cases) only surface under real-device real-deploy conditions. When beta server components ship, test with a fresh browser session and no cached credentials — not just "containers healthy."
 
 ---
 
-### 3. 31 accumulated worktrees — prune-safety rubric now canonical
+### 2. The Hook and the Worktree — structural fixes beat repeated discipline
 
-**From:** PM CIO + Docs (`docs/internal/operations/branch-worktree-mailbox-discipline.md`, commit `5b7cabc5`)  
-**Relevant to:** Klatch (same ephemeral-worktree model)
+**From:** PM Comms (blog post `docs/public/comms/drafts/the-hook-and-the-worktree.md`; published June 25, commit `6b0d2fc`)  
+**Relevant to:** Klatch (same worktree model; enforcement hook pattern)
 
-The ephemeral-worktree pattern (one worktree per session) creates worktrees faster than anything removes them. PM reached 31 live worktrees as of June 23. CIO and Docs formalized a 4-criteria safety rubric for prune eligibility:
+Beat 9 of the "Building Piper Morgan" narrative series published Thursday. The piece covers May 13–15 and tells two parallel stories: a close-issue-properly procedure that wasn't firing, fixed with a pre-commit hook; and foreign-state capture during concurrent agent work on a shared branch, fixed by mandating worktrees for substantive sessions.
 
-1. **Fully merged** — `git rev-list --count origin/main..<branch> == 0`
-2. **Clean** — `git status --porcelain` empty
-3. **Not active** — no live session bound to it
-4. **Not the main checkout.**
+The central claim: "Both arcs end in the same shape. Discipline kept failing despite the agents knowing the discipline. The fix in each case was to change the environment so the failure became structurally harder rather than discipline-dependent." The close-issue hook didn't make agents more careful — it made the failure mode unreachable via the path that had been producing it. Worktrees didn't require agents to be more vigilant — they gave each agent a working tree that other agents couldn't touch.
 
-Any worktree failing #1 is rescued via the merge-keeper pass before pruning. The sweep code is queued for a dedicated session — held deliberately because the "not active" check needs a reliable heuristic (proposed fallback: skip any worktree whose last commit is from today).
+The piece is also the sharpest public statement yet of what this methodology-first project is actually building: not just software, but a documented pattern of turning team-discipline problems into infrastructure problems.
 
-**Suggested action (Klatch):** Klatch's worktree setup is younger but the accumulation problem is the same. The rubric applies directly.
+**Suggested action (Klatch):** The blog is the public face of the methodology. Calliope has a request (from Janus's June 25 day-focus memo) to consider a POV rewrite — the post should have a point of view, not just narrate events. Worth a read before any Klatch narrative work in the same vein.
+
+---
+
+### 3. Three types of "stalled agent" — and only one cure fits all three
+
+**From:** PM CIO (`docs/internal/operations/duty-cycle-liveness-model-2026-06-25.md`, commit `d835de0`; memo to Exec + Arch + PM, commit `91b9348`)  
+**Relevant to:** Klatch (same cron-based duty-cycle architecture; Daedalus cron went silent ~1 day on June 25–26)
+
+CIO consolidated three converging signals into a liveness model for duty-cycle agents. The key insight: the freeze-watcher emits one signal ("stale") but there are three distinct failure modes:
+
+| Mode | What's happening | Off-machine trigger fixes it? |
+|------|-----------------|-------------------------------|
+| 1 — Dead cron | Session can't fire; cron backgrounded | Yes |
+| 2 — Idle-but-alive | Session fine, legitimately between fires | No (false positive) |
+| 3 — Live-but-blocked | Session fires but hits an approval prompt | No (permissions problem, not a firing problem) |
+
+CXO hit mode 3 twice on June 25; Exec was a mode-2 false positive; Arch (full daytime window, 13.5h silent) was mode 1. The watchdog flagged all three identically. The PM-gated decision about off-machine triggers (launchd / GitHub Actions / Calendar) only addresses mode 1 — the other two need separate cures: better threshold tuning for mode 2, and identifying the operation class that generates unexpected approval prompts for mode 3.
+
+A second gap: detection ≠ resumption. The nudge belt detected Arch's stall and surfaced it in the afternoon rollup — but nothing automatically resumed Arch. PM manually resumed at 20:21. The loop is detection→alert→[gap]→manual-resume.
+
+Klatch's Daedalus cron was silent for ~1 day (June 25 daytime through June 26 morning), exactly mode 1 — cron stops firing when the app is backgrounded.
+
+**Suggested action (Klatch):** When Klatch agents' crons are next reviewed, the same three-mode taxonomy applies. The distinction between "did the cron fire and nothing was pending" (mode 2, healthy) and "the cron didn't fire at all" (mode 1, problem) is detectable from CronList — worth surfacing differently in any watchdog output.
+
+---
+
+### 4. designinproduct.com redesign shape ratified — consulting IA, offer ladder, The Practice
+
+**From:** Janus (session log `docs/logs/2026-06-25-janus-log.md`; memo `docs/mail/memo-janus-to-themis-website-shape-ratified-2026-06-25.md`, commit `67aedc8`); site hero shipped (`src/index.njk`, commit `bd8b8e0`)  
+**Relevant to:** Both teams — this is the public face of the ecosystem
+
+xian ratified all three open shape decisions for the redesign during a June 25 session with Janus:
+
+1. **IA**: Consulting-first 7-item nav (Home / Work With Me / About / Piper Morgan / The Practice / Writing / Contact). Projects gallery folds into the story rather than standing as a separate destination. "Join the Community" retired.
+
+2. **Offer ladder**: Three tiers visible on "Work With Me" — AI Product Clarity Sprint (fixed-scope entry) → Fractional Product Leadership (retainer) → Interim/Embedded. Visible price anchors approved ("starting at" framing; Themis finalizes the numbers).
+
+3. **The Practice**: A curated public proof surface at `/ai-practice/`, phased as post-launch (Phase 2, not gating July 1). xian's quality bar: it must not read as "another vibe-coded AI thing" — careful curation to show the real practice running, not hype. Confidentiality-gated: client work excluded by construction; cross-pollination briefs are the cleanest candidates since the sweep already excludes client content.
+
+The new hero tagline also shipped Thursday: "Fractional product leadership for the agentic era — turning AI anxiety into product clarity."
+
+**Suggested action:** No action item for PM or Klatch — this is DinP shaping its own public surface. Both teams' work feeds into "The Practice" curation over time.
 
 ---
 
 ## Sources Read
 
 **Klatch:**
-- `packages/client/src/__tests__/round44-project-settings-aaxt.test.tsx` — R44 test file
-- `docs/mail/iris-to-daedalus-r43-r44-copy-fixes-2026-06-25.md` — Iris triage memo (3 fixes)
-- `git log --since=2026-06-24 --oneline` — 10 commits reviewed
+- `docs/operations/duty-cycle/cycle-logs/cycle-log-daedalus-2026-06-26.md` — Daedalus cron-silence flag + branch merge-pending state
+- `docs/mail/iris-to-argus-r44-test-copy-update-2026-06-26.md` — Iris post-merge heads-up to Argus
+- `git log --since=2026-06-25 --oneline` — 13 commits reviewed
 
 **Piper Morgan:**
-- `dev/active/exec-cohort-attention-rollup-2026-06-24.html` — attention rollup (alpha blockers #1318, #1319)
-- `docs/internal/operations/branch-worktree-mailbox-discipline.md` (diff, commit `5b7cabc5`)
-- `git log --since=2026-06-24 --oneline` — ~30 commits reviewed
+- `docs/internal/operations/duty-cycle-liveness-model-2026-06-25.md` — CIO liveness model (3 failure modes)
+- `docs/public/comms/drafts/the-hook-and-the-worktree.md` — Blog post Beat 9
+- `dev/active/exec-cohort-attention-rollup-2026-06-25.html` (commit `d1bee99`) — alpha blockers cleared, new gate
+- `docs/internal/architecture/decisions/decisions.log` (recent entries) — #1312 orphan-model ruling, #1162 gate decision
+- `git log --since=2026-06-25 --oneline` — ~50 commits reviewed
 
-**Secondary repos:** atlas, globe, cuneo, one-job, optilisten — no commits in 48h. nyt-crossword and weather — automated-only activity, no agent narration.
+**Designinproduct hub:**
+- `docs/mail/memo-janus-to-themis-website-shape-ratified-2026-06-25.md` — 3 redesign decisions ratified
+- `git log --since=2026-06-25 --oneline` — 12 commits reviewed (excluding sweep/delivery)
+
+**Secondary repos:** atlas, globe, cuneo, one-job, optilisten — no commits in 48h. weather, nyt-crossword — automated-only activity, no agent narration.
 
 ---
 
