@@ -1,6 +1,6 @@
-# Cross-Pollination Brief — June 27, 2026
+# Cross-Pollination Brief — June 28, 2026
 
-Friday into Saturday: Klatch's path to beta became concrete. xian defined the release gate — composition gesture fully implemented and tested/QA'd equals a release cut (v0.9 or v1.0), July 2026 target — and the team made immediate progress: AAXT Round 45 passed clean on the CrossRefStrip gesture, and Daedalus built increment 6 (clone-from-klatch). PM is holding quiet heading into the weekend. Also: the Tectonic Globe project joined the cross-pollination network as a new reader, and DinP's five automated trigger prompts moved from live-config-only into version control.
+Klatch crossed its beta gate overnight. All seven increments of the composition gesture are now built, Iris-reviewed, merged, and validated — MAXT Session 03 (live with xian, 15/15) and two AAXT rounds (R46 clone-from-klatch, R47 mention-override) all passed with zero Phantoms. The release condition xian set on June 26 is met; a release cut awaits his call. On the PM side, a busy Saturday produced a working auto-foreground watchdog that revives the duty cycle when the app backgrounds, a new formal decision record (ADR-073), and the Triad Model published to both Medium and LinkedIn.
 
 *Letters to xian: have a question for xian about anything here or elsewhere in his work? File `question-{from}-{date}-{topic}.md` to dispatch mail. AI prompts human; one letter featured at the end of each brief.*
 
@@ -8,58 +8,64 @@ Friday into Saturday: Klatch's path to beta became concrete. xian defined the re
 
 ## Key Insights
 
-### 1. Klatch beta defined: when composition gesture is done and QA'd, cut the release
+### 1. Klatch beta gate fully cleared — composition gesture complete, release awaits xian's call
 
-**From:** Klatch (`docs/ROADMAP.md`, commit `c22c4c0`; Calliope attention rollup `8adb2b4`)
-**Relevant to:** PM (pre-alpha-to-beta sequencing), DinP (public milestone to surface when the time comes)
+**From:** Klatch (Iris session log `docs/logs/2026-06-27-1903-iris-sonnet-log.md`; AAXT R46+R47 `e18ad3a`; Iris heartbeat `6eb5138`)
+**Relevant to:** PM (milestone sequencing), DinP (public milestone to announce when the cut lands)
 
-xian settled the beta definition on June 26 and it's now in ROADMAP.md with a July 2026 target: when the composition gesture — the feature that lets users build a multi-entity conversation in Klatch rather than a single-agent one — is fully implemented, tested, and QA'd, the next release is cut (v0.9 or v1.0). Step 11 (Search) comes after beta, not before.
+Yesterday's brief reported the beta gate being defined; today it's met. The composition gesture — the feature that lets a user build a multi-entity conversation in Klatch rather than a single-agent one — is fully implemented across all seven increments:
 
-The ROADMAP notes that the composition gesture's plumbing was ready long before Iris's UX design phase. Her Phase 3 spec (completed June 2026) was the actual critical-path item: "not more infrastructure, not more feature steps, but real design work that made the core feature worthy of a release." That framing — design work as critical path, not just polish — is worth carrying.
+- Increments 1–6: built by Daedalus, Iris-reviewed as conformant, merged to main
+- Increment 7 (@mention override): the last piece — lets a user address a specific entity mid-conversation regardless of klatch mode; built, Iris-reviewed conformant, merged via `aaca51b`
+- MAXT Session 03 (15 probes, live walkthrough with xian): all 15 pass
+- AAXT R46 (clone-from-klatch, 8 probes): passed, 0 Phantoms
+- AAXT R47 (mention-override, 8 probes): passed, 0 Phantoms
 
-Increment status as of June 26: increments 1–5 are done and Iris-reviewed (on `claude/daedalus`, awaiting merge); increment 6 is built and in Iris's UX review queue; increments 7+ (@mention autocomplete, JIT import paths) are queued.
+The beta gate condition set June 26 in `docs/ROADMAP.md` — "composition gesture fully implemented, tested, and QA'd" — is now satisfied. Iris's overnight heartbeat: "awaiting xian release cut call." No code blockers remain.
 
-**Suggested action (DinP/PM):** The July target is worth noting on the DinP calendar and gallery entry for Klatch. For PM: the "design work as critical path, not infrastructure" framing is a direct counter to the common instinct to add more feature steps when something isn't shipping — worth keeping in the methodology surface.
+One minor observation from R46: a "Subliminal candidate" was noted in the GUARD1 probe — not a blocker, worth follow-up. R47 passed clean.
 
----
-
-### 2. Composition gesture in motion: R45 passes 100%, clone-from-klatch built
-
-**From:** Klatch (AAXT `a2a9603`; Daedalus→Iris memo `c2f0041`)
-**Relevant to:** PM (AAXT methodology, template UX pattern)
-
-AAXT Round 45 validated the CrossRefStrip gesture (cross-references between klatches in conversation view) and the #general channel guard across 8 probes spanning three roster states (empty, one-klatch, two-klatch). Result: 7 Correct, 1 Reconstructed, 0 Phantoms — all design properties confirmed. This unblocked Daedalus to proceed.
-
-Daedalus built increment 6 (clone-from-klatch) and sent it to Iris for UX review. The feature adds an action-select at the top of the New Klatch form — visible only when a klatch already exists to copy — that prefills name, purpose, mode, project, and agent roster from the selected source. One deliberate design choice worth noting: if the source klatch's purpose is the default boilerplate (`'You are a helpful assistant.'`), increment 6 prefills the purpose field **empty** rather than copying it. A cloned klatch with no real purpose starts clean, not inheriting placeholder noise.
-
-Tests pass: `clone-from-klatch.test.tsx` green; tsc clean; form test suite 24/24.
-
-**Suggested action (PM):** The "don't inherit boilerplate into a copy" heuristic is a transferable UX decision for any "start from template" workflow Piper surfaces — cloned projects, duplicated issue templates, copied contexts. A template that inherits its source's placeholder text creates clean-up debt. Default to empty when the source value is known noise.
+**Suggested action (DinP):** Mark the July 2026 Klatch beta target as actively pending on the DinP calendar. When xian cuts the release, the gallery entry and public narrative are ready to update. For PM: the MAXT protocol (structured live walkthrough with the product owner as the beta gate) is a pattern worth carrying — it kept the quality bar clear and prevented premature release pressure.
 
 ---
 
-### 3. DinP's automated trigger prompts move into version control
+### 2. PM ships auto-foreground watchdog (Belt-0) — revives the duty cycle when the app suspends
 
-**From:** DinP hub (`internal/cross-pollination/process/trigger-prompts/`, commit `707de1e`)
-**Relevant to:** PM (duty-cycle scripts), Klatch (any future automated sweep or cron agent)
+**From:** PM (CIO session log `dev/2026/06/27/2026-06-27-1341-cio-code-opus-log.md`; commit `dafc4904f`)
+**Relevant to:** Klatch (duty-cycle continuity), DinP (any future automated trigger work)
 
-All five CCR trigger prompts powering the cross-pollination infrastructure — Intelligence Sweep, Delivery, Brief Health Check, Klatch External Intel Sweep, Weekly Digest — were committed to `internal/cross-pollination/process/trigger-prompts/` on June 26. Previously they existed only as live Anthropic CCR config; they were not in version control, meaning drift between the live config and any local understanding was undetectable.
+The persistent duty-cycle failure mode on PM is mode-1b: the Claude Code app gets backgrounded or suspended while a session is live, and the in-process cron can't fire. Until now, recovery required PM to manually foreground the app. CIO built, tested, and deployed an automated cure (Belt-0, `duty-cycle-watchdog.sh` v2.1):
 
-The consequence: changes to any trigger now leave a git trace. The current prompt text is auditable without platform access. Prompt-vs-spec drift (a known failure mode documented in the DinP CLAUDE.md) is now detectable by comparing the trigger-prompts directory against live config.
+When the watchdog detects a stall, it now runs `open -b com.anthropic.claude-code` — Launch Services, not Apple Events — to un-suspend the app. This was a non-trivial engineering puzzle: `osascript` hangs when called from within the app itself (self-deadlock), and System Events requires a TCC grant. `open -b` sidesteps both issues cleanly. Test result: 9/9 pass; deployed to the launchd-run copy PM's watchdog uses; default-on.
 
-The CLAUDE.md's "Trigger Discipline" section already documented two common failure modes (silent claude-branch push, mid-run abort); version-controlling the prompts adds a third failure-mode prevention: silent prompt drift where the live config and the documented intent diverge.
+Important scoping note the CIO documented explicitly: Belt-0 cures mode-1b (app backgrounded). It does NOT cure mode-1a (session death — cron list empty, carry-forward lost) or the machine-sleep case (launchd can't run while the Mac is asleep). Those remain the motivation for an always-on Mac Mini or off-machine trigger. The first real mode-1b stall will self-validate it.
 
-**Suggested action (PM):** PM's duty-cycle is also governed by cron + automation scripts. If any of those exist only as live config (cron entries, hook scripts in platform settings, run commands not committed anywhere), this is the moment to snapshot them to a canonical path in the repo — the same move DinP just made.
+ADR-073 was also written this session, formalizing the hard rule against destructive git operations in PM's main checkout (the rule that was PM-mandated on June 21 after working-tree content was lost twice).
+
+**Suggested action (Klatch):** Klatch's Iris is on a similar duty-cycle model. If app-backgrounding is ever a factor there, the `open -b <bundle-id>` pattern is a proven, permission-free primitive that sidesteps the Apple-Events TCC trap.
+
+---
+
+### 3. PM's Triad Model published to Medium and LinkedIn
+
+**From:** PM (Comms log `dev/2026/06/27/2026-06-27-1152-comms-code-sonnet-log.md`; editorial calendar commit `979ceb4d`)
+**Relevant to:** DinP (narrative continuity, the Building Piper Morgan series)
+
+The Triad Model, a piece in the Building Piper Morgan publication, completed its full cycle on June 27: PM voice-pass, publication, and syndication to both Medium and LinkedIn. URLs have been added to the editorial calendar (commit `979ceb4d`), confirmed by the overnight Docs WATCH session.
+
+The publication joins Beat 8 (Medium URL already confirmed) in the forward-moving narrative series Comms maintains. Several other pieces are in the pipeline: "Extension Without Integration" (PM re-voice-pass pending), a BYOC insight ("We Built Onboarding in Our Own Image"), and Beats A–E awaiting PM steering on the publication slate shape.
+
+**Suggested action (DinP):** The Triad Model addition to the editorial calendar means the Medium feed will have a new entry when Janus's next blog-sync or gallery update runs. Worth confirming the hub's Medium integration picks it up cleanly.
 
 ---
 
 ## Sources Read
 
-- **Klatch** — `docs/ROADMAP.md` (beta milestone section); Calliope attention rollup `docs/operations/attention-rollup.md`; Daedalus→Iris memo `docs/mail/daedalus-to-iris-clone-from-klatch-review-2026-06-26.md`; AAXT R45 COORDINATION.md update; Calliope cycle log (Fire 16)
-- **Piper Morgan** — git log (last 24h): session-log housekeeping, inbox triage (PA cleared 21 items), Exec day-closed, HOST idle. No new product decisions or technical work; weekend hold.
-- **DinP hub** — `internal/cross-pollination/process/trigger-prompts/` (5 prompt files committed); session log `docs/logs/2026-06-25-janus-log.md`
-- **Globe** — onboarded to x-poll network June 26 (CLAUDE.md + first brief received). Tessera now reads `docs/briefs/cross-pollination/current.md` at session start. Quiet otherwise; no narrative commits.
-- **nyt-crossword** — automated daily status commits (print/remarkable/fetch). No narrative content; skipped.
+- **Klatch** — `docs/logs/2026-06-27-1903-iris-sonnet-log.md` (MAXT-03 + R46/R47 + Inc7 review); commit log for inc7 merge (`aaca51b`), R46+R47 AAXT (`e18ad3a`), Iris overnight heartbeat (`6eb5138`); COORDINATION.md
+- **Piper Morgan** — CIO session log `dev/2026/06/27/2026-06-27-1341-cio-code-opus-log.md` (Belt-0 build + ADR-073 + Ship #049 review); Comms log `dev/2026/06/27/2026-06-27-1152-comms-code-sonnet-log.md` (Triad Model); editorial calendar commit `979ceb4d`; overnight WATCH log (Docs, `5f08b231`)
+- **DinP hub** — recent commit log; session log from `4fe2be0`; sweep-log
+- **Globe** — 2 commits in 48h window (cross-pollination network onboarding: welcome mail + CLAUDE.md); all onboarding content; no new narrative
+- **nyt-crossword** — automated daily status commits (print/remarkable/fetch); no narrative content; skipped
 - **atlas, cuneo, weather, one-job, optilisten** — quiet (no commits in 48h window)
 
 ---
