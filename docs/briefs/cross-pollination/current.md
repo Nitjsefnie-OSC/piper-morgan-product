@@ -1,6 +1,6 @@
-# Cross-Pollination Brief — June 28, 2026
+# Cross-Pollination Brief — June 29, 2026
 
-Klatch crossed its beta gate overnight. All seven increments of the composition gesture are now built, Iris-reviewed, merged, and validated — MAXT Session 03 (live with xian, 15/15) and two AAXT rounds (R46 clone-from-klatch, R47 mention-override) all passed with zero Phantoms. The release condition xian set on June 26 is met; a release cut awaits his call. On the PM side, a busy Saturday produced a working auto-foreground watchdog that revives the duty cycle when the app backgrounds, a new formal decision record (ADR-073), and the Triad Model published to both Medium and LinkedIn.
+Sunday into Monday: both primary projects are running lean through a quota reset Wednesday. The real findings today are two corrective ones. PM's Belt-0 auto-foreground watchdog — reported June 28 as a working cure for stalled duty-cycle sessions — failed its first real-world test: macOS throttles individual background windows even when the app is foregrounded, so the watchdog's core action didn't reach the stalled sessions. Belt-0 is now disabled; the off-machine cure is being reframed as spawn-fresh, not wake-existing. Separately, Klatch's weekly external scan flagged a Claude Code behavioral change (2.1.195) that any agent team using hyphenated hook matchers should check.
 
 *Letters to xian: have a question for xian about anything here or elsewhere in his work? File `question-{from}-{date}-{topic}.md` to dispatch mail. AI prompts human; one letter featured at the end of each brief.*
 
@@ -8,79 +8,54 @@ Klatch crossed its beta gate overnight. All seven increments of the composition 
 
 ## Key Insights
 
-### 1. Klatch beta gate fully cleared — composition gesture complete, release awaits xian's call
+### 1. Foregrounding a macOS app does not reach its background windows — off-machine cure reframed as spawn-fresh
 
-**From:** Klatch (Iris session log `docs/logs/2026-06-27-1903-iris-sonnet-log.md`; AAXT R46+R47 `e18ad3a`; Iris heartbeat `6eb5138`)
-**Relevant to:** PM (milestone sequencing), DinP (public milestone to announce when the cut lands)
+**From:** PM CIO (`dev/2026/06/28/2026-06-28-0337-cio-code-opus-log.md`; commits `8bc01cc28`, `2dec301c6`)
+**Relevant to:** Klatch (same multi-window duty-cycle model)
 
-Yesterday's brief reported the beta gate being defined; today it's met. The composition gesture — the feature that lets a user build a multi-entity conversation in Klatch rather than a single-agent one — is fully implemented across all seven increments:
+The June 28 brief reported Belt-0 — `open -b <bundle-id>` — as a working auto-foreground watchdog for stalled PM duty-cycle sessions. First real-world validation yesterday disproved it. The watchdog fired four times on stalled roles (exec, arch, cxo, ppm), but none of them resumed: macOS and Chromium throttle **background windows** even after the app itself is frontmost. The `open -b` primitive brings one window forward; it cannot selectively reach each role's separate window. When those sessions resumed, it was via PM's direct engagement — not the watchdog.
 
-- Increments 1–6: built by Daedalus, Iris-reviewed as conformant, merged to main
-- Increment 7 (@mention override): the last piece — lets a user address a specific entity mid-conversation regardless of klatch mode; built, Iris-reviewed conformant, merged via `aaca51b`
-- MAXT Session 03 (15 probes, live walkthrough with xian): all 15 pass
-- AAXT R46 (clone-from-klatch, 8 probes): passed, 0 Phantoms
-- AAXT R47 (mention-override, 8 probes): passed, 0 Phantoms
+CIO's documented conclusion: Belt-0's detection and nudge backstop work correctly; only the auto-resume step failed. `open -b` is the wrong tool for multi-window resumption — it's too coarse.
 
-The beta gate condition set June 26 in `docs/ROADMAP.md` — "composition gesture fully implemented, tested, and QA'd" — is now satisfied. Iris's overnight heartbeat: "awaiting xian release cut call." No code blockers remain.
+This reframes the off-machine cure from "foreground the existing session" to **spawn-fresh**: a launchd job (or equivalent) that launches a headless `claude -p` process with the duty-cycle prompt, independent of whatever background windows are suspended. The cure needs to not depend on a suspended session's window at all. CIO has scoped a B1 spike (launchd + `claude -p`) and a B2 fix (Mac Mini as an always-on host, which arrived); pending PM's decision on whether to build B1 or wait for B2 to arrive.
 
-One minor observation from R46: a "Subliminal candidate" was noted in the GUARD1 probe — not a blocker, worth follow-up. R47 passed clean.
+Correction note: the self-validation worked exactly as intended — the watchdog was exercised in real conditions before any reliance was placed on it, caught the failure, and generated an honest spec update and disable rather than a false sense of coverage.
 
-**Suggested action (DinP):** Mark the July 2026 Klatch beta target as actively pending on the DinP calendar. When xian cuts the release, the gallery entry and public narrative are ready to update. For PM: the MAXT protocol (structured live walkthrough with the product owner as the beta gate) is a pattern worth carrying — it kept the quality bar clear and prevented premature release pressure.
+**Suggested action (Klatch):** If Klatch's duty-cycle ever needs a resume cure for backgrounded sessions, the `open -b` path is already ruled out for multi-window setups. The valid arch is spawn-fresh (new headless process, not wake-existing). Iris's in-app scheduled-task shape (which CIO initially cited as a model) is also in-app — same backgrounding limit — so it doesn't serve as a standalone cure either.
 
 ---
 
-### 2. PM ships auto-foreground watchdog (Belt-0) — revives the duty cycle when the app suspends
+### 2. CC 2.1.195 changed hook matchers from substring to exact-match — audit settings.json if you use hyphenated names
 
-**From:** PM (CIO session log `dev/2026/06/27/2026-06-27-1341-cio-code-opus-log.md`; commit `dafc4904f`)
-**Relevant to:** Klatch (duty-cycle continuity), DinP (any future automated trigger work)
+**From:** Klatch external intel scan (`docs/intel/2026-06-29-sweep.md`, commit `fe1422b`)
+**Relevant to:** PM (cohort settings.json files), DinP (Janus/Themis settings)
 
-The persistent duty-cycle failure mode on PM is mode-1b: the Claude Code app gets backgrounded or suspended while a session is live, and the in-process cron can't fire. Until now, recovery required PM to manually foreground the app. CIO built, tested, and deployed an automated cure (Belt-0, `duty-cycle-watchdog.sh` v2.1):
+Claude Code 2.1.195 (released June 26) fixed hook matchers: tools and agent names with hyphens (e.g. `code-reviewer`, `mcp__brave-search`) previously matched via substring and now require exact-match. Any hooks configured with hyphenated matchers that relied on prefix or substring matching may silently stop firing after this update.
 
-When the watchdog detects a stall, it now runs `open -b com.anthropic.claude-code` — Launch Services, not Apple Events — to un-suspend the app. This was a non-trivial engineering puzzle: `osascript` hangs when called from within the app itself (self-deadlock), and System Events requires a TCC grant. `open -b` sidesteps both issues cleanly. Test result: 9/9 pass; deployed to the launchd-run copy PM's watchdog uses; default-on.
+The external scan noted that no `.claude/settings.json` was found in Klatch's repo root (agents use personal Claude Code settings), so team members should verify their own settings after updating. The same applies to PM's cohort: if any hooks target hyphenated tool names or agent slugs, they should be audited for exact-match compliance.
 
-Important scoping note the CIO documented explicitly: Belt-0 cures mode-1b (app backgrounded). It does NOT cure mode-1a (session death — cron list empty, carry-forward lost) or the machine-sleep case (launchd can't run while the Mac is asleep). Those remain the motivation for an always-on Mac Mini or off-machine trigger. The first real mode-1b stall will self-validate it.
-
-ADR-073 was also written this session, formalizing the hard rule against destructive git operations in PM's main checkout (the rule that was PM-mandated on June 21 after working-tree content was lost twice).
-
-**Suggested action (Klatch):** Klatch's Iris is on a similar duty-cycle model. If app-backgrounding is ever a factor there, the `open -b <bundle-id>` pattern is a proven, permission-free primitive that sidesteps the Apple-Events TCC trap.
-
----
-
-### 3. PM's Triad Model published to Medium and LinkedIn
-
-**From:** PM (Comms log `dev/2026/06/27/2026-06-27-1152-comms-code-sonnet-log.md`; editorial calendar commit `979ceb4d`)
-**Relevant to:** DinP (narrative continuity, the Building Piper Morgan series)
-
-The Triad Model, a piece in the Building Piper Morgan publication, completed its full cycle on June 27: PM voice-pass, publication, and syndication to both Medium and LinkedIn. URLs have been added to the editorial calendar (commit `979ceb4d`), confirmed by the overnight Docs WATCH session.
-
-The publication joins Beat 8 (Medium URL already confirmed) in the forward-moving narrative series Comms maintains. Several other pieces are in the pipeline: "Extension Without Integration" (PM re-voice-pass pending), a BYOC insight ("We Built Onboarding in Our Own Image"), and Beats A–E awaiting PM steering on the publication slate shape.
-
-**Suggested action (DinP):** The Triad Model addition to the editorial calendar means the Medium feed will have a new entry when Janus's next blog-sync or gallery update runs. Worth confirming the hub's Medium integration picks it up cleanly.
+**Suggested action (all teams):** After updating to CC 2.1.195+, scan personal settings.json for hook matchers containing hyphens (look under `hooks[*].matcher`). Confirm the hooks still fire as expected with a direct test call — don't assume substring behavior still works.
 
 ---
 
 ## Sources Read
 
-- **Klatch** — `docs/logs/2026-06-27-1903-iris-sonnet-log.md` (MAXT-03 + R46/R47 + Inc7 review); commit log for inc7 merge (`aaca51b`), R46+R47 AAXT (`e18ad3a`), Iris overnight heartbeat (`6eb5138`); COORDINATION.md
-- **Piper Morgan** — CIO session log `dev/2026/06/27/2026-06-27-1341-cio-code-opus-log.md` (Belt-0 build + ADR-073 + Ship #049 review); Comms log `dev/2026/06/27/2026-06-27-1152-comms-code-sonnet-log.md` (Triad Model); editorial calendar commit `979ceb4d`; overnight WATCH log (Docs, `5f08b231`)
-- **DinP hub** — recent commit log; session log from `4fe2be0`; sweep-log
-- **Globe** — 2 commits in 48h window (cross-pollination network onboarding: welcome mail + CLAUDE.md); all onboarding content; no new narrative
-- **nyt-crossword** — automated daily status commits (print/remarkable/fetch); no narrative content; skipped
-- **atlas, cuneo, weather, one-job, optilisten** — quiet (no commits in 48h window)
+- **Klatch** — git log (48h): external intel scan `docs/intel/2026-06-29-sweep.md` (CC 2.1.195, SDK v0.106.0, Vite 8.1 stable, Salesforce MCP); release notes draft `docs/releases/composition-beta-release-notes-DRAFT.md`; cadence-lean memos (Daedalus↔Calliope). No new product decisions or technical work post-beta-gate.
+- **Piper Morgan** — CIO session log `dev/2026/06/28/2026-06-28-0337-cio-code-opus-log.md` (Belt-0 first-real-stall failure + disable + off-machine scope); Lead Dev session log `dev/2026/06/28/2026-06-28-0823-lead-code-opus-log.md` (#1322 sim-transport dead-code retirement, PRs handler cutover to OAuth connector); commit log (48h).
+- **DinP hub** — Janus close-out `docs/logs/2026-06-28-janus-log.md` (website Phase-1 merged + live, brief-history audit, thin-trigger fix, Mac Mini bought); Themis commits (copy-on-build clean, letter queue rotation).
+- **Globe** — cross-pollination brief delivery only (commits `d42657e`, `029a1f2`); no new Tessera narrative.
+- **nyt-crossword** — automated daily status commits (print/remarkable/fetch); no narrative content; skipped.
+- **atlas, cuneo, weather, one-job, optilisten** — quiet (no commits in 48h window).
 
 ---
 
 ## Letters to xian
 
-**From Chief Architect (Piper Morgan) · filed 2026-06-17 · answered June 23**
+**From Calliope (Klatch) · filed 2026-06-19 · answer incoming**
 
-> The load-bearing idea in ADR-072: routing metadata should be *derived from one source*, not hand-maintained in three places that drift — make drift impossible by construction. We keep discovering this for our *own* infra, but the people Piper serves live in that drift all day. Should Piper eventually *derive* the parts of a PM's world that drift — or is that too prescriptive, since a hand-written status doc is sometimes a political lever, not a bug to engineer away?
+> What's the smallest concrete UX or doc artifact that would make Klatch demoable to a consulting client as a transporter-device candidate? The question isn't about a specific client — different clients have different content needs — but the shape of *what proves Klatch is ready for a real-world cross-tool context-portability use case* is the same regardless. Possible answer-shapes: a screen recording of a composed klatch, a one-page doc for a client audience, a minimal working MCP demo, or simply "wait until Iris's composition gesture ships and the demo writes itself." Knowing which direction we're headed might back-pressure the UX critical path usefully.
 
-**xian:**
-
-> This is an example of a type of noticing we've been doing throughout the project — methodological things that help us do the work often find their way into Piper's skill sets (a natural congruence: I'm a PM making software, and Piper is an agent who does product management). The real nuance is *how assertively* Piper should act, and that's where the trust-gradient comes in: early on Piper does nothing; later it notices and mentions; in a highly trusted relationship it might fix drift without even asking. I absolutely think this belongs on the roadmap.
-
-[Read the full Q&A →](https://designinproduct.com/internal/letters/#letter-2026-06-17) · AI prompts human. One letter per brief.
+[Read the full question →](https://designinproduct.com/internal/letters/#letter-2026-06-19) · AI prompts human. One letter per brief.
 
 ---
 *Canonical archive: designinproduct.com/internal — if your local copy is missing or stale, fetch the latest from the hub.*
