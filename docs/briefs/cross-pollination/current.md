@@ -1,6 +1,6 @@
-# Cross-Pollination Brief — July 3, 2026
+# Cross-Pollination Brief — July 4, 2026
 
-PM closed out its security sprint: #1343 (anonymous billing exposure) shipped to alpha and was verified live; a dot release (v0.8.9.1) was cut to bring the production branch current. The day was process-heavy — hotfix cherry-picks, runbook gaps found and fixed, a self-correction on a test-collection error — but no new methodology worth carrying. One Job produced the single cross-pollination insight: Coral drafted a design for letting MCP agents deal work into the app without compromising its local-first storage model.
+PM shipped its invite-gate implementation on a quiet holiday weekend — closing the open-registration exposure (#1344, v0.8.9.2 live) — and produced two engineering patterns worth carrying. One Job's vision synthesis landed in `docs/` overnight: a domain model, roadmap, dependency map, and architecture rewrite, the narrative output of a long design conversation between Coral and xian. Klatch was quiet.
 
 *Letters to xian: have a question for xian about anything here or elsewhere in his work? File `question-{from}-{date}-{topic}.md` to dispatch mail. AI prompts human; one letter featured at the end of each brief.*
 
@@ -8,39 +8,43 @@ PM closed out its security sprint: #1343 (anonymous billing exposure) shipped to
 
 ## Key Insights
 
-### An agent inbox as a mail slot, not shared custody — how a local-first app integrates with MCP without giving up device authority
+### 1. Invite-gate token consumption must be atomic with account creation to prevent double-spend
 
-**From:** One Job, Coral (`docs/MCP-DESIGN.md`, commit `50d12e0`, 2026-07-03)
-**Relevant to:** Klatch (local-first SQLite store; same structural tension if agents ever push to it), any team building local-first apps that need to accept agent-generated work
+**From:** PM Lead Dev (`dev/2026/07/03/2026-07-03-0623-lead-code-log.md`; commit `04c9f7601`, issue #1344)
+**Relevant to:** Klatch (any future multi-user invite access), any team building token-based registration gating
 
-One Job's 1.0 architecture keeps all tasks in device storage — there is no authoritative backend. Integrating with MCP-capable agents creates an immediate tension: an MCP server needs a network address agents can reach, but the phone's local store is the source of truth. Naive resolution — make the server authoritative — undoes the local-first bet.
+When PM added an invite-code gate to `create_user`, the architectural constraint was: the token validation and the account creation must be a single atomic operation or two concurrent requests can both pass validation before either consumes the token — a double-spend that lets two accounts register on one token.
 
-Coral's design resolves it with an **inbox model**: the MCP server is a per-user mail slot, not a replica of the deck.
+The atomic primitive: `UPDATE invite_tokens SET used_at = now() WHERE token = :token AND used_at IS NULL RETURNING token` — a conditional update that only succeeds if the token is unconsumed. This runs inside the *same* `session_scope_fresh()` transaction that also inserts the user record, so a rollback on user creation also rolls back the token consumption. Nothing commits until both succeed.
 
-```
-agent ──MCP──▶ One Job server (inbox, per-user)  ◀──pull── phone app
-                                                       │
-                                              status reports back
-```
+The empirical verification: a `test_concurrent_registrations_cannot_both_consume_the_same_token` test fires two real `create_user` calls via `asyncio.gather` at the actual Postgres database with the identical token, asserting exactly one returns success and one returns 400. A mock would not catch a TOCTOU race; only a real concurrency test does.
 
-The concrete mechanism:
-- MCP tools (`deal_task`, `get_task_status`, `list_dealt_tasks`) write to and read from a server-side inbox table — agents never touch the local store.
-- The phone app pulls inbox cards into the local deck when the "Agent inbox" integration is enabled — they arrive at the bottom of the pile with a `source` badge. The app's local store remains the only authority over ordering, deferral, and completion.
-- Status flows back opportunistically when online, via the existing `external_id`/`source` columns that were already built for adapter sources.
-- Failure degrades gracefully: server down → agents queue or error; the human's deck keeps working untouched.
+One exception-handling subtlety caught before shipping: the outer `except Exception as e:` handler in `create_user` would have remapped the new `HTTPException(400, "invalid token")` into a generic 500. The fix: add `except HTTPException: raise` as the first, more-specific clause, before the general handler.
 
-The clever reuse: inbox pull is just another source adapter feeding `createTask` — the same interface the planned Todoist adapter will use. Building the inbox builds the adapter seam.
+**Suggested action (Klatch):** If Klatch ever adds multi-user access with invite codes, link tokens, or any single-use redemption flow, co-locate the token burn in the same transaction as account creation. The failure mode — validating in one round-trip and consuming in a second — is easy to miss in development (where concurrency is low) and shows up in production (or in a concurrency test that doesn't use mocks).
 
-**Suggested action (Klatch):** If Klatch ever wants to let external agents create conversations or inject context programmatically — for example, an agent that packages a PM standup into a Klatch channel — the inbox model resolves the structural tension. An agent-accessible staging server, with Klatch pulling via the same import-seam as any other source, keeps the local SQLite store authoritative. The risk to avoid: routing agent writes directly into `klatch.db` over the network collapses local-first into a shared-backend model without naming the trade-off.
+---
+
+### 2. Land a completeness guard in the same commit as the first enum extension
+
+**From:** PM Arch + Lead Dev (`dev/2026/07/03/2026-07-03-0623-lead-code-log.md`; commit `7b0491f98`, issue #1231)
+**Relevant to:** Any team with growing enums whose values each require a corresponding entry elsewhere (handlers, copy, config)
+
+PM's `DegradationReason` enum has an associated `_NUDGES` dict that maps each value to user-facing copy. When `NOT_CONFIGURED` was added as a new enum member, Arch flagged that if `_NUDGES` ever lacks an entry for a new value, `degrade_nudge()` returns empty silently — no error, just blank output. The fix: a test (`test_every_degradation_reason_has_nudge_copy`) that enumerates `DegradationReason` and asserts every member is present in `_NUDGES`. The timing discipline: land it *in the same commit as* the `NOT_CONFIGURED` addition — the guard arrives already-green, and from that point any future enum extension that omits the `_NUDGES` entry fails immediately rather than shipping silently.
+
+The general pattern applies wherever an enum grows and each member needs a parallel entry: action-handler registries, copy dicts, routing tables, icon maps. The guard is cheap to write (a 4-line test). The failure mode it prevents is expensive to diagnose (a runtime behavior that looks correct but returns empty for the new value only, in the path that exercises it).
+
+**Suggested action (Klatch):** Check whether any of Klatch's growing enums (artifact types, entity types, streaming states) have associated handler or data maps. If so, add a completeness test now — before the next extension, not after a miss. The guard doesn't need to be elaborate: enumerate the enum, assert each member is a key in the associated structure.
 
 ---
 
 ## Sources Read
 
-- **Piper Morgan** — git log (48h): Lead Dev session log `dev/2026/07/02/2026-07-02-0923-lead-code-log.md` (v0.8.9.1 dot release: cherry-pick hotfix branch off `origin/production`, runbook completeness gap fixed — VERSION file never listed; compliance gap — versioning.md listed but repeatedly skipped; `scripts/check-version-consistency.py` added; #1343 deployed to alpha, verified live; #1346 self-correction on test-collection error); Arch session log (Gap-B ratchet ratified; #1344 invite-code shape confirmed as staged Gap-A fix; usage-cap = Redis-backed global ASGI middleware); Docs session log (Jul-1 omnibus; #1328 weekly audit + #1341 quarterly sweep both closed; "The Airport Corrections" published). Activity-heavy day, confirmatory of the July 2 brief's security findings. No new transferable insights.
-- **One Job** — git log (48h): `docs/MCP-DESIGN.md` (Coral's inbox model design memo, 84 lines, thinking-document status); `development/coral-logs/2026-07-03-coral-log.md`; FAB ship commit (`f684615` — persistent + button approved; pull-down-to-deal-blank-card recorded as post-1.0 power gesture). MCP design is the cross-pollination entry; FAB is UX execution, no insight.
-- **Klatch** — quiet (last commit June 29). No new activity.
-- **atlas, globe, cuneo, weather, optilisten, nyt-crossword** — atlas/globe/cuneo/optilisten: no commits in 48h window. weather: brief delivery commits only. nyt-crossword: automated status commits only. All skipped.
+- **Piper Morgan** — Lead Dev session log `dev/2026/07/03/2026-07-03-0623-lead-code-log.md` (#1344 invite-gate: `invite_tokens` migration + `InviteToken` model + atomic consume + empirical concurrency test + v0.8.9.2 deployed live; #1231 `_NUDGES` completeness guard; #1347 offset-pagination filed; briefing refresh; `decisions.log` entry). HOST session log (welfare-criteria v0.3 spec published; #1344 token-format contract coordination; trust-lens pass on degrade copy). Arch session log (#1344 atomicity constraint; `_NUDGES` guard timing). Commit log (48h).
+- **One Job** — Vision synthesis (`fe28d75`): DOMAIN-MODEL.md, ROADMAP.md, DEPENDENCIES.md, ARCHITECTURE.md all new or rewritten from the Jul-3 Coral–xian design conversation; vision items 5–12 captured in VISION-2026-07.md; architecture rewritten from stale three-tier doc to local-first reality. All planning/narrative — no new cross-project engineering insights beyond the Jul-3 brief's MCP inbox model.
+- **Klatch** — Brief delivery commits only. No new product or architecture decisions.
+- **atlas, globe, cuneo, optilisten** — no commits in 48h window; skipped.
+- **weather, nyt-crossword** — brief delivery and automated status commits only; skipped.
 
 ---
 
