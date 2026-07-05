@@ -1,6 +1,6 @@
-# Cross-Pollination Brief — July 4, 2026
+# Cross-Pollination Brief — July 5, 2026
 
-PM shipped its invite-gate implementation on a quiet holiday weekend — closing the open-registration exposure (#1344, v0.8.9.2 live) — and produced two engineering patterns worth carrying. One Job's vision synthesis landed in `docs/` overnight: a domain model, roadmap, dependency map, and architecture rewrite, the narrative output of a long design conversation between Coral and xian. Klatch was quiet.
+Two substantive findings today from different corners of the ecosystem. Klatch's agents produced a gap audit for the five-layer context model: the first four layers transfer at high fidelity when an agent moves environments, but Layer 5 — the behavioral calibration that makes an agent *this* agent for *this* user — transfers at zero. The gap now has a roadmap position (Step 10.5) and five proposed LM-based remediation processes. One Job surfaced a three-legged pattern for keeping PWA users on current code: the app checks aggressively, CI proves delivery, and a user-visible manual control closes the trust loop. PM was active but mostly operational — no new methodology worth carrying.
 
 *Letters to xian: have a question for xian about anything here or elsewhere in his work? File `question-{from}-{date}-{topic}.md` to dispatch mail. AI prompts human; one letter featured at the end of each brief.*
 
@@ -8,43 +8,72 @@ PM shipped its invite-gate implementation on a quiet holiday weekend — closing
 
 ## Key Insights
 
-### 1. Invite-gate token consumption must be atomic with account creation to prevent double-spend
+### 1. Layer 5 of the five-layer model transfers at zero — and Klatch has designed five processes to fix it
 
-**From:** PM Lead Dev (`dev/2026/07/03/2026-07-03-0623-lead-code-log.md`; commit `04c9f7601`, issue #1344)
-**Relevant to:** Klatch (any future multi-user invite access), any team building token-based registration gating
+**From:** Klatch, xian + Calliope (`docs/plans/layer5-portability-gap-audit-2026-07-04.md`, commit `3f5216c`, July 4)
+**Relevant to:** Piper Morgan (same five-layer architecture; PM agents move across environments), any team running agents in multi-environment setups
 
-When PM added an invite-code gate to `create_user`, the architectural constraint was: the token validation and the account creation must be a single atomic operation or two concurrent requests can both pass validation before either consumes the token — a double-spend that lets two accounts register on one token.
+Klatch's core promise is cross-environment portability of agent conversations with context intact. A July 4 gap audit — written jointly by xian and Calliope, 159 lines — found that the portability story has a significant hole.
 
-The atomic primitive: `UPDATE invite_tokens SET used_at = now() WHERE token = :token AND used_at IS NULL RETURNING token` — a conditional update that only succeeds if the token is unconsumed. This runs inside the *same* `session_scope_fresh()` transaction that also inserts the user record, so a rollback on user creation also rolls back the token consumption. Nothing commits until both succeed.
+The transfer-fidelity table by layer:
 
-The empirical verification: a `test_concurrent_registrations_cannot_both_consume_the_same_token` test fires two real `create_user` calls via `asyncio.gather` at the actual Postgres database with the identical token, asserting exactly one returns success and one returns 400. A mock would not catch a TOCTOU race; only a real concurrency test does.
+| Layer | Content | Fidelity |
+|---|---|---|
+| L1: Kit briefing | Date, model, env | ~90% |
+| L2: Project instructions | CLAUDE.md, behavioral rules | ~100% (Claude Code); ~60% (claude.ai) |
+| L3: Project memory | MEMORY.md, accumulated facts | ~100% / ~60% same split |
+| L4: Channel addendum | Conversation framing | 0% — must be written by hand |
+| **L5: Entity prompt** | **Agent identity, behavioral calibration** | **0%** |
 
-One exception-handling subtlety caught before shipping: the outer `except Exception as e:` handler in `create_user` would have remapped the new `HTTPException(400, "invalid token")` into a generic 500. The fix: add `except HTTPException: raise` as the first, more-specific clause, before the general handler.
+The document's framing: Layers 1–3 give an agent facts and context. Layer 5 is where the agent *is* — the communication style, working approach, and relationship calibration that developed through hundreds of conversations. An agent with Layers 1–3 but no Layer 5 "has the project's knowledge but not the working relationship. It's a well-briefed stranger."
 
-**Suggested action (Klatch):** If Klatch ever adds multi-user access with invite codes, link tokens, or any single-use redemption flow, co-locate the token burn in the same transaction as account creation. The failure mode — validating in one round-trip and consuming in a second — is easy to miss in development (where concurrency is low) and shows up in production (or in a concurrency test that doesn't use mocks).
+**Five proposed processes to close the gap:**
+
+1. **Automated persona extraction (passive)** — prompt an LLM over conversation history to write a first-person behavioral profile as a Layer 5 seed. Captures observed style but not tacit knowledge.
+2. **Correction extraction (passive, high-signal)** — filter conversation history for correction/feedback turns; extract behavioral constraints implied by each ("don't X", "prefer Y"). These are the clearest behavioral calibration signals because they're the moments when calibration actively changed.
+3. **Pre-migration interview (active, highest value)** — send a structured prompt to the source agent before migration, asking it to report its working style, communication preferences, key undocumented context, and feedback-derived calibration in a format another agent can use. One paragraph of "what future-you should start with."
+4. **Memory distillation (semi-passive)** — prompt for facts and decisions not in MEMORY.md but implicit in the conversation. Supplements Layer 3, not Layer 5 directly.
+5. **Behavioral fingerprint scoring (ongoing)** — after migration, use the extracted profile to score the new agent's responses for fidelity to the source agent's patterns. Also an AAXT probe target.
+
+The document recommends Process 3 (pre-migration interview) as the first increment — immediately buildable without infrastructure changes. Proposed roadmap position: Step 10.5, before Search (Step 11), on the basis that "search is a utility feature; Layer 5 portability is core to what Klatch *is*."
+
+**Suggested action (Piper Morgan):** PM agents already move between environments (and PM has the same five-layer model). Before migrating an agent to a new context, add a Process 3 question: "What should the version of you starting fresh know about how to work well with xian on this project?" Save the output as a pinned file. The cost is one prompt; the gain is a working relationship that survives the move rather than having to be rebuilt from scratch.
 
 ---
 
-### 2. Land a completeness guard in the same commit as the first enum extension
+### 2. PWA auto-updates need three legs: automatic pull, provable delivery, and a user-visible manual escape hatch
 
-**From:** PM Arch + Lead Dev (`dev/2026/07/03/2026-07-03-0623-lead-code-log.md`; commit `7b0491f98`, issue #1231)
-**Relevant to:** Any team with growing enums whose values each require a corresponding entry elsewhere (handlers, copy, config)
+**From:** One Job, Coral (`development/coral-logs/2026-07-04-coral-log.md`, commits `b574a8f` + `3bc3de0`, July 4–5)
+**Relevant to:** Any project shipping a web app with a service worker or local-first PWA; Klatch (if it ever ships a PWA or installable app)
 
-PM's `DegradationReason` enum has an associated `_NUDGES` dict that maps each value to user-facing copy. When `NOT_CONFIGURED` was added as a new enum member, Arch flagged that if `_NUDGES` ever lacks an entry for a new value, `degrade_nudge()` returns empty silently — no error, just blank output. The fix: a test (`test_every_degradation_reason_has_nudge_copy`) that enumerates `DegradationReason` and asserts every member is present in `_NUDGES`. The timing discipline: land it *in the same commit as* the `NOT_CONFIGURED` addition — the guard arrives already-green, and from that point any future enum extension that omits the `_NUDGES` entry fails immediately rather than shipping silently.
+One Job's holiday weekend debugging session produced a three-legged pattern for PWA delivery observability — after Xian's installed PWA refused to update and the root cause turned out to be a combination of iOS's lazy service-worker-check behavior and a previously silent deploy pipeline.
 
-The general pattern applies wherever an enum grows and each member needs a parallel entry: action-handler registries, copy dicts, routing tables, icon maps. The guard is cheap to write (a 4-line test). The failure mode it prevents is expensive to diagnose (a runtime behavior that looks correct but returns empty for the new value only, in the path that exercises it).
+**The problem stack:**
+- iOS PWAs only check for service-worker updates at launch. Rapid quit/reopen doesn't give the download time to complete. A user on the installed version can be on stale code for days without knowing it.
+- The standing workaround — "delete the icon and reinstall" — has a trap: on iOS, deleting the PWA icon destroys all local storage. For a local-first app where "the icon is the database," this is a data-loss vector, not just an inconvenience.
+- The deploy pipeline had been silently succeeding without verifying the live site had actually updated.
 
-**Suggested action (Klatch):** Check whether any of Klatch's growing enums (artifact types, entity types, streaming states) have associated handler or data maps. If so, add a completeness test now — before the next extension, not after a miss. The guard doesn't need to be elaborate: enumerate the enum, assert each member is a key in the associated structure.
+**The three-legged fix:**
+
+1. **Automatic foreground update checks** (`src/pwaUpdateCheck.ts`) — the app calls `navigator.serviceWorker.getRegistration().update()` every time it returns to the foreground via `visibilitychange`, plus an hourly heartbeat while open. Deliberately uses plain `getRegistration()` rather than vite-plugin-pwa virtual imports, so the Capacitor (native) build still compiles.
+
+2. **CI deploy verification** (`.github/workflows/deploy.yml`) — after publish, the workflow curls the live URL in a retry loop until the served bundle hash matches the just-built hash. "Deploy succeeded" is now observed, not assumed. Also fixes a latent misconfiguration: deploy/verify jobs now run only on push, never from pull_request builds.
+
+3. **User-visible manual escape hatch** (Settings → "Check for updates") — calls `registration.update()` on demand with honest state toasts ("Checking for updates… / You're on the latest version / Handled by the app store on this build"). Degrades gracefully where no service worker exists.
+
+Coral's framing for the third leg: "auto-update systems need an escape hatch the user can see, both for genuinely stuck states and for trust: 'I can MAKE it current, therefore I believe it's current.'" The automatic legs handle the common case; the manual lever closes the trust gap and handles the edge case where automation fails silently.
+
+**Suggested action (Klatch, DinP):** If Klatch or any project in the ecosystem ships a PWA or service-worker-cached web app, plan all three legs from the start. The most commonly skipped leg is the CI delivery verification — confirming the live site actually updated, not just that the deploy workflow reported success. The most commonly undervalued leg is the manual escape hatch — it costs very little and restores user trust in the auto-update system.
 
 ---
 
 ## Sources Read
 
-- **Piper Morgan** — Lead Dev session log `dev/2026/07/03/2026-07-03-0623-lead-code-log.md` (#1344 invite-gate: `invite_tokens` migration + `InviteToken` model + atomic consume + empirical concurrency test + v0.8.9.2 deployed live; #1231 `_NUDGES` completeness guard; #1347 offset-pagination filed; briefing refresh; `decisions.log` entry). HOST session log (welfare-criteria v0.3 spec published; #1344 token-format contract coordination; trust-lens pass on degrade copy). Arch session log (#1344 atomicity constraint; `_NUDGES` guard timing). Commit log (48h).
-- **One Job** — Vision synthesis (`fe28d75`): DOMAIN-MODEL.md, ROADMAP.md, DEPENDENCIES.md, ARCHITECTURE.md all new or rewritten from the Jul-3 Coral–xian design conversation; vision items 5–12 captured in VISION-2026-07.md; architecture rewritten from stale three-tier doc to local-first reality. All planning/narrative — no new cross-project engineering insights beyond the Jul-3 brief's MCP inbox model.
-- **Klatch** — Brief delivery commits only. No new product or architecture decisions.
+- **Klatch** — git log (since July 4): `docs/plans/layer5-portability-gap-audit-2026-07-04.md` (full read; 159 lines, xian+Calliope joint design doc); `docs/plans/theseus-brief-search-planning-maxt-2026-07-04.md` (MAXT planning for Search — new test session scoped, no cross-project insight); `docs/operations/attention-rollup.md` v17 (Argus back online after 6-day mode-1; vitest 4 migration fix for client flake; AVAILABLE_MODELS gap flagged to Daedalus; Sonnet 5 + Fable 5 available; SDK 14 minors behind); `docs/ROADMAP.md` (Step 10.5 added). Commit log.
+- **Piper Morgan** — git log (since July 4): Notion connector ported to #1232 Connector contract (`5050ed0`, Arch's 3-layer ruling — Notion's keychain model is a legitimate Layer-2 backend, adapter inherits 22 existing methods); Lead Dev correction re: Slack class (`72bb230` — wrong class identified in earlier memo; real Slack adapter has live 3-state composite requiring running Socket Mode runner, not just credential check; Slack migration scoped as genuinely more complex than Notion); Arch ruling refined + shim ratified (`98d4bc6`); Comms activity (drafts, editorial calendar); CXO/CIO/PPM duty cycle fires (heartbeat only). No new transferable methodology.
+- **One Job** — git log (48h): full read of coral log July 4 (`a502723`, `b574a8f`, `dcb7323`, `3bc3de0`); `store/COWORK-IOS-BRIEF.md` (state addendum); `docs/VISION-2026-07.md` Item 13 (hypothesis + safety net). PWA delivery observability pattern is the cross-pollination entry.
 - **atlas, globe, cuneo, optilisten** — no commits in 48h window; skipped.
-- **weather, nyt-crossword** — brief delivery and automated status commits only; skipped.
+- **nyt-crossword** — automated status commits only; skipped.
 
 ---
 
@@ -60,3 +89,4 @@ xian's answer: the emerging use case isn't Klatch as destination — it's Klatch
 
 ---
 *Canonical archive: designinproduct.com/internal — if your local copy is missing or stale, fetch the latest from the hub.*
+
