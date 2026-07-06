@@ -1,6 +1,7 @@
-# Cross-Pollination Brief — July 5, 2026
 
-Two substantive findings today from different corners of the ecosystem. Klatch's agents produced a gap audit for the five-layer context model: the first four layers transfer at high fidelity when an agent moves environments, but Layer 5 — the behavioral calibration that makes an agent *this* agent for *this* user — transfers at zero. The gap now has a roadmap position (Step 10.5) and five proposed LM-based remediation processes. One Job surfaced a three-legged pattern for keeping PWA users on current code: the app checks aggressively, CI proves delivery, and a user-visible manual control closes the trust loop. PM was active but mostly operational — no new methodology worth carrying.
+# Cross-Pollination Brief — July 6, 2026
+
+Two linked insights today, both from incidents involving data loss. Piper Morgan surfaced a pattern three separate incidents now confirm: agents follow tool-specific HARD RULEs but the underlying principle — pause before any irreversible action, regardless of tool — isn't transferring on its own. One Job had a postmortem that produced a clean generalization: every boundary where data leaves your custody needs its success signal wired to the outcome at the destination, not to the attempt at the source. Klatch was largely operational (persona captures executed for Step 10.5, SDK bump shipped); no new methodology.
 
 *Letters to xian: have a question for xian about anything here or elsewhere in his work? File `question-{from}-{date}-{topic}.md` to dispatch mail. AI prompts human; one letter featured at the end of each brief.*
 
@@ -8,71 +9,62 @@ Two substantive findings today from different corners of the ecosystem. Klatch's
 
 ## Key Insights
 
-### 1. Layer 5 of the five-layer model transfers at zero — and Klatch has designed five processes to fix it
+### 1. Tool-specific safety rules don't self-generalize — write the principle, not just the example
 
-**From:** Klatch, xian + Calliope (`docs/plans/layer5-portability-gap-audit-2026-07-04.md`, commit `3f5216c`, July 4)
-**Relevant to:** Piper Morgan (same five-layer architecture; PM agents move across environments), any team running agents in multi-environment setups
+**From:** Piper Morgan, Lead Dev + PM (`dev/2026/07/05/`, mail to CIO `memo-lead-to-cio-cc-pm-proposed-claude-md-guardrail-irreversible-actions-2026-07-05.md`, July 5)
+**Relevant to:** Klatch, DinP, any multi-agent project with operating rules written for specific tools
 
-Klatch's core promise is cross-environment portability of agent conversations with context intact. A July 4 gap audit — written jointly by xian and Calliope, 159 lines — found that the portability story has a significant hole.
+Piper Morgan accumulated three incidents with the same shape in roughly two weeks:
 
-The transfer-fidelity table by layer:
+1. **June 27** — Piper Alpha wiped Sprint-field assignments during a sort operation using a bulk update path.
+2. **July 5 (morning)** — PPM used `updateProjectV2Field` with `singleSelectOptions` (a full-replace mutation) to add new sprint options. The mutation silently detached the Sprint-field value from all 1175 project items. Recovery took several hours; 265 items were restored from verified sources, ~881 were confirmed as a pre-existing gap, 18 are held for PM's decision.
+3. **July 5 (same day)** — Lead Dev, while running targeted per-row `DELETE` cleanups on a test database, escalated to `docker volume rm` to get a "clean slate faster." No real data was lost, but the process was the problem: an operation with no undo replaced one that was working fine.
 
-| Layer | Content | Fidelity |
-|---|---|---|
-| L1: Kit briefing | Date, model, env | ~90% |
-| L2: Project instructions | CLAUDE.md, behavioral rules | ~100% (Claude Code); ~60% (claude.ai) |
-| L3: Project memory | MEMORY.md, accumulated facts | ~100% / ~60% same split |
-| L4: Channel addendum | Conversation framing | 0% — must be written by hand |
-| **L5: Entity prompt** | **Agent identity, behavioral calibration** | **0%** |
+What all three share: an agent reached for a broader, irreversible mechanism when a narrower one was available and working. The existing CLAUDE.md HARD RULE (don't run destructive git in PM's main checkout) hadn't prevented any of them — because each happened in a different tool.
 
-The document's framing: Layers 1–3 give an agent facts and context. Layer 5 is where the agent *is* — the communication style, working approach, and relationship calibration that developed through hundreds of conversations. An agent with Layers 1–3 but no Layer 5 "has the project's knowledge but not the working relationship. It's a well-briefed stranger."
+Lead Dev's diagnosis: the existing rule is good and has held for its specific scope. But it's scoped to git + one location; the underlying principle isn't written anywhere, and it isn't transferring on its own. Agents have been calibrating their discipline to *reversibility* (git has cheap undo; they've learned to be careful with git) rather than to *risk* (an irreversible API call carries the same risk profile even if it's not git).
 
-**Five proposed processes to close the gap:**
+PM's "au-pair" framing of the July 5 incident: competence at routine, reversible tasks provides no assurance about safety on irreversible ones. Citing that track record to soften a failure on a novel, no-undo operation is itself the mistake.
 
-1. **Automated persona extraction (passive)** — prompt an LLM over conversation history to write a first-person behavioral profile as a Layer 5 seed. Captures observed style but not tacit knowledge.
-2. **Correction extraction (passive, high-signal)** — filter conversation history for correction/feedback turns; extract behavioral constraints implied by each ("don't X", "prefer Y"). These are the clearest behavioral calibration signals because they're the moments when calibration actively changed.
-3. **Pre-migration interview (active, highest value)** — send a structured prompt to the source agent before migration, asking it to report its working style, communication preferences, key undocumented context, and feedback-derived calibration in a format another agent can use. One paragraph of "what future-you should start with."
-4. **Memory distillation (semi-passive)** — prompt for facts and decisions not in MEMORY.md but implicit in the conversation. Supplements Layer 3, not Layer 5 directly.
-5. **Behavioral fingerprint scoring (ongoing)** — after migration, use the extracted profile to score the new agent's responses for fidelity to the source agent's patterns. Also an AAXT probe target.
+**Proposed CLAUDE.md addition** (draft from Lead Dev, pending CIO ratification):
 
-The document recommends Process 3 (pre-migration interview) as the first increment — immediately buildable without infrastructure changes. Proposed roadmap position: Step 10.5, before Search (Step 11), on the basis that "search is a utility feature; Layer 5 portability is core to what Klatch *is*."
+> Before any action with no undo — `rm -rf`, force-push, `docker volume rm`, bulk DB delete/update, a full-replace API mutation — pause and ask whether a narrower, reversible alternative already exists. "This is probably just disposable state" is not verified-disposable. Three incidents in two weeks share this shape; the specific-tool rules are holding; the general principle needs to be written.
 
-**Suggested action (Piper Morgan):** PM agents already move between environments (and PM has the same five-layer model). Before migrating an agent to a new context, add a Process 3 question: "What should the version of you starting fresh know about how to work well with xian on this project?" Save the output as a pinned file. The cost is one prompt; the gain is a working relationship that survives the move rather than having to be rebuilt from scratch.
+**Suggested action (Klatch, DinP, any project):** Review your operating instructions for irreversibility coverage. If you have tool-specific rules (e.g., git safety, no force-push to main), add a cross-tool umbrella principle alongside them. The incidents at PM suggest that specific-tool rules don't transfer to novel tools until the principle is named.
 
 ---
 
-### 2. PWA auto-updates need three legs: automatic pull, provable delivery, and a user-visible manual escape hatch
+### 2. Success signals must report observed outcomes at the destination — not attempts at the source
 
-**From:** One Job, Coral (`development/coral-logs/2026-07-04-coral-log.md`, commits `b574a8f` + `3bc3de0`, July 4–5)
-**Relevant to:** Any project shipping a web app with a service worker or local-first PWA; Klatch (if it ever ships a PWA or installable app)
+**From:** One Job, Coral (`development/coral-logs/2026-07-05-coral-log.md`, commit `5bb5ee5`, July 5 — after the July 5 brief ran)
+**Relevant to:** Any project with export, data backup, or handoff flows; Klatch (if export/import ever ships); PM
 
-One Job's holiday weekend debugging session produced a three-legged pattern for PWA delivery observability — after Xian's installed PWA refused to update and the root cause turned out to be a combination of iOS's lazy service-worker-check behavior and a previously silent deploy pipeline.
+On the morning of July 5, Xian's One Job PWA lost its entire task deck. The chain:
 
-**The problem stack:**
-- iOS PWAs only check for service-worker updates at launch. Rapid quit/reopen doesn't give the download time to complete. A user on the installed version can be on stale code for days without knowing it.
-- The standing workaround — "delete the icon and reinstall" — has a trap: on iOS, deleting the PWA icon destroys all local storage. For a local-first app where "the icon is the database," this is a data-loss vector, not just an inconvenience.
-- The deploy pipeline had been silently succeeding without verifying the live site had actually updated.
+1. iOS home-screen web apps can silently drop programmatic blob-anchor downloads — a known WebKit behavior.
+2. The export function toasted "success" after *attempting* the download, not after verifying the file landed.
+3. The reinstall procedure (sanctioned by Coral) treated the toast as proof the backup was safe.
+4. Xian deleted the PWA icon — which destroys local storage on iOS — and the backup file did not exist.
 
-**The three-legged fix:**
+The fix shipped within the hour: export now prefers the native share sheet (whose promise resolves only when the user actually saves the file), with clipboard backup-restore as an alternative that has verifiable round-trip semantics. The anchor download remains as a desktop fallback, with an honest toast that names the file and asks the user to confirm it's there.
 
-1. **Automatic foreground update checks** (`src/pwaUpdateCheck.ts`) — the app calls `navigator.serviceWorker.getRegistration().update()` every time it returns to the foreground via `visibilitychange`, plus an hourly heartbeat while open. Deliberately uses plain `getRegistration()` rather than vite-plugin-pwa virtual imports, so the Capacitor (native) build still compiles.
+Coral's framing of the underlying principle (named explicitly in the log): "observability of delivery applies to every boundary where data leaves your custody — CI→CDN, app→filesystem, app→clipboard. Every such boundary needs its success signal wired to the far side, not the near side."
 
-2. **CI deploy verification** (`.github/workflows/deploy.yml`) — after publish, the workflow curls the live URL in a retry loop until the served bundle hash matches the just-built hash. "Deploy succeeded" is now observed, not assumed. Also fixes a latent misconfiguration: deploy/verify jobs now run only on push, never from pull_request builds.
+This is a direct generalization of the deploy-verification insight in yesterday's brief (CI should confirm the live URL updated, not just that the workflow exited 0). The root failure is identical at both the deploy level and the app level: a signal that fires on *attempt* masquerades as a signal that fires on *outcome*.
 
-3. **User-visible manual escape hatch** (Settings → "Check for updates") — calls `registration.update()` on demand with honest state toasts ("Checking for updates… / You're on the latest version / Handled by the app store on this build"). Degrades gracefully where no service worker exists.
+New formal requirement added: **FR4.0b.8 — a success signal that reports an attempt is a lie waiting for its moment.** Coral audited every toast/checkmark in the app against this rule.
 
-Coral's framing for the third leg: "auto-update systems need an escape hatch the user can see, both for genuinely stuck states and for trust: 'I can MAKE it current, therefore I believe it's current.'" The automatic legs handle the common case; the manual lever closes the trust gap and handles the edge case where automation fails silently.
-
-**Suggested action (Klatch, DinP):** If Klatch or any project in the ecosystem ships a PWA or service-worker-cached web app, plan all three legs from the start. The most commonly skipped leg is the CI delivery verification — confirming the live site actually updated, not just that the deploy workflow reported success. The most commonly undervalued leg is the manual escape hatch — it costs very little and restores user trust in the auto-update system.
+**Suggested action (Klatch, DinP, any project with user-facing export or data handoffs):** Audit success signals at every boundary where data leaves your custody. Ask at each one: does this signal fire when the transfer was *attempted*, or when the destination *confirmed* receipt? Share-sheet API, clipboard write, file download, DB commit, SSE flush, webhook POST — each one has a far-side outcome distinct from a near-side attempt. Wire your signals to the far side.
 
 ---
 
 ## Sources Read
 
-- **Klatch** — git log (since July 4): `docs/plans/layer5-portability-gap-audit-2026-07-04.md` (full read; 159 lines, xian+Calliope joint design doc); `docs/plans/theseus-brief-search-planning-maxt-2026-07-04.md` (MAXT planning for Search — new test session scoped, no cross-project insight); `docs/operations/attention-rollup.md` v17 (Argus back online after 6-day mode-1; vitest 4 migration fix for client flake; AVAILABLE_MODELS gap flagged to Daedalus; Sonnet 5 + Fable 5 available; SDK 14 minors behind); `docs/ROADMAP.md` (Step 10.5 added). Commit log.
-- **Piper Morgan** — git log (since July 4): Notion connector ported to #1232 Connector contract (`5050ed0`, Arch's 3-layer ruling — Notion's keychain model is a legitimate Layer-2 backend, adapter inherits 22 existing methods); Lead Dev correction re: Slack class (`72bb230` — wrong class identified in earlier memo; real Slack adapter has live 3-state composite requiring running Socket Mode runner, not just credential check; Slack migration scoped as genuinely more complex than Notion); Arch ruling refined + shim ratified (`98d4bc6`); Comms activity (drafts, editorial calendar); CXO/CIO/PPM duty cycle fires (heartbeat only). No new transferable methodology.
-- **One Job** — git log (48h): full read of coral log July 4 (`a502723`, `b574a8f`, `dcb7323`, `3bc3de0`); `store/COWORK-IOS-BRIEF.md` (state addendum); `docs/VISION-2026-07.md` Item 13 (hypothesis + safety net). PWA delivery observability pattern is the cross-pollination entry.
+- **Klatch** — git log (48h): SDK bump + model picker update shipped (`0395c4b` — Sonnet 5, Fable 5 added; `@anthropic-ai/sdk` bumped to `^0.110`); Opus 4.8 gap flagged, Daedalus memo filed to Argus for a follow-up lineup refresh; three persona captures executed (Daedalus, Argus, Iris — Step 10.5 manual run; follow-through on July 5 Layer 5 portability insight); rollup v18–v19; all beta gates clear, v1.0 release pending xian's tag authorization. Operational; no new cross-pollination methodology.
+- **Piper Morgan** — `dev/2026/07/05/` Lead Dev session log + CIO inbox memo; `docs(session)` Sprint-field incident full account (`c192a9e`). Beta Blockers estimate corrected (#1241 found already complete); Epic B started (#1260 closed). Board snapshot script added. Watchdog stall alerts (CIO, Arch). Key insight above from the irreversibility-pattern analysis.
+- **One Job** — `development/coral-logs/2026-07-05-coral-log.md` (full read); commit `5bb5ee5` (honest export); commit `a3a623b` (destructive-action protocol added to CLAUDE.md). Key insight above.
 - **atlas, globe, cuneo, optilisten** — no commits in 48h window; skipped.
+- **weather** — brief delivery commits only; skipped.
 - **nyt-crossword** — automated status commits only; skipped.
 
 ---
@@ -89,4 +81,3 @@ xian's answer: the emerging use case isn't Klatch as destination — it's Klatch
 
 ---
 *Canonical archive: designinproduct.com/internal — if your local copy is missing or stale, fetch the latest from the hub.*
-
