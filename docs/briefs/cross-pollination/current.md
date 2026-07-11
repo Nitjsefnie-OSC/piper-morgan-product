@@ -1,59 +1,35 @@
+# Cross-Pollination Brief — July 11, 2026
 
-# Cross-Pollination Brief — July 9, 2026
-
-Two findings today. One Job produced a concrete methodology for writing public-facing content from internal docs without leaking internal jargon — explicitly authored for this brief and xian-approved. Piper Morgan uncovered a silent hygiene risk for Claude Code projects: memory artifacts written with a CWD-relative path instead of the documented absolute path can end up committed to the repo tree undetected. Klatch was quiet; no new methodology.
+Heavy execution day in Piper Morgan: Fly.io deployment stack live (#1278), field-encryption plaintext-write risk caught and patched (#1387), ADR-070 amended to store logical connector identity rather than topology, and the full sprint LOW-tier backlog (218 issues) resolved. One transferable methodology finding emerged — a structural gap in how scheduled jobs are cleaned up when migrating between scheduling mechanisms.
 
 *Letters to xian: have a question for xian about anything here or elsewhere in his work? File `question-{from}-{date}-{topic}.md` to dispatch mail. AI prompts human; one letter featured at the end of each brief.*
 
 ## Key Insights
 
-### 1. Writing for strangers: translate from meaning, don't export from internal docs
+### Switching a recurring job to a new scheduling mechanism permanently orphans the old one — cleanup must happen in the same session that creates the replacement
 
-**From:** One Job, Coral (`development/coral-logs/2026-07-08-coral-log.md`; `docs/mail/memo-coral-to-janus-2026-07-08-register-shift-howto.md`, July 8 — written deliberately for this brief, xian-approved)
+**From:** Piper Morgan, CIO (commit `b82b0b8` + `docs(cron-lifecycle)`, July 10; methodology-35 promoted to Proven)
 
-**Relevant to:** Any agent producing public-facing content — landing pages, release notes, philosophy pages, changelogs, docs — from internal design docs or working notes. Klatch (near v1.0, will face this); DinP (Janus curates the gallery); PM (Comms, weekly Ship posts).
+**Relevant to:** Any project running duty-cycle agents or scheduled background jobs, especially where multiple scheduling mechanisms coexist — ephemeral CronCreate vs. persistent scheduled-tasks, different cron shapes, or interval changes across sessions. Klatch (Calliope duty cycle); DinP (Janus + Themis pulse cycles); One Job (Coral / Relay sessions).
 
-One Job built a public philosophy page from its internal VISION.md document. The lesson emerging from that work is a concrete two-gate method that Coral names "translate, don't export":
+When Piper Morgan's Docs role moved their duty-cycle trigger from an ephemeral `CronCreate` job to a `scheduled-tasks` entry (to satisfy a schedule-change request), the new job was created and verified. The old ephemeral job was never deleted. Both then ran independently for an unknown period — two parallel duty-cycle sessions doing overlapping work daily — until Docs noticed two session logs covering the same day's work.
 
-**The failure mode:** Start from the internal artifact, delete the sensitive parts, soften the rest. This leaks every time, because jargon isn't a layer you can peel off — it's woven through the sentences. "Provenance-carrying source adapters on the storage seam" has no public version hiding inside it. There's nothing to remove; the sentence is made of internal concepts all the way down. The tell: an internal proper noun (a partner project's name, a subsystem, a ticket code) survives into the public copy.
+The reason this is structurally harder than other double-fire cases: `CronList`/`CronDelete` only see jobs the *calling session itself* created. `scheduled-tasks` is a separate disk-persistent subsystem with its own listing. Once the migration session ends, neither mechanism can see the other's jobs — so the orphaned predecessor becomes **permanently unreachable**. No subsequent session, and no other mechanism, can delete it. The window for cleanup closes when the session that performed the migration moves on.
 
-**The method — two gates, in order:**
+**The discipline (the only fix that works):** when migrating a recurring job from one mechanism to another, delete the old mechanism's job as an **explicit, named step of the same migration** — before or immediately after creating the new one, in the same session and turn. Do not defer it to a cleanup pass. Do not assume another session can pick it up later. Verify both surfaces before considering the migration complete.
 
-1. **Gate 1: Drop what a stranger doesn't need.** Strategy, competitive positioning, internal milestones, the names of systems doing the work — most of this doesn't go out. This isn't an oversight; it's a decision. Name what you're dropping and why.
-2. **Gate 2: Rebuild the rest from the user's chair.** The ideas that pass Gate 1 still can't go out in internal wording. Rebuild each from the reader's experience. Not simplification — re-derivation from a different starting point. "Horizontal is fate; vertical is hierarchy; zoom is attention" (internal axiom) → "Swipe right and it's done" (same truth, felt from the user's thumb).
+This instance, combined with the same-mechanism STOP re-arm bug fixed the same day (`fix(duty-cycle-tick): STOP re-arm is delete-then-create, not create-only`) — where creating a new STOP cron without first deleting the previous one also produces two parallel jobs — promoted **methodology-35 (Asymmetric Discipline: creation without paired cleanup)** from Emerging to Proven. The pattern name captures the root cause: creation is visible and memorable; deletion of the predecessor is easy to skip because it's not in the "happy path" mental model of "make the new thing."
 
-**Mechanical guardrail:** No internal proper noun in public copy unless it is re-introduced from scratch for someone who has never heard it. When re-introducing feels absurd ("...and the storage seam is—"), that's Gate 1 firing late: the thing shouldn't be there at all.
-
-**The structural fix:** Give public and internal voice separate homes — separate files with separate jobs. If your internal reasoning and public copy share a document, register leaks are a matter of when, not if. The separation has to exist in the artifacts, not just your intentions.
-
-**Suggested action:** Before any agent publishes something — a release announcement, a philosophy page, an external how-to — run through the two gates explicitly rather than editing-in-place from the internal doc. One specific check: scan for any noun that requires project context to understand; if re-introducing it from scratch feels forced, Gate 1 should have dropped it.
-
----
-
-### 2. Claude Code auto-memory files can silently end up in the repo tree via a CWD-relative write path
-
-**From:** Piper Morgan, coding-agent session (`dev/2026/07/08/2026-07-08-1309-prog-code-log.md`; commit `6763f72`, July 8)
-
-**Relevant to:** Any project where Claude Code agents write to Claude's memory store — i.e., any project with multiple agents using `~/.claude/projects/.../memory/` for persistent context. Klatch (Daedalus, Argus, Calliope, Iris and others have memory stores); DinP (Janus layer-3 memory).
-
-Claude Code's auto-memory artifacts are documented to live at an *absolute* path: `~/.claude/projects/-Users-xian-Development-...-product/memory/`. But if an agent's Write call resolves to a CWD-relative path — landing the file at `.claude/projects/.../memory/` relative to the repo root — the file ends up inside the working tree, not in the user's home directory. A subsequent `git add` or `git commit -A` can then include it in the repo without anyone noticing.
-
-In PM's case, one such file (`project_agent_migration.md`, written to the repo-relative path during a March 31 session on a machine called "faoilean") had been tracked in the repo for 3+ months before being caught. It propagated normally into every worktree via `git checkout`. Content was stale and safe to remove, but the failure mode is silent: there's no error, the push succeeds, and the artifact spreads to every clone.
-
-**Two companion findings from the same investigation:**
-
-- **`.gitignore` fix:** Adding `.claude/projects/` to `.gitignore` prevents recurrence (as a companion to the existing `.claude/worktrees/` ignore pattern that PM already had). This pattern can be added to any project's `.gitignore` as a one-time precaution.
-- **Two-step memory save can be interrupted:** Writing a memory file and then adding an index pointer to `MEMORY.md` are two separate operations. If the session ends or compacts between them, the file exists in the memory store but is unlisted. An unindexed memory file is effectively invisible to the load-at-session-start step. Verify both steps complete.
-
-**Suggested action:** Check your project's `.gitignore` for a `.claude/projects/` entry (or equivalent). If it's not there, add it. Then verify no `.claude/projects/` directory exists already in your tracked tree (`git ls-files .claude/projects/` — any output means an artifact has already been committed). If your project uses a MEMORY.md index for the memory store, audit that every file in the store directory has an index entry.
+**Suggested action:** Audit any scheduled job or cron-style duty cycle for pending mechanism migrations (or past ones that might have left a predecessor). When planning a migration, add "delete old job" as a literal step in the same procedure that creates the new one — before the procedure is considered complete. If a stale predecessor exists and the window has closed, detection is still possible by scanning for duplicate session logs or double-commits for the same role in the same day; the `mcp__ccd_session_mgmt__list_sessions` surface can identify which session owns a stray job, and `send_message` can ask that session to self-clean.
 
 ## Sources Read
 
-- **Klatch** — git log (48h): cross-pollination brief delivery commits only. No new methodology; no docs/ changes.
-- **Piper Morgan** — `dev/2026/07/08/2026-07-08-1309-prog-code-log.md` (stray memory artifact investigation; full read); `dev/2026/07/08/2026-07-08-0941-exec-code-log.md` (Fire 7: dark-roles + day arc); commit log for context. Ship #050 published ("The Connector Gets Real"); ADR-073 authoring begun; beta blockers at 7 open. Operational; two transferable findings above.
-- **One Job** — `development/coral-logs/2026-07-08-coral-log.md` (full read); `docs/mail/memo-coral-to-janus-2026-07-08-register-shift-howto.md` (full read); rc.8–rc.9 (sift in chain rooms; sub-card edit-loss fixed); `docs/philosophy.html` (public manifesto). TestFlight promotion near.
+- **Klatch** — git log (48h): cross-pollination brief delivery commits + one `.gitignore` update (applying July 9 brief suggestion; confirmatory). No new methodology.
+- **Piper Morgan** — commit log (48h, full): Fly.io stack live (`2162b6c`–`8fda0c7`); #1387 field-encryption plaintext-write risk caught and patched (`9921a4a`, same day, Arch boundary-check); ADR-070 Amendment A (`30b1cee`, mcp_server_ref stores logical key not topology); sprint LOW-tier 218/218 complete (`d45fd2a`); duplicate-cron root-caused as methodology-35 instance + promoted (`92ed971`, `b82b0b8`); duty-cycle-tick STOP re-arm fixed (`08b2f6b`); briefing-staleness hook uses git commit date not mtime (`76f6b5d`). One transferable finding above; rest operational.
 - **atlas, globe, cuneo, optilisten** — no commits in 48h window; skipped.
-- **weather, nyt-crossword** — automated brief-delivery / status commits only; skipped.
+- **weather, one-job** — cross-pollination brief delivery commits only; skipped.
+- **nyt-crossword** — automated status commits; skipped.
+- **mediajunkie** — no commits in 48h window; skipped.
 
 ## Letters to xian
 
