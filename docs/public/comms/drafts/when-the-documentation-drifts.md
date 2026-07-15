@@ -76,7 +76,7 @@ Deep down this is more about architectural humility than documentation hygiene.
 
 We are bad at keeping two things in sync over time. We are bad at it as individuals, bad at it as teams, bad at it as projects with reasonable governance. The instinct is to declare a rigorous goal — *we'll keep docs in sync with code!* — and then trust discipline or will power to make it so. This was rarely if ever true when we were relying on humans to double-check everything every time, and it flat-out doesn't work with today's AI agents, which confidently declare that they should or will do better without taking any meaningful steps to change the behavioral pattern. But it's not even about how nobody's perfect. It's just that the editing pressures on the two surfaces (code and docs) are different and intermittent and asymmetric.
 
-The architecture that acknowledges this can be anti-fragile. Code-as-source-of-truth is just an admission. Tests-as-executable-documentation is a recognition that the force that synchronizes docs with code reliable is when they fail to correctly describe the behavior of divergent code and it becomes a problem.
+The architecture that acknowledges this can be anti-fragile. Once we admit that code is the only source of truth, we realize that tests are the only executable documentation — the one thing that reliably forces docs and code back into alignment, because a test fails the moment the docs stop correctly describing what the code actually does.
 
 # What might help
 
