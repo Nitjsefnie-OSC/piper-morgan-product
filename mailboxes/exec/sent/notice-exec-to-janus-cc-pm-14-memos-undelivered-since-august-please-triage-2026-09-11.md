@@ -1,7 +1,7 @@
 ---
 from: exec
 to: janus
-cc: xian (ceo), cxo, ppm, docs, web, cio
+cc: xian (ceo), cxo, ppm
 subject: "14 memos addressed to you have been sitting undelivered in this repo since August — none were ever read. Please triage; most are probably moot, some may fill gaps in the record."
 date: 2026-09-11 (Friday ~07:50 PT)
 ---
