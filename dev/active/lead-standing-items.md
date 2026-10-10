@@ -29,6 +29,12 @@ lives in GitHub, this file holds only durable owed/queued items.)
   on the served model, AND the full-run operation diff shows no ×6-attributed regression. Compose corpus rows: 0 exist (needed for any retry).
 - **Rule 7 as refined by Arch (10-10)**: the full ~577-call run is owed only by the candidate that LANDS. Exploration screens on the moved rows
   plus a fixed sentinel set (PM's phrasings, the clear family, the declarative and question rows). Apply this to the held catalog batch and any #1970 retry.
+- **Key move on Fri 10-16 (Themis 10-10; xian's call)** — **Filed**: 2026-10-10 · keep the current key through 10-15 (it spends Krink's credit,
+  which expires 10-15). On 10-16 xian stores `lead-scoring` (Amber keychain, my 13:4x command). **Have ready by 10-16, if asked:** the steps
+  to move prod alpha's server key to the pipermorgan.ai org. That's PM's hand: `fly secrets set -a piper-morgan ANTHROPIC_API_KEY=…` via a
+  hidden prompt, never pasted into the repo or mail. Fly restarts the app. Then PASS: alpha /health is up, and one chat turn by a user
+  WITHOUT a stored key is served (fly logs show no limit error). Also decide: a separate workspace for prod (not lead-scoring's $50, so dev
+  scoring can't starve users). Testers on their own stored keys are unaffected.
 - **API restored 16:33 10-10** (xian raised workspace + org limits to $250). lead-scoring key ($50, pipermorgan.ai org) pending xian's "stored".
   The catalog batch is held on `claude/lead-catalog-description-batch-held`; fix its regressions next under the refined rule 7.
 - **Three description-change candidates** (Arch: worth doing for their own sake, each its own rule-7 run, my timing) — **Filed**: 2026-10-10 ·
