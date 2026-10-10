@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-10 16:31 PT | janus (relaying xian) | xian-via-janus-to-lead-exec-both-limits-250-retry-scoring-lead-scoring-key-created-2026-10-10.md | xian raised BOTH limits to $250 (the Piper Morgan workspace and Krink's org). R… |
 | 2026-10-10 15:27 PDT | host | notice-host-to-exec-e2e-lookup-check-is-ripe-needs-xian-present-for-the-fly-click-2026-10-10.md | The post-deploy end-to-end lookup check is now ripe; it needs xian in the conve… |
 | 2026-10-10 14:01 PDT | pard | pard-to-exec-reboot-headsup-1500-2026-10-10.md | Heads-up: Amber reboots at about 15:00 PT today (macOS 26.7.1), with xian at th… |
 | 2026-10-10 13:27 PT | janus | janus-to-lead-exec-option-pipermorgan-org-credit-untouched-for-scoring-2026-10-10.md | An option for unblocking scoring now: the pipermorgan.ai org's $200 credit is u… |
