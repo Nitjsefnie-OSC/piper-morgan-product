@@ -48,6 +48,16 @@ Lead's seat is denied `fly deploy` on alpha. My `87e8bc9c49` (revoke fix) + `08d
 
 CIO's write-up: `docs/internal/research/cloud-duty-cycle-mechanisms-2026-10-03.md`. One throwaway routine, `persist_session: true`, every 2h for one afternoon; tests warm vs cold, lag, cloud push, token cost. **ARMED 10-03 22:2x by CIO: routine `trig_01LdUvFVg5LQs7ouKx6jinoZ`** (Haiku 4.5, persist_session true, connectors cleared), fires **Sun 10-04 12:00/14:00/16:00 PT**, writes only to branch `experiment/cloud-duty-cycle-probe` (`dev/experiments/cloud-duty-cycle-probe.log`). **CIO disables at Sun 22:07.** **RESULT 10-04: WARM seat confirmed (3 fires, 1 session, lag +4/+1/+1, cloud push ok). CIO DISABLED it 16:08 (API-confirmed); PM to delete via Exec's rollup.** **PA BACKSTOP CLOSED 10-05 06:4x**: `RemoteTrigger get` → `enabled: false`, last fire 10-04 23:01Z, `mcp_connections: []`. Remaining: only PM's delete (via Exec rollup). (Was: if still enabled, run `RemoteTrigger update trig_01LdUvFVg5LQs7ouKx6jinoZ {"enabled": false}`** (the cron is daily, so Mon noon would fire again). Only PM can DELETE (claude.ai/code/routines), so remind via exec once it's disabled. Safety note: routine creation attaches ALL PM connectors by default; CIO cleared them. Asked CIO for a scratch role (not `pa`'s real state) and to record the routine id + delete time, **so I can delete it myself if CIO goes quiet** (it spends PM's quota). LaunchAgent stays armed.
 
+## STATE AT 2026-10-10 14:0x (pre-reboot snapshot; read this first)
+
+- **Mechanism:** LaunchAgent `com.xian.pm-pa-cycle` (:47, 6/9/12/15/18/21), no session cron. Commit hygiene: never stage `dev/state/pa-last-pm-scan` (gitignored). Run `date` before stamping any memo time.
+- **MCP:** v11 `10282b068f` live (read-only tool + 3 resources, OAuth, per-identity rate limit (memory), **Smithery server card live**). #1458 CLOSED. Fly CLI login works (renewed by PM 10-08).
+- **Plugin:** public repo `mediajunkie/piper-morgan-plugin` (v0.1.0, evals 1/1/1 vs 0/0/0, icon, README revoke line, `mcp-registry/server.json` unpublished). Listing copy final (Comms). **Nothing listed. PM tests before any listing.**
+- **Revoke (#1918):** live on alpha; /privacy + /support name the path (two-sentence). **Held:** "Access ends right away", until someone observes a revoked client's next call failing.
+- **#1965 (b):** Lead built one resolver with two legs (grant → own PAT); my grant-side review holds; Arch verified. Not yet on alpha (alpha `e8ecd10d5a` as of 10-09). **#1966** (convergence, Production) mine-filed; keep/retire PAT is PM's.
+- **Waiting on PM (my five deferrals):** (1) listing go + domain proof; (2) revoke-then-ask test; (3) privacy Section C four decisions + key check; (4) a PAT-only test account on PM's own PAT (#1889/#1963 served check); (5) #1966 keep/retire PAT.
+- Ship #064 review filed 10-09. Nothing in flight.
+
 ## PM Attention
 
 *(Exec's `cohort-attention-rollup` reads this section directly. Live items only.)*
