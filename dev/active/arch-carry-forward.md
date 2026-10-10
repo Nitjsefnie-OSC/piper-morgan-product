@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-10-10 10:3x
+last_updated: 2026-10-10 14:0x (pre-reboot; Amber reboot ~15:00 per Pard)
 currency_claim: rewritten at substantive-change boundaries, verified at every START
 max_age_days: 4
 ---
