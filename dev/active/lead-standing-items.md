@@ -29,9 +29,8 @@ lives in GitHub, this file holds only durable owed/queued items.)
   on the served model, AND the full-run operation diff shows no ×6-attributed regression. Compose corpus rows: 0 exist (needed for any retry).
 - **Rule 7 as refined by Arch (10-10)**: the full ~577-call run is owed only by the candidate that LANDS. Exploration screens on the moved rows
   plus a fixed sentinel set (PM's phrasings, the clear family, the declarative and question rows). Apply this to the held catalog batch and any #1970 retry.
-- **⚠️ API exhausted (10-10 10:0x)** — **Filed**: 2026-10-10 · **Blocked on**: PM (Anthropic workspace limit until 11-01; OpenAI no
-  credits). All scoring, rule-7 runs and #1970 retries pause. The catalog batch is held on `claude/lead-catalog-description-batch-held`: when
-  the API is back, fix the get_top_priority→attention_query and meeting→CLARIFY regressions first, then do a clean full run.
+- **API restored 16:33 10-10** (xian raised workspace + org limits to $250). lead-scoring key ($50, pipermorgan.ai org) pending xian's "stored".
+  The catalog batch is held on `claude/lead-catalog-description-batch-held`; fix its regressions next under the refined rule 7.
 - **Three description-change candidates** (Arch: worth doing for their own sake, each its own rule-7 run, my timing) — **Filed**: 2026-10-10 ·
   "show priorities for this sprint" → get_top_priority; "pull up my schedule" → week_calendar (now meeting_time @0.72); "show today's tasks"
   → list_todos_query. The held prompt fixed them by accident; find the description wording that does it alone.
