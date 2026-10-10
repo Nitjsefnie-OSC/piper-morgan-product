@@ -1,5 +1,25 @@
 # Comms carry-forward
 
+## ⭐ CURRENT STATE — 2026-10-10 14:0x PT (written before the Amber reboot, ~15:00). Read this first, it supersedes older lines below
+- **Log**: `dev/2026/10/10/2026-10-10-0619-comms-code-log.md` (today). The 10-09 log is DAY-CLOSED.
+- **Publishing**:
+  - "No Undo" published Sat 10-10 04:26, live and checked. Owes a Medium + LinkedIn crosspost (PM, by hand).
+  - **Sun 10-11 "It Doesn't Count if You Skip It"**: `ready-for-docs`. Docs' pre-flight is clean and they publish at Sun 04:12.
+  - **Tue 10-13 "Giving It Away, and Wondering Who May Want It"**: **PM has changed only the title and tease, the body is
+    still my 09-18 draft, and there's no art.** Waiting on PM's rewrite + art. My pre-check notes are in the 10-10 log.
+  - Thu 10-15 "The Overzealous Cleanup Routine": not yet pre-checked.
+  - Wed 10-14 Ship #064: my workstream review + next-week addendum are in (10-09). Review the draft when Exec sends it.
+- **Waiting on PM** (all on Exec's rollup):
+  - privacy Section C: 4 decisions, in `docs/legal/mcp-privacy-and-support-proposal-2026-10-05.md`.
+  - D-C: is template-audit the single source for Ship rules? (CIO R6)
+  - the mining-pass picks (sent 10-09).
+  - a verdict on the first scaffold (Sep 6, `the-unguarded-entrance.md`, Tue 11-03). The next scaffold (Sep 7–10) waits on it.
+- **Done since the lines below were written**: the mining pass (10-09, next due 10-23); the blog template review; the No Undo alt
+  text; the privacy widen live; Ship v4.1 metrics → bullets.
+- **Drain rule (xian 10-08)**: every fire drains everything unblocked, rechecks mail until 2 consecutive empties, and writes a
+  `Drain:` line with a named blocker for each deferral.
+
+
 **Spring-cleaned 2026-09-22** per today's context-floor-reduction plan (item 4a, PM directive via
 Exec) — resolved items deleted, not archived with a `was:`/history trail. Full narrative for
 anything below lives in the dated session log, not here.
