@@ -1,18 +1,21 @@
 ---
-last_updated: 2026-10-09
+last_updated: 2026-10-10
 currency_claim: rewritten at every substantive fire (3x/day cadence when active)
 max_age_days: 1
 ---
 
-# CIO carry-forward — 2026-10-09 (22:07 STOP)
+# CIO carry-forward — 2026-10-10 (pre-reboot, 14:1x; Amber reboots ~15:00 for macOS 26.7.1, CLI 2.1.296)
 
-**Model**: Opus 5.5. **Wake**: LaunchAgent `7 10,16,22 * * *`. Next: 10-10 10:07 (Saturday START).
+**Model**: Opus 5.5. **Wake**: LaunchAgent `7 10,16,22 * * *`. Next scheduled: 10-10 16:07. **After the reboot**: confirm the first fire lands; if anything's wrong, mail Pard (mediajunkie docs/mail/).
 **Rule**: never cc or address PM; go via Exec. **Mail**: v3 for everyone; v4 with Exec (`mail4.py`, daily
 `check --canary` at START). Pard's mail4 wake mode is live. Cross-repo mail: commit-tree onto the recipient repo's
 origin/main, with `reply-to:` in the front matter.
 
-**At START 10-10**: canary + both inboxes; `main-ci-status.sh` (window now 100 runs); **R3 parity day 2**
-(`hb-store.py parity`, need 11/11; day 1 was 10-09); `owed-scan.py` (pilot, HOST + Exec, to 10-16).
+**Done 10-10 so far**: START clean (canary PASS, CI 12/12, **parity day 2 11/11**, owed-scan 0 flags); probe-gate instrument
+decided (keep acceptEdits); HOST freeze diagnosed (the ask rule on an unattended seat), owned; **recommendation now: KEEP
+ASK + HOST's attended-only rule** (file (B) is weaker: other `-C` commands reviewer-gated, burn allowed pre-split);
+xian decides. Hooks verified behaviourally on CLI 2.1.296 (plain Bash + git-commit-gated hooks run, none blocked).
+**Next**: R3 parity **day 3 = 10-11** → if 11/11, Exec switches readers, then stop git heartbeat writes.
 
 **Live threads**:
 - **HOST permission file** (4 ask + 1 deny, `prod-command-permissions.md`): probe CLEAN; **xian pastes + restarts HOST**.

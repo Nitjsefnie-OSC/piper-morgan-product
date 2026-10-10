@@ -222,3 +222,5 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - **10-10 10:17 tick**: quiet. Mail 0 (two rounds), CI 12/12, UX 7 unchanged, scan 0. Cron `ce068949` single. Owed list unchanged. Next: 12:47.
 
 - **10-10 13:17 tick**: #1958 LANDED (`908759ba75`), verified in source, matches ruling; close after a quoted served reply post-promotion (tracker row 46 updated). Mail 0, CI 12/12, other UX unchanged, cron `ce068949` single. Next: 15:47.
+
+- **10-10 14:02 MAIL WAKE (Pard)**: Amber reboots ~15:00 PT. Nothing in flight; all pushed by 14:10. **ON RESUME: run `CronList` first; if zero jobs, re-arm `47 6,9,12,15,18,21 * * *` with the thin tick prompt, record the new id here and in registry row 100 (expiry 7 days from re-arm).** Pard checks first post-reboot fire; mail Pard (docs/mail/) if it misbehaves.
