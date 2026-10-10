@@ -1516,12 +1516,13 @@ _CALENDAR_QUERY_DESCRIPTIONS: dict[str, str] = {
         "(#1595)"
     ),
     "_handle_week_calendar_query": (
-        "Calendar or schedule for the WEEK ahead or several days (this week, next "
-        "week, the coming days), including the free time in it — never a single "
-        "day. It lists the calendar; it does not judge conflicts, overlaps, "
-        "double-bookings or clashes, and does not answer yes/no questions about "
-        "the calendar. It is the user's own calendar only — never a team's, a "
-        "shared, or another person's calendar (#1595)"
+        "Calendar or schedule for the WEEK ahead, several days, or a day-less "
+        "'my schedule' request (this week, next week, the coming days), "
+        "including the free time in it — never a single named day — and only "
+        "the user's own calendar, never a team's, shared, or another person's "
+        "calendar. It lists the calendar; it does not judge conflicts, "
+        "overlaps, double-bookings or clashes, and does not answer yes/no "
+        "questions about the calendar (#1595)"
     ),
 }
 
