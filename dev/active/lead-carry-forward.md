@@ -16,6 +16,8 @@
 - **#1958** fixed on main (label echoes "on"/"next"); open until a served check after the NEXT promotion.
 - **Mon 10-12:** Phase 3 re-measure for PPM (121/91 last) AND which remaining deletions need a fresh served row. **Wed 10-14:** PPM's
   tripwire, plus my cron rotation at START (`dad96d7a` expires ~10-15 21:4x; delete-then-create; update the registry row).
+- **FIRST THING AFTER THE REBOOT:** `CronList`. The session-scoped cron `dad96d7a` may not survive. If zero → CronCreate `17 6,9,12,15,18,21 * * *`
+  (Gap-C self-heal), update the registry row with the new id + arm date, and mail Pard if the first fire misbehaves.
 - **Seat limits (do not work around):** fly deploy / secrets / prod DB / .env* / the mint script / the alpha test-account credential file.
 
 ### (10-09 state, kept for context)
