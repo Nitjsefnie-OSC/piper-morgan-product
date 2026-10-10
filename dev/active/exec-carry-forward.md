@@ -1,8 +1,16 @@
 # Exec carry-forward
 
-**STATE: LIVE.** Cron **`a75ac360`** (re-armed 10-08 22:40 at day-close from `61cbaa86`, verbatim Rule 0 prompt, CronList-verified one; expires ~10-15, re-arm by ~10-13; before that `61cbaa86`, `cc6d1721`, `c720a119`), `38 6,10,14,18,22` (normal 5x/day — throttle lifted 09-28),
+**STATE: LIVE.** Cron **`8d68e9e4`** (current; armed 10-09 ~23:1x, expires ~10-16, re-arm by ~10-13; **Amber reboots ~15:00 PT 10-10 per Pard: after resume run CronList FIRST, re-arm if zero**). Older line follows, kept for history: `a75ac360` (re-armed 10-08 22:40 at day-close from `61cbaa86`, verbatim Rule 0 prompt, CronList-verified one; expires ~10-15, re-arm by ~10-13; before that `61cbaa86`, `cc6d1721`, `c720a119`), `38 6,10,14,18,22` (normal 5x/day — throttle lifted 09-28),
 expires ~10-14, armed 10-07 23:1x, re-armed delete-then-create at each STOP.
 
+
+## 10-10 14:0x UPDATE (newest; pre-reboot handoff, Pard's 14:01 heads-up)
+- **Amber reboots ~15:00 PT 10-10 (macOS 26.7.1), xian at machine.** Session resumes into its own conversation; only origin/main is guaranteed. Cron `8d68e9e4` is session-scoped: on resume, `CronList` before anything; re-arm `38 6,10,14,18,22` (delete-then-create, verbatim Rule 0 prompt) if zero. If first post-reboot fire is wrong, mail Pard (mediajunkie docs/mail/).
+- Rollup v146 / Artifact `719UZ4h1NELjEwWZbDCceT` version 148. Waiting on xian: Web credential step (row 89: `!` read in Web's session vs one-file Bash allow rule), OpenAI top-up "done" (row 78, then relay to Lead), Enterprise date 2027 vs 2028 (row 84), promote-gate line (row 79), plus reissue invites, three yeses, test-card rows, Calendar secrets, Privacy C, CIO D-E/F/G + D-C/D, mining picks, Agent 360 asks.
+- Answered today (via Janus, 13:06 and 13:17): "0e - b" Web runs alpha served checks; spend limit raised; OpenAI top-up coming; No Undo crossposts done; tripwire reads the extraction ceiling as headline, routing tail beside it (row 77 closed).
+- Open watches: row 90 `limit-raise-propagation` (Lead's seat still got the limit error 13:10 after the raise; wait for Lead's served-call confirmation, escalate at next fire if absent); row 91 `pm-org-credit-scoring` (Themis's $199.99 pipermorgan.ai promo credit, expires 11/4; Lead proposes key+cap via Janus, xian OKs); row 86 HOST: woke 13:20 (last-invoked), scheduled 15:26 fire will land after the reboot, so count it as the test only if it fires post-reboot; row 88 keep-ask stands (silence = keep ask); row 87 prod-key workspace exposure unmeasured (console is xian's).
+- Dates held: design partners Fri 10-23, hard stop Fri 10-30; hb-store parity second run + report to CIO 10-11; Lead re-measure Mon 10-12; PPM tripwire Wed 10-14; Comms Ship #064 review Wed 10-14; #1967 pilot report to CIO by 10-16; mail v4 audit by 10-22.
+- Queues empty at 14:02 (mail v3 0 after filing Pard's note, mail v4 0 unacknowledged, awaiting-decision 0). Next scheduled fire 14:38 (reboot follows).
 
 ## 10-10 07:2x UPDATE (newest; morning fire 07:08)
 - Rollup v136 / Artifact version 138. Waiting order now ends: ... small thing, Crosspost No Undo, **Enterprise milestone date (2027 vs 2028)**, Calendar secrets.
