@@ -3949,6 +3949,34 @@ HAND_ROWS = [
     # Phrasings from the regression tests that broke on the 10-09 batch (or synthesized, marked).
     # Expectations ruled by PPM 10-09; the 3 project-delete rows are REVIEW, held until #1935 (Arch 10-09, option c).
     {
+        "phrase": "what date did I finish the onboarding project",
+        "category": "STATUS",
+        "expected": "action:check_completion_status",
+        "source": 'phase3-rule10/COMPLETION_HISTORY_PATTERNS literal r"\\bwhat date did (i|we) (complete|finish|ship|deliver|launch|close)\\b"',
+        "notes": "rule-10 held literal (COMPLETION_HISTORY_PATTERNS, 2026-10-11 deposit); origin=literal, no pinning test cites this phrasing",
+    },
+    {
+        "phrase": "show me when we shipped the API",
+        "category": "STATUS",
+        "expected": "action:check_completion_status",
+        "source": 'phase3-rule10/COMPLETION_HISTORY_PATTERNS literal r"\\bshow me when (i|we) (completed|finished|shipped|delivered|launched|closed)\\b"',
+        "notes": "rule-10 held literal (COMPLETION_HISTORY_PATTERNS, 2026-10-11 deposit); origin=literal, no pinning test cites this phrasing",
+    },
+    {
+        "phrase": "when was the migration completed",
+        "category": "STATUS",
+        "expected": "action:check_completion_status",
+        "source": 'phase3-rule10/COMPLETION_HISTORY_PATTERNS literal r"\\bwhen was .{1,40}(completed|finished|shipped|delivered|launched)\\b"',
+        "notes": "rule-10 held literal (COMPLETION_HISTORY_PATTERNS, 2026-10-11 deposit); origin=literal, no pinning test cites this phrasing",
+    },
+    {
+        "phrase": "how long ago did we ship the dashboard",
+        "category": "STATUS",
+        "expected": "action:check_completion_status",
+        "source": 'phase3-rule10/COMPLETION_HISTORY_PATTERNS literal r"\\bhow long ago did (i|we) (complete|finish|ship|deliver|launch)\\b"',
+        "notes": "rule-10 held literal (COMPLETION_HISTORY_PATTERNS, 2026-10-11 deposit); origin=literal, no pinning test cites this phrasing",
+    },
+    {
         "phrase": "Where did you get that from?",
         "category": "PROVENANCE",
         "expected": "action:explain_suggestion",
@@ -4626,6 +4654,11 @@ RULED_EXPECTATIONS: dict = {
     "what's the most critical thing": (
         "action:attention_query",
         "RULED 2026-10-06 (PPM re-judge REV3, landed set; verified offline against the 10-06 full report): was action:get_top_priority",
+    ),
+    "link my repository to the project": (
+        "REVIEW",
+        "RULED 2026-10-11 (PPM, #1951 residue): was action:manage_repos — names no repository; CLARIFY asks which one and "
+        "manage_repos without a referent would arm the same question (#1641 carrier); either answer honest, same ruling as the unlink sibling",
     ),
     "please unlink my repository from this project": (
         "REVIEW",
