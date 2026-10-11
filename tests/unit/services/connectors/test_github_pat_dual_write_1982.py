@@ -89,8 +89,13 @@ async def test_delete_targets_the_github_provider():
 
 
 @pytest.mark.asyncio
-async def test_disconnect_github_deletes_both_copies():
-    """Revoke leaves no row the MCP app's GitHub subkey could still read (Arch #2)."""
+async def test_disconnect_github_removes_all_three_copies():
+    """Arch #1982: a revoke is proven complete. After the dual write the PAT lives in
+    three places: the keychain under ``github_token`` (the route's write), the keychain
+    under ``github`` (the key service's own copy from store_user_key) and the at-rest
+    ``user_api_keys`` row. Disconnect must remove all three. The key service is REAL
+    here (only the keychain, the session and the audit logger are doubles), so the
+    second keychain delete and the row delete are the service's own behaviour."""
     from services.connectors.disconnect import disconnect_connector
 
     keychain = MagicMock()
@@ -98,12 +103,23 @@ async def test_disconnect_github_deletes_both_copies():
     binding_repo.set_status = AsyncMock()
     grant_store = MagicMock()
     grant_store.delete = AsyncMock()
-    at_rest_delete = AsyncMock(return_value=True)
+    row = MagicMock()
+    row.key_reference = "ref"
+    row.created_at = None
+    row.last_validated_at = None
+    result = MagicMock()
+    result.scalar_one_or_none.return_value = row
     session = MagicMock()
+    session.execute = AsyncMock(return_value=result)
+    session.delete = AsyncMock()
+    session.commit = AsyncMock()
     factory = MagicMock()
-    factory.session_scope = MagicMock(return_value=_Scope(session))
+    factory.session_scope = MagicMock(side_effect=lambda: _Scope(session))
     with (
         patch("services.infrastructure.keychain_service.KeychainService", return_value=keychain),
+        # the key service binds the class at import time; patch its own name too, or
+        # this test's outcome depends on whether the module was imported earlier
+        patch("services.security.user_api_key_service.KeychainService", return_value=keychain),
         patch("services.integrations.github.config_service.GitHubConfigService"),
         patch("services.database.session_factory.AsyncSessionFactory", factory),
         patch(
@@ -114,12 +130,17 @@ async def test_disconnect_github_deletes_both_copies():
             "services.mcp.consumer.connector_grant_store.ConnectorGrantStore",
             return_value=grant_store,
         ),
-        patch("services.connectors.github_pat_store.delete_user_pat_at_rest", at_rest_delete),
+        patch("services.security.user_api_key_service.audit_logger") as audit,
     ):
+        audit.log_api_key_event = AsyncMock()
         await disconnect_connector(_U, "github")
+    # 1. the route's keychain copy
     keychain.delete_api_key.assert_any_call("github_token", username=_U)
+    # 2. the key service's own keychain copy (provider "github", user-scoped)
+    keychain.delete_api_key.assert_any_call("github", username=_U)
+    # 3. the at-rest row
+    session.delete.assert_awaited_once_with(row)
     grant_store.delete.assert_awaited_once()
-    at_rest_delete.assert_awaited_once_with(session, _U)
 
 
 def _load_backfill():

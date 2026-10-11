@@ -76,6 +76,7 @@ class UserAPIKeyService:
         validate: bool = True,
         store: bool = True,
         audit_context: Optional[Dict[str, Any]] = None,
+        *,
         security_check: bool = True,
     ) -> Optional[UserAPIKey]:
         """
@@ -89,12 +90,14 @@ class UserAPIKeyService:
             validate: Whether to validate key with provider API
             store: Whether to actually store the key (False for validation-only)
             audit_context: Optional request context for audit logging
-            security_check: Run the #268 format/strength/leak validator first
-                (default). #1982: False ONLY for a key the caller has just
+            security_check: (keyword-only) Run the #268 format/strength/leak
+                validator first (default). #1982: False ONLY for a key the caller has just
                 verified live with its provider (the GitHub PAT dual write,
                 and the backfill of PATs that were accepted that way): a live
                 acceptance outranks a regex, and a rejection here would land
-                AFTER the keychain write, as a half-save.
+                AFTER the keychain write, as a half-save. The callers allowed to
+                pass False are a CLOSED LIST enforced by
+                tests/test_architecture_enforcement.py::TestSecurityCheckBypassCallers1982.
 
         Returns:
             UserAPIKey database record, or None if store=False. When
