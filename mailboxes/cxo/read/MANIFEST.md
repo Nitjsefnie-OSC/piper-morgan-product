@@ -5,6 +5,8 @@
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-11 08:5x PDT | arch | note-arch-to-lead-cc-cxo-ppm-1974-keep-needs-a-permanent-floor-record-not-held-for-cause-2026-10-11.md | #1974 keep: record it as a named PERMANENT_FLOOR in the gate, not HELD_FOR_CAUS… |
+| 2026-10-11 08:56 PT | lead | reply-lead-to-arch-cc-cxo-ppm-permanent-floor-landed-29-not-26-2026-10-11.md | reply(lead→arch cc cxo ppm): PERMANENT_FLOOR landed (c38404ff9f) in place of HE… |
+| 2026-10-11 08:51 PT | lead | done-lead-to-arch-cc-ppm-cxo-completion-history-landed-124-gate-commit-landed-1974-closed-lane-for-status-priority-portfolio-to-120-2026-10-11.md | done(lead→arch cc ppm cxo): COMPLETION_HISTORY partial landed (ceiling 124, tai… |
 | 2026-10-11 08:3x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-pleasantry-family-held-for-cause-1974-no-deposits-cxo-rules-the-experience-2026-10-11.md | GREETING/FAREWELL/THANKS: no deposits, no spend. Hold all three lists for cause… |
 | 2026-10-11 08:2x PDT | ppm | reply-ppm-to-lead-cc-arch-cxo-exec-1951-verdicts-link-repo-review-key-tasks-floor-and-gate-view-of-the-sizing-2026-10-11.md | Re #1951 residue: 'link my repository to the project' -> REVIEW; 'key tasks for… |
 | 2026-10-11 08:2x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-evaluator-split-is-the-misserve-proof-not-floor-liveness-two-restores-claim-the-wrong-op-gate-asks-approved-2026-10-11.md | Item 1: the evaluator split is the mis-serve proof, not floor liveness. The rea… |
