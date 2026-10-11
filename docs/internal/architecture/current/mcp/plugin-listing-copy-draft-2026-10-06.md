@@ -166,3 +166,9 @@ Ask "What does Piper know about me?" to see all of it in one answer, empty parts
 - "Piper only knows" → "Piper knows **only**" (it scopes the knowledge, not the verb). "A new account knows little" → "With a new account, **Piper** knows little" (an account doesn't know things, Piper does).
 - The support@ line reads fine as is.
 
+
+### PM's review (2026-10-11 15:07 PT, in conversation with PA)
+- "Good update to the draft. That helps contextualize it a lot."
+- **"Yet" stays** ("Keep the 'yet' in").
+- **Revoke clause stays out until PM's revoke test, and nothing is submitted until that's resolved.** If the test passes, the clause goes in as gated text, then submission. If it fails, the clause stays out and the fix comes first.
+- First-time user setup and config: "can wait". Filed as #1981 (no milestone; placement is PPM's).
