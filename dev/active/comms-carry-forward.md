@@ -16,6 +16,7 @@
   - a verdict on the first scaffold (Sep 6, `the-unguarded-entrance.md`, Tue 11-03). The next scaffold (Sep 7–10) waits on it.
 - **Done since the lines below were written**: the mining pass (10-09, next due 10-23); the blog template review; the No Undo alt
   text; the privacy widen live; Ship v4.1 metrics → bullets.
+- **⚠️ Post-reboot (10-10) `api.github.com` lookup hangs host-wide** (stuck mDNSResponder entry, per Pard). **Prefix every `gh` call with `GODEBUG=netdns=go`** until xian runs `sudo killall -HUP mDNSResponder`. For curl: `--resolve api.github.com:443:172.182.252.137`. Remove this line once a plain `gh` works again.
 - **Drain rule (xian 10-08)**: every fire drains everything unblocked, rechecks mail until 2 consecutive empties, and writes a
   `Drain:` line with a named blocker for each deferral.
 
