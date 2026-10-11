@@ -749,17 +749,21 @@ class TestNonRegressionMechanism:
         # fixture's own premise — the same shape TEMPORAL_PATTERNS'
         # deletion caused here before it, when this fixture was
         # TEMPORAL_PATTERNS/"when is my next meeting?".)
-        phrase = (
-            'please clear the reminders except for "Review the PR" - also, are you '
-            "able to set my default repo for me conversationally?"
-        )
+        # 2026-10-11 (#1977 step 1): the #1606 plan-row phrase this fixture used
+        # ('please clear the reminders … - also, are you able to set my default
+        # repo…') is now DECLINED at surface 1 (its clear-reminders clause is an
+        # unclaimed leading clause), so it no longer claims. Swapped for a
+        # single-clause floor-expected row PORTFOLIO_PATTERNS still claims
+        # (ruled survivor #1933): claim manage_portfolio, row ruled floor, the
+        # row's own verdict MATCH (ruled floor) — the same shape.
+        phrase = "update my project name to Atlas"
         entry = {
-            "list": "SET_DEFAULT_REPO_PATTERNS",
+            "list": "PORTFOLIO_PATTERNS",
             "rows_claimed_at_deletion": [phrase],
         }
         ok, problems = gate.check_deleted_entry_non_regression(entry)
         assert not ok
-        assert any("claimed again by SET_DEFAULT_REPO_PATTERNS" in p for p in problems)
+        assert any("claimed again by PORTFOLIO_PATTERNS" in p for p in problems)
 
     def test_restored_shape_passes_only_when_literal_is_a_recorded_survivor(self):
         """#1973-shape restore (2026-10-10): a `known_reabsorptions` record
@@ -870,10 +874,14 @@ class TestNonRegressionMechanism:
         # fixture's own premise — the SAME fixture-breakage shape
         # CALENDAR_QUERY_PATTERNS'/TEMPORAL_PATTERNS' own deletions caused
         # here before it, each time swapped to a still-claimed example.)
-        phrase = (
-            'please clear the reminders except for "Review the PR" - also, are you '
-            "able to set my default repo for me conversationally?"
-        )
+        # 2026-10-11 (#1977 step 1): the #1606 plan-row phrase this fixture used
+        # ('please clear the reminders … - also, are you able to set my default
+        # repo…') is now DECLINED at surface 1 (its clear-reminders clause is an
+        # unclaimed leading clause), so it no longer claims. Swapped for a
+        # single-clause floor-expected row PORTFOLIO_PATTERNS still claims
+        # (ruled survivor #1933): claim manage_portfolio, row ruled floor, the
+        # row's own verdict MATCH (ruled floor) — the same shape.
+        phrase = "update my project name to Atlas"
         claim = gate.claim_for_phrase(PreClassifier, phrase)
         assert claim.pattern_list is not None, "test fixture assumption broke"
         entry = {
@@ -898,10 +906,14 @@ class TestNonRegressionMechanism:
         # happens to be fine (that is the whole point of requiring
         # documentation: catching the unexpected reclaim itself, not just
         # its eventual safety).
-        phrase = (
-            'please clear the reminders except for "Review the PR" - also, are you '
-            "able to set my default repo for me conversationally?"
-        )
+        # 2026-10-11 (#1977 step 1): the #1606 plan-row phrase this fixture used
+        # ('please clear the reminders … - also, are you able to set my default
+        # repo…') is now DECLINED at surface 1 (its clear-reminders clause is an
+        # unclaimed leading clause), so it no longer claims. Swapped for a
+        # single-clause floor-expected row PORTFOLIO_PATTERNS still claims
+        # (ruled survivor #1933): claim manage_portfolio, row ruled floor, the
+        # row's own verdict MATCH (ruled floor) — the same shape.
+        phrase = "update my project name to Atlas"
         entry = {
             "list": "SYNTHETIC_UNDOCUMENTED_RECLAIM_LIST",
             "rows_claimed_at_deletion": [phrase],
@@ -2181,43 +2193,47 @@ def test_permanent_floor_is_the_1974_family_cites_the_ruling_and_stays_in_the_ta
 _TWO_TOPIC = "list my archived projects and summarize my current work"
 
 
-def test_plan_row_fallback_partial_blocks_portfolio_and_names_status():
-    counts = pattern_literal_counts.per_list_literal_counts()
-    records, by_list = gate.build_census(gate.CURRENT_LIVE_CATEGORIES)
-    report = gate.render_list_report("PORTFOLIO_PATTERNS", by_list, counts, len(records))
-    verdict = next(line for line in report.splitlines() if line.startswith("verdict:"))
-    assert verdict.startswith("verdict: NO-GO (rule 11)"), verdict
-    assert "PLANNED rows whose FALLBACK" in verdict, verdict
-    line = next(line for line in report.splitlines() if "planned, fallback partial" in line)
-    assert (
-        "(STATUS_PATTERNS)" in line and _TWO_TOPIC in line and "drops the PORTFOLIO half" in line
-    ), line
-
-
-def test_plan_row_unclaimed_fallback_is_unacknowledged_until_step_2_lands(monkeypatch):
-    """Same row, with STATUS's `current work` survivor also gone: the fallback
-    claims nothing. Arch's 2026-10-11 CORRECTION: that is NOT OK on its own —
-    classify_multiple's LLM fallback returns ONE intent, so the other half is
-    dropped by the model. Until #1977 step 2 lands the row reads "planned,
-    fallback unacknowledged" and still blocks; the step-2 commit flips
-    STEP2_ACKNOWLEDGEMENT_LANDED and this pin to "planned"."""
-    from services.intent_service.pre_classifier import PreClassifier
-
+def test_plan_row_fallback_unacknowledged_blocks_portfolio_until_step_2():
+    """With #1977 step 1 on main, removing the show/list/view literal leaves the
+    #1884 phrase with ONE surface-1 claim (STATUS) and an unclaimed leading
+    clause ("list my archived projects"), so surface 1 DECLINES the turn: the
+    fallback is unclaimed. Arch's 2026-10-11 correction: that is NOT OK until
+    step 2 acknowledges the other half — "planned, fallback unacknowledged",
+    NO-GO. The step-2 commit flips STEP2_ACKNOWLEDGEMENT_LANDED and this pin."""
     assert gate.STEP2_ACKNOWLEDGEMENT_LANDED is False, "flip this pin together with #1977 step 2"
-    monkeypatch.setattr(
-        PreClassifier,
-        "STATUS_PATTERNS",
-        [p for p in PreClassifier.STATUS_PATTERNS if "current work" not in p],
-    )
     counts = pattern_literal_counts.per_list_literal_counts()
     records, by_list = gate.build_census(gate.CURRENT_LIVE_CATEGORIES)
     a = gate.assess_list("PORTFOLIO_PATTERNS", by_list["PORTFOLIO_PATTERNS"])
     outcomes = {rec.phrase: outcome for rec, outcome, _ in a.planned}
     assert outcomes.get(_TWO_TOPIC) == "planned-unacknowledged", outcomes
     assert [c for c in a.reabsorbed if c[0].phrase == _TWO_TOPIC], "must still block"
-    report = gate.render_list_report("PORTFOLIO_PATTERNS", by_list, counts, len(records))
-    assert "planned, fallback unacknowledged" in report
     assert a.kind == "rule11"
+    report = gate.render_list_report("PORTFOLIO_PATTERNS", by_list, counts, len(records))
+    verdict = next(line for line in report.splitlines() if line.startswith("verdict:"))
+    assert "PLANNED rows whose FALLBACK" in verdict, verdict
+    assert "planned, fallback unacknowledged" in report
+
+
+def test_plan_row_fallback_partial_names_the_dropping_list(monkeypatch):
+    """Unit-level partial outcome: before = PORTFOLIO + STATUS, the post-removal
+    fallback claims STATUS only → "planned-partial" naming STATUS_PATTERNS
+    (the pre-step-1 reading of the #1884 row, kept as the shape the rule
+    must still catch when a surviving literal takes a two-topic turn whole)."""
+    from services.intent_service.pre_classifier import PreClassifier
+
+    monkeypatch.setattr(
+        gate,
+        "surface1_fallback_claims",
+        lambda pc, phrase: [("STATUS_PATTERNS", "get_project_status", "STATUS")],
+    )
+    outcome, after, why = gate.plan_fallback_outcome(
+        PreClassifier,
+        _TWO_TOPIC,
+        ["list_archived_projects", "get_project_status"],
+        ["PORTFOLIO", "STATUS"],
+    )
+    assert outcome == "planned-partial", (outcome, why)
+    assert after.pattern_list == "STATUS_PATTERNS" and "drops the PORTFOLIO half" in why
 
 
 def test_plan_row_is_shadowed_when_the_split_still_covers_both_halves():

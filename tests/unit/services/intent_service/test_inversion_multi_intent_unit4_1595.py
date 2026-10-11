@@ -476,13 +476,14 @@ class TestTheShapesAreReal:
         `_READ_LANE_GROUPS` membership and the no-WorkflowEntry property,
         are both unchanged by a PARTIAL deletion that keeps the list alive;
         measured directly (both orderings below), not assumed."""
+        # #1977 (residue rule): the read-first phrasing claims its one read
+        # half but leaves "delete my hydrate reminder" unclaimed (substantive
+        # second clause) -> surface 1 now declines it too (was: 1 claim).
         assert (
-            len(
-                PreClassifier.detect_multiple_intents(
-                    "can you summarize my current work and delete my hydrate reminder"
-                ).intents
-            )
-            == 1
+            PreClassifier.detect_multiple_intents(
+                "can you summarize my current work and delete my hydrate reminder"
+            ).intents
+            == []
         )
         assert (
             PreClassifier.detect_multiple_intents(

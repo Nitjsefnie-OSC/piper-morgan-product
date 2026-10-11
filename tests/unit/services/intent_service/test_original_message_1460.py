@@ -56,7 +56,10 @@ MULTI_INTENT_MESSAGE = "What's my schedule today and show my todos"
 # LOCAL_GIT_STATUS_PATTERNS, neither scheduled for further deletion) —
 # confirmed directly: 2 intents, status/get_project_status +
 # query/local_git_status_query.
-STILL_CLAIMED_MULTI_INTENT_MESSAGE = "can you summarize my current work and what branch are we on"
+# #1977 (residue rule): the git half no longer claims, so the old message
+# became ONE claim + an unclaimed clause and is now declined at surface 1.
+# Swapped to a genuine two-claim split (PORTFOLIO + STATUS, measured).
+STILL_CLAIMED_MULTI_INTENT_MESSAGE = "list my archived projects and summarize my current work"
 # #1595 Phase 3, rule-10-licensed FULL deletion (2026-10-09): GUIDANCE_PATTERNS'
 # last 3 literals (including \bsetup.*projects?\b, which SETUP_MESSAGE matched)
 # are tombstoned — SETUP_MESSAGE no longer claims ANY intent via

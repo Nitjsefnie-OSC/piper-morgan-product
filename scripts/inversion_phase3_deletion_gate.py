@@ -1725,7 +1725,9 @@ def render_list_report(
     held, n_surv, licensed = a.held, a.n_surv, a.licensed
     reabsorbed, shadowed, ruled, planned = a.reabsorbed, a.shadowed, a.ruled, a.planned
     if reabsorbed:
-        greedy = sorted({f"{c[2].pattern_list} -> {c[2].action}" for c in reabsorbed})
+        greedy = sorted(
+            {f"{c[2].pattern_list} -> {c[2].action}" for c in reabsorbed if c[2].pattern_list}
+        ) or ["(none — the fallback is unclaimed)"]
         n_partial = sum(
             1 for c in reabsorbed if c[1] in ("planned-partial", "planned-unacknowledged")
         )

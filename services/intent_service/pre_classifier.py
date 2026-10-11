@@ -151,6 +151,95 @@ class PreClassifier:
         residue_words = re.findall(r"[a-z0-9']+", residue, flags=re.IGNORECASE)
         return len(residue_words) == 0
 
+    # #1977 (ADR-080 D6, surface 1 only declines MORE): coordination markers
+    # that open a possible second clause in the UNCLAIMED residue. No comma
+    # (Arch 2026-10-11: commas are list separators inside one object).
+    _RESIDUE_MARKER_RE = re.compile(r"\b(?:and|also|then|plus)\b|;", re.IGNORECASE)
+    _RESIDUE_STOPWORDS = frozenset(
+        {
+            "a", "an", "the", "my", "to", "of", "for", "me", "please",
+            "it", "that", "this", "i", "you", "we", "us", "your", "our",
+        }
+    )  # fmt: skip
+    _RESIDUE_MIN_CONTENT_WORDS = 2
+    # #1977 (Lead's review, 2026-10-11): an unclaimed clause counts only when it
+    # is ASK-shaped — verb-first, a wh-word, "can/could/would you", or "please".
+    # A statement or aside ("we're going in circles now and no that is not the
+    # name of the new project", PM's #1856 turn 2) stays with the claim it sits
+    # beside; declining it would pull a mid-flow correction away from the
+    # handler that owns the flow. Used only to NARROW the decline (D6-shaped).
+    _RESIDUE_ASK_CUE_RE = re.compile(
+        r"^\s*(?:please\s+)?(?:"
+        r"what|when|where|who|which|how|why|whose|"
+        r"can|could|would|will|should|do|does|did|is|are|am|"
+        r"list|show|tell|give|get|find|check|summarize|summarise|connect|link|add|create|"
+        r"delete|remove|clear|mark|complete|finish|schedule|remind|set|open|close|reopen|"
+        r"update|edit|archive|restore|search|look|pull|fetch|send|write|draft|explain|"
+        r"help|let|make|run|start|stop|cancel|move|rename|describe|analyze|analyse|review"
+        r")\b",
+        re.IGNORECASE,
+    )
+
+    @staticmethod
+    def _substantive_residue(clean_for_matching: str, spans) -> Optional[str]:
+        """#1977: the substantive second clause no claim covers, or None.
+
+        Blank every claimed span out of the message, strip the #1416
+        pleasantry/filler patterns (what ``_is_pleasantry_only`` strips), then
+        cut the message into clauses at the coordination markers (the leading
+        clause included) and look for one with >= 2 content words that NO
+        claim span touches (a span is
+        the matched keyword only, so "... and what branch are we on" is a
+        claimed clause even though "are we on" lies outside the span; the
+        plain blank-the-spans reading over-declined 26 real two-claim splits
+        in tests/unit). Returns that clause (text after the marker),
+        else None. Pure measurement: callers only ever DECLINE on a hit.
+        """
+        real_spans = [sp for sp in spans if sp]
+        chars = list(clean_for_matching)
+        for start, end in real_spans:
+            for i in range(max(start, 0), min(end, len(chars))):
+                chars[i] = " "
+        residue = "".join(chars)
+        # Same-length blanking so clause offsets stay aligned with the spans.
+        for pattern_set in (
+            PreClassifier.GREETING_PATTERNS,
+            PreClassifier.FAREWELL_PATTERNS,
+            PreClassifier.THANKS_PATTERNS,
+            PreClassifier._PLEASANTRY_FILLER_PATTERNS,
+        ):
+            for pattern in pattern_set:
+                residue = re.sub(
+                    pattern, lambda m: " " * len(m.group(0)), residue, flags=re.IGNORECASE
+                )
+        markers = list(PreClassifier._RESIDUE_MARKER_RE.finditer(residue))
+        if not markers:
+            return None
+        # Every clause the markers cut the message into — INCLUDING the one
+        # before the first marker ("list my archived projects and summarize my
+        # current work": with only the STATUS half claimed, the dropped half is
+        # the LEADING clause; Lead's review of the first cut, 2026-10-11).
+        bounds = [(0, markers[0].start())] + [
+            (m.end(), markers[i + 1].start() if i + 1 < len(markers) else len(residue))
+            for i, m in enumerate(markers)
+        ]
+        for c_start, c_end in bounds:
+            # A claim anywhere inside the clause means the clause IS claimed
+            # (a span is only the matched keyword, not the whole clause).
+            if any(start < c_end and end > c_start for start, end in real_spans):
+                continue
+            clause = residue[c_start:c_end]
+            if not PreClassifier._RESIDUE_ASK_CUE_RE.match(clause.strip(" ,;:.!?")):
+                continue  # a statement/aside, not a second ask (#1856 PM turn 2)
+            words = [
+                w
+                for w in re.findall(r"[a-z0-9']+", clause, flags=re.IGNORECASE)
+                if w.lower() not in PreClassifier._RESIDUE_STOPWORDS
+            ]
+            if len(words) >= PreClassifier._RESIDUE_MIN_CONTENT_WORDS:
+                return " ".join(clause.split()).strip(" ,;:.!?") or None
+        return None
+
     # Thanks patterns - using regex with word boundaries for precision
     THANKS_PATTERNS = [
         r"\bthanks\b",
@@ -1455,6 +1544,47 @@ class PreClassifier:
     def pre_classify_with_pattern_list(
         message: str,
     ) -> Tuple[Optional[Intent], Optional[str]]:
+        """Claim WITH list identity, declining a claim that leaves a
+        substantive second clause unclaimed (#1977 residue rule; parity with
+        ``detect_multiple_intents``). Delegates to
+        :meth:`_pre_classify_claim`; only ever turns a claim into
+        ``(None, None)``.
+        """
+        intent, list_name = PreClassifier._pre_classify_claim(message)
+        if intent is None or list_name is None:
+            return intent, list_name
+        clean_for_matching = message.strip().lower().rstrip(string.punctuation + "!?.,;:😊🙂👋")
+        if list_name == "INTEGRATION_CONNECT_PATTERNS":
+            match = PreClassifier._integration_connect_match(clean_for_matching)
+        else:
+            patterns = vars(PreClassifier).get(list_name)
+            match = (
+                PreClassifier._first_pattern_match(clean_for_matching, patterns)
+                if isinstance(patterns, list)
+                else None
+            )
+        if match is None:
+            # No span available (e.g. the inline MILESTONE_STATUS claim):
+            # keep the claim rather than guess.
+            return intent, list_name
+        residue_clause = PreClassifier._substantive_residue(clean_for_matching, [match.span()])
+        if residue_clause:
+            import structlog
+
+            structlog.get_logger().info(
+                "preclassify_residue_declined",
+                message_preview=message[:50],
+                dropped=intent.action,
+                pattern_list=list_name,
+                residue=residue_clause,
+            )
+            return None, None
+        return intent, list_name
+
+    @staticmethod
+    def _pre_classify_claim(
+        message: str,
+    ) -> Tuple[Optional[Intent], Optional[str]]:
         """Rule-based pre-classification WITH the claiming list's identity.
 
         Returns ``(intent, pattern_list_name)`` — the name of the class-level
@@ -2715,6 +2845,26 @@ class PreClassifier:
             intents = []
             claimed_list_by_id.clear()
             claimed_span_by_id.clear()
+
+        # #1977: the #1416/#1924 rule generalized to EVERY claim set. If the
+        # claimed spans leave a substantive second clause (coordination marker
+        # + >= 2 content words) nothing deterministic may take the turn: a
+        # declined set falls through to the router / LLM classifier, which
+        # reads the WHOLE message. Surface 1 only declines more (ADR-080 D6).
+        if intents:
+            residue_clause = PreClassifier._substantive_residue(
+                clean_for_matching, [claimed_span_by_id.get(id(i)) for i in intents]
+            )
+            if residue_clause:
+                logger.info(
+                    "multi_intent_residue_declined",
+                    message_preview=message[:50],
+                    dropped=[i.action for i in intents],
+                    residue=residue_clause,
+                )
+                return MultiIntentResult(
+                    intents=[], original_message=message, is_multi_intent=False
+                )
 
         result = MultiIntentResult(
             intents=intents,
