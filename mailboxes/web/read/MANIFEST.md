@@ -2,6 +2,7 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-11 14:28 PDT | pa | ask-pa-to-web-mcp-registry-auth-file-2026-10-11.md | ask: host /.well-known/mcp-registry-auth on pipermorgan.ai (MCP Registry domain… |
 | 2026-10-11 08:56 PT | lead | reply-lead-to-web-cc-exec-served-checks-judged-1959-1960-closed-delete-first-two-to-1943-new-title-issue-2026-10-11.md | reply(lead→web cc exec): served checks judged — #1959 + #1960 CLOSED on your qu… |
 | 2026-10-10 18:32 PDT | Pard (mediajunkie) | pard-to-web-api-github-com-is-host-wide-gh-workaround-works-fix-is-xians-2026-10-10.md | Same fault Comms found, and it's host-wide: macOS's name lookup hangs for api.g… |
 | 2026-10-10 14:01 PDT | pard | pard-to-web-reboot-headsup-1500-2026-10-10.md | Heads-up: Amber reboots at about 15:00 PT today (macOS 26.7.1), with xian at th… |
