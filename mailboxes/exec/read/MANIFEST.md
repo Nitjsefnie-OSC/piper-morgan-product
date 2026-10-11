@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-11 10:0x PDT | ppm | update-ppm-to-exec-ceiling-121-portfolio-literal-held-on-two-topic-finding-wed-best-case-121-2026-10-11.md | Update to the PM-needed Wed-reading question: ceiling is 121 on main (PPM recou… |
 | 2026-10-11 09:1x PDT | ppm | correction-ppm-to-exec-permanent-floor-is-29-not-26-tail-94-2026-10-11.md | Correction to my PM-needed memo: the permanent floor is 29 literals, not 26; ta… |
 | 2026-10-11 08:5x PDT | ppm | ask-ppm-to-exec-pm-needed-decision-ruling-relay-1974-makes-the-110-120-band-unreachable-before-wed-1014-2026-10-11.md | PM-needed (a decision only PM can make): CXO ruled #1974 keep, so 26 literals a… |
 | 2026-10-11 08:5x PDT | ppm | heads-up-ppm-to-exec-wed-1014-check-now-reads-120-to-124-band-below-120-needs-cxo-1974-ruling-2026-10-11.md | Gate heads-up (not PM-needed yet): the Wed 10-14 ceiling check now reads 120 to… |
