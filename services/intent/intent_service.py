@@ -439,15 +439,30 @@ class IntentService:
         return text or None
 
     @staticmethod
-    def _unanswered_halves(intent: Intent) -> Optional[Tuple[Optional[str], str]]:
-        """#1977 step 2: ``(answered_clause_or_None, unanswered_clause)``.
+    def _unanswered_halves(intent: Intent) -> Optional[Tuple[List[str], str]]:
+        """#1977 step 2 — THE COVERAGE RULE (Arch + CXO 2026-10-11, mechanical and
+        pinned). Returns ``(clauses_to_name, hint)`` or None.
 
-        Only when step 1 actually carried a residue on the intent (Arch: never
-        on a guess). If the served category equals a declined claim's, the
-        claimed half was answered and the residue is the unanswered half;
-        otherwise nothing is claimed as done (which half the LLM answered is
-        unknown) and the unanswered half is the declined claim's clause. No
-        declined claim recorded -> residue.
+        Step 1 carries two kinds of clause: the DECLINED CLAIMS' clauses (each has
+        a surface-1 category) and the LEFTOVER clause (``unclaimed_residue``, no
+        category — no literal claimed it). Coverage is decided ONLY from categories
+        the served intent can be compared with:
+
+        * served category == a declined claim's category  → the claimed half was
+          answered; **the leftover clause is ALWAYS named** (the #1884 shape:
+          STATUS served, "I need the archived list too" named). Never omitted —
+          omitting it is the silent drop again.
+        * served category matches NO declined claim → which half the model answered
+          is unknown; name BOTH the leftover clause and the declined claim's clause,
+          leftover first, capped at two ("an 'I haven't done' about a half the model
+          did answer is the smaller error; leaving out a half nobody answered is
+          the larger" — Arch).
+        * no declined claim recorded → the leftover clause alone.
+
+        The ``hint`` (what a bare "yes" re-submits through the #852 offer rail) is
+        ALWAYS the leftover clause, so the "yes" lands on the half that was dropped.
+        Each named clause is trimmed to <= 8 words (CXO rule 4); a clause that trims
+        to nothing is dropped; no clause left → None (no line).
         """
         ctx = getattr(intent, "context", None) or {}
         residue = ctx.get("unclaimed_residue")
@@ -455,51 +470,34 @@ class IntentService:
             return None
         declined = ctx.get("declined_claims") or []
         served = getattr(getattr(intent, "category", None), "value", None)
-        claim_text = None
-        covered = False
-        for category_value, _action, clause_text in declined:
-            if clause_text and claim_text is None:
-                claim_text = clause_text
-            if category_value == served:
-                covered = True
-                if clause_text:
-                    claim_text = clause_text
-                break
-        if covered or not declined or claim_text is None:
-            answered, unanswered = (claim_text if covered else None), residue
-        else:
-            # The served category differs from the declined claim's: we do NOT
-            # know which half the LLM classifier answered (the first served
-            # check, 2026-10-11, showed it answering NEITHER — summarize_document
-            # for "summarize my current work and I need the archived list too"),
-            # so claim nothing as done; the declined clause is the one half we
-            # know went unanswered by the deterministic path (Arch: never a guess).
-            answered, unanswered = None, claim_text
-        unanswered = IntentService._trim_clause(unanswered)
-        if not unanswered:
+        covered = any(category_value == served for category_value, _a, _c in declined)
+        leftover = IntentService._trim_clause(residue)
+        named: List[str] = [leftover] if leftover else []
+        if declined and not covered:
+            for _category_value, _action, clause_text in declined:
+                trimmed = IntentService._trim_clause(clause_text) if clause_text else None
+                if trimmed and trimmed not in named:
+                    named.append(trimmed)
+                if len(named) >= 2:
+                    break
+        if not named:
             return None
-        return IntentService._trim_clause(answered), unanswered
+        return named, (leftover or named[0])
 
     @staticmethod
     def _unanswered_half_line(intent: Intent) -> Optional[str]:
-        """#1977 step 2 (CXO's copy): the one-line acknowledgement of the half
-        a residue decline left unanswered, or None.
-
-        ``I haven't done "{unanswered}" yet. Want me to?`` (CXO's final copy,
-        2026-10-11: never an "I did …" half). No apology (rule 3), user's own words (rule 1),
-        <= 8 words per clause (rule 4).
+        """#1977 step 2 (CXO's final copy, 2026-10-11): ``I haven't done "A" yet.``
+        or ``I haven't done "A" or "B" yet.`` (never an "I did …" half), plus
+        `` Want me to?`` when the offer arms (``_append_unanswered_half`` drops the
+        question when it cannot arm). No apology (rule 3), user's own words (rule
+        1), <= 8 words per clause (rule 4). Which clauses: ``_unanswered_halves``.
         """
         halves = IntentService._unanswered_halves(intent)
         if halves is None:
             return None
-        answered, unanswered = halves
-        # The clause is the user's own words pasted in (CXO rule 1), so it is
-        # QUOTED: bare pasting collides with the sentence's grammar ("I haven't
-        # tell me a joke…"). Lead 2026-10-11; CXO owns the copy.
-        line = f'I haven\'t done "{unanswered}" yet.'
-        # CXO 2026-10-11 (final copy): no "I did …" half — the reply above the
-        # line already shows what was done, and naming the answered half in the
-        # user's words can be a false claim. Only the unanswered clause.
+        named, _hint = halves
+        quoted = " or ".join(f'"{c}"' for c in named)
+        line = f"I haven't done {quoted} yet."
         return line + IntentService._UNANSWERED_HALF_QUESTION
 
     def _append_unanswered_half(

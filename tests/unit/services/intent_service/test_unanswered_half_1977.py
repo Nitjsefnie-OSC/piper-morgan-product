@@ -75,7 +75,7 @@ class TestUnansweredHalfLine:
             [("status", "get_project_status", "summarize my current work")],
         )
         assert IntentService._unanswered_half_line(intent) == (
-            'I haven\'t done "summarize my current work" yet. Want me to?'
+            'I haven\'t done "tell me a joke about cats" or "summarize my current work" yet. Want me to?'
         )
 
     def test_no_declined_claim_recorded_uses_the_residue(self):
@@ -273,3 +273,61 @@ class TestAppendAndArm:
     def test_no_suffix_is_byte_identical(self):
         out = self._service()._apply_soft_offer(self._result(), "hi", str(uuid4()), user_id=_USER)
         assert "haven't" not in out.message
+
+
+# THE COVERAGE RULE (Arch + CXO 2026-10-11): pinned on the helper directly.
+def _intent_with(residue, declined, served_category):
+    from types import SimpleNamespace
+
+    cat = SimpleNamespace(value=served_category)
+    return SimpleNamespace(
+        category=cat, context={"unclaimed_residue": residue, "declined_claims": declined}
+    )
+
+
+def test_coverage_rule_served_matches_declined_claim_names_the_leftover_and_hints_it():
+    from services.intent.intent_service import IntentService
+
+    intent = _intent_with(
+        "I need the archived list too",
+        [("STATUS", "get_project_status", "summarize my current work")],
+        "STATUS",
+    )
+    named, hint = IntentService._unanswered_halves(intent)
+    assert named == ["I need the archived list too"]
+    assert hint == "I need the archived list too"
+    assert IntentService._unanswered_half_line(intent) == (
+        'I haven\'t done "I need the archived list too" yet. Want me to?'
+    )
+
+
+def test_coverage_rule_served_matches_no_declined_claim_names_both_leftover_first_and_hints_leftover():
+    from services.intent.intent_service import IntentService
+
+    intent = _intent_with(
+        "I need the archived list too",
+        [("STATUS", "get_project_status", "summarize my current work")],
+        "SYNTHESIS",
+    )
+    named, hint = IntentService._unanswered_halves(intent)
+    assert named == ["I need the archived list too", "summarize my current work"]
+    assert hint == "I need the archived list too"
+    assert IntentService._unanswered_half_line(intent) == (
+        'I haven\'t done "I need the archived list too" or "summarize my current work" yet. Want me to?'
+    )
+
+
+def test_coverage_rule_caps_at_two_and_hint_is_still_the_leftover():
+    from services.intent.intent_service import IntentService
+
+    intent = _intent_with(
+        "tell me a joke about cats",
+        [
+            ("STATUS", "get_project_status", "summarize my current work"),
+            ("PORTFOLIO", "manage_portfolio", "list my projects"),
+        ],
+        "CONVERSATION",
+    )
+    named, hint = IntentService._unanswered_halves(intent)
+    assert len(named) == 2 and named[0] == "tell me a joke about cats"
+    assert hint == "tell me a joke about cats"
