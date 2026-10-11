@@ -1968,7 +1968,15 @@ def test_1973_completion_history_is_no_go_on_the_dispatch_threshold_itself():
             if line.lstrip().startswith("survives:") and "when did (i|we)" in line
         )
         assert "When did we launch the beta?" in survivor, survivor
-    assert gate.HELD_FOR_CAUSE == {}
+    # 2026-10-11: the only HELD_FOR_CAUSE entries are the #1974 pleasantry family
+    # (CXO: ruled keep, permanent floor) — never COMPLETION_HISTORY.
+    assert set(gate.HELD_FOR_CAUSE) == {
+        "GREETING_PATTERNS",
+        "FAREWELL_PATTERNS",
+        "THANKS_PATTERNS",
+        "_PLEASANTRY_FILLER_PATTERNS",
+    }
+    assert all("#1974" in v for v in gate.HELD_FOR_CAUSE.values())
 
 
 def test_1973_match_arm_applies_the_dispatch_threshold():
@@ -2049,3 +2057,60 @@ def test_census_table_verdict_agrees_with_the_per_list_report_for_every_list():
             assert "(rule 1" not in verdict_line, (name, verdict_line)
         checked += 1
     assert checked >= 10, checked
+
+
+# Arch's restore rule (2026-10-11): a restore is valid only when the restored
+# literal claims the row's ruled op; otherwise it restores nothing and the row is
+# a candidate-attributed KNOWN MISS, recorded as such. Two of the six 10-10
+# restores (focus-today, upcoming-milestones) were exactly that. The same rule
+# applies to RULED_SURVIVORS (the #1933 update/edit pair carries known_miss).
+def _ruled_op(expected: str) -> str:
+    return expected.split(":", 1)[1] if expected.startswith("action:") else expected
+
+
+def test_restored_literals_claim_the_ruled_op_or_carry_a_known_miss():
+    records, _ = gate.build_census(gate.CURRENT_LIVE_CATEGORIES)
+    by_phrase = {r.phrase: r for r in records}
+    checked = 0
+    for entry in gate.load_deleted_pattern_lists():
+        for phrase, rec in (entry.get("known_reabsorptions") or {}).items():
+            if not rec.get("restored"):
+                continue
+            r = by_phrase[phrase]
+            if r.claim.action != _ruled_op(r.expected):
+                assert rec.get("known_miss"), (entry["list"], phrase, r.claim.action, r.expected)
+            checked += 1
+    assert checked >= 2, checked
+
+
+def test_ruled_survivors_cite_a_ruling_and_claim_the_ruled_op_or_carry_a_known_miss():
+    from services.intent_service.pre_classifier import PreClassifier
+
+    records, by_list = gate.build_census(gate.CURRENT_LIVE_CATEGORIES)
+    by_phrase = {r.phrase: r for r in records}
+    ruled = gate.load_ruled_survivors()
+    assert ruled, "RULED_SURVIVORS is empty — the #1933 pair should be in it"
+    for list_name, lits in ruled.items():
+        for lit, rec in lits.items():
+            assert lit in getattr(PreClassifier, list_name), (list_name, lit)
+            assert rec.get("ruling"), (list_name, lit)
+            for phrase in rec.get("rows", []):
+                r = by_phrase[phrase]
+                if r.claim.action != _ruled_op(r.expected):
+                    assert rec.get("known_miss"), (
+                        list_name,
+                        lit,
+                        phrase,
+                        r.claim.action,
+                        r.expected,
+                    )
+    counts = pattern_literal_counts.per_list_literal_counts()
+    report = gate.render_list_report("PORTFOLIO_PATTERNS", by_list, counts, len(records))
+    assert "ruled survivor:" in report
+    assert "deleting 2" not in report, "a ruled survivor must not be licensed"
+
+
+def test_census_table_reads_held_for_the_1974_family():
+    _, by_list = gate.build_census(gate.CURRENT_LIVE_CATEGORIES)
+    for name in ("GREETING_PATTERNS", "FAREWELL_PATTERNS", "THANKS_PATTERNS"):
+        assert gate.census_verdict_label(name, by_list[name]) == "HELD"

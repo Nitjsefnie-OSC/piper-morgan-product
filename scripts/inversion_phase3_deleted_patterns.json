@@ -1013,7 +1013,8 @@
           "claimed_action": "get_top_priority",
           "agrees": false,
           "restored": true,
-          "note": "2026-10-10 #1973-shape restore (Lead): the deleted literal is back in PRIORITY_PATTERNS (ruled, permanent unless the row later scores under rules 1/10/11), so the phrase is claimed again by its own list; documented, not silent. The claim (get_top_priority) differs from the ruled destination; it is a surface-1 fallback beneath the live consult. Report: inversion-week-calendar-description-full-score-2026-10-10-anthropic.md."
+          "note": "2026-10-10 #1973-shape restore (Lead): the deleted literal is back in PRIORITY_PATTERNS (ruled, permanent unless the row later scores under rules 1/10/11), so the phrase is claimed again by its own list; documented, not silent. The claim (get_top_priority) differs from the ruled destination; it is a surface-1 fallback beneath the live consult. Report: inversion-week-calendar-description-full-score-2026-10-10-anthropic.md.",
+          "known_miss": "2026-10-11 (Arch): the restored literal claims get_top_priority, the row is ruled attention_query, the router serves get_top_priority @0.95 with or without it — the restore restored nothing. Candidate-attributed known miss against the 10-10 week_calendar landing. CXO withdrew the survivor status 10-11; re-delete under misserved_at_deletion."
         }
       },
       "note": "gate --list PRIORITY_PATTERNS --live read_status,read_referent,read_synthesis,create_todo,create_reminder,read_strategic,read_temporal,delete_todo: GO, 42/42 claimed rows MATCH/agreeing-REVIEW/live-MISMATCH/mis-serve/surface-2-floor, 0 [FAIL]. 5 of the list's 47 literals needed a corpus row before deletion (unexercised) -- see shadowed_literals for the per-literal account (2 shadowed by an earlier, broader sibling literal in this same list; 3 genuinely never exercised by any corpus row, in any category). Destination: get_top_priority, a FLOOR-disposition action (Arch-confirmed via inversion_phase1_shadow_score._expected_action_is_floor_disposition). All 42 claimed rows are this list's OWN corpus rows -- no sibling-list reabsorption existed at deletion time. 2 rows pass via misserved_at_deletion (claim disagreed with the ruled destination AND the router independently declined -- deleting a deterministically-wrong fallback cannot regress the row). 2 rows pass via the NEW surface2_verified_at_deletion shape -- Arch's 2026-10-02 condition (d): the router MISMATCHED to a non-floor op (get_contextual_guidance@0.72 / week_calendar@0.72, both below dispatch confidence or not live), but a frozen N=5 surface-2 probe (served model recorded per call; both provider legs testers hold probed -- gpt-4o 45/45, claude-sonnet-4-6 45/45) shows the LLM classifier landing BOTH phrases in the PRIORITY category on every sample, so once surface 1 is gone the LLM classifier routes them by category to the SAME floor (get_top_priority) surface 1 used to reach by pattern -- the pattern is not load-bearing. Post-deletion, the empirical claim_for_phrase probe (against the live, now-tombstoned PreClassifier) found ZERO reabsorptions across all 42 phrases (STATUS_PATTERNS, GUIDANCE_PATTERNS, TODO_COMPLETE_PATTERNS, and ANALYSIS_PATTERNS were specifically checked, per the dispatch's watch-list -- none reclaim any of the 42 phrases). check_deleted_entry_non_regression gained ONE new sibling branch for this deletion: a documented surface2_verified_at_deletion phrase is OK iff it is still UNCLAIMED by surface 1 post-deletion (the same narrower, cheaper re-verified invariant misserved_at_deletion already uses -- the original N=5 probe proof is a one-time fact recorded at GO time and is never re-derived on each future test run). Ceiling: 376 -> 329 (this list alone). | 2026-10-02 (Lead, same hour): the three literals the gate flagged as never exercised (\\bmost important task\\b, \\bmost important work\\b, \\bwhat.*work on next\\b) got one corpus row each AFTER the deletion — verified against the pre-deletion literals from git (all three match) and unclaimed by every surviving list; scored on Haiku (reports 57-59). Deposit-before-delete was the procedure; this is the same evidence landed an hour late, recorded as such. 2026-10-10 #1973-shape restore: \"where should my focus be today\" -- candidate-attributed read-to-read move (router swaps attention_query to get_top_priority); CXO ruled the today-focus family stays together, so the restore is permanent; literal \\bwhere.*focus\\b restored to pre_classifier.py (list now partial, 1 survivor(s)); re-delete only with its row scoring under rules 1/10/11. Report: inversion-week-calendar-description-full-score-2026-10-10-anthropic.md.",
@@ -1452,7 +1453,8 @@
           "claimed_action": "get_project_status",
           "agrees": false,
           "restored": true,
-          "note": "2026-10-10 #1973-shape restore (Lead): the deleted literal is back in STATUS_PATTERNS (ruled, permanent unless the row later scores under rules 1/10/11), so the phrase is claimed again by its own list; documented, not silent. The claim (get_project_status) differs from the ruled destination; it is a surface-1 fallback beneath the live consult. Report: inversion-week-calendar-description-full-score-2026-10-10-anthropic.md."
+          "note": "2026-10-10 #1973-shape restore (Lead): the deleted literal is back in STATUS_PATTERNS (ruled, permanent unless the row later scores under rules 1/10/11), so the phrase is claimed again by its own list; documented, not silent. The claim (get_project_status) differs from the ruled destination; it is a surface-1 fallback beneath the live consult. Report: inversion-week-calendar-description-full-score-2026-10-10-anthropic.md.",
+          "known_miss": "2026-10-11 (Arch): the restored literal claims get_project_status, the row is ruled list_milestones, the router says CLARIFY @0.4 — the restore restored nothing. Known miss; re-delete under misserved_at_deletion (surface 2 already mis-serve-safe)."
         },
         "I need a status report": {
           "reclaimed_by": "STATUS_PATTERNS",
@@ -2804,5 +2806,26 @@
       "known_reabsorptions": {},
       "note": "gate --list COMPLETION_HISTORY_PATTERNS --live read_status,read_referent,read_synthesis,create_todo,create_reminder,read_strategic,read_temporal,delete_todo,read_floor,read_floor_2,read_canonical,read_portfolio,complete_todo: GO (partial), deleting 3 of 5 literals (what date did / when was ... completed / how long ago did); ceiling 127 -> 124. The 3 rows_claimed_at_deletion each scored MATCH check_completion_status >=0.85 in inversion-phase3-rule10-completion-history-rows-score-2026-10-11-anthropic.md. Survivors and why: 'When did we launch the beta?' (router check_completion_status @0.72, under the 0.8 dispatch threshold) and 'show me when we shipped the API' (router shipped_this_week @0.72) both stand down to surface 2, and inversion-phase3-surface2-floor-probe-2026-10-11-n5-anthropic-completion.md shows surface 2 NOT landing STATUS for them ('When did we launch the beta?' TEMPORAL 3 / QUERY 2; 'show me when we shipped the API' QUERY/get_release_history 5/5), so those two literals are load-bearing and survive. No surface-2 credits are recorded for them."
     }
-  ]
+  ],
+  "RULED_SURVIVORS": {
+    "_comment": "Literals a ruling keeps although the gate's evidence would license them (Arch 2026-10-11, Lead's ask approved). Each cites its ruling; a ruled survivor whose claim differs from its rows' ruled op must carry known_miss (the restore pin applies here too). Excluded from `licensed` like load-bearing survivors; printed by --list.",
+    "PORTFOLIO_PATTERNS": {
+      "\\bupdate\\s+(?:my\\s+)?(?:the\\s+)?project\\b": {
+        "ruling": "#1933 option (a): PPM/CXO/Arch keep the update/edit literals (pinned by tests/unit/services/intent_service/test_portfolio_edit_literals_1933.py)",
+        "on": "2026-10-11",
+        "rows": [
+          "update my project name to Atlas"
+        ],
+        "known_miss": "the literal claims manage_portfolio while the row is ruled floor; kept on purpose because the fallback is WORSE — the router/surface 2 mis-route edit-project phrasings to update_document (a WRITE), #1933's finding"
+      },
+      "\\bedit\\s+(?:my\\s+)?(?:the\\s+)?project\\b": {
+        "ruling": "#1933 option (a): PPM/CXO/Arch keep the update/edit literals (pinned by tests/unit/services/intent_service/test_portfolio_edit_literals_1933.py)",
+        "on": "2026-10-11",
+        "rows": [
+          "edit my project description"
+        ],
+        "known_miss": "the literal claims manage_portfolio while the row is ruled floor; kept on purpose because the fallback is WORSE (router update_document @0.85, a WRITE), #1933's finding"
+      }
+    }
+  }
 }
