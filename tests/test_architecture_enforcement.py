@@ -3270,7 +3270,11 @@ class TestExtractionPatternRatchet:
         # `\\bconnect\\s+...repo...\\s+(?:to\\s+)` ("connect my repository to the
         # project"). Report: inversion-week-calendar-description-full-score-
         # 2026-10-10-anthropic.md. 121 + 6 = 127.
-        "pre-classifier": 124,
+        #
+        # 127 -> 124 (2026-10-11): COMPLETION_HISTORY partial (3 of 5).
+        # 124 -> 122 (2026-10-11): STATUS partial, `\\bproject landscape\\b` and
+        # `\\bupcoming milestones?\\b` (the latter under misserved_at_deletion).
+        "pre-classifier": 122,
     }
 
     # The named interpretation-by-pattern spans, per surface: (file, symbols).

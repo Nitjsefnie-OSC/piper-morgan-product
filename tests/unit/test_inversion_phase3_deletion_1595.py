@@ -482,15 +482,14 @@ class TestDeletedPatternListsLedger:
         status_entry = next(e for e in entries if e["list"] == "STATUS_PATTERNS")
         assert status_entry.get("partial") is True
         assert (
-            status_entry.get("literals") == 50
-        ), "literals is the DELETED count (52 minus 2 #1973-shape restores), not the original 56"
-        # 2026-10-10: 2 restores (#1973-shape, Lead) join the 4 original survivors.
+            status_entry.get("literals") == 52
+        ), "literals is the DELETED count (56 minus the 4 survivors), not the original 56"
+        # 2026-10-11: `project landscape` and `upcoming milestones?` deleted (partial);
+        # 4 survivors remain (3 original + the 10-10 `status report` restore).
         assert set(status_entry.get("surviving_literals", {})) == {
             r"\bnext milestone\b",
             r"\bcurrent work\b",
             r"\bproject overview\b",
-            r"\bproject landscape\b",
-            r"\bupcoming milestones?\b",
             r"\bstatus report\b",
         }
         guidance_entry = next(e for e in entries if e["list"] == "GUIDANCE_PATTERNS")
@@ -766,21 +765,24 @@ class TestNonRegressionMechanism:
         """#1973-shape restore (2026-10-10): a `known_reabsorptions` record
         with ``restored: true`` is accepted only if its ``reclaiming_literal``
         is listed in the entry's ``surviving_literals`` (the restore is
-        recorded, not silent). Synthetic entry on the real restored STATUS
-        literal; the same record WITHOUT the survivor listing must fail."""
-        phrase = "any upcoming milestones for this project"
-        lit = r"\bupcoming milestones?\b"
+        recorded, not silent). Synthetic entry on a row the PORTFOLIO edit
+        survivor (#1933, RULED_SURVIVORS) really claims with a wrong op and a
+        router that does not independently serve it; the same record WITHOUT
+        the survivor listing must fail. (2026-10-11: re-pointed from the STATUS
+        `upcoming milestones` restore, which was re-deleted.)"""
+        phrase = "edit my project description"
+        lit = r"\bedit\s+(?:my\s+)?(?:the\s+)?project\b"
         known = {
             phrase: {
-                "reclaimed_by": "STATUS_PATTERNS",
+                "reclaimed_by": "PORTFOLIO_PATTERNS",
                 "reclaiming_literal": lit,
-                "claimed_action": "get_project_status",
+                "claimed_action": "manage_portfolio",
                 "agrees": False,
                 "restored": True,
             }
         }
         entry = {
-            "list": "STATUS_PATTERNS",
+            "list": "PORTFOLIO_PATTERNS",
             "rows_claimed_at_deletion": [phrase],
             "known_reabsorptions": known,
             "surviving_literals": {lit: [phrase]},
@@ -794,7 +796,7 @@ class TestNonRegressionMechanism:
             unrecorded, cats=gate.CURRENT_LIVE_CATEGORIES
         )
         assert not ok
-        assert any("claimed again by STATUS_PATTERNS" in p for p in problems)
+        assert any("claimed again by PORTFOLIO_PATTERNS" in p for p in problems)
 
     def test_fails_for_a_phrase_that_is_no_longer_a_corpus_row(self):
         entry = {
@@ -1145,15 +1147,15 @@ class TestPriorityPatternsVerdictIsReported:
         # 2026-10-10: the two #1973-shape restores (`\\bupcoming milestones?\\b`,
         # `\\bstatus report\\b`) add their own rows plus "give me a project status
         # report" (collateral of `\\bstatus report\\b`): 7 rows.
-        assert len(lv.rows) == 7, [r.phrase for r in lv.rows]
+        # 2026-10-11: `project landscape` and `upcoming milestones?` deleted again
+        # (their two rows leave the census): 5 rows.
+        assert len(lv.rows) == 5, [r.phrase for r in lv.rows]
         assert {r.phrase for r in lv.rows} == {
             "give me a project status report",
-            "any upcoming milestones for this project",
             "I need a status report",
             "any update on the next milestone",
             "can you summarize my current work",
             "give me a project overview",
-            "what's the project landscape",
         }
         # 2026-10-10: the week_calendar full run (577, wired into
         # PHASE3_REPORTS) re-scored "what's the project landscape" as
@@ -1162,9 +1164,7 @@ class TestPriorityPatternsVerdictIsReported:
         # deleted here (not in the six-restore brief; flagged to Lead).
         ok_phrases = {r.phrase for r in lv.rows if r.row_ok}
         assert ok_phrases == {
-            "what's the project landscape",
             "give me a project status report",
-            "any upcoming milestones for this project",
         }, ok_phrases
         assert lv.deletable is False, "a list with any FAIL row is NO-GO, not GO"
 
@@ -2080,7 +2080,10 @@ def test_restored_literals_claim_the_ruled_op_or_carry_a_known_miss():
             if r.claim.action != _ruled_op(r.expected):
                 assert rec.get("known_miss"), (entry["list"], phrase, r.claim.action, r.expected)
             checked += 1
-    assert checked >= 2, checked
+    # 2026-10-11: both `restored: true` records (focus-today, upcoming-milestones) were
+    # re-deleted under misserved_at_deletion, so none remain; the loop stays as the
+    # guard for any future restore record.
+    assert checked >= 0, checked
 
 
 def test_ruled_survivors_cite_a_ruling_and_claim_the_ruled_op_or_carry_a_known_miss():

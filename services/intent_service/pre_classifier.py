@@ -340,14 +340,14 @@ class PreClassifier:
     STATUS_PATTERNS = [
         r"\bcurrent work\b",
         r"\bproject overview\b",
-        r"\bproject landscape\b",
+        # 2026-10-11 (#1595): "project landscape" tombstoned (router list_projects
+        # @0.92 live via group; PARTIAL STATUS deletion, 2 more literals gone).
         # Issue #898 Q25: Milestone queries are project status, not priority
         r"\bnext milestone\b",
-        # #1973-shape restore (2026-10-10, Lead): "any upcoming milestones for
-        # this project" — router swaps the destination (list_milestones);
-        # deleted literal restored from 73a40f7cbe^; re-delete only with its
-        # row scoring under rules 1/10/11.
-        r"\bupcoming milestones?\b",
+        # 2026-10-11 (#1595): "upcoming milestones?" re-deleted under
+        # misserved_at_deletion (Arch 2026-10-11: the 10-10 restore claimed
+        # get_project_status for a list_milestones row and restored nothing; the
+        # row stays list_milestones as a known miss).
         # #1973-shape restore (2026-10-10, Lead): "I need a status report" —
         # candidate-attributed move (generate_report); deleted literal
         # restored from 73a40f7cbe^; re-delete only with its row scoring
@@ -2924,9 +2924,10 @@ class PreClassifier:
         # entry no longer present there could never match anyway; this
         # keeps the set an honest subset rather than carrying inert dead
         # entries (pinned: TestOverlapSetIsValueCopyNotNewVocabulary).
+        # 2026-10-11 (#1595): `\\bproject landscape\\b` was tombstoned in
+        # STATUS_PATTERNS, so it is pruned here too (value copy).
         status_project_noun_overlap = {
             r"\bproject overview\b",
-            r"\bproject landscape\b",
         }
         drop_intent_ids: set = set()
         if "PORTFOLIO" in categories and "STATUS" in categories:

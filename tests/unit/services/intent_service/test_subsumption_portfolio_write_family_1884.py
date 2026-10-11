@@ -237,9 +237,12 @@ class TestOverlapSetIsValueCopyNotNewVocabulary:
         # a value copy, not independent vocabulary, so it shrinks when its
         # source shrinks. This candidate set is updated to the new value
         # copy's actual 2 members.
+        #
+        # 2026-10-11 (#1595): `\\bproject landscape\\b` was deleted from
+        # STATUS_PATTERNS (gate GO, partial) and pruned from the overlap set in
+        # the same commit; the value copy is now the single member below.
         candidates = {
             r"\bproject overview\b",
-            r"\bproject landscape\b",
         }
         assert candidates.issubset(set(PreClassifier.STATUS_PATTERNS)), (
             "the filter's overlap set contains a literal not present in "
@@ -262,7 +265,6 @@ class TestOverlapSetIsValueCopyNotNewVocabulary:
         }
         overlap = {
             r"\bproject overview\b",
-            r"\bproject landscape\b",
         }
         assert genuine.isdisjoint(overlap)
         for p in genuine:

@@ -179,9 +179,12 @@ STATUS_READS = (
     "can you summarize my current work",
     "any update on the next milestone",
     "give me a project overview",
-    "what's the project landscape",
     "when did I complete the onboarding project?",
 )
+# 2026-10-11: STATUS_PATTERNS' `\\bproject landscape\\b` is tombstoned (partial
+# deletion; the row "what's the project landscape" scores list_projects @0.92 via
+# the read_portfolio group), so the phrase moves out of STATUS_READS.
+STATUS_LANDSCAPE_READS_NOW_UNCLAIMED = ("what's the project landscape",)
 LOCAL_GIT_STATUS_READS_NOW_UNCLAIMED = (
     "what branch are we on",
     "what branch am i on",
@@ -436,6 +439,38 @@ class TestMemoryReadsNowDeclineAtSurfaceOne:
     def test_multi_intent_path_declines(self, phrase):
         claimed = [i for i in _multi(phrase) if i.category in READ_LANE_CATEGORIES]
         assert claimed == [], f"{phrase!r} unexpectedly still claims on the multi path: {claimed}"
+
+
+class TestStatusLandscapeReadNowDeclinesAtSurfaceOne:
+    """#1595 Phase 3 (2026-10-11): STATUS_PATTERNS' `\\bproject landscape\\b`
+    is deleted (gate GO partial; the phrase's row routes list_projects @0.92,
+    live via the read_portfolio group). It declines at surface 1 on both
+    paths and is served by the Inversion layer."""
+
+    _PHRASES = STATUS_LANDSCAPE_READS_NOW_UNCLAIMED
+
+    @pytest.mark.parametrize("phrase", _PHRASES)
+    def test_single_intent_path_declines(self, phrase):
+        assert _single(phrase) is None, f"{phrase!r} unexpectedly still claims at surface 1"
+
+    @pytest.mark.parametrize("phrase", _PHRASES)
+    def test_multi_intent_path_declines(self, phrase):
+        claimed = [i for i in _multi(phrase) if i.category in READ_LANE_CATEGORIES]
+        assert claimed == [], f"{phrase!r} unexpectedly still claims on the multi path: {claimed}"
+
+    @pytest.mark.asyncio
+    async def test_landscape_served_via_inversion(self, monkeypatch):
+        """Plumbing attestation (router stubbed, no LLM call)."""
+        from tests.unit.services.intent_service._inversion_pin_helper import (
+            assert_inversion_routes,
+        )
+
+        await assert_inversion_routes(
+            monkeypatch,
+            "what's the project landscape",
+            live_categories="read_status",
+            expected_action="list_projects",
+        )
 
 
 class TestLocalGitStatusReadsNowDeclineAtSurfaceOne:
