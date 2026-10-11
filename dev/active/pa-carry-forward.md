@@ -50,6 +50,7 @@ CIO's write-up: `docs/internal/research/cloud-duty-cycle-mechanisms-2026-10-03.m
 
 ## STATE AT 2026-10-10 14:0x (pre-reboot snapshot; read this first)
 
+- **Post-reboot (10-10 16:51) known fault:** macOS can't resolve `api.github.com`, so bare `gh` times out. **Prefix `GODEBUG=netdns=go`** on every `gh` (curl: `--resolve api.github.com:443:172.182.252.137`). A bare-gh timeout = 'unverified', not red. The fix is PM's (`sudo killall -HUP mDNSResponder`); Pard mails when cleared. Also: `/private/tmp` was wiped, so recreate scratch dirs before use.
 - **Mechanism:** LaunchAgent `com.xian.pm-pa-cycle` (:47, 6/9/12/15/18/21), no session cron. Commit hygiene: never stage `dev/state/pa-last-pm-scan` (gitignored). Run `date` before stamping any memo time.
 - **MCP:** v11 `10282b068f` live (read-only tool + 3 resources, OAuth, per-identity rate limit (memory), **Smithery server card live**). #1458 CLOSED. Fly CLI login works (renewed by PM 10-08).
 - **Plugin:** public repo `mediajunkie/piper-morgan-plugin` (v0.1.0, evals 1/1/1 vs 0/0/0, icon, README revoke line, `mcp-registry/server.json` unpublished). Listing copy final (Comms). **Nothing listed. PM tests before any listing.**

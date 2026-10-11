@@ -79,6 +79,11 @@ Collected here (Arch, 2026-10-06) so the next lane meets them as steps rather th
    lands**, not by every exploratory wording. Screen candidates on the rows that moved plus a fixed sentinel set (PM's phrasings, the clear family,
    the declarative/question rows), then give the one chosen candidate the full run. While scoring is unavailable, **catalog and description changes
    and deletions wait**. The rules are not relaxed to work around a missing instrument.
+   **Freshness** (Lead's proposal, adopted by Arch 10-10): the **newest full run on the served model is the gate's primary evidence**, outranked only
+   by denser N=5 reports for the rows they cover. An older report never masks a newer verdict (first-entry-wins hid 8 mis-serving rows until
+   10-10, 5 of them live on alpha). Rows a fresh run exposes are dispositioned per #1973 (a/b/c) in the lane that finds them. Surface-2 evidence
+   names its model: `intent_classification` uses the provider's default tier (Sonnet 4.6 for Anthropic keys), not the router's light tier
+   (Haiku), and OpenAI-key users' surface 2 stays unmeasured while that account has no credits.
 8. **"Ready for PM" means the served answer** (10-05). A live probe of PM's own phrasings asserts what the user would see, not the route.
 9. **Before ruling or building on a gate or predicate change, enumerate every caller and read the fallback** (Arch's own lesson, 10-04). Use `git grep -w`,
    not `-E '\b'`, which git grep doesn't support.
