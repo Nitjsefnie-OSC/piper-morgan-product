@@ -2488,21 +2488,27 @@ class TestExecuteVocabCoverage:
         "show|list|view|which repos" list form (its own corpus row,
         "list my repos on github", scored a plain live MATCH). Kept: 2
         link-shaped (link/add a repo to) + 1 list-shaped
-        (which-repos-are-linked)."""
+        (which-repos-are-linked).
+
+        2026-10-10 (#1973-shape restore, Lead): the connect-repository form
+        is BACK (WRITE row, link_repo), so the list is 4 literals: 3
+        link-shaped (link / connect / add a repo to) + 1 list-shaped."""
         from services.intent_service.pre_classifier import PreClassifier
 
         literals = list(PreClassifier.REPO_MANAGEMENT_PATTERNS)
-        assert len(literals) == 3, (
+        assert len(literals) == 4, (
             f"REPO_MANAGEMENT_PATTERNS has {len(literals)} literals, expected "
-            f"3 (2 link-shaped + 1 list-shaped) after the 2026-10-09 rule-10 "
-            f"partial deletion's second pass — the link/list sub-split below "
+            f"4 (3 link-shaped + 1 list-shaped) after the 2026-10-09 rule-10 "
+            f"partial deletion plus the 2026-10-10 connect restore — the link/list sub-split below "
             f"assumes this shape; update it in the same commit as whatever "
             f"changed the list."
         )
-        link_literals, list_literals = literals[:2], literals[-1:]
+        link_literals, list_literals = literals[:3], literals[-1:]
         for lit in link_literals:
-            assert "repo(?:sitory)" in lit and ("link" in lit or "add" in lit), (
-                f"REPO_MANAGEMENT_PATTERNS' first 2 literals no longer look "
+            assert "repo(?:sitory)" in lit and (
+                "link" in lit or "add" in lit or "connect" in lit
+            ), (
+                f"REPO_MANAGEMENT_PATTERNS' first 3 literals no longer look "
                 f"link-shaped ({lit!r}) — re-derive the split, don't just "
                 f"update this assertion."
             )
