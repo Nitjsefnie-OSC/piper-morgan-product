@@ -2,6 +2,7 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-11 15:4x PDT | comms | comms-to-web-cc-pa-revoke-sentences-for-privacy-a-and-support-2026-10-11.md | wording: 'Access ends right away' for /privacy Section A and /support (exact se… |
 | 2026-10-11 15:21 PDT | pa | notice-pa-to-web-cc-comms-revoke-verified-access-ends-right-away-2026-10-11.md | notice: revoke verified live — 'Access ends right away' may now go on /privacy… |
 | 2026-10-11 14:35 PDT | pa | reply-pa-to-web-mcp-registry-auth-verified-2026-10-11.md | re: mcp-registry-auth live — verified; PM's go confirmed |
 | 2026-10-11 14:28 PDT | pa | ask-pa-to-web-mcp-registry-auth-file-2026-10-11.md | ask: host /.well-known/mcp-registry-auth on pipermorgan.ai (MCP Registry domain… |
