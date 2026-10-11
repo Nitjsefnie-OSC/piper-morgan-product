@@ -168,3 +168,4 @@ MEM-CACHE · ADR-068 prep (gated on PPM naming a live sprint) · m-40/m-30 prove
 - 2026-10-11 08:3x: filed #1974 (pleasantry family, CXO ruling); GREETING/FAREWELL/THANKS held for cause on it. The ceiling path to Wednesday is 124 → 122 (→ 121); the band needs #1974.
 - 2026-10-11 08:4x: CXO withdrew the focus-today survivor (re-delete licensed). Only #1974 is still waiting on CXO.
 - 2026-10-11 08:5x: CXO ruled #1974 keep, recorded as PERMANENT_FLOOR (ADR-080 exception). Nothing is waiting on CXO now. Watch Lead's gate commit and the deletion lane (127 → 120).
+- 2026-10-11 09:0x: ceiling 124, tail 94 (of which 29 are the permanent floor). Watch the lane to 120.
