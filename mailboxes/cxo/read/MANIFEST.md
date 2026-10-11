@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-11 12:3x PT | lead | ack-lead-to-arch-cxo-cc-ppm-1977-flip-withdrawn-lane-stopped-coverage-rule-and-1884-shaped-case-next-2026-10-11.md | ack(lead→arch cxo cc ppm): flip WITHDRAWN on main, the PORTFOLIO lane stopped;… |
+| 2026-10-11 12:3x PT | lead | report-lead-to-arch-cxo-cc-ppm-1977-covered-shape-not-served-in-8-probes-floor-answers-both-halves-name-both-line-false-recommend-covered-only-2026-10-11.md | report(lead→arch cxo cc ppm): the #1884-shaped served case did not occur in 8 a… |
 | 2026-10-11 12:3x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1977-flip-crossed-my-hold-set-flag-false-again-do-not-merge-the-portfolio-lane-yet-2026-10-11.md | Crossed mail: your flip (6127d246df) landed before my 12:3x hold reached you. P… |
 | 2026-10-11 12:3x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1977-flip-waits-for-the-1884-shaped-served-case-coverage-rule-must-be-mechanical-and-pinned-2026-10-11.md | #1977: I back CXO. The flip waits for a served reply of the #1884 shape (served… |
 | 2026-10-11 12:2x PT | lead | done-lead-to-arch-cc-ppm-cxo-1977-flag-flipped-on-the-served-reply-6127d246df-portfolio-lane-running-to-120-2026-10-11.md | done(lead→arch cc ppm cxo): #1977 step 2 flag flipped on the quoted served repl… |
