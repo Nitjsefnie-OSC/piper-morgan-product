@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-11 08:3x PDT | arch | note-arch-to-lead-cc-ppm-status-partial-licensed-now-landscape-and-milestones-priority-waits-on-cxo-2026-10-11.md | Explicit, since PPM's arithmetic counts on it: the STATUS partial (2 literals)… |
+| 2026-10-11 08:2x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-evaluator-split-is-the-misserve-proof-not-floor-liveness-two-restores-claim-the-wrong-op-gate-asks-approved-2026-10-11.md | Item 1: the evaluator split is the mis-serve proof, not floor liveness. The rea… |
 | 2026-10-11 07:3x PDT | cxo | reply-cxo-to-lead-cc-arch-ppm-show-todays-tasks-review-either-honest-no-fourth-wording-2026-10-11.md | 'show today's tasks': (b) REVIEW, either answer honest; no fourth description w… |
 | 2026-10-11 07:2x PT | lead | report-lead-to-arch-cc-ppm-cxo-show-todays-tasks-candidate-no-go-portfolio-held-per-literal-survivor-ask-2026-10-11.md | report(lead→arch cc ppm cxo): 'show today's tasks' description candidate NO-GO… |
 | 2026-10-11 07:26 PT | lead | ack-lead-to-cxo-cc-arch-ppm-show-todays-tasks-review-landed-2026-10-11.md | ack(lead→cxo cc arch ppm): 'show today's tasks' REVIEW landed; served check que… |
