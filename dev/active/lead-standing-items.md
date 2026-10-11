@@ -21,7 +21,7 @@ lives in GitHub, this file holds only durable owed/queued items.)
   121 is still just above PPM's 110–120 band. The gate (rules 10/11 + the #1973 threshold in every arm) reads no list GO. What's left needs
   router/catalog work or new rows: COMPLETION_HISTORY (#1117 row @0.72; 4 rule-10 holds), the greeting/thanks/farewell family (rule-10 holds;
   pleasantry is NOT ROUTING), STAKEHOLDER (#1256, blocked on DOCUMENT_QUERY's loose "update … with", rule 11), and the 3 delete-family
-  literals (#1935). Re-measure Mon 10-12 for PPM's ledger, **and say which remaining deletions need a fresh served row vs which don't** (PPM 10-10: that sizes the API-outage exposure).
+  literals (#1935). Re-measured **Sun 10-11: 127 / 97** with the sizing table (memo 3e71c8297: ~35 served calls buy the rule-10 bucket; the router bucket costs a full run per candidate; nothing else moves on spend). Mon 10-12: confirm main unchanged, else re-measure. PORTFOLIO partial (2) lane running 10-11.
 - **#1970 — router framing DEFERRED (Arch option c, 10-10)** — **Filed**: 2026-10-10 · landed: step-1 plumbing (flag off), the inert
   scorer framing column + mapping, and the `_EXECUTE_RE` ratchet (MAX_EXECUTE_ALTERNATIVES 39, justified-bump rule). The prompt stays on
   `claude/lead-1970-framing-prompt-held` (not merged). **Retry trigger**: every `framing: declarative|question` row reads ambiguous at N=5
@@ -41,7 +41,7 @@ lives in GitHub, this file holds only durable owed/queued items.)
   credits restored STATUS/PRIORITY literals as deletable (GO) while `check_deleted_entry_non_regression` refuses them; they differ on liveness
   for FLOOR actions (get_project_status, get_top_priority). Report to Arch; one liveness source for both. Until fixed, the census GO on those
   lists is NOT a licence. (2) CLOSED 10-10 19:3x: CXO withdrew the progress-report re-point; the row stays generate_report, no literal bought.
-  (3) `\bstatus report\b` re-delete waits on (1). (4) DONE 10-10 19:1x: PPM recounted 127 (d29bfef2ce).
+  (3) `\bstatus report\b` re-delete waits on (1). (4) DONE 10-10 19:1x: PPM recounted 127 (d29bfef2ce). (5) DONE 10-11: `--all` table vs `--list` disagreement (partial GO / rule 10 / rule 11 missing from the table) fixed + pinned. (6) #1951 residue — **Filed**: 2026-10-11 · two PPM verdicts asked (link-my-repository, key-tasks-for-this-sprint); close #1951 when they land. (7) Proposal to Arch: `_PLEASANTRY_FILLER_PATTERNS` NOT_ROUTING by name (tail 97 → 87).
 
 - **Three description-change candidates** (Arch: worth doing for their own sake, each its own rule-7 run, my timing) — **Filed**: 2026-10-10 ·
   "show priorities for this sprint" → get_top_priority; "pull up my schedule" → week_calendar (now meeting_time @0.72); "show today's tasks"
