@@ -2194,25 +2194,23 @@ def test_permanent_floor_is_the_1974_family_cites_the_ruling_and_stays_in_the_ta
 _TWO_TOPIC = "list my archived projects and summarize my current work"
 
 
-def test_plan_row_fallback_acknowledged_after_the_served_flip_licenses_portfolio():
-    """#1977 step 2 is SERVED (2026-10-11, local server with a real LLM, armed
-    branch right after a standup offer — quoted in
-    dev/2026/10/11/controls/served-1977-step2-2026-10-11.md): the legacy branch
-    acknowledges the half it did not answer. So an unclaimed post-removal
-    fallback reads "planned" and the #1884 row no longer blocks: PORTFOLIO reads
-    GO (partial), deleting 1 (121 -> 120)."""
-    assert gate.STEP2_ACKNOWLEDGEMENT_LANDED is True
+def test_plan_row_fallback_unacknowledged_blocks_portfolio_until_the_1884_shaped_served_case():
+    """#1977 step 2's code is on main and a served line exists (12:0x), but Arch +
+    CXO (12:3x) withdrew the flip: that quote named the OTHER half by luck (the
+    classifier answered neither). The flag flips only on a served reply of the
+    #1884 shape — served intent covers the claimed half, the line names the
+    leftover clause — plus a pinned, mechanical coverage rule. Until then the
+    #1884 row reads "planned, fallback unacknowledged" and blocks."""
+    assert gate.STEP2_ACKNOWLEDGEMENT_LANDED is False, "flip only with the 1884-shaped served quote"
     counts = pattern_literal_counts.per_list_literal_counts()
     records, by_list = gate.build_census(gate.CURRENT_LIVE_CATEGORIES)
     a = gate.assess_list("PORTFOLIO_PATTERNS", by_list["PORTFOLIO_PATTERNS"])
     outcomes = {rec.phrase: outcome for rec, outcome, _ in a.planned}
-    assert outcomes.get(_TWO_TOPIC) == "planned", outcomes
-    assert not [c for c in a.reabsorbed if c[0].phrase == _TWO_TOPIC]
-    assert a.kind == "go-partial", a.kind
+    assert outcomes.get(_TWO_TOPIC) == "planned-unacknowledged", outcomes
+    assert [c for c in a.reabsorbed if c[0].phrase == _TWO_TOPIC], "must still block"
+    assert a.kind == "rule11"
     report = gate.render_list_report("PORTFOLIO_PATTERNS", by_list, counts, len(records))
-    verdict = next(line for line in report.splitlines() if line.startswith("verdict:"))
-    assert verdict.startswith("verdict: GO (partial)") and "deleting 1" in verdict, verdict
-    assert "planned (rule 11, plan row)" in report
+    assert "planned, fallback unacknowledged" in report
 
 
 def test_plan_row_fallback_partial_names_the_dropping_list(monkeypatch):
