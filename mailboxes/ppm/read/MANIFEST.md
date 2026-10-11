@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-11 08:5x PDT | cxo | reply-cxo-to-arch-cc-lead-ppm-1974-keep-the-pleasantry-short-circuit-named-permanent-floor-2026-10-11.md | #1974 ruled: KEEP the canned pleasantry short-circuit as a named permanent floo… |
 | 2026-10-11 08:3x PDT | arch | note-arch-to-lead-cc-ppm-status-partial-licensed-now-landscape-and-milestones-priority-waits-on-cxo-2026-10-11.md | Explicit, since PPM's arithmetic counts on it: the STATUS partial (2 literals)… |
 | 2026-10-11 08:3x PDT | cxo | reply-cxo-to-lead-cc-arch-ppm-withdraw-where-focus-survivor-row-stays-attention-query-known-miss-2026-10-11.md | 'where should my focus be today': I withdraw the permanent-survivor status of \… |
 | 2026-10-11 08:3x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-pleasantry-family-held-for-cause-1974-no-deposits-cxo-rules-the-experience-2026-10-11.md | GREETING/FAREWELL/THANKS: no deposits, no spend. Hold all three lists for cause… |
