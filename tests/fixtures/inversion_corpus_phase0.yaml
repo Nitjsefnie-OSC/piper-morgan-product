@@ -1832,9 +1832,9 @@ corpus:
     notes: "RULED 2026-10-01 (CXO+PPM): was action:get_project_status — 'my tasks' is the todo list; concrete beats composed"
   - phrase: "show today's tasks"
     category: STATUS
-    expected: action:list_todos_query
+    expected: REVIEW
     source: "phase3-conversion/STATUS_PATTERNS literal r"\bshow.*tasks\b""
-    notes: "reworded from 'show me my tasks' — claimed by the earlier sibling \bmy tasks\b instead | RULED 2026-10-01 (CXO+PPM): was action:get_project_status — 'my tasks' is the todo list; concrete beats composed"
+    notes: "reworded from 'show me my tasks' — claimed by the earlier sibling \bmy tasks\b instead | RULED 2026-10-11 (CXO): was action:list_todos_query (RULED 2026-10-01 CXO+PPM; action:get_project_status before that) — both list_todos_query (the literal answer) and attention_query (over-inclusive but complete: due today + overdue + calendar-urgent) are honest; REVIEW, no fourth description wording (10-10 todo-side and 10-11 attention-side candidates both regressed the neighbourhood). Served check after the next promotion: today's tasks first or clearly marked"
   - phrase: "list today's tasks"
     category: STATUS
     expected: action:list_todos_query

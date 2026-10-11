@@ -51,15 +51,14 @@ lives in GitHub, this file holds only durable owed/queued items.)
   schedule" (week_calendar @0.85, MATCH) are already right on the 10-10 full run. The remaining row reads attention_query @0.85; the 10-10 lane
   found every list_todos_query wording regressed, and 10-11's inverse (attention_query excluding a plain list of today's tasks) screened
   clean then failed the full run (5 ×6-attributed regressions incl. a WRITE landing; held report
-  `inversion-attention-query-description-CANDIDATE-HELD-full-score-2026-10-11-anthropic.md`). **No fourth wording.** Asked PPM/CXO for a
-  re-judge: (a) attention_query, (b) REVIEW (Lead leans b), (c) keep as a known miss. Blocked on that ruling.
+  `inversion-attention-query-description-CANDIDATE-HELD-full-score-2026-10-11-anthropic.md`). **No fourth wording.** CXO ruled 10-11: (b) REVIEW — landed (builder + fixture + ledger rejudged). CLOSED; the served check rides the post-promotion row.
 - **#1970 framing to the router** (Production, Arch's design on the issue, comment 6090297342) — **Filed**: 2026-10-09 · after the MVP
   gate work. Order: (1) plumbing behind the flag (`framing` in the router's top-level output → `context["inversion_framing"]`;
   `evaluate_consent(framing_hint=)`, where PRIVATE WRITE uses the hint, OUTWARD WRITE takes the stricter of hint and regex, DESTRUCTIVE is unchanged); (2) the prompt line
   + corpus WRITE rows get an expected framing → full run on the served model (rule 7); (3) a `MAX_EXECUTE_ALTERNATIVES` ratchet, retiring PRIVATE verbs
   only on a served framing MATCH.
 - **Post-promotion served checks on alpha** (+ #1960: "my default repo should be test-piper-morgan" → quote the consent line) — **Filed**: 2026-10-08 · **Web runs these (xian 10-10, list sent 13:1x)**; quoted replies come to Lead + Exec. Quote each served
-  answer (rule 8): "delete the first two reminders"; #1958 "remind me to X on Friday" → "(scheduled for Friday)" (needs the NEXT promotion); #1959 close of a nonexistent issue (honest reply, no confirm); #1889/#1963/#1964
+  answer (rule 8): "show today's tasks" (CXO 10-11: today's tasks first or clearly marked, else CXO rules on the reply shape); "delete the first two reminders"; #1958 "remind me to X on Friday" → "(scheduled for Friday)" (needs the NEXT promotion); #1959 close of a nonexistent issue (honest reply, no confirm); #1889/#1963/#1964
   (#1965 a+b landed 10-08: quote the served standup + Radar for an OAuth-only account AND a PAT-only account, the latter on its
   owner's own PAT that PM provisions, never a Piper-held one; CXO closes #1889/#1963 on the quoted output); if PM turns on the `clear_todos` token, PM's 08-15 sentence first.
 

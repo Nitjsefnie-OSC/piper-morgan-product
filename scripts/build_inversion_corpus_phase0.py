@@ -4387,8 +4387,11 @@ RULED_EXPECTATIONS: dict = {
         "RULED 2026-10-01 (CXO+PPM): was action:get_project_status — 'my tasks' is the todo list; concrete beats composed",
     ),
     "show today's tasks": (
-        "action:list_todos_query",
-        "RULED 2026-10-01 (CXO+PPM): was action:get_project_status — 'my tasks' is the todo list; concrete beats composed",
+        "REVIEW",
+        "RULED 2026-10-11 (CXO): was action:list_todos_query (RULED 2026-10-01 CXO+PPM; action:get_project_status before that) — "
+        "both list_todos_query (the literal answer) and attention_query (over-inclusive but complete: due today + overdue + "
+        "calendar-urgent) are honest; REVIEW, no fourth description wording (10-10 todo-side and 10-11 attention-side candidates both "
+        "regressed the neighbourhood). Served check after the next promotion: today's tasks first or clearly marked",
     ),
     "list today's tasks": (
         "action:list_todos_query",
