@@ -261,8 +261,9 @@ class TestCensusDenominators:
         claimed = sum(1 for r in records if r.claim.pattern_list is not None)
         unclaimed = sum(1 for r in records if r.claim.pattern_list is None)
         assert claimed + unclaimed == len(records)
-        assert claimed + unclaimed == 581, (
-            "the corpus is 581 rows as of the 2026-10-11 COMPLETION_HISTORY rule-10 rows (+4, one phrasing per held literal); "
+        assert claimed + unclaimed == 586, (
+            "the corpus is 586 rows as of the 2026-10-11 PORTFOLIO rule-10 rows (+5, the #1431/#1757/#1738 pin phrasings, Arch-approved); "
+            "581 rows as of the 2026-10-11 COMPLETION_HISTORY rule-10 rows (+4, one phrasing per held literal); "
             "577 rows as of the 2026-10-09 GUIDANCE rule-10 rows (+6, the 15 pins' setup phrasings); "
             "571 rows as of the 2026-10-09 COMPLETION_HISTORY rule-10 rows (+3, the #1117 phrasings); "
             "568 rows as of the 2026-10-09 rule-10 llm-retirement rows (+2 IDENTITY, Arch's amendment); "

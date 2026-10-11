@@ -2433,6 +2433,31 @@ corpus:
     expected: action:check_completion_status
     source: "phase3-rule10/COMPLETION_HISTORY_PATTERNS literal r"\bhow long ago did (i|we) (complete|finish|ship|deliver|launch)\b""
     notes: "rule-10 held literal (COMPLETION_HISTORY_PATTERNS, 2026-10-11 deposit); origin=literal, no pinning test cites this phrasing"
+  - phrase: "show my archived projects"
+    category: PORTFOLIO
+    expected: action:list_archived_projects
+    source: "phase3-rule10/PORTFOLIO_PATTERNS tests/unit/services/intent_service/test_archived_list_1431.py::test_archived_list_claimed_by_portfolio + tests/unit/services/intent_service/test_portfolio_archive_greed_1757.py (single/multi-intent path)"
+    notes: "rule-10 held literal (PORTFOLIO_PATTERNS show/list/view-projects; 2026-10-11 deposit, Arch-approved); origin=test pin #1431 + #1757; the #1738 single-intent guard stays a test, not a row"
+  - phrase: "show archived projects"
+    category: PORTFOLIO
+    expected: action:list_archived_projects
+    source: "phase3-rule10/PORTFOLIO_PATTERNS tests/unit/services/intent_service/test_archived_list_1431.py::test_archived_list_claimed_by_portfolio"
+    notes: "rule-10 held literal (PORTFOLIO_PATTERNS show/list/view-projects; 2026-10-11 deposit, Arch-approved); origin=test pin #1431; the #1738 single-intent guard stays a test, not a row"
+  - phrase: "view my archived projects"
+    category: PORTFOLIO
+    expected: action:list_archived_projects
+    source: "phase3-rule10/PORTFOLIO_PATTERNS tests/unit/services/intent_service/test_archived_list_1431.py::test_archived_list_claimed_by_portfolio"
+    notes: "rule-10 held literal (PORTFOLIO_PATTERNS show/list/view-projects; 2026-10-11 deposit, Arch-approved); origin=test pin #1431; the #1738 single-intent guard stays a test, not a row"
+  - phrase: "show my projects"
+    category: PORTFOLIO
+    expected: action:list_projects
+    source: "phase3-rule10/PORTFOLIO_PATTERNS tests/unit/services/intent_service/test_truncated_render_provenance_1738.py::test_portfolio_list_claim_is_single_intent"
+    notes: "rule-10 held literal (PORTFOLIO_PATTERNS show/list/view-projects; 2026-10-11 deposit, Arch-approved); origin=test pin #1738; the #1738 single-intent guard stays a test, not a row"
+  - phrase: "list my archived projects (show all names)"
+    category: PORTFOLIO
+    expected: action:list_archived_projects
+    source: "phase3-rule10/PORTFOLIO_PATTERNS tests/unit/services/intent_service/test_truncated_render_provenance_1738.py::test_portfolio_list_claim_is_single_intent"
+    notes: "rule-10 held literal (PORTFOLIO_PATTERNS show/list/view-projects; 2026-10-11 deposit, Arch-approved); origin=test pin #1738; the #1738 single-intent guard stays a test, not a row"
   - phrase: "Where did you get that from?"
     category: PROVENANCE
     expected: action:explain_suggestion
