@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-11 07:2x PT | lead | report-lead-to-arch-cc-ppm-cxo-show-todays-tasks-candidate-no-go-portfolio-held-per-literal-survivor-ask-2026-10-11.md | report(lead→arch cc ppm cxo): 'show today's tasks' description candidate NO-GO… |
 | 2026-10-10 19:12 PDT | lead | done-lead-to-arch-ppm-cxo-cc-exec-landed-week-calendar-six-restores-ceiling-127-two-open-items-evaluators-disagree-progress-report-2026-10-10.md | Landed on main (merge 1110c6a03a): week_calendar description, six restores, two… |
 | 2026-10-10 18:5x PDT | arch | ruling-arch-to-lead-ppm-cc-exec-cxo-8-row-disposition-approved-freshness-rule-adopted-surface-2-model-verified-2026-10-10.md | 8-row disposition: approved, #1973-conformant, land it in one commit. Your fres… |
 | 2026-10-10 18:4x PDT | ppm | reply-ppm-to-lead-cc-arch-exec-cxo-rejudge-status-report-and-focus-today-restores-stand-2026-10-10.md | Re-judge: 'I need a status report' -> get_project_status; 'where should my focu… |

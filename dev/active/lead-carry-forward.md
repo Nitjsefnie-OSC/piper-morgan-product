@@ -1,6 +1,25 @@
-# Lead carry-forward — Fable 5.1 seat (xian switched 10-10); Model A worktree ~/Development/piper-morgan-worktrees/lead
+# Lead carry-forward — Fable 5.1 seat; Model A worktree ~/Development/piper-morgan-worktrees/lead
 
-## STATE @ 2026-10-10 21:5x PT — DAY-CLOSED (log dev/2026/10/10/2026-10-10-0513-lead-code-log.md)
+## STATE @ 2026-10-11 07:2x PT — START fire drained (log dev/2026/10/11/2026-10-11-0647-lead-code-log.md, open)
+- **Re-measure done Sun 10-11: ceiling 127 / tail 97** (memo 3e71c8297 to PPM cc Arch, with the sizing: 20 rule-10 literals move on ~35 served
+  calls; 28 need tokens; 33 need router/catalog work; 5 census-GO are rulings; 1 rule 11; 10 are the pleasantry stripper → NOT_ROUTING proposal).
+  **Mon 10-12: confirm main unchanged, else re-measure.**
+- **Landed:** `--all` census table now prints the per-list verdict (partial GO / r10 / r11), pinned. New kept instruments:
+  `scripts/inversion_router_control.py` (router ×N) and `scripts/inversion_report_diff.py` (per-row report diff).
+- **Held, awaiting rulings:** (1) PORTFOLIO partial (2 literals): `update … project` is a ruled survivor (#1933 a); show/list/view literal needs
+  5 corpus rows for pin phrasings (listed in the log) — Arch asked for a per-literal ruled-survivor mark in the gate + a word on depositing the
+  rows. (2) "show today's tasks": candidate A NO-GO on the full run (5 attributed regressions incl. a WRITE landing); no fourth wording; PPM/CXO
+  re-judge asked (Lead leans REVIEW). (3) #1951: two PPM verdicts asked (link-my-repository; key-tasks-for-this-sprint). (4) Floor-action
+  liveness disagreement (census vs non-regression) + `\bstatus report\b` re-delete: Arch. (5) `_PLEASANTRY_FILLER_PATTERNS` NOT_ROUTING: Arch.
+- **Finding to remember:** the attention/todo/priority description neighbourhood is fragile on the served Haiku router — edits on either side
+  move "when am i in a meeting", the sprint-priorities row and a todo/reminder row. Screens pass, full runs fail. Don't retry by wording.
+- Spend today: 745 Haiku router calls (Krink's credit, expires 10-15). Keychain readable (no -25308).
+- Watch: Web's quoted served checks on alpha 4bd1a236e9 (6 turns); #1958 + CXO's team-calendar probe after the NEXT promotion.
+- **Wed 10-14 START: cron rotation** (e5491d18 expires ~10-17; delete-then-create; registry row) + PPM's tripwire read (127 ceiling, tail 97
+  or 87 if the stripper is named). **Fri 10-16:** key switch — steps in `dev/active/lead-prod-key-move-2026-10-16.md` (PM's hand).
+
+### (10-10 state, kept for context)
+#### ## STATE @ 2026-10-10 21:5x PT — DAY-CLOSED (log dev/2026/10/10/2026-10-10-0513-lead-code-log.md)
 - **Alpha = `4bd1a236e9`** (promoted 10-09 18:34 via `promote_to_alpha`). 13 tokens live incl. complete_todo; clear_todos OFF. **Served checks:
   Web runs them** (xian's (b), 10-10 13:06; list sent 13:1x). Web needs xian to type the credential read in Web's own session. **Watch for
   Web's quoted replies** (6 turns) → judge borderline rows; CXO closes #1889/#1963 on quoted output.
