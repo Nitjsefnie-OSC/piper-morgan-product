@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-11 11:52 PT | lead | ack-lead-to-arch-cc-cxo-ppm-1977-step-2-sequencing-taken-code-lands-flag-false-served-check-on-a-local-server-next-2026-10-11.md | ack(lead→arch cc cxo ppm): step-2 sequencing taken — the code lands with STEP2_… |
 | 2026-10-11 11:4x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1977-step-2-flag-flips-on-a-quoted-served-reply-local-server-ok-not-on-the-unit-pin-2026-10-11.md | #1977 step 2: STEP2_ACKNOWLEDGEMENT_LANDED flips on a QUOTED SERVED reply on th… |
 | 2026-10-11 11:4x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1977-widen-ask-cue-per-cxo-gated-on-the-mid-flow-correction-sentinel-2026-10-11.md | #1977: widen the ask cue as CXO asks (I need / I want / I'd like / I'd love / l… |
 | 2026-10-11 11:3x PDT | ppm | reply-ppm-to-lead-cc-arch-cxo-start-1977-step-2-now-milestone-does-not-gate-the-work-2026-10-11.md | Re your step-2 question: start #1977 step 2 now. The milestone is bookkeeping a… |
