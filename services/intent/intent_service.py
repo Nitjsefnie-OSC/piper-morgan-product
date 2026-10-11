@@ -427,6 +427,127 @@ class IntentService:
         )  # Issue #876: Conversational error messages
         self.logger = structlog.get_logger()
 
+    _UNANSWERED_HALF_QUESTION = " Want me to?"
+    _UNANSWERED_MAX_WORDS = 8  # CXO rule 4
+
+    @staticmethod
+    def _trim_clause(clause: Optional[str]) -> Optional[str]:
+        """#1977 step 2 (CXO rule 4): the clause in the user's words, cut to
+        <= 8 words at a word boundary; None when nothing is left."""
+        words = (clause or "").split()[: IntentService._UNANSWERED_MAX_WORDS]
+        text = " ".join(words).strip(" ,;:.!?")
+        return text or None
+
+    @staticmethod
+    def _unanswered_halves(intent: Intent) -> Optional[Tuple[Optional[str], str]]:
+        """#1977 step 2: ``(answered_clause_or_None, unanswered_clause)``.
+
+        Only when step 1 actually carried a residue on the intent (Arch: never
+        on a guess). If the served category equals a declined claim's, the
+        claimed half was answered and the residue is the unanswered half;
+        otherwise the LLM answered the residue's side and the unanswered half
+        is the declined claim's clause. No declined claim recorded -> residue.
+        """
+        ctx = getattr(intent, "context", None) or {}
+        residue = ctx.get("unclaimed_residue")
+        if not residue:
+            return None
+        declined = ctx.get("declined_claims") or []
+        served = getattr(getattr(intent, "category", None), "value", None)
+        claim_text = None
+        covered = False
+        for category_value, _action, clause_text in declined:
+            if clause_text and claim_text is None:
+                claim_text = clause_text
+            if category_value == served:
+                covered = True
+                if clause_text:
+                    claim_text = clause_text
+                break
+        if covered or not declined or claim_text is None:
+            answered, unanswered = (claim_text if covered else None), residue
+        else:
+            answered, unanswered = residue, claim_text
+        unanswered = IntentService._trim_clause(unanswered)
+        if not unanswered:
+            return None
+        return IntentService._trim_clause(answered), unanswered
+
+    @staticmethod
+    def _unanswered_half_line(intent: Intent) -> Optional[str]:
+        """#1977 step 2 (CXO's copy): the one-line acknowledgement of the half
+        a residue decline left unanswered, or None.
+
+        ``I haven't {unanswered} yet. Want me to?`` — or, when the answered
+        half's clause is known, ``I did {answered}. I haven't {unanswered}
+        yet. Want me to?``. No apology (rule 3), user's own words (rule 1),
+        <= 8 words per clause (rule 4).
+        """
+        halves = IntentService._unanswered_halves(intent)
+        if halves is None:
+            return None
+        answered, unanswered = halves
+        # The clause is the user's own words pasted in (CXO rule 1), so it is
+        # QUOTED: bare pasting collides with the sentence's grammar ("I haven't
+        # tell me a joke…"). Lead 2026-10-11; CXO owns the copy.
+        line = f'I haven\'t done "{unanswered}" yet.'
+        if answered:
+            line = f'I did "{answered}". {line}'
+        return line + IntentService._UNANSWERED_HALF_QUESTION
+
+    def _append_unanswered_half(
+        self,
+        result: "IntentProcessingResult",
+        line: str,
+        clause: Optional[str],
+        session_id: Optional[str],
+        user_id: Optional[str],
+    ) -> "IntentProcessingResult":
+        """#1977 step 2: append the acknowledgement line after the answer.
+
+        The question is HONEST only if a bare "yes" can cash it: arm the
+        existing one-turn ``last_offer`` rail (#852 contextual offer — "yes"
+        binds ``continuation_hint`` into the classifier as the accepted offer,
+        the same path "Would you like me to list your archived projects?"
+        uses; no new offer kind). First-arm-wins: never over a live arm in
+        either one-slot store, never on a failed turn, never over a handler
+        that flagged its own pending ask. If it cannot be armed, drop the
+        question (CXO rule 2) rather than promise what "yes" cannot deliver.
+        """
+        if not result.message:
+            return result
+        armed = False
+        if clause and session_id and result.success:
+            try:
+                intent_data = result.intent_data or {}
+                handler_armed = any(
+                    v for k, v in intent_data.items() if str(k).endswith("_pending")
+                )
+                if (
+                    not handler_armed
+                    and self.workflow_offer_service.peek_pending_offer(session_id, user_id=user_id)
+                    is None
+                    and self._peek_last_offer(session_id, user_id=user_id) is None
+                ):
+                    from services.intent_service.conversation_context import (
+                        LastOffer,
+                        get_or_create_context,
+                    )
+
+                    get_or_create_context(session_id, user_id=user_id).last_offer = LastOffer(
+                        offer_type="contextual",
+                        continuation_hint=clause,
+                        offer_text=line,
+                    )
+                    armed = True
+                    self.logger.info("unanswered_half_offer_armed", session_id=session_id)
+            except (ValueError, KeyError):
+                armed = False  # Non-UUID session_id — reply-only, no arm
+        if not armed:
+            line = line.removesuffix(self._UNANSWERED_HALF_QUESTION)
+        result.message = f"{result.message}\n\n{line}"
+        return result
+
     def _apply_soft_offer(
         self,
         result: "IntentProcessingResult",
@@ -438,6 +559,8 @@ class IntentService:
         formality_baseline: Optional[float] = None,
         off_topic_prefix: Optional[str] = None,
         restate_suffix: Optional[str] = None,
+        unanswered_half_suffix: Optional[str] = None,
+        unanswered_half_clause: Optional[str] = None,
     ) -> "IntentProcessingResult":
         """
         Issue #767: Check for soft invocation opportunity and append offer.
@@ -466,6 +589,14 @@ class IntentService:
                 truthfully, then restate the armed offer in one clause" —
                 contract §3). Applied here so every funneled return carries
                 it; the end-of-method application covers the fall-through.
+            unanswered_half_suffix: #1977 step 2 (CXO's copy) — the one-line
+                acknowledgement of the clause a residue decline left
+                unanswered ("I haven't X yet. Want me to?"), applied after the
+                answer exactly like ``restate_suffix``. The "Want me to?" is
+                kept only when the offer could be armed on the one-turn
+                ``last_offer`` rail (``unanswered_half_clause`` is what a bare
+                "yes" then steers the classifier to); otherwise the line ends
+                at "yet." (CXO rule 2) — see ``_append_unanswered_half``.
 
         Returns:
             Modified result with offer appended, or original result unchanged
@@ -489,6 +620,14 @@ class IntentService:
                 requires_clarification=result.requires_clarification,
                 suggestions=result.suggestions,
                 preferences=result.preferences,
+            )
+        if unanswered_half_suffix:
+            result = self._append_unanswered_half(
+                result,
+                unanswered_half_suffix,
+                unanswered_half_clause,
+                session_id,
+                user_id,
             )
         if not result.success:
             return result
@@ -1286,6 +1425,10 @@ class IntentService:
             # (guided process, resume, standup) drop it — accepted parity
             # with #899, noted here so nobody rediscovers it as a bug.
             _pending_ask_restate = None
+            # #1977 step 2: the unanswered-half acknowledgement (computed once
+            # the intent is known; applied at the same two points).
+            _unanswered_half = None
+            _unanswered_clause = None
 
             # Issue #838: Load formality baseline from PersonalityProfile
             # Must load early — needed by pending offer handling and soft offer detection.
@@ -2599,6 +2742,21 @@ class IntentService:
                             message, user_id=user_id, session_id=session_id
                         )
 
+                # #1977 step 2: surface 1 declined a claim set because a second
+                # ask-shaped clause was left unclaimed; the single served intent
+                # cannot be assumed to have answered both halves. Carry the
+                # residue + declined claims so the reply can name the half not
+                # answered (never on a guess: only what step 1 actually carried).
+                if (
+                    getattr(multi_result, "unclaimed_residue", None)
+                    and len(multi_result.intents) <= 1
+                    and intent is not None
+                ):
+                    if intent.context is None:
+                        intent.context = {}
+                    intent.context["unclaimed_residue"] = multi_result.unclaimed_residue
+                    intent.context["declined_claims"] = list(multi_result.declined_claims)
+
             self.logger.info(f"Intent classified as: {intent.category} - {intent.action}")
 
             # Issue #490: Add user_id to intent context for downstream handlers
@@ -2612,6 +2770,12 @@ class IntentService:
 
             # #1124 Phase 3: verb-boundary observability (Arch ruling 2026-06-07).
             self._observe_action_verb(intent, message)
+
+            # #1977 step 2: one helper decides the line (and the clause a
+            # bare "yes" would steer to); None unless step 1 carried a residue.
+            _unanswered_half = self._unanswered_half_line(intent)
+            _halves = self._unanswered_halves(intent) if _unanswered_half else None
+            _unanswered_clause = _halves[1] if _halves else None
 
             if user_id:
                 if intent.context is None:
@@ -2804,6 +2968,8 @@ class IntentService:
                     formality_baseline=formality_baseline,
                     off_topic_prefix=off_topic_prefix,
                     restate_suffix=_pending_ask_restate,
+                    unanswered_half_suffix=_unanswered_half,
+                    unanswered_half_clause=_unanswered_clause,
                 )
 
             # Issue #286: Handle canonical intents (PORTFOLIO, EXECUTION, STATUS, etc.)
@@ -2845,6 +3011,8 @@ class IntentService:
                         formality_baseline=formality_baseline,
                         off_topic_prefix=off_topic_prefix,
                         restate_suffix=_pending_ask_restate,
+                        unanswered_half_suffix=_unanswered_half,
+                        unanswered_half_clause=_unanswered_clause,
                     )
 
                 # Issue #595: Add greeting prefix if multi-intent with greeting detected
@@ -2936,6 +3104,8 @@ class IntentService:
                     formality_baseline=formality_baseline,
                     off_topic_prefix=off_topic_prefix,
                     restate_suffix=_pending_ask_restate,
+                    unanswered_half_suffix=_unanswered_half,
+                    unanswered_half_clause=_unanswered_clause,
                 )
 
             # Issue #883 + #1094: workflows are no longer pre-created. Handlers
@@ -2972,6 +3142,8 @@ class IntentService:
                     formality_baseline=formality_baseline,
                     off_topic_prefix=off_topic_prefix,
                     restate_suffix=_pending_ask_restate,
+                    unanswered_half_suffix=_unanswered_half,
+                    unanswered_half_clause=_unanswered_clause,
                 )
 
             # Handle QUERY intents with domain services
@@ -2990,6 +3162,8 @@ class IntentService:
                     formality_baseline=formality_baseline,
                     off_topic_prefix=off_topic_prefix,
                     restate_suffix=_pending_ask_restate,
+                    unanswered_half_suffix=_unanswered_half,
+                    unanswered_half_clause=_unanswered_clause,
                 )
 
             # GREAT-4D Phase 1: Handle EXECUTION intents with domain services
@@ -3007,6 +3181,8 @@ class IntentService:
                     formality_baseline=formality_baseline,
                     off_topic_prefix=off_topic_prefix,
                     restate_suffix=_pending_ask_restate,
+                    unanswered_half_suffix=_unanswered_half,
+                    unanswered_half_clause=_unanswered_clause,
                 )
 
             # GREAT-4D Phase 2: Handle ANALYSIS intents with domain services
@@ -3024,6 +3200,8 @@ class IntentService:
                     formality_baseline=formality_baseline,
                     off_topic_prefix=off_topic_prefix,
                     restate_suffix=_pending_ask_restate,
+                    unanswered_half_suffix=_unanswered_half,
+                    unanswered_half_clause=_unanswered_clause,
                 )
 
             # GREAT-4D Phase 4: Handle SYNTHESIS intents
@@ -3041,6 +3219,8 @@ class IntentService:
                     formality_baseline=formality_baseline,
                     off_topic_prefix=off_topic_prefix,
                     restate_suffix=_pending_ask_restate,
+                    unanswered_half_suffix=_unanswered_half,
+                    unanswered_half_clause=_unanswered_clause,
                 )
 
             # GREAT-4D Phase 5: Handle STRATEGY intents
@@ -3058,6 +3238,8 @@ class IntentService:
                     formality_baseline=formality_baseline,
                     off_topic_prefix=off_topic_prefix,
                     restate_suffix=_pending_ask_restate,
+                    unanswered_half_suffix=_unanswered_half,
+                    unanswered_half_clause=_unanswered_clause,
                 )
 
             # GREAT-4D Phase 6: Handle LEARNING intents
@@ -3075,6 +3257,8 @@ class IntentService:
                     formality_baseline=formality_baseline,
                     off_topic_prefix=off_topic_prefix,
                     restate_suffix=_pending_ask_restate,
+                    unanswered_half_suffix=_unanswered_half,
+                    unanswered_half_clause=_unanswered_clause,
                 )
 
             # GREAT-4D Phase 7: Handle UNKNOWN intents via conversational floor (#907)
@@ -3099,6 +3283,8 @@ class IntentService:
                     formality_baseline=formality_baseline,
                     off_topic_prefix=off_topic_prefix,
                     restate_suffix=_pending_ask_restate,
+                    unanswered_half_suffix=_unanswered_half,
+                    unanswered_half_clause=_unanswered_clause,
                 )
 
             # Fallback for truly unhandled categories (should never reach here)
@@ -3159,6 +3345,13 @@ class IntentService:
                     intent_data=result.intent_data,
                     workflow_id=result.workflow_id,
                     requires_clarification=result.requires_clarification,
+                )
+
+            # #1977 step 2: fall-through application (funneled returns get it
+            # in _apply_soft_offer).
+            if _unanswered_half and result.message:
+                result = self._append_unanswered_half(
+                    result, _unanswered_half, _unanswered_clause, session_id, user_id
                 )
 
             return result

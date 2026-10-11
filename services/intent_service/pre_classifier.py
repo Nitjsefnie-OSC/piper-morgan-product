@@ -38,6 +38,14 @@ class MultiIntentResult:
     # ``None`` for an intent whose claiming match was not retained. Default []
     # keeps every existing constructor call byte-identical.
     spans: List[Optional[Tuple[int, int]]] = field(default_factory=list)
+    # #1977 step 2: set ONLY on a residue decline (``intents`` is then empty).
+    # ``unclaimed_residue`` is the ask-shaped clause no claim covered;
+    # ``declined_claims`` is ``(category_value, action, clause_text)`` per
+    # declined claim. Carried so the legacy branch can acknowledge the half
+    # the single served intent did not answer. Defaults keep every existing
+    # constructor call byte-identical.
+    unclaimed_residue: Optional[str] = None
+    declined_claims: List[Tuple[str, str, Optional[str]]] = field(default_factory=list)
 
     @property
     def primary_intent(self) -> Optional[Intent]:
@@ -189,6 +197,22 @@ class PreClassifier:
     def _substantive_residue(clean_for_matching: str, spans) -> Optional[str]:
         """#1977: the substantive second clause no claim covers, or None.
 
+        Thin wrapper over ``_substantive_residue_detail`` (the one clause cut).
+        """
+        detail = PreClassifier._substantive_residue_detail(clean_for_matching, spans)
+        return detail[0] if detail else None
+
+    @staticmethod
+    def _substantive_residue_detail(
+        clean_for_matching: str, spans
+    ) -> Optional[Tuple[str, List[Optional[str]]]]:
+        """#1977: ``(residue_clause, claim_clauses)`` or None.
+
+        ``claim_clauses`` is ALIGNED with ``spans``: the text of the clause
+        each claim's span sits in (the user's words, from the unblanked
+        message), or None for a span-less claim. Step 2 carries both so the
+        reply can name the half it did not answer.
+
         Blank every claimed span out of the message, strip the #1416
         pleasantry/filler patterns (what ``_is_pleasantry_only`` strips), then
         cut the message into clauses at the coordination markers (the leading
@@ -228,6 +252,21 @@ class PreClassifier:
             (m.end(), markers[i + 1].start() if i + 1 < len(markers) else len(residue))
             for i, m in enumerate(markers)
         ]
+
+        def _claim_clauses() -> List[Optional[str]]:
+            out: List[Optional[str]] = []
+            for sp in spans:
+                text = None
+                if sp:
+                    for b_start, b_end in bounds:
+                        if sp[0] < b_end and sp[1] > b_start:
+                            text = " ".join(clean_for_matching[b_start:b_end].split()).strip(
+                                " ,;:.!?"
+                            )
+                            break
+                out.append(text or None)
+            return out
+
         for c_start, c_end in bounds:
             # A claim anywhere inside the clause means the clause IS claimed
             # (a span is only the matched keyword, not the whole clause).
@@ -242,7 +281,8 @@ class PreClassifier:
                 if w.lower() not in PreClassifier._RESIDUE_STOPWORDS
             ]
             if len(words) >= PreClassifier._RESIDUE_MIN_CONTENT_WORDS:
-                return " ".join(clause.split()).strip(" ,;:.!?") or None
+                text = " ".join(clause.split()).strip(" ,;:.!?")
+                return (text, _claim_clauses()) if text else None
         return None
 
     # Thanks patterns - using regex with word boundaries for precision
@@ -2857,10 +2897,11 @@ class PreClassifier:
         # declined set falls through to the router / LLM classifier, which
         # reads the WHOLE message. Surface 1 only declines more (ADR-080 D6).
         if intents:
-            residue_clause = PreClassifier._substantive_residue(
+            _residue_detail = PreClassifier._substantive_residue_detail(
                 clean_for_matching, [claimed_span_by_id.get(id(i)) for i in intents]
             )
-            if residue_clause:
+            if _residue_detail:
+                residue_clause, _claim_clause_texts = _residue_detail
                 logger.info(
                     "multi_intent_residue_declined",
                     message_preview=message[:50],
@@ -2868,7 +2909,14 @@ class PreClassifier:
                     residue=residue_clause,
                 )
                 return MultiIntentResult(
-                    intents=[], original_message=message, is_multi_intent=False
+                    intents=[],
+                    original_message=message,
+                    is_multi_intent=False,
+                    unclaimed_residue=residue_clause,
+                    declined_claims=[
+                        (i.category.value, i.action, _claim_clause_texts[idx])
+                        for idx, i in enumerate(intents)
+                    ],
                 )
 
         result = MultiIntentResult(
