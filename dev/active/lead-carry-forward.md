@@ -16,9 +16,9 @@
 - **#1958** fixed on main (label echoes "on"/"next"); open until a served check after the NEXT promotion.
 - **Mon 10-12:** Phase 3 re-measure for PPM (121/91 last) AND which remaining deletions need a fresh served row. **Wed 10-14:** PPM's
   tripwire, plus my cron rotation at START (`dad96d7a` expires ~10-15 21:4x; delete-then-create; update the registry row).
-- **POST-REBOOT (done 17:29):** cron re-armed `e5491d18`; registry updated. **OPEN: Amber keychain unreadable from tmux (-25308) → no LLM
-  calls from any seat until xian unlocks it (Pard has the steps). Then: (1) one confirm call on the lead-scoring key, report Janus+Exec;
-  (2) resume the catalog-batch subagent on branch `claude/lead-catalog-description-batch-held-v2` (candidate 1 pushed, f6cebdb283).**
+- **POST-REBOOT (done 17:4x):** cron `e5491d18`; keychain unlocked by xian inside tmux (may not survive another lock/reboot; if -25308
+  returns, tell Pard and hold LLM work). Confirm call served 17:41 on the stored key; **workspace attribution is xian's console check**
+  (Usage → lead-scoring → 1 request at 17:41). Catalog-batch subagent resumed on `claude/lead-catalog-description-batch-held-v2`.
 - **(superseded) FIRST THING AFTER THE REBOOT:** `CronList`. The session-scoped cron `dad96d7a` may not survive. If zero → CronCreate `17 6,9,12,15,18,21 * * *`
   (Gap-C self-heal), update the registry row with the new id + arm date, and mail Pard if the first fire misbehaves.
 - **Seat limits (do not work around):** fly deploy / secrets / prod DB / .env* / the mint script / the alpha test-account credential file.
