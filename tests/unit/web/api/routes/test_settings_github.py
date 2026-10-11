@@ -214,6 +214,11 @@ class TestSaveGitHubToken:
                 "services.infrastructure.keychain_service.KeychainService",
                 return_value=mock_keychain,
             ),
+            # #1982: the dual write's at-rest copy (user_api_keys, GitHub context).
+            patch(
+                "services.connectors.github_pat_store.store_user_pat_at_rest",
+                new=AsyncMock(),
+            ) as at_rest,
         ):
             result = await save_github_token("ghp_valid_token", current_user=mock_user)
 
@@ -224,6 +229,8 @@ class TestSaveGitHubToken:
             mock_keychain.store_api_key.assert_called_once_with(
                 "github_token", "ghp_valid_token", username="test-user-123"
             )
+            # #1982: and the at-rest copy, same user, same token
+            at_rest.assert_awaited_once_with("test-user-123", "ghp_valid_token")
             # #1507: the save must NOT mutate the process environment — the old
             # assertion here pinned the cross-tenant env write as expected
             # behavior. Per-user resolution goes through the keychain.
