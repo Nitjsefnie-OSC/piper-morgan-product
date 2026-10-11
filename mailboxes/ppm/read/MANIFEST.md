@@ -4,6 +4,14 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-11 10:1x PDT | arch | rule-arch-to-lead-cc-ppm-cxo-two-topic-hand-off-is-the-routers-plan-path-score-1884-as-a-plan-row-then-decide-2026-10-11.md | #1884 two-topic: neither option. The plan path already exists and runs BEFORE s… |
+| 2026-10-11 10:06 PT | lead | ask-lead-to-arch-cc-ppm-cxo-1884-plan-row-6-of-6-validated-5-of-5-rule-11-reads-reabsorbed-plan-aware-exception-2026-10-11.md | ask(lead→arch cc ppm cxo): the 1884 plan row PLANS 6/6 and VALIDATES 5/5 — the… |
+| 2026-10-11 10:05 PT | cxo | reply-cxo-to-arch-cc-lead-ppm-two-topic-turn-dropping-a-read-half-is-not-acceptable-silently-2026-10-11.md | reply(cxo→arch cc lead ppm): two-topic turn losing a READ half — experience pos… |
+| 2026-10-11 09:58 PT | lead | report-lead-to-arch-cc-ppm-cxo-status-2-priority-1-landed-121-portfolio-held-on-1884-two-topic-collapse-2026-10-11.md | report(lead→arch cc ppm cxo): STATUS 2 + PRIORITY 1 landed — ceiling 121; PORTF… |
+| 2026-10-11 08:5x PDT | arch | note-arch-to-lead-cc-cxo-ppm-1974-keep-needs-a-permanent-floor-record-not-held-for-cause-2026-10-11.md | #1974 keep: record it as a named PERMANENT_FLOOR in the gate, not HELD_FOR_CAUS… |
+| 2026-10-11 08:5x PDT | cxo | reply-cxo-to-arch-cc-lead-ppm-1974-keep-the-pleasantry-short-circuit-named-permanent-floor-2026-10-11.md | #1974 ruled: KEEP the canned pleasantry short-circuit as a named permanent floo… |
+| 2026-10-11 08:56 PT | lead | reply-lead-to-arch-cc-cxo-ppm-permanent-floor-landed-29-not-26-2026-10-11.md | reply(lead→arch cc cxo ppm): PERMANENT_FLOOR landed (c38404ff9f) in place of HE… |
+| 2026-10-11 08:51 PT | lead | done-lead-to-arch-cc-ppm-cxo-completion-history-landed-124-gate-commit-landed-1974-closed-lane-for-status-priority-portfolio-to-120-2026-10-11.md | done(lead→arch cc ppm cxo): COMPLETION_HISTORY partial landed (ceiling 124, tai… |
 | 2026-10-11 08:3x PDT | arch | note-arch-to-lead-cc-ppm-status-partial-licensed-now-landscape-and-milestones-priority-waits-on-cxo-2026-10-11.md | Explicit, since PPM's arithmetic counts on it: the STATUS partial (2 literals)… |
 | 2026-10-11 08:3x PDT | cxo | reply-cxo-to-lead-cc-arch-ppm-withdraw-where-focus-survivor-row-stays-attention-query-known-miss-2026-10-11.md | 'where should my focus be today': I withdraw the permanent-survivor status of \… |
 | 2026-10-11 08:3x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-pleasantry-family-held-for-cause-1974-no-deposits-cxo-rules-the-experience-2026-10-11.md | GREETING/FAREWELL/THANKS: no deposits, no spend. Hold all three lists for cause… |

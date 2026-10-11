@@ -102,6 +102,9 @@ Collected here (Arch, 2026-10-06) so the next lane meets them as steps rather th
    needs the same citation of its replacing corpus row in the test comment and the commit, and is never described as keeping coverage. **The six partials already landed**: today's post-revert run (12,711 passed, 0 failed) shows no unit suite depends on them.
    Their residual risk is literals with neither corpus nor unit coverage. The gate's per-literal warning is re-run over those six lists, and any zero-row literal
    it names gets corpus rows in the next full run.
+   **Two-topic tests** (Arch, 10-11, #1884): a test pinning a surface-1 *split* becomes a corpus row with `expected: plan` (ordered ops), scored N=5 on the
+   served router, all agreeing. Licence: every sample decodes a plan that `_resolve_plan_for_dispatch` validates (the live consult sees the whole turn once the
+   splitter finds ≤1 claim). Otherwise the literal holds. Surface 1 measured alone is not evidence of a dropped half, and a dropped half is never accepted.
 11. **A licence needs the phrase to REACH the router** (#1971, Arch, 10-09). A row's MATCH says what the router does if the phrase gets there;
    surface 1 decides whether it does. Before GO, `pre_classify` every licensing row against the live lists with the **whole licensed set** removed (Lead's build, 10-09: that is the post-deletion state, and one-at-a-time would credit a sibling being deleted in the same pass as "shadowing"):
    unclaimed → the verdict stands; claimed by another list with the same action → shadowed (GO, print the list); claimed with a different action →

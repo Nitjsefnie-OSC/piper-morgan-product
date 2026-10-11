@@ -743,11 +743,8 @@ class TestPreClassifier:
         completion_history_queries = [
             "When did I complete the API migration?",
             "When did I complete the migration?",
-            "What date did I finish the database project?",
             "Show me when I shipped the auth refactor",
             "When did we launch the beta?",
-            "How long ago did I finish the redesign?",
-            "When was the auth refactor shipped?",
         ]
         for query in completion_history_queries:
             intent = PreClassifier.pre_classify(query)
@@ -757,6 +754,33 @@ class TestPreClassifier:
                 "completion-history must not fall through to temporal/current-time"
             )
             assert intent.action == "check_completion_status"
+
+    @pytest.mark.asyncio
+    async def test_completion_history_deleted_literals_route_via_inversion(self, monkeypatch):
+        """#1595 Phase 3 (2026-10-11): COMPLETION_HISTORY_PATTERNS' "what date
+        did", "when was ... completed" and "how long ago did" literals are
+        tombstoned. Three phrasings of the #1117 pin above moved here under
+        the decline + inversion-routes idiom (stubbed router, no LLM). Each
+        has a corpus row (source "phase3-rule10/COMPLETION_HISTORY_PATTERNS
+        ...test_completion_history_routes_to_status_not_temporal",
+        expected action:check_completion_status, scored 0.92-0.95)."""
+        from tests.unit.services.intent_service._inversion_pin_helper import (
+            assert_inversion_routes,
+        )
+
+        for query in [
+            "What date did I finish the database project?",
+            "How long ago did I finish the redesign?",
+            "When was the auth refactor shipped?",
+        ]:
+            intent = PreClassifier.pre_classify(query)
+            assert intent is None, f"surface 1 should decline {query!r} (got {intent!r})"
+            await assert_inversion_routes(
+                monkeypatch,
+                query,
+                live_categories="read_floor_2",
+                expected_action="check_completion_status",
+            )
 
     @pytest.mark.smoke
     def test_insight_pull_no_longer_preclassifies(self):

@@ -269,17 +269,16 @@ class PreClassifier:
     # the beta?" scored check_completion_status @0.72, under the 0.8 dispatch
     # threshold, so it would stand down to surface 2, which is the #1117 misroute to
     # temporal. That literal is load-bearing; nothing in this list is deleted.
+    # 2026-10-11: rule-10 rows for the other held literals scored MATCH, so 3 of the
+    # 5 are tombstoned below (partial); the 2 survivors stay (surface 2 misses them).
     COMPLETION_HISTORY_PATTERNS = [
         # "when did I/we complete/finish/ship/deliver/launch/close X"
         r"\bwhen did (i|we) (complete|finish|ship|deliver|launch|close|wrap up|finalize)\b",
-        # "what date did I/we finish/complete/ship X"
-        r"\bwhat date did (i|we) (complete|finish|ship|deliver|launch|close)\b",
+        # 2026-10-11 (#1595): "what date did I/we ..." tombstoned (rule-10 row MATCH).
         # "show me when I/we shipped/completed/finished X"
         r"\bshow me when (i|we) (completed|finished|shipped|delivered|launched|closed)\b",
-        # "when was X completed/finished/shipped/delivered/launched" (passive)
-        r"\bwhen was .{1,40}(completed|finished|shipped|delivered|launched)\b",
-        # "how long ago did I/we complete/finish/ship X"
-        r"\bhow long ago did (i|we) (complete|finish|ship|deliver|launch)\b",
+        # 2026-10-11 (#1595): "when was X completed ..." (passive) tombstoned.
+        # 2026-10-11 (#1595): "how long ago did I/we ..." tombstoned.
     ]
 
     # #1595 Phase 3, seventh deletion (2026-10-02): PARTIAL — 52 of 56
@@ -341,14 +340,14 @@ class PreClassifier:
     STATUS_PATTERNS = [
         r"\bcurrent work\b",
         r"\bproject overview\b",
-        r"\bproject landscape\b",
+        # 2026-10-11 (#1595): "project landscape" tombstoned (router list_projects
+        # @0.92 live via group; PARTIAL STATUS deletion, 2 more literals gone).
         # Issue #898 Q25: Milestone queries are project status, not priority
         r"\bnext milestone\b",
-        # #1973-shape restore (2026-10-10, Lead): "any upcoming milestones for
-        # this project" — router swaps the destination (list_milestones);
-        # deleted literal restored from 73a40f7cbe^; re-delete only with its
-        # row scoring under rules 1/10/11.
-        r"\bupcoming milestones?\b",
+        # 2026-10-11 (#1595): "upcoming milestones?" re-deleted under
+        # misserved_at_deletion (Arch 2026-10-11: the 10-10 restore claimed
+        # get_project_status for a list_milestones row and restored nothing; the
+        # row stays list_milestones as a known miss).
         # #1973-shape restore (2026-10-10, Lead): "I need a status report" —
         # candidate-attributed move (generate_report); deleted literal
         # restored from 73a40f7cbe^; re-delete only with its row scoring
@@ -902,9 +901,13 @@ class PreClassifier:
     # restore is permanent; re-delete only with its row scoring under rules
     # 1/10/11. Report:
     # inversion-week-calendar-description-full-score-2026-10-10-anthropic.md.
-    PRIORITY_PATTERNS = [
-        r"\bwhere.*focus\b",
-    ]
+    #
+    # 2026-10-11 (#1595): re-deleted under misserved_at_deletion — CXO withdrew
+    # the survivor status and Arch ruled the restore restored nothing (the router
+    # serves get_top_priority @0.95 with or without it; the row is ruled
+    # attention_query and stays a known miss). `\bwhere.*focus\b` tombstoned;
+    # the list is empty again.
+    PRIORITY_PATTERNS = []  # type: List[str]
 
     # #1595 Phase 3, eighth deletion (2026-10-02): PARTIAL — 18 of 21
     # literals tombstoned, 3 SURVIVE. The gate
@@ -2925,9 +2928,10 @@ class PreClassifier:
         # entry no longer present there could never match anyway; this
         # keeps the set an honest subset rather than carrying inert dead
         # entries (pinned: TestOverlapSetIsValueCopyNotNewVocabulary).
+        # 2026-10-11 (#1595): `\\bproject landscape\\b` was tombstoned in
+        # STATUS_PATTERNS, so it is pruned here too (value copy).
         status_project_noun_overlap = {
             r"\bproject overview\b",
-            r"\bproject landscape\b",
         }
         drop_intent_ids: set = set()
         if "PORTFOLIO" in categories and "STATUS" in categories:

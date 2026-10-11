@@ -4,7 +4,7 @@ number: 80
 title: "LLM decides meaning; code decides permission, checks meaning against real data, and shows before it acts"
 status: "ACCEPTED"
 valid_from: "2026-10-06"
-last_updated: "2026-10-10"
+last_updated: "2026-10-11"
 ---
 
 # ADR-080 — LLM decides meaning; code decides permission, checks meaning against real data, and shows before it acts
@@ -89,4 +89,5 @@ retires the binders it replaces in the same lane.
   asking. So `_EXECUTE_RE` is treated as a conservative consent detector (D3/D4 side), not free interpretation. It is held by a justified-bump
   ratchet (a rise only with the corpus row the #1509 coverage test demands). Retry when every declarative/question row reads ambiguous at N=5
   on the served model with no ×6-attributed operation regression.
+- **Pure pleasantries keep a deterministic short-circuit: a named, permanent floor** (2026-10-11, #1974, CXO ruling). GREETING, FAREWELL and THANKS plus `_PLEASANTRY_FILLER_PATTERNS` (29 literals: the three lists whole, 9+5+5, plus 10 filler; corrected from 26 on 2026-10-11) are the first named exception to D6's "only shrinks". A message that is *only* a pleasantry has nothing to interpret, and the canned reply is instant, needs no model call, and can't turn into a clarifying question. The #1416 guard (substantive residue falls through to full classification) is part of the exception, not separate from it. The gate records them as `PERMANENT_FLOOR` by name; they stay in the routing tail. Revisit only with a new experience ruling.
 - Whether the #1631 prose floor on answer turns retires per carrier once that carrier's answers carry structured args (Arch's 10-05 (b): yes, per carrier, not before).

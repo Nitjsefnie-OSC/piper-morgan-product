@@ -111,6 +111,10 @@ _P3 = ROOT / "docs" / "internal" / "architecture" / "current"
 # wire the reports at the FRONT in the same commit that updates the rows and the pins.
 PHASE3_REPORTS: List[Path] = [
     _P3
+    / "inversion-phase3-rule10-portfolio-rows-score-2026-10-11b-anthropic.md",  # the 20 PORTFOLIO rule-10 rows incl. the #1884 two-topic PLAN row (Arch 2026-10-11: a pinned surface-1 split becomes a plan row) and the 2 test_portfolio_patterns phrasings; supersedes the 10-11 (a) portfolio report for its rows
+    _P3
+    / "inversion-phase3-rule10-completion-history-rows-score-2026-10-11b-anthropic.md",  # the 7 COMPLETION_HISTORY rule-10 rows (4 per-literal + 3 pin phrasings from test_completion_history_routes_to_status_not_temporal), served Haiku 4.5; supersedes the 10-11 (a) report for its rows
+    _P3
     / "inversion-phase3-rule10-portfolio-rows-score-2026-10-11-anthropic.md",  # the 5 PORTFOLIO pin phrasings as rule-10 rows (Arch-approved 10-11), served Haiku 4.5 17/17: all 5 route as their pins assert; the 12 older rule-10 PORTFOLIO rows it also re-scores route the same ops as the 10-10 full run and 3 of them were UNSCORED there (single-sample partial, placed first for its own rows only)
     _P3
     / "inversion-phase3-rule10-completion-history-rows-score-2026-10-11-anthropic.md",  # the 4 COMPLETION_HISTORY rule-10 rows (one per held literal), served Haiku 4.5 4/4; 3 MATCH >=0.85, 'show me when we shipped the API' -> shipped_this_week @0.72 (survivor; surface 2 N=5 lands get_release_history)
@@ -1421,6 +1425,19 @@ def reabsorption_check(
 # cannot see. Each entry names an open issue, and is removed when that issue closes.
 HELD_FOR_CAUSE: Dict[str, str] = {}
 
+# Lists a RULING keeps for good (Arch 2026-10-11: HELD_FOR_CAUSE's contract expires
+# when its issue closes, so a ruled keep needs its own record). They still CLAIM
+# turns, so they stay in the routing tail — that is what separates them from
+# NOT_ROUTING; the census prints them by name with the ruling. The first named
+# exception to ADR-080 D6 ("the interpretation layer only shrinks").
+_1974 = "ruled keep, CXO #1974 (issuecomment-6110663876): pure pleasantries keep the canned short-circuit; #1416 residue rule unchanged"
+PERMANENT_FLOOR: Dict[str, str] = {
+    "GREETING_PATTERNS": _1974,
+    "FAREWELL_PATTERNS": _1974,
+    "THANKS_PATTERNS": _1974,
+    "_PLEASANTRY_FILLER_PATTERNS": _1974,
+}
+
 
 @dataclass
 class ListAssessment:
@@ -1435,6 +1452,7 @@ class ListAssessment:
     reabsorbed: list
     shadowed: list
     kind: str  # rule11 | survivors | rule10 | go | go-partial | no-go
+    ruled: dict = field(default_factory=dict)  # literal -> RULED_SURVIVORS record
 
 
 CENSUS_LABELS = {
@@ -1472,7 +1490,15 @@ def assess_list(list_name: str, lv: ListVerdict) -> ListAssessment:
     if lv.rows and (lv.deletable or partial):
         held = [p for p in unexercised_literals(list_name, lv.rows) if p not in survivors]
     n_surv = len(survivors) if partial else 0
-    licensed = lv.literal_count - n_surv - len(held)
+    # Ruled survivors (ledger RULED_SURVIVORS, Arch 2026-10-11): a ruling keeps the
+    # literal although the evidence would license it. Out of `licensed` like a
+    # load-bearing survivor; printed by --list; never silently GO.
+    ruled = {
+        lit: rec
+        for lit, rec in load_ruled_survivors().get(list_name, {}).items()
+        if lit not in (survivors if partial else {}) and lit not in held
+    }
+    licensed = lv.literal_count - n_surv - len(held) - len(ruled)
     # Rule 11 (#1971): re-claim the licensing rows with the licensed literals gone.
     reabsorbed: List[Tuple[RowRecord, str, ClaimResult]] = []
     shadowed: List[Tuple[RowRecord, str, ClaimResult]] = []
@@ -1482,7 +1508,7 @@ def assess_list(list_name: str, lv: ListVerdict) -> ListAssessment:
         licensed_literals = [
             p
             for p in (getattr(_PC, list_name, None) or [])
-            if p not in (survivors if partial else {}) and p not in held
+            if p not in (survivors if partial else {}) and p not in held and p not in ruled
         ]
         checked = reabsorption_check(list_name, licensed_literals, lv.rows)
         reabsorbed = [c for c in checked if c[1] == "reabsorbed"]
@@ -1493,7 +1519,7 @@ def assess_list(list_name: str, lv: ListVerdict) -> ListAssessment:
         kind = "survivors"
     elif (lv.deletable or partial) and licensed <= 0:
         kind = "rule10"
-    elif lv.deletable and not held:
+    elif lv.deletable and not held and not ruled:
         kind = "go"
     elif lv.deletable or partial:
         kind = "go-partial"
@@ -1509,6 +1535,7 @@ def assess_list(list_name: str, lv: ListVerdict) -> ListAssessment:
         reabsorbed=reabsorbed,
         shadowed=shadowed,
         kind=kind,
+        ruled=ruled,
     )
 
 
@@ -1516,6 +1543,10 @@ def census_verdict_label(list_name: str, lv: ListVerdict) -> str:
     """The ``--all`` table's verdict column — the per-list verdict, abbreviated."""
     if list_name in NOT_ROUTING:
         return "NOT ROUTING"
+    if list_name in HELD_FOR_CAUSE:
+        return "HELD"
+    if list_name in PERMANENT_FLOOR:
+        return "FLOOR (ruled)"
     if not lv.rows:
         return "NO ROWS"
     return CENSUS_LABELS[assess_list(list_name, lv).kind]
@@ -1532,6 +1563,8 @@ def render_list_report(
         return f"{list_name}: NOT ROUTING — outside the Phase 3 tail ({NOT_ROUTING[list_name]})"
     if list_name in HELD_FOR_CAUSE:
         return f"{list_name}: HELD — {HELD_FOR_CAUSE[list_name]}"
+    if list_name in PERMANENT_FLOOR:
+        return f"{list_name}: PERMANENT FLOOR — {PERMANENT_FLOOR[list_name]} (in the routing tail)"
     lv = by_list.get(list_name)
     if lv is None:
         lines.append(f"{list_name}: not found in the census (0 rows claimed, 0 literals?)")
@@ -1543,7 +1576,7 @@ def render_list_report(
     a = assess_list(list_name, lv)
     failing, survivors, partial = a.failing, a.survivors, a.partial
     held, n_surv, licensed = a.held, a.n_surv, a.licensed
-    reabsorbed, shadowed = a.reabsorbed, a.shadowed
+    reabsorbed, shadowed, ruled = a.reabsorbed, a.shadowed, a.ruled
     if reabsorbed:
         greedy = sorted({f"{c[2].pattern_list} -> {c[2].action}" for c in reabsorbed})
         lines.append(
@@ -1564,7 +1597,7 @@ def render_list_report(
             f"verdict: NO-GO (rule 10) — {len(held)} non-survivor literal(s) lack their own "
             "claiming corpus row; deposit rows first"
         )
-    elif lv.deletable and not held:
+    elif lv.deletable and not held and not ruled:
         lines.append(
             f"verdict: GO (deletable) — deleting removes {lv.literal_count} literals: "
             f"ceiling {total_literals} -> {total_literals - lv.literal_count}"
@@ -1584,6 +1617,8 @@ def render_list_report(
             f'  shadowed (rule 11, same action): "{rec.phrase}" still claimed by '
             f"{after.pattern_list} -> {after.action}"
         )
+    for lit, rec in ruled.items():
+        lines.append(f'  ruled survivor: r"{lit}"  — {rec.get("ruling", "?")}')
     for pat in held:
         lines.append(f'  HELD (rule 10, needs its own corpus row before deletion): r"{pat}"')
     if held:
@@ -1599,7 +1634,7 @@ def render_list_report(
             lines.append(
                 f'  [{mark}] "{rec.phrase}" -> claim={rec.claim.action} '
                 f"expected={rec.expected} router={rec.router.route}@{rec.router.conf} "
-                f"verdict={rec.router.verdict} :: {rec.reason}"
+                f"verdict={rec.router.verdict} :: {rec.reason}" + ledger_key_hint(rec.reason)
             )
     else:
         lines.append("")
@@ -1640,6 +1675,30 @@ def render_census_table(by_list: Dict[str, ListVerdict]) -> str:
 # The deletion ledger — DELETED_PATTERN_LISTS non-regression check (the
 # pinning test's mechanism half; #1595 Phase-3 prompt condition (b)).
 # ---------------------------------------------------------------------------
+
+
+def ledger_key_hint(reason: str) -> str:
+    """Which DELETED_PATTERN_LISTS key a licensing row's credit must travel in
+    (Arch 2026-10-11, after the census/non-regression 'disagreement' turned out
+    to be a mis-serve credit with no ledger record): the non-regression re-proof
+    cannot re-derive a mis-serve or surface-2 credit, so the deletion entry
+    carries it. Printed per row by --list so the lane sees it up front."""
+    keys = []
+    if "mis-serve" in reason:
+        keys.append("misserved_at_deletion")
+    if "probe samples" in reason:
+        keys.append("surface2_verified_at_deletion")
+    return f"  [ledger: {', '.join(keys)}]" if keys else ""
+
+
+def load_ruled_survivors() -> Dict[str, Dict[str, dict]]:
+    """Read the ledger's ``RULED_SURVIVORS`` map (list -> literal -> record).
+    The ``_comment`` key is documentation, not a list."""
+    import json
+
+    data = json.loads(DELETED_PATTERNS_JSON.read_text())
+    out = data.get("RULED_SURVIVORS", {}) or {}
+    return {k: v for k, v in out.items() if not k.startswith("_")}
 
 
 def load_deleted_pattern_lists() -> List[dict]:
@@ -1953,16 +2012,22 @@ def main() -> int:
     if args.all or not args.list_name:
         print(render_census_table(by_list))
         print()
+        floor_n = sum(literal_counts.get(n, 0) for n in PERMANENT_FLOOR)
         print(
-            f"routing tail (Phase 3 scope): {routing_tail(literal_counts)} literals  |  "
-            f"ratchet ceiling counts all: {sum(literal_counts.values())}  |  "
+            f"routing tail (Phase 3 scope): {routing_tail(literal_counts)} literals, of which "
+            f"{floor_n} are a ruled permanent floor (#1974: "
+            + ", ".join(f"{n} ({literal_counts.get(n, 0)})" for n in sorted(PERMANENT_FLOOR))
+            + f")  |  ratchet ceiling counts all: {sum(literal_counts.values())}  |  "
             f"not routing, by name: "
             + ", ".join(f"{n} ({literal_counts.get(n, 0)})" for n in sorted(NOT_ROUTING))
         )
         zero_claim = sorted(
             n
             for n in literal_counts
-            if n not in NOT_ROUTING and (n not in by_list or len(by_list[n].rows) == 0)
+            if n not in NOT_ROUTING
+            and n not in HELD_FOR_CAUSE
+            and n not in PERMANENT_FLOOR
+            and (n not in by_list or len(by_list[n].rows) == 0)
         )
         if zero_claim:
             print()

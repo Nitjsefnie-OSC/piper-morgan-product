@@ -17,11 +17,18 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-11 10:0x PDT | ppm | update-ppm-to-exec-ceiling-121-portfolio-literal-held-on-two-topic-finding-wed-best-case-121-2026-10-11.md | Update to the PM-needed Wed-reading question: ceiling is 121 on main (PPM recou… |
+| 2026-10-11 09:1x PDT | ppm | correction-ppm-to-exec-permanent-floor-is-29-not-26-tail-94-2026-10-11.md | Correction to my PM-needed memo: the permanent floor is 29 literals, not 26; ta… |
+| 2026-10-11 08:5x PDT | ppm | ask-ppm-to-exec-pm-needed-decision-ruling-relay-1974-makes-the-110-120-band-unreachable-before-wed-1014-2026-10-11.md | PM-needed (a decision only PM can make): CXO ruled #1974 keep, so 26 literals a… |
+| 2026-10-11 08:5x PDT | ppm | heads-up-ppm-to-exec-wed-1014-check-now-reads-120-to-124-band-below-120-needs-cxo-1974-ruling-2026-10-11.md | Gate heads-up (not PM-needed yet): the Wed 10-14 ceiling check now reads 120 to… |
+| 2026-10-11 08:56 PT | lead | reply-lead-to-web-cc-exec-served-checks-judged-1959-1960-closed-delete-first-two-to-1943-new-title-issue-2026-10-11.md | reply(lead→web cc exec): served checks judged — #1959 + #1960 CLOSED on your qu… |
 | 2026-10-11 08:4x PDT | ppm | ask-ppm-to-exec-pm-needed-enterprise-milestone-due-date-2028-vs-2027-reminder-2026-10-11.md | PM-needed (decision only PM can make), one reminder: Enterprise milestone due_o… |
+| 2026-10-11 08:45 PT | Janus (DinP) | janus-to-exec-cc-host-who-reads-the-alpha-address-2026-10-11.md | Does any Piper seat read mail sent to the alpha@ address? Friday's alpha reques… |
 | 2026-10-11 08:2x PDT | ppm | reply-ppm-to-lead-cc-arch-cxo-exec-1951-verdicts-link-repo-review-key-tasks-floor-and-gate-view-of-the-sizing-2026-10-11.md | Re #1951 residue: 'link my repository to the project' -> REVIEW; 'key tasks for… |
 | 2026-10-11 08:19 PT | lead | reply-lead-to-ppm-cc-arch-cxo-exec-1951-verdicts-landed-closed-portfolio-held-completion-history-go-3-2026-10-11.md | reply(lead→ppm cc arch cxo exec): #1951 verdicts landed + issue closed; one cor… |
 | 2026-10-11 07:13 PDT | cio | cio-to-exec-hb-store-parity-day3-go-after-stop-run-2026-10-11.md | Re hb-store parity day 3: hold the reader switch until my 22:07 STOP run; I'll… |
 | 2026-10-11 | duty-cycle-watchdog (automated) | alert-duty-cycle-stall-2026-10-11-0646.md | ⚠️ Piper Morgan: duty-cycle stall — docs |
+| 2026-10-11 | web | results-web-to-lead-cc-exec-alpha-served-checks-4bd1a236e9-4-pass-1-fail-2-for-lead-to-judge-2026-10-11.md | Results: Lead's alpha served checks on 4bd1a236e9 — #1959 PASS, #1960 PASS, del… |
 | 2026-10-10 19:12 PDT | lead | done-lead-to-arch-ppm-cxo-cc-exec-landed-week-calendar-six-restores-ceiling-127-two-open-items-evaluators-disagree-progress-report-2026-10-10.md | Landed on main (merge 1110c6a03a): week_calendar description, six restores, two… |
 | 2026-10-10 18:5x PDT | cxo | reply-cxo-to-ppm-cc-lead-arch-exec-status-report-yes-progress-report-yes-focus-today-no-keep-family-2026-10-10.md | Re-judge: YES to status report and progress report -> get_project_status (my 10… |
 | 2026-10-10 18:5x PDT | arch | ruling-arch-to-lead-ppm-cc-exec-cxo-8-row-disposition-approved-freshness-rule-adopted-surface-2-model-verified-2026-10-10.md | 8-row disposition: approved, #1973-conformant, land it in one commit. Your fres… |

@@ -851,13 +851,9 @@
     {
       "list": "PRIORITY_PATTERNS",
       "deleted_on": "2026-10-02",
-      "literals": 46,
-      "partial": true,
-      "surviving_literals": {
-        "\\bwhere.*focus\\b": [
-          "where should my focus be today"
-        ]
-      },
+      "literals": 47,
+      "partial": false,
+      "surviving_literals": {},
       "rows_claimed_at_deletion": [
         "what should I focus on today?",
         "what are my top priorities?",
@@ -992,6 +988,12 @@
           "ruled_destination": "get_contextual_guidance",
           "router_route": "CLARIFY@0.85",
           "note": "PRIORITY_PATTERNS claimed this phrase as get_top_priority, disagreeing with the ruled destination ('get_contextual_guidance'). The router independently declined (route=CLARIFY@0.85), so the pattern was serving this row WRONG, not merely redundantly -- deleting the pattern cannot make the surviving LLM-classifier fallback worse than a deterministic wrong answer. See row_disposition's 'mis-serves this row' branch in scripts/inversion_phase3_deletion_gate.py."
+        },
+        "where should my focus be today": {
+          "claimed_action": "get_top_priority",
+          "ruled_destination": "attention_query",
+          "router_route": "get_top_priority@0.95",
+          "note": "PRIORITY_PATTERNS claimed this phrase as get_top_priority, disagreeing with the ruled destination ('attention_query'). The router independently names get_top_priority @0.95 (the served answer, with or without the literal), so the pattern was serving this row WRONG, not merely redundantly. 2026-10-11 re-delete under misserved_at_deletion: CXO withdrew the permanent-survivor status 2026-10-11 and Arch ruled the 10-10 restore restored nothing (the router serves get_top_priority either way). The row stays attention_query as a known miss against the 10-10 week_calendar landing; get_top_priority is the served answer. Surface 2 lands on no WRITE/DESTRUCTIVE op in 10/10 probe samples. See row_disposition's 'mis-serves this row' branch in scripts/inversion_phase3_deletion_gate.py."
         }
       },
       "surface2_verified_at_deletion": {
@@ -1006,17 +1008,8 @@
           "served": "anthropic:claude-sonnet-4-6"
         }
       },
-      "known_reabsorptions": {
-        "where should my focus be today": {
-          "reclaimed_by": "PRIORITY_PATTERNS",
-          "reclaiming_literal": "\\bwhere.*focus\\b",
-          "claimed_action": "get_top_priority",
-          "agrees": false,
-          "restored": true,
-          "note": "2026-10-10 #1973-shape restore (Lead): the deleted literal is back in PRIORITY_PATTERNS (ruled, permanent unless the row later scores under rules 1/10/11), so the phrase is claimed again by its own list; documented, not silent. The claim (get_top_priority) differs from the ruled destination; it is a surface-1 fallback beneath the live consult. Report: inversion-week-calendar-description-full-score-2026-10-10-anthropic.md."
-        }
-      },
-      "note": "gate --list PRIORITY_PATTERNS --live read_status,read_referent,read_synthesis,create_todo,create_reminder,read_strategic,read_temporal,delete_todo: GO, 42/42 claimed rows MATCH/agreeing-REVIEW/live-MISMATCH/mis-serve/surface-2-floor, 0 [FAIL]. 5 of the list's 47 literals needed a corpus row before deletion (unexercised) -- see shadowed_literals for the per-literal account (2 shadowed by an earlier, broader sibling literal in this same list; 3 genuinely never exercised by any corpus row, in any category). Destination: get_top_priority, a FLOOR-disposition action (Arch-confirmed via inversion_phase1_shadow_score._expected_action_is_floor_disposition). All 42 claimed rows are this list's OWN corpus rows -- no sibling-list reabsorption existed at deletion time. 2 rows pass via misserved_at_deletion (claim disagreed with the ruled destination AND the router independently declined -- deleting a deterministically-wrong fallback cannot regress the row). 2 rows pass via the NEW surface2_verified_at_deletion shape -- Arch's 2026-10-02 condition (d): the router MISMATCHED to a non-floor op (get_contextual_guidance@0.72 / week_calendar@0.72, both below dispatch confidence or not live), but a frozen N=5 surface-2 probe (served model recorded per call; both provider legs testers hold probed -- gpt-4o 45/45, claude-sonnet-4-6 45/45) shows the LLM classifier landing BOTH phrases in the PRIORITY category on every sample, so once surface 1 is gone the LLM classifier routes them by category to the SAME floor (get_top_priority) surface 1 used to reach by pattern -- the pattern is not load-bearing. Post-deletion, the empirical claim_for_phrase probe (against the live, now-tombstoned PreClassifier) found ZERO reabsorptions across all 42 phrases (STATUS_PATTERNS, GUIDANCE_PATTERNS, TODO_COMPLETE_PATTERNS, and ANALYSIS_PATTERNS were specifically checked, per the dispatch's watch-list -- none reclaim any of the 42 phrases). check_deleted_entry_non_regression gained ONE new sibling branch for this deletion: a documented surface2_verified_at_deletion phrase is OK iff it is still UNCLAIMED by surface 1 post-deletion (the same narrower, cheaper re-verified invariant misserved_at_deletion already uses -- the original N=5 probe proof is a one-time fact recorded at GO time and is never re-derived on each future test run). Ceiling: 376 -> 329 (this list alone). | 2026-10-02 (Lead, same hour): the three literals the gate flagged as never exercised (\\bmost important task\\b, \\bmost important work\\b, \\bwhat.*work on next\\b) got one corpus row each AFTER the deletion — verified against the pre-deletion literals from git (all three match) and unclaimed by every surviving list; scored on Haiku (reports 57-59). Deposit-before-delete was the procedure; this is the same evidence landed an hour late, recorded as such. 2026-10-10 #1973-shape restore: \"where should my focus be today\" -- candidate-attributed read-to-read move (router swaps attention_query to get_top_priority); CXO ruled the today-focus family stays together, so the restore is permanent; literal \\bwhere.*focus\\b restored to pre_classifier.py (list now partial, 1 survivor(s)); re-delete only with its row scoring under rules 1/10/11. Report: inversion-week-calendar-description-full-score-2026-10-10-anthropic.md.",
+      "known_reabsorptions": {},
+      "note": "gate --list PRIORITY_PATTERNS --live read_status,read_referent,read_synthesis,create_todo,create_reminder,read_strategic,read_temporal,delete_todo: GO, 42/42 claimed rows MATCH/agreeing-REVIEW/live-MISMATCH/mis-serve/surface-2-floor, 0 [FAIL]. 5 of the list's 47 literals needed a corpus row before deletion (unexercised) -- see shadowed_literals for the per-literal account (2 shadowed by an earlier, broader sibling literal in this same list; 3 genuinely never exercised by any corpus row, in any category). Destination: get_top_priority, a FLOOR-disposition action (Arch-confirmed via inversion_phase1_shadow_score._expected_action_is_floor_disposition). All 42 claimed rows are this list's OWN corpus rows -- no sibling-list reabsorption existed at deletion time. 2 rows pass via misserved_at_deletion (claim disagreed with the ruled destination AND the router independently declined -- deleting a deterministically-wrong fallback cannot regress the row). 2 rows pass via the NEW surface2_verified_at_deletion shape -- Arch's 2026-10-02 condition (d): the router MISMATCHED to a non-floor op (get_contextual_guidance@0.72 / week_calendar@0.72, both below dispatch confidence or not live), but a frozen N=5 surface-2 probe (served model recorded per call; both provider legs testers hold probed -- gpt-4o 45/45, claude-sonnet-4-6 45/45) shows the LLM classifier landing BOTH phrases in the PRIORITY category on every sample, so once surface 1 is gone the LLM classifier routes them by category to the SAME floor (get_top_priority) surface 1 used to reach by pattern -- the pattern is not load-bearing. Post-deletion, the empirical claim_for_phrase probe (against the live, now-tombstoned PreClassifier) found ZERO reabsorptions across all 42 phrases (STATUS_PATTERNS, GUIDANCE_PATTERNS, TODO_COMPLETE_PATTERNS, and ANALYSIS_PATTERNS were specifically checked, per the dispatch's watch-list -- none reclaim any of the 42 phrases). check_deleted_entry_non_regression gained ONE new sibling branch for this deletion: a documented surface2_verified_at_deletion phrase is OK iff it is still UNCLAIMED by surface 1 post-deletion (the same narrower, cheaper re-verified invariant misserved_at_deletion already uses -- the original N=5 probe proof is a one-time fact recorded at GO time and is never re-derived on each future test run). Ceiling: 376 -> 329 (this list alone). | 2026-10-02 (Lead, same hour): the three literals the gate flagged as never exercised (\\bmost important task\\b, \\bmost important work\\b, \\bwhat.*work on next\\b) got one corpus row each AFTER the deletion — verified against the pre-deletion literals from git (all three match) and unclaimed by every surviving list; scored on Haiku (reports 57-59). Deposit-before-delete was the procedure; this is the same evidence landed an hour late, recorded as such. 2026-10-10 #1973-shape restore: \"where should my focus be today\" -- candidate-attributed read-to-read move (router swaps attention_query to get_top_priority); CXO ruled the today-focus family stays together, so the restore is permanent; literal \\bwhere.*focus\\b restored to pre_classifier.py (list now partial, 1 survivor(s)); re-delete only with its row scoring under rules 1/10/11. Report: inversion-week-calendar-description-full-score-2026-10-10-anthropic.md. 2026-10-11 re-delete (Lead-dispatched; gate --list PRIORITY_PATTERNS, 13-token live set: GO (deletable), deleting 1, ceiling 122 -> 121): \\bwhere.*focus\\b is tombstoned again, the list is a FULL tombstone (partial false, 0 survivors, 47 literals deleted). Row \"where should my focus be today\" (ruled attention_query, literal claimed get_top_priority, router get_top_priority@0.95) is a mis-serve credit (misserved_at_deletion); its known_reabsorptions restore record is removed. Row \"where should I focus this week\" stays credited under GUIDANCE_PATTERNS' surface2_verified_at_deletion.",
       "rejudged": {
         "what's the most urgent thing": {
           "on": "2026-10-06",
@@ -1045,7 +1038,7 @@
     {
       "list": "STATUS_PATTERNS",
       "deleted_on": "2026-10-02",
-      "literals": 50,
+      "literals": 52,
       "partial": true,
       "surviving_literals": {
         "\\bnext milestone\\b": [
@@ -1056,12 +1049,6 @@
         ],
         "\\bproject overview\\b": [
           "give me a project overview"
-        ],
-        "\\bproject landscape\\b": [
-          "what's the project landscape"
-        ],
-        "\\bupcoming milestones?\\b": [
-          "any upcoming milestones for this project"
         ],
         "\\bstatus report\\b": [
           "I need a status report"
@@ -1115,7 +1102,8 @@
         "what are my assignments",
         "show me my current assignments",
         "what's assigned to me",
-        "show today's assignments"
+        "show today's assignments",
+        "what's the project landscape"
       ],
       "verdict_report": [
         "inversion-phase1-shadow-score-2026-10-01-haiku-baseline.md",
@@ -1129,6 +1117,7 @@
         "get_project_status",
         "list_archived_projects",
         "list_milestones",
+        "list_projects",
         "list_todos_query",
         "manage_portfolio",
         "show_standup"
@@ -1181,7 +1170,8 @@
         "what are my assignments": "floor",
         "show me my current assignments": "floor",
         "what's assigned to me": "floor",
-        "show today's assignments": "get_project_status"
+        "show today's assignments": "get_project_status",
+        "what's the project landscape": "list_projects"
       },
       "shadowed_literals": {
         "\\bmy current work\\b": "shadowed WITHIN this same list by its own earlier, shorter sibling \\bcurrent work\\b (a SURVIVOR, list index 3, ahead of this literal's former index 13) -- \"current work\" is a guaranteed substring of \"my current work\" preceded by a space (always a \\b boundary), so the shorter pattern provably claims first for every possible phrase. Confirmed via PreClassifier._first_pattern_match(\"my current work\", STATUS_PATTERNS) -> \\bcurrent work\\b. Never exercised via this literal specifically, and stays unreachable post-deletion (the survivor remains ahead of where this literal would have been).",
@@ -1243,6 +1233,12 @@
           "ruled_destination": "floor",
           "router_route": "attention_query@0.75",
           "note": "STATUS_PATTERNS claimed this phrase as get_project_status, disagreeing with the ruled destination ('floor'). The router independently declined/named a different op, so the pattern was serving this row WRONG, not merely redundantly -- deleting the pattern cannot make the surviving LLM-classifier fallback worse than a deterministic wrong answer. See row_disposition's 'mis-serves this row' branch in scripts/inversion_phase3_deletion_gate.py."
+        },
+        "any upcoming milestones for this project": {
+          "claimed_action": "get_project_status",
+          "ruled_destination": "list_milestones",
+          "router_route": "CLARIFY@0.4",
+          "note": "STATUS_PATTERNS claimed this phrase as get_project_status, disagreeing with the ruled destination ('list_milestones'). The router independently declined (route=CLARIFY@0.4), so the pattern was serving this row WRONG, not merely redundantly. 2026-10-11 re-delete under misserved_at_deletion, per Arch's 2026-10-11 ruling: the 10-10 #1973-shape restore claimed the wrong op (get_project_status, not list_milestones) and restored nothing; the literal \\bupcoming milestones?\\b is deleted again and the row stays list_milestones as a known miss (surface 2 already mis-serve-safe: lands on no WRITE/DESTRUCTIVE op in 5/5 probe samples). See row_disposition's 'mis-serves this row' branch in scripts/inversion_phase3_deletion_gate.py."
         }
       },
       "surface2_verified_at_deletion": {
@@ -1446,14 +1442,6 @@
         }
       },
       "known_reabsorptions": {
-        "any upcoming milestones for this project": {
-          "reclaimed_by": "STATUS_PATTERNS",
-          "reclaiming_literal": "\\bupcoming milestones?\\b",
-          "claimed_action": "get_project_status",
-          "agrees": false,
-          "restored": true,
-          "note": "2026-10-10 #1973-shape restore (Lead): the deleted literal is back in STATUS_PATTERNS (ruled, permanent unless the row later scores under rules 1/10/11), so the phrase is claimed again by its own list; documented, not silent. The claim (get_project_status) differs from the ruled destination; it is a surface-1 fallback beneath the live consult. Report: inversion-week-calendar-description-full-score-2026-10-10-anthropic.md."
-        },
         "I need a status report": {
           "reclaimed_by": "STATUS_PATTERNS",
           "reclaiming_literal": "\\bstatus report\\b",
@@ -1469,7 +1457,7 @@
           "note": "2026-10-10 collateral of the restored \\bstatus report\\b: claims get_project_status while the ledger expects generate_report (re-pointed to get_project_status in the follow-up corpus re-judge commit). Report: inversion-week-calendar-description-full-score-2026-10-10-anthropic.md. Re-pointed to get_project_status by the 2026-10-10 CXO+PPM re-judge, so the reclaim now agrees."
         }
       },
-      "note": "gate --list STATUS_PATTERNS --live read_status,read_referent,read_synthesis,create_todo,create_reminder,read_strategic,read_temporal,delete_todo: GO (partial) -- 4 load-bearing literal(s) SURVIVE (\\bnext milestone\\b, \\bcurrent work\\b, \\bproject overview\\b, \\bproject landscape\\b), deleting the other 52: ceiling 329 -> 277. This is the FIRST partial deletion in the #1595 Phase 3 epic: of the 52 corpus rows STATUS_PATTERNS claims, 48 are [OK] and 4 are [FAIL] -- each FAIL row is a MATCH on a non-live op (get_project_status has no WorkflowEntry; the live consult stands down) where a frozen N=5 surface-2 probe does NOT show the LLM classifier landing in STATUS on every sample, so the literal that claims that row stays load-bearing and survives. Of the 48 OK rows: 18 pass via 'expected action live via group' (show_standup/list_archived_projects/list_milestones/list_todos_query/generate_report all have registered flip_groups), 4 pass via 'MATCH (ruled floor)' (the router declining IS the destination), 9 pass via the mis-serve escape (STATUS_PATTERNS's single hardcoded claim get_project_status disagrees with the ruled destination -- manage_portfolio for 6 PORTFOLIO-collision rows, floor for 2 attention_query rows, generate_report is itself excluded from this bucket since it's live -- deleting a deterministically-wrong fallback cannot regress the row), and 17 pass via a NEW-to-this-list shape: a frozen N=5 surface-2 probe (both provider legs testers hold probed, 10/10 combined) shows the LLM classifier landing the phrase in the STATUS category on every sample, so once surface 1 is gone the LLM classifier reaches the SAME floor (get_project_status) by category -- the pattern was never load-bearing for these rows. 4 of the 56 literals were flagged 'needs a corpus row before deletion' (unexercised by any STATUS-claimed row) -- see shadowed_literals for the per-literal account: 1 is shadowed WITHIN this list by a surviving sibling (\\bmy current work\\b, by \\bcurrent work\\b); the other 3 (\\bwhat'?s the (?:next|upcoming) milestone\\b, \\bmilestone status\\b, \\bmilestone progress\\b) are CROSS-LIST shadowed -- byte-identical duplicates of literals inside the inline (non-class-attribute) MILESTONE_STATUS_INLINE_PATTERNS check (pre_classifier.py, Issue #1068), which is checked BEFORE STATUS_PATTERNS in pre_classify's if-chain, so STATUS_PATTERNS's own copies could never fire regardless of this deletion. This was caught and corrected mid-dispatch (2026-10-02): a first audit using PreClassifier._first_pattern_match against STATUS_PATTERNS ALONE (the wrong instrument -- it checks reachability within one list, not through the real if-chain) initially flagged these 3 as genuinely-unexercised-and-reachable and triggered a STOP; the Lead re-ran PreClassifier.pre_classify_with_pattern_list (the real production entry point, which traverses the FULL if-chain) and found all three claimed by MILESTONE_STATUS_INLINE_PATTERNS first -- no corpus deposits were needed. \\bnext milestone\\b is NOT in the unreachable set (it is one of the 4 survivors, reachable via phrases like 'any update on the next milestone' that don't match MILESTONE_STATUS_INLINE_PATTERNS' 'what's the next/upcoming milestone' shape) -- a PRE-EXISTING note in scripts/build_inversion_corpus_phase0.py's STATUS deposit block comment had called it 'structurally unreachable' too, which was accurate ONLY before the fifth deletion (GITHUB_QUERY_PATTERNS) emptied that list's own shadowing copy of \\bnext milestone\\b; the note was corrected in the same commit as this deletion (both the block comment and the 'any upcoming milestones for this project' row's own `notes` field, regenerated via `python scripts/build_inversion_corpus_phase0.py` -- 385 rows unchanged, only `notes` text differs). Post-deletion, the empirical claim_for_phrase probe (against the live, now-partially-tombstoned PreClassifier) found ZERO reabsorptions across all 48 deleted-literal rows -- pre_classify_with_pattern_list AND detect_multiple_intents (via claim_for_phrase, both entry surfaces) checked, none reclaim any of the 48 phrases, and all 4 survivor rows remain claimed by STATUS_PATTERNS itself post-deletion. GUIDANCE_PATTERNS re-checked post-deletion (--list GUIDANCE_PATTERNS): now reads GO (partial) with 3 survivors (\\bsetup.*projects?\\b, \\bset up.*projects?\\b, \\bset up.*portfolio\\b) -- its 3 setup-phrase FAIL rows are unaffected by this deletion (they were never reclaimable by STATUS_PATTERNS's deleted \\bmy projects\\b/\\bmy portfolio\\b literals in the first place, since GUIDANCE is checked before STATUS in the if-chain; this re-check is a structural confirmation, not a change driven by this deletion). Ceiling: 329 -> 277 (this list alone). 2026-10-10: \"what am I working on?\" CREDITED under #1973 (b) by a surface-2 probe (no restore). Report: inversion-week-calendar-description-full-score-2026-10-10-anthropic.md. 2026-10-10 #1973-shape restore: \"any upcoming milestones for this project\" -- router swaps the destination (list_milestones); literal \\bupcoming milestones?\\b restored to pre_classifier.py (list now partial, 5 survivor(s)); re-delete only with its row scoring under rules 1/10/11. Report: inversion-week-calendar-description-full-score-2026-10-10-anthropic.md. 2026-10-10 #1973-shape restore: \"I need a status report\" -- candidate-attributed move (generate_report); literal \\bstatus report\\b restored to pre_classifier.py (list now partial, 6 survivor(s)); re-delete only with its row scoring under rules 1/10/11. Report: inversion-week-calendar-description-full-score-2026-10-10-anthropic.md. 2026-10-10 CXO+PPM re-judge: \"I need a status report\", \"give me a project status report\" re-pointed to get_project_status (project state, not repo activity); the \\bstatus report\\b re-delete was ATTEMPTED and NOT landed (see the session log). \"I need a progress report\" was NOT re-pointed: its already-deleted \\bprogress report\\b literal would then fail non-regression (router served generate_report @0.85, get_project_status is non-live with no surface-2 probe).",
+      "note": "gate --list STATUS_PATTERNS --live read_status,read_referent,read_synthesis,create_todo,create_reminder,read_strategic,read_temporal,delete_todo: GO (partial) -- 4 load-bearing literal(s) SURVIVE (\\bnext milestone\\b, \\bcurrent work\\b, \\bproject overview\\b, \\bproject landscape\\b), deleting the other 52: ceiling 329 -> 277. This is the FIRST partial deletion in the #1595 Phase 3 epic: of the 52 corpus rows STATUS_PATTERNS claims, 48 are [OK] and 4 are [FAIL] -- each FAIL row is a MATCH on a non-live op (get_project_status has no WorkflowEntry; the live consult stands down) where a frozen N=5 surface-2 probe does NOT show the LLM classifier landing in STATUS on every sample, so the literal that claims that row stays load-bearing and survives. Of the 48 OK rows: 18 pass via 'expected action live via group' (show_standup/list_archived_projects/list_milestones/list_todos_query/generate_report all have registered flip_groups), 4 pass via 'MATCH (ruled floor)' (the router declining IS the destination), 9 pass via the mis-serve escape (STATUS_PATTERNS's single hardcoded claim get_project_status disagrees with the ruled destination -- manage_portfolio for 6 PORTFOLIO-collision rows, floor for 2 attention_query rows, generate_report is itself excluded from this bucket since it's live -- deleting a deterministically-wrong fallback cannot regress the row), and 17 pass via a NEW-to-this-list shape: a frozen N=5 surface-2 probe (both provider legs testers hold probed, 10/10 combined) shows the LLM classifier landing the phrase in the STATUS category on every sample, so once surface 1 is gone the LLM classifier reaches the SAME floor (get_project_status) by category -- the pattern was never load-bearing for these rows. 4 of the 56 literals were flagged 'needs a corpus row before deletion' (unexercised by any STATUS-claimed row) -- see shadowed_literals for the per-literal account: 1 is shadowed WITHIN this list by a surviving sibling (\\bmy current work\\b, by \\bcurrent work\\b); the other 3 (\\bwhat'?s the (?:next|upcoming) milestone\\b, \\bmilestone status\\b, \\bmilestone progress\\b) are CROSS-LIST shadowed -- byte-identical duplicates of literals inside the inline (non-class-attribute) MILESTONE_STATUS_INLINE_PATTERNS check (pre_classifier.py, Issue #1068), which is checked BEFORE STATUS_PATTERNS in pre_classify's if-chain, so STATUS_PATTERNS's own copies could never fire regardless of this deletion. This was caught and corrected mid-dispatch (2026-10-02): a first audit using PreClassifier._first_pattern_match against STATUS_PATTERNS ALONE (the wrong instrument -- it checks reachability within one list, not through the real if-chain) initially flagged these 3 as genuinely-unexercised-and-reachable and triggered a STOP; the Lead re-ran PreClassifier.pre_classify_with_pattern_list (the real production entry point, which traverses the FULL if-chain) and found all three claimed by MILESTONE_STATUS_INLINE_PATTERNS first -- no corpus deposits were needed. \\bnext milestone\\b is NOT in the unreachable set (it is one of the 4 survivors, reachable via phrases like 'any update on the next milestone' that don't match MILESTONE_STATUS_INLINE_PATTERNS' 'what's the next/upcoming milestone' shape) -- a PRE-EXISTING note in scripts/build_inversion_corpus_phase0.py's STATUS deposit block comment had called it 'structurally unreachable' too, which was accurate ONLY before the fifth deletion (GITHUB_QUERY_PATTERNS) emptied that list's own shadowing copy of \\bnext milestone\\b; the note was corrected in the same commit as this deletion (both the block comment and the 'any upcoming milestones for this project' row's own `notes` field, regenerated via `python scripts/build_inversion_corpus_phase0.py` -- 385 rows unchanged, only `notes` text differs). Post-deletion, the empirical claim_for_phrase probe (against the live, now-partially-tombstoned PreClassifier) found ZERO reabsorptions across all 48 deleted-literal rows -- pre_classify_with_pattern_list AND detect_multiple_intents (via claim_for_phrase, both entry surfaces) checked, none reclaim any of the 48 phrases, and all 4 survivor rows remain claimed by STATUS_PATTERNS itself post-deletion. GUIDANCE_PATTERNS re-checked post-deletion (--list GUIDANCE_PATTERNS): now reads GO (partial) with 3 survivors (\\bsetup.*projects?\\b, \\bset up.*projects?\\b, \\bset up.*portfolio\\b) -- its 3 setup-phrase FAIL rows are unaffected by this deletion (they were never reclaimable by STATUS_PATTERNS's deleted \\bmy projects\\b/\\bmy portfolio\\b literals in the first place, since GUIDANCE is checked before STATUS in the if-chain; this re-check is a structural confirmation, not a change driven by this deletion). Ceiling: 329 -> 277 (this list alone). 2026-10-10: \"what am I working on?\" CREDITED under #1973 (b) by a surface-2 probe (no restore). Report: inversion-week-calendar-description-full-score-2026-10-10-anthropic.md. 2026-10-10 #1973-shape restore: \"any upcoming milestones for this project\" -- router swaps the destination (list_milestones); literal \\bupcoming milestones?\\b restored to pre_classifier.py (list now partial, 5 survivor(s)); re-delete only with its row scoring under rules 1/10/11. Report: inversion-week-calendar-description-full-score-2026-10-10-anthropic.md. 2026-10-10 #1973-shape restore: \"I need a status report\" -- candidate-attributed move (generate_report); literal \\bstatus report\\b restored to pre_classifier.py (list now partial, 6 survivor(s)); re-delete only with its row scoring under rules 1/10/11. Report: inversion-week-calendar-description-full-score-2026-10-10-anthropic.md. 2026-10-10 CXO+PPM re-judge: \"I need a status report\", \"give me a project status report\" re-pointed to get_project_status (project state, not repo activity); the \\bstatus report\\b re-delete was ATTEMPTED and NOT landed (see the session log). \"I need a progress report\" was NOT re-pointed: its already-deleted \\bprogress report\\b literal would then fail non-regression (router served generate_report @0.85, get_project_status is non-live with no surface-2 probe). 2026-10-11 partial deletion (Lead-dispatched, gate --list STATUS_PATTERNS with the 13-token live set: GO (partial), deleting 2, ceiling 124 -> 122): \\bproject landscape\\b (row \"what's the project landscape\": router list_projects@0.92, live via the read_status group, ruled list_projects) and \\bupcoming milestones?\\b (row \"any upcoming milestones for this project\": ruled list_milestones, literal claimed get_project_status, router CLARIFY@0.4 -- a mis-serve credit, ledger key misserved_at_deletion; its 10-10 known_reabsorptions restore record is removed because the literal is no longer a survivor). 4 survivors remain: next milestone, current work, project overview, status report.",
       "rejudged": {
         "what projects am I working on": {
           "on": "2026-10-06",
@@ -2768,6 +2756,62 @@
       "shadowed_literals": {},
       "known_reabsorptions": {},
       "note": "gate --list PORTFOLIO_PATTERNS --live read_status,read_referent,read_synthesis,create_todo,create_reminder,read_strategic,read_temporal,delete_todo,read_floor,read_floor_2,read_canonical,read_portfolio,complete_todo: GO (partial) -- 15 load-bearing literal(s) SURVIVE, 0 HELD, deleting 1: ceiling 130 -> 129. Per PM/PPM ruling, the delete/remove/get-rid-of literals are named survivors until #1935 regardless of their own gate verdict; hide/put-away/add/new-project are held or survivors per the gate's own read ('new project' gained a claiming row via today's rule-10 deposit and is now a genuine FAIL/survivor, not HELD, as it was in the pre-deposit measurement). The ONLY deletable literal is the 'search projects for Y' form -- its own corpus row 'search projects for budget' (today's rule-10 deposit) is a plain live MATCH (search_projects, live via the read_portfolio group). 0 unexercised literals (rule 10 satisfied). Zero reabsorptions post-deletion (checked via claim_for_phrase, both entry surfaces). No rule-10(B) restores needed -- the two affected tests (test_pre_classifier.py::test_portfolio_patterns split off its own corpus-row phrase; test_subsumption_portfolio_write_family_1884.py's control-case probe swapped to a surviving literal) converted cleanly under rule 10(A), every decline confirmed empirically (no reabsorption, no production misroute)."
+    },
+    {
+      "list": "COMPLETION_HISTORY_PATTERNS",
+      "deleted_on": "2026-10-11",
+      "literals": 5,
+      "partial": true,
+      "surviving_literals": {
+        "\\bwhen did (i|we) (complete|finish|ship|deliver|launch|close|wrap up|finalize)\\b": [
+          "When did we launch the beta?"
+        ],
+        "\\bshow me when (i|we) (completed|finished|shipped|delivered|launched|closed)\\b": [
+          "show me when we shipped the API"
+        ]
+      },
+      "rows_claimed_at_deletion": [
+        "what date did I finish the onboarding project",
+        "when was the migration completed",
+        "how long ago did we ship the dashboard"
+      ],
+      "verdict_report": [
+        "inversion-phase3-rule10-completion-history-rows-score-2026-10-11-anthropic.md"
+      ],
+      "expected_ops": [
+        "check_completion_status"
+      ],
+      "expected_op_by_phrase": {
+        "what date did I finish the onboarding project": "check_completion_status",
+        "when was the migration completed": "check_completion_status",
+        "how long ago did we ship the dashboard": "check_completion_status"
+      },
+      "misserved_at_deletion": {},
+      "surface2_verified_at_deletion": {},
+      "shadowed_literals": {},
+      "known_reabsorptions": {},
+      "note": "gate --list COMPLETION_HISTORY_PATTERNS --live read_status,read_referent,read_synthesis,create_todo,create_reminder,read_strategic,read_temporal,delete_todo,read_floor,read_floor_2,read_canonical,read_portfolio,complete_todo: GO (partial), deleting 3 of 5 literals (what date did / when was ... completed / how long ago did); ceiling 127 -> 124. The 3 rows_claimed_at_deletion each scored MATCH check_completion_status >=0.85 in inversion-phase3-rule10-completion-history-rows-score-2026-10-11-anthropic.md. Survivors and why: 'When did we launch the beta?' (router check_completion_status @0.72, under the 0.8 dispatch threshold) and 'show me when we shipped the API' (router shipped_this_week @0.72) both stand down to surface 2, and inversion-phase3-surface2-floor-probe-2026-10-11-n5-anthropic-completion.md shows surface 2 NOT landing STATUS for them ('When did we launch the beta?' TEMPORAL 3 / QUERY 2; 'show me when we shipped the API' QUERY/get_release_history 5/5), so those two literals are load-bearing and survive. No surface-2 credits are recorded for them."
     }
-  ]
+  ],
+  "RULED_SURVIVORS": {
+    "_comment": "Literals a ruling keeps although the gate's evidence would license them (Arch 2026-10-11, Lead's ask approved). Each cites its ruling; a ruled survivor whose claim differs from its rows' ruled op must carry known_miss (the restore pin applies here too). Excluded from `licensed` like load-bearing survivors; printed by --list.",
+    "PORTFOLIO_PATTERNS": {
+      "\\bupdate\\s+(?:my\\s+)?(?:the\\s+)?project\\b": {
+        "ruling": "#1933 option (a): PPM/CXO/Arch keep the update/edit literals (pinned by tests/unit/services/intent_service/test_portfolio_edit_literals_1933.py)",
+        "on": "2026-10-11",
+        "rows": [
+          "update my project name to Atlas"
+        ],
+        "known_miss": "the literal claims manage_portfolio while the row is ruled floor; kept on purpose because the fallback is WORSE — the router/surface 2 mis-route edit-project phrasings to update_document (a WRITE), #1933's finding"
+      },
+      "\\bedit\\s+(?:my\\s+)?(?:the\\s+)?project\\b": {
+        "ruling": "#1933 option (a): PPM/CXO/Arch keep the update/edit literals (pinned by tests/unit/services/intent_service/test_portfolio_edit_literals_1933.py)",
+        "on": "2026-10-11",
+        "rows": [
+          "edit my project description"
+        ],
+        "known_miss": "the literal claims manage_portfolio while the row is ruled floor; kept on purpose because the fallback is WORSE (router update_document @0.85, a WRITE), #1933's finding"
+      }
+    }
+  }
 }

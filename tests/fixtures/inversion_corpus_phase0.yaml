@@ -2458,6 +2458,36 @@ corpus:
     expected: action:list_archived_projects
     source: "phase3-rule10/PORTFOLIO_PATTERNS tests/unit/services/intent_service/test_truncated_render_provenance_1738.py::test_portfolio_list_claim_is_single_intent"
     notes: "rule-10 held literal (PORTFOLIO_PATTERNS show/list/view-projects; 2026-10-11 deposit, Arch-approved); origin=test pin #1738; the #1738 single-intent guard stays a test, not a row"
+  - phrase: "What date did I finish the database project?"
+    category: STATUS
+    expected: action:check_completion_status
+    source: "phase3-rule10/COMPLETION_HISTORY_PATTERNS tests/unit/services/test_pre_classifier.py::TestPreClassifier::test_completion_history_routes_to_status_not_temporal"
+    notes: "rule-10 pin phrasing for the deleted `what date did` literal (2026-10-11 deposit; lane found the pin on CI's unit tier); origin=test"
+  - phrase: "How long ago did I finish the redesign?"
+    category: STATUS
+    expected: action:check_completion_status
+    source: "phase3-rule10/COMPLETION_HISTORY_PATTERNS tests/unit/services/test_pre_classifier.py::TestPreClassifier::test_completion_history_routes_to_status_not_temporal"
+    notes: "rule-10 pin phrasing for the deleted `how long ago did` literal (2026-10-11 deposit; lane found the pin on CI's unit tier); origin=test"
+  - phrase: "When was the auth refactor shipped?"
+    category: STATUS
+    expected: action:check_completion_status
+    source: "phase3-rule10/COMPLETION_HISTORY_PATTERNS tests/unit/services/test_pre_classifier.py::TestPreClassifier::test_completion_history_routes_to_status_not_temporal"
+    notes: "rule-10 pin phrasing for the deleted `when was … shipped` literal (2026-10-11 deposit; lane found the pin on CI's unit tier); origin=test"
+  - phrase: "list my archived projects and summarize my current work"
+    category: PORTFOLIO
+    expected: plan
+    source: "phase3-rule10/PORTFOLIO_PATTERNS tests/unit/services/intent_service/test_subsumption_portfolio_write_family_1884.py::TestGenuineTwoTopicControlUnchanged::test_two_topic_list_plus_genuine_status_phrase_now_kept"
+    notes: "RULED 2026-10-11 (Arch): a test that pins a surface-1 SPLIT becomes a plan row — ordered ops list_archived_projects -> get_project_status (the second a floor READ, allowed in a plan by #1606). Licence for deleting the show/list/view literal: N=5 all plan and all validate in _resolve_plan_for_dispatch; any single-op or declined sample holds the literal. Served 2026-10-11: PLAN[list_archived_projects->get_project_status] 6/6 (Haiku 4.5)"
+  - phrase: "list all projects"
+    category: PORTFOLIO
+    expected: action:list_projects
+    source: "phase3-rule10/PORTFOLIO_PATTERNS tests/unit/services/test_pre_classifier.py::TestPreClassifier::test_portfolio_patterns"
+    notes: "rule-10 pin phrasing for the show/list/view-projects literal (2026-10-11 deposit, Arch-approved; CXO: a plain portfolio read); origin=test"
+  - phrase: "view my projects"
+    category: PORTFOLIO
+    expected: action:list_projects
+    source: "phase3-rule10/PORTFOLIO_PATTERNS tests/unit/services/test_pre_classifier.py::TestPreClassifier::test_portfolio_patterns"
+    notes: "rule-10 pin phrasing for the show/list/view-projects literal (2026-10-11 deposit, Arch-approved; CXO: a plain portfolio read); origin=test"
   - phrase: "Where did you get that from?"
     category: PROVENANCE
     expected: action:explain_suggestion
