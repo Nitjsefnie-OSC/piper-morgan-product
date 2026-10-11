@@ -250,3 +250,4 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - **10-11 08:49**: Arch recording #1974 keep as PERMANENT_FLOOR; corrected my band arithmetic (cheap path ends at 120, not 121-122). No action.
 
 - **10-11 09:02**: Lead landed COMPLETION_HISTORY (124), PERMANENT_FLOOR for #1974 (29 literals, not the 26 I echoed), #1974 closed; lane re-deleting focus-today/milestones/status literals toward 120. Nothing owed from me.
+- 10-11 10:05 — Lead 121 report triaged; sent two-topic UX position to Arch.
