@@ -171,3 +171,4 @@ MEM-CACHE · ADR-068 prep (gated on PPM naming a live sprint) · m-40/m-30 prove
 - 2026-10-11 09:0x: ceiling 124, tail 94 (of which 29 are the permanent floor). Watch the lane to 120.
 - 2026-10-11 10:1x: ceiling 121. PORTFOLIO's last literal waits on Lead's N=5 plan-row score for #1884 (licence = validated plan on every sample).
 - 2026-10-11 10:2x: plan-aware rule 11 approved with a fallback condition. PORTFOLIO holds at 121 on #1977 (fallback swallows a two-topic turn). Wednesday reads 121.
+- 2026-10-11 10:4x: #1977 step 1 approved. Corrected: unclaimed fallback is NO-GO until step 2. The PORTFOLIO literal needs both steps for 120.

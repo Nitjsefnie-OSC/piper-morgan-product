@@ -105,8 +105,9 @@ Collected here (Arch, 2026-10-06) so the next lane meets them as steps rather th
    **Two-topic tests** (Arch, 10-11, #1884): a test pinning a surface-1 *split* becomes a corpus row with `expected: plan` (ordered ops), scored N=5 on the
    served router, all agreeing. Licence: every sample decodes a plan that `_resolve_plan_for_dispatch` validates (the live consult sees the whole turn once the
    splitter finds ≤1 claim). Otherwise the literal holds. Surface 1 measured alone is not evidence of a dropped half, and a dropped half is never accepted.
-   **Fallback condition** (10-11, #1977): a validated plan is also re-claimed at surface 1 with the literal gone. If the result is unclaimed, or a split covering every
-   plan op, the plan is credited. If it is a single or partial claim, it reads "planned, fallback partial" → NO-GO, because the consult stands down on
+   **Fallback condition** (10-11, #1977): a validated plan is also re-claimed at surface 1 with the literal gone. If the result is a split covering every
+   plan op, the plan is credited. Unclaimed is credited only once #1977 step 2 (acknowledgement on the legacy branch) is in place, because the legacy LLM
+   fallback returns one intent. Until then it reads "planned, fallback unacknowledged" → NO-GO (corrected 10-11 10:4x). If it is a single or partial claim, it reads "planned, fallback partial" → NO-GO, because the consult stands down on
    `armed_snapshot`, router error or sub-threshold, and that branch would drop a half silently.
 11. **A licence needs the phrase to REACH the router** (#1971, Arch, 10-09). A row's MATCH says what the router does if the phrase gets there;
    surface 1 decides whether it does. Before GO, `pre_classify` every licensing row against the live lists with the **whole licensed set** removed (Lead's build, 10-09: that is the post-deletion state, and one-at-a-time would credit a sibling being deleted in the same pass as "shadowing"):
