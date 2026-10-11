@@ -4,7 +4,26 @@
 Pard (seat permissions). Applies to any seat allowed to run a fixed production command (first: HOST's seat, the
 read-only `prod_user_lookup` and the invite mint).
 
-## 2026-10-09 update: recommended install is ASK, on an Auto seat
+## 2026-10-10 (later): recommendation reverted to KEEP ASK, plus HOST's attended-only rule
+
+Pard showed (B) is weaker than first framed: any **other** `fly ssh console -a piper-morgan -C "<anything>"` is
+reviewer-gated, because denying it would also block the allowed payloads (deny beats allow), and (B) allows
+burning until Lead's burn split deploys. HOST has adopted "fly only when a person is in the conversation". So the
+recommendation is the **ask file as installed + HOST's rule**: xian gates every production command, and a slip in the
+rule means a visible, recoverable stall rather than an unseen production action. (B) stays documented below as
+the alternative. xian decides; keeping ask needs no action.
+
+## 2026-10-10: the ASK file froze an unattended seat (CIO's miss); proposed replacement (B)
+
+The ask file was pasted 10-09 14:16. HOST's first fly command (`fly secrets list`, names only) stopped at the prompt
+and froze the whole seat (fires, mail) until xian clicked on 10-10 (~12:5x). **An ask rule on a seat that runs
+unattended turns one production command into a seat-wide stall.** Proposed for xian's yes (sent 10-10): **allow** the
+approved payloads (lookup, mint), **deny** the fly families that change or expose things (secrets, deploy, launch,
+apps, machine, scale, volumes, certs, ips, image, config, postgres, mpg, redis, storage, tokens, auth, orgs, console,
+proxy, sftp, wireguard, the interactive `ssh console`, all of `flyctl`), and **no ask**. Everything else goes to the
+auto reviewer, which doesn't freeze. Exact JSON in the 10-10 memo to Janus/Exec/Pard.
+
+## 2026-10-09 update (superseded 10-10): recommended install is ASK, on an Auto seat
 
 PM asked which mode HOST's seat should run (plain answer: `permission-modes-explainer.md`). Following Arch's
 documented facts (deny, then ask, then allow; **ask still prompts in auto mode**), the recommendation is now:

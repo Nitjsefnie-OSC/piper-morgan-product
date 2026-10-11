@@ -22,11 +22,21 @@ lives in GitHub, this file holds only durable owed/queued items.)
   121 is still just above PPM's 110–120 band. The gate (rules 10/11 + the #1973 threshold in every arm) reads no list GO. What's left needs
   router/catalog work or new rows: COMPLETION_HISTORY (#1117 row @0.72; 4 rule-10 holds), the greeting/thanks/farewell family (rule-10 holds;
   pleasantry is NOT ROUTING), STAKEHOLDER (#1256, blocked on DOCUMENT_QUERY's loose "update … with", rule 11), and the 3 delete-family
-  literals (#1935). Re-measure Mon 10-12 for PPM's ledger.
+  literals (#1935). Re-measure Mon 10-12 for PPM's ledger, **and say which remaining deletions need a fresh served row vs which don't** (PPM 10-10: that sizes the API-outage exposure).
 - **#1970 — router framing DEFERRED (Arch option c, 10-10)** — **Filed**: 2026-10-10 · landed: step-1 plumbing (flag off), the inert
   scorer framing column + mapping, and the `_EXECUTE_RE` ratchet (MAX_EXECUTE_ALTERNATIVES 39, justified-bump rule). The prompt stays on
   `claude/lead-1970-framing-prompt-held` (not merged). **Retry trigger**: every `framing: declarative|question` row reads ambiguous at N=5
   on the served model, AND the full-run operation diff shows no ×6-attributed regression. Compose corpus rows: 0 exist (needed for any retry).
+- **Rule 7 as refined by Arch (10-10)**: the full ~577-call run is owed only by the candidate that LANDS. Exploration screens on the moved rows
+  plus a fixed sentinel set (PM's phrasings, the clear family, the declarative and question rows). Apply this to the held catalog batch and any #1970 retry.
+- **Key move on Fri 10-16 (Themis 10-10; xian's call)** — **Filed**: 2026-10-10 · keep the current key through 10-15 (it spends Krink's credit,
+  which expires 10-15). On 10-16 xian stores `lead-scoring` (Amber keychain, my 13:4x command). **Have ready by 10-16, if asked:** the steps
+  to move prod alpha's server key to the pipermorgan.ai org. That's PM's hand: `fly secrets set -a piper-morgan ANTHROPIC_API_KEY=…` via a
+  hidden prompt, never pasted into the repo or mail. Fly restarts the app. Then PASS: alpha /health is up, and one chat turn by a user
+  WITHOUT a stored key is served (fly logs show no limit error). Also decide: a separate workspace for prod (not lead-scoring's $50, so dev
+  scoring can't starve users). Testers on their own stored keys are unaffected.
+- **API restored 16:33 10-10** (xian raised workspace + org limits to $250). lead-scoring key ($50, pipermorgan.ai org) pending xian's "stored".
+  The catalog batch is held on `claude/lead-catalog-description-batch-held`; fix its regressions next under the refined rule 7.
 - **Three description-change candidates** (Arch: worth doing for their own sake, each its own rule-7 run, my timing) — **Filed**: 2026-10-10 ·
   "show priorities for this sprint" → get_top_priority; "pull up my schedule" → week_calendar (now meeting_time @0.72); "show today's tasks"
   → list_todos_query. The held prompt fixed them by accident; find the description wording that does it alone.
@@ -35,8 +45,8 @@ lives in GitHub, this file holds only durable owed/queued items.)
   `evaluate_consent(framing_hint=)`, where PRIVATE WRITE uses the hint, OUTWARD WRITE takes the stricter of hint and regex, DESTRUCTIVE is unchanged); (2) the prompt line
   + corpus WRITE rows get an expected framing → full run on the served model (rule 7); (3) a `MAX_EXECUTE_ALTERNATIVES` ratchet, retiring PRIVATE verbs
   only on a served framing MATCH.
-- **Post-promotion served checks on alpha** (+ #1960: "my default repo should be test-piper-morgan" → quote the consent line) — **Filed**: 2026-10-08 · Blocked on: PM's next `promote_to_alpha`. Quote each served
-  answer (rule 8): "delete the first two reminders"; #1959 close of a nonexistent issue (honest reply, no confirm); #1889/#1963/#1964
+- **Post-promotion served checks on alpha** (+ #1960: "my default repo should be test-piper-morgan" → quote the consent line) — **Filed**: 2026-10-08 · **Web runs these (xian 10-10, list sent 13:1x)**; quoted replies come to Lead + Exec. Quote each served
+  answer (rule 8): "delete the first two reminders"; #1958 "remind me to X on Friday" → "(scheduled for Friday)" (needs the NEXT promotion); #1959 close of a nonexistent issue (honest reply, no confirm); #1889/#1963/#1964
   (#1965 a+b landed 10-08: quote the served standup + Radar for an OAuth-only account AND a PAT-only account, the latter on its
   owner's own PAT that PM provisions, never a Piper-held one; CXO closes #1889/#1963 on the quoted output); if PM turns on the `clear_todos` token, PM's 08-15 sentence first.
 

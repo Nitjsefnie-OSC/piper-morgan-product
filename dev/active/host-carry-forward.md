@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-10-09
+last_updated: 2026-10-10
 currency_claim: per-stop
 max_age_days: 1
 ---
@@ -9,6 +9,10 @@ max_age_days: 1
 **Written**: 2026-10-09 14:2x PDT (restart refresh, day 77 on Amber; 10-08 06:3x block below is older; the frontmatter above is the checkable claim, this prose line is not). · **Worktree**: Model A, `~/Development/piper-morgan-worktrees/host` on `claude/host-cycle`
 
 **Cadence**: LaunchAgent seat 7 (`com.xian.pm-host-cycle`, `26 6,9,12,15,18,21`). There is no session cron; `CronList` always reads empty and that is expected. The registry row (`dev/active/duty-cycle-registry.tsv`, host row, col 2) is the cadence source of truth.
+
+**10-10 15:26 wake**: e2e lookup check is RIPE (both commits in deployed `dd5b7c702e`, file (A) installed); blocker = needs a person in conversation for the ask click; notice sent to Exec. Whether the ~15:00 reboot happened is unverified by me; this fire ran normally.
+
+**10-10 14:0x PRE-REBOOT (day 78)**: Amber reboots ~15:00 PT (Pard). State: the ask rule DID fire (my 10-09 evening `fly secrets list` froze the seat until someone cleared it ~12:55 on 10-10); **my standing rule now: no fly commands in scheduled or mail-wake fires, only with a person in the conversation** (CIO recommends keeping the ask file, xian's yes/no on keep-ask vs file (B) still his). Answered Exec's OpenAI ask (no server OpenAI key on prod; stored user keys and 429 history UNMEASURED) and Lead's Anthropic-workspace ask (unmeasured by me; xian says the limit was raised). Sev O. added to the gitignored roster as recruiting-list only, no invite, no code (Exec: none until xian says). 10-09 log closed (DAY-CLOSED); 10-10 log is `dev/2026/10/10/2026-10-10-1300-host-code-log.md`. Inbox empty. Still gated on others: post-deploy e2e lookup check (needs a person present for the fly click), Janne and Savanna sends, roster flips, fielding 1b on Agent 360 v0.6. First post-reboot fire is 15:26: expect it to find a quiet inbox, no fly.
 
 **10-09 14:2x RESTART (day 77)**: Pard restarted this seat at Janus's request so xian's `.claude/settings.local.json` loads (four `ask` lines for `fly`/`flyctl` forms, one `deny` for a retargeting `-` flag after the quoted `-C` command; valid JSON, read by me). The restart also cleared my one-session mint-wrapper approval, so `scripts/mint_prod_invite.sh` may be classifier-denied again. **I have not run any fly command since the restart; whether the ask rule fires is untested, and my first fly command (the post-deploy e2e) is the live test, with xian clicking.** Do not write rules myself.
 **What happened 10-09 (all in the session log)**: Row F mint for Web done (`65G9…2BPV`); Janne `C048…Z3JW` and Savanna `EHAB…JWF2` reissues minted, UNUSED, sends are PM's hand; lookup payloads approved from the trust side; both shell probes on xian's "HOST, go" CLEAN (no remote shell on `fly ssh console -C`; not measured for `|`, `&&`, backticks, redirects, newlines); Agent 360 v0.5 synthesis sent (11 of 11); #1967 owed-scanner marker accepted by CIO, `scripts/owed-scan.py` built, pilot HOST+Exec 10-09 to 10-16.
