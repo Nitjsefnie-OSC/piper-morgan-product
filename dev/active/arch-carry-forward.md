@@ -166,3 +166,4 @@ MEM-CACHE · ADR-068 prep (gated on PPM naming a live sprint) · m-40/m-30 prove
 
 - 2026-10-11: item 1 ruled (the split is the mis-serve proof, not liveness). Restore-validity rule added: 2 of the 10-10 restores claim the wrong op. Waiting on CXO for focus-today (`\bwhere.*focus\b` survivor status) and on Lead for the milestones re-delete, the `\bstatus report\b` N=5 probe, `ruled_survivors` with the claim-agreement pin, and the PORTFOLIO 5-row deposit. Lead's interpreter is borrowed for gate scripts (this seat has no venv).
 - 2026-10-11 08:3x: filed #1974 (pleasantry family, CXO ruling); GREETING/FAREWELL/THANKS held for cause on it. The ceiling path to Wednesday is 124 → 122 (→ 121); the band needs #1974.
+- 2026-10-11 08:4x: CXO withdrew the focus-today survivor (re-delete licensed). Only #1974 is still waiting on CXO.
