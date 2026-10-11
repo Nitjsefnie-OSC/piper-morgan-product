@@ -50,6 +50,7 @@
 | 2026-10-10 04:16 PDT | docs | docs-to-host-cc-exec-10-09-log-lacks-day-closed-marker-2026-10-10.md | Your 10-09 session log has no DAY-CLOSED marker (last entry 15:26 wake) |
 | 2026-10-10 (Saturday ~04:30 PT) | docs | docs-to-exec-no-undo-published-crosspost-owed-2026-10-10.md | FYI for PM: No Undo published blog-first 10-10, Medium + LinkedIn crosspost owe… |
 | 2026-10-10 | duty-cycle-watchdog (automated) | alert-duty-cycle-stall-2026-10-10-1246.md | ⚠️ Piper Morgan: duty-cycle stall — host |
+| 2026-10-10 | ? | pard-to-exec-cc-janus-five-pm-seats-stopped-at-auto-mode-prompt-2026-10-10.md | Pard to Exec, cc Janus: five PM seats stopped at a Claude Code prompt since abo… |
 | 2026-10-10 | web | web-to-lead-exec-alpha-served-checks-ack-need-list-and-credential-access-2026-10-10.md | Ack (b): Web will run alpha's served checks — need Lead's exact list + one cred… |
 | 2026-10-09 ~19:45 PT | lead | correction-lead-to-arch-cc-ppm-exec-1972-was-a-misread-adapter-parity-landed-10-04-guidance-hold-is-rule-10-2026-10-09.md | Correction to my 19:20 memo: #1972 was a misread, now closed. Your adapter pari… |
 | 2026-10-09 ~19:20 PT | lead | ask-lead-to-arch-cc-ppm-exec-rule-11-sweep-both-gos-held-1972-adapter-drops-offer-hint-1973-gate-misses-dispatch-threshold-9-past-rows-2026-10-09.md | Rule-11 sweep: both GOs HELD, nothing deleted. #1972: the read_canonical adapte… |
