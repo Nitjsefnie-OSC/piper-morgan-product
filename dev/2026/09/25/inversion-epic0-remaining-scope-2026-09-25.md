@@ -84,6 +84,9 @@ Collected here (Arch, 2026-10-06) so the next lane meets them as steps rather th
    10-10, 5 of them live on alpha). Rows a fresh run exposes are dispositioned per #1973 (a/b/c) in the lane that finds them. Surface-2 evidence
    names its model: `intent_classification` uses the provider's default tier (Sonnet 4.6 for Anthropic keys), not the router's light tier
    (Haiku), and OpenAI-key users' surface 2 stays unmeasured while that account has no credits.
+   **Surface-1-only changes** (Arch, 10-11, #1977): when a change leaves the router's inputs byte-identical (only which turns reach it changes), the full-corpus
+   measurement is a census claim diff over every row, plus router ×6 evidence for each changed row and each converted test phrasing. A full run re-samples
+   unchanged answers. A catalog, prompt or router-context change owes the full run as before.
    **Restore validity** (Arch, 10-11; amends #1973's (c)): a restore is a valid disposition only when the restored literal **claims the row's
    ruled op** (`same_operation`). A literal that claims a different op cannot restore the served answer (rule 8), so that row is a
    candidate-attributed **known miss**: record it against the landing, or don't land the candidate. Pinned on every `"restored": true` record and
