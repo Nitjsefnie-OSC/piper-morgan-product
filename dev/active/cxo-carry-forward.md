@@ -246,3 +246,5 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - **10-11 08:20 MAIL WAKE**: withdrew my permanent-survivor ruling on `\bwhere.*focus\b` (it claimed get_top_priority, router serves it anyway); focus-today stays ruled attention_query as a known miss; Lead re-deletes. Lead closed #1951. Owed to me unchanged otherwise.
 
 - **10-11 08:32 MAIL WAKE**: ruled #1974 KEEP pleasantry short-circuit (permanent floor); owed: check canned copy vs a quoted served "hello"/"thank you!" when Lead next quotes alpha replies. Noted: `\bstatus report\b` stays a survivor (surface 2 says SYNTHESIS), so status-report row is held by a literal not a served model.
+
+- **10-11 08:49**: Arch recording #1974 keep as PERMANENT_FLOOR; corrected my band arithmetic (cheap path ends at 120, not 121-122). No action.
