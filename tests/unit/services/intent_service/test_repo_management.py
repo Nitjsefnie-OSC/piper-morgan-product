@@ -110,9 +110,13 @@ class TestRepoManagementPatterns:
 
         message = "connect my repository to Piper Morgan"
         result = PreClassifier.pre_classify(message)
-        assert result is None, (
-            "REPO_MANAGEMENT_PATTERNS' 'connect ... repo(sitory) to' literal is deleted — "
-            f"surface 1 should decline (got {result!r})"
+        # 2026-10-10 (#1973-shape restore, Lead): the literal is back
+        # (WRITE row that fails (a) and cannot take (b) under rule 4), so
+        # surface 1 claims manage_repos again; the Inversion routing below is
+        # unchanged and still pinned.
+        assert result is not None and result.action == "manage_repos", (
+            "REPO_MANAGEMENT_PATTERNS' 'connect ... repo(sitory) to' literal is restored — "
+            f"surface 1 should claim manage_repos (got {result!r})"
         )
         await assert_inversion_routes(
             monkeypatch,
