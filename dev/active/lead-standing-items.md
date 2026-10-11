@@ -37,6 +37,11 @@ lives in GitHub, this file holds only durable owed/queued items.)
   scoring can't starve users). Testers on their own stored keys are unaffected.
 - **API restored 16:33 10-10** (xian raised workspace + org limits to $250). lead-scoring key ($50, pipermorgan.ai org) pending xian's "stored".
   The catalog batch is held on `claude/lead-catalog-description-batch-held`; fix its regressions next under the refined rule 7.
+- **Post-restore re-deletes (PPM re-judges 10-10)** — **Filed**: 2026-10-10 · after the six-restore commit lands: (1) re-point the corpus row
+  "I need a status report" → action:get_project_status (builder + fixture; PPM's 10-06 verdict) and re-delete the restored STATUS literal
+  under rule 10 with that row (full run: get_project_status @0.85 MATCH once re-pointed; main N=5 was 0.7–0.85, so take a fresh N=5 first).
+  (2) "where should my focus be today" → get_top_priority: **Blocked on** CXO's concurrence (PPM asked); then same re-point + re-delete of
+  the restored PRIORITY literal. Each takes the ceiling down 1 (127 → 125).
 - **Three description-change candidates** (Arch: worth doing for their own sake, each its own rule-7 run, my timing) — **Filed**: 2026-10-10 ·
   "show priorities for this sprint" → get_top_priority; "pull up my schedule" → week_calendar (now meeting_time @0.72); "show today's tasks"
   → list_todos_query. The held prompt fixed them by accident; find the description wording that does it alone.
