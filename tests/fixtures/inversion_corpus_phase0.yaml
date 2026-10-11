@@ -138,9 +138,9 @@ corpus:
     source: "corpus-1283"
   - phrase: "give me a project status report"
     category: EXECUTION
-    expected: action:generate_report
+    expected: action:get_project_status
     source: "corpus-1283"
-    notes: "RULED 2026-10-01 (CXO+PPM): the ask names a report; generate_report is a real wired handler"
+    notes: "RULED 2026-10-10 (CXO+PPM re-judge 2026-10-10: project state, not repo activity): was action:generate_report (RULED 2026-10-01, CXO+PPM: the ask names a report)"
   - phrase: "can we connect my github?"
     category: QUERY
     expected: action:get_contextual_guidance
@@ -1776,9 +1776,9 @@ corpus:
     source: "phase3-conversion/STATUS_PATTERNS literal r"\bcurrent status\b""
   - phrase: "I need a status report"
     category: STATUS
-    expected: action:generate_report
+    expected: action:get_project_status
     source: "phase3-conversion/STATUS_PATTERNS literal r"\bstatus report\b""
-    notes: "RULED 2026-10-01 (CXO+PPM): the ask names a report; generate_report is a real wired handler"
+    notes: "RULED 2026-10-10 (CXO+PPM re-judge 2026-10-10: project state, not repo activity): was action:generate_report (RULED 2026-10-01, CXO+PPM: the ask names a report)"
   - phrase: "what's my progress"
     category: STATUS
     expected: action:get_project_status

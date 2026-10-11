@@ -761,8 +761,8 @@ class TestNonRegressionMechanism:
         is listed in the entry's ``surviving_literals`` (the restore is
         recorded, not silent). Synthetic entry on the real restored STATUS
         literal; the same record WITHOUT the survivor listing must fail."""
-        phrase = "I need a status report"
-        lit = r"\bstatus report\b"
+        phrase = "any upcoming milestones for this project"
+        lit = r"\bupcoming milestones?\b"
         known = {
             phrase: {
                 "reclaimed_by": "STATUS_PATTERNS",
