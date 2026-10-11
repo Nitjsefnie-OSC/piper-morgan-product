@@ -1,6 +1,6 @@
 # Docs Carry-Forward
 
-**Updated**: 2026-10-10 16:15 PDT (16:12 fire quiet, post-reboot). History of earlier states lives in the session logs (`dev/2026/10/{04..10}/*docs-code-log.md`), not here.
+**Updated**: 2026-10-10 19:15 PDT (19:12 fire quiet). Known fault: bare `gh` hangs on Amber since the 10-10 reboot (Pard); prefix `GODEBUG=netdns=go`, a bare timeout means "unverified". History of earlier states lives in the session logs (`dev/2026/10/{04..10}/*docs-code-log.md`), not here.
 
 ## Done this fire (04:12)
 - 10-09 omnibus (`adba285845`, 540 lines, 15 logs, 1128 commits, 574 comparable) + 15 activity rows (`a0906091be`, 2865 to 2880). Nudged HOST (10-09 log lacks DAY-CLOSED, `8e927d29ef`).
