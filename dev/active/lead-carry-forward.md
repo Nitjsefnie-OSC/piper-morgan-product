@@ -44,6 +44,14 @@
   spends Krink's credit, expires 10-15). Have the prod server-key move steps ready for 10-16 (PM's hand; recommend a separate prod workspace);
   one confirm call after xian switches. OpenAI: no credits; don't count OpenAI legs until xian says topped up. Keychain -25308 = locked
   (tmux over ssh); if it returns, tell Pard and hold LLM work.
+- **#1982 (built 10-11, `079477fb15`):** MCP app gets ONE scoped subkey (`user_api_keys.secret.github`), never the master key.
+  Runbook `docs/internal/operations/mcp-scoped-subkey-runbook-1982.md`. Waiting on: PM's pipe (`derive_subkey.py | fly secrets import`),
+  PA's MCP deploy + live check, PM's snapshot + re-encrypt (`reencrypt_github_secrets_1982.py`, dry run then `--apply --snapshot`).
+  **Mine when the report reads `legacy=0`: flip `GITHUB_LEGACY_CONTEXT_FALLBACK` to False in the commit that records the count.**
+  Open with Arch: PAT-only users are CONNECT_REQUIRED on MCP (Settings saves the PAT only to the hosted keychain, per-user context);
+  recommended dual write via `UserAPIKeyService.store_user_key(provider="github")` + delete on clear; build on Arch's word.
+- **Mint grant** is on no seat since the 10-09 restart (HOST's dry run denied 10-11); HOST asked Exec to put the re-add on xian's
+  card. Lead mints nothing. PA's PAT-only invite waits on that.
 - **#1958** fixed on main; served check after the NEXT promotion (also CXO's "show the team calendar" floor probe).
 - **Cron:** `e5491d18`, armed 10-10 17:29 PT after the 15:00 reboot killed dad96d7a; expires ~10-17. **Rotate at Wed 10-14 START** anyway
   (delete-then-create; update the registry row). Use `GODEBUG=netdns=go gh …` (api.github.com DNS hang since the reboot, Pard).
