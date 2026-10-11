@@ -107,6 +107,8 @@ PM via the rollup. PM questions come in conversation.
 
 ## This seat's standing errors (deduplicated)
 
+- **Cross-repo commit-tree delivery: `mkdir -p` the scratch dir and abort on any empty hash before pushing** (2026-10-10). After a reboot `/private/tmp` was gone, every step failed, and an empty `$C` made the push a branch-delete on mediajunkie main. GitHub refused it (default branch). Chain the steps with `&&` and add `[ -n "$C" ]` before the push. Memory: `feedback_guard_empty_hashes_before_commit_tree_push`.
+
 - **A cascade/reshuffle must verify slot contiguity, not just the tease chain.** 09-08 I "pushed every
   insight back by one position" but jumped Distribution from 10/3 to 10/10, which left Sun 10/4 empty.
   My full-chain footer verification passed because it checks teases, not dates. PM noticed 10-01.
