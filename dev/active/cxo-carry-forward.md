@@ -56,7 +56,7 @@ max_age_days: 1
 
 ## Cron
 
-✅ **Current cron: `ce068949`** (re-armed 2026-10-09 22:2x at STOP from `f6aa73ff`, SAME expression `47 6,9,12,15,18,21 * * *`), `CronList`-verified exactly one. 7-day auto-expiry ~2026-10-16; re-arm by the 10-14 21:47 slot at the latest.
+✅ **Current cron: `dab9789c`** (re-armed 2026-10-10 22:2x at STOP from `ce068949`, SAME expression `47 6,9,12,15,18,21 * * *`), `CronList`-verified exactly one. 7-day auto-expiry ~2026-10-17; re-arm by the 10-15 21:47 slot at the latest.
 
 ## Standing-items tracker
 
@@ -232,3 +232,5 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - **10-10 18:45**: PPM conceded focus-today (stays attention_query); report rows re-point is Lead's. Arch approved 8-row disposition. Pard: gh needs `GODEBUG=netdns=go` until xian runs mDNSResponder HUP; bare-gh timeout = unverified. Next: 18:47 tick.
 
 - **10-10 19:17**: ruled progress report stays generate_report (withdrew re-point). Lead landed 1110c6a03a. Next: 21:47 = STOP (day-close, re-arm cron).
+
+- **10-10 22:2x STOP done**: DAY-CLOSED 2026-10-10 written; cron re-armed `ce068949` -> `dab9789c` (expires ~10-17). Owed list unchanged (see 10-10 day arc in the session log). Sunday 10-11 starts with the 06:47 tick. Note: `gh` needs `GODEBUG=netdns=go` until xian runs mDNSResponder HUP.
