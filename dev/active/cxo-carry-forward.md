@@ -253,3 +253,4 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - 10-11 10:05 — Lead 121 report triaged; sent two-topic UX position to Arch.
 - 10-11 10:20 — two #1884 memos triaged; watch: served both-halves check post-promotion.
 - 10-11 10:30 — Arch #1977 ruling; sent ack copy to Lead.
+- 10-11 10:40 — Lead rule-11 build triaged; #1977 design at Lead's 12:17 fire.
