@@ -1968,15 +1968,9 @@ def test_1973_completion_history_is_no_go_on_the_dispatch_threshold_itself():
             if line.lstrip().startswith("survives:") and "when did (i|we)" in line
         )
         assert "When did we launch the beta?" in survivor, survivor
-    # 2026-10-11: the only HELD_FOR_CAUSE entries are the #1974 pleasantry family
-    # (CXO: ruled keep, permanent floor) — never COMPLETION_HISTORY.
-    assert set(gate.HELD_FOR_CAUSE) == {
-        "GREETING_PATTERNS",
-        "FAREWELL_PATTERNS",
-        "THANKS_PATTERNS",
-        "_PLEASANTRY_FILLER_PATTERNS",
-    }
-    assert all("#1974" in v for v in gate.HELD_FOR_CAUSE.values())
+    # 2026-10-11: HELD_FOR_CAUSE is empty again; the #1974 pleasantry family is a
+    # ruled PERMANENT_FLOOR (Arch: a held-for-cause entry expires with its issue).
+    assert gate.HELD_FOR_CAUSE == {}
 
 
 def test_1973_match_arm_applies_the_dispatch_threshold():
@@ -2046,7 +2040,12 @@ def test_census_table_verdict_agrees_with_the_per_list_report_for_every_list():
     records, by_list = gate.build_census(gate.CURRENT_LIVE_CATEGORIES)
     checked = 0
     for name, lv in by_list.items():
-        if name in gate.NOT_ROUTING or name in gate.HELD_FOR_CAUSE or not lv.rows:
+        if (
+            name in gate.NOT_ROUTING
+            or name in gate.HELD_FOR_CAUSE
+            or name in gate.PERMANENT_FLOOR
+            or not lv.rows
+        ):
             continue
         label = gate.census_verdict_label(name, lv)
         report = gate.render_list_report(name, by_list, counts, len(records))
@@ -2110,7 +2109,30 @@ def test_ruled_survivors_cite_a_ruling_and_claim_the_ruled_op_or_carry_a_known_m
     assert "deleting 2" not in report, "a ruled survivor must not be licensed"
 
 
-def test_census_table_reads_held_for_the_1974_family():
+def test_permanent_floor_is_the_1974_family_cites_the_ruling_and_stays_in_the_tail():
+    """Arch 2026-10-11: a ruled keep is a PERMANENT_FLOOR record, not HELD_FOR_CAUSE
+    (whose contract expires when its issue closes). Each entry cites its ruling; a
+    list may not be both a permanent floor and NOT_ROUTING, because floor lists
+    still claim turns and therefore count in the routing tail."""
+    assert set(gate.PERMANENT_FLOOR) == {
+        "GREETING_PATTERNS",
+        "FAREWELL_PATTERNS",
+        "THANKS_PATTERNS",
+        "_PLEASANTRY_FILLER_PATTERNS",
+    }
+    for name, ruling in gate.PERMANENT_FLOOR.items():
+        assert "#1974" in ruling and "issuecomment-" in ruling, (name, ruling)
+        assert name not in gate.NOT_ROUTING, name
+        assert name not in gate.HELD_FOR_CAUSE, name
+    counts = pattern_literal_counts.per_list_literal_counts()
+    # 29 = GREETING 9 + FAREWELL 5 + THANKS 5 + filler 10: the three lists WHOLE
+    # (16 rule-10-held literals + the 3 survivor literals) plus the filler. The
+    # "26" in the 10-11 memos counted the held literals, not the lists.
+    floor_n = sum(counts.get(n, 0) for n in gate.PERMANENT_FLOOR)
+    assert floor_n == 29
+    # in the tail: removing the floor lists from the counts lowers routing_tail by exactly 29
+    without = {k: v for k, v in counts.items() if k not in gate.PERMANENT_FLOOR}
+    assert gate.routing_tail(counts) - gate.routing_tail(without) == 29
     _, by_list = gate.build_census(gate.CURRENT_LIVE_CATEGORIES)
     for name in ("GREETING_PATTERNS", "FAREWELL_PATTERNS", "THANKS_PATTERNS"):
-        assert gate.census_verdict_label(name, by_list[name]) == "HELD"
+        assert gate.census_verdict_label(name, by_list[name]) == "FLOOR (ruled)"

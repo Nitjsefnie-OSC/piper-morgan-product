@@ -1421,11 +1421,15 @@ def reabsorption_check(
 
 # Lists the gate's evidence would license but that are held for a cause the gate
 # cannot see. Each entry names an open issue, and is removed when that issue closes.
-_1974 = (
-    "ruled KEEP, permanent floor (#1974, CXO 2026-10-11): pure pleasantries keep the canned "
-    "short-circuit; #1416 residue rule unchanged; stays in the routing tail (Arch 2026-10-11)"
-)
-HELD_FOR_CAUSE: Dict[str, str] = {
+HELD_FOR_CAUSE: Dict[str, str] = {}
+
+# Lists a RULING keeps for good (Arch 2026-10-11: HELD_FOR_CAUSE's contract expires
+# when its issue closes, so a ruled keep needs its own record). They still CLAIM
+# turns, so they stay in the routing tail — that is what separates them from
+# NOT_ROUTING; the census prints them by name with the ruling. The first named
+# exception to ADR-080 D6 ("the interpretation layer only shrinks").
+_1974 = "ruled keep, CXO #1974 (issuecomment-6110663876): pure pleasantries keep the canned short-circuit; #1416 residue rule unchanged"
+PERMANENT_FLOOR: Dict[str, str] = {
     "GREETING_PATTERNS": _1974,
     "FAREWELL_PATTERNS": _1974,
     "THANKS_PATTERNS": _1974,
@@ -1539,6 +1543,8 @@ def census_verdict_label(list_name: str, lv: ListVerdict) -> str:
         return "NOT ROUTING"
     if list_name in HELD_FOR_CAUSE:
         return "HELD"
+    if list_name in PERMANENT_FLOOR:
+        return "FLOOR (ruled)"
     if not lv.rows:
         return "NO ROWS"
     return CENSUS_LABELS[assess_list(list_name, lv).kind]
@@ -1555,6 +1561,8 @@ def render_list_report(
         return f"{list_name}: NOT ROUTING — outside the Phase 3 tail ({NOT_ROUTING[list_name]})"
     if list_name in HELD_FOR_CAUSE:
         return f"{list_name}: HELD — {HELD_FOR_CAUSE[list_name]}"
+    if list_name in PERMANENT_FLOOR:
+        return f"{list_name}: PERMANENT FLOOR — {PERMANENT_FLOOR[list_name]} (in the routing tail)"
     lv = by_list.get(list_name)
     if lv is None:
         lines.append(f"{list_name}: not found in the census (0 rows claimed, 0 literals?)")
@@ -2002,9 +2010,12 @@ def main() -> int:
     if args.all or not args.list_name:
         print(render_census_table(by_list))
         print()
+        floor_n = sum(literal_counts.get(n, 0) for n in PERMANENT_FLOOR)
         print(
-            f"routing tail (Phase 3 scope): {routing_tail(literal_counts)} literals  |  "
-            f"ratchet ceiling counts all: {sum(literal_counts.values())}  |  "
+            f"routing tail (Phase 3 scope): {routing_tail(literal_counts)} literals, of which "
+            f"{floor_n} are a ruled permanent floor (#1974: "
+            + ", ".join(f"{n} ({literal_counts.get(n, 0)})" for n in sorted(PERMANENT_FLOOR))
+            + f")  |  ratchet ceiling counts all: {sum(literal_counts.values())}  |  "
             f"not routing, by name: "
             + ", ".join(f"{n} ({literal_counts.get(n, 0)})" for n in sorted(NOT_ROUTING))
         )
@@ -2013,6 +2024,7 @@ def main() -> int:
             for n in literal_counts
             if n not in NOT_ROUTING
             and n not in HELD_FOR_CAUSE
+            and n not in PERMANENT_FLOOR
             and (n not in by_list or len(by_list[n].rows) == 0)
         )
         if zero_claim:
