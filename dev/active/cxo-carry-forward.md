@@ -226,3 +226,5 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - **10-10 14:02 MAIL WAKE (Pard)**: Amber reboots ~15:00 PT. Nothing in flight; all pushed by 14:10. **ON RESUME: run `CronList` first; if zero jobs, re-arm `47 6,9,12,15,18,21 * * *` with the thin tick prompt, record the new id here and in registry row 100 (expiry 7 days from re-arm).** Pard checks first post-reboot fire; mail Pard (docs/mail/) if it misbehaves.
 
 - **10-10 16:17 tick**: first fire after the Amber reboot; cron `ce068949` survived (CronList single), no re-arm needed. Quiet: mail 0 (two rounds), CI 12/12, UX 7 unchanged, scan 0. Owed list unchanged. Next: 18:47.
+
+- **10-10 18:32 MAIL WAKE (PPM re-judge)**: concurred status report / progress report / project status report -> get_project_status (my 10-01 call was wrong, handler is repo-activity); REFUSED focus-today -> get_top_priority (family stays attention_query; offered to revisit all three today-focus rows with side-by-side served replies). Sent PPM cc Lead/Arch/Exec. WATCH: Lead re-points rows 1-2 and re-deletes under rule 10; any PPM/Arch push to move the today-focus family.
