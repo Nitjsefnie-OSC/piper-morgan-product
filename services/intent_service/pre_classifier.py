@@ -1367,14 +1367,12 @@ class PreClassifier:
     # message, so it guards that shape cleanly too.
     PROJECT_NOUN_REQUIRED = r"(?=.*\bprojects?\b)"
 
-    # #1738: the portfolio LIST claim, named. NOT a new routing pattern
-    # (#1559 moratorium) — this is the literal that has closed
-    # PORTFOLIO_PATTERNS since #675, extracted so _apply_subsumption_filter
-    # can key on the SAME claim this group makes (portfolio-list subsumes
-    # the STATUS list/show overlap) rather than a re-derived copy.
-    PORTFOLIO_LIST_PATTERN = (
-        r"\b(?:show|list|view)\s+(?:my\s+)?(?:all\s+)?(?:archived\s+)?projects\b"
-    )
+    # #1738: the portfolio LIST claim was a named constant here
+    # (PORTFOLIO_LIST_PATTERN = the show/list/view-projects literal). 2026-10-11
+    # (#1595): the constant and its PORTFOLIO_PATTERNS entry are deleted (gate GO
+    # partial; its 8 rule-10 rows route list_projects / list_archived_projects live
+    # via the read_status / read_portfolio groups). Only comments referenced the
+    # name (verified: git grep PORTFOLIO_LIST_PATTERN).
 
     PORTFOLIO_PATTERNS = [
         # Archive operations - "Archive my project X" (non-project targets
@@ -1415,8 +1413,8 @@ class PreClassifier:
         # Update project - "Update project X"
         r"\bupdate\s+(?:my\s+)?(?:the\s+)?project\b",
         r"\bedit\s+(?:my\s+)?(?:the\s+)?project\b",
-        # List operations - "Show my projects" (#1738: named constant above)
-        PORTFOLIO_LIST_PATTERN,
+        # List operations - "Show my projects": tombstoned 2026-10-11 (#1595); see the
+        # PORTFOLIO_LIST_PATTERN note above.
     ]
 
     # Set-default-repo patterns (RECONNECT #1327 gap 1) — conversational counterpart
