@@ -1418,25 +1418,41 @@ def reabsorption_check(
 HELD_FOR_CAUSE: Dict[str, str] = {}
 
 
-def render_list_report(
-    list_name: str,
-    by_list: Dict[str, ListVerdict],
-    all_literal_counts: Dict[str, int],
-    corpus_total: int,
-) -> str:
-    lines: List[str] = []
-    if list_name in NOT_ROUTING:
-        return f"{list_name}: NOT ROUTING — outside the Phase 3 tail ({NOT_ROUTING[list_name]})"
-    if list_name in HELD_FOR_CAUSE:
-        return f"{list_name}: HELD — {HELD_FOR_CAUSE[list_name]}"
-    lv = by_list.get(list_name)
-    if lv is None:
-        lines.append(f"{list_name}: not found in the census (0 rows claimed, 0 literals?)")
-        return "\n".join(lines)
+@dataclass
+class ListAssessment:
+    """The verdict computation, shared by BOTH renderers (see assess_list)."""
 
-    total_literals = sum(all_literal_counts.values())
-    lines.append(f"## {list_name}")
-    lines.append(f"literals: {lv.literal_count}  |  rows claimed: {len(lv.rows)}/{corpus_total}")
+    failing: list
+    survivors: dict
+    partial: bool
+    held: List[str]
+    n_surv: int
+    licensed: int
+    reabsorbed: list
+    shadowed: list
+    kind: str  # rule11 | survivors | rule10 | go | go-partial | no-go
+
+
+CENSUS_LABELS = {
+    "rule11": "NO-GO (r11)",
+    "survivors": "NO-GO",
+    "rule10": "NO-GO (r10)",
+    "go": "GO",
+    "go-partial": "GO (partial)",
+    "no-go": "NO-GO",
+}
+
+
+def assess_list(list_name: str, lv: ListVerdict) -> ListAssessment:
+    """One verdict computation for ``--list`` AND the ``--all`` census table.
+
+    Until 2026-10-11 the census table printed GO/NO-GO from ``lv.deletable``
+    alone — no partial GO, no rule 10, no rule 11 — so the same run read
+    STAKEHOLDER_UPDATE "GO" in the table and "NO-GO (rule 11)" per list, and
+    STATUS/PORTFOLIO "NO-GO" in the table and "GO (partial)" per list. Same
+    evidence, two answers. The per-list computation is the authority; the
+    table now calls it (``census_verdict_label``).
+    """
     failing = [r for r in lv.rows if not r.row_ok]
     survivors = load_bearing_literals(list_name, failing) if (failing and lv.rows) else {}
     partial = (
@@ -1467,6 +1483,63 @@ def render_list_report(
         checked = reabsorption_check(list_name, licensed_literals, lv.rows)
         reabsorbed = [c for c in checked if c[1] == "reabsorbed"]
         shadowed = [c for c in checked if c[1] == "shadowed"]
+    if reabsorbed:
+        kind = "rule11"
+    elif (lv.deletable or partial) and licensed <= 0 and not held:
+        kind = "survivors"
+    elif (lv.deletable or partial) and licensed <= 0:
+        kind = "rule10"
+    elif lv.deletable and not held:
+        kind = "go"
+    elif lv.deletable or partial:
+        kind = "go-partial"
+    else:
+        kind = "no-go"
+    return ListAssessment(
+        failing=failing,
+        survivors=survivors,
+        partial=bool(partial),
+        held=held,
+        n_surv=n_surv,
+        licensed=licensed,
+        reabsorbed=reabsorbed,
+        shadowed=shadowed,
+        kind=kind,
+    )
+
+
+def census_verdict_label(list_name: str, lv: ListVerdict) -> str:
+    """The ``--all`` table's verdict column — the per-list verdict, abbreviated."""
+    if list_name in NOT_ROUTING:
+        return "NOT ROUTING"
+    if not lv.rows:
+        return "NO ROWS"
+    return CENSUS_LABELS[assess_list(list_name, lv).kind]
+
+
+def render_list_report(
+    list_name: str,
+    by_list: Dict[str, ListVerdict],
+    all_literal_counts: Dict[str, int],
+    corpus_total: int,
+) -> str:
+    lines: List[str] = []
+    if list_name in NOT_ROUTING:
+        return f"{list_name}: NOT ROUTING — outside the Phase 3 tail ({NOT_ROUTING[list_name]})"
+    if list_name in HELD_FOR_CAUSE:
+        return f"{list_name}: HELD — {HELD_FOR_CAUSE[list_name]}"
+    lv = by_list.get(list_name)
+    if lv is None:
+        lines.append(f"{list_name}: not found in the census (0 rows claimed, 0 literals?)")
+        return "\n".join(lines)
+
+    total_literals = sum(all_literal_counts.values())
+    lines.append(f"## {list_name}")
+    lines.append(f"literals: {lv.literal_count}  |  rows claimed: {len(lv.rows)}/{corpus_total}")
+    a = assess_list(list_name, lv)
+    failing, survivors, partial = a.failing, a.survivors, a.partial
+    held, n_surv, licensed = a.held, a.n_surv, a.licensed
+    reabsorbed, shadowed = a.reabsorbed, a.shadowed
     if reabsorbed:
         greedy = sorted({f"{c[2].pattern_list} -> {c[2].action}" for c in reabsorbed})
         lines.append(
@@ -1543,19 +1616,16 @@ def render_list_report(
 
 def render_census_table(by_list: Dict[str, ListVerdict]) -> str:
     lines: List[str] = []
-    lines.append(f"{'list':<40} {'literals':>8} {'rows':>6} {'verdict':>12}")
-    lines.append("-" * 70)
+    lines.append(f"{'list':<40} {'literals':>8} {'rows':>6} {'verdict':>14}")
+    lines.append("-" * 72)
     total_rows_claimed = 0
     for name in sorted(by_list):
         lv = by_list[name]
         n_rows = len(lv.rows)
         total_rows_claimed += n_rows
-        if name in NOT_ROUTING:
-            verdict = "NOT ROUTING"
-        else:
-            verdict = "GO" if lv.deletable else ("NO-GO" if n_rows else "NO ROWS")
-        lines.append(f"{name:<40} {lv.literal_count:>8} {n_rows:>6} {verdict:>12}")
-    lines.append("-" * 70)
+        verdict = census_verdict_label(name, lv)
+        lines.append(f"{name:<40} {lv.literal_count:>8} {n_rows:>6} {verdict:>14}")
+    lines.append("-" * 72)
     lines.append(
         f"total rows claimed (may double-count if a row's list changes across parses): {total_rows_claimed}"
     )

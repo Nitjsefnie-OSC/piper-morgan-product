@@ -1994,3 +1994,35 @@ def test_rule11_outcomes_unclaimed_shadowed_reabsorbed():
     assert set(o for o, _ in by_phrase.values()) <= {"unclaimed", "shadowed", "reabsorbed"}
     # An empty licensed set checks nothing (no swap, no rows).
     assert gate.reabsorption_check("STAKEHOLDER_UPDATE_PATTERNS", [], rows) == []
+
+
+# 2026-10-11 (Lead): the `--all` census table and the `--list` report must give
+# ONE answer per list. Before this pin the table printed GO/NO-GO from
+# `lv.deletable` alone (no partial GO, no rule 10, no rule 11), so one run read
+# STAKEHOLDER_UPDATE "GO" in the table and "NO-GO (rule 11)" per list, and
+# STATUS/PORTFOLIO "NO-GO" in the table and "GO (partial)" per list.
+_TABLE_TO_REPORT = {
+    "GO": "verdict: GO (deletable)",
+    "GO (partial)": "verdict: GO (partial)",
+    "NO-GO (r10)": "verdict: NO-GO (rule 10)",
+    "NO-GO (r11)": "verdict: NO-GO (rule 11)",
+    "NO-GO": "verdict: NO-GO",
+}
+
+
+def test_census_table_verdict_agrees_with_the_per_list_report_for_every_list():
+    counts = pattern_literal_counts.per_list_literal_counts()
+    records, by_list = gate.build_census(gate.CURRENT_LIVE_CATEGORIES)
+    checked = 0
+    for name, lv in by_list.items():
+        if name in gate.NOT_ROUTING or name in gate.HELD_FOR_CAUSE or not lv.rows:
+            continue
+        label = gate.census_verdict_label(name, lv)
+        report = gate.render_list_report(name, by_list, counts, len(records))
+        verdict_line = next(l for l in report.splitlines() if l.startswith("verdict:"))
+        assert label in _TABLE_TO_REPORT, (name, label)
+        assert verdict_line.startswith(_TABLE_TO_REPORT[label]), (name, label, verdict_line)
+        if label == "NO-GO":
+            assert "(rule 1" not in verdict_line, (name, verdict_line)
+        checked += 1
+    assert checked >= 10, checked
