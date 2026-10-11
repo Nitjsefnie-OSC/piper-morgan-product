@@ -1398,6 +1398,8 @@ attempts so this doesn't recur invisibly. Genuinely singleton: an onboarding/OAu
 not sharing a mechanism with anything else in this group. **Both filed without milestone/board**
 — fixed same-fire (MVP, board-added, Status Product Backlog).
 
+**`#1978` folded in 2026-10-11, found by Lead while binding a working Anthropic key to a local test user, placed MVP (Gate class 4)**: the Settings key-format rule demanded 100 or more characters after `sk-ant-`, but current org-workspace Anthropic keys have 99 (106 total), so a tester adding a valid new-format key is told it is invalid. Fix on main (floor 40, `4121b14b78`); alpha runs `4bd1a236e9` with the old pattern, so it waits on promotion and a served add-key check. Catch-all epic: a singleton, not part of the interpretation spine.
+
 ### 10. Schema/domain correspondence (2 items, 0 open) — genuinely its own epic
 ~~`#1788`~~ (**CLOSED, caught 2026-09-26 by a reconciliation pass — was shown "open — one registry
 entry from green," not previously marked**) · ~~`#1797`~~ (disposal-pipeline issue for the 5 dead
@@ -1661,3 +1663,4 @@ deletion gate's partial verdict calls literals deletable on zero corpus coverage
 (1) the warning on partial non-survivors, (2) a full `tests/unit` run required before any partial lands (docs), and (3) an audit of the six previously landed partials or an explicit
 out-of-scope call. Gate 14 → 15, fourth slip-ledger entry, dates unchanged; criterion (3) is separable and may belong on Production (PM's call, not moved).
   **#1969 CLOSED 2026-10-09 12:50 PDT** (Lead, `ca5eebb8d7`; all three criteria met, criterion 3 resolved as a gate re-run per Arch's rule 10, no move to Production needed). Gate 15 → 14; close row in the slip ledger. The Phase 3 tail itself (155 / routing 125) is still open; Lead re-measures Mon 10-12.
+- 2026-10-11 (PPM): #1978 folded into epic 9 (Gate class 4, MVP, slip entry 5 in the ledger).
