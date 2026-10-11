@@ -111,6 +111,8 @@ _P3 = ROOT / "docs" / "internal" / "architecture" / "current"
 # wire the reports at the FRONT in the same commit that updates the rows and the pins.
 PHASE3_REPORTS: List[Path] = [
     _P3
+    / "inversion-phase3-rule10-completion-history-rows-score-2026-10-11b-anthropic.md",  # the 7 COMPLETION_HISTORY rule-10 rows (4 per-literal + 3 pin phrasings from test_completion_history_routes_to_status_not_temporal), served Haiku 4.5; supersedes the 10-11 (a) report for its rows
+    _P3
     / "inversion-phase3-rule10-portfolio-rows-score-2026-10-11-anthropic.md",  # the 5 PORTFOLIO pin phrasings as rule-10 rows (Arch-approved 10-11), served Haiku 4.5 17/17: all 5 route as their pins assert; the 12 older rule-10 PORTFOLIO rows it also re-scores route the same ops as the 10-10 full run and 3 of them were UNSCORED there (single-sample partial, placed first for its own rows only)
     _P3
     / "inversion-phase3-rule10-completion-history-rows-score-2026-10-11-anthropic.md",  # the 4 COMPLETION_HISTORY rule-10 rows (one per held literal), served Haiku 4.5 4/4; 3 MATCH >=0.85, 'show me when we shipped the API' -> shipped_this_week @0.72 (survivor; surface 2 N=5 lands get_release_history)

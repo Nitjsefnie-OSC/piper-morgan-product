@@ -493,15 +493,16 @@ class TestExpectedFramingForRow:
         assert p1.p0.expected_framing_for_row(row) is None
 
     def test_real_corpus_rows_resolve_as_expected(self):
-        """Cross-check against the live corpus (not synthetic) for the two
-        manage_repos rows that exist today."""
+        """Cross-check against the live corpus (not synthetic) for the
+        manage_repos rows that exist today. (2026-10-11: "link my repository to
+        the project" was re-judged REVIEW by PPM, so the filter no longer keys
+        on the word "link" — any asserted manage_repos row is an imperative
+        WRITE and must resolve to the execute framing.)"""
         rows = p1.p0.load_corpus()
-        link_rows = [
-            r for r in rows if r.get("expected") == "action:manage_repos" and "link" in r["phrase"]
-        ]
-        assert link_rows
-        for r in link_rows:
-            assert p1.p0.expected_framing_for_row(r) == "execute"
+        repo_rows = [r for r in rows if r.get("expected") == "action:manage_repos"]
+        assert repo_rows
+        for r in repo_rows:
+            assert p1.p0.expected_framing_for_row(r) == "execute", r["phrase"]
 
 
 class TestFramingExpectationDenominators:
