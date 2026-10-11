@@ -3270,7 +3270,7 @@ class TestExtractionPatternRatchet:
         # `\\bconnect\\s+...repo...\\s+(?:to\\s+)` ("connect my repository to the
         # project"). Report: inversion-week-calendar-description-full-score-
         # 2026-10-10-anthropic.md. 121 + 6 = 127.
-        "pre-classifier": 127,
+        "pre-classifier": 124,
     }
 
     # The named interpretation-by-pattern spans, per surface: (file, symbols).
