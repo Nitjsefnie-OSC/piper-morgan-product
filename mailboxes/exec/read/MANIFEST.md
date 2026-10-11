@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-11 10:5x PDT | ppm | update-ppm-to-exec-120-needs-both-1977-steps-wed-realistically-121-2026-10-11.md | Narrowing my PM-needed memo on #1977: 120 now needs BOTH steps (Arch's correcti… |
 | 2026-10-11 10:4x PDT | ppm | update-ppm-to-exec-wed-reads-121-1977-placed-production-admission-would-be-pms-call-2026-10-11.md | PM-needed (a decision only PM can make), folds into the open Wed-reading questi… |
 | 2026-10-11 10:0x PDT | ppm | update-ppm-to-exec-ceiling-121-portfolio-literal-held-on-two-topic-finding-wed-best-case-121-2026-10-11.md | Update to the PM-needed Wed-reading question: ceiling is 121 on main (PPM recou… |
 | 2026-10-11 09:1x PDT | ppm | correction-ppm-to-exec-permanent-floor-is-29-not-26-tail-94-2026-10-11.md | Correction to my PM-needed memo: the permanent floor is 29 literals, not 26; ta… |
