@@ -344,6 +344,16 @@ class PreClassifier:
         r"\bproject landscape\b",
         # Issue #898 Q25: Milestone queries are project status, not priority
         r"\bnext milestone\b",
+        # #1973-shape restore (2026-10-10, Lead): "any upcoming milestones for
+        # this project" — router swaps the destination (list_milestones);
+        # deleted literal restored from 73a40f7cbe^; re-delete only with its
+        # row scoring under rules 1/10/11.
+        r"\bupcoming milestones?\b",
+        # #1973-shape restore (2026-10-10, Lead): "I need a status report" —
+        # candidate-attributed move (generate_report); deleted literal
+        # restored from 73a40f7cbe^; re-delete only with its row scoring
+        # under rules 1/10/11 (PPM re-judge: see the corpus re-point).
+        r"\bstatus report\b",
     ]
 
     # Issue #521: Contextual Intelligence query patterns
@@ -884,7 +894,17 @@ class PreClassifier:
     # -inert dead code (an empty pattern list can never claim). Ledger:
     # `scripts/inversion_phase3_deleted_patterns.json`. Ceiling:
     # `TestExtractionPatternRatchet.CEILINGS["pre-classifier"]` 376 -> 329.
-    PRIORITY_PATTERNS = []  # type: List[str]
+    # #1973-shape restore (2026-10-10, Lead): "where should my focus be today"
+    # — candidate-attributed read->read move (router swaps the destination
+    # attention_query -> get_top_priority); deleted literal restored from
+    # d1e954f08b^. The list is now PARTIAL with 1 survivor (46 of 47 literals
+    # remain deleted). CXO ruled the today-focus family stays together, so this
+    # restore is permanent; re-delete only with its row scoring under rules
+    # 1/10/11. Report:
+    # inversion-week-calendar-description-full-score-2026-10-10-anthropic.md.
+    PRIORITY_PATTERNS = [
+        r"\bwhere.*focus\b",
+    ]
 
     # #1595 Phase 3, eighth deletion (2026-10-02): PARTIAL — 18 of 21
     # literals tombstoned, 3 SURVIVE. The gate

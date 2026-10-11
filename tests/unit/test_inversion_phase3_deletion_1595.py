@@ -475,13 +475,16 @@ class TestDeletedPatternListsLedger:
         status_entry = next(e for e in entries if e["list"] == "STATUS_PATTERNS")
         assert status_entry.get("partial") is True
         assert (
-            status_entry.get("literals") == 52
-        ), "literals is the DELETED count, not the original 56"
+            status_entry.get("literals") == 50
+        ), "literals is the DELETED count (52 minus 2 #1973-shape restores), not the original 56"
+        # 2026-10-10: 2 restores (#1973-shape, Lead) join the 4 original survivors.
         assert set(status_entry.get("surviving_literals", {})) == {
             r"\bnext milestone\b",
             r"\bcurrent work\b",
             r"\bproject overview\b",
             r"\bproject landscape\b",
+            r"\bupcoming milestones?\b",
+            r"\bstatus report\b",
         }
         guidance_entry = next(e for e in entries if e["list"] == "GUIDANCE_PATTERNS")
         # 2026-10-09: FULL tombstone — the 3 eighth-deletion survivors were
@@ -542,6 +545,13 @@ class TestDeletedPatternListsLedger:
         assert reminder_entry.get("literals") == 4
         assert set(reminder_entry.get("surviving_literals", {})) == {
             r"\bset\s+(?:a\s+)?reminder\b",
+        }
+        priority_entry = next(e for e in entries if e["list"] == "PRIORITY_PATTERNS")
+        # 2026-10-10: #1973-shape restore of `\\bwhere.*focus\\b` -> PARTIAL.
+        assert priority_entry.get("partial") is True
+        assert priority_entry.get("literals") == 46
+        assert set(priority_entry.get("surviving_literals", {})) == {
+            r"\bwhere.*focus\b",
         }
         session_activity_entry = next(
             e for e in entries if e["list"] == "SESSION_ACTIVITY_QUERY_PATTERNS"
@@ -744,6 +754,40 @@ class TestNonRegressionMechanism:
         ok, problems = gate.check_deleted_entry_non_regression(entry)
         assert not ok
         assert any("claimed again by SET_DEFAULT_REPO_PATTERNS" in p for p in problems)
+
+    def test_restored_shape_passes_only_when_literal_is_a_recorded_survivor(self):
+        """#1973-shape restore (2026-10-10): a `known_reabsorptions` record
+        with ``restored: true`` is accepted only if its ``reclaiming_literal``
+        is listed in the entry's ``surviving_literals`` (the restore is
+        recorded, not silent). Synthetic entry on the real restored STATUS
+        literal; the same record WITHOUT the survivor listing must fail."""
+        phrase = "I need a status report"
+        lit = r"\bstatus report\b"
+        known = {
+            phrase: {
+                "reclaimed_by": "STATUS_PATTERNS",
+                "reclaiming_literal": lit,
+                "claimed_action": "get_project_status",
+                "agrees": False,
+                "restored": True,
+            }
+        }
+        entry = {
+            "list": "STATUS_PATTERNS",
+            "rows_claimed_at_deletion": [phrase],
+            "known_reabsorptions": known,
+            "surviving_literals": {lit: [phrase]},
+        }
+        ok, problems = gate.check_deleted_entry_non_regression(
+            entry, cats=gate.CURRENT_LIVE_CATEGORIES
+        )
+        assert ok, problems
+        unrecorded = dict(entry, surviving_literals={})
+        ok, problems = gate.check_deleted_entry_non_regression(
+            unrecorded, cats=gate.CURRENT_LIVE_CATEGORIES
+        )
+        assert not ok
+        assert any("claimed again by STATUS_PATTERNS" in p for p in problems)
 
     def test_fails_for_a_phrase_that_is_no_longer_a_corpus_row(self):
         entry = {
@@ -1064,14 +1108,19 @@ class TestPriorityPatternsVerdictIsReported:
         """#1595 Phase 3 sixth deletion: PRIORITY_PATTERNS is tombstoned —
         pins the post-deletion state directly rather than leaving it as an
         implicit consequence of the ledger entry alone (same idiom as
-        test_temporal_patterns_now_claims_zero_rows above)."""
+        test_temporal_patterns_now_claims_zero_rows above).
+
+        2026-10-10 (#1973-shape restore, Lead; CXO: the today-focus family
+        stays together, so permanent): `\\bwhere.*focus\\b` is back, so the list
+        is PARTIAL and claims exactly the 2 rows that literal matches (its
+        own ledgered row and GUIDANCE's "where should I focus this week")."""
         _records, by_list = gate.build_census(cats=None)
         lv = by_list.get("PRIORITY_PATTERNS")
-        assert (
-            lv is not None
-        ), "PRIORITY_PATTERNS must still appear in the census (0 rows, not absent)"
-        assert len(lv.rows) == 0
-        assert lv.deletable is False, "an empty list reports NO ROWS, not GO"
+        assert lv is not None, "PRIORITY_PATTERNS must still appear in the census"
+        assert {r.phrase for r in lv.rows} == {
+            "where should my focus be today",
+            "where should I focus this week",
+        }, [r.phrase for r in lv.rows]
 
     def test_status_patterns_now_claims_four_rows(self):
         """#1595 Phase 3 seventh deletion, the FIRST PARTIAL one:
@@ -1086,8 +1135,14 @@ class TestPriorityPatternsVerdictIsReported:
         _records, by_list = gate.build_census(cats=cats)
         lv = by_list.get("STATUS_PATTERNS")
         assert lv is not None, "STATUS_PATTERNS must still appear in the census"
-        assert len(lv.rows) == 4, [r.phrase for r in lv.rows]
+        # 2026-10-10: the two #1973-shape restores (`\\bupcoming milestones?\\b`,
+        # `\\bstatus report\\b`) add their own rows plus "give me a project status
+        # report" (collateral of `\\bstatus report\\b`): 7 rows.
+        assert len(lv.rows) == 7, [r.phrase for r in lv.rows]
         assert {r.phrase for r in lv.rows} == {
+            "give me a project status report",
+            "any upcoming milestones for this project",
+            "I need a status report",
             "any update on the next milestone",
             "can you summarize my current work",
             "give me a project overview",
@@ -1099,7 +1154,11 @@ class TestPriorityPatternsVerdictIsReported:
         # so that ONE row now passes; the other 3 still FAIL. It is NOT
         # deleted here (not in the six-restore brief; flagged to Lead).
         ok_phrases = {r.phrase for r in lv.rows if r.row_ok}
-        assert ok_phrases == {"what's the project landscape"}, ok_phrases
+        assert ok_phrases == {
+            "what's the project landscape",
+            "give me a project status report",
+            "any upcoming milestones for this project",
+        }, ok_phrases
         assert lv.deletable is False, "a list with any FAIL row is NO-GO, not GO"
 
     def test_guidance_patterns_now_claims_zero_rows(self):

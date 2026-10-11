@@ -1747,6 +1747,17 @@ def check_deleted_entry_non_regression(
                     continue
                 if known.get("agrees") is False and row_ok:
                     continue
+                # #1973-shape restore (2026-10-10): a ledger-RECORDED restore
+                # ("restored": true, the literal is back by explicit ruling and
+                # listed in the entry's surviving_literals) is not a
+                # reabsorption to catch: the deletion's claim is moot for it.
+                # The invariant that remains is that the restoring list still
+                # claims the phrase (checked by the enclosing branch) and that
+                # the literal is genuinely a recorded survivor.
+                if known.get("restored") is True and known.get("reclaiming_literal") in (
+                    entry.get("surviving_literals") or {}
+                ):
+                    continue
             problems.append(
                 f"{phrase!r}: claimed again by {claim.pattern_list} — the deleted "
                 f"list's territory was reabsorbed by a surviving pattern"
