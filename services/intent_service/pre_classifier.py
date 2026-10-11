@@ -162,6 +162,23 @@ class PreClassifier:
         }
     )  # fmt: skip
     _RESIDUE_MIN_CONTENT_WORDS = 2
+    # #1977 (Lead's review, 2026-10-11): an unclaimed clause counts only when it
+    # is ASK-shaped — verb-first, a wh-word, "can/could/would you", or "please".
+    # A statement or aside ("we're going in circles now and no that is not the
+    # name of the new project", PM's #1856 turn 2) stays with the claim it sits
+    # beside; declining it would pull a mid-flow correction away from the
+    # handler that owns the flow. Used only to NARROW the decline (D6-shaped).
+    _RESIDUE_ASK_CUE_RE = re.compile(
+        r"^\s*(?:please\s+)?(?:"
+        r"what|when|where|who|which|how|why|whose|"
+        r"can|could|would|will|should|do|does|did|is|are|am|"
+        r"list|show|tell|give|get|find|check|summarize|summarise|connect|link|add|create|"
+        r"delete|remove|clear|mark|complete|finish|schedule|remind|set|open|close|reopen|"
+        r"update|edit|archive|restore|search|look|pull|fetch|send|write|draft|explain|"
+        r"help|let|make|run|start|stop|cancel|move|rename|describe|analyze|analyse|review"
+        r")\b",
+        re.IGNORECASE,
+    )
 
     @staticmethod
     def _substantive_residue(clean_for_matching: str, spans) -> Optional[str]:
@@ -212,6 +229,8 @@ class PreClassifier:
             if any(start < c_end and end > c_start for start, end in real_spans):
                 continue
             clause = residue[c_start:c_end]
+            if not PreClassifier._RESIDUE_ASK_CUE_RE.match(clause.strip(" ,;:.!?")):
+                continue  # a statement/aside, not a second ask (#1856 PM turn 2)
             words = [
                 w
                 for w in re.findall(r"[a-z0-9']+", clause, flags=re.IGNORECASE)
