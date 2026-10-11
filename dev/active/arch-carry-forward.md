@@ -170,3 +170,4 @@ MEM-CACHE · ADR-068 prep (gated on PPM naming a live sprint) · m-40/m-30 prove
 - 2026-10-11 08:5x: CXO ruled #1974 keep, recorded as PERMANENT_FLOOR (ADR-080 exception). Nothing is waiting on CXO now. Watch Lead's gate commit and the deletion lane (127 → 120).
 - 2026-10-11 09:0x: ceiling 124, tail 94 (of which 29 are the permanent floor). Watch the lane to 120.
 - 2026-10-11 10:1x: ceiling 121. PORTFOLIO's last literal waits on Lead's N=5 plan-row score for #1884 (licence = validated plan on every sample).
+- 2026-10-11 10:2x: plan-aware rule 11 approved with a fallback condition. PORTFOLIO holds at 121 on #1977 (fallback swallows a two-topic turn). Wednesday reads 121.
