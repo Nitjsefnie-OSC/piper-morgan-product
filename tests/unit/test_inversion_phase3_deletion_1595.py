@@ -553,12 +553,11 @@ class TestDeletedPatternListsLedger:
             r"\bset\s+(?:a\s+)?reminder\b",
         }
         priority_entry = next(e for e in entries if e["list"] == "PRIORITY_PATTERNS")
-        # 2026-10-10: #1973-shape restore of `\\bwhere.*focus\\b` -> PARTIAL.
-        assert priority_entry.get("partial") is True
-        assert priority_entry.get("literals") == 46
-        assert set(priority_entry.get("surviving_literals", {})) == {
-            r"\bwhere.*focus\b",
-        }
+        # 2026-10-11: `\\bwhere.*focus\\b` (the 10-10 restore) re-deleted under
+        # misserved_at_deletion -> FULL tombstone again (47 of 47 literals).
+        assert priority_entry.get("partial") is False
+        assert priority_entry.get("literals") == 47
+        assert set(priority_entry.get("surviving_literals", {})) == set()
         session_activity_entry = next(
             e for e in entries if e["list"] == "SESSION_ACTIVITY_QUERY_PATTERNS"
         )
@@ -1119,17 +1118,48 @@ class TestPriorityPatternsVerdictIsReported:
         implicit consequence of the ledger entry alone (same idiom as
         test_temporal_patterns_now_claims_zero_rows above).
 
-        2026-10-10 (#1973-shape restore, Lead; CXO: the today-focus family
-        stays together, so permanent): `\\bwhere.*focus\\b` is back, so the list
-        is PARTIAL and claims exactly the 2 rows that literal matches (its
-        own ledgered row and GUIDANCE's "where should I focus this week")."""
+        2026-10-10 (#1973-shape restore, Lead) put `\\bwhere.*focus\\b` back;
+        2026-10-11 it is re-deleted under misserved_at_deletion (CXO withdrew the
+        survivor, Arch: the restore restored nothing), so the list claims no rows."""
         _records, by_list = gate.build_census(cats=None)
         lv = by_list.get("PRIORITY_PATTERNS")
         assert lv is not None, "PRIORITY_PATTERNS must still appear in the census"
-        assert {r.phrase for r in lv.rows} == {
-            "where should my focus be today",
-            "where should I focus this week",
-        }, [r.phrase for r in lv.rows]
+        # 2026-10-11: re-deleted under misserved_at_deletion (CXO withdrew the survivor;
+        # Arch: the restore restored nothing) -> 0 rows again.
+        assert len(lv.rows) == 0, [r.phrase for r in lv.rows]
+
+    @pytest.mark.asyncio
+    async def test_where_focus_today_declines_and_falls_to_the_floor(self, monkeypatch):
+        """2026-10-11 (#1595): the `\\bwhere.*focus\\b` literal is gone, so surface 1
+        declines "where should my focus be today" (it has a corpus row). The router
+        names get_top_priority @0.95 (the SERVED answer; attention_query is the
+        ruling, so the row is a known miss against the 10-10 week_calendar landing,
+        ledger: misserved_at_deletion). get_top_priority is a floor-disposition op
+        with no rail entry, so the live consult cannot dispatch it (an Intent with
+        that action is never returned); it declines and the turn falls to the floor
+        (surface 2), where PRIORITY lands get_top_priority. Router stubbed, no LLM."""
+        from types import SimpleNamespace
+
+        from services.intent_service import inversion_live
+        from services.intent_service.pre_classifier import PreClassifier
+        from services.intent_service.workflow_entries import register_default_workflows
+        from tests.unit.services.intent_service._inversion_pin_helper import (
+            stub_router_operation,
+        )
+
+        phrase = "where should my focus be today"
+        assert r"\bwhere.*focus\b" not in PreClassifier.PRIORITY_PATTERNS
+        assert PreClassifier.pre_classify(phrase) is None
+        monkeypatch.setenv(inversion_live.LIVE_CATEGORIES_ENV, "read_floor")
+        stub_router_operation(monkeypatch, "get_top_priority", confidence=0.95)
+        register_default_workflows()
+        intent = await inversion_live.consult_inversion_live(
+            phrase,
+            session_id=None,
+            user_id=None,
+            intent_service=SimpleNamespace(intent_classifier=None),
+        )
+        assert intent is None, intent
 
     def test_status_patterns_now_claims_four_rows(self):
         """#1595 Phase 3 seventh deletion, the FIRST PARTIAL one:

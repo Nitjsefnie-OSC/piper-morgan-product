@@ -3274,7 +3274,10 @@ class TestExtractionPatternRatchet:
         # 127 -> 124 (2026-10-11): COMPLETION_HISTORY partial (3 of 5).
         # 124 -> 122 (2026-10-11): STATUS partial, `\\bproject landscape\\b` and
         # `\\bupcoming milestones?\\b` (the latter under misserved_at_deletion).
-        "pre-classifier": 122,
+        #
+        # 122 -> 121 (2026-10-11): PRIORITY `\\bwhere.*focus\\b` re-deleted under
+        # misserved_at_deletion (CXO withdrew the survivor status).
+        "pre-classifier": 121,
     }
 
     # The named interpretation-by-pattern spans, per surface: (file, symbols).

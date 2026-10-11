@@ -901,9 +901,13 @@ class PreClassifier:
     # restore is permanent; re-delete only with its row scoring under rules
     # 1/10/11. Report:
     # inversion-week-calendar-description-full-score-2026-10-10-anthropic.md.
-    PRIORITY_PATTERNS = [
-        r"\bwhere.*focus\b",
-    ]
+    #
+    # 2026-10-11 (#1595): re-deleted under misserved_at_deletion — CXO withdrew
+    # the survivor status and Arch ruled the restore restored nothing (the router
+    # serves get_top_priority @0.95 with or without it; the row is ruled
+    # attention_query and stays a known miss). `\bwhere.*focus\b` tombstoned;
+    # the list is empty again.
+    PRIORITY_PATTERNS = []  # type: List[str]
 
     # #1595 Phase 3, eighth deletion (2026-10-02): PARTIAL — 18 of 21
     # literals tombstoned, 3 SURVIVE. The gate
