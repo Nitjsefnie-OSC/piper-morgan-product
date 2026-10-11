@@ -264,3 +264,4 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - 10-11 12:45 — flag flipped early, Arch holding; I read the #1884-shaped served case when Lead posts it.
 - 10-11 12:55 — agreed step 2 covered-branch-only; asked for rate (neither) before the PORTFOLIO deletion.
 - 10-11 13:15 — 1977 HOLD (121 stands); filed #1979 summarize-my-current-work misroute; own acceptance check owed.
+- 10-11 13:25 — 1977 hold accepted; #1979 design is Lead+Arch; my acceptance check on its fix.
