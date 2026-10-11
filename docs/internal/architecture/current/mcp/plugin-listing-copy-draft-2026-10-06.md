@@ -87,7 +87,7 @@ to listings that ship different things: only the **plugin** carries the skills. 
 and a plain connector listing get the **server alone** (one tool, three read-only data sources). (3) There's
 no frame for "early probe" vs "the product", so the narrow scope could read as thin. (4) Small fixes:
 "Piper… They" read as the skills; the revoke line (pending PM's revoke test); the Registry one-liner should match.
-`[INVITE LINK]` = PM to choose (an address or a page).
+Invitation route: **support@pipermorgan.ai** (PM, 10-11: lighter than a dedicated page). Written as plain text, not a link, so it works in listing fields that don't render links.
 
 ### A. Plugin listing (Claude directory plugin bundle; OpenAI plugin)
 
@@ -99,6 +99,8 @@ no frame for "early probe" vs "the product", so the narrow scope could read as t
 
 Piper Morgan is a product-management colleague. Connect Piper once and your assistant can see what Piper knows about you: your organization, your active projects and stated priorities, what Piper has confirmed about how you like to work, and your open GitHub issues.
 
+**What Piper knows comes from you.** Piper only knows what you've set up in your Piper account at pipermorgan.ai: the priorities and projects you gave during setup, what you've confirmed with Piper about how you work, and the GitHub account you connected there. A new account knows little, and Piper will say so.
+
 Three skills put that to use:
 
 - **What Piper knows**: your profile, priorities and open issues in one place, including what Piper *doesn't* know yet.
@@ -109,7 +111,7 @@ Three skills put that to use:
 
 **Read-only, and yours to switch off.** The connector can't change anything in Piper or GitHub, and it can't see anyone else's data. You approve access on a Piper sign-in page, and you can remove it any time in Piper under Settings → Connected apps. *(Last clause gated on PM's revoke test.)*
 
-**An early release.** This first version reads and suggests. It doesn't act for you yet. Piper Morgan is in invitation-only alpha, and you need a Piper account to use it. Request an invitation: [INVITE LINK].
+**An early release.** This first version reads and suggests. It doesn't act for you yet. Piper Morgan is in invitation-only alpha, and you need a Piper account to use it. To request an invitation, email support@pipermorgan.ai.
 
 ### B. Server-only listing (Smithery, MCP Registry, Claude connector directory)
 
@@ -123,11 +125,13 @@ Piper Morgan is a product-management colleague. This connector lets your AI assi
 - what Piper has confirmed about how you like to work
 - your open GitHub issues, through the GitHub account you connected to Piper.
 
+**What Piper knows comes from you.** Piper only knows what you've set up in your Piper account at pipermorgan.ai: the priorities and projects you gave during setup, what you've confirmed with Piper about how you work, and the GitHub account you connected there. A new account knows little, and Piper will say so.
+
 Ask "What does Piper know about me?" to see all of it in one answer, empty parts included. Piper reports empty as empty and doesn't fill gaps with guesses.
 
 **Read-only, and yours to switch off.** The connector can't change anything, and it can't see anyone else's data. You approve access on a Piper sign-in page and can remove it any time in Piper under Settings → Connected apps. *(Last clause gated on PM's revoke test.)*
 
-**An early release.** Piper Morgan is in invitation-only alpha, and you need a Piper account. Request an invitation: [INVITE LINK]. For a daily standup and issue ranking built on this, see the Piper Morgan plugin.
+**An early release.** Piper Morgan is in invitation-only alpha, and you need a Piper account. To request an invitation, email support@pipermorgan.ai. For a daily standup and issue ranking built on this, see the Piper Morgan plugin.
 
 **MCP Registry `server.json` description** (Registry limit 100 chars): `Read-only access to what Piper Morgan, a product-management colleague, knows about you.` *(87 chars; the 100 limit is the schema's `maxLength`, checked 10-11.)*
 
@@ -150,3 +154,10 @@ Ask "What does Piper know about me?" to see all of it in one answer, empty parts
 - "you need a Piper account to use this" → "to use **it**".
 - "reads and suggests; it doesn't act" → two sentences, and the B bullet list lost its semicolons (no semicolons in public copy).
 - **Left for PM, not changed:** "It doesn't act for you **yet**". "Yet" is a quiet promise about a later version. It's true to the plan, but it sets the kind of expectation PM named. Keep it or drop it, PM's call. `[INVITE LINK]` and the gated revoke clause are untouched.
+
+### PA, after Comms' pass (2026-10-11, PM's question: "does the write-up address that Piper can only know things about you if you have set up an account already?")
+- It didn't. "You need a Piper account" was there, but not *why*: everything Piper reports comes from the Piper account (setup answers, what you've confirmed with Piper, the GitHub account connected there). Added the paragraph **"What Piper knows comes from you."** to A and B, right after the opening, so a stranger knows up front that a new account knows little. "Piper will say so" is they/them-safe and avoids "honest".
+- `[INVITE LINK]` → "To request an invitation, email support@pipermorgan.ai." (PM leaned to support@; PA agrees, see the session log.)
+- Recounted (python `len`, bold marks and gating note stripped): A description 1,781/2,000, B description 1,279/2,000. One-liners and the Registry line unchanged.
+- Comms' open question ("yet") is still PM's.
+
