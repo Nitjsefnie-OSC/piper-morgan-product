@@ -482,15 +482,14 @@ class TestDeletedPatternListsLedger:
         status_entry = next(e for e in entries if e["list"] == "STATUS_PATTERNS")
         assert status_entry.get("partial") is True
         assert (
-            status_entry.get("literals") == 50
-        ), "literals is the DELETED count (52 minus 2 #1973-shape restores), not the original 56"
-        # 2026-10-10: 2 restores (#1973-shape, Lead) join the 4 original survivors.
+            status_entry.get("literals") == 52
+        ), "literals is the DELETED count (56 minus the 4 survivors), not the original 56"
+        # 2026-10-11: `project landscape` and `upcoming milestones?` deleted (partial);
+        # 4 survivors remain (3 original + the 10-10 `status report` restore).
         assert set(status_entry.get("surviving_literals", {})) == {
             r"\bnext milestone\b",
             r"\bcurrent work\b",
             r"\bproject overview\b",
-            r"\bproject landscape\b",
-            r"\bupcoming milestones?\b",
             r"\bstatus report\b",
         }
         guidance_entry = next(e for e in entries if e["list"] == "GUIDANCE_PATTERNS")
@@ -554,12 +553,11 @@ class TestDeletedPatternListsLedger:
             r"\bset\s+(?:a\s+)?reminder\b",
         }
         priority_entry = next(e for e in entries if e["list"] == "PRIORITY_PATTERNS")
-        # 2026-10-10: #1973-shape restore of `\\bwhere.*focus\\b` -> PARTIAL.
-        assert priority_entry.get("partial") is True
-        assert priority_entry.get("literals") == 46
-        assert set(priority_entry.get("surviving_literals", {})) == {
-            r"\bwhere.*focus\b",
-        }
+        # 2026-10-11: `\\bwhere.*focus\\b` (the 10-10 restore) re-deleted under
+        # misserved_at_deletion -> FULL tombstone again (47 of 47 literals).
+        assert priority_entry.get("partial") is False
+        assert priority_entry.get("literals") == 47
+        assert set(priority_entry.get("surviving_literals", {})) == set()
         session_activity_entry = next(
             e for e in entries if e["list"] == "SESSION_ACTIVITY_QUERY_PATTERNS"
         )
@@ -766,21 +764,24 @@ class TestNonRegressionMechanism:
         """#1973-shape restore (2026-10-10): a `known_reabsorptions` record
         with ``restored: true`` is accepted only if its ``reclaiming_literal``
         is listed in the entry's ``surviving_literals`` (the restore is
-        recorded, not silent). Synthetic entry on the real restored STATUS
-        literal; the same record WITHOUT the survivor listing must fail."""
-        phrase = "any upcoming milestones for this project"
-        lit = r"\bupcoming milestones?\b"
+        recorded, not silent). Synthetic entry on a row the PORTFOLIO edit
+        survivor (#1933, RULED_SURVIVORS) really claims with a wrong op and a
+        router that does not independently serve it; the same record WITHOUT
+        the survivor listing must fail. (2026-10-11: re-pointed from the STATUS
+        `upcoming milestones` restore, which was re-deleted.)"""
+        phrase = "edit my project description"
+        lit = r"\bedit\s+(?:my\s+)?(?:the\s+)?project\b"
         known = {
             phrase: {
-                "reclaimed_by": "STATUS_PATTERNS",
+                "reclaimed_by": "PORTFOLIO_PATTERNS",
                 "reclaiming_literal": lit,
-                "claimed_action": "get_project_status",
+                "claimed_action": "manage_portfolio",
                 "agrees": False,
                 "restored": True,
             }
         }
         entry = {
-            "list": "STATUS_PATTERNS",
+            "list": "PORTFOLIO_PATTERNS",
             "rows_claimed_at_deletion": [phrase],
             "known_reabsorptions": known,
             "surviving_literals": {lit: [phrase]},
@@ -794,7 +795,7 @@ class TestNonRegressionMechanism:
             unrecorded, cats=gate.CURRENT_LIVE_CATEGORIES
         )
         assert not ok
-        assert any("claimed again by STATUS_PATTERNS" in p for p in problems)
+        assert any("claimed again by PORTFOLIO_PATTERNS" in p for p in problems)
 
     def test_fails_for_a_phrase_that_is_no_longer_a_corpus_row(self):
         entry = {
@@ -1117,17 +1118,48 @@ class TestPriorityPatternsVerdictIsReported:
         implicit consequence of the ledger entry alone (same idiom as
         test_temporal_patterns_now_claims_zero_rows above).
 
-        2026-10-10 (#1973-shape restore, Lead; CXO: the today-focus family
-        stays together, so permanent): `\\bwhere.*focus\\b` is back, so the list
-        is PARTIAL and claims exactly the 2 rows that literal matches (its
-        own ledgered row and GUIDANCE's "where should I focus this week")."""
+        2026-10-10 (#1973-shape restore, Lead) put `\\bwhere.*focus\\b` back;
+        2026-10-11 it is re-deleted under misserved_at_deletion (CXO withdrew the
+        survivor, Arch: the restore restored nothing), so the list claims no rows."""
         _records, by_list = gate.build_census(cats=None)
         lv = by_list.get("PRIORITY_PATTERNS")
         assert lv is not None, "PRIORITY_PATTERNS must still appear in the census"
-        assert {r.phrase for r in lv.rows} == {
-            "where should my focus be today",
-            "where should I focus this week",
-        }, [r.phrase for r in lv.rows]
+        # 2026-10-11: re-deleted under misserved_at_deletion (CXO withdrew the survivor;
+        # Arch: the restore restored nothing) -> 0 rows again.
+        assert len(lv.rows) == 0, [r.phrase for r in lv.rows]
+
+    @pytest.mark.asyncio
+    async def test_where_focus_today_declines_and_falls_to_the_floor(self, monkeypatch):
+        """2026-10-11 (#1595): the `\\bwhere.*focus\\b` literal is gone, so surface 1
+        declines "where should my focus be today" (it has a corpus row). The router
+        names get_top_priority @0.95 (the SERVED answer; attention_query is the
+        ruling, so the row is a known miss against the 10-10 week_calendar landing,
+        ledger: misserved_at_deletion). get_top_priority is a floor-disposition op
+        with no rail entry, so the live consult cannot dispatch it (an Intent with
+        that action is never returned); it declines and the turn falls to the floor
+        (surface 2), where PRIORITY lands get_top_priority. Router stubbed, no LLM."""
+        from types import SimpleNamespace
+
+        from services.intent_service import inversion_live
+        from services.intent_service.pre_classifier import PreClassifier
+        from services.intent_service.workflow_entries import register_default_workflows
+        from tests.unit.services.intent_service._inversion_pin_helper import (
+            stub_router_operation,
+        )
+
+        phrase = "where should my focus be today"
+        assert r"\bwhere.*focus\b" not in PreClassifier.PRIORITY_PATTERNS
+        assert PreClassifier.pre_classify(phrase) is None
+        monkeypatch.setenv(inversion_live.LIVE_CATEGORIES_ENV, "read_floor")
+        stub_router_operation(monkeypatch, "get_top_priority", confidence=0.95)
+        register_default_workflows()
+        intent = await inversion_live.consult_inversion_live(
+            phrase,
+            session_id=None,
+            user_id=None,
+            intent_service=SimpleNamespace(intent_classifier=None),
+        )
+        assert intent is None, intent
 
     def test_status_patterns_now_claims_four_rows(self):
         """#1595 Phase 3 seventh deletion, the FIRST PARTIAL one:
@@ -1145,15 +1177,15 @@ class TestPriorityPatternsVerdictIsReported:
         # 2026-10-10: the two #1973-shape restores (`\\bupcoming milestones?\\b`,
         # `\\bstatus report\\b`) add their own rows plus "give me a project status
         # report" (collateral of `\\bstatus report\\b`): 7 rows.
-        assert len(lv.rows) == 7, [r.phrase for r in lv.rows]
+        # 2026-10-11: `project landscape` and `upcoming milestones?` deleted again
+        # (their two rows leave the census): 5 rows.
+        assert len(lv.rows) == 5, [r.phrase for r in lv.rows]
         assert {r.phrase for r in lv.rows} == {
             "give me a project status report",
-            "any upcoming milestones for this project",
             "I need a status report",
             "any update on the next milestone",
             "can you summarize my current work",
             "give me a project overview",
-            "what's the project landscape",
         }
         # 2026-10-10: the week_calendar full run (577, wired into
         # PHASE3_REPORTS) re-scored "what's the project landscape" as
@@ -1162,9 +1194,7 @@ class TestPriorityPatternsVerdictIsReported:
         # deleted here (not in the six-restore brief; flagged to Lead).
         ok_phrases = {r.phrase for r in lv.rows if r.row_ok}
         assert ok_phrases == {
-            "what's the project landscape",
             "give me a project status report",
-            "any upcoming milestones for this project",
         }, ok_phrases
         assert lv.deletable is False, "a list with any FAIL row is NO-GO, not GO"
 
@@ -2079,7 +2109,10 @@ def test_restored_literals_claim_the_ruled_op_or_carry_a_known_miss():
             if r.claim.action != _ruled_op(r.expected):
                 assert rec.get("known_miss"), (entry["list"], phrase, r.claim.action, r.expected)
             checked += 1
-    assert checked >= 2, checked
+    # 2026-10-11: both `restored: true` records (focus-today, upcoming-milestones) were
+    # re-deleted under misserved_at_deletion, so none remain; the loop stays as the
+    # guard for any future restore record.
+    assert checked >= 0, checked
 
 
 def test_ruled_survivors_cite_a_ruling_and_claim_the_ruled_op_or_carry_a_known_miss():
