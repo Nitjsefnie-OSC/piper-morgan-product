@@ -1420,10 +1420,18 @@ def plan_fallback_outcome(
     """
     claims = surface1_fallback_claims(pc, phrase)
     if not claims:
+        if STEP2_ACKNOWLEDGEMENT_LANDED:
+            return (
+                "planned",
+                ClaimResult(None, None, None, None),
+                "fallback unclaimed — the legacy LLM classifier returns one intent and the reply "
+                "acknowledges the other half (#1977 step 2)",
+            )
         return (
-            "planned",
+            "planned-unacknowledged",
             ClaimResult(None, None, None, None),
-            "fallback unclaimed — the whole turn reaches the LLM classifier, nothing deterministic swallows a half",
+            "fallback unclaimed — the legacy LLM classifier returns ONE intent, so the other half "
+            "is dropped by the model (Arch 2026-10-11 correction); OK once #1977 step 2 lands",
         )
     after_halves = {c for _, _, c in claims}
     first = claims[0]
@@ -1553,6 +1561,13 @@ HELD_FOR_CAUSE: Dict[str, str] = {}
 # NOT_ROUTING; the census prints them by name with the ruling. The first named
 # exception to ADR-080 D6 ("the interpretation layer only shrinks").
 _1974 = "ruled keep, CXO #1974 (issuecomment-6110663876): pure pleasantries keep the canned short-circuit; #1416 residue rule unchanged"
+# #1977 step 2 (the reply acknowledges an unanswered half on the legacy branch).
+# Arch's 2026-10-11 correction: an UNCLAIMED post-removal fallback is not OK on
+# its own — classify_multiple's LLM fallback returns ONE intent, so the half is
+# dropped by the model instead of by a literal. Until step 2 lands, unclaimed
+# reads "planned, fallback unacknowledged" (NO-GO); the step-2 commit flips this.
+STEP2_ACKNOWLEDGEMENT_LANDED = False
+
 PERMANENT_FLOOR: Dict[str, str] = {
     "GREETING_PATTERNS": _1974,
     "FAREWELL_PATTERNS": _1974,
@@ -1637,7 +1652,11 @@ def assess_list(list_name: str, lv: ListVerdict) -> ListAssessment:
             if p not in (survivors if partial else {}) and p not in held and p not in ruled
         ]
         checked = reabsorption_check(list_name, licensed_literals, lv.rows)
-        reabsorbed = [c for c in checked if c[1] in ("reabsorbed", "planned-partial")]
+        reabsorbed = [
+            c
+            for c in checked
+            if c[1] in ("reabsorbed", "planned-partial", "planned-unacknowledged")
+        ]
         shadowed = [c for c in checked if c[1] == "shadowed"]
         planned = [c for c in checked if c[1].startswith("planned")]
     if reabsorbed:
@@ -1707,7 +1726,9 @@ def render_list_report(
     reabsorbed, shadowed, ruled, planned = a.reabsorbed, a.shadowed, a.ruled, a.planned
     if reabsorbed:
         greedy = sorted({f"{c[2].pattern_list} -> {c[2].action}" for c in reabsorbed})
-        n_partial = sum(1 for c in reabsorbed if c[1] == "planned-partial")
+        n_partial = sum(
+            1 for c in reabsorbed if c[1] in ("planned-partial", "planned-unacknowledged")
+        )
         lines.append(
             f"verdict: NO-GO (rule 11) — {len(reabsorbed)} licensing row(s) REABSORBED by a "
             f"different action once the licensed literals are removed: {'; '.join(greedy)} "
@@ -1727,6 +1748,11 @@ def render_list_report(
                 lines.append(
                     f'  planned, fallback partial ({after.pattern_list}): "{rec.phrase}" '
                     f"{rec.router.route} — {why}"
+                )
+            elif outcome == "planned-unacknowledged":
+                _, _, why = plan_fallback_outcome_cached(list_name, rec)
+                lines.append(
+                    f'  planned, fallback unacknowledged: "{rec.phrase}" {rec.router.route} — {why}'
                 )
             else:
                 lines.append(
@@ -1761,7 +1787,7 @@ def render_list_report(
             f"{after.pattern_list} -> {after.action}"
         )
     for rec, outcome, after in planned:
-        if outcome == "planned-partial":
+        if outcome in ("planned-partial", "planned-unacknowledged"):
             continue  # printed under the verdict above
         _, _, why = plan_fallback_outcome_cached(list_name, rec)
         tag = "planned" if outcome == "planned" else "planned, shadowed"
@@ -2016,7 +2042,7 @@ def check_deleted_entry_non_regression(
             outcome, _after, why = plan_fallback_outcome(
                 PreClassifier, phrase, want_ops, list(planned_at[phrase].get("halves") or [])
             )
-            if outcome == "planned-partial":
+            if outcome in ("planned-partial", "planned-unacknowledged"):
                 problems.append(f"{phrase!r}: planned, but today's fallback drops a half — {why}")
             continue
 
