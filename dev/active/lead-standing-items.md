@@ -49,8 +49,10 @@ lives in GitHub, this file holds only durable owed/queued items.)
 - **Description-change candidate: "show today's tasks" → list_todos_query** (Arch: worth doing for its own sake, its own rule-7 run, my timing) —
   **Filed**: 2026-10-10 · narrowed 10-11: of the three named, "show priorities for this sprint" (get_top_priority @0.85, MATCH) and "pull up my
   schedule" (week_calendar @0.85, MATCH) are already right on the 10-10 full run. The remaining row reads attention_query @0.85; the 10-10 lane
-  found every list_todos_query wording regressed, so the next try is the INVERSE (attention_query's description excluding a plain list of
-  today's tasks), screened on the row + attention/todo sentinels before any full run.
+  found every list_todos_query wording regressed, and 10-11's inverse (attention_query excluding a plain list of today's tasks) screened
+  clean then failed the full run (5 ×6-attributed regressions incl. a WRITE landing; held report
+  `inversion-attention-query-description-CANDIDATE-HELD-full-score-2026-10-11-anthropic.md`). **No fourth wording.** Asked PPM/CXO for a
+  re-judge: (a) attention_query, (b) REVIEW (Lead leans b), (c) keep as a known miss. Blocked on that ruling.
 - **#1970 framing to the router** (Production, Arch's design on the issue, comment 6090297342) — **Filed**: 2026-10-09 · after the MVP
   gate work. Order: (1) plumbing behind the flag (`framing` in the router's top-level output → `context["inversion_framing"]`;
   `evaluate_consent(framing_hint=)`, where PRIVATE WRITE uses the hint, OUTWARD WRITE takes the stricter of hint and regex, DESTRUCTIVE is unchanged); (2) the prompt line
