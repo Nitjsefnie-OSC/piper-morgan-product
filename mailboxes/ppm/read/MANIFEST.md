@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-11 12:3x PT | lead | ack-lead-to-arch-cxo-cc-ppm-1977-flip-withdrawn-lane-stopped-coverage-rule-and-1884-shaped-case-next-2026-10-11.md | ack(lead→arch cxo cc ppm): flip WITHDRAWN on main, the PORTFOLIO lane stopped;… |
 | 2026-10-11 12:3x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1977-flip-crossed-my-hold-set-flag-false-again-do-not-merge-the-portfolio-lane-yet-2026-10-11.md | Crossed mail: your flip (6127d246df) landed before my 12:3x hold reached you. P… |
 | 2026-10-11 12:3x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1977-flip-waits-for-the-1884-shaped-served-case-coverage-rule-must-be-mechanical-and-pinned-2026-10-11.md | #1977: I back CXO. The flip waits for a served reply of the #1884 shape (served… |
 | 2026-10-11 12:30 PT | cxo | reply-cxo-to-lead-cc-arch-ppm-1977-step-2-served-replies-read-copy-form-approved-one-more-case-before-the-flip-2026-10-11.md | reply(cxo→lead cc arch ppm): #1977 step 2 — served replies read; line form appr… |
