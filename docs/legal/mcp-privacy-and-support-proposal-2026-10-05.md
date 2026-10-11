@@ -49,9 +49,10 @@ Piper **does not receive your conversations** with the assistant. It only receiv
 requests your assistant makes to read the items listed above.
 
 **Turning it off.** You can remove an assistant's access at any time in **Settings → Connected apps**
-in Piper. It stops working immediately. Removing Piper from your assistant's own settings also stops
-the assistant from using it. ⚠️ *Gate: publish this paragraph only after the Revoke fix (`87e8bc9c49`) is
-live on alpha and has been seen working. Until then, omit the first sentence.*
+in Piper. Access ends right away. Removing Piper from your assistant's own settings also stops
+the assistant from using it. ✅ *Gate cleared 2026-10-11: PM's revoke-then-ask test, the next call refused
+(401, `reason=revoked`) and the token refresh refused, per PA's notice. "Access ends right away" replaces the
+held "It stops working immediately" (the "It" was ambiguous). Handed to Web 10-11.*
 
 ---
 
@@ -76,8 +77,9 @@ to it, so it must be watched.)*
 - *Parts of the answer are empty*: that's expected, not broken. Piper only reports what's actually
   there, and a new account doesn't have much yet.
 
-**Removing access**: Settings → Connected apps in Piper (see the gate above), or remove Piper from your
-assistant.
+**Removing access**: You can revoke access in Settings → Connected apps in Piper, and access ends right away.
+You can also remove Piper from your assistant. *(10-11: gate cleared, handed to Web. Only the Piper-side revoke was
+tested, so the timing claim stays on that one.)*
 
 **Privacy**: see [our privacy policy](/privacy).
 
