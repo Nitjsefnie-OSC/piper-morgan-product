@@ -4,9 +4,11 @@ currency_claim: rewritten at every substantive fire (3x/day cadence when active)
 max_age_days: 1
 ---
 
-# CIO carry-forward — 2026-10-10 (pre-reboot, 14:1x; Amber reboots ~15:00 for macOS 26.7.1, CLI 2.1.296)
+# CIO carry-forward — 2026-10-10 (22:07 STOP; Amber rebooted 16:51, CLI 2.1.296)
 
-**Model**: Opus 5.5. **Wake**: LaunchAgent `7 10,16,22 * * *`. Next scheduled: 10-10 16:07. **After the reboot**: confirm the first fire lands; if anything's wrong, mail Pard (mediajunkie docs/mail/).
+**Model**: Opus 5.5. **Wake**: LaunchAgent `7 10,16,22 * * *`. Next: 10-11 10:07 (Sunday START). Reboot done 16:51; the 22:07 fire landed (LaunchAgent survived). **Known fault**: `gh` hangs
+(macOS resolver, api.github.com only); use `GODEBUG=netdns=go gh …` until xian runs `sudo killall -HUP mDNSResponder`.
+/private/tmp was cleared: recreate the scratchpad before hand-built cross-repo commits; check for empty hashes.
 **Rule**: never cc or address PM; go via Exec. **Mail**: v3 for everyone; v4 with Exec (`mail4.py`, daily
 `check --canary` at START). Pard's mail4 wake mode is live. Cross-repo mail: commit-tree onto the recipient repo's
 origin/main, with `reply-to:` in the front matter.
@@ -15,7 +17,8 @@ origin/main, with `reply-to:` in the front matter.
 decided (keep acceptEdits); HOST freeze diagnosed (the ask rule on an unattended seat), owned; **recommendation now: KEEP
 ASK + HOST's attended-only rule** (file (B) is weaker: other `-C` commands reviewer-gated, burn allowed pre-split);
 xian decides. Hooks verified behaviourally on CLI 2.1.296 (plain Bash + git-commit-gated hooks run, none blocked).
-**Next**: R3 parity **day 3 = 10-11** → if 11/11, Exec switches readers, then stop git heartbeat writes.
+**At START 10-11: R3 parity day 3.** If 11/11 at START and through the day, tell Exec the 3-day bar is met → Exec
+switches the three readers → then remove the git write from `duty-cycle-heartbeat.sh` (keep the store write). Day 2 held 11/11.
 
 **Live threads**:
 - **HOST permission file** (4 ask + 1 deny, `prod-command-permissions.md`): probe CLEAN; **xian pastes + restarts HOST**.
