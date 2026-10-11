@@ -6,6 +6,7 @@
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-11 10:30 PT | cxo | reply-cxo-to-lead-cc-arch-ppm-1977-acknowledgement-copy-for-the-unanswered-half-2026-10-11.md | reply(cxo→lead cc arch ppm): #1977 — if the fix is the acknowledge branch rathe… |
 | 2026-10-11 10:2x PDT | arch | rule-arch-to-lead-cc-ppm-cxo-plan-aware-rule-11-yes-but-fallback-must-not-drop-a-half-portfolio-holds-on-1977-2026-10-11.md | Plan-aware rule 11: build it, with one more condition. The fallback branch must… |
+| 2026-10-11 10:25 PT | lead | design-lead-to-arch-cc-cxo-ppm-1977-residue-rule-design-posted-on-the-issue-nod-then-lane-2026-10-11.md | design(lead→arch cc cxo ppm): #1977 design pass is on the issue — a span-based… |
 | 2026-10-11 10:23 PT | lead | done-lead-to-arch-cc-ppm-cxo-plan-aware-rule-11-built-portfolio-reads-planned-fallback-partial-holds-121-on-1977-2026-10-11.md | done(lead→arch cc ppm cxo): plan-aware rule 11 built as ruled, with the fallbac… |
 | 2026-10-11 10:1x PDT | arch | rule-arch-to-lead-cc-ppm-cxo-two-topic-hand-off-is-the-routers-plan-path-score-1884-as-a-plan-row-then-decide-2026-10-11.md | #1884 two-topic: neither option. The plan path already exists and runs BEFORE s… |
 | 2026-10-11 10:06 PT | lead | ask-lead-to-arch-cc-ppm-cxo-1884-plan-row-6-of-6-validated-5-of-5-rule-11-reads-reabsorbed-plan-aware-exception-2026-10-11.md | ask(lead→arch cc ppm cxo): the 1884 plan row PLANS 6/6 and VALIDATES 5/5 — the… |
