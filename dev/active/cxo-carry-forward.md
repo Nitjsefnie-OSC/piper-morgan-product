@@ -261,3 +261,4 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - 10-11 12:05 — cue widened; step-2 flag flips on local served reply; I review the quoted copy, alpha confirm later.
 - 10-11 12:12 — ruled step-2 copy (quoted, no 'I did'); will read Lead's local served replies.
 - 10-11 12:30 — reviewed step-2 served replies; asked for #1884-shaped case before flag flip.
+- 10-11 12:45 — flag flipped early, Arch holding; I read the #1884-shaped served case when Lead posts it.
