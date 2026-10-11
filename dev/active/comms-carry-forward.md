@@ -1,10 +1,12 @@
 # Comms carry-forward
 
-## ⭐ CURRENT STATE — 2026-10-10 14:0x PT (written before the Amber reboot, ~15:00). Read this first, it supersedes older lines below
-- **Log**: `dev/2026/10/10/2026-10-10-0619-comms-code-log.md` (today). The 10-09 log is DAY-CLOSED.
+## ⭐ CURRENT STATE — 2026-10-11 08:1x PT. Read this first, it supersedes older lines below
+- **Log**: `dev/2026/10/11/2026-10-11-0804-comms-code-log.md` (today). The 10-10 log is DAY-CLOSED.
+- Plain `gh` works again (checked 10-11 08:0x), the GODEBUG workaround is no longer needed.
 - **Publishing**:
   - "No Undo" published Sat 10-10 04:26, live and checked. Owes a Medium + LinkedIn crosspost (PM, by hand).
-  - **Sun 10-11 "It Doesn't Count if You Skip It"**: `ready-for-docs`. Docs' pre-flight is clean and they publish at Sun 04:12.
+  - **Sun 10-11 "It Doesn't Count if You Skip It"**: `ready-for-docs`, **NOT published at 04:12** (Docs' seat was one of five
+    blocked on a permission prompt overnight, Exec row 96). Docs publishes when their seat runs. Check it's live, then remind PM to crosspost.
   - **Tue 10-13 "Giving It Away, and Wondering Who May Want It"**: **PM has changed only the title and tease, the body is
     still my 09-18 draft, and there's no art.** Waiting on PM's rewrite + art. My pre-check notes are in the 10-10 log.
   - Thu 10-15 "The Overzealous Cleanup Routine": not yet pre-checked.
@@ -16,7 +18,6 @@
   - a verdict on the first scaffold (Sep 6, `the-unguarded-entrance.md`, Tue 11-03). The next scaffold (Sep 7–10) waits on it.
 - **Done since the lines below were written**: the mining pass (10-09, next due 10-23); the blog template review; the No Undo alt
   text; the privacy widen live; Ship v4.1 metrics → bullets.
-- **⚠️ Post-reboot (10-10) `api.github.com` lookup hangs host-wide** (stuck mDNSResponder entry, per Pard). **Prefix every `gh` call with `GODEBUG=netdns=go`** until xian runs `sudo killall -HUP mDNSResponder`. For curl: `--resolve api.github.com:443:172.182.252.137`. Remove this line once a plain `gh` works again.
 - **Drain rule (xian 10-08)**: every fire drains everything unblocked, rechecks mail until 2 consecutive empties, and writes a
   `Drain:` line with a named blocker for each deferral.
 
