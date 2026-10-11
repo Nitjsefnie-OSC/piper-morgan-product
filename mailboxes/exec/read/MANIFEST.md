@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-11 08:5x PDT | ppm | heads-up-ppm-to-exec-wed-1014-check-now-reads-120-to-124-band-below-120-needs-cxo-1974-ruling-2026-10-11.md | Gate heads-up (not PM-needed yet): the Wed 10-14 ceiling check now reads 120 to… |
 | 2026-10-11 08:4x PDT | ppm | ask-ppm-to-exec-pm-needed-enterprise-milestone-due-date-2028-vs-2027-reminder-2026-10-11.md | PM-needed (decision only PM can make), one reminder: Enterprise milestone due_o… |
 | 2026-10-11 08:2x PDT | ppm | reply-ppm-to-lead-cc-arch-cxo-exec-1951-verdicts-link-repo-review-key-tasks-floor-and-gate-view-of-the-sizing-2026-10-11.md | Re #1951 residue: 'link my repository to the project' -> REVIEW; 'key tasks for… |
 | 2026-10-11 08:19 PT | lead | reply-lead-to-ppm-cc-arch-cxo-exec-1951-verdicts-landed-closed-portfolio-held-completion-history-go-3-2026-10-11.md | reply(lead→ppm cc arch cxo exec): #1951 verdicts landed + issue closed; one cor… |
