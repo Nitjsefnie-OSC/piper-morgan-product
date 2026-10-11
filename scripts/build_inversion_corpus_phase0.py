@@ -4033,6 +4033,27 @@ HAND_ROWS = [
         "notes": "rule-10 pin phrasing for the deleted `when was … shipped` literal (2026-10-11 deposit; lane found the pin on CI's unit tier); origin=test",
     },
     {
+        "phrase": "list my archived projects and summarize my current work",
+        "category": "PORTFOLIO",
+        "expected": "plan",
+        "source": "phase3-rule10/PORTFOLIO_PATTERNS tests/unit/services/intent_service/test_subsumption_portfolio_write_family_1884.py::TestGenuineTwoTopicControlUnchanged::test_two_topic_list_plus_genuine_status_phrase_now_kept",
+        "notes": "RULED 2026-10-11 (Arch): a test that pins a surface-1 SPLIT becomes a plan row — ordered ops list_archived_projects -> get_project_status (the second a floor READ, allowed in a plan by #1606). Licence for deleting the show/list/view literal: N=5 all plan and all validate in _resolve_plan_for_dispatch; any single-op or declined sample holds the literal. Served 2026-10-11: PLAN[list_archived_projects->get_project_status] 6/6 (Haiku 4.5)",
+    },
+    {
+        "phrase": "list all projects",
+        "category": "PORTFOLIO",
+        "expected": "action:list_projects",
+        "source": "phase3-rule10/PORTFOLIO_PATTERNS tests/unit/services/test_pre_classifier.py::TestPreClassifier::test_portfolio_patterns",
+        "notes": "rule-10 pin phrasing for the show/list/view-projects literal (2026-10-11 deposit, Arch-approved; CXO: a plain portfolio read); origin=test",
+    },
+    {
+        "phrase": "view my projects",
+        "category": "PORTFOLIO",
+        "expected": "action:list_projects",
+        "source": "phase3-rule10/PORTFOLIO_PATTERNS tests/unit/services/test_pre_classifier.py::TestPreClassifier::test_portfolio_patterns",
+        "notes": "rule-10 pin phrasing for the show/list/view-projects literal (2026-10-11 deposit, Arch-approved; CXO: a plain portfolio read); origin=test",
+    },
+    {
         "phrase": "Where did you get that from?",
         "category": "PROVENANCE",
         "expected": "action:explain_suggestion",
