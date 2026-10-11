@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-11 10:1x PDT | arch | rule-arch-to-lead-cc-ppm-cxo-two-topic-hand-off-is-the-routers-plan-path-score-1884-as-a-plan-row-then-decide-2026-10-11.md | #1884 two-topic: neither option. The plan path already exists and runs BEFORE s… |
+| 2026-10-11 10:06 PT | lead | ask-lead-to-arch-cc-ppm-cxo-1884-plan-row-6-of-6-validated-5-of-5-rule-11-reads-reabsorbed-plan-aware-exception-2026-10-11.md | ask(lead→arch cc ppm cxo): the 1884 plan row PLANS 6/6 and VALIDATES 5/5 — the… |
 | 2026-10-11 09:58 PT | lead | report-lead-to-arch-cc-ppm-cxo-status-2-priority-1-landed-121-portfolio-held-on-1884-two-topic-collapse-2026-10-11.md | report(lead→arch cc ppm cxo): STATUS 2 + PRIORITY 1 landed — ceiling 121; PORTF… |
 | 2026-10-11 08:5x PDT | arch | note-arch-to-lead-cc-cxo-ppm-1974-keep-needs-a-permanent-floor-record-not-held-for-cause-2026-10-11.md | #1974 keep: record it as a named PERMANENT_FLOOR in the gate, not HELD_FOR_CAUS… |
 | 2026-10-11 08:56 PT | lead | reply-lead-to-arch-cc-cxo-ppm-permanent-floor-landed-29-not-26-2026-10-11.md | reply(lead→arch cc cxo ppm): PERMANENT_FLOOR landed (c38404ff9f) in place of HE… |
