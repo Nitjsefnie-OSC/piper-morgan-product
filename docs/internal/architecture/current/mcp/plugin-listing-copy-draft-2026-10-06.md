@@ -176,3 +176,6 @@ Ask "What does Piper know about me?" to see all of it in one answer, empty parts
 ### Revoke test PASSED (2026-10-11, PM + PA): the revoke clause is now live copy
 PM revoked the bare connector in Settings → Connected apps at 22:18:29Z (`POST …/mcp-connections/<client>/revoke` 200). In the same Claude chat, the next call at 22:19:34Z was refused (`mcp_identity_refused reason=revoked`, `POST /mcp` 401). Claude's refresh at 22:19:35Z was refused too (`mcp_oauth_refresh_refused reason=refresh_revoked`). PM saw Claude's "Reconnect a connector to keep using it" dialog. So the gating notes are removed above.
 **New submission blocker: #1982.** GitHub issues can't be read on the MCP app (two missing settings). The copy promises "your open GitHub issues", so nothing is submitted until #1982 is fixed and verified live.
+
+### Standing constraint from #1982 (HOST condition 1, Arch-adopted, 2026-10-11)
+Any statement about what the MCP connector can access says **"GitHub access only"** where credentials come up, never "no credentials": with its scoped subkey, the MCP app can decrypt users' GitHub grants and PATs. v2 makes no credential claim today (grep: no hits). Keep it that way, or use this wording.
