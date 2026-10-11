@@ -529,22 +529,33 @@ class TestPreClassifierRoutingIntegration:
     attention_query→read_status)."""
 
     def test_attention_query_routes_to_query_category(self):
-        """'what needs my attention' no longer claims at surface 1."""
+        """'what needs my attention' is claimed again at surface 1 by the
+        RESTORED `\\bneeds my attention\\b` literal (#1973-shape restore,
+        2026-10-10, Lead): QUERY / attention_query."""
         result = PreClassifier.pre_classify("what needs my attention")
 
-        assert result is None
+        assert result is not None
+        assert result.category == IntentCategory.QUERY
+        assert result.action == "attention_query"
 
     def test_attention_query_variants(self):
-        """Attention query phrasings no longer claim at surface 1."""
-        test_cases = [
+        """Only the phrasings containing the RESTORED `\\bneeds my attention\\b`
+        literal (#1973-shape restore, 2026-10-10) claim at surface 1; the
+        rest still decline."""
+        claimed = [
             "what needs my attention",
-            "what needs attention",
             "show me what needs my attention",
+        ]
+        declined = [
+            "what needs attention",
             "items that need attention",
             "attention items",
         ]
 
-        for query in test_cases:
+        for query in claimed:
+            result = PreClassifier.pre_classify(query)
+            assert result is not None and result.action == "attention_query", query
+        for query in declined:
             result = PreClassifier.pre_classify(query)
             assert result is None, f"unexpectedly still classifies: {query}"
 
@@ -601,10 +612,16 @@ class TestPreClassifierRoutingIntegration:
         and PRIORITY_PATTERNS (sixth deletion) are now `[]` — the collision
         this test guarded against (CONTEXTUAL_QUERY needing to be checked
         before PRIORITY's `\\bneeds.*attention\\b`) is doubly moot: neither
-        list can claim anything any more. Converted to pin the decline."""
+        list can claim anything any more. Converted to pin the decline.
+        2026-10-10 (#1973-shape restore, Lead): CONTEXTUAL_QUERY_PATTERNS
+        regained `\\bneeds my attention\\b`, so this phrase is claimed again as
+        QUERY / attention_query (PRIORITY_PATTERNS is still `[]`, so the
+        collision this test originally guarded cannot recur)."""
         result = PreClassifier.pre_classify("what needs my attention right now")
 
-        assert result is None
+        assert result is not None
+        assert result.category == IntentCategory.QUERY
+        assert result.action == "attention_query"
 
     @pytest.mark.asyncio
     async def test_full_routing_attention_query_to_handler(self, intent_service, mock_workflow):

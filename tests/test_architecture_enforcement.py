@@ -3251,7 +3251,17 @@ class TestExtractionPatternRatchet:
         # 0.85-0.95 (inversion-phase3-guidance-pin-rows-score-2026-10-09-
         # anthropic.md, inversion-phase3-rule11-sweep-rows-score-2026-10-09-
         # anthropic.md). 124 - 3 = 121.
-        "pre-classifier": 121,
+        #
+        # 121 -> 124 (2026-10-10, Lead): three #1973-shape restores (Arch's
+        # ruling, issue 1973 comment 6091429803), each a deleted literal put
+        # back verbatim: REMINDER_PATTERNS `\bset\s+(?:a\s+)?reminder\b`
+        # ("set a reminder for the dentist appointment"),
+        # CONTEXTUAL_QUERY_PATTERNS `\bneeds my attention\b` ("this project
+        # needs my attention today"), REPO_MANAGEMENT_PATTERNS
+        # `\bconnect\s+...repo...\s+(?:to\s+)` ("connect my repository to the
+        # project"). Report: inversion-week-calendar-description-full-score-
+        # 2026-10-10-anthropic.md. 121 + 3 = 124.
+        "pre-classifier": 124,
     }
 
     # The named interpretation-by-pattern spans, per surface: (file, symbols).

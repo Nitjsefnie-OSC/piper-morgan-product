@@ -3980,6 +3980,35 @@ On alpha those 4 rows are served by surface 2, not the router. Before #1973 the 
 
 Ceiling: 124 → 121 with GUIDANCE (below); #1973 changed no literals.
 
+### `week_calendar` description: own-calendar clause + no-conflicts sentence (2026-10-10, Arch's 10-08 clause; rule 7 full run)
+
+The `week_calendar` rail description now says it is "the user's own calendar only — never a team's, a shared, or another person's
+calendar" and "only lists events: never use it for any question about conflicts, overlaps, double-bookings or clashes, or any yes/no
+question". Measured on the served model: "show the team calendar" / "show the team schedule" → NONE (were week_calendar @0.72),
+"pull up my schedule" → week_calendar @0.85 (was meeting_time @0.72), "is there a conflict on my calendar" → NONE. Full run 455/515, 0
+errors (`inversion-week-calendar-description-full-score-2026-10-10-anthropic.md`, with the ×6 attribution table of every row that
+moved). One candidate-attributed read→read move disclosed: "where should my focus be today" attention_query → get_top_priority
+(PPM re-judge requested). The rest of the held batch (todo-query, priority descriptions) was dropped: the todo-query edit caused
+regressions in every wording tried. CXO's served floor probe on alpha ("show the team calendar": says it can only see the user's own
+calendar, never invents a team's) is still owed after the next promotion.
+
+**Three #1973-shape restores (2026-10-10, Lead; from the same full run).** Under Arch's #1973 ruling (issue 1973, comment
+6091429803) the full run flagged 8 ledger rows; 2 are credited by surface-2 probes with no restore ("what am I working on?" STATUS and
+"what risk do we have in this plan" ANALYSIS, rule 3 + rule 4, READ ops), and the restored literals are, verbatim from the parent of
+each deleting commit: `\bset\s+(?:a\s+)?reminder\b` back in REMINDER_PATTERNS ("set a reminder for the dentist appointment":
+WRITE row that fails (a) and cannot take (b) under rule 4), `\bneeds my attention\b` back in CONTEXTUAL_QUERY_PATTERNS ("this project
+needs my attention today": router swaps the destination / surface 2 lands the wrong category), and the REPO_MANAGEMENT_PATTERNS
+`connect ... repo(sitory) ... to` literal ("connect my repository to the project": WRITE row, same rule-4 reason). Ceiling 121 -> 124;
+the three lists are PARTIAL again (1 survivor each; REMINDER_PATTERNS 4 of 5 literals still deleted). Collateral reclaims are
+ledgered in `known_reabsorptions` ("what needs my attention?" agrees with attention_query). **Three rows were NOT restored, because the
+restore cannot pass the non-regression gate honestly:** "where should my focus be today" (PRIORITY `\bwhere.*focus\b` claims
+get_top_priority, the ledger expects attention_query, the router now also says get_top_priority: a re-judge, not a restore),
+"any upcoming milestones for this project" (STATUS `\bupcoming milestones?\b` claims get_project_status, ledger expects
+list_milestones, router CLARIFY) and "I need a status report" (STATUS `\bstatus report\b` claims get_project_status, ledger expects
+generate_report, router get_project_status; it would also reclaim "give me a project status report"). Two other census pins moved
+with the newly wired report: "what's the project landscape" now passes (router route live via group; literal NOT deleted) and
+"update my project name to Atlas" is now a router MATCH (ruled floor) rather than a #1933 mis-serve case.
+
 ### `read_floor_2` — a SECOND wave of FLOOR rail adapters (2026-10-03, Arch's ruling; NOT flipped)
 
 Built as its own flip group, not a widening of `read_floor` — `read_floor` is already LIVE on

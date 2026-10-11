@@ -115,6 +115,8 @@ PHASE3_REPORTS: List[Path] = [
     _P3
     / "inversion-phase3-guidance-pin-rows-score-2026-10-09-anthropic.md",  # the 6 GUIDANCE pin phrasings (#1460/#814 setup + contracts' example), rule-10 rows, served model (6/6 MATCH, 0.85-0.95)
     _P3
+    / "inversion-week-calendar-description-full-score-2026-10-10-anthropic.md",  # FULL run (577, 455/515) for the week_calendar description landing (rule 7); behind the N=5 #1973 report so conservative min-of-5 values stay first
+    _P3
     / "inversion-phase3-rule11-sweep-rows-score-2026-10-09-anthropic.md",  # the rule-11 sweep's licensing rows (GUIDANCE 3, COMPLETION_HISTORY 1) + the 3 #1117 rule-10 rows, served model; neither list deleted (#1972 hold; 0.72 sub-threshold)
     _P3
     / "inversion-phase3-rule10-llm-identity-rows-score-2026-10-09-anthropic.md",  # the 2 IDENTITY replacing rows for the llm-marked pins (Arch's rule-10 amendment), served model (2/2 MATCH)
@@ -316,6 +318,10 @@ DEPOSITS_REPORT = PHASE3_REPORTS[-1]
 # floor either way. Read, never assumed; a phrase absent from every probe
 # gets no credit.
 SURFACE2_FLOOR_PROBES: List[Path] = [
+    _P3
+    / "inversion-phase3-surface2-floor-probe-2026-10-10-n5-anthropic-nr.md",  # #1973 (b): "what am I working on?" 5/5 STATUS/get_project_status @0.95, claude-sonnet-4-6 (anthropic leg only; openai had no credits)
+    _P3
+    / "inversion-phase3-surface2-floor-probe-2026-10-10-n5-anthropic-risk.md",  # #1973 (b): "what risk do we have in this plan" 5/5 ANALYSIS (READ ops), claude-sonnet-4-6 (anthropic leg only; openai had no credits)
     _P3
     / "inversion-phase3-surface2-floor-probe-2026-10-09-n5-anthropic-1973.md",  # #1973 (b): 4 rows x 5, claude-sonnet-4-6, 20/20 same category; openai leg unmeasurable (account 429, no credits)
     _P3

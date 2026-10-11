@@ -530,8 +530,19 @@ class TestDeletedPatternListsLedger:
             r"\bimpact analysis\b",
         }
         contextual_entry = next(e for e in entries if e["list"] == "CONTEXTUAL_QUERY_PATTERNS")
-        assert contextual_entry.get("partial") is not True
-        assert contextual_entry.get("literals") == 13
+        # 2026-10-10: #1973-shape restore of `\bneeds my attention\b` -> PARTIAL.
+        assert contextual_entry.get("partial") is True
+        assert contextual_entry.get("literals") == 12
+        assert set(contextual_entry.get("surviving_literals", {})) == {
+            r"\bneeds my attention\b",
+        }
+        reminder_entry = next(e for e in entries if e["list"] == "REMINDER_PATTERNS")
+        # 2026-10-10: #1973-shape restore of `\bset\s+(?:a\s+)?reminder\b` -> PARTIAL.
+        assert reminder_entry.get("partial") is True
+        assert reminder_entry.get("literals") == 4
+        assert set(reminder_entry.get("surviving_literals", {})) == {
+            r"\bset\s+(?:a\s+)?reminder\b",
+        }
         session_activity_entry = next(
             e for e in entries if e["list"] == "SESSION_ACTIVITY_QUERY_PATTERNS"
         )
@@ -590,12 +601,13 @@ class TestDeletedPatternListsLedger:
         repo_management_entry = next(e for e in entries if e["list"] == "REPO_MANAGEMENT_PATTERNS")
         assert repo_management_entry.get("partial") is True
         assert (
-            repo_management_entry.get("literals") == 6
-        ), "literals is the CUMULATIVE deleted count (5 first pass + 1 second pass), not the original 9"
+            repo_management_entry.get("literals") == 5
+        ), "literals is the CUMULATIVE deleted count (5 first pass + 1 second pass - 1 #1973-shape restore), not the original 9"
         assert set(repo_management_entry.get("surviving_literals", {})) == {
             r"\blink\s+(?:(?:my|the|a)\s+)?(?:repo(?:sitory)?)\s+(?:to\s+)",
             r"\badd\s+(?:(?:my|the|a)\s+)?(?:repo(?:sitory)?)\s+to\s+",
             r"\bwhich\s+repos?\s+(?:are\s+)?(?:linked|connected)\b",
+            r"\bconnect\s+(?:(?:my|the|a)\s+)?(?:repo(?:sitory)?)\s+(?:to\s+)",
         }
         provenance_entry = next(e for e in entries if e["list"] == "PROVENANCE_PATTERNS")
         assert provenance_entry.get("partial") is True
@@ -1081,9 +1093,13 @@ class TestPriorityPatternsVerdictIsReported:
             "give me a project overview",
             "what's the project landscape",
         }
-        assert all(
-            not r.row_ok for r in lv.rows
-        ), "all 4 rows are the FAIL rows that keep the literal"
+        # 2026-10-10: the week_calendar full run (577, wired into
+        # PHASE3_REPORTS) re-scored "what's the project landscape" as
+        # MISMATCH-but-the-router's-own-route-is-live (the consult owns it),
+        # so that ONE row now passes; the other 3 still FAIL. It is NOT
+        # deleted here (not in the six-restore brief; flagged to Lead).
+        ok_phrases = {r.phrase for r in lv.rows if r.row_ok}
+        assert ok_phrases == {"what's the project landscape"}, ok_phrases
         assert lv.deletable is False, "a list with any FAIL row is NO-GO, not GO"
 
     def test_guidance_patterns_now_claims_zero_rows(self):
@@ -1646,9 +1662,14 @@ class TestPortfolioDeadClaimRowsAreNotMisserveCredited:
         )
         assert rec is not None, "corpus row must exist (2026-10-04 PORTFOLIO deposit)"
         assert rec.claim.pattern_list == "PORTFOLIO_PATTERNS", rec.claim
-        assert rec.row_ok is False, rec.reason
-        assert "update_document_query" in rec.reason
-        assert "WRITE/DESTRUCTIVE" in rec.reason
+        # 2026-10-10: the week_calendar full run (577) scores this phrase
+        # CLARIFY @0.4 = MATCH (ruled floor), so it is now credited by the
+        # router itself (rule 1), NOT by the #1933 mis-serve path this class
+        # guards; the mis-serve guard is still pinned by the sibling "edit my
+        # project description" row below (still MISMATCH, surface 2 lands
+        # update_document_query).
+        assert rec.row_ok is True, rec.reason
+        assert "MATCH (ruled floor)" in rec.reason
 
     def test_edit_project_description_row_is_not_misserve_credited(self):
         records, by_list = gate.build_census(cats=gate.CURRENT_LIVE_CATEGORIES)
@@ -1667,7 +1688,10 @@ class TestPortfolioDeadClaimRowsAreNotMisserveCredited:
         lv = by_list.get("PORTFOLIO_PATTERNS")
         assert lv is not None, "PORTFOLIO_PATTERNS must appear in the census"
         failing = {r.phrase for r in lv.rows if not r.row_ok}
-        assert {"update my project name to Atlas", "edit my project description"} <= failing
+        # 2026-10-10: "update my project name to Atlas" now passes on the
+        # router's own MATCH (ruled floor), see the pin above.
+        assert "edit my project description" in failing
+        assert "update my project name to Atlas" not in failing
         assert lv.deletable is False, "a list with any FAIL row is NO-GO, not GO"
 
 

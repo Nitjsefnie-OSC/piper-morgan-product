@@ -51,7 +51,14 @@ class TestReminderPreClassifierPatterns:
         routes the same phrase to create_reminder, deterministically (a
         stubbed router, no LLM)."""
         result = PreClassifier._matches_patterns(message.lower(), PreClassifier.REMINDER_PATTERNS)
-        assert result is False, f"REMINDER_PATTERNS is deleted — should no longer match: {message}"
+        # 2026-10-10 (#1973-shape restore, Lead): REMINDER_PATTERNS regained
+        # `\\bset\\s+(?:a\\s+)?reminder\\b`, so the "set (a) reminder" phrasings
+        # are claimed again at surface 1; every other phrasing here still declines.
+        restored = "set a reminder" in message.lower() or "set reminder" in message.lower()
+        assert result is restored, (
+            f"REMINDER_PATTERNS match mismatch for {message!r}: got {result}, "
+            f"expected {restored} (only the restored 'set (a) reminder' literal survives)"
+        )
         await assert_inversion_routes(
             monkeypatch,
             message,
