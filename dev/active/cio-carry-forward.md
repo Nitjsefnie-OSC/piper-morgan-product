@@ -36,3 +36,5 @@ half of a harness first; a model refusing isn't the matcher refusing (count `per
 can hide its subject (main-ci-status 20 → 100).
 
 **Criteria line**: `label:methodology,process,innovation`, baseline 5.
+
+- R3 reader switch (key: r3-reader-go; Filed 2026-10-11): at STOP 10-11, if parity is 11/11, mail Exec the go, then remove the git write after Exec confirms.
