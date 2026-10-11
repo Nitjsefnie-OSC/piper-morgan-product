@@ -21,7 +21,10 @@ lives in GitHub, this file holds only durable owed/queued items.)
   121 is still just above PPM's 110–120 band. The gate (rules 10/11 + the #1973 threshold in every arm) reads no list GO. What's left needs
   router/catalog work or new rows: COMPLETION_HISTORY (#1117 row @0.72; 4 rule-10 holds), the greeting/thanks/farewell family (rule-10 holds;
   pleasantry is NOT ROUTING), STAKEHOLDER (#1256, blocked on DOCUMENT_QUERY's loose "update … with", rule 11), and the 3 delete-family
-  literals (#1935). Re-measured **Sun 10-11: 127 / 97** with the sizing table (memo 3e71c8297: ~35 served calls buy the rule-10 bucket; the router bucket costs a full run per candidate; nothing else moves on spend). Mon 10-12: confirm main unchanged, else re-measure. PORTFOLIO partial (2) lane running 10-11.
+  literals (#1935). Re-measured **Sun 10-11: 127 / 97** with the sizing table (memo 3e71c8297: ~35 served calls buy the rule-10 bucket; the router bucket costs a full run per candidate; nothing else moves on spend). Mon 10-12: confirm main unchanged, else re-measure. PORTFOLIO partial (2) HELD 10-11: `update … project` is a ruled survivor (#1933 option a); the show/list/view literal needs
+  corpus rows for 5 pin phrasings ("show my archived projects", "show archived projects", "view my archived projects", "show my projects",
+  "list my archived projects (show all names)") plus a look at the #1738 single-intent guard before any pin converts. Arch asked for a
+  per-literal ruled-survivor mark in the gate so the census stops licensing it.
 - **#1970 — router framing DEFERRED (Arch option c, 10-10)** — **Filed**: 2026-10-10 · landed: step-1 plumbing (flag off), the inert
   scorer framing column + mapping, and the `_EXECUTE_RE` ratchet (MAX_EXECUTE_ALTERNATIVES 39, justified-bump rule). The prompt stays on
   `claude/lead-1970-framing-prompt-held` (not merged). **Retry trigger**: every `framing: declarative|question` row reads ambiguous at N=5
