@@ -39,8 +39,7 @@ lives in GitHub, this file holds only durable owed/queued items.)
 - **Post-landing follow-ups (10-10 evening)** — **Filed**: 2026-10-10 · (1) **Gate evaluator disagreement** (lane's finding): `--list` census
   credits restored STATUS/PRIORITY literals as deletable (GO) while `check_deleted_entry_non_regression` refuses them; they differ on liveness
   for FLOOR actions (get_project_status, get_top_priority). Report to Arch; one liveness source for both. Until fixed, the census GO on those
-  lists is NOT a licence. (2) "I need a progress report": CXO/PPM re-point to get_project_status has no served support (router
-  generate_report; surface-2 SYNTHESIS 5/5). Ask CXO: keep generate_report, or restore `\bprogress report\b` claiming get_project_status.
+  lists is NOT a licence. (2) CLOSED 10-10 19:3x: CXO withdrew the progress-report re-point; the row stays generate_report, no literal bought.
   (3) `\bstatus report\b` re-delete waits on (1). (4) PPM recounts the ceiling (127) after the merge.
 
 - **Three description-change candidates** (Arch: worth doing for their own sake, each its own rule-7 run, my timing) — **Filed**: 2026-10-10 ·
