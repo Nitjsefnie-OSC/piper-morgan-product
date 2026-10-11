@@ -4069,7 +4069,10 @@ def register_default_workflows() -> None:
         (
             _qentry(
                 run_todo_query_workflow,
-                "todo list/next query via action dispatch",
+                "List the user's todos or tasks as they stand — show my todos, "
+                "list my tasks, what are my todos, today's tasks, my to-do list — "
+                "a plain listing, not ranked by urgency, which is attention_query "
+                "(#1595)",
                 # effect: READ — delegates to _handle_execution_intent, but the
                 # ONLY actions registered on this entry (list_todos_query /
                 # list_completed_todos / next_todo_query) map to list_todos /
