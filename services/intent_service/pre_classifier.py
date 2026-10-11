@@ -169,8 +169,9 @@ class PreClassifier:
 
         Blank every claimed span out of the message, strip the #1416
         pleasantry/filler patterns (what ``_is_pleasantry_only`` strips), then
-        look for a coordination marker followed by >= 2 content words before
-        the next marker / end, in a clause NO claim span touches (a span is
+        cut the message into clauses at the coordination markers (the leading
+        clause included) and look for one with >= 2 content words that NO
+        claim span touches (a span is
         the matched keyword only, so "... and what branch are we on" is a
         claimed clause even though "are we on" lies outside the span; the
         plain blank-the-spans reading over-declined 26 real two-claim splits
@@ -195,9 +196,17 @@ class PreClassifier:
                     pattern, lambda m: " " * len(m.group(0)), residue, flags=re.IGNORECASE
                 )
         markers = list(PreClassifier._RESIDUE_MARKER_RE.finditer(residue))
-        for idx, marker in enumerate(markers):
-            c_start = marker.end()
-            c_end = markers[idx + 1].start() if idx + 1 < len(markers) else len(residue)
+        if not markers:
+            return None
+        # Every clause the markers cut the message into — INCLUDING the one
+        # before the first marker ("list my archived projects and summarize my
+        # current work": with only the STATUS half claimed, the dropped half is
+        # the LEADING clause; Lead's review of the first cut, 2026-10-11).
+        bounds = [(0, markers[0].start())] + [
+            (m.end(), markers[i + 1].start() if i + 1 < len(markers) else len(residue))
+            for i, m in enumerate(markers)
+        ]
+        for c_start, c_end in bounds:
             # A claim anywhere inside the clause means the clause IS claimed
             # (a span is only the matched keyword, not the whole clause).
             if any(start < c_end and end > c_start for start, end in real_spans):

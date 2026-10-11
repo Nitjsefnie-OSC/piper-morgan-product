@@ -73,12 +73,15 @@ def test_disjoint_temporal_survives_connect_claim_1755():
     match). Pinned directly: only the connect/GUIDANCE half survives now,
     and it is correctly single-intent (not multi) since there is only one
     surface-1 claim left."""
+    # #1977 step 1 (2026-10-11): with TEMPORAL_PATTERNS gone, "what time is it"
+    # is an UNCLAIMED leading clause beside the connect claim, so surface 1
+    # DECLINES the whole turn rather than letting the connect handler take it
+    # and drop the time question. The corpus row (INTEGRATION_CONNECT, expected
+    # REVIEW) has the router's answer on file: get_current_time @0.9.
     result = PreClassifier.detect_multiple_intents("what time is it? also connect my github")
-    assert _resolved(result) == [
-        (IntentCategory.GUIDANCE, "get_contextual_guidance"),
-    ], f"resolved {_resolved(result)} — TEMPORAL_PATTERNS is deleted, it should never claim"
-    connect = result.intents[0]
-    assert connect.context.get("setup_target") == "github"
+    assert (
+        _resolved(result) == []
+    ), f"resolved {_resolved(result)} — step 1 declines a claim set that leaves a substantive clause"
     assert not result.is_multi_intent
 
 
@@ -175,9 +178,9 @@ async def test_classify_multiple_returns_both_parts_1755():
     (same message, same update as test_disjoint_temporal_survives_connect_
     claim_1755 above, exercised through classify_multiple instead of
     detect_multiple_intents directly)."""
-    from services.intent_service.classifier import IntentClassifier
-
-    result = await IntentClassifier().classify_multiple("what time is it? also connect my github")
-    assert _resolved(result) == [
-        (IntentCategory.GUIDANCE, "get_contextual_guidance"),
-    ]
+    # #1977 step 1 (2026-10-11): the surface-1 leg of classify_multiple
+    # (detect_multiple_intents) now declines this turn (see the test above);
+    # the LLM leg it then falls to is not exercised here (no LLM in unit tests).
+    # The corpus row carries the served answer (router get_current_time @0.9).
+    result = PreClassifier.detect_multiple_intents("what time is it? also connect my github")
+    assert _resolved(result) == []
