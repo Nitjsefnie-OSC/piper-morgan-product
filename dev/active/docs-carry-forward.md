@@ -1,6 +1,6 @@
 # Docs Carry-Forward
 
-**Updated**: 2026-10-10 19:15 PDT (19:12 fire quiet). Known fault: bare `gh` hangs on Amber since the 10-10 reboot (Pard); prefix `GODEBUG=netdns=go`, a bare timeout means "unverified". History of earlier states lives in the session logs (`dev/2026/10/{04..10}/*docs-code-log.md`), not here.
+**Updated**: 2026-10-11 08:20 PDT (08:04 fire). Known fault: bare `gh` hangs on Amber since the 10-10 reboot (Pard); prefix `GODEBUG=netdns=go`. History in session logs (`dev/2026/10/{04..11}/*docs-code-log.md`), not here.
 
 ## Done this fire (04:12)
 - 10-09 omnibus (`adba285845`, 540 lines, 15 logs, 1128 commits, 574 comparable) + 15 activity rows (`a0906091be`, 2865 to 2880). Nudged HOST (10-09 log lacks DAY-CLOSED, `8e927d29ef`).
@@ -8,15 +8,15 @@
 - Notice to Exec that the crosspost is owed (`afdcc5345`).
 
 ## OWED (PM's hand)
-- Nothing for No Undo: FULLY DISTRIBUTED 10-10 (LinkedIn pulse + Medium URLs from PM in conversation; row `distributed`, `canonicalSite` `distributed`, validator 0 errors).
-- `published` with an empty pubDate: "15 Sessions, Fast Recovery" (outside Step 1f's 7-day window, age unverified). Step 1f's 7-day window is otherwise empty.
+- **Crossposts for "It Doesn't Count if You Skip It"** (insight, published 10-11, website `a319f1d`): Medium + LinkedIn owed. Row is `published`, `canonicalSite` empty. When PM gives URLs: set mediumURL/linkedinURL/liPubDate, status + `canonicalSite` `distributed`. Step 1f resurfaces it each fire.
+- `published` with an empty pubDate: "15 Sessions, Fast Recovery" (outside Step 1f's window, age unverified).
 
 ## Unclosed logs / awaiting
 - HOST 10-09 log: no DAY-CLOSED (nudge sent). Spec's 10-08 log unclosed, no Spec 10-09 log, seat looks dormant. Re-check at the next START (Step 1d).
 - Roadmap v19.0 fold LANDED (`aca130a366`). I re-audited it and **closed #1644** (05:3x). Reply to PPM filed (`114a882b5`). Enterprise milestone date (GitHub 2028-10-30 vs decisions.log 2027-10-30) is PM's via Exec, PPM routed it, nothing owed from Docs. Exec (cc, read 05:4x) will relay PM's 2027/2028 answer to PPM and Docs; no Docs edit unless asked.
 
 ## NEXT (named triggers)
-- **Sun 10-11 04:12**: PUBLISH "It Doesn't Count if You Skip It" (insight, `ready-for-docs`, Comms memo read 10:58, ack sent). Pre-flight and dry-run already clean 10-10. START heartbeat first, re-sync both worktrees, re-diff, then real run: `node scripts/publish-post.js --draft ... --image ...png --slug it-doesnt-count-if-you-skip-it --category insight --work-date 2026-09-12` and fix pubDate to 2026-10-11 (script defaults to today). Then archive draft + image, update `draftPath`, set row `published` + blogURL/blogPath, verify live by body phrase (deploy lag ~1-2 min), remind PM Medium + LinkedIn owed (insight).
+- **Tue 10-13**: "Giving It Away, and Wondering Who May Want It" is `drafted`. Publish only after Comms sets `ready-for-docs` and sends a publish-ready memo, same pre-flight.
 - **Mon 10-12**: Weekly Docs Audit. `roadmap.md` flag is CLEAR (fold landed 10-10, audited). Mention only the Enterprise date discrepancy as PM-pending.
 - **~11-30**: glossary 60-day re-verify.
 
