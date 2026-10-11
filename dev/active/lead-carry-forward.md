@@ -49,10 +49,10 @@
   PA's MCP deploy + live check, PM's snapshot + re-encrypt (`reencrypt_github_secrets_1982.py`, dry run then `--apply --snapshot`).
   **Mine when the report reads `legacy=0`: flip `GITHUB_LEGACY_CONTEXT_FALLBACK` to False in the commit that records the count.**
   Open with Arch: PAT-only users are CONNECT_REQUIRED on MCP (Settings saves the PAT only to the hosted keychain, per-user context);
-  Arch said yes (10-11 15:5x). **Built and HELD** on `claude/lead-1982-pat-dual-write` (c33c14467b, on origin). Land when PA relays
+  Arch said yes (10-11 15:5x) and confirmed `security_check=False` with three conditions, all built. **Built and HELD** on
+  `claude/lead-1982-pat-dual-write` (4400ee3d9f, on origin). Land when PA relays
   that PM's PAT-only alpha test is done (and before the MCP live check if PM's account is PAT-only): merge into cycle, push main,
-  issue comment, decisions.log. Open with Arch: the `security_check=False` deviation (memo 16:13); if reversed, move the dual write
-  before the keychain write instead.
+  issue comment, decisions.log. Nothing open with Arch on it.
 - **Mint grant** is on no seat since the 10-09 restart (HOST's dry run denied 10-11); HOST asked Exec to put the re-add on xian's
   card. Lead mints nothing. PA's PAT-only invite waits on that.
 - **#1958** fixed on main; served check after the NEXT promotion (also CXO's "show the team calendar" floor probe).
