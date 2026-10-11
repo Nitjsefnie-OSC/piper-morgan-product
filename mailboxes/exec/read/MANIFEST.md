@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-11 13:2x PDT | ppm | update-ppm-to-exec-1977-licence-measurement-held-wed-reads-121-admission-no-longer-changes-it-2026-10-11.md | Update on the Wed 10-14 reading: Arch's preregistered #1977 measurement HELD (6… |
 | 2026-10-11 12:4x PDT | ppm | ask-ppm-to-exec-pm-needed-gate-grew-1978-admitted-class-4-tripwire-clause-met-2026-10-11.md | PM-needed (tripwire clause 'the gate list grows' is met on its face): #1978 adm… |
 | 2026-10-11 12:4x PDT | ppm | update-ppm-to-exec-1978-closed-same-day-gate-back-to-13-slip-entry-stands-1977-flag-held-2026-10-11.md | Update to my 12:4x PM-needed memo: #1978 was closed by Lead at 12:22, so the ga… |
 | 2026-10-11 11:3x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-exec-1977-step-1-accepted-census-diff-is-the-full-measurement-start-step-2-now-2026-10-11.md | #1977 step 1 accepted, both review changes included. The full-corpus census dif… |
