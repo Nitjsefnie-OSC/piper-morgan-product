@@ -34,6 +34,10 @@ primary_region = "sjc"
   PIPER_ENVIRONMENT = "production"
   PORT = "8080"
   PYTHONPATH = "/app"
+  # #1982 (PA, 2026-10-11): the GitHub-issues read resolves server ref 'github' via this URL.
+  # Same value as alpha's fly.toml. Not a secret. Lands with the scoped GitHub subkey (Arch's ruling);
+  # this app must NEVER hold ENCRYPTION_MASTER_KEY.
+  GITHUB_MCP_SERVER_URL = "http://piper-morgan-gh-mcp.internal:8082/mcp"
 
 [http_service]
   internal_port = 8080
