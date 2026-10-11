@@ -87,12 +87,11 @@ def test_disjoint_temporal_survives_connect_claim_reordered_1755():
 
     #1595 Phase 3 fourth deletion: same update as the test above — the
     temporal half ("check my schedule") no longer claims at all."""
+    # #1977 (residue rule): the connect claim leaves "check my schedule"
+    # unclaimed (substantive second clause) -> surface 1 declines the turn
+    # so the whole message reaches the router/classifier.
     result = PreClassifier.detect_multiple_intents("connect my slack and check my schedule")
-    assert _resolved(result) == [
-        (IntentCategory.GUIDANCE, "get_contextual_guidance"),
-    ], f"resolved {_resolved(result)} — TEMPORAL_PATTERNS is deleted, it should never claim"
-    connect = result.intents[0]
-    assert connect.context.get("setup_target") == "slack"
+    assert _resolved(result) == []
     assert not result.is_multi_intent
 
 
@@ -139,10 +138,9 @@ def test_connect_and_temporal_disjoint_spans_1755():
     connect/GUIDANCE half survives now (same update as
     test_disjoint_temporal_survives_connect_claim_reordered_1755 above,
     which uses the identical message)."""
+    # #1977 (residue rule): declined -- see the reordered test above.
     result = PreClassifier.detect_multiple_intents("connect my slack and check my schedule")
-    assert _resolved(result) == [
-        (IntentCategory.GUIDANCE, "get_contextual_guidance"),
-    ]
+    assert _resolved(result) == []
 
 
 # ---------------------------------------------------------------------------
