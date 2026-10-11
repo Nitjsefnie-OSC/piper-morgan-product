@@ -76,3 +76,67 @@ Productivity · Project management · Developer tools (for GitHub issues)
   copy hedge ("I will not release software that doesn't offer clear data separation"). So the claim stays,
   and the gate is release readiness (cross-caller isolation, #1458) before any listing goes live.
   - **PA, 2026-10-06: gate already MET.** #1458 CLOSED 2026-10-05 22:52Z (two-caller interleaved test through the real app, pinned `user_context_service` store test with a mutation check, AST rule that every MCP handler resolves the caller; MCP v10 `e3dde4b26f`). CXO retired the re-check trigger 10-05 16:30.
+
+---
+
+## v2 DRAFT (PA, 2026-10-11): for PM's one review pass, after Comms' voice pass
+
+**Why a v2 (PM, 10-11: "for at least some users… a first impression and may set longer-term expectations"):**
+(1) v1 sells to people who can't get in: invite-only came last, with no way to ask. (2) One copy was headed
+to listings that ship different things: only the **plugin** carries the skills. Smithery, the MCP Registry
+and a plain connector listing get the **server alone** (one tool, three read-only data sources). (3) There's
+no frame for "early probe" vs "the product", so the narrow scope could read as thin. (4) Small fixes:
+"Piper… They" read as the skills; the revoke line (pending PM's revoke test); the Registry one-liner should match.
+`[INVITE LINK]` = PM to choose (an address or a page).
+
+### A. Plugin listing (Claude directory plugin bundle; OpenAI plugin)
+
+**Name:** Piper Morgan
+
+**One-liner:** A product-management colleague that turns your priorities and open GitHub issues into a daily standup and a ranked to-do list. Read-only.
+
+**Description:**
+
+Piper Morgan is a product-management colleague. Connect Piper once and your assistant can see what Piper knows about you: your organization, your active projects and stated priorities, what Piper has confirmed about how you like to work, and your open GitHub issues.
+
+Three skills put that to use:
+
+- **What Piper knows**: your profile, priorities and open issues in one place, including what Piper *doesn't* know yet.
+- **Morning standup**: a plan for today, short enough to read in thirty seconds, tied to your priorities and to specific issues.
+- **Prioritize my issues**: your open issues sorted into do first, next, and defer or drop, each with one line of reasoning, plus the biggest judgment call made, so you can overrule it.
+
+**Honest about what's missing.** When something is empty, Piper says so. The skills don't invent progress, and they label inferences as inferences. In our tests against sample data, each skill did this every time, and the same assistant without the plugin didn't.
+
+**Read-only, and yours to switch off.** The connection can't change anything in Piper or GitHub, and it can't see anyone else's data. You approve access on a Piper sign-in page, and you can remove it any time in Piper under Settings → Connected apps. *(Last clause gated on PM's revoke test.)*
+
+**An early release.** This first version reads and suggests; it doesn't act for you yet. Piper Morgan is in invitation-only alpha, and you need a Piper account to use this. Request an invitation: [INVITE LINK].
+
+### B. Server-only listing (Smithery, MCP Registry, Claude connector directory)
+
+**One-liner:** Read-only access to what Piper Morgan, a product-management colleague, knows about you: priorities, projects, working style and open GitHub issues.
+
+**Description:**
+
+Piper Morgan is a product-management colleague. This connector lets your AI assistant read what Piper knows about you, so it can plan and prioritize with real context:
+
+- your organization, active projects and stated priorities;
+- what Piper has confirmed about how you like to work;
+- your open GitHub issues, through the GitHub account you connected to Piper.
+
+Ask "What does Piper know about me?" to see all of it in one answer, empty parts included. Piper reports empty as empty and doesn't fill gaps with guesses.
+
+**Read-only, and yours to switch off.** The connector can't change anything, and it can't see anyone else's data. You approve access on a Piper sign-in page and can remove it any time in Piper under Settings → Connected apps. *(Last clause gated on PM's revoke test.)*
+
+**An early release.** Piper Morgan is in invitation-only alpha, and you need a Piper account. Request an invitation: [INVITE LINK]. For a daily standup and issue ranking built on this, see the Piper Morgan plugin.
+
+**MCP Registry `server.json` description** (Registry limit 100 chars): `Read-only access to what Piper Morgan, a product-management colleague, knows about you.` *(87 chars; the 100 limit is the schema's `maxLength`, checked 10-11.)*
+
+**Counted 10-11 (python `len`):** A one-liner 137/200; A description 1,505/2,000; B one-liner 147/200; B description ~1,000/2,000.
+
+### What changed from v1, line by line
+- Invite-only moved from a closing aside to a closing call to action, with a link.
+- New "An early release" line: says what this version does *not* do yet, so the scope reads as deliberate.
+- "Clear about what's missing / Piper reports empty as empty. They don't…" → "Honest about what's missing. When something is empty, Piper says so. The skills don't…" (the subject is now unambiguous).
+- "In our tests… each skill does this where…" → "did this every time" (sourced: `RESULTS-v0.1.0`, complete run, 1/1/1 vs 0/0/0; "every time" rather than "reliably" to avoid implying a large sample). Comms' call.
+- Revoke clause added, gated on the test.
+- A server-only variant that promises no skills.
