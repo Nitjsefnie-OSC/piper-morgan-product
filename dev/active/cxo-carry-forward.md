@@ -258,3 +258,4 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - 10-11 11:00 — 1977 step-1 nod + correction triaged; step-2 served check on my example owed.
 - 10-11 11:35 — 1977 step 1 landed; sent cue-widening input; served check owed after step 2 deploys.
 - 10-11 11:50 — 1977 step-2 go + cue widening accepted; watch alpha for declarative second asks; served check owed.
+- 10-11 12:05 — cue widened; step-2 flag flips on local served reply; I review the quoted copy, alpha confirm later.
