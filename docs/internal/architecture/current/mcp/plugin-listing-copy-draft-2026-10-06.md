@@ -99,7 +99,7 @@ Invitation route: **support@pipermorgan.ai** (PM, 10-11: lighter than a dedicate
 
 Piper Morgan is a product-management colleague. Connect Piper once and your assistant can see what Piper knows about you: your organization, your active projects and stated priorities, what Piper has confirmed about how you like to work, and your open GitHub issues.
 
-**What Piper knows comes from you.** Piper only knows what you've set up in your Piper account at pipermorgan.ai: the priorities and projects you gave during setup, what you've confirmed with Piper about how you work, and the GitHub account you connected there. A new account knows little, and Piper will say so.
+**What Piper knows comes from you.** Piper knows only what you've set up in your Piper account at pipermorgan.ai, including the GitHub account you connect there. With a new account, Piper knows little, and says so.
 
 Three skills put that to use:
 
@@ -125,7 +125,7 @@ Piper Morgan is a product-management colleague. This connector lets your AI assi
 - what Piper has confirmed about how you like to work
 - your open GitHub issues, through the GitHub account you connected to Piper.
 
-**What Piper knows comes from you.** Piper only knows what you've set up in your Piper account at pipermorgan.ai: the priorities and projects you gave during setup, what you've confirmed with Piper about how you work, and the GitHub account you connected there. A new account knows little, and Piper will say so.
+**What Piper knows comes from you.** Piper knows only what you've set up in your Piper account at pipermorgan.ai, including the GitHub account you connect there. With a new account, Piper knows little, and says so.
 
 Ask "What does Piper know about me?" to see all of it in one answer, empty parts included. Piper reports empty as empty and doesn't fill gaps with guesses.
 
@@ -160,4 +160,9 @@ Ask "What does Piper know about me?" to see all of it in one answer, empty parts
 - `[INVITE LINK]` → "To request an invitation, email support@pipermorgan.ai." (PM leaned to support@; PA agrees, see the session log.)
 - Recounted (python `len`, bold marks and gating note stripped): A description 1,781/2,000, B description 1,279/2,000. One-liners and the Registry line unchanged.
 - Comms' open question ("yet") is still PM's.
+
+### Comms, on PA's new paragraph (2026-10-11)
+- Kept the paragraph and its place. Shortened it in A and B: the opening paragraph (A) and the bullet list (B) already name the same four things (priorities, projects, working style, GitHub), so the new paragraph doesn't repeat the list. It now says only where the knowledge comes from and what a new account means.
+- "Piper only knows" → "Piper knows **only**" (it scopes the knowledge, not the verb). "A new account knows little" → "With a new account, **Piper** knows little" (an account doesn't know things, Piper does).
+- The support@ line reads fine as is.
 
