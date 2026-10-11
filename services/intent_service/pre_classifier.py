@@ -175,7 +175,12 @@ class PreClassifier:
         r"list|show|tell|give|get|find|check|summarize|summarise|connect|link|add|create|"
         r"delete|remove|clear|mark|complete|finish|schedule|remind|set|open|close|reopen|"
         r"update|edit|archive|restore|search|look|pull|fetch|send|write|draft|explain|"
-        r"help|let|make|run|start|stop|cancel|move|rename|describe|analyze|analyse|review"
+        r"help|let|make|run|start|stop|cancel|move|rename|describe|analyze|analyse|review|"
+        # Request-statements (CXO 2026-10-11, Arch-ruled): "I need X too" is a
+        # request in polite grammar, not an aside. This cue may GROW, but only
+        # in the direction that makes surface 1 decline more (ADR-080 D6).
+        r"i\s+need|i\s+want|i'?d\s+like|i\s+would\s+like|i'?d\s+love|let\s+me\s+see|give\s+me|"
+        r"can\s+i\s+(?:get|see|have)"
         r")\b",
         re.IGNORECASE,
     )

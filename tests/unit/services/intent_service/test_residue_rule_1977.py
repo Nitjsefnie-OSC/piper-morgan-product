@@ -77,3 +77,63 @@ class TestSingleEntryParity:
     def test_single_claim_without_residue_still_claims(self):
         intent, name = PreClassifier.pre_classify_with_pattern_list("summarize my current work")
         assert name == "STATUS_PATTERNS" and intent is not None
+
+
+# ---------------------------------------------------------------------------
+# Widened ask cue (CXO + Arch, 2026-10-11): request-statements ("I need", "I want",
+# "I'd like", "I'd love", "let me see", "give me", "can I get/see/have") are asks.
+# Gated on the mid-flow-correction sentinels: a correction joined by a marker
+# must not be pulled off its handler.
+# ---------------------------------------------------------------------------
+import pytest as _pytest
+
+from services.intent_service.pre_classifier import PreClassifier as _PC
+
+
+@_pytest.mark.parametrize(
+    "message",
+    [
+        "summarize my current work and I need the archived list too",
+        "summarize my current work and give me the archived list",
+        "summarize my current work and I'd like the archived list as well",
+    ],
+)
+def test_request_statement_second_ask_declines(message):
+    """The declarative second ask was the named trade of the first cut; with the
+    widened cue it declines like an imperative one (the list half is no longer
+    dropped silently by the STATUS claim)."""
+    assert _PC.detect_multiple_intents(message).intents == []
+    assert _PC.pre_classify(message) is None
+
+
+@_pytest.mark.parametrize(
+    "message",
+    [
+        # #1856 turn 2 — an aside joined to the claim: stays claimed.
+        "we're going in circles now and no that is not the name of the new project",
+        # a marker-joined correction that CARRIES the claim: the trailing clause
+        # is touched by the claim span, so it is not unclaimed.
+        "we're going in circles and I want the new project called Atlas",
+    ],
+)
+def test_mid_flow_corrections_stay_with_the_add_project_handler(message):
+    intents = _PC.detect_multiple_intents(message).intents
+    assert [(i.category.value, i.action) for i in intents] == [("portfolio", "manage_portfolio")]
+    assert _PC.pre_classify(message) is not None
+
+
+@_pytest.mark.parametrize(
+    "message",
+    [
+        "we're going in circles and I want it called Atlas",
+        "that's wrong, and I need the name to be Atlas",
+        "no, I want it called Atlas",
+    ],
+)
+def test_corrections_without_a_claim_were_never_surface_1_turns(message):
+    """Arch's sentinel shapes: no surface-1 literal matches these at all, so
+    surface 1 did not claim them before the cue and does not after — the
+    active-process machinery, not surface 1, owns a mid-flow correction with
+    no claim. Pinned so a future literal cannot quietly start claiming them."""
+    assert _PC.detect_multiple_intents(message).intents == []
+    assert _PC.pre_classify(message) is None

@@ -4054,6 +4054,13 @@ HAND_ROWS = [
         "notes": "rule-10 pin phrasing for the show/list/view-projects literal (2026-10-11 deposit, Arch-approved; CXO: a plain portfolio read); origin=test",
     },
     {
+        "phrase": "summarize my current work and I need the archived list too",
+        "category": "STATUS",
+        "expected": "plan",
+        "source": "phase3-1977/request-statement second ask (CXO + Arch 2026-10-11)",
+        "notes": "RULED 2026-10-11 (Arch): the declarative second ask named as the first cut's trade; with the widened ask cue surface 1 declines it (STATUS claim + unclaimed 'I need the archived list too'). Ordered ops session_activity_query -> list_archived_projects. Served 2026-10-11: PLAN[session_activity_query->list_archived_projects] 6/6 (Haiku 4.5)",
+    },
+    {
         "phrase": "Where did you get that from?",
         "category": "PROVENANCE",
         "expected": "action:explain_suggestion",

@@ -111,6 +111,8 @@ _P3 = ROOT / "docs" / "internal" / "architecture" / "current"
 # wire the reports at the FRONT in the same commit that updates the rows and the pins.
 PHASE3_REPORTS: List[Path] = [
     _P3
+    / "inversion-phase3-1977-trade-row-score-2026-10-11-anthropic.md",  # the #1977 request-statement plan row ("… and I need the archived list too"), PLAN[session_activity_query→list_archived_projects], 1 call (6/6 on the control)
+    _P3
     / "inversion-phase3-rule10-portfolio-rows-score-2026-10-11b-anthropic.md",  # the 20 PORTFOLIO rule-10 rows incl. the #1884 two-topic PLAN row (Arch 2026-10-11: a pinned surface-1 split becomes a plan row) and the 2 test_portfolio_patterns phrasings; supersedes the 10-11 (a) portfolio report for its rows
     _P3
     / "inversion-phase3-rule10-completion-history-rows-score-2026-10-11b-anthropic.md",  # the 7 COMPLETION_HISTORY rule-10 rows (4 per-literal + 3 pin phrasings from test_completion_history_routes_to_status_not_temporal), served Haiku 4.5; supersedes the 10-11 (a) report for its rows
