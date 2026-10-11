@@ -384,6 +384,12 @@ def refuse_master_key(environ=None) -> None:
     A mechanism, not a memory: the ruling that MCP never gets the master key is
     enforced where the process starts, so a well-meant ``fly secrets set`` on the
     wrong app produces a crash loop, never a quietly over-privileged server.
+
+    Called from ``main_mcp.main()`` (the process entrypoint Fly runs), NOT from
+    :func:`build_asgi_app`: the test suite builds this app in a process that
+    legitimately carries a test master key for the alpha-side encryption tests
+    (CI exports one for the whole run), and the first cut of this guard inside
+    the factory turned 28 MCP server tests red on main (2026-10-11).
     """
     env = os.environ if environ is None else environ
     if env.get(MASTER_KEY_ENV):
@@ -414,7 +420,6 @@ def build_asgi_app() -> ASGIApp:
     FastMCP app (bearer auth, routing, the resource/tool handlers
     themselves).
     """
-    refuse_master_key()
     mcp = build_mcp_server()
     inner_app = mcp.streamable_http_app()
     mcp_path = mcp.settings.streamable_http_path

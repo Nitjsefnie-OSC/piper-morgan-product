@@ -26,7 +26,7 @@ HOST = os.environ.get("PIPER_MCP_HOST", "0.0.0.0")
 
 
 def main() -> None:
-    refuse_master_key()  # #1982: before anything else, and again inside build_asgi_app()
+    refuse_master_key()  # #1982: the one place the guard lives (see its docstring)
     app = build_asgi_app()
     logger.info("mcp_server_starting", host=HOST, port=PORT, service="piper-morgan-mcp")
     uvicorn.run(app, host=HOST, port=PORT, log_level="info")

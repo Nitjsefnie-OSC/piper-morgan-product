@@ -289,12 +289,15 @@ class TestMasterKeyGuard:
         refuse_master_key({})  # absent → silent
         refuse_master_key({ENV_MASTER_KEY: ""})  # empty → silent (unset, not present)
 
-    def test_build_asgi_app_refuses_with_master_key(self, monkeypatch):
+    def test_build_asgi_app_does_not_carry_the_guard(self, monkeypatch):
+        """The guard lives at the process entrypoint, not in the app factory: the
+        suite builds this app in a process that carries a test master key for the
+        alpha-side tests (CI exports one), and a factory-level guard turned 28 MCP
+        server tests red on main. Pin the placement so it is not re-added by reflex."""
         from services.mcp.server.app import build_asgi_app
 
         monkeypatch.setenv(ENV_MASTER_KEY, MASTER_B64)
-        with pytest.raises(RuntimeError):
-            build_asgi_app()
+        assert build_asgi_app() is not None
 
     def test_main_mcp_refuses_before_serving(self, monkeypatch):
         import main_mcp
