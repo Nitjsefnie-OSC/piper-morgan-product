@@ -46,7 +46,11 @@ class ProviderKeyValidator:
                 "prefixes": ["sk-ant-"],
                 "min_length": 100,
                 "max_length": 120,
-                "pattern": r"^sk-ant-[A-Za-z0-9\-_]{100,}$",
+                # 2026-10-11 (#1978): keys issued from a pipermorgan.ai org workspace are
+                # 106 chars (99 after the prefix); the old {100,} floor refused a working
+                # key. Anthropic does not document a fixed length — keep the prefix and a
+                # sane floor, never a ceiling.
+                "pattern": r"^sk-ant-[A-Za-z0-9\-_]{40,}$",
                 "description": "Anthropic API key (starts with 'sk-ant-')",
             },
             "github": {

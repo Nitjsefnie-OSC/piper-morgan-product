@@ -415,3 +415,16 @@ class TestValidationResult:
         assert result.valid is True
         assert len(result.warnings) == 1
         assert "test pattern" in result.warnings[0]
+
+
+def test_anthropic_key_of_106_chars_passes_format_1978():
+    """#1978 (2026-10-11): a working Anthropic key issued from an org workspace is
+    106 chars (99 after `sk-ant-`); the previous `{100,}` floor refused it in
+    Settings and in UserAPIKeyService.store_user_key. Prefix + a sane floor only."""
+    from services.security.provider_key_validator import ProviderKeyValidator
+
+    v = ProviderKeyValidator()
+    ok_key = "sk-ant-" + "A" * 99
+    assert v.validate_format("anthropic", ok_key).valid is True
+    assert v.validate_format("anthropic", "sk-ant-" + "A" * 20).valid is False
+    assert v.validate_format("anthropic", "sk-proj-" + "A" * 99).valid is False
