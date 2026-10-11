@@ -3277,7 +3277,10 @@ class TestExtractionPatternRatchet:
         #
         # 122 -> 121 (2026-10-11): PRIORITY `\\bwhere.*focus\\b` re-deleted under
         # misserved_at_deletion (CXO withdrew the survivor status).
-        "pre-classifier": 121,
+        #
+        # 121 -> 120 (2026-10-11): PORTFOLIO partial, the show/list/view-projects
+        # literal (PORTFOLIO_LIST_PATTERN constant removed with it).
+        "pre-classifier": 120,
     }
 
     # The named interpretation-by-pattern spans, per surface: (file, symbols).

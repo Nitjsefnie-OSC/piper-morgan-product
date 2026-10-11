@@ -356,6 +356,10 @@ class TestPhantomStatusSiblingSubsumed:
         ],
     )
     def test_portfolio_list_claim_is_single_intent(self, message):
+        """2026-10-11 (#1595): the PORTFOLIO list literal is deleted, so there
+        is no surface-1 PORTFOLIO claim for these four rule-10 corpus rows. The
+        #1738 guard stays BEHAVIOURAL: no phantom get_project_status sibling may
+        be stapled to a listing, and the turn is not multi-intent."""
         result = PreClassifier.detect_multiple_intents(message)
         actions = [(i.category, i.action) for i in result.intents]
         assert not result.is_multi_intent, (
@@ -363,9 +367,30 @@ class TestPhantomStatusSiblingSubsumed:
             f"get_project_status sibling is what stapled 'I wasn't able to check "
             f"on project status…' onto a SUCCESSFUL listing (#1738 defect 2)"
         )
-        assert len(result.intents) == 1
-        assert result.intents[0].category == IntentCategory.PORTFOLIO
-        assert result.intents[0].action == "manage_portfolio"
+        assert not any(i.action == "get_project_status" for i in result.intents), actions
+        assert result.intents == [], actions
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        "message,expected_action",
+        [
+            ("list my archived projects", "list_archived_projects"),
+            ("list my archived projects (show all names)", "list_archived_projects"),
+            ("show my projects", "list_projects"),
+            ("list my projects", "list_projects"),
+        ],
+    )
+    async def test_portfolio_list_routes_via_inversion(self, monkeypatch, message, expected_action):
+        from tests.unit.services.intent_service._inversion_pin_helper import (
+            assert_inversion_routes,
+        )
+
+        await assert_inversion_routes(
+            monkeypatch,
+            message,
+            live_categories="read_status",
+            expected_action=expected_action,
+        )
 
     def test_pure_status_ask_keeps_status(self):
         """Control: no PORTFOLIO claim → STATUS untouched.

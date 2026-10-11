@@ -647,9 +647,9 @@ class TestDeletedPatternListsLedger:
         portfolio_entry = next(e for e in entries if e["list"] == "PORTFOLIO_PATTERNS")
         assert portfolio_entry.get("partial") is True
         assert (
-            portfolio_entry.get("literals") == 1
-        ), "literals is the DELETED count, not the original 16"
-        assert len(portfolio_entry.get("surviving_literals", {})) == 15
+            portfolio_entry.get("literals") == 2
+        ), "literals is the DELETED count (search 2026-10-09, show/list/view 2026-10-11), not the original 16"
+        assert len(portfolio_entry.get("surviving_literals", {})) == 14
 
     def test_real_ledger_entries_pass_non_regression(self):
         """Every entry in the real (now non-empty) ledger passes

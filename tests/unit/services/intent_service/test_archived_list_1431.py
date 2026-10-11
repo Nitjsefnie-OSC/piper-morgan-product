@@ -50,28 +50,67 @@ from services.shared_types import IntentCategory
 
 
 class TestArchivedListReachability:
+    """2026-10-11 (#1595): PORTFOLIO_PATTERNS' show/list/view-projects literal
+    is DELETED (gate GO partial; each phrasing below has a rule-10 corpus row
+    scoring list_archived_projects / list_projects, live via group). Surface 1
+    no longer claims them; the Inversion layer routes them (router stubbed, no
+    LLM). The handler seam below (the #1431 narrowing inside
+    ``_handle_portfolio_query``) is unchanged and still tested directly."""
+
     @pytest.mark.parametrize(
         "message",
         [
             "list my archived projects",
-            "List my archived projects",
+            "List my archived projects",  # case variant of the corpus row
             "show my archived projects",
             "show archived projects",
             "view my archived projects",
         ],
     )
-    def test_archived_list_claimed_by_portfolio(self, message):
-        intent = PreClassifier.pre_classify(message)
-        assert intent is not None, f"pre-classifier did not claim {message!r}"
-        assert intent.category == IntentCategory.PORTFOLIO
-        assert intent.action == "manage_portfolio"
+    def test_archived_list_declines_at_surface_one(self, message):
+        assert (
+            PreClassifier.pre_classify(message) is None
+        ), f"pre-classifier unexpectedly still claims {message!r}"
 
-    def test_plain_list_still_claimed_by_portfolio(self):
-        """Regression guard: the active-list phrasing keeps its claim."""
-        intent = PreClassifier.pre_classify("list my projects")
-        assert intent is not None
-        assert intent.category == IntentCategory.PORTFOLIO
-        assert intent.action == "manage_portfolio"
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        "message",
+        [
+            "list my archived projects",
+            "show my archived projects",
+            "show archived projects",
+            "view my archived projects",
+        ],
+    )
+    async def test_archived_list_routes_via_inversion(self, monkeypatch, message):
+        from tests.unit.services.intent_service._inversion_pin_helper import (
+            assert_inversion_routes,
+        )
+
+        await assert_inversion_routes(
+            monkeypatch,
+            message,
+            live_categories="read_status",
+            expected_action="list_archived_projects",
+        )
+
+    def test_plain_list_declines_at_surface_one(self):
+        """The active-list phrasing ("list my projects", corpus row, router
+        list_projects @0.99) declines too."""
+        assert PreClassifier.pre_classify("list my projects") is None
+
+    @pytest.mark.asyncio
+    async def test_plain_list_routes_via_inversion(self, monkeypatch):
+        from tests.unit.services.intent_service._inversion_pin_helper import (
+            assert_inversion_routes,
+        )
+
+        await assert_inversion_routes(
+            monkeypatch,
+            "list my projects",
+            live_categories="read_status",
+            expected_action="list_projects",
+        )
 
 
 # ---------------------------------------------------------------------------
