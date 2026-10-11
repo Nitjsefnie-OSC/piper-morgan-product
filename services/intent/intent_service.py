@@ -452,11 +452,10 @@ class IntentService:
           answered; **the leftover clause is ALWAYS named** (the #1884 shape:
           STATUS served, "I need the archived list too" named). Never omitted —
           omitting it is the silent drop again.
-        * served category matches NO declined claim → which half the model answered
-          is unknown; name BOTH the leftover clause and the declined claim's clause,
-          leftover first, capped at two ("an 'I haven't done' about a half the model
-          did answer is the smaller error; leaving out a half nobody answered is
-          the larger" — Arch).
+        * served category matches NO declined claim → NOTHING (CXO 12:55, withdrawing
+          "name both": the floor saw the whole message and, measured 7/8, answered
+          both halves; a line there was false every time). The 1/8 "neither" is a
+          measured known miss on the row, not something this line can fix.
         * no declined claim recorded → the leftover clause alone.
 
         The ``hint`` (what a bare "yes" re-submits through the #852 offer rail) is
@@ -471,18 +470,18 @@ class IntentService:
         declined = ctx.get("declined_claims") or []
         served = getattr(getattr(intent, "category", None), "value", None)
         covered = any(category_value == served for category_value, _a, _c in declined)
-        leftover = IntentService._trim_clause(residue)
-        named: List[str] = [leftover] if leftover else []
         if declined and not covered:
-            for _category_value, _action, clause_text in declined:
-                trimmed = IntentService._trim_clause(clause_text) if clause_text else None
-                if trimmed and trimmed not in named:
-                    named.append(trimmed)
-                if len(named) >= 2:
-                    break
-        if not named:
+            # COVERED BRANCH ONLY (CXO 12:55 + Lead's 8-probe measurement, 2026-10-11):
+            # when the served category matches no declined claim, the LLM floor saw
+            # the WHOLE message and — measured 7 of 8 — answered both halves in
+            # prose; a line here was a FALSE "I haven't done" every time it fired
+            # ("… the cat joke …" under the joke). Say nothing, arm nothing. The one
+            # "neither" in eight is a measured known miss recorded on the row.
             return None
-        return named, (leftover or named[0])
+        leftover = IntentService._trim_clause(residue)
+        if not leftover:
+            return None
+        return [leftover], leftover
 
     @staticmethod
     def _unanswered_half_line(intent: Intent) -> Optional[str]:

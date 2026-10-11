@@ -66,7 +66,7 @@ class TestUnansweredHalfLine:
             == 'I haven\'t done "tell me a joke about cats" yet. Want me to?'
         )
 
-    def test_served_category_differs_declined_clause_is_unanswered(self):
+    def test_served_category_differs_says_nothing(self):
         """(b) the LLM answered the residue's side -> the declined clause is
         the unanswered one."""
         intent = _intent(
@@ -74,9 +74,9 @@ class TestUnansweredHalfLine:
             "tell me a joke about cats",
             [("status", "get_project_status", "summarize my current work")],
         )
-        assert IntentService._unanswered_half_line(intent) == (
-            'I haven\'t done "tell me a joke about cats" or "summarize my current work" yet. Want me to?'
-        )
+        # CXO 12:55 (2026-10-11): on the uncovered branch the floor saw the whole
+        # message and answered both halves 7/8 — a line here was false every time.
+        assert IntentService._unanswered_half_line(intent) is None
 
     def test_no_declined_claim_recorded_uses_the_residue(self):
         intent = _intent(IntentCategory.STATUS, "tell me a joke about cats", [])
@@ -301,7 +301,10 @@ def test_coverage_rule_served_matches_declined_claim_names_the_leftover_and_hint
     )
 
 
-def test_coverage_rule_served_matches_no_declined_claim_names_both_leftover_first_and_hints_leftover():
+def test_coverage_rule_served_matches_no_declined_claim_says_nothing():
+    """CXO 2026-10-11 12:55, withdrawing "name both": on the uncovered branch the
+    floor saw the whole message and (measured 7/8) answered both halves; a line
+    there was false every time it fired. Nothing is named, nothing is armed."""
     from services.intent.intent_service import IntentService
 
     intent = _intent_with(
@@ -309,15 +312,11 @@ def test_coverage_rule_served_matches_no_declined_claim_names_both_leftover_firs
         [("STATUS", "get_project_status", "summarize my current work")],
         "SYNTHESIS",
     )
-    named, hint = IntentService._unanswered_halves(intent)
-    assert named == ["I need the archived list too", "summarize my current work"]
-    assert hint == "I need the archived list too"
-    assert IntentService._unanswered_half_line(intent) == (
-        'I haven\'t done "I need the archived list too" or "summarize my current work" yet. Want me to?'
-    )
+    assert IntentService._unanswered_halves(intent) is None
+    assert IntentService._unanswered_half_line(intent) is None
 
 
-def test_coverage_rule_caps_at_two_and_hint_is_still_the_leftover():
+def test_coverage_rule_covered_with_two_declined_claims_still_names_only_the_leftover():
     from services.intent.intent_service import IntentService
 
     intent = _intent_with(
@@ -326,8 +325,7 @@ def test_coverage_rule_caps_at_two_and_hint_is_still_the_leftover():
             ("STATUS", "get_project_status", "summarize my current work"),
             ("PORTFOLIO", "manage_portfolio", "list my projects"),
         ],
-        "CONVERSATION",
+        "PORTFOLIO",
     )
     named, hint = IntentService._unanswered_halves(intent)
-    assert len(named) == 2 and named[0] == "tell me a joke about cats"
-    assert hint == "tell me a joke about cats"
+    assert named == ["tell me a joke about cats"] and hint == "tell me a joke about cats"
