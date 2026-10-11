@@ -1099,6 +1099,25 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
         return await self.resolve_credential(user_id)
 
     @staticmethod
+    async def _user_pat_at_rest(user_id) -> Optional[str]:
+        """#1982: the user's own PAT from the encrypted-at-rest ``user_api_keys`` row
+        (provider ``github``, context ``user_api_keys.secret.github``), read BEFORE the
+        keychain path. Settings writes both; this is the one a scoped process (the MCP
+        app) can read, because the hosted keychain table encrypts under a per-user
+        context no fixed subkey list can name. Any failure is ``None`` (next source)."""
+        uid = str(user_id or "").strip()
+        if not uid or uid == "system":
+            return None
+        try:
+            from services.security.user_api_key_service import UserAPIKeyService
+
+            async with AsyncSessionFactory.session_scope() as session:
+                return await UserAPIKeyService().retrieve_user_key(session, uid, _GITHUB) or None
+        except Exception:
+            logger.warning("GitHub PAT at-rest lookup failed", exc_info=True)
+            return None
+
+    @staticmethod
     def _user_pat(user_id) -> Optional[str]:
         """The user's OWN personal access token, or None. Never the env/system
         token for a real user: ``GitHubConfigService`` returns the env token only
@@ -1143,7 +1162,7 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
         stale = None
         if binding is not None:
             stale = _NONBOUND_REASON.get(binding.status, DegradationReason.CONNECT_REQUIRED)
-        pat = self._user_pat(user_id)
+        pat = await self._user_pat_at_rest(user_id) or self._user_pat(user_id)
         if pat:
             return GitHubCredential(
                 owner_id=getattr(binding, "owner_id", user_id),

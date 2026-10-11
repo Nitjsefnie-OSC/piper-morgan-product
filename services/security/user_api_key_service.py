@@ -24,6 +24,26 @@ from services.security.field_encryption import DecryptionError, FieldEncryptionS
 
 logger = logging.getLogger(__name__)
 
+# #358: the one HKDF context every provider's secret used to share.
+USER_SECRET_CONTEXT = "user_api_keys.secret"
+# #1982 (Arch, 2026-10-11): GitHub credentials get their OWN context so the MCP app can
+# be handed a decrypt-only subkey for exactly these rows and nothing else. ``github`` is
+# the user's own PAT (Settings → GitHub); ``github_mcp_oauth`` is the OAuth grant
+# (ConnectorGrantStore). Every other provider stays on USER_SECRET_CONTEXT.
+GITHUB_SECRET_CONTEXT = "user_api_keys.secret.github"
+GITHUB_PROVIDERS = frozenset({"github", "github_mcp_oauth"})
+# Reads of a GitHub row try GITHUB_SECRET_CONTEXT first, then the legacy shared context,
+# until scripts/reencrypt_github_secrets_1982.py reports zero legacy rows on alpha.
+# Flip to False in the same commit that records that count (HOST's condition 2).
+# A scoped process (the MCP app) never holds the legacy subkey, so the fallback is
+# skipped there by construction (``supports`` is False), not by this flag.
+GITHUB_LEGACY_CONTEXT_FALLBACK = True
+
+
+def secret_context(provider: str) -> str:
+    """The HKDF context a provider's secret is encrypted under (#1982)."""
+    return GITHUB_SECRET_CONTEXT if provider in GITHUB_PROVIDERS else USER_SECRET_CONTEXT
+
 
 class UserAPIKeyService:
     """Service for managing user-specific API keys with keychain storage"""
@@ -223,7 +243,7 @@ class UserAPIKeyService:
         # #358: also encrypt-at-rest in the DB (portable to the hosted box, which has no
         # OS keychain). None encryptor (no master key) → skip; the keychain remains the store.
         encrypted_secret = (
-            self._encryptor.encrypt(api_key, "user_api_keys.secret") if self._encryptor else None
+            self._encryptor.encrypt(api_key, secret_context(provider)) if self._encryptor else None
         )
 
         # Check if key record exists
@@ -308,6 +328,33 @@ class UserAPIKeyService:
             )  # transient, read via getattr
             return user_key
 
+    def _decrypt_secret(self, token: str, provider: str) -> Optional[str]:
+        """Decrypt a stored secret under the provider's context; ``None`` on failure.
+
+        #1982: a GitHub row written before the context split still sits under the
+        legacy shared context. Try the provider's own context first, then the legacy
+        one — only while GITHUB_LEGACY_CONTEXT_FALLBACK holds AND this process holds
+        that subkey (a scoped MCP process does not, and must not: the fallback stays
+        off its path by construction). Never logs the token or the plaintext.
+        """
+        assert self._encryptor is not None
+        context = secret_context(provider)
+        try:
+            return self._encryptor.decrypt(token, context)
+        except DecryptionError:
+            pass
+        legacy_applies = (
+            context != USER_SECRET_CONTEXT
+            and GITHUB_LEGACY_CONTEXT_FALLBACK
+            and self._encryptor.supports(USER_SECRET_CONTEXT)
+        )
+        if not legacy_applies:
+            return None
+        try:
+            return self._encryptor.decrypt(token, USER_SECRET_CONTEXT)
+        except DecryptionError:
+            return None
+
     async def retrieve_user_key(
         self, session: AsyncSession, user_id: str, provider: str
     ) -> Optional[str]:
@@ -341,13 +388,13 @@ class UserAPIKeyService:
         # #358: prefer the encrypted-at-rest secret (works on the hosted box, which has no
         # OS keychain). Fall back to the keychain for legacy / pre-migration / local rows.
         if user_key.encrypted_secret and self._encryptor:
-            try:
-                return self._encryptor.decrypt(user_key.encrypted_secret, "user_api_keys.secret")
-            except DecryptionError:
-                logger.error(
-                    f"Failed to decrypt stored secret for {user_id}/{provider}; "
-                    "falling back to keychain"
-                )
+            secret = self._decrypt_secret(user_key.encrypted_secret, provider)
+            if secret is not None:
+                return secret
+            logger.error(
+                f"Failed to decrypt stored secret for {user_id}/{provider}; "
+                "falling back to keychain"
+            )
 
         # Retrieve from keychain
         try:
@@ -644,7 +691,7 @@ class UserAPIKeyService:
         # would keep serving the OLD key after every rotation. Refresh it with the
         # new key (or clear it if no encryptor, keeping column and keychain in step).
         existing_key.encrypted_secret = (
-            self._encryptor.encrypt(new_api_key, "user_api_keys.secret")
+            self._encryptor.encrypt(new_api_key, secret_context(provider))
             if self._encryptor
             else None
         )

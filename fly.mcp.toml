@@ -30,6 +30,10 @@ primary_region = "sjc"
 [experimental]
   cmd = ["/bin/bash", "-c", "/usr/local/bin/verify-python-version.sh && exec python main_mcp.py"]
 
+# Secrets (set via `fly secrets import`, NEVER here): ENCRYPTION_SCOPED_SUBKEYS —
+# the GitHub-only decrypt subkey (#1982). ENCRYPTION_MASTER_KEY must NOT be set on
+# this app; main_mcp.py refuses to start if it is. Runbook:
+# docs/internal/operations/mcp-scoped-subkey-runbook-1982.md
 [env]
   PIPER_ENVIRONMENT = "production"
   PORT = "8080"

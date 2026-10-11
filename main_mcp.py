@@ -17,7 +17,7 @@ import uvicorn
 # Side effect: configures structlog (JSON, correlation-ready) the same way
 # every other Piper entrypoint does — reused, not reimplemented here.
 import services.infrastructure.logging.config  # noqa: F401
-from services.mcp.server.app import build_asgi_app
+from services.mcp.server.app import build_asgi_app, refuse_master_key
 
 logger = structlog.get_logger(__name__)
 
@@ -26,6 +26,7 @@ HOST = os.environ.get("PIPER_MCP_HOST", "0.0.0.0")
 
 
 def main() -> None:
+    refuse_master_key()  # #1982: before anything else, and again inside build_asgi_app()
     app = build_asgi_app()
     logger.info("mcp_server_starting", host=HOST, port=PORT, service="piper-morgan-mcp")
     uvicorn.run(app, host=HOST, port=PORT, log_level="info")

@@ -1,0 +1,88 @@
+# MCP app: GitHub-only decrypt subkey, no master key (#1982)
+
+**Ruling** (Arch, 2026-10-11, decisions.log + #1982): `piper-morgan-mcp` never holds
+`ENCRYPTION_MASTER_KEY`. It is handed a decrypt-only HKDF subkey for exactly the
+contexts it reads. `main_mcp.py` refuses to start if the master key is present.
+HOST's three conditions are acceptance criteria (#1982, second comment).
+
+## What the MCP process reads (step 5 census, Lead 2026-10-11)
+
+Traced from `main_mcp.py` → `services/mcp/server/app.py` and its imports:
+
+| Read | Table / column | Encrypted context | On MCP |
+|---|---|---|---|
+| bearer identity (`identity.py`) | `mcp_access_tokens` | none (hash column) | plain read |
+| resources / tools (`resources.py`) | `users` (id, preferences) | none | plain read |
+| GitHub OAuth grant (`github_adapter.py` → `ConnectorGrantStore`) | `user_api_keys` provider `github_mcp_oauth` | `user_api_keys.secret.github` | **subkey** |
+| GitHub PAT, at-rest row (`github_adapter._user_pat_at_rest`) | `user_api_keys` provider `github` | `user_api_keys.secret.github` | **subkey** |
+| GitHub PAT, keychain row (`github_adapter._user_pat` → `GitHubConfigService`) | `secure_credentials` name `<uid>_github_token_api_key` | `secure_credentials.<name>` (per user) | **not readable; fails closed to None** |
+| `mcp_oauth_clients.client_secret` | — | `mcp_oauth_clients.client_secret` | **never read**: the OAuth authorization server lives in alpha (`web/routers/mcp_oauth.py`); `connections.py` is alpha's settings page. MCP only verifies bearer tokens. |
+
+So the MCP app needs **one** context, `user_api_keys.secret.github`. Nothing else.
+
+**Open gap (routed to Arch 2026-10-11):** Settings → GitHub saves the PAT with
+`KeychainService.store_api_key("github_token", token, username=<uid>)`, i.e. only the
+hosted keychain table under a per-user context. No fixed subkey list can name that
+context, so a **PAT-only** user gets `CONNECT_REQUIRED` on the MCP app (alpha is
+unaffected: it holds the master key). Lead's recommendation: have the save route also
+write the PAT through `UserAPIKeyService.store_user_key(provider="github")` (and the
+clear route delete it), so the row lands under the GitHub context the MCP app holds;
+`_user_pat_at_rest` already reads it first. Not built pending Arch's word.
+
+## 1. Set the secret (PM's hand; no agent sees the value)
+
+On a machine with the master key (alpha), pipe straight into the MCP app's secrets.
+`fly secrets import` reads `NAME=VALUE` lines from stdin, which is what the script
+prints (one line, nothing else on stdout):
+
+```bash
+fly ssh console -a piper-morgan -C "python scripts/derive_subkey.py user_api_keys.secret.github" \
+  | fly secrets import -a piper-morgan-mcp
+```
+
+Then confirm `ENCRYPTION_MASTER_KEY` is NOT among the MCP app's secret names
+(`fly secrets list -a piper-morgan-mcp`). If it is, `fly secrets unset` it: the guard
+will crash-loop the app otherwise, by design.
+
+If the value ever appears in a tool output, CI log or tracked file: rotate (re-derive
+after rotating the master key). Scrubbing is not a fix.
+
+## 2. Re-encrypt the existing GitHub rows on alpha (gated; HOST condition 2)
+
+Alpha writes new GitHub rows under the new context from the moment this lands; the
+read path falls back to the legacy shared context until the re-encrypt reports zero.
+
+```bash
+# a. snapshot first — record the id
+fly volumes list -a piper-morgan-db
+fly volumes snapshots create <vol-id> -a piper-morgan-db
+fly volumes snapshots list <vol-id> -a piper-morgan-db | head -3    # newest = just now
+
+# b. dry run: census + decrypt + scratch re-encrypt, no writes
+fly ssh console -a piper-morgan -C "python scripts/reencrypt_github_secrets_1982.py"
+
+# c. apply, naming the snapshot; then the script re-reads every row and round-trips it
+fly ssh console -a piper-morgan -C "python scripts/reencrypt_github_secrets_1982.py --apply --snapshot <snapshot-id>"
+```
+
+The script prints counts and row ids only. A non-zero exit means stop and read the
+output; `--apply` refuses without `--snapshot` and refuses if any row is undecryptable.
+
+## 3. Drop the legacy fallback
+
+When step 2's final report reads `legacy=0`: set `GITHUB_LEGACY_CONTEXT_FALLBACK = False`
+in `services/security/user_api_key_service.py` in the same commit that records the count
+(issue comment + decisions.log). The MCP app never used the fallback: a scoped service
+reports `supports("user_api_keys.secret") == False`, so the branch is skipped by
+construction there, not by the flag.
+
+## Mechanism summary
+
+- `FieldEncryptionService.scoped({ctx: subkey})` / `ENCRYPTION_SCOPED_SUBKEYS=ctx=base64[,…]`:
+  decrypt-only; unlisted context → `ScopedContextError`; any encrypt →
+  `ScopedEncryptRefused` (both `DecryptionError` subclasses, so every fail-closed caller
+  keeps working). Both env vars set → hard error.
+- `secret_context(provider)`: `github` / `github_mcp_oauth` → `user_api_keys.secret.github`;
+  everything else → `user_api_keys.secret`.
+- `refuse_master_key()` in `services/mcp/server/app.py`, called from `main_mcp.main()`
+  and `build_asgi_app()`; pinned by `tests/unit/services/security/test_scoped_subkeys_1982.py`.

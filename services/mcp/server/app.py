@@ -369,6 +369,31 @@ def build_mcp_server() -> FastMCP:
     return mcp
 
 
+# #1982 (Arch's ruling, 2026-10-11): the MCP app never holds the master key. It
+# shares DATABASE_URL with alpha, so the master key (or the shared
+# "user_api_keys.secret" subkey) would hand an MCP compromise every user's
+# credentials, and a key copy cannot be undone. The MCP app is given a
+# decrypt-only subkey for exactly the contexts it reads (ENCRYPTION_SCOPED_SUBKEYS,
+# see services/security/field_encryption.py) and refuses to start otherwise.
+MASTER_KEY_ENV = "ENCRYPTION_MASTER_KEY"
+
+
+def refuse_master_key(environ=None) -> None:
+    """Fail closed at startup if the master key is present in this process (#1982).
+
+    A mechanism, not a memory: the ruling that MCP never gets the master key is
+    enforced where the process starts, so a well-meant ``fly secrets set`` on the
+    wrong app produces a crash loop, never a quietly over-privileged server.
+    """
+    env = os.environ if environ is None else environ
+    if env.get(MASTER_KEY_ENV):
+        raise RuntimeError(
+            f"{SERVICE_NAME}: {MASTER_KEY_ENV} is set in this process. The MCP app never "
+            "holds the master key (#1982). Unset it on this app and provide "
+            "ENCRYPTION_SCOPED_SUBKEYS instead."
+        )
+
+
 def build_asgi_app() -> ASGIApp:
     """The full ASGI app: MCP streamable-HTTP (bearer-identity-gated,
     per-identity rate-limited) + plain ``/health`` + ``/``, deny-by-default
@@ -389,6 +414,7 @@ def build_asgi_app() -> ASGIApp:
     FastMCP app (bearer auth, routing, the resource/tool handlers
     themselves).
     """
+    refuse_master_key()
     mcp = build_mcp_server()
     inner_app = mcp.streamable_http_app()
     mcp_path = mcp.settings.streamable_http_path
