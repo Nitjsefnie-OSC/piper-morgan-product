@@ -4427,16 +4427,16 @@ RULED_EXPECTATIONS: dict = {
         "RULED 2026-10-01 (CXO; PPM conceded): was action:get_project_status — an OWNERSHIP question; attention_query is an urgency aggregate and no assigned-to-me op exists",
     ),
     "I need a status report": (
-        "action:generate_report",
-        "RULED 2026-10-01 (CXO+PPM): the ask names a report; generate_report is a real wired handler",
+        "action:get_project_status",
+        "RULED 2026-10-10 (CXO+PPM re-judge 2026-10-10: project state, not repo activity): was action:generate_report (RULED 2026-10-01, CXO+PPM: the ask names a report)",
     ),
     "I need a progress report": (
         "action:generate_report",
         "RULED 2026-10-01 (CXO+PPM): the ask names a report; generate_report is a real wired handler",
     ),
     "give me a project status report": (
-        "action:generate_report",
-        "RULED 2026-10-01 (CXO+PPM): the ask names a report; generate_report is a real wired handler",
+        "action:get_project_status",
+        "RULED 2026-10-10 (CXO+PPM re-judge 2026-10-10: project state, not repo activity): was action:generate_report (RULED 2026-10-01, CXO+PPM: the ask names a report)",
     ),
     "prs needing review": (
         "floor",
