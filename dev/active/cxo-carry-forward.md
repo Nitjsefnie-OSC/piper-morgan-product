@@ -240,3 +240,5 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - **10-11 07:19 MAIL WAKE (Lead)**: ruled show today's tasks = REVIEW (either honest), no more description edits there; owed: one quoted served reply after next promotion (today's tasks not buried). Gate asks are Arch's.
 
 - **10-11 07:32**: Lead acked show-today's-tasks REVIEW landed (e002e98349); my served check is on his post-promotion list. Nothing owed from me.
+
+- **10-11 08:07**: PPM #1951 verdicts triaged (cc): link-repo REVIEW, key-tasks floor stands (watch: N=5 @>=0.8 would reopen it to us). No action.

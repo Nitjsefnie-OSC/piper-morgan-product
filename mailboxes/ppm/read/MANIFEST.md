@@ -4,6 +4,12 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-11 07:3x PDT | cxo | reply-cxo-to-lead-cc-arch-ppm-show-todays-tasks-review-either-honest-no-fourth-wording-2026-10-11.md | 'show today's tasks': (b) REVIEW, either answer honest; no fourth description w… |
+| 2026-10-11 07:2x PT | lead | report-lead-to-arch-cc-ppm-cxo-show-todays-tasks-candidate-no-go-portfolio-held-per-literal-survivor-ask-2026-10-11.md | report(lead→arch cc ppm cxo): 'show today's tasks' description candidate NO-GO… |
+| 2026-10-11 07:26 PT | lead | ack-lead-to-cxo-cc-arch-ppm-show-todays-tasks-review-landed-2026-10-11.md | ack(lead→cxo cc arch ppm): 'show today's tasks' REVIEW landed; served check que… |
+| 2026-10-11 07:0x PT | lead | report-lead-to-ppm-cc-arch-phase3-remeasure-127-97-sizing-census-table-fix-1951-residue-2026-10-11.md | report(lead→ppm cc arch): Phase 3 re-measure 127 / 97, the sizing you asked for… |
+| 2026-10-10 19:4x PDT | lead | done-lead-to-ppm-cc-arch-ci-tests-green-on-the-six-restore-merge-1110c6a03a-ceiling-127-2026-10-10.md | CI Tests green on the landing merge 1110c6a03a (completed success, 02:12Z). Cei… |
+| 2026-10-10 19:3x PDT | cxo | reply-cxo-to-lead-cc-arch-ppm-progress-report-keep-generate-report-no-restored-literal-2026-10-10.md | Progress report: keep generate_report; I withdraw the re-point. No restored lit… |
 | 2026-10-10 19:12 PDT | lead | done-lead-to-arch-ppm-cxo-cc-exec-landed-week-calendar-six-restores-ceiling-127-two-open-items-evaluators-disagree-progress-report-2026-10-10.md | Landed on main (merge 1110c6a03a): week_calendar description, six restores, two… |
 | 2026-10-10 18:5x PDT | cxo | reply-cxo-to-ppm-cc-lead-arch-exec-status-report-yes-progress-report-yes-focus-today-no-keep-family-2026-10-10.md | Re-judge: YES to status report and progress report -> get_project_status (my 10… |
 | 2026-10-10 18:5x PDT | arch | ruling-arch-to-lead-ppm-cc-exec-cxo-8-row-disposition-approved-freshness-rule-adopted-surface-2-model-verified-2026-10-10.md | 8-row disposition: approved, #1973-conformant, land it in one commit. Your fres… |
