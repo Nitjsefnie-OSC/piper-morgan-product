@@ -445,8 +445,9 @@ class IntentService:
         Only when step 1 actually carried a residue on the intent (Arch: never
         on a guess). If the served category equals a declined claim's, the
         claimed half was answered and the residue is the unanswered half;
-        otherwise the LLM answered the residue's side and the unanswered half
-        is the declined claim's clause. No declined claim recorded -> residue.
+        otherwise nothing is claimed as done (which half the LLM answered is
+        unknown) and the unanswered half is the declined claim's clause. No
+        declined claim recorded -> residue.
         """
         ctx = getattr(intent, "context", None) or {}
         residue = ctx.get("unclaimed_residue")
@@ -467,7 +468,13 @@ class IntentService:
         if covered or not declined or claim_text is None:
             answered, unanswered = (claim_text if covered else None), residue
         else:
-            answered, unanswered = residue, claim_text
+            # The served category differs from the declined claim's: we do NOT
+            # know which half the LLM classifier answered (the first served
+            # check, 2026-10-11, showed it answering NEITHER — summarize_document
+            # for "summarize my current work and I need the archived list too"),
+            # so claim nothing as done; the declined clause is the one half we
+            # know went unanswered by the deterministic path (Arch: never a guess).
+            answered, unanswered = None, claim_text
         unanswered = IntentService._trim_clause(unanswered)
         if not unanswered:
             return None
@@ -478,9 +485,8 @@ class IntentService:
         """#1977 step 2 (CXO's copy): the one-line acknowledgement of the half
         a residue decline left unanswered, or None.
 
-        ``I haven't {unanswered} yet. Want me to?`` — or, when the answered
-        half's clause is known, ``I did {answered}. I haven't {unanswered}
-        yet. Want me to?``. No apology (rule 3), user's own words (rule 1),
+        ``I haven't done "{unanswered}" yet. Want me to?`` (CXO's final copy,
+        2026-10-11: never an "I did …" half). No apology (rule 3), user's own words (rule 1),
         <= 8 words per clause (rule 4).
         """
         halves = IntentService._unanswered_halves(intent)
@@ -491,8 +497,9 @@ class IntentService:
         # QUOTED: bare pasting collides with the sentence's grammar ("I haven't
         # tell me a joke…"). Lead 2026-10-11; CXO owns the copy.
         line = f'I haven\'t done "{unanswered}" yet.'
-        if answered:
-            line = f'I did "{answered}". {line}'
+        # CXO 2026-10-11 (final copy): no "I did …" half — the reply above the
+        # line already shows what was done, and naming the answered half in the
+        # user's words can be a false claim. Only the unanswered clause.
         return line + IntentService._UNANSWERED_HALF_QUESTION
 
     def _append_unanswered_half(

@@ -53,9 +53,7 @@ class TestUnansweredHalfLine:
             [("status", "get_project_status", "summarize my current work")],
         )
         line = IntentService._unanswered_half_line(intent)
-        assert line == (
-            'I did "summarize my current work". I haven\'t done "tell me a joke about cats" yet. Want me to?'
-        )
+        assert line == ('I haven\'t done "tell me a joke about cats" yet. Want me to?')
 
     def test_no_clause_text_for_declined_claim_names_only_the_unanswered(self):
         intent = _intent(
@@ -77,7 +75,7 @@ class TestUnansweredHalfLine:
             [("status", "get_project_status", "summarize my current work")],
         )
         assert IntentService._unanswered_half_line(intent) == (
-            'I did "tell me a joke about cats". I haven\'t done "summarize my current work" yet. Want me to?'
+            'I haven\'t done "summarize my current work" yet. Want me to?'
         )
 
     def test_no_declined_claim_recorded_uses_the_residue(self):
