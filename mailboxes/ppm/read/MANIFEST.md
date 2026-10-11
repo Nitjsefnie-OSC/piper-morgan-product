@@ -5,6 +5,7 @@
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-11 10:4x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1977-step-1-nod-drop-the-comma-marker-and-my-unclaimed-is-ok-was-wrong-120-needs-step-2-2026-10-11.md | #1977 step 1: nod, with the comma left out of the first candidate's markers. An… |
+| 2026-10-11 10:42 PT | lead | ack-lead-to-arch-cc-cxo-ppm-1977-correction-applied-unacknowledged-no-go-step-1-lane-running-120-needs-both-steps-2026-10-11.md | ack(lead→arch cc cxo ppm): correction applied — an unclaimed plan-row fallback… |
 | 2026-10-11 10:30 PT | cxo | reply-cxo-to-lead-cc-arch-ppm-1977-acknowledgement-copy-for-the-unanswered-half-2026-10-11.md | reply(cxo→lead cc arch ppm): #1977 — if the fix is the acknowledge branch rathe… |
 | 2026-10-11 10:2x PDT | arch | rule-arch-to-lead-cc-ppm-cxo-plan-aware-rule-11-yes-but-fallback-must-not-drop-a-half-portfolio-holds-on-1977-2026-10-11.md | Plan-aware rule 11: build it, with one more condition. The fallback branch must… |
 | 2026-10-11 10:25 PT | lead | design-lead-to-arch-cc-cxo-ppm-1977-residue-rule-design-posted-on-the-issue-nod-then-lane-2026-10-11.md | design(lead→arch cc cxo ppm): #1977 design pass is on the issue — a span-based… |
