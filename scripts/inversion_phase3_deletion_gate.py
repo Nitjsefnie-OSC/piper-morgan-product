@@ -1564,9 +1564,12 @@ _1974 = "ruled keep, CXO #1974 (issuecomment-6110663876): pure pleasantries keep
 # #1977 step 2 (the reply acknowledges an unanswered half on the legacy branch).
 # Arch's 2026-10-11 correction: an UNCLAIMED post-removal fallback is not OK on
 # its own — classify_multiple's LLM fallback returns ONE intent, so the half is
-# dropped by the model instead of by a literal. Until step 2 lands, unclaimed
-# reads "planned, fallback unacknowledged" (NO-GO); the step-2 commit flips this.
-STEP2_ACKNOWLEDGEMENT_LANDED = False
+# dropped by the model instead of by a literal. Until step 2 landed, unclaimed
+# read "planned, fallback unacknowledged" (NO-GO). LANDED 2026-10-11: the legacy
+# branch now appends the one-line acknowledgement of the unanswered half
+# (IntentService._unanswered_half_line, CXO's copy) — flipped in the same
+# commit as its pin (test_plan_row_fallback_acknowledged_...).
+STEP2_ACKNOWLEDGEMENT_LANDED = True
 
 PERMANENT_FLOOR: Dict[str, str] = {
     "GREETING_PATTERNS": _1974,

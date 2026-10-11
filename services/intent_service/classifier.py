@@ -756,6 +756,11 @@ class IntentClassifier:
                 intents=[single_intent],
                 original_message=message,
                 is_multi_intent=False,
+                # #1977 step 2: a residue decline hands the whole message to
+                # the single-intent classifier; carry what surface 1 saw so the
+                # reply can acknowledge the half this one intent did not answer.
+                unclaimed_residue=multi_result.unclaimed_residue,
+                declined_claims=list(multi_result.declined_claims),
             )
         except Exception as e:
             logger.error(f"Multi-intent classification failed: {e}", exc_info=True)
