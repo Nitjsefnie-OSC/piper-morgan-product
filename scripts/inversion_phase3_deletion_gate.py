@@ -1571,7 +1571,7 @@ _1974 = "ruled keep, CXO #1974 (issuecomment-6110663876): pure pleasantries keep
 # branch now appends the one-line acknowledgement of the unanswered half
 # (IntentService._unanswered_half_line, CXO's copy) — flipped in the same
 # commit as its pin (test_plan_row_fallback_acknowledged_...).
-STEP2_ACKNOWLEDGEMENT_LANDED = True  # flipped 2026-10-11 on the quoted served reply (local server, armed branch): dev/2026/10/11/controls/served-1977-step2-2026-10-11.md
+STEP2_ACKNOWLEDGEMENT_LANDED = False  # withdrawn 2026-10-11 12:3x (Arch + CXO): flips only on a served reply of the #1884 SHAPE (served intent covers the claimed half, the line names the leftover clause); the 12:0x quote named the other half by luck
 
 PERMANENT_FLOOR: Dict[str, str] = {
     "GREETING_PATTERNS": _1974,
