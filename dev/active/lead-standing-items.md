@@ -43,9 +43,11 @@ lives in GitHub, this file holds only durable owed/queued items.)
   lists is NOT a licence. (2) CLOSED 10-10 19:3x: CXO withdrew the progress-report re-point; the row stays generate_report, no literal bought.
   (3) `\bstatus report\b` re-delete waits on (1). (4) DONE 10-10 19:1x: PPM recounted 127 (d29bfef2ce). (5) DONE 10-11: `--all` table vs `--list` disagreement (partial GO / rule 10 / rule 11 missing from the table) fixed + pinned. (6) #1951 residue — **Filed**: 2026-10-11 · two PPM verdicts asked (link-my-repository, key-tasks-for-this-sprint); close #1951 when they land. (7) Proposal to Arch: `_PLEASANTRY_FILLER_PATTERNS` NOT_ROUTING by name (tail 97 → 87).
 
-- **Three description-change candidates** (Arch: worth doing for their own sake, each its own rule-7 run, my timing) — **Filed**: 2026-10-10 ·
-  "show priorities for this sprint" → get_top_priority; "pull up my schedule" → week_calendar (now meeting_time @0.72); "show today's tasks"
-  → list_todos_query. The held prompt fixed them by accident; find the description wording that does it alone.
+- **Description-change candidate: "show today's tasks" → list_todos_query** (Arch: worth doing for its own sake, its own rule-7 run, my timing) —
+  **Filed**: 2026-10-10 · narrowed 10-11: of the three named, "show priorities for this sprint" (get_top_priority @0.85, MATCH) and "pull up my
+  schedule" (week_calendar @0.85, MATCH) are already right on the 10-10 full run. The remaining row reads attention_query @0.85; the 10-10 lane
+  found every list_todos_query wording regressed, so the next try is the INVERSE (attention_query's description excluding a plain list of
+  today's tasks), screened on the row + attention/todo sentinels before any full run.
 - **#1970 framing to the router** (Production, Arch's design on the issue, comment 6090297342) — **Filed**: 2026-10-09 · after the MVP
   gate work. Order: (1) plumbing behind the flag (`framing` in the router's top-level output → `context["inversion_framing"]`;
   `evaluate_consent(framing_hint=)`, where PRIVATE WRITE uses the hint, OUTWARD WRITE takes the stricter of hint and regex, DESTRUCTIVE is unchanged); (2) the prompt line
