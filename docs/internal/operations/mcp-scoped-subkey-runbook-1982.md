@@ -29,6 +29,14 @@ write the PAT through `UserAPIKeyService.store_user_key(provider="github")` (and
 clear route delete it), so the row lands under the GitHub context the MCP app holds;
 `_user_pat_at_rest` already reads it first. Not built pending Arch's word.
 
+## 0. Deploy alpha with this build FIRST (PM's hand; PA addition 2026-10-11)
+
+Steps 1 and 2 run `scripts/derive_subkey.py` and `scripts/reencrypt_github_secrets_1982.py` **inside
+alpha's image** (`fly ssh console -a piper-morgan`). As of 2026-10-11 15:5x PT, alpha runs `4bd1a236e9`
+(`/health` git_sha), which does NOT contain `079477fb15` (ancestor check failed), so neither script
+exists there yet. Alpha must also be writing new GitHub rows under the new context before the
+re-encrypt. Check `/health` git_sha against `079477fb15` before step 1.
+
 ## 1. Set the secret (PM's hand; no agent sees the value)
 
 On a machine with the master key (alpha), pipe straight into the MCP app's secrets.
