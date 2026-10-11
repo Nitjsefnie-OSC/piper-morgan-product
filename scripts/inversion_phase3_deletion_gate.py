@@ -1368,6 +1368,113 @@ def load_bearing_literals(list_name: str, failing_rows: List[RowRecord]) -> Dict
     return survivors
 
 
+_PLAN_LABEL_RE = re.compile(r"^PLAN\[(.*)\]$")
+
+
+def plan_ops_from_label(route: Optional[str]) -> List[str]:
+    """``PLAN[a→b→c]`` (the scorer's route label, #1595 unit 4b) → ``[a, b, c]``."""
+    m = _PLAN_LABEL_RE.match(str(route or "").strip())
+    if not m:
+        return []
+    return [op.strip() for op in re.split(r"→|->", m.group(1)) if op.strip()]
+
+
+def surface1_fallback_claims(pc, phrase: str) -> List[Tuple[Optional[str], Optional[str], str]]:
+    """What the LEGACY chain would claim for ``phrase`` when the live consult
+    stands down (armed snapshot, router error, sub-threshold — Arch
+    2026-10-11): ``classify_multiple`` runs ``detect_multiple_intents``
+    FIRST and takes its intents (one or many); only when that finds nothing
+    does the single-intent entry get the turn. Returns
+    ``[(pattern_list, action, CATEGORY), …]`` — empty means unclaimed, the
+    whole message goes to the LLM classifier and nothing deterministic
+    swallows a half."""
+    multi = pc.detect_multiple_intents(phrase)
+    out = []
+    for i, it in enumerate(multi.intents):
+        lst = multi.pattern_lists[i] if i < len(multi.pattern_lists) else None
+        cat = it.category.value if hasattr(it.category, "value") else str(it.category)
+        out.append((lst, it.action, str(cat).upper()))
+    if out:
+        return out
+    single_intent, single_list = pc.pre_classify_with_pattern_list(phrase)
+    if single_intent is not None:
+        cat = single_intent.category
+        cat = cat.value if hasattr(cat, "value") else str(cat)
+        return [(single_list, single_intent.action, str(cat).upper())]
+    return []
+
+
+def plan_fallback_outcome(
+    pc, phrase: str, plan_ops: List[str], before_halves: List[str]
+) -> Tuple[str, ClaimResult, str]:
+    """Arch's plan-aware rule 11 (2026-10-11): a ``plan`` row's served path is
+    the router's plan, but the consult's stand-down branch (armed snapshot,
+    router error, sub-threshold) is real and common, so the deletion must not
+    leave a fallback that drops a half. The fallback is surface 1 alone, so
+    the question is surface 1's own: does the split AFTER the removal still
+    cover every half it covered BEFORE (``before_halves`` = the claim
+    categories with the literals present)? Caller has swapped the class list.
+      unclaimed                        → "planned"           (OK: the whole turn reaches the LLM classifier)
+      covers every pre-removal half    → "planned-shadowed"  (OK)
+      a single claim / a partial split → "planned-partial"   (NO-GO, names the dropping list)
+    """
+    claims = surface1_fallback_claims(pc, phrase)
+    if not claims:
+        return (
+            "planned",
+            ClaimResult(None, None, None, None),
+            "fallback unclaimed — the whole turn reaches the LLM classifier, nothing deterministic swallows a half",
+        )
+    after_halves = {c for _, _, c in claims}
+    first = claims[0]
+    after = ClaimResult(
+        pattern_list=first[0],
+        action=first[1],
+        category=first[2],
+        entry_surface="detect_multiple_intents",
+    )
+    before = set(h.upper() for h in before_halves)
+    if before <= after_halves:
+        return (
+            "planned-shadowed",
+            after,
+            (
+                f"fallback split still covers every half ({', '.join(sorted(before))}) — nothing dropped"
+            ),
+        )
+    dropped = sorted(before - after_halves)
+    lists = sorted({str(lst) for lst, _, _ in claims})
+    return (
+        "planned-partial",
+        after,
+        (
+            f"fallback claims {', '.join(sorted(after_halves))} only ({', '.join(lists)}) — drops the "
+            f"{', '.join(dropped)} half; plan {'→'.join(plan_ops)} answers both only when the consult runs"
+        ),
+    )
+
+
+def plan_fallback_outcome_cached(list_name: str, rec: RowRecord) -> Tuple[str, ClaimResult, str]:
+    """Re-derive one plan row's fallback outcome with THIS list's licensed
+    literals removed — the same swap ``reabsorption_check`` does — so the
+    renderer can print the reason without threading it through every tuple."""
+    from services.intent_service.pre_classifier import PreClassifier
+
+    patterns = getattr(PreClassifier, list_name, None) or []
+    lv_licensed = _LAST_LICENSED.get(list_name, set())
+    before = [c for _, _, c in surface1_fallback_claims(PreClassifier, rec.phrase)]
+    setattr(PreClassifier, list_name, [p for p in patterns if p not in lv_licensed])
+    try:
+        return plan_fallback_outcome(
+            PreClassifier, rec.phrase, plan_ops_from_label(rec.router.route), before
+        )
+    finally:
+        setattr(PreClassifier, list_name, patterns)
+
+
+_LAST_LICENSED: Dict[str, set] = {}
+
+
 def reabsorption_check(
     list_name: str, licensed: List[str], rows: List[RowRecord]
 ) -> List[Tuple[RowRecord, str, ClaimResult]]:
@@ -1394,15 +1501,30 @@ def reabsorption_check(
     if not patterns or not licensed:
         return []
     licensed_set = set(licensed)
+    _LAST_LICENSED[list_name] = licensed_set
     licensing = []
     for rec in rows:
         match = PreClassifier._first_pattern_match(_clean_for_matching(rec.phrase), patterns)
         if match is not None and match.re.pattern in licensed_set:
             licensing.append(rec)
     out: List[Tuple[RowRecord, str, ClaimResult]] = []
+    # Pre-removal halves for plan rows (surface 1 with the literals present).
+    before_halves: Dict[str, List[str]] = {}
+    for rec in licensing:
+        if rec.expected == "plan" and plan_ops_from_label(rec.router.route):
+            before_halves[rec.phrase] = [
+                c for _, _, c in surface1_fallback_claims(PreClassifier, rec.phrase)
+            ]
     setattr(PreClassifier, list_name, [p for p in patterns if p not in licensed_set])
     try:
         for rec in licensing:
+            plan_ops = plan_ops_from_label(rec.router.route)
+            if rec.expected == "plan" and plan_ops and rec.router.verdict == "MATCH":
+                outcome, after, _why = plan_fallback_outcome(
+                    PreClassifier, rec.phrase, plan_ops, before_halves.get(rec.phrase, [])
+                )
+                out.append((rec, outcome, after))
+                continue
             after = claim_for_phrase(PreClassifier, rec.phrase)
             if after.action is None:
                 outcome = "unclaimed"
@@ -1453,6 +1575,9 @@ class ListAssessment:
     shadowed: list
     kind: str  # rule11 | survivors | rule10 | go | go-partial | no-go
     ruled: dict = field(default_factory=dict)  # literal -> RULED_SURVIVORS record
+    planned: list = field(
+        default_factory=list
+    )  # plan rows: (rec, "planned[-shadowed|-partial]", after)
 
 
 CENSUS_LABELS = {
@@ -1502,6 +1627,7 @@ def assess_list(list_name: str, lv: ListVerdict) -> ListAssessment:
     # Rule 11 (#1971): re-claim the licensing rows with the licensed literals gone.
     reabsorbed: List[Tuple[RowRecord, str, ClaimResult]] = []
     shadowed: List[Tuple[RowRecord, str, ClaimResult]] = []
+    planned: List[Tuple[RowRecord, str, ClaimResult]] = []
     if (lv.deletable or partial) and licensed > 0:
         from services.intent_service.pre_classifier import PreClassifier as _PC
 
@@ -1511,8 +1637,9 @@ def assess_list(list_name: str, lv: ListVerdict) -> ListAssessment:
             if p not in (survivors if partial else {}) and p not in held and p not in ruled
         ]
         checked = reabsorption_check(list_name, licensed_literals, lv.rows)
-        reabsorbed = [c for c in checked if c[1] == "reabsorbed"]
+        reabsorbed = [c for c in checked if c[1] in ("reabsorbed", "planned-partial")]
         shadowed = [c for c in checked if c[1] == "shadowed"]
+        planned = [c for c in checked if c[1].startswith("planned")]
     if reabsorbed:
         kind = "rule11"
     elif (lv.deletable or partial) and licensed <= 0 and not held:
@@ -1536,6 +1663,7 @@ def assess_list(list_name: str, lv: ListVerdict) -> ListAssessment:
         shadowed=shadowed,
         kind=kind,
         ruled=ruled,
+        planned=planned,
     )
 
 
@@ -1576,20 +1704,35 @@ def render_list_report(
     a = assess_list(list_name, lv)
     failing, survivors, partial = a.failing, a.survivors, a.partial
     held, n_surv, licensed = a.held, a.n_surv, a.licensed
-    reabsorbed, shadowed, ruled = a.reabsorbed, a.shadowed, a.ruled
+    reabsorbed, shadowed, ruled, planned = a.reabsorbed, a.shadowed, a.ruled, a.planned
     if reabsorbed:
         greedy = sorted({f"{c[2].pattern_list} -> {c[2].action}" for c in reabsorbed})
+        n_partial = sum(1 for c in reabsorbed if c[1] == "planned-partial")
         lines.append(
             f"verdict: NO-GO (rule 11) — {len(reabsorbed)} licensing row(s) REABSORBED by a "
             f"different action once the licensed literals are removed: {'; '.join(greedy)} "
             "(blocked on the greedy list, not on this list's evidence; rule 4 applies if that "
             "action writes)"
-        )
-        for rec, _, after in reabsorbed:
-            lines.append(
-                f'  reabsorbed: "{rec.phrase}" {rec.claim.action} -> '
-                f"{after.pattern_list} -> {after.action}"
+            + (
+                f"; {n_partial} of them PLANNED rows whose FALLBACK (the consult's stand-down "
+                "branch: armed snapshot, router error, sub-threshold) would drop a half — Arch "
+                "2026-10-11, #1977"
+                if n_partial
+                else ""
             )
+        )
+        for rec, outcome, after in reabsorbed:
+            if outcome == "planned-partial":
+                _, _, why = plan_fallback_outcome_cached(list_name, rec)
+                lines.append(
+                    f'  planned, fallback partial ({after.pattern_list}): "{rec.phrase}" '
+                    f"{rec.router.route} — {why}"
+                )
+            else:
+                lines.append(
+                    f'  reabsorbed: "{rec.phrase}" {rec.claim.action} -> '
+                    f"{after.pattern_list} -> {after.action}"
+                )
     elif (lv.deletable or partial) and licensed <= 0 and not held:
         lines.append("verdict: NO-GO — only load-bearing survivors remain in this list")
     elif (lv.deletable or partial) and licensed <= 0:
@@ -1617,6 +1760,12 @@ def render_list_report(
             f'  shadowed (rule 11, same action): "{rec.phrase}" still claimed by '
             f"{after.pattern_list} -> {after.action}"
         )
+    for rec, outcome, after in planned:
+        if outcome == "planned-partial":
+            continue  # printed under the verdict above
+        _, _, why = plan_fallback_outcome_cached(list_name, rec)
+        tag = "planned" if outcome == "planned" else "planned, shadowed"
+        lines.append(f'  {tag} (rule 11, plan row): "{rec.phrase}" {rec.router.route} — {why}')
     for lit, rec in ruled.items():
         lines.append(f'  ruled survivor: r"{lit}"  — {rec.get("ruling", "?")}')
     for pat in held:
@@ -1844,11 +1993,31 @@ def check_deleted_entry_non_regression(
     reports = reports or RouterReports(FULL_REPORT, TEMPORAL_RESCORE_REPORT, PHASE3_REPORTS)
     corpus_by_phrase = {r["phrase"]: r for r in p0.load_corpus()}
 
+    planned_at = entry.get("planned_at_deletion") or {}
     for phrase in entry.get("rows_claimed_at_deletion", []):
         claim = claim_for_phrase(PreClassifier, phrase)
         corpus_row = corpus_by_phrase.get(phrase)
         if corpus_row is None:
             problems.append(f"{phrase!r}: no longer a corpus row — cannot re-verify")
+            continue
+        if phrase in planned_at:
+            # Arch's plan-aware rule 11 (2026-10-11): the served path is the
+            # router's validated plan; re-check it from the NEWEST report, then
+            # re-check the fallback (today's surface 1) still drops nothing.
+            want_ops = list(planned_at[phrase].get("ops") or [])
+            lookup = reports.lookup(phrase, corpus_row.get("category", ""))
+            got_ops = plan_ops_from_label(lookup.route)
+            if got_ops != want_ops:
+                problems.append(
+                    f"{phrase!r}: planned_at_deletion expects PLAN[{'→'.join(want_ops)}] but the "
+                    f"newest report says {lookup.route} — a single-op or declined sample holds (Arch 2026-10-11)"
+                )
+                continue
+            outcome, _after, why = plan_fallback_outcome(
+                PreClassifier, phrase, want_ops, list(planned_at[phrase].get("halves") or [])
+            )
+            if outcome == "planned-partial":
+                problems.append(f"{phrase!r}: planned, but today's fallback drops a half — {why}")
             continue
 
         target_op = expected_op_for_phrase(entry, phrase, corpus_row)

@@ -2170,3 +2170,83 @@ def test_permanent_floor_is_the_1974_family_cites_the_ruling_and_stays_in_the_ta
     _, by_list = gate.build_census(gate.CURRENT_LIVE_CATEGORIES)
     for name in ("GREETING_PATTERNS", "FAREWELL_PATTERNS", "THANKS_PATTERNS"):
         assert gate.census_verdict_label(name, by_list[name]) == "FLOOR (ruled)"
+
+
+# Arch's plan-aware rule 11 (2026-10-11, after the #1884 two-topic finding): a
+# `plan` row is "planned" (OK) when its post-removal fallback is unclaimed,
+# "planned, shadowed" (OK) when surface 1 still covers every half it covered
+# before, and "planned, fallback partial" (NO-GO, naming the dropping list) when
+# a single claim or a partial split would drop a half on the consult's
+# stand-down branch. PORTFOLIO's last literal reads partial today (#1977).
+_TWO_TOPIC = "list my archived projects and summarize my current work"
+
+
+def test_plan_row_fallback_partial_blocks_portfolio_and_names_status():
+    counts = pattern_literal_counts.per_list_literal_counts()
+    records, by_list = gate.build_census(gate.CURRENT_LIVE_CATEGORIES)
+    report = gate.render_list_report("PORTFOLIO_PATTERNS", by_list, counts, len(records))
+    verdict = next(line for line in report.splitlines() if line.startswith("verdict:"))
+    assert verdict.startswith("verdict: NO-GO (rule 11)"), verdict
+    assert "PLANNED rows whose FALLBACK" in verdict, verdict
+    line = next(line for line in report.splitlines() if "planned, fallback partial" in line)
+    assert (
+        "(STATUS_PATTERNS)" in line and _TWO_TOPIC in line and "drops the PORTFOLIO half" in line
+    ), line
+
+
+def test_plan_row_is_planned_when_the_fallback_is_unclaimed(monkeypatch):
+    """Same row, with STATUS's `current work` survivor also gone: the fallback
+    claims nothing, the whole turn reaches the LLM classifier → "planned", and
+    the row no longer blocks the licence."""
+    from services.intent_service.pre_classifier import PreClassifier
+
+    monkeypatch.setattr(
+        PreClassifier,
+        "STATUS_PATTERNS",
+        [p for p in PreClassifier.STATUS_PATTERNS if "current work" not in p],
+    )
+    counts = pattern_literal_counts.per_list_literal_counts()
+    records, by_list = gate.build_census(gate.CURRENT_LIVE_CATEGORIES)
+    a = gate.assess_list("PORTFOLIO_PATTERNS", by_list["PORTFOLIO_PATTERNS"])
+    outcomes = {rec.phrase: outcome for rec, outcome, _ in a.planned}
+    assert outcomes.get(_TWO_TOPIC) == "planned", outcomes
+    assert not [c for c in a.reabsorbed if c[0].phrase == _TWO_TOPIC]
+    report = gate.render_list_report("PORTFOLIO_PATTERNS", by_list, counts, len(records))
+    assert "planned (rule 11, plan row)" in report
+
+
+def test_plan_row_is_shadowed_when_the_split_still_covers_both_halves():
+    """Unit-level: with nothing removed, surface 1 still claims PORTFOLIO + STATUS
+    for the phrase → both halves covered → shadowed."""
+    from services.intent_service.pre_classifier import PreClassifier
+
+    before = [c for _, _, c in gate.surface1_fallback_claims(PreClassifier, _TWO_TOPIC)]
+    assert set(before) == {"PORTFOLIO", "STATUS"}, before
+    outcome, _, why = gate.plan_fallback_outcome(
+        PreClassifier, _TWO_TOPIC, ["list_archived_projects", "get_project_status"], before
+    )
+    assert outcome == "planned-shadowed", (outcome, why)
+
+
+def test_non_regression_rechecks_a_planned_row_from_the_newest_report_and_todays_fallback():
+    entry = {
+        "list": "PORTFOLIO_PATTERNS",
+        "rows_claimed_at_deletion": [_TWO_TOPIC],
+        "planned_at_deletion": {
+            _TWO_TOPIC: {
+                "ops": ["list_archived_projects", "get_project_status"],
+                "halves": ["PORTFOLIO", "STATUS"],
+            }
+        },
+        "expected_ops": [],
+    }
+    ok, problems = gate.check_deleted_entry_non_regression(entry, cats=gate.CURRENT_LIVE_CATEGORIES)
+    assert ok, problems  # the literal is still present today, so the fallback covers both halves
+    wrong = {
+        **entry,
+        "planned_at_deletion": {
+            _TWO_TOPIC: {"ops": ["get_project_status"], "halves": ["PORTFOLIO", "STATUS"]}
+        },
+    }
+    ok, problems = gate.check_deleted_entry_non_regression(wrong, cats=gate.CURRENT_LIVE_CATEGORIES)
+    assert not ok and any("planned_at_deletion expects PLAN[" in p for p in problems), problems
