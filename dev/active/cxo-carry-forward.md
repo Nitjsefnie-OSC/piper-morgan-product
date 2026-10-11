@@ -242,3 +242,5 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - **10-11 07:32**: Lead acked show-today's-tasks REVIEW landed (e002e98349); my served check is on his post-promotion list. Nothing owed from me.
 
 - **10-11 08:07**: PPM #1951 verdicts triaged (cc): link-repo REVIEW, key-tasks floor stands (watch: N=5 @>=0.8 would reopen it to us). No action.
+
+- **10-11 08:20 MAIL WAKE**: withdrew my permanent-survivor ruling on `\bwhere.*focus\b` (it claimed get_top_priority, router serves it anyway); focus-today stays ruled attention_query as a known miss; Lead re-deletes. Lead closed #1951. Owed to me unchanged otherwise.

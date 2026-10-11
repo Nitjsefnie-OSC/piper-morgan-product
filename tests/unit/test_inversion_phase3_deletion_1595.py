@@ -261,8 +261,10 @@ class TestCensusDenominators:
         claimed = sum(1 for r in records if r.claim.pattern_list is not None)
         unclaimed = sum(1 for r in records if r.claim.pattern_list is None)
         assert claimed + unclaimed == len(records)
-        assert claimed + unclaimed == 577, (
-            "the corpus is 577 rows as of the 2026-10-09 GUIDANCE rule-10 rows (+6, the 15 pins' setup phrasings); "
+        assert claimed + unclaimed == 586, (
+            "the corpus is 586 rows as of the 2026-10-11 PORTFOLIO rule-10 rows (+5, the #1431/#1757/#1738 pin phrasings, Arch-approved); "
+            "581 rows as of the 2026-10-11 COMPLETION_HISTORY rule-10 rows (+4, one phrasing per held literal); "
+            "577 rows as of the 2026-10-09 GUIDANCE rule-10 rows (+6, the 15 pins' setup phrasings); "
             "571 rows as of the 2026-10-09 COMPLETION_HISTORY rule-10 rows (+3, the #1117 phrasings); "
             "568 rows as of the 2026-10-09 rule-10 llm-retirement rows (+2 IDENTITY, Arch's amendment); "
             "566 after the 2026-10-09 rule-10 (B) row (+1, the #1256 phrasing); "
@@ -1937,14 +1939,30 @@ def test_1973_completion_history_is_no_go_on_the_dispatch_threshold_itself():
     #1117 row "When did we launch the beta?" MATCHes check_completion_status at
     0.72 < 0.8, so the consult stands down and the literal claiming it is
     load-bearing. Before the fix the MATCH arm credited it and the gate read GO,
-    and a hand-held HELD_FOR_CAUSE entry stood in. Now the gate itself says NO-GO."""
+    and a hand-held HELD_FOR_CAUSE entry stood in. Now the gate itself holds it.
+
+    Converted 2026-10-11 (Lead): the 4 other literals got their own rule-10 rows
+    that day, so the LIST may read GO (partial) — what this pin protects is that
+    the threshold keeps the beta row's literal (``when did (i|we) …``) a SURVIVOR,
+    never that the whole list stays NO-GO."""
     counts = pattern_literal_counts.per_list_literal_counts()
     records, by_list = gate.build_census(gate.CURRENT_LIVE_CATEGORIES)
     report = gate.render_list_report("COMPLETION_HISTORY_PATTERNS", by_list, counts, len(records))
     verdict = next(line for line in report.splitlines() if line.startswith("verdict:"))
-    assert verdict.startswith("verdict: NO-GO"), verdict
-    beta = next(line for line in report.splitlines() if "When did we launch the beta?" in line)
+    assert not verdict.startswith("verdict: GO (deletable)"), verdict
+    beta = next(
+        line
+        for line in report.splitlines()
+        if "When did we launch the beta?" in line and line.lstrip().startswith("[")
+    )
     assert beta.lstrip().startswith("[FAIL]") and "dispatch threshold" in beta
+    if verdict.startswith("verdict: GO (partial)"):
+        survivor = next(
+            line
+            for line in report.splitlines()
+            if line.lstrip().startswith("survives:") and "when did (i|we)" in line
+        )
+        assert "When did we launch the beta?" in survivor, survivor
     assert gate.HELD_FOR_CAUSE == {}
 
 

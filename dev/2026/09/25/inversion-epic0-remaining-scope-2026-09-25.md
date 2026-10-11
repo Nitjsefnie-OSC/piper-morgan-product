@@ -84,6 +84,10 @@ Collected here (Arch, 2026-10-06) so the next lane meets them as steps rather th
    10-10, 5 of them live on alpha). Rows a fresh run exposes are dispositioned per #1973 (a/b/c) in the lane that finds them. Surface-2 evidence
    names its model: `intent_classification` uses the provider's default tier (Sonnet 4.6 for Anthropic keys), not the router's light tier
    (Haiku), and OpenAI-key users' surface 2 stays unmeasured while that account has no credits.
+   **Restore validity** (Arch, 10-11; amends #1973's (c)): a restore is a valid disposition only when the restored literal **claims the row's
+   ruled op** (`same_operation`). A literal that claims a different op cannot restore the served answer (rule 8), so that row is a
+   candidate-attributed **known miss**: record it against the landing, or don't land the candidate. Pinned on every `"restored": true` record and
+   every `ruled_survivors` entry. (Found 10-11: 2 of the 6 restores of 10-10, focus-today and upcoming-milestones, claim the wrong op.)
 8. **"Ready for PM" means the served answer** (10-05). A live probe of PM's own phrasings asserts what the user would see, not the route.
 9. **Before ruling or building on a gate or predicate change, enumerate every caller and read the fallback** (Arch's own lesson, 10-04). Use `git grep -w`,
    not `-E '\b'`, which git grep doesn't support.

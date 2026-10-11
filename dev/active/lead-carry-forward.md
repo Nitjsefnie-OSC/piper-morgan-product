@@ -9,8 +9,8 @@
 - **Held, awaiting rulings:** (1) PORTFOLIO partial (2 literals): `update … project` is a ruled survivor (#1933 a); show/list/view literal needs
   5 corpus rows for pin phrasings (listed in the log) — Arch asked for a per-literal ruled-survivor mark in the gate + a word on depositing the
   rows. (2) "show today's tasks": candidate A NO-GO on the full run (5 attributed regressions incl. a WRITE landing); no fourth wording; PPM/CXO
-  re-judge asked (Lead leans REVIEW). (3) #1951: two PPM verdicts asked (link-my-repository; key-tasks-for-this-sprint). (4) Floor-action
-  liveness disagreement (census vs non-regression) + `\bstatus report\b` re-delete: Arch. (5) `_PLEASANTRY_FILLER_PATTERNS` NOT_ROUTING: Arch.
+  re-judge asked (Lead leans REVIEW). (3) #1951: two PPM verdicts asked (link-my-repository; key-tasks-for-this-sprint). (4) RESOLVED 10-11: the evaluator split was the mis-serve proof (Arch); `status report` is a survivor (surface 2 → SYNTHESIS 5/5). (5) RULED: filler stays; tail 97.
+- **Rulings 10-11 (Arch/CXO):** restore rule (a restored literal must claim the ruled op, else known miss — pin it); STATUS 2 + PRIORITY 1 licensed under misserved_at_deletion (CXO withdrew `where.*focus`); pleasantry family HELD_FOR_CAUSE on #1974; both gate asks approved. **Queue (behind the COMPLETION_HISTORY lane):** gate commit (ruled_survivors, restore pin, HELD ×3, --list hint) → lane STATUS 2 + PRIORITY 1 + PORTFOLIO 1. Arithmetic 127 → 124 → 121 → 120.
 - **Finding to remember:** the attention/todo/priority description neighbourhood is fragile on the served Haiku router — edits on either side
   move "when am i in a meeting", the sprint-priorities row and a todo/reminder row. Screens pass, full runs fail. Don't retry by wording.
 - Spend today: 745 Haiku router calls (Krink's credit, expires 10-15). Keychain readable (no -25308).
