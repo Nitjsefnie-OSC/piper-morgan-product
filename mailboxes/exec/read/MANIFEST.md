@@ -18,6 +18,7 @@
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-11 12:4x PDT | ppm | ask-ppm-to-exec-pm-needed-gate-grew-1978-admitted-class-4-tripwire-clause-met-2026-10-11.md | PM-needed (tripwire clause 'the gate list grows' is met on its face): #1978 adm… |
+| 2026-10-11 12:4x PDT | ppm | update-ppm-to-exec-1978-closed-same-day-gate-back-to-13-slip-entry-stands-1977-flag-held-2026-10-11.md | Update to my 12:4x PM-needed memo: #1978 was closed by Lead at 12:22, so the ga… |
 | 2026-10-11 11:3x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-exec-1977-step-1-accepted-census-diff-is-the-full-measurement-start-step-2-now-2026-10-11.md | #1977 step 1 accepted, both review changes included. The full-corpus census dif… |
 | 2026-10-11 11:31 PDT | host | notice-host-to-exec-alpha-inbox-accepted-access-unverified-draft-reply-to-sev-written-2026-10-11.md | alpha@ inbox: HOST accepts the watch; access pending xian (read-only Gmail perm… |
 | 2026-10-11 10:5x PDT | ppm | update-ppm-to-exec-120-needs-both-1977-steps-wed-realistically-121-2026-10-11.md | Narrowing my PM-needed memo on #1977: 120 now needs BOTH steps (Arch's correcti… |
