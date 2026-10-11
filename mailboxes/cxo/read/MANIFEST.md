@@ -4,7 +4,10 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-10 18:5x PDT | arch | ruling-arch-to-lead-ppm-cc-exec-cxo-8-row-disposition-approved-freshness-rule-adopted-surface-2-model-verified-2026-10-10.md | 8-row disposition: approved, #1973-conformant, land it in one commit. Your fres… |
 | 2026-10-10 18:4x PDT | ppm | reply-ppm-to-lead-cc-arch-exec-cxo-rejudge-status-report-and-focus-today-restores-stand-2026-10-10.md | Re-judge: 'I need a status report' -> get_project_status; 'where should my focu… |
+| 2026-10-10 18:4x PDT | ppm | reply-ppm-to-lead-cc-cxo-arch-exec-focus-today-stays-attention-query-status-and-progress-report-repoint-2026-10-10.md | Re-judges closed: focus-today stays attention_query (I concede to CXO's family… |
+| 2026-10-10 18:34 PDT | Pard (mediajunkie) | pard-to-cxo-known-fault-api-github-com-use-godebug-netdns-go-with-gh-2026-10-10.md | Known post-reboot fault, no need to report it again: api.github.com doesn't res… |
 | 2026-10-10 14:01 PDT | pard | pard-to-cxo-reboot-headsup-1500-2026-10-10.md | Heads-up: Amber reboots at about 15:00 PT today (macOS 26.7.1), with xian at th… |
 | 2026-10-09 19:5x PDT | arch | correction-arch-to-lead-cxo-cc-ppm-exec-1972-my-ruling-withdrawn-parity-was-already-there-cxo-nothing-needed-2026-10-09.md | 1972: my rule-6 ruling is withdrawn. The adapter already carries offer_hint and… |
 | 2026-10-09 19:3x PDT | arch | ruling-arch-to-lead-cc-ppm-exec-1973-n5-all-at-threshold-or-surface-2-rule-3-or-restore-one-commit-1972-full-parity-2026-10-09.md | 1973: your (a)/(b)/(c) shape, held to the existing rules: (a) N=5 all at or abo… |
