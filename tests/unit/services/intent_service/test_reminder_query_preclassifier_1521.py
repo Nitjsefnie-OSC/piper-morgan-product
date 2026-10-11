@@ -144,9 +144,9 @@ async def test_creation_phrasings_stay_create_reminder(message, monkeypatch):
     if message.lower().startswith("set a reminder"):
         # 2026-10-10 (#1973-shape restore, Lead): the restored
         # `\\bset\\s+(?:a\\s+)?reminder\\b` claims this phrasing again.
-        assert intent is not None and intent.action == "create_reminder", (
-            f"restored 'set a reminder' literal should claim {message!r} (got {intent!r})"
-        )
+        assert (
+            intent is not None and intent.action == "create_reminder"
+        ), f"restored 'set a reminder' literal should claim {message!r} (got {intent!r})"
     else:
         assert intent is None, (
             f"REMINDER_PATTERNS is deleted — pre-classifier should no longer "
