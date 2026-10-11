@@ -17,8 +17,7 @@ lives in GitHub, this file holds only durable owed/queued items.)
   `b3f684822f` · dual-write/`get_github_repository` DONE 10-06 (`e394c6e084`). Places removed 10-06 (`d06e81186b`). `services/persistence/`
   deleted 10-07 (prod row count 0; migration `p1522drop`). Still open: Documents HELD on #1270, Pard/PM on pytest.ini ignore + the Next.js scaffold, I2 error pages (product call).
 - Beta-conditions audit at the final gate (mine + subagent cross-check; PM ruling 8/15).
-- **Epic 0 Phase 3 tail — re-plan trip-wire Wed 10-14** (PPM ruled 10-10 05:3x; the earlier "Tue" was a label error) — **Filed**: 2026-10-09 · end of 10-09: ceiling 155 → **121**, routing tail
-  **91** (measured 17:5x PDT: `pattern_literal_counts` TOTAL 121, `routing_tail` 91; reported to PPM). Batch 26 + chunk 8 (5) + GUIDANCE (3).
+- **Epic 0 Phase 3 tail — re-plan trip-wire Wed 10-14** (PPM ruled 10-10 05:3x; the earlier "Tue" was a label error) — **Filed**: 2026-10-09 · end of 10-10: ceiling **127** (121 + 6 restores), routing tail re-measure Mon; 10-09 was 121/91 (measured 17:5x PDT: `pattern_literal_counts` TOTAL 121, `routing_tail` 91; reported to PPM). Batch 26 + chunk 8 (5) + GUIDANCE (3).
   121 is still just above PPM's 110–120 band. The gate (rules 10/11 + the #1973 threshold in every arm) reads no list GO. What's left needs
   router/catalog work or new rows: COMPLETION_HISTORY (#1117 row @0.72; 4 rule-10 holds), the greeting/thanks/farewell family (rule-10 holds;
   pleasantry is NOT ROUTING), STAKEHOLDER (#1256, blocked on DOCUMENT_QUERY's loose "update … with", rule 11), and the 3 delete-family
@@ -37,11 +36,13 @@ lives in GitHub, this file holds only durable owed/queued items.)
   scoring can't starve users). Testers on their own stored keys are unaffected.
 - **API restored 16:33 10-10** (xian raised workspace + org limits to $250). lead-scoring key ($50, pipermorgan.ai org) pending xian's "stored".
   The catalog batch is held on `claude/lead-catalog-description-batch-held`; fix its regressions next under the refined rule 7.
-- **Post-restore re-deletes (PPM re-judges 10-10)** — **Filed**: 2026-10-10 · after the six-restore commit lands: (1) re-point the corpus row
-  "I need a status report" → action:get_project_status (builder + fixture; PPM's 10-06 verdict) and re-delete the restored STATUS literal
-  under rule 10 with that row (full run: get_project_status @0.85 MATCH once re-pointed; main N=5 was 0.7–0.85, so take a fresh N=5 first).
-  (2) "where should my focus be today" → get_top_priority: **Blocked on** CXO's concurrence (PPM asked); then same re-point + re-delete of
-  the restored PRIORITY literal. Each takes the ceiling down 1 (127 → 125).
+- **Post-landing follow-ups (10-10 evening)** — **Filed**: 2026-10-10 · (1) **Gate evaluator disagreement** (lane's finding): `--list` census
+  credits restored STATUS/PRIORITY literals as deletable (GO) while `check_deleted_entry_non_regression` refuses them; they differ on liveness
+  for FLOOR actions (get_project_status, get_top_priority). Report to Arch; one liveness source for both. Until fixed, the census GO on those
+  lists is NOT a licence. (2) "I need a progress report": CXO/PPM re-point to get_project_status has no served support (router
+  generate_report; surface-2 SYNTHESIS 5/5). Ask CXO: keep generate_report, or restore `\bprogress report\b` claiming get_project_status.
+  (3) `\bstatus report\b` re-delete waits on (1). (4) PPM recounts the ceiling (127) after the merge.
+
 - **Three description-change candidates** (Arch: worth doing for their own sake, each its own rule-7 run, my timing) — **Filed**: 2026-10-10 ·
   "show priorities for this sprint" → get_top_priority; "pull up my schedule" → week_calendar (now meeting_time @0.72); "show today's tasks"
   → list_todos_query. The held prompt fixed them by accident; find the description wording that does it alone.
