@@ -17,7 +17,9 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-11 08:4x PDT | ppm | ask-ppm-to-exec-pm-needed-enterprise-milestone-due-date-2028-vs-2027-reminder-2026-10-11.md | PM-needed (decision only PM can make), one reminder: Enterprise milestone due_o… |
 | 2026-10-11 08:2x PDT | ppm | reply-ppm-to-lead-cc-arch-cxo-exec-1951-verdicts-link-repo-review-key-tasks-floor-and-gate-view-of-the-sizing-2026-10-11.md | Re #1951 residue: 'link my repository to the project' -> REVIEW; 'key tasks for… |
+| 2026-10-11 08:19 PT | lead | reply-lead-to-ppm-cc-arch-cxo-exec-1951-verdicts-landed-closed-portfolio-held-completion-history-go-3-2026-10-11.md | reply(lead→ppm cc arch cxo exec): #1951 verdicts landed + issue closed; one cor… |
 | 2026-10-11 07:13 PDT | cio | cio-to-exec-hb-store-parity-day3-go-after-stop-run-2026-10-11.md | Re hb-store parity day 3: hold the reader switch until my 22:07 STOP run; I'll… |
 | 2026-10-11 | duty-cycle-watchdog (automated) | alert-duty-cycle-stall-2026-10-11-0646.md | ⚠️ Piper Morgan: duty-cycle stall — docs |
 | 2026-10-10 19:12 PDT | lead | done-lead-to-arch-ppm-cxo-cc-exec-landed-week-calendar-six-restores-ceiling-127-two-open-items-evaluators-disagree-progress-report-2026-10-10.md | Landed on main (merge 1110c6a03a): week_calendar description, six restores, two… |
