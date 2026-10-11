@@ -1949,7 +1949,11 @@ def test_1973_completion_history_is_no_go_on_the_dispatch_threshold_itself():
     report = gate.render_list_report("COMPLETION_HISTORY_PATTERNS", by_list, counts, len(records))
     verdict = next(line for line in report.splitlines() if line.startswith("verdict:"))
     assert not verdict.startswith("verdict: GO (deletable)"), verdict
-    beta = next(line for line in report.splitlines() if "When did we launch the beta?" in line)
+    beta = next(
+        line
+        for line in report.splitlines()
+        if "When did we launch the beta?" in line and line.lstrip().startswith("[")
+    )
     assert beta.lstrip().startswith("[FAIL]") and "dispatch threshold" in beta
     if verdict.startswith("verdict: GO (partial)"):
         survivor = next(
