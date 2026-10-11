@@ -269,17 +269,16 @@ class PreClassifier:
     # the beta?" scored check_completion_status @0.72, under the 0.8 dispatch
     # threshold, so it would stand down to surface 2, which is the #1117 misroute to
     # temporal. That literal is load-bearing; nothing in this list is deleted.
+    # 2026-10-11: rule-10 rows for the other held literals scored MATCH, so 3 of the
+    # 5 are tombstoned below (partial); the 2 survivors stay (surface 2 misses them).
     COMPLETION_HISTORY_PATTERNS = [
         # "when did I/we complete/finish/ship/deliver/launch/close X"
         r"\bwhen did (i|we) (complete|finish|ship|deliver|launch|close|wrap up|finalize)\b",
-        # "what date did I/we finish/complete/ship X"
-        r"\bwhat date did (i|we) (complete|finish|ship|deliver|launch|close)\b",
+        # 2026-10-11 (#1595): "what date did I/we ..." tombstoned (rule-10 row MATCH).
         # "show me when I/we shipped/completed/finished X"
         r"\bshow me when (i|we) (completed|finished|shipped|delivered|launched|closed)\b",
-        # "when was X completed/finished/shipped/delivered/launched" (passive)
-        r"\bwhen was .{1,40}(completed|finished|shipped|delivered|launched)\b",
-        # "how long ago did I/we complete/finish/ship X"
-        r"\bhow long ago did (i|we) (complete|finish|ship|deliver|launch)\b",
+        # 2026-10-11 (#1595): "when was X completed ..." (passive) tombstoned.
+        # 2026-10-11 (#1595): "how long ago did I/we ..." tombstoned.
     ]
 
     # #1595 Phase 3, seventh deletion (2026-10-02): PARTIAL — 52 of 56

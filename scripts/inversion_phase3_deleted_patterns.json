@@ -2768,6 +2768,41 @@
       "shadowed_literals": {},
       "known_reabsorptions": {},
       "note": "gate --list PORTFOLIO_PATTERNS --live read_status,read_referent,read_synthesis,create_todo,create_reminder,read_strategic,read_temporal,delete_todo,read_floor,read_floor_2,read_canonical,read_portfolio,complete_todo: GO (partial) -- 15 load-bearing literal(s) SURVIVE, 0 HELD, deleting 1: ceiling 130 -> 129. Per PM/PPM ruling, the delete/remove/get-rid-of literals are named survivors until #1935 regardless of their own gate verdict; hide/put-away/add/new-project are held or survivors per the gate's own read ('new project' gained a claiming row via today's rule-10 deposit and is now a genuine FAIL/survivor, not HELD, as it was in the pre-deposit measurement). The ONLY deletable literal is the 'search projects for Y' form -- its own corpus row 'search projects for budget' (today's rule-10 deposit) is a plain live MATCH (search_projects, live via the read_portfolio group). 0 unexercised literals (rule 10 satisfied). Zero reabsorptions post-deletion (checked via claim_for_phrase, both entry surfaces). No rule-10(B) restores needed -- the two affected tests (test_pre_classifier.py::test_portfolio_patterns split off its own corpus-row phrase; test_subsumption_portfolio_write_family_1884.py's control-case probe swapped to a surviving literal) converted cleanly under rule 10(A), every decline confirmed empirically (no reabsorption, no production misroute)."
+    },
+    {
+      "list": "COMPLETION_HISTORY_PATTERNS",
+      "deleted_on": "2026-10-11",
+      "literals": 5,
+      "partial": true,
+      "surviving_literals": {
+        "\\bwhen did (i|we) (complete|finish|ship|deliver|launch|close|wrap up|finalize)\\b": [
+          "When did we launch the beta?"
+        ],
+        "\\bshow me when (i|we) (completed|finished|shipped|delivered|launched|closed)\\b": [
+          "show me when we shipped the API"
+        ]
+      },
+      "rows_claimed_at_deletion": [
+        "what date did I finish the onboarding project",
+        "when was the migration completed",
+        "how long ago did we ship the dashboard"
+      ],
+      "verdict_report": [
+        "inversion-phase3-rule10-completion-history-rows-score-2026-10-11-anthropic.md"
+      ],
+      "expected_ops": [
+        "check_completion_status"
+      ],
+      "expected_op_by_phrase": {
+        "what date did I finish the onboarding project": "check_completion_status",
+        "when was the migration completed": "check_completion_status",
+        "how long ago did we ship the dashboard": "check_completion_status"
+      },
+      "misserved_at_deletion": {},
+      "surface2_verified_at_deletion": {},
+      "shadowed_literals": {},
+      "known_reabsorptions": {},
+      "note": "gate --list COMPLETION_HISTORY_PATTERNS --live read_status,read_referent,read_synthesis,create_todo,create_reminder,read_strategic,read_temporal,delete_todo,read_floor,read_floor_2,read_canonical,read_portfolio,complete_todo: GO (partial), deleting 3 of 5 literals (what date did / when was ... completed / how long ago did); ceiling 127 -> 124. The 3 rows_claimed_at_deletion each scored MATCH check_completion_status >=0.85 in inversion-phase3-rule10-completion-history-rows-score-2026-10-11-anthropic.md. Survivors and why: 'When did we launch the beta?' (router check_completion_status @0.72, under the 0.8 dispatch threshold) and 'show me when we shipped the API' (router shipped_this_week @0.72) both stand down to surface 2, and inversion-phase3-surface2-floor-probe-2026-10-11-n5-anthropic-completion.md shows surface 2 NOT landing STATUS for them ('When did we launch the beta?' TEMPORAL 3 / QUERY 2; 'show me when we shipped the API' QUERY/get_release_history 5/5), so those two literals are load-bearing and survive. No surface-2 credits are recorded for them."
     }
   ]
 }

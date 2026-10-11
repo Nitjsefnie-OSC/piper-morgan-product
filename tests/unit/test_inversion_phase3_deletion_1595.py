@@ -437,7 +437,10 @@ class TestDeletedPatternListsLedger:
         (test_pre_classifier.py::test_portfolio_patterns split off its own
         corpus-row phrase; test_subsumption_portfolio_write_family_1884.py's
         control-case probe swapped to a surviving literal) converted
-        cleanly under rule 10(A). This assertion is
+        cleanly under rule 10(A). Then the TWENTY-SEVENTH deletion, 2026-10-11:
+        COMPLETION_HISTORY_PATTERNS (3 of 5 literals, PARTIAL, 2 survivors
+        held by surface 2); its 3 rule-10 rows are plain live MATCHes
+        (check_completion_status). This assertion is
         pinned to the
         CURRENT ledger contents, per this test's own prior docstring ("this
         assertion needs updating in the SAME commit as the deletion") — a
@@ -471,6 +474,7 @@ class TestDeletedPatternListsLedger:
             "PROVENANCE_PATTERNS",
             "TODO_COMPLETE_PATTERNS",
             "PORTFOLIO_PATTERNS",
+            "COMPLETION_HISTORY_PATTERNS",
         }, (
             f"DELETED_PATTERN_LISTS contents changed — update this pin in the "
             f"same commit as the ledger change. Got: {sorted(names)}"
