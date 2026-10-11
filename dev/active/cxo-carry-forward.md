@@ -238,3 +238,5 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - **10-11 07:17 tick**: new log `dev/2026/10/11/2026-10-11-0717-cxo-code-log.md`. Quiet: mail 0, CI 12/12, UX 7 unchanged, scan 0. Cron `dab9789c` single. Owed list unchanged. Next: 09:47.
 
 - **10-11 07:19 MAIL WAKE (Lead)**: ruled show today's tasks = REVIEW (either honest), no more description edits there; owed: one quoted served reply after next promotion (today's tasks not buried). Gate asks are Arch's.
+
+- **10-11 07:32**: Lead acked show-today's-tasks REVIEW landed (e002e98349); my served check is on his post-promotion list. Nothing owed from me.
