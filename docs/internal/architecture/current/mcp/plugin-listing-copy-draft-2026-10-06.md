@@ -109,7 +109,7 @@ Three skills put that to use:
 
 **Clear about what's missing.** When something is empty, Piper says so. The skills don't invent progress, and they label inferences as inferences. In our tests against sample data, each skill did this in every trial, and the same assistant without the plugin didn't.
 
-**Read-only, and yours to switch off.** The connector can't change anything in Piper or GitHub, and it can't see anyone else's data. You approve access on a Piper sign-in page, and you can remove it any time in Piper under Settings → Connected apps. *(Last clause gated on PM's revoke test.)*
+**Read-only, and yours to switch off.** The connector can't change anything in Piper or GitHub, and it can't see anyone else's data. You approve access on a Piper sign-in page, and you can remove it any time in Piper under Settings → Connected apps.
 
 **An early release.** This first version reads and suggests. It doesn't act for you yet. Piper Morgan is in invitation-only alpha, and you need a Piper account to use it. To request an invitation, email support@pipermorgan.ai.
 
@@ -129,7 +129,7 @@ Piper Morgan is a product-management colleague. This connector lets your AI assi
 
 Ask "What does Piper know about me?" to see all of it in one answer, empty parts included. Piper reports empty as empty and doesn't fill gaps with guesses.
 
-**Read-only, and yours to switch off.** The connector can't change anything, and it can't see anyone else's data. You approve access on a Piper sign-in page and can remove it any time in Piper under Settings → Connected apps. *(Last clause gated on PM's revoke test.)*
+**Read-only, and yours to switch off.** The connector can't change anything, and it can't see anyone else's data. You approve access on a Piper sign-in page and can remove it any time in Piper under Settings → Connected apps.
 
 **An early release.** Piper Morgan is in invitation-only alpha, and you need a Piper account. To request an invitation, email support@pipermorgan.ai. For a daily standup and issue ranking built on this, see the Piper Morgan plugin.
 
@@ -172,3 +172,7 @@ Ask "What does Piper know about me?" to see all of it in one answer, empty parts
 - **"Yet" stays** ("Keep the 'yet' in").
 - **Revoke clause stays out until PM's revoke test, and nothing is submitted until that's resolved.** If the test passes, the clause goes in as gated text, then submission. If it fails, the clause stays out and the fix comes first.
 - First-time user setup and config: "can wait". Filed as #1981 (no milestone; placement is PPM's).
+
+### Revoke test PASSED (2026-10-11, PM + PA): the revoke clause is now live copy
+PM revoked the bare connector in Settings → Connected apps at 22:18:29Z (`POST …/mcp-connections/<client>/revoke` 200). In the same Claude chat, the next call at 22:19:34Z was refused (`mcp_identity_refused reason=revoked`, `POST /mcp` 401). Claude's refresh at 22:19:35Z was refused too (`mcp_oauth_refresh_refused reason=refresh_revoked`). PM saw Claude's "Reconnect a connector to keep using it" dialog. So the gating notes are removed above.
+**New submission blocker: #1982.** GitHub issues can't be read on the MCP app (two missing settings). The copy promises "your open GitHub issues", so nothing is submitted until #1982 is fixed and verified live.
