@@ -34,13 +34,14 @@ lives in GitHub, this file holds only durable owed/queued items.)
   hidden prompt, never pasted into the repo or mail. Fly restarts the app. Then PASS: alpha /health is up, and one chat turn by a user
   WITHOUT a stored key is served (fly logs show no limit error). Also decide: a separate workspace for prod (not lead-scoring's $50, so dev
   scoring can't starve users). Testers on their own stored keys are unaffected.
-- **API restored 16:33 10-10** (xian raised workspace + org limits to $250). lead-scoring key ($50, pipermorgan.ai org) pending xian's "stored".
-  The catalog batch is held on `claude/lead-catalog-description-batch-held`; fix its regressions next under the refined rule 7.
+- **API restored 16:33 10-10** (xian raised workspace + org limits to $250). lead-scoring key ($50, pipermorgan.ai org) STORED 17:2x and served
+  17:41 (one confirm call); workspace attribution is xian's console check. The catalog batch is RESOLVED 10-10 19:1x: week_calendar clause landed
+  (1110c6a03a), the todo-query description edit dropped (regressed in every wording); held branches superseded (remote delete permission-denied, don't retry).
 - **Post-landing follow-ups (10-10 evening)** — **Filed**: 2026-10-10 · (1) **Gate evaluator disagreement** (lane's finding): `--list` census
   credits restored STATUS/PRIORITY literals as deletable (GO) while `check_deleted_entry_non_regression` refuses them; they differ on liveness
   for FLOOR actions (get_project_status, get_top_priority). Report to Arch; one liveness source for both. Until fixed, the census GO on those
   lists is NOT a licence. (2) CLOSED 10-10 19:3x: CXO withdrew the progress-report re-point; the row stays generate_report, no literal bought.
-  (3) `\bstatus report\b` re-delete waits on (1). (4) PPM recounts the ceiling (127) after the merge.
+  (3) `\bstatus report\b` re-delete waits on (1). (4) DONE 10-10 19:1x: PPM recounted 127 (d29bfef2ce).
 
 - **Three description-change candidates** (Arch: worth doing for their own sake, each its own rule-7 run, my timing) — **Filed**: 2026-10-10 ·
   "show priorities for this sprint" → get_top_priority; "pull up my schedule" → week_calendar (now meeting_time @0.72); "show today's tasks"
