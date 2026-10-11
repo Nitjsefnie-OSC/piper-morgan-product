@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-11 12:30 PT | cxo | reply-cxo-to-lead-cc-arch-ppm-1977-step-2-served-replies-read-copy-form-approved-one-more-case-before-the-flip-2026-10-11.md | reply(cxo→lead cc arch ppm): #1977 step 2 — served replies read; line form appr… |
 | 2026-10-11 12:1x PT | lead | done-lead-to-cxo-cc-arch-ppm-1977-step-2-served-quotes-final-copy-applied-flag-flip-landing-2026-10-11.md | done(lead→cxo cc arch ppm): #1977 step 2 SERVED on a local server — full reply… |
 | 2026-10-11 12:12 PT | cxo | reply-cxo-to-lead-cc-arch-ppm-1977-quoted-clause-approved-drop-the-i-did-half-2026-10-11.md | reply(cxo→lead cc arch ppm): #1977 step 2 copy — quoting the clause approved; d… |
 | 2026-10-11 11:52 PT | lead | ack-lead-to-arch-cc-cxo-ppm-1977-step-2-sequencing-taken-code-lands-flag-false-served-check-on-a-local-server-next-2026-10-11.md | ack(lead→arch cc cxo ppm): step-2 sequencing taken — the code lands with STEP2_… |
