@@ -8,7 +8,7 @@
 - Notice to Exec that the crosspost is owed (`afdcc5345`).
 
 ## OWED (PM's hand)
-- **Crossposts for "It Doesn't Count if You Skip It"** (insight, published 10-11, website `a319f1d`): LinkedIn RECORDED 10-11 (linkedinURL + liPubDate set), **Medium still owed**. Row stays `published`, `canonicalSite` empty. When PM gives the Medium URL: set mediumURL, status + `canonicalSite` `distributed`. Step 1f resurfaces it each fire.
+- Nothing for "It Doesn't Count if You Skip It": FULLY DISTRIBUTED 10-11 (LinkedIn + Medium URLs from PM, row `distributed`, `canonicalSite` `distributed`).
 - `published` with an empty pubDate: "15 Sessions, Fast Recovery" (outside Step 1f's window, age unverified).
 
 ## Unclosed logs / awaiting
