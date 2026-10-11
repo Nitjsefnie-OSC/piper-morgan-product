@@ -487,9 +487,12 @@ class IntentService:
         if halves is None:
             return None
         answered, unanswered = halves
-        line = f"I haven't {unanswered} yet."
+        # The clause is the user's own words pasted in (CXO rule 1), so it is
+        # QUOTED: bare pasting collides with the sentence's grammar ("I haven't
+        # tell me a joke…"). Lead 2026-10-11; CXO owns the copy.
+        line = f'I haven\'t done "{unanswered}" yet.'
         if answered:
-            line = f"I did {answered}. {line}"
+            line = f'I did "{answered}". {line}'
         return line + IntentService._UNANSWERED_HALF_QUESTION
 
     def _append_unanswered_half(

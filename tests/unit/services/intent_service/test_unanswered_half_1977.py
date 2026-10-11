@@ -54,7 +54,7 @@ class TestUnansweredHalfLine:
         )
         line = IntentService._unanswered_half_line(intent)
         assert line == (
-            "I did summarize my current work. I haven't tell me a joke about cats yet. Want me to?"
+            'I did "summarize my current work". I haven\'t done "tell me a joke about cats" yet. Want me to?'
         )
 
     def test_no_clause_text_for_declined_claim_names_only_the_unanswered(self):
@@ -65,7 +65,7 @@ class TestUnansweredHalfLine:
         )
         assert (
             IntentService._unanswered_half_line(intent)
-            == "I haven't tell me a joke about cats yet. Want me to?"
+            == 'I haven\'t done "tell me a joke about cats" yet. Want me to?'
         )
 
     def test_served_category_differs_declined_clause_is_unanswered(self):
@@ -77,14 +77,14 @@ class TestUnansweredHalfLine:
             [("status", "get_project_status", "summarize my current work")],
         )
         assert IntentService._unanswered_half_line(intent) == (
-            "I did tell me a joke about cats. I haven't summarize my current work yet. Want me to?"
+            'I did "tell me a joke about cats". I haven\'t done "summarize my current work" yet. Want me to?'
         )
 
     def test_no_declined_claim_recorded_uses_the_residue(self):
         intent = _intent(IntentCategory.STATUS, "tell me a joke about cats", [])
         assert (
             IntentService._unanswered_half_line(intent)
-            == "I haven't tell me a joke about cats yet. Want me to?"
+            == 'I haven\'t done "tell me a joke about cats" yet. Want me to?'
         )
 
     def test_no_residue_in_context_is_none(self):
@@ -104,8 +104,10 @@ class TestUnansweredHalfLine:
         assert len(residue.split()) == 12
         intent = _intent(IntentCategory.STATUS, residue, [])
         line = IntentService._unanswered_half_line(intent)
-        assert line == "I haven't list all of my archived projects from the yet. Want me to?"
-        assert len(line.split(" yet.")[0].removeprefix("I haven't ").split()) == 8
+        assert (
+            line == 'I haven\'t done "list all of my archived projects from the" yet. Want me to?'
+        )
+        assert len(line.split('"')[1].split()) == 8
 
     def test_blank_clause_after_trim_is_none(self):
         assert (
@@ -205,7 +207,7 @@ class TestAppendAndArm:
     """The funnel half: the line rides after the answer; the question is kept
     only when a bare "yes" can cash it (the #852 contextual rail)."""
 
-    LINE = "I haven't tell me a joke about cats yet. Want me to?"
+    LINE = 'I haven\'t done "tell me a joke about cats" yet. Want me to?'
 
     def _service(self):
         return IntentService(intent_classifier=IntentClassifier(llm_service=_ExplosiveLLM()))
@@ -242,7 +244,7 @@ class TestAppendAndArm:
             unanswered_half_suffix=self.LINE,
             unanswered_half_clause="tell me a joke about cats",
         )
-        assert out.message.endswith("I haven't tell me a joke about cats yet.")
+        assert out.message.endswith('I haven\'t done "tell me a joke about cats" yet.')
         assert "Want me to?" not in out.message
         assert get_or_create_context(sid, user_id=_USER).last_offer is existing
 
@@ -268,7 +270,7 @@ class TestAppendAndArm:
             unanswered_half_suffix=self.LINE,
             unanswered_half_clause="tell me a joke about cats",
         )
-        assert out.message.endswith("cats yet.")
+        assert out.message.endswith('cats" yet.')
 
     def test_no_suffix_is_byte_identical(self):
         out = self._service()._apply_soft_offer(self._result(), "hi", str(uuid4()), user_id=_USER)
