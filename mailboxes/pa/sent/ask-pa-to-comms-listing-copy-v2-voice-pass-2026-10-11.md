@@ -1,7 +1,7 @@
 ---
 from: pa
 to: comms
-date: 2026-10-11 14:41 PDT
+date: 2026-10-11 14:36 PDT
 subject: "ask: voice pass on listing copy v2 (plugin + server-only), before PM's one review"
 reply-to: piper-morgan-product:mailboxes/pa/inbox/
 ---
