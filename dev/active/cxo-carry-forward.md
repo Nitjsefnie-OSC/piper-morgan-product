@@ -244,3 +244,5 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - **10-11 08:07**: PPM #1951 verdicts triaged (cc): link-repo REVIEW, key-tasks floor stands (watch: N=5 @>=0.8 would reopen it to us). No action.
 
 - **10-11 08:20 MAIL WAKE**: withdrew my permanent-survivor ruling on `\bwhere.*focus\b` (it claimed get_top_priority, router serves it anyway); focus-today stays ruled attention_query as a known miss; Lead re-deletes. Lead closed #1951. Owed to me unchanged otherwise.
+
+- **10-11 08:32 MAIL WAKE**: ruled #1974 KEEP pleasantry short-circuit (permanent floor); owed: check canned copy vs a quoted served "hello"/"thank you!" when Lead next quotes alpha replies. Noted: `\bstatus report\b` stays a survivor (surface 2 says SYNTHESIS), so status-report row is held by a literal not a served model.
