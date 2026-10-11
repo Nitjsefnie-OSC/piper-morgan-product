@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 # duty-cycle-heartbeat.sh v1.0 (CIO 2026-07-28; proposed 07-27, HOST-approved 07-28 with 3 refinements)
 #
+# ⚠️ IT PUSHES YOUR WHOLE CYCLE BRANCH (`git push origin HEAD:main`, #1980): work you mean to hold goes on a
+# side branch; anything on the cycle branch ships at the next heartbeat, ahead of any tests you meant to run first.
+#
 # WHY THIS EXISTS
 # The freeze-watchdog inferred liveness from WORK OUTPUT — commits and session-log updates. But the
 # duty-cycle skill tells agents NOT to produce work output on quiet fires ("don't commit a
