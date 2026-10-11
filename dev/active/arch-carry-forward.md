@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-10-10 18:5x (post-reboot)
+last_updated: 2026-10-11 08:2x PDT
 currency_claim: rewritten at substantive-change boundaries, verified at every START
 max_age_days: 4
 ---
@@ -163,3 +163,5 @@ ADR-078 D4: the classifier stays stateless — also an ESSENCE standing rule.
 
 #1481 Slack principal · #1459 original_message ratchet (Lead's build) · #1462 PDR-006 · #973
 MEM-CACHE · ADR-068 prep (gated on PPM naming a live sprint) · m-40/m-30 proven-bar watches.
+
+- 2026-10-11: item 1 ruled (the split is the mis-serve proof, not liveness). Restore-validity rule added: 2 of the 10-10 restores claim the wrong op. Waiting on CXO for focus-today (`\bwhere.*focus\b` survivor status) and on Lead for the milestones re-delete, the `\bstatus report\b` N=5 probe, `ruled_survivors` with the claim-agreement pin, and the PORTFOLIO 5-row deposit. Lead's interpreter is borrowed for gate scripts (this seat has no venv).
