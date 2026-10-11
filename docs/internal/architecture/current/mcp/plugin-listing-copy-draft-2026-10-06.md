@@ -93,7 +93,7 @@ no frame for "early probe" vs "the product", so the narrow scope could read as t
 
 **Name:** Piper Morgan
 
-**One-liner:** A product-management colleague that turns your priorities and open GitHub issues into a daily standup and a ranked to-do list. Read-only.
+**One-liner:** A product-management colleague who turns your priorities and open GitHub issues into a daily standup and a ranked to-do list. Read-only.
 
 **Description:**
 
@@ -103,13 +103,13 @@ Three skills put that to use:
 
 - **What Piper knows**: your profile, priorities and open issues in one place, including what Piper *doesn't* know yet.
 - **Morning standup**: a plan for today, short enough to read in thirty seconds, tied to your priorities and to specific issues.
-- **Prioritize my issues**: your open issues sorted into do first, next, and defer or drop, each with one line of reasoning, plus the biggest judgment call made, so you can overrule it.
+- **Prioritize my issues**: your open issues sorted into do first, next, and defer or drop, each with one line of reasoning, plus the biggest judgment call behind the ranking, so you can overrule it.
 
-**Honest about what's missing.** When something is empty, Piper says so. The skills don't invent progress, and they label inferences as inferences. In our tests against sample data, each skill did this every time, and the same assistant without the plugin didn't.
+**Clear about what's missing.** When something is empty, Piper says so. The skills don't invent progress, and they label inferences as inferences. In our tests against sample data, each skill did this in every trial, and the same assistant without the plugin didn't.
 
-**Read-only, and yours to switch off.** The connection can't change anything in Piper or GitHub, and it can't see anyone else's data. You approve access on a Piper sign-in page, and you can remove it any time in Piper under Settings → Connected apps. *(Last clause gated on PM's revoke test.)*
+**Read-only, and yours to switch off.** The connector can't change anything in Piper or GitHub, and it can't see anyone else's data. You approve access on a Piper sign-in page, and you can remove it any time in Piper under Settings → Connected apps. *(Last clause gated on PM's revoke test.)*
 
-**An early release.** This first version reads and suggests; it doesn't act for you yet. Piper Morgan is in invitation-only alpha, and you need a Piper account to use this. Request an invitation: [INVITE LINK].
+**An early release.** This first version reads and suggests. It doesn't act for you yet. Piper Morgan is in invitation-only alpha, and you need a Piper account to use it. Request an invitation: [INVITE LINK].
 
 ### B. Server-only listing (Smithery, MCP Registry, Claude connector directory)
 
@@ -119,8 +119,8 @@ Three skills put that to use:
 
 Piper Morgan is a product-management colleague. This connector lets your AI assistant read what Piper knows about you, so it can plan and prioritize with real context:
 
-- your organization, active projects and stated priorities;
-- what Piper has confirmed about how you like to work;
+- your organization, active projects and stated priorities
+- what Piper has confirmed about how you like to work
 - your open GitHub issues, through the GitHub account you connected to Piper.
 
 Ask "What does Piper know about me?" to see all of it in one answer, empty parts included. Piper reports empty as empty and doesn't fill gaps with guesses.
@@ -131,7 +131,7 @@ Ask "What does Piper know about me?" to see all of it in one answer, empty parts
 
 **MCP Registry `server.json` description** (Registry limit 100 chars): `Read-only access to what Piper Morgan, a product-management colleague, knows about you.` *(87 chars; the 100 limit is the schema's `maxLength`, checked 10-11.)*
 
-**Counted 10-11 (python `len`):** A one-liner 137/200; A description 1,505/2,000; B one-liner 147/200; B description ~1,000/2,000.
+**Counted 10-11 (python `len`), recounted after Comms' pass:** A one-liner 136/200, A description ~1,450/2,000, B one-liner 147/200, B description ~950/2,000. Registry 87/100 unchanged.
 
 ### What changed from v1, line by line
 - Invite-only moved from a closing aside to a closing call to action, with a link.
@@ -140,3 +140,13 @@ Ask "What does Piper know about me?" to see all of it in one answer, empty parts
 - "In our tests… each skill does this where…" → "did this every time" (sourced: `RESULTS-v0.1.0`, complete run, 1/1/1 vs 0/0/0; "every time" rather than "reliably" to avoid implying a large sample). Comms' call.
 - Revoke clause added, gated on the test.
 - A server-only variant that promises no skills.
+
+### Comms' voice pass (2026-10-11), changes made in place above
+- A one-liner: "a colleague **that** turns" → "**who** turns" (Piper is they/them, and v1 had "who").
+- "Honest about what's missing" → "**Clear** about what's missing". PM flags "honest" as a Claude-ism, and v1 used "Clear".
+- "did this every time" → "did this **in every trial**". It's the same sourced claim (`RESULTS-v0.1.0`, 1/1/1 vs 0/0/0), and it names the unit, so it doesn't sound like a large sample.
+- "plus the biggest judgment call made" → "the biggest judgment call **behind the ranking**" (the bare passive had lost its subject).
+- A: "The connection can't change" → "The **connector**", to match B and the "connector is it" rule.
+- "you need a Piper account to use this" → "to use **it**".
+- "reads and suggests; it doesn't act" → two sentences, and the B bullet list lost its semicolons (no semicolons in public copy).
+- **Left for PM, not changed:** "It doesn't act for you **yet**". "Yet" is a quiet promise about a later version. It's true to the plan, but it sets the kind of expectation PM named. Keep it or drop it, PM's call. `[INVITE LINK]` and the gated revoke clause are untouched.
