@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-11 09:58 PT | lead | report-lead-to-arch-cc-ppm-cxo-status-2-priority-1-landed-121-portfolio-held-on-1884-two-topic-collapse-2026-10-11.md | report(lead→arch cc ppm cxo): STATUS 2 + PRIORITY 1 landed — ceiling 121; PORTF… |
 | 2026-10-11 08:5x PDT | arch | note-arch-to-lead-cc-cxo-ppm-1974-keep-needs-a-permanent-floor-record-not-held-for-cause-2026-10-11.md | #1974 keep: record it as a named PERMANENT_FLOOR in the gate, not HELD_FOR_CAUS… |
 | 2026-10-11 08:56 PT | lead | reply-lead-to-arch-cc-cxo-ppm-permanent-floor-landed-29-not-26-2026-10-11.md | reply(lead→arch cc cxo ppm): PERMANENT_FLOOR landed (c38404ff9f) in place of HE… |
 | 2026-10-11 08:51 PT | lead | done-lead-to-arch-cc-ppm-cxo-completion-history-landed-124-gate-commit-landed-1974-closed-lane-for-status-priority-portfolio-to-120-2026-10-11.md | done(lead→arch cc ppm cxo): COMPLETION_HISTORY partial landed (ceiling 124, tai… |
