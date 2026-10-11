@@ -230,3 +230,5 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - **10-10 18:32 MAIL WAKE (PPM re-judge)**: concurred status report / progress report / project status report -> get_project_status (my 10-01 call was wrong, handler is repo-activity); REFUSED focus-today -> get_top_priority (family stays attention_query; offered to revisit all three today-focus rows with side-by-side served replies). Sent PPM cc Lead/Arch/Exec. WATCH: Lead re-points rows 1-2 and re-deletes under rule 10; any PPM/Arch push to move the today-focus family.
 
 - **10-10 18:45**: PPM conceded focus-today (stays attention_query); report rows re-point is Lead's. Arch approved 8-row disposition. Pard: gh needs `GODEBUG=netdns=go` until xian runs mDNSResponder HUP; bare-gh timeout = unverified. Next: 18:47 tick.
+
+- **10-10 19:17**: ruled progress report stays generate_report (withdrew re-point). Lead landed 1110c6a03a. Next: 21:47 = STOP (day-close, re-arm cron).
