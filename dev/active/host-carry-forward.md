@@ -10,6 +10,7 @@ max_age_days: 1
 
 **Cadence**: LaunchAgent seat 7 (`com.xian.pm-host-cycle`, `26 6,9,12,15,18,21`). There is no session cron; `CronList` always reads empty and that is expected. The registry row (`dev/active/duty-cycle-registry.tsv`, host row, col 2) is the cadence source of truth.
 
+OWED[key: host-pat-invite-mint; to: pa; by: trigger: xian re-adds Bash(scripts/mint_prod_invite.sh:*) on HOST's seat]: dry run, mint ONE (--apply), raw in 0600 roster only, mail PA cc Exec the masked form; PM's go relayed via PA and Lead 10-11
 OWED[key: host-alpha-inbox; to: exec; by: trigger: xian grants read-only Gmail on HOST's seat and confirms which account receives alpha@]: start watching alpha@ each fire; report sender first name, date, subject, gist to Exec only; never send. ROUTE (xian via Janus 10-11): alpha@ is an alias of xian's pipermorgan.ai address, forwarded to a designinproduct.com address and delivered by catch-all to his designinproduct.com inbox; my connector must be signed into THAT Google account (unknown until the first read). Interim: Janus checks at 05:07, 14:07, 20:07 and relays; stops when my seat can read.
 
 **10-10 15:26 wake**: e2e lookup check is RIPE (both commits in deployed `dd5b7c702e`, file (A) installed); blocker = needs a person in conversation for the ask click; notice sent to Exec. Whether the ~15:00 reboot happened is unverified by me; this fire ran normally.
