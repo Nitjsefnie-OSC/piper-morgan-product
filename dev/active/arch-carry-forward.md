@@ -173,3 +173,4 @@ MEM-CACHE · ADR-068 prep (gated on PPM naming a live sprint) · m-40/m-30 prove
 - 2026-10-11 10:2x: plan-aware rule 11 approved with a fallback condition. PORTFOLIO holds at 121 on #1977 (fallback swallows a two-topic turn). Wednesday reads 121.
 - 2026-10-11 10:4x: #1977 step 1 approved. Corrected: unclaimed fallback is NO-GO until step 2. The PORTFOLIO literal needs both steps for 120.
 - 2026-10-11 11:3x: #1977 step 1 landed and accepted (rule 7 clarified for surface-1-only changes). Step 2 is Lead's, starting now. If it lands, PORTFOLIO reads planned → 120. Wednesday's count is PM's via Exec.
+- 2026-10-11 13:0x: #1977 HOLD on the preregistered 20 (6 neither, one phrasing). The ceiling stays at 121 for Wednesday. Re-run the same 20 when #1979 lands.
