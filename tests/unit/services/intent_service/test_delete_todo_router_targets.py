@@ -29,6 +29,7 @@ from services.intent_service.conversation_context import NumberedList
 from services.intent_service.destructive_confirm import (
     CONFIRM_PENDING_ACTION_WORKFLOW,
     CONFIRMED_CONTEXT_KEY,
+    RESOLVED_TODO_CONTEXT_KEY,
 )
 from services.intent_service.todo_handlers import (
     BATCH_DELETE_IDS_KEY,
@@ -196,6 +197,64 @@ class TestHandleDeleteTodoTargets:
             context={"original_message": "delete the PR review"},
         )
         assert await handlers.handle_delete_todo_targets(intent, "s1", uuid4(), offers, "u") is None
+        handlers.todo_service.delete_todo.assert_not_awaited()
+
+    @pytest.mark.asyncio
+    async def test_1975_gate_confirmed_yes_with_a_bound_row_is_left_to_the_legacy_handler(
+        self, handlers, offers, session_ctx
+    ):
+        """#1975 (alpha 4bd1a236e9, Web's served run 2026-10-11): 'delete the
+        reminder "web check alpha one"' named an UPCOMING reminder. The #1666
+        rail gate resolved it against all active todos, asked 'Delete todo:
+        "web check alpha one"? (yes/no)' and bound the row. The confirmed yes
+        then reached THIS handler first (the router had named the target
+        too), which re-resolved the name against due reminders only and
+        answered "I couldn't find … in your due reminders" — the executor
+        searching a different set from the confirm. A gate-confirmed carrier
+        with a bound row is not this handler's turn: return None so
+        handle_delete_todo deletes exactly the bound id."""
+        upcoming = Todo(text="web check alpha one", priority="medium")
+        upcoming.id = str(uuid4())
+        upcoming.reminder_date = _NOW + timedelta(hours=16)
+        upcoming.completed = False
+        due_only = [_due("revise the pr", 100)]
+        handlers.todo_service.list_todos = AsyncMock(return_value=due_only + [upcoming])
+        intent = _intent(
+            'delete the reminder "web check alpha one"',
+            ["name:web check alpha one"],
+            extra={
+                CONFIRMED_CONTEXT_KEY: True,
+                RESOLVED_TODO_CONTEXT_KEY: {
+                    "todo_id": upcoming.id,
+                    "text": upcoming.text,
+                    "number": "2",
+                },
+            },
+        )
+        result = await handlers.handle_delete_todo_targets(intent, "s1", uuid4(), offers, "u")
+        assert result is None
+        handlers.todo_service.delete_todo.assert_not_awaited()
+        offers.set_pending_offer.assert_not_called()
+
+    @pytest.mark.asyncio
+    async def test_1975_the_same_turn_unconfirmed_still_resolves_against_the_due_pool(
+        self, handlers, offers, session_ctx
+    ):
+        """Boundary: without the gate's binding the handler's own path is
+        unchanged — an upcoming reminder named while another is due is still
+        unresolved against the due pool (that pool rule is #1943's, not this
+        fix's). Pins that #1975 narrowed nothing but the confirmed re-entry."""
+        upcoming = Todo(text="web check alpha one", priority="medium")
+        upcoming.id = str(uuid4())
+        upcoming.reminder_date = _NOW + timedelta(hours=16)
+        upcoming.completed = False
+        handlers.todo_service.list_todos = AsyncMock(
+            return_value=[_due("revise the pr", 100), upcoming]
+        )
+        intent = _intent('delete the reminder "web check alpha one"', ["name:web check alpha one"])
+        msg, armed = await handlers.handle_delete_todo_targets(intent, "s1", uuid4(), offers, "u")
+        assert armed is False
+        assert msg.startswith('I couldn\'t find "web check alpha one" in your due reminders.')
         handlers.todo_service.delete_todo.assert_not_awaited()
 
     @pytest.mark.asyncio

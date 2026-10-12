@@ -1000,9 +1000,23 @@ class TodoIntentHandlers:
         from services.intent_service.destructive_confirm import (
             CONFIRM_PENDING_ACTION_WORKFLOW,
             CONFIRMED_CONTEXT_KEY,
+            RESOLVED_TODO_CONTEXT_KEY,
         )
 
         ctx = dict(intent.context or {})
+        # #1975: a confirmed "yes" whose ask was armed by the #1666 rail gate
+        # (build_todo_delete_confirmation's named-target leg) carries the row
+        # it named under RESOLVED_TODO_CONTEXT_KEY, not BATCH_DELETE_IDS_KEY.
+        # That gate resolves against ALL active todos, so an UPCOMING reminder
+        # named by title is confirmed by name — and must then be deleted by
+        # that bound id in handle_delete_todo, never re-resolved here against
+        # the due-reminders pool (where an upcoming row is absent, so the user
+        # was told "couldn't find it in your due reminders" on the very item
+        # they had just confirmed). The gate ran first on the classified turn
+        # precisely because the router also named the target; the binding it
+        # made is the one the confirmed yes honours.
+        if ctx.get(CONFIRMED_CONTEXT_KEY) and ctx.get(RESOLVED_TODO_CONTEXT_KEY):
+            return None
         args = ctx.get("inversion_args") or {}
         targets = _router_target_tokens(args.get("targets")) if isinstance(args, dict) else []
         exclude = _router_target_tokens(args.get("exclude")) if isinstance(args, dict) else []
