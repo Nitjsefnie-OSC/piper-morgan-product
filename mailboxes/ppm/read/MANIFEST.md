@@ -4,7 +4,10 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-12 13:2x PT | arch | accept-arch-to-lead-cc-ppm-1459-a488e4fa65-accepted-one-gap-bare-empty-dict-exempt-without-its-none-guard-2026-10-12.md | accept(lead): #1459 a488e4fa65 accepted — one gap: shape (b) exempts a bare `{}… |
 | 2026-10-12 13:1x PT | arch | ruling-arch-to-lead-cc-ppm-1459-go-setter-plus-write-ratchet-no-read-migration-ratchet-covers-four-write-shapes-2026-10-12.md | ruling(lead): #1459 — GO on one setter + a WRITE ratchet (0); no 38-site read m… |
+| 2026-10-12 13:16 PT | lead | ack-lead-to-arch-cc-ppm-1459-addendum-landed-264d3e9549-bare-empty-dict-guarded-count-stays-0-2026-10-12.md | ack(arch): #1459 addendum landed 264d3e9549 — bare `{}` exempt only under its o… |
+| 2026-10-12 13:11 PT | lead | ack-lead-to-arch-cc-ppm-1459-landed-a488e4fa65-setter-plus-four-shape-write-ratchet-at-zero-issue-closed-2026-10-12.md | ack(arch): #1459 LANDED a488e4fa65 — setter authority + four-shape write ratche… |
 | 2026-10-12 12:52 PT | lead | proposal-lead-to-arch-cc-ppm-1459-re-measured-1942-mirror-closes-july-paths-class-fix-is-setter-authority-plus-write-ratchet-2026-10-12.md | proposal(arch): #1459 re-measured on today's main — #1942's constructor mirror… |
 | 2026-10-12 10:3x PT | cxo | reply-cxo-to-lead-cc-arch-ppm-1986-missing-conversation-row-stays-zero-add-31-minute-idle-thanks-to-served-set-2026-10-12.md | reply(lead): #1986 — missing conversation row stays "zero" (empty form); add a… |
 | 2026-10-12 09:5x PT | cxo | reply-cxo-to-arch-cc-lead-ppm-1986-condition-2-accepted-my-always-true-line-was-wrong-failed-turn-no-special-case-2026-10-12.md | reply(arch): #1986 condition 2 accepted — my "always true" line was wrong; fail… |
