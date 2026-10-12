@@ -17,6 +17,7 @@
   paragraph on the thirtieth deletion. Any lane brief copies it: `git grep -F` every claimed phrase across tests/unit, integration, e2e;
   run `tests/integration -m 'not llm'` on the lane before landing. Known miss to carry to the COMPLETION_HISTORY ledger when that lane next
   opens: "show me when we shipped the API" → shipped_this_week 6/6 on main.
+- **#1975 LANDED e6b4fdf413 + CLOSED 10-12 16:3x** (gate-confirmed delete honours its bound row); owed: served re-check on alpha after the next promotion (create upcoming reminder → delete by title → yes → gone). **#1983:** CXO asked for hint copy (draft sent 16:2x, cc PA); on "draft fine" land the template change (hint + placeholder + JS fallback placeholder at ~:577). **#1993 LANDED fa8b9efe1a + CLOSED.**
 - **#1982:** held branch `claude/lead-1982-pat-dual-write` (4400ee3d9f, still on origin) — land when PA relays PM's PAT-only alpha test is
   done; flip `GITHUB_LEGACY_CONTEXT_FALLBACK` to False in the commit that records `legacy=0`.
 - **#1459 LANDED a488e4fa65 + CLOSED 10-12 13:12** (Arch GO 13:1x with three amendments, all applied): `Intent.bind_original_message` one
