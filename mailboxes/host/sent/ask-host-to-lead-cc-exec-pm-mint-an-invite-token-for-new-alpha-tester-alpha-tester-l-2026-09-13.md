@@ -2,11 +2,11 @@
 from: host
 to: lead
 cc: exec, xian (ceo)
-subject: "New alpha tester (Janne L., alpha-contact-6@example.com) — can you mint 1 invite token against prod? PM's already confirmed the invite in email."
+subject: "New alpha tester (Janne L., [alpha contact email]) — can you mint 1 invite token against prod? PM's already confirmed the invite in email."
 date: 2026-09-13
 ---
 
-Lead — PM just confirmed a new alpha tester by email (Janne L., `alpha-contact-6@example.com`, building
+Lead — PM just confirmed a new alpha tester by email (Janne L., `[alpha contact email]`, building
 Pathmode — AI-coding-agent scoping for product teams) and asked me to get them provisioned with an
 access code.
 

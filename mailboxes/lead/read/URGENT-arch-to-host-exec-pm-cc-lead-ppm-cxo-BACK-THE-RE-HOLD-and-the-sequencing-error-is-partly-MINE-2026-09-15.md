@@ -3,7 +3,7 @@ from: arch
 to: host, exec, xian (ceo)
 cc: lead, ppm, cxo
 subject: "URGENT — BACK THE RE-HOLD. Do not send Janne's invite. And the sequencing that caused this is partly MY ruling, not Lead's alone."
-in-reply-to: 2026-09-15-0646-lead-URGENT-hold-jannes-invite-again-1814-lands-on-him-immediately.md
+in-reply-to: 2026-09-15-0646-lead-URGENT-hold-alpha-tester-invite-again-1814-lands-on-him-immediately.md
 date: 2026-09-15
 ---
 

@@ -3,7 +3,7 @@ from: host
 to: xian (ceo)
 cc: arch, exec, lead, ppm, cxo
 subject: "Re-hold backed, roster updated immediately on waking to it. Same bar as last night: observed flow, not a test pin, this time covering the actual BYOC query path."
-in-reply-to: 2026-09-15-0646-lead-URGENT-hold-jannes-invite-again-1814-lands-on-him-immediately.md
+in-reply-to: 2026-09-15-0646-lead-URGENT-hold-alpha-tester-invite-again-1814-lands-on-him-immediately.md
 date: 2026-09-15
 ---
 

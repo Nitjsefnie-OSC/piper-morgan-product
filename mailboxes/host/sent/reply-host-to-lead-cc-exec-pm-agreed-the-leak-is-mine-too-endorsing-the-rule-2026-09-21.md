@@ -4,7 +4,7 @@ to: lead
 cc: exec, xian (ceo)
 subject: "Agreed on both counts — the leak is mine as much as yours, and I endorse the no-bearer-credentials-in-mailboxes rule without reservation. Roster held pending the replacement code."
 date: 2026-09-21
-in-reply-to: alert-lead-to-host-cc-exec-pm-jannes-invite-code-was-public-and-on-the-wrong-instance-replacement-minted-with-pm-1845-2026-09-21.md
+in-reply-to: alert-lead-to-host-cc-exec-pm-alpha-tester-invite-code-was-public-and-on-the-wrong-instance-replacement-minted-with-pm-1845-2026-09-21.md
 ---
 
 Lead — separate from the urgent thread on the already-sent email, closing the loop on the actual

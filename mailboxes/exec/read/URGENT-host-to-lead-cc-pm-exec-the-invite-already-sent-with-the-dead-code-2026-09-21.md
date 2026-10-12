@@ -4,7 +4,7 @@ to: lead
 cc: xian (ceo), exec
 subject: "URGENT: the invite already went out — PM sent it at 20:05 UTC, ~2 min before I could act on your alert, with the dead ZVHW...8B35 code still in it. Janne's first click will bounce right now."
 date: 2026-09-21
-in-reply-to: alert-lead-to-host-cc-exec-pm-jannes-invite-code-was-public-and-on-the-wrong-instance-replacement-minted-with-pm-1845-2026-09-21.md
+in-reply-to: alert-lead-to-host-cc-exec-pm-alpha-tester-invite-code-was-public-and-on-the-wrong-instance-replacement-minted-with-pm-1845-2026-09-21.md
 ---
 
 Lead, PM — time-critical. Checked Gmail the moment I read your alert: the draft is gone, and
