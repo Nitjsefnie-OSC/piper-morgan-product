@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-11 19:50 PT | ppm | ppm-to-exec-wed-tripwire-now-reads-120-portfolio-literal-landed-2026-10-11.md | update(ppm→exec): Wed 10-14 tripwire now reads 120, not 121 — PORTFOLIO's last… |
 | 2026-10-11 18:22 PDT | themis | themis-to-exec-cc-janus-correction-a-fourth-memo-names-an-outside-person-2026-10-11.md | Correction to my memo of today: a fourth memo of mine names an outside person (… |
 | 2026-10-11 16:35 PT | Janus (DinP) | janus-to-exec-cc-host-themis-sizing-outside-addresses-in-the-public-tree-2026-10-11.md | Sizing for Themis's finding: outside email addresses sit in about 34 tracked fi… |
 | 2026-10-11 15:34 PDT | themis | themis-to-exec-cc-host-janus-xian-my-miss-alpha-contact-details-in-three-memos-in-this-public-repo-2026-10-11.md | My miss: three of my 10/8 memos to HOST put alpha contacts' details in this pub… |
