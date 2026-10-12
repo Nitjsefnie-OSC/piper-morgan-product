@@ -12,22 +12,22 @@ I decided to open-source Piper Morgan under Apache 2.0. The details came togethe
 
 The paperwork is easy. The hard part is thinking about what giving this thing away actually means once it's out of my hands.
 
-The worry that actually held my attention was somebody taking the code, stripping out the ethical boundaries and other aspects that make it careful and mindful of the need to earn trust. Could someone ship an "evil Piper" that looks like this product without the providing the same rules to prevent crossing lines with people's data and their trust. 
+The worry that actually held my attention was somebody taking the code, stripping out the ethical boundaries and other aspects that make it careful and mindful of the need to earn trust. Could someone ship an "evil Piper" that looks like this product without providing the same rules to prevent crossing lines with people's data and their trust?
 
-The architecture that keeps Piper Morgan from being extractive or intrusive isn't hidden in compiled code. The repo has been public from day one, and when the source is public anyone can see which pieces to cut, if that's what they want to do. 
+The architecture that keeps Piper Morgan from being extractive or intrusive isn't hidden in compiled code. The repo has been public from day one, and when the source is public anyone can see which pieces to cut, if that's what they want to do.
 
 Ordinary competition, a rival cloning the code and building a competing product on it, is a cost I can live with. That's the normal price of giving code away. This is a different worry entirely.
 
-Exec and I looked at whether a license has any ability to actually stop such behavior. We checked the question against the Open Source and Free Software definitions directly. We even looked specifically at the Hippocratic License, since it exists for exactly this concern — restricting use by whoever would do harmful things with the code. (We ended up ruling it out. It isn't recognized by the Open Source Initiative, it's largely untested, and adopting it would cost us the "genuinely open" claim that makes Apache 2.0 worth choosing in the first place.) 
+Exec and I looked at whether a license has any ability to actually stop such behavior. We checked the question against the Open Source and Free Software definitions directly. We even looked specifically at the Hippocratic License, since it exists for exactly this concern — restricting use by whoever would do harmful things with the code. (We ended up ruling it out. It isn't recognized by the Open Source Initiative, it's largely untested, and adopting it would cost us the "genuinely open" claim that makes Apache 2.0 worth choosing in the first place.)
 
-I realized no clause in any license stops somebody from forking the code and deleting the parts they don't like. Once it's open, there's no preventing.
+I realized no clause in any license stops somebody from forking the code and deleting the parts they don't like. Once it's open, there's no preventing it.
 
 What's left is a reputational mechanism, not a legal one, built in two pieces. A trademark filing for the Piper Morgan name, running in parallel, so a stripped-down fork can't call itself Piper Morgan and borrow the trust that name carries. And a public values document, specific enough that a fork visibly diverging from it can't credibly claim to still be us. I handed that second piece to my communications agent (Comms) and my head-of-sapient-trust agent (HOST) jointly, with no rush deadline. Think it over, I suggested.
 
-Comms went beyond asking "what do we believe?" to question which of those beliefs would need to be visibly absent before an outside observer could tell a fork had quietly dropped them. HOST went and read the parts of the codebase designed to fulfill the ethical claims true, rather than trusting the docs, and came back with a first pass at three properties:
-1. No cross-user learning, enforced in the architecture itself rather than by policy alone. 
-2. The audit-transparency system that lets anyone check what the system looked at before acting. 
-3. A hash-only discipline that keeps audit logs honest without exposing what's actually in them. 
+Comms went beyond asking "what do we believe?" to question which of those beliefs would need to be visibly absent before an outside observer could tell a fork had quietly dropped them. HOST went and read the parts of the codebase designed to make the ethical claims true, rather than trusting the docs, and came back with a first pass at three properties:
+1. No cross-user learning, enforced in the architecture itself rather than by policy alone.
+2. The audit-transparency system that lets anyone check what the system looked at before acting.
+3. A hash-only discipline that keeps audit logs checkable without exposing what's actually in them.
 
 All three framed under language I'd already used to describe what this project should be: not extractive, not intrusive, doesn't violate confidence.
 
