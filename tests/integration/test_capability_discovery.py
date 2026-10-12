@@ -215,7 +215,8 @@ class TestCapabilityDiscovery:
         deletion (2026-10-11, merge 8531742988) took that literal. Converted to
         the decline+inversion-routes idiom used below for IDENTITY (stubbed
         router, no LLM): surface 1 declines, the Inversion router routes to
-        list_projects under the read_portfolio group. Found by the burn-down
+        list_projects under the read_status group (the entry's own flip_group;
+        read_portfolio is search_projects'). Found by the burn-down
         gate on CI run 38198186227 (the deletion's unit tier could not see an
         integration test)."""
         from tests.unit.services.intent_service._inversion_pin_helper import (
@@ -230,7 +231,7 @@ class TestCapabilityDiscovery:
         await assert_inversion_routes(
             monkeypatch,
             "show my projects",
-            live_categories="read_portfolio",
+            live_categories="read_status",
             expected_action="list_projects",
         )
 
