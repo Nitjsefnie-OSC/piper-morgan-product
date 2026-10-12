@@ -1,6 +1,35 @@
 # Lead carry-forward — Fable 5.1 seat; Model A worktree ~/Development/piper-morgan-worktrees/lead
 
-## STATE @ 2026-10-11 21:48 PT — DAY-CLOSED (log dev/2026/10/11/2026-10-11-0647-lead-code-log.md)
+## STATE @ 2026-10-12 07:1x PT — START drained (log dev/2026/10/12/2026-10-12-0647-lead-code-log.md, open)
+- **#1984 half (2): NO-GO on the description path, HELD at `claude/lead-1984-status-description` (40b3c95b33), reported 07:11** (memo to
+  Arch cc CXO PPM; issue comment 6126007704). W1 full run 13 improved / 8 worsened, ×6 attribution = 4 attributed; W2/W3 screens 3 each;
+  the "Not session activity" sentence is lever and damage; no fourth wording. Every wording holds the #1984 row on the ruled plan and the
+  served reply reads right (`controls/served-1984-half2-2026-10-12.md`). **Waiting on Arch's ruling among three levers:** (a) land W2 as a
+  measured trade; (b) narrow `session_activity_query`'s description — screen the same 11 rows first (~66 calls), full run only on a clean
+  screen (~593); (c) ledger the row as a known miss, CXO decides whether #1984 closes on half (1). Adapter is not a lever. 🔒 filed 10-12;
+  smallest answer: a letter. Escalate to Exec if unanswered after 10-13.
+- **Ceiling 120 / routing tail 90 (29 the #1974 floor)** — re-read 120 this morning, main unchanged for PPM's row (said in the memo).
+  **Wed 10-14 tripwire reads 120.** Main 12/12 workflows green at START (d296221de5); my pushes today are docs-only.
+- **Deletion procedure:** the test-tree sweep step is in the routing-stack doc (after the pattern→corpus conversion step) + a post-landing
+  paragraph on the thirtieth deletion. Any lane brief copies it: `git grep -F` every claimed phrase across tests/unit, integration, e2e;
+  run `tests/integration -m 'not llm'` on the lane before landing. Known miss to carry to the COMPLETION_HISTORY ledger when that lane next
+  opens: "show me when we shipped the API" → shipped_this_week 6/6 on main.
+- **#1982:** held branch `claude/lead-1982-pat-dual-write` (4400ee3d9f, still on origin) — land when PA relays PM's PAT-only alpha test is
+  done; flip `GITHUB_LEGACY_CONTEXT_FALLBACK` to False in the commit that records `legacy=0`.
+- **read_floor_3 wave** (get_project_status + get_top_priority adapters; Arch's four 10-11 20:5x conditions): trigger = the deletion lane's
+  next STATUS/PRIORITY pass. Not #1984's lever.
+- **Wed 10-14 START: cron rotation** (e5491d18, armed 10-10 17:29, expires ~10-17; delete-then-create; update the registry row) + PPM's
+  tripwire read. **Fri 10-16:** key switch — `dev/active/lead-prod-key-move-2026-10-16.md` (PM's hand) + one confirm call.
+- **Mail v4 pilot:** lead is a pilot role from 10-12 — every mail check reads `scripts/mail4.py inbox` too; canary at START read PASS
+  (the check line counts 2 pilot roles, cio and exec — lead not yet in its denominator; note for CIO if it persists).
+- **Watch:** Web's served checks on alpha; #1958 + CXO's team-calendar probe after the NEXT promotion; the #1984 alpha confirmation (CXO).
+- Spend today: 853 Haiku router calls (Krink's credit, expires 10-15) + 6 chat turns on a local server. Keychain readable; the test user's
+  key still bound. Untracked scratch `dev/active/canonical-retest-serving-llm.json` (pre-existing, not mine).
+- Discipline notes carried from 10-11: no `git push` chained behind a pipeline whose exit code is `head`'s; `git status` before every push;
+  write the log line after an edit script returns; `date` before every stamp; filenames under 180 chars. New today: `git mv -k` on an
+  untracked file is a silent no-op that still exits 0 — use plain `mv`.
+
+### (10-11 state, kept for context) — STATE @ 2026-10-11 21:48 PT — DAY-CLOSED (log dev/2026/10/11/2026-10-11-0647-lead-code-log.md)
 - **Ceiling 120 / routing tail 90 (29 the #1974 ruled floor).** Day: 127 → 120 (COMPLETION_HISTORY 3, STATUS 2 + PRIORITY 1, PORTFOLIO 1 —
   deletions 27–30 recorded in the routing-stack doc). **PPM's Wed 10-14 tripwire reads 120.** Main GREEN on af776b9614 (Full Test Suite
   success; a red window 20:23–20:5x from an integration pin my PORTFOLIO landing's unit tier could not see — converted).
