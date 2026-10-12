@@ -388,7 +388,7 @@ Completed sprints are carried as history. The **active gate is the open MVP mile
 - **During beta**: MCP/plugin probe released and tested (PA); the front-loaded PUB cluster proceeds. **Public beta** requires the MCP path complete (#1462, #1458, #1509, #1688).
 - **Production milestone, 1.0/GA: Feb 2, 2027** (GitHub `due_on` 2027-02-02; PM's 09-06 message said "2026", which Exec flagged as almost certainly 2027, and GitHub now carries 2027). Needs the milestone closed in full.
 - **Fast Follow: May 8, 2027. Dot Releases: Sep 2, 2027.** (GitHub `due_on`, matching PM's 09-06 reset.)
-- **Enterprise**: GitHub `due_on` reads **2028-10-30**; the 09-06 decisions.log entry records **2027-10-30**. **Unreconciled**: a one-year discrepancy between the milestone record and the log. Flagged for PM; PPM does not pick.
+- **Enterprise: Oct 30, 2028** (GitHub `due_on` 2028-10-30; PM's answer 2026-10-12, relayed by Exec: "Enterprise was moved to 2028 as a theoretical possibility. On the current plan we are still doing dot releases through 9/2027 at least and there may never be demand for Enterprise features." The 09-06 decisions.log line reading 2027-10-30 is the error; correction appended to decisions.log).
 - PDR-005 v1.0 ratification and the BYOC ADRs (Q6/Q7) remain open from the v17 interval; BYOC/local is not ruled as a beta surface.
 
 ### Historical: May-June 2026

@@ -13,12 +13,13 @@
   - Thu 10-15 "The Overzealous Cleanup Routine": not yet pre-checked.
   - Wed 10-14 Ship #064: my workstream review + next-week addendum are in (10-09). Review the draft when Exec sends it.
 - **Waiting on PM** (all on Exec's rollup):
-  - privacy Section C: 4 decisions, in `docs/legal/mcp-privacy-and-support-proposal-2026-10-05.md`.
-  - D-C: is template-audit the single source for Ship rules? (CIO R6)
+  - privacy Section C **v2 (10-12)**: 4 blanks ⟦PM⟧ (3 goals + N days), to PM's goal-and-gap principle. On his answers, give Web the final text + widen the opening sentence.
   - the mining-pass picks (sent 10-09).
   - a verdict on the first scaffold (Sep 6, `the-unguarded-entrance.md`, Tue 11-03). The next scaffold (Sep 7–10) waits on it.
 - **Done since the lines below were written**: the mining pass (10-09, next due 10-23); the blog template review; the No Undo alt
   text; the privacy widen live; Ship v4.1 metrics → bullets.
+- **Tuesday/Thursday posts: PM writes them, and a day-before un-rewritten post is NORMAL** (xian 10-12). Stand by for "ready". Never offer "run my draft" or "slip it".
+- D-C done 10-12 (both drafting skills defer to template-audit).
 - **Drain rule (xian 10-08)**: every fire drains everything unblocked, rechecks mail until 2 consecutive empties, and writes a
   `Drain:` line with a named blocker for each deferral.
 
