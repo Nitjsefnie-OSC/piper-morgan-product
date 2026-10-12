@@ -44,7 +44,7 @@ Built and waiting for the next promotion to alpha: the standup and Radar say whe
 
 - **Rulings from an assumed state.** Arch corrected six of their own rulings and claims this week, each made before reading everything. The sharpest: Arch treated "the router is unsure" as "not a command" until a ten-call live probe showed a delete request would have been saved as a new project. Arch now reads the callers and the measured router output before ruling.
 - **Cheaper, safer machinery.** CIO cut the briefing every agent loads at session start from 169 KB to a 5 KB page, and destructive git commands aimed at my working copy are now blocked by a hook instead of a sentence in the instructions.
-- **AI prompts human.** After outside feedback that the posts sounded AI-written, I now write the prose myself, and Comms supplies a scaffold with every fact cited.
+- **AI prompts human.** After outside feedback that the posts sounded AI-written, I now write the prose myself, and Comms supplies a draft or a scaffold, with the facts checked.
 - **Checking the content, not the file.** Saturday's post went live with the wrong hero image for about three and a half hours until I noticed. The publish check had confirmed the file existed. It now opens the image and compares it to the alt text.
 
 ## 🌍 Published this week
