@@ -164,3 +164,5 @@ Brake FIRED (second slip = #1965 admission, found and ledgered 10-09). Memo to E
 - 2026-10-11 19:2x — #1979 part A LANDED on main (39398a32af). Lead's same-20 on the fix branch: 0 silent partials / 0 neither / 20 both (Lead's figures). Waiting on Arch: does the branch run count or re-run on main. Then PORTFOLIO deletion → 120. My recount after landing: 121. Wed reads 121 unless the deletion lands first. CXO closes #1979 on the served quotes. No PPM action; recount after the PORTFOLIO landing.
 
 - 2026-10-11 19:4x — Arch RULED branch run counts (tree identical); PORTFOLIO deletion lands after CI Tests on 39398a32af is green → 120 expected. My recount stays 121 until Lead reports the landing; then recount and ledger. #1984 (CXO, cold two-topic reply) placed Production. Wed reads 120 if the deletion lands first, else 121.
+
+- 2026-10-11 19:3x — CXO accepted and closed #1979 (served quotes read); #1984 already placed Production. Nothing from CXO blocks the PORTFOLIO deletion. Still waiting: CI green on 39398a32af, Lead's landing, then my recount (121 now, 120 expected).
