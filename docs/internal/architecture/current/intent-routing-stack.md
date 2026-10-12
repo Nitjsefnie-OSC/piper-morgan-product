@@ -1365,8 +1365,12 @@ widened to the armed check (a pure "hi" on an armed turn still takes the canned 
 survives via the #1739 §5a re-arm) — Arch asked to be told, not to have it changed silently. The copy is
 three CXO-owned constants in `services/ui_messages/keyless_pleasantry.py` (`THANKS_NOTHING_DONE_THIS_SESSION`,
 `THANKS_AFTER_DELIVERY`, `FAREWELL_LINE`), shared with the keyless gate — one string, one place. The thanks
-form is a truth test on the session (Arch's condition 2): any prior assistant turn in `build_recent_history`
-→ "You're welcome."; none → the honest-empty form; never the empty form unconditionally. Dispositions:
+form is a truth test on the session (Arch's condition 2, tightened the same morning): the honest-empty form
+needs POSITIVE proof — `count_delivered_turns` (conversation_context.py) reads the durable `conversation_turns`
+table, owner-checked, and raises on anything that is not a successful read; a verified zero → the empty form,
+anything else (a delivered turn, no session id, a read error, an owner mismatch) → "You're welcome.". The
+in-memory window (`build_recent_history`) was the wrong source: `_prune_old_turns` empties it after 30 minutes,
+so a thanks after lunch would have read as a fresh session. Dispositions:
 `("CONVERSATION","thanks"/"farewell")` back to CANONICAL; the #1818 spend-free ratchet lists both.
 Why: alpha c613beabf5 (2026-10-12) served a todo briefing for a cold "thank you!" — #1754's premise ("the
 floor IS the conversational surface… better than canned by construction") was falsified for these two

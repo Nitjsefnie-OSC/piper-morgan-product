@@ -257,10 +257,12 @@ class TestThanksAndFarewell1986:
         )
 
     @pytest.mark.asyncio
-    async def test_thanks_with_no_prior_assistant_turn_is_the_honest_empty_form(self, handler):
+    async def test_thanks_with_a_verified_zero_delivered_turns_is_the_honest_empty_form(
+        self, handler
+    ):
         with patch(
-            "services.intent_service.conversation_context.build_recent_history",
-            return_value=[],
+            "services.intent_service.conversation_context.count_delivered_turns",
+            new=AsyncMock(return_value=0),
         ):
             result = await handler.respond(self._intent("thanks"), "s-1986", user_id="u")
         assert result["message"] == "That's kind — though I haven't done anything this session yet."
@@ -268,26 +270,34 @@ class TestThanksAndFarewell1986:
 
     @pytest.mark.asyncio
     async def test_thanks_after_a_delivered_turn_is_youre_welcome(self, handler):
+        """Arch's tightened condition 2: the DURABLE table says a turn was delivered
+        (e.g. 35 minutes ago, after the in-memory window was pruned)."""
         with patch(
-            "services.intent_service.conversation_context.build_recent_history",
-            return_value=[
-                {"role": "user", "content": "show my todos"},
-                {"role": "assistant", "content": "Here are your todos: …"},
-            ],
+            "services.intent_service.conversation_context.count_delivered_turns",
+            new=AsyncMock(return_value=1),
         ):
             result = await handler.respond(self._intent("thanks"), "s-1986", user_id="u")
         assert result["message"] == "You're welcome."
 
     @pytest.mark.asyncio
-    async def test_thanks_after_a_user_only_history_is_still_the_empty_form(self, handler):
-        """The in-flight turn is excluded by build_recent_history; a user message
-        with no assistant reply is not a delivery."""
+    async def test_thanks_when_the_read_raises_is_youre_welcome(self, handler):
+        """Unknown is never the empty form: a read error serves the generous line."""
         with patch(
-            "services.intent_service.conversation_context.build_recent_history",
-            return_value=[{"role": "user", "content": "hello?"}],
+            "services.intent_service.conversation_context.count_delivered_turns",
+            new=AsyncMock(side_effect=RuntimeError("db timeout")),
         ):
             result = await handler.respond(self._intent("thanks"), "s-1986", user_id="u")
-        assert result["message"] == "That's kind — though I haven't done anything this session yet."
+        assert result["message"] == "You're welcome."
+
+    @pytest.mark.asyncio
+    async def test_thanks_without_a_session_id_is_youre_welcome(self, handler):
+        """No session → no proof of empty → the generous form (the real reader raises)."""
+        from services.intent_service.conversation_context import count_delivered_turns
+
+        with pytest.raises(ValueError):
+            await count_delivered_turns(None, "u")
+        result = await handler.respond(self._intent("thanks"), None, user_id="u")
+        assert result["message"] == "You're welcome."
 
     @pytest.mark.asyncio
     async def test_farewell_is_one_line(self, handler):

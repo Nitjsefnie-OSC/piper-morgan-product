@@ -129,3 +129,67 @@ def test_patterns_byte_identical_to_the_ruled_floor():
     ]
     assert len(PreClassifier.FAREWELL_PATTERNS) == 5
     assert len(PreClassifier._PLEASANTRY_FILLER_PATTERNS) == 10
+
+
+# --- the durable reader (condition 2, tightened) ------------------------------
+
+
+class TestCountDeliveredTurns:
+    """`count_delivered_turns` is the POSITIVE proof behind the honest-empty
+    form: it reads the durable `conversation_turns` table, owner-checked, and
+    raises on anything that is not a successful read."""
+
+    @staticmethod
+    def _scope(row, count):
+        from unittest.mock import AsyncMock, MagicMock
+
+        session = AsyncMock()
+        session.get = AsyncMock(return_value=row)
+        result = MagicMock()
+        result.scalar.return_value = count
+        session.execute = AsyncMock(return_value=result)
+        scope = MagicMock()
+        scope.__aenter__ = AsyncMock(return_value=session)
+        scope.__aexit__ = AsyncMock(return_value=False)
+        return scope
+
+    @pytest.mark.asyncio
+    async def test_owner_mismatch_raises_not_zero(self):
+        from unittest.mock import MagicMock, patch
+
+        from services.intent_service.conversation_context import count_delivered_turns
+
+        row = MagicMock()
+        row.user_id = "someone-else"
+        with patch(
+            "services.database.session_factory.AsyncSessionFactory.session_scope",
+            return_value=self._scope(row, 3),
+        ):
+            with pytest.raises(PermissionError):
+                await count_delivered_turns("s-1986", "f13937fb-182b-44db-a9fd-0d722a3a223e")
+
+    @pytest.mark.asyncio
+    async def test_missing_conversation_row_reads_as_zero(self):
+        from unittest.mock import patch
+
+        from services.intent_service.conversation_context import count_delivered_turns
+
+        with patch(
+            "services.database.session_factory.AsyncSessionFactory.session_scope",
+            return_value=self._scope(None, 0),
+        ):
+            assert await count_delivered_turns("s-1986", "u") == 0
+
+    @pytest.mark.asyncio
+    async def test_owned_conversation_counts_delivered_turns(self):
+        from unittest.mock import MagicMock, patch
+
+        from services.intent_service.conversation_context import count_delivered_turns
+
+        row = MagicMock()
+        row.user_id = "u"
+        with patch(
+            "services.database.session_factory.AsyncSessionFactory.session_scope",
+            return_value=self._scope(row, 2),
+        ):
+            assert await count_delivered_turns("s-1986", "u") == 2

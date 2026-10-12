@@ -517,6 +517,42 @@ def build_recent_history(
 _UNSCOPED_PRINCIPAL = object()
 
 
+async def count_delivered_turns(session_id: Optional[str], user_id: Optional[str]) -> int:
+    """#1986 condition 2, tightened (Arch 2026-10-12 09:2x): POSITIVE proof of
+    "no prior assistant turn in this session", read from the DURABLE
+    ``conversation_turns`` table — not the in-memory window, which
+    ``_prune_old_turns`` empties after 30 minutes (a user Piper helped 35
+    minutes ago must still hear "You're welcome.").
+
+    Raises on anything that is not a successful, owner-checked read: no
+    session id, a DB failure, or an owner mismatch (#1532 F3 — another
+    principal's turns are never counted as yours). The caller treats a raise
+    as UNKNOWN and serves the generous form; only a verified zero licenses
+    the honest-empty form. A missing conversation row reads as zero delivered
+    turns (the table was read and holds nothing for this session).
+    """
+    if not session_id:
+        raise ValueError("count_delivered_turns: no session id")
+    from sqlalchemy import func, select
+
+    from services.conversation.conversation_manager import _owner_matches
+    from services.database.models import ConversationDB, ConversationTurnDB
+    from services.database.session_factory import AsyncSessionFactory
+
+    async with AsyncSessionFactory.session_scope() as session:
+        row = await session.get(ConversationDB, str(session_id))
+        if row is not None and not _owner_matches(row.user_id, user_id):
+            raise PermissionError("count_delivered_turns: conversation owner mismatch")
+        result = await session.execute(
+            select(func.count(ConversationTurnDB.id)).where(
+                ConversationTurnDB.conversation_id == str(session_id),
+                ConversationTurnDB.assistant_response.isnot(None),
+                ConversationTurnDB.assistant_response != "",
+            )
+        )
+        return int(result.scalar() or 0)
+
+
 async def hydrate_turns_from_db(
     conv_ctx: ConversationContext,
     conversation_manager,

@@ -97,7 +97,7 @@ class ConversationHandler:
         # at the action gate and never reach this handler live.
 
         if intent.action == "thanks":
-            return self._respond_to_thanks(intent, session_id, user_id=user_id)
+            return await self._respond_to_thanks(intent, session_id, user_id=user_id)
         if intent.action == "farewell":
             return {
                 "message": FAREWELL_LINE,
@@ -116,25 +116,34 @@ class ConversationHandler:
         return await self._respond_to_greeting(intent, session_id, user_id=user_id)
 
     @staticmethod
-    def _respond_to_thanks(
+    async def _respond_to_thanks(
         intent: Intent, session_id: Optional[str], user_id: Optional[str] = None
     ) -> Dict[str, Any]:
-        """#1986 condition 2 (Arch's truth test, CXO concurred 2026-10-12):
-        "I haven't done anything this session yet" is only true when nothing
-        has happened this session. The source is the one the floor already
-        reads — build_recent_history (#1122) — and the test is deterministic:
-        any prior ASSISTANT turn in this session → "You're welcome." (mildly
-        generous after a failed turn, never a false claim; CXO: no special
-        case); none → the honest-empty form. A canned "hello" reply counts as
-        a prior assistant turn (CXO's preference to exclude it would need new
-        tagging; skipped on CXO's own say-so, Arch's default stands).
+        """#1986 condition 2, as tightened by Arch (2026-10-12 09:2x; CXO
+        concurred on the first cut): the honest-empty form ("I haven't done
+        anything this session yet") can be FALSE, so it alone needs proof — a
+        positive, durable, owner-checked read of zero delivered turns
+        (``count_delivered_turns``, the ``conversation_turns`` table). The
+        in-memory window was the wrong source: ``_prune_old_turns`` empties it
+        after 30 minutes, so a thanks after lunch read as a fresh session.
+        Anything else — a prior delivered turn, no session id, a read error,
+        an owner mismatch — serves "You're welcome." (CXO: mildly generous,
+        never a false claim; a failed prior turn gets no special case).
         """
-        from services.intent_service.conversation_context import build_recent_history
+        from services.intent_service.conversation_context import count_delivered_turns
 
-        history = build_recent_history(session_id, user_id)
-        delivered = any(turn.get("role") == "assistant" for turn in history)
+        try:
+            delivered = await count_delivered_turns(session_id, user_id)
+            verified_empty = delivered == 0
+        except Exception as e:  # silent-ok: LOGGED; unknown → the generous form, never the empty one (#1986 condition 2)
+            logger.warning(
+                "thanks_delivered_turns_read_failed", session_id=session_id, error=str(e)
+            )
+            verified_empty = False
         return {
-            "message": THANKS_AFTER_DELIVERY if delivered else THANKS_NOTHING_DONE_THIS_SESSION,
+            "message": THANKS_NOTHING_DONE_THIS_SESSION
+            if verified_empty
+            else THANKS_AFTER_DELIVERY,
             "intent": intent_to_dict(intent),
             "workflow_id": None,
         }
