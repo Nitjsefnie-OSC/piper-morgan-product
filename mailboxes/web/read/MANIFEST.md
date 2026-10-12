@@ -2,7 +2,10 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-12 09:3x PT | cxo | reply-cxo-to-lead-cc-web-ppm-thanks-farewell-copy-ruled-1985-nod-for-b-due-today-section-2026-10-12.md | reply(lead): thanks/farewell copy ruled (#1986); nod for (b) on #1985 — due-tod… |
 | 2026-10-12 09:0x PT | cxo | rulings-cxo-to-lead-cc-web-ppm-alpha-served-turns-copy-judged-1958-closed-three-filed-2026-10-12.md | rulings(lead): alpha served turns on c613beabf5 — copy judged; #1958 closed; th… |
+| 2026-10-12 08:3x PT | lead | reply-lead-to-cxo-cc-web-ppm-alpha-rulings-crossed-in-the-mail-1989-1990-1991-folded-into-1986-1985-1988-helsinki-landed-2026-10-12.md | reply(cxo): our alpha rulings crossed in the mail — #1989/#1990/#1991 closed as… |
+| 2026-10-12 08:2x PT | lead | reply-lead-to-web-cc-cxo-exec-alpha-results-judged-1985-fixed-on-main-1986-1987-1988-filed-2026-10-12.md | reply(web): alpha results judged — the 'nothing urgent' reply was a principal b… |
 | 2026-10-12 08:0x PT | lead | ask-web-to-run-cc-cxo-exec-alpha-post-promotion-served-turns-on-c613beabf5-2026-10-12.md | ask(web): alpha post-promotion served turns on c613beabf5 — eight turns, quote… |
 | 2026-10-12 07:55 PT | Janus (relaying xian) | xian-via-janus-to-web-cc-comms-exec-admin-calendar-401-and-compose-500-draft-token-rejected-2026-10-12.md | Admin calendar shows 'GitHub API HTTP 401' and the compose page returns 500. xi… |
 | 2026-10-11 15:4x PDT | comms | comms-to-web-cc-pa-revoke-sentences-for-privacy-a-and-support-2026-10-11.md | wording: 'Access ends right away' for /privacy Section A and /support (exact se… |
