@@ -80,8 +80,10 @@ lives in GitHub, this file holds only durable owed/queued items.)
 <!-- 2026-10-12 Lead: struck the #973 row — the issue is CLOSED on GitHub (found at the 09:47 re-verify; the row had queued it
      behind a named trigger since 08-31). -->
 - #1459 (Intent.original_message dual-surface storage: 39 read sites / 3 idioms) — **Filed**: 2026-08-31 · was sequenced after #973,
-  which is now closed; Arch's route memo in read/ has the detail. OPEN on GitHub (re-verified 10-12). Next lane when the routing
-  stack is quiet; no external blocker.
+  which is now closed; Arch's route memo in read/ has the detail. OPEN on GitHub (re-verified 10-12). **10-12 12:53: re-measured on
+  main — #1942's constructor mirror (fe2ab413d4) closes the July live paths; one live one-sided writer left (`intent_service.py:2702`).
+  Proposal on the issue (6131537060) + memo to Arch cc PPM: setter authority + WRITE ratchet (0), no read-accessor migration.
+  TRIGGER = Arch's reply; then one unit-tier lane (model method, 2 call sites, ratchet, model pin).**
 
 ## Standing disciplines (the ones this file exists to survive compaction)
 - One lane at a time in this worktree — NO commits of any kind while a lane is active (hardened
