@@ -362,3 +362,5 @@ ts_local	account	config_dir	five_hour_pct	five_hour_reset	seven_day_pct	seven_da
 2026-10-12 00:23 PDT	designinproduct.com	~/.claude	0.0	2026-10-12T11:00	35.0	2026-10-15T04:00	usage-read.sh		Fable	5	no
 2026-10-12 03:23 PDT	pipermorgan.ai	~/.claude-pm	UNREADABLE				usage-read.sh	credential present but has no accessToken field			
 2026-10-12 03:23 PDT	designinproduct.com	~/.claude	0.0	2026-10-12T11:00	35.0	2026-10-15T04:00	usage-read.sh		Fable	5	no
+2026-10-12 06:23 PDT	pipermorgan.ai	~/.claude-pm	2.0	2026-10-12T18:00	36.0	2026-10-16T05:00	usage-read.sh		Fable	24	no
+2026-10-12 06:23 PDT	designinproduct.com	~/.claude	2.0	2026-10-12T16:00	36.0	2026-10-15T04:00	usage-read.sh		Fable	5	no
