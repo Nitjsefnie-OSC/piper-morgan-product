@@ -2,13 +2,17 @@
 
 The cohort's guard hooks, ported into one Claude Code **mod** (a plugin with a hooks module). The plan is stage 7 of
 `dev/2026/10/03/spec-eval/D-propose-ruleset.md`: port M-1 to M-6 and M-9, run each mod rule alongside its settings
-hook for one week, then retire the hooks. **Status 2026-10-12 (CIO): M-1 and M-4. Not installed on any seat.**
+hook for one week, then retire the hooks. **Status 2026-10-12 (CIO), v0.2.0: M-1 to M-6 implemented, M-9 prototyped. Not installed on any seat.**
 
 | Rule | What it does | Settings hook it shadows | State |
 |---|---|---|---|
 | M-1 | Refuses working-tree-discarding git aimed at PM's main checkout | `.claude/hooks/guard-pm-checkout.sh` | ported; 3 tests pass |
 | M-4 | Refuses `gh api` calls carrying `updateProjectV2Field` + `singleSelectOptions` (full replace of a Projects v2 option list) | none (prose rule + skill `assign-sprint-safely`) | new; 3 tests pass. Can't see a query passed by file (`-F query=@q.graphql`) |
-| M-2, M-3, M-5, M-6, M-9 | diff before checkout, mail branch, bearer lint, dispatch tier, status line | `check-branch.sh`, … | **wait for the canary**: each needs a mods API call (`process.run`, `agent.spawn`, `ui.status`) not yet run on a seat |
+| M-2 | Denies `git checkout <ref> -- <paths>` / `git restore --source=<ref> <paths>` when `git diff HEAD --stat -- <paths>` is non-empty; prints the stat. Override: put `diff-reviewed` anywhere in the command | none (prose rule, SCOPE is not DIRECTION) | done; 3 tests (parser pure; hook with `process.run` stubbed). Plain `git checkout -- <path>` (no ref) is not covered |
+| M-3 | Denies `git add` of a `mailboxes/` path, or `git commit -a/--all` while `git status --porcelain mailboxes/` is non-empty, on any branch but main; says use `scripts/mail-send.sh`. Parses the command string, so the compound `git add && git commit` is caught | `.claude/hooks/check-branch.sh` (reads the index before the add runs) | done; 4 tests (parser pure; hook with `process.run` stubbed) |
+| M-5 | On Write/Edit under `mailboxes/`, `docs/`, `dev/`: writes the NEW content (`content` / `new_string`) to a temp file, runs `python3 scripts/mailbox_bearer_lint.py --files <tmp>`, denies on exit 1. Fails open if the script or python is missing | CI `mailbox_bearer_lint.py` (backstop) | done; 2 tests with the linter stubbed. The real script was run by hand on a fake token (exit 1) and a masked one (exit 0). An Edit is judged on `new_string` only, with no baseline |
+| M-6 | Denies an `Agent` tool call with no `model` (a `fork` is exempt: it can't take one) | none (prose rule, CLAUDE.md dispatch tier) | done; 1 test |
+| M-9 | Status line `CI main: green/red · briefing Nd`, via `$.ui.status`, refreshed at session start and at most every 10 minutes on a Bash call | log-maintenance and context reminders | prototype: text builder tested; the `gh` / `git log` refresh path is untested live. Log staleness not built (role unknown to the mod) |
 
 **Needs CLI ≥ 2.1.287** (mods are on by default from there; the fleet is on 2.1.296 per Pard's 10-12 record).
 
@@ -24,7 +28,7 @@ by the auto-mode reviewer on 10-12. The first live check is the canary seat (Par
 **Fails open** on its own error (`.catch` passes the call on), so a bug can't wedge a seat. The settings hook stays
 behind it during the parallel week.
 
-Cost: string parsing per Bash call, no subprocess. Benefit: none yet: measuring. Review: 2026-12-01. Owner: CIO (rules), Pard (install).
+Cost: string parsing per Bash call; M-2 and M-3 run `git` only when the command parses as a match; M-5 runs python3 per Write/Edit under the three trees; M-9 runs `gh` and `git log` at most every 10 minutes. Benefit: none yet: measuring. Review: 2026-12-01. Owner: CIO (rules), Pard (install).
 
 ## Attended live check (for xian; 2 minutes; nothing installed)
 

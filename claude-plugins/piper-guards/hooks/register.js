@@ -105,6 +105,159 @@ export const M4_MESSAGE = [
   'Add options in the GitHub web UI instead; to change items, use the skill assign-sprint-safely.',
 ].join('\n')
 
+// ---- shared: git invocations in a command, with the directory each runs in (cd / -C tracked like M-1) ----
+export function gitInvocations(cmd, cwd, home) {
+  let base = cwd
+  const out = []
+  for (const seg of splitSegments(cmd)) {
+    const toks = tokenize(seg)
+    if (!toks.length) continue
+    if (toks[0] === 'cd' && toks.length > 1) { base = resolve(toks[1], base, home); continue }
+    const gi = toks.indexOf('git')
+    if (gi < 0) continue
+    let rest = toks.slice(gi + 1)
+    let dir = base
+    while (rest.length && rest[0].startsWith('-')) {
+      if (rest[0] === '-C' && rest.length > 1) { dir = resolve(rest[1], dir, home); rest = rest.slice(2); continue }
+      if (rest[0] === '-c' && rest.length > 1) { rest = rest.slice(2); continue }
+      rest = rest.slice(1)
+    }
+    if (!rest.length) continue
+    out.push({ seg: seg.trim(), dir, sub: rest[0], args: rest.slice(1) })
+  }
+  return out
+}
+
+// ---- M-2: diff before `git checkout <ref> -- <paths>` / `git restore --source=<ref> <paths>` (SCOPE is not DIRECTION) ----
+// Returns [{seg, dir, paths}] for each command that overwrites working-tree paths from a ref.
+export function checkoutFromRef(cmd, cwd, home) {
+  const hits = []
+  for (const g of gitInvocations(cmd, cwd, home)) {
+    if (g.sub === 'checkout') {
+      const dd = g.args.indexOf('--')
+      if (dd > 0 && g.args.slice(0, dd).some((a) => !a.startsWith('-')) && g.args.length > dd + 1) {
+        hits.push({ seg: g.seg, dir: g.dir, paths: g.args.slice(dd + 1) })
+      }
+    } else if (g.sub === 'restore') {
+      const hasSource = g.args.some((a) => a === '-s' || a === '--source' || a.startsWith('--source='))
+      if (!hasSource || g.args.includes('--staged') || g.args.includes('-S')) continue
+      const paths = []
+      for (let i = 0; i < g.args.length; i++) {
+        const a = g.args[i]
+        if (a === '-s' || a === '--source') { i++; continue }
+        if (a.startsWith('-')) continue
+        paths.push(a)
+      }
+      if (paths.length) hits.push({ seg: g.seg, dir: g.dir, paths })
+    }
+  }
+  return hits
+}
+
+export const hasDiffReviewed = (cmd) => /\bdiff-reviewed\b/.test(cmd)
+
+export function m2Message(h, stat) {
+  return [
+    `BLOCKED by piper-guards M-2 (diff before checkout): \`${h.seg}\` would overwrite uncommitted changes (git diff HEAD --stat):`,
+    stat.trimEnd(),
+    'Review it (`git diff HEAD -- <paths>`): checkout from a ref overwrites the working tree and the discarded version is unrecoverable.',
+    'Once reviewed, add `diff-reviewed` to the command (e.g. as a trailing comment) to override.',
+  ].join('\n')
+}
+
+// ---- M-3: mail on main. Parses the command string, so it is not blind to a compound `git add && git commit`
+// (check-branch.sh reads the index before the add has run). ----
+// Returns [{kind: 'add' | 'commit-all', seg, dir}] for each git invocation that stages mailbox paths or commits everything.
+export function mailboxGitOps(cmd, cwd, home) {
+  const ops = []
+  for (const g of gitInvocations(cmd, cwd, home)) {
+    if (g.sub === 'add') {
+      if (g.args.some((a) => !a.startsWith('-') && /(^|\/)mailboxes(\/|$)/.test(a))) ops.push({ kind: 'add', seg: g.seg, dir: g.dir })
+    } else if (g.sub === 'commit') {
+      if (g.args.some((a) => a === '--all' || /^-[a-zA-Z]*a[a-zA-Z]*$/.test(a))) ops.push({ kind: 'commit-all', seg: g.seg, dir: g.dir })
+    }
+  }
+  return ops
+}
+
+export const M3_MESSAGE = (seg, branch) => [
+  `BLOCKED by piper-guards M-3 (mail on main): \`${seg}\` stages or commits mailbox files on branch \`${branch}\` (not main).`,
+  'Mail is cross-agent infrastructure and lands on main only. Write the memo files, then use scripts/mail-send.sh with every changed path;',
+  'it commits straight to origin/main and cleans up your worktree. Do not git add / git commit mailboxes/ on a branch.',
+].join('\n')
+
+// ---- M-5: bearer credentials in Write/Edit content under mailboxes/, docs/, dev/ (public repo; #1845) ----
+export function guardedPath(filePath) {
+  const m = /^(.*?)\/(mailboxes|docs|dev)\/(.+)$/.exec(String(filePath ?? ''))
+  return m ? { root: m[1], rel: m[2] + '/' + m[3] } : null
+}
+
+export const M5_MESSAGE = (rel, out) => [
+  `BLOCKED by piper-guards M-5 (bearer credential): the new content for ${rel} contains what scripts/mailbox_bearer_lint.py reads as a bearer credential.`,
+  out.trim(),
+  'Never write a full invite code / API key / token into the repo (it is PUBLIC). Use the masked form: first four, an ellipsis, last four.',
+].join('\n')
+
+// ---- M-6: dispatch tier (Agent tool call must set `model`) ----
+export const M6_MESSAGE = [
+  'BLOCKED by piper-guards M-6 (dispatch tier): this Agent call sets no `model`, so the subagent silently inherits yours.',
+  'Set model explicitly (haiku for mechanical work, sonnet for bounded implementation, opus for hard reasoning) and log the tier in your session-log entry for the dispatch.',
+].join('\n')
+// A fork can't take `model` (it always inherits the parent; Agent input docs, 2.1.296), so it is exempt.
+export const isModelUnset = (e) => e.subagent_type !== 'fork' && (e.model === undefined || e.model === null || e.model === '')
+
+// ---- M-9 (prototype): status line text from CI state and briefing age ----
+export function statusText({ ci, briefingDays }) {
+  const parts = []
+  if (ci) parts.push(`CI main: ${ci}`)
+  if (briefingDays !== undefined && briefingDays !== null) parts.push(`briefing ${briefingDays}d`)
+  return parts.length ? parts.join(' · ') : undefined
+}
+
+// M-5 hook: lint the NEW content (Write: content; Edit: new_string) with the repo's own script, via a temp file.
+// Declared at the top of the file because the mod loader requires hooks to be top-level functions.
+async function m5($, e, next) {
+  const g = guardedPath(e.file_path)
+  if (!g) return next(e)
+  const text = typeof e.content === 'string' ? e.content : e.new_string
+  if (typeof text !== 'string' || !text) return next(e)
+  const script = g.root + '/scripts/mailbox_bearer_lint.py'
+  if (!(await $.fs.exists(script))) return next(e)
+  const tmp = `/tmp/piper-guards-m5-${Date.now()}-${Math.floor(Math.random() * 1e9)}.md`
+  await $.fs.write(tmp, text)
+  try {
+    const r = await $.process.run(['python3', script, '--files', tmp], { cwd: g.root, timeoutMs: 15000 })
+    if (r.exitCode === 1 && /bearer credential/.test(r.stdout)) {
+      return { deny: M5_MESSAGE(g.rel, r.stdout.split('\n').filter((l) => /FAIL|:\d+ /.test(l)).join('\n').replaceAll(tmp, g.rel)) }
+    }
+  } finally {
+    await $.process.run(['rm', '-f', tmp]).catch(() => {})
+  }
+  return next(e)
+}
+
+// M-9 prototype: status line (CI on main, briefing age), refreshed at most every 10 minutes.
+let lastStatusRefresh = 0
+async function refresh($) {
+  if (Date.now() - lastStatusRefresh < 600000) return
+  lastStatusRefresh = Date.now()
+  let ci
+  let briefingDays
+  try {
+    const r = await $.process.run(['gh', 'run', 'list', '--branch', 'main', '--limit', '1', '--json', 'conclusion,status'], { timeoutMs: 8000 })
+    if (r.exitCode === 0) {
+      const run = JSON.parse(r.stdout)[0]
+      if (run) ci = run.conclusion === 'success' ? 'green' : run.conclusion === 'failure' ? 'red' : run.status
+    }
+  } catch (_) {}
+  try {
+    const r = await $.process.run(['git', 'log', '-1', '--format=%ct', '--', 'docs/briefing/BRIEFING-CURRENT-STATE.md'], { timeoutMs: 8000 })
+    const t = parseInt(r.stdout.trim(), 10)
+    if (r.exitCode === 0 && t) briefingDays = Math.floor((Date.now() / 1000 - t) / 86400)
+  } catch (_) {}
+  $.ui.status(statusText({ ci, briefingDays }))
+}
+
 export function register(on, options) {
   const pm = norm(options.pm_checkout || '/Users/xian/Development/piper-morgan-product')
   on('tool.call', { tool: 'Bash' }, async ($, e, next) => {
@@ -117,4 +270,50 @@ export function register(on, options) {
     if (bad.length) return { deny: denyMessage(bad, pm) }
     return next(e)
   }).catch(async ($, e, next) => next(e))
+
+  // M-2: needs $.process.run (argv, no shell).
+  on('tool.call', { tool: 'Bash' }, async ($, e, next) => {
+    const cmd = String(e.command ?? '')
+    if (!cmd.includes('git') || hasDiffReviewed(cmd)) return next(e)
+    const cwd = norm(String(await $.session.cwd()))
+    const home = cwd.match(/^\/Users\/[^/]+/)?.[0] || '/Users/xian'
+    for (const h of checkoutFromRef(cmd, cwd, home)) {
+      const r = await $.process.run(['git', 'diff', 'HEAD', '--stat', '--', ...h.paths], { cwd: h.dir, timeoutMs: 10000 })
+      if (r.exitCode === 0 && r.stdout.trim()) return { deny: m2Message(h, r.stdout) }
+    }
+    return next(e)
+  }).catch(async ($, e, next) => next(e))
+
+  // M-3
+  on('tool.call', { tool: 'Bash' }, async ($, e, next) => {
+    const cmd = String(e.command ?? '')
+    if (!cmd.includes('git')) return next(e)
+    const cwd = norm(String(await $.session.cwd()))
+    const home = cwd.match(/^\/Users\/[^/]+/)?.[0] || '/Users/xian'
+    for (const op of mailboxGitOps(cmd, cwd, home)) {
+      const b = await $.process.run(['git', 'rev-parse', '--abbrev-ref', 'HEAD'], { cwd: op.dir, timeoutMs: 10000 })
+      const branch = b.stdout.trim()
+      if (b.exitCode !== 0 || !branch || branch === 'main') continue
+      if (op.kind === 'commit-all') {
+        const s = await $.process.run(['git', 'status', '--porcelain', 'mailboxes/'], { cwd: op.dir, timeoutMs: 10000 })
+        if (s.exitCode !== 0 || !s.stdout.trim()) continue
+      }
+      return { deny: M3_MESSAGE(op.seg, branch) }
+    }
+    return next(e)
+  }).catch(async ($, e, next) => next(e))
+
+  // M-5: lint the NEW content (Write: content; Edit: new_string) with the repo's own script, via a temp file.
+  on('tool.call', { tool: 'Write' }, m5).catch(async ($, e, next) => next(e))
+  on('tool.call', { tool: 'Edit' }, m5).catch(async ($, e, next) => next(e))
+
+  // M-6
+  on('tool.call', { tool: 'Agent' }, async ($, e, next) => {
+    if (isModelUnset(e)) return { deny: M6_MESSAGE }
+    return next(e)
+  }).catch(async ($, e, next) => next(e))
+
+  // M-9 prototype: status line (CI on main, briefing age). Refreshed at most every 10 minutes.
+  on('session.start', async ($, e, next) => { await refresh($).catch(() => {}); return next(e) }).catch(async ($, e, next) => next(e))
+  on('tool.call', { tool: 'Bash' }, async ($, e, next) => { refresh($).catch(() => {}); return next(e) }).catch(async ($, e, next) => next(e))
 }
