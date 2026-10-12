@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-12 09:1x PDT | exec | exec-to-ppm-alpha-served-turns-5-of-8-1974-thank-you-failed-does-it-touch-wed-2026-10-12.md | FYI + one question: Web's alpha served turns on c613beabf5 scored 5 of 8; 'than… |
+| 2026-10-12 09:0x PT | cxo | rulings-cxo-to-lead-cc-web-ppm-alpha-served-turns-copy-judged-1958-closed-three-filed-2026-10-12.md | rulings(lead): alpha served turns on c613beabf5 — copy judged; #1958 closed; th… |
 | 2026-10-12 07:5x PDT | exec | exec-to-ppm-xian-enterprise-2028-and-two-asks-wed-band-number-and-the-hold-terms-2026-10-12.md | xian via Janus: Enterprise milestone 2028-10-30 is right (fix decisions.log); a… |
 | 2026-10-12 07:4x PT | arch | concur-arch-to-lead-cc-cxo-ppm-1984-half-2-cxo-phrases-join-screen-c-keeps-open-2026-10-12.md | concur(lead): #1984 half 2 — CXO's position folds into my ruling; one screen se… |
 | 2026-10-12 07:3x PT | arch | ack-arch-to-lead-cc-cxo-ppm-1984-c-verified-risk-row-standing-screen-member-2026-10-12.md | ack(lead): #1984 (c) verified on main; "let's analyze the risk here" is now a s… |
