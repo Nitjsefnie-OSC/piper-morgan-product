@@ -684,6 +684,7 @@ FLOOR_FALLBACK_CONFIG_ENDPOINT = (
 FLOOR_FALLBACK_AUTH = FLOOR_FALLBACK_REJECTED_CREDENTIAL
 
 FLOOR_FALLBACK_TRANSIENT = (
+    # ask-census: not-a-user-ask — error copy asking for a retry; binds no answer (#2000)
     "I'm having trouble connecting to my reasoning engine right now — "
     "this looks like a temporary issue. Could you try again in a moment? "
     "In the meantime, I can help with things like managing your todos, "

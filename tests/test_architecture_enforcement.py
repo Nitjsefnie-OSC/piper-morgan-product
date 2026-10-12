@@ -4120,7 +4120,17 @@ class TestUnarmedAskSiteRatchet:
     #      emitted AFTER _rearm_time_question() re-armed the store with
     #      this same stored ask (#1654); the arm lives in the callee, out
     #      of the holder-local scan's sight.
-    MAX_MARKER_EXEMPTIONS = 2
+    #   3–6. MEASURED 2026-10-12 under the widened predicate (#2000): four
+    #      module-level copy constants the mid-line rule now sees, each
+    #      classified by reading its consumer —
+    #      add_project_clarify._NAME_REASK_TAIL (stored as the ask:
+    #      `pending_offer["question"] = _NAME_REASK_TAIL` in _name_reask),
+    #      standup_preferences._TEACHING_LINE and INVITE_EMPTY_LEAD (both
+    #      reach the user only through build_interview_invitation, which
+    #      stores `"question": question`), conversational_floor
+    #      .FLOOR_FALLBACK_TRANSIENT ("Could you try again in a moment?" is
+    #      error copy asking for a retry; it binds no answer).
+    MAX_MARKER_EXEMPTIONS = 6
 
     # THE RATCHET TABLE — census MEASURED 2026-09-12 (predicate above, run
     # over the scope above). SHRINK-ONLY: arm the site through the one-slot
@@ -4134,7 +4144,7 @@ class TestUnarmedAskSiteRatchet:
             (
                 "services/intent/intent_service.py",
                 "IntentService._get_contextual_fallback",
-                4,
+                5,  # 4 → 5 on 2026-10-12: the widened predicate (#2000) sees "…? Say 'close issue #…'"
                 "I can close issues! Just tell me the issue number, like 'clo",
             ),
             (
@@ -4143,7 +4153,9 @@ class TestUnarmedAskSiteRatchet:
                 # 2 -> 1 (2026-10-06, CXO 10-05 flag): the multi-match "Which one would
                 # you like to ...?" became a declarative "Say '... issue #N' with the
                 # number you mean." The confirm literal below remains.
-                1,
+                # 1 -> 2 (2026-10-12, #2000): the widened predicate now sees
+                # that declarative's "…? Say 'close issue #N'…" hint line.
+                2,
                 "Are you sure you want to close issue #{}: **{}**? Say 'yes, ",
             ),
             (
@@ -4152,8 +4164,10 @@ class TestUnarmedAskSiteRatchet:
                 # 2 -> 1 (2026-10-06, CXO 10-05 flag): the multi-match "Which one would
                 # you like to ...?" became a declarative "Say '... issue #N' with the
                 # number you mean." The confirm literal below remains.
-                1,
-                "Reopen issue #{}: **{}**? Say 'yes, reopen #{}' to confirm.",
+                # 1 -> 2 (2026-10-12, #2000): same hint line as close; the
+                # "Did you mean" literal now sorts first, so the fingerprint moved.
+                2,
+                "Did you mean issue #{}: {}? Say 'reopen issue #{}' to confir",
             ),
             # 2026-09-12 (#1769): the _resume_suspended_standup and
             # _start_standup_conversation rows shrank out — both ask sites
@@ -4280,6 +4294,50 @@ class TestUnarmedAskSiteRatchet:
                 1,
                 "You've uploaded a few files and I'm not sure which one you m",
             ),
+            # ---- MEASURED 2026-10-12 under the widened predicate (#2000, Arch):
+            # a measurement change, not new debt — these asks were always
+            # unarmed; the old predicate could not see a '?' followed by a
+            # same-line hint ("…? Try …", "…? Say …", "…? Tell …"). Each
+            # classified by reading its holder: none arms. SHRINK-ONLY from
+            # here, same as every row above. #1987 (Arch's condition): when
+            # handle_delete_todo's ask lists numbered candidates it must arm
+            # through the #846 store, removing its row.
+            (
+                "services/intent/intent_service.py",
+                "IntentService._handle_set_timezone",
+                1,
+                '"{}" matches more than one timezone — did you mean {}? Tell ',
+            ),
+            (
+                "services/intent/intent_service.py",
+                "IntentService._resume_suspended_onboarding",
+                1,
+                "I couldn't find the paused setup. Want to start fresh? Just ",
+            ),
+            (
+                "services/intent_service/calendar_offer_policy.py",
+                "OFFER_TEXT",
+                1,
+                "I noticed your calendar isn't connected yet — would you like",
+            ),
+            (
+                "services/intent_service/canonical_handlers.py",
+                "CanonicalHandlers._handle_link_repo",
+                2,
+                "Which project should I link {} to? Please tell me the projec",
+            ),
+            (
+                "services/intent_service/todo_handlers.py",
+                "TodoIntentHandlers.handle_complete_todo",
+                2,
+                "I found {} todos matching '{}': {}. Which one should I compl",
+            ),
+            (
+                "services/intent_service/todo_handlers.py",
+                "TodoIntentHandlers.handle_delete_todo",
+                1,
+                "Which todo should I remove? Try: 'delete todo [number]'",
+            ),
         }
     )
 
@@ -4288,14 +4346,34 @@ class TestUnarmedAskSiteRatchet:
     def _repo_root(self) -> str:
         return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+    # #2000 (Arch, 2026-10-12): an ask followed by an instructional hint on
+    # the same line ("Which todo should I remove? Try: 'delete todo
+    # [number]'") used to be invisible — the predicate only saw a line that
+    # ENDS in '?'. A '?' followed by whitespace and a capital letter is a
+    # question mark closing a sentence mid-line; count it too.
+    _MIDLINE_QUESTION_RE = re.compile(r"\?[ \t]+[A-Z]")
+
     @staticmethod
     def _interrogative(text: str) -> bool:
         if len(text) < 8 or " " not in text:
             return False
         return any(
             line.rstrip(TestUnarmedAskSiteRatchet._TRAILING_CLOSERS).endswith("?")
+            or TestUnarmedAskSiteRatchet._MIDLINE_QUESTION_RE.search(line) is not None
             for line in text.splitlines()
         )
+
+    def test_2000_predicate_sees_a_question_closed_mid_line(self):
+        """#2000: the delete ask was invisible because its line ends in a
+        hint, not a '?'. A '?' + whitespace + capital counts; a '?' followed
+        by lowercase does not; the length/space floors still apply."""
+        p = TestUnarmedAskSiteRatchet._interrogative
+        assert p("Which todo should I remove? Try: 'delete todo [number]'")
+        assert p("Want the guided version instead? Say 'my standup interview'.")
+        assert p("Did you mean tomorrow?**")  # trailing closers still stripped, unchanged
+        assert not p("the '?' character is not a question here")
+        assert not p("what? no, not that one")  # '?' + lowercase
+        assert not p("ok?")  # below the length floor
 
     @staticmethod
     def _joined_text(node) -> str:

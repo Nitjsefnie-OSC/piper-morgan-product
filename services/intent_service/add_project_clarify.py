@@ -151,6 +151,7 @@ _ADD_PROJECT_RESTATEMENT_RE = re.compile(
 )
 
 _NAME_REASK_TAIL = (
+    # ask-census: armed at the consumer — _name_reask stores it as pending_offer["question"] (#2000)
     "What should the project be called? Say its name (the repo part is "
     "optional), or say 'no' to drop it."
 )

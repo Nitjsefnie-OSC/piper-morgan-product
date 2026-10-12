@@ -236,6 +236,7 @@ def infer_mode_signal(user_id: Optional[str]) -> Optional[Tuple[str, float]]:
 # #1511's taught phrase, kept verbatim: it is deterministically claimed by
 # _is_standup_query's "my standup" cue + the handler's interview token, so the
 # invitation teaches a phrase that routes without the LLM classifier.
+# ask-census: armed at the consumer — reaches the user only via build_interview_invitation's stored "question" (#2000)
 _TEACHING_LINE = "Want the guided version instead? Say 'my standup interview'."
 
 # Appended after a COMPLETE report (CXO property 1 is the caller's job; this
@@ -247,6 +248,7 @@ INVITE_AFTER_REPORT = (
 
 # PPM's empty case: fail honestly, then the invitation IS the first move.
 INVITE_EMPTY_LEAD = (
+    # ask-census: armed at the consumer — build_interview_invitation stores it as "question" (#2000)
     "I don't have anything to build your standup from yet — no observed "
     "activity in your connected tools. Want to do a quick guided standup "
     "interview instead? You tell me what happened and what's ahead, and I'll "
