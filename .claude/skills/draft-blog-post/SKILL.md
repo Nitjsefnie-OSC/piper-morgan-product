@@ -2,12 +2,14 @@
 name: draft-blog-post
 description: Draft a blog post (narrative, insight, or Weekly Ship) for an editorial-calendar slot. Use when Comms is drafting a scheduled post, when PM hands off a slot, when starting from a source artifact (session logs, omnibus, Granola transcript), or when picking up an in-progress draft. Mandates a Phase 0 pipeline-inventory precondition (Layer C), carries voice discipline upstream from voice-pass to draft-time, applies the four-category opacity sweep before handoff, runs the verifiable-claims discipline at draft time, and enforces the calendar-row-at-draft-creation rule (Layer A) that prevents orphan drafts.
 scope: role-specific
-version: 1.4
+version: 1.5
 created: 2026-05-15
-updated: 2026-09-12
+updated: 2026-10-12
 ---
 
 # draft-blog-post
+
+> **Formatting rules have one source: `template-audit`** (PM, 2026-10-12, CIO's R6 decision D-C). Where this skill and `template-audit` disagree on a formatting rule (tease, metrics, title case, glosses, word count), `template-audit` wins, and this skill gets fixed to match.
 
 Draft a Piper Morgan blog post per editorial-calendar slot. Three phases — pre-draft orientation, in-draft guardrails, pre-handoff sweep — each carrying a piece of the discipline that the May 13 Ship #042 plain-language pass demonstrated needs to live upstream of voice-pass.
 
@@ -34,7 +36,7 @@ Three variants. Detect from the editorial calendar entry's `theme` field:
 |---|---|---|---|---|
 | `building` | Narrative | Chronological beats; story arc | ~800–1300 words | Medium only |
 | `insight` | Insight | Time-decoupled argument | ~800–1300 words | Medium + LinkedIn |
-| `ship` | Weekly Ship | Section-based summary | ~1100–1400 words | LinkedIn only |
+| `ship` | Weekly Ship | Section-based summary | no fixed range, norm ~1,630 words (template-audit calibration table) | LinkedIn only |
 
 Length is a creep guard, not a minimum — voice and substance carry the calibration. If a draft significantly exceeds these, ask whether each section is doing argumentative work or just covering territory.
 
@@ -139,7 +141,7 @@ After the calendar-row check, before drafting body content:
 
 3. **Editorial calendar** — `docs/internal/planning/comms/editorial-calendar.csv`
    - Confirm slot: which row are you filling? What's its pubDate, category, slug?
-   - Pull what the previous published piece's footer is teasing — your opening should resonate with that tease; your own footer teases the next item on the calendar regardless of category
+   - Pull what the previous published piece's footer is teasing — your opening should resonate with that tease; your own footer teases the next **non-Ship** item on the calendar (Ships sit outside the tease chain, template-audit #6)
 
 4. **Open-topics tracker** — `dev/active/comms-open-topics.md`
    - Quick state-of-play on what's drafted, pending, flagged
@@ -156,7 +158,7 @@ If drafting from a source artifact (session log, omnibus, Granola transcript):
 ### Cadence check
 
 - Wednesday Ships, Tuesday + Thursday narratives, Saturday + Sunday insights, no Friday post (per `reference_publishing_cadence` memory)
-- Footer teases the very next scheduled item on the calendar regardless of category
+- Footer teases the next scheduled **non-Ship** item on the calendar, whatever its category. A Ship itself carries no tease (template-audit #6)
 - Syndication targets by category (see table above) shape final-pass calibrations but don't drive drafting
 
 ## Phase 2 — In-draft guardrails
@@ -195,7 +197,7 @@ For every comparative claim, count, named pattern, or specific number:
 
 - Same frontmatter / heading / footer conventions as narrative
 - Difference: time-decoupled. Insights argue a point; narratives walk a chronology. Don't force chronological beats onto an insight.
-- Pairing context: insights often pair (related or contrasting); footer teases the next scheduled item regardless of category
+- Pairing context: insights often pair (related or contrasting); footer teases the next scheduled non-Ship item, whatever its category
 
 ### Structural notes — Ship variant
 
@@ -204,7 +206,7 @@ Section-based summary, not a narrative arc. See `docs/internal/planning/comms/bl
 - **Section structure**: Product & Experience / Engineering & Architecture / Methodology & Process Innovation / etc. See the most recent published Ship for current shape.
 - **Blog-post list**: every Ship includes a list of the prior week's other publications. Heading-flexible (pick a name that reads as part of the post, not boilerplate). One bullet per publication, ordered by publish date: date + em-dash + linked title + em-dash + one-line teaser. Exclude the Ship itself.
 - **Featured image fallback**: if two narratives have strong candidate cartoon images, file both inline with a note for PM ("PM: pick one"). PM has voice on which carries the Ship.
-- **Metrics tables**: keep rich for the canonical post (blog tables render cleanly). LinkedIn flattens tables at cross-post; that's syndication-target limitation, not a draft problem. Don't pre-flatten.
+- **Metrics**: a **bullet list, never a table** (`**Issues closed:** 25`). Medium and LinkedIn don't render markdown tables (PM 2026-07-08, template-audit's Ship rules).
 - **Image**: typically `piper-ship.png`, reused across Ships. PM may leave alt/caption empty.
 
 ## Phase 3 — Pre-handoff sweep
@@ -216,7 +218,7 @@ The substantive gate. Run this before handing the draft to PM for voice-pass.
 Scan the draft for these and translate:
 
 1. **Agent role names as proper nouns** (Lead Dev, Architect, PPM, CXO, CIO, HOST, Exec, PA, Comms)
-   - Translate to role functions with optional parenthetical-gloss form on first use
+   - Translate to role functions with optional parenthetical-gloss form on first use (**narratives and insights only**: Ships name agents directly, template-audit #14 Ship row)
    - Example: "Piper Alpha noticed..." → "the product-management role (Piper Alpha) noticed..."
 
 2. **Internal acronyms not glossed** (M2 / M2d / M2e, MVP, BYOC, ADR, PDR, MUX, UAT, AAXT, etc.)
@@ -225,7 +227,7 @@ Scan the draft for these and translate:
 
 3. **Issue/commit numbers in narrative prose** (#1018, commit `fc79de31`, ADR-061)
    - Drop, move to footnote, or replace with role-functional description
-   - Keep where they carry coordinate-function (metrics tables, GitHub references in technical-detail sections)
+   - Keep where they carry coordinate-function (the metrics list, GitHub references in technical-detail sections)
 
 4. **Gnomic self-references** that need shared context to parse
    - Examples: "the cohort was running the methodology fluently"; "the catch caught itself"
@@ -233,14 +235,14 @@ Scan the draft for these and translate:
 
 ### Length check
 
-- Word count against target (Ship: 1100–1400; narrative/insight: 800–1300)
+- Word count against target (narrative/insight: ~800–1,300, and >1,600 is a question for PM, not a defect. Ship: no fixed range, norm ~1,630. Both per template-audit #13)
 - If significantly over: ask which sections are doing argumentative work versus covering territory
 - Trim covers-territory sections; keep argumentative ones
 
 ### Footer-tease verification
 
 - Pull the next scheduled item from the editorial calendar
-- Verify your footer teases THAT item regardless of category
+- Verify your footer teases THAT item (the next non-Ship post), whatever its category
 - Update if the calendar has shifted since drafting started
 
 ### Pattern / principle name verification
@@ -274,7 +276,7 @@ Final read for the patterns in Phase 2:
 | Wait until pre-handoff to apply voice discipline | Voice-pass becomes janitorial; PM does the upstream work | Apply voice discipline at draft time per Phase 2 |
 | Leave `[FACT-CHECK NOTE]` brackets in for things you could verify | Pushes load onto PM that you could carry | Source-check at draft time; leave brackets only for genuine PM-only knowledge |
 | Drop role-names entirely without preserving the agent identity | Loses the "honest about how the team works" voice | Use parenthetical-gloss form on first use, role-function thereafter |
-| Pre-flatten the metrics table for LinkedIn | Canonical post should be rich; PM handles LinkedIn conversion | Keep tables for blog; PM flattens at cross-post time |
+| Put Ship metrics in a table | Medium/LinkedIn don't render markdown tables | Bullet list (`**Issues closed:** 25`), per template-audit |
 | Use deadline as default pacing | Deadlines are triage tools; work that can be done now should be done now | Draft when you have the context, not at the deadline |
 | Save the draft file without creating a calendar row | Produces orphan drafts that go untracked for weeks (May 24 incident: 4 orphans, 4–7 weeks each) | Calendar row + draft file in the same commit. Status=`drafted` if no pubDate yet |
 
@@ -291,7 +293,7 @@ Final read for the patterns in Phase 2:
 - [ ] No "load-bearing" outside internal-context quotes
 - [ ] Word count within target range (or trim plan named)
 - [ ] Footer teases next scheduled item per editorial calendar
-- [ ] Ship variant: blog-post list present, featured-image option(s) named, metrics tables kept rich
+- [ ] Ship variant: blog-post list present, featured-image option(s) named, metrics as a bullet list
 
 ## Examples
 

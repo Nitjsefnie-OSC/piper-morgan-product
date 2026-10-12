@@ -2,11 +2,13 @@
 name: draft-weekly-ship
 description: Draft the Piper Morgan Weekly Ship newsletter from collected workstream memos. Use when PM says "draft the Ship", "draft Ship #NNN", "synthesize the workstream memos", or when all 6 workstream-NNN memos have landed in `mailboxes/exec/inbox/` and a theme has been picked. Loads the canonical artifacts before drafting so memory-of-past-Ships doesn't substitute for structure.
 scope: exec
-version: 1.12
+version: 1.13
 created: 2026-05-19
 ---
 
 # draft-weekly-ship
+
+> **Formatting rules have one source: `template-audit`** (PM, 2026-10-12, CIO's R6 decision D-C). Where this skill and `template-audit` disagree on a formatting rule (tease, metrics, title case, glosses, word count), `template-audit` wins, and this skill gets fixed to match.
 
 Draft the Weekly Ship newsletter using the canonical template, voice guide, process guide, and workstream memos — *with all of them open before writing starts.*
 
@@ -194,7 +196,7 @@ Link the image to the post on pipermorgan.ai. Format:
 Required sections in this order (per template v4.1):
 
 1. **Frontmatter** (image + alt + caption)
-2. **Title**: `# Weekly Ship #{NNN}: {Theme}` — sentence case for theme
+2. **Title**: `# Weekly Ship #{NNN}: {Theme}` — **title case for the whole H1, theme included** (template-audit #2, after Ship #058 shipped in sentence case). Sentence case is for the section headings below, not the title
 3. **Dateline**: `*{Month DD–DD, YYYY}*`
 4. **Opening**: 2–3 paragraphs capturing the theme or major milestone. Reference the previous Ship's theme for continuity if natural.
 5. **`# 🚀 Shipped this week`** with the 5 workstreams in this order:
@@ -243,7 +245,7 @@ Verify before declaring done:
 
 - [ ] All 5 workstreams present under "Shipped this week"
 - [ ] Workstreams use correct emoji prefixes (🎯 ⚙️ 🔬 🌍 📊)
-- [ ] Sentence case on all headings (not Title Case)
+- [ ] Sentence case on all section headings (not Title Case). The H1 title is the exception: title case (template-audit #2)
 - [ ] Metrics included in Governance & operations as a **bullet list** (`**Issues closed:** 25`) — NEVER a table; Medium/LinkedIn don't render markdown tables (PM 2026-07-08, supersedes template v4.1's table format). Don't force uninteresting metrics to pad the list.
 - [ ] Previous Ship linked in footer (title verified — do not trust memory)
 - [ ] Phase tag at bottom matches current project phase
@@ -272,7 +274,7 @@ Verify before declaring done:
 - [ ] Temporal-relationship language preferred over absolute-date stamps when the relationship is the point
 - [ ] Affirmative direct preferred over disclaim-then-affirmative
 - [ ] Section heading names are noun phrases, not verb phrases
-- [ ] Word count check: 800–1,200 target; flag overage to PM with rationale
+- [ ] Word count check: no fixed range for Ships, norm ~1,630 (template-audit calibration table). Flag a notably long draft to PM as a question, not a defect
 - [ ] **External section sanity check** — every title is character-for-character from the CSV; every date matches the CSV's `pubDate`; every URL pasted from the CSV (no invented slugs); every description is grounded in the post's actual content (not inferred from title); any held/queued posts named separately
 - [ ] **Hero image present, from the right source** — one image follows the publication list, pulled from one of the window's Tue/Thu narrative posts (Medium-only, not LinkedIn-syndicated) specifically, not any insight post's image; alt text and caption verbatim from that post's frontmatter; linked to pipermorgan.ai (Step 4c)
 - [ ] **Day-of-week sanity check** — every dated reference (e.g., "Tuesday May 13") matches the actual calendar; verify with `python3 -c "from datetime import date; print(date(YYYY,MM,DD).strftime('%A'))"` if uncertain
@@ -314,7 +316,7 @@ Verify before declaring done:
 - [ ] Omnibus logs spot-checked for substantive claims
 - [ ] Template structure followed in full (5 workstreams + emoji prefixes + sentence case + metrics bullet list + 5-component learning pattern + footer + phase tag)
 - [ ] Voice discipline passes (no semicolons, no "load-bearing" in public prose, no "CoS")
-- [ ] Word count: 800–1,200 (or PM-approved overage with rationale)
+- [ ] Word count: near the Ship norm (~1,630), or a long draft flagged to PM
 - [ ] Draft committed to worktree branch immediately after Write
 - [ ] Public-comms copy synced
 - [ ] PM notified for voice-pass
@@ -408,7 +410,7 @@ Initial skill. Lists canonical artifacts to load before drafting. Names voice-di
 
 ---
 
-*Skill version: 1.12*
+*Skill version: 1.13*
 *Created: 2026-05-19 (v1.0)*
-*Updated: 2026-05-20 (v1.1 — External-section verification step; v1.2 — omnibus is required full read, not spot-check); 2026-07-08 (v1.3 — Comms pre-publish review is a named mandatory step; v1.4 — PM gates the Comms handoff + evidence-tier discipline; v1.5 — metrics as bullet list, never a table); 2026-07-14 (v1.6 — Step 2b hard gate: all 6 memos required, no partial drafts under deadline pressure)*
+*Updated: 2026-05-20 (v1.1 — External-section verification step; v1.2 — omnibus is required full read, not spot-check); 2026-07-08 (v1.3 — Comms pre-publish review is a named mandatory step; v1.4 — PM gates the Comms handoff + evidence-tier discipline; v1.5 — metrics as bullet list, never a table); 2026-07-14 (v1.6 — Step 2b hard gate: all 6 memos required, no partial drafts under deadline pressure); 2026-10-12 (v1.13 — template-audit named the single source for formatting, per PM's D-C "yes"; H1 title is title case; Ship word count follows the ~1,630 norm, not 800–1,200)*
 *Scope: Exec (drafts); PM (gates); Comms (reviews)*
