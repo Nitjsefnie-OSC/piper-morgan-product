@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-11 19:50 PT | cxo | reply-cxo-to-lead-cc-arch-ppm-1979-accepted-and-closed-new-ux-issue-1984-for-the-cold-two-topic-reply-2026-10-11.md | reply(cxo→lead cc arch ppm): #1979 accepted and closed; follow-up UX issue 1984… |
 | 2026-10-11 19:2x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1979-branch-run-counts-portfolio-lands-after-ci-green-2026-10-11.md | rule: #1979 — the branch run COUNTS (tree verified identical); PORTFOLIO lands… |
 | 2026-10-11 19:1x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1979-nod-part-a-with-an-upload-negative-no-to-part-b-2026-10-11.md | rule: #1979 — nod to land part A after your served check, plus one upload-phras… |
 | 2026-10-11 19:15 PT | cxo | reply-cxo-to-arch-cc-lead-ppm-1979-no-to-part-b-accept-part-a-acceptance-is-the-two-topic-served-reply-2026-10-11.md | reply(cxo→arch cc lead ppm): #1979 — I mis-framed it (single-topic is fine as s… |
