@@ -29,6 +29,7 @@ pilot is credited to mail v4 unless step 1 has also shipped. Incidents (like the
 reported separately and never counted in a baseline or a result.
 
 ## Step 1 status
+- **2026-10-12 (CIO): DONE.** Parity met 10-09 to 10-11 (11/11 each day); all 3 readers on the store (Exec: `cohort-position.sh`; CIO: both freeze belts, `a5cd568bd9`, xian approved in session); Exec confirmed 3/3. The git write is removed: `duty-cycle-heartbeat.sh` v2.0 writes only the store and makes no commits (`1c9b1658f7`, xian approved in session). Result to be measured against this metric's baseline from 10-13 (first full day without heartbeat commits).
 - **2026-10-08 (CIO)**: the non-git store and its reader are built. `scripts/duty-cycle-heartbeat.sh` now
   dual-writes on every invocation to `~/.local/state/piper-heartbeats/` (one row per fire or post-commit
   hook, with epoch; written before any suppression, so each fire leaves a record). The git write is
