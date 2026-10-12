@@ -30,8 +30,13 @@
   principal bug, FIXED on main 5d5f7ec88e** (served AC open: re-run after the NEXT promotion); `thank you!` → briefing = **#1986**
   (thanks/farewell have no canned short-circuit; CXO's copy first); `show the team calendar` = the TEMPORAL known live miss (no filing;
   CXO's bar needs a connected account or a copy change). Also filed: **#1987** (`delete that reminder` after create); **#1988** (`<city>`
-  eaten by the renderer; copy fixed on main; render half is Web's decision). **Watch:** CI on 00aa8ce4ac+ (Full Test Suite);
-  CXO's closes on the quotes; Web's #1988 answer; next promotion → re-run turns 1b, 2 (and 4 if copy changes).
+  eaten by the renderer; copy fixed on main; render half is Web's decision). CXO's rulings (08:14) crossed mine: #1989/#1990/#1991 closed as duplicates of
+  #1986/#1985/#1988 (rulings folded in). 'Helsinki' copy landed (dacf3007a3). #1958 CLOSED by CXO; #1979 confirmed.
+  **Open with CXO:** (1) #1986 copy for thanks/farewell (then I build the short-circuit); (2) #1985 served shape — my (b): a due-today
+  read + "Nothing due today and nothing overdue." in the attention handler, on CXO's nod. **Watch:** CI on a head carrying 5d5f7ec88e;
+  Web's #1988 render decision; next promotion → Web re-runs `thank you!` ×2 and `show today's tasks` ×2.
+- **Stamp rule (today's third slip):** the frontmatter/log time is substituted from `date` at write time (`NOW=$(TZ=… date)`), never
+  typed into a draft.
 
 - Spend today: 853 Haiku router calls (Krink's credit, expires 10-15) + 6 chat turns on a local server. Keychain readable; the test user's
   key still bound. Untracked scratch `dev/active/canonical-retest-serving-llm.json` (pre-existing, not mine).
