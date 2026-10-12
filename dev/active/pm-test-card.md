@@ -17,6 +17,7 @@ Review deployments → alpha → Approve.
 
 **Live on alpha already (since 10-09 evening):** #1959/#1941 (A), #1942/#1944 (D), the 34 retired literals (item 4), #1960, the
 standup/Radar source-failure lines (#1889/#1963/#1964/#1965), the MCP server card, #1978 (org-workspace keys accepted; landed 10-11).
+**Landed on main after the promotion, NOT live yet (next promotion):** #1975 (delete an upcoming reminder by title then yes → gone), #1996 (overdue ages in calendar days; an item due earlier today sits under the due-today line, never "0 days overdue"), #1997 (the floor never calls your todo list clear when every todo is a due reminder).
 **Arrived with today's promotion (live 15:47):** #1985 (attention query reads YOUR todos, not the session's), #1986 (pure "thank you!"/"goodbye"
 get a short warm line, not a briefing), #1988/#1991 (the timezone hint renders its example), #1459 (internal, no visible change).
 
