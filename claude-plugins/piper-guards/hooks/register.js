@@ -1,6 +1,6 @@
 // piper-guards — R6 step 6 (stage 7 of dev/2026/10/03/spec-eval/D-propose-ruleset.md). CIO, 2026-10-12.
 //
-// M-1, ported from .claude/hooks/guard_pm_checkout.py (same rules, same messages): refuse git commands that
+// Rules: M-1 and M-4 (below). M-1, ported from .claude/hooks/guard_pm_checkout.py (same rules, same messages): refuse git commands that
 // discard working-tree state when they target PM's main checkout. PM edits there without committing, so the
 // discarded changes are unrecoverable (CLAUDE.md HARD RULE). Target = `git -C <dir>` if given, else the last
 // `cd <dir>` earlier in the command, else the session cwd.
@@ -91,10 +91,25 @@ export function denyMessage(bad, pm) {
   return lines.join('\n')
 }
 
+// M-4 (new; no settings hook today): refuse a Projects v2 single-select option-list write. `updateProjectV2Field`
+// with `singleSelectOptions` is a FULL replace: omitting existing options wipes every item's value for them, with no
+// undo (2026-07-05: 1,175 items lost their sprint). CLAUDE.md "GitHub Projects v2"; skill assign-sprint-safely.
+export function isProjectsFullReplace(cmd) {
+  return /\bgh\b[^\n]*\bapi\b/.test(cmd) && /updateProjectV2Field/.test(cmd) && /singleSelectOptions/.test(cmd)
+}
+
+export const M4_MESSAGE = [
+  'BLOCKED by piper-guards M-4 (R6): this GraphQL call rewrites a Projects v2 single-select field\'s option list.',
+  '`updateProjectV2Field` with `singleSelectOptions` REPLACES the whole list: any option you leave out is deleted,',
+  'and every item assigned to it loses that value, with no undo (2026-07-05: 1,175 sprint assignments wiped).',
+  'Add options in the GitHub web UI instead; to change items, use the skill assign-sprint-safely.',
+].join('\n')
+
 export function register(on, options) {
   const pm = norm(options.pm_checkout || '/Users/xian/Development/piper-morgan-product')
   on('tool.call', { tool: 'Bash' }, async ($, e, next) => {
     const cmd = String(e.command ?? '')
+    if (isProjectsFullReplace(cmd)) return { deny: M4_MESSAGE }
     if (!cmd.includes('git')) return next(e)
     const cwd = norm(String(await $.session.cwd()))
     const home = cwd.match(/^\/Users\/[^/]+/)?.[0] || '/Users/xian'
