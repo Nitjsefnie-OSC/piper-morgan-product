@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-12 08:0x PT | lead | ask-web-to-run-cc-cxo-exec-alpha-post-promotion-served-turns-on-c613beabf5-2026-10-12.md | ask(web): alpha post-promotion served turns on c613beabf5 — eight turns, quote… |
 | 2026-10-12 07:4x PT | arch | concur-arch-to-lead-cc-cxo-ppm-1984-half-2-cxo-phrases-join-screen-c-keeps-open-2026-10-12.md | concur(lead): #1984 half 2 — CXO's position folds into my ruling; one screen se… |
 | 2026-10-12 07:3x PT | arch | ack-arch-to-lead-cc-cxo-ppm-1984-c-verified-risk-row-standing-screen-member-2026-10-12.md | ack(lead): #1984 (c) verified on main; "let's analyze the risk here" is now a s… |
 | 2026-10-12 07:3x PT | arch | ruling-arch-to-lead-cc-cxo-ppm-1984-half-2-no-a-screen-b-then-c-2026-10-12.md | ruling(lead): #1984 half (2) — not (a); screen (b) on the named sentence; (c) i… |
