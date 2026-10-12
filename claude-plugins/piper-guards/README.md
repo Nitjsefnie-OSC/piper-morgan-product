@@ -32,16 +32,19 @@ Purpose: confirm that a mod's `tool.call` deny holds in **auto mode** on a real 
 measured it. Two seats' reviewers refused to set this up unattended (CIO and Pard, 10-12), so it's a paste for xian.
 **Harmless if the guard fails**: the only command the agent runs is `git stash` on a clean throwaway repo.
 
+No paste block in this README contains a `#` comment: interactive zsh treats `#` as an argument unless
+`interactivecomments` is set (10-12, Janus). Notes go in the prose around a block.
+
 **1. In your own terminal** (not inside a Claude session), make a decoy repo and a plugin copy pointed at it:
 ```bash
-T=$(cd "$(mktemp -d)" && pwd -P)/pg-check && mkdir -p "$T" && cd "$T"   # pwd -P: /var is a symlink to /private/var
+T=$(cd "$(mktemp -d)" && pwd -P)/pg-check && mkdir -p "$T" && cd "$T"
 git init -q decoy && echo x > decoy/a.txt && git -C decoy add a.txt && git -C decoy -c user.name=t -c user.email=t@t commit -qm init
 cp -R ~/Development/piper-morgan-worktrees/cio/claude-plugins/piper-guards ./pg
 sed -i '' "s#/Users/xian/Development/piper-morgan-product#$T/decoy#" pg/.claude-plugin/plugin.json pg/hooks/register.js
-grep -c "$T/decoy" pg/.claude-plugin/plugin.json pg/hooks/register.js   # expect 1 and 1
-grep -c piper-morgan-product pg/.claude-plugin/plugin.json pg/hooks/register.js   # expect 0 and 0
+grep -c "$T/decoy" pg/.claude-plugin/plugin.json pg/hooks/register.js
+grep -c piper-morgan-product pg/.claude-plugin/plugin.json pg/hooks/register.js
 ```
-(The copy comes from CIO's worktree because your checkout hasn't pulled `claude-plugins/` yet. The path is rewritten
+The first `grep` should print 1 for each file, the second 0 for each. (The copy comes from CIO's worktree because your checkout hasn't pulled `claude-plugins/` yet. The path is rewritten
 in both the manifest default and `register.js`'s fallback, so the result doesn't depend on how userConfig reaches a
 `--plugin-dir` session. `pwd -P` matters because the mod compares paths as text and doesn't resolve symlinks; Pard
 caught both, 10-12.)
