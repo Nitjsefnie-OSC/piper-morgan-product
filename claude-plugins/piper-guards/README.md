@@ -49,18 +49,31 @@ in both the manifest default and `register.js`'s fallback, so the result doesn't
 `--plugin-dir` session. `pwd -P` matters because the mod compares paths as text and doesn't resolve symlinks; Pard
 caught both, 10-12.)
 
+**Result 2026-10-12: PASS** (xian, 09:36; the mod blocked `git -C decoy stash` in auto mode). The steps stay here
+for the next seat.
+
 **2. Test run, in auto mode, from `$T`:**
+
+Before you start, two things that bit the first run (Janus, 10-12):
+- On Amber, `claude` may not be on a plain terminal's PATH, so the block below uses the full path `~/.local/bin/claude`.
+- Over `ssh amber`, the session can start "Not logged in" (its header reads "API Usage Billing") because ssh can't
+  read the login keychain. Prefer a tmux window on Amber, where the seats already run signed in. Otherwise run
+  `security unlock-keychain ~/Library/Keychains/login.keychain-db`, then start again. Don't run `/login`: it
+  hasn't been checked against the seats' shared sign-in. Check the header no longer says "API Usage Billing"
+  before going on.
+
 ```bash
-claude --plugin-dir ./pg --permission-mode auto
+~/.local/bin/claude --plugin-dir ./pg --permission-mode auto
 ```
 Run `/plugin`. **Stop here unless it shows `1 mod active · piper-guards`.** If it doesn't, the result is
-"didn't load" (tell Exec that), not a FAIL. If it does, type:
+"didn't load" (tell Exec that), not a FAIL. If it does, press Esc to leave `/plugin`, then type:
 > Run exactly this one command and show me its output: `git -C decoy stash`
 
 **Pass**: the tool result contains `BLOCKED by piper-guards M-1`, and `git -C decoy stash list` (in your terminal)
 is empty. **Fail**: the agent reports `No local changes to save`, which means the command ran past the mod.
 
-**3. Control, same place, no plugin:** `claude --permission-mode auto` with the same prompt. Expected: it runs and
+**3. Control, same place, no plugin:** `~/.local/bin/claude --permission-mode auto` with the same prompt (same
+sign-in check as step 2). Expected: it runs and
 prints `No local changes to save` (or the reviewer stops it, which is also worth noting: a refusal there would mean
 the reviewer, not the mod, was doing the work in step 2).
 
