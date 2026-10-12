@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-10-11
+last_updated: 2026-10-12
 currency_claim: rewritten at every substantive fire (3x/day cadence when active)
 max_age_days: 1
 ---
@@ -24,7 +24,8 @@ origin/main, with `reply-to:` in the front matter.
   keep `--permission-mode acceptEdits`. The slim CLAUDE.md waits on 🔒 D-E/D-F.
 - **#1967 OWED pilot**: my marker `owed-pilot-review` due 10-16 (row 8p).
 
-**🔒 PM-gated (escalated to Exec, dated)**: D-C, D-D (since 10-03); D-E, D-F, D-G (since 10-03, escalated 10-08);
+**Answered 10-12** (xian via Janus→Exec): D-C yes (Comms did it), D-D yes, D-E drop, D-F one line, all applied (`a2ce30228c`); D-G overtaken.
+**🔒 PM-gated (escalated to Exec, dated)**:
 routine deletion (10-04); R1-R7 walk-through (10-05); keep ask or (B) on HOST (10-10).
 **Others**: Pard (marker cap, likely moot after R3); Exec's soak (8n); Lead joins v4 10-12 (flip roles.yaml).
 
@@ -36,3 +37,4 @@ can hide its subject (main-ci-status 20 → 100).
 
 - R3 git-write removal (key: r3-git-write-removal-2; Filed 2026-10-11): readers 1/3 (Exec: cohort-position). The 2 freeze belts: patch written + tested, commit REFUSED by auto-mode ([Auto-Mode Bypass]) after Exec was refused the same edit; patch at dev/2026/10/11/r3-belts-store-readers.patch (not applied). Blocked on xian allowing the belt edit (via Exec). Then remove the git write and run freeze-check right away and at the next START. Git write stays until then.
 - piper-guards remaining rules (key: piper-guards-rest; Filed 2026-10-12): M-1 + M-4 done (6/6); M-2, M-3, M-5, M-6 and M-9 wait on xian's attended live check (README runbook, 49dc037e70). Then side-by-side week, CIO seat first.
+- R6 slim CLAUDE.md (key: r6-slim-claude-md; Filed 2026-10-12): candidate `dev/2026/10/12/r6-slim-CLAUDE-candidate.md`, probe commit `92ead77426` (local branch cio/r6-slim-probe). 60-run suite started ~08:05 10-12 (launched before 08:03) → when it finishes: compare each cell to the 56/60 baseline; pass → swap CLAUDE.md, history-log extraction #8, prompt-audit, token re-measure, 24h watch; any cell below → re-run the baseline for that cell (CLI/model drift) before judging.
