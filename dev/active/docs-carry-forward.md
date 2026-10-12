@@ -1,6 +1,6 @@
 # Docs Carry-Forward
 
-**Updated**: 2026-10-12 07:45 PDT (07:12 fire). 10-10 and 10-11 omnibuses + 31 activity rows DONE this fire (10-10 had been missed). Weekly Docs Audit waits on the workflow-created FLY-AUDIT issue (~09:20 PDT), take at the 10:12 fire. Known fault: bare `gh` hangs on Amber since the 10-10 reboot (Pard); prefix `GODEBUG=netdns=go`. History in session logs (`dev/2026/10/{04..11}/*docs-code-log.md`), not here.
+**Updated**: 2026-10-12 13:20 PDT (13:12 fire). DONE 10-12: 10-10 + 10-11 omnibuses, Weekly Audit #1994 closed, BRIEFING-CURRENT-STATE refreshed. **HELD**: How to Report edit in `docs/ALPHA_KNOWN_ISSUES.md` (line 133) and `docs/ALPHA_TESTING_GUIDE.md` (line 329), text staged in memo to Exec (`docs-to-exec-cc-host-how-to-report-diff-for-xians-read-2026-10-12.md`); commit and push both files ONLY after Exec says xian read it. Known fault: bare `gh` hangs on Amber since the 10-10 reboot (Pard); prefix `GODEBUG=netdns=go`. History in session logs (`dev/2026/10/{04..11}/*docs-code-log.md`), not here.
 
 ## Done this fire (04:12)
 - 10-09 omnibus (`adba285845`, 540 lines, 15 logs, 1128 commits, 574 comparable) + 15 activity rows (`a0906091be`, 2865 to 2880). Nudged HOST (10-09 log lacks DAY-CLOSED, `8e927d29ef`).
@@ -17,7 +17,7 @@
 
 ## NEXT (named triggers)
 - **Tue 10-13**: "Giving It Away, and Wondering Who May Want It" is `drafted`. Publish only after Comms sets `ready-for-docs` and sends a publish-ready memo, same pre-flight.
-- **Mon 10-12**: Weekly Docs Audit. `roadmap.md` flag is CLEAR (fold landed 10-10, audited). Mention only the Enterprise date discrepancy as PM-pending.
+- **Mon 10-12**: (done, see header) Weekly Docs Audit. `roadmap.md` flag is CLEAR (fold landed 10-10, audited). Mention only the Enterprise date discrepancy as PM-pending.
 - **~11-30**: glossary 60-day re-verify.
 
 ## Held on PM (via Exec)
