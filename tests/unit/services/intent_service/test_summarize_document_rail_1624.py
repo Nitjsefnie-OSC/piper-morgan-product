@@ -307,6 +307,29 @@ class TestSummarizeDocumentDispatch:
             assert result is None, f"{msg!r} must fall through to the floor path"
 
     @pytest.mark.asyncio
+    async def test_conversation_and_text_sources_fall_through_to_the_floor_path(self):
+        """#1979: the classifier emits `summarize_document` with
+        source_type=conversation for "summarize my current work and I need the
+        archived list too" (5/5 on the surface-2 probe; 6/6 served on a local
+        server). This entry's contract names text/conversation floor-direct;
+        the guard must hand them back (None → SYNTHESIS floor with the whole
+        message) instead of running the upload resolver, which produced the
+        upload prompt CXO filed. The slot is the LLM's own (ADR-080 D1) — no
+        message sniff decides this."""
+        for msg, source in [
+            ("summarize my current work and I need the archived list too", "conversation"),
+            ("summarize my current work", "conversation"),
+            ("summarize what we just discussed", "conversation"),
+            ("summarize this: lorem ipsum dolor", "text"),
+        ]:
+            result = await run_summarize_document_workflow(
+                session_id="sess-1979",
+                user_id=_USER,
+                context={"intent": _intent(msg, source_type=source)},
+            )
+            assert result is None, f"{msg!r} ({source}) must fall through to the floor path"
+
+    @pytest.mark.asyncio
     async def test_missing_file_content_degrades_honestly(self):
         p1, p2, p3, p4, _resolver, analyze = _boundary_patches()
         analyze.side_effect = FileNotFoundError("gone")
