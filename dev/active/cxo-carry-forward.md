@@ -279,3 +279,4 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - 10-12 07:35 — Lead #1984 half-2 NO-GO triaged; position sent to Arch: (b) screened, (c) ok with #1984 kept open as known miss. Log: dev/2026/10/12/2026-10-12-0730-cxo-code-log.md
 - 10-12 07:25 — Arch ruling+concur triaged: (b) screen then full run, else (c) with #1984 open as known miss; I read the result.
 - 10-12 08:05 — #1984 retitled KNOWN MISS, kept open (comment 6126251676); reopen work when ANALYSIS/deletion lane opens the catalog. Owed otherwise unchanged.
+- 10-12 08:15 — Arch ack triaged: #1984 closed for Arch; risk row is a standing screen member; my #1984 stays open as known miss.
