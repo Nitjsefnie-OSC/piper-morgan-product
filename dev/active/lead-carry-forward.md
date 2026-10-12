@@ -1,13 +1,16 @@
 # Lead carry-forward — Fable 5.1 seat; Model A worktree ~/Development/piper-morgan-worktrees/lead
 
-## STATE @ 2026-10-12 07:1x PT — START drained (log dev/2026/10/12/2026-10-12-0647-lead-code-log.md, open)
-- **#1984 half (2): NO-GO on the description path, HELD at `claude/lead-1984-status-description` (40b3c95b33), reported 07:11** (memo to
-  Arch cc CXO PPM; issue comment 6126007704). W1 full run 13 improved / 8 worsened, ×6 attribution = 4 attributed; W2/W3 screens 3 each;
-  the "Not session activity" sentence is lever and damage; no fourth wording. Every wording holds the #1984 row on the ruled plan and the
-  served reply reads right (`controls/served-1984-half2-2026-10-12.md`). **Waiting on Arch's ruling among three levers:** (a) land W2 as a
-  measured trade; (b) narrow `session_activity_query`'s description — screen the same 11 rows first (~66 calls), full run only on a clean
-  screen (~593); (c) ledger the row as a known miss, CXO decides whether #1984 closes on half (1). Adapter is not a lever. 🔒 filed 10-12;
-  smallest answer: a letter. Escalate to Exec if unanswered after 10-13.
+## STATE @ 2026-10-12 07:2x PT — START drained + the 07:16 mail wake drained (log dev/2026/10/12/2026-10-12-0647-lead-code-log.md, open)
+- **#1984 half (2): CLOSED ON MY SIDE 07:2x — lever (c) applied.** Arch ruled (07:3x his clock, read 07:16): not (a); (b) = drop the
+  `'what did I work on today'` rail example, screened ×6 main vs (b) on 20 phrases (CXO's two true-session phrases joined) → the row
+  reached the ruled plan 6/6 but two rows read worse (re-checked 12/12 each) → FAIL → (c): the corpus row carries the KNOWN MISS note
+  (main, pre-push smoke 568); expected stays the ruled ops (MISMATCH on purpose). Memo + issue comment 6126198825. **Nothing owed by me;
+  CXO retitles #1984 (proposed title in the memo). No more wordings on this neighbourhood (Arch).** Held branch
+  `claude/lead-1984-status-description` (40b3c95b33) is dead — leave it on origin, do not merge; the report is filed CANDIDATE-HELD.
+  Observation on file: "let's analyze the risk here" tips to CLARIFY 6/6 under any catalog edit (ANALYSIS survivor at the margin) —
+  the next catalog candidate carries it; a ledger line when the ANALYSIS lane opens.
+- **CI watch:** my 07:2x corpus push (tests/fixtures) triggers test.yml — read the Full Test Suite result at the next fire; a corpus-note
+  edit cannot change a test's outcome, so a red there is someone else's head.
 - **Ceiling 120 / routing tail 90 (29 the #1974 floor)** — re-read 120 this morning, main unchanged for PPM's row (said in the memo).
   **Wed 10-14 tripwire reads 120.** Main 12/12 workflows green at START (d296221de5); my pushes today are docs-only.
 - **Deletion procedure:** the test-tree sweep step is in the routing-stack doc (after the pattern→corpus conversion step) + a post-landing
