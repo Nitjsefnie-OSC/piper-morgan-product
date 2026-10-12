@@ -295,3 +295,4 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - 10-12 16:17 — fire: quiet; waiting on Web's re-run quotes (#1985/#1986) and PM step 4 (#1983).
 - 10-12 17:05 — #1983 final copy sent (parenthesis cut); held for PM step 4; #1995 queued behind it.
 - 10-12 17:40 — alpha re-run judged: #1985/#1986 CLOSED; filed #1998, #1999; #1987 comment; armed-slot question to Lead. Owed: #1960 quote, #1983 (step 4 via PA), #1995, #1984 known miss open.
+- 10-12 18:05 — re-run crossed fixes: #1996/#1997 on main (not live), #1998/#1999 closed as dups; Arch: #1987 pick must arm, #2000 census. Owed: judge #1996/#1997 on next promotion's re-run.
