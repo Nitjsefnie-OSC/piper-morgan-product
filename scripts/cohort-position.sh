@@ -28,19 +28,12 @@
 #      `last_updated:` key, docs/lead/web vary the label text again, comms/pa/arch bury the date in
 #      a prose paragraph). Extraction below tolerates this by pattern-scanning rather than assuming
 #      one schema — see extract_focus()/self_reported_date().
-#   3. dev/heartbeats/YYYY-MM-DD/{role}.tsv — real per-role liveness data, read from the SAME
-#      underlying files `scripts/cohort-freeze-detect.sh` consumes (not shelled out to that script —
-#      it only prints a cohort-wide aggregate, never a per-role timestamp, and its own wall-clock
-#      window + `git fetch` would break this script's idempotency for no benefit). Read from the
-#      LOCAL working tree (not origin/main) — cheaper, no network dependency, but can be behind a
-#      checkout that hasn't fetched; the footer note says so.
-#      ⚠️ NOT the primary liveness signal — see item 5. `duty-cycle-heartbeat.sh` writes these
-#      DELIBERATELY SPARSELY for busy roles ("the work commit already IS a heartbeat... busy agents
-#      pay ~zero", its own header, refinement (a) / `--if-quiet`). Reading this alone, as v1 of this
-#      script did, INVERTS the column: the busier a role is, the fewer heartbeat rows it has, the
-#      staler it reads. Exec caught this same-day (2026-08-29) — cxo read 19 days stale from
-#      heartbeat data alone while having committed 40 minutes earlier. Kept as one input among three
-#      (item 5), never trusted alone again.
+#   3. The heartbeat store (`scripts/hb-store.py`; default ~/.local/state/piper-heartbeats), read by
+#      role_last_heartbeat(). Until R3 (2026-10-11/12) this was dev/heartbeats/YYYY-MM-DD/{role}.tsv in
+#      git; the heartbeat script has been store-only since v2.0 and no longer writes those files. The
+#      store records every invocation (`--if-quiet` is now a no-op), so a busy role no longer reads
+#      stale from heartbeats alone the way it did in git (Exec, 2026-08-29: cxo read 19 days stale
+#      while committing 40 minutes earlier). Still one input among three (item 5), never trusted alone.
 #   4. `git log -1 --format=%ct -- <path>` on the carry-forward file itself — real git-commit time,
 #      used for the Stale? column (unchanged) and as one input to Last Active (item 5).
 #   5. `git log origin/main --since="14 days ago"` scanned ONCE for all roles, matched per-role by
@@ -64,7 +57,6 @@ set -uo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 REG="${COHORT_POSITION_REGISTRY:-$REPO/dev/active/duty-cycle-registry.tsv}"
 CF_DIR="$REPO/dev/active"
-HB_DIR="$REPO/dev/heartbeats"
 NOW_EPOCH=$(date +%s)
 STALE_THRESHOLD_S=$((48 * 3600))
 
