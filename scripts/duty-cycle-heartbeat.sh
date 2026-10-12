@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
-# duty-cycle-heartbeat.sh v1.0 (CIO 2026-07-28; proposed 07-27, HOST-approved 07-28 with 3 refinements)
+# duty-cycle-heartbeat.sh v2.0 (CIO 2026-07-28; v2.0 2026-10-12: R3 step 1 done — STORE ONLY, NO GIT)
 #
-# ⚠️ IT PUSHES YOUR WHOLE CYCLE BRANCH (`git push origin HEAD:main`, #1980): work you mean to hold goes on a
-# side branch; anything on the cycle branch ships at the next heartbeat, ahead of any tests you meant to run first.
+# ★ v2.0 (2026-10-12, CIO; Exec confirmed 3 of 3 readers on the store; xian approved the edit in session):
+# this script writes ONLY the non-git store ($PIPER_HB_STORE, default ~/.local/state/piper-heartbeats; read
+# with scripts/hb-store.py). It no longer commits, fetches, merges or pushes anything, so it no longer ships
+# your cycle branch (#1980 is gone with it) and makes no hb(...) / hb-last-invoked(...) commits on main.
+# `--if-quiet` and `--no-push` are still accepted, as no-ops, so callers don't break. The git-era text below
+# (`dev/heartbeats/...`, refinements, retries) describes the surface that existed until 2026-10-12; that
+# directory is history now. The old git code is in git history (this file before 2026-10-12).
 #
 # WHY THIS EXISTS
 # The freeze-watchdog inferred liveness from WORK OUTPUT — commits and session-log updates. But the
@@ -79,12 +84,11 @@ done
 
 cd "$(git rev-parse --show-toplevel 2>/dev/null)" || { echo "heartbeat: not in a git repo" >&2; exit 2; }
 
-# R3 step 1 (2026-10-08, CIO): DUAL-WRITE to the non-git heartbeat store, on EVERY invocation, before any
-# suppression or self-marker refusal below, so each fire leaves exactly one record whatever git does (the
-# 10-05 per-fire-record ruling). Git behaviour below is unchanged until the 3-day, 11/11-role parity test
-# passes (docs/internal/operations/r3-metric.md); then the git write stops. Read with scripts/hb-store.py.
-# Store: one directory on this host (the cohort runs on Amber). Never fatal: a store failure is printed,
-# and the git path still runs. Columns: ts, role, fire, source (fire|hook), epoch.
+# R3 step 1 (dual-write 2026-10-08; git write removed 2026-10-12, CIO): the non-git heartbeat store, one
+# record per invocation (the 10-05 per-fire-record ruling). Read with scripts/hb-store.py.
+# Store: one directory on this host (the cohort runs on Amber). Columns: ts, role, fire, source (fire|hook),
+# epoch. A store failure is now FATAL and loud (m-44): there is no git fallback, so a silent miss would read
+# as a frozen role.
 PIPER_HB_STORE="${PIPER_HB_STORE:-$HOME/.local/state/piper-heartbeats}"
 _hb_ts="$(date '+%Y-%m-%d %H:%M:%S %Z')"; _hb_ep="$(date +%s)"
 _hb_src="fire"; [ -n "${PIPER_IN_POST_COMMIT_HOOK:-}" ] && _hb_src="hook"
@@ -93,200 +97,7 @@ if mkdir -p "$PIPER_HB_STORE/$(date +%Y-%m-%d)" "$PIPER_HB_STORE/last-invoked" 2
    && printf '%s\t%s\t%s\t%s\n' "$_hb_ts" "$FIRE" "$_hb_src" "$_hb_ep" > "$PIPER_HB_STORE/last-invoked/$ROLE.txt"; then
   echo "heartbeat-store: $ROLE $FIRE ($_hb_src) recorded"
 else
-  echo "heartbeat-store: WARNING — could not write $PIPER_HB_STORE (git path continues)" >&2
-fi
-
-# ── DEFENSE-IN-DEPTH RE-ENTRY CHECK — added 2026-09-22, fire-zero recursion incident, second guard
-# (the primary guard is the calling hook's own PIPER_IN_POST_COMMIT_HOOK env-var check; this one
-# doesn't depend on how this script got invoked). If the commit HEAD currently points at is itself
-# one of THIS ROLE's own marker commits, there is nothing this invocation should do — reacting to
-# a heartbeat-marker commit by writing another heartbeat-marker commit is exactly the loop shape
-# that produced 967 spurious commits on origin/main before it was killed by hand.
-#
-# ⚠️ CORRECTED 2026-09-22 same day (Web's finding, reproduced and reported same-day). The pattern
-# originally matched ANY role's marker prefix, not $ROLE's own — so any seat whose routine sync
-# landed with origin/main's tip sitting on a DIFFERENT role's just-pushed marker would silently
-# no-op its own heartbeat call (exit 0, no error surfaced anywhere). Given 11 seats pushing small
-# frequent marker commits all day, this was common, not rare — Web caught it live, reproduced twice
-# on unchanged state, and found `dev/heartbeats/last-invoked/web.txt` sitting 3h stale as a result.
-# The actual recursion incident this guard exists to prevent is always the SAME role reacting to
-# its OWN marker (hook(X) → heartbeat(X) → commit marker(X) → hook(X) fires again on that commit →
-# heartbeat(X) sees HEAD is X's own marker → exits) — scoping to $ROLE preserves that protection
-# while eliminating the cross-role false-suppression. The former "belt and suspenders" framing
-# (catching two independent invocations racing on ANY marker) never had a concrete incident behind
-# it and cost a real, recurring false-clean; dropped in favor of the narrower, verified-correct scope.
-_head_msg="$(git log -1 --format=%s 2>/dev/null || true)"
-case "$_head_msg" in
-  "hb($ROLE)"*|"hb-last-invoked($ROLE)"*)
-    echo "heartbeat: HEAD is already a $ROLE heartbeat marker commit ('$_head_msg') — refusing to react to my own output"
-    exit 0
-    ;;
-esac
-
-DAY="$(date +%Y-%m-%d)"
-DIR="dev/heartbeats/$DAY"
-FILE="$DIR/${ROLE}.tsv"
-TS="$(date '+%Y-%m-%d %H:%M:%S %Z')"
-
-# v1.1 (2026-09-04, CXO's finding, Docs/Exec endorsed — standing-item 7j). Prior to this, an
-# --if-quiet suppression wrote NOTHING: the freeze-watchdog then saw "no heartbeat row today" and
-# could not tell (a) writer runs, correctly suppressed vs. (c) writer invoked once, then stopped
-# entirely (CXO's real case: 7 real invocations, then silence for 24 days, masked the whole time by
-# real commit output — Arch's incident shape exactly). `--if-quiet` making the writer's own health
-# unobservable is precisely the failure mode CXO named: "a busy agent never writes a row, therefore
-# never learns whether its writer works — until the day it goes quiet, and that is exactly the day
-# the answer matters." Fix: this marker is OVERWRITTEN (not appended, so no unbounded growth like
-# the per-day TSVs) on every invocation of this script, suppressed or not — so a role's writer
-# health becomes checkable independent of whether today produced a real heartbeat row.
-LAST_INVOKED_DIR="dev/heartbeats/last-invoked"
-LAST_INVOKED_FILE="$LAST_INVOKED_DIR/${ROLE}.txt"
-mkdir -p "$LAST_INVOKED_DIR"
-# v1.2 (2026-09-05, CXO's finding, Arch's precedent): third field is a provenance tag, always
-# "observed" here — this script is the ONLY writer of this file, and every write IS a direct
-# observation (the script ran, right now, in this process). Explicit rather than implicit so the
-# invariant is machine-checkable: duty-cycle-freeze-check.sh's cold-start backfill (7l) computes a
-# "derived" reading transiently for its own console output when this file doesn't exist, and NEVER
-# persists that derived value here — this field is what makes that boundary enforceable rather
-# than just documented in a comment, matching the ratified derived-artifacts-declare-themselves
-# precedent (the B4 derived ADR index's own "GENERATED FILE" banner, per Arch, m-36's rationale
-# applied at a different altitude: a value that's inferred must say so on the artifact itself).
-printf '%s\t%s\tobserved\n' "$TS" "$FIRE" > "$LAST_INVOKED_FILE"
-
-# --if-quiet: skip when the fire already produced a role-tagged commit today. That commit IS the
-# heartbeat (refinement a), so writing another would be pure churn.
-# ⚠️ 2026-08-04: START ALWAYS WRITES, --if-quiet or not.
-# Refinement (a) suppresses the write whenever the role committed, which on a busy cohort is every
-# fire — so the surface is legitimately empty on a healthy day. That made the G6 writer-liveness
-# check unable to distinguish "nobody ran the writer" from "everyone was busy", and after the 7/29
-# correction (also require zero commits) G6 became PERMANENTLY SILENT on any active day.
-# Consequence, observed: the writer has been unrun since 2026-07-28 by every role including me, and
-# nothing could say so. Exactly the m-44 shape, inside the m-44 fix.
-# One unconditional line per role per START (11 lines/day) restores the discriminator at trivial
-# cost: an empty surface past midday now means the writer is dead, not that the day was productive.
-if [ "$FIRE" = "START" ] && [ "$MODE" = "--if-quiet" ]; then
-  echo "heartbeat: START always writes (surface must stay diagnostic) — ignoring --if-quiet"
-  MODE=""
-fi
-
-if [ "$MODE" = "--if-quiet" ]; then
-  git fetch origin main -q 2>/dev/null || true
-  # NO `git log ... | grep -q` here, and the reason is a real bug this replaced:
-  # `grep -q` exits the instant it matches, which SIGPIPEs the still-writing `git log`; under
-  # `set -o pipefail` that non-zero producer status becomes the pipeline's status, so the guard
-  # reported NO MATCH *because it had matched*. Timing-dependent, so it passed when tested in
-  # isolation and failed inside the script -- an intermittent false-negative in a guard, which is
-  # the m-44 family exactly. Capture first, then test the string: no pipe, no race.
-  #
-  # ⚠️ 2026-08-28 (Web found it, CIO fixed it): window shortened 6h -> 3h. Suppression CASCADES —
-  # a suppressed fire produces no new reference point, so consecutive quiet fires stack against the
-  # SAME stale commit timestamp until the window finally elapses. On the cohort's tightest cadence
-  # (3h, nine of eleven roles), a 6h window let TWO consecutive quiet fires suppress before a third
-  # fire finally wrote — worst case ~9h of true silence (three fire-intervals) against those roles'
-  # own 7h dynamic threshold, a false stale-alert on a role that never missed a beat (Web, 08-28:
-  # every fire ran on schedule; the freeze-watchdog's own alert matched the gap almost to the
-  # minute). 3h is the shortest inter-fire gap anywhere in the registry — at that window, AT MOST
-  # ONE quiet fire in a row can suppress (elapsed 3h is right at the boundary; the second consecutive
-  # quiet fire's elapsed 6h clears it and writes), bounding worst-case silence to ~2 fire-intervals,
-  # safely under any role's 2x-gap+1 dynamic threshold with real margin. Costs looser-cadence roles
-  # (cio, exec) some of the "free" suppression — cheap, since a heartbeat write is a few bytes.
-  recent="$(git log origin/main --since="3 hours ago" --format=%s 2>/dev/null || true)"
-  case "$recent" in *"($ROLE)"*) hb_already=1;; *) hb_already=0;; esac
-  if [ "$hb_already" = 1 ]; then
-    # v1.1: don't just exit — land the last-invoked marker so the suppression itself is observable.
-    # Same failure posture as the full-write path below (fail loud, never silently), but this is a
-    # single-line overwrite, not an unbounded append, so the "cost is per quiet fire" design intent
-    # is preserved: the marker commit is the same trivial size a heartbeat row would have been.
-    git add -- "$LAST_INVOKED_FILE" 2>/dev/null
-    if git diff --cached --quiet -- "$LAST_INVOKED_FILE" 2>/dev/null; then
-      echo "heartbeat: $ROLE committed within 3h — that commit IS the heartbeat; nothing written (refinement a)"
-      exit 0
-    fi
-    # ⚠️ RETRY ADDED 2026-09-20 (Web's finding): a plain fetch+merge+push, on failure, used to warn
-    # and give up — leaving the just-created marker commit STRANDED, UNPUSHED, on the agent's own
-    # branch. "Not treated as fatal" was the right call for the FIRE (a marker-update failure
-    # shouldn't abort a duty-cycle turn) but the consequence was worse than the stale marker it was
-    # trying to avoid: `origin/main..HEAD` becomes non-empty, which is the PASS CONDITION of the
-    # sign-off checklist itself — reproduced twice on Web's seat in one day, once with a clean index,
-    # ruling out "probably a staged-index artifact." Most likely cause: a push race against
-    # concurrent cohort writes to `main` (11 seats), which is exactly what mail-send.sh already
-    # retries around. Same fix here: re-fetch, re-merge, re-push, up to 3 attempts, before giving up.
-    if git commit -q -m "hb-last-invoked($ROLE): suppressed $FIRE $TS" -- "$LAST_INVOKED_FILE" 2>/dev/null; then
-      # --no-push (2026-09-22, fire-zero incident fix): commit locally, stop here. No fetch/merge/
-      # push from this context — see the flag's own USAGE note for why. Delivery rides the caller's
-      # next real push.
-      if [ "$NO_PUSH" = 1 ]; then
-        echo "heartbeat: $ROLE committed within 3h — row suppressed (refinement a), last-invoked marker committed locally (--no-push: delivery deferred to caller's next real push)"
-        exit 0
-      fi
-      attempt=0; landed=0
-      while [ "$attempt" -lt 3 ]; do
-        attempt=$((attempt + 1))
-        if git fetch origin main -q 2>/dev/null \
-           && git merge origin/main --no-edit -q 2>/dev/null \
-           && git push -q origin HEAD:main 2>/dev/null; then
-          landed=1; break
-        fi
-      done
-      if [ "$landed" = 1 ]; then
-        git push -q origin HEAD 2>/dev/null || true
-        echo "heartbeat: $ROLE committed within 3h — row suppressed (refinement a), last-invoked marker updated"
-        exit 0
-      fi
-      # Name the actual residue and the fix, not just "failed to land" — a vague warning is what let
-      # this go unnoticed twice; only running the sign-off checklist's own verify step caught it.
-      echo "heartbeat: WARNING — last-invoked marker for $ROLE is STRANDED: committed locally after $attempt push attempt(s), still NOT on origin/main (push race against concurrent cohort writes, most likely). NOT fatal to this fire, but 'git push origin HEAD:main' before you end it, or the sign-off checklist's 'origin/main..HEAD empty' check will fail on this exact commit." >&2
-      exit 0
-    fi
-    echo "heartbeat: WARNING — could not create last-invoked marker commit for $ROLE; not treated as fatal" >&2
-    exit 0
-  fi
-fi
-
-mkdir -p "$DIR"
-printf '%s\t%s\t%s\n' "$TS" "$ROLE" "$FIRE" >> "$FILE"
-
-# DELIVERY. mail-send.sh is deliberately NOT reused: it refuses non-mailbox paths on purpose, and
-# that guardrail protects mail discipline (mail must land on main, from any worktree, without
-# touching a shared checkout). Widening it to carry heartbeats would trade a real protection for a
-# convenience. Heartbeats are ordinary agent-owned files, so they ship the ordinary way.
-#
-# Per-role daily paths mean two agents can never touch the same file, so no retry/rebase dance is
-# needed — the only conflict possible is on the commit tip, which the push handles.
-# v1.1: the last-invoked marker rides in the SAME commit as the heartbeat row (one push, not two).
-git add -- "$FILE" "$LAST_INVOKED_FILE" 2>/dev/null
-if git diff --cached --quiet -- "$FILE" 2>/dev/null; then
-  echo "heartbeat: nothing staged for $FILE — refusing to report success (m-44: a no-op must not look like a write)" >&2
+  echo "heartbeat-store: FAILED to write $PIPER_HB_STORE — the belts will read $ROLE as stale. Investigate now." >&2
   exit 1
 fi
-# --no-push (2026-09-22, fire-zero incident fix): commit locally, stop before any fetch/merge/push.
-# Not exercised by the hook today (it only ever calls --if-quiet, which takes the suppressed path
-# above), but kept consistent here so this flag means the same thing on both paths rather than
-# being a --if-quiet-only special case someone has to rediscover later.
-if [ "$NO_PUSH" = 1 ]; then
-  if git commit -q -m "hb($ROLE): $FIRE $TS" -- "$FILE" "$LAST_INVOKED_FILE" 2>/dev/null; then
-    echo "heartbeat: $ROLE $FIRE -> $FILE (committed locally, --no-push: delivery deferred to caller's next real push)"
-    exit 0
-  fi
-  echo "heartbeat: FAILED to commit $FILE locally — the belt will read $ROLE as stale and the cause will not be visible. Investigate now." >&2
-  exit 1
-fi
-
-if git commit -q -m "hb($ROLE): $FIRE $TS" -- "$FILE" "$LAST_INVOKED_FILE" 2>/dev/null \
-   && git fetch origin main -q 2>/dev/null \
-   && git merge origin/main --no-edit -q 2>/dev/null \
-   && git push -q origin HEAD:main 2>/dev/null; then
-  git push -q origin HEAD 2>/dev/null || true
-  echo "heartbeat: $ROLE $FIRE -> $FILE (on origin/main)"
-  exit 0
-fi
-
-# Fail LOUDLY rather than quietly (m-44): a heartbeat that silently fails to land is worse than none,
-# because the belt would then read the role as stale and nobody would know why.
-#
-# WATCHED IT FIRE (Arch, 2026-09-15): first confirmed live instance of this path, not just a
-# theoretical design — Arch's 06:53 START heartbeat hit this exact branch (a push race, four roles
-# firing inside the same minute), the message printed verbatim as written above, and Arch retried
-# immediately and verified the retry landed at trunk. Per this corpus's own discipline ("a net you
-# haven't seen fire is a claim, not a mechanism"), this discharges that claim for this branch.
-echo "heartbeat: FAILED to land $FILE on origin/main — the belt will read $ROLE as stale and the cause will not be visible. Investigate now." >&2
-exit 1
+exit 0
