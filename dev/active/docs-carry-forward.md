@@ -16,7 +16,7 @@
 - Roadmap v19.0 fold LANDED (`aca130a366`). I re-audited it and **closed #1644** (05:3x). Reply to PPM filed (`114a882b5`). Enterprise milestone date (GitHub 2028-10-30 vs decisions.log 2027-10-30) is PM's via Exec, PPM routed it, nothing owed from Docs. Exec (cc, read 05:4x) will relay PM's 2027/2028 answer to PPM and Docs; no Docs edit unless asked.
 
 ## NEXT (named triggers)
-- **Tue 10-13**: "Giving It Away, and Wondering Who May Want It" is `drafted`. Publish only after Comms sets `ready-for-docs` and sends a publish-ready memo, same pre-flight.
+- **Tue 10-13 04:12 fire**: PUBLISH "Giving It Away, and Wondering Who May Want It" (`ready-for-docs`, Comms memo received and pre-flight + dry-run done 10-12 15:0x). Real publish with `--category building --work-date 2026-08-13`, image `...-pleased-customer-removes-brakes-maker-worries.jpg`; re-fetch first. Medium-only crosspost reminder to PM after.
 - **Mon 10-12**: (done, see header) Weekly Docs Audit. `roadmap.md` flag is CLEAR (fold landed 10-10, audited). Mention only the Enterprise date discrepancy as PM-pending.
 - **~11-30**: glossary 60-day re-verify.
 

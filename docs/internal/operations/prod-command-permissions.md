@@ -4,12 +4,33 @@
 Pard (seat permissions). Applies to any seat allowed to run a fixed production command (first: HOST's seat, the
 read-only `prod_user_lookup` and the invite mint).
 
+## 2026-10-12 (later): regenerated with aliases after Pard's check
+
+Pard read flyctl's `Aliases:` lines on 10-12 and found 79 spellings of gated verbs that matched no rule. Examples: `fly m destroy`,
+`fly app destroy`, `fly vol destroy`, `fly pg connect`. With the catch-all ask removed, those went to the auto-mode reviewer.
+The lists are now generated, not hand-written: `scripts/gen-fly-permissions.py` reads each level's `--help` and emits every
+alias spelling. The JSON records the flyctl version it was built from and the alias sets (`flyctl_version`, `aliases`), and
+it is marked do-not-hand-edit. Built from flyctl v0.4.115: 151 spellings (72 before, so 79 added, matching Pard's count),
+64 allow, 120 ask, 1028 deny rules.
+
+- **Drift check:** `scripts/gen-fly-permissions.py --check` exits 1 when the installed flyctl's version or alias sets differ
+  from the committed JSON. flyctl updates itself, so someone has to run this on a schedule. Who runs it is still open
+  (Pard's daily or HOST's START).
+- **Hidden or deprecated commands** that `--help` doesn't list are not covered. They fall to the auto-mode reviewer.
+  A deny-by-default isn't possible: a catch-all deny or ask would also override every allow (deny, then ask, then allow).
+  This residual is accepted. The drift check turns a new verb on a flyctl update into a visible event.
+- Simulated with fnmatch: 25 of 25 alias cases came out as intended. `fly m stop x` and `fly app destroy` are refused;
+  `fly m exec` and `fly pg connect` ask; `fly app list` and `fly secrets ls` are allowed; `fly m list` goes to the reviewer.
+- **Install:** it is xian's paste. Pard's seat is refused when it writes another seat's permission file. Pard checks the
+  regenerated file and puts the paste on xian's card. Add `fly m stop x` (refused) and `fly m list` (reviewer or runs) to
+  the attended check.
+
 ## 2026-10-12 (later): xian approved; exact rules drafted for Pard to install
 
 xian said "yes, approve" to the split above (Exec v4 01M4S0KQRM2CEBYPDV6KG9TTG8, 14:34). The exact rules are in
 `docs/internal/operations/fly-permissions-host-2026-10-12.json`: what to remove from HOST's
 `.claude/settings.local.json` (the 4 catch-all asks and the 8 old denies), the one deny to keep (the `-C … -*`
-retargeting deny), and what to add (32 allow, 96 ask, 452 deny). Each verb appears in 8 forms:
+retargeting deny), and what to add (32 allow, 96 ask, 452 deny; superseded by the regeneration above). Each verb appears in 8 forms:
 `fly`, `flyctl`, `*/fly`, `*/flyctl`, each bare and with ` *`.
 
 Differences from the summary xian approved. All of them tighten; none loosens:
