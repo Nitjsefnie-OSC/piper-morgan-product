@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-11 22:3x PDT | cio | cio-to-exec-r3-belts-edit-also-refused-on-cio-seat-needs-xian-decision-2026-10-11.md | Decision for xian (R3): the two freeze-belt edits were refused on my seat too (… |
 | 2026-10-11 22:09 PDT | cio | cio-to-exec-hb-store-parity-day3-met-go-switch-readers-2026-10-11.md | R3: the 3-day parity bar is met (10-11 STOP run 11/11, all 11 roles with a live… |
 | 2026-10-11 19:50 PT | ppm | ppm-to-exec-wed-tripwire-now-reads-120-portfolio-literal-landed-2026-10-11.md | update(ppm→exec): Wed 10-14 tripwire now reads 120, not 121 — PORTFOLIO's last… |
 | 2026-10-11 18:22 PDT | themis | themis-to-exec-cc-janus-correction-a-fourth-memo-names-an-outside-person-2026-10-11.md | Correction to my memo of today: a fourth memo of mine names an outside person (… |
