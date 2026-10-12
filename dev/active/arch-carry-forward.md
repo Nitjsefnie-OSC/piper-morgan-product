@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-10-11 08:2x PDT
+last_updated: 2026-10-11 21:3x PDT
 currency_claim: rewritten at substantive-change boundaries, verified at every START
 max_age_days: 4
 ---
@@ -181,3 +181,9 @@ MEM-CACHE · ADR-068 prep (gated on PPM naming a live sprint) · m-40/m-30 prove
 - 2026-10-11 20:1x: ceiling 120 verified (pattern_literal_counts TOTAL 120; PORTFOLIO is survivors-only). Wednesday reads 120. #1984 half (1) is Lead's with CXO's copy plus the "On the your … front" fix; half (2) is a description change in the full-run lane.
 - 2026-10-11 20:5x: #1984 half (2) is GO as a read_floor_3 wave (STATUS + PRIORITY), Lead, 10-12 START. Watch: Lead's answer on unflipped live-grammar exposure (condition 3) and the baseline-by-name report.
 - 2026-10-11 21:0x: SUPERSEDES 20:5x. #1984 half (2) is a description edit (held 40b3c95b33), landing at Lead's 10-12 START after the full run, served check and N=5. The read_floor_3 wave opens only when the deletion lane takes up STATUS/PRIORITY.
+- 2026-10-11 21:3x STOP — open threads for 10-12, with nothing owed by Arch:
+  - **Ceiling 120.** Wednesday reads 120.
+  - **#1984 half 2:** a description edit, held at 40b3c95b33. Lead lands it after the full run, a served check (with an upload negative) and N=5. Read the row diffs when Lead reports.
+  - **#1982:** the runbook order is alpha deploy, PM pipe, MCP deploy, snapshot/dry run/apply, live check, then Lead drops the fallback. The PAT dual-write branch (4400ee3d9f) waits on PM's PAT test.
+  - **read_floor_3 wave:** opens when the deletion lane takes up STATUS/PRIORITY, with the 20:5x conditions.
+  - **Suggested to Lead (not yet sent):** a grammar-sources line in the `intent-routing-stack.md` quick-ref.
