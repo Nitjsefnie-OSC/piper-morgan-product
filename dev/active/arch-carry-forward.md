@@ -179,3 +179,4 @@ MEM-CACHE · ADR-068 prep (gated on PPM naming a live sprint) · m-40/m-30 prove
 - 2026-10-11 19:2x: #1979 A landed (39398a32af); the preregistered 20 met (0/0) and counts. PORTFOLIO lands after CI Tests green → 120. Watch for Lead's landing report and the gate number.
 - 2026-10-11 19:5x: #1979 closed by CXO. #1984 placed (label fallback is a code fix; the router half is a corpus row scored N=5). Lead's to build.
 - 2026-10-11 20:1x: ceiling 120 verified (pattern_literal_counts TOTAL 120; PORTFOLIO is survivors-only). Wednesday reads 120. #1984 half (1) is Lead's with CXO's copy plus the "On the your … front" fix; half (2) is a description change in the full-run lane.
+- 2026-10-11 20:5x: #1984 half (2) is GO as a read_floor_3 wave (STATUS + PRIORITY), Lead, 10-12 START. Watch: Lead's answer on unflipped live-grammar exposure (condition 3) and the baseline-by-name report.
