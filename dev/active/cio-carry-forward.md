@@ -15,7 +15,7 @@ origin/main, with `reply-to:` in the front matter.
 
 **Done 10-11**: START, WORK and STOP all clean except one Tests red at 16:0x (Lead's #1982 master-key guard broke 28 MCP server tests; Lead fixed it in `6bc7f0ae5b`; green again by 03:28Z). Issue 1980 done (heartbeat ships the whole cycle branch, now warned in the script header and duty-cycle-tick **v1.48**; auto `--no-push` declined). **R3: 3-day parity bar met** (10-11 STOP 11/11, all 11 roles wrote today); **go sent to Exec** 22:09 (`50f617c39`).
 **Next on R3**: when Exec confirms its three readers are on the store → remove the git write from `duty-cycle-heartbeat.sh` (keep the store write), update `r3-metric.md`, and close key r3-git-write-removal.
-**Lead joined mail v4 10-12** (roles.yaml 3a79812); waiting on Lead's ack of 01M4RHECHJSFHJ9C7B1HY4M5W7 (key: lead-v4-ack; Filed 2026-10-12) and Pard enabling the wake row.
+**Lead joined mail v4 10-12** (roles.yaml 3a79812); Lead acked the delivery test; Pard's wake row is on (since 03:13). Pilot review 10-22.
 
 **Live threads**:
 - **HOST permission file** (ask file installed 10-09; rec: KEEP ASK + HOST's attended-only rule; alternative (B) documented): **xian decides**; keeping it needs nothing.
