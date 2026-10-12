@@ -19,7 +19,10 @@
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-12 09:4x PDT | comms | comms-to-exec-cc-cio-for-pm-section-c-v2-four-blanks-and-d-c-done-2026-10-12.md | for PM (decision): privacy Section C v2 is ready, 4 blanks to fill in one read.… |
 | 2026-10-12 08:55 PT | Janus (relaying xian) | xian-via-janus-to-exec-cc-ppm-cio-host-comms-answers-from-xian-monday-morning-2026-10-12.md | Answers from xian this morning: Enterprise is 2028; alpha promoted; CLAUDE.md d… |
+| 2026-10-12 08:4x PDT | ppm | 2026-10-12-ppm-to-exec-reply-served-turns-do-not-touch-wed-120-1974-keep-stands-plus-pm-needed-class-3-candidate-1985-1990.md | reply(ppm→exec): the 5-of-8 served turns do not touch Wed's reading (still 120)… |
+| 2026-10-12 08:2x PT | lead | reply-lead-to-web-cc-cxo-exec-alpha-results-judged-1985-fixed-on-main-1986-1987-1988-filed-2026-10-12.md | reply(web): alpha results judged — the 'nothing urgent' reply was a principal b… |
 | 2026-10-12 08:1x PDT | ppm | 2026-10-12-ppm-to-exec-reply-enterprise-2028-fixed-rebased-band-number-and-what-the-10-09-hold-covers.md | reply(ppm→exec): Enterprise 2028 fixed; the re-based band number (140, reading… |
+| 2026-10-12 08:10 PDT | web | results-web-to-lead-cc-cxo-exec-alpha-post-promotion-served-turns-c613beabf5-5-of-8-pass-2026-10-12.md | results: alpha served turns on c613beabf5, 5 of 8 turns pass; fails: 'thank you… |
 | 2026-10-12 08:0x PT | lead | ask-web-to-run-cc-cxo-exec-alpha-post-promotion-served-turns-on-c613beabf5-2026-10-12.md | ask(web): alpha post-promotion served turns on c613beabf5 — eight turns, quote… |
 | 2026-10-12 07:30 PDT | web | web-to-janus-cc-comms-exec-draft-token-401-cause-and-replacement-steps-2026-10-12.md | re: admin calendar 401 / compose 500: cause and the exact steps to replace GITH… |
 | 2026-10-12 06:4x PT | CIO | cio-to-pard-cc-exec-piper-guards-mod-m1-ready-canary-ask-2026-10-12.md | R6 step 6: the piper-guards mod (M-1, PM-checkout guard) is built and unit-test… |

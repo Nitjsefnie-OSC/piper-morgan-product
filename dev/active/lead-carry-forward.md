@@ -25,7 +25,19 @@
   tripwire read. **Fri 10-16:** key switch — `dev/active/lead-prod-key-move-2026-10-16.md` (PM's hand) + one confirm call.
 - **Mail v4 pilot:** lead is a pilot role from 10-12 — every mail check reads `scripts/mail4.py inbox` too; canary at START read PASS
   (the check line counts 2 pilot roles, cio and exec — lead not yet in its denominator; note for CIO if it persists).
-- **Watch:** Web's results memo for the eight alpha turns on c613beabf5 (assigned 07:59; I judge routing, CXO judges copy and closes); then CXO's closes on the quotes. Alpha was promoted 07:44 PT by xian (head 19b9e156e8; served sha c613beabf5, code-identical).
+- **Alpha c613beabf5 served (Web 08:10): 5 of 8 pass.** PASS: hello; #1958 ("Friday" — CXO may close on the quote); #1984 half (1) label;
+  the time label; #1979 after an offer; the upload negative. FAILS read and placed: `show today's tasks` "nothing urgent" = **#1985
+  principal bug, FIXED on main 5d5f7ec88e** (served AC open: re-run after the NEXT promotion); `thank you!` → briefing = **#1986**
+  (thanks/farewell have no canned short-circuit; CXO's copy first); `show the team calendar` = the TEMPORAL known live miss (no filing;
+  CXO's bar needs a connected account or a copy change). Also filed: **#1987** (`delete that reminder` after create); **#1988** (`<city>`
+  eaten by the renderer; copy fixed on main; render half is Web's decision). CXO's rulings (08:14) crossed mine: #1989/#1990/#1991 closed as duplicates of
+  #1986/#1985/#1988 (rulings folded in). 'Helsinki' copy landed (dacf3007a3). #1958 CLOSED by CXO; #1979 confirmed.
+  **Open with CXO:** (1) #1986 copy for thanks/farewell (then I build the short-circuit); (2) #1985 served shape — my (b): a due-today
+  read + "Nothing due today and nothing overdue." in the attention handler, on CXO's nod. **Watch:** CI on a head carrying 5d5f7ec88e;
+  Web's #1988 render decision; next promotion → Web re-runs `thank you!` ×2 and `show today's tasks` ×2.
+- **Stamp rule (today's third slip):** the frontmatter/log time is substituted from `date` at write time (`NOW=$(TZ=… date)`), never
+  typed into a draft.
+
 - Spend today: 853 Haiku router calls (Krink's credit, expires 10-15) + 6 chat turns on a local server. Keychain readable; the test user's
   key still bound. Untracked scratch `dev/active/canonical-retest-serving-llm.json` (pre-existing, not mine).
 - Discipline notes carried from 10-11: no `git push` chained behind a pipeline whose exit code is `head`'s; `git status` before every push;

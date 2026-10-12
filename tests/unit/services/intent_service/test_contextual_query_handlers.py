@@ -776,3 +776,99 @@ class TestContextualQueryInversionRoutesSurvive:
             live_categories=live_categories,
             expected_action=action,
         )
+
+
+class TestTodoReadsScopeByPrincipal1985:
+    """#1985 (alpha c613beabf5, 2026-10-12): `show today's tasks` answered
+    "nothing urgent" over an overdue todo because `_handle_attention_query`
+    filtered TodoDB by owner_id == SESSION_id while todos are written with
+    owner_id = user_id — the #1395 principal-confusion class (ADR-071 D5).
+    These pins read the bound parameters of the statements the handlers
+    execute: the principal must be bound, the session id must not.
+    """
+
+    USER = "f13937fb-182b-44db-a9fd-0d722a3a223e"
+    SESSION = "lead-1985-session"
+
+    @staticmethod
+    def _capture_session(captured):
+        mock_session = AsyncMock()
+
+        async def _execute(stmt, *args, **kwargs):
+            captured.append(stmt)
+            result = MagicMock()
+            result.scalars.return_value.all.return_value = []
+            result.scalar.return_value = 0
+            result.all.return_value = []
+            return result
+
+        mock_session.execute = _execute
+        scope = MagicMock()
+        scope.__aenter__ = AsyncMock(return_value=mock_session)
+        scope.__aexit__ = AsyncMock(return_value=False)
+        return scope
+
+    @staticmethod
+    def _bound_values(stmt):
+        try:
+            return {str(v) for v in stmt.compile().params.values() if v is not None}
+        except Exception:
+            return set()
+
+    @pytest.mark.asyncio
+    async def test_attention_query_binds_the_principal_not_the_session(self, intent_service):
+        captured = []
+        intent = Intent(
+            category=IntentCategory.QUERY,
+            action="attention_query",
+            context={"original_message": "show today's tasks", "user_id": self.USER},
+        )
+        with patch(
+            "services.intent.intent_service.AsyncSessionFactory.session_scope",
+            return_value=self._capture_session(captured),
+        ):
+            result = await intent_service._handle_attention_query(
+                intent, "wf-1985", self.SESSION, None
+            )
+        assert result.success is True
+        bound = set().union(*(self._bound_values(s) for s in captured)) if captured else set()
+        todo_stmts = [s for s in captured if "todos" in str(s).lower()]
+        assert todo_stmts, "the handler must read the todo table"
+        assert self.USER in bound, f"principal not bound; bound={bound}"
+        assert self.SESSION not in bound, f"session id still bound; bound={bound}"
+
+    @pytest.mark.asyncio
+    async def test_attention_query_falls_back_to_the_threaded_user_id(self, intent_service):
+        """#849 threads user_id positionally; without a stamped principal it is the owner."""
+        captured = []
+        intent = Intent(
+            category=IntentCategory.QUERY,
+            action="attention_query",
+            context={"original_message": "what needs my attention"},
+        )
+        with patch(
+            "services.intent.intent_service.AsyncSessionFactory.session_scope",
+            return_value=self._capture_session(captured),
+        ):
+            await intent_service._handle_attention_query(intent, "wf-1985", self.SESSION, self.USER)
+        bound = set().union(*(self._bound_values(s) for s in captured)) if captured else set()
+        assert self.USER in bound
+        assert self.SESSION not in bound
+
+    @pytest.mark.asyncio
+    async def test_changes_query_binds_the_principal_not_the_session(self, intent_service):
+        captured = []
+        intent = Intent(
+            category=IntentCategory.QUERY,
+            action="changes_query",
+            context={"original_message": "what changed since yesterday", "user_id": self.USER},
+        )
+        with patch(
+            "services.intent.intent_service.AsyncSessionFactory.session_scope",
+            return_value=self._capture_session(captured),
+        ):
+            result = await intent_service._handle_changes_query(intent, "wf-1985", self.SESSION)
+        assert result.success is True
+        bound = set().union(*(self._bound_values(s) for s in captured)) if captured else set()
+        assert self.USER in bound, f"principal not bound; bound={bound}"
+        assert self.SESSION not in bound, f"session id still bound; bound={bound}"

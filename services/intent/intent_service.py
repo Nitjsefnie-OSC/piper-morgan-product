@@ -9183,10 +9183,13 @@ class IntentService:
                 async with AsyncSessionFactory.session_scope() as session:
                     from services.database.models import AuditLog
 
+                    # #1985: every read here is scoped to the PRINCIPAL (audit log, todos,
+                    # projects are all user-owned), not the session — the #1395 class.
+                    _owner_id = _principal_from_intent(intent) or session_id
                     result = await session.execute(
                         select(AuditLog)
                         .where(
-                            and_(AuditLog.user_id == session_id, AuditLog.created_at >= since_time)
+                            and_(AuditLog.user_id == _owner_id, AuditLog.created_at >= since_time)
                         )
                         .order_by(AuditLog.created_at.desc())
                         .limit(50)
@@ -9218,7 +9221,7 @@ class IntentService:
                         select(TodoDB)
                         .where(
                             and_(
-                                TodoDB.owner_id == session_id,
+                                TodoDB.owner_id == _owner_id,
                                 or_(
                                     TodoDB.created_at >= since_time,
                                     TodoDB.updated_at >= since_time,
@@ -9265,7 +9268,7 @@ class IntentService:
                         select(ProjectDB)
                         .where(
                             and_(
-                                ProjectDB.owner_id == session_id,
+                                ProjectDB.owner_id == _owner_id,
                                 or_(
                                     ProjectDB.created_at >= since_time,
                                     ProjectDB.updated_at >= since_time,
@@ -9400,6 +9403,18 @@ class IntentService:
             now = datetime.now(timezone.utc)
             attention_items = []
 
+            # #1985 (alpha c613beabf5, 2026-10-12): both todo reads below
+            # filtered by owner_id == SESSION_id while todos are WRITTEN with
+            # owner_id = user_id — the #1395 principal-confusion class
+            # (ADR-071 D5) left behind when the completion-stats read was
+            # fixed. Structurally empty for every real user, so the handler's
+            # fallback copy said "nothing urgent" over an overdue todo (a false
+            # all-clear, m-44). The principal comes from the sanctioned
+            # accessor; the #849-threaded user_id is the second source;
+            # session_id stays only as the legacy fallback for principal-less
+            # internal calls.
+            _owner_id = _principal_from_intent(intent) or user_id or session_id
+
             # 1. High-priority todos
             high_priority_todos = []
             try:
@@ -9411,7 +9426,7 @@ class IntentService:
                         select(TodoDB)
                         .where(
                             and_(
-                                TodoDB.owner_id == session_id,
+                                TodoDB.owner_id == _owner_id,
                                 TodoDB.completed == False,
                                 TodoDB.priority.in_(["urgent", "high"]),
                             )
@@ -9451,7 +9466,7 @@ class IntentService:
                         select(TodoDB)
                         .where(
                             and_(
-                                TodoDB.owner_id == session_id,
+                                TodoDB.owner_id == _owner_id,
                                 TodoDB.completed == False,
                                 TodoDB.due_date.isnot(None),
                                 TodoDB.due_date < now,
@@ -9545,7 +9560,7 @@ class IntentService:
                         select(ProjectDB)
                         .where(
                             and_(
-                                ProjectDB.owner_id == session_id,
+                                ProjectDB.owner_id == _owner_id,
                                 ProjectDB.is_archived == False,
                                 ProjectDB.updated_at < week_ago,
                             )
