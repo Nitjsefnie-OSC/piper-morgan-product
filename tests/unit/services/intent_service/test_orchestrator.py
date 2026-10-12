@@ -445,8 +445,14 @@ class TestHelpers:
         assert _intent_topic_label(intent) == "your calendar"
 
     def test_topic_label_unknown_action(self):
+        """#1984: no label → None, never the humanized action id (the old
+        fallback served "Regarding list archived projects, …")."""
         intent = _make_intent(IntentCategory.QUERY, "custom_action")
-        assert _intent_topic_label(intent) == "custom action"
+        assert _intent_topic_label(intent) is None
+
+    def test_topic_label_archived_projects(self):
+        intent = _make_intent(IntentCategory.PORTFOLIO, "list_archived_projects")
+        assert _intent_topic_label(intent) == "your archived projects"
 
     def test_lowercase_first_normal(self):
         assert _lowercase_first("Hello world") == "hello world"

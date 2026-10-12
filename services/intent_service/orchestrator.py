@@ -287,7 +287,13 @@ class IntentOrchestrator:
                 parts.append(result.response)
             else:
                 topic = _intent_topic_label(result.intent)
-                transition = transitions[i % len(transitions)].format(topic=topic)
+                # #1984: no label → the topic-free join. Never an action id
+                # humanized into prose ("Regarding list archived projects, …"
+                # is what the old fallback served).
+                if topic is None:
+                    transition = TOPIC_FREE_TRANSITION
+                else:
+                    transition = transitions[i % len(transitions)].format(topic=topic)
                 parts.append(f"{transition}, {_lowercase_first(result.response)}")
 
         body = " ".join(parts)
@@ -298,7 +304,14 @@ class IntentOrchestrator:
         # rendered the failure note as part of the last item's name
         # ("- One Job I wasn't able to check on project status ...").
         if failed:
-            failure_topics = [_intent_topic_label(r.intent) for r in failed]
+            # #1984: an unlabeled failed intent is named by UNLABELED_FAILURE_TOPIC,
+            # never by its action id; duplicates collapse so two unlabeled
+            # failures read once.
+            failure_topics: List[str] = []
+            for r in failed:
+                label = _intent_topic_label(r.intent) or UNLABELED_FAILURE_TOPIC
+                if label not in failure_topics:
+                    failure_topics.append(label)
             if len(failure_topics) == 1:
                 # #1198: no false retry promise — nothing retries in the background.
                 failure_note = f"I wasn't able to check on {failure_topics[0]} right now — ask me again and I'll retry."
@@ -313,8 +326,23 @@ class IntentOrchestrator:
         return body
 
 
-def _intent_topic_label(intent: Intent) -> str:
-    """Get a human-readable topic label for an intent."""
+# #1984 (Arch's placement, 2026-10-11): the words that stand in when an intent
+# has no label. CXO owns them; change the constant, not the call sites.
+TOPIC_FREE_TRANSITION = "Also"  # → "Also, <next reply>"
+UNLABELED_FAILURE_TOPIC = "part of that"  # → "I wasn't able to check on part of that …"
+
+
+def _intent_topic_label(intent: Intent) -> Optional[str]:
+    """A human-readable topic label for an intent, or None when none is defined.
+
+    #1984: the old fallback humanized the action id (``list_archived_projects``
+    → "list archived projects") and served it in prose ("Regarding list
+    archived projects, you don't have any archived projects."). The plan path
+    can emit any catalog action, so a missing row must never reach the user as
+    an identifier: callers substitute TOPIC_FREE_TRANSITION /
+    UNLABELED_FAILURE_TOPIC, pinned catalog-wide by
+    tests/unit/services/intent_service/test_topic_label_catalog_1984.py.
+    """
     labels = {
         "meeting_time": "your calendar",
         "week_calendar": "your calendar",
@@ -331,8 +359,10 @@ def _intent_topic_label(intent: Intent) -> str:
         "explain_trust": "trust",
         "get_memory": "memory",
         "manage_portfolio": "your portfolio",
+        "list_archived_projects": "your archived projects",  # #1984 (Arch's read; CXO's words)
+        "list_projects": "your projects",
     }
-    return labels.get(intent.action, intent.action.replace("_", " "))
+    return labels.get(intent.action)
 
 
 def _lowercase_first(text: str) -> str:
