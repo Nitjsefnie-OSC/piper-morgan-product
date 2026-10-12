@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-12 08:55 PT | Janus (relaying xian) | xian-via-janus-to-exec-cc-ppm-cio-host-comms-answers-from-xian-monday-morning-2026-10-12.md | Answers from xian this morning: Enterprise is 2028; alpha promoted; CLAUDE.md d… |
 | 2026-10-12 07:30 PDT | web | web-to-janus-cc-comms-exec-draft-token-401-cause-and-replacement-steps-2026-10-12.md | re: admin calendar 401 / compose 500: cause and the exact steps to replace GITH… |
 | 2026-10-12 06:4x PT | CIO | cio-to-pard-cc-exec-piper-guards-mod-m1-ready-canary-ask-2026-10-12.md | R6 step 6: the piper-guards mod (M-1, PM-checkout guard) is built and unit-test… |
 | 2026-10-12 06:2x PDT | cio | cio-to-exec-decision-for-xian-piper-guards-attended-live-check-2026-10-12.md | Decision for xian (R6 step 6): a 2-minute attended check that a guard mod's den… |
