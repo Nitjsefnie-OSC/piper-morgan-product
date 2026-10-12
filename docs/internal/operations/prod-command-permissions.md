@@ -4,6 +4,44 @@
 Pard (seat permissions). Applies to any seat allowed to run a fixed production command (first: HOST's seat, the
 read-only `prod_user_lookup` and the invite mint).
 
+## 2026-10-12: CIO review of xian's proposed split (HOST's ask; xian decides; no rule written yet)
+
+xian, in HOST's pane: allow `fly deploy` and read-only commands unattended; keep asks on `secrets set/unset`,
+`ssh console -C` and `tokens create`. Review:
+
+1. **Precedence (documented, not measured on a seat):** deny, then ask, then allow; the first match wins (Claude Code
+   permissions docs, quoted by Arch 10-09). So **no read-only command can be allowed while the catch-all
+   `ask: fly *` stays**: the catch-all must go and be replaced by explicit asks. CIO's sandboxed probe of this was
+   refused by auto mode 10-12 (time not recorded); not retried. A chained command after an allowed prefix (`fly status; …`)
+   was refused 5/5 on 10-09, so an allow does not cover a chain.
+2. **Removing the catch-all leaves every unlisted fly verb to the auto-mode reviewer**, not to xian (Pard's 10-10
+   point about (B)). So the replacement needs a **deny** list for the families that change or destroy things,
+   or those go to the classifier.
+3. **Don't allow `fly deploy` on any seat.** `fly deploy` builds from the seat's local folder: uncommitted or
+   unreviewed code, no CI, no health gate. It also bypasses `fly-deploy.yml`'s design (alpha promotes staging's
+   exact image behind a GitHub required reviewer, so "a push to main cannot reach testers even through a workflow
+   edit"). The deploy path that already works is the workflow, with xian as the reviewer. Keep the deny.
+4. **`fly logs` stays on ask**: it carries user data, and a seat can paste it into a public-repo log; the bearer
+   lint doesn't catch emails or names.
+5. **Asks work only because of HOST's attended-only rule** (no fly in scheduled or mail-wake fires). An ask on an
+   unattended fire freezes the seat (10-10). Keep the rule as long as any ask exists.
+
+Proposed file, for xian's yes (bare, flyctl and full-path forms each get the same rule; shown once):
+- **allow**: `fly status`, `fly releases`, `fly apps list`, `fly secrets list`.
+- **ask**: `fly logs`, `fly ssh console` (all forms, including `-C`), `fly ssh issue`, `fly ssh sftp`, `fly console`,
+  `fly proxy`, `fly machine exec`, `fly postgres connect`, `fly secrets set`, `fly secrets unset`, `fly tokens create`.
+- **deny**: `fly deploy`, `fly launch`, `fly apps` (other than `list`), `fly machine` (other than `exec`), `fly scale`,
+  `fly volumes`, `fly certs`, `fly ips`, `fly image`, `fly config`, `fly postgres` (other than `connect`), `fly mpg`,
+  `fly redis`, `fly storage`, `fly tokens` (other than `create`), `fly orgs`, `fly auth`, `fly wireguard`, plus the
+  existing retargeting-flag deny after `-C`.
+- Order caveat: an "other than" can't be written as one rule. Write the deny for each specific verb
+  (e.g. `fly apps destroy`, `fly apps create`, `fly machine destroy`, `fly machine stop`, …), not the whole family:
+  a family-wide deny would also beat the ask on `machine exec` and `postgres connect`.
+- Anything unlisted goes to the auto-mode reviewer. That is the residual risk this design accepts.
+
+Check after install (attended, in HOST's pane): `fly status -a piper-morgan` runs without a prompt; `fly logs` prompts;
+`fly deploy` is refused. Owners: CIO and Pard draft the exact JSON on xian's yes; Pard installs.
+
 ## 2026-10-10 (later): recommendation reverted to KEEP ASK, plus HOST's attended-only rule
 
 Pard showed (B) is weaker than first framed: any **other** `fly ssh console -a piper-morgan -C "<anything>"` is
