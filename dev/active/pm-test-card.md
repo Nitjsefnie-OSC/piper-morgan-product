@@ -4,54 +4,49 @@
 rows get added when a fix needs PM's live verification and struck when done. When PM asks "what do I
 test?", the answer is this file. Mirror: https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi (v15, BEHIND this file; this file is current).
 
-**Surface**: alpha.pipermorgan.ai · **now running `e8ecd10d5a`** (read from /health 18:0x 10-09) with **13 tokens live, including
-`complete_todo`** (Exec's flag read, 10-09 10:1x). **v16 (10-09 18:0x PDT)**: Step 0 rewritten for tonight's promotion. The v169-era
-Step 0 (12 tokens, the P6 SQL) is history; P6 stays below as its own row.
+**Surface**: alpha.pipermorgan.ai · **now running `651756d520`** (read from /health 15:48 10-12 after promotion run 38312410442
+landed; code = main's 264d3e9549 under services/web/config). **v17 (15:48 10-12)**: Step 0 struck
+(10-09's promotion landed 10-09 18:25; today's landed 15:47); the test order rewritten for what is live now; PM's PAT-only test added
+(row G) — it was never on this card before, it lived on Exec's rollup as the invite item.
 
-## Step 0 — promote tonight's build (PM's hand, ~5 min) — refreshed 2026-10-09
+## Step 0 — DONE. Nothing to promote by hand.
+The 10-09 build went live 10-09 18:25 (run 38013096307); c613beabf5 this morning (run 38265156567); today's build is run 38312410442,
+approved by xian at 15:48. Landed 15:48; alpha reports `651756d520`. Dispatch recipe for next time:
+`gh workflow run fly-deploy.yml -R mediajunkie/piper-morgan-product --ref main -f promote_to_alpha=true`, then Actions → the run →
+Review deployments → alpha → Approve.
 
-**What you're promoting: staging's image** (`4bd1a236e9` at 18:1x; its code equals main's `f0ac5db8d0`, 17:49 PDT). It carries every app change since alpha's `e8ecd10d5a`
-(24 commits):
-- #1959: close/reopen checks the issue exists before asking.
-- #1941, #1942, #1944: GitHub honesty, routing and the default-repo fixes.
-- #1889/#1963/#1964/#1965: standup and Radar say when a source failed.
-- #1960: the WRITE-tier consent line no longer claims a write to your tools.
-- The clear_todos resolver (its token stays OFF).
-- The MCP server card.
-- 34 more pre-classifier literals retired (ceiling 155 → 121; the router now answers "who are you", "help me setup my projects",
-  "mark the first two complete" and similar).
+**Live on alpha already (since 10-09 evening):** #1959/#1941 (A), #1942/#1944 (D), the 34 retired literals (item 4), #1960, the
+standup/Radar source-failure lines (#1889/#1963/#1964/#1965), the MCP server card, #1978 (org-workspace keys accepted; landed 10-11).
+**Arrived with today's promotion (live 15:47):** #1985 (attention query reads YOUR todos, not the session's), #1986 (pure "thank you!"/"goodbye"
+get a short warm line, not a briefing), #1988/#1991 (the timezone hint renders its example), #1459 (internal, no visible change).
 
-**Who runs it: you, through the promote workflow, not a bare `fly deploy`.** (Corrected 18:1x. v16 first said
-`fly deploy`, the old v169 path.) Since 10-07, every push to main auto-deploys **staging**. Promotion copies staging's image to
-alpha behind your reviewer approval. The workflow's own parity and post-promotion sha checks do the verifying. Staging now runs
-`4bd1a236e9`, whose code is identical to `f0ac5db8d0` (they differ only in docs, dev and mailbox files). No secrets change:
-`complete_todo` is already live (13 tokens), and `clear_todos` stays off until its sentence is checked.
+**Test in this order** (each ~1 min unless noted; everything below is live on alpha now):
+1. **A**: close a nonexistent issue (#1941/#1959). Expect a straight "no such issue", no "Close #N?" first.
+2. **D**: `get issue 101` → `what's the issue count`. (#1945, the Project Config page, is still open with CXO; expect that unchanged.)
+3. **Item 4**: "who are you", "help me setup my projects", "mark the first two complete". Same answers as before; anything different, paste it.
+4. **New, #1985** (after promotion): with at least one overdue or due-today todo, send `what needs my attention?`. Pass: a `Today:` list
+   naming them (due today first, then overdue). Fail: "I don't see anything urgent" while the todo list shows them.
+5. **New, #1986** (after promotion): `thank you!` as the first turn of a fresh conversation → a short warm line, nothing about todos.
+   Then after a real answer, `thanks` → "You're welcome." or similar; `goodbye` → a short farewell. Fail: a briefing or a question back.
+   (Web runs this family on the test account too; your run on your own account is the one CXO closes #1985/#1986 on.)
+6. **New, #1988** (after promotion): any turn that earns the timezone hint (e.g. `what time is it for me?` with no timezone set).
+   Pass: the hint reads `set my timezone to Helsinki`-style, with a real city, not an empty quote.
+7. **G, PAT-only account** (new, ~10 min, fresh account): see row G below. This is the served check for #1889/#1963/#1965, and
+   #1982's held dual-write lands on it.
+8. **F** (#1913): first conversation survives adding your key — do it inside G's fresh account (~2 min).
+9. **C** stays parked: #1943 is still open with Arch. Try-and-tell, not pass/fail.
+10. P1–P6 as before, when you have the time. P1 pairs with G.
 
-```bash
-# 0. PASS gate first: GitHub Actions "Tests" on f0ac5db8d0 = success.
-#    Lead updates this line when it lands; if red, stop.
-# 1. dispatch the promotion (or Actions → "Fly deploy" → Run workflow → tick promote_to_alpha)
-gh workflow run fly-deploy.yml -R mediajunkie/piper-morgan-product --ref main -f promote_to_alpha=true
-# 2. approve: Actions → that run → "Review deployments" → alpha → Approve and deploy
-# 3. PASS: the run's promote-alpha job is green, and alpha reports the sha the run read from staging:
-curl -s https://alpha.pipermorgan.ai/health | grep -o '"git_sha":"[0-9a-f]*'
-# 4. PASS: the flag survived (no change expected): 13 tokens, complete_todo last
-fly ssh console -a piper-morgan -C 'printenv PIPER_INVERSION_LIVE_CATEGORIES'
-```
-If step 3 fails at the **parity gate**, staging moved under it (another push landed mid-run). Nothing deploys. Just dispatch
-again. (This happened on 10-07; agents hold image-affecting pushes while you're promoting.)
-Then tell Lead "deployed". Lead runs the served checks on the test account right after (#1959, #1960, "delete the first two
-reminders", the standup/Radar disclosure), and you take the rows below.
-
-**Then test, in this order** (each ~1 min unless noted):
-1. **A** below: close a nonexistent issue (#1941/#1959). Expect a straight "no such issue", and no "Close #N?" first.
-2. **D** below: the two GitHub asks (#1942/#1944 fixed). D's third failure, #1945, is still open with CXO, so expect that part unchanged.
-3. **C** below: "Mark the first one complete and leave the second one pending". **#1943 is still open with Arch**, so this is a
-   try-and-tell-us, not a pass/fail.
-4. New, from tonight's retirements: "who are you", "help me setup my projects", "mark the first two complete". Each should get
-   the same answer it got before (the router now serves them). Anything different, paste it.
-5. **F** (#1913, still open): first conversation survives adding your key, ~2 min.
-6. P1–P5 as before, when you have the time.
+### G. PAT-only account: GitHub through a pasted token, no OAuth (#1889/#1963/#1965 served check; #1982 lands on it) — ~10 min
+HOST minted ONE alpha invite for this on 10-12 09:30 (masked `0877…VXB9`, unused); the raw code is in the 0600 roster and the
+`~/.piper-shared` file, never in mail. Do: incognito → alpha.pipermorgan.ai → sign up with that invite + your Anthropic key (this is P1
+too — note anything that blocks signup). Then Settings → Integrations → GitHub → paste a personal access token (classic or fine-grained
+with repo read on `mediajunkie/piper-morgan-product`); do NOT click the OAuth connect. Then: `what open issues do I have?` →
+`what's the issue count` → `give me a standup` → `What does Piper know about me?`. Pass: real issues and a count via the token; the
+standup's GitHub line is populated with no "source failed" line; the "know about me" answer lists GitHub issues. Fail: the owner/name
+nudge, "I couldn't find an issue number", an empty or failed GitHub source in the standup, or an OAuth prompt when the PAT is set.
+Tell Lead the result (pass or the exact reply); on pass, Lead lands `claude/lead-1982-pat-dual-write` and reports `legacy=0` before
+turning the legacy fallback off.
 
 ## Re-test now — fixed since PM's last pass
 
