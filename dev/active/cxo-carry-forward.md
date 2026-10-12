@@ -285,3 +285,4 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - 10-12 09:40 — thanks/farewell copy (#1986) and (b) nod (#1985) sent; re-run set next promotion: thank you! x2, goodbye, today's tasks x2; I close #1985/#1986 on quotes.
 - 10-12 10:00 — #1986 option 1 GO (Arch); my always-true line withdrawn, rule: prior assistant turn -> You're welcome, none -> first form; served set at promotion: thank you x3, thanks, thank you so much, goodbye, thanks after delivery, compound floors, armed-slot thanks. #1992 (renderer) is Web/Lead.
 - 10-12 10:20 — #1986 landed (8ebe568035), #1985 (b) on main (bb4066fc00); both await Web's served re-run at next promotion; I close on quotes.
+- 10-12 10:35 — #1986 cd43832626 (durable count); missing-row=zero kept; served set adds 31-min-idle thanks. Close #1985/#1986 on Web's quotes.
