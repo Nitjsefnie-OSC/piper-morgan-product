@@ -2120,3 +2120,66 @@ class TestFetchSlackMentionsItems:
 
         assert len(result) == 1
         assert result[0]["title"] == "valid-ping"
+
+
+# ---------------------------------------------------------------------------
+# #1985 (b) / CXO 2026-10-12: an item that is both a pending todo and a due
+# reminder reaches the floor ONCE — in the reminder block. The floor prompt
+# already says so; the model did not always obey (alpha c613beabf5, turns 1b
+# and 7c listed "revise the pr" under both), so the context stops offering it
+# twice.
+# ---------------------------------------------------------------------------
+class TestPendingTodosDedupedAgainstDueReminders1985:
+    @pytest.mark.asyncio
+    async def test_todo_that_is_also_a_due_reminder_is_dropped_from_pending(self):
+        assembler = ContextAssembler()
+        user_id = "f13937fb-182b-44db-a9fd-0d722a3a223e"
+        with (
+            patch.object(
+                assembler,
+                "_gather_temporal_context",
+                new=AsyncMock(
+                    return_value={
+                        "pending_todos": [
+                            {"text": "Revise the PR ", "priority": "high", "due_date": None},
+                            {"text": "send the invoice", "priority": "medium", "due_date": None},
+                        ],
+                        "pending_todo_count": 2,
+                    }
+                ),
+            ),
+            patch.object(
+                assembler,
+                "_gather_reminder_context",
+                new=AsyncMock(
+                    return_value={"due_reminders": ["revise the pr"], "reminder_count": 1}
+                ),
+            ),
+            patch.object(
+                assembler,
+                "_gate_due_reminder_mentions",
+                new=AsyncMock(side_effect=lambda ctx, *a, **k: ctx),
+            ),
+        ):
+            context = await assembler.gather_context(
+                "TEMPORAL", user_id=user_id, session_id="s-1985"
+            )
+        assert context["due_reminders"] == ["revise the pr"]
+        assert [t["text"] for t in context["pending_todos"]] == ["send the invoice"]
+
+    @pytest.mark.asyncio
+    async def test_no_reminders_leaves_pending_todos_untouched(self):
+        assembler = ContextAssembler()
+        todos = [{"text": "send the invoice", "priority": "medium", "due_date": None}]
+        with (
+            patch.object(
+                assembler,
+                "_gather_temporal_context",
+                new=AsyncMock(return_value={"pending_todos": list(todos), "pending_todo_count": 1}),
+            ),
+            patch.object(assembler, "_gather_reminder_context", new=AsyncMock(return_value={})),
+        ):
+            context = await assembler.gather_context(
+                "TEMPORAL", user_id="f13937fb-182b-44db-a9fd-0d722a3a223e", session_id="s"
+            )
+        assert context["pending_todos"] == todos

@@ -384,7 +384,7 @@ class TestAttentionQueryResults:
             mock_session_instance.__aenter__ = AsyncMock(return_value=mock_session_instance)
             mock_session_instance.__aexit__ = AsyncMock(return_value=None)
 
-            # First call returns empty (high priority), second returns overdue
+            # Read order (#1985 (b)): high-priority, due-today, overdue, projects.
             mock_result_1 = MagicMock()
             mock_result_1.scalars.return_value.all.return_value = []
 
@@ -392,7 +392,7 @@ class TestAttentionQueryResults:
             mock_result_2.scalars.return_value.all.return_value = [mock_todo]
 
             mock_session_instance.execute = AsyncMock(
-                side_effect=[mock_result_1, mock_result_2, mock_result_1]
+                side_effect=[mock_result_1, mock_result_1, mock_result_2, mock_result_1]
             )
 
             mock_session.return_value = mock_session_instance
@@ -449,8 +449,10 @@ class TestAttentionQueryResults:
                 )
 
                 assert result.success is True
-                # #1069: empty-state wording is source-transparent
-                assert "I don't see anything urgent" in result.message
+                # #1985 (b): verified-empty reads serve CXO's exact line, then
+                # the #1069 source-transparent second line.
+                assert "Nothing due today and nothing overdue." in result.message
+                assert "nothing urgent" not in result.message.lower()
                 assert result.intent_data["total_attention_items"] == 0
 
 
@@ -510,8 +512,10 @@ class TestContextualQueryErrorHandling:
 
                 # Handler gracefully degrades by logging warnings and showing no items
                 assert result.success is True
-                # #1069: empty-state wording is source-transparent
-                assert "I don't see anything urgent" in result.message
+                # #1069 / #1985 (b): a FAILED read is not an empty list — never
+                # the exact empty line over a timeout.
+                assert "couldn't check your todos" in result.message
+                assert "Nothing due today and nothing overdue." not in result.message
                 assert result.intent_data["total_attention_items"] == 0
 
 
@@ -872,3 +876,116 @@ class TestTodoReadsScopeByPrincipal1985:
         bound = set().union(*(self._bound_values(s) for s in captured)) if captured else set()
         assert self.USER in bound, f"principal not bound; bound={bound}"
         assert self.SESSION not in bound, f"session id still bound; bound={bound}"
+
+
+class TestAttentionReplyShape1985b:
+    """#1985 (b) — CXO's reply-shape ruling (2026-10-12): the todo list LEADS
+    under "Today:", due today first, then overdue, each marked; the exact
+    empty line when both are empty; "Nothing due today." then the overdue
+    list when only overdue exist; never "nothing urgent" over a non-empty
+    list; a flagged todo already listed is not repeated.
+    """
+
+    USER = "f13937fb-182b-44db-a9fd-0d722a3a223e"
+
+    class _Todo:
+        def __init__(self, text, priority="medium", due_date=None, updated_at=None):
+            self.text = text
+            self.priority = priority
+            self.due_date = due_date
+            self.updated_at = updated_at
+            self.name = text
+
+    @classmethod
+    def _session(cls, due_today, overdue, flagged):
+        """A fake session that answers each read by the SHAPE of its statement:
+        two datetime bounds = due today; one datetime bound + no IN = overdue;
+        an IN list = flagged; anything else (projects) = nothing."""
+        mock_session = AsyncMock()
+
+        async def _execute(stmt, *args, **kwargs):
+            params = list(stmt.compile().params.values())
+            sql = str(stmt).lower()
+            dts = [v for v in params if isinstance(v, datetime)]
+            result = MagicMock()
+            if "todos" not in sql:
+                rows = []
+            elif any(isinstance(v, (list, tuple)) for v in params):
+                rows = flagged
+            elif len(dts) >= 2:
+                rows = due_today
+            elif len(dts) == 1:
+                rows = overdue
+            else:
+                rows = []
+            result.scalars.return_value.all.return_value = rows
+            return result
+
+        mock_session.execute = _execute
+        scope = MagicMock()
+        scope.__aenter__ = AsyncMock(return_value=mock_session)
+        scope.__aexit__ = AsyncMock(return_value=False)
+        return scope
+
+    def _intent(self):
+        return Intent(
+            category=IntentCategory.QUERY,
+            action="attention_query",
+            context={"original_message": "show today's tasks", "user_id": self.USER},
+        )
+
+    async def _run(self, intent_service, due_today, overdue, flagged=()):
+        with (
+            patch(
+                "services.intent.intent_service.AsyncSessionFactory.session_scope",
+                return_value=self._session(list(due_today), list(overdue), list(flagged)),
+            ),
+            patch(
+                "services.utils.datetime_utils.user_timezone_name",
+                new=AsyncMock(return_value="America/Los_Angeles"),
+            ),
+        ):
+            return await intent_service._handle_attention_query(
+                self._intent(), "wf-1985b", "session-1985b", None
+            )
+
+    @pytest.mark.asyncio
+    async def test_due_today_leads_then_overdue_each_marked(self, intent_service):
+        now = datetime.now(timezone.utc)
+        due = self._Todo("send the budget review to the board", due_date=now + timedelta(hours=3))
+        late = self._Todo("revise the pr", due_date=now - timedelta(days=5))
+        result = await self._run(intent_service, [due], [late])
+        lines = [ln for ln in result.message.split("\n") if ln.strip()]
+        assert lines[0] == "**Today:**"
+        assert lines[1] == "📅 send the budget review to the board (due today)"
+        assert lines[2].startswith("⏰ revise the pr (") and lines[2].endswith("days overdue)")
+        assert "nothing urgent" not in result.message.lower()
+        assert result.intent_data["due_today_todos"][0]["text"] == due.text
+
+    @pytest.mark.asyncio
+    async def test_exact_empty_line_when_nothing_due_or_overdue(self, intent_service):
+        result = await self._run(intent_service, [], [])
+        lines = [ln for ln in result.message.split("\n") if ln.strip()]
+        assert lines[0] == "**Today:**"
+        assert lines[1] == "Nothing due today and nothing overdue."
+        assert "nothing urgent" not in result.message.lower()
+
+    @pytest.mark.asyncio
+    async def test_nothing_due_today_line_then_overdue(self, intent_service):
+        now = datetime.now(timezone.utc)
+        late = self._Todo("revise the pr", due_date=now - timedelta(days=2))
+        result = await self._run(intent_service, [], [late])
+        lines = [ln for ln in result.message.split("\n") if ln.strip()]
+        assert lines[0] == "**Today:**"
+        assert lines[1] == "Nothing due today."
+        assert lines[2].startswith("⏰ revise the pr (")
+
+    @pytest.mark.asyncio
+    async def test_flagged_todo_already_listed_appears_once(self, intent_service):
+        now = datetime.now(timezone.utc)
+        late = self._Todo("revise the pr", priority="high", due_date=now - timedelta(days=2))
+        other = self._Todo("call finance", priority="urgent")
+        result = await self._run(intent_service, [], [late], flagged=[late, other])
+        assert result.message.count("revise the pr") == 1
+        assert "call finance" in result.message
+        assert result.message.index("revise the pr") < result.message.index("call finance")

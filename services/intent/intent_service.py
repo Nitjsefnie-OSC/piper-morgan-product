@@ -9414,6 +9414,7 @@ class IntentService:
             # session_id stays only as the legacy fallback for principal-less
             # internal calls.
             _owner_id = _principal_from_intent(intent) or user_id or session_id
+            todo_reads_failed = False  # #1069: a failed read is never an empty list
 
             # 1. High-priority todos
             high_priority_todos = []
@@ -9454,7 +9455,57 @@ class IntentService:
                             }
                         )
             except Exception as priority_error:
+                todo_reads_failed = True
                 self.logger.warning(f"Failed to fetch priority todos: {priority_error}")
+
+            # 1b. Due today (#1985 (b), CXO's reply-shape ruling 2026-10-12):
+            # "show today's tasks" lists what is due TODAY first, then what is
+            # overdue. The day boundary is the user's clock (#1876 preference,
+            # #1572 fallback), never the server's — a todo due at 4pm Pacific
+            # is "today" at 1pm Pacific even though UTC has moved on.
+            due_today_todos = []
+            try:
+                from zoneinfo import ZoneInfo
+
+                from services.utils.datetime_utils import user_timezone_name
+
+                _tz_name = await user_timezone_name(_owner_id)
+                try:
+                    _local_now = now.astimezone(ZoneInfo(_tz_name))
+                except Exception:  # silent-ok: an unusable zone degrades to UTC, never a dead turn
+                    _local_now = now
+                _day_end = (
+                    _local_now.replace(hour=0, minute=0, second=0, microsecond=0)
+                    + timedelta(days=1)
+                ).astimezone(timezone.utc)
+                async with AsyncSessionFactory.session_scope() as session:
+                    from services.database.models import TodoDB
+
+                    result = await session.execute(
+                        select(TodoDB)
+                        .where(
+                            and_(
+                                TodoDB.owner_id == _owner_id,
+                                TodoDB.completed == False,
+                                TodoDB.due_date.isnot(None),
+                                TodoDB.due_date >= now,
+                                TodoDB.due_date < _day_end,
+                            )
+                        )
+                        .order_by(TodoDB.due_date.asc())
+                        .limit(10)
+                    )
+                    for todo in result.scalars().all():
+                        due_today_todos.append(
+                            {
+                                "type": "due_today_todo",
+                                "text": todo.text,
+                                "due_date": todo.due_date.isoformat() if todo.due_date else None,
+                            }
+                        )
+            except Exception as due_today_error:
+                todo_reads_failed = True
+                self.logger.warning(f"Failed to fetch due-today todos: {due_today_error}")
 
             # 2. Overdue todos
             overdue_todos = []
@@ -9497,6 +9548,7 @@ class IntentService:
                             }
                         )
             except Exception as overdue_error:
+                todo_reads_failed = True
                 self.logger.warning(f"Failed to fetch overdue todos: {overdue_error}")
 
             # 3. Calendar urgency (upcoming meetings in next 2 hours)
@@ -9594,40 +9646,59 @@ class IntentService:
             except Exception as stale_error:
                 self.logger.warning(f"Failed to fetch stale projects: {stale_error}")
 
-            # Format response
-            if not attention_items:
-                # Issue #1069: source-transparent empty-state. The previous
-                # wording ("Everything looks good!") asserted a positive state
-                # without naming what was checked — scored as fabrication-shaped
-                # in Colleague Test rubric (Q30 R=1 C=0 T=1 across Runs 4-7).
-                # Naming the surfaces and acknowledging the limits keeps the
-                # claim honest and invites follow-up.
-                message = (
-                    "I don't see anything urgent across your high-priority todos, "
-                    "overdue items, upcoming meetings, or stale projects. "
-                    "There may be other signals I haven't checked — let me know if "
-                    "there's a specific area you want me to look at."
-                )
+            # Format response — #1985 (b), CXO's ruling 2026-10-12: the todo
+            # list LEADS the reply under a plain "Today:" opening (due today
+            # first, then overdue, each marked); the exact empty line when
+            # both are empty; the other signals (flagged, meetings, stale
+            # projects) FOLLOW the list and never lead it. Never "nothing
+            # urgent" over a non-empty list — that line was a false all-clear
+            # when the todo reads were session-scoped (#1985), and is gone.
+            listed_texts = {d["text"] for d in due_today_todos} | {o["text"] for o in overdue_todos}
+            lines: list[str] = ["**Today:**"]
+            if not due_today_todos and not overdue_todos:
+                if todo_reads_failed:
+                    # #1069 / m-44: a read that failed is not a verified-empty
+                    # list; say so instead of the exact empty line.
+                    lines.append("I couldn't check your todos just now — ask me again in a moment.")
+                else:
+                    lines.append("Nothing due today and nothing overdue.")
             else:
-                lines = [f"**Items Needing Attention** ({len(attention_items)})\n"]
-
-                # Sort by urgency (urgent > high > medium > low)
-                urgency_order = {"urgent": 0, "high": 1, "medium": 2, "low": 3}
-                sorted_items = sorted(
-                    attention_items, key=lambda x: urgency_order.get(x["urgency"], 4)
+                if due_today_todos:
+                    for due_item in due_today_todos:
+                        lines.append(f"📅 {due_item['text']} (due today)")
+                else:
+                    lines.append("Nothing due today.")
+                for late_item in overdue_todos:
+                    lines.append(
+                        f"⏰ {late_item['text']} ({late_item['days_overdue']} days overdue)"
+                    )
+            # Other signals follow the list. A flagged todo already listed
+            # above is not repeated (CXO: an item appears once).
+            following = [
+                item
+                for item in attention_items
+                if not (
+                    item["category"] in ("Priority", "Overdue") and item["item"] in listed_texts
                 )
-
-                # Group by category
+                and item["category"] != "Overdue"
+            ]
+            if following:
+                urgency_order = {"urgent": 0, "high": 1, "medium": 2, "low": 3}
+                following = sorted(following, key=lambda x: urgency_order.get(x["urgency"], 4))
                 current_category = None
-                for item in sorted_items:
+                for item in following:
                     if item["category"] != current_category:
                         current_category = item["category"]
                         lines.append(f"\n**{current_category}:**")
-
                     detail_str = f" ({item['detail']})" if "detail" in item else ""
                     lines.append(f"{item['icon']} {item['item']}{detail_str}")
-
-                message = "\n".join(lines)
+            elif not due_today_todos and not overdue_todos and not todo_reads_failed:
+                # #1069 source transparency keeps its place as the SECOND line:
+                # name what was checked, never assert a positive state.
+                lines.append(
+                    "Nothing from your flagged todos, upcoming meetings or stale projects either."
+                )
+            message = "\n".join(lines)
 
             return IntentProcessingResult(
                 success=True,
@@ -9637,6 +9708,7 @@ class IntentService:
                     "action": intent.action,
                     "confidence": intent.confidence,
                     "total_attention_items": len(attention_items),
+                    "due_today_todos": due_today_todos,
                     "high_priority_todos": high_priority_todos,
                     "overdue_todos": overdue_todos,
                     "upcoming_meetings": upcoming_meetings,

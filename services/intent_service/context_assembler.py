@@ -439,6 +439,20 @@ class ContextAssembler:
             if reminder_ctx:
                 context.update(reminder_ctx)
                 self._attribute_provenance(list(reminder_ctx.keys()), user_id=user_id)
+                # #1985 (b) / CXO 2026-10-12: an item that is BOTH a pending todo
+                # and a due reminder appears once — in the reminder block (the
+                # floor prompt already says so; the model did not always obey,
+                # so the context no longer offers it twice). Match on text: a
+                # due reminder IS a todo's text (get_due_reminders).
+                _due_texts = {
+                    str(r).strip().casefold() for r in (context.get("due_reminders") or [])
+                }
+                if _due_texts and context.get("pending_todos"):
+                    context["pending_todos"] = [
+                        td
+                        for td in context["pending_todos"]
+                        if str(td.get("text", "")).strip().casefold() not in _due_texts
+                    ]
         except Exception as e:  # silent-ok: reminder slice is additive; failure merges source_failed upstream so the floor says "couldn't check", never "none due" (#1425/#1566)
             logger.warning("context_assembler_reminder_gather_error", error=str(e))
 
