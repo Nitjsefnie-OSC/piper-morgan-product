@@ -2893,3 +2893,19 @@ date,role,slug,environment,model,log_filename,notes
 2026-10-10,Programmer subagent,prog,code,sonnet,2026-10-10-0950-prog-code-log-1595-catalog-description-batch.md,"Catalog description batch v1: single-row screen passed, full run invalid"
 2026-10-10,Programmer subagent,prog,code,sonnet,2026-10-10-1640-prog-code-log-1595-catalog-batch-v2.md,Catalog batch v2: week_calendar survivor
 2026-10-10,Programmer subagent,prog,code,sonnet,2026-10-10-1850-prog-code-log-1595-six-restores.md,Six literal restores; rows 2 to 4 claim a different op than their ruling
+2026-10-11,Docs mgr,docs,code,opus,2026-10-11-0804-docs-code-log.md,It Doesn't Count if You Skip It published and fully distributed; quiet fires; lapse: 10-10 omnibus missed at START
+2026-10-11,Chief of Staff,exec,code,opus,2026-10-11-0648-exec-code-log.md,"Dark-seat recovery, hb-store reader switch with CIO, alpha@ watch, xian login relay; log unclosed"
+2026-10-11,Lead Dev,lead,code,opus,2026-10-11-0647-lead-code-log.md,"Deletion lane ceiling 127 to 120 (three landings), #1977 steps, #1979 fix landed, #1984 filed"
+2026-10-11,Principal PM,ppm,code,opus,2026-10-11-0805-ppm-code-log.md,"Recounted ceiling at 120 on merged main, slips stayed at five, #1979 sequencing"
+2026-10-11,Web,web,code,opus,2026-10-11-0618-web-code-log.md,"Alpha served checks, credential read for login, MCP revoke path (#1982) input"
+2026-10-11,Communications,comms,code,opus,2026-10-11-0804-comms-code-log.md,"It Doesn't Count publish-ready, listing copy, #1982 input"
+2026-10-11,Chief Architect,arch,code,opus,2026-10-11-0803-arch-code-log.md,"Five self-recorded corrections incl. restore-validity rule, read_floor_3 GO, #1977 withdrawal"
+2026-10-11,Piper Alpha,pa,code,opus,2026-10-11-0647-pa-code-log.md,"MCP revoke test and scoped-subkey design (#1982), listing copy"
+2026-10-11,Chief Experience Officer,cxo,code,opus,2026-10-11-0717-cxo-code-log.md,"Filed #1979, #1977 step 2 withdrawal on crossed mail, restore review"
+2026-10-11,Chief Innovation Officer,cio,code,opus,2026-10-11-0710-cio-code-log.md,hb-store reader switch with Exec; post-close entries 22:22
+2026-10-11,Head of Sapient Trust,host,code,opus,2026-10-11-0804-host-code-log.md,"alpha@ watch with Janus and Exec, #1982 input"
+2026-10-11,Programmer subagent,prog,code,sonnet,2026-10-11-0658-prog-code-log.md,"PORTFOLIO partial deletion, held"
+2026-10-11,Programmer subagent,prog,code,sonnet,2026-10-11-0825-prog-code-log.md,"COMPLETION_HISTORY deletions, ceiling 127 to 124"
+2026-10-11,Programmer subagent,prog,code,sonnet,2026-10-11-0851-prog-code-log.md,"STATUS 2 + PRIORITY 1 deletions, 124 to 121"
+2026-10-11,Programmer subagent,prog,code,sonnet,2026-10-11-1042-prog-code-log.md,#1977 step 1 span-based residue decline
+2026-10-11,Programmer subagent,prog,code,sonnet,2026-10-11-1143-prog-code-log.md,#1977 step 2 acknowledgement line
