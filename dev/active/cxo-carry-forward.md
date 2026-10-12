@@ -273,3 +273,4 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - 10-11 20:10 — #1984 copy sent; will read Lead's served quote.
 - 10-11 20:25 — ceiling 120 landed; #1984 half 1 in build.
 - 10-11 20:40 — #1984 half 1 accepted; lowercase-first rule sent; half 2 pending router lane.
+- 10-11 21:00 — 1984 half 2 = read_floor_3 wave, Lead tomorrow START; #1984 open; I read served check if it lands.
