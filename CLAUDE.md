@@ -60,6 +60,7 @@ Lifecycle: `docs/internal/operations/amber-worktree-lifecycle.md`.
 5. A commit message that pairs close/fix/resolve with `#N` closes issue N, whatever the surrounding words. Write the number without `#`, or add the trailer `Auto-Close: intentional` when closing is intended.
 6. Memory in `~/.claude-pm/` is shared and has no git history. Export it to a tracked file before any prune or delete.
 7. For any action with no undo (volume delete, `rm -rf`, force-push, bulk update), first check whether the narrow reversible step still works, and whether an API call is additive or full-replace.
+8. Never write an outside person's name, address, employer or words into this public repo: files, filenames, commits, mail, logs, rollups. Use a role label ("an alpha tester"). When the detail matters, write it in a private repo (designinproduct `docs/mail/`, `-private-` in the filename) and leave a name-free pointer here. Outside means anyone but xian and his agents; the one exception is xian's Piper Morgan advisor. Report old mentions to Exec; don't remove them (a history rewrite is xian's call). Rule page: designinproduct `docs/conventions/people-details-stay-private.md`.
 
 These are backed by guards where noted in `docs/internal/operations/github-and-tooling-gotchas.md`; guards are advisory and bypassable, so the rule still applies. Scope is not direction: a narrow path list does not make an overwrite safe.
 
