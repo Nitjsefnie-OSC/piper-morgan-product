@@ -140,8 +140,8 @@ WHAT HAPPENED: [actual result]
 ERROR MESSAGE: [if any]
 ```
 
-- **GitHub Issues**: [Create new issue](https://github.com/mediajunkie/piper-morgan-product/issues/new)
-- **Email**: Reply to your onboarding email for private issues
+- **Private**: email alpha@pipermorgan.ai. It goes to the alpha team and stays there unless you ask us to share it.
+- **Public**: a [GitHub issue](https://github.com/mediajunkie/piper-morgan-product/issues/new). A GitHub issue is public, so leave out anything you would not post on a public page.
 
 ---
 
