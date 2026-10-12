@@ -1,13 +1,13 @@
 # Comms carry-forward
 
-## ⭐ CURRENT STATE — 2026-10-11 21:2x PT. Read this first, it supersedes older lines below
-- **Log**: `dev/2026/10/11/2026-10-11-0804-comms-code-log.md` (DAY-CLOSED). Next START creates the 10-12 log.
+## ⭐ CURRENT STATE — 2026-10-12 06:2x PT. Read this first, it supersedes older lines below
+- **Log**: `dev/2026/10/12/2026-10-12-0619-comms-code-log.md` (today). 10-11 is DAY-CLOSED.
 - **Close a log with exactly `<!-- DAY-CLOSED: YYYY-MM-DD -->`** (the watchdog anchors on it). A bare `DAY-CLOSED …` line is a new form and trips the drift check (Lead fixed my 10-10 one).
 - Plain `gh` works again (checked 10-11 08:0x), the GODEBUG workaround is no longer needed.
 - 10-11 done: "Access ends right away" is live on /privacy and /support (website `44ebaca`, content checked). Listing copy v2 is voiced, and PM ruled "yet" stays. Thu 10-15 pre-check notes are in the 10-11 log.
 - **Publishing**:
   - "No Undo" published Sat 10-10 04:26, live, crossposted (calendar `distributed`, 10-10).
-  - Sun 10-11 "It Doesn't Count if You Skip It": published 08:05 (late, Docs' seat was held overnight), live and checked. Owes PM's crosspost.
+  - Sun 10-11 "It Doesn't Count if You Skip It": published 08:05 (late, Docs' seat was held overnight), live, crossposted (`distributed`).
   - **Tue 10-13 "Giving It Away, and Wondering Who May Want It"**: **PM has changed only the title and tease, the body is
     still my 09-18 draft, and there's no art.** Waiting on PM's rewrite + art. My pre-check notes are in the 10-10 log.
   - Thu 10-15 "The Overzealous Cleanup Routine": not yet pre-checked.
