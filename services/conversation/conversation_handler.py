@@ -129,8 +129,21 @@ class ConversationHandler:
         Anything else — a prior delivered turn, no session id, a read error,
         an owner mismatch — serves "You're welcome." (CXO: mildly generous,
         never a false claim; a failed prior turn gets no special case).
+
+        The belt (Arch, 09:3x): a durable zero proves the TABLE is empty, not
+        that Piper said nothing — ``_save_turn_to_database`` logs and swallows
+        a failed save, and a fast "hello" → "thanks" can read before the hello
+        row lands. So the empty form ALSO requires the in-memory window
+        (``build_recent_history``) to hold no assistant turn; either source
+        showing a delivery wins. Named residue, accepted: a failed save AND a
+        gap over 30 minutes (the window pruned) still yields the empty form —
+        the floor's own memory has the same hole for that turn, and turn-save
+        durability is out of scope here.
         """
-        from services.intent_service.conversation_context import count_delivered_turns
+        from services.intent_service.conversation_context import (
+            build_recent_history,
+            count_delivered_turns,
+        )
 
         try:
             delivered = await count_delivered_turns(session_id, user_id)
@@ -140,6 +153,10 @@ class ConversationHandler:
                 "thanks_delivered_turns_read_failed", session_id=session_id, error=str(e)
             )
             verified_empty = False
+        if verified_empty and any(
+            turn.get("role") == "assistant" for turn in build_recent_history(session_id, user_id)
+        ):
+            verified_empty = False  # the belt: the window saw a delivery the table has not
         return {
             "message": THANKS_NOTHING_DONE_THIS_SESSION
             if verified_empty

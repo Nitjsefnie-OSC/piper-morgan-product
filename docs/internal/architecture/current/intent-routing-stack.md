@@ -1369,8 +1369,10 @@ form is a truth test on the session (Arch's condition 2, tightened the same morn
 needs POSITIVE proof — `count_delivered_turns` (conversation_context.py) reads the durable `conversation_turns`
 table, owner-checked, and raises on anything that is not a successful read; a verified zero → the empty form,
 anything else (a delivered turn, no session id, a read error, an owner mismatch) → "You're welcome.". The
-in-memory window (`build_recent_history`) was the wrong source: `_prune_old_turns` empties it after 30 minutes,
-so a thanks after lunch would have read as a fresh session. Dispositions:
+in-memory window (`build_recent_history`) alone was the wrong source: `_prune_old_turns` empties it after 30
+minutes, so a thanks after lunch would have read as a fresh session. Arch's belt (09:3x): the table alone is
+not enough either (turn saves are best-effort), so the empty form needs BOTH a durable zero AND a window with
+no assistant turn; named residue: a failed save plus a pruned window still yields the empty form. Dispositions:
 `("CONVERSATION","thanks"/"farewell")` back to CANONICAL; the #1818 spend-free ratchet lists both.
 Why: alpha c613beabf5 (2026-10-12) served a todo briefing for a cold "thank you!" — #1754's premise ("the
 floor IS the conversational surface… better than canned by construction") was falsified for these two

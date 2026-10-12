@@ -260,9 +260,15 @@ class TestThanksAndFarewell1986:
     async def test_thanks_with_a_verified_zero_delivered_turns_is_the_honest_empty_form(
         self, handler
     ):
-        with patch(
-            "services.intent_service.conversation_context.count_delivered_turns",
-            new=AsyncMock(return_value=0),
+        with (
+            patch(
+                "services.intent_service.conversation_context.count_delivered_turns",
+                new=AsyncMock(return_value=0),
+            ),
+            patch(
+                "services.intent_service.conversation_context.build_recent_history",
+                return_value=[],
+            ),
         ):
             result = await handler.respond(self._intent("thanks"), "s-1986", user_id="u")
         assert result["message"] == "That's kind — though I haven't done anything this session yet."
@@ -298,6 +304,42 @@ class TestThanksAndFarewell1986:
             await count_delivered_turns(None, "u")
         result = await handler.respond(self._intent("thanks"), None, user_id="u")
         assert result["message"] == "You're welcome."
+
+    @pytest.mark.asyncio
+    async def test_durable_zero_but_window_shows_a_delivery_is_youre_welcome(self, handler):
+        """Arch's belt (09:3x): turn saves are best-effort, so a durable zero
+        after a delivered turn is possible; the in-memory window must agree
+        before the empty form ships."""
+        with (
+            patch(
+                "services.intent_service.conversation_context.count_delivered_turns",
+                new=AsyncMock(return_value=0),
+            ),
+            patch(
+                "services.intent_service.conversation_context.build_recent_history",
+                return_value=[
+                    {"role": "user", "content": "hello"},
+                    {"role": "assistant", "content": "I'm here and ready. Hello!"},
+                ],
+            ),
+        ):
+            result = await handler.respond(self._intent("thanks"), "s-1986", user_id="u")
+        assert result["message"] == "You're welcome."
+
+    @pytest.mark.asyncio
+    async def test_durable_zero_and_empty_window_is_the_empty_form(self, handler):
+        with (
+            patch(
+                "services.intent_service.conversation_context.count_delivered_turns",
+                new=AsyncMock(return_value=0),
+            ),
+            patch(
+                "services.intent_service.conversation_context.build_recent_history",
+                return_value=[{"role": "user", "content": "thanks!"}],
+            ),
+        ):
+            result = await handler.respond(self._intent("thanks"), "s-1986", user_id="u")
+        assert result["message"] == "That's kind — though I haven't done anything this session yet."
 
     @pytest.mark.asyncio
     async def test_farewell_is_one_line(self, handler):
