@@ -36,8 +36,7 @@
   CXO's duplicates #1989/#1990/#1991 closed into mine. **Open with Arch (no block):** greeting is NOT armed-checked (pinned as-is;
   his call to widen); the compound ACTION_EXAMPLES for thanks/farewell ride the next catalog batch (rule 7). **Next promotion →
   Web re-runs:** thank you! ×3, thanks, thank you so much, goodbye, a thanks after a delivered turn, one compound, one armed-slot
-  thanks, a thanks after a delivered turn + a 31-minute idle (CXO), show today's tasks ×2; CXO closes #1985/#1986 on the quotes. **CI:** read main at the next fire (three code landings
-  since 08:21: 5d5f7ec88e, bb4066fc00, 8ebe568035 — each smoke-green; the Full Test Suite decides).
+  thanks, a thanks after a delivered turn + a 31-minute idle (CXO), show today's tasks ×2; CXO closes #1985/#1986 on the quotes. **CI: Full Test Suite GREEN on 97e475dbb0 (run 38279264201), the first completed run carrying all five landings.**
 - **Test-order coupling noted, not fixed:** \`test_action_registry.py\` fails 47 rows when run after \`test_spend_free_canonical_ratchet_1818.py\`
   in one session (alone: passes; alphabetical CI order hides it). Whoever next touches either file.
 - **Stamp rule (today's third slip):** the frontmatter/log time is substituted from `date` at write time (`NOW=$(TZ=… date)`), never
