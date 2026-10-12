@@ -124,6 +124,26 @@ if ! TIP=$(git -C "$REPO" rev-parse --short origin/main 2>/dev/null); then
   exit 3
 fi
 emitted=0; emitters=""
+# R3 (2026-10-11, CIO): when the local heartbeat store exists (scripts/hb-store.py; on Amber, where this
+# runs), emissions come from it: one row per invocation, epoch in column 5. Otherwise from git, as before.
+# Not a union: the store already holds every git row, so adding both would double-count. The store
+# records LOCAL invocations, not delivery to origin/main; a cohort that works but doesn't push now reads
+# as emitting, which is why commits_in_window below still matters.
+HB_STORE="${PIPER_HB_STORE:-$HOME/.local/state/piper-heartbeats}"
+if [ -d "$HB_STORE" ]; then
+  HB_SRC="store"
+  for f in "$HB_STORE"/20??-??-??/*.tsv; do
+    [ -f "$f" ] || continue
+    while IFS=$'\t' read -r _ts who _fire _src e; do
+      case "${e:-}" in ''|*[!0-9]*) continue ;; esac
+      if [ "$e" -ge "$win_start" ] && [ "$e" -le "$NOW_EPOCH" ]; then
+        emitted=$((emitted+1))
+        case " $emitters " in *" $who "*) ;; *) emitters="$emitters $who";; esac
+      fi
+    done < "$f"
+  done
+else
+HB_SRC="git"
 for f in $(git -C "$REPO" ls-tree -r --name-only origin/main -- dev/heartbeats/ 2>/dev/null | grep '\.tsv$'); do
   while IFS=$'\t' read -r ts who _; do
     [ -z "${ts:-}" ] && continue
@@ -134,6 +154,7 @@ for f in $(git -C "$REPO" ls-tree -r --name-only origin/main -- dev/heartbeats/ 
     fi
   done < <(git -C "$REPO" show "origin/main:$f" 2>/dev/null)
 done
+fi
 
 ws=$(date -r "$win_start" "+%Y-%m-%d %H:%M" 2>/dev/null || date -d "@$win_start" "+%Y-%m-%d %H:%M")
 we=$(date -r "$NOW_EPOCH" "+%Y-%m-%d %H:%M" 2>/dev/null || date -d "@$NOW_EPOCH" "+%Y-%m-%d %H:%M")
@@ -162,7 +183,7 @@ if [ -n "${TIP:-}" ]; then
   commits_in_window=$(git -C "$REPO" log --since="$ws" --until="$we" origin/main --oneline 2>/dev/null | wc -l | tr -d ' ')
 fi
 
-echo "cohort-freeze: examined ref=origin/main tip=$TIP$FETCH_NOTE window=[$ws .. $we] (${WINDOW_H}h) watched_roles=$roles scheduled_fires=$sched emissions=$emitted emitters=[${emitters# }] commits_in_window=$commits_in_window min_sched=$MIN_SCHED lag=${DISPATCH_LAG_MIN}m" >&2
+echo "cohort-freeze: examined ref=origin/main tip=$TIP$FETCH_NOTE window=[$ws .. $we] (${WINDOW_H}h) watched_roles=$roles scheduled_fires=$sched emissions=$emitted emissions_src=$HB_SRC emitters=[${emitters# }] commits_in_window=$commits_in_window min_sched=$MIN_SCHED lag=${DISPATCH_LAG_MIN}m" >&2
 
 if [ "$sched" -lt "$MIN_SCHED" ]; then
   echo "INSUFFICIENT-SCHEDULE ($sched scheduled fires < $MIN_SCHED in window) — NOT an all-clear, this window cannot discriminate" >&2

@@ -142,6 +142,12 @@ FIRST_FIRE_GRACE_MIN="${FIRST_FIRE_GRACE_MIN:-45}"   # minutes past first_fire b
 NO_SESSION_LOG_GRACE_MIN="${NO_SESSION_LOG_GRACE_MIN:-20}"   # minutes a role-tagged commit must age before its absence-of-log becomes a real signal
 now=$(date +%s); hour=${FREEZE_CHECK_NOW_HOUR:-$(date +%-H)}; min=$(date +%-M); now_min=$(( hour * 60 + min ))
 today=$(date +%Y/%m/%d); today_dash=$(date +%Y-%m-%d)
+# R3 (2026-10-11, CIO): heartbeats also live in a local store (scripts/hb-store.py), written on EVERY
+# invocation (suppressed ones and post-commit-hook ones too). Every heartbeat read below takes git OR store,
+# so the git write in duty-cycle-heartbeat.sh can stop without blinding this belt. Single-host assumption:
+# the store is on Amber, where this runs; elsewhere it is ABSENT, the examined line says so, and only git counts.
+HB_STORE="${PIPER_HB_STORE:-$HOME/.local/state/piper-heartbeats}"
+if [ -d "$HB_STORE" ]; then _hb_store_note="present"; else _hb_store_note="ABSENT(git only)"; fi
 git -C "$REPO" fetch origin main -q 2>/dev/null || true
 
 # ── REGISTRY SOURCED FROM origin/main, NOT the local working tree (2026-09-21, CXO's finding) ──
@@ -193,7 +199,9 @@ age_of() {
   # compliance. A heartbeat line means "I woke up" and nothing more, which is exactly the claim
   # a liveness check needs. See scripts/duty-cycle-heartbeat.sh.
   ct3=$(git -C "$REPO" log origin/main -1 --format=%ct --since="9 days ago" -- "dev/heartbeats/*/${role}.tsv" 2>/dev/null)
-  newest=$(printf '%s\n%s\n%s\n' "$ct" "$ct2" "$ct3" | grep -E '^[0-9]+$' | sort -nr | head -1)
+  # R3: the store's newest invocation epoch (column 4 of last-invoked/<role>.txt).
+  ct4=$(awk -F'\t' 'NR==1{print $4}' "$HB_STORE/last-invoked/${role}.txt" 2>/dev/null)
+  newest=$(printf '%s\n%s\n%s\n%s\n' "$ct" "$ct2" "$ct3" "$ct4" | grep -E '^[0-9]+$' | sort -nr | head -1)
   [ -z "$newest" ] && return 1
   echo $(( (now - newest) / 3600 ))
 }
@@ -382,6 +390,9 @@ if [ "$hour" -ge 12 ]; then
   # fired too and produced the two-line string "0\n0", which `[` then rejected as non-integer.
   hb_today=$(git -C "$REPO" ls-tree --name-only origin/main "dev/heartbeats/$today_dash/" 2>/dev/null | wc -l | tr -d " ")
   hb_prev=$(git -C "$REPO" log origin/main --since="9 days ago" --format=%H -1 -- "dev/heartbeats/" 2>/dev/null)
+  # R3: add the store. Its today dir holds a file per role that invoked the writer at all.
+  hb_today=$(( hb_today + $(ls "$HB_STORE/$today_dash/" 2>/dev/null | grep -c '\.tsv$' || true) ))
+  [ -z "$hb_prev" ] && [ -n "$(find "$HB_STORE" -maxdepth 1 -name '20??-??-??' -mtime -9 2>/dev/null | head -1)" ] && hb_prev="store"
   # ⚠️ 2026-07-29: this condition was WRONG on its first real day and false-alarmed on the busiest
   # day on record (122 role-tagged commits). HOST diagnosed it: its own two refinements conflict.
   #   (a) "a work commit IS the heartbeat" → --if-quiet suppresses the write whenever the role
@@ -406,7 +417,7 @@ if [ "$hour" -ge 12 ]; then
     # a measurement the check no longer performs. An alarm must not claim more evidence than it
     # gathered: an operator reading the old text would believe both sources were checked and empty,
     # when only the heartbeat surface was read. State the denominator in the alarm itself.
-    echo "HEARTBEAT-WRITER-SILENT — zero heartbeats for $today_dash past midday, though the surface has been written before. NOTE: this check reads ONLY dev/heartbeats/ — it does NOT look at commits, so role-tagged commits may well exist. What it shows is that the WRITER is silent, not that the cohort is. A broken writer looks exactly like a cohort that skipped the step, so do NOT read this as healthy until explained."
+    echo "HEARTBEAT-WRITER-SILENT — zero heartbeats for $today_dash past midday, though the surface has been written before. NOTE: this check reads ONLY the heartbeat surfaces (dev/heartbeats/ on origin/main and the local store) — it does NOT look at commits, so role-tagged commits may well exist. What it shows is that the WRITER is silent, not that the cohort is. A broken writer looks exactly like a cohort that skipped the step, so do NOT read this as healthy until explained."
   fi
 fi
 
@@ -459,7 +470,7 @@ if [ "${REG:-}" = "${REG_TMP:-}" ]; then
 else
   _reg_source="$REG (local checkout — DUTY_CYCLE_REGISTRY override or origin/main read failed)"
 fi
-echo "freeze-check: examined ref=origin/main tip=${_tip:-<NONE — could not read origin/main>} registry=$_reg_source rows=${_n:-0} at $(date '+%Y-%m-%d %H:%M')" >&2
+echo "freeze-check: examined ref=origin/main tip=${_tip:-<NONE — could not read origin/main>} registry=$_reg_source hb_store=$_hb_store_note rows=${_n:-0} at $(date '+%Y-%m-%d %H:%M')" >&2
 
 while IFS=$'\t' read -r role cron thr ws we ff since state; do
   # ⚠️ 2026-09-22 (CXO's finding): widened '#'* to also match a leading '"#' — a CSV-style quote-
@@ -611,7 +622,8 @@ while IFS=$'\t' read -r role cron thr ws we ff since state; do
       # time by a week of heavy commit output that satisfied every OTHER liveness check). A
       # distinct, named state, not a folded-in STALE variant and not gated behind
       # DUTY_CYCLE_COVERAGE — this is meant to surface actively, the same as PARK-NO-EXIT above.
-      if ! git -C "$REPO" cat-file -e "origin/main:dev/heartbeats/$today_dash/$role.tsv" 2>/dev/null; then
+      if ! git -C "$REPO" cat-file -e "origin/main:dev/heartbeats/$today_dash/$role.tsv" 2>/dev/null \
+         && [ ! -s "$HB_STORE/$today_dash/$role.tsv" ]; then   # R3: a store row today also counts
         # v0.12 (2026-09-04, CXO's finding, Docs/Exec/HOST endorsed, standing-item 7j). The line
         # above collapsed 3 distinguishable causes into one: (a) writer runs, correctly suppressed
         # — fine; (b) writer never invoked — onboarding gap; (c) writer invoked, then STOPPED — a
@@ -622,6 +634,12 @@ while IFS=$'\t' read -r role cron thr ws we ff since state; do
         # someone to run a manual probe, per Exec's exact ask: "a `last invoked: YYYY-MM-DD` on the
         # line would do it."
         li_line="$(git -C "$REPO" show "origin/main:dev/heartbeats/last-invoked/$role.txt" 2>/dev/null | head -1)"
+        # R3: prefer the store's marker (ts, fire, source, epoch) when present. Its source field is
+        # fire|hook, both direct observations, so it is normalized to the git marker's "observed".
+        _sli="$(head -1 "$HB_STORE/last-invoked/$role.txt" 2>/dev/null)"
+        if [ -n "$_sli" ]; then
+          li_line="$(printf '%s' "$_sli" | awk -F'\t' '{print $1"\t"$2"\tobserved"}')"
+        fi
         if [ -z "$li_line" ]; then
           # v0.13 (2026-09-05, CXO's backfill fix — standing-item 7l). Real cold-start bug found
           # hours after v0.12 shipped: a missing marker file was reported as "never — not called
