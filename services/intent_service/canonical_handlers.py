@@ -344,7 +344,7 @@ class CanonicalHandlers:
                 # user made (#1876) — say so and point at the one place to change it.
                 message += (
                     f" That's on the default zone ({user_tz}) — set yours under "
-                    'Settings → Preferences, or say "set my timezone to [city]".'
+                    'Settings → Preferences, or say "set my timezone to Helsinki".'
                 )
 
         calendar_context = {}
