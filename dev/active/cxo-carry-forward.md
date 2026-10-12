@@ -56,7 +56,7 @@ max_age_days: 1
 
 ## Cron
 
-✅ **Current cron: `dab9789c`** (re-armed 2026-10-10 22:2x at STOP from `ce068949`, SAME expression `47 6,9,12,15,18,21 * * *`), `CronList`-verified exactly one. 7-day auto-expiry ~2026-10-17; re-arm by the 10-15 21:47 slot at the latest.
+✅ **Current cron: `64616204`** (re-armed 2026-10-11 22:2x at STOP from `dab9789c`, SAME expression `47 6,9,12,15,18,21 * * *`), `CronList`-verified exactly one. 7-day auto-expiry ~2026-10-18; re-arm by the 10-16 21:47 slot at the latest.
 
 ## Standing-items tracker
 
@@ -275,3 +275,4 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - 10-11 20:40 — #1984 half 1 accepted; lowercase-first rule sent; half 2 pending router lane.
 - 10-11 21:00 — 1984 half 2 = read_floor_3 wave, Lead tomorrow START; #1984 open; I read served check if it lands.
 - 10-11 21:05 — 1984 half 2 = description edit (not wave), Lead 10-12 START; served check owed to me.
+- 10-11 22:25 — STOP done: DAY-CLOSED 10-11, cron dab9789c -> 64616204 (expires ~10-18), registry updated. Owed unchanged; #1984 half-2 served check at Lead's 10-12 START.
