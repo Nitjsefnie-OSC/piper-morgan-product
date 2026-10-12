@@ -19,9 +19,10 @@
   opens: "show me when we shipped the API" → shipped_this_week 6/6 on main.
 - **#1982:** held branch `claude/lead-1982-pat-dual-write` (4400ee3d9f, still on origin) — land when PA relays PM's PAT-only alpha test is
   done; flip `GITHUB_LEGACY_CONTEXT_FALLBACK` to False in the commit that records `legacy=0`.
-- **#1459 (next lane) — proposal OUT 12:53 10-12, waiting on Arch:** #1942's mirror superseded the July spec; class fix = `Intent.bind_original_message`
-  setter authority + ratchet on post-construction single-surface WRITES (ceiling 0, denominator asserted) + strike/name the divergence
-  licence; drop the 38-site read migration. Issue comment 6131537060; memo 495ecc53b. Build on his word (unit tier only, no served scoring).
+- **#1459 LANDED a488e4fa65 + CLOSED 10-12 13:12** (Arch GO 13:1x with three amendments, all applied): `Intent.bind_original_message` one
+  writer; `__post_init__` normalizes to the attribute + logs; classifier fill deleted with proof; `TestOriginalMessageWriteRatchet1459`
+  (four shapes, AST, ceiling 0, denominator asserted). CI test.yml on the merge head: read at the next fire. Lane worktree lead-1459
+  removed; branch `claude/lead-1459-setter-ratchet` stays on origin (remote delete is permission-denied, don't retry).
 - **#1977 CLOSED 10-12 12:53** (banner + evidence comment + close; the work had been complete since 10-11 19:3x).
 - **read_floor_3 wave** (get_project_status + get_top_priority adapters; Arch's four 10-11 20:5x conditions): trigger = the deletion lane's
   next STATUS/PRIORITY pass. Not #1984's lever.
