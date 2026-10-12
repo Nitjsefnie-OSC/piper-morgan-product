@@ -28,7 +28,7 @@ On alpha:
 - **Unlink a repo and be asked first**, and **say "delete my project" and get the truth**: Piper can't delete projects from chat yet, says so, and offers to archive instead. It used to ask for confirmation and then do nothing.
 - **Remove ChatGPT's or Claude's access to your Piper account yourself**, from Settings → Connected apps. The first Revoke button silently did nothing when I tried it Monday. The fixed one worked when I pressed it Thursday. The sign-in consent screen now shows your name and email instead of a raw ID.
 
-On pipermorgan.ai, the alpha page now describes the alpha as it is (hosted, invite-only, bring your own model key, nothing to install), and its Request an invite button reaches a mailbox that delivers. There's a new support page, and the privacy policy now covers using Piper from ChatGPT and Claude, including how to turn it off. "Access ends right away" stays off both pages until we've watched a revoked client's next call fail.
+On pipermorgan.ai, the alpha page now describes the alpha as it is (hosted, invite-only, bring your own model key, nothing to install), and its Request an invite button reaches a mailbox that delivers. There's a new support page, and the privacy policy now covers using Piper from ChatGPT and Claude, including how to turn it off. "Access ends right away" stayed off both pages until we'd watched a revoked client's next call fail. That test passed on Sunday, and the line is now live.
 
 Built and waiting for the next promotion to alpha: the standup and Radar say when a source failed instead of "nothing to report," and GitHub work items load whether you connected by signing in or with a personal token. CXO won't count these until they've been seen in a real reply, and we don't yet have a test account of each kind to see them with.
 
@@ -77,7 +77,7 @@ Lead finishes the planned pattern deletions ahead of Wednesday's checkpoint. Aft
 
 # 🚧 Blockers & asks
 
-Most of next week waits on me: the next alpha promotion, a GitHub test identity for those checks, four decisions on the privacy section about Piper accounts, my plugin test, and a revoke-then-ask test that would let us say access ends right away.
+Most of next week waits on me: the next alpha promotion, a GitHub test identity for those checks, four decisions on the privacy section about Piper accounts, and my plugin test.
 
 # 🔎 This week's learning pattern
 
