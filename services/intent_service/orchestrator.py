@@ -276,10 +276,12 @@ class IntentOrchestrator:
             return successful[0].response
 
         # Multiple successful results — use transitions
+        # #1984 (CXO's copy, 2026-10-11): two templates, alternating. The old
+        # third, "On the {topic} front", read "On the your calendar front" for
+        # every "your …" label at index 2 (3-part plans) — dropped.
         transitions = [
             "As for {topic}",
             "Regarding {topic}",
-            "On the {topic} front",
         ]
 
         for i, result in enumerate(successful):
@@ -308,15 +310,28 @@ class IntentOrchestrator:
             # never by its action id; duplicates collapse so two unlabeled
             # failures read once.
             failure_topics: List[str] = []
+            any_unlabeled = False
             for r in failed:
-                label = _intent_topic_label(r.intent) or UNLABELED_FAILURE_TOPIC
-                if label not in failure_topics:
+                label = _intent_topic_label(r.intent)
+                if label is None:
+                    any_unlabeled = True
+                elif label not in failure_topics:
                     failure_topics.append(label)
-            if len(failure_topics) == 1:
+            if any_unlabeled:
+                # CXO's copy: a plan can include writes, so the unlabeled part is
+                # something Piper could not "do", never something it "checked on".
+                failure_topics.append(UNLABELED_FAILURE_TOPIC)
+            if len(failure_topics) == 1 and any_unlabeled:
+                # #1198: no false retry promise — nothing retries in the background.
+                failure_note = (
+                    f"I wasn't able to do {UNLABELED_FAILURE_TOPIC} right now — "
+                    "ask me again and I'll retry."
+                )
+            elif len(failure_topics) == 1:
                 # #1198: no false retry promise — nothing retries in the background.
                 failure_note = f"I wasn't able to check on {failure_topics[0]} right now — ask me again and I'll retry."
             else:
-                topics = ", ".join(failure_topics)
+                topics = " and ".join([", ".join(failure_topics[:-1]), failure_topics[-1]])
                 # #1198: no false retry promise — nothing retries in the background.
                 failure_note = (
                     f"I wasn't able to check on {topics} right now — ask me again and I'll retry."
@@ -361,6 +376,8 @@ def _intent_topic_label(intent: Intent) -> Optional[str]:
         "manage_portfolio": "your portfolio",
         "list_archived_projects": "your archived projects",  # #1984 (Arch's read; CXO's words)
         "list_projects": "your projects",
+        "list_milestones": "your milestones",  # #1984 CXO
+        "session_activity_query": "this session",  # #1984 CXO
     }
     return labels.get(intent.action)
 
