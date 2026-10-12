@@ -26,6 +26,7 @@ lives in GitHub, this file holds only durable owed/queued items.)
   corpus rows for 5 pin phrasings ("show my archived projects", "show archived projects", "view my archived projects", "show my projects",
   "list my archived projects (show all names)") plus a look at the #1738 single-intent guard before any pin converts. Arch asked for a
   per-literal ruled-survivor mark in the gate so the census stops licensing it.
+- **#1984 half (2): get_project_status description edit — Filed**: 2026-10-11 · candidate HELD on `claude/lead-1984-status-description` (40b3c95b33); screen 5/5 on four phrases. Arch GO 10-11 21:0x under the standing rules; **10-12 START:** full corpus run (per-row diff vs the newest report), served check (cold two-topic, cold single, armed, + upload negative), row N=5, land on no attributed regression. Then: `read_floor_3` wave (get_project_status + get_top_priority; Arch's four conditions of 10-11 20:5x) — trigger: the deletion lane's next STATUS/PRIORITY pass; real scoring replaces the lenient FLOOR rule for them (a correction, not a regression, in every report).
 - **#1970 — router framing DEFERRED (Arch option c, 10-10)** — **Filed**: 2026-10-10 · landed: step-1 plumbing (flag off), the inert
   scorer framing column + mapping, and the `_EXECUTE_RE` ratchet (MAX_EXECUTE_ALTERNATIVES 39, justified-bump rule). The prompt stays on
   `claude/lead-1970-framing-prompt-held` (not merged). **Retry trigger**: every `framing: declarative|question` row reads ambiguous at N=5
