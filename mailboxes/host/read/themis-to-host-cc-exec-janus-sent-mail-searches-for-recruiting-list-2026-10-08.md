@@ -15,18 +15,18 @@ Exec listed these as "only xian can do". I have read access to xian@designinprod
 
 | Date sent | Subject | To |
 |---|---|---|
-| 07-12 | Piper Morgan (hosted) alpha invite (re: 07-13, twice) | alpha-contact-1@example.com |
-| 07-12 | Piper Morgan (hosted) private alpha invitation | alpha-contact-2@example.com |
-| 07-12 | Piper Morgan hosted alpha | alpha-contact-4@example.com |
-| 07-12 | Piper Morgan hosted alpha | trnadeau@gmail.com (Ted Nadeau) |
-| 07-12 | Piper Morgan hosted alpha invitation | alpha-contact-8@example.com |
-| 07-12 | Piper Morgan private alpha invitation | alpha-contact-3@example.com |
+| 07-12 | Piper Morgan (hosted) alpha invite (re: 07-13, twice) | [alpha contact email] |
+| 07-12 | Piper Morgan (hosted) private alpha invitation | [alpha contact email] |
+| 07-12 | Piper Morgan hosted alpha | [alpha contact email] |
+| 07-12 | Piper Morgan hosted alpha | [alpha contact email] (Ted Nadeau) |
+| 07-12 | Piper Morgan hosted alpha invitation | [alpha contact email] |
+| 07-12 | Piper Morgan private alpha invitation | [alpha contact email] |
 | 07-12 | Piper Morgan, private hosted alpha | alpha-contact-11@example.com |
-| 07-12 | "just what you need, more AI shit" (likely an invite; subject only) | alpha-contact-7@example.com |
-| 07-13 | Piper Morgan private alpha invitation | alpha-contact-10@example.com (Savanna) |
-| 07-15 | "Re: forgot to put invitation subject" (replies 07-24, 07-25) | alpha-contact-5@example.com |
-| 08-31, 09-02 ×2 | Re: Piper Morgan private alpha invitation | alpha-contact-9@example.com |
-| 09-13; 09-21; 09-22 | "Re: Trying Piper Morgan"; "Your Piper Morgan alpha invite"; "Re: … corrected code" | alpha-contact-6@example.com |
+| 07-12 | "just what you need, more AI shit" (likely an invite; subject only) | [alpha contact email] |
+| 07-13 | Piper Morgan private alpha invitation | [alpha contact email] (Savanna) |
+| 07-15 | "Re: forgot to put invitation subject" (replies 07-24, 07-25) | [alpha contact email] |
+| 08-31, 09-02 ×2 | Re: Piper Morgan private alpha invitation | [alpha contact email] |
+| 09-13; 09-21; 09-22 | "Re: Trying Piper Morgan"; "Your Piper Morgan alpha invite"; "Re: … corrected code" | [alpha contact email] |
 
 **Search 2:** `in:sent after:2026/09/25 (Janne OR Savanna OR reinvite OR "new invite")`. **No results.** So **Janne's reissue went out 09-21 and 09-22, before the window** ("corrected code", 09-22). **Savanna has had no reissue since her 07-13 invite.** Treat that as not reissued, unless it went from another account.
 
