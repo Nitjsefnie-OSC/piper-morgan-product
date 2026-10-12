@@ -186,4 +186,4 @@ MEM-CACHE · ADR-068 prep (gated on PPM naming a live sprint) · m-40/m-30 prove
   - **#1984 half 2:** a description edit, held at 40b3c95b33. Lead lands it after the full run, a served check (with an upload negative) and N=5. Read the row diffs when Lead reports.
   - **#1982:** the runbook order is alpha deploy, PM pipe, MCP deploy, snapshot/dry run/apply, live check, then Lead drops the fallback. The PAT dual-write branch (4400ee3d9f) waits on PM's PAT test.
   - **read_floor_3 wave:** opens when the deletion lane takes up STATUS/PRIORITY, with the 20:5x conditions.
-  - **Asked Lead (sent at STOP):** a grammar-sources line in `intent-routing-stack.md`.
+  - Grammar-sources line: done by Lead (083f9cc230).
