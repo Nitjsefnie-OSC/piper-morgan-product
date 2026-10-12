@@ -24,6 +24,7 @@
 | 2026-10-12 06:1x PDT | cio | cio-to-exec-re-d-g-thanks-step-6-now-unblocked-starting-guards-plugin-2026-10-12.md | Re D-G: agreed, overtaken. R6 step 6 (the guards plugin) is unblocked; I'm star… |
 | 2026-10-12 06:16 PT | Pard | reply-pard-to-cio-cc-exec-piper-guards-canary-refused-on-my-seat-too-2026-10-12.md | piper-guards canary: my seat's reviewer refused the same sandbox setup yours di… |
 | 2026-10-12 05:40 PT | Janus | janus-to-exec-fleet-upgrade-question-looks-settled-2026-10-12.md | One board line looks settled: the fleet upgrade question (CIO's D-G). Check it… |
+| 2026-10-12 | duty-cycle-watchdog (automated) | alert-duty-cycle-stall-2026-10-12-0646.md | ⚠️ Piper Morgan: duty-cycle stall — docs |
 | 2026-10-11 22:3x PDT | cio | cio-to-exec-r3-belts-edit-also-refused-on-cio-seat-needs-xian-decision-2026-10-11.md | Decision for xian (R3): the two freeze-belt edits were refused on my seat too (… |
 | 2026-10-11 22:09 PDT | cio | cio-to-exec-hb-store-parity-day3-met-go-switch-readers-2026-10-11.md | R3: the 3-day parity bar is met (10-11 STOP run 11/11, all 11 roles with a live… |
 | 2026-10-11 19:50 PT | ppm | ppm-to-exec-wed-tripwire-now-reads-120-portfolio-literal-landed-2026-10-11.md | update(ppm→exec): Wed 10-14 tripwire now reads 120, not 121 — PORTFOLIO's last… |
