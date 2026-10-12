@@ -1290,6 +1290,16 @@ Full decision record: `docs/internal/architecture/adrs/adr-080-llm-decides-meani
 4. **Floor/pre-classifier names** — action strings matched inside surface-1 and surface-4
    code. Not statically enumerable; the accounting lives in
    `tests/unit/services/intent_service/test_routing_vocabulary_1283.py::KNOWN_OFF_RAIL`.
+5. **The Inversion router's grammar** (`derive_routing_grammar`, `inversion_router.py`) — **two
+   sources, in order: the rail entries PLUS every `ACTION_REGISTRY` canonical pair with no rail key**
+   (the FLOOR/CANONICAL ops, each with its `ACTION_DESCRIPTIONS` text; a registry op is skipped only
+   when a synonymous rail canonical already covers it). So a FLOOR op without an adapter — `get_project_status`,
+   `get_top_priority` — IS a name the router can emit, alone or inside a plan, and
+   `_resolve_plan_for_dispatch` already credits it as a floor element (#1606). **A `read_floor` adapter
+   changes dispatch and the scorer's lenient-FLOOR rule, not whether the router can name the op.** The lever
+   for a FLOOR op the router under-names is its registry description (Family-1 enrichment), measured by the
+   full run like any router input. Recorded 2026-10-11 after Lead and Arch both built a #1984 ruling on the
+   opposite premise; the fact lived only in the function's docstring until this line.
 
 **Enforcement**: that same test is the no-LLM ratchet — every registry canonical must be
 rail-registered or explicitly ledgered as off-rail-but-surface-handled; the ledger only
@@ -2606,6 +2616,10 @@ Haiku). Arch's ruling: the router is the better owner — **build rail ENTRIES, 
   'help' / features / menu), the served router's own coverage went TRUST 0 → 15/15, DISCOVERY
   16 → 22/24, ANALYSIS 7 → 10/14, MEMORY 5 → 9/15 on the full Phase-2 gate
   (`inversion-phase2-gate-2026-10-02-read-floor-haiku{,-02}.md`), no category regressing.
+- **What an adapter does NOT do (2026-10-11):** it does not make the op nameable — the grammar already lists every
+  registry FLOOR/CANONICAL op without a rail key (vocabulary 5 above). An adapter changes dispatch (rail entry
+  instead of floor credit) and ends the scorer's lenient NONE/CLARIFY = MATCH rule for that op; description text
+  is what moves the router's naming.
 - **Not flipped.** Arch's condition 3: the Phase-2 per-category gate runs on `read_floor` like any
   wave, with TRUST's remaining misses read row by row (PPM's rule), before the token goes in the
   flag (PM's hand). Only after it is live and clean do the four lists go, on condition (a) evidence.
