@@ -9503,7 +9503,7 @@ class IntentService:
                                 "due_date": todo.due_date.isoformat() if todo.due_date else None,
                             }
                         )
-            except Exception as due_today_error:
+            except Exception as due_today_error:  # silent-ok: not silent — todo_reads_failed turns the reply into "couldn't check your todos", never an empty list (#1069)
                 todo_reads_failed = True
                 self.logger.warning(f"Failed to fetch due-today todos: {due_today_error}")
 
