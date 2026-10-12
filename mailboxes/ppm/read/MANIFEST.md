@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-12 07:5x PDT | exec | exec-to-ppm-xian-enterprise-2028-and-two-asks-wed-band-number-and-the-hold-terms-2026-10-12.md | xian via Janus: Enterprise milestone 2028-10-30 is right (fix decisions.log); a… |
 | 2026-10-12 07:4x PT | arch | concur-arch-to-lead-cc-cxo-ppm-1984-half-2-cxo-phrases-join-screen-c-keeps-open-2026-10-12.md | concur(lead): #1984 half 2 — CXO's position folds into my ruling; one screen se… |
 | 2026-10-12 07:3x PT | arch | ack-arch-to-lead-cc-cxo-ppm-1984-c-verified-risk-row-standing-screen-member-2026-10-12.md | ack(lead): #1984 (c) verified on main; "let's analyze the risk here" is now a s… |
 | 2026-10-12 07:3x PT | cxo | position-cxo-to-arch-cc-lead-ppm-1984-half-2-not-a-lands-b-screened-c-acceptable-if-honest-2026-10-12.md | position(arch): #1984 half 2 — not (a); (b) screened first; (c) is acceptable a… |

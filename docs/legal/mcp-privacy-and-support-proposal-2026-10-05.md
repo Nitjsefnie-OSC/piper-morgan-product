@@ -85,12 +85,17 @@ tested, so the timing claim stays on that one.)*
 
 ---
 
-## C. Your Piper account (DRAFT, Comms 2026-10-08, from Lead's cited facts; PM has not seen it)
+## C. Your Piper account (DRAFT v2, Comms 2026-10-12, rewritten to PM's principle; from Lead's cited facts)
 
 *Status: draft for PM. Facts from Lead's 10-08 memo (`mailboxes/comms/read/facts-lead-to-comms-…-2026-10-08.md`),
 each cited there to code on `origin/main` = alpha `e8ecd10d5a`. Bracketed notes are sources and get stripped at
-publish. Four **[PM DECISION]** marks below: those sentences are true today, but PM may prefer to change the
-product rather than say them. Insert after Section A.*
+publish. Insert after Section A.*
+
+*v2 (10-12), PM's principle via Janus: "We must always honestly say what the product does now. If we plan to do
+something different we should acknowledge the goal and the current gap." So every sentence below states what
+Piper does today, and the three gaps now read as "today X, our goal is Y". **PM fills four blanks, marked ⟦PM …⟧:**
+three goals (each one a short phrase, or "none", which drops that goal sentence) and one turnaround in days. No
+other decisions are left in this section.*
 
 ### Your Piper account
 
@@ -116,9 +121,9 @@ Our admin tools don't display your conversations, and the stored copies are encr
 processing your conversations. [#1812, `provider_selection.py`]
 
 **Logs.** Our server logs include the text of messages you send to Piper, which we use to fix how Piper
-understands requests. **[PM DECISION 1: this is the default today (`PIPER_INVERSION_LOG_UTTERANCE` on). Lead:
-don't write "we don't log your messages". If you'd rather not say this, the fix is to switch the default to
-hash-only (Lead), not to change the wording.]** [Log retention on Fly: unverified]
+understands requests. ⟦PM GOAL 1, e.g. "Our goal is to keep only a scrambled fingerprint of each message, not
+its text." Or "none".⟧ [Today's default: `PIPER_INVERSION_LOG_UTTERANCE` on. Lead's hash-only switch is the way to
+close this gap. Log retention on Fly: unverified]
 
 **Services you connect.** If you connect GitHub, Google Calendar, Slack or Notion, Piper reads and writes there
 when you ask. For GitHub and Slack, Piper never sees your password. Piper keeps the access the service grants,
@@ -138,13 +143,14 @@ the app only, not this website]
 
 **Deleting your data.** In Piper you can delete files you uploaded, your AI provider key, what Piper has learned
 about you, your settings, and your to-dos, projects and linked repositories. Deleting removes them.
-- **Conversations: [PM DECISION 2]** Deleting a conversation hides it from you, but the encrypted copy stays on
-  our servers. [`conversations.py` sets `lifecycle_state="deleted"`.] *Say this, or have Lead make delete erase,
-  then write "Deleting a conversation removes it."*
-- **Your whole account: [PM DECISION 3]** There's no in-app way yet. *Lead: write "on request", and only if
-  someone will act on requests.* If yes: "To delete your account and everything in it, email
-  support@pipermorgan.ai and we'll do it within [N] days." **[PM DECISION 4: the number of days, or drop the
-  promise.]**
+- **Conversations.** Deleting a conversation hides it from you, but the encrypted copy stays on our servers.
+  ⟦PM GOAL 2, e.g. "Our goal is for deleting a conversation to erase it." Or "none".⟧
+  [`conversations.py` sets `lifecycle_state="deleted"`.]
+- **Your whole account.** There's no way to delete your account inside Piper yet. ⟦PM GOAL 3, e.g. "We plan to
+  add one." Or "none".⟧ Until then, email support@pipermorgan.ai and we'll delete your account and everything in
+  it within ⟦PM: N⟧ days.
+  [Lead: promise "on request" only if someone will act on requests. support@ is PM's address (live on /support).
+  The person who carries out a deletion is PM's call, and it isn't written into the policy.]
 
 ---
 
@@ -153,11 +159,11 @@ about you, your settings, and your to-dos, projects and linked repositories. Del
 2. Approve section A's facts (they're code-checked, but it's your policy), then route to Comms for voice
    and Web to publish. Bump the policy's "Last updated" date.
 3. The "Turning it off" sentence waits for the Revoke fix to be live and seen working.
-4. **Section C (your Piper account), drafted 2026-10-08.** Four decisions inside: (1) say that message text is
-   logged, or change the default first; (2) say a deleted conversation is only hidden, or make delete erase;
-   (3) offer account deletion on request, and who does it; (4) the turnaround for that request. If Section C
-   ships, the policy's opening sentence should widen to cover using Piper, not just connecting it (Comms will
-   reword it).
+4. **Section C (your Piper account), v2 2026-10-12.** Rewritten to PM's "say what it does now, plus the goal and
+   the gap" principle. Four blanks to fill in one read: GOAL 1 (logs), GOAL 2 (deleted conversations), GOAL 3
+   (account deletion), each a phrase or "none", and N (days to act on an emailed account-deletion request). Then
+   Comms gives Web the final text. When Section C ships, the policy's opening sentence widens to cover using Piper
+   (Comms rewords it in the same hand-off).
 5. ~~One check only PM can run~~ **No longer needed for the privacy claim** (PA 10-08 09:5x traced GitHub's no-key
    path: like Slack, it fails closed, so the access is encrypted in the DB or the connect is refused, never
    plaintext). `fly secrets list -a piper-morgan` now only tells PM whether connecting works on alpha. That's a
