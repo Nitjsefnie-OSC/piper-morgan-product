@@ -59,7 +59,12 @@ MULTI_INTENT_MESSAGE = "What's my schedule today and show my todos"
 # #1977 (residue rule): the git half no longer claims, so the old message
 # became ONE claim + an unclaimed clause and is now declined at surface 1.
 # Swapped to a genuine two-claim split (PORTFOLIO + STATUS, measured).
-STILL_CLAIMED_MULTI_INTENT_MESSAGE = "list my archived projects and summarize my current work"
+# #1595 Phase 3, twenty-seventh deletion (2026-10-11): PORTFOLIO's show/list/view
+# literal is gone, so "list my archived projects and ..." is one STATUS claim plus
+# an unclaimed ask-shaped clause and step 1 (#1977) declines it. The ruled
+# `update ... project` survivor (#1933 a) still claims PORTFOLIO; measured
+# 2026-10-11: ["manage_portfolio", "get_project_status"], is_multi_intent.
+STILL_CLAIMED_MULTI_INTENT_MESSAGE = "update my project name to Atlas and summarize my current work"
 # #1595 Phase 3, rule-10-licensed FULL deletion (2026-10-09): GUIDANCE_PATTERNS'
 # last 3 literals (including \bsetup.*projects?\b, which SETUP_MESSAGE matched)
 # are tombstoned — SETUP_MESSAGE no longer claims ANY intent via

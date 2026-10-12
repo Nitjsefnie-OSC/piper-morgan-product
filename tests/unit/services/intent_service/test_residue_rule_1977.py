@@ -16,11 +16,14 @@ def _sub(message, spans):
 
 class TestMultiIntentResidue:
     def test_two_claims_cover_both_clauses_not_declined(self):
-        """Measured: PORTFOLIO (0,25) + STATUS (43,55); the leftover
-        ' and summarize my ' holds one content word -> not declined (the
-        #1884 control test_two_topic_..._now_kept keeps passing unchanged)."""
+        """Measured 2026-10-11 (after the twenty-seventh deletion took
+        PORTFOLIO's show/list/view literal): PORTFOLIO claims via the ruled
+        `update ... project` survivor (0,17) + STATUS `current work` (49,61);
+        the leftover ' name to Atlas and summarize my ' is not ask-shaped ->
+        not declined. Was "list my archived projects and summarize my current
+        work" (PORTFOLIO (0,25) + STATUS (43,55)) until that literal went."""
         r = PreClassifier.detect_multiple_intents(
-            "list my archived projects and summarize my current work"
+            "update my project name to Atlas and summarize my current work"
         )
         assert [i.action for i in r.intents] == ["manage_portfolio", "get_project_status"]
         assert r.is_multi_intent

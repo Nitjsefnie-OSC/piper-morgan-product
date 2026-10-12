@@ -165,7 +165,13 @@ TURN_TWO_NAMED = "are we behind upstream at all and what we discussed yesterday 
 #   True, pattern_lists ['LOCAL_GIT_STATUS_PATTERNS', 'PORTFOLIO_PATTERNS'],
 #   segments [('are we behind upstream at all and', local_git_status_query),
 #   ('list my projects', manage_portfolio)].
-TURN_UNRAILED_HALF = "are we behind upstream at all and list my projects"
+# #1595 Phase 3, twenty-seventh deletion (2026-10-11): PORTFOLIO's show/list/view
+# literal is gone, so "list my projects" no longer claims at surface 1. The ruled
+# `update ... project` survivor (#1933 a) still claims manage_portfolio, which
+# is still not a rail key — the property this turn pins. Measured 2026-10-11:
+# segments [('are we behind upstream at all and', local_git_status_query),
+# ('update my project name to Atlas', manage_portfolio)]; SEG_ISSUES_AND unchanged.
+TURN_UNRAILED_HALF = "are we behind upstream at all and update my project name to Atlas"
 
 # Their segments, as sibling_segments derives them (message order). Measured
 # via PreClassifier.detect_multiple_intents + inversion_live.sibling_segments
