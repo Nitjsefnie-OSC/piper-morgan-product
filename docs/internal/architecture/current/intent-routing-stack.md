@@ -1392,6 +1392,15 @@ already-known list is not a new claim surface) — printed as "needs a corpus ro
 deletion", never invented. A deletion commit must deposit those rows first; the gate
 does not do this for you.
 
+**The test-tree sweep step (added 2026-10-12, from the thirtieth deletion's red window)**: before a
+deletion lands, `git grep -n -F '<phrase the literal matched>' -- tests/` for every corpus phrase the
+literal claimed, across ALL test trees — `tests/unit`, `tests/integration`, `tests/e2e` — not only the
+unit tier the lane runs; then run `tests/integration -m 'not llm'` on the lane's tree. The unit tier
+cannot see an integration pin: the thirtieth deletion landed on a green unit tier (12,916 / 0) and
+main went red 20:23–20:5x on `tests/integration/test_capability_discovery.py`'s surface-1 pin of
+"show my projects", converted only after `check_fullsuite_backlog.py` flagged it as NEW. The lane
+brief carries the same step; a pin found by the sweep converts in the deletion commit, never after.
+
 **Non-regression ledger**: `scripts/inversion_phase3_deleted_patterns.json`'s
 `DELETED_PATTERN_LISTS` array — EMPTY as of 2026-09-27 (no list has been deleted; this
 unit built the gate, not a deletion). Each future entry records the deleted list, its
@@ -4088,6 +4097,13 @@ Verified how: full `tests/unit` on the landing tree 12916 passed / 0 failed (315
 enforcement; mypy gate at ceiling (24 codes, 1104); ruff clean; pre-push smoke 568 passed; CI Tests green on the
 #1979 merge (39398a32af) before landing, per Arch's condition; CI on 8531742988 watched after. No LLM calls in the
 landing itself; the licence's 40 chat turns were spent on the #1979 fix-branch server earlier the same evening.
+
+Post-landing (same evening): the Full Test Suite on 51db50efd0 read one NEW failure —
+`tests/integration/test_capability_discovery.py::test_show_my_projects_routes_to_portfolio`, an integration-tier
+pin of the deleted literal that the lane's unit tier never ran. Converted to an async decline +
+`assert_inversion_routes(..., live_categories="read_status", expected_action="list_projects")` (af776b9614, green).
+Procedure change recorded above (the test-tree sweep step): grep every test tree for the claimed phrases and run
+`tests/integration -m 'not llm'` before a deletion lands.
 
 ### `read_floor_2` — a SECOND wave of FLOOR rail adapters (2026-10-03, Arch's ruling; NOT flipped)
 
