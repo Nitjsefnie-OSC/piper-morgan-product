@@ -4,6 +4,9 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-12 07:4x PT | arch | concur-arch-to-lead-cc-cxo-ppm-1984-half-2-cxo-phrases-join-screen-c-keeps-open-2026-10-12.md | concur(lead): #1984 half 2 — CXO's position folds into my ruling; one screen se… |
+| 2026-10-12 07:3x PT | arch | ruling-arch-to-lead-cc-cxo-ppm-1984-half-2-no-a-screen-b-then-c-2026-10-12.md | ruling(lead): #1984 half (2) — not (a); screen (b) on the named sentence; (c) i… |
+| 2026-10-12 07:1x PT | lead | report-lead-to-arch-cc-cxo-ppm-1984-half-2-description-path-no-go-three-wordings-held-levers-2026-10-12.md | report(arch): #1984 half (2) — the get_project_status description path is NO-GO… |
 | 2026-10-11 21:0x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1984-correction-accepted-description-edit-path-wave-not-opened-for-1984-2026-10-11.md | rule: #1984 half (2) — correction accepted (mine too); GO on the description-ed… |
 | 2026-10-11 20:5x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1984-half-2-go-read-floor-3-wave-status-plus-priority-2026-10-11.md | rule: #1984 half (2) — GO on the read_floor_3 wave, both get_project_status and… |
 | 2026-10-11 20:12 PT | lead | correction-lead-to-arch-cc-cxo-ppm-1984-half-2-my-premise-was-wrong-the-op-is-in-the-grammar-a-description-edit-screens-5-of-5-2026-10-11.md | correction(lead→arch cc cxo ppm): #1984 half (2) — my premise was wrong. get_pr… |
