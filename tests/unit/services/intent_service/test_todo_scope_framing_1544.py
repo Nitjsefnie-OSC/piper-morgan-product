@@ -110,6 +110,40 @@ class TestRendererVerifiedEmpty:
         assert "Draft the release notes" in out
         assert "PENDING TODOS: none" not in out
 
+    def test_1997_dedup_emptied_list_is_not_rendered_as_none(self):
+        """Alpha 651756d520 turn 8: every pending todo was also a due reminder,
+        the dedup left [], and the floor read 'PENDING TODOS: none' → 'Your
+        todo list is clear'. With the moved count present, the floor is told
+        the list is NOT empty."""
+        out = self.floor._format_domain_context(
+            {
+                "due_reminders": ["revise the pr", "send the budget review"],
+                "reminder_count": 2,
+                "pending_todos": [],
+                "pending_todo_count": 2,
+                "pending_todos_in_reminders": 2,
+            }
+        )
+        assert "PENDING TODOS: none" not in out
+        assert "PENDING TODOS (2)" in out
+        assert "NOT empty" in out
+        assert "never say it is clear" in out
+
+    def test_1997_reminder_ages_render_beside_each_item(self):
+        out = self.floor._format_domain_context(
+            {
+                "due_reminders": ["revise the pr", "web check alpha"],
+                "reminder_count": 2,
+                "due_reminder_ages": {
+                    "revise the pr": "5 days overdue",
+                    "web check alpha": "due earlier today",
+                },
+            }
+        )
+        assert "• revise the pr (5 days overdue)" in out
+        assert "• web check alpha (due earlier today)" in out
+        assert "never describe it as due today" in out
+
     def test_absent_key_renders_no_todo_lines(self):
         out = self.floor._format_domain_context({"current_time": "now-ish"})
         assert "PENDING TODOS" not in out

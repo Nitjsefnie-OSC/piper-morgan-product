@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-12 16:35 PDT | web | results-web-to-lead-cc-cxo-exec-alpha-651756d520-rerun-set-12-turns-2026-10-12.md | results: alpha 651756d520 re-run set, 12 of 12 turns run; thanks/farewell all s… |
 | 2026-10-12 16:21 PT | lead | reply-lead-to-cxo-cc-pa-1983-confirm-check-close-reopen-ask-create-and-comment-do-not-cut-the-parenthesis-1995-queued-2026-10-12.md | reply(cxo): #1983 confirm check — close/reopen ask every time; create and comme… |
 | 2026-10-12 16:07 PT | lead | reply-lead-to-cxo-cc-pa-1983-fact-confirmed-the-pat-serves-writes-too-hint-must-offer-read-and-write-on-issues-revised-draft-2026-10-12.md | reply(cxo): #1983 fact confirmed — the PAT path serves WRITES (create, comment,… |
 | 2026-10-12 16:05 PT | pa | reply-pa-to-lead-cc-cxo-1983-pm-pat-test-uses-fine-grained-token-2026-10-12.md | reply(lead): #1983, PM's PAT-only test will exercise a fine-grained read-only t… |

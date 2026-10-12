@@ -2168,6 +2168,95 @@ class TestPendingTodosDedupedAgainstDueReminders1985:
         assert [t["text"] for t in context["pending_todos"]] == ["send the invoice"]
 
     @pytest.mark.asyncio
+    async def test_1997_dedup_that_empties_the_list_carries_the_moved_count(self):
+        """Alpha 651756d520 turn 8: all three pending todos were also due
+        reminders; the dedup left [] and the floor said 'Your todo list is
+        clear'. The context now says how many it moved."""
+        assembler = ContextAssembler()
+        user_id = "f13937fb-182b-44db-a9fd-0d722a3a223e"
+        with (
+            patch.object(
+                assembler,
+                "_gather_temporal_context",
+                new=AsyncMock(
+                    return_value={
+                        "pending_todos": [
+                            {"text": "revise the pr", "priority": "high", "due_date": None},
+                            {
+                                "text": "send the budget review",
+                                "priority": "medium",
+                                "due_date": None,
+                            },
+                        ],
+                        "pending_todo_count": 2,
+                    }
+                ),
+            ),
+            patch.object(
+                assembler,
+                "_gather_reminder_context",
+                new=AsyncMock(
+                    return_value={
+                        "due_reminders": ["revise the pr", "send the budget review"],
+                        "reminder_count": 2,
+                    }
+                ),
+            ),
+            patch.object(
+                assembler,
+                "_gate_due_reminder_mentions",
+                new=AsyncMock(side_effect=lambda ctx, *a, **k: ctx),
+            ),
+        ):
+            context = await assembler.gather_context(
+                "TEMPORAL", user_id=user_id, session_id="s-1997"
+            )
+        assert context["pending_todos"] == []
+        assert context["pending_todos_in_reminders"] == 2
+        assert context["pending_todo_count"] == 2
+
+    @pytest.mark.asyncio
+    async def test_1997_reminder_context_carries_calendar_ages(self):
+        """The reminder block gains per-item ages on the user's calendar:
+        'due earlier today' for today's, 'N days overdue' otherwise."""
+        from datetime import datetime, timedelta, timezone
+        from zoneinfo import ZoneInfo
+
+        assembler = ContextAssembler()
+        tz = ZoneInfo("America/Los_Angeles")
+        local_now = datetime.now(timezone.utc).astimezone(tz)
+        today_row = MagicMock(text="web check alpha")
+        today_row.reminder_date = local_now.replace(hour=0, minute=5).astimezone(timezone.utc)
+        old_row = MagicMock(text="revise the pr")
+        old_row.reminder_date = (
+            (local_now - timedelta(days=5)).replace(hour=23, minute=50).astimezone(timezone.utc)
+        )
+        one_row = MagicMock(text="send the invoice")
+        one_row.reminder_date = (local_now - timedelta(days=1)).astimezone(timezone.utc)
+        handlers = MagicMock()
+        handlers.get_due_reminders = AsyncMock(
+            return_value=["web check alpha", "revise the pr", "send the invoice"]
+        )
+        handlers._due_reminder_todos = AsyncMock(return_value=[today_row, old_row, one_row])
+        with (
+            patch(
+                "services.intent_service.todo_handlers.TodoIntentHandlers",
+                return_value=handlers,
+            ),
+            patch(
+                "services.utils.datetime_utils.user_timezone_name",
+                new=AsyncMock(return_value="America/Los_Angeles"),
+            ),
+        ):
+            ctx = await assembler._compute_reminder_context("f13937fb-182b-44db-a9fd-0d722a3a223e")
+        assert ctx["reminder_count"] == 3
+        assert ctx["due_reminder_ages"] == {
+            "web check alpha": "due earlier today",
+            "revise the pr": "5 days overdue",
+            "send the invoice": "1 day overdue",
+        }
+
+    @pytest.mark.asyncio
     async def test_no_reminders_leaves_pending_todos_untouched(self):
         assembler = ContextAssembler()
         todos = [{"text": "send the invoice", "priority": "medium", "due_date": None}]

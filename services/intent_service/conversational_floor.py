@@ -976,8 +976,19 @@ class ConversationalFloor:
                 # due reminders are only those whose time has already passed.
                 # GatherOutcome §5b: a render cap may shorten what the user
                 # sees; it must never change what the system believes it has.
+                ages = domain_context.get("due_reminder_ages")
+                ages = ages if isinstance(ages, dict) else {}
                 for r in rems:
-                    lines.append(f"    • {r}")
+                    age = ages.get(str(r))
+                    lines.append(f"    • {r} ({age})" if age else f"    • {r}")
+                if ages:
+                    # #1997: the age is on the user's calendar. Only "due
+                    # earlier today" is today's; "N days overdue" is NOT.
+                    lines.append(
+                        "  - Each age in parentheses is on the user's calendar: "
+                        "'due earlier today' is today's; 'N days overdue' came "
+                        "due N days ago — never describe it as due today."
+                    )
                 # #1569 per-item vocabulary rule (CXO/PPM joint design):
                 # vocabulary is set by which context key an item arrived
                 # through — these arrived through the reminder key.
@@ -1326,6 +1337,20 @@ class ConversationalFloor:
                             lines.append(f"    • Pending todo: {text}")
                     else:
                         lines.append(f"    • Pending todo: {text}")
+            elif isinstance(todos, list) and domain_context.get("pending_todos_in_reminders"):
+                # #1997: the list is empty because the #1985 (b) dedup moved
+                # every pending todo into the DUE REMINDERS block above — the
+                # account's todo list is NOT empty, and the floor must never
+                # call it clear (alpha 651756d520, turn 8).
+                _count = domain_context.get("pending_todo_count") or domain_context.get(
+                    "pending_todos_in_reminders"
+                )
+                lines.append(
+                    f"- PENDING TODOS ({_count}): every pending todo is also a due "
+                    "reminder and is listed under DUE REMINDERS above. The todo "
+                    "list is NOT empty — never say it is clear or has nothing "
+                    "pending; those reminders ARE the todos."
+                )
             elif isinstance(todos, list):
                 # #1544: VERIFIED-EMPTY — the owner-scoped todo read ran this
                 # turn and found zero pending rows. Distinct from the key
