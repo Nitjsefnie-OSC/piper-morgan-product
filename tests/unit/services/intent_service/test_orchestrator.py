@@ -460,6 +460,37 @@ class TestHelpers:
     def test_lowercase_first_preserves_i(self):
         assert _lowercase_first("I'm here to help") == "I'm here to help"
 
+    # #1984 — CXO's five exceptions (2026-10-11), one pin each, plus the two
+    # defaults CXO named.
+    def test_lowercase_first_rule1_i_forms(self):
+        assert _lowercase_first("I'd start with the calendar") == "I'd start with the calendar"
+        assert _lowercase_first("I checked your todo list") == "I checked your todo list"
+
+    def test_lowercase_first_rule2_inner_capital(self):
+        assert _lowercase_first("GitHub isn't connected yet") == "GitHub isn't connected yet"
+        assert _lowercase_first("iPhone sync is off") == "iPhone sync is off"
+
+    def test_lowercase_first_rule3_next_word_capitalized(self):
+        assert (
+            _lowercase_first("Google Calendar isn't connected yet")
+            == "Google Calendar isn't connected yet"
+        )
+        assert _lowercase_first("New York is three hours ahead") == "New York is three hours ahead"
+
+    def test_lowercase_first_rule4_day_or_month(self):
+        assert _lowercase_first("Sunday is free") == "Sunday is free"
+        assert _lowercase_first("October has two milestones") == "October has two milestones"
+
+    def test_lowercase_first_rule5_brand_list(self):
+        assert _lowercase_first("Slack isn't connected") == "Slack isn't connected"
+        assert _lowercase_first("Notion has three pages") == "Notion has three pages"
+
+    def test_lowercase_first_defaults_still_lowercase(self):
+        assert _lowercase_first("You don't have any archived projects.") == (
+            "you don't have any archived projects."
+        )
+        assert _lowercase_first("Today is Sunday") == "today is Sunday"
+
     def test_lowercase_first_empty(self):
         assert _lowercase_first("") == ""
 

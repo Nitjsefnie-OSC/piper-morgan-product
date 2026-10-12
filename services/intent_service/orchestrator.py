@@ -382,12 +382,56 @@ def _intent_topic_label(intent: Intent) -> Optional[str]:
     return labels.get(intent.action)
 
 
+# #1984 (CXO's rule, 2026-10-11): lowercase stays the default — "As for your
+# calendar, You don't have…" is worse than "google Calendar" — with five closed,
+# mechanical exceptions. A proper noun outside the list is a one-word addition
+# to the list, never a rule change.
+_LOWERCASE_FIRST_BRANDS = frozenset(
+    {"Google", "GitHub", "Slack", "Notion", "Piper", "Gmail", "Claude", "Anthropic"}
+)
+_LOWERCASE_FIRST_CALENDAR_WORDS = frozenset(
+    {
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    }
+)
+_LOWERCASE_FIRST_I_FORMS = frozenset({"I", "I'm", "I'll", "I've", "I'd"})
+
+
 def _lowercase_first(text: str) -> str:
-    """Lowercase the first character of a string (for natural transitions)."""
+    """Lowercase the first character of a string (for natural transitions),
+    except when the first word is (1) a form of "I", (2) has a capital after
+    its first letter (GitHub, iPhone), (3) is followed by another capitalized
+    word (Google Calendar, New York), (4) is a day-of-week or month name, or
+    (5) is on the short brand list. #1984, CXO's rule."""
     if not text:
         return text
-    # Don't lowercase if starts with a proper noun indicator (capital after article)
-    # or common abbreviations
-    if text[:2] in ("I ", "I'"):
+    words = text.split(None, 2)
+    first = words[0] if words else ""
+    bare = first.rstrip(".,;:!?'\"")
+    if bare in _LOWERCASE_FIRST_I_FORMS or first.startswith("I'"):
+        return text
+    if any(ch.isupper() for ch in bare[1:]):
+        return text
+    if len(words) > 1 and words[1][:1].isupper():
+        return text
+    if bare in _LOWERCASE_FIRST_CALENDAR_WORDS or bare in _LOWERCASE_FIRST_BRANDS:
         return text
     return text[0].lower() + text[1:]
