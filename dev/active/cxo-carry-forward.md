@@ -277,3 +277,4 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - 10-11 21:05 — 1984 half 2 = description edit (not wave), Lead 10-12 START; served check owed to me.
 - 10-11 22:25 — STOP done: DAY-CLOSED 10-11, cron dab9789c -> 64616204 (expires ~10-18), registry updated. Owed unchanged; #1984 half-2 served check at Lead's 10-12 START.
 - 10-12 07:35 — Lead #1984 half-2 NO-GO triaged; position sent to Arch: (b) screened, (c) ok with #1984 kept open as known miss. Log: dev/2026/10/12/2026-10-12-0730-cxo-code-log.md
+- 10-12 07:25 — Arch ruling+concur triaged: (b) screen then full run, else (c) with #1984 open as known miss; I read the result.
