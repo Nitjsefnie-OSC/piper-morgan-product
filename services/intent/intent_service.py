@@ -2787,6 +2787,19 @@ class IntentService:
                 intent.context["user_id"] = user_id
                 self.logger.info(f"Added user_id to intent context: {user_id}")
 
+            # #1986 condition 3 (Arch, 2026-10-12): the pure-pleasantry gate
+            # (_requires_canonical_handler) has no session in scope, so the
+            # armed-rail signal is stamped here, per turn, strings only — the
+            # same shape as the #1596 guided_flow_escape stamp. A thanks or
+            # farewell on an ARMED turn must not short-circuit (it may be the
+            # answer to "Want me to…?"). _armed_offer_signal already tolerates
+            # a missing store/session (returns None).
+            if intent.context is None:
+                intent.context = {}
+            intent.context["armed_offer_rail"] = self._armed_offer_signal(
+                session_id, user_id, intent
+            )
+
             # #1596: a guided flow ended or paused on THIS turn (the
             # #1529/#899 escape fall-through). Stamp the fact onto the intent
             # so the floor doors can hand it to the renderer — the
@@ -15789,11 +15802,17 @@ Add any additional information here.
         if category == "EXECUTION":
             return True
 
-        # CONVERSATION with action="greeting": has onboarding/calendar side effects
-        # Greeting stays canonical until floor has calendar context integration
-        if category == "CONVERSATION" and intent.action == "greeting":
+        # CONVERSATION pure pleasantries take the canned path. greeting: has
+        # onboarding/calendar side effects (#102/#407). thanks + farewell:
+        # #1986 (Arch's ruling 2026-10-12, REVERSING #1754 for these two pairs
+        # only — alpha c613beabf5 served a todo briefing for a cold
+        # "thank you!"; the floor is not "better than canned by construction"
+        # for a pleasantry). No new pattern: THANKS/FAREWELL claims already
+        # exist and are a ruled permanent floor (#1974); only the dispatch of a
+        # fully understood claim changes.
+        if category == "CONVERSATION" and intent.action in ("greeting", "thanks", "farewell"):
             # #1416: only PURE pleasantries take the canned/consciousness
-            # greeting. The pre-classifier already falls through for compound
+            # reply. The pre-classifier already falls through for compound
             # messages, but the LLM classifier often labels a greeting-opener
             # ("Hi, … How do I address you?") as greeting too — this gate is
             # the last line. Substantive residue → floor, which greets AND
@@ -15805,7 +15824,15 @@ Add any additional information here.
                 or (intent.context.get("original_message", "") if intent.context else "")
             ).lower()
             if msg and not PreClassifier._is_pleasantry_only(msg):
-                return False  # compound greeting → floor
+                return False  # compound pleasantry → floor
+            if intent.action != "greeting" and (intent.context or {}).get("armed_offer_rail"):
+                # #1986 condition 3: an ARMED turn (a workflow offer or the
+                # one-turn last_offer rail holds a question) keeps today's path
+                # — "thanks" may be the answer. greeting is deliberately NOT
+                # widened here (Arch asked to be told, not surprised): today a
+                # pure "hi" on an armed turn takes the canned greeting and the
+                # offer survives via the #1739 §5a re-arm; unchanged.
+                return False
             return True
 
         # TEMPORAL: pure date/time queries stay canonical (deterministic, sub-ms).

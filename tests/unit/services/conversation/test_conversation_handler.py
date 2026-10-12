@@ -220,16 +220,14 @@ class TestCalendarGreeting:
 
     @pytest.mark.asyncio
     async def test_non_greeting_action_rejected(self, handler):
-        """#1754: the handler is greeting-only — farewell/thanks/chitchat
-        branches (and the RESPONSES canned table) were deleted; the action
-        gate floor-routes every non-greeting CONVERSATION action. A
-        non-greeting arriving here is a gate-contract violation and raises,
-        which canonical_handlers.handle converts to its honest generic
-        fallback."""
+        """#1754: the handler was greeting-only; #1986 (2026-10-12) widened it by
+        exactly two actions (thanks, farewell — see TestThanksAndFarewell1986).
+        Any OTHER conversation action arriving here is still a gate-contract
+        violation and raises, which canonical_handlers.handle converts to its
+        honest generic fallback."""
         for action, message in [
-            ("farewell", "Goodbye"),
-            ("thanks", "Thank you"),
             ("chitchat", "How are you?"),
+            ("clarification_needed", "none"),
         ]:
             intent = Intent(
                 category=IntentCategory.CONVERSATION,
@@ -237,5 +235,71 @@ class TestCalendarGreeting:
                 confidence=0.95,
                 original_message=message,
             )
-            with pytest.raises(ValueError, match="non-greeting action"):
+            with pytest.raises(ValueError, match="the action gate admits only"):
                 await handler.respond(intent)
+
+
+class TestThanksAndFarewell1986:
+    """#1986: thanks/farewell rejoin the canned path. Condition 2 (Arch's truth
+    test, CXO concurred): any prior assistant turn in the session → "You're
+    welcome."; none → the honest-empty form. Farewell is one line. Any other
+    action still raises (the #1754 contract, widened by exactly two actions)."""
+
+    @pytest.fixture
+    def handler(self):
+        return ConversationHandler()
+
+    def _intent(self, action):
+        return Intent(
+            category=IntentCategory.CONVERSATION,
+            action=action,
+            context={"original_message": "thanks!" if action == "thanks" else "bye"},
+        )
+
+    @pytest.mark.asyncio
+    async def test_thanks_with_no_prior_assistant_turn_is_the_honest_empty_form(self, handler):
+        with patch(
+            "services.intent_service.conversation_context.build_recent_history",
+            return_value=[],
+        ):
+            result = await handler.respond(self._intent("thanks"), "s-1986", user_id="u")
+        assert result["message"] == "That's kind — though I haven't done anything this session yet."
+        assert result["workflow_id"] is None
+
+    @pytest.mark.asyncio
+    async def test_thanks_after_a_delivered_turn_is_youre_welcome(self, handler):
+        with patch(
+            "services.intent_service.conversation_context.build_recent_history",
+            return_value=[
+                {"role": "user", "content": "show my todos"},
+                {"role": "assistant", "content": "Here are your todos: …"},
+            ],
+        ):
+            result = await handler.respond(self._intent("thanks"), "s-1986", user_id="u")
+        assert result["message"] == "You're welcome."
+
+    @pytest.mark.asyncio
+    async def test_thanks_after_a_user_only_history_is_still_the_empty_form(self, handler):
+        """The in-flight turn is excluded by build_recent_history; a user message
+        with no assistant reply is not a delivery."""
+        with patch(
+            "services.intent_service.conversation_context.build_recent_history",
+            return_value=[{"role": "user", "content": "hello?"}],
+        ):
+            result = await handler.respond(self._intent("thanks"), "s-1986", user_id="u")
+        assert result["message"] == "That's kind — though I haven't done anything this session yet."
+
+    @pytest.mark.asyncio
+    async def test_farewell_is_one_line(self, handler):
+        result = await handler.respond(self._intent("farewell"), "s-1986", user_id="u")
+        assert result["message"] == "Goodbye for now."
+
+    @pytest.mark.asyncio
+    async def test_other_conversation_actions_still_raise(self, handler):
+        intent = Intent(
+            category=IntentCategory.CONVERSATION,
+            action="chitchat",
+            context={"original_message": "how's it going"},
+        )
+        with pytest.raises(ValueError):
+            await handler.respond(intent, "s-1986", user_id="u")

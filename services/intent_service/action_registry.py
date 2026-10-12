@@ -36,20 +36,17 @@ class ActionDisposition(Enum):
 ACTION_REGISTRY: dict[tuple[str, str], ActionDisposition] = {
     # ---- CONVERSATION ----
     ("CONVERSATION", "greeting"): ActionDisposition.CANONICAL,
-    # #1773: farewell/thanks were marked CANONICAL but the action gate
+    # #1986 (Arch's ruling 2026-10-12, reversing #1754 for these two pairs):
+    # farewell/thanks are CANONICAL again. The action gate
     # (_requires_canonical_handler, services/intent/intent_service.py) admits
-    # CONVERSATION to the canonical handler ONLY for action == "greeting" (and
-    # only pleasantry-only at that) — every other CONVERSATION action falls
-    # through to its default `return False`, and CONVERSATION is in
-    # `_should_route_to_floor`'s `_FLOOR_ROUTED_CATEGORIES`, so farewell/thanks
-    # floor-route on every real turn. Confirmed post-#1754 (ConversationHandler
-    # is greeting-only; the farewell/thanks/chitchat branches were deleted) and
-    # independently measured by test_spend_free_canonical_ratchet_1818.py,
-    # which traces both through conversational_floor.py to an LLM call. FLOOR
-    # now matches the runtime disposition; nothing in the routing logic
-    # changes — this is metadata catching up to behavior.
-    ("CONVERSATION", "farewell"): ActionDisposition.FLOOR,
-    ("CONVERSATION", "thanks"): ActionDisposition.FLOOR,
+    # CONVERSATION greeting/thanks/farewell to ConversationHandler when the
+    # message is pleasantry-ONLY (#1416) and, for thanks/farewell, the turn is
+    # not armed (condition 3). History: #1773 had set these to FLOOR to match
+    # the post-#1754 runtime (greeting-only handler); alpha c613beabf5 then
+    # served a todo briefing for a cold "thank you!" and the premise fell. The
+    # #1818 spend-free ratchet lists both pairs as spend-free.
+    ("CONVERSATION", "farewell"): ActionDisposition.CANONICAL,
+    ("CONVERSATION", "thanks"): ActionDisposition.CANONICAL,
     # ---- IDENTITY ----
     # #1877 (same drift shape as #1773): the action gate
     # (_requires_canonical_handler, services/intent/intent_service.py ~15329-15336)

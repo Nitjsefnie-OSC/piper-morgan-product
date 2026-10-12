@@ -39,11 +39,20 @@ KEYLESS_SHARED_KEY_SENTENCE = (
     "Add an OpenAI or Anthropic key in Settings and I'll be ready when you are."
 )
 
+# #1986 (CXO's copy, ruled 2026-10-12; Arch condition 4: ONE string, ONE
+# place): the thanks/farewell lines the keyed canned path
+# (ConversationHandler) serves too. Never paste these into another string.
+THANKS_NOTHING_DONE_THIS_SESSION = "That's kind — though I haven't done anything this session yet."
+THANKS_AFTER_DELIVERY = "You're welcome."
+FAREWELL_LINE = "Goodbye for now."
+
 # Kind-matched acknowledgments — CXO's copy, verbatim.
 KEYLESS_KIND_PREFIXES: Dict[str, str] = {
     "greeting": "Hello — good to meet you.",
-    "farewell": "Goodbye for now.",
-    "thanks": "That's kind — though I haven't actually done anything yet.",
+    "farewell": FAREWELL_LINE,
+    # Keyless: nothing can have been done this session, so the honest-empty
+    # form is always the true one here.
+    "thanks": THANKS_NOTHING_DONE_THIS_SESSION,
     "neutral": "I'd like to help with that.",
 }
 

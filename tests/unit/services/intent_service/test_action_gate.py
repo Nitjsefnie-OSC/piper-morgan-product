@@ -130,12 +130,21 @@ class TestActionGate:
         intent = _make_intent(IC.CONVERSATION, "chitchat", "nice weather today")
         assert self.svc._requires_canonical_handler(intent) is False
 
-    def test_conversation_farewell_does_not_require_canonical(self):
-        intent = _make_intent(IC.CONVERSATION, "farewell", "goodbye")
-        assert self.svc._requires_canonical_handler(intent) is False
+    # #1986 (2026-10-12, Arch's #1754 reversal for these two pairs): PURE thanks
+    # and farewell take the canned path like greeting; compound forms floor
+    # (#1416); an armed turn floors (condition 3). Full pins:
+    # test_thanks_farewell_short_circuit_1986.py.
 
-    def test_conversation_thanks_does_not_require_canonical(self):
+    def test_conversation_pure_farewell_requires_canonical(self):
+        intent = _make_intent(IC.CONVERSATION, "farewell", "goodbye")
+        assert self.svc._requires_canonical_handler(intent) is True
+
+    def test_conversation_pure_thanks_requires_canonical(self):
         intent = _make_intent(IC.CONVERSATION, "thanks", "thank you")
+        assert self.svc._requires_canonical_handler(intent) is True
+
+    def test_conversation_compound_thanks_does_not_require_canonical(self):
+        intent = _make_intent(IC.CONVERSATION, "thanks", "thanks, now show my todos")
         assert self.svc._requires_canonical_handler(intent) is False
 
     # -- IDENTITY: all identity goes to floor (Apr 8 decision) --

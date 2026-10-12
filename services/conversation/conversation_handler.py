@@ -6,6 +6,11 @@ from services.api.serializers import intent_to_dict
 from services.consciousness.conversation_consciousness import format_greeting_conscious
 from services.domain.models import Intent
 from services.shared_types import IntentCategory, PortfolioOnboardingState
+from services.ui_messages.keyless_pleasantry import (
+    FAREWELL_LINE,
+    THANKS_AFTER_DELIVERY,
+    THANKS_NOTHING_DONE_THIS_SESSION,
+)
 
 logger = structlog.get_logger()
 
@@ -50,16 +55,21 @@ def _get_standup_components():
 
 
 class ConversationHandler:
-    """Handles the greeting conversational intent (calendar-aware, FTUX-aware).
+    """Handles the pure-pleasantry conversational intents: greeting
+    (calendar-aware, FTUX-aware), thanks and farewell.
 
-    #1754: this handler is greeting-only. The farewell/thanks/chitchat
-    branches (and the RESPONSES canned-copy table) were deleted per the Arch
-    GO ruling 2026-09-12 — the action gate (_requires_canonical_handler)
-    admits CONVERSATION here only for pure-pleasantry greetings; every other
-    conversation action floor-routes, and the floor IS the conversational
-    surface. The orphaned canned table was also a #1655-class liability
-    (dead example copy that could become a live reply through an unexpected
-    path).
+    #1754 (2026-09-12) made this handler greeting-only: the farewell/thanks/
+    chitchat branches and the RESPONSES canned-copy table were deleted on the
+    premise that the floor is the conversational surface and does this better
+    than canned branches by construction. #1986 (Arch, 2026-10-12) REVERSED
+    that for thanks and farewell only: alpha c613beabf5 served a todo briefing
+    for a cold "thank you!". The contract now: the action gate
+    (_requires_canonical_handler) admits CONVERSATION here for pure-pleasantry
+    greeting, thanks and farewell (compound forms still floor, #1416; an armed
+    turn still floors for thanks/farewell, condition 3); chitchat and every
+    other conversation action floor-route. The three thanks/farewell strings
+    are CXO-owned constants in services/ui_messages/keyless_pleasantry.py —
+    one string, one place (condition 4); no canned table returns.
     """
 
     async def respond(
@@ -86,16 +96,48 @@ class ConversationHandler:
         # per the #1730 Gap-2 ruling — clarification_needed intents floor-route
         # at the action gate and never reach this handler live.
 
+        if intent.action == "thanks":
+            return self._respond_to_thanks(intent, session_id, user_id=user_id)
+        if intent.action == "farewell":
+            return {
+                "message": FAREWELL_LINE,
+                "intent": intent_to_dict(intent),
+                "workflow_id": None,
+            }
         if intent.action != "greeting":
             raise ValueError(
-                f"ConversationHandler.respond received non-greeting action "
-                f"{intent.action!r} — the action gate admits only pure-pleasantry "
-                f"'greeting' to this handler (#1754)"
+                f"ConversationHandler.respond received action {intent.action!r} — "
+                f"the action gate admits only pure-pleasantry 'greeting', 'thanks' "
+                f"and 'farewell' to this handler (#1754, #1986)"
             )
 
         # Issue #102: Enhanced greeting with calendar awareness
         # Issue #849: Thread user_id for user-scoped calendar auth
         return await self._respond_to_greeting(intent, session_id, user_id=user_id)
+
+    @staticmethod
+    def _respond_to_thanks(
+        intent: Intent, session_id: Optional[str], user_id: Optional[str] = None
+    ) -> Dict[str, Any]:
+        """#1986 condition 2 (Arch's truth test, CXO concurred 2026-10-12):
+        "I haven't done anything this session yet" is only true when nothing
+        has happened this session. The source is the one the floor already
+        reads — build_recent_history (#1122) — and the test is deterministic:
+        any prior ASSISTANT turn in this session → "You're welcome." (mildly
+        generous after a failed turn, never a false claim; CXO: no special
+        case); none → the honest-empty form. A canned "hello" reply counts as
+        a prior assistant turn (CXO's preference to exclude it would need new
+        tagging; skipped on CXO's own say-so, Arch's default stands).
+        """
+        from services.intent_service.conversation_context import build_recent_history
+
+        history = build_recent_history(session_id, user_id)
+        delivered = any(turn.get("role") == "assistant" for turn in history)
+        return {
+            "message": THANKS_AFTER_DELIVERY if delivered else THANKS_NOTHING_DONE_THIS_SESSION,
+            "intent": intent_to_dict(intent),
+            "workflow_id": None,
+        }
 
     async def _get_calendar_summary(
         self, user_id: Optional[str] = None

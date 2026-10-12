@@ -171,6 +171,16 @@ _LEGACY_EXECUTION_ELIF_ACTIONS = {"list_todos", "next_todo"}
 # so this bridge needs a setup-shaped message instead to test the row's
 # CANONICAL claim.
 _DISPOSITION_TEST_MESSAGE_OVERRIDES = {
+    # #1986 (2026-10-12): the registry EXAMPLES for thanks/farewell ("Thanks for
+    # your help", "Goodbye, talk later") are router catalog text and read as
+    # COMPOUND to _is_pleasantry_only, which the gate correctly floors (#1416).
+    # The rows mean "when the message is only a pleasantry" (their
+    # descriptions say so), so the gate probe is the pure form. The examples
+    # themselves are a catalog smell (a compound example for a pure-only op),
+    # flagged to Arch as the next catalog batch's item — a catalog change owes a
+    # rule-7 run, which a test override does not.
+    ("CONVERSATION", "thanks"): "thank you!",
+    ("CONVERSATION", "farewell"): "goodbye",
     ("GUIDANCE", "get_contextual_guidance"): "help me set up my github integration",
 }
 

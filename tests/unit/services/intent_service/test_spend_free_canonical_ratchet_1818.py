@@ -242,6 +242,10 @@ PAIR_MESSAGES = {
 # reach the LLM. "Canonical" was never a cost claim; here is the cost, measured.
 SPEND_FREE = {
     ("CONVERSATION", "greeting"),
+    # #1986 (2026-10-12): thanks/farewell rejoin the canned path (Arch's
+    # #1754 reversal for these two pairs); this set may only GROW this way.
+    ("CONVERSATION", "farewell"),
+    ("CONVERSATION", "thanks"),
     # ("TEMPORAL", "get_current_time") REMOVED 2026-10-01 — see the NOTE
     # above PAIR_MESSAGES. No longer reachable via pre_classify at all.
     ("PORTFOLIO", "manage_portfolio"),

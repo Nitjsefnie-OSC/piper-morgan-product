@@ -1352,6 +1352,28 @@ any surface row (first instance: `pin:reminder-query` → QUERY/`list_reminders_
 - Verdicts about "routing" must model the whole chain or say explicitly which layer
   they measured.
 
+## Pure pleasantries: greeting, thanks and farewell take the canned path (2026-10-12, #1986 — the #1754 reversal for two pairs)
+
+`_requires_canonical_handler` (intent_service.py, the CONVERSATION branch) admits a CONVERSATION intent to
+`ConversationHandler` when (a) `intent.action` is `greeting`, `thanks` or `farewell`, (b) the message is
+pleasantry-ONLY by `PreClassifier._is_pleasantry_only` (#1416: any residue floors — "thanks, now show my
+todos" and "no thanks" are not even claimed by surface 1), and (c) for thanks/farewell only, the turn is NOT
+armed: `process_intent` stamps `intent.context["armed_offer_rail"]` (the `_armed_offer_signal` read of the
+#846 one-slot store and the #852 last-offer rail, strings only, per turn) right after the principal stamp,
+and an armed turn keeps today's path because "thanks" may be the answer to "Want me to…?". greeting was NOT
+widened to the armed check (a pure "hi" on an armed turn still takes the canned greeting and the offer
+survives via the #1739 §5a re-arm) — Arch asked to be told, not to have it changed silently. The copy is
+three CXO-owned constants in `services/ui_messages/keyless_pleasantry.py` (`THANKS_NOTHING_DONE_THIS_SESSION`,
+`THANKS_AFTER_DELIVERY`, `FAREWELL_LINE`), shared with the keyless gate — one string, one place. The thanks
+form is a truth test on the session (Arch's condition 2): any prior assistant turn in `build_recent_history`
+→ "You're welcome."; none → the honest-empty form; never the empty form unconditionally. Dispositions:
+`("CONVERSATION","thanks"/"farewell")` back to CANONICAL; the #1818 spend-free ratchet lists both.
+Why: alpha c613beabf5 (2026-10-12) served a todo briefing for a cold "thank you!" — #1754's premise ("the
+floor IS the conversational surface… better than canned by construction") was falsified for these two
+pairs. No pattern changed (THANKS/FAREWELL are a ruled permanent floor, #1974); only the dispatch of an
+already-understood claim. Pins: `test_thanks_farewell_short_circuit_1986.py`, the handler tests, the
+#1818 ratchet. Served check at the next promotion (Arch's condition 6): Web's run.
+
 ## Phase 3 — deletion gate (#1595 epic-0 unit 5, instrument built 2026-09-27)
 
 The epic's own condition on the endpoint (issue #1595 body, "Conditions on the endpoint
