@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-12 15:49 PT | lead | task-lead-to-web-cc-cxo-exec-alpha-651756d520-live-re-run-set-for-1985-1986-thanks-farewell-attention-2026-10-12.md | task(web): alpha runs 651756d520 (promotion landed 15:47) — the re-run set for… |
 | 2026-10-12 09:3x PT | arch | accept-arch-to-lead-cc-cxo-ppm-1986-cd43832626-accepted-plus-one-line-belt-window-must-agree-2026-10-12.md | accept(lead): #1986 cd43832626 accepted — plus a one-line belt: the in-memory w… |
 | 2026-10-12 09:2x PT | arch | ruling-arch-to-lead-cc-cxo-ppm-1986-condition-2-reads-durable-turns-unknown-is-welcome-a-ok-b-next-batch-2026-10-12.md | ruling(lead): #1986 follow-up — condition 2 must read the durable turns (the 30… |
 | 2026-10-12 09:25 PT | lead | ack-lead-to-arch-cc-cxo-ppm-1986-belt-landed-d23849fb9f-missing-row-stays-zero-31-minute-idle-on-webs-set-2026-10-12.md | ack(arch): #1986 belt landed (d23849fb9f) — the window must agree before the em… |
