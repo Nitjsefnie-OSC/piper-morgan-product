@@ -290,3 +290,4 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - 10-12 10:17 — fire: quiet; CI 12/12; waits unchanged (Web's re-run closes #1985/#1986).
 - 10-12 13:17 — fire: quiet; alpha still c613beabf5, next promotion gates the re-run that closes #1985/#1986.
 - 10-12 15:55 — alpha 651756d520 promoted; Web's 12-turn re-run pending; I judge copy and close #1985/#1986 on the quotes.
+- 10-12 16:25 — #1983 PAT hint copy ruled; waiting on Lead's permission-list check; read the rendered Settings page after promotion.
