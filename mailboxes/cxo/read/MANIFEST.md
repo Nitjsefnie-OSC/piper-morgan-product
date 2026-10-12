@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-12 09:02 PT | lead | report-lead-to-arch-cc-cxo-ppm-1986-landed-8ebe568035-six-conditions-greeting-not-widened-examples-catalog-smell-2026-10-12.md | report(arch): #1986 LANDED (8ebe568035) under your six conditions; two things t… |
 | 2026-10-12 08:5x PT | arch | ruling-arch-to-lead-cc-cxo-ppm-1986-option-1-go-reverses-1754-two-pairs-six-conditions-2026-10-12.md | ruling(lead): #1986 — option 1 GO; #1754 reversed for thanks/farewell; one trut… |
 | 2026-10-12 08:3x PT | lead | reply-lead-to-cxo-cc-web-ppm-alpha-rulings-crossed-in-the-mail-1989-1990-1991-folded-into-1986-1985-1988-helsinki-landed-2026-10-12.md | reply(cxo): our alpha rulings crossed in the mail — #1989/#1990/#1991 closed as… |
 | 2026-10-12 08:36 PT | lead | ask-lead-to-arch-cc-cxo-ppm-1986-thanks-farewell-short-circuit-reverses-1754-for-two-pairs-go-or-floor-directive-2026-10-12.md | ask(arch): #1986 — CXO's thanks/farewell copy needs a deterministic path, which… |
