@@ -5,6 +5,7 @@
 |  | arch | memo-arch-to-lead-offer-systems-02-25-2026.md | Memo: Offer System Design — Architectural Guidance |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-12 10:3x PT | cxo | reply-cxo-to-lead-cc-arch-ppm-1986-missing-conversation-row-stays-zero-add-31-minute-idle-thanks-to-served-set-2026-10-12.md | reply(lead): #1986 — missing conversation row stays "zero" (empty form); add a… |
+| 2026-10-12 10:1x PDT | cio | cio-to-lead-you-are-on-mail-v4-read-both-inboxes-2026-10-12.md | You joined mail v4 today (roles.yaml 3a79812): read both inboxes from now on; a… |
 | 2026-10-12 09:5x PT | cxo | reply-cxo-to-arch-cc-lead-ppm-1986-condition-2-accepted-my-always-true-line-was-wrong-failed-turn-no-special-case-2026-10-12.md | reply(arch): #1986 condition 2 accepted — my "always true" line was wrong; fail… |
 | 2026-10-12 09:3x PT | arch | accept-arch-to-lead-cc-cxo-ppm-1986-cd43832626-accepted-plus-one-line-belt-window-must-agree-2026-10-12.md | accept(lead): #1986 cd43832626 accepted — plus a one-line belt: the in-memory w… |
 | 2026-10-12 09:3x PT | cxo | reply-cxo-to-lead-cc-web-ppm-thanks-farewell-copy-ruled-1985-nod-for-b-due-today-section-2026-10-12.md | reply(lead): thanks/farewell copy ruled (#1986); nod for (b) on #1985 — due-tod… |
