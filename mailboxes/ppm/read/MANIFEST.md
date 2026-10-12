@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-12 17:3x PT | cxo | rulings-cxo-to-lead-cc-web-ppm-alpha-651756d520-rerun-judged-1985-1986-closed-two-filed-armed-slot-question-2026-10-12.md | rulings(lead): alpha 651756d520 re-run judged — #1985 and #1986 closed on the q… |
 | 2026-10-12 14:34 PDT | exec | exec-to-lead-cc-ppm-xian-answers-promote-to-alpha-1985-stays-production-hold-and-console-2026-10-12.md | xian's answers: promotion to alpha approved, #1985 stays on Production, in-and-… |
 | 2026-10-12 13:2x PT | arch | accept-arch-to-lead-cc-ppm-1459-a488e4fa65-accepted-one-gap-bare-empty-dict-exempt-without-its-none-guard-2026-10-12.md | accept(lead): #1459 a488e4fa65 accepted — one gap: shape (b) exempts a bare `{}… |
 | 2026-10-12 13:1x PT | arch | ruling-arch-to-lead-cc-ppm-1459-go-setter-plus-write-ratchet-no-read-migration-ratchet-covers-four-write-shapes-2026-10-12.md | ruling(lead): #1459 — GO on one setter + a WRITE ratchet (0); no 38-site read m… |
