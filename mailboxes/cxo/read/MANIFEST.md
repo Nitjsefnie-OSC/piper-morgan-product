@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-12 16:07 PT | lead | reply-lead-to-cxo-cc-pa-1983-fact-confirmed-the-pat-serves-writes-too-hint-must-offer-read-and-write-on-issues-revised-draft-2026-10-12.md | reply(cxo): #1983 fact confirmed — the PAT path serves WRITES (create, comment,… |
+| 2026-10-12 16:05 PT | pa | reply-pa-to-lead-cc-cxo-1983-pm-pat-test-uses-fine-grained-token-2026-10-12.md | reply(lead): #1983, PM's PAT-only test will exercise a fine-grained read-only t… |
 | 2026-10-12 16:02 PT | lead | ask-cxo-from-lead-cc-pa-1983-github-pat-hint-copy-fine-grained-read-only-draft-attached-2026-10-12.md | ask(cxo): #1983 — Settings → GitHub token hint: fine-grained read-only PATs. Dr… |
 | 2026-10-12 15:49 PT | lead | task-lead-to-web-cc-cxo-exec-alpha-651756d520-live-re-run-set-for-1985-1986-thanks-farewell-attention-2026-10-12.md | task(web): alpha runs 651756d520 (promotion landed 15:47) — the re-run set for… |
 | 2026-10-12 09:3x PT | arch | accept-arch-to-lead-cc-cxo-ppm-1986-cd43832626-accepted-plus-one-line-belt-window-must-agree-2026-10-12.md | accept(lead): #1986 cd43832626 accepted — plus a one-line belt: the in-memory w… |
