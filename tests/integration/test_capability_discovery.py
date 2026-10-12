@@ -208,14 +208,31 @@ class TestCapabilityDiscovery:
         assert intent.category == IntentCategory.STATUS
         assert intent.action == "get_project_status"
 
-    def test_show_my_projects_routes_to_portfolio(self):
-        """'show my projects' now pre-classifies as PORTFOLIO/manage_portfolio
-        (the portfolio pre-classification) — moved out of the STATUS list when
-        that taxonomy landed; pinned here so the routing is still asserted."""
+    @pytest.mark.asyncio
+    async def test_show_my_projects_routes_to_portfolio(self, monkeypatch):
+        """'show my projects' pre-classified as PORTFOLIO/manage_portfolio via
+        PORTFOLIO_PATTERNS' show/list/view literal until #1595's thirtieth
+        deletion (2026-10-11, merge 8531742988) took that literal. Converted to
+        the decline+inversion-routes idiom used below for IDENTITY (stubbed
+        router, no LLM): surface 1 declines, the Inversion router routes to
+        list_projects under the read_portfolio group. Found by the burn-down
+        gate on CI run 38198186227 (the deletion's unit tier could not see an
+        integration test)."""
+        from tests.unit.services.intent_service._inversion_pin_helper import (
+            assert_inversion_routes,
+        )
+
         intent = PreClassifier.pre_classify("show my projects")
-        assert intent is not None
-        assert intent.category == IntentCategory.PORTFOLIO
-        assert intent.action == "manage_portfolio"
+        assert intent is None or intent.category != IntentCategory.PORTFOLIO, (
+            f"PORTFOLIO's show/list/view literal is deleted — surface 1 should not "
+            f"claim 'show my projects' (got {intent!r})"
+        )
+        await assert_inversion_routes(
+            monkeypatch,
+            "show my projects",
+            live_categories="read_portfolio",
+            expected_action="list_projects",
+        )
 
     # ==========================================================================
     # Regression tests: IDENTITY phrasings still reach get_identity
