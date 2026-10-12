@@ -77,9 +77,11 @@ lives in GitHub, this file holds only durable owed/queued items.)
   the rail); "let's analyze the risk here" (live ANALYSIS survivor; CXO reopens only on a served reply that invents or blames).
 
 ## Sequenced from Arch's aging-items route (2026-08-31)
-- #973 MEM-CACHE-AUDIT Phase 1 (96d): queue position — after the corpus tag-pass lands and PM's
-  next test round clears; the June blockers Arch cites are confirmed cleared.
-- #1459: next after #973 (Arch's route memo in read/ has the detail; sequencing mine, action later).
+<!-- 2026-10-12 Lead: struck the #973 row — the issue is CLOSED on GitHub (found at the 09:47 re-verify; the row had queued it
+     behind a named trigger since 08-31). -->
+- #1459 (Intent.original_message dual-surface storage: 39 read sites / 3 idioms) — **Filed**: 2026-08-31 · was sequenced after #973,
+  which is now closed; Arch's route memo in read/ has the detail. OPEN on GitHub (re-verified 10-12). Next lane when the routing
+  stack is quiet; no external blocker.
 
 ## Standing disciplines (the ones this file exists to survive compaction)
 - One lane at a time in this worktree — NO commits of any kind while a lane is active (hardened
