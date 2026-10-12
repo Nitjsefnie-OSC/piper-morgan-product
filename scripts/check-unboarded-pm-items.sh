@@ -62,7 +62,8 @@ STANDING="dev/active/${ROLE}-standing-items.md"
 # marker there silently degrades to the 24h default the day it gets swept — coverage narrows with
 # no error, the exact m-44 shape this script's own header already warns about elsewhere. dev/state/
 # is a new, NOT-sprint-cleaned home for small durable machine-state markers (as opposed to
-# dev/active/'s human scratch/carry-forward role) — same convention as dev/heartbeats/.
+# dev/active/'s human scratch/carry-forward role). (dev/heartbeats/ was the same kind of home until R3
+# moved heartbeats out of git on 2026-10-12.)
 # 2026-10-07: the marker is now GITIGNORED (per-seat local state, never read cross-seat). It survives
 # sprint-cleaning and lives as long as the seat's stable Model-A worktree; a fresh worktree starts with
 # the labelled 24h default below. Committing it cost ~111 commits/week and kept seats always-dirty.

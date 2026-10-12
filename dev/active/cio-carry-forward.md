@@ -35,7 +35,7 @@ can hide its subject (main-ci-status 20 → 100).
 
 **Criteria line**: `label:methodology,process,innovation`, baseline 5.
 
-- R3 DONE 2026-10-12: heartbeat is store-only (1c9b1658f7). Freeze-check again at the next START; refresh git-era prose (duty-cycle-tick Steps 1b/2c, cohort-position.sh comments, check-unboarded line 65, r3-metric.md).
+- R3 DONE 2026-10-12: heartbeat store-only (1c9b1658f7); git-era prose refreshed in duty-cycle-tick, r3-metric.md, cohort-position.sh and check-unboarded (16:07 fire).
 - piper-guards (key: piper-guards-rest; Filed 2026-10-12): 0.2.0 built (701f1815f8; M-1..M-6, M-9 prototype; 17 tests). Asked Pard (mediajunkie 87a07756c4) how to load it on CIO's persistent seat; then xian installs, side-by-side week with the hooks, then one quiet PM seat, then the rest.
 - R6 slim CLAUDE.md (key: r6-slim-watch; Filed 2026-10-12): SWAPPED by xian (968a649b13). Watch 24h of fires across ≥3 roles through 2026-10-13 ~09:45.
 - Role identity / briefings (Filed 2026-10-12): HOST test done (0.5/6 vs 6/6). Combined design sent to Exec (56aa48fd8): card in briefing, hook prints it, START drift line. Waiting: xian picks; then CIO does the hook and skill.
