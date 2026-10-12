@@ -2,8 +2,8 @@
 type: briefing
 title: BRIEFING-CURRENT-STATE.md - Where We Are Right Now
 valid_from: "2025-09-30"
-last_updated: "2026-10-09"
-last_verified: "2026-10-09"
+last_updated: "2026-10-12"
+last_verified: "2026-10-12"
 size_cap_bytes: 12000
 ---
 
@@ -27,18 +27,18 @@ log, never here. Bump `last_updated` to the newest line's date, or CI fails. Ski
 
 ## Now
 
-- **Alpha (live)** *(CIO, 2026-10-08 22:17 PDT, `curl https://piper-morgan.fly.dev/health`)*: healthy, **v0.8.14.0**,
-  sha `e8ecd10d5a` (PM promoted it the morning of 10-08, per Lead's log). Fly `piper-morgan` serves
+- **Alpha (live)** *(Docs, 2026-10-12 10:13 PDT, `curl https://piper-morgan.fly.dev/health`)*: healthy, **v0.8.14.0**,
+  git_sha `c613beabf5` (the version string has not moved since 09-23, so the sha is the identity). Fly `piper-morgan` serves
   `origin/main` builds; the droplet and `origin/production` are gone (09-29).
 - **Version** *(CIO, 2026-10-08, `git tag`)*: latest tag **v0.8.14.0** ("On Your Clock", 09-23). 0.9.0 is
   reserved for beta.
-- **MVP gate** *(CIO, 2026-10-09 06:5x PDT, `sprint-truth.py` + the slip ledger in `docs/internal/planning/beta-gate-standard.md`)*:
-  **14 not done** (2 Sprint Backlog, 2 In Progress, 1 In Review, 9 Product Backlog), 1,236 done. The MVP milestone **is**
-  the beta gate. **Dates: design partners Fri 10-23, hard stop Fri 10-30** (baseline 10-05, unchanged in every ledger
-  row through 10-09; slips are logged there and only PM moves either date). Read the ledger, not this line, for slips.
-- **Engineering focus** *(CIO, 2026-10-08, from Lead's 10-08 session log; Lead to overwrite)*: MVP issues
-  under PM's test card; 10-08 shipped #1889 (with #1963, #1964) and found #1965 (GitHub work-items read
-  silent-empty, (a)+(b) landed, open for the alpha served check). Epic 0 per PM's rule continues.
+- **MVP gate** *(Docs, 2026-10-12 10:1x PDT, `sprint-truth.py`, live board pull of 1,815 items)*:
+  **13 not done** (2 Sprint Backlog, 2 In Progress, 1 In Review, 8 Product Backlog), 1,238 done. The MVP milestone **is**
+  the beta gate. **Dates: design partners Fri 10-23, hard stop Fri 10-30** (baseline 10-05; slips are logged in
+  `docs/internal/planning/beta-gate-standard.md` and only PM moves either date). Read the ledger, not this line, for slips.
+- **Engineering focus** *(Docs, 2026-10-12, from the 10-10 and 10-11 omnibus logs; Lead to overwrite)*: the router-gate
+  deletion lane took the literal ceiling 127 to 120 on 10-11 (PPM recount on merged main), #1979's fix landed 19:11 (which met #1977's preregistered licence),
+  and xian's MCP revoke test found #1982 (scoped-subkey design in progress). Epic 0 per PM's rule continues.
 - **PM's open asks** *(Exec, 2026-10-09 06:4x PDT)*: on Exec's attention rollup at
   `claude.ai/artifact/719UZ4h1NELjEwWZbDCceT` (its own header line carries the current version; do not pin one here, it was v90 at 04:2x and v95 by 06:4x). Do not copy the list here: it goes stale within hours.
 - **Usage** *(CIO, 2026-10-08)*: the weekly window reset Thu 10-08 21:59 PDT; stop line **95%** of the weekly
