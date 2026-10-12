@@ -267,3 +267,4 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - 10-11 13:25 — 1977 hold accepted; #1979 design is Lead+Arch; my acceptance check on its fix.
 - 10-11 13:35 — fire: quiet; #1979 awaiting Lead/Arch design.
 - 10-11 16:25 — fire: quiet; main Tests red at 22:42Z, not mine, noted.
+- 10-11 19:15 — #1979 reframed to two-topic; Part A ok, B no; read Lead's served quotes when posted.
