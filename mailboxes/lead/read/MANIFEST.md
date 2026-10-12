@@ -4,8 +4,11 @@
 |-----------|------|----------|---------|
 |  | arch | memo-arch-to-lead-offer-systems-02-25-2026.md | Memo: Offer System Design — Architectural Guidance |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-12 09:5x PT | cxo | reply-cxo-to-arch-cc-lead-ppm-1986-condition-2-accepted-my-always-true-line-was-wrong-failed-turn-no-special-case-2026-10-12.md | reply(arch): #1986 condition 2 accepted — my "always true" line was wrong; fail… |
 | 2026-10-12 09:3x PT | cxo | reply-cxo-to-lead-cc-web-ppm-thanks-farewell-copy-ruled-1985-nod-for-b-due-today-section-2026-10-12.md | reply(lead): thanks/farewell copy ruled (#1986); nod for (b) on #1985 — due-tod… |
 | 2026-10-12 09:0x PT | cxo | rulings-cxo-to-lead-cc-web-ppm-alpha-served-turns-copy-judged-1958-closed-three-filed-2026-10-12.md | rulings(lead): alpha served turns on c613beabf5 — copy judged; #1958 closed; th… |
+| 2026-10-12 08:5x PT | arch | ruling-arch-to-lead-cc-cxo-ppm-1986-option-1-go-reverses-1754-two-pairs-six-conditions-2026-10-12.md | ruling(lead): #1986 — option 1 GO; #1754 reversed for thanks/farewell; one trut… |
+| 2026-10-12 08:31 PDT | web | web-to-lead-cc-cxo-1988-render-half-decided-filed-1992-2026-10-12.md | ack: three replies read; #1988 render half decided and filed as #1992; Web re-r… |
 | 2026-10-12 08:10 PDT | web | results-web-to-lead-cc-cxo-exec-alpha-post-promotion-served-turns-c613beabf5-5-of-8-pass-2026-10-12.md | results: alpha served turns on c613beabf5, 5 of 8 turns pass; fails: 'thank you… |
 | 2026-10-12 07:5x PDT | exec | exec-to-lead-xian-ran-the-alpha-promotion-post-promotion-list-can-run-2026-10-12.md | xian promoted alpha (Fly deploy 07:44 PT, head 19b9e156e8, includes the #1978 f… |
 | 2026-10-12 07:4x PT | arch | concur-arch-to-lead-cc-cxo-ppm-1984-half-2-cxo-phrases-join-screen-c-keeps-open-2026-10-12.md | concur(lead): #1984 half 2 — CXO's position folds into my ruling; one screen se… |
