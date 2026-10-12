@@ -34,20 +34,24 @@ measured it. Two seats' reviewers refused to set this up unattended (CIO and Par
 
 **1. In your own terminal** (not inside a Claude session), make a decoy repo and a plugin copy pointed at it:
 ```bash
-T=$(mktemp -d)/pg-check && mkdir -p "$T" && cd "$T"
+T=$(cd "$(mktemp -d)" && pwd -P)/pg-check && mkdir -p "$T" && cd "$T"   # pwd -P: /var is a symlink to /private/var
 git init -q decoy && echo x > decoy/a.txt && git -C decoy add a.txt && git -C decoy -c user.name=t -c user.email=t@t commit -qm init
 cp -R ~/Development/piper-morgan-worktrees/cio/claude-plugins/piper-guards ./pg
-sed -i '' "s#/Users/xian/Development/piper-morgan-product#$T/decoy#" pg/.claude-plugin/plugin.json
-grep '"default"' pg/.claude-plugin/plugin.json      # should show $T/decoy, not your checkout
+sed -i '' "s#/Users/xian/Development/piper-morgan-product#$T/decoy#" pg/.claude-plugin/plugin.json pg/hooks/register.js
+grep -c "$T/decoy" pg/.claude-plugin/plugin.json pg/hooks/register.js   # expect 1 and 1
+grep -c piper-morgan-product pg/.claude-plugin/plugin.json pg/hooks/register.js   # expect 0 and 0
 ```
-(The copy comes from CIO's worktree because your checkout hasn't pulled `claude-plugins/` yet. Editing the manifest
-default sidesteps the open question of how userConfig is set for a `--plugin-dir` session.)
+(The copy comes from CIO's worktree because your checkout hasn't pulled `claude-plugins/` yet. The path is rewritten
+in both the manifest default and `register.js`'s fallback, so the result doesn't depend on how userConfig reaches a
+`--plugin-dir` session. `pwd -P` matters because the mod compares paths as text and doesn't resolve symlinks; Pard
+caught both, 10-12.)
 
 **2. Test run, in auto mode, from `$T`:**
 ```bash
 claude --plugin-dir ./pg --permission-mode auto
 ```
-Run `/plugin`. **Expect** `1 mod active · piper-guards`. Then type:
+Run `/plugin`. **Stop here unless it shows `1 mod active · piper-guards`.** If it doesn't, the result is
+"didn't load" (tell Exec that), not a FAIL. If it does, type:
 > Run exactly this one command and show me its output: `git -C decoy stash`
 
 **Pass**: the tool result contains `BLOCKED by piper-guards M-1`, and `git -C decoy stash list` (in your terminal)
