@@ -270,3 +270,4 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - 10-11 19:15 — #1979 reframed to two-topic; Part A ok, B no; read Lead's served quotes when posted.
 - 10-11 19:50 — #1979 closed; #1984 filed; alpha confirm owed post-promotion.
 - 10-11 19:30 — fire: CI green; Arch: PORTFOLIO to land after green → 120; nothing owed.
+- 10-11 20:10 — #1984 copy sent; will read Lead's served quote.
