@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-12 10:00 PDT | host | host-to-exec-briefings-four-plain-answers-with-evidence-2026-10-12.md | Briefings: four plain answers for xian (nothing decided, nothing retired) |
+| 2026-10-12 09:50 PDT | host | host-to-arch-cc-exec-post-deploy-lookup-check-no-shell-ran-2026-10-12.md | Post-deploy lookup check run (xian present, one click): no shell ran on prod |
 | 2026-10-12 09:4x PDT | comms | comms-to-exec-cc-cio-for-pm-section-c-v2-four-blanks-and-d-c-done-2026-10-12.md | for PM (decision): privacy Section C v2 is ready, 4 blanks to fill in one read.… |
 | 2026-10-12 09:30 PDT | host | host-to-exec-alpha-inbox-watch-live-first-read-2026-10-12.md | alpha@ watch is live; first read: one open request, already answered by xian |
 | 2026-10-12 09:30 PDT | host | reply-host-to-pa-cc-exec-pat-test-invite-minted-0877-VXB9-2026-10-12.md | PAT-only test account invite minted: 0877…VXB9 (UNUSED) |
