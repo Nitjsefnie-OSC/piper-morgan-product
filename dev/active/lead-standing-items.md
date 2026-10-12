@@ -37,8 +37,10 @@ lives in GitHub, this file holds only durable owed/queued items.)
   on the served model, AND the full-run operation diff shows no ×6-attributed regression. Compose corpus rows: 0 exist (needed for any retry).
 - **Rule 7 as refined by Arch (10-10)**: the full ~577-call run is owed only by the candidate that LANDS. Exploration screens on the moved rows
   plus a fixed sentinel set (PM's phrasings, the clear family, the declarative and question rows). **Standing screen member (Arch, decisions.log 10-12 07:3x): every catalog or router-input candidate's ×6 screen includes "let's analyze the risk here" (corpus yaml:1973) against same-minute main — it tipped to CLARIFY 6/6 under three unrelated edits on 10-12. When the ANALYSIS lane opens, moving that row off the margin comes first.** Apply this to the held catalog batch and any #1970 retry.
-- **Key move on Fri 10-16 (Themis 10-10; xian's call)** — **Filed**: 2026-10-10 · keep the current key through 10-15 (it spends Krink's credit,
-  which expires 10-15). On 10-16 xian stores `lead-scoring` (Amber keychain, my 13:4x command). **Have ready by 10-16, if asked:** the steps
+- **Key move on Fri 10-16 (Themis 10-10; xian's call)** — **Filed**: 2026-10-10 · ~~keep the current key through 10-15 (it spends Krink's credit,
+  which expires 10-15). On 10-16 xian stores `lead-scoring` (Amber keychain, my 13:4x command).~~ **STRUCK 10-12 14:45: stale from the
+  moment xian stored the key — the Amber keychain has held `lead-scoring` since 10-10 17:41 (confirm call), and the console shows my
+  scoring billing that workspace (~$16 MTD, confirmed to Exec). Only the PROD server key move below remains PM's hand on 10-16.** **Have ready by 10-16, if asked:** the steps
   to move prod alpha's server key to the pipermorgan.ai org. That's PM's hand: `fly secrets set -a piper-morgan ANTHROPIC_API_KEY=…` via a
   hidden prompt, never pasted into the repo or mail. Fly restarts the app. Then PASS: alpha /health is up, and one chat turn by a user
   WITHOUT a stored key is served (fly logs show no limit error). Also decide: a separate workspace for prod (not lead-scoring's $50, so dev

@@ -27,6 +27,11 @@
 - **#1977 CLOSED 10-12 12:53** (banner + evidence comment + close; the work had been complete since 10-11 19:3x).
 - **read_floor_3 wave** (get_project_status + get_top_priority adapters; Arch's four 10-11 20:5x conditions): trigger = the deletion lane's
   next STATUS/PRIORITY pass. Not #1984's lever.
+- **ALPHA PROMOTION run 38312410442 WAITING for xian's approval (14:45 10-12):** staging 3bbbfc7c40 (= 264d3e9549 in code; all seven
+  landings + #1978). When it lands: read /health, hand Web the re-run set (thank you! ×3, thanks, thank you so much, goodbye, thanks after a
+  delivered turn, one compound, one armed-slot thanks, thanks after delivery + 31-min idle, show today's tasks ×2); CXO closes #1985/#1986
+  on the quotes; PPM reads #1985's re-run. Dispatch recipe: `gh workflow run fly-deploy.yml --ref main -f promote_to_alpha=true` after
+  staging settles. **Scoring key = lead-scoring since 10-10 17:41 (console-confirmed); the 10-16 item is the prod server key only.**
 - **Wed 10-14 START: cron rotation** (e5491d18, armed 10-10 17:29, expires ~10-17; delete-then-create; update the registry row) + PPM's
   tripwire read. **Fri 10-16:** key switch — `dev/active/lead-prod-key-move-2026-10-16.md` (PM's hand) + one confirm call.
 - **Mail v4 pilot — LIVE 10-12 10:1x (roles.yaml 3a79812; delivery test acked 08d2dc8d83):** every mail check reads both inboxes;
