@@ -53,8 +53,9 @@ in both the manifest default and `register.js`'s fallback, so the result doesn't
 `--plugin-dir` session. `pwd -P` matters because the mod compares paths as text and doesn't resolve symlinks; Pard
 caught both, 10-12.)
 
-**Result 2026-10-12: PASS** (xian, 09:36; the mod blocked `git -C decoy stash` in auto mode). The steps stay here
-for the next seat.
+**Result 2026-10-12: PASS** (xian, 09:36; the mod blocked `git -C decoy stash` in auto mode; `git -C decoy stash
+list` empty, read by Janus at 09:52). **Control: the command ran** ("No local changes to save", xian ~09:58), so the
+mod, not the auto-mode reviewer, did the blocking. The steps stay here for the next seat.
 
 **2. Test run, in auto mode, from `$T`:**
 
@@ -76,9 +77,39 @@ Run `/plugin`. **Stop here unless it shows `1 mod active · piper-guards`.** If 
 **Pass**: the tool result contains `BLOCKED by piper-guards M-1`, and `git -C decoy stash list` (in your terminal)
 is empty. **Fail**: the agent reports `No local changes to save`, which means the command ran past the mod.
 
-**3. Control, same place, no plugin:** `~/.local/bin/claude --permission-mode auto` with the same prompt (same
-sign-in check as step 2). Expected: it runs and
+**3. Control, same place, no plugin:** a new terminal starts somewhere else, so first `cd "$T"`, then
+`~/.local/bin/claude --permission-mode auto` with the same prompt (same sign-in check as step 2). Expected: it runs and
 prints `No local changes to save` (or the reviewer stops it, which is also worth noting: a refusal there would mean
 the reviewer, not the mod, was doing the work in step 2).
 
 **4. Clean up:** `rm -rf "$T"`. Tell Exec pass or fail (one line); CIO and Pard take it from there.
+
+## Installing on a seat (local scope; Pard's design, 2026-10-12)
+
+Local scope writes to `.claude/settings.local.json` in the worktree it is run from, which is gitignored, so the
+install reaches that one seat only and survives a relaunch with no launcher change. Not user scope: the PM seats
+share `~/.claude-pm`, so a user-scope install would reach every PM seat at once. Marketplace: `piper-local`
+(`claude-plugins/.claude-plugin/marketplace.json`). For CIO's seat, in your own terminal:
+
+```bash
+cd /Users/xian/Development/piper-morgan-worktrees/cio
+export CLAUDE_CONFIG_DIR=/Users/xian/.claude-pm
+~/.local/bin/claude plugin marketplace add /Users/xian/Development/piper-morgan-worktrees/cio/claude-plugins --scope local
+~/.local/bin/claude plugin install piper-guards@piper-local --scope local
+~/.local/bin/claude plugin list
+```
+
+The last line should list `piper-guards`. The running session may need a restart to load it; check `/plugin` in
+the seat's pane shows `1 mod active · piper-guards`. To back out:
+
+```bash
+cd /Users/xian/Development/piper-morgan-worktrees/cio
+export CLAUDE_CONFIG_DIR=/Users/xian/.claude-pm
+~/.local/bin/claude plugin uninstall piper-guards@piper-local --scope local
+```
+
+Not yet measured (Pard): whether the install caches a copy (then a new version needs
+`claude plugin marketplace update piper-local`), and whether userConfig's `pm_checkout` reaches an installed plugin
+(the `register.js` fallback is the same path on Amber, so the result is right either way). The mod fails open, so
+during the side-by-side week the seat records at each fire that `claude plugin list` still shows it loaded:
+otherwise "no blocks" can't be told from "not running".

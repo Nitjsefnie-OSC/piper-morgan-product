@@ -1,0 +1,14 @@
+{
+  "name": "piper-local",
+  "description": "Local marketplace for the Piper Morgan cohort's own plugins, installed per seat at local scope.",
+  "owner": {
+    "name": "Piper Morgan cohort (CIO)"
+  },
+  "plugins": [
+    {
+      "name": "piper-guards",
+      "source": "./piper-guards",
+      "description": "The cohort's guard rules (R6) as a Claude Code mod: PM-checkout protection, diff before checkout, mail on main, Projects full-replace, bearer credentials, dispatch tier."
+    }
+  ]
+}
