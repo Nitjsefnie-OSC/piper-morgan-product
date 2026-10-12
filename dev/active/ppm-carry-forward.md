@@ -190,3 +190,5 @@ Brake FIRED (second slip = #1965 admission, found and ledgered 10-09). Memo to E
 - 2026-10-12 08:4x — #1985 root cause fixed on main (5d5f7ec88e, Lead); shape (b) nodded by CXO; #1989/#1990/#1991 closed as dups; Helsinki landed. My Class 3 lean → leave Production, admit only if post-promotion Web re-run still shows false "nothing urgent". Update sent to Exec. Trigger: next promotion → Web re-run set → CXO reads. Ceiling 120.
 
 - 2026-10-12 08:5x — #1986: Arch reversed #1754 for thanks/farewell (option 1 GO, 6 conditions; literals byte-identical, ratchets don't move; truth test for the thanks line). No gate effect, ceiling 120. Recount after Lead lands it just to confirm byte-identical (expect 120). #1992 (render half of #1988) placed Production.
+
+- 2026-10-12 09:0x — #1986 LANDED (8ebe568035); my recount 120 (byte-identical patterns, as Arch's condition 1 required). #1985 (b) on main (bb4066fc00). Waiting: Web's served re-run at next promotion (trigger for any Class 3 admit of #1985), Arch's rulings on Lead's two findings (not mine), PM's low-urgency OK, xian's Wed-reading choice, Lead's Mon reconfirm.
