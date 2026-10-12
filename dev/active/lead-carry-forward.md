@@ -1,6 +1,6 @@
 # Lead carry-forward — Fable 5.1 seat; Model A worktree ~/Development/piper-morgan-worktrees/lead
 
-## STATE @ 2026-10-12 09:3x PT — START + six mail wakes drained; four code landings on main (log dev/2026/10/12/2026-10-12-0647-lead-code-log.md, open)
+## STATE @ 2026-10-12 09:4x PT — START + seven mail wakes drained; five code landings on main (log dev/2026/10/12/2026-10-12-0647-lead-code-log.md, open)
 - **#1984 half (2): CLOSED ON MY SIDE 07:2x — lever (c) applied.** Arch ruled (07:3x his clock, read 07:16): not (a); (b) = drop the
   `'what did I work on today'` rail example, screened ×6 main vs (b) on 20 phrases (CXO's two true-session phrases joined) → the row
   reached the ruled plan 6/6 but two rows read worse (re-checked 12/12 each) → FAIL → (c): the corpus row carries the KNOWN MISS note
@@ -29,12 +29,13 @@
   todos by session id → "nothing urgent" over an overdue todo): principal fix 5d5f7ec88e + CXO's reply shape bb4066fc00 (due today
   then overdue under "Today:", exact empty line, "couldn't check" on a failed read, assembler dedupe). #1986 (thanks → todo
   briefing): Arch's #1754 reversal for thanks/farewell, 8ebe568035 under six conditions + condition 2 tightened cd43832626 (the
-  empty form needs a durable, owner-checked zero from `count_delivered_turns`; unknown → "You're welcome."). #1988 (timezone placeholder) CLOSED on
+  empty form needs a durable, owner-checked zero from `count_delivered_turns`; unknown → "You're welcome.") + Arch's belt
+  d23849fb9f (the in-memory window must agree too; residue named). Arch accepted; CXO closes #1985/#1986 on Web's quotes. #1988 (timezone placeholder) CLOSED on
   the Helsinki copy (dacf3007a3); render half = Web's #1992. #1987 (delete that reminder) filed, PPM places. #1958 CLOSED by CXO.
   CXO's duplicates #1989/#1990/#1991 closed into mine. **Open with Arch (no block):** greeting is NOT armed-checked (pinned as-is;
   his call to widen); the compound ACTION_EXAMPLES for thanks/farewell ride the next catalog batch (rule 7). **Next promotion →
   Web re-runs:** thank you! ×3, thanks, thank you so much, goodbye, a thanks after a delivered turn, one compound, one armed-slot
-  thanks, show today's tasks ×2; CXO closes #1985/#1986 on the quotes. **CI:** read main at the next fire (three code landings
+  thanks, a thanks after a delivered turn + a 31-minute idle (CXO), show today's tasks ×2; CXO closes #1985/#1986 on the quotes. **CI:** read main at the next fire (three code landings
   since 08:21: 5d5f7ec88e, bb4066fc00, 8ebe568035 — each smoke-green; the Full Test Suite decides).
 - **Test-order coupling noted, not fixed:** \`test_action_registry.py\` fails 47 rows when run after \`test_spend_free_canonical_ratchet_1818.py\`
   in one session (alone: passes; alphabetical CI order hides it). Whoever next touches either file.

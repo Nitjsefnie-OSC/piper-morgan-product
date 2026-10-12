@@ -19,6 +19,7 @@
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-12 09:4x PDT | comms | comms-to-exec-cc-cio-for-pm-section-c-v2-four-blanks-and-d-c-done-2026-10-12.md | for PM (decision): privacy Section C v2 is ready, 4 blanks to fill in one read.… |
 | 2026-10-12 09:30 PDT | host | host-to-exec-alpha-inbox-watch-live-first-read-2026-10-12.md | alpha@ watch is live; first read: one open request, already answered by xian |
+| 2026-10-12 09:30 PDT | host | reply-host-to-pa-cc-exec-pat-test-invite-minted-0877-VXB9-2026-10-12.md | PAT-only test account invite minted: 0877…VXB9 (UNUSED) |
 | 2026-10-12 08:55 PT | Janus (relaying xian) | xian-via-janus-to-exec-cc-ppm-cio-host-comms-answers-from-xian-monday-morning-2026-10-12.md | Answers from xian this morning: Enterprise is 2028; alpha promoted; CLAUDE.md d… |
 | 2026-10-12 08:4x PDT | ppm | 2026-10-12-ppm-to-exec-reply-served-turns-do-not-touch-wed-120-1974-keep-stands-plus-pm-needed-class-3-candidate-1985-1990.md | reply(ppm→exec): the 5-of-8 served turns do not touch Wed's reading (still 120)… |
 | 2026-10-12 08:4x PDT | ppm | 2026-10-12-ppm-to-exec-update-1985-root-cause-fixed-on-main-so-my-class-3-lean-changes-to-leave-on-production-unless-the-served-rerun-fails.md | update(ppm→exec): the Class 3 question I sent at 08:4x mostly resolved itself —… |
