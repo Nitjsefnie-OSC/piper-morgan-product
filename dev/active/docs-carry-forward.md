@@ -1,6 +1,6 @@
 # Docs Carry-Forward
 
-**Updated**: 2026-10-11 08:20 PDT (08:04 fire). Known fault: bare `gh` hangs on Amber since the 10-10 reboot (Pard); prefix `GODEBUG=netdns=go`. History in session logs (`dev/2026/10/{04..11}/*docs-code-log.md`), not here.
+**Updated**: 2026-10-12 07:45 PDT (07:12 fire). 10-10 and 10-11 omnibuses + 31 activity rows DONE this fire (10-10 had been missed). Weekly Docs Audit waits on the workflow-created FLY-AUDIT issue (~09:20 PDT), take at the 10:12 fire. Known fault: bare `gh` hangs on Amber since the 10-10 reboot (Pard); prefix `GODEBUG=netdns=go`. History in session logs (`dev/2026/10/{04..11}/*docs-code-log.md`), not here.
 
 ## Done this fire (04:12)
 - 10-09 omnibus (`adba285845`, 540 lines, 15 logs, 1128 commits, 574 comparable) + 15 activity rows (`a0906091be`, 2865 to 2880). Nudged HOST (10-09 log lacks DAY-CLOSED, `8e927d29ef`).
