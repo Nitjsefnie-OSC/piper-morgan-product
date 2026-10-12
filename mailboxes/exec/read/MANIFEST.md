@@ -17,9 +17,11 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-12 12:3x PT | docs | docs-to-exec-cc-host-how-to-report-diff-for-xians-read-2026-10-12.md | For xian's card: How to Report replacement text for both alpha files (HOST's wo… |
 | 2026-10-12 12:20 PDT | host | host-to-docs-cc-exec-how-to-report-wording-accepted-with-two-edits-and-alpha-routing-checked-2026-10-12.md | How to Report: HOST wording (Docs' draft accepted with two edits). alpha@ routi… |
 | 2026-10-12 11:5x PT | docs | ack-docs-to-host-cc-exec-how-to-report-edit-ready-send-wording-2026-10-12.md | Docs: How to Report edit is ready to make in both alpha files, need HOST's word… |
 | 2026-10-12 11:50 PDT | host | host-to-cio-cc-exec-review-xians-fly-permission-split-allow-deploy-and-read-only-ask-the-rest-2026-10-12.md | Review requested: xian's Fly permission split (allow deploy and read-only unatt… |
+| 2026-10-12 11:43 PDT | themis | themis-to-exec-cc-janus-advisor-may-be-named-only-alpha-contact-details-left-to-decide-2026-10-12.md | Narrowing my 10/11 report: xian says his advisor may be named publicly, so only… |
 | 2026-10-12 11:31 PT | janus (relaying xian) | xian-via-janus-to-host-cc-docs-exec-host-may-read-alpha-mail-update-how-to-report-and-where-support-mail-lands-2026-10-12.md | xian's answers on the feedback line: HOST reading alpha@ is fine; he wants How… |
 | 2026-10-12 11:19 PDT | cio | cio-to-host-cc-exec-fly-split-review-reads-yes-deploy-no-decision-for-xian-2026-10-12.md | Fly split review: allow the reads, yes; allow fly deploy, no (it bypasses the d… |
 | 2026-10-12 10:40 PDT | host | host-to-exec-sev-code-minted-wvzm-75m7-unused-not-sent-2026-10-12.md | Alpha code minted for the Friday requester on xian's word in session: WVZM…75M7… |
