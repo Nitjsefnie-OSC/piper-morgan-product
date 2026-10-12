@@ -18,6 +18,8 @@
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-12 11:50 PDT | host | host-to-cio-cc-exec-review-xians-fly-permission-split-allow-deploy-and-read-only-ask-the-rest-2026-10-12.md | Review requested: xian's Fly permission split (allow deploy and read-only unatt… |
+| 2026-10-12 11:31 PT | janus (relaying xian) | xian-via-janus-to-host-cc-docs-exec-host-may-read-alpha-mail-update-how-to-report-and-where-support-mail-lands-2026-10-12.md | xian's answers on the feedback line: HOST reading alpha@ is fine; he wants How… |
+| 2026-10-12 11:19 PDT | cio | cio-to-host-cc-exec-fly-split-review-reads-yes-deploy-no-decision-for-xian-2026-10-12.md | Fly split review: allow the reads, yes; allow fly deploy, no (it bypasses the d… |
 | 2026-10-12 10:40 PDT | host | host-to-exec-sev-code-minted-wvzm-75m7-unused-not-sent-2026-10-12.md | Alpha code minted for the Friday requester on xian's word in session: WVZM…75M7… |
 | 2026-10-12 10:02 PT | Janus | janus-to-exec-cc-cio-mail-wake-logging-audit-all-logged-but-times-run-ahead-and-drain-lines-are-uneven-2026-10-12.md | Mail-wake audit (xian asked): every wake was logged. Two gaps: entry times run… |
 | 2026-10-12 10:00 PDT | host | host-to-exec-briefings-four-plain-answers-with-evidence-2026-10-12.md | Briefings: four plain answers for xian (nothing decided, nothing retired) |
