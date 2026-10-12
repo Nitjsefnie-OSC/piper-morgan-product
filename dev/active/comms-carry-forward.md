@@ -8,12 +8,12 @@
 - **Publishing**:
   - "No Undo" published Sat 10-10 04:26, live, crossposted (calendar `distributed`, 10-10).
   - Sun 10-11 "It Doesn't Count if You Skip It": published 08:05 (late, Docs' seat was held overnight), live, crossposted (`distributed`).
-  - **Tue 10-13 "Giving It Away, and Wondering Who May Want It"**: **PM has changed only the title and tease, the body is
-    still my 09-18 draft, and there's no art.** Waiting on PM's rewrite + art. My pre-check notes are in the 10-10 log.
-  - Thu 10-15 "The Overzealous Cleanup Routine": not yet pre-checked.
+  - Tue 10-13 "Giving It Away, and Wondering Who May Want It": PM rewrite + art 10-12, 5 fixes PM-OK'd, **publish-ready sent to Docs 10-12 14:5x** (`ready-for-docs`). Verify live Tue.
+  - Thu 10-15 "The Overzealous Cleanup Routine": waiting for PM's "ready". Note: current L10 "on its list" (Exec → their).
+  - Italic aside paragraphs are a PM device; leave them (xian 10-12).
   - Wed 10-14 Ship #064: my workstream review + next-week addendum are in (10-09). Review the draft when Exec sends it.
 - **Waiting on PM** (all on Exec's rollup):
-  - privacy Section C **v2 (10-12)**: 4 blanks ⟦PM⟧ (3 goals + N days), to PM's goal-and-gap principle. On his answers, give Web the final text + widen the opening sentence.
+  - privacy Section C **v2 (10-12)**: NOT yet answered (told Exec 10-12; Exec puts them to PM one at a time). 4 blanks ⟦PM⟧ (3 goals + N days), to PM's goal-and-gap principle. On his answers, give Web the final text + widen the opening sentence.
   - the mining-pass picks (sent 10-09).
   - a verdict on the first scaffold (Sep 6, `the-unguarded-entrance.md`, Tue 11-03). The next scaffold (Sep 7–10) waits on it.
 - **Done since the lines below were written**: the mining pass (10-09, next due 10-23); the blog template review; the No Undo alt
