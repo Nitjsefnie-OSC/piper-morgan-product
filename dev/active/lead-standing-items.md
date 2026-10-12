@@ -9,10 +9,12 @@ lives in GitHub, this file holds only durable owed/queued items.)
      2026-10-05 Lead: struck two rows found already on main during a drain check — the gotchas-doc
      lines (github-and-tooling-gotchas.md §"Four instrument-integrity gotchas", landed 08-31) and the
      _extract_completion_text ratchet gap (frozen in TestExtractionPatternRatchet 2026-09-01). -->
-- Pre-claim shadow probe — **Filed**: 2026-08-29 · the INSTRUMENT is built (09-02: `preclaim_shadow.py` + `scripts/preclaim_shadow_report.py`,
-  default OFF). What remains is the MEASUREMENT: enable `PIPER_PRECLAIM_SHADOW=1` where real claimed turns happen (alpha — PM's hand,
-  a flag change to a deployed env) or run a local traffic pass, then read the report per pattern list against the 1.0 bar. Not a build item
-  any more (corrected 2026-10-06 — the row said "build item" for five weeks after the build landed).
+<!-- 2026-10-12 Lead: struck the pre-claim shadow probe MEASUREMENT row (filed 08-29) — SUPERSEDED for its purpose by the Phase 3
+     deletion gate (scripts/inversion_phase3_deletion_gate.py, Arch-ratified 09-27): the gate's per-list census (rows claimed, the
+     router's verdict, rules 10/11, misserved_at_deletion) IS the per-pattern-list precision-vs-bar readout the probe was built to
+     produce, computed from the corpus instead of live traffic, and it licensed all 30 deletions to date (ceiling 120, 29 ruled
+     floor). The gate even threads the claiming list's NAME through the probe's own code path. A live-traffic pass on alpha
+     (PIPER_PRECLAIM_SHADOW=1, PM's hand) stays available as an optional cross-check, no longer owed; the instrument stays. -->
 - #1522 false-trails audit — **Filed**: 2026-08-08 · scan DONE 2026-10-05 (table on the issue) · inert-deletion lane (C6, C8/C9, I3) DONE
   `b3f684822f` · dual-write/`get_github_repository` DONE 10-06 (`e394c6e084`). Places removed 10-06 (`d06e81186b`). `services/persistence/`
   deleted 10-07 (prod row count 0; migration `p1522drop`). Still open: Documents HELD on #1270, Pard/PM on pytest.ini ignore + the Next.js scaffold, I2 error pages (product call).
