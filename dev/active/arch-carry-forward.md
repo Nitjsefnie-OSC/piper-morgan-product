@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-10-11 21:3x PDT
+last_updated: 2026-10-12 09:3x PDT
 currency_claim: rewritten at substantive-change boundaries, verified at every START
 max_age_days: 4
 ---
@@ -33,6 +33,13 @@ description**: this carry-forward + session logs + commits are the current state
 job shrinks to orientation once it ages. **Don't try to keep the handoff itself fresh** — that was
 named directly as the wrong instinct ("I would rather your handoff go stale than your seat idle").
 
+- **10-12 (morning)**:
+  - **#1984 half 2 CLOSED for Arch as a KNOWN MISS (option c).** Option (a), the trade, was refused because its improvements were unattributed. The (b) screen failed on 2 rows. The corpus row is ledgered with expected=plan. #1984 stays OPEN, and the retitle is CXO's.
+  - **STANDING:** "let's analyze the risk here" (yaml:1973) is in every catalog-candidate ×6 screen.
+  - The compound thanks/farewell registry EXAMPLES ride the next catalog batch (trigger: that batch).
+  - **#1986 LANDED** (`8ebe568035`, then `cd43832626`, then the belt `d23849fb9f`, all verified in source). This **reverses #1754 for thanks/farewell**. The empty thanks form needs a durable zero AND an empty in-memory window; anything unknown serves "You're welcome."
+  - **Watch:** Web's served set at the next promotion, including the 31-minute idle and the armed-slot thanks. CXO closes #1985/#1986.
+  - **#1993 filed** (test-order leak, 47 rows; reproduce first).
 - **SPRINT GOAL (PM-locked 10-03, week ending Thu 10-08)**: finish epic 0 Phase 3 deletions for every live-wave list. Lead owns it. Arch's part is **same-fire
   ruling turnaround**. Quota is expected to run out around Wed 14:10, so plan for 4 days. **Both upstream gates were ALREADY CLEARED when I named them**: read_floor went live ~09:5x 10-03 (PM flip, TRUST 15/15 after descriptions) and #1920 CLOSED 10-02.
   DISCOVERY/TRUST/MEMORY/ANALYSIS read GO (partial) and are the week's first lanes. Lead is restarting onto Opus 5.5.
