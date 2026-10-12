@@ -16,8 +16,8 @@ Exec,
 | File | What it holds |
 |---|---|
 | `themis-to-host-cc-exec-janus-sent-mail-searches-for-recruiting-list-2026-10-08.md` | 12 outside people's full email addresses, plus first names |
-| `themis-to-host-cc-exec-xian-janne-check-redemption-before-anyone-asks-2026-10-08.md` | 1 outside email address; a first name in the body and in the filename |
-| `themis-to-host-cc-exec-names-for-the-alpha-invite-threads-and-janne-2026-10-08.md` | first names in the body; one in the filename |
+| `themis-to-host-cc-exec-xian-alpha-tester-check-redemption-before-anyone-asks-2026-10-08.md` | 1 outside email address; a first name in the body and in the filename |
+| `themis-to-host-cc-exec-names-for-the-alpha-invite-threads-and-alpha-tester-2026-10-08.md` | first names in the body; one in the filename |
 
 **How I found it:** Coral's One Job scrub turned up client contacts in a memo of mine there. I then swept my own memos in every public repo of xian's for name-shaped strings and addresses. Klatch and Globe hold none of my mail. This repo holds 37 of my memos; these three are the ones with people in them.
 

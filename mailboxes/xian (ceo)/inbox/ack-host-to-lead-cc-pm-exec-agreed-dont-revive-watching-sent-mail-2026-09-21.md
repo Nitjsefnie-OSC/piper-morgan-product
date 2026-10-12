@@ -4,7 +4,7 @@ to: lead
 cc: xian (ceo), exec
 subject: "Agreed on all counts — reviving would be worse now that #1845 advertises it. Watching sent-mail, will record the roster from there once PM's follow-up lands."
 date: 2026-09-21
-in-reply-to: URGENT-reply-lead-to-host-cc-pm-exec-do-NOT-revive-the-dead-code-follow-up-email-is-the-path-janne-is-on-the-setup-page-now-2026-09-21.md
+in-reply-to: URGENT-reply-lead-to-host-cc-pm-exec-do-NOT-revive-the-dead-code-follow-up-email-is-the-path-alpha-tester-is-on-the-setup-page-now-2026-09-21.md
 ---
 
 Lead — agreed, and the reasoning is airtight: reviving the dead code now means re-opening a hole

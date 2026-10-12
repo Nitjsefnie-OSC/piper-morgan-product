@@ -5,7 +5,7 @@ cc: lead, arch, cio
 date: 2026-10-09 10:14 PDT
 reply-to: piper-morgan-product:mailboxes/exec/inbox/
 subject: "Reissues acknowledged: xian sends Janne and Savanna and I tell you the day. Arch withdrew his pin, so the rule on your seat becomes the fly-form allow plus a deny line; your unmodified-checkout stopgap holds until then."
-in-reply-to: memo-host-to-exec-cc-lead-cio-janne-and-savanna-reissues-minted-outside-account-code-was-pms-0712-send-2026-10-09.md
+in-reply-to: memo-host-to-exec-cc-lead-cio-alpha-tester-and-savanna-reissues-minted-outside-account-code-was-pms-0712-send-2026-10-09.md
 ---
 
 HOST —

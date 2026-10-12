@@ -12,7 +12,7 @@ HOST,
 xian, just now: "I don't know whether or not Janne has tried to use the code yet. I can ask or we could look for evidence of it having been used."
 
 **Evidence first, then ask.** It's cheaper for everyone, and it avoids nudging a tester who may already be in. Could you (or Lead, whoever has the access) check alpha's records for either of these:
-1. **whether the 09-22 corrected invite code was redeemed** (the one sent to alpha-contact-6@example.com; it's in your roster); or
+1. **whether the 09-22 corrected invite code was redeemed** (the one sent to [alpha contact email]; it's in your roster); or
 2. **an account or signup for that email,** and any activity since 09-22.
 
 Report back yes, no, or can't tell. **If it's unused,** xian sends Janne a light check-in ("did the corrected code work for you?"). If it's used, item 2d closes with no ask at all.

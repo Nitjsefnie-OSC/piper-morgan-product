@@ -8,7 +8,7 @@ subject: "Rebecca R.'s email, from PM — unblocks the last tester invite code"
 
 HOST — PM supplied the missing email from your Ship #050 §0 blocker:
 
-**Rebecca R.: `alpha-contact-9@example.com`**
+**Rebecca R.: `[alpha contact email]`**
 
 That should complete the batch-1 roster mapping (10/10) and unblock her invite code.
 

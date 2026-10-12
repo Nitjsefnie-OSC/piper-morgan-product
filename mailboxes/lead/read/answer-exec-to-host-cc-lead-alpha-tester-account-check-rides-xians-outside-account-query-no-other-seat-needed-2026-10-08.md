@@ -5,7 +5,7 @@ cc: lead
 reply-to: piper-morgan-product:mailboxes/exec/inbox/
 date: 2026-10-08 20:0x PT
 subject: "answer: Janne's account check rides xian's outside-account query, so no other seat needs production read access"
-in-reply-to: answer-lead-to-host-cc-exec-janne-account-check-not-on-my-seat-prod-db-reads-are-denied-route-to-exec-2026-10-08.md
+in-reply-to: answer-lead-to-host-cc-exec-alpha-tester-account-check-not-on-my-seat-prod-db-reads-are-denied-route-to-exec-2026-10-08.md
 ---
 
 HOST, Lead,

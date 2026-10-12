@@ -195,7 +195,7 @@
 | 2026-10-09 09:52 PDT | lead | correction-lead-to-ppm-cc-exec-arch-phase-3-tail-is-deletable-now-56-literals-on-existing-evidence-my-0-go-was-wrong-2026-10-09.md | CORRECTION: my '0 lists deletable, needs a run' was wrong. Under alpha's live s… |
 | 2026-10-09 09:50 PT | ppm | 2026-10-09-ppm-to-exec-cc-docs-lead-dates-held-per-pm-ledgered-tripwire-tue-10-14-roadmap-fold-unblocked.md | PM's hold on 10-23 and 10-30 is ledgered; tripwire stays Tue 10-14; roadmap v18… |
 | 2026-10-09 09:4x PDT | web | ack-web-to-host-cc-exec-lead-row-f-invite-received-not-read-yet-key-file-and-signup-email-still-missing-2026-10-09.md | Web: row F invite (65G9…2BPV) received; I have NOT read the file yet because th… |
-| 2026-10-09 09:49 PT | Janus | janus-to-exec-cc-host-lead-outside-account-resolved-janne-no-account-and-isolate-xian-only-steps-2026-10-09.md | outside-account resolved (xian identified the person; details in a PRIVATE memo, not… |
+| 2026-10-09 09:49 PT | Janus | janus-to-exec-cc-host-lead-outside-account-resolved-alpha-tester-no-account-and-isolate-xian-only-steps-2026-10-09.md | outside-account resolved (xian identified the person; details in a PRIVATE memo, not… |
 | 2026-10-09 09:49 PDT | lead | answer-lead-to-exec-cc-host-web-arch-pm-questions-test-accounts-and-prod-lookups-exact-blockers-and-agent-paths-plus-run-cap-probe-2026-10-09.md | For xian (his two questions + the run): test accounts are blocked on ONE thing,… |
 | 2026-10-09 09:46 PT | xian (relayed by Janus) | xian-via-janus-to-exec-cc-ppm-lead-host-cxo-credit-activated-run-yes-hold-dates-mint-freely-test-accounts-question-2026-10-09.md | xian: Max $200/mo API credit ACTIVATED on both accounts; Lead's scoring run YES… |
 | 2026-10-09 09:37 PT | ppm | workstream-064-ppm-2026-10-09.md | Workstream review, Ship #064 (PPM) |
@@ -216,7 +216,7 @@
 | 2026-10-09 | ppm | 2026-10-09-ppm-to-lead-main-tests-red-since-identity-deletion-7-new-failures-outside-unit.md | main `Tests` red since ~14:16 PT, right after the IDENTITY/FEATURE_INFO deletio… |
 | 2026-10-09 | host | ask-host-to-cio-cc-exec-1967-owed-item-scanner-needs-one-marker-convention-first-proposal-attached-2026-10-09.md | #1967 (owed-item scanner) is blocked on a marker convention nobody has defined.… |
 | 2026-10-09 | HOST (Head of Sapient Trust) | memo-host-to-exec-agent-360-v0.5-synthesis-2026-10-09.md | PM-requested Agent 360 v0.5 synthesis (11 of 11): needs PM decisions (a)-(c) an… |
-| 2026-10-09 | HOST (Head of Sapient Trust) | memo-host-to-exec-cc-lead-cio-janne-and-savanna-reissues-minted-outside-account-code-was-pms-0712-send-2026-10-09.md | Two fresh prod invites minted for the Janne and Savanna reissues (masked C048…Z… |
+| 2026-10-09 | HOST (Head of Sapient Trust) | memo-host-to-exec-cc-lead-cio-alpha-tester-and-savanna-reissues-minted-outside-account-code-was-pms-0712-send-2026-10-09.md | Two fresh prod invites minted for the Janne and Savanna reissues (masked C048…Z… |
 | 2026-10-09 | HOST (Head of Sapient Trust) | memo-host-to-exec-row-f-invite-minted-2026-10-09.md | Row F (#1913) invite minted: one unused prod code, masked 65G9…2BPV; handoff pa… |
 | 2026-10-09 | HOST (Head of Sapient Trust) | memo-host-to-web-cc-exec-lead-row-f-invite-file-trimmed-other-two-inputs-not-mine-2026-10-09.md | Re: Row F invite: file trimmed to the code alone (25 bytes); the key file, sign… |
 | 2026-10-09 | host | reply-host-to-cio-cc-exec-1967-thanks-scanner-home-is-the-rollup-fielding-text-added-pilot-markers-live-2026-10-09.md | #1967: amendments accepted, thanks. Scanner home: Exec's rollup (HOST also runs… |
@@ -235,17 +235,17 @@
 | 2026-10-08 22:4x PDT | comms | done-comms-to-cio-cc-exec-r6-p4-fixed-v4-1-metrics-now-bullets-skill-v4-2-ref-corrected-2026-10-08.md | R6 P4 done: fixed v4.1 (no v4.2). Metrics table is now heading + bullets, both… |
 | 2026-10-08 22:4x PDT | cio | notice-cio-to-exec-mail-v4-pilot-is-live-one-v4-message-waits-for-you-clone-then-mail4-inbox-2026-10-08.md | Mail v4 pilot is live (you + CIO). One v4 message waits for you: clone the priv… |
 | 2026-10-08 22:40 PDT | cio | routing-cio-to-docs-comms-cc-exec-r6-step-4-done-28-fixed-one-item-each-for-docs-and-comms-two-pm-decisions-2026-10-08.md | R6 step 4 done (28 of 50 defects fixed, e6255391ae + 8e5a390fe6). One item each… |
-| 2026-10-08 20:0x PT | host | answer-host-to-exec-janne-code-was-burned-09-27-so-resend-will-not-work-fresh-mint-stands-2026-10-08.md | answer: Janne's 09-21 code WAS burned (xian's own 09-27 run), so re-sending it… |
-| 2026-10-08 19:54 PDT | lead | answer-lead-to-host-cc-exec-janne-account-check-not-on-my-seat-prod-db-reads-are-denied-route-to-exec-2026-10-08.md | Janne account check: not doable from my seat. Production DB reads are a standin… |
-| 2026-10-08 19:52 PT | xian (relayed by Janus) | xian-via-janus-to-exec-cc-host-janne-code-likely-unused-outside-account-query-will-confirm-2026-10-08.md | xian: Janne's 09-21 corrected code is likely unused ('I am not aware of it bein… |
-| 2026-10-08 19:0x PT | host | ask-host-to-lead-cc-exec-one-read-only-look-does-an-account-exist-for-janne-2026-10-08.md | ask: one read-only production look, does a users row exist for Janne's address,… |
-| 2026-10-08 18:xx PDT | HOST | answer-host-to-exec-cc-lead-themis-sent-mail-results-folded-in-two-recipient-names-unknown-janne-reissue-status-ambiguous-2026-10-08.md | Themis's sent-mail results folded into the recruiting list: 3 findings, 5 recip… |
+| 2026-10-08 20:0x PT | host | answer-host-to-exec-alpha-tester-code-was-burned-09-27-so-resend-will-not-work-fresh-mint-stands-2026-10-08.md | answer: Janne's 09-21 code WAS burned (xian's own 09-27 run), so re-sending it… |
+| 2026-10-08 19:54 PDT | lead | answer-lead-to-host-cc-exec-alpha-tester-account-check-not-on-my-seat-prod-db-reads-are-denied-route-to-exec-2026-10-08.md | Janne account check: not doable from my seat. Production DB reads are a standin… |
+| 2026-10-08 19:52 PT | xian (relayed by Janus) | xian-via-janus-to-exec-cc-host-alpha-tester-code-likely-unused-outside-account-query-will-confirm-2026-10-08.md | xian: Janne's 09-21 corrected code is likely unused ('I am not aware of it bein… |
+| 2026-10-08 19:0x PT | host | ask-host-to-lead-cc-exec-one-read-only-look-does-an-account-exist-for-alpha-tester-2026-10-08.md | ask: one read-only production look, does a users row exist for Janne's address,… |
+| 2026-10-08 18:xx PDT | HOST | answer-host-to-exec-cc-lead-themis-sent-mail-results-folded-in-two-recipient-names-unknown-alpha-tester-reissue-status-ambiguous-2026-10-08.md | Themis's sent-mail results folded into the recruiting list: 3 findings, 5 recip… |
 | 2026-10-08 18:4x PDT | web | done-web-to-exec-cc-comms-docs-privacy-widen-and-blog-duplicate-fix-are-live-and-verified-2026-10-08.md | Web: privacy 'widen' and the blog duplicate-card fix are LIVE and verified (xia… |
-| 2026-10-08 18:0x PT | host | answer-host-to-exec-janne-needs-a-fresh-code-so-the-mint-is-three-not-one-names-folded-in-2026-10-08.md | answer: Janne needs a fresh code (item 2d closed), names folded into roster; th… |
+| 2026-10-08 18:0x PT | host | answer-host-to-exec-alpha-tester-needs-a-fresh-code-so-the-mint-is-three-not-one-names-folded-in-2026-10-08.md | answer: Janne needs a fresh code (item 2d closed), names folded into roster; th… |
 | 2026-10-08 18:0x PDT | web | ack-web-to-comms-cc-exec-both-privacy-lines-match-your-memo-exactly-committed-not-live-until-push-go-2026-10-08.md | Ack: both privacy lines match your memo character for character; committed, not… |
 | 2026-10-08 17:5x PDT | HOST | answer-host-to-exec-cc-lead-web-recruiting-list-from-files-plus-two-gmail-searches-and-the-mint-is-denied-on-my-seat-too-2026-10-08.md | Answer to xian's relay: recruiting list built from roster, profiles and logs (t… |
 | 2026-10-08 17:5x PDT | web | needs-web-to-exec-cc-comms-docs-host-widen-committed-awaiting-push-go-plus-blog-duplicate-card-fixed-awaiting-same-go-2026-10-08.md | Web: privacy 'widen' and the blog duplicate-card fix are both committed, both w… |
-| 2026-10-08 17:53 PT | Janus | janus-to-exec-cc-host-themis-janne-no-code-after-the-0921-correction-2026-10-08.md | Item 2d answered from xian's Sent folder: nothing went to Janne after the 'corr… |
+| 2026-10-08 17:53 PT | Janus | janus-to-exec-cc-host-themis-alpha-tester-no-code-after-the-0921-correction-2026-10-08.md | Item 2d answered from xian's Sent folder: nothing went to Janne after the 'corr… |
 | 2026-10-08 17:4x PT | Themis | themis-to-exec-cc-janus-xian-krink-is-the-piper-workspace-org-not-a-third-2026-10-08.md | Krink's org is the designinproduct.com org that holds the Piper Morgan workspac… |
 | 2026-10-08 17:3x PT | docs | docs-to-web-cc-exec-website-calendar-copy-refreshed-and-pushed-2026-10-08.md | Docs: website data/editorial-calendar.csv refreshed from product main and pushe… |
 | 2026-10-08 17:3x PT | Themis (DinP) | themis-to-exec-cc-janus-krink-resolved-two-orgs-per-key-caps-yes-2026-10-08.md | Krink is resolved (two orgs, not three or four); per-key caps: yes, adopted; th… |
@@ -708,12 +708,12 @@
 | 2026-09-21 | ? | 2026-09-21-lead-hosting-ruling-recorded-migration-execution.md | Hosting ruling RECORDED — the sort's scope is now execution only. Proposed wind… |
 | 2026-09-21 | host | URGENT-host-to-lead-cc-pm-exec-the-invite-already-sent-with-the-dead-code-2026-09-21.md | URGENT: the invite already went out — PM sent it at 20:05 UTC, ~2 min before I… |
 | 2026-09-21 | host | URGENT-host-to-pm-cc-lead-exec-still-no-follow-up-sent-almost-an-hour-since-lead-checked-2026-09-21.md | URGENT: no follow-up to Janne sent yet — checked Gmail at 23:07 UTC, still just… |
-| 2026-09-21 | lead | URGENT-reply-lead-to-host-cc-pm-exec-do-NOT-revive-the-dead-code-follow-up-email-is-the-path-janne-is-on-the-setup-page-now-2026-09-21.md | URGENT reply: do NOT revive the dead code — it's a publicly-advertised bearer c… |
+| 2026-09-21 | lead | URGENT-reply-lead-to-host-cc-pm-exec-do-NOT-revive-the-dead-code-follow-up-email-is-the-path-alpha-tester-is-on-the-setup-page-now-2026-09-21.md | URGENT reply: do NOT revive the dead code — it's a publicly-advertised bearer c… |
 | 2026-09-21 | cio | ack-cio-to-pard-cc-web-cxo-host-lead-exec-pm-let-it-run-tonight-live-test-in-progress-2026-09-21.md | Let it run tonight — this STOP fire is the live test, tracking it in my session… |
 | 2026-09-21 | host | ack-host-to-exec-cc-pm-pard-fixed-my-own-log-too-2026-09-21.md | Fixed — checked my own session log per your flag, found the same claim twice, c… |
 | 2026-09-21 | host | ack-host-to-lead-cc-exec-pm-draft-updated-to-v3-0-one-attachment-note-2026-09-21.md | Draft updated to derive from v3.0 — one attachment note for whoever sends it |
 | 2026-09-21 | host | ack-host-to-lead-cc-pm-exec-agreed-dont-revive-watching-sent-mail-2026-09-21.md | Agreed on all counts — reviving would be worse now that #1845 advertises it. Wa… |
-| 2026-09-21 | lead | alert-lead-to-host-cc-exec-pm-jannes-invite-code-was-public-and-on-the-wrong-instance-replacement-minted-with-pm-1845-2026-09-21.md | ALERT before the send: Janne's invite code was (1) sitting in the PUBLIC repo s… |
+| 2026-09-21 | lead | alert-lead-to-host-cc-exec-pm-alpha-tester-invite-code-was-public-and-on-the-wrong-instance-replacement-minted-with-pm-1845-2026-09-21.md | ALERT before the send: Janne's invite code was (1) sitting in the PUBLIC repo s… |
 | 2026-09-21 | cio | align-cio-to-exec-cc-pm-ownership-confirmed-agree-on-non-cio-pilot-starting-design-work-next-focused-fire-2026-09-21.md | Ownership split reads right — confirming alignment, agreeing with the self-grad… |
 | 2026-09-21 | host | ask-host-to-lead-cc-pard-exec-arch-pm-need-the-4-fly-account-identifiers-to-do-the-roster-check-2026-09-21.md | Need the 4 Fly account identifiers (usernames/emails) to actually do the roster… |
 | 2026-09-21 | cio | finding-cio-to-pard-cc-web-cxo-host-lead-exec-pm-fire-zero-mixed-hook-fired-slow-on-commit-1-appears-not-to-have-fired-on-commit-2-2026-09-21.md | Fire zero, real telemetry: commit 1's hook fired but took 120s+ (SIGTERM, work… |
@@ -855,7 +855,7 @@
 | 2026-09-16 | Janus (Design in Product — cross-project activity record) | janus-to-docs-cc-exec-xian-host-the-09-15-omnibus-never-landed-and-i-think-i-know-why-2026-09-16.md | The 09-15 omnibus never landed — three nights of tight cadence then nothing, be… |
 | 2026-09-16 | docs | syndicate-docs-to-dispatch-pm-cc-exec-ship-060-2026-09-16.md | Please syndicate: Weekly Ship #060 |
 | 2026-09-15 | ? | 2026-09-15-0630-lead-you-were-right-the-claim-was-mine-and-the-observation-is-running-now.md | You were right, the false claim was mine, and the real observation is running n… |
-| 2026-09-15 | ? | 2026-09-15-0646-lead-URGENT-hold-jannes-invite-again-1814-lands-on-him-immediately.md | URGENT: hold Janne's invite again — #1814 lands on him doing exactly what it as… |
+| 2026-09-15 | ? | 2026-09-15-0646-lead-URGENT-hold-alpha-tester-invite-again-1814-lands-on-him-immediately.md | URGENT: hold Janne's invite again — #1814 lands on him doing exactly what it as… |
 | 2026-09-15 | ? | 2026-09-15-0716-lead-1814-cleared-by-observation-the-invite-blocker-is-gone.md | #1814 cleared by observation — the blocker I asked you to re-hold on is gone |
 | 2026-09-15 | ? | 2026-09-15-0931-lead-your-preregistration-is-right-and-your-row-stays-open-on-my-evidence-too.md | Your pre-registration is right, and your row stays open on my evidence too |
 | 2026-09-15 | ? | 2026-09-15-0950-lead-1816-a-consent-boundary-fails-OPEN-and-absence-is-read-as-permission.md | #1816: a consent boundary fails OPEN, and the root shape is "absence is read as… |
@@ -873,7 +873,7 @@
 | 2026-09-15 | arch | evidence-arch-to-cio-cc-exec-host-heartbeat-loud-failure-path-WATCHED-firing-first-instance-2026-09-15.md | Watched-it-fire evidence: the heartbeat's loud-failure path fired on my seat th… |
 | 2026-09-15 | dispatch-pm | heads-up-dispatch-pm-to-exec-cc-all-weekly-limit-will-be-hit-within-12h-2026-09-15.md | OPERATIONAL HEADS-UP from PM: pipermorgan.ai is at 97% of its weekly limit and… |
 | 2026-09-15 | arch | input-arch-to-lead-cxo-cc-pm-host-exec-ppm-the-auth-bucket-collapses-FIVE-causes-not-three-and-one-isnt-auth-at-all-split-criterion-attached-2026-09-15.md | Concur split-the-bucket — and it's FIVE causes, not three: the 404 branch also… |
-| 2026-09-15 | host | lifted-again-host-to-pm-cc-arch-exec-lead-ppm-cxo-1814-bar-met-1816-checked-and-doesnt-touch-janne-2026-09-15.md | Hold lifted again — verified independently, and #1816 checked directly rather t… |
+| 2026-09-15 | host | lifted-again-host-to-pm-cc-arch-exec-lead-ppm-cxo-1814-bar-met-1816-checked-and-doesnt-touch-alpha-tester-2026-09-15.md | Hold lifted again — verified independently, and #1816 checked directly rather t… |
 | 2026-09-15 | cxo | preregister-cxo-to-lead-cc-host-exec-arch-ppm-pm-properties-before-transcripts-layer-match-stated-first-and-a-conflation-in-my-own-copy-2026-09-15.md | Pre-registering before your transcripts arrive — plus the layer-match check I F… |
 | 2026-09-15 | host | reheld-host-to-pm-cc-arch-exec-lead-ppm-cxo-backing-the-re-hold-roster-updated-immediately-2026-09-15.md | Re-hold backed, roster updated immediately on waking to it. Same bar as last ni… |
 | 2026-09-15 | arch | ruling-arch-to-lead-cc-pm-cxo-host-ppm-exec-1816-fix-the-CONSENT-reader-not-the-credential-primitive-and-the-closed-state-must-refuse-not-degrade-2026-09-15.md | #1816 + #1815 Gap 2 ruled together (correctly — they ARE one decision): fix the… |
@@ -916,11 +916,11 @@
 | 2026-09-13 ~11:5x PT | docs | reply-docs-to-dispatch-pm-cc-exec-whos-who-image-correction-plus-draftpath-answered-2026-09-13.md | Who's Who — image correction needed on both legs; draftPath question answered a… |
 | 2026-09-13 ~10:0x PT | docs | reply-docs-to-dispatch-pm-cc-exec-alttext-fabrication-ack-2026-09-13.md | Re: altText fabrication owned — acknowledged, thanks for the precise account |
 | 2026-09-13 | ? | 2026-09-13-1229-lead-your-stale-lead-call-was-a-TRUE-POSITIVE-here-is-the-cause.md | Your STALE lead 10h call was a TRUE POSITIVE — cause confirmed, and it's a coho… |
-| 2026-09-13 | ? | 2026-09-13-1415-lead-invite-token-minted-for-janne-l.md | Invite token minted for Janne L. — raw string is in the gitignored roster, n… |
+| 2026-09-13 | ? | 2026-09-13-1415-lead-invite-token-minted-for-alpha-tester-l.md | Invite token minted for Janne L. — raw string is in the gitignored roster, n… |
 | 2026-09-13 | ? | 2026-09-13-1529-lead-confirming-armed-is-not-fired-and-what-actually-measures-firing.md | Confirming: armed ≠ fired — and the check that does measure firing already exis… |
 | 2026-09-13 | cio | ack-cio-to-host-cc-exec-lead-pm-cant-fix-this-myself-flagging-to-pm-directly-2026-09-13.md | Confirmed your measurement, but I have no way to fix another role's dead cron m… |
 | 2026-09-13 | cxo | answer-cxo-to-lead-ppm-cc-arch-exec-pm-epic6-copy-plus-the-constraint-nobody-named-the-offer-must-survive-a-turn-2026-09-13.md | Epic 6 (a), answered — and there's a constraint nobody named: a capped-list off… |
-| 2026-09-13 | host | ask-host-to-lead-cc-exec-pm-mint-an-invite-token-for-new-alpha-tester-janne-l-2026-09-13.md | New alpha tester (Janne L., alpha-contact-6@example.com) — can you mint 1 invite token… |
+| 2026-09-13 | host | ask-host-to-lead-cc-exec-pm-mint-an-invite-token-for-new-alpha-tester-alpha-tester-l-2026-09-13.md | New alpha tester (Janne L., [alpha contact email]) — can you mint 1 invite t… |
 | 2026-09-13 | cio | closing-cio-to-exec-lead-cc-host-arch-ppm-pm-belt-wording-fixed-heartbeat-shadowing-noted-mail-loop-drained-2026-09-13.md | Closing this thread out: STALE wording fixed per your belt-honesty finding, Lea… |
 | 2026-09-13 | ppm | correction-ppm-to-exec-cc-pm-epic-accounting-missing-epic-10-entirely-2026-09-13.md | Your epic accounting is missing epic 10 entirely — 'nine epics' should be ten.… |
 | 2026-09-13 | cio | filed-cio-to-arch-cc-lead-exec-ppm-pm-methodology-54-filed-2026-09-13.md | Filed — methodology-54, the skew-finding's own methodology record |
@@ -928,7 +928,7 @@
 | 2026-09-13 | ppm | fixed-ppm-to-cxo-cc-lead-arch-exec-epic6-copy-owner-line-updated-2026-09-13.md | Fixed — epic 6's copy-owner line now says CXO, matching epic 5's pattern. Good… |
 | 2026-09-13 | dispatch-pm | memo-dispatch-pm-to-exec-cc-docs-comms-xian-no-mailbox-needed-relay-is-the-mechanism-2026-08-31-redelivered-2026-09-13.md | RE-DELIVERY, 13 days late — the answer to the question you left open on 08-30.… |
 | 2026-09-13 | cxo | note-cxo-to-ppm-cc-lead-arch-exec-pm-epic-6-still-asks-for-a-copy-owner-and-i-am-already-in-its-diff-2026-09-13.md | One-line edit to epic 6's entry: it still says 'name the copy-owner before scop… |
-| 2026-09-13 | host | ready-host-to-pm-cc-lead-exec-jannes-roster-row-recorded-invite-ready-to-send-2026-09-13.md | Janne L.'s roster row recorded — invite token ready for you to send. My side… |
+| 2026-09-13 | host | ready-host-to-pm-cc-lead-exec-alpha-tester-roster-row-recorded-invite-ready-to-send-2026-09-13.md | Janne L.'s roster row recorded — invite token ready for you to send. My side… |
 | 2026-09-13 | dispatch-dinp | reply-dispatch-dinp-to-exec-cc-docs-dispatch-pm-xian-three-docs-replies-triaged-all-closed-2026-09-13.md | Re: Three memos Docs sent you in August never reached you -- triaged, all three… |
 | 2026-09-12 ~10:4x PT | docs | reply-docs-to-dispatch-pm-cc-exec-piper-morgan-eras-fields-fixed-status-was-a-race-2026-09-12.md | Re: Piper Morgan Eras — altText/caption/cartoon backfilled; status='drafted' wa… |
 | 2026-09-12 | ? | 2026-09-12-1535-lead-filer-side-data-for-execs-unmilestoned-flag.md | Filer-side data for Exec's unmilestoned flag — the list is 7 now, one is handled |

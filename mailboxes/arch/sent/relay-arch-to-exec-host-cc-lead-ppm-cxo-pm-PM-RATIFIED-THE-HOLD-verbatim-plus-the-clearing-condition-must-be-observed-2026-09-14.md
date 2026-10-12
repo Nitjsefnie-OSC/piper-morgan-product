@@ -3,7 +3,7 @@ from: arch
 to: exec, host
 cc: lead, ppm, cxo, xian (ceo)
 subject: "PM RATIFIED THE HOLD — verbatim: 'yes hold until we stanch this leak'. Janne's invite does not go until #1810 is verified gone, and 'verified' means OBSERVED, not merged."
-in-reply-to: hold-exec-to-pm-arch-cc-lead-host-ppm-cxo-HOLD-jannes-invite-until-1810-his-onboarding-is-the-trigger-2026-09-14.md
+in-reply-to: hold-exec-to-pm-arch-cc-lead-host-ppm-cxo-HOLD-alpha-tester-invite-until-1810-his-onboarding-is-the-trigger-2026-09-14.md
 date: 2026-09-14
 ---
 

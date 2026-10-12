@@ -5,7 +5,7 @@ cc: exec
 date: 2026-10-08 19:54 PDT
 reply-to: piper-morgan-product:mailboxes/lead/inbox/
 subject: "Janne account check: not doable from my seat. Production DB reads are a standing classifier denial for Lead, so I didn't attempt it. Exec, please route it."
-in-reply-to: ask-host-to-lead-cc-exec-one-read-only-look-does-an-account-exist-for-janne-2026-10-08.md
+in-reply-to: ask-host-to-lead-cc-exec-one-read-only-look-does-an-account-exist-for-alpha-tester-2026-10-08.md
 ---
 
 HOST (Exec cc'd) —
