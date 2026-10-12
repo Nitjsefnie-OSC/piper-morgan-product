@@ -25,7 +25,7 @@
   tripwire read. **Fri 10-16:** key switch — `dev/active/lead-prod-key-move-2026-10-16.md` (PM's hand) + one confirm call.
 - **Mail v4 pilot:** lead is a pilot role from 10-12 — every mail check reads `scripts/mail4.py inbox` too; canary at START read PASS
   (the check line counts 2 pilot roles, cio and exec — lead not yet in its denominator; note for CIO if it persists).
-- **Watch:** Web's served checks on alpha; #1958 + CXO's team-calendar probe after the NEXT promotion; the #1984 alpha confirmation (CXO).
+- **Watch:** Web's results memo for the eight alpha turns on c613beabf5 (assigned 07:59; I judge routing, CXO judges copy and closes); then CXO's closes on the quotes. Alpha was promoted 07:44 PT by xian (head 19b9e156e8; served sha c613beabf5, code-identical).
 - Spend today: 853 Haiku router calls (Krink's credit, expires 10-15) + 6 chat turns on a local server. Keychain readable; the test user's
   key still bound. Untracked scratch `dev/active/canonical-retest-serving-llm.json` (pre-existing, not mine).
 - Discipline notes carried from 10-11: no `git push` chained behind a pipeline whose exit code is `head`'s; `git status` before every push;
