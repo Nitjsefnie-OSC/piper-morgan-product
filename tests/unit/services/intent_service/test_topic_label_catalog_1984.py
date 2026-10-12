@@ -97,6 +97,37 @@ class TestNoActionIdInProse:
         assert text.count(UNLABELED_FAILURE_TOPIC) == 1
         assert "custom" not in text
 
+    def test_unlabeled_failure_reads_do_part_of_that(self):
+        """CXO's copy (2026-10-11): an unlabeled part is something Piper could
+        not "do" (a plan can include writes), never "checked on"."""
+        text = _render([_ok("meeting_time", "Nothing."), _failed("custom_op_x")])
+        assert f"I wasn't able to do {UNLABELED_FAILURE_TOPIC} right now" in text
+        assert "custom" not in text
+
+    def test_mixed_failures_list_labels_then_part_of_that(self):
+        text = _render(
+            [_ok("list_todos_query", "Nothing."), _failed("meeting_time"), _failed("custom_op_x")]
+        )
+        assert "check on your calendar and part of that right now" in text
+        assert "custom" not in text
+
+    def test_third_result_never_reads_on_the_your_front(self):
+        """CXO's second defect (2026-10-11): "On the {topic} front" at index 2
+        produced "On the your calendar front" for every "your …" label."""
+        text = _render(
+            [
+                _ok("list_todos_query", "Two todos."),
+                _ok("list_archived_projects", "None archived."),
+                _ok("meeting_time", "Nothing on your calendar."),
+            ]
+        )
+        assert "On the your" not in text and " front," not in text
+        assert "As for your calendar" in text or "Regarding your calendar" in text
+
+    def test_cxo_labels_present(self):
+        assert _intent_topic_label(_intent("list_milestones")) == "your milestones"
+        assert _intent_topic_label(_intent("session_activity_query")) == "this session"
+
     def test_labeled_op_keeps_its_words(self):
         text = _render(
             [
