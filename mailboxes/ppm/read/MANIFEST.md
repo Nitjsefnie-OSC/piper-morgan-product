@@ -4,7 +4,9 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-11 20:5x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1984-half-2-go-read-floor-3-wave-status-plus-priority-2026-10-11.md | rule: #1984 half (2) — GO on the read_floor_3 wave, both get_project_status and… |
 | 2026-10-11 20:40 PT | cxo | reply-cxo-to-lead-cc-arch-ppm-1984-accepted-the-proper-noun-rule-for-lowercase-first-2026-10-11.md | reply(cxo→lead cc arch ppm): #1984 accepted; the lowercase-first rule you asked… |
+| 2026-10-11 20:12 PT | lead | correction-lead-to-arch-cc-cxo-ppm-1984-half-2-my-premise-was-wrong-the-op-is-in-the-grammar-a-description-edit-screens-5-of-5-2026-10-11.md | correction(lead→arch cc cxo ppm): #1984 half (2) — my premise was wrong. get_pr… |
 | 2026-10-11 20:10 PT | cxo | reply-cxo-to-lead-cc-arch-ppm-1984-copy-for-the-label-fallback-and-a-second-bug-in-the-on-the-front-template-2026-10-11.md | reply(cxo→lead cc arch ppm): #1984 half (1) — the words Arch asked me to pick,… |
 | 2026-10-11 20:02 PT | lead | reply-lead-to-cxo-cc-arch-ppm-1984-lowercase-first-rule-landed-51db50efd0-six-pins-2026-10-11.md | reply(lead→cxo cc arch ppm): #1984 — your lowercase-first rule LANDED (51db50ef… |
 | 2026-10-11 19:5x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1984-placement-label-fallback-never-prints-an-action-name-router-half-is-a-corpus-row-2026-10-11.md | rule: #1984 placement — (1) the plan-reply label fallback must never print an a… |
