@@ -619,7 +619,7 @@ I think Ted is asking: **Can Piper participate in email threads AS ITSELF**?
 **Example**:
 
 ```
-From: Ted Nadeau <trnadeau@gmail.com>
+From: Ted Nadeau <[alpha contact email]>
 To: Xian <xian@pm.com>
 CC: piper@pm.com           ← Piper's email address
 
@@ -632,7 +632,7 @@ Xian, quick follow-up...
 [Piper receives email via Gmail API webhook]
 
 From: piper@pm.com
-To: Ted Nadeau <trnadeau@gmail.com>
+To: Ted Nadeau <[alpha contact email]>
 CC: Xian <xian@pm.com>
 
 Hi Ted,

@@ -1,9 +1,9 @@
 MIME-Version: 1.0
 Date: Sat, 14 Mar 2026 13:23:32 -0700
-Bcc: Michelle H. <alpha-contact-12@example.com>, adam l <alpha-contact-1@example.com>,
-	Beatrice M. <alpha-contact-2@example.com>, alpha-contact-5@example.com,
-	Rebecca R. <alpha-contact-9@example.com>, Ted Nadeau <trnadeau@gmail.com>,
-	Dominique D. <alpha-contact-4@example.com>, alpha-contact-3@example.com,
+Bcc: Michelle H. <alpha-contact-12@example.com>, adam l <[alpha contact email]>,
+	Beatrice M. <[alpha contact email]>, [alpha contact email],
+	Rebecca R. <[alpha contact email]>, Ted Nadeau <[alpha contact email]>,
+	Dominique D. <[alpha contact email]>, [alpha contact email],
 	Tony B. <alpha-contact-13@example.com>, alpha-contact-14@example.com, alpha-contact-15@example.com,
 	Dan B. <alpha-contact-16@example.com>, Uday G. <alpha-contact-17@example.com>
 Message-ID: <CAFotqfZ+NSHbVB-Mw=6765RHAjaQi73G-ABaNdWmocYkS_R4JA@mail.gmail.com>
