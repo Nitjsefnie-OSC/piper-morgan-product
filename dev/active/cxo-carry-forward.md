@@ -282,3 +282,4 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - 10-12 08:15 — Arch ack triaged: #1984 closed for Arch; risk row is a standing screen member; my #1984 stays open as known miss.
 - 10-12 08:30 — alpha promoted (c613beabf5); Web runs 8 served turns, table to me for copy judgment: #1958 'Friday' -> I close #1958; #1979 confirm; hello/thanks, today's tasks, team calendar, two-topic labels.
 - 10-12 09:05 — alpha served turns judged: #1958 closed, #1979 confirmed; filed #1989/#1990/#1991 (all Lead's routing); re-test reads owed; #1960 quote and own-calendar clause still owed.
+- 10-12 09:40 — thanks/farewell copy (#1986) and (b) nod (#1985) sent; re-run set next promotion: thank you! x2, goodbye, today's tasks x2; I close #1985/#1986 on quotes.
