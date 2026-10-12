@@ -287,3 +287,4 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - 10-12 10:20 — #1986 landed (8ebe568035), #1985 (b) on main (bb4066fc00); both await Web's served re-run at next promotion; I close on quotes.
 - 10-12 10:35 — #1986 cd43832626 (durable count); missing-row=zero kept; served set adds 31-min-idle thanks. Close #1985/#1986 on Web's quotes.
 - 10-12 10:50 — #1986 belt landed d23849fb9f; nothing owed but the close on Web's quotes after promotion.
+- 10-12 10:17 — fire: quiet; CI 12/12; waits unchanged (Web's re-run closes #1985/#1986).
