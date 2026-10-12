@@ -5322,8 +5322,8 @@ class TestOriginalMessageWriteRatchet1459:
     (a) a single-surface assignment — ``x.original_message = …`` or
         ``x.context["original_message"] = …``;
     (b) replacing the whole context dict (``x.context = …``) with anything other
-        than the two exempt idioms: the ``is None`` guard's ``{}`` and the copy
-        ``dict(x.context or {})``;
+        than the two exempt idioms: a bare ``{}`` directly under that receiver's
+        own ``if x.context is None:`` guard, and the copy ``dict(x.context or {})``;
     (c) ``x.context.update(…)`` / ``setdefault`` carrying the key, or
         ``setattr(x, "original_message", …)``;
     (d) ``x.context.pop("original_message")`` / ``del x.context["original_message"]``.
@@ -5371,10 +5371,46 @@ class TestOriginalMessageWriteRatchet1459:
         return isinstance(node, ast.Dict) and any(cls._is_key(k) for k in node.keys if k)
 
     @classmethod
-    def _exempt_context_replacement(cls, target: ast.Attribute, value: ast.AST) -> bool:
-        # ``x.context = {}`` (the ``is None`` guard) …
+    def _guarded_assignments(cls, tree: ast.AST) -> set[int]:
+        """ids of the Assign nodes that sit directly in the body of
+        ``if <intent>.context is None:`` — the only place a bare ``{}`` is a
+        no-op rather than a wipe (Arch's addendum, 2026-10-12)."""
+        guarded: set[int] = set()
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.If):
+                continue
+            test = node.test
+            if (
+                isinstance(test, ast.Compare)
+                and len(test.ops) == 1
+                and isinstance(test.ops[0], ast.Is)
+                and len(test.comparators) == 1
+                and isinstance(test.comparators[0], ast.Constant)
+                and test.comparators[0].value is None
+                and cls._is_intent_context(test.left)
+            ):
+                # Compare the receiver beneath ``.context``: a Store target and a
+                # Load test differ in ``ctx``, so a whole-node dump never matches.
+                receiver = ast.dump(test.left.value)
+                for stmt in node.body:
+                    if isinstance(stmt, ast.Assign) and any(
+                        isinstance(t, ast.Attribute)
+                        and t.attr == "context"
+                        and ast.dump(t.value) == receiver
+                        for t in stmt.targets
+                    ):
+                        guarded.add(id(stmt))
+        return guarded
+
+    @classmethod
+    def _exempt_context_replacement(
+        cls, target: ast.Attribute, value: ast.AST, *, guarded: bool
+    ) -> bool:
+        # ``x.context = {}`` ONLY under its own ``if x.context is None`` guard; an
+        # unguarded bare ``{}`` wipes the key and leaves the field set — the
+        # divergence shape (b) exists to catch …
         if isinstance(value, ast.Dict) and not value.keys:
-            return True
+            return guarded
         # … and ``x.context = dict(x.context or {})`` (the copy-before-mutate idiom).
         if (
             isinstance(value, ast.Call)
@@ -5400,6 +5436,7 @@ class TestOriginalMessageWriteRatchet1459:
         """Return (violations, construction_sites) for one module."""
         violations: list[str] = []
         constructions = 0
+        guarded = cls._guarded_assignments(tree)
         for node in ast.walk(tree):
             # denominator: Intent(...) with the message set either way
             if isinstance(node, ast.Call):
@@ -5431,7 +5468,9 @@ class TestOriginalMessageWriteRatchet1459:
                     elif (
                         isinstance(node, ast.Assign)
                         and cls._is_intent_context(t)
-                        and not cls._exempt_context_replacement(t, node.value)
+                        and not cls._exempt_context_replacement(
+                            t, node.value, guarded=id(node) in guarded
+                        )
                     ):
                         violations.append(f"{path}:{node.lineno} (b) context replaced")
             # (c) update/setdefault on the key; setattr on the field; (d) pop
@@ -5496,6 +5535,9 @@ def f(intent, pre_intent, other):
     setattr(intent, "original_message", "a")           # (c)
     intent.context.pop("original_message", None)       # (d)
     del intent.context["original_message"]             # (d)
+    intent.context = {}                                # (b) — bare {} with NO is-None guard wipes the key
+    if other.context is None:
+        intent.context = {}                            # (b) — guarded, but by ANOTHER receiver's test
     # exempt / out of scope:
     if intent.context is None:
         intent.context = {}
@@ -5516,6 +5558,8 @@ def f(intent, pre_intent, other):
             [
                 "(a) attribute-only write",
                 "(a) dict-only write",
+                "(b) context replaced",
+                "(b) context replaced",
                 "(b) context replaced",
                 "(b) context replaced",
                 "(c) update on the key",
