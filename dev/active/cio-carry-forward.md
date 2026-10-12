@@ -35,3 +35,4 @@ can hide its subject (main-ci-status 20 → 100).
 **Criteria line**: `label:methodology,process,innovation`, baseline 5.
 
 - R3 git-write removal (key: r3-git-write-removal-2; Filed 2026-10-11): readers 1/3 (Exec: cohort-position). The 2 freeze belts: patch written + tested, commit REFUSED by auto-mode ([Auto-Mode Bypass]) after Exec was refused the same edit; patch at dev/2026/10/11/r3-belts-store-readers.patch (not applied). Blocked on xian allowing the belt edit (via Exec). Then remove the git write and run freeze-check right away and at the next START. Git write stays until then.
+- piper-guards remaining rules (key: piper-guards-rest; Filed 2026-10-12): M-1 + M-4 done (6/6); M-2, M-3, M-5, M-6 and M-9 wait on xian's attended live check (README runbook, 49dc037e70). Then side-by-side week, CIO seat first.
