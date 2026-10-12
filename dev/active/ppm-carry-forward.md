@@ -196,3 +196,5 @@ Brake FIRED (second slip = #1965 admission, found and ledgered 10-09). Memo to E
 - 2026-10-12 09:1x — #1986 condition 2 tightened + landed (cd43832626): durable owner-checked turn count licenses the empty thanks line, else "You're welcome." Compound examples ride next catalog batch (trigger = that batch's rule-7 run). #1993 (test-order leak) placed Production. Ceiling 120, no gate effect.
 
 - 2026-10-12 09:2x — CXO: missing conversation row stays zero (empty form); adds a 31-minute-idle thanks to the served set; closes #1986/#1985 on quoted replies. No gate effect.
+
+- 2026-10-12 09:3x — Arch accepted cd43832626 plus a one-line belt (empty thanks form needs durable zero AND no in-memory assistant turn); Lead's to add. No gate effect, patterns untouched.
