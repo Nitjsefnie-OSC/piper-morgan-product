@@ -73,6 +73,7 @@ def intent_service(mock_engine, mock_classifier, mock_canonical_handlers):
     from services.intent_service.workflow_dispatcher import WORKFLOW_REGISTRY
     from services.intent_service.workflow_entries import register_default_workflows
 
+    saved = dict(WORKFLOW_REGISTRY)  # #1993: restore, don't leave the rail empty
     WORKFLOW_REGISTRY.clear()
     register_default_workflows()
 
@@ -84,8 +85,9 @@ def intent_service(mock_engine, mock_classifier, mock_canonical_handlers):
 
     yield service
 
-    # Clean up registry
+    # Clean up registry: put back whatever was registered before this fixture ran
     WORKFLOW_REGISTRY.clear()
+    WORKFLOW_REGISTRY.update(saved)
 
 
 class TestOfferAcceptance:

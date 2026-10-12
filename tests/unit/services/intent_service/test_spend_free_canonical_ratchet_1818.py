@@ -301,11 +301,18 @@ def real_intent_service():
     from services.intent_service.workflow_dispatcher import WORKFLOW_REGISTRY
     from services.intent_service.workflow_entries import register_default_workflows
 
+    # #1993: snapshot and restore the module-level rail. The old teardown
+    # (`WORKFLOW_REGISTRY.clear()`) left the registry EMPTY for every test that
+    # ran after this file, which failed test_action_registry's live-runtime
+    # oracle 45 rows deep whenever the two ran in that order (CI's alphabetical
+    # collection hid it). Same shape as test_workflow_dispatcher's clean_registry.
+    saved = dict(WORKFLOW_REGISTRY)
     WORKFLOW_REGISTRY.clear()
     register_default_workflows()
     service = IntentService()
     yield service
     WORKFLOW_REGISTRY.clear()
+    WORKFLOW_REGISTRY.update(saved)
 
 
 @pytest.mark.asyncio

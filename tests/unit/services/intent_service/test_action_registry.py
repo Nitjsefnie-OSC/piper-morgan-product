@@ -36,6 +36,18 @@ from services.shared_types import IntentCategory
 # is safe to share across every test in this module.
 register_default_workflows()
 
+
+@pytest.fixture(autouse=True)
+def _rail_registered():
+    """#1993: a fixture elsewhere in the session may clear WORKFLOW_REGISTRY in its
+    teardown (test_spend_free_canonical_ratchet_1818 and test_offer_accept_decline
+    did, until their restore). The import-time call above runs once at collection,
+    so it cannot see that. register_default_workflows() is idempotent (skips keys
+    already present), so re-asserting it before every test is a no-op in the
+    healthy case and a repair in the starved one."""
+    register_default_workflows()
+
+
 # ---- Registry Coverage Tests ----
 
 
