@@ -575,6 +575,21 @@
         "wireguard",
         "wg"
       ]
+    ],
+    "suspend": [
+      [
+        "suspend"
+      ]
+    ],
+    "resume": [
+      [
+        "resume"
+      ]
+    ],
+    "move": [
+      [
+        "move"
+      ]
     ]
   },
   "spellings": {
@@ -688,6 +703,7 @@
       "machines uncordon",
       "machines update",
       "mcp",
+      "move",
       "mpg",
       "orgs",
       "pg attach",
@@ -715,11 +731,13 @@
       "postgres restart",
       "postgres users",
       "redis",
+      "resume",
       "scale",
       "secrets deploy",
       "secrets import",
       "secrets sync",
       "storage",
+      "suspend",
       "tigris",
       "tokens 3p",
       "tokens attenuate",
@@ -1603,6 +1621,14 @@
       "Bash(*/fly mcp *)",
       "Bash(*/flyctl mcp)",
       "Bash(*/flyctl mcp *)",
+      "Bash(fly move)",
+      "Bash(fly move *)",
+      "Bash(flyctl move)",
+      "Bash(flyctl move *)",
+      "Bash(*/fly move)",
+      "Bash(*/fly move *)",
+      "Bash(*/flyctl move)",
+      "Bash(*/flyctl move *)",
       "Bash(fly mpg)",
       "Bash(fly mpg *)",
       "Bash(flyctl mpg)",
@@ -1819,6 +1845,14 @@
       "Bash(*/fly redis *)",
       "Bash(*/flyctl redis)",
       "Bash(*/flyctl redis *)",
+      "Bash(fly resume)",
+      "Bash(fly resume *)",
+      "Bash(flyctl resume)",
+      "Bash(flyctl resume *)",
+      "Bash(*/fly resume)",
+      "Bash(*/fly resume *)",
+      "Bash(*/flyctl resume)",
+      "Bash(*/flyctl resume *)",
       "Bash(fly scale)",
       "Bash(fly scale *)",
       "Bash(flyctl scale)",
@@ -1859,6 +1893,14 @@
       "Bash(*/fly storage *)",
       "Bash(*/flyctl storage)",
       "Bash(*/flyctl storage *)",
+      "Bash(fly suspend)",
+      "Bash(fly suspend *)",
+      "Bash(flyctl suspend)",
+      "Bash(flyctl suspend *)",
+      "Bash(*/fly suspend)",
+      "Bash(*/fly suspend *)",
+      "Bash(*/flyctl suspend)",
+      "Bash(*/flyctl suspend *)",
       "Bash(fly tigris)",
       "Bash(fly tigris *)",
       "Bash(flyctl tigris)",

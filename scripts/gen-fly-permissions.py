@@ -79,6 +79,10 @@ DENY = [
     "orgs",
     "auth",
     "wireguard",
+    # Deprecated and absent from `fly help`, but still run on v0.4.115 (Pard, 10-12).
+    "suspend",
+    "resume",
+    "move",
 ]
 
 REMOVE = {

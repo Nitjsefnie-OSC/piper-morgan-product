@@ -4,6 +4,25 @@
 Pard (seat permissions). Applies to any seat allowed to run a fixed production command (first: HOST's seat, the
 read-only `prod_user_lookup` and the invite mint).
 
+## 2026-10-12 (later still): Pard's re-check, hidden verbs, and install path
+
+- **Re-check (Pard, 14:55):** 0 alias spellings miss their class (was 79). No spelling is in two classes, and remove and
+  keep_deny are unchanged.
+- **Hidden verbs added to DENY:** `suspend`, `resume` and `move`. They are deprecated and absent from `fly help`, but
+  still run on v0.4.115. Pard found them by guessing 38 names, so this is not a full list. `regions`, `history`, `open`,
+  `info` and `curl` exist too but are read-only, so they go to the reviewer. Now 64 allow, 120 ask, 1052 deny.
+- **Residual, written down rather than fixed:** a prefix before the binary matches no rule under fnmatch:
+  `env fly …`, `command fly …`, `FLY_API_TOKEN=x fly …`, or a double space after `fly`. Those go to the reviewer.
+  The current catch-all file has the same hole. Whether Claude Code's matcher strips such prefixes is unmeasured.
+  The attended check adds `env fly tokens list` (in DENY, harmless if it runs). Never test this with `deploy`.
+- **Drift check:** Pard owns it, as a cycle-check arm added at install. It also asserts that HOST's installed rules
+  equal this JSON.
+- **Install:** `mediajunkie:scripts/apply-fly-split.py`, which backs up the file, refuses if any non-fly rule would
+  change, and is dry-run clean. Its `--apply` is xian's to run.
+- **Conflict:** Pard's fleet manifest (`mediajunkie:docs/seat-permissions.json`) puts the 8 old Fly denies on every seat.
+  A later fleet `--apply` would re-deny `secrets set|unset` and `tokens create` on HOST without notice. The fix, a HOST
+  exception in the manifest, goes to xian with the install.
+
 ## 2026-10-12 (later): regenerated with aliases after Pard's check
 
 Pard read flyctl's `Aliases:` lines on 10-12 and found 79 spellings of gated verbs that matched no rule. Examples: `fly m destroy`,
