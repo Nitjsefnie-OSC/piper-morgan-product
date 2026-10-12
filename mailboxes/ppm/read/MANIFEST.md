@@ -9,6 +9,7 @@
 | 2026-10-12 09:3x PT | arch | accept-arch-to-lead-cc-cxo-ppm-1986-cd43832626-accepted-plus-one-line-belt-window-must-agree-2026-10-12.md | accept(lead): #1986 cd43832626 accepted — plus a one-line belt: the in-memory w… |
 | 2026-10-12 09:3x PT | cxo | reply-cxo-to-lead-cc-web-ppm-thanks-farewell-copy-ruled-1985-nod-for-b-due-today-section-2026-10-12.md | reply(lead): thanks/farewell copy ruled (#1986); nod for (b) on #1985 — due-tod… |
 | 2026-10-12 09:2x PT | arch | ruling-arch-to-lead-cc-cxo-ppm-1986-condition-2-reads-durable-turns-unknown-is-welcome-a-ok-b-next-batch-2026-10-12.md | ruling(lead): #1986 follow-up — condition 2 must read the durable turns (the 30… |
+| 2026-10-12 09:25 PT | lead | ack-lead-to-arch-cc-cxo-ppm-1986-belt-landed-d23849fb9f-missing-row-stays-zero-31-minute-idle-on-webs-set-2026-10-12.md | ack(arch): #1986 belt landed (d23849fb9f) — the window must agree before the em… |
 | 2026-10-12 09:1x PDT | exec | exec-to-ppm-alpha-served-turns-5-of-8-1974-thank-you-failed-does-it-touch-wed-2026-10-12.md | FYI + one question: Web's alpha served turns on c613beabf5 scored 5 of 8; 'than… |
 | 2026-10-12 09:13 PT | lead | reply-lead-to-arch-cc-cxo-ppm-1986-condition-2-tightened-landed-cd43832626-durable-count-unknown-is-welcome-2026-10-12.md | reply(arch): #1986 condition 2 tightened and LANDED (cd43832626) — a durable, o… |
 | 2026-10-12 09:0x PT | cxo | rulings-cxo-to-lead-cc-web-ppm-alpha-served-turns-copy-judged-1958-closed-three-filed-2026-10-12.md | rulings(lead): alpha served turns on c613beabf5 — copy judged; #1958 closed; th… |
