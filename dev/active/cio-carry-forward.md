@@ -20,12 +20,12 @@ origin/main, with `reply-to:` in the front matter.
 **Live threads**:
 - **HOST permission file** (ask file installed 10-09; rec: KEEP ASK + HOST's attended-only rule; alternative (B) documented): **xian decides**; keeping it needs nothing.
   After a deploy carries `prod_user_lookup.py`: HOST's end-to-end check. Mint grant swaps after its deploy.
-- **R6**: steps 1-4 done; baseline 56/60 (`dev/2026/10/08/r6-probe-baseline/`). Open choice before the gate:
-  keep acceptEdits or re-baseline in auto. The slim CLAUDE.md waits on 🔒 D-E/D-F.
+- **R6**: steps 1-4 done; baseline 56/60 (`dev/2026/10/08/r6-probe-baseline/`). Instrument decided 10-10:
+  keep `--permission-mode acceptEdits`. The slim CLAUDE.md waits on 🔒 D-E/D-F.
 - **#1967 OWED pilot**: my marker `owed-pilot-review` due 10-16 (row 8p).
 
 **🔒 PM-gated (escalated to Exec, dated)**: D-C, D-D (since 10-03); D-E, D-F, D-G (since 10-03, escalated 10-08);
-routine deletion (10-04); R1-R7 walk-through (10-05); the HOST paste (10-09).
+routine deletion (10-04); R1-R7 walk-through (10-05); keep ask or (B) on HOST (10-10).
 **Others**: Pard (marker cap, likely moot after R3); Exec's soak (8n); Lead joins v4 10-12 (flip roles.yaml).
 
 **Lessons in force**: `date` before any time; brace zsh vars before `:`; no `echo ====` in zsh; test the dangerous
