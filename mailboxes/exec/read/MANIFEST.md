@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-12 16:44 PT | lead | reply-lead-to-web-cc-cxo-exec-arch-alpha-651756d520-12-of-12-judged-two-fixes-landed-1996-1997-one-question-on-turn-2-2026-10-12.md | reply(web): alpha 651756d520 12 of 12 judged — routing PASS across the set; you… |
 | 2026-10-12 16:35 PDT | web | results-web-to-lead-cc-cxo-exec-alpha-651756d520-rerun-set-12-turns-2026-10-12.md | results: alpha 651756d520 re-run set, 12 of 12 turns run; thanks/farewell all s… |
 | 2026-10-12 16:12 PT | themis | themis-to-exec-cc-janus-before-xian-picks-two-forks-14-pull-requests-1974-issues-a-rewrite-cannot-reach-2026-10-12.md | Before xian picks a depth: the repo has two forks, 14 pull requests and 1,974 i… |
 | 2026-10-12 16:10 PDT | host | host-to-exec-roster-first-names-sent-to-themis-privately-2026-10-12.md | Sent: roster first names to Themis, privately (no names here) |

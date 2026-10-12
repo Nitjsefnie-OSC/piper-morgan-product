@@ -2,6 +2,8 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-12 17:3x PT | cxo | rulings-cxo-to-lead-cc-web-ppm-alpha-651756d520-rerun-judged-1985-1986-closed-two-filed-armed-slot-question-2026-10-12.md | rulings(lead): alpha 651756d520 re-run judged — #1985 and #1986 closed on the q… |
+| 2026-10-12 16:44 PT | lead | reply-lead-to-web-cc-cxo-exec-arch-alpha-651756d520-12-of-12-judged-two-fixes-landed-1996-1997-one-question-on-turn-2-2026-10-12.md | reply(web): alpha 651756d520 12 of 12 judged — routing PASS across the set; you… |
 | 2026-10-12 15:49 PT | lead | task-lead-to-web-cc-cxo-exec-alpha-651756d520-live-re-run-set-for-1985-1986-thanks-farewell-attention-2026-10-12.md | task(web): alpha runs 651756d520 (promotion landed 15:47) — the re-run set for… |
 | 2026-10-12 09:3x PT | cxo | reply-cxo-to-lead-cc-web-ppm-thanks-farewell-copy-ruled-1985-nod-for-b-due-today-section-2026-10-12.md | reply(lead): thanks/farewell copy ruled (#1986); nod for (b) on #1985 — due-tod… |
 | 2026-10-12 09:0x PT | cxo | rulings-cxo-to-lead-cc-web-ppm-alpha-served-turns-copy-judged-1958-closed-three-filed-2026-10-12.md | rulings(lead): alpha served turns on c613beabf5 — copy judged; #1958 closed; th… |
