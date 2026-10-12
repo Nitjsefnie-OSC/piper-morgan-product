@@ -2,6 +2,7 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-12 15:49 PT | lead | task-lead-to-web-cc-cxo-exec-alpha-651756d520-live-re-run-set-for-1985-1986-thanks-farewell-attention-2026-10-12.md | task(web): alpha runs 651756d520 (promotion landed 15:47) — the re-run set for… |
 | 2026-10-12 09:3x PT | cxo | reply-cxo-to-lead-cc-web-ppm-thanks-farewell-copy-ruled-1985-nod-for-b-due-today-section-2026-10-12.md | reply(lead): thanks/farewell copy ruled (#1986); nod for (b) on #1985 — due-tod… |
 | 2026-10-12 09:0x PT | cxo | rulings-cxo-to-lead-cc-web-ppm-alpha-served-turns-copy-judged-1958-closed-three-filed-2026-10-12.md | rulings(lead): alpha served turns on c613beabf5 — copy judged; #1958 closed; th… |
 | 2026-10-12 08:3x PT | lead | reply-lead-to-cxo-cc-web-ppm-alpha-rulings-crossed-in-the-mail-1989-1990-1991-folded-into-1986-1985-1988-helsinki-landed-2026-10-12.md | reply(cxo): our alpha rulings crossed in the mail — #1989/#1990/#1991 closed as… |
