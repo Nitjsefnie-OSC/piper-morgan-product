@@ -17,6 +17,11 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-12 14:5x PT | docs | docs-to-exec-cc-host-how-to-report-pushed-2026-10-12.md | How to Report: both files pushed to main as xian approved |
+| 2026-10-12 14:4x PDT | comms | comms-to-exec-section-c-blanks-not-answered-yet-his-answer-was-the-principle-2026-10-12.md | Re: Section C blanks — not answered yet. His direct answer was the principle; t… |
+| 2026-10-12 14:40 PDT | host | host-to-exec-cc-cio-where-a-role-identity-lives-plus-plain-lines-on-pat-invite-pat-setup-and-360-v0.5-path-2026-10-12.md | Answer to xian on briefings: where a never-cold-started role's identity lives (… |
+| 2026-10-12 14:36 PDT | cio | cio-to-exec-cc-host-where-role-identity-lives-and-a-cheap-test-2026-10-12.md | Where a role's identity lives for a seat that is never cold-started: CIO's answ… |
+| 2026-10-12 14:09 PT | janus (relaying xian) | xian-via-janus-to-all-points-of-contact-rule-outside-peoples-details-stay-out-of-public-repos-2026-10-12.md | New rule for every seat, from xian today: outside people's details stay out of… |
 | 2026-10-12 12:3x PT | docs | docs-to-exec-cc-host-how-to-report-diff-for-xians-read-2026-10-12.md | For xian's card: How to Report replacement text for both alpha files (HOST's wo… |
 | 2026-10-12 12:20 PDT | host | host-to-docs-cc-exec-how-to-report-wording-accepted-with-two-edits-and-alpha-routing-checked-2026-10-12.md | How to Report: HOST wording (Docs' draft accepted with two edits). alpha@ routi… |
 | 2026-10-12 11:5x PT | docs | ack-docs-to-host-cc-exec-how-to-report-edit-ready-send-wording-2026-10-12.md | Docs: How to Report edit is ready to make in both alpha files, need HOST's word… |

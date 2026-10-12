@@ -18,7 +18,7 @@ origin/main, with `reply-to:` in the front matter.
 **Lead joined mail v4 10-12** (roles.yaml 3a79812); Lead acked the delivery test; Pard's wake row is on (since 03:13). Pilot review 10-22.
 
 **Live threads**:
-- **HOST permission file** (ask file installed 10-09; rec: KEEP ASK + HOST's attended-only rule; alternative (B) documented): **xian decides**; keeping it needs nothing.
+- **HOST fly split APPROVED by xian 10-12**: exact rules drafted (3bbbfc7c40, fly-permissions-host-2026-10-12.json), memo to Pard. Waiting: Pard installs, then xian's attended check (status runs, logs asks, deploy refused). Adjust if bare forms don't match.
   After a deploy carries `prod_user_lookup.py`: HOST's end-to-end check. Mint grant swaps after its deploy.
 - **R6**: steps 1-4 done; baseline 56/60 (`dev/2026/10/08/r6-probe-baseline/`). Instrument decided 10-10:
   keep `--permission-mode acceptEdits`. The slim CLAUDE.md waits on 🔒 D-E/D-F.
