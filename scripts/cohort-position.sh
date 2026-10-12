@@ -113,27 +113,18 @@ role_last_commit_epoch() {
 }
 
 role_last_heartbeat() {
-  # Scans dev/heartbeats/*/{role}.tsv for the newest timestamp line for $1. Prints
-  # "epoch<TAB>state" (epoch=0, state="" if nothing found — never fabricated).
-  local role="$1"
-  local best_epoch=0 best_state="" d f ts who state e
-  if [ -d "$HB_DIR" ]; then
-    for d in "$HB_DIR"/*/; do
-      [ -d "$d" ] || continue
-      f="${d}${role}.tsv"
-      [ -f "$f" ] || continue
-      while IFS=$'\t' read -r ts who state; do
-        [ -z "${ts:-}" ] && continue
-        e="$(parse_ts_epoch "$ts")"
-        [ -z "${e:-}" ] && continue
-        if [ "$e" -gt "$best_epoch" ] 2>/dev/null; then
-          best_epoch="$e"
-          best_state="${state:-}"
-        fi
-      done < "$f"
-    done
-  fi
-  printf '%s\t%s\n' "$best_epoch" "$best_state"
+  # R3 step 1 (2026-10-11, Exec, CIO's go after 3 days of 11/11 parity): reads the non-git store
+  # (scripts/hb-store.py; default ~/.local/state/piper-heartbeats) instead of scanning
+  # dev/heartbeats/*/{role}.tsv. Prints "epoch<TAB>state" (epoch=0, state="" if nothing found,
+  # never fabricated). The store records every invocation, suppressed or not, so its newest
+  # signal is >= the git one. State is the fire type of the newest invocation.
+  local role="$1" epoch state li
+  epoch="$(python3 "$REPO/scripts/hb-store.py" latest --role "$role" --epoch 2>/dev/null | tail -1)"
+  case "$epoch" in ''|*[!0-9]*) epoch=0 ;; esac
+  state=""
+  li="${PIPER_HB_STORE:-$HOME/.local/state/piper-heartbeats}/last-invoked/${role}.txt"
+  [ "$epoch" -gt 0 ] && [ -f "$li" ] && state="$(head -1 "$li" | awk -F'\t' '{print $2}')"
+  printf '%s\t%s\n' "$epoch" "$state"
 }
 
 extract_focus() {
