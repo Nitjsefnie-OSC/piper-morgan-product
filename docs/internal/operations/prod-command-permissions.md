@@ -4,6 +4,32 @@
 Pard (seat permissions). Applies to any seat allowed to run a fixed production command (first: HOST's seat, the
 read-only `prod_user_lookup` and the invite mint).
 
+## 2026-10-12 (later): xian approved; exact rules drafted for Pard to install
+
+xian said "yes, approve" to the split above (Exec v4 01M4S0KQRM2CEBYPDV6KG9TTG8, 14:34). The exact rules are in
+`docs/internal/operations/fly-permissions-host-2026-10-12.json`: what to remove from HOST's
+`.claude/settings.local.json` (the 4 catch-all asks and the 8 old denies), the one deny to keep (the `-C … -*`
+retargeting deny), and what to add (32 allow, 96 ask, 452 deny). Each verb appears in 8 forms:
+`fly`, `flyctl`, `*/fly`, `*/flyctl`, each bare and with ` *`.
+
+Differences from the summary xian approved. All of them tighten; none loosens:
+- Extra denies: `fly destroy`, `fly secrets deploy|import|sync`, `fly consul`, `fly extensions`, `fly mcp`, and
+  `fly -*` (a global flag before the verb, such as `fly -t TOKEN deploy`, would otherwise slip past every per-verb rule;
+  this also refuses `fly --version`).
+- Extra ask: top-level `fly sftp`, the same thing as `fly ssh sftp`.
+- The payload allows (`fly ssh console -a piper-morgan -C "python /app/scripts/<payload>.py…`) stay inert under this
+  file, because the ask on `fly ssh console` takes precedence over them. That matches 10-10's KEEP ASK. End state (B)
+  would need another change.
+
+Simulated, not measured: the rules were run against 27 sample commands with Python `fnmatchcase`, in the order deny,
+ask, allow. Results: `fly status` (bare, `-a`, and full path) allow; `fly logs`, `ssh console`, `machine exec`,
+`postgres connect`, `secrets set` and `tokens create` ask; `fly deploy` in every form, `apps destroy`,
+`scale`, `volumes destroy` and `tokens list` deny; `fly checks list` and `fly apps open` go to the reviewer.
+Claude Code's own matcher is not `fnmatch`, so the attended check is the real test. Add one case to it:
+`/opt/homebrew/bin/fly status -a piper-morgan` should run without a prompt.
+
+Still in force: HOST's attended-only rule (no `fly` in unattended fires), for as long as any ask exists.
+
 ## 2026-10-12: CIO review of xian's proposed split (HOST's ask; xian decides; no rule written yet)
 
 xian, in HOST's pane: allow `fly deploy` and read-only commands unattended; keep asks on `secrets set/unset`,
