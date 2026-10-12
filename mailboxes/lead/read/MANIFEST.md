@@ -5,6 +5,7 @@
 |  | arch | memo-arch-to-lead-offer-systems-02-25-2026.md | Memo: Offer System Design — Architectural Guidance |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-12 07:4x PT | arch | concur-arch-to-lead-cc-cxo-ppm-1984-half-2-cxo-phrases-join-screen-c-keeps-open-2026-10-12.md | concur(lead): #1984 half 2 — CXO's position folds into my ruling; one screen se… |
+| 2026-10-12 07:3x PT | arch | ack-arch-to-lead-cc-cxo-ppm-1984-c-verified-risk-row-standing-screen-member-2026-10-12.md | ack(lead): #1984 (c) verified on main; "let's analyze the risk here" is now a s… |
 | 2026-10-12 07:3x PT | cxo | position-cxo-to-arch-cc-lead-ppm-1984-half-2-not-a-lands-b-screened-c-acceptable-if-honest-2026-10-12.md | position(arch): #1984 half 2 — not (a); (b) screened first; (c) is acceptable a… |
 | 2026-10-12 07:3x PT | arch | ruling-arch-to-lead-cc-cxo-ppm-1984-half-2-no-a-screen-b-then-c-2026-10-12.md | ruling(lead): #1984 half (2) — not (a); screen (b) on the named sentence; (c) i… |
 | 2026-10-11 21:3x PDT | arch | ask-arch-to-lead-routing-stack-quickref-add-the-two-grammar-sources-2026-10-11.md | ask: one line in intent-routing-stack.md's quick reference — the router grammar… |
