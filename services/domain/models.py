@@ -22,6 +22,8 @@ if TYPE_CHECKING:
     from services.auth.jwt_service import JWTClaims
 
 # Import Item primitive for Todo to extend
+import structlog
+
 from services.domain.primitives import Item
 
 # MUX Lifecycle Integration (#433)
@@ -54,6 +56,8 @@ from services.shared_types import (
     WorkflowStatus,
     WorkflowType,
 )
+
+logger = structlog.get_logger(__name__)
 
 # =============================================================================
 # REQUEST CONTEXT - ADR-051: Unified User Session Context
@@ -565,15 +569,48 @@ class Intent:
         # router set the top-level field only — while handlers read one or
         # the other. "get issue 101" reached a context-only reader as an
         # empty string. Mirror whichever side is present so every Intent,
-        # from every constructor, hands handlers the same shape. Never
-        # overwrites a value that is already set.
+        # from every constructor, hands handlers the same shape.
+        #
+        # 1459 (Arch, 2026-10-12): the two surfaces are ONE value with one
+        # writer, ``bind_original_message``. A constructor that sets both to
+        # different strings is repaired here, not pinned: the typed top-level
+        # field wins and the repair is logged (never raised — a crashed turn
+        # is worse for the user than a logged repair). After construction,
+        # "both surfaces equal" is a property of every Intent, and the
+        # enforcement ratchet (tests/test_architecture_enforcement.py,
+        # TestOriginalMessageWriteRatchet1459) keeps every later write on the
+        # one setter.
         if self.context is None:
             self.context = {}
         ctx_msg = self.context.get("original_message")
-        if not self.original_message and isinstance(ctx_msg, str) and ctx_msg:
-            self.original_message = ctx_msg
-        elif self.original_message and not ctx_msg:
-            self.context["original_message"] = self.original_message
+        ctx_str = ctx_msg if isinstance(ctx_msg, str) else ""
+        if self.original_message:
+            if ctx_str and ctx_str != self.original_message:
+                logger.warning(
+                    "intent_original_message_diverged",
+                    action=self.action,
+                    attribute_head=self.original_message[:80],
+                    context_head=ctx_str[:80],
+                    repair="normalized_to_attribute",
+                )
+            self.bind_original_message(self.original_message)
+        elif ctx_str:
+            self.bind_original_message(ctx_str)
+        # Neither set: both stay empty and the key stays absent.
+
+    def bind_original_message(self, message: str) -> None:
+        """The ONE writer for the user's message (#1459).
+
+        Sets ``original_message`` and ``context["original_message"]`` together so
+        the two surfaces can never diverge after construction. Every fill outside
+        this module goes through here; a raw single-surface write, a context
+        replacement that drops the key, an ``update``/``setdefault``/``pop`` on the
+        key, or a ``setattr`` on the field is a ratchet failure.
+        """
+        if self.context is None:
+            self.context = {}
+        self.original_message = message
+        self.context["original_message"] = message
 
 
 @dataclass

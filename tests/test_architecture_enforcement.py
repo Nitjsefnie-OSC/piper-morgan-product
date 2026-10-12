@@ -5308,3 +5308,252 @@ class TestNoLocalEscapeHelpers1582:
             "web/static/js/escape.js no longer defines escapeAttr() — the "
             "shared source of truth this ratchet allowlists would be empty."
         )
+
+
+class TestOriginalMessageWriteRatchet1459:
+    """#1459 — the user's message has ONE writer: ``Intent.bind_original_message``.
+
+    The message lives on two surfaces (``Intent.original_message`` and
+    ``context["original_message"]``, Issue #744). #1942 made every constructor
+    mirror them; #1459 (Arch's ruling, 2026-10-12) makes divergence AFTER
+    construction impossible by counting every write shape that could defeat the
+    mirror and holding the count at ZERO outside ``services/domain/models.py``:
+
+    (a) a single-surface assignment — ``x.original_message = …`` or
+        ``x.context["original_message"] = …``;
+    (b) replacing the whole context dict (``x.context = …``) with anything other
+        than the two exempt idioms: the ``is None`` guard's ``{}`` and the copy
+        ``dict(x.context or {})``;
+    (c) ``x.context.update(…)`` / ``setdefault`` carrying the key, or
+        ``setattr(x, "original_message", …)``;
+    (d) ``x.context.pop("original_message")`` / ``del x.context["original_message"]``.
+
+    Receivers are identified by name: any name or attribute chain whose last
+    name contains ``intent`` (``intent``, ``pre_intent``, ``sibling_intent``,
+    ``self.intent``). A SQLAlchemy row's ``.context`` or a local ``context =
+    dict(intent.context)`` copy is outside the scan on purpose. This is the
+    scanner's stated limit; widen it here, never narrow it quietly.
+
+    Denominator: a shrink-lock at zero passes just as happily when the scanner is
+    broken, so the scan must still SEE the construction sites that set the
+    message (kwarg or dict-literal key) and the scanner must flag each of the four
+    shapes on a synthetic module. Both are asserted before the bound.
+    """
+
+    MAX_SINGLE_SURFACE_WRITES = 0
+    EXEMPT = {"services/domain/models.py"}
+    KEY = "original_message"
+
+    # ---- scanner -------------------------------------------------------------
+
+    @staticmethod
+    def _receiver_is_intent(node: ast.AST) -> bool:
+        if isinstance(node, ast.Name):
+            return "intent" in node.id.lower()
+        if isinstance(node, ast.Attribute):
+            return "intent" in node.attr.lower()
+        return False
+
+    @classmethod
+    def _is_intent_context(cls, node: ast.AST) -> bool:
+        return (
+            isinstance(node, ast.Attribute)
+            and node.attr == "context"
+            and cls._receiver_is_intent(node.value)
+        )
+
+    @classmethod
+    def _is_key(cls, node: ast.AST) -> bool:
+        return isinstance(node, ast.Constant) and node.value == cls.KEY
+
+    @classmethod
+    def _dict_carries_key(cls, node: ast.AST) -> bool:
+        return isinstance(node, ast.Dict) and any(cls._is_key(k) for k in node.keys if k)
+
+    @classmethod
+    def _exempt_context_replacement(cls, target: ast.Attribute, value: ast.AST) -> bool:
+        # ``x.context = {}`` (the ``is None`` guard) …
+        if isinstance(value, ast.Dict) and not value.keys:
+            return True
+        # … and ``x.context = dict(x.context or {})`` (the copy-before-mutate idiom).
+        if (
+            isinstance(value, ast.Call)
+            and isinstance(value.func, ast.Name)
+            and value.func.id == "dict"
+            and len(value.args) == 1
+            and not value.keywords
+        ):
+            arg = value.args[0]
+            if (
+                isinstance(arg, ast.BoolOp)
+                and isinstance(arg.op, ast.Or)
+                and len(arg.values) == 2
+                and cls._is_intent_context(arg.values[0])
+                and isinstance(arg.values[1], ast.Dict)
+                and not arg.values[1].keys
+            ):
+                return True
+        return False
+
+    @classmethod
+    def _scan_tree(cls, tree: ast.AST, path: str) -> tuple[list[str], int]:
+        """Return (violations, construction_sites) for one module."""
+        violations: list[str] = []
+        constructions = 0
+        for node in ast.walk(tree):
+            # denominator: Intent(...) with the message set either way
+            if isinstance(node, ast.Call):
+                fn = node.func
+                fname = fn.id if isinstance(fn, ast.Name) else getattr(fn, "attr", "")
+                if fname == "Intent":
+                    kws = {k.arg: k.value for k in node.keywords if k.arg}
+                    if cls.KEY in kws or cls._dict_carries_key(
+                        kws.get("context", ast.Dict([], []))
+                    ):
+                        constructions += 1
+            # (a) single-surface assignment (plain, augmented or annotated)
+            if isinstance(node, (ast.Assign, ast.AugAssign, ast.AnnAssign)):
+                targets = node.targets if isinstance(node, ast.Assign) else [node.target]
+                for t in targets:
+                    if (
+                        isinstance(t, ast.Attribute)
+                        and t.attr == cls.KEY
+                        and cls._receiver_is_intent(t.value)
+                    ):
+                        violations.append(f"{path}:{node.lineno} (a) attribute-only write")
+                    elif (
+                        isinstance(t, ast.Subscript)
+                        and cls._is_intent_context(t.value)
+                        and cls._is_key(t.slice)
+                    ):
+                        violations.append(f"{path}:{node.lineno} (a) dict-only write")
+                    # (b) whole-context replacement outside the two exempt idioms
+                    elif (
+                        isinstance(node, ast.Assign)
+                        and cls._is_intent_context(t)
+                        and not cls._exempt_context_replacement(t, node.value)
+                    ):
+                        violations.append(f"{path}:{node.lineno} (b) context replaced")
+            # (c) update/setdefault on the key; setattr on the field; (d) pop
+            if isinstance(node, ast.Call):
+                fn = node.func
+                if isinstance(fn, ast.Attribute) and cls._is_intent_context(fn.value):
+                    if fn.attr in ("update", "setdefault", "pop"):
+                        carries = any(cls._is_key(a) or cls._dict_carries_key(a) for a in node.args)
+                        carries = carries or any(k.arg == cls.KEY for k in node.keywords)
+                        if carries:
+                            shape = "(d) pop" if fn.attr == "pop" else f"(c) {fn.attr}"
+                            violations.append(f"{path}:{node.lineno} {shape} on the key")
+                if (
+                    isinstance(fn, ast.Name)
+                    and fn.id == "setattr"
+                    and len(node.args) >= 2
+                    and cls._receiver_is_intent(node.args[0])
+                    and cls._is_key(node.args[1])
+                ):
+                    violations.append(f"{path}:{node.lineno} (c) setattr on the field")
+            # (d) del x.context["original_message"]
+            if isinstance(node, ast.Delete):
+                for t in node.targets:
+                    if (
+                        isinstance(t, ast.Subscript)
+                        and cls._is_intent_context(t.value)
+                        and cls._is_key(t.slice)
+                    ):
+                        violations.append(f"{path}:{node.lineno} (d) del on the key")
+        return violations, constructions
+
+    @classmethod
+    def _scan_repo(cls) -> tuple[list[str], int, int]:
+        violations: list[str] = []
+        constructions = 0
+        files = 0
+        for pattern in ("services/**/*.py", "web/**/*.py"):
+            for path in sorted(glob.glob(pattern, recursive=True)):
+                norm = path.replace(os.sep, "/")
+                if norm in cls.EXEMPT or "/tests/" in norm or "/test_" in norm:
+                    continue
+                with open(path, encoding="utf-8") as fh:
+                    source = fh.read()
+                if cls.KEY not in source and ".context" not in source:
+                    continue
+                files += 1
+                v, c = cls._scan_tree(ast.parse(source, filename=path), norm)
+                violations.extend(v)
+                constructions += c
+        return violations, constructions, files
+
+    # ---- the scanner's own denominator ----------------------------------------
+
+    SYNTHETIC = """
+def f(intent, pre_intent, other):
+    intent.original_message = "a"                      # (a)
+    intent.context["original_message"] = "a"           # (a)
+    pre_intent.context = {"original_message": "a"}     # (b)
+    intent.context = dict(other.context or {})         # (b) — not the exempt copy of ITS OWN context
+    intent.context.update({"original_message": "a"})   # (c)
+    intent.context.setdefault("original_message", "a") # (c)
+    setattr(intent, "original_message", "a")           # (c)
+    intent.context.pop("original_message", None)       # (d)
+    del intent.context["original_message"]             # (d)
+    # exempt / out of scope:
+    if intent.context is None:
+        intent.context = {}
+    intent.context = dict(intent.context or {})
+    intent.context["user_id"] = "u"
+    row.context = {"original_message": "a"}
+    ctx = dict(intent.context or {})
+    ctx.setdefault("original_message", "")
+    made = Intent(category=c, action="x", original_message="m")
+    made2 = Intent(category=c, action="x", context={"original_message": "m"})
+"""
+
+    def test_scanner_flags_every_write_shape(self):
+        """A shrink-lock that cannot see the shapes it locks is not a lock."""
+        violations, constructions = self._scan_tree(ast.parse(self.SYNTHETIC), "synthetic")
+        shapes = sorted(v.split(" ", 1)[1] for v in violations)
+        assert shapes == sorted(
+            [
+                "(a) attribute-only write",
+                "(a) dict-only write",
+                "(b) context replaced",
+                "(b) context replaced",
+                "(c) update on the key",
+                "(c) setdefault on the key",
+                "(c) setattr on the field",
+                "(d) pop on the key",
+                "(d) del on the key",
+            ]
+        ), violations
+        assert constructions == 2
+
+    def test_scan_sees_the_construction_sites(self):
+        """The denominator: the repo scan must find the sites that SET the message
+        at construction (dozens on main), or the scanner is broken and a zero
+        below means nothing."""
+        _, constructions, files = self._scan_repo()
+        assert files >= 10, f"scanned only {files} files — glob or filter broke"
+        assert constructions >= 20, (
+            f"found only {constructions} Intent(...) construction sites that set "
+            f"original_message — the scanner is broken, not the code clean"
+        )
+
+    def test_no_single_surface_writes_outside_the_model(self):
+        """The ratchet. Every fill of the user's message after construction goes
+        through ``Intent.bind_original_message``; nothing outside models.py writes
+        either surface alone, replaces the context without carrying it forward,
+        or edits the key through update/setdefault/pop/del/setattr."""
+        violations, constructions, _ = self._scan_repo()
+        assert constructions >= 20  # never trust the zero without the denominator
+        assert len(violations) <= self.MAX_SINGLE_SURFACE_WRITES, (
+            f"{len(violations)} single-surface original_message write(s) outside "
+            f"services/domain/models.py (ratchet target {self.MAX_SINGLE_SURFACE_WRITES}). "
+            f"Use intent.bind_original_message(msg) instead:\n  " + "\n  ".join(violations)
+        )
+
+    def test_ratchet_target_stays_tight(self):
+        violations, _, _ = self._scan_repo()
+        assert len(violations) == self.MAX_SINGLE_SURFACE_WRITES, (
+            f"Ratchet drift: actual count {len(violations)}, target "
+            f"{self.MAX_SINGLE_SURFACE_WRITES}; the direction is DOWN only."
+        )

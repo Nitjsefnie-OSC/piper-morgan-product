@@ -5371,9 +5371,57 @@ hint=execute/regex=ambiguous "ambiguous wins" case, disagreement telemetry
 pair proving the hint reaches `evaluate_consent` through the real rail when
 the flag token is on, and is ignored when it's off.
 
+## One writer for the user's message: `Intent.bind_original_message` + a write ratchet at zero (2026-10-12, #1459, Arch's ruling)
+
+The user's message lives on two surfaces, `Intent.original_message` and
+`intent.context["original_message"]` (Issue #744's duality; the July 2026
+census under #1459 found 39 readers split across three idioms and writers that
+filled one side only). #1942 (fe2ab413d4, 2026-10-05) put the mirror in
+`Intent.__post_init__`, so every constructor hands handlers both surfaces
+equal; that closed the July verdict's two live paths (dict-only writer →
+attribute-only reader) at the source. The #1898 passage above — `consult_inversion_live`
+"sets `original_message` on the TOP-LEVEL field only" — describes the pre-#1942
+shape; since the mirror, a router-served Intent carries both.
+
+#1459 finishes the class (Arch, 2026-10-12, rescoped from the original
+38-site read-accessor migration, which buys no correctness once writes have one
+authority):
+
+- **One setter.** `Intent.bind_original_message(msg)` writes both surfaces;
+  `__post_init__` calls it. A constructor that sets the two to DIFFERENT strings
+  is repaired, not pinned: the typed top-level field wins, the dict follows, and
+  `intent_original_message_diverged` is logged (never raised — a crashed turn is
+  worse for the user than a logged repair). No writer on main produces that
+  shape; the model makes it impossible to keep. The former
+  `test_both_set_are_left_alone` licence is struck.
+- **The two fills.** `intent_service.py`'s multi-intent sibling fill (dict-only
+  before) goes through the setter. `classifier.py`'s attribute-only fill after
+  `pre_classify_with_pattern_list` is deleted: every one of the pre-classifier's
+  37 `Intent(...)` constructions sets the context key and the mirror lifts it
+  into the field, so the fill had nothing left to do and was itself a
+  divergence route.
+- **The ratchet** (`tests/test_architecture_enforcement.py::TestOriginalMessageWriteRatchet1459`,
+  AST-based, `services/` + `web/`, `models.py` exempt, receivers named `*intent*`)
+  counts four write shapes and holds them at **0**: (a) a single-surface
+  assignment of the field or the key; (b) replacing `intent.context` with
+  anything but the two exempt idioms (`{}` under an `is None` guard; the copy
+  `dict(intent.context or {})`); (c) `update`/`setdefault` carrying the key or
+  `setattr` on the field; (d) `pop`/`del` of the key. The denominator is
+  asserted before the bound (the scan must still see ≥20 construction sites that
+  set the message; 62 on the landing tree over 65 files), and the scanner must
+  flag every shape on a synthetic module, so a broken scanner fails rather than
+  reporting a clean zero. Negative control at build time: on untouched main the
+  scanner found exactly the two fills above and nothing else.
+
+Readers are untouched (7 attribute-only, 15 dict-only, 16 either-or on the
+landing tree): with one writer, either surface is the same value. A local copy
+such as `context = dict(intent.context or {}); context.setdefault(...)` is
+outside the scan by design — it is not the Intent's context.
+
 ## Pointers
 
 - Probe report + recalibration trace: `dev/2026/07/08/routing-probe-1283-run1.md`
 - Dispatch-site ratchet (the no-new-elif rule): `tests/test_architecture_enforcement.py::TestPreFloorDispatchSiteRatchet` + CLAUDE.md §"Intent dispatch"
+- Message write ratchet (one setter for `original_message`, #1459): `tests/test_architecture_enforcement.py::TestOriginalMessageWriteRatchet1459`
 - Migration roadmap off the legacy chains: `docs/internal/architecture/current/pre-floor-handler-migration-roadmap-1124.md`
 - **ADR-080** (2026-10-06): the meaning / resolution / permission division and its five-question review checklist: `docs/internal/architecture/adrs/adr-080-llm-decides-meaning-code-decides-permission.md`; epic-0 standing rules: `dev/2026/09/25/inversion-epic0-remaining-scope-2026-09-25.md` §"Deletion and rail procedure"

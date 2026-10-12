@@ -202,7 +202,9 @@ class TestDetectorsReadBothSurfaces:
         assert handlers._detect_priority_recommendation_request(intent) is False
 
     def test_attribute_surface_still_wins_when_present(self, handlers):
-        # Attribute takes precedence over dict (idiom B ordering).
+        # Attribute takes precedence over dict: idiom B ordering, and since
+        # #1459 the model itself normalizes a divergent pair to the attribute
+        # at construction (test_intent_message_shape_1942.py pins the repair).
         intent = Intent(
             category=IntentCategory.TEMPORAL,
             action="get_current_time",
