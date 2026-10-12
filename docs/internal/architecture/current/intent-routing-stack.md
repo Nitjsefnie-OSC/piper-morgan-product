@@ -4010,7 +4010,35 @@ reclaims are ledgered the same way ("what needs my attention?", "give me a proje
 this week"). Two other census pins moved with the newly wired report: "what's the project landscape" now passes (router route live via
 group; literal NOT deleted) and "update my project name to Atlas" is now a router MATCH (ruled floor) rather than a #1933 mis-serve case.
 
-### Twenty-seventh deletion (2026-10-11): `PORTFOLIO_PATTERNS` — PARTIAL, the show/list/view literal, licensed by a preregistered served measurement
+### Twenty-seventh deletion (2026-10-11): `COMPLETION_HISTORY_PATTERNS` — PARTIAL, 3 of 5, rule-10-licensed
+
+Merge 9cb5e45c1e (lane: a Coding Agent subagent, Sonnet; commit 11973fb052; Lead's review and merge). Ceiling **127 → 124**. The
+rule-10 rows deposited for the held literals scored MATCH on the served router, so three tombstoned: "what date did I/we …",
+"when was X completed …" (passive), "how long ago did I/we …". Two survive because surface 2 misses them (the #1117 misroute to
+temporal): `\bwhen did (i|we) (complete|finish|ship|deliver|launch|close|wrap up|finalize)\b` and `\bshow me when (i|we)
+(completed|finished|shipped|delivered|launched|closed)\b`. Ledger entry with the two survivors and their rows; ceiling pin 124. The
+#1117 pin split: three phrasings → decline + `assert_inversion_routes(…, live_categories="read_floor_2",
+expected_action="check_completion_status")` — `check_completion_status` is a `read_floor_2` member, not `read_status` (the lane
+caught the brief's wrong token). Report: `inversion-phase3-rule10-completion-history-rows-score-2026-10-11-anthropic.md`.
+Verified how: lane tests/unit 12,815 / 0 / 227 skipped; ratchets + enforcement 83; ruff clean; Lead's merge check (deletion pins +
+pre_classifier + framing + enforcement + ratchets) 249 passed, rc 0; pre-push smoke 568.
+
+### Twenty-eighth and twenty-ninth deletions (2026-10-11): `STATUS_PATTERNS` (2) and `PRIORITY_PATTERNS` (1) — the 10-10 restores re-deleted under `misserved_at_deletion`
+
+Merge 6bb22031a6 (lane: Sonnet; commits 5e7b17299b + 7fbbdf3b48; Lead's review and merge). Ceiling **124 → 121**. Arch's 2026-10-11
+rulings on the six rule-10(B) restores of 2026-10-10: a restored literal must claim the ruled op, else it is a known miss and restored
+nothing. STATUS: "project landscape" tombstoned (the router serves `list_projects` @0.92, live via the group; the #1756 landscape pin
+converted on its row) and "upcoming milestones?" re-deleted (the restore claimed `get_project_status` for a `list_milestones` row; the
+row stays `list_milestones` as a known miss). PRIORITY: `\bwhere.*focus\b` tombstoned after CXO withdrew its survivor status and Arch
+ruled the restore restored nothing (the router serves `get_top_priority` @0.95 with or without it; the row is ruled `attention_query`
+and stays a known miss); `PRIORITY_PATTERNS` is empty again. Ledger: `misserved_at_deletion` records replace both restore records; the
+focus-today pin now reads honestly (surface 1 declines, consult None, the floor serves `get_top_priority` — no rail entry). Verified how:
+lane unit 12,823 / 0; integration + intent 14 failed (pre-existing names), rest 17 + 10 errors (pre-existing names); ratchets 83; ruff
+clean; Lead's merge tier 532 passed, rc 0; `pattern_literal_counts` TOTAL 121. The same lane found that deleting PORTFOLIO's
+show/list/view literal would collapse "list my archived projects and summarize my current work" to one STATUS claim — the finding that
+held PORTFOLIO at 121 on #1977 until the thirtieth deletion below.
+
+### Thirtieth deletion (2026-10-11): `PORTFOLIO_PATTERNS` — PARTIAL, the show/list/view literal, licensed by a preregistered served measurement
 
 The last PORTFOLIO literal that the gate could ever read GO: `PORTFOLIO_LIST_PATTERN` (the show/list/view-projects
 literal, the #1738 named constant) plus the #1884 two-topic row under `planned_at_deletion`. Ceiling **121 → 120**
