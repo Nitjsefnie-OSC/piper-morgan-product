@@ -981,6 +981,26 @@ class TestAttentionReplyShape1985b:
         assert lines[2].startswith("⏰ revise the pr (")
 
     @pytest.mark.asyncio
+    async def test_1999_due_today_whose_time_has_passed_reads_due_earlier_today(
+        self, intent_service
+    ):
+        """CXO's #1999 ruling: under one whole day overdue, say it in words,
+        under the Today: line, never '(0 days overdue)' beneath 'Nothing due
+        today.'"""
+        now = datetime.now(timezone.utc)
+        passed = self._Todo(
+            "send the budget review to the board", due_date=now - timedelta(hours=2)
+        )
+        ahead = self._Todo("web check alpha", due_date=now + timedelta(hours=2))
+        result = await self._run(intent_service, [passed, ahead], [])
+        lines = [ln for ln in result.message.split("\n") if ln.strip()]
+        assert lines[0] == "**Today:**"
+        assert lines[1] == "📅 send the budget review to the board (due earlier today)"
+        assert lines[2] == "📅 web check alpha (due today)"
+        assert "0 days overdue" not in result.message
+        assert "Nothing due today" not in result.message
+
+    @pytest.mark.asyncio
     async def test_1996_overdue_age_is_calendar_days_on_the_users_clock(self, intent_service):
         """Alpha 651756d520 (Web, 2026-10-12): 'revise the pr' read 4 days
         overdue at 16:27 and 5 days a few minutes later — the age was elapsed

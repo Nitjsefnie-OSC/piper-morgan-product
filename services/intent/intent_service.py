@@ -9522,6 +9522,17 @@ class IntentService:
                                 "type": "due_today_todo",
                                 "text": todo.text,
                                 "due_date": todo.due_date.isoformat() if todo.due_date else None,
+                                # #1999 (CXO): an item whose time has passed
+                                # today is still today's, said in words.
+                                "past_due": bool(
+                                    todo.due_date
+                                    and (
+                                        todo.due_date
+                                        if todo.due_date.tzinfo
+                                        else todo.due_date.replace(tzinfo=timezone.utc)
+                                    )
+                                    < now
+                                ),
                             }
                         )
             except Exception as due_today_error:  # silent-ok: not silent — todo_reads_failed turns the reply into "couldn't check your todos", never an empty list (#1069)
@@ -9695,7 +9706,8 @@ class IntentService:
             else:
                 if due_today_todos:
                     for due_item in due_today_todos:
-                        lines.append(f"📅 {due_item['text']} (due today)")
+                        _label = "due earlier today" if due_item.get("past_due") else "due today"
+                        lines.append(f"📅 {due_item['text']} ({_label})")
                 else:
                     lines.append("Nothing due today.")
                 for late_item in overdue_todos:
