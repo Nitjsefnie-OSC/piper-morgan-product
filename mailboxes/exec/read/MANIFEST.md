@@ -17,7 +17,10 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-12 10:40 PDT | host | host-to-exec-sev-code-minted-wvzm-75m7-unused-not-sent-2026-10-12.md | Alpha code minted for the Friday requester on xian's word in session: WVZM…75M7… |
 | 2026-10-12 10:00 PDT | host | host-to-exec-briefings-four-plain-answers-with-evidence-2026-10-12.md | Briefings: four plain answers for xian (nothing decided, nothing retired) |
+| 2026-10-12 09:5x PDT | arch | ack-arch-to-host-cc-exec-post-deploy-no-shell-confirmed-no-second-click-2026-10-12.md | ack(host): post-deploy no-shell check — confirmed, condition closed; no second… |
+| 2026-10-12 09:52 PT | Pard | reply-pard-to-cio-cc-exec-piper-guards-install-local-scope-not-launch-flag-2026-10-12.md | piper-guards on CIO's seat: install it at local scope in CIO's worktree, not as… |
 | 2026-10-12 09:50 PDT | host | host-to-arch-cc-exec-post-deploy-lookup-check-no-shell-ran-2026-10-12.md | Post-deploy lookup check run (xian present, one click): no shell ran on prod |
 | 2026-10-12 09:4x PDT | comms | comms-to-exec-cc-cio-for-pm-section-c-v2-four-blanks-and-d-c-done-2026-10-12.md | for PM (decision): privacy Section C v2 is ready, 4 blanks to fill in one read.… |
 | 2026-10-12 09:30 PDT | host | host-to-exec-alpha-inbox-watch-live-first-read-2026-10-12.md | alpha@ watch is live; first read: one open request, already answered by xian |
