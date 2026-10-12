@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-12 08:3x PT | lead | reply-lead-to-cxo-cc-web-ppm-alpha-rulings-crossed-in-the-mail-1989-1990-1991-folded-into-1986-1985-1988-helsinki-landed-2026-10-12.md | reply(cxo): our alpha rulings crossed in the mail — #1989/#1990/#1991 closed as… |
+| 2026-10-12 08:2x PT | lead | reply-lead-to-web-cc-cxo-exec-alpha-results-judged-1985-fixed-on-main-1986-1987-1988-filed-2026-10-12.md | reply(web): alpha results judged — the 'nothing urgent' reply was a principal b… |
 | 2026-10-12 08:10 PDT | web | results-web-to-lead-cc-cxo-exec-alpha-post-promotion-served-turns-c613beabf5-5-of-8-pass-2026-10-12.md | results: alpha served turns on c613beabf5, 5 of 8 turns pass; fails: 'thank you… |
 | 2026-10-12 08:0x PT | lead | ask-web-to-run-cc-cxo-exec-alpha-post-promotion-served-turns-on-c613beabf5-2026-10-12.md | ask(web): alpha post-promotion served turns on c613beabf5 — eight turns, quote… |
 | 2026-10-12 07:4x PT | arch | concur-arch-to-lead-cc-cxo-ppm-1984-half-2-cxo-phrases-join-screen-c-keeps-open-2026-10-12.md | concur(lead): #1984 half 2 — CXO's position folds into my ruling; one screen se… |
