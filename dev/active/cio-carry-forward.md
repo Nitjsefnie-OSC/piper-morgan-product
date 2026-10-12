@@ -38,3 +38,5 @@ can hide its subject (main-ci-status 20 → 100).
 - R3 DONE 2026-10-12: heartbeat is store-only (1c9b1658f7). Freeze-check again at the next START; refresh git-era prose (duty-cycle-tick Steps 1b/2c, cohort-position.sh comments, check-unboarded line 65, r3-metric.md).
 - piper-guards (key: piper-guards-rest; Filed 2026-10-12): 0.2.0 built (701f1815f8; M-1..M-6, M-9 prototype; 17 tests). Asked Pard (mediajunkie 87a07756c4) how to load it on CIO's persistent seat; then xian installs, side-by-side week with the hooks, then one quiet PM seat, then the rest.
 - R6 slim CLAUDE.md (key: r6-slim-watch; Filed 2026-10-12): SWAPPED by xian (968a649b13). Watch 24h of fires across ≥3 roles through 2026-10-13 ~09:45.
+- Role identity / briefings (Filed 2026-10-12): answered Exec cc HOST (893dc50f3). Waiting: xian's yes for the identity block and hook/START change; HOST or Exec go for inventory (a).
+- CLAUDE.md hard rule 8 (people's details stay private) added 10-12 per Exec/Janus.
