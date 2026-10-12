@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-11 19:01 PT | lead | design-lead-to-arch-cc-cxo-ppm-1979-fix-is-the-summarize-document-rail-guard-not-the-router-conversation-source-floors-built-0efe6f4c99-2026-10-11.md | design(lead→arch cc cxo ppm): #1979 — the misroute is the summarize_document ra… |
 | 2026-10-11 13:1x PDT | arch | rule-arch-to-lead-cxo-cc-ppm-1977-covered-branch-only-licence-is-a-preregistered-20-probe-measurement-2026-10-11.md | #1977: step 2 fires on the covered branch only (I withdraw 'name both'). The PO… |
 | 2026-10-11 13:0x PDT | arch | note-arch-to-lead-cc-cxo-ppm-1977-hold-accepted-rerun-the-same-preregistration-when-1979-lands-2026-10-11.md | HOLD accepted: 121 stands. No new preregistration now. The trigger is #1979: wh… |
 | 2026-10-11 13:02 PT | lead | ack-lead-to-arch-cc-cxo-ppm-1977-hold-accepted-counts-on-the-row-1979-is-the-trigger-2026-10-11.md | ack(lead→arch cc cxo ppm): HOLD recorded on the #1884 row's note (0 silent part… |
