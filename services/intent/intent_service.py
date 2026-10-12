@@ -2697,11 +2697,9 @@ class IntentService:
                     if not intent.original_message and not (intent.context or {}).get(
                         "original_message"
                     ):
-                        if intent.context is None:
-                            intent.context = {}
-                        intent.context["original_message"] = (
-                            multi_result.original_message or message
-                        )
+                        # 1459: the one setter fills BOTH surfaces (this used to
+                        # fill the dict only and leave the attribute "").
+                        intent.bind_original_message(multi_result.original_message or message)
 
                 elif (
                     multi_result.is_multi_intent

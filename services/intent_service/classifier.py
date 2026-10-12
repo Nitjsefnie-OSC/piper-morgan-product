@@ -418,15 +418,15 @@ class IntentClassifier:
         # byte-identical to pre_classify's).
         pre_intent, preclaim_pattern_list = PreClassifier.pre_classify_with_pattern_list(message)
         if pre_intent:
-            # #1332/#1220 completion (found via #1417, 2026-07-16): the
-            # pre-classifier's ~31 emission sites set only
-            # context["original_message"] — the Intent FIELD stayed "" through
-            # this handoff, so every field-reading consumer downstream
-            # (e.g. _detect_setup_request's canonical-gate) saw an empty
-            # message and mis-routed pre-classified intents to the floor.
-            # Normalize once here, mirroring the cache-reconstruction fix.
-            if not pre_intent.original_message:
-                pre_intent.original_message = message
+            # #1332/#1220 (found via #1417, 2026-07-16): the pre-classifier's
+            # emission sites set only context["original_message"], so a
+            # field-reading consumer downstream saw "" and mis-routed. An
+            # attribute-only fill lived here until #1459 (2026-10-12): every
+            # one of the pre-classifier's 37 Intent constructions sets the
+            # context key, and Intent.__post_init__ mirrors it into the field
+            # at construction, so the fill had nothing left to do — and, being
+            # single-surface, was itself a divergence route. Deleted; the
+            # enforcement ratchet keeps it out.
             logger.info(
                 "intent_classification",
                 source="PRE_CLASSIFIER",
