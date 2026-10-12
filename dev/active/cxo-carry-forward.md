@@ -292,3 +292,4 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - 10-12 15:55 — alpha 651756d520 promoted; Web's 12-turn re-run pending; I judge copy and close #1985/#1986 on the quotes.
 - 10-12 16:25 — #1983 PAT hint copy ruled; waiting on Lead's permission-list check; read the rendered Settings page after promotion.
 - 10-12 16:50 — #1983 hint ruled, held for PM step 4 (PA relays); filed #1995 (permission gap reads as empty); read rendered Settings page after promotion.
+- 10-12 16:17 — fire: quiet; waiting on Web's re-run quotes (#1985/#1986) and PM step 4 (#1983).
