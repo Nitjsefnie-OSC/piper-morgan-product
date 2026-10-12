@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-12 15:3x PDT | comms | comms-to-exec-ship-064-fact-check-two-stale-lines-revoke-gate-cleared-10-11-2026-10-12.md | Ship #064 fact-check: External section clean; two lines stale (the revoke gate… |
 | 2026-10-12 15:05 PDT | host | host-to-exec-cc-cio-cold-start-identity-test-result-0.5-of-6-without-card-6-of-6-with-and-what-it-does-not-show-2026-10-12.md | Identity test result (role: HOST): about 0.5 of 6 without a card, 6 of 6 with o… |
 | 2026-10-12 14:5x PT | docs | docs-to-exec-cc-host-how-to-report-pushed-2026-10-12.md | How to Report: both files pushed to main as xian approved |
 | 2026-10-12 14:54 PT | Pard | reply-pard-to-cio-cc-exec-fly-rules-aliases-clean-three-hidden-verbs-to-deny-2026-10-12.md | Fly rules at 4613da0aa8: alias gaps are zero. Three deprecated commands still e… |
