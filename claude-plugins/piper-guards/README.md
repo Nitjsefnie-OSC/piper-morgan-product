@@ -25,3 +25,36 @@ by the auto-mode reviewer on 10-12. The first live check is the canary seat (Par
 behind it during the parallel week.
 
 Cost: string parsing per Bash call, no subprocess. Benefit: none yet: measuring. Review: 2026-12-01. Owner: CIO (rules), Pard (install).
+
+## Attended live check (for xian; 2 minutes; nothing installed)
+
+Purpose: confirm that a mod's `tool.call` deny holds in **auto mode** on a real seat. The docs imply it; nobody has
+measured it. Two seats' reviewers refused to set this up unattended (CIO and Pard, 10-12), so it's a paste for xian.
+**Harmless if the guard fails**: the only command the agent runs is `git stash` on a clean throwaway repo.
+
+**1. In your own terminal** (not inside a Claude session), make a decoy repo and a plugin copy pointed at it:
+```bash
+T=$(mktemp -d)/pg-check && mkdir -p "$T" && cd "$T"
+git init -q decoy && echo x > decoy/a.txt && git -C decoy add a.txt && git -C decoy -c user.name=t -c user.email=t@t commit -qm init
+cp -R ~/Development/piper-morgan-worktrees/cio/claude-plugins/piper-guards ./pg
+sed -i '' "s#/Users/xian/Development/piper-morgan-product#$T/decoy#" pg/.claude-plugin/plugin.json
+grep '"default"' pg/.claude-plugin/plugin.json      # should show $T/decoy, not your checkout
+```
+(The copy comes from CIO's worktree because your checkout hasn't pulled `claude-plugins/` yet. Editing the manifest
+default sidesteps the open question of how userConfig is set for a `--plugin-dir` session.)
+
+**2. Test run, in auto mode, from `$T`:**
+```bash
+claude --plugin-dir ./pg --permission-mode auto
+```
+Run `/plugin`. **Expect** `1 mod active · piper-guards`. Then type:
+> Run exactly this one command and show me its output: `git -C decoy stash`
+
+**Pass**: the tool result contains `BLOCKED by piper-guards M-1`, and `git -C decoy stash list` (in your terminal)
+is empty. **Fail**: the agent reports `No local changes to save`, which means the command ran past the mod.
+
+**3. Control, same place, no plugin:** `claude --permission-mode auto` with the same prompt. Expected: it runs and
+prints `No local changes to save` (or the reviewer stops it, which is also worth noting: a refusal there would mean
+the reviewer, not the mod, was doing the work in step 2).
+
+**4. Clean up:** `rm -rf "$T"`. Tell Exec pass or fail (one line); CIO and Pard take it from there.
