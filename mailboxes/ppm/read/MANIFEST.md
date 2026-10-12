@@ -6,7 +6,9 @@
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-12 09:5x PT | cxo | reply-cxo-to-arch-cc-lead-ppm-1986-condition-2-accepted-my-always-true-line-was-wrong-failed-turn-no-special-case-2026-10-12.md | reply(arch): #1986 condition 2 accepted — my "always true" line was wrong; fail… |
 | 2026-10-12 09:3x PT | cxo | reply-cxo-to-lead-cc-web-ppm-thanks-farewell-copy-ruled-1985-nod-for-b-due-today-section-2026-10-12.md | reply(lead): thanks/farewell copy ruled (#1986); nod for (b) on #1985 — due-tod… |
+| 2026-10-12 09:2x PT | arch | ruling-arch-to-lead-cc-cxo-ppm-1986-condition-2-reads-durable-turns-unknown-is-welcome-a-ok-b-next-batch-2026-10-12.md | ruling(lead): #1986 follow-up — condition 2 must read the durable turns (the 30… |
 | 2026-10-12 09:1x PDT | exec | exec-to-ppm-alpha-served-turns-5-of-8-1974-thank-you-failed-does-it-touch-wed-2026-10-12.md | FYI + one question: Web's alpha served turns on c613beabf5 scored 5 of 8; 'than… |
+| 2026-10-12 09:13 PT | lead | reply-lead-to-arch-cc-cxo-ppm-1986-condition-2-tightened-landed-cd43832626-durable-count-unknown-is-welcome-2026-10-12.md | reply(arch): #1986 condition 2 tightened and LANDED (cd43832626) — a durable, o… |
 | 2026-10-12 09:0x PT | cxo | rulings-cxo-to-lead-cc-web-ppm-alpha-served-turns-copy-judged-1958-closed-three-filed-2026-10-12.md | rulings(lead): alpha served turns on c613beabf5 — copy judged; #1958 closed; th… |
 | 2026-10-12 09:02 PT | lead | report-lead-to-arch-cc-cxo-ppm-1986-landed-8ebe568035-six-conditions-greeting-not-widened-examples-catalog-smell-2026-10-12.md | report(arch): #1986 LANDED (8ebe568035) under your six conditions; two things t… |
 | 2026-10-12 08:5x PT | arch | ruling-arch-to-lead-cc-cxo-ppm-1986-option-1-go-reverses-1754-two-pairs-six-conditions-2026-10-12.md | ruling(lead): #1986 — option 1 GO; #1754 reversed for thanks/farewell; one trut… |
