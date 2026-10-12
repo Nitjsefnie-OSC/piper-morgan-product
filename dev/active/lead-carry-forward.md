@@ -1,6 +1,6 @@
 # Lead carry-forward — Fable 5.1 seat; Model A worktree ~/Development/piper-morgan-worktrees/lead
 
-## STATE @ 2026-10-12 07:2x PT — START drained + the 07:16 mail wake drained (log dev/2026/10/12/2026-10-12-0647-lead-code-log.md, open)
+## STATE @ 2026-10-12 09:1x PT — START + five mail wakes drained; three code landings on main (log dev/2026/10/12/2026-10-12-0647-lead-code-log.md, open)
 - **#1984 half (2): CLOSED ON MY SIDE 07:2x — lever (c) applied.** Arch ruled (07:3x his clock, read 07:16): not (a); (b) = drop the
   `'what did I work on today'` rail example, screened ×6 main vs (b) on 20 phrases (CXO's two true-session phrases joined) → the row
   reached the ruled plan 6/6 but two rows read worse (re-checked 12/12 each) → FAIL → (c): the corpus row carries the KNOWN MISS note
@@ -25,16 +25,18 @@
   tripwire read. **Fri 10-16:** key switch — `dev/active/lead-prod-key-move-2026-10-16.md` (PM's hand) + one confirm call.
 - **Mail v4 pilot:** lead is a pilot role from 10-12 — every mail check reads `scripts/mail4.py inbox` too; canary at START read PASS
   (the check line counts 2 pilot roles, cio and exec — lead not yet in its denominator; note for CIO if it persists).
-- **Alpha c613beabf5 served (Web 08:10): 5 of 8 pass.** PASS: hello; #1958 ("Friday" — CXO may close on the quote); #1984 half (1) label;
-  the time label; #1979 after an offer; the upload negative. FAILS read and placed: `show today's tasks` "nothing urgent" = **#1985
-  principal bug, FIXED on main 5d5f7ec88e** (served AC open: re-run after the NEXT promotion); `thank you!` → briefing = **#1986**
-  (thanks/farewell have no canned short-circuit; CXO's copy first); `show the team calendar` = the TEMPORAL known live miss (no filing;
-  CXO's bar needs a connected account or a copy change). Also filed: **#1987** (`delete that reminder` after create); **#1988** (`<city>`
-  eaten by the renderer; copy fixed on main; render half is Web's decision). CXO's rulings (08:14) crossed mine: #1989/#1990/#1991 closed as duplicates of
-  #1986/#1985/#1988 (rulings folded in). 'Helsinki' copy landed (dacf3007a3). #1958 CLOSED by CXO; #1979 confirmed.
-  **Open with CXO:** (1) #1986 copy for thanks/farewell (then I build the short-circuit); (2) #1985 served shape — my (b): a due-today
-  read + "Nothing due today and nothing overdue." in the attention handler, on CXO's nod. **Watch:** CI on a head carrying 5d5f7ec88e;
-  Web's #1988 render decision; next promotion → Web re-runs `thank you!` ×2 and `show today's tasks` ×2.
+- **Alpha c613beabf5 served (Web 08:10): 5 of 8 pass — all three fails resolved on main by 09:1x.** #1985 (attention handler read
+  todos by session id → "nothing urgent" over an overdue todo): principal fix 5d5f7ec88e + CXO's reply shape bb4066fc00 (due today
+  then overdue under "Today:", exact empty line, "couldn't check" on a failed read, assembler dedupe). #1986 (thanks → todo
+  briefing): Arch's #1754 reversal for thanks/farewell, 8ebe568035 under six conditions. #1988 (timezone placeholder) CLOSED on
+  the Helsinki copy (dacf3007a3); render half = Web's #1992. #1987 (delete that reminder) filed, PPM places. #1958 CLOSED by CXO.
+  CXO's duplicates #1989/#1990/#1991 closed into mine. **Open with Arch (no block):** greeting is NOT armed-checked (pinned as-is;
+  his call to widen); the compound ACTION_EXAMPLES for thanks/farewell ride the next catalog batch (rule 7). **Next promotion →
+  Web re-runs:** thank you! ×3, thanks, thank you so much, goodbye, a thanks after a delivered turn, one compound, one armed-slot
+  thanks, show today's tasks ×2; CXO closes #1985/#1986 on the quotes. **CI:** read main at the next fire (three code landings
+  since 08:21: 5d5f7ec88e, bb4066fc00, 8ebe568035 — each smoke-green; the Full Test Suite decides).
+- **Test-order coupling noted, not fixed:** \`test_action_registry.py\` fails 47 rows when run after \`test_spend_free_canonical_ratchet_1818.py\`
+  in one session (alone: passes; alphabetical CI order hides it). Whoever next touches either file.
 - **Stamp rule (today's third slip):** the frontmatter/log time is substituted from `date` at write time (`NOW=$(TZ=… date)`), never
   typed into a draft.
 
