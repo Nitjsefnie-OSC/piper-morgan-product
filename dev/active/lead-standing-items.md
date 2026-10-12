@@ -83,7 +83,8 @@ lives in GitHub, this file holds only durable owed/queued items.)
   which is now closed; Arch's route memo in read/ has the detail. OPEN on GitHub (re-verified 10-12). **10-12 12:53: re-measured on
   main — #1942's constructor mirror (fe2ab413d4) closes the July live paths; one live one-sided writer left (`intent_service.py:2702`).
   Proposal on the issue (6131537060) + memo to Arch cc PPM: setter authority + WRITE ratchet (0), no read-accessor migration.
-  TRIGGER = Arch's reply; then one unit-tier lane (model method, 2 call sites, ratchet, model pin).**
+  TRIGGER = Arch's reply; then one unit-tier lane (model method, 2 call sites, ratchet, model pin).** **DONE 10-12 13:12: Arch GO
+  (three amendments) → LANDED a488e4fa65, #1459 CLOSED; ack sent. Row closed.**
 
 ## Standing disciplines (the ones this file exists to survive compaction)
 - One lane at a time in this worktree — NO commits of any kind while a lane is active (hardened
