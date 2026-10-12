@@ -1,6 +1,6 @@
 ---
-image: ''
-alt: ''
+image: 'giving-it-away-and-wondering-who-may-want-it-pleased-customer-removes-brakes-maker-worries.jpg'
+alt: 'A worried bicycle maker reaches across a shop counter as a delighted customer proudly holds up the brakes they’ve removed from their new bike.'
 caption: ''
 ---
 
