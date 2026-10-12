@@ -435,7 +435,10 @@ ACTION_DESCRIPTIONS: dict[tuple[str, str], str] = {
     # live for the Slack/slash-command surface — the citation below names
     # them as that surface's handler, not chat's.
     ("STATUS", "get_project_status"): (
-        "Answer project status questions (how a project is going, status reports)"
+        "Answer questions about the user's own current work and project status: how a "
+        "project is going, what they are working on, a summary of their current work, "
+        "status reports. Not session activity (what was created this session) and not "
+        "an uploaded document."
     ),
     # #1117 COMPLETION_HISTORY; floor answers history honestly (#925).
     ("STATUS", "check_completion_status"): (
