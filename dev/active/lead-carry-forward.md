@@ -21,7 +21,8 @@
   done; flip `GITHUB_LEGACY_CONTEXT_FALLBACK` to False in the commit that records `legacy=0`.
 - **#1459 LANDED a488e4fa65 + CLOSED 10-12 13:12** (Arch GO 13:1x with three amendments, all applied): `Intent.bind_original_message` one
   writer; `__post_init__` normalizes to the attribute + logs; classifier fill deleted with proof; `TestOriginalMessageWriteRatchet1459`
-  (four shapes, AST, ceiling 0, denominator asserted). CI test.yml on the merge head: read at the next fire. Lane worktree lead-1459
+  (four shapes, AST, ceiling 0, denominator asserted). **Addendum 264d3e9549 (Arch's one gap: bare `{}` exempt only under its own
+  is-None guard; count stays 0).** CI test.yml + Architecture Enforcement on 264d3e9549: read at the next fire. Lane worktrees
   removed; branch `claude/lead-1459-setter-ratchet` stays on origin (remote delete is permission-denied, don't retry).
 - **#1977 CLOSED 10-12 12:53** (banner + evidence comment + close; the work had been complete since 10-11 19:3x).
 - **read_floor_3 wave** (get_project_status + get_top_priority adapters; Arch's four 10-11 20:5x conditions): trigger = the deletion lane's
