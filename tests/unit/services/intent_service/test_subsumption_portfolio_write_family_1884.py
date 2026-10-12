@@ -167,26 +167,80 @@ class TestGenuineTwoTopicControlUnchanged:
         assert IntentCategory.STATUS in categories, f"over-suppression: {actions}"
 
     def test_two_topic_list_plus_genuine_status_phrase_now_kept(self):
-        """Incidental improvement over #1738's blunt literal check, pinned
-        so it is a deliberate, known change rather than an unnoticed side
-        effect: #1738's rule dropped STATUS whenever the raw message
-        matched PORTFOLIO_LIST_PATTERN ANYWHERE in the string, regardless
-        of why STATUS also matched — so "list my archived projects and
-        what's my project status" was WRONGLY subsumed at HEAD before
-        this fix (probed, #1884 report), even though "project status" is
-        a genuine, distinct status ask. The #1884 condition checks WHICH
-        STATUS_PATTERNS entries actually matched, so a genuine status
-        phrase riding alongside a list claim now correctly survives.
+        """The #1884 two-topic control, converted (2026-10-11, #1595 PORTFOLIO
+        show/list/view-projects literal deleted).
 
-        #1595 Phase 3 seventh deletion (2026-10-02, PARTIAL): STATUS_PATTERNS'
-        \\bproject status\\b literal is gone — swapped the second clause for
-        "summarize my current work" (matches the surviving \\bcurrent
-        work\\b literal, not in the overlap set); same point."""
+        History: #1738's blunt literal check wrongly subsumed STATUS here; #1884
+        fixed it so a genuine status phrase beside a list claim survives; the
+        2026-10-02 swap used "summarize my current work" (surviving \\bcurrent
+        work\\b literal) as the second clause.
+
+        Now the list claim is gone, so only STATUS claims. Surface 1 DECLINES
+        the whole turn (#1977 step 1: a claim set that leaves an ask-shaped
+        unclaimed clause -- here the leading "list my archived projects" --
+        does not serve a half), and the corpus row for this exact phrasing is a
+        PLAN (list_archived_projects -> get_project_status; ruled by Arch
+        2026-10-11, rule 11 / planned_at_deletion). Not deleted, not swapped:
+        the two-topic fact is now pinned where it lives."""
+        import scripts.inversion_phase0_baseline as p0
+
         message = "list my archived projects and summarize my current work"
+        # Surface 1 declines: no PORTFOLIO claim, and STATUS alone is not served.
+        assert PreClassifier.pre_classify(message) is None
         result, actions = _intents(message)
-        categories = {c for c, _ in actions}
-        assert IntentCategory.PORTFOLIO in categories
-        assert IntentCategory.STATUS in categories, f"over-suppression: {actions}"
+        assert IntentCategory.PORTFOLIO not in {c for c, _ in actions}, actions
+        # The corpus carries the row, ruled a plan.
+        rows = {r["phrase"]: r for r in p0.load_corpus()}
+        assert message in rows, "the #1884 two-topic row must stay in the corpus"
+        assert rows[message]["expected"] == "plan"
+        assert rows[message]["category"] == "PORTFOLIO"
+
+    @pytest.mark.asyncio
+    async def test_two_topic_list_plus_status_plans_both_ops(self, monkeypatch):
+        """Stubbed consult (no LLM): a router PLAN of both ops is handed off as
+        plan_operations [list_archived_projects, get_project_status]."""
+        from types import SimpleNamespace
+
+        from services.intent_service import inversion_live
+        from services.intent_service import inversion_router as ir
+        from services.intent_service.inversion_router import RoutingDecision
+        from services.intent_service.workflow_entries import register_default_workflows
+
+        async def _route(message, session_state=None, **kwargs):
+            return RoutingDecision(
+                outcome="plan",
+                operations=[
+                    {
+                        "operation": "list_archived_projects",
+                        "args": {},
+                        "confidence": 0.9,
+                        "rationale": "list archived",
+                    },
+                    {
+                        "operation": "get_project_status",
+                        "args": {},
+                        "confidence": 0.9,
+                        "rationale": "summarize current work",
+                    },
+                ],
+            )
+
+        monkeypatch.setattr(ir, "route", _route)
+        monkeypatch.setenv(inversion_live.LIVE_CATEGORIES_ENV, "read_status,read_portfolio")
+        register_default_workflows()
+        out = await inversion_live.consult_inversion_live(
+            "list my archived projects and summarize my current work",
+            session_id=None,
+            user_id=None,
+            intent_service=SimpleNamespace(intent_classifier=None),
+        )
+        assert out is None  # no single Intent represents a plan
+        record = inversion_live.consume_live_route_provenance()
+        assert record.reason == inversion_live.PLAN_STAND_DOWN
+        assert [o["operation"] for o in record.plan_operations] == [
+            "list_archived_projects",
+            "get_project_status",
+        ]
 
 
 class TestUnaffectedControls:

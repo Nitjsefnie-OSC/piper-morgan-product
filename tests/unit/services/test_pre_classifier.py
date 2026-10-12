@@ -565,10 +565,8 @@ class TestPreClassifier:
             "restore project Epsilon",
             "unarchive the old project",
             "bring back my archived project",
-            # List operations
-            "show my projects",
-            "list all projects",
-            "view my projects",
+            # List operations: the show/list/view-projects literal is deleted
+            # (2026-10-11, #1595) -- see test_portfolio_list_now_unclaimed below.
             # Add/create operations
             "add a new project",
             "create a project",
@@ -590,6 +588,25 @@ class TestPreClassifier:
             ), f"Expected PORTFOLIO for '{pattern}', got {intent.category}"
             assert intent.action == "manage_portfolio"
             assert intent.confidence == 1.0
+
+    @pytest.mark.asyncio
+    async def test_portfolio_list_now_unclaimed(self, monkeypatch):
+        """PORTFOLIO_PATTERNS' show/list/view-projects literal is deleted
+        (2026-10-11, #1595). "show my projects", "list all projects" and "view my projects" are
+        corpus rows (router list_projects @0.95, live via group): surface 1 declines and the
+        Inversion routes it (router stubbed, no LLM)."""
+        from tests.unit.services.intent_service._inversion_pin_helper import (
+            assert_inversion_routes,
+        )
+
+        for phrase in ("show my projects", "list all projects", "view my projects"):
+            assert PreClassifier.pre_classify(phrase) is None, phrase
+            await assert_inversion_routes(
+                monkeypatch,
+                phrase,
+                live_categories="read_status",
+                expected_action="list_projects",
+            )
 
     def test_portfolio_search_now_unclaimed(self):
         """PORTFOLIO_PATTERNS' "search projects for Y" literal is deleted

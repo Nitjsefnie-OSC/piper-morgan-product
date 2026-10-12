@@ -221,6 +221,7 @@ shadowed literal's candidate phrasings are genuinely UNCLAIMED post-deletion
 
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -649,9 +650,9 @@ class TestDeletedPatternListsLedger:
         portfolio_entry = next(e for e in entries if e["list"] == "PORTFOLIO_PATTERNS")
         assert portfolio_entry.get("partial") is True
         assert (
-            portfolio_entry.get("literals") == 1
-        ), "literals is the DELETED count, not the original 16"
-        assert len(portfolio_entry.get("surviving_literals", {})) == 15
+            portfolio_entry.get("literals") == 2
+        ), "literals is the DELETED count (search 2026-10-09, show/list/view 2026-10-11), not the original 16"
+        assert len(portfolio_entry.get("surviving_literals", {})) == 14
 
     def test_real_ledger_entries_pass_non_regression(self):
         """Every entry in the real (now non-empty) ledger passes
@@ -2194,23 +2195,40 @@ def test_permanent_floor_is_the_1974_family_cites_the_ruling_and_stays_in_the_ta
 _TWO_TOPIC = "list my archived projects and summarize my current work"
 
 
-def test_plan_row_fallback_unacknowledged_blocks_portfolio_until_the_1884_shaped_served_case():
-    """#1977 step 2's code is on main and a served line exists (12:0x), but Arch +
-    CXO (12:3x) withdrew the flip: that quote named the OTHER half by luck (the
-    classifier answered neither). The flag flips only on a served reply of the
-    #1884 shape — served intent covers the claimed half, the line names the
-    leftover clause — plus a pinned, mechanical coverage rule. Until then the
-    #1884 row reads "planned, fallback unacknowledged" and blocks."""
-    assert gate.STEP2_ACKNOWLEDGEMENT_LANDED is False, "flip only with the 1884-shaped served quote"
+def test_plan_row_fallback_acknowledged_after_the_served_flip_licenses_portfolio():
+    """#1977 step 2's licence is the preregistered measurement Arch set on
+    2026-10-11 13:1x (20 armed-branch declines, >=3 phrasings, 0 silent
+    partials, <=2 "neither"). The first run read 6 neither (HOLD) -- all one
+    phrasing, "summarize my current work ...", which the legacy classifier
+    sent to the summarize_document rail and its upload prompt (#1979). With
+    the #1979 rail guard on main (0efe6f4c99), the SAME 20 read 0 silent
+    partials, 0 neither, 20 both
+    (dev/2026/10/11/controls/probes20-1979-fix-branch-2026-10-11.txt); Arch
+    ruled 19:2x that the run counts (tree identical to main). So the #1884
+    plan row no longer blocked PORTFOLIO's show/list/view literal (GO partial,
+    deleting 1, 121 -> 120). CONVERTED 2026-10-11 (#1595) when that deletion
+    landed: the ledger carries the row under ``planned_at_deletion`` and the
+    non-regression re-check reads it; the gate's list report for PORTFOLIO is
+    survivors-only."""
+    assert gate.STEP2_ACKNOWLEDGEMENT_LANDED is True
+    entry = next(
+        e
+        for e in json.loads(gate.DELETED_PATTERNS_JSON.read_text())["DELETED_PATTERN_LISTS"]
+        if e["list"] == "PORTFOLIO_PATTERNS"
+    )
+    assert _TWO_TOPIC in entry["rows_claimed_at_deletion"]
+    assert entry["planned_at_deletion"][_TWO_TOPIC]["ops"] == [
+        "list_archived_projects",
+        "get_project_status",
+    ]
+    ok, problems = gate.check_deleted_entry_non_regression(entry, cats=gate.CURRENT_LIVE_CATEGORIES)
+    assert ok, problems
     counts = pattern_literal_counts.per_list_literal_counts()
     records, by_list = gate.build_census(gate.CURRENT_LIVE_CATEGORIES)
     a = gate.assess_list("PORTFOLIO_PATTERNS", by_list["PORTFOLIO_PATTERNS"])
-    outcomes = {rec.phrase: outcome for rec, outcome, _ in a.planned}
-    assert outcomes.get(_TWO_TOPIC) == "planned-unacknowledged", outcomes
-    assert [c for c in a.reabsorbed if c[0].phrase == _TWO_TOPIC], "must still block"
-    assert a.kind == "rule11"
+    assert not [c for c in a.reabsorbed if c[0].phrase == _TWO_TOPIC]
     report = gate.render_list_report("PORTFOLIO_PATTERNS", by_list, counts, len(records))
-    assert "planned, fallback unacknowledged" in report
+    assert "deleting 1" not in report, report  # nothing left to delete: survivors only
 
 
 def test_plan_row_fallback_partial_names_the_dropping_list(monkeypatch):
@@ -2235,13 +2253,23 @@ def test_plan_row_fallback_partial_names_the_dropping_list(monkeypatch):
     assert after.pattern_list == "STATUS_PATTERNS" and "drops the PORTFOLIO half" in why
 
 
-def test_plan_row_is_shadowed_when_the_split_still_covers_both_halves():
+def test_plan_row_is_shadowed_when_the_split_still_covers_both_halves(monkeypatch):
     """Unit-level: with nothing removed, surface 1 still claims PORTFOLIO + STATUS
     for the phrase → both halves covered → shadowed."""
     from services.intent_service.pre_classifier import PreClassifier
 
-    before = [c for _, _, c in gate.surface1_fallback_claims(PreClassifier, _TWO_TOPIC)]
-    assert set(before) == {"PORTFOLIO", "STATUS"}, before
+    # Hand-built (the show/list/view literal is deleted, #1595 2026-10-11, so
+    # surface 1 no longer yields the PORTFOLIO half live): the shape the rule
+    # must still read as shadowed.
+    before = ["PORTFOLIO", "STATUS"]
+    monkeypatch.setattr(
+        gate,
+        "surface1_fallback_claims",
+        lambda pc, phrase: [
+            ("PORTFOLIO_PATTERNS", "manage_portfolio", "PORTFOLIO"),
+            ("STATUS_PATTERNS", "get_project_status", "STATUS"),
+        ],
+    )
     outcome, _, why = gate.plan_fallback_outcome(
         PreClassifier, _TWO_TOPIC, ["list_archived_projects", "get_project_status"], before
     )

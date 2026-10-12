@@ -87,7 +87,6 @@ PROJECT_ARCHIVE_FAMILY = (
     "unarchive my project alpha",
     "bring back my project alpha",
     "bring back the project",
-    "show my archived projects",
 )
 
 
@@ -133,3 +132,30 @@ class TestProjectArchiveFamilyStillClaims:
     @pytest.mark.parametrize("phrase", PROJECT_ARCHIVE_FAMILY)
     def test_multi_intent_path_claims(self, phrase):
         assert len(_portfolio_intents(_multi(phrase))) == 1
+
+
+class TestArchivedListShowNowDeclines:
+    """2026-10-11 (#1595): "show my archived projects" used to ride the
+    show/list/view-projects PORTFOLIO literal (moved out of
+    PROJECT_ARCHIVE_FAMILY). That literal is deleted; the phrase has a rule-10
+    corpus row (list_archived_projects @0.99, live via group), so surface 1
+    declines on both paths and the Inversion routes it (router stubbed)."""
+
+    def test_single_intent_path_declines(self):
+        assert _single("show my archived projects") is None
+
+    def test_multi_intent_path_declines(self):
+        assert _portfolio_intents(_multi("show my archived projects")) == []
+
+    @pytest.mark.asyncio
+    async def test_routes_via_inversion(self, monkeypatch):
+        from tests.unit.services.intent_service._inversion_pin_helper import (
+            assert_inversion_routes,
+        )
+
+        await assert_inversion_routes(
+            monkeypatch,
+            "show my archived projects",
+            live_categories="read_status",
+            expected_action="list_archived_projects",
+        )
