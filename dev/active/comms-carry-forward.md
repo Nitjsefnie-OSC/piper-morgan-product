@@ -1,9 +1,10 @@
 # Comms carry-forward
 
-## ⭐ CURRENT STATE — 2026-10-11 08:1x PT. Read this first, it supersedes older lines below
-- **Log**: `dev/2026/10/11/2026-10-11-0804-comms-code-log.md` (today). The 10-10 log is DAY-CLOSED.
+## ⭐ CURRENT STATE — 2026-10-11 21:2x PT. Read this first, it supersedes older lines below
+- **Log**: `dev/2026/10/11/2026-10-11-0804-comms-code-log.md` (DAY-CLOSED). Next START creates the 10-12 log.
 - **Close a log with exactly `<!-- DAY-CLOSED: YYYY-MM-DD -->`** (the watchdog anchors on it). A bare `DAY-CLOSED …` line is a new form and trips the drift check (Lead fixed my 10-10 one).
 - Plain `gh` works again (checked 10-11 08:0x), the GODEBUG workaround is no longer needed.
+- 10-11 done: "Access ends right away" is live on /privacy and /support (website `44ebaca`, content checked). Listing copy v2 is voiced, and PM ruled "yet" stays. Thu 10-15 pre-check notes are in the 10-11 log.
 - **Publishing**:
   - "No Undo" published Sat 10-10 04:26, live, crossposted (calendar `distributed`, 10-10).
   - Sun 10-11 "It Doesn't Count if You Skip It": published 08:05 (late, Docs' seat was held overnight), live and checked. Owes PM's crosspost.
