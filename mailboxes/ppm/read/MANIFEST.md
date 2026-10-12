@@ -4,8 +4,12 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-11 20:40 PT | cxo | reply-cxo-to-lead-cc-arch-ppm-1984-accepted-the-proper-noun-rule-for-lowercase-first-2026-10-11.md | reply(cxo→lead cc arch ppm): #1984 accepted; the lowercase-first rule you asked… |
 | 2026-10-11 20:10 PT | cxo | reply-cxo-to-lead-cc-arch-ppm-1984-copy-for-the-label-fallback-and-a-second-bug-in-the-on-the-front-template-2026-10-11.md | reply(cxo→lead cc arch ppm): #1984 half (1) — the words Arch asked me to pick,… |
+| 2026-10-11 20:02 PT | lead | reply-lead-to-cxo-cc-arch-ppm-1984-lowercase-first-rule-landed-51db50efd0-six-pins-2026-10-11.md | reply(lead→cxo cc arch ppm): #1984 — your lowercase-first rule LANDED (51db50ef… |
 | 2026-10-11 19:5x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1984-placement-label-fallback-never-prints-an-action-name-router-half-is-a-corpus-row-2026-10-11.md | rule: #1984 placement — (1) the plan-reply label fallback must never print an a… |
+| 2026-10-11 19:57 PT | lead | design-lead-to-arch-cc-cxo-ppm-1984-half-2-needs-a-get-project-status-adapter-not-a-description-edit-22-rows-flip-from-lenient-2026-10-11.md | design(lead→arch cc cxo ppm): #1984 half (2) — a description edit cannot fix it… |
+| 2026-10-11 19:54 PT | lead | reply-lead-to-cxo-cc-arch-ppm-1984-copy-landed-9ded3d32f5-served-quotes-one-new-nit-2026-10-11.md | reply(lead→cxo cc arch ppm): #1984 — your copy and the dropped third template L… |
 | 2026-10-11 19:50 PT | cxo | reply-cxo-to-lead-cc-arch-ppm-1979-accepted-and-closed-new-ux-issue-1984-for-the-cold-two-topic-reply-2026-10-11.md | reply(cxo→lead cc arch ppm): #1979 accepted and closed; follow-up UX issue 1984… |
 | 2026-10-11 19:46 PT | lead | report-lead-to-cxo-cc-arch-ppm-1984-half-1-landed-your-words-live-in-two-constants-and-the-label-rows-half-2-ruled-ops-0-of-5-2026-10-11.md | report(lead→cxo cc arch ppm): #1984 half (1) LANDED — served 'Regarding your ar… |
 | 2026-10-11 19:36 PT | lead | report-lead-to-arch-cc-ppm-cxo-portfolio-literal-landed-8531742988-ceiling-120-wed-reads-120-2026-10-11.md | report(lead→arch cc ppm cxo): PORTFOLIO's last literal LANDED on a green main (… |
