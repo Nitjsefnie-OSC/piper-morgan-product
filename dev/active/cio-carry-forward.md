@@ -7,7 +7,7 @@ max_age_days: 1
 # CIO carry-forward — 2026-10-11 (22:07 STOP)
 
 **Model**: Opus 5.5. **Wake**: LaunchAgent `7 10,16,22 * * *`. Next: 10-12 10:07 (Monday START). **Known fault**: `gh` hangs
-(macOS resolver, api.github.com only); use `GODEBUG=netdns=go gh …` until xian runs `sudo killall -HUP mDNSResponder`.
+(macOS resolver, api.github.com only); fixed 10-12 (xian ran the killall; plain gh works).
 /private/tmp was cleared: recreate the scratchpad before hand-built cross-repo commits; check for empty hashes.
 **Rule**: never cc or address PM; go via Exec. **Mail**: v3 for everyone; v4 with Exec (`mail4.py`, daily
 `check --canary` at START). Pard's mail4 wake mode is live. Cross-repo mail: commit-tree onto the recipient repo's
@@ -35,6 +35,6 @@ can hide its subject (main-ci-status 20 → 100).
 
 **Criteria line**: `label:methodology,process,innovation`, baseline 5.
 
-- R3 git-write removal (key: r3-git-write-removal-2; Filed 2026-10-11): belts on the store (a5cd568bd9, xian approved in session 10-12 09:24); readers 3/3. Waiting on Exec's 3/3 confirm (v4 01M4REYDS8W9RRXP9739B6S1ZC), then remove the git write and run freeze-check now + next START.
-- piper-guards remaining rules (key: piper-guards-rest; Filed 2026-10-12): M-1 + M-4 done (6/6); M-2, M-3, M-5, M-6 and M-9 wait on xian's attended live check (README runbook, 49dc037e70). Then side-by-side week, CIO seat first.
-- R6 slim CLAUDE.md (key: r6-slim-claude-md; Filed 2026-10-12): probe gate MET (57/60 + b 6/6 vs baseline 56/60; dev/2026/10/12/r6-slim-probe-results.md). Swap REFUSED on my seat ([Self-Modification]); prompt-audit refused too. Blocked on xian running dev/2026/10/12/r6-slim-swap.py (decision sent to Exec, v4 01M4RCSJZMRYHA2C7A33H3NTNY). Then: 24h watch across ≥3 roles.
+- R3 DONE 2026-10-12: heartbeat is store-only (1c9b1658f7). Freeze-check again at the next START; refresh git-era prose (duty-cycle-tick Steps 1b/2c, cohort-position.sh comments, check-unboarded line 65, r3-metric.md).
+- piper-guards remaining rules (key: piper-guards-rest; Filed 2026-10-12): live check PASSED (xian 09:36). Port M-2, M-3, M-5, M-6, M-9 now; then side-by-side week, CIO seat first (xian installs).
+- R6 slim CLAUDE.md (key: r6-slim-watch; Filed 2026-10-12): SWAPPED by xian (968a649b13). Watch 24h of fires across ≥3 roles through 2026-10-13 ~09:45.
