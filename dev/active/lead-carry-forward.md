@@ -1,6 +1,6 @@
 # Lead carry-forward — Fable 5.1 seat; Model A worktree ~/Development/piper-morgan-worktrees/lead
 
-## STATE @ 2026-10-12 09:1x PT — START + five mail wakes drained; three code landings on main (log dev/2026/10/12/2026-10-12-0647-lead-code-log.md, open)
+## STATE @ 2026-10-12 09:3x PT — START + six mail wakes drained; four code landings on main (log dev/2026/10/12/2026-10-12-0647-lead-code-log.md, open)
 - **#1984 half (2): CLOSED ON MY SIDE 07:2x — lever (c) applied.** Arch ruled (07:3x his clock, read 07:16): not (a); (b) = drop the
   `'what did I work on today'` rail example, screened ×6 main vs (b) on 20 phrases (CXO's two true-session phrases joined) → the row
   reached the ruled plan 6/6 but two rows read worse (re-checked 12/12 each) → FAIL → (c): the corpus row carries the KNOWN MISS note
@@ -28,7 +28,8 @@
 - **Alpha c613beabf5 served (Web 08:10): 5 of 8 pass — all three fails resolved on main by 09:1x.** #1985 (attention handler read
   todos by session id → "nothing urgent" over an overdue todo): principal fix 5d5f7ec88e + CXO's reply shape bb4066fc00 (due today
   then overdue under "Today:", exact empty line, "couldn't check" on a failed read, assembler dedupe). #1986 (thanks → todo
-  briefing): Arch's #1754 reversal for thanks/farewell, 8ebe568035 under six conditions. #1988 (timezone placeholder) CLOSED on
+  briefing): Arch's #1754 reversal for thanks/farewell, 8ebe568035 under six conditions + condition 2 tightened cd43832626 (the
+  empty form needs a durable, owner-checked zero from `count_delivered_turns`; unknown → "You're welcome."). #1988 (timezone placeholder) CLOSED on
   the Helsinki copy (dacf3007a3); render half = Web's #1992. #1987 (delete that reminder) filed, PPM places. #1958 CLOSED by CXO.
   CXO's duplicates #1989/#1990/#1991 closed into mine. **Open with Arch (no block):** greeting is NOT armed-checked (pinned as-is;
   his call to widen); the compound ACTION_EXAMPLES for thanks/farewell ride the next catalog batch (rule 7). **Next promotion →
