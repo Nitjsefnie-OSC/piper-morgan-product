@@ -448,11 +448,19 @@ class ContextAssembler:
                     str(r).strip().casefold() for r in (context.get("due_reminders") or [])
                 }
                 if _due_texts and context.get("pending_todos"):
+                    _before = len(context["pending_todos"])
                     context["pending_todos"] = [
                         td
                         for td in context["pending_todos"]
                         if str(td.get("text", "")).strip().casefold() not in _due_texts
                     ]
+                    _moved = _before - len(context["pending_todos"])
+                    if _moved:
+                        # #1997: a list this dedup emptied is NOT "no pending
+                        # todos" (alpha 651756d520: "Your todo list is clear"
+                        # beside the three reminders that were the list).
+                        # Carry how many moved so the floor says so.
+                        context["pending_todos_in_reminders"] = _moved
         except Exception as e:  # silent-ok: reminder slice is additive; failure merges source_failed upstream so the floor says "couldn't check", never "none due" (#1425/#1566)
             logger.warning("context_assembler_reminder_gather_error", error=str(e))
 
@@ -1172,6 +1180,46 @@ class ContextAssembler:
             compute_fn=lambda: self._compute_reminder_context(user_id),
         )
 
+    async def _due_reminder_ages(self, handlers, user_id: str) -> Dict[str, str]:
+        """#1997: how old each due reminder is, on the user's calendar, keyed
+        by its text — ``"due earlier today"`` or ``"N day(s) overdue"``. The
+        reminder block used to carry text only, so the floor guessed ("three
+        reminders have come due today" for items 3–5 days old). Additive:
+        any failure returns ``{}`` and the block renders as before. The
+        day-count rule is #1996's (calendar days at local midnight, never
+        elapsed 24-hour periods)."""
+        try:
+            from uuid import UUID
+            from zoneinfo import ZoneInfo
+
+            from services.utils.datetime_utils import user_timezone_name
+
+            rows = await handlers._due_reminder_todos(UUID(user_id))
+            if not rows:
+                return {}
+            now = datetime.now(timezone.utc)
+            try:
+                local_now = now.astimezone(ZoneInfo(await user_timezone_name(user_id)))
+            except Exception:  # silent-ok: unknown zone → UTC calendar; ages stay additive
+                local_now = now
+            ages: Dict[str, str] = {}
+            for row in rows:
+                when = getattr(row, "reminder_date", None)
+                text = getattr(row, "text", None)
+                if not when or not text:
+                    continue
+                if when.tzinfo is None:
+                    when = when.replace(tzinfo=timezone.utc)
+                days = (local_now.date() - when.astimezone(local_now.tzinfo).date()).days
+                if days <= 0:
+                    ages[str(text)] = "due earlier today"
+                else:
+                    ages[str(text)] = f"{days} day{'s' if days != 1 else ''} overdue"
+            return ages
+        except Exception as e:  # silent-ok: ages are an additive annotation; the reminder block itself is unaffected
+            logger.warning("context_assembler_reminder_ages_error", error=str(e))
+            return {}
+
     async def _gate_due_reminder_mentions(
         self,
         reminder_ctx: Dict[str, Any],
@@ -1244,10 +1292,14 @@ class ContextAssembler:
                 # silently broken).
                 return {"source_failed": True}
             if due_reminders:
-                return {
+                reminder_ctx: Dict[str, Any] = {
                     "due_reminders": due_reminders,
                     "reminder_count": len(due_reminders),
                 }
+                ages = await self._due_reminder_ages(handlers, user_id)
+                if ages:
+                    reminder_ctx["due_reminder_ages"] = ages
+                return reminder_ctx
         except (
             Exception
         ) as e:  # silent-ok: failure surfaces via source_failed flag, not an empty context (#1425)

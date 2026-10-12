@@ -9475,20 +9475,30 @@ class IntentService:
             # #1572 fallback), never the server's — a todo due at 4pm Pacific
             # is "today" at 1pm Pacific even though UTC has moved on.
             due_today_todos = []
+            # #1996: ONE day boundary, on the user's clock, shared by the
+            # due-today read, the overdue read and the overdue age. Local
+            # MIDNIGHT — not `now` — splits "due today" from "overdue", so an
+            # item due earlier today is still today's (never "0 days
+            # overdue"), and the age is counted in calendar days, which
+            # changes at local midnight rather than whenever 24 more hours
+            # happen to elapse mid-conversation (alpha 651756d520: 4 → 5 days
+            # within minutes).
+            _local_now = now
             try:
                 from zoneinfo import ZoneInfo
 
                 from services.utils.datetime_utils import user_timezone_name
 
                 _tz_name = await user_timezone_name(_owner_id)
-                try:
-                    _local_now = now.astimezone(ZoneInfo(_tz_name))
-                except Exception:  # silent-ok: an unusable zone degrades to UTC, never a dead turn
-                    _local_now = now
-                _day_end = (
-                    _local_now.replace(hour=0, minute=0, second=0, microsecond=0)
-                    + timedelta(days=1)
-                ).astimezone(timezone.utc)
+                _local_now = now.astimezone(ZoneInfo(_tz_name))
+            except (
+                Exception
+            ):  # silent-ok: an unusable or unknown zone degrades to UTC, never a dead turn
+                _local_now = now
+            _local_day_start = _local_now.replace(hour=0, minute=0, second=0, microsecond=0)
+            _day_start = _local_day_start.astimezone(timezone.utc)
+            _day_end = (_local_day_start + timedelta(days=1)).astimezone(timezone.utc)
+            try:
                 async with AsyncSessionFactory.session_scope() as session:
                     from services.database.models import TodoDB
 
@@ -9499,7 +9509,7 @@ class IntentService:
                                 TodoDB.owner_id == _owner_id,
                                 TodoDB.completed == False,
                                 TodoDB.due_date.isnot(None),
-                                TodoDB.due_date >= now,
+                                TodoDB.due_date >= _day_start,
                                 TodoDB.due_date < _day_end,
                             )
                         )
@@ -9531,7 +9541,7 @@ class IntentService:
                                 TodoDB.owner_id == _owner_id,
                                 TodoDB.completed == False,
                                 TodoDB.due_date.isnot(None),
-                                TodoDB.due_date < now,
+                                TodoDB.due_date < _day_start,
                             )
                         )
                         .order_by(TodoDB.due_date.asc())
@@ -9540,7 +9550,16 @@ class IntentService:
                     todos = result.scalars().all()
 
                     for todo in todos:
-                        days_overdue = (now - todo.due_date).days if todo.due_date else 0
+                        # #1996: calendar days on the user's clock, never
+                        # elapsed 24-hour periods.
+                        days_overdue = 0
+                        if todo.due_date:
+                            _due = todo.due_date
+                            if _due.tzinfo is None:
+                                _due = _due.replace(tzinfo=timezone.utc)
+                            days_overdue = (
+                                _local_now.date() - _due.astimezone(_local_now.tzinfo).date()
+                            ).days
                         overdue_todos.append(
                             {
                                 "type": "overdue_todo",

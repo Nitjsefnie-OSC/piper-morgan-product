@@ -981,6 +981,72 @@ class TestAttentionReplyShape1985b:
         assert lines[2].startswith("⏰ revise the pr (")
 
     @pytest.mark.asyncio
+    async def test_1996_overdue_age_is_calendar_days_on_the_users_clock(self, intent_service):
+        """Alpha 651756d520 (Web, 2026-10-12): 'revise the pr' read 4 days
+        overdue at 16:27 and 5 days a few minutes later — the age was elapsed
+        24-hour periods. An item due at 23:50 local five calendar days ago is
+        5 days overdue all day today, whatever the hour."""
+        from zoneinfo import ZoneInfo
+
+        tz = ZoneInfo("America/Los_Angeles")
+        local_now = datetime.now(timezone.utc).astimezone(tz)
+        due_local = (local_now - timedelta(days=5)).replace(hour=23, minute=50, second=0)
+        late = self._Todo("revise the pr", due_date=due_local.astimezone(timezone.utc))
+        result = await self._run(intent_service, [], [late])
+        assert "⏰ revise the pr (5 days overdue)" in result.message
+        assert result.intent_data["overdue_todos"][0]["days_overdue"] == 5
+
+    @pytest.mark.asyncio
+    async def test_1996_both_reads_split_at_local_midnight_not_now(self, intent_service):
+        """The due-today read's lower bound and the overdue read's upper bound
+        are the SAME instant: local midnight on the user's clock. Before #1996
+        both were `now`, which put an item due earlier today in the overdue
+        list as '(0 days overdue)'."""
+        from zoneinfo import ZoneInfo
+
+        seen = []
+
+        async def _execute(stmt, *args, **kwargs):
+            params = list(stmt.compile().params.values())
+            if "todos" in str(stmt).lower():
+                seen.append(sorted(v for v in params if isinstance(v, datetime)))
+            result = MagicMock()
+            result.scalars.return_value.all.return_value = []
+            return result
+
+        session = AsyncMock()
+        session.execute = _execute
+        scope = MagicMock()
+        scope.__aenter__ = AsyncMock(return_value=session)
+        scope.__aexit__ = AsyncMock(return_value=False)
+        with (
+            patch(
+                "services.intent.intent_service.AsyncSessionFactory.session_scope",
+                return_value=scope,
+            ),
+            patch(
+                "services.utils.datetime_utils.user_timezone_name",
+                new=AsyncMock(return_value="America/Los_Angeles"),
+            ),
+        ):
+            await intent_service._handle_attention_query(
+                self._intent(), "wf-1996", "session-1996", None
+            )
+        now = datetime.now(timezone.utc)
+        local_midnight = (
+            now.astimezone(ZoneInfo("America/Los_Angeles"))
+            .replace(hour=0, minute=0, second=0, microsecond=0)
+            .astimezone(timezone.utc)
+        )
+        two_bound = [d for d in seen if len(d) == 2]
+        one_bound = [d for d in seen if len(d) == 1]
+        assert two_bound and one_bound, seen
+        assert two_bound[0][0] == local_midnight
+        assert two_bound[0][1] == local_midnight + timedelta(days=1)
+        assert one_bound[0][0] == local_midnight
+        assert local_midnight <= now
+
+    @pytest.mark.asyncio
     async def test_flagged_todo_already_listed_appears_once(self, intent_service):
         now = datetime.now(timezone.utc)
         late = self._Todo("revise the pr", priority="high", due_date=now - timedelta(days=2))
