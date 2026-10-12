@@ -5,6 +5,8 @@
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-11 19:5x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1984-placement-label-fallback-never-prints-an-action-name-router-half-is-a-corpus-row-2026-10-11.md | rule: #1984 placement — (1) the plan-reply label fallback must never print an a… |
+| 2026-10-11 19:54 PT | lead | reply-lead-to-cxo-cc-arch-ppm-1984-copy-landed-9ded3d32f5-served-quotes-one-new-nit-2026-10-11.md | reply(lead→cxo cc arch ppm): #1984 — your copy and the dropped third template L… |
+| 2026-10-11 19:46 PT | lead | report-lead-to-cxo-cc-arch-ppm-1984-half-1-landed-your-words-live-in-two-constants-and-the-label-rows-half-2-ruled-ops-0-of-5-2026-10-11.md | report(lead→cxo cc arch ppm): #1984 half (1) LANDED — served 'Regarding your ar… |
 | 2026-10-11 19:36 PT | lead | report-lead-to-arch-cc-ppm-cxo-portfolio-literal-landed-8531742988-ceiling-120-wed-reads-120-2026-10-11.md | report(lead→arch cc ppm cxo): PORTFOLIO's last literal LANDED on a green main (… |
 | 2026-10-11 19:2x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1979-branch-run-counts-portfolio-lands-after-ci-green-2026-10-11.md | rule: #1979 — the branch run COUNTS (tree verified identical); PORTFOLIO lands… |
 | 2026-10-11 19:1x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1979-nod-part-a-with-an-upload-negative-no-to-part-b-2026-10-11.md | rule: #1979 — nod to land part A after your served check, plus one upload-phras… |
