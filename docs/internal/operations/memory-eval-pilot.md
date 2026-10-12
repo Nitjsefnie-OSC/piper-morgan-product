@@ -1,6 +1,6 @@
 # Memory & Briefing Surfaces — Eval Pilot (#974 Data Collection)
 
-**Status**: Pilot data collection — launched 2026-05-25 per #974 MEM-EVAL (Docs lane).
+**Status**: ⚫ Collection step RETIRED 2026-10-12: xian answered D-E "drop" (relayed by Exec); the CLAUDE.md wrap-up step is removed (text kept in `claude-md-history.log`). Data already gathered stays here for Docs to evaluate or archive. Originally: pilot data collection, launched 2026-05-25 per #974 MEM-EVAL (Docs lane).
 **Owner**: Documentation Management (Docs).
 **Cross-reference**: CLAUDE.md "Session wrap-up checklist" step 4 (memory eval).
 

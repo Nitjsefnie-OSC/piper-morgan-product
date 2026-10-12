@@ -1,10 +1,10 @@
 ---
 name: close-issue-properly
-description: Close GitHub issues with proper evidence and audit-ready records. Use when completing work on a tracked issue, when PM says "close the issue", or before ending a session with completed work. Updates description checkboxes and adds closing comment.
+description: Close GitHub issues with proper evidence and audit-ready records. Use when completing work on a tracked issue, when PM says "close the issue", "mark complete", "wrap up #N" or "done with #N", or before ending a session with completed work. Updates description checkboxes and adds closing comment.
 scope: cross-role
-version: 1.2
+version: 1.3
 created: 2026-01-21
-updated: 2026-05-17
+updated: 2026-10-12
 ---
 
 # close-issue-properly
@@ -61,10 +61,16 @@ gh issue view <id> --json body -q '.body' > /tmp/issue-body.md
 # 3. Any completion matrices
 ```
 
-For each checkbox, determine its status:
-- ✅ **Done** → Change to `[x]`
-- ⏭️ **Deferred** → Keep as `[ ]` but add note: `[ ] Item - *Deferred: [reason]*`
-- ❌ **Not applicable** → Keep as `[ ]` but add note: `[ ] Item - *N/A: [reason]*`
+For each checkbox, determine its status (the one convention; `close-issue` was merged into this skill 2026-10-12):
+
+| Situation | Checkbox becomes | Note |
+|---|---|---|
+| Done, verified | `[x]` | none |
+| Done, verified another way than the box implies | `[x]` | `[x] Item - *Verified: [how]*` |
+| Deferred to a follow-up issue | `[ ]` | `[ ] Item - *Deferred → #N: [reason]*` |
+| Not applicable / out of scope | `[ ]` | `[ ] Item - *N/A: [reason]*` |
+| Won't do | `[ ]` | `[ ] Item - *Won't do: [reason]*` |
+| Superseded (whole issue replaced or its window passed) | `[x]` | `[x] Item - *N/A:superseded*` (see Example 5) |
 
 **Every unchecked box must have an explanation.** No unexplained unchecked boxes.
 
@@ -92,7 +98,8 @@ gh issue edit <id> --body-file /tmp/issue-body.md
 
 **What to update**:
 1. All completed checkboxes: `[ ]` → `[x]`
-2. Add status banner if not present: `**Status**: ✅ COMPLETE`
+2. Add status banner at the top if not present: `**Status**: ✅ COMPLETE — [one-line summary]`, or for a
+   superseded / won't-fix issue `**Status**: ⚫ CLOSED — [superseded by #N / won't fix: reason]`
 3. Add deferred items table if any items were skipped
 4. Update any completion matrices with evidence links
 
@@ -130,20 +137,15 @@ EOF
 ### Step 5: Close the Issue
 
 ```bash
-# Option A: Direct close (after completing Steps 2-4)
 gh issue close <id>
-
-# Option B: Beads with validation (preferred if available)
-./scripts/bd-safe close <issue-id>
+# superseded, won't-do or window-passed:
+gh issue close <id> --reason "not planned"
 ```
 
-**Note**: `bd-safe` validates that epic children are closed and acceptance criteria exist before allowing close.
-
-### Step 6: Sync Database (if using Beads)
+### Step 6: Tell the parent epic (if any)
 
 ```bash
-bd sync
-git status  # Verify clean state
+gh issue comment <epic-id> --body "Child closed: #<id> ([title]) ✅"
 ```
 
 ## Pattern Families
@@ -192,7 +194,7 @@ Before closing, verify:
 - [ ] **Closing comment** added with evidence template
 - [ ] Tests passing (if applicable)
 - [ ] If epic: all children closed
-- [ ] If Beads: `bd sync` completed
+- [ ] If a child: parent epic told
 
 ## Examples
 
@@ -226,9 +228,6 @@ Added input validation to user handler.
 
 # Step 5: Close
 gh issue close 543
-
-# Step 6: Sync
-bd sync
 ```
 
 ### Example 2: Issue with Deferred Items
@@ -283,9 +282,6 @@ All 3 child issues closed with evidence."
 
 # Step 5: Close epic
 gh issue close epic-42
-
-# Step 6: Sync
-bd sync
 ```
 
 ### Example 4: Blocked - Cannot Close
@@ -296,8 +292,7 @@ pytest tests/  # 2 failed
 
 # Instead:
 # 1. File P0 blocker issue for failing tests
-gh issue create --title "P0: Fix failing tests in feature X" --label blocker --body "<details>"
-bd dep add <new-blocker> <original-issue> --type blocks
+gh issue create --title "P0: Fix failing tests in feature X" --label blocker --body "<details> Blocks #<original-issue>."
 
 # 2. Keep original issue open
 # 3. Report to PM
@@ -364,6 +359,7 @@ gh issue close <id> --reason "not planned"
 
 ## Changelog
 
+- **v1.3** (2026-10-12): Merged `close-issue` (v1.0, the generalized copy) into this skill on xian's D-D "yes" (R6 defect C17, relayed by Exec 10-12). Brought over its checkbox-status table (Won't do, Verified-another-way, Deferred → #N), the ⚫ CLOSED banner for superseded/won't-fix issues, the parent-epic step and its trigger phrases. Removed the Beads (`bd`, `bd-safe`, `bd sync`) steps: Beads isn't installed on Amber and GitHub is the tracker (CIO ruling 2026-10-05). `close-issue` deleted; its references now point here.
 - **v1.2** (2026-05-17): Added Example 5 (Recurring auto-generated audit — close-as-superseded). Codifies the close-as-superseded pattern for FLY-AUDIT-style recurring issues so they don't accumulate as orphans with 95 unchecked boxes. May 17 trigger: #1049 sat 13 days post-creation; #1076 was previously closed with all-unchecked. Optional Monday-morning sweep noted as preventive practice.
 - **v1.1** (2026-02-09): Added Pre-Flight Checklist, expanded Step 2 with mandatory analysis, added warnings about Comment-Only Close anti-pattern, improved examples with full flow
 - **v1.0** (2026-01-21): Initial version

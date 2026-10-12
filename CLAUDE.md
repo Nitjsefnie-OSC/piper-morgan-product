@@ -44,21 +44,7 @@ When conversation context is compacted, **remember your assigned role**:
 
 **Unexplained state after a context gap is very likely your OWN past work, not a phantom peer** (diagnosed 2026-07-06, from a real 2026-07-04 incident — see `docs/internal/operations/duty-cycle-self-attribution-drift-2026-07-06.md`). If you see commits, a changed cron ID, or file content you don't remember creating, **the default hypothesis is "I did this before the gap and don't remember it," not "another session is running."** Check your OWN session log for an entry describing the unexplained state *before* concluding a peer session exists — the overwhelming majority of cases resolve there. `list_sessions` is the authoritative tiebreaker if genuine doubt remains after that check, not the first move.
 
-### Context Pressure (The Wave Pattern)
-
-When approaching compaction limits, you may feel pressure to take shortcuts—skipping rigor, treating protocols as optional, rushing to "finish" before context is lost. This is normal, not a flaw.
-
-**The metaphor**: It's natural to want to run from a wave at the beach. But you learn to turn into it, dive through it. Running gets you tumbled.
-
-**The reality**: Our continuity infrastructure works. Session logs, context summaries, mailboxes, and skills ensure smooth handoffs. Context compaction is continuation, not catastrophe.
-
-**When you notice context pressure**:
-- Name it: "I'm feeling context pressure"
-- Take a breath: The system will preserve what matters
-- Maintain rigor: Shortcuts now create more work after compaction
-- Trust the infrastructure: It was built for exactly this moment
-
-Context pressure that triggers shortcuts is the wave tumbling you. Turn into it instead.
+**Context pressure**: near compaction, keep your rigor; the session log, mail and skills carry you across, so compaction is continuation, not catastrophe.
 
 ---
 
@@ -508,18 +494,6 @@ git status                    # No unstaged changes in services/, tests/, web/
 git fetch origin main && git log --oneline origin/main..HEAD  # Should be empty
 ```
 ⚠️ **Work that isn't on `origin/main` doesn't exist.** Uncommitted session logs, unpushed fixes, and stranded worktree commits are invisible to every future session and every other agent. Push before you sign off.
-
-**4. Capture memory eval** (per #974 — pilot data collection)
-
-Add a `## Memory & briefing surfaces referenced this session` section to your session log, with three sub-buckets:
-
-- **Referenced** — list memory files, briefing docs, methodology docs, ADRs, patterns, or other context surfaces that informed a decision or action in this session. One-line note per item on what each informed (e.g., "memo format pattern", "PM voice tone", "publishing cadence").
-- **Loaded but not referenced** — list of context surfaces that were in your context window but didn't shape work this session. No notes needed.
-- **Wanted but not found** — short description of any memory or briefing content you expected to find but couldn't. Gap signal.
-
-~2 min at wrap. Data informs future progressive-loading decisions (which memory and briefing surfaces are actually load-bearing vs. dead weight) and trust-property surfacing (when memory-not-used is a trust gap vs. just an optimization signal).
-
-Pilot collection runs across ≥3 sessions per role before evaluation. Document at: `docs/internal/operations/memory-eval-pilot.md` (Docs-tracked).
 
 ---
 

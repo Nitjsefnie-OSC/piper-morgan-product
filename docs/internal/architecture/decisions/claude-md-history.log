@@ -424,3 +424,36 @@ MVP milestone IS the beta gate... PM moved beta back a month on 2026-08-08 witho
 fixed date." Sent PPM a direct note rather than rewriting their own active-priorities list.
 
 2026-10-04 (Docs) -- CLAUDE.md sign-off text: main-checkout steps replaced with "push from your own worktree". PM ruling 1 on Spec's R6 (relayed by Spec to CIO+Docs, 10-04; evaluation at docs/internal/audits/2026-10-spec-project-evaluation.md section 2 R6). Session wrap-up checklist step 2 (cd to main repo, git checkout main, git merge, git push origin main) is now `git push origin HEAD:main`; sign-off option (a) (git checkout main && git pull && git merge && git push) is now `git fetch origin main && git merge origin/main && git push origin HEAD:main`. Why: the old text told agents to run checkout/merge in PM's live main checkout, contradicting the HARD RULE and the worktree model (agents already pushed this way in practice). Also changed wrap-up step 3's `git log main..claude/branch` to `git fetch origin main && git log origin/main..HEAD` (a local `main` ref in a worktree can be stale; same class of bug the sign-off section already fixed). Revert with git revert. Note: R6 step 1 (destructive-git guard hook) is CIO's and comes next; ruling 2's other steps are not Docs'.
+
+2026-10-12 (CIO) -- CLAUDE.md: two R6 removals on xian's answers D-E "drop" and D-F "one line" (relayed by Exec 10-12, mail v4 01M4R9RVY7S3ADHPXM9AGQBNDZ; proposed in docs Spec D-propose 2026-10-03, dev/2026/10/03/spec-eval/D-propose-ruleset.md). (1) The "Context Pressure (The Wave Pattern)" section became one line. (2) Session wrap-up step 4, the #974 memory-eval capture, was dropped. Revert with git revert. Full removed text follows.
+
+--- removed (1) ---
+### Context Pressure (The Wave Pattern)
+
+When approaching compaction limits, you may feel pressure to take shortcuts—skipping rigor, treating protocols as optional, rushing to "finish" before context is lost. This is normal, not a flaw.
+
+**The metaphor**: It's natural to want to run from a wave at the beach. But you learn to turn into it, dive through it. Running gets you tumbled.
+
+**The reality**: Our continuity infrastructure works. Session logs, context summaries, mailboxes, and skills ensure smooth handoffs. Context compaction is continuation, not catastrophe.
+
+**When you notice context pressure**:
+- Name it: "I'm feeling context pressure"
+- Take a breath: The system will preserve what matters
+- Maintain rigor: Shortcuts now create more work after compaction
+- Trust the infrastructure: It was built for exactly this moment
+
+Context pressure that triggers shortcuts is the wave tumbling you. Turn into it instead.
+
+--- removed (2) ---
+**4. Capture memory eval** (per #974 — pilot data collection)
+
+Add a `## Memory & briefing surfaces referenced this session` section to your session log, with three sub-buckets:
+
+- **Referenced** — list memory files, briefing docs, methodology docs, ADRs, patterns, or other context surfaces that informed a decision or action in this session. One-line note per item on what each informed (e.g., "memo format pattern", "PM voice tone", "publishing cadence").
+- **Loaded but not referenced** — list of context surfaces that were in your context window but didn't shape work this session. No notes needed.
+- **Wanted but not found** — short description of any memory or briefing content you expected to find but couldn't. Gap signal.
+
+~2 min at wrap. Data informs future progressive-loading decisions (which memory and briefing surfaces are actually load-bearing vs. dead weight) and trust-property surfacing (when memory-not-used is a trust gap vs. just an optimization signal).
+
+Pilot collection runs across ≥3 sessions per role before evaluation. Document at: `docs/internal/operations/memory-eval-pilot.md` (Docs-tracked).
+--- end ---
