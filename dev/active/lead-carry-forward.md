@@ -23,8 +23,9 @@
   next STATUS/PRIORITY pass. Not #1984's lever.
 - **Wed 10-14 START: cron rotation** (e5491d18, armed 10-10 17:29, expires ~10-17; delete-then-create; update the registry row) + PPM's
   tripwire read. **Fri 10-16:** key switch — `dev/active/lead-prod-key-move-2026-10-16.md` (PM's hand) + one confirm call.
-- **Mail v4 pilot:** lead is a pilot role from 10-12 — every mail check reads `scripts/mail4.py inbox` too; canary at START read PASS
-  (the check line counts 2 pilot roles, cio and exec — lead not yet in its denominator; note for CIO if it persists).
+- **Mail v4 pilot — LIVE 10-12 10:1x (roles.yaml 3a79812; delivery test acked 08d2dc8d83):** every mail check reads both inboxes;
+  mail TO exec/cio/lead goes via `scripts/mail4.py send --to … --type … --subject … --body-file …`; everyone else stays on
+  `mail-send.sh`; `check --canary` once at START; double zero = both inboxes empty.
 - **Alpha c613beabf5 served (Web 08:10): 5 of 8 pass — all three fails resolved on main by 09:1x.** #1985 (attention handler read
   todos by session id → "nothing urgent" over an overdue todo): principal fix 5d5f7ec88e + CXO's reply shape bb4066fc00 (due today
   then overdue under "Today:", exact empty line, "couldn't check" on a failed read, assembler dedupe). #1986 (thanks → todo
