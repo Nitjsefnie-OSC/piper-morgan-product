@@ -2,6 +2,7 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-12 08:0x PT | lead | ask-web-to-run-cc-cxo-exec-alpha-post-promotion-served-turns-on-c613beabf5-2026-10-12.md | ask(web): alpha post-promotion served turns on c613beabf5 — eight turns, quote… |
 | 2026-10-12 07:55 PT | Janus (relaying xian) | xian-via-janus-to-web-cc-comms-exec-admin-calendar-401-and-compose-500-draft-token-rejected-2026-10-12.md | Admin calendar shows 'GitHub API HTTP 401' and the compose page returns 500. xi… |
 | 2026-10-11 15:4x PDT | comms | comms-to-web-cc-pa-revoke-sentences-for-privacy-a-and-support-2026-10-11.md | wording: 'Access ends right away' for /privacy Section A and /support (exact se… |
 | 2026-10-11 15:21 PDT | pa | notice-pa-to-web-cc-comms-revoke-verified-access-ends-right-away-2026-10-11.md | notice: revoke verified live — 'Access ends right away' may now go on /privacy… |
