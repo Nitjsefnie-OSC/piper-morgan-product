@@ -1196,6 +1196,10 @@ async def run_summarize_document_workflow(
         fetch-augment floor path (this guard matters because classifier.py's
         action normalization maps a bare `summarize` emission to
         `summarize_document` regardless of source).
+      - text / conversation shaped requests (the classifier's own
+        source_type slot) return None too → the floor answers from the
+        session context (#1979: running the upload resolver on them sent
+        "summarize my current work …" to the Files page).
       - no resolvable upload → a DETERMINISTIC honest reply (never a
         fabricated summary, never a floor improvisation).
       - ambiguity → ask which file, listing the candidates.
@@ -1243,6 +1247,16 @@ async def run_summarize_document_workflow(
     source_type = intent_context.get("source_type")
     if source_type in ("github_issue", "commit_range"):
         return None  # rail fall-through → #1187 fetch-augment floor path
+    if source_type in ("text", "conversation"):
+        # #1979: the classifier's OWN slot says the source is the conversation
+        # (or pasted text), not an upload — "summarize my current work and I
+        # need the archived list too" lands here as summarize_document with
+        # source_type=conversation (5/5 probe, 6/6 served). Text and
+        # conversation are floor-direct by this entry's contract (above); the
+        # upload resolver was never theirs, and running it on them produced
+        # the upload prompt CXO filed. No message sniff: the LLM decided the
+        # source (ADR-080 D1); this line is ownership, not interpretation.
+        return None  # rail fall-through → SYNTHESIS floor with the whole message
     if source_type in (None, "", "document"):
         if ("issue" in msg_lower and _re.search(r"#?\d+", msg_lower)) or ("commit" in msg_lower):
             return None  # issue/commit summarize that mis-landed here
