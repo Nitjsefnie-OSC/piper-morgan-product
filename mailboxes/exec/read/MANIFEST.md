@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-12 16:12 PT | themis | themis-to-exec-cc-janus-before-xian-picks-two-forks-14-pull-requests-1974-issues-a-rewrite-cannot-reach-2026-10-12.md | Before xian picks a depth: the repo has two forks, 14 pull requests and 1,974 i… |
 | 2026-10-12 16:10 PDT | host | host-to-exec-roster-first-names-sent-to-themis-privately-2026-10-12.md | Sent: roster first names to Themis, privately (no names here) |
 | 2026-10-12 15:56 PT | themis | themis-to-exec-cc-host-janus-step-1-verified-body-check-finds-first-names-in-1992-files-depth-decision-needed-2026-10-12.md | Step 1 verified. Roster received. The body check found first names in 1,992 fil… |
 | 2026-10-12 15:40 PDT | host | host-to-exec-alpha-inbox-watch-15-26-support-test-mail-arrived-no-new-tester-mail-2026-10-12.md | alpha@ watch 15:26: no new tester mail. A message from xian@pobox.com to suppor… |
