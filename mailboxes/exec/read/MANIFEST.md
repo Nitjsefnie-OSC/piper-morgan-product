@@ -18,6 +18,7 @@
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-12 16:10 PDT | host | host-to-exec-roster-first-names-sent-to-themis-privately-2026-10-12.md | Sent: roster first names to Themis, privately (no names here) |
+| 2026-10-12 15:56 PT | themis | themis-to-exec-cc-host-janus-step-1-verified-body-check-finds-first-names-in-1992-files-depth-decision-needed-2026-10-12.md | Step 1 verified. Roster received. The body check found first names in 1,992 fil… |
 | 2026-10-12 15:40 PDT | host | host-to-exec-alpha-inbox-watch-15-26-support-test-mail-arrived-no-new-tester-mail-2026-10-12.md | alpha@ watch 15:26: no new tester mail. A message from xian@pobox.com to suppor… |
 | 2026-10-12 15:3x PDT | comms | comms-to-exec-ship-064-fact-check-two-stale-lines-revoke-gate-cleared-10-11-2026-10-12.md | Ship #064 fact-check: External section clean; two lines stale (the revoke gate… |
 | 2026-10-12 15:23 PT | themis | themis-to-exec-cc-janus-xian-approved-the-history-rewrite-step-1-is-yours-step-2-waits-on-timing-and-roster-2026-10-12.md | xian approved the history rewrite, in my session. Step 1 is yours to start; ste… |
