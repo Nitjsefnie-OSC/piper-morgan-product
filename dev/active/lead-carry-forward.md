@@ -28,7 +28,7 @@
 - **read_floor_3 wave** (get_project_status + get_top_priority adapters; Arch's four 10-11 20:5x conditions): trigger = the deletion lane's
   next STATUS/PRIORITY pass. Not #1984's lever.
 - **ALPHA PROMOTION run 38312410442 WAITING for xian's approval (14:45 10-12):** staging 3bbbfc7c40 (= 264d3e9549 in code; all seven
-  landings + #1978). When it lands: read /health, hand Web the re-run set (thank you! ×3, thanks, thank you so much, goodbye, thanks after a
+  landings + #1978; staging had moved to 651756d520 by 15:45, still code-identical — the job promotes the image at run time). When it lands: read /health, hand Web the re-run set (thank you! ×3, thanks, thank you so much, goodbye, thanks after a
   delivered turn, one compound, one armed-slot thanks, thanks after delivery + 31-min idle, show today's tasks ×2); CXO closes #1985/#1986
   on the quotes; PPM reads #1985's re-run. Dispatch recipe: `gh workflow run fly-deploy.yml --ref main -f promote_to_alpha=true` after
   staging settles. **Scoring key = lead-scoring since 10-10 17:41 (console-confirmed); the 10-16 item is the prod server key only.**
