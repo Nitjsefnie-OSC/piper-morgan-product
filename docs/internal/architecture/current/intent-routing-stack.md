@@ -4010,6 +4010,43 @@ reclaims are ledgered the same way ("what needs my attention?", "give me a proje
 this week"). Two other census pins moved with the newly wired report: "what's the project landscape" now passes (router route live via
 group; literal NOT deleted) and "update my project name to Atlas" is now a router MATCH (ruled floor) rather than a #1933 mis-serve case.
 
+### Twenty-seventh deletion (2026-10-11): `PORTFOLIO_PATTERNS` — PARTIAL, the show/list/view literal, licensed by a preregistered served measurement
+
+The last PORTFOLIO literal that the gate could ever read GO: `PORTFOLIO_LIST_PATTERN` (the show/list/view-projects
+literal, the #1738 named constant) plus the #1884 two-topic row under `planned_at_deletion`. Ceiling **121 → 120**
+(`pattern_literal_counts.py` TOTAL 120 over 36 lists); routing tail 91 → 90 (29 of it the #1974 ruled floor).
+Landed 2026-10-11 19:34 PT, merge 8531742988 on main (the held WIP 5cda6c2c1e re-based onto main at ccbfef6171, plus
+the three test conversions in 4a89a8d47f). Survivors: the ruled `update … project` literal (#1933 option a) and the
+archive/hide/put-away/delete/remove/get-rid-of/restore/unarchive family; AFTER: `gate --list PORTFOLIO_PATTERNS`
+reads `verdict: NO-GO — only load-bearing survivors remain in this list`, no "deleting".
+
+**The licence was a measurement, not a quote** (Arch 2026-10-11 13:1x, ruled on 19:2x). The #1884 row's served path is
+the router's plan; its fallback is the legacy chain, which returns ONE intent, so the deletion needed the legacy
+branch to acknowledge the half it does not answer (#1977 step 2). The flag `STEP2_ACKNOWLEDGEMENT_LANDED` first
+flipped on a served quote (12:0x) and was WITHDRAWN (12:3x: the quote named the other half by luck). Arch then set a
+preregistered measurement: 20 armed-branch declines, ≥3 phrasings, licence = 0 silent partials and ≤2 "neither".
+First run: 6 neither — all one phrasing, "summarize my current work …", which the legacy classifier sent to the
+`summarize_document` rail and its upload prompt (#1979). With the #1979 rail guard on main (0efe6f4c99: a
+conversation/text-sourced summarize hands back to the floor), the SAME 20 read **0 silent partials, 0 neither, 20
+both** (`dev/2026/10/11/controls/probes20-1979-fix-branch-2026-10-11.txt`, run on a tree Arch verified identical to
+main over services/web/config). The flag flipped in the landing commit with that reason.
+
+**Test conversions**: the held branch's 9 files (ledger, pre-classifier, enforcement ceiling, 1431, 1757, 1884, 1738,
+test_pre_classifier, the 1595 ledger test) plus three the held branch had not converted — all three used "list my
+archived projects and summarize my current work" as a two-claim phrase, which with the literal gone is one STATUS
+claim + an unclaimed ask-shaped clause and declines under step 1 (#1977). Measured replacements, not assumed:
+"update my project name to Atlas and summarize my current work" → [manage_portfolio, get_project_status]
+(test_residue_rule_1977, test_original_message_1460); "are we behind upstream at all and update my project name to
+Atlas" → [local_git_status_query, manage_portfolio] with `SEG_ISSUES_AND` byte-identical and `manage_portfolio` still
+unrailed (test_inversion_multi_intent_unit4_1595). Side finding: "give me a project overview and summarize my
+current work" now declines — STATUS claims one literal per list (`current work` first) and `project overview` goes
+unclaimed; pre-existing one-claim-per-list shape, not acted on.
+
+Verified how: full `tests/unit` on the landing tree 12916 passed / 0 failed (315s); 329 across the touched files +
+enforcement; mypy gate at ceiling (24 codes, 1104); ruff clean; pre-push smoke 568 passed; CI Tests green on the
+#1979 merge (39398a32af) before landing, per Arch's condition; CI on 8531742988 watched after. No LLM calls in the
+landing itself; the licence's 40 chat turns were spent on the #1979 fix-branch server earlier the same evening.
+
 ### `read_floor_2` — a SECOND wave of FLOOR rail adapters (2026-10-03, Arch's ruling; NOT flipped)
 
 Built as its own flip group, not a widening of `read_floor` — `read_floor` is already LIVE on
