@@ -178,3 +178,4 @@ MEM-CACHE · ADR-068 prep (gated on PPM naming a live sprint) · m-40/m-30 prove
 - 2026-10-11 19:1x: #1979 part A (0efe6f4c99) approved pending the served check and an upload negative; part B declined. When A lands, Lead re-runs the preregistered 20, and PORTFOLIO lands → 120 if neither ≤ 2.
 - 2026-10-11 19:2x: #1979 A landed (39398a32af); the preregistered 20 met (0/0) and counts. PORTFOLIO lands after CI Tests green → 120. Watch for Lead's landing report and the gate number.
 - 2026-10-11 19:5x: #1979 closed by CXO. #1984 placed (label fallback is a code fix; the router half is a corpus row scored N=5). Lead's to build.
+- 2026-10-11 20:1x: ceiling 120 verified (pattern_literal_counts TOTAL 120; PORTFOLIO is survivors-only). Wednesday reads 120. #1984 half (1) is Lead's with CXO's copy plus the "On the your … front" fix; half (2) is a description change in the full-run lane.
