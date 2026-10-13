@@ -3006,6 +3006,18 @@ class IntentService:
             #     ├── Pre-classifier high-confidence + deterministic? → Fast-path canonical
             #     └── Everything else → Context Assembler → Floor
             if self._should_route_to_floor(intent):
+                # #2004: a bare decline with nothing open never reaches the
+                # floor — the floor assembles context (todos, due items) and
+                # composed "Got it, leaving it alone." PLUS an unrequested
+                # list (served on alpha b713b91cb5, CXO's bar: a short
+                # acknowledgement only). Deterministic, no LLM, the shared
+                # decline vocabulary; an ARMED turn's decline was already
+                # answered by its seam before classification.
+                bare = self._bare_decline_nothing_open(intent)
+                if bare is not None:
+                    bare.suggestions = all_suggestions
+                    bare.preferences = preferences
+                    return bare
                 # Floor with context assembly
                 result = await self._handle_floor_with_context(
                     intent,
@@ -15973,6 +15985,38 @@ Add any additional information here.
 
     # _is_adjacent_identity removed (#963) — all IDENTITY routes to floor since Apr 8.
     # Detection methods it called (_detect_health_check_request, etc.) also removed.
+
+    def _bare_decline_nothing_open(self, intent: Intent) -> Optional[IntentProcessingResult]:
+        """#2004 — a FULL-MESSAGE decline ("never mind", "no thanks", "skip")
+        on a floor-bound CONVERSATION/UNKNOWN turn with no armed offer rail
+        gets the short acknowledgement; everything else returns None and the
+        floor serves the turn. The armed case never arrives here: the #846
+        pop seam answers a decline before classification, and the
+        ``armed_offer_rail`` stamp (#1986 condition 3) guards the rest."""
+        category = intent.category.value.upper()
+        if category not in ("CONVERSATION", "UNKNOWN"):
+            return None
+        if (intent.context or {}).get("armed_offer_rail"):
+            return None
+        msg = intent.original_message or (
+            intent.context.get("original_message", "") if intent.context else ""
+        )
+        from services.intent_service.soft_invocation import is_bare_decline
+
+        if not is_bare_decline(msg or ""):
+            return None
+        from services.ui_messages.keyless_pleasantry import BARE_DECLINE_NOTHING_OPEN
+
+        self.logger.info("bare_decline_nothing_open", category=category, action=intent.action)
+        return IntentProcessingResult(
+            success=True,
+            message=BARE_DECLINE_NOTHING_OPEN,
+            intent_data={
+                "category": category,
+                "action": intent.action,
+                "bare_decline_nothing_open": True,
+            },
+        )
 
     def _should_route_to_floor(self, intent: Intent) -> bool:
         """

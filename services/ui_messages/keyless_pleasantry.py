@@ -44,6 +44,10 @@ KEYLESS_SHARED_KEY_SENTENCE = (
 # (ConversationHandler) serves too. Never paste these into another string.
 THANKS_NOTHING_DONE_THIS_SESSION = "That's kind — though I haven't done anything this session yet."
 THANKS_AFTER_DELIVERY = "You're welcome."
+# #2004 (CXO, 2026-10-13): a bare "never mind" / "no thanks" with nothing
+# open gets a short acknowledgement and nothing else — the floor used to
+# compose an ack AND an unrequested todo list from the assembled context.
+BARE_DECLINE_NOTHING_OPEN = "Okay."
 FAREWELL_LINE = "Goodbye for now."
 
 # Kind-matched acknowledgments — CXO's copy, verbatim.

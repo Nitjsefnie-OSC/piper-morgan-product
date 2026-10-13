@@ -288,10 +288,20 @@ ACCEPT_PATTERNS = [
     ]
 ]
 
+# #2004: the FULL-MESSAGE decline row, named so a seam that must only ever
+# see a bare decline (nothing open, nothing to cancel) can read exactly this
+# row and never the unanchored prose rows below it. Same literal, same
+# position in DECLINE_PATTERNS — one vocabulary.
+FULL_MESSAGE_DECLINE_RE = re.compile(
+    r"^(?:no|nah|nope|not now|not right now|never mind|i'?m good|no thanks|no thank you|just venting|skip)\.?!?$",
+    re.IGNORECASE,
+)
+
 DECLINE_PATTERNS = [
+    FULL_MESSAGE_DECLINE_RE,
+] + [
     re.compile(p, re.IGNORECASE)
     for p in [
-        r"^(?:no|nah|nope|not now|not right now|never mind|i'?m good|no thanks|no thank you|just venting|skip)\.?!?$",
         r"^(?:no|nah),?\s",
         r"\b(?:not (?:now|right now|yet|today)|maybe later|i'?m (?:good|fine|okay)|just (?:venting|thinking|wondering))\b",
         r"\bno,?\s*(?:thanks|thank you|i'?m good|that'?s okay)\b",
@@ -740,3 +750,11 @@ class WorkflowOfferService:
         stored message. (Audit: #827, 2026-02-18)
         """
         return offer.decline_message
+
+
+def is_bare_decline(text: str) -> bool:
+    """#2004 — True when the WHOLE message is one of the shared full-message
+    decline forms ("never mind", "no thanks", "skip" …). Anchored both ends:
+    "never mind, show my todos" is not bare. Reads the same row the armed
+    seams decline on, so a bare decline means the same thing armed or not."""
+    return bool(FULL_MESSAGE_DECLINE_RE.match((text or "").strip()))
