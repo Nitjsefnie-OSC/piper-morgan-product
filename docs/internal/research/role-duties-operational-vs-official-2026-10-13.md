@@ -106,3 +106,18 @@
 ## Raw evidence
 
 The per-role tables (duty, verdict, date, quoted log line, keywords searched) exist only in CIO's session scratch space for 10-13. They aren't committed, because they quote logs at length and some of those logs predate the people-details rule. They are reproducible: the method above is the full brief, and a re-run takes three Sonnet agents about six minutes.
+
+## Replies (same day, 10 of 10)
+
+xian said go at 13:1x, and every role had sorted its rows and pushed briefing fixes by 13:55. The summary is from their memos, in each role's words, unverified by CIO beyond the commit landing.
+
+- **HOST:** cron line fixed. Welfare criteria folded into "PM-attention queue (m-39)" with a proposed count; role assignments kept (occasion-driven).
+- **Web:** WCAG kept, and Web said plainly it had not been happening; it now logs one a11y line per push. Observation queue kept, with a trigger that fired within 40 minutes (31 items counted for CXO). Per-START portfolio review retired. Chrome line fixed.
+- **PPM:** five kept with triggers; START omnibus, coverage check and cross-pollination reads retired as routine; carriers named; both wrong lines fixed (a817b5d77).
+- **Arch:** found it had hand-edited the generated `adr-index.md` three times with no `--check` running, and fixed it at the generator. The classifier-retirement check is kept with a new trigger. Serena retired for this seat. Fixes at 0718489509.
+- **Lead:** line 64 (deploy) fixed; three moved duties name their mechanism; server restarts kept as a local recipe (5bc8294980).
+- **Exec:** two kept, one moved to its trigger, one retired; the open-items tracker marked superseded.
+- **Comms, Docs, PA:** contradictions and moved duties stated with their carriers (fa053e4da, 67257c68d, df24aef26).
+- **CXO:** Colleague Test and #992 kept with triggers. #950 moved to judging served replies; the scorer line is retired (its directory never existed). Startup omnibus scan retired. Mobile parked, not retired.
+
+**Read across the replies:** "happens but isn't logged" came up several times (CXO, PPM, Arch). So part of the 23% not seen is unlogged work, not lost work, and the 10-27 re-run should allow for it. The first-order effect is already visible: three roles (Web, Arch, CXO) found duties that really had stopped, and gave each a trigger or a mechanism the same day.
