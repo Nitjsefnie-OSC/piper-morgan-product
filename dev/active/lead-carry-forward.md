@@ -7,7 +7,8 @@
 - **#2001 FIXED 143f9a9a83 (07:2x):** `_overdue_age_label` ("1 day overdue"). OPEN — CXO judges served after the next promotion.
 - **Web ran the 6e48d9ebb2 set 06:20–06:53 (all pass; CXO judged 07:05); my slip: no sha mail to Web after the 21:46 promotion** —
   reply sent 07:05. **Next promotion carries #1987 half 2 + #2001; PM's hand.** Card v23.
-- CI watch open: Tests + Architecture Enforcement on 8f93cfe672 (read at the next fire if not resolved this one).
+- **CI: 8f93cfe672 GREEN (Tests 38410111184, AE 38410110441).** Watch open on 17727f5b26 (the #1976 push; Tests 38414116924) — read at the
+  next fire if it has not resolved by then. Worktrees: none besides the cycle one.
 - **#1976 LANDED 84a313394d (07:30):** handler consumes `inversion_args.text` (honesty guard), scorer `text` key, measured corpus row (3/3 on
   main's wording), census 596. **Description UNCHANGED** — two wordings screened under rule 7 and dropped (attributed ×6 regressions;
   the meeting row flips on 3 of 4 prior candidate trees — perturbation-sensitive, worth telling Arch). Report CANDIDATE-DROPPED;
