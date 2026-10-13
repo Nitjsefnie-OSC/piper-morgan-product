@@ -41,14 +41,14 @@ Built and waiting for the next promotion to alpha: the Standup and Radar feature
 - **The best find of the week.** Preparing a live check for that "say when a source failed" feature, Lead found the GitHub work-items read turned every failure into "verified empty," and users who connected GitHub by signing in had no token on that path at all. The new disclosure could never have fired. PA found the other half: personal-token users had no path either, while Settings said they were connected. The fix is one resolver with two legs.
 - **The remaining number of literal routing patterns dropped from 440 to 155** in ten deletion lanes over Friday and Saturday, on rulings Arch gated. Nothing further landed after that, and the remaining tail didn't finish by Thursday night, which had been the goal. Nonetheless, the number of routing patterns is approaching the acceptable limit set to help determine whether we are on track for an October 30 beta. It's still touch and go, but still definitely possible.
 - **The first real promotion to alpha in the new Fly deploy GitHub Action workflow.** The promote workflow had only ever run as drills that skipped the steps that later failed. Its first real runs on Wednesday found three bugs in three attempts, each a safe refusal.
-- **The hosted connector is ready for a second caller.** Cross-caller isolation shipped with a two-user test and per-user rate limits. PA's review caught that the rate limiter would have enforced nothing in production while every test passed.
-- **CI coverage.** One gating workflow had been red for 41 runs unseen, because the daily check named only the lint job. The check now covers all twelve.
+- **The hosted connector is ready for a second caller.** Cross-caller isolation shipped with a two-user test and per-user rate limits. PA's review caught that the rate limiter would have enforced nothing in production while every test passed. [Comms: I don't really understand this item. Can you clarify it or ask Exec to... It needs to be in plain language. Less jargon. The whole draft needs a jargon review, imho. --xian]
+- **CI coverage.** One gating workflow had been red for 41 runs unseen, because the daily check named only the lint job. The check now covers all twelve. [QUESTION: Is it green (yet) now, or not, as of end of Thursday? Can we say so? --xian]
 
 ## 🔬 Methodology & process innovation
 
 - **Rulings from an assumed state.** Arch corrected six of their own rulings and claims this week, each made before reading everything. The sharpest: Arch treated "the router is unsure" as "not a command" until a ten-call live probe showed a delete request would have been saved as a new project. Arch now reads the callers and the measured router output before ruling.
 - **Cheaper, safer machinery.** CIO cut the briefing every agent loads at session start from 169 KB to a 5 KB page, and destructive git commands aimed at my working copy are now blocked by a hook instead of a sentence in the instructions.
-- **AI prompts human.** After outside feedback that the posts sounded AI-written, I now write the prose myself, and Comms supplies a draft or a scaffold, with the facts checked.
+- **AI prompts human.** After outside feedback from a trusted human advisor that blog posts are given off that "AI-written" smell, I've reverted to an approach I'm using elsewhere, writing all of the prose myself from a scaffolding Comms supplies with the facts checked. The editorial calendar has a number of drafts that I am carefully rewriting as I come to them, and forthcoming posts will follow the model in which Claude prompts me to write instead of the other way around.
 - **Checking the content, not the file.** Saturday's post went live with the wrong hero image for about three and a half hours until I noticed. The publish check had confirmed the file existed. It now opens the image and compares it to the alt text.
 
 ## 🌍 Published this week
@@ -69,9 +69,8 @@ Built and waiting for the next promotion to alpha: the Standup and Radar feature
 - **Issues filed:** 46
 - **Open issues on the beta gate:** 28 → 14, mostly from my scope rulings on Tuesday rather than burn-down
 - **Routing pattern ceiling (goal is reduction):** 440 → 155
-- **Posts published:** 5
 
-The beta gate got a written standard and a slip ledger. PPM measured all 31 open gate issues on Monday, I ruled on them Tuesday, and the gate went to 14. Every admission and close is now a ledger row, with a brake: after a second slip, PPM stops proposing dates and brings me a choice between cutting scope and accepting a later date. The brake fired Thursday. I'm holding the dates anyway (design partners by Friday, October 23, hard stop Friday, October 30) and watching for slippage. As I write this, five slips are logged against that baseline and no days have moved.
+The beta gate got a written standard and a "slip ledger." PPM measured all 31 open gate issues on Monday, I ruled on them Tuesday, and the gate went to 14. Every admission and close is now a ledger row, with a brake: after a second slip, PPM stops proposing dates and brings me a choice between cutting scope and accepting a later date. The brake fired Thursday. I'm holding the dates anyway (design partners by Friday, October 23, hard stop Friday, October 30) and watching for slippage. As I write this, five slips are logged against that baseline and no days have moved.
 
 Every agent's review this week listed at least one of their own mistakes, with the fix.
 
