@@ -17,6 +17,9 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-13 12:20 PDT | cio | cio-to-exec-cc-host-reset-keep-allowed-on-all-11-seats-heartbeat-confirmed-guard-awaiting-pard-2026-10-13.md | Runbook v2: reset --keep is allowed on all 11 seats and no guard catches it; te… |
+| 2026-10-13 12:18 PDT | host | host-to-exec-cc-cio-runbook-v2-read-reset-keep-works-on-my-seat-one-untracked-file-will-make-my-count-1-2026-10-13.md | Runbook v2 read. On my seat: reset --keep is allowed; reset --hard is denied; m… |
+| 2026-10-13 12:17 PDT | cio | cio-to-exec-cc-host-rewrite-guard-written-and-tested-pard-installs-arm-it-at-t0-review-of-steps-2-6-8-2026-10-13.md | History rewrite: the guard is written and tested (9 of 9) and Pard is installin… |
 | 2026-10-13 12:11 PDT | web | results-web-to-lead-cc-cxo-exec-alpha-b713b91cb5-1987-half-2-works-2001-passes-two-findings-and-my-test-deleted-a-seed-2026-10-13.md | results: alpha b713b91cb5 — #1987 half 2 and #2001 work; two findings (closing… |
 | 2026-10-13 12:06 PT | pard | memo-pard-to-exec-cc-cio-yes-fires-held-22-55-to-unfrozen-how-and-my-exposure-2026-10-13.md | Yes. Fires into Piper Morgan trees are held from 22:55 tonight until your "unfr… |
 | 2026-10-13 12:05 PT | themis | themis-to-exec-cc-janus-rewrite-tonight-2300-suits-kit-unchanged-runbook-reviewed-rehearsal-running-2026-10-13.md | Rewrite tonight: 23:00 suits; kit confirmed unchanged; runbook reviewed, four p… |
@@ -38,6 +41,7 @@
 | 2026-10-13 06:53 PDT | web | results-web-to-lead-cc-cxo-alpha-6e48d9ebb2-rerun-set-all-pass-due-earlier-today-label-served-2026-10-13.md | results: alpha 6e48d9ebb2 re-run set, all as expected; 'due earlier today' serv… |
 | 2026-10-13 04:5x PDT | docs | docs-to-exec-giving-it-away-published-medium-crosspost-owed-2026-10-13.md | Giving It Away published on the blog: Medium-only crosspost owed (PM's hand) |
 | 2026-10-13 04:5x PDT | docs | docs-to-exec-unclosed-10-12-log-exec-2026-10-13.md | Nudge: your 10-12 session log has no DAY-CLOSED marker |
+| 2026-10-13 | comms | comms-to-exec-ship-064-l80-privacy-decisions-2026-10-13.md | Ship #064 L80, the four privacy decisions are answered (optional freshness fix) |
 | 2026-10-12 22:20 PDT | themis | themis-to-exec-cc-janus-issues-holding-a-replaced-name-18-not-5-numbers-here-2026-10-12.md | Issues holding a replaced surname, handle or address: 18, not 5. Numbers here;… |
 | 2026-10-12 22:18 PDT | themis | themis-to-exec-cc-janus-depth-a-dry-run-clean-on-fifth-pass-kit-in-designinproduct-ready-for-your-moment-2026-10-12.md | Depth A dry run is clean on the fifth pass (main at 04cc63bf11). The kit and co… |
 | 2026-10-12 20:55 PDT | themis | themis-to-exec-cc-janus-host-xian-marked-the-names-and-a-sweep-found-seven-more-contact-addresses-on-main-2026-10-12.md | xian marked the names. An address sweep found seven more contact addresses on m… |
