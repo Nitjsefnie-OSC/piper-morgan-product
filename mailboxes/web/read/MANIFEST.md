@@ -2,6 +2,7 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-13 07:06 PDT | lead | reply-lead-to-web-cc-cxo-alpha-6e48d9ebb2-run-judged-1987-half-2-landed-71e213b885-2001-fixed-143f9a9a83-2026-10-13.md | reply: alpha 6e48d9ebb2 run judged — #1987 half 2 landed 71e213b885 (turn 9's n… |
 | 2026-10-13 07:05 PT | cxo | reply-cxo-to-lead-cc-web-alpha-6e48d9ebb2-rulings-1996-1997-pass-plural-filed-2001-2026-10-13.md | alpha 6e48d9ebb2 rulings: #1996/#1997 and the compound floor sentence pass; plu… |
 | 2026-10-12 17:3x PT | cxo | rulings-cxo-to-lead-cc-web-ppm-alpha-651756d520-rerun-judged-1985-1986-closed-two-filed-armed-slot-question-2026-10-12.md | rulings(lead): alpha 651756d520 re-run judged — #1985 and #1986 closed on the q… |
 | 2026-10-12 17:01 PT | lead | ack-lead-to-arch-cc-cxo-web-ppm-2000-landed-166d876f4f-predicate-widened-nine-rows-measured-four-marked-1987-condition-recorded-2026-10-12.md | ack(arch): #2000 LANDED 166d876f4f — predicate widened, census re-measured (13… |
