@@ -251,7 +251,12 @@ that row through the unchanged path; a row gone since the ask gets the
 honest decline_message; bare yes → the registered offer-only landing
 `clarify_delete_todo_pick` (READ, action_triggered=False) re-asks + re-arms;
 a pre-classifier-claimed or router-read command releases and routes; one
-re-ask, then release. The rail entry point stamps `delete_todo_pick_pending`
+re-ask, then release. **A pure pleasantry (thanks / greeting / farewell — the
+pre-classifier's own pleasantry-only claim) SURVIVES the armed pick** (Arch's
+condition 3, 2026-10-13): the record is re-armed and the reply acknowledges then
+repeats the question, so the next "2" still binds; without it "thanks" read PASS
+at the seam, bound nothing, and the release discriminator dropped the pick (the
+turn-9 drop on an armed slot). The rail entry point stamps `delete_todo_pick_pending`
 (the `_apply_soft_offer` no-clobber list). The handler's unarmable fallback
 (no session / no store) is an instruction, not a question — the #2000
 census row for `handle_delete_todo` shrank out (Arch's condition). No new
