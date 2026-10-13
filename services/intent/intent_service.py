@@ -661,6 +661,8 @@ class IntentService:
             # #1654: the armed reminder TASK question (the no-task clarify's
             # carrier — same clobber risk, one question earlier).
             "reminder_task_question_pending",
+            # #1987 half 2: the armed which-todo pick (numbered candidates).
+            "delete_todo_pick_pending",
             # #1651: the standup's bound overdue-todo offer must survive
             # this turn (armed on the rail-dispatched get_standup path).
             "standup_todo_offer_pending",
@@ -1534,6 +1536,31 @@ class IntentService:
                 # falls through: declines/bare exits drop honestly via
                 # decline_message; full restatements and unrelated commands
                 # abandon via the pop and route normally.
+                # #1987 half 2: a pending WHICH-TODO PICK (armed by
+                # handle_delete_todo's numbered candidates ask) binds "2" /
+                # "the first one" / a title against the rows the question
+                # named and arms the #1666 title-bound confirm — the delete
+                # still runs only off the confirmed yes. Returning None falls
+                # through: a state question survives silently, declines drop
+                # honestly via decline_message, a bare "yes" re-asks via the
+                # registered landing, claimed commands release and route.
+                elif _vi_payload.get("kind") == "delete_todo_pick_question":
+                    from services.intent_service import delete_todo_pick as _dtp
+
+                    _dtp_turn = await _dtp.handle_delete_todo_pick_turn(
+                        pending_offer,
+                        message,
+                        session_id=session_id,
+                        user_id=user_id,
+                        intent_service=self,
+                    )
+                    if _dtp_turn is not None:
+                        return IntentProcessingResult(
+                            success=True,
+                            message=_dtp_turn["message"],
+                            intent_data=_dtp_turn["intent_data"],
+                            requires_clarification=_dtp_turn.get("requires_clarification", False),
+                        )
                 elif _vi_payload.get("kind") == "reminder_time_question":
                     from services.intent_service import todo_handlers as _th
 
@@ -2140,6 +2167,10 @@ class IntentService:
                         # #1648: a released reminder time question (full
                         # restatement or unrelated command) routes normally.
                         "reminder_time_question": "reminder_time_question_abandoned",
+                        # #1987 half 2: a released which-todo pick (claimed
+                        # command, decline, bare exit) drops via the pop;
+                        # nothing bound, nothing deleted.
+                        "delete_todo_pick_question": "delete_todo_pick_question_released",
                         # #1688: a released interview question (decline, bare
                         # exit, or claimed command) drops via the pop; nothing
                         # was bound, nothing is claimed.

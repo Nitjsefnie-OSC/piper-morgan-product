@@ -503,16 +503,22 @@ class TestEndToEndReadOnlyLegs:
     async def test_no_referent_gets_clarification_not_confirm(
         self, live_service, monkeypatch, todo_boundary
     ):
-        """No number and no named target ('delete it') — the handler's
-        which-todo ask. (Named-but-unmatched targets now get the #1527
-        didn't-find leg instead — pinned in test_delete_todo_named_target_1527.)"""
+        """No number and no named target ('delete it', nothing created this
+        session) — the handler's which-todo ask. (Named-but-unmatched targets
+        get the #1527 didn't-find leg instead — pinned in
+        test_delete_todo_named_target_1527.) #1987 half 2: the ask lists the
+        candidates numbered and arms the PICK (never a destructive confirm —
+        nothing is bound yet)."""
+        from services.intent_service.delete_todo_pick import DELETE_PICK_KIND
+
         sid = "e2e-1666-nonum"
         _stub_classification(monkeypatch, live_service, "delete it", "delete_todo")
         result = await live_service.process_intent(
             message="delete it", session_id=sid, user_id=_USER
         )
-        assert "Which todo should I remove?" in result.message
-        assert _pending_offers(live_service).get(sid) is None
+        assert result.message.startswith("Which todo should I delete?\n1. ")
+        stored = _pending_offers(live_service).get(sid)
+        assert stored["pending_action"]["kind"] == DELETE_PICK_KIND
         assert todo_boundary["deleted"] == []
 
     async def test_out_of_range_gets_honest_miss_not_confirm(

@@ -342,14 +342,19 @@ class TestBoundariesUnregressed:
         self, live_service, monkeypatch, todo_boundary
     ):
         """'delete my reminder' (singular, nothing named): which ONE is the
-        honest question — the bulk seam must not claim it."""
+        honest question — the bulk seam must not claim it. #1987 half 2: that
+        question lists the reminders numbered and arms the pick (never the
+        bulk confirm, never a destructive confirm)."""
+        from services.intent_service.delete_todo_pick import DELETE_PICK_KIND
+
         sid = "e2e-1696-singular"
         _stub_classification(monkeypatch, live_service, "delete my reminder", "delete_todo")
         result = await live_service.process_intent(
             message="delete my reminder", session_id=sid, user_id=_USER
         )
-        assert "Which todo should I remove?" in result.message
-        assert _pending_offers(live_service).get(sid) is None
+        assert result.message.startswith("Which reminder should I delete?\n1. ")
+        stored = _pending_offers(live_service).get(sid)
+        assert stored["pending_action"]["kind"] == DELETE_PICK_KIND
         assert todo_boundary["deleted"] == []
 
     async def test_exception_clause_never_gets_a_guessed_bulk_set(

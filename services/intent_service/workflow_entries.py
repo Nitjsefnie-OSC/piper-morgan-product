@@ -18,6 +18,11 @@ from services.intent_service.add_project_clarify import (
     run_clarify_add_project_confirm_workflow,
     run_clarify_add_project_name_workflow,
 )
+from services.intent_service.delete_todo_pick import (
+    DELETE_PICK_KIND,
+    PICK_PENDING_FLAG,
+    run_clarify_delete_todo_pick_workflow,
+)
 from services.intent_service.reminder_clear import (
     run_clarify_reminder_clear_verb_workflow,
     run_clear_reminders_delete_workflow,
@@ -856,17 +861,35 @@ async def run_delete_todo_workflow(
         )
 
     message = await intent_service.todo_handlers.handle_delete_todo(
-        intent, session_id, user_id=todo_user_id
+        intent,
+        session_id,
+        user_id=todo_user_id,
+        # #1987 half 2: the no-number ask arms the numbered pick via the store.
+        offer_service=getattr(intent_service, "workflow_offer_service", None),
+        principal=user_id,
     )
+    _dt_intent_data: Dict[str, Any] = {
+        "category": category,
+        "action": intent.action,
+        "confidence": intent.confidence,
+    }
+    # #1987 half 2: if the ask just armed the pick, the result carries the
+    # pending flag — _apply_soft_offer shares the one-slot #846 store and
+    # would otherwise clobber the binding (the #1648 belt, same idiom as the
+    # reminder time/task questions).
+    try:
+        _dt_peek = intent_service.workflow_offer_service.peek_pending_offer(session_id)
+        _dt_kind = (_dt_peek.get("pending_action") or {}).get("kind") if _dt_peek else None
+        if _dt_kind == DELETE_PICK_KIND:
+            _dt_intent_data[PICK_PENDING_FLAG] = True
+    except Exception:  # silent-ok: flag derivation only — the reply itself is already composed
+        pass
     # Issue #748: Don't return workflow_id for synchronous operations
     return IntentProcessingResult(
         success=True,
         message=message,
-        intent_data={
-            "category": category,
-            "action": intent.action,
-            "confidence": intent.confidence,
-        },
+        intent_data=_dt_intent_data,
+        requires_clarification=bool(_dt_intent_data.get(PICK_PENDING_FLAG, False)),
     )
 
 
@@ -3620,6 +3643,19 @@ def register_default_workflows() -> None:
         # handled kind-specifically at the offer seam
         # (reminder_clear._handle_pick_target_turn), which re-enters the
         # SAME post-resolution flow a single matched name would have taken.
+        # #1987 half 2: offer-seam-only landing for the which-todo PICK (the
+        # carrier armed by handle_delete_todo's numbered candidates ask).
+        # effect: READ — a bare "yes" against "which one?" re-asks and
+        # re-arms; the bound pick arms the #1666 DESTRUCTIVE confirm on an
+        # ANSWERED turn at the pop seam (delete_todo_pick.
+        # handle_delete_todo_pick_turn); the delete itself still runs only
+        # off the confirmed yes. action_triggered=False (the #1906 precedent).
+        "clarify_delete_todo_pick": WorkflowEntry(
+            entry_point=run_clarify_delete_todo_pick_workflow,
+            effect=EffectClass.READ,
+            description="Re-ask the #1987 which-todo pick on a bare affirmative",
+            requires_context=["pending_action", "intent_service"],
+        ),
         "reminder_clear_pick_target": WorkflowEntry(
             entry_point=run_reminder_clear_pick_target_workflow,
             effect=EffectClass.READ,
