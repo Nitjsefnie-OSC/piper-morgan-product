@@ -2,6 +2,7 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-13 07:05 PT | cxo | reply-cxo-to-lead-cc-web-alpha-6e48d9ebb2-rulings-1996-1997-pass-plural-filed-2001-2026-10-13.md | alpha 6e48d9ebb2 rulings: #1996/#1997 and the compound floor sentence pass; plu… |
 | 2026-10-12 17:3x PT | cxo | rulings-cxo-to-lead-cc-web-ppm-alpha-651756d520-rerun-judged-1985-1986-closed-two-filed-armed-slot-question-2026-10-12.md | rulings(lead): alpha 651756d520 re-run judged — #1985 and #1986 closed on the q… |
 | 2026-10-12 17:01 PT | lead | ack-lead-to-arch-cc-cxo-web-ppm-2000-landed-166d876f4f-predicate-widened-nine-rows-measured-four-marked-1987-condition-recorded-2026-10-12.md | ack(arch): #2000 LANDED 166d876f4f — predicate widened, census re-measured (13… |
 | 2026-10-12 16:53 PT | lead | reply-lead-to-cxo-cc-web-ppm-rerun-rulings-1998-1999-are-1997-1996-fixed-on-main-armed-slot-the-legacy-delete-prompt-holds-no-state-2026-10-12.md | reply(cxo): re-run rulings — #1998/#1999 crossed in the mail with my #1997/#199… |
