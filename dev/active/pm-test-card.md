@@ -1,6 +1,6 @@
 # PM test card — the standing "what should I test?" surface
 
-**Owner**: Lead. **Started**: 2026-09-19. **Rewritten fresh for the 10-13 morning**: v25 (12:33 10-13: Web's three served runs on b713b91cb5 judged by CXO — #1987 all three ACs, #2001, #1976 done; #2002/#2003 fixed on main 75ac141ed6, served checks owed after the next promotion); v24 (12:09 10-13: alpha promoted to b713b91cb5 on xian's word — every row is live); v23 (07:05 10-13: Web's run judged, two landings on main, not live); v22, 22:30 PDT 10-12 (PM's ask: "pick it up then
+**Owner**: Lead. **Started**: 2026-09-19. **Rewritten fresh for the 10-13 morning**: v26 (12:43 10-13: #2004 fixed on main a1fdee9921, row N3); v25 (12:33 10-13: Web's three served runs on b713b91cb5 judged by CXO — #1987 all three ACs, #2001, #1976 done; #2002/#2003 fixed on main 75ac141ed6, served checks owed after the next promotion); v24 (12:09 10-13: alpha promoted to b713b91cb5 on xian's word — every row is live); v23 (07:05 10-13: Web's run judged, two landings on main, not live); v22, 22:30 PDT 10-12 (PM's ask: "pick it up then
 with a fresh test card"). Rolling doc: rows get added when a fix needs PM's live verification and struck when done. When PM asks
 "what do I test?", the answer is this file. Earlier versions and all struck history: `git log -p` of this file. Mirror artifact
 (https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi) is v15 and BEHIND; this file is current.
@@ -15,10 +15,11 @@ gh workflow run fly-deploy.yml -R mediajunkie/piper-morgan-product --ref main -f
 Promotion takes ~4 min; `curl -s https://alpha.pipermorgan.ai/health` shows `git_sha`. (The 10-12 `pending_deployments` approval
 call is gone: the alpha environment has no reviewers now, Fly B.)
 
-## Owed after the NEXT promotion (fixed on main 75ac141ed6 at 12:33 10-13, NOT live on b713b91cb5)
+## Owed after the NEXT promotion (fixed on main 75ac141ed6 + a1fdee9921 at 12:33 10-13, NOT live on b713b91cb5)
 
 N1. **#2002 layout** — `delete a reminder` with 2+ reminders → in the served HTML the closing sentence ("Say the number or the name, or 'never mind'…") is its own paragraph AFTER the `<ol>`, not inside the last `<li>`. Web reads `.message-row` innerHTML. Same for `delete todo`.
 N2. **#2003 named miss** — with the numbered ask armed, `delete the reminder "a title that is not in the list"` → `I don't see a reminder called "…".` then the SAME numbered list, still armed (a following `2` binds and asks the yes/no); nothing deleted. Then `"<an existing title>"` quoted → the yes/no confirm for THAT title (unchanged). Unquoted miss (`delete the reminder web check alpha nine`) → "Still not sure which reminder you mean — you have:" + list, no guess.
+N3. **#2004 bare never-mind** — with nothing open (e.g. right after the gone-row line, or cold in a new conversation): `never mind` → **"Okay."** and nothing else (no todo list). Also `no thanks` cold → "Okay.". Control: `never mind, show my todos` → the todo list as before (compound goes to the floor). CXO sets the word if "Okay." is not it.
 
 ## Morning order — everything below is live on alpha now (each ~1 min unless noted)
 
