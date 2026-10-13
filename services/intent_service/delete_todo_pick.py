@@ -62,15 +62,18 @@ PICK_PENDING_FLAG = "delete_todo_pick_pending"
 MAX_LISTED = 5
 
 _REMINDER_WORDS = frozenset({"reminder", "reminders"})
-# The pre-classifier's pleasantry-only claims (its own GREETING / THANKS /
-# FAREWELL pattern sets; nothing re-declared here) that an armed pick
-# survives, and the one-line acknowledgement each gets before the open
-# question is repeated. Copy is CXO's to rule.
-_PLEASANTRY_ACTIONS = frozenset({"greeting", "thanks", "farewell"})
+# The pre-classifier's pleasantry-only claims (its own GREETING / THANKS
+# pattern sets; nothing re-declared here) that an armed pick survives, and
+# the one-line acknowledgement each gets before the open question (with its
+# numbered list) is repeated. CXO's copy (2026-10-13 ruling): the prefix
+# says "nothing has been deleted yet" because "You're welcome" alone could
+# read as if something was done. FAREWELL RELEASES (CXO, same ruling): the
+# user is leaving, not answering — the pick drops via the pop and the canned
+# farewell serves unchanged.
+_PLEASANTRY_ACTIONS = frozenset({"greeting", "thanks"})
 _PLEASANTRY_ACK = {
-    "thanks": "You're welcome.",
-    "greeting": "Hi!",
-    "farewell": "Bye for now — before you go:",
+    "thanks": "You're welcome — nothing has been deleted yet.",
+    "greeting": "Hello — nothing has been deleted yet.",
 }
 
 
@@ -205,8 +208,9 @@ async def handle_delete_todo_pick_turn(
     seam re-arms silently and normal processing answers), a decline (the
     honest ``decline_message``), a bare accept (the registered landing
     re-asks), or a released command (routes normally). A pure pleasantry
-    (thanks / greeting / farewell) SURVIVES: the record is re-armed here and
-    the reply acknowledges, then repeats the question (Arch's condition 3).
+    (thanks / greeting) SURVIVES: the record is re-armed here and the reply
+    acknowledges, then repeats the question with its list (Arch's condition
+    3; CXO's copy). A farewell releases (CXO's ruling).
     """
     payload = pending_offer.get("pending_action") or {}
     if payload.get("kind") != DELETE_PICK_KIND:
@@ -272,8 +276,10 @@ async def handle_delete_todo_pick_turn(
     # armed slot). A pure pleasantry (greeting / thanks / farewell, the
     # pre-classifier's own pleasantry-only claim — no new pattern) re-arms
     # the SAME record and answers with a short acknowledgement plus the
-    # open question (CXO owns the copy). Farewell survives too (Arch's
-    # default, for consistency with condition 3; CXO may rule otherwise).
+    # open question and its list (CXO's copy, 2026-10-13). Farewell is NOT
+    # in the set: CXO ruled it releases (the user is leaving, not
+    # answering) — it falls through to the discriminator like any claimed
+    # turn and the canned "Goodbye for now." serves.
     # Beside STATE_QUESTION in spirit; handled here rather than at the
     # generic seam because the pop already cleared the slot.
     from services.intent_service.pre_classifier import PreClassifier

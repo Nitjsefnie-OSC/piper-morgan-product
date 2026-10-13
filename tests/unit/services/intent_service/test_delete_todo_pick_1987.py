@@ -408,10 +408,9 @@ class TestPickTurn:
     @pytest.mark.parametrize(
         "pleasantry,ack",
         [
-            ("thanks", "You're welcome."),
-            ("thank you!", "You're welcome."),
-            ("hello", "Hi!"),
-            ("bye", "Bye for now"),
+            ("thanks", "You're welcome — nothing has been deleted yet."),
+            ("thank you!", "You're welcome — nothing has been deleted yet."),
+            ("hello", "Hello — nothing has been deleted yet."),
         ],
     )
     async def test_pleasantry_survives_the_armed_pick(
@@ -419,18 +418,34 @@ class TestPickTurn:
     ):
         """Arch's condition 3 (#1987): 'thanks' while the pick is armed is NOT
         short-circuited into a release — the record is re-armed with the same
-        candidates and the reply acknowledges then repeats the question;
-        nothing is done or deleted."""
+        candidates and the reply is CXO's copy: the one-line prefix, then the
+        question WITH its numbered list re-shown (the user may have scrolled
+        past it); nothing is done or deleted."""
         await _armed_pick("delete a reminder", intent_service.todo_handlers.todo_service, store)
         armed_before = store.slot["pending_action"]["pick_ids"]
         out = await _answer(pleasantry, intent_service, store)
-        assert out["message"].startswith(ack)
-        assert "Which reminder should I delete?" in out["message"]
+        lines = out["message"].splitlines()
+        assert lines[0] == ack
+        assert lines[1:4] == [
+            "Which reminder should I delete?",
+            "1. water the plants",
+            "2. send the invoice",
+        ]
+        assert lines[4] == "Say the number or the name, or 'never mind' to leave them alone."
         assert out["intent_data"][PICK_PENDING_FLAG] is True
         assert out["requires_clarification"] is True
-        assert "deleted" not in out["message"].lower().replace("nothing has been deleted", "")
         assert store.slot["pending_action"]["kind"] == DELETE_PICK_KIND
         assert store.slot["pending_action"]["pick_ids"] == armed_before
+        intent_service.todo_handlers.todo_service.delete_todo.assert_not_awaited()
+
+    @pytest.mark.parametrize("farewell", ["bye", "goodbye"])
+    async def test_farewell_releases_the_pick(self, intent_service, store, farewell):
+        """CXO's ruling (2026-10-13): a farewell is the user leaving, not
+        answering — the pick releases (None here; the pop already cleared the
+        slot) and the canned farewell serves unchanged; nothing deleted."""
+        await _armed_pick("delete a reminder", intent_service.todo_handlers.todo_service, store)
+        assert await _answer(farewell, intent_service, store) is None
+        assert store.slot is None
         intent_service.todo_handlers.todo_service.delete_todo.assert_not_awaited()
 
     async def test_number_after_thanks_still_binds(self, rows, intent_service, store):
