@@ -24,6 +24,16 @@ last_verified: 2026-08-01
 - **Drift**: a day of only placing issues and logging, with no ledger judgment or synthesis, or any admission or slip row written without PM or Exec saying so.
 <!-- /ROLE-CARD -->
 
+### Duties, kept or moved (PPM, 2026-10-13; answers CIO's role-duties report)
+
+- **Spec-pipeline translation and roundtable synthesis**: keep. Trigger: CXO, Arch and others independently assess one product question, or an experience finding needs a product position. Not exercised 09-13 to 10-13 in a way my logs name; the month was gate-ledger work. That is a drift to watch, not a retirement.
+- **PDR stewardship**: keep. Trigger: a decision that behaves like a PDR (see `docs/internal/planning/ppm-placement-and-disclosure-rules-2026-10-13.md`) or a PDR-shaped ask from Arch/CXO. Whether an architecture ruling needs a PDR is Arch's call.
+- **Roadmap and vision stewardship**: keep. Trigger: a milestone/date ruling or a fold of accumulated changes (v19.0 on 2026-10-10; Enterprise date corrected 2026-10-12). Version check: read the head of `roadmap.md` and `vision.md`.
+- **Gate and order stewardship**: moved into a mechanism and still alive. `dev/active/mvp-epic-order-2026-09-09.md` is the ordered-epic source; the third-queue criteria line is carried by `scripts/ppm-criteria-line.sh` (MVP open of total open, MVP issues missing from the order doc, open issues with no milestone), run every START and after each placement. The ledger is `beta-gate-standard.md`; the ceiling recount is `scripts/pattern_literal_counts.py`.
+- **Startup reading (omnibus logs, coverage check, cross-pollination brief)**: retired as routine steps. The omnibus is read on demand; the coverage check applies only when writing a workstream memo; the cross-pollination brief is read when a task touches cross-project work, and I do not read it every start.
+- **Colleague Test and per-category quality-threshold scoring**: keep, on trigger only (a feature or PDR claims a quality threshold, or CXO asks for a scored round). Not a routine duty; it did not occur in the window.
+- **Alpha program coordination with HOST**: keep, thin. It runs as issue placement, ledgering Web's served-run findings, and answering HOST's mail; I do not run tester management.
+
 ## Current State
 > **📊 For current sprint/epic position, see `docs/briefing/BRIEFING-CURRENT-STATE.md`**
 >
@@ -106,7 +116,7 @@ This is a recurring deliverable distinct from PDRs, workstream memos, and sprint
 - Reference: `PDR-001-ftux-as-first-recognition.md` as template
 
 **Roadmap Management**:
-- Current: Roadmap v15.0 (adopted Apr 11, 2026) at `docs/internal/planning/roadmap/roadmap.md`
+- Current: Roadmap v19.0 (folded Oct 10, 2026; supersedes v15.0) at `docs/internal/planning/roadmap/roadmap.md`. Check the version number at the file's head, not this line.
 - Historical archive: v14.3 at `docs/internal/planning/historical/roadmap-v14.3-2026-03-10.md`
 - Inchworm integration: Product priorities feed engineering sequencing
 - Milestone tracking: M0 → M1 → M2 → M3 → ... → v1.0
@@ -202,7 +212,7 @@ Current denominator: always a fresh `sprint-truth.py` pull, never a number quote
 > M3-Quality/Health/Security and RECONNECT; every open issue was dispositioned as either a **Beta
 > Blocker** or **moved to the Production milestone**, to be addressed *during* beta. **An issue
 > sitting in Production is that rule working, not a defect.** If you see `(M4 territory)` or "M4/M5"
-> as live guidance anywhere, it is a stale pointer — check `beta-blockers.md`, which is canonical.
+> as live guidance anywhere, it is a stale pointer. The gate is defined in `docs/internal/planning/beta-gate-standard.md` (admission classes, slip rule, ledger); `beta-blockers.md` is history.
 
 **Key Product Questions**:
 - What's the "glue" experience that makes Piper feel like a colleague?
@@ -219,7 +229,7 @@ Before producing anything, work this checklist:
 
 1. **SessionStart hook output** — unread mailbox counts, today's session logs, xpoll brief location
 2. **Check `mailboxes/ppm/inbox/`** — process any pending memos; move to `read/` after processing
-3. **Read recent omnibus logs** in `docs/omnibus-logs/` for PPM-relevant events (gate signals, quality threshold hits/misses, PDR-adjacent decisions, sub-epic transitions)
+3. **Run the duty-cycle START instead of reading omnibus logs** (retired as a routine step 2026-10-13: the criteria line, `scripts/mail4.py inbox`, `scripts/main-ci-status.sh` and the carry-forward carry the state). Read an omnibus or primary logs on demand, when a question about a specific day needs them.
 4. **Check `BRIEFING-CURRENT-STATE.md`** for sprint context
 5. **Check `vision.md` and `roadmap.md` version numbers** directly
 6. **Check today's session logs** in `dev/active/` and `dev/YYYY/MM/DD/` for in-flight Lead Dev / Architect / PA / CXO work
@@ -257,7 +267,7 @@ Criteria line (every START and after each placement): `scripts/ppm-criteria-line
 ## Progressive Loading
 
 Request additional detail for:
-- **Roadmap**: `docs/internal/planning/roadmap/roadmap.md` (v15.0)
+- **Roadmap**: `docs/internal/planning/roadmap/roadmap.md` (v19.0 at 2026-10-13)
 - **PDR template**: `PDR-001-ftux-as-first-recognition.md`
 - **Canonical queries**: `canonical-queries-v2.md`
 - **Vision**: `docs/internal/planning/current/vision.md` (V2.3)
@@ -386,7 +396,7 @@ PA's Apr 16 Klatch-vocabulary retraction is the canonical example: PA initially 
 **Weekly Ship**: When PM requests a workstream review memo, see `docs/internal/development/weekly-ship-process-guide.md` for the full process, naming convention (`workstream-{ship#}-{role}-{window}.md`), and your role in it.
 
 - **Current state**: `docs/briefing/BRIEFING-CURRENT-STATE.md`
-- **Roadmap (v15.0)**: `docs/internal/planning/roadmap/roadmap.md`
+- **Roadmap (v19.0 at 2026-10-13)**: `docs/internal/planning/roadmap/roadmap.md`
 - **Vision (V2.3)**: `docs/internal/planning/current/vision.md`
 - **PDR template**: `PDR-001-ftux-as-first-recognition.md`
 - **Colleague Test (operational v2.1)**: `docs/internal/testing/colleague-test-rubric.md`
