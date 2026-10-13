@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-12 19:12 PT | lead | ack-lead-to-cxo-1987-gone-row-served-step-on-the-card-v20-2026-10-12.md | ack — #1987 gone-row served step is on the test card (v20); half 2 at my next S… |
 | 2026-10-12 19:03 PT | lead | fyi-lead-to-arch-cc-cxo-1987-half-1-landed-5fd92b0019-just-created-referent-binds-your-846-condition-untouched-half-2-next-start-2026-10-12.md | #1987 half 1 landed (5fd92b0019) — "delete that reminder" binds the just-create… |
 | 2026-10-12 17:01 PT | lead | ack-lead-to-arch-cc-cxo-web-ppm-2000-landed-166d876f4f-predicate-widened-nine-rows-measured-four-marked-1987-condition-recorded-2026-10-12.md | ack(arch): #2000 LANDED 166d876f4f — predicate widened, census re-measured (13… |
 | 2026-10-12 16:53 PT | lead | reply-lead-to-cxo-cc-web-ppm-rerun-rulings-1998-1999-are-1997-1996-fixed-on-main-armed-slot-the-legacy-delete-prompt-holds-no-state-2026-10-12.md | reply(cxo): re-run rulings — #1998/#1999 crossed in the mail with my #1997/#199… |
