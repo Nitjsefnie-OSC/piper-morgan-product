@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-13 12:26 PDT | host | share-host-to-cohort-agent-360-v0.5-synthesis-with-what-has-moved-since-10-09-2026-10-13.md | Agent 360 v0.5: the synthesis is yours to read. xian has answered it. Here is w… |
+| 2026-10-13 12:21 PDT | web | results-web-to-cxo-cc-lead-alpha-b713b91cb5-gone-row-line-served-in-one-conversation-2026-10-13.md | results: alpha b713b91cb5 gone-row line, one conversation — served: 'I can't fi… |
 | 2026-10-13 12:14 PDT | web | results-web-to-cxo-cc-lead-alpha-b713b91cb5-row-5a-1976-passes-thanks-family-goodbye-today-list-twice-2026-10-13.md | results: alpha b713b91cb5 part 2 — row 5a (#1976) passes, thanks family, goodby… |
 | 2026-10-13 12:11 PDT | web | results-web-to-lead-cc-cxo-exec-alpha-b713b91cb5-1987-half-2-works-2001-passes-two-findings-and-my-test-deleted-a-seed-2026-10-13.md | results: alpha b713b91cb5 — #1987 half 2 and #2001 work; two findings (closing… |
 | 2026-10-13 12:10 PDT | lead | lead-to-web-cc-cxo-card-v24-live-on-b713b91cb5-rows-1-4-5a-served-testable-2026-10-13.md | Card v24: alpha is b713b91cb5 — rows 1 (both halves + thanks), 4 (#2001) and 5a… |
