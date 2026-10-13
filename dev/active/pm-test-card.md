@@ -4,8 +4,8 @@
 rows get added when a fix needs PM's live verification and struck when done. When PM asks "what do I
 test?", the answer is this file. Mirror: https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi (v15, BEHIND this file; this file is current).
 
-**Surface**: alpha.pipermorgan.ai · **now running `651756d520`** (read from /health 15:48 10-12 after promotion run 38312410442
-landed; code = main's 264d3e9549 under services/web/config). **v17 (15:48 10-12)**: Step 0 struck **v18 (19:03 10-12)**: #1987 (delete that reminder, 5fd92b0019) added to the not-live list. **v19 (19:11 10-12)**: #1992 (angle-bracket text visible, 1e2cb22576) added to the not-live list. **v20 (19:12 10-12)**: #1987 row gains the gone-row served step (CXO).
+**Surface**: alpha.pipermorgan.ai · **now running `6e48d9ebb2`** (read from /health 21:46 10-12 after promotion run 38346886426
+landed, dispatched + approved by xian from his Mac via `gh`; code identical to main's head 9ee7134e85 — the 14 later commits are logs and mail). **v21 (21:49 10-12)**: the 21:46 promotion; the not-live list is now live; test order rewritten for it. Previously: `651756d520` (15:48 10-12, run 38312410442). **v17 (15:48 10-12)**: Step 0 struck **v18 (19:03 10-12)**: #1987 (delete that reminder, 5fd92b0019) added to the not-live list. **v19 (19:11 10-12)**: #1992 (angle-bracket text visible, 1e2cb22576) added to the not-live list. **v20 (19:12 10-12)**: #1987 row gains the gone-row served step (CXO).
 (10-09's promotion landed 10-09 18:25; today's landed 15:47); the test order rewritten for what is live now; PM's PAT-only test added
 (row G) — it was never on this card before, it lived on Exec's rollup as the invite item.
 
@@ -17,11 +17,20 @@ Review deployments → alpha → Approve.
 
 **Live on alpha already (since 10-09 evening):** #1959/#1941 (A), #1942/#1944 (D), the 34 retired literals (item 4), #1960, the
 standup/Radar source-failure lines (#1889/#1963/#1964/#1965), the MCP server card, #1978 (org-workspace keys accepted; landed 10-11).
-**Landed on main after the promotion, NOT live yet (next promotion):** #1975 (delete an upcoming reminder by title then yes → gone), #1996 (overdue ages in calendar days; an item due earlier today sits under the due-today line, never "0 days overdue"), #1997 (the floor never calls your todo list clear when every todo is a due reminder). #1987 (set a reminder, then `delete that reminder` → `Delete the reminder "…"? (yes/no)`, `yes` → gone; `delete a reminder` with no pointer still asks which — that half is next; ALSO once: set a reminder, delete it on the Todos page, then `delete that reminder` → expect `I can't find "…" anymore — it may already have been removed. …nothing has been deleted.` — CXO wants the gone-row line served too). #1992 (a reply that carries angle-bracket text shows it — e.g. ask `what time is it` with no timezone set and look for the `[city]` hint intact; any `<tag>`-shaped text in a reply must be visible, not missing).
+**Arrived with the 21:46 promotion (live now — test these first, numbered 1–6 below):** #1975 (delete an upcoming reminder by title then yes → gone), #1996 (overdue ages in calendar days; an item due earlier today sits under the due-today line, never "0 days overdue"), #1997 (the floor never calls your todo list clear when every todo is a due reminder). #1987 (set a reminder, then `delete that reminder` → `Delete the reminder "…"? (yes/no)`, `yes` → gone; `delete a reminder` with no pointer still asks which — that half is next; ALSO once: set a reminder, delete it on the Todos page, then `delete that reminder` → expect `I can't find "…" anymore — it may already have been removed. …nothing has been deleted.` — CXO wants the gone-row line served too). #1992 (a reply that carries angle-bracket text shows it — e.g. ask `what time is it` with no timezone set and look for the `[city]` hint intact; any `<tag>`-shaped text in a reply must be visible, not missing).
 **Arrived with today's promotion (live 15:47):** #1985 (attention query reads YOUR todos, not the session's), #1986 (pure "thank you!"/"goodbye"
 get a short warm line, not a briefing), #1988/#1991 (the timezone hint renders its example), #1459 (internal, no visible change).
 
 **Test in this order** (each ~1 min unless noted; everything below is live on alpha now):
+**Tonight's six (21:46 build):**
+1. **#1987 pointer delete**: `remind me to water the plants tomorrow at 9`, then `delete that reminder`. Pass: `Delete the reminder "…"? (yes/no)`; `yes` removes it. Then `delete a reminder` alone still asks which (that half is owed; try-and-tell).
+2. **#1987 gone row**: set another reminder, delete it on the Todos page, then in chat `delete that reminder`. Pass: `I can't find "…" anymore — it may already have been removed. … nothing has been deleted.`
+3. **#1975 delete by title**: a reminder with a distinctive title, `delete the <title> reminder`, `yes`. Pass: that one gone on the Todos page, nothing else missing.
+4. **#1996/#1997**: with one overdue item and one due earlier today, `what needs my attention?` and `show my todos`. Pass: ages in calendar days; the earlier-today item under Today: as "(due earlier today)"; never "0 days overdue"; the list never called clear while due reminders remain.
+5. **#1992**: with no timezone set, `what time is it`. Pass: the bracketed city placeholder in the hint is visible.
+6. **Row G** (PAT-only account, ~10 min) if energy holds — unblocks #1982/#1983.
+
+**The earlier order (live since 15:47, still open for a pass):**
 1. **A**: close a nonexistent issue (#1941/#1959). Expect a straight "no such issue", no "Close #N?" first.
 2. **D**: `get issue 101` → `what's the issue count`. (#1945, the Project Config page, is still open with CXO; expect that unchanged.)
 3. **Item 4**: "who are you", "help me setup my projects", "mark the first two complete". Same answers as before; anything different, paste it.
