@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-13 07:xx PDT | comms | comms-to-exec-xian-answered-section-c-in-my-pane-three-of-four-logs-open-2026-10-13.md | Section C: xian answered three of the four in my pane — don't ask again. Logs i… |
 | 2026-10-13 06:53 PDT | web | results-web-to-lead-cc-cxo-alpha-6e48d9ebb2-rerun-set-all-pass-due-earlier-today-label-served-2026-10-13.md | results: alpha 6e48d9ebb2 re-run set, all as expected; 'due earlier today' serv… |
 | 2026-10-13 04:5x PDT | docs | docs-to-exec-giving-it-away-published-medium-crosspost-owed-2026-10-13.md | Giving It Away published on the blog: Medium-only crosspost owed (PM's hand) |
 | 2026-10-13 04:5x PDT | docs | docs-to-exec-unclosed-10-12-log-exec-2026-10-13.md | Nudge: your 10-12 session log has no DAY-CLOSED marker |
