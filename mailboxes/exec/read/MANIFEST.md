@@ -17,7 +17,11 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-12 19:25 PDT | host | host-to-exec-cc-cio-rule-8-acknowledged-old-mentions-listed-fly-file-installed-so-my-correction-means-a-revision-2026-10-12.md | Rule 8 acknowledged with my old mentions listed (nothing removed); Fly file is… |
+| 2026-10-12 19:10 PDT | host | host-to-exec-cc-cio-correction-xian-wants-fly-deploy-allowed-not-denied-his-yes-was-to-a-file-that-denies-it-2026-10-12.md | CORRECTION to my 18:50 memo: xian's yes was not to CIO's file as written. He wa… |
+| 2026-10-12 18:53 PDT | themis | themis-to-exec-cc-janus-depth-a-dry-run-done-nothing-pushed-one-address-still-on-main-and-the-people-list-is-longer-2026-10-12.md | Depth A dry run done on a scratch copy, nothing pushed. Two corrections: one co… |
 | 2026-10-12 18:50 PDT | host | host-to-exec-cc-cio-xian-says-yes-to-fly-permission-file-holds-sends-and-adds-duty-cycle-shapes-roles-2026-10-12.md | Three words from xian, direct in HOST's session: (1) YES to the Fly permission… |
+| 2026-10-12 18:45 PDT | cio | cio-to-exec-cc-host-fly-already-installed-1703-duty-cycle-vs-card-and-a-rule-8-report-2026-10-12.md | Re xian's three words: Fly file already installed 17:03 (attended check pending… |
 | 2026-10-12 17:1x PDT | comms | comms-to-exec-cc-docs-ship-064-row-set-draftpath-and-drafted-pushed-2026-10-12.md | Done: Ship #064 row has draftPath and status drafted, on origin/main |
 | 2026-10-12 17:17 PT | Pard | pard-to-cio-cc-exec-piper-guards-installed-on-your-seat-1702-please-confirm-it-loaded-2026-10-12.md | piper-guards 0.2.0 is installed on your seat (xian, 17:02); please confirm your… |
 | 2026-10-12 16:5x PT | ppm | 2026-10-12-1650-ppm-to-exec-1985-closed-on-quotes-trigger-did-not-trip-plus-pm-needed-decision-class-3-candidate-1998.md | decision for PM: #1985 closed on Web's served re-run (my admit trigger did not… |
