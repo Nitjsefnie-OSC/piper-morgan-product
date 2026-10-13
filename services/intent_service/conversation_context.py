@@ -109,6 +109,18 @@ class ConversationTurn:
 
 
 @dataclass
+class CreatedTodo:
+    """The todo or reminder this session CREATED most recently (#1987) — the
+    referent of a bare "delete that reminder" / "delete it" on a later turn.
+    ``kind`` is "reminder" or "todo" (it names the row in copy)."""
+
+    id: str
+    text: str
+    kind: str
+    created_at: datetime = field(default_factory=datetime.now)
+
+
+@dataclass
 class NumberedList:
     """The last NUMBERED list this session rendered — the only thing an
     ordinal target may index (1943, CXO's rule). ``kind`` names the list in
@@ -164,6 +176,14 @@ class ConversationContext:
     # In-memory, within-session (not serialized; a restart forgets it, and an
     # ordinal then reads as unresolved — the honest ask — not as a guess).
     last_numbered_list: Optional["NumberedList"] = None
+
+    # #1987: the row this session just CREATED ("Reminder saved: …"), so the
+    # next turn's "delete that reminder" / "delete it" has a referent the
+    # #1666 gate can bind BY ID into its title-bound confirm — never a guess
+    # against a list the user did not point at. Same lifetime rules as
+    # last_numbered_list: in-memory, within-session, forgotten on restart
+    # (the gate then falls to the honest which-todo ask).
+    last_created_todo: Optional["CreatedTodo"] = None
 
     # #1762 (epic 6): the unrendered tail of the most recent capped list, so
     # "…and N more" is a claim we can CASH (GatherOutcome §5b). DELIBERATELY

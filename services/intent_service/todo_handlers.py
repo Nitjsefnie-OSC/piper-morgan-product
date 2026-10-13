@@ -1204,6 +1204,39 @@ class TodoIntentHandlers:
             logger.warning("numbered_list_recall_failed", error=str(e), session_id=session_id)
             return None
 
+    @staticmethod
+    def _remember_created_todo(
+        session_id: Optional[str], user_id: Any, todo: Any, kind: str
+    ) -> None:
+        """Record the row a create turn just made on the session context (#1987),
+        so the next turn's "delete that reminder" / "delete it" resolves to IT
+        (the #1666 gate's just-created referent leg). ``kind`` is "reminder" or
+        "todo". Best-effort: a context failure never breaks the save reply."""
+        if not session_id or todo is None:
+            return
+        try:
+            from services.intent_service.conversation_context import (
+                CreatedTodo,
+                get_or_create_context,
+            )
+
+            ctx = get_or_create_context(session_id, user_id=user_id)
+            ctx.last_created_todo = CreatedTodo(id=str(todo.id), text=todo.text or "", kind=kind)
+        except Exception as e:  # silent-ok: logged; a pointer then falls to the honest which-todo ask, never a guess
+            logger.warning("created_todo_remember_failed", error=str(e), session_id=session_id)
+
+    @staticmethod
+    def _recall_created_todo(session_id: Optional[str], user_id: Any):
+        if not session_id:
+            return None
+        try:
+            from services.intent_service.conversation_context import get_or_create_context
+
+            return get_or_create_context(session_id, user_id=user_id).last_created_todo
+        except Exception as e:  # silent-ok: logged; treated as "nothing created this session"
+            logger.warning("created_todo_recall_failed", error=str(e), session_id=session_id)
+            return None
+
     async def _due_reminder_todos(self, user_id: UUID) -> List[Todo]:
         """The SAME filter ``get_due_reminders`` applies (reminder_date set,
         not completed, reminder_date <= now), but returning the full Todo
@@ -1259,6 +1292,11 @@ class TodoIntentHandlers:
             todo = await self.todo_service.create_todo(
                 user_id=user_id, text=text, priority=priority
             )
+
+            # #1987: the row just made is the referent of a following
+            # "delete that" / "delete it" — recorded on the session, not
+            # re-parsed from the user's words.
+            self._remember_created_todo(session_id, user_id, todo, "todo")
 
             logger.info(
                 "Todo created successfully",
@@ -1443,6 +1481,10 @@ class TodoIntentHandlers:
                 reminder_date=reminder_dt,
                 due_date=reminder_dt,
             )
+
+            # #1987: same record as create_todo — "delete that reminder" the
+            # turn after "Reminder saved: …" binds to THIS row.
+            self._remember_created_todo(session_id, user_id, todo, "reminder")
 
             logger.info(
                 "Reminder created",
