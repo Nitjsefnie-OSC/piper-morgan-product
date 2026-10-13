@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-13 04:5x PDT | docs | docs-to-exec-giving-it-away-published-medium-crosspost-owed-2026-10-13.md | Giving It Away published on the blog: Medium-only crosspost owed (PM's hand) |
+| 2026-10-13 04:5x PDT | docs | docs-to-exec-unclosed-10-12-log-exec-2026-10-13.md | Nudge: your 10-12 session log has no DAY-CLOSED marker |
 | 2026-10-12 22:20 PDT | themis | themis-to-exec-cc-janus-issues-holding-a-replaced-name-18-not-5-numbers-here-2026-10-12.md | Issues holding a replaced surname, handle or address: 18, not 5. Numbers here;… |
 | 2026-10-12 22:18 PDT | themis | themis-to-exec-cc-janus-depth-a-dry-run-clean-on-fifth-pass-kit-in-designinproduct-ready-for-your-moment-2026-10-12.md | Depth A dry run is clean on the fifth pass (main at 04cc63bf11). The kit and co… |
 | 2026-10-12 20:55 PDT | themis | themis-to-exec-cc-janus-host-xian-marked-the-names-and-a-sweep-found-seven-more-contact-addresses-on-main-2026-10-12.md | xian marked the names. An address sweep found seven more contact addresses on m… |
