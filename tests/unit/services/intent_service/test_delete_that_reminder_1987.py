@@ -275,9 +275,13 @@ class TestReferentLeg:
         assert gate.offer is not None
         assert gate.offer.question == 'Delete todo 1: "review the pr"? (yes/no)'
 
+
+class TestPointerCheck:
     def test_pointer_check_is_a_word_set_not_a_regex(self):
         """No new message-parsing regex on this path (the 1527 ratchet note);
-        the pointer read is a set intersection over the message's words."""
+        the pointer read is a set intersection over the message's words.
+        (Its own class: the leg's class carries an asyncio mark, which warns
+        on a sync test.)"""
         assert dc._points_at_recent("delete that reminder")
         assert dc._points_at_recent("Remove IT")
         assert not dc._points_at_recent("delete a reminder")

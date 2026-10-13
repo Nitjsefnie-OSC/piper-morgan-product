@@ -262,8 +262,10 @@ class TestCensusDenominators:
         claimed = sum(1 for r in records if r.claim.pattern_list is not None)
         unclaimed = sum(1 for r in records if r.claim.pattern_list is None)
         assert claimed + unclaimed == len(records)
-        assert claimed + unclaimed == 593, (
-            "the corpus is 593 rows as of the 2026-10-11 #1977 request-statement plan row (+1, the first cut's trade, now declined); "
+        assert claimed + unclaimed == 594, (
+            "the corpus is 594 rows as of the 2026-10-12 #1987 'delete that reminder' row (+1, context-dependent, informational — "
+            "the referent is the previous turn's created row; expected_args deliberately absent); "
+            "593 rows as of the 2026-10-11 #1977 request-statement plan row (+1, the first cut's trade, now declined); "
             "592 rows as of the 2026-10-11 PORTFOLIO two-topic plan row + 2 pin phrasings (+3, Arch's rule-10 extension to splits); "
             "589 rows as of the 2026-10-11 COMPLETION_HISTORY pin phrasings (+3, test_completion_history_routes_to_status_not_temporal); "
             "586 rows as of the 2026-10-11 PORTFOLIO rule-10 rows (+5, the #1431/#1757/#1738 pin phrasings, Arch-approved); "
