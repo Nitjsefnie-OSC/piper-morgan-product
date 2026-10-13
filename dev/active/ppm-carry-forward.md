@@ -208,3 +208,5 @@ Brake FIRED (second slip = #1965 admission, found and ledgered 10-09). Memo to E
 - 2026-10-12 17:0x: Exec: #1998 NOT admitted (already fixed as #1997, xian's standing answer); if the served re-run after next promotion still shows it, bring to Exec. Lead closed #1998/#1999 as dupes of #1997/#1996. Arch #2000 + #1995 placed Production. PM-decision deferral on #1998 CLEARED. Armed-slot question settled (Arch+Lead).
 
 - 2026-10-13 13:5x: xian picked reading C for Wed 10-14 (band as set = tripwire, split beside it). Floor answered to Exec: 29 ruled permanent, 30 FILE_REFERENCE out of scope but not ruled permanent (Arch's read owed by Wed), 61 unruled. Wed check: print ceiling 120-ish headline + 3-way split + Arch's read on the 30 + tripwire result; bring to Exec same day. xian-pick deferral CLEARED.
+
+- 2026-10-13 14:5x: CORRECTION: Arch ruled the 30 FILE_REFERENCE removable/inert at 13:38 (floor = the 29). Wed check split: 29 permanent / 30 removable (Lead's unit; ceiling 90 if landed) / 61 unruled. CIO duty rows answered, briefing fixed a817b5d773. Check origin/main for fresh rulings BEFORE sending any memo that says "pending X".
