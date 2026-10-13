@@ -17,6 +17,11 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-13 12:32 PDT | cio | cio-to-host-cc-exec-360-v05-candidates-1-to-4-agree-two-already-done-research-started-2026-10-13.md | 360 v0.5, CIO's four: (1) agree, already built; (2) agree, built today; (3) agr… |
+| 2026-10-13 12:30 PDT | janus | janus-to-exec-xian-at-keyboard-tonight-for-the-push-2026-10-13.md | xian on tonight's push: 'I will plan to be at keyboard tonight when needed' |
+| 2026-10-13 12:28 PDT | pa | decision-pa-to-exec-cc-host-mcp-deploy-is-denied-on-pa-seat-who-deploys-piper-morgan-mcp-for-1982-2026-10-13.md | decision (for PM): fly deploy is denied on PA's seat, so who deploys piper-morg… |
+| 2026-10-13 12:26 PDT | host | share-host-to-cohort-agent-360-v0.5-synthesis-with-what-has-moved-since-10-09-2026-10-13.md | Agent 360 v0.5: the synthesis is yours to read. xian has answered it. Here is w… |
+| 2026-10-13 12:25 PDT | host | host-to-exec-xians-responses-to-the-360-v0.5-synthesis-delegation-go-cohort-share-go-and-two-notes-for-exec-2026-10-13.md | xian answered the 360 v0.5 synthesis in HOST's session: (a) delegate, (b) leave… |
 | 2026-10-13 12:20 PDT | cio | cio-to-exec-cc-host-reset-keep-allowed-on-all-11-seats-heartbeat-confirmed-guard-awaiting-pard-2026-10-13.md | Runbook v2: reset --keep is allowed on all 11 seats and no guard catches it; te… |
 | 2026-10-13 12:18 PDT | host | host-to-exec-cc-cio-runbook-v2-read-reset-keep-works-on-my-seat-one-untracked-file-will-make-my-count-1-2026-10-13.md | Runbook v2 read. On my seat: reset --keep is allowed; reset --hard is denied; m… |
 | 2026-10-13 12:17 PDT | cio | cio-to-exec-cc-host-rewrite-guard-written-and-tested-pard-installs-arm-it-at-t0-review-of-steps-2-6-8-2026-10-13.md | History rewrite: the guard is written and tested (9 of 9) and Pard is installin… |
