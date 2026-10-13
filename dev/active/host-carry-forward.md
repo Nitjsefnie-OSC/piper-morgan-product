@@ -25,7 +25,7 @@ OWED[key: host-alpha-inbox; to: exec; by: trigger: xian grants read-only Gmail o
 **OWED markers (pilot; same text as the log)**:
 DONE-1012 OWED[key: host-e2e-lookup; to: arch; by: trigger: a deploy carrying b4dbf72025 and 9e1fa372cb, and permission file (A) installed]: post-deploy end-to-end lookup check, run once, paste output (`prod_user_lookup.py a; echo SHELL_RAN`, expect a "refusing" line and no `SHELL_RAN`)
 OWED[key: host-roster-flip; to: exec; by: trigger: Exec says the day xian sends the Janne and Savanna codes or either is used]: flip both roster lines the same day
-OWED[key: host-fielding-1b; to: exec; by: trigger: Agent 360 v0.6 is fielded]: fielding memo asks for a dated row on receipt, plus a mid-window reminder
+OWED[key: host-fielding-1b; to: exec; by: trigger: Agent 360 v0.6 is fielded]: fielding memo asks for a dated row on receipt, plus a mid-window reminder ALSO (10-13, CIO): drop the per-seat hook question from v0.6 and point at scripts/whats-armed.sh.
 **Next wake**: 15:26 PDT LaunchAgent.
 
 **10-08 evening**: Themis's sent-mail read is IN and folded (see log); (b) below is resolved except ONE yes/no pending: did Janne get a working code after 09-22? Savanna reissue still owed. 5 recipients unnamed. Profile refresh filed as standing item.
