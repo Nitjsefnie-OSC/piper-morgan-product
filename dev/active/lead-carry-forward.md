@@ -10,9 +10,10 @@
 - **MEETING ROW LANDED d13dafd172 (08:24; branch commits e40a69f50b + b9afba39ad):** Arch's 07:4x ruling (the rule-10 licence row
   'when am i in a meeting' must be stabilized, not excluded). Landing = the ADDITIVE registry example for meeting_time ('How much time do I
   spend in meetings today? / When am I in a meeting?'), description unchanged; licence row meeting_time ×6 @0.95 on main+edit AND three
-  perturbed trees; full run 476/532 (day's best, TEMPORAL 63/66); no ×6-attributed regression. **Disclosed to Arch: standing member 16/18
-  vs same-minute main 18/18 — if he reads that as a tip, the revert is one line (action_registry.py, the meeting_time example) — do it
-  the same fire he says so.** Six wordings in the log table; w4's full run kept CANDIDATE-HELD. Reply to Arch cc PPM sent 08:24.
+  perturbed trees; full run 476/532 (day's best, TEMPORAL 63/66); no ×6-attributed regression. **ACCEPTED by Arch 08:31, no revert** (the member is a live
+  ANALYSIS survivor so a 2/18 wobble changes no served answer; Fisher p≈0.49). His one watch: if a ×6 block on MAIN itself reads the
+  member below 6/6, report it (standing items). Lesson recorded by Arch in decisions.log: an additive registry example is the
+  least-perturbing lever; try it first for a single-row stabilization. Six wordings in the log table; w4's full run kept CANDIDATE-HELD. Reply to Arch cc PPM sent 08:24.
 - **Red window #2 today: 17727f5b26 (the #1976 push) — one pin (`phase3-args/` source label), fixed 27346753dc; Tests watch open.**
   Discipline widened: corpus-row deposits run BOTH 1595 test files before landing.
 - **CI: 8f93cfe672 GREEN (Tests 38410111184, AE 38410110441).** Watch open on 17727f5b26 (the #1976 push; Tests 38414116924) — read at the
