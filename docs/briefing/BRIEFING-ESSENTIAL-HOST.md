@@ -34,10 +34,10 @@ max_age_days: 90
 > `claude/host-cycle`, on Amber (the cohort's always-on host since 2026-07-25). **This is the
 > opposite of what this briefing said until today**: it previously claimed Model A was "deprecated"
 > and HOST ran an ephemeral Desktop worktree — that was true pre-Amber and has been wrong for two
-> months. Thin cron prompt + `duty-cycle-tick` skill, **windowed daytime-only**
-> (`37 6,9,12,15,18,21 * * *`, no overnight), transient state in `dev/active/host-carry-forward.md`.
-> Cron is **session-only**, dies with the session or after 7 days; re-armed via delete-then-create
-> at every STOP, verified via `CronList`. The shared operating model is **not duplicated here** —
+> months. Thin fire prompt + `duty-cycle-tick` skill, fired by a **LaunchAgent**
+> (`com.xian.pm-host-cycle`, `26 6,9,12,15,18,21`, windowed daytime-only, no overnight); there is no session cron
+> to arm or re-arm, and `CronList` reading empty is expected. Transient state lives in `dev/active/host-carry-forward.md`;
+> the registry row in `dev/active/duty-cycle-registry.tsv` is the cadence source of truth (verified 2026-10-13). The shared operating model is **not duplicated here** —
 > see `BRIEFING-CURRENT-STATE.md` and CLAUDE.md §"Worktree model" for the canonical, cohort-wide
 > mechanics.
 
