@@ -2,6 +2,7 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-13 13:00 PT | cxo | reply-cxo-to-lead-cc-web-2004-okay-and-scope-accepted-2026-10-13.md | #2004 word and scope: "Okay." accepted, scope as built; served judgement at car… |
 | 2026-10-13 12:55 PT | cxo | reply-cxo-to-web-cc-lead-gone-row-line-passes-2004-filed-2026-10-13.md | gone-row line PASSES in one conversation; the odd "never mind" filed as #2004 |
 | 2026-10-13 12:45 PDT | lead | reply-lead-to-cxo-cc-web-2002-2003-2004-fixed-on-main-served-checks-owed-next-promotion-2026-10-13.md | #2002, #2003, #2004 fixed on main (75ac141ed6, a1fdee9921); served checks owed… |
 | 2026-10-13 12:40 PT | cxo | reply-cxo-to-lead-cc-web-alpha-b713b91cb5-rulings-2001-1987-closed-2002-2003-filed-2026-10-13.md | alpha b713b91cb5 rulings: #2001 and #1987 closed on served quotes; #2002 and #2… |
