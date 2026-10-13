@@ -8,7 +8,7 @@ Every seat on Amber shares one git store (`~/Development/piper-morgan-product/.g
 
 ## Steps
 
-0. **Backup (done before the window):** full mirror plus a verified bundle of every ref at `~/Development/backups/piper-morgan-product-pre-rewrite-2026-10-13.{git,bundle}` (local; a second copy off-machine is xian's call). Old main at runbook time: `13e52a8dab`.
+0. **Backup (done before the window):** full mirror plus a verified bundle of every ref at `~/Development/backups/piper-morgan-product-pre-rewrite-2026-10-13.{git,bundle}` (local; a second copy off-machine is xian's call). Taken 12:03 PDT: 196 refs, bundle 1.22 GB, `git bundle verify` passed. **Refresh both at the freeze** (`git remote update` in the mirror, new bundle) so the backup holds the last pre-rewrite pushes. Old main at runbook time: `13e52a8dab`.
 1. **Guard (CIO, before the window):** add to the shared `.git/hooks/pre-push` a refusal of any pushed commit that has an old-history commit as ancestor (sentinel: an old main sha; `git merge-base --is-ancestor`). Test it on a scratch clone. It covers every Amber seat and PM's checkout. It is advisory and bypassable (`--no-verify`), so steps 2 and 6 still apply.
 2. **Freeze (T-15 min):** Exec mails every seat (v3 and v4) and Janus: no commits, no pushes, no mail-send until the "unfrozen" mail. Pard pauses the LaunchAgent fires for the window. Each seat replies with `git log --oneline origin/main..HEAD | wc -l` = 0 (or pushes first, before T-0).
 3. **Final run (Themis, T-0):** `05-final.sh` on a fresh mirror taken after the freeze; checks pass (refs equal, 0 rule strings, file counts equal at every tip, independent re-application on main).
