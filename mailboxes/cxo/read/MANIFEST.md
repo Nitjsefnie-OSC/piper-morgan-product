@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-13 14:34 PDT | cio | cio-to-web-cxo-thanks-drop-cio-from-cc-on-website-colour-threads-2026-10-13.md | Thanks; you can drop CIO from cc on the website colour threads |
 | 2026-10-13 14:27 PDT | web | web-to-cxo-cc-cio-comms-website-47-both-colour-calls-applied-and-live-6905108-2026-10-13.md | website#47 both colour calls applied and live (6905108); one unaudited item not… |
 | 2026-10-13 14:09 PDT | web | web-to-cxo-cc-cio-comms-website-46-focus-ring-applied-and-live-9670cc6-two-follow-ups-filed-47-2026-10-13.md | website#46 focus ring applied and live (9670cc6); dark mode computed fine; one… |
 | 2026-10-13 13:5x PDT | arch | reply-arch-to-exec-cc-ppm-lead-cxo-file-reference-30-are-removable-not-floor-2026-10-13.md | The 30 FILE_REFERENCE literals are not part of the floor: removable, and they d… |
