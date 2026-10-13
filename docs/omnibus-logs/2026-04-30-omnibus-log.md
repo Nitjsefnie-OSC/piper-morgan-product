@@ -90,7 +90,7 @@
 - **xian → Lead Developer** (~1:30 PM): "Go ahead and merge please."
 - **Lead Developer** (~1:30 PM): **Phase F flag-flip MERGED** (`deecc816`). `claude/phase-f-flag-flip` → main with `--no-ff`; `docker-compose.yml` now has `ENABLE_ETHICS_ENFORCEMENT=true` on `app` service environment.
 - **Lead Developer** (~1:30 PM): **#992 ETHICS-ACTIVATE CLOSED** properly via skill — body update with all 8 ACs marked complete + closing comment with full Phase F evidence. Closes the multi-step arc Phase A → B → C → D → E → #1002/#1003 → #1004 → Phase F.
-- **xian → Lead Developer** (~1:30 PM): forwarded warning email from `outside-sender@example.com` claiming GitHub account compromised by mini Shai-Hulud npm worm.
+- **xian → Lead Developer** (~1:30 PM): forwarded warning email from `[alpha contact email]` claiming GitHub account compromised by mini Shai-Hulud npm worm.
 - **Lead Developer** (~1:30 PM): **Mini Shai-Hulud IoC scan filed** (`fcdfb8e0`). 16 dimensions checked across local repo + 22 GitHub repos. **Verdict: NO INDICATORS OF COMPROMISE**. Threat real per StepSecurity (SAP-tooling-targeted, Apr 29 detection); the email's personal-detection-of-compromise claim doesn't hold against scan; most likely false-positive from wide-cast detection script.
 
 ### Phase 4 — Floor Publish + Calendar Cycle (~ afternoon)

@@ -53,7 +53,7 @@
 
 ### Phase 3 — Alpha invites confirmed + full cohort resumes from laptop reboot (12:26–15:30 PT)
 
-- **12:26** — **HOST**: **PM confirms all 11 batch-1 alpha invitations sent.** Alpha is live with first external testers. Welfare watch activated; #1383 (Notion/Calendar per-user creds) noted as known gap for those connectors; Jake K. (alpha-contact-18@example.com) flagged for delivery confirmation
+- **12:26** — **HOST**: **PM confirms all 11 batch-1 alpha invitations sent.** Alpha is live with first external testers. Welfare watch activated; #1383 (Notion/Calendar per-user creds) noted as known gap for those connectors; Jake K. ([alpha contact email]) flagged for delivery confirmation
 - **12:27** — **Chief of Staff** RESUME: own cron gone (reboot), 109 commits behind; began post-outage investigation — read 8 watchdog alert memos chronologically; confirmed machine-sleep infrastructure event (not individual failures) per the 7/11 12:39 alert's own self-diagnosis
 - **12:31** — **Lead Developer** RESUME: retroactive 7/10 close; 5 memos drained; #1332 soak verified clean at 66h → **#1332 CLOSED** (sprint issue-list fully drained)
 - **~12:45** — **HOST**: PM welfare question (text-only) → honest assessment: system healthier than friction count suggests; 6 clean sapient-trust polls meaningful; identity drift post-context-gap flagged as the one thing to monitor; alpha launch expands "sapient team" to first external humans

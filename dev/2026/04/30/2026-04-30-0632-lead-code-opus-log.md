@@ -86,7 +86,7 @@ CEO authorized merge ("Go ahead and merge please"). Executed:
 
 ## ~1:30 PM — Mini Shai-Hulud IoC scan (CEO-directed)
 
-CEO forwarded warning email from `outside-sender@example.com` claiming GitHub account compromised by mini Shai-Hulud npm worm. Investigated.
+CEO forwarded warning email from `[alpha contact email]` claiming GitHub account compromised by mini Shai-Hulud npm worm. Investigated.
 
 **Verdict: NO INDICATORS OF COMPROMISE** on this repo or `mediajunkie` GitHub account.
 

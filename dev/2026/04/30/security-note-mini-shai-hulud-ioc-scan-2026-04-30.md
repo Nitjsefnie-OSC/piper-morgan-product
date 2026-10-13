@@ -45,7 +45,7 @@ Exfiltration is via the victim's own GitHub account: malware creates Dune-themed
 
 ## The warning email (legitimate-shaped, but false-positive)
 
-**From**: `outside-sender@example.com` (real Gmail account; SPF/DKIM/DMARC all PASS)
+**From**: `[alpha contact email]` (real Gmail account; SPF/DKIM/DMARC all PASS)
 **To**: 13 BCC'd recipients including `xian@pobox.com`
 **Sent**: 2026-04-30 16:03 EDT (delivered after 16s; spam score 0.0)
 **Subject**: "Your GitHub Account maybe compromised - Please read"
