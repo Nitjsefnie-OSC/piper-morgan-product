@@ -1547,16 +1547,10 @@ _READ_QUERY_DESCRIPTIONS: dict[str, str] = {
 
 
 _CALENDAR_QUERY_DESCRIPTIONS: dict[str, str] = {
-    # 2026-10-13 (Arch's ruling on the rule-10 licence row "when am i in a
-    # meeting", yaml:1350): under unrelated catalog edits the router read it as
-    # "Ambiguous: could mean today's meetings (meeting_time), this week's
-    # schedule (week_calendar), or recurring meetings (recurring_meetings)"
-    # and clarified. The day-less "when" question is named here explicitly.
     "_handle_meeting_time_query": (
         "Calendar, agenda or schedule for ONE day — today, tomorrow, or a named "
-        "day — when the next meeting is ('when am I in a meeting'), and how much "
-        "time is in meetings. 'What's coming up' with no day named is the week "
-        "view, not this (#1595)"
+        "day — the next upcoming meeting, and how much time is in meetings "
+        "(#1595)"
     ),
     "_handle_week_calendar_query": (
         "Calendar or schedule for the WEEK ahead or several days (this week, next "
