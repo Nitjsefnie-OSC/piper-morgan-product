@@ -28,7 +28,7 @@ log, never here. Bump `last_updated` to the newest line's date, or CI fails. Ski
 ## Now
 
 - **Alpha (live)** *(Lead, 2026-10-13 06:48 PDT, `curl https://alpha.pipermorgan.ai/health`)*: healthy, **v0.8.14.0**,
-  git_sha `6e48d9ebb2` (promoted 10-12 21:46 by PM via `gh`, run 38346886426; carries #1975/#1987/#1992/#1996/#1997) (the version string has not moved since 09-23, so the sha is the identity). Fly `piper-morgan` serves
+  git_sha `b713b91cb5` (promoted 10-13 12:04 by Exec on xian's direct word, run 38451337983, no approval step; carries everything landed through 10-13 12:00: #1987 both halves, #2001, #1976, the meeting_time example, logs-keep-only-fingerprints) (the version string has not moved since 09-23, so the sha is the identity). Fly `piper-morgan` serves
   `origin/main` builds; the droplet and `origin/production` are gone (09-29).
 - **Version** *(CIO, 2026-10-08, `git tag`)*: latest tag **v0.8.14.0** ("On Your Clock", 09-23). 0.9.0 is
   reserved for beta.
