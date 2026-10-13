@@ -321,6 +321,14 @@ def _principal_from_intent(intent) -> Optional[str]:
     return context.get("user_id")
 
 
+def _overdue_age_label(days: int) -> str:
+    """#2001 (CXO, alpha 6e48d9ebb2 2026-10-13): the overdue age in words —
+    "1 day overdue", otherwise "N days overdue" — one source for BOTH the
+    Today: list line and the attention item's detail, which had disagreed
+    ("(1 days overdue)" in the list, "1 day overdue" in the floor prose)."""
+    return f"{days} day overdue" if days == 1 else f"{days} days overdue"
+
+
 def _coerce_todo_principal(user_id: Optional[str]) -> Optional[UUID]:
     """#1466: safe UUID coercion for the todo/reminder rail.
 
@@ -9616,7 +9624,7 @@ class IntentService:
                                 "item": todo.text,
                                 "urgency": "urgent" if days_overdue > 7 else "high",
                                 "icon": "⏰",
-                                "detail": f"{days_overdue} days overdue",
+                                "detail": _overdue_age_label(days_overdue),  # #2001
                             }
                         )
             except Exception as overdue_error:
@@ -9743,8 +9751,8 @@ class IntentService:
                     lines.append("Nothing due today.")
                 for late_item in overdue_todos:
                     lines.append(
-                        f"⏰ {late_item['text']} ({late_item['days_overdue']} days overdue)"
-                    )
+                        f"⏰ {late_item['text']} ({_overdue_age_label(int(late_item.get('days_overdue') or 0))})"
+                    )  # #2001: "1 day", "N days"
             # Other signals follow the list. A flagged todo already listed
             # above is not repeated (CXO: an item appears once).
             following = [
