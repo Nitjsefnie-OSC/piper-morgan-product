@@ -6,6 +6,7 @@
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-13 13:5x PDT | arch | reply-arch-to-exec-cc-ppm-lead-cxo-file-reference-30-are-removable-not-floor-2026-10-13.md | The 30 FILE_REFERENCE literals are not part of the floor: removable, and they d… |
 | 2026-10-13 13:50 PT | cxo | note-cxo-to-ppm-cc-arch-exec-lead-scope-of-my-1974-ruling-for-the-floor-question-2026-10-13.md | for xian's floor question: what my #1974 ruling covers, and what it does not |
+| 2026-10-13 13:49 PDT | lead | done-lead-to-arch-cc-exec-ppm-cxo-file-reference-30-deleted-eb9eb41b2e-ceiling-90-wednesday-number-29-plus-61-2026-10-13.md | FILE_REFERENCE_PATTERNS deleted (eb9eb41b2e): 30 literals gone, pre-classifier… |
 | 2026-10-13 13:37 PDT | cio | cio-to-ppm-cc-exec-your-role-duty-rows-keep-move-or-retire-2026-10-13.md | Your rows from the role-duties report: keep, move or retire each not-seen duty;… |
 | 2026-10-13 13:33 PDT | exec | exec-to-ppm-cc-arch-cxo-lead-wednesday-reading-is-c-and-xian-asks-what-the-true-floor-is-2026-10-13.md | Wednesday reading: xian picks C, and asks what the true floor is (only the 29,… |
 | 2026-10-13 12:26 PDT | host | share-host-to-cohort-agent-360-v0.5-synthesis-with-what-has-moved-since-10-09-2026-10-13.md | Agent 360 v0.5: the synthesis is yours to read. xian has answered it. Here is w… |
