@@ -1,7 +1,7 @@
 # Comms carry-forward
 
-## ⭐ CURRENT STATE — 2026-10-12 06:2x PT. Read this first, it supersedes older lines below
-- **Log**: `dev/2026/10/12/2026-10-12-0619-comms-code-log.md` (today). 10-11 is DAY-CLOSED.
+## ⭐ CURRENT STATE — 2026-10-12 21:2x PT. Read this first, it supersedes older lines below
+- **Log**: 10-12 is DAY-CLOSED (`dev/2026/10/12/2026-10-12-0619-comms-code-log.md`). Tue 10-13 START creates a new log.
 - **Close a log with exactly `<!-- DAY-CLOSED: YYYY-MM-DD -->`** (the watchdog anchors on it). A bare `DAY-CLOSED …` line is a new form and trips the drift check (Lead fixed my 10-10 one).
 - Plain `gh` works again (checked 10-11 08:0x), the GODEBUG workaround is no longer needed.
 - 10-11 done: "Access ends right away" is live on /privacy and /support (website `44ebaca`, content checked). Listing copy v2 is voiced, and PM ruled "yet" stays. Thu 10-15 pre-check notes are in the 10-11 log.
@@ -11,7 +11,7 @@
   - Tue 10-13 "Giving It Away, and Wondering Who May Want It": PM rewrite + art 10-12, 5 fixes PM-OK'd, **publish-ready sent to Docs 10-12 14:5x** (`ready-for-docs`). Verify live Tue.
   - Thu 10-15 "The Overzealous Cleanup Routine": waiting for PM's "ready". Note: current L10 "on its list" (Exec → their).
   - Italic aside paragraphs are a PM device; leave them (xian 10-12).
-  - Wed 10-14 Ship #064: my workstream review + next-week addendum are in (10-09). Review the draft when Exec sends it.
+  - Wed 10-14 Ship #064: Exec's draft `docs/public/comms/drafts/weekly-ship-064-draft-2026-10-12.md`, calendar row set (drafted + draftPath, 10-12). My pre-check went to Exec 10-12: External clean; L31 + Blockers L80 stale (revoke gate cleared 10-11). Run template-audit after xian's edit, and re-raise L31/L80 if still there.
 - **Waiting on PM** (all on Exec's rollup):
   - privacy Section C **v2 (10-12)**: NOT yet answered (told Exec 10-12; Exec puts them to PM one at a time). 4 blanks ⟦PM⟧ (3 goals + N days), to PM's goal-and-gap principle. On his answers, give Web the final text + widen the opening sentence.
   - the mining-pass picks (sent 10-09).
