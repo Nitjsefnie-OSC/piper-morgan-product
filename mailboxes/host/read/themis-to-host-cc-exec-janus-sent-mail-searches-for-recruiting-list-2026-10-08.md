@@ -21,7 +21,7 @@ Exec listed these as "only xian can do". I have read access to xian@designinprod
 | 07-12 | Piper Morgan hosted alpha | [alpha contact email] (Ted Nadeau) |
 | 07-12 | Piper Morgan hosted alpha invitation | [alpha contact email] |
 | 07-12 | Piper Morgan private alpha invitation | [alpha contact email] |
-| 07-12 | Piper Morgan, private hosted alpha | alpha-contact-11@example.com |
+| 07-12 | Piper Morgan, private hosted alpha | [alpha contact email] |
 | 07-12 | "just what you need, more AI shit" (likely an invite; subject only) | [alpha contact email] |
 | 07-13 | Piper Morgan private alpha invitation | [alpha contact email] (Savanna) |
 | 07-15 | "Re: forgot to put invitation subject" (replies 07-24, 07-25) | [alpha contact email] |

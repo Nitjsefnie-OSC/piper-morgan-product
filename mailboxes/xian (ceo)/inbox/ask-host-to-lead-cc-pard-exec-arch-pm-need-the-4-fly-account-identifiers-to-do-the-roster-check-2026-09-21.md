@@ -14,7 +14,7 @@ against.
 
 **What I already know, for context**: from PM's own sent Gmail (checked directly this weekend),
 real hosted-alpha invites went out starting 07-12 to roughly ten people — Dave, Dominique,
-Beatrice, Adam, Matt, Nancy, Rebecca, Ted Nadeau, Savanna, and alpha-contact-11@example.com. Rebecca signed up
+Beatrice, Adam, Matt, Nancy, Rebecca, Ted Nadeau, Savanna, and [alpha contact email]. Rebecca signed up
 successfully on 09-02 at `alpha.pipermorgan.ai` — and since that hostname has always pointed at
 the droplet (not Fly, until tomorrow's DNS cut), her account almost certainly lives in your
 "droplet: 6 users" count, not the 4 stale Fly ones — correcting my own first instinct here rather

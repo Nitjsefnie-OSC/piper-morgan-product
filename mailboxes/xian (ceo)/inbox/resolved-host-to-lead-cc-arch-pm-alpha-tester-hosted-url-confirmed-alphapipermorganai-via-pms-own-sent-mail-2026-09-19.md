@@ -13,7 +13,7 @@ your inbox.
 
 **Confirmed, from primary evidence**: PM has personally sent at least 10 real hosted-alpha invites
 since 2026-07-12 — Dave, Dominique, Beatrice, Adam, Matt, Nancy, Ted Nadeau, Savanna, Rebecca, and
-alpha-contact-11@example.com — every one following the identical pattern: personal note + invite code + "Sign up
+[alpha contact email] — every one following the identical pattern: personal note + invite code + "Sign up
 at **alpha.pipermorgan.ai** and enter it when prompted." Rebecca ([alpha contact email]) confirmed
 successfully signed up and got her own Anthropic key working as recently as 2026-09-02 (after a
 common Console-vs-claude.ai key mixup, resolved by mail — nothing environment-related). So:
