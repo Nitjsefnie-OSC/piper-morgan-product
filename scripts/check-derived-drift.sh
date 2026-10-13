@@ -42,6 +42,7 @@ cd "$(dirname "$0")/.." || exit 1
 CHECKS=(
   "MEMORY.md (shared memory index)|python3 scripts/rebuild-memory-index.py --check"
   "day-closed-marker-census.md (predicate corpus)|python3 scripts/day-closed-census.py --check"
+  "adr-index.md (ADR index, derived from each ADR's Status line)|python3 scripts/derive-adr-index.py --check"
 )
 
 # ── NOT YET REGISTERED — printed every run, deliberately. ───────────────────────
