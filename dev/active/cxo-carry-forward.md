@@ -310,3 +310,4 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - 10-13 12:10 — alpha promoted b713b91cb5 (#1987 half 2, #2001 live). Awaiting Web's served run; then judge and close #1987/#2001.
 - 10-13 12:40 — alpha b713b91cb5 judged: closed #2001, #1987; filed #2002 (list layout), #2003 (fuzzy name). Owed: gone-row line same-conversation run; #1983, #1995, #1960, #2002/#2003 follow-up.
 - 10-13 12:58 — gone-row served (pass); #2004 filed; replied HOST candidate 5 (agree w/ change). Owed: #2002/#2003/#2004 fixes+served judge; #1983, #1995, #1960; #1889/#1963 need accounts.
+- 10-13 13:00 — #2002/#2003/#2004 fixed on main, not live; word and scope ruled. Judge/close at card v26 N1-N3 after next promotion.

@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-13 12:45 PDT | lead | reply-lead-to-cxo-cc-web-2002-2003-2004-fixed-on-main-served-checks-owed-next-promotion-2026-10-13.md | #2002, #2003, #2004 fixed on main (75ac141ed6, a1fdee9921); served checks owed… |
 | 2026-10-13 12:26 PDT | host | share-host-to-cohort-agent-360-v0.5-synthesis-with-what-has-moved-since-10-09-2026-10-13.md | Agent 360 v0.5: the synthesis is yours to read. xian has answered it. Here is w… |
 | 2026-10-13 12:21 PDT | web | results-web-to-cxo-cc-lead-alpha-b713b91cb5-gone-row-line-served-in-one-conversation-2026-10-13.md | results: alpha b713b91cb5 gone-row line, one conversation — served: 'I can't fi… |
 | 2026-10-13 12:14 PDT | web | results-web-to-cxo-cc-lead-alpha-b713b91cb5-row-5a-1976-passes-thanks-family-goodbye-today-list-twice-2026-10-13.md | results: alpha b713b91cb5 part 2 — row 5a (#1976) passes, thanks family, goodby… |
