@@ -65,12 +65,15 @@ Read these FIRST; the sections below are historical context:
   C4 grant rule + class-aware payload-honesty rules.
 - **`reviews/2026-08-architectural-review/reorientation-plan.md`** — the four workstreams, owners,
   dates. **Ratified sequencing: web-chat = MAINTENANCE MODE; all new build → the MCP/BYOC path;
-  MCP-path completion = PUBLIC-BETA GATE (milestone #9); legacy-classifier retirement check
-  2026-09-30.**
+  MCP-path completion = PUBLIC-BETA GATE (milestone #9).** The legacy-classifier retirement
+  criterion (plan C2) was due a check 2026-09-30 that did not happen; stated 10-13: not met (the
+  LLM classifier still serves four call sites). Its re-check trigger is the #1595 Phase 3 tail
+  reaching the ruled floor (decisions.log 10-13).
 - **`docs/internal/architecture/bets/`** — the scope-bet gate (ratified): crossing a scope
   tripwire needs a PM-ratified one-page Bet Memo first.
 - ADR corpus: **demote-don't-retire** — ADRs are append-only history; the index is a DERIVED VIEW
-  (`scripts/derive-adr-index.py`); current law lives in the six living core docs.
+  (`scripts/derive-adr-index.py`; never hand-edit it, edit the ADR's Status line and regenerate;
+  `--check` runs in `scripts/check-derived-drift.sh` at START); current law lives in the six living core docs.
 
 ## Key Patterns (HISTORICAL NOTES — dated caveats added 2026-09-01)
 **Router Architecture** (ADR-038):
@@ -210,7 +213,7 @@ Spatial: 3 patterns (Granular/Embedded/Delegated)
 
 Some methodology patterns have product relevance. When evaluating architecture decisions, check portable patterns for prior art.
 
-**Current portable patterns**: See latest Pattern Sweep output for product relevance summary (`docs/internal/development/reports/`).
+**Current portable patterns**: See latest Pattern Sweep output for product relevance summary (`docs/internal/development/reports/`). The sweep is carried by `.github/workflows/pattern-sweep.yml`, which opens a sweep issue on schedule (Tuesdays); Arch reads its output when evaluating a decision, and does not run the sweep.
 
 **Architectural question**: "Does this pattern require infrastructure we haven't built?"
 
@@ -224,9 +227,9 @@ Product Relevance classifications:
 **Weekly Ship**: When PM requests a workstream review memo, see `docs/internal/development/weekly-ship-process-guide.md` for the full process, naming convention (`workstream-{ship#}-{role}-{window}.md`), and your role in it.
 
 - **Current state**: `docs/briefing/BRIEFING-CURRENT-STATE.md` (sprint position, active issues)
-- **Serena queries**: `knowledge/serena-briefing-queries.md` (live system state)
+- **Live state**: `git grep` and the code on main (Serena retired from this seat 10-13: no Serena tool here; `knowledge/serena-briefing-queries.md` is left for seats that have one)
 - **Pattern catalog**: `docs/internal/architecture/patterns/` (81 entries, B3-dispositioned 2026-09-01)
-- **ADRs**: `docs/internal/architecture/adrs/` (78 files; index is DERIVED — trust Status lines)
+- **ADRs**: `docs/internal/architecture/adrs/` (79 files; index is DERIVED — trust Status lines)
 - **Navigation**: `docs/NAVIGATION.md` (find anything)
 
 ---

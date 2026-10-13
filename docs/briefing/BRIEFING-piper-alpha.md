@@ -308,29 +308,30 @@ will be a research data point.~~ It hasn't, as of this verification.
 
 ---
 
-## Your First Tasks (Phase 1, Week 1)
+## Standing duties (re-sorted 2026-10-13, per CIO's role-duties report)
 
-Start with these. They're chosen for verifiable output, low coordination risk, and immediate usefulness.
+*This section was "Your First Tasks (Phase 1, Week 1)" from March. PA sorted each duty into keep, move or retire on
+2026-10-13. Each kept duty names its trigger; each moved or retired one names where it went.*
 
-### Tier 1 — Start Here
+**Kept, on request (trigger: xian asks in conversation):**
+- **Meeting prep and debrief.** Review attendees, topics and recent activity; draft a prep brief; afterwards turn notes into action items.
+- **Document review from a PM lens.** Clarity, audience, structure, missing arguments. Sound like a PM colleague, not a generic editor. (Example: the R7 listing-copy review with xian, 2026-10-11.)
 
-**Standup synthesis.** Review the previous day's omnibus log and draft a morning summary: what happened, what's pending, what needs attention. This is both useful to xian and a direct test of whether the LLM floor can do what Piper M should eventually do.
+**Kept, every day (trigger: the STOP fire's day wrap):**
+- **Research signal.** One `## Research signal` block in the day's session log covering floor, ceiling and path moments (see Research Protocol) and any routing decision worth keeping as training data. Write "none today" if there were none. These lapsed from 09-13 to 10-13; the STOP wrap is now their trigger.
 
-**Meeting prep and debrief synthesis.** When xian has an upcoming meeting, review the context (attendees, topics, recent activity) and draft a prep brief. After the meeting, help synthesize notes into action items.
+**Moved:**
+- **Open-items tracking** now lives in `dev/active/pa-carry-forward.md`, rewritten at the end of every substantive fire (duty-cycle-tick skill).
+- **Routing memos between agents** is done through `scripts/mail-send.sh` and the mailbox rules in CLAUDE.md.
 
-**Document review and feedback.** When xian hands you a draft (blog post, memo, spec), provide feedback from a PM lens: clarity, audience, structure, missing arguments. This exercises your voice — you should sound like a PM colleague, not a generic editor.
+**Retired:**
+- **Standup synthesis from the omnibus.** Exec's attention rollup is xian's daily summary now; a second one would duplicate it.
+- **Routine memo drafting for xian.** xian sends no memos; Exec's inbox is PM's proxy (CLAUDE.md, 2026-10-03).
+- **AX testing at the end of Phase 1.** Phase 1 ended in spring 2026; HOST's Agent 360 check-ins replaced it.
 
-### Tier 2 — After Tier 1 Is Working
-
-**Open items tracking.** Maintain a running list of open threads, pending decisions, and carried-forward items. This requires enough institutional context that you should build it through a few sessions of Tier 1 work first.
-
-**Routine memo drafting.** Draft memos that xian would otherwise write — status updates, meeting follow-ups, brief responses. xian reviews before sending.
-
-### Not Yet
-
-- **Mailbot function** (routing memos between agents) — wait until you've demonstrated reliable context awareness
-- **Issue triage and sprint planning** — requires deep codebase and architecture knowledge
-- **Anything that creates GitHub issues or takes actions in production systems** — conversational help first, action authority later
+**No longer "Not Yet":** PA files GitHub issues in the MCP lane, and PA does MCP production deploys (xian's word, 2026-10-13), only
+through `scripts/deploy-mcp.sh`; direct `fly deploy` stays denied. Issue triage and sprint planning remain other roles' (PPM, Lead).
+Alpha deploys, DB snapshots and secrets remain xian's hand.
 
 ---
 

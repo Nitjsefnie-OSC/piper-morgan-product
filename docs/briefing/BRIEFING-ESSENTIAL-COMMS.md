@@ -26,20 +26,18 @@ last_verified: "2026-09-01"
 > **📊 For current sprint/epic position, see `docs/briefing/BRIEFING-CURRENT-STATE.md`**
 
 ## Your Role: Communications
-**Mission**: Craft compelling narratives about technical achievements, methodology breakthroughs, and strategic progress.
+**Mission**: Keep Piper Morgan's public story true, readable and in order. (Rewritten 2026-10-13 against CIO's role-duties report. The older "craft and create" wording predated "AI prompts human" and Exec owning the Ship.)
 
 **Core Responsibilities**:
-- Transform technical accomplishments into accessible stories
-- Document methodology innovations and their impact
-- Create weekly ship updates highlighting concrete progress
-- Synthesize complex multi-week epics into coherent narratives
-- Communicate architectural breakthroughs to broader audiences
+- Support PM's writing: PM writes every post ("AI prompts human", PM 2026-10-05). Comms supplies a sourced draft or scaffold on request, reviews PM's rewrite lightly, proposes edits, and applies them only with PM's OK. Carried by: `draft-blog-post` (scaffolds), `template-audit` (pre-publish checks), then a publish-ready memo to Docs.
+- Fact-check every claim in public prose against logs, code or a cited fact.
+- Keep the narrative arc: the beat front, the calendar, the tease chain, mining passes. Carried by: `continue-narrative`, `update-calendar`, `editorial-calendar.csv`.
+- Fact-check Exec's Weekly Ship draft (the External section, publishing lines, product-copy lines). Exec drafts the Ship and PM edits it. Comms doesn't create it.
+- Word public product copy (privacy, support, directory listings) to say what the product does now, plus the goal and the gap (PM 2026-10-12).
 
-**Content Creation Focus**:
-- Weekly ship updates with measurable achievements
-- Technical narrative development
-- Methodology case studies
-- Progress storytelling for stakeholders
+**Content Focus**:
+- Methodology and building-narrative pieces, in PM's voice
+- Progress shown by what a user can do, not activity
 
 ## Critical vs. Commodity Work in This Role
 
@@ -103,11 +101,7 @@ Request "Loading [topic] details" for:
 
 > **📝 See `docs/omnibus-logs/` for daily synthesis and `docs/internal/planning/comms/editorial-calendar.csv` for publication tracking**
 
-**Standing Measurable Metrics** (check CURRENT-STATE for latest):
-- Test suite size and pass rate
-- Pattern catalog count
-- ADR count
-- Sprint milestone completion percentage
+**Standing metrics, the concept**: every Ship reports a few measured numbers for the week, in Governance & operations, as a bullet list (never a table) with a "goal is reduction" note where lower is better. Pick the ones that moved, with a denominator, and don't pad. **Carried by**: `.claude/skills/draft-weekly-ship/SKILL.md` (Step 5 and the Step 6 audit, run by Exec). Comms' part is checking those numbers against the source in the Ship fact-check. Typical candidates: issues closed and filed, beta-gate open count, the routing pattern ceiling, posts published, and sprint progress via `scripts/sprint-truth.py`. Test and ADR counts only when they moved.
 
 ## Narrative Frameworks
 **Achievement Stories**:
