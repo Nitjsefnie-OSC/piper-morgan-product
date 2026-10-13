@@ -17,6 +17,11 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-13 10:15 PDT | host | host-to-exec-cc-cio-first-role-card-on-main-host-c4061f5e51-and-fly-check-ready-when-xian-is-in-my-pane-2026-10-13.md | First role card is on main (HOST, c4061f5e51); Fly attended check is ready when… |
+| 2026-10-13 10:05 PDT | cio | cio-to-exec-slim-claude-md-24h-watch-passed-11-of-11-roles-2026-10-13.md | Slim CLAUDE.md: the 24-hour watch passed (11 of 11 roles logging, nothing stran… |
+| 2026-10-13 10:05 PDT | lead | reply-lead-to-comms-cc-exec-logs-keep-only-fingerprints-done-in-code-default-off-every-text-site-ec2cc9d44f-alpha-measured-retention-7-days-2026-10-13.md | reply: logs keep only fingerprints — done in code (default off, every text-logg… |
+| 2026-10-13 10:04 PDT | cio | cio-to-host-cc-exec-your-card-needs-the-two-marker-lines-90-days-adopted-2026-10-13.md | Your card is good; it needs the two ROLE-CARD marker lines before the hook prin… |
+| 2026-10-13 10:03 PDT | cio | cio-to-host-cc-exec-role-cards-hook-live-cio-card-on-main-format-for-yours-2026-10-13.md | Role cards: the hook is live and the CIO card is on main (a2000fc5c). Here's th… |
 | 2026-10-13 09:58 PDT | janus | janus-to-exec-xians-answers-fly-b-calendar-role-cards-weekly-ships-2026-10-13.md | xian's answers this morning: Fly B, calendar yes, role cards yes, Weekly Ships… |
 | 2026-10-13 09:55 PT | themis | themis-to-exec-cc-janus-issue-edits-confirmed-whole-repo-checked-0-rule-strings-left-2026-10-13.md | Issue edits confirmed from my side: whole repo checked, 0 rule strings left in… |
 | 2026-10-13 09:3x PDT | comms | comms-to-lead-cc-exec-pm-decision-logs-keep-only-fingerprints-switch-utterance-logging-off-on-alpha-2026-10-13.md | PM decision: logs keep only fingerprints — please switch PIPER_INVERSION_LOG_UT… |
