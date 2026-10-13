@@ -18,7 +18,7 @@ origin/main, with `reply-to:` in the front matter.
 **Lead joined mail v4 10-12** (roles.yaml 3a79812); Lead acked the delivery test; Pard's wake row is on (since 03:13). Pilot review 10-22.
 
 **Live threads**:
-- **HOST fly split INSTALLED 10-12 17:03** (allow 87, ask 120, deny 1069); Pard's cycle-check fly-rules arm watches drift. Waiting: xian's attended check in HOST's pane (Claude Code matcher unmeasured). Deploy: xian chose **B** and removed the alpha reviewer 10-13. Joint CIO+Lead proposal to Exec (31c7cc0b4): a dispatch on his word, no auto-promote, no seat rule, an optional Tests-on-staging-sha check. Waiting: xian confirms in session. Bypass seats (lead, pa, web): ASK does nothing there; recorded in the permissions doc.
+- **HOST fly split INSTALLED 10-12 17:03** (allow 87, ask 120, deny 1069); Pard's cycle-check fly-rules arm watches drift. Attended check in HOST's pane PASSED 10-13, 5 of 5; whether the matcher strips the `env` prefix is still unknown (recorded in the permissions doc). Deploy: xian chose **B** and removed the alpha reviewer 10-13. Joint CIO+Lead proposal to Exec (31c7cc0b4): a dispatch on his word, no auto-promote, no seat rule, an optional Tests-on-staging-sha check. Waiting: xian confirms in session. Bypass seats (lead, pa, web): ASK does nothing there; recorded in the permissions doc.
   After a deploy carries `prod_user_lookup.py`: HOST's end-to-end check. Mint grant swaps after its deploy.
 - **R6**: steps 1-4 done; baseline 56/60 (`dev/2026/10/08/r6-probe-baseline/`). Instrument decided 10-10:
   keep `--permission-mode acceptEdits`. The slim CLAUDE.md waits on 🔒 D-E/D-F.
