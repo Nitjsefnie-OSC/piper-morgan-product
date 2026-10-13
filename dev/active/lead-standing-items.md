@@ -101,3 +101,4 @@ lives in GitHub, this file holds only durable owed/queued items.)
 - Deploys only on PM's explicit word; flag changes to deployed env count.
 - Verify awaited items against the ISSUE, not local files; merge origin/main BEFORE inbox listing.
 - **#2001 served check — '1 day overdue' singular in the Today: list** — **Filed**: 2026-10-13 · fixed on main 143f9a9a83 (07:05); CXO's issue, CXO judges on the next served run after a promotion; issue stays OPEN until then. Trigger: the next promotion (PM's hand) + Web's/PM's run.
+- **Meeting-row example landing — Arch's read on the standing member (16/18 vs 18/18)** — **Filed**: 2026-10-13 · landed d13dafd172 08:24 under his ruling's bar; if Arch reads the member as tipped, revert the meeting_time example (one line in `services/intent_service/action_registry.py`) the same fire. Trigger: Arch's reply.
