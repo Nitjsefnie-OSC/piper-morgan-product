@@ -31,6 +31,7 @@ Alpha's env id was 23175672771 on 10-12. Promotion takes ~4 min; `curl -s https:
 4. **#1996 / #1997 ages** — PASSED on Web's 06:53 run (CXO judged); yours is optional. #2001 ('1 days' → '1 day', on main 143f9a9a83, NOT live) is the one open copy nit. With one overdue item and one due earlier today: `what needs my attention?` then `show my todos`. Pass:
    ages in calendar days on your clock; the earlier-today item under `Today:` as "(due earlier today)"; never "0 days overdue"; the
    list is never called clear while due reminders remain.
+5a. **#1976 stray 'to' (on main 84a313394d, NOT live until the next promotion):** `add a todo to web test one` → the Todos page title reads `web test one`, not `to web test one`. Remove it after.
 5. **#1992 angle brackets.** With no timezone set, `what time is it`. Pass: the hint's bracketed city placeholder is visible. Any
    `<tag>`-shaped text in a reply must show, not vanish.
 

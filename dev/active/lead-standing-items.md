@@ -18,7 +18,7 @@ lives in GitHub, this file holds only durable owed/queued items.)
 - ~~#1987 half 2~~ **DONE 10-13 07:05: landed 71e213b885** (delete_todo_pick.py; served check on the card, next promotion). Was: the generic which-todo ask lists the few known candidates numbered (CXO's 10-12 bar) and the numbered pick ARMS via
   the #846 store (Arch's condition on the `handle_delete_todo` census row; the #1906 carrier shape)** — **Filed**: 2026-10-12 · trigger:
   my next START (fresh session; deferred from the 10-12 tail on purpose). Half 1 landed 5fd92b0019; served checks on the card v20.
-- **#1976 — create_todo consumes the router's text arg ('add a todo to X' keeps the stray 'to')** — **Filed**: 2026-10-12 · sized 10-12:
+- ~~#1976~~ **DONE 10-13 07:30: landed 84a313394d** (handler consume + scorer text key + measured corpus row; description UNCHANGED — the router already names the text; two wordings screened and dropped). Served check on the card, next promotion. Was: create_todo consumes the router's text arg ('add a todo to X' keeps the stray 'to') — **Filed**: 2026-10-12 · sized 10-12:
   router-prompt change (args are prompt-described; the entry names no text arg) + handler consume + MEASURED corpus row → rule 7 full
   run before landing. Trigger: a START, with #1987 half 2 (same #1943 family).
 - #1522 false-trails audit — **Filed**: 2026-08-08 · scan DONE 2026-10-05 (table on the issue) · inert-deletion lane (C6, C8/C9, I3) DONE

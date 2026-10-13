@@ -8,7 +8,10 @@
 - **Web ran the 6e48d9ebb2 set 06:20–06:53 (all pass; CXO judged 07:05); my slip: no sha mail to Web after the 21:46 promotion** —
   reply sent 07:05. **Next promotion carries #1987 half 2 + #2001; PM's hand.** Card v23.
 - CI watch open: Tests + Architecture Enforcement on 8f93cfe672 (read at the next fire if not resolved this one).
-- #1976 still owed at a START (router text arg for create_todo); nothing else carried from this fire.
+- **#1976 LANDED 84a313394d (07:30):** handler consumes `inversion_args.text` (honesty guard), scorer `text` key, measured corpus row (3/3 on
+  main's wording), census 596. **Description UNCHANGED** — two wordings screened under rule 7 and dropped (attributed ×6 regressions;
+  the meeting row flips on 3 of 4 prior candidate trees — perturbation-sensitive, worth telling Arch). Report CANDIDATE-DROPPED;
+  controls `dev/2026/10/13/controls/1976-*`. Served check on the card (5a). Nothing else carried from this fire.
 
 ## EARLIER — STATE @ 2026-10-12 22:31 PT — DAY CLOSED. Alpha promoted 21:46 (`6e48d9ebb2`); PM tests in the 10-13 morning off card v22
 - **PROMOTION DONE 21:46 10-12 (run 38346886426):** PM dispatched + approved from his Mac with `gh` (no browser; the approve call needs
