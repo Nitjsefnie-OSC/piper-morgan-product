@@ -9,7 +9,7 @@
 - **#1992 LANDED 1e2cb22576 + CLOSED (19:1x):** raw HTML in bot replies renders as visible text (marked `html` renderer override,
   DOMPurify backstop); `frontend-tests.yml` filter gains `web/assets/**`; 1732 img-onerror pin strengthened. **Frontend Tests
   38335667554 GREEN.** Harness: `tests/frontend/` (own package.json, jsdom) — never `npx jest` from the root. Served check on the card.
-- **#1976 SIZED (19:2x), not tonight:** the router's args are prompt-described (no schema) and the create_todo entry names no text
+- **#1976 SIZED (19:13), not tonight:** the router's args are prompt-described (no schema) and the create_todo entry names no text
   arg → a router-prompt change + handler consume of `inversion_args.text` + a MEASURED corpus row → rule 7 full run before landing.
   Take at a START with #1987 half 2 (same family, #1943).
 - **Test card v20 (19:1x):** not-live list = #1975, #1996, #1997, #1987, #1992 (+ the gone-row served step). Next promotion = PM's hand.
