@@ -13,12 +13,14 @@ on:
     branches: [main]
     paths:
       - 'web/static/js/**'
+      - 'web/assets/**'
       - 'tests/frontend/**'
       - '.github/workflows/frontend-tests.yml'
   pull_request:
     branches: [main]
     paths:
       - 'web/static/js/**'
+      - 'web/assets/**'
       - 'tests/frontend/**'
       - '.github/workflows/frontend-tests.yml'
 

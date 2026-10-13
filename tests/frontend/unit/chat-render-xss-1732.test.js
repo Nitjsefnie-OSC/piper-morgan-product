@@ -90,7 +90,14 @@ describe('#1732 render boundary — served copy (web/assets) — with REAL marke
   test('img-onerror payload loses its handler', () => {
     const el = mount(render, `Reminder saved: **${PAYLOAD_ONERROR}**`);
     expect(el.querySelector('[onerror]')).toBeNull();
-    expect(el.innerHTML).not.toMatch(/onerror/i);
+    // #1992: raw HTML now renders as VISIBLE inert text (the tag is entity-
+    // escaped before DOMPurify), so the payload's words may appear as text —
+    // what must not exist is an element or an attribute carrying them.
+    expect(el.querySelector('img')).toBeNull();
+    for (const node of el.querySelectorAll('*')) {
+      for (const attr of node.attributes) expect(attr.name).not.toMatch(/^on/i);
+    }
+    expect(el.textContent).toMatch(/onerror/i);
     expect(window.__pwned).toBeUndefined();
   });
 
