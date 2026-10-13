@@ -3280,7 +3280,15 @@ class TestExtractionPatternRatchet:
         #
         # 121 -> 120 (2026-10-11): PORTFOLIO partial, the show/list/view-projects
         # literal (PORTFOLIO_LIST_PATTERN constant removed with it).
-        "pre-classifier": 120,
+        #
+        # 120 -> 90 (2026-10-13, Arch decisions.log 4905a9d746): FILE_REFERENCE_PATTERNS
+        # (30 literals) DELETED outright — not a routing claim (no corpus licence,
+        # no ledger entry): its one reader produced a context flag and a recent-
+        # uploads string that no caller consumed (no classify call site passes a
+        # session; no constructor passes an event_bus). List, both helpers, the
+        # classifier read and tests/domain/test_file_reference_detection.py removed;
+        # the deletion gate's NOT_ROUTING dict is now empty by name.
+        "pre-classifier": 90,
     }
 
     # The named interpretation-by-pattern spans, per surface: (file, symbols).

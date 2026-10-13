@@ -1530,45 +1530,12 @@ class PreClassifier:
         r"\bwhich\s+repos?\s+(?:are\s+)?(?:linked|connected)\b",
     ]
 
-    # File reference patterns (with variations and typo tolerance)
-    FILE_REFERENCE_PATTERNS = [
-        # Direct references
-        r"\b(the file|that file|my file|this file)\b",
-        r"\b(the document|that document|my document|this document)\b",
-        r"\b(the doc|that doc|my doc|this doc)\b",
-        r"\b(what i uploaded|the upload|that upload|this upload)\b",
-        # File types
-        r"\b(the csv|that csv|my csv|this csv)\b",
-        r"\b(the pdf|that pdf|my pdf|this pdf)\b",
-        r"\b(the spreadsheet|that spreadsheet|my spreadsheet|this spreadsheet)\b",
-        r"\b(the excel file|that excel file|my excel file|this excel file)\b",
-        r"\b(the report|that report|my report|this report)\b",
-        r"\b(the data file|that data file|my data file|this data file)\b",
-        r"\b(the text file|that text file|my text file|this text file)\b",
-        r"\b(the markdown file|that markdown file|my markdown file|this markdown file)\b",
-        r"\b(the json file|that json file|my json file|this json file)\b",
-        # Abbreviated forms
-        r"\b(the txt|that txt|my txt|this txt)\b",
-        r"\b(the md|that md|my md|this md)\b",
-        r"\b(the xlsx|that xlsx|my xlsx|this xlsx)\b",
-        r"\b(the docx|that docx|my docx|this docx)\b",
-        # Generic patterns with adjectives
-        r"\b(that \w+(?:\s+\w+)* file|the \w+(?:\s+\w+)* file|my \w+(?:\s+\w+)* file|this \w+(?:\s+\w+)* file)\b",
-        r"\b(that \w+(?:\s+\w+)* document|the \w+(?:\s+\w+)* document|my \w+(?:\s+\w+)* document|this \w+(?:\s+\w+)* document)\b",
-        r"\b(that \w+(?:\s+\w+)* doc|the \w+(?:\s+\w+)* doc|my \w+(?:\s+\w+)* doc|this \w+(?:\s+\w+)* doc)\b",
-        # Common typos and variations
-        r"\b(teh file|taht file|th file)\b",
-        r"\b(documnet|docuemnt|docment)\b",
-        r"\b(fiel|fils|fille)\b",
-        r"\b(uploded|uplaoded|uploadd)\b",
-        r"\b(reprot|reoprt|raport)\b",
-        r"\b(excell|exel|excel)\b",
-        r"\b(spreedsheet|spredsheet|spreadsheat)\b",
-        # Integration-related typos (from handoff doc)
-        r"\b(intregration|integartion|intergration)\b",
-        r"\b(analys[ei]s|analisys|anlyze)\b",
-        r"\b(summar[iy]ze|summerize|summarise)\b",
-    ]
+    # FILE_REFERENCE_PATTERNS (30 literals) DELETED 2026-10-13 (Arch, decisions.log
+    # 4905a9d746): its only reader produced a context flag and a recent-uploads
+    # string that no caller consumed (no classify call site passes a session; no
+    # constructor passes an event_bus). Not a routing claim, so no corpus licence;
+    # the literal ceiling falls by 30. If Piper should notice "that file", the model
+    # reads the session's uploads (ADR-080 D1) — its own issue, not these regexes.
 
     @staticmethod
     def pre_classify(message: str) -> Optional[Intent]:
@@ -2326,61 +2293,6 @@ class PreClassifier:
             ), "PRIORITY_PATTERNS"
 
         return None, None
-
-    @staticmethod
-    def detect_file_reference(message: str) -> bool:
-        """Check if message references an uploaded file"""
-        clean_msg = message.strip().lower()
-
-        # Exclude verb usage of "file" (e.g., "file the report", "file a complaint")
-        verb_file_patterns = [
-            r"\bfile\s+(?:the|a|an|this|that)\s+\w+",  # "file the report", "file a complaint"
-            r"\bfile\s+\w+\s+(?:for|against|with)",  # "file complaint for", "file report against"
-        ]
-
-        # If message matches verb usage patterns, it's not a file reference
-        if PreClassifier._matches_patterns(clean_msg, verb_file_patterns):
-            return False
-
-        return PreClassifier._matches_patterns(clean_msg, PreClassifier.FILE_REFERENCE_PATTERNS)
-
-    @staticmethod
-    def get_file_reference_confidence(message: str) -> float:
-        """Calculate confidence score for file reference detection"""
-        clean_msg = message.strip().lower()
-
-        # Different patterns have different confidence weights
-        high_confidence_patterns = [
-            r"\b(the file|that file|my file|this file)\b",
-            r"\b(the document|that document|my document|this document)\b",
-            r"\b(what i uploaded|the upload|that upload|this upload|my upload)\b",
-        ]
-
-        medium_confidence_patterns = [
-            r"\b(the csv|that csv|my csv|this csv)\b",
-            r"\b(the pdf|that pdf|my pdf|this pdf)\b",
-            r"\b(the doc|that doc|my doc|this doc)\b",
-            r"\b(the report|that report|my report|this report)\b",
-        ]
-
-        low_confidence_patterns = [
-            r"\b(teh file|taht file|th file)\b",
-            r"\b(documnet|docuemnt|docment)\b",
-            r"\b(fiel|fils|fille)\b",
-            r"\b(uploded|uplaoded|uploadd)\b",
-        ]
-
-        # Check for matches and return highest confidence
-        if PreClassifier._matches_patterns(clean_msg, high_confidence_patterns):
-            return 0.9
-        elif PreClassifier._matches_patterns(clean_msg, medium_confidence_patterns):
-            return 0.7
-        elif PreClassifier._matches_patterns(clean_msg, low_confidence_patterns):
-            return 0.5
-        elif PreClassifier._matches_patterns(clean_msg, PreClassifier.FILE_REFERENCE_PATTERNS):
-            return 0.6  # Generic patterns
-        else:
-            return 0.0
 
     @staticmethod
     def _first_pattern_match(message: str, patterns: list):

@@ -130,7 +130,7 @@
 | 12 | DOCUMENT_QUERY_PATTERNS | QUERY | 9 | _handle_update_document_query |
 | 13 | PRIORITY_PATTERNS | PRIORITY | 53 | _handle_priority_query |
 | 14 | GUIDANCE_PATTERNS | GUIDANCE | 22 | _handle_guidance_query |
-| 15 | FILE_REFERENCE_PATTERNS | (support) | 54 | detect_file_reference() |
+| 15 | ~~FILE_REFERENCE_PATTERNS~~ | (support) | 0 | DELETED 2026-10-13 (Arch 4905a9d746: its flag and upload string were never consumed; Lead removed list + helpers + classifier read) |
 
 ### Canonical Handlers
 
