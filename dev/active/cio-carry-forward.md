@@ -40,3 +40,4 @@ can hide its subject (main-ci-status 20 → 100).
 - R6 slim CLAUDE.md (key: r6-slim-watch; Filed 2026-10-12): CLOSED 10-13. The 24h watch passed (11/11 roles logging, nothing stranded); mailed Exec.
 - Role cards (Filed 2026-10-12): DONE 10-13. 11 of 11 on main and printing (hook Section 8, tick skill v1.51 Drift line). Left: a live start or compaction check at my next one; xian's optional review of the priority order (via Exec).
 - CLAUDE.md hard rule 8 (people's details stay private) added 10-12 per Exec/Janus.
+- History rewrite tonight 23:00-24:00 (key: rewrite-guard-install; Filed 2026-10-13): CIO guard on main (a9a5c8227, dormant until <common-dir>/piper-old-history-sentinels), test 9/9, tick v1.52 pre-merge check. Install: Pard (asked 9b675640d), confirm by 21:00 or give xian the cp line. Review to Exec 46a062bf4 (arm at T-0). Tonight: reply once to the freeze mail, then nothing; reset on the step 6 mail (status first), run the v1.52 check, report.
