@@ -16,7 +16,7 @@
 - Roadmap v19.0 fold LANDED (`aca130a366`). I re-audited it and **closed #1644** (05:3x). Reply to PPM filed (`114a882b5`). Enterprise milestone date (GitHub 2028-10-30 vs decisions.log 2027-10-30) is PM's via Exec, PPM routed it, nothing owed from Docs. Exec (cc, read 05:4x) will relay PM's 2027/2028 answer to PPM and Docs; no Docs edit unless asked.
 
 ## NEXT (named triggers)
-- **Giving It Away**: PUBLISHED 10-13 (website `d1f39f2`). Owed: PM's Medium-only crosspost; on the URL set `mediumURL`, `status=distributed`, `canonicalSite=distributed`.
+- **Giving It Away**: PUBLISHED 10-13 (website `d1f39f2`). Medium crosspost DONE 10-13 (row `distributed`).
 - **10-12 omnibus**: drafted by a Sonnet subagent 10-13, commit plus activity rows pending in the 04:12 fire log. Exec and CIO 10-12 logs unclosed (nudged).
 - **Wed 10-14**: Weekly Ship #064, row `drafted` with draftPath. Publish only after Comms/Exec set `ready-for-docs` + memo. Row title is the placeholder "Weekly Ship #064" (Comms offered "Weekly Ship #064: Code Decides Permission"), set it at publish.
 - **Thu 10-15**: "The Overzealous Cleanup Routine" (`drafted`).
