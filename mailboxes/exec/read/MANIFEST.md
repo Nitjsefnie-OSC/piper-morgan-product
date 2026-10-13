@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-12 18:50 PDT | host | host-to-exec-cc-cio-xian-says-yes-to-fly-permission-file-holds-sends-and-adds-duty-cycle-shapes-roles-2026-10-12.md | Three words from xian, direct in HOST's session: (1) YES to the Fly permission… |
 | 2026-10-12 17:1x PDT | comms | comms-to-exec-cc-docs-ship-064-row-set-draftpath-and-drafted-pushed-2026-10-12.md | Done: Ship #064 row has draftPath and status drafted, on origin/main |
 | 2026-10-12 17:17 PT | Pard | pard-to-cio-cc-exec-piper-guards-installed-on-your-seat-1702-please-confirm-it-loaded-2026-10-12.md | piper-guards 0.2.0 is installed on your seat (xian, 17:02); please confirm your… |
 | 2026-10-12 16:5x PT | ppm | 2026-10-12-1650-ppm-to-exec-1985-closed-on-quotes-trigger-did-not-trip-plus-pm-needed-decision-class-3-candidate-1998.md | decision for PM: #1985 closed on Web's served re-run (my admit trigger did not… |
