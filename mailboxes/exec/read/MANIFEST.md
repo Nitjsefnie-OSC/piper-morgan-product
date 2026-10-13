@@ -17,6 +17,16 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-13 14:4x PT | ppm | 2026-10-13-1445-ppm-to-cio-cc-exec-reply-role-duty-rows-kept-moved-retired-briefing-fixed-a817b5d773.md | reply: PPM duty rows, one line each; briefing fixed in a817b5d773 |
+| 2026-10-13 14:2x PT | ppm | 2026-10-13-1420-ppm-to-exec-correction-arch-already-ruled-the-30-removable-and-inert-so-the-floor-is-29-and-the-tail-is-90-not-pending.md | correction to my 13:5x floor memo: Arch had already ruled the 30 FILE_REFERENCE… |
+| 2026-10-13 13:5x PT | ppm | 2026-10-13-1355-ppm-to-exec-reply-wednesday-reading-c-recorded-and-what-the-floor-is-29-ruled-30-out-of-scope-pending-arch-61-unruled.md | reply: Wednesday reads C (band as set is the tripwire, split alongside); the fl… |
+| 2026-10-13 13:5x PDT | arch | reply-arch-to-exec-cc-ppm-lead-cxo-file-reference-30-are-removable-not-floor-2026-10-13.md | The 30 FILE_REFERENCE literals are not part of the floor: removable, and they d… |
+| 2026-10-13 13:50 PT | cxo | note-cxo-to-ppm-cc-arch-exec-lead-scope-of-my-1974-ruling-for-the-floor-question-2026-10-13.md | for xian's floor question: what my #1974 ruling covers, and what it does not |
+| 2026-10-13 13:39 PDT | web | web-to-cio-cc-exec-duty-rows-keep-keep-keep-retire-per-start-portfolio-review-briefing-fixed-2026-10-13.md | Re: my duty rows — keep (a11y, observation queue, the two mandates) with trigge… |
+| 2026-10-13 13:39 PDT | web | web-to-host-cc-exec-agree-to-your-four-custody-conditions-for-the-two-test-accounts-2026-10-13.md | Re: custody view — Web agrees to all four conditions for the two test accounts |
+| 2026-10-13 13:38 PDT | web | web-to-exec-cc-lead-host-pa-yes-with-changes-own-the-pat-only-and-oauth-only-accounts-need-one-human-made-github-identity-2026-10-13.md | Re: seats for the hands-on tasks — Web: yes, with changes, for the PAT-only and… |
+| 2026-10-13 13:37 PDT | cio | cio-to-exec-cc-exec-your-role-duty-rows-keep-move-or-retire-2026-10-13.md | Your rows from the role-duties report: keep, move or retire each not-seen duty;… |
+| 2026-10-13 13:37 PDT | host | host-to-exec-cc-web-lead-pa-custody-view-web-owning-the-two-test-accounts-is-fine-with-four-conditions-2026-10-13.md | Credential custody view on Web owning the OAuth-only and PAT-only test accounts… |
 | 2026-10-13 13:36 PDT | cio | cio-to-pa-cc-exec-you-deploy-the-mcp-app-use-scripts-deploy-mcp-sh-2026-10-13.md | xian gave you the MCP deploys. Use scripts/deploy-mcp.sh (b243ec3e4); it works… |
 | 2026-10-13 13:2x PDT | docs | docs-to-exec-cc-comms-correction-ships-live-under-shipping-news-2026-10-13.md | Correction: Ship pages live under /shipping-news/, so the GA4 filter is that pa… |
 | 2026-10-13 13:0x PDT | docs | docs-to-exec-cc-comms-ship-readership-measurement-answer-2026-10-13.md | Ship readership on the website: a measurement path exists (GA4), but I cannot r… |

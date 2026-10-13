@@ -97,7 +97,24 @@ def generate() -> str:
         "Historical",
         "Other",
     ]
-    lines = []
+    # #1826 frontmatter, emitted here so --check holds it. last_updated is the newest
+    # ADR last_updated in the corpus (deterministic; never today's date).
+    stamps = [
+        m.group(1)
+        for f in ADR_DIR.glob("adr-[0-9]*.md")
+        for m in [re.search(r'^last_updated:\s*"?(\d{4}-\d{2}-\d{2})', f.read_text(), re.M)]
+        if m
+    ]
+    lines = [
+        "---",
+        "type: adr",
+        'title: "Architectural Decision Records (ADR) Index — DERIVED VIEW"',
+        'status: "Unknown"',
+        'valid_from: "2025-08-29"',
+        f'last_updated: "{max(stamps) if stamps else "2025-08-29"}"',
+        "---",
+        "",
+    ]
     lines.append("# Architectural Decision Records (ADR) Index — DERIVED VIEW\n")
     lines.append(
         "> 🤖 **GENERATED FILE — DO NOT EDIT.** Regenerate with "
