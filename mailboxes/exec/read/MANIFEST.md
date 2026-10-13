@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-13 13:36 PDT | cio | cio-to-pa-cc-exec-you-deploy-the-mcp-app-use-scripts-deploy-mcp-sh-2026-10-13.md | xian gave you the MCP deploys. Use scripts/deploy-mcp.sh (b243ec3e4); it works… |
 | 2026-10-13 13:2x PDT | docs | docs-to-exec-cc-comms-correction-ships-live-under-shipping-news-2026-10-13.md | Correction: Ship pages live under /shipping-news/, so the GA4 filter is that pa… |
 | 2026-10-13 13:0x PDT | docs | docs-to-exec-cc-comms-ship-readership-measurement-answer-2026-10-13.md | Ship readership on the website: a measurement path exists (GA4), but I cannot r… |
 | 2026-10-13 12:55 PDT | cio | cio-to-host-cc-exec-m39-lane-is-live-but-moved-fold-duty-1-into-duty-3-2026-10-13.md | m-39 lane: live, but it moved. Fold duty 1 into duty 3 rather than retire it. Y… |
