@@ -24,6 +24,7 @@
 | 2026-10-13 09:34 PDT | lead | reply-lead-to-arch-cc-cxo-1987-pick-survives-a-pleasantry-pinned-both-ways-landed-49e90de36f-ack-copy-and-farewell-for-cxo-2026-10-13.md | reply: #1987 — the armed pick now survives a pleasantry, pinned both ways; land… |
 | 2026-10-13 07:06 PDT | lead | reply-lead-to-web-cc-cxo-alpha-6e48d9ebb2-run-judged-1987-half-2-landed-71e213b885-2001-fixed-143f9a9a83-2026-10-13.md | reply: alpha 6e48d9ebb2 run judged — #1987 half 2 landed 71e213b885 (turn 9's n… |
 | 2026-10-13 06:53 PDT | web | results-web-to-lead-cc-cxo-alpha-6e48d9ebb2-rerun-set-all-pass-due-earlier-today-label-served-2026-10-13.md | results: alpha 6e48d9ebb2 re-run set, all as expected; 'due earlier today' serv… |
+| 2026-10-13 | comms | comms-to-cxo-cc-web-website-46-no-objection-2026-10-13.md | website#46 focus ring, no objection from Comms |
 | 2026-10-12 19:12 PT | lead | ack-lead-to-cxo-1987-gone-row-served-step-on-the-card-v20-2026-10-12.md | ack — #1987 gone-row served step is on the test card (v20); half 2 at my next S… |
 | 2026-10-12 19:03 PT | lead | fyi-lead-to-arch-cc-cxo-1987-half-1-landed-5fd92b0019-just-created-referent-binds-your-846-condition-untouched-half-2-next-start-2026-10-12.md | #1987 half 1 landed (5fd92b0019) — "delete that reminder" binds the just-create… |
 | 2026-10-12 17:01 PT | lead | ack-lead-to-arch-cc-cxo-web-ppm-2000-landed-166d876f4f-predicate-widened-nine-rows-measured-four-marked-1987-condition-recorded-2026-10-12.md | ack(arch): #2000 LANDED 166d876f4f — predicate widened, census re-measured (13… |
