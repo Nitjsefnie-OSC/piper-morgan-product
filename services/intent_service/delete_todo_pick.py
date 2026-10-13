@@ -65,15 +65,17 @@ _REMINDER_WORDS = frozenset({"reminder", "reminders"})
 # The pre-classifier's pleasantry-only claims (its own GREETING / THANKS
 # pattern sets; nothing re-declared here) that an armed pick survives, and
 # the one-line acknowledgement each gets before the open question (with its
-# numbered list) is repeated. CXO's copy (2026-10-13 ruling): the prefix
-# says "nothing has been deleted yet" because "You're welcome" alone could
-# read as if something was done. FAREWELL RELEASES (CXO, same ruling): the
-# user is leaving, not answering — the pick drops via the pop and the canned
-# farewell serves unchanged.
+# numbered list) is repeated. CXO's copy (2026-10-13 09:50 ruling, which
+# superseded the 09:40 "nothing has been deleted yet" prefix): the plain
+# ack — "You're welcome." matches the canned thanks constant, so there is
+# one string, not two — and the numbered question directly under it already
+# says nothing is done. FAREWELL RELEASES (CXO, both rulings): the user is
+# leaving, not answering — the pick drops via the pop and the canned
+# "Goodbye for now." serves unchanged.
 _PLEASANTRY_ACTIONS = frozenset({"greeting", "thanks"})
 _PLEASANTRY_ACK = {
-    "thanks": "You're welcome — nothing has been deleted yet.",
-    "greeting": "Hello — nothing has been deleted yet.",
+    "thanks": "You're welcome.",
+    "greeting": "Hi!",
 }
 
 

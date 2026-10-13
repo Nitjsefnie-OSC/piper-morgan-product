@@ -253,9 +253,9 @@ honest decline_message; bare yes → the registered offer-only landing
 a pre-classifier-claimed or router-read command releases and routes; one
 re-ask, then release. **A pure thanks or greeting (the pre-classifier's own
 pleasantry-only claim) SURVIVES the armed pick** (Arch's condition 3, 2026-10-13):
-the record is re-armed and the reply is CXO's copy — "You're welcome — nothing
-has been deleted yet." / "Hello — …" then the question WITH its numbered list
-re-shown — so the next "2" still binds; a FAREWELL releases (CXO: the user is
+the record is re-armed and the reply is CXO's copy (09:50 ruling) — the plain
+"You're welcome." / "Hi!" (one string, the canned thanks constant) then the
+question WITH its numbered list re-shown — so the next "2" still binds; a FAREWELL releases (CXO: the user is
 leaving, not answering; the canned "Goodbye for now." serves unchanged); without it "thanks" read PASS
 at the seam, bound nothing, and the release discriminator dropped the pick (the
 turn-9 drop on an armed slot). The rail entry point stamps `delete_todo_pick_pending`

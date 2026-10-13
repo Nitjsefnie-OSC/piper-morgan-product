@@ -408,9 +408,9 @@ class TestPickTurn:
     @pytest.mark.parametrize(
         "pleasantry,ack",
         [
-            ("thanks", "You're welcome — nothing has been deleted yet."),
-            ("thank you!", "You're welcome — nothing has been deleted yet."),
-            ("hello", "Hello — nothing has been deleted yet."),
+            ("thanks", "You're welcome."),
+            ("thank you!", "You're welcome."),
+            ("hello", "Hi!"),
         ],
     )
     async def test_pleasantry_survives_the_armed_pick(
@@ -418,9 +418,10 @@ class TestPickTurn:
     ):
         """Arch's condition 3 (#1987): 'thanks' while the pick is armed is NOT
         short-circuited into a release — the record is re-armed with the same
-        candidates and the reply is CXO's copy: the one-line prefix, then the
-        question WITH its numbered list re-shown (the user may have scrolled
-        past it); nothing is done or deleted."""
+        candidates and the reply is CXO's copy (09:50 ruling): the plain ack
+        — one string, the canned thanks constant — then the question WITH its
+        numbered list re-shown (the user may have scrolled past it); nothing
+        is done or deleted."""
         await _armed_pick("delete a reminder", intent_service.todo_handlers.todo_service, store)
         armed_before = store.slot["pending_action"]["pick_ids"]
         out = await _answer(pleasantry, intent_service, store)
