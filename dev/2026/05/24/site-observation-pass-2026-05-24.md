@@ -45,11 +45,11 @@ Question: is `/what-weve-learned` deprecated content that should redirect, or a 
 
 The `<Image>` component handles sizing, but a 400×400 source is overkill for a 40×40 display. For Retina (2x), 80×80 would suffice. Minor PERF / asset-weight item.
 
-### #5 [A11Y] [P2] Theme toggle present in nav; not sure if it has discoverable affordance
+### #5 [A11Y] [P2] [CHECKED 2026-10-13 — labelled, focusable; focus ring contrast filed as website#46] Theme toggle present in nav; not sure if it has discoverable affordance
 
 `<ThemeToggle />` is in `Navigation.tsx` but I haven't seen its rendered shape. If it's an unlabeled icon button, screen-reader users may miss it. [needs visual check + ARIA-label audit]
 
-### #6 [CONTENT] [P2] Privacy policy is dated "September 2025" — visibly stale
+### #6 [CONTENT] [P2] [RESOLVED — live /privacy reads October 2026, checked 2026-10-13] Privacy policy is dated "September 2025" — visibly stale
 
 In the blog publish cadence (multiple posts/week since), Sept 2025 reads as "haven't touched this in 8 months." The actual policy content may be unchanged-and-fine; just bumping the "Last updated" date when policies have been reaffirmed is a low-cost trust signal.
 
