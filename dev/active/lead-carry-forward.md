@@ -1,6 +1,21 @@
 # Lead carry-forward — Fable 5.1 seat; Model A worktree ~/Development/piper-morgan-worktrees/lead
 
-## STATE @ 2026-10-12 09:4x PT — START + seven mail wakes drained; five code landings on main (log dev/2026/10/12/2026-10-12-0647-lead-code-log.md, open)
+## STATE @ 2026-10-12 19:13 PT — through the 18:17 fire: fifteen code landings on main today (log dev/2026/10/12/2026-10-12-0647-lead-code-log.md, open)
+- **#1987 half 1 LANDED 5fd92b0019 (19:0x), issue OPEN:** "delete that reminder"/"delete it" after a save binds the just-created row
+  (`conversation_context.last_created_todo`, the `last_numbered_list` idiom) into the #1666 title-bound confirm; 20 pins; corpus row;
+  routing-stack paragraph. CXO ACCEPTED the gone-row copy (19:10). **Half 2 = NEXT START, named trigger:** the generic which-todo
+  ask lists the few known candidates numbered (CXO's bar) and the numbered pick ARMS via the #846 store (Arch's condition on the
+  census row) — the #1906 carrier shape, a distinct mechanism. Served checks on the card: D1 arm + gone-row line (CXO judges).
+- **#1992 LANDED 1e2cb22576 + CLOSED (19:1x):** raw HTML in bot replies renders as visible text (marked `html` renderer override,
+  DOMPurify backstop); `frontend-tests.yml` filter gains `web/assets/**`; 1732 img-onerror pin strengthened. **Frontend Tests
+  38335667554 GREEN.** Harness: `tests/frontend/` (own package.json, jsdom) — never `npx jest` from the root. Served check on the card.
+- **#1976 SIZED (19:2x), not tonight:** the router's args are prompt-described (no schema) and the create_todo entry names no text
+  arg → a router-prompt change + handler consume of `inversion_args.text` + a MEASURED corpus row → rule 7 full run before landing.
+  Take at a START with #1987 half 2 (same family, #1943).
+- **Test card v20 (19:1x):** not-live list = #1975, #1996, #1997, #1987, #1992 (+ the gone-row served step). Next promotion = PM's hand.
+- **Side worktrees in place:** lead-1987, lead-1992 (a gitignored root `node_modules` sits there — my `npm ci` at the wrong level; the
+  `rm -rf` was guard-blocked, leave it), lead-1993, lead-1975, lead-1985b, lead-2000 — all merged; remove at STOP or tomorrow.
+- **CI watches on 5fd92b0019 (Tests + Architecture Enforcement)** — if still running at the next fire, read them first.
 - **#1984 half (2): CLOSED ON MY SIDE 07:2x — lever (c) applied.** Arch ruled (07:3x his clock, read 07:16): not (a); (b) = drop the
   `'what did I work on today'` rail example, screened ×6 main vs (b) on 20 phrases (CXO's two true-session phrases joined) → the row
   reached the ruled plan 6/6 but two rows read worse (re-checked 12/12 each) → FAIL → (c): the corpus row carries the KNOWN MISS note
@@ -17,7 +32,7 @@
   paragraph on the thirtieth deletion. Any lane brief copies it: `git grep -F` every claimed phrase across tests/unit, integration, e2e;
   run `tests/integration -m 'not llm'` on the lane before landing. Known miss to carry to the COMPLETION_HISTORY ledger when that lane next
   opens: "show me when we shipped the API" → shipped_this_week 6/6 on main.
-- **PR #1952 MERGED 8c3c56c0d6 (17:2x):** Pard's health-gate stale-read fix replaces my interim 48h guard; stale → unmeasured + warning. **Owed: read the gate's log on the next app-path staging deploy** (the 'last concluded Tests on main: … created …' line) and tell Pard cc Arch it read fresh.
+- **PR #1952 MERGED 8c3c56c0d6 (17:2x):** Pard's health-gate stale-read fix replaces my interim 48h guard; stale → unmeasured + warning. **Gate's first live run READ 18:5x (fly-deploy 38331164368 on 5bff4e1b45: 'last concluded Tests on main: success (8c3c56c0d6…, created 00:23Z)', fresh, green; Arch read the same run); Pard told cc Arch (mediajunkie 154fa5e, trailers on). Nothing owed; keep reading the line on later deploys.** (was: read the gate's log on the next app-path staging deploy** (the 'last concluded Tests on main: … created …' line) and tell Pard cc Arch it read fresh.
 - **#1996 + #1997 LANDED 3469ac2633 + CLOSED 10-12 17:0x** (calendar-day overdue ages at local midnight; dedup-emptied list never 'none'; reminder ages in the floor prompt). **Owed after the next promotion (Web's set, named in my 17:0x reply):** turns 8/11a/11b/12 + a later-today reminder past its time + #1975's delete-by-title. Turn-2 CLOSED (CXO + Arch: keep as built). Turn 9: arms nothing, condition 3 met (Arch concurs). **#2000 LANDED 166d876f4f + CLOSED** (census predicate widened, 9 rows measured, 4 marked). **#1987 (Arch's condition on the row): a numbered delete pick must arm via the #846 store — #1943's family, with Arch.** #1998/#1999 closed as dups of #1997/#1996; CXO's bars quoted on mine. 42f8fe6933 ('due earlier today') landed 729647c019.
 - **#1975 LANDED e6b4fdf413 + CLOSED 10-12 16:3x** (gate-confirmed delete honours its bound row); owed: served re-check on alpha after the next promotion (create upcoming reminder → delete by title → yes → gone). **#1983:** copy RULED by CXO 16:4x (two branches, Read first; parenthesis cut per my 17:0x confirm check — close/reopen ask, create/comment proceed on an imperative). **HELD until PA relays PM's PAT-only step-4 result**; then land the template change (hint + placeholder + JS fallback placeholder at ~:577) and ask CXO to read the served Settings page. **#1995 (CXO, permission gap reads as empty — honesty):** queued behind #1983's landing; needs a served repro with a token lacking Pull requests: Read on PA's PAT-only account. **#1993 LANDED fa8b9efe1a + CLOSED.**
 - **#1982:** held branch `claude/lead-1982-pat-dual-write` (4400ee3d9f, still on origin) — land when PA relays PM's PAT-only alpha test is
