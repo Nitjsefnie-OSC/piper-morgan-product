@@ -17,7 +17,7 @@ Lead minted 12 Crockford Base32 tokens against the production DB on July 4 (comm
 - Spare tokens: 2 held for new signups
 
 **One flag before distributing:**
-- Jake K.'s email (`alpha-contact-18@example.com`) is marked "unconfirmed" in the roster — recommend PM verify before sending his code.
+- Jake K.'s email (`[alpha contact email]`) is marked "unconfirmed" in the roster — recommend PM verify before sending his code.
 - All other 9 have confirmed emails.
 
 **PM's action**: open `dev/alpha/invite-tokens-assignments-batch-1.md` locally and send codes via preferred mechanism (email, direct message). Onboarding URL: `alpha.pipermorgan.ai`.

@@ -67,7 +67,7 @@ Aug 4, 2026 confirmed in `staggered-audit-calendar-2026.md` (not a parallel doc)
 
 **Welfare monitoring moves from design to live.** With batch-1 going out, HOST is shifting from "what should the welfare infrastructure look like" to "what are we actually seeing." The #1383 watch (Notion/Calendar per-user credential gates not yet threaded) is the first real gap to watch — GitHub is the flagship connector for batch 1, so it's not a launch blocker, but it means testers who try Notion or Calendar will hit a silent gap. HOST is watching for the pattern.
 
-**Jake K. email remains unconfirmed.** `alpha-contact-18@example.com` is listed as unconfirmed in the roster. His code is assigned but should not be sent until PM verifies the address.
+**Jake K. email remains unconfirmed.** `[alpha contact email]` is listed as unconfirmed in the roster. His code is assigned but should not be sent until PM verifies the address.
 
 **Sapient-trust poll: 5th consecutive clean.** No open issues. The cadence is holding.
 
