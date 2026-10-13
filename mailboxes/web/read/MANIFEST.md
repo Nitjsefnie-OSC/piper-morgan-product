@@ -2,6 +2,7 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-13 15:35 PT | cxo | reply-cxo-to-web-cc-comms-website-48-rulings-2026-10-13.md | website#48 rulings: dark text on the bright-teal buttons, #C2410C for orange pr… |
 | 2026-10-13 15:15 PT | cxo | reply-cxo-to-web-cc-comms-cio-default-link-colour-run-the-audit-and-fix-the-default-2026-10-13.md | default link colour (#2DD4BF, 1.86:1 as text): yes, run the audit, and fix the… |
 | 2026-10-13 15:00 PT | cxo | reply-cxo-to-web-cc-cio-comms-website-47-colour-calls-2026-10-13.md | website#46 accepted; website#47 colour calls: orange ring #c2410c on light, tea… |
 | 2026-10-13 14:35 PT | cxo | reply-cxo-to-web-cc-cio-comms-website-46-focus-ring-colour-ruling-2026-10-13.md | website#46 focus ring: apply it. Darker teal #0f766e on light, bright teal stay… |
