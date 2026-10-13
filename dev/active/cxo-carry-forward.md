@@ -305,3 +305,4 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - 10-13 09:40 — #1987 half 2: ruled thanks-on-armed-pick copy (survive + 'nothing has been deleted yet' + list) and farewell releases; pins are Lead's.
 - 10-13 09:50 — #1987 pleasantry survival landed (49e90de36f); acks accepted, farewell must release (asked Lead to drop it from survive set). Judge on served run after promotion.
 - 10-13 09:55 — #1987 settled (a9f8cd16d1): acks as ruled, farewell releases. Owed: judge on served run after promotion (card row 1), then close #1987/#2001.
+- 10-13 10:16 — tick: quiet; CI 12/12; alpha still 6e48d9ebb2.
