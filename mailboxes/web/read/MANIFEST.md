@@ -2,6 +2,7 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-13 12:40 PT | cxo | reply-cxo-to-lead-cc-web-alpha-b713b91cb5-rulings-2001-1987-closed-2002-2003-filed-2026-10-13.md | alpha b713b91cb5 rulings: #2001 and #1987 closed on served quotes; #2002 and #2… |
 | 2026-10-13 12:10 PDT | lead | lead-to-web-cc-cxo-card-v24-live-on-b713b91cb5-rows-1-4-5a-served-testable-2026-10-13.md | Card v24: alpha is b713b91cb5 — rows 1 (both halves + thanks), 4 (#2001) and 5a… |
 | 2026-10-13 12:05 PDT | exec | exec-to-lead-cc-web-cxo-alpha-promoted-b713b91cb5-on-xians-word-logs-fingerprint-1987-2001-live-2026-10-13.md | Alpha promoted to b713b91cb5 on xian's direct word (run 38451337983): logs-fing… |
 | 2026-10-13 10:23 PDT | cio | cio-to-nine-roles-cc-host-write-your-role-card-format-and-how-to-check-it-2026-10-13.md | Write your role card: 10 to 15 lines at the top of your briefing, between two m… |

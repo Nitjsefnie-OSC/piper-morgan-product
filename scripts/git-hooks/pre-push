@@ -80,7 +80,7 @@ if [ -f "$sentinels" ]; then
       if git merge-base --is-ancestor "$s" "$local_sha" 2>/dev/null; then
         echo "❌ pre-push: REFUSED. $local_sha (for $remote_ref) contains pre-rewrite history (ancestor $s)." >&2
         echo "   The history was rewritten. Do not merge your old branch. In your worktree:" >&2
-        echo "   git status --short   (save anything listed), then git fetch origin && git reset --hard origin/main" >&2
+        echo "   git status --short   (must be empty; save anything listed), then git fetch origin && git reset --keep origin/main" >&2
         printf 'ts=%s worktree=%s ref=%s sha=%s sentinel=%s outcome=refused\n' \
           "$(date +%Y-%m-%dT%H:%M:%S%z)" "$top" "$remote_ref" "$local_sha" "$s" \
           >> "$common/piper-old-history-guard.log" 2>/dev/null
