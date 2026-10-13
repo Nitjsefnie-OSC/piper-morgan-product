@@ -206,3 +206,5 @@ Brake FIRED (second slip = #1965 admission, found and ledgered 10-09). Memo to E
 - 2026-10-12 16:5x: CXO closed #1985/#1986 on Web's alpha re-run (trigger did not trip). #1998 [HONESTY] compound floor answer filed: placed Production, NOT admitted; PM decision asked via Exec (memo 16:50). If PM admits: Gate class 3 line, Owner, sixth slip entry (13->14), Wed tripwire met. #1999 Production. Waiting on Lead's cause check for #1998.
 
 - 2026-10-12 17:0x: Exec: #1998 NOT admitted (already fixed as #1997, xian's standing answer); if the served re-run after next promotion still shows it, bring to Exec. Lead closed #1998/#1999 as dupes of #1997/#1996. Arch #2000 + #1995 placed Production. PM-decision deferral on #1998 CLEARED. Armed-slot question settled (Arch+Lead).
+
+- 2026-10-13 13:5x: xian picked reading C for Wed 10-14 (band as set = tripwire, split beside it). Floor answered to Exec: 29 ruled permanent, 30 FILE_REFERENCE out of scope but not ruled permanent (Arch's read owed by Wed), 61 unruled. Wed check: print ceiling 120-ish headline + 3-way split + Arch's read on the 30 + tripwire result; bring to Exec same day. xian-pick deferral CLEARED.
