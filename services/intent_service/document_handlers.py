@@ -393,7 +393,11 @@ async def handle_search_documents(query: str, user_id: str) -> Dict:
         passing owner_id filters results to documents the principal may read
         (owner == principal OR is_global_pm_domain). The user_id here is the principal.
     """
-    logger.info("Searching documents", query=query, user_id=user_id)
+    # 2026-10-13 (PM: "keep only fingerprints of logs"): the user's query is
+    # user text — sha256 by default, the text only under the opt-in knob.
+    from services.utils.utterance_log import utterance_fields
+
+    logger.info("Searching documents", user_id=user_id, **utterance_fields(query, key="query"))
 
     # #1238: owner-scoped — pass the principal so another user's private docs
     # aren't surfaced (global PM-domain docs remain readable via the marker).

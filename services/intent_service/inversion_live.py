@@ -636,10 +636,13 @@ def live_min_confidence() -> float:
 
 
 def _log_full_utterance() -> bool:
-    # The SAME operator knob the shadow observer reads
-    # (PIPER_INVERSION_LOG_UTTERANCE, default on) — one privacy switch for
-    # both inversion telemetry surfaces. The sha256 is always logged.
-    return os.environ.get("PIPER_INVERSION_LOG_UTTERANCE", "1").strip().lower() in _TRUTHY
+    # The SAME operator knob every text-logging site reads
+    # (PIPER_INVERSION_LOG_UTTERANCE — DEFAULT OFF since 2026-10-13, PM:
+    # "keep only fingerprints of logs"); one privacy switch, owned by
+    # services.utils.utterance_log. The sha256 is always logged.
+    from services.utils.utterance_log import log_full_utterance
+
+    return log_full_utterance()
 
 
 def _category_by_operation(grammar: Any) -> Dict[str, str]:

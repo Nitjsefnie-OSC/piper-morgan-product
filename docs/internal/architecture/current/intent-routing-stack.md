@@ -1209,7 +1209,7 @@ two claim sites in `classifier.py` (`classify`'s `pre_classify` branch and
 returns without re-claiming and is deliberately not re-sampled) — under
 sampling (`PIPER_PRECLAIM_SHADOW` "1"/"true" enables, default OFF = pinned
 byte-identical; `PIPER_PRECLAIM_SHADOW_SAMPLE` rate, default 1.0; the shared
-`PIPER_INVERSION_LOG_UTTERANCE` privacy knob), a fire-and-forget task runs ONE
+`PIPER_INVERSION_LOG_UTTERANCE` privacy knob — DEFAULT OFF since 2026-10-13, PM: "keep only fingerprints of logs"; owned by `services/utils/utterance_log.py`, which every text-logging site reads: the three inversion telemetry surfaces, the pre-classifier's input lines, `process_intent`'s "Processing intent" line, the classification cache lines, and the document/Notion search queries), a fire-and-forget task runs ONE
 constrained-router call and logs `preclaim_shadow_agreement` /
 `_disagreement` / `_incomparable` carrying **the claiming pattern-list name**
 (threaded via `PreClassifier.pre_classify_with_pattern_list` — `pre_classify`

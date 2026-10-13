@@ -46,7 +46,8 @@ Config (read at call time, never import time — the shadow-flag idiom):
 - ``PIPER_PRECLAIM_SHADOW_SAMPLE``   — sampling rate 0.0–1.0; default 1.0.
 - ``PIPER_INVERSION_LOG_UTTERANCE``  — the SAME privacy knob the other two
                                        inversion telemetry surfaces read:
-                                       "0" logs the sha256 only; default "1".
+                                       "1" logs the text; DEFAULT "0" since
+                                       2026-10-13 (sha256 only).
 
 Cost: one Haiku-class LLM call per SAMPLED pre-claimed turn, bounded by the
 sample rate; zero latency cost (fire-and-forget, never awaited by the turn).
@@ -106,7 +107,11 @@ def _sample_rate() -> float:
 
 
 def _log_full_utterance() -> bool:
-    return os.environ.get("PIPER_INVERSION_LOG_UTTERANCE", "1").strip().lower() in _TRUTHY
+    # DEFAULT OFF since 2026-10-13 (PM: "keep only fingerprints of logs");
+    # the knob is owned by services.utils.utterance_log.
+    from services.utils.utterance_log import log_full_utterance
+
+    return log_full_utterance()
 
 
 def maybe_schedule_preclaim_shadow(

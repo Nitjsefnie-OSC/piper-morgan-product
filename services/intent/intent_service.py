@@ -62,6 +62,7 @@ from services.slot_filling.slot_template import MEETING_TEMPLATE
 from services.trust.trust_computation_service import TrustComputationService
 from services.ui_messages.user_friendly_errors import UserFriendlyErrorService
 from services.utils.text_sanitation import display_title
+from services.utils.utterance_log import utterance_fields as _utterance_fields
 
 
 class _RepoRouteKwargs(TypedDict, total=False):
@@ -2561,7 +2562,9 @@ class IntentService:
             if intent is None:
                 # Issue #595: Multi-intent classification
                 # Use classify_multiple to detect all intents in message
-                self.logger.info(f"Processing intent: {message}")
+                # 2026-10-13 (PM: "keep only fingerprints of logs"): sha256 by
+                # default, the text only under the opt-in knob.
+                self.logger.info("Processing intent", **_utterance_fields(message))
                 # Issue #852: Pass contextual continuation hint to classifier
                 classification_context = (
                     {"contextual_continuation_hint": contextual_continuation_hint}

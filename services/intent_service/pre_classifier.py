@@ -1648,9 +1648,18 @@ class PreClassifier:
         import structlog
 
         logger = structlog.get_logger()
-        logger.info(f"PRE_CLASSIFIER DEBUG - Original: '{message}'")
-        logger.info(f"PRE_CLASSIFIER DEBUG - Clean: '{clean_msg}'")
-        logger.info(f"PRE_CLASSIFIER DEBUG - Clean for matching: '{clean_for_matching}'")
+        # 2026-10-13 (PM: "keep only fingerprints of logs"): the input lines
+        # carry the sha256 by default and the text only under the opt-in knob
+        # (services.utils.utterance_log — the same switch as the inversion
+        # telemetry). Before this they logged every message verbatim at INFO.
+        from services.utils.utterance_log import log_full_utterance, utterance_fields
+
+        if log_full_utterance():
+            logger.info(f"PRE_CLASSIFIER DEBUG - Original: '{message}'")
+            logger.info(f"PRE_CLASSIFIER DEBUG - Clean: '{clean_msg}'")
+            logger.info(f"PRE_CLASSIFIER DEBUG - Clean for matching: '{clean_for_matching}'")
+        else:
+            logger.info("PRE_CLASSIFIER DEBUG - input", **utterance_fields(message))
 
         # Check for greetings
         greeting_match = PreClassifier._matches_patterns(
