@@ -4,6 +4,15 @@
 Pard (seat permissions). Applies to any seat allowed to run a fixed production command (first: HOST's seat, the
 read-only `prod_user_lookup` and the invite mint).
 
+## 2026-10-13 (later): PA deploys the MCP app through a fixed wrapper (xian's delegation)
+
+xian (via Exec, 13:1x): PA does the MCP deploys (#1982), with an allow scoped to the MCP app on PA's seat. **No allow rule can do it alone.** PA's seat denies `fly deploy:*`, deny beats allow, and a glob deny narrow enough to spare `fly deploy -c fly.mcp.toml -a piper-morgan-mcp` would also spare a bare `fly deploy`, which reads `fly.toml` (production). So:
+- **The deny stays** for every direct `fly deploy` on PA's seat.
+- **`scripts/deploy-mcp.sh`** is the one path. It deploys app `piper-morgan-mcp` from `fly.mcp.toml`, built remotely. It takes no arguments except `--dry-run`, and runs only from a tree whose tracked content equals origin/main with no untracked, non-ignored files. It prints the deployed sha and the latest releases.
+- **Rule for Pard (or xian) to add on PA's seat only:** allow `Bash(scripts/deploy-mcp.sh)` and `Bash(scripts/deploy-mcp.sh --dry-run)`, exact strings. PA's seat runs in bypassPermissions, where the allow changes nothing today. It matters if the seat moves to auto mode, where the reviewer would otherwise judge each deploy.
+- **Limits:** the script is editable by any seat on the host, so it guards against accidents, not against a seat that means harm. The same is true of every rule on a bypass seat (see above). No time-box, because MCP deploys are a standing PA duty. Review on 2026-11-24, or retire it when an MCP deploy workflow exists.
+- **Tested** (dry run and refusals only; nothing deployed): extra arguments refused, a stale tree refused, an untracked file refused, a modified tracked file refused, a config naming another app refused; a clean detached worktree at origin/main passes and prints the command.
+
 ## 2026-10-13: alpha promotion after Fly B, and three seats where ASK does nothing
 
 **Fly B is done.** xian removed the required reviewer on the GitHub `alpha` environment. Read 10-13: the protection rules are now just `branch_policy` with 0 reviewers, and the branch policy allows `main` only. `promote-alpha` in `fly-deploy.yml` still runs only on `workflow_dispatch` with `promote_to_alpha=true`. The proposal to Exec (CIO and Lead, one memo) is to keep promotion as a dispatch on xian's explicit word, with no auto-promote and no new permission rule. xian confirms it in session.
