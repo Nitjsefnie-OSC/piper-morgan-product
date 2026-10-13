@@ -2,9 +2,9 @@
 # Candidate COMMON-DIR .git/hooks/commit-msg: #1934's "better primary layer" proposal for the
 # #1691 auto-close guard and the #1845 bearer-credential guard.
 #
-# STATUS: PROPOSED, NOT INSTALLED. Installing a new hook type changes every seat's commit path;
-# it waits for CIO (hook owner) co-sign, same convention as scripts/git-hooks/pre-push. Install,
-# once agreed:
+# STATUS: CO-SIGNED by CIO 2026-10-13 (after a fail-open fix for a crashing checker), NOT INSTALLED.
+# Install after the 10-13 history rewrite has settled; xian pastes it (agent seats are refused writes
+# to .git/hooks):
 #   cp scripts/git-hooks/commit-msg "$(git rev-parse --git-common-dir)/hooks/commit-msg"
 #
 # WHY THIS LAYER, not just the PreToolUse Bash hook (.claude/hooks/autoclose-guard.sh):
@@ -46,7 +46,18 @@ checker="$top/scripts/check_autoclose_keywords.py"
 msgfile="${1:-}"
 [ -n "$msgfile" ] && [ -f "$msgfile" ] || exit 0
 
-if ! python3 "$checker" - < "$msgfile" 1>&2; then
+out="$(python3 "$checker" - < "$msgfile" 2>&1)"
+rc=$?
+if [ $rc -ne 0 ]; then
+    # A crash also exits 1, the same code as a refusal. Without this check a broken checker (a missing
+    # import, a syntax error landed on main) would block every commit on every seat (CIO review,
+    # 2026-10-13: reproduced in a scratch repo by leaving out mailbox_bearer_lint.py). Fail open, loudly.
+    if printf '%s\n' "$out" | grep -q '^Traceback (most recent call last)'; then
+        printf '%s\n' "$out" | tail -3 >&2
+        echo "⚠️  commit-msg guard: the checker CRASHED, so this message was NOT checked. Committing anyway; fix scripts/check_autoclose_keywords.py." >&2
+        exit 0
+    fi
+    printf '%s\n' "$out" >&2
     echo "" >&2
     echo "BLOCKED by the commit-msg guard (#1691 auto-close and/or #1845 bearer-credential, #1934 layer)." >&2
     exit 1
