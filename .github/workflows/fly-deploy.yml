@@ -271,6 +271,9 @@ jobs:
     # exists. That is what makes "a push to main cannot reach testers" a property of GitHub rather
     # than a property of everyone remembering. Configure in Settings -> Environments -> alpha.
     environment: alpha
+    permissions:
+      contents: read
+      actions: read   # the Tests-on-exact-sha gate below reads workflow runs
     steps:
       - uses: actions/checkout@v4
         with:
@@ -329,6 +332,28 @@ jobs:
           echo "ref=$ref" >> "$GITHUB_OUTPUT"
           echo "sha=$sha" >> "$GITHUB_OUTPUT"
           echo "promoting image: $ref  (sha $sha)"
+
+      - name: Tests must have concluded success on the exact sha staging reports
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ steps.img.outputs.sha }}
+        run: |
+          # Fly B (xian's yes, relayed by Exec 2026-10-13 13:33, on the CIO+Lead proposal of 10:45).
+          # The staging deploy's health gate reads the LAST CONCLUDED Tests run on main, which can be
+          # an older sha than the one staging ends up serving: main moves fast and runs get cancelled
+          # by newer pushes. This gate closes that gap at the promotion, where it matters: the sha
+          # staging reports (captured once, above) must have a Tests run that COMPLETED with
+          # conclusion success. Cancelled, in-progress, failed or absent all refuse. Same-commit-
+          # family evidence is not accepted: a green on a descendant says nothing about THIS image.
+          # Operator remedy: wait for Tests on that sha (or push and let staging move on), then
+          # dispatch again. Read-only (actions: read); nothing is promoted when this fails.
+          conclusion="$(gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/test.yml/runs?head_sha=${SHA}&per_page=20" \
+                 -q '[.workflow_runs[] | select(.status=="completed") | .conclusion] | if index("success") then "success" else (.[0] // "none") end')"
+          if [ "$conclusion" != "success" ]; then
+            echo "::error title=Tests not green on the staging sha::Tests on ${SHA} reads '${conclusion}' (need a completed run with conclusion success). Nothing was promoted. Wait for Tests on that exact sha, or let staging move to a sha that has one, then dispatch again."
+            exit 1
+          fi
+          echo "Tests concluded success on ${SHA}"
 
       - name: Content-parity gate
         run: |
