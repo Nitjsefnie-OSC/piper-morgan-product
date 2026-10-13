@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-10-12 21:3x PDT
+last_updated: 2026-10-13 15:3x PDT
 currency_claim: rewritten at substantive-change boundaries, verified at every START
 max_age_days: 4
 ---
@@ -33,6 +33,15 @@ description**: this carry-forward + session logs + commits are the current state
 job shrinks to orientation once it ages. **Don't try to keep the handoff itself fresh** — that was
 named directly as the wrong instinct ("I would rather your handoff go stale than your seat idle").
 
+- **10-13**:
+  - **Role card** at the top of the briefing (`144578829f`); the session-start hook prints it. Each day's first fire writes a Drift: line (tick v1.51).
+  - **Rule 7, perturbation-sensitive ledger** (decisions.log 07:4x). The meeting licence row was stabilized by `d13dafd172` (accepted). **Watch:** main's own ×6 on the standing member "let's analyze the risk here". If it reads below 6/6, the ANALYSIS margin fix goes ahead of the next catalog candidate (Lead reports it).
+  - **#1987 both halves landed; my condition is met** (pins `a9f8cd16d1`). **Watch:** the served check (AC 3) after the next promotion, which is PM's hand.
+  - **ADR-070 Amendment B** (`cf0615061a`): one credential resolver per connector. Answers Agent 360 candidate 7(3) (no PDR); candidate 4 agreed.
+  - **FILE_REFERENCE_PATTERNS: ruled inert and removable (`4905a9d746`); Lead DELETED them (`eb9eb41b2e`, validated).** Ceiling 120 → 90. Wednesday's number is 29 floor + 61 router-quality.
+  - **adr-index.md is GENERATED: never hand-edit it.** Edit the ADR's Status line and run `derive-adr-index.py`. It is registered in `check-derived-drift.sh` (`0718489509`).
+  - **Legacy-classifier retirement check (due 09-30) was missed; stated 10-13: not met.** Re-check trigger: the #1595 Phase 3 tail reaches the ruled floor.
+  - CIO role-duty rows answered (8/8); CIO re-runs the count on 10-27.
 - **10-12 (morning)**:
   - **#1984 half 2 CLOSED for Arch as a KNOWN MISS (option c).** Option (a), the trade, was refused because its improvements were unattributed. The (b) screen failed on 2 rows. The corpus row is ledgered with expected=plan. #1984 stays OPEN, and the retitle is CXO's.
   - **STANDING:** "let's analyze the risk here" (yaml:1973) is in every catalog-candidate ×6 screen.
