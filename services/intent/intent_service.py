@@ -16467,6 +16467,8 @@ Add any additional information here.
                     intent,
                     self.todo_handlers,
                     _coerce_todo_principal(_consent_user),
+                    # #1987: the just-created referent leg reads the session.
+                    session_id=session_id,
                 )
                 if _todo_gate.error_message is not None:
                     # Lookup failed: an unconfirmed destructive write

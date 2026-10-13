@@ -429,6 +429,45 @@ def _named_delete_target(message: str) -> str:
     return " ".join(kept)
 
 
+# #1987: the words that POINT at something already in the conversation. A
+# word-SET check (the _named_delete_target idiom), not a message-parsing
+# regex — TestExtractionPatternRatchet is untouched. Deliberately excludes the
+# indefinite shapes ("delete a reminder", "delete one"): those name no
+# referent, and CXO's 10-12 bar on that ask (list the candidates numbered)
+# is the other half of #1987, not this leg.
+_REFERENT_WORDS = frozenset({"that", "this", "it"})
+
+
+def _points_at_recent(message: str) -> bool:
+    words = {w.lower() for w in re.findall(r"\w+", message)}
+    return bool(words & _REFERENT_WORDS)
+
+
+def _recent_created_referent(
+    message: str, todo_handlers: Any, session_id: Optional[str], todo_user_id: Any
+) -> Any:
+    """The row this session just created, when the message points at it and
+    nothing has been shown since that could be the pointer's real target.
+    None → the caller keeps the honest which-todo passthrough."""
+    if not session_id or not _points_at_recent(message):
+        return None
+    recall = getattr(todo_handlers, "_recall_created_todo", None)
+    if recall is None:
+        return None
+    recent = recall(session_id, todo_user_id)
+    if recent is None:
+        return None
+    # A numbered list rendered AFTER the creation makes "that" ambiguous (it
+    # may mean a row on screen) — don't guess; the which-todo ask is honest.
+    recall_numbered = getattr(todo_handlers, "_recall_numbered_list", None)
+    numbered = recall_numbered(session_id, todo_user_id) if recall_numbered else None
+    shown_at = getattr(numbered, "shown_at", None)
+    created_at = getattr(recent, "created_at", None)
+    if shown_at is not None and created_at is not None and shown_at > created_at:
+        return None
+    return recent
+
+
 def _armed_todo_delete(
     intent: Intent, todo: Any, position: int, question: str, summary: str
 ) -> TodoDeleteGate:
@@ -465,6 +504,7 @@ async def build_todo_delete_confirmation(
     intent: Intent,
     todo_handlers: Any,
     todo_user_id: Any,
+    session_id: Optional[str] = None,
 ) -> TodoDeleteGate:
     """Build the #1190 confirmation for a delete-todo rail intent (#1666).
 
@@ -526,12 +566,20 @@ async def build_todo_delete_confirmation(
 
     todo_number = todo_handlers._extract_todo_id(message)
     named_target = None
+    referent = None
     if todo_number is None:
         named_target = _named_delete_target(message)
         if not named_target:
-            # Nothing numbered AND nothing named — the handler's
-            # "Which todo should I remove?" ask is the honest turn.
-            return TodoDeleteGate(passthrough=True)
+            # #1987: nothing numbered, nothing named — but "delete that
+            # reminder" / "delete it" the turn after "Reminder saved: …"
+            # POINTS at the row this session just created. That row is
+            # bound below by id into the same title-bound confirm the named
+            # leg arms; without one (or with a newer numbered list on
+            # screen) the handler's "Which todo should I remove?" ask is
+            # still the honest turn.
+            referent = _recent_created_referent(message, todo_handlers, session_id, todo_user_id)
+            if referent is None:
+                return TodoDeleteGate(passthrough=True)
 
     try:
         todos = await todo_handlers.todo_service.list_todos(
@@ -569,6 +617,32 @@ async def build_todo_delete_confirmation(
             question=f'Delete todo {todo_number}: "{todo.text}"? (yes/no)',
             summary=f'delete todo {todo_number}: "{todo.text}"',
         )
+
+    # --- just-created referent leg (#1987) ----------------------------------
+    if referent is not None:
+        row = next((t for t in todos if str(t.id) == str(referent.id)), None)
+        if row is None:
+            # Created this session, gone from the owner's list now (deleted
+            # on the Todos page, completed, or a restart lost it): honest
+            # didn't-find in todo/reminder vocabulary, nothing armed.
+            return TodoDeleteGate(
+                clarification=(
+                    f'I can\'t find "{referent.text}" anymore — it may already have been '
+                    "removed. Say 'show my todos' to see the list — nothing has been deleted."
+                )
+            )
+        position = next(i + 1 for i, t in enumerate(todos) if t.id == row.id)
+        if referent.kind == "reminder":
+            # CXO's D1 (2026-10-06): the one-item delete confirm for a reminder.
+            from services.intent_service.todo_handlers import _delete_confirm_question
+
+            question = _delete_confirm_question([row.text], [])
+            summary = f'delete the reminder "{row.text}"'
+        else:
+            # The #1527 named leg's copy — the row is a plain todo.
+            question = f'Delete todo: "{row.text}"? (yes/no)'
+            summary = f'delete the todo "{row.text}"'
+        return _armed_todo_delete(intent, row, position, question=question, summary=summary)
 
     # --- named-target leg (#1527 remaining scope) ---------------------------
     # Lazy import (same circularity note as reminder_clear above).

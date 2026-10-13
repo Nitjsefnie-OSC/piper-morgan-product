@@ -133,6 +133,19 @@ HAND_ROWS = [
         "source": "phase3-args/delete_todo 2026-10-08 (explicit verb — not clear_todos)",
     },
     {
+        "phrase": "delete that reminder",
+        "category": "EXECUTION",
+        "expected": "action:delete_todo",
+        "source": "#1987 alpha c613beabf5 2026-10-12 (Web's served run, the turn after 'Reminder saved: …')",
+        "notes": (
+            "two-turn shape, context-dependent (Phase-0 convention: informational). The referent "
+            "is the row the PREVIOUS turn created — nothing in this text names it (no number, no "
+            "title), so expected_args are deliberately absent. #1987's gate leg binds the "
+            "just-created row from the session (conversation_context.last_created_todo) into the "
+            "#1666 title-bound confirm; the router's job here is the verb, not the target."
+        ),
+    },
+    {
         "phrase": "mark all my reminders done except for 'revise the pr'",
         "category": "EXECUTION",
         "expected": "action:complete_todo",

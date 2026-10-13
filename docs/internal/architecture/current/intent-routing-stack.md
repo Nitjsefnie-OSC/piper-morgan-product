@@ -214,6 +214,24 @@ keeps first claim on ambiguous shapes; singular unnamed 'delete my reminder'
 keeps the which-todo ask; the #1527 named-target and #1666 numbered legs
 unchanged. Regression: `test_bulk_delete_reminders_1696.py` + the updated
 bulk pin in `test_reminder_delete_misroute_1527.py`.
+**#1987 just-created referent leg (2026-10-12)**: 'delete that reminder' /
+'delete it' the turn after "Reminder saved: …" names nothing (that/it/this are
+`_STOPWORDS`, "reminder" is `_DELETE_COMMAND_NOISE`) and fell to the which-todo
+ask (alpha c613beabf5, Web's served run). The create handlers now record the
+row they made on the session (`conversation_context.last_created_todo`, the
+`last_numbered_list` idiom); the gate's no-number/no-name branch, when the
+message points (`_REFERENT_WORDS`, a word-set check — no new regex, the
+ratchet is untouched) and the session holds a created row still in the
+owner's list, arms the EXISTING title-bound confirm with that row bound by id
+(reminder → CXO's D1 'Delete the reminder "X"? (yes/no)'; todo → the #1527
+'Delete todo: "X"?' copy). Guards: no session, no created row, an indefinite
+ask ('delete a reminder'), or a numbered list shown AFTER the creation (the
+pointer may mean a row on screen) → the unchanged passthrough; a created row
+no longer in the list → an honest didn't-find turn, nothing armed. CXO's
+10-12 bar on the generic which-todo ask (list the candidates numbered, and —
+Arch's condition — the numbered pick must arm via the #846 store) is the
+second half of #1987, not built here. Regression:
+`test_delete_that_reminder_1987.py`.
 **#1906 pick-target carrier (2026-09-30) — the ONE unarmed branch in
 `reminder_clear.py` now arms.** PM live, test card session: a named-target ask
 that matches zero or several candidates (`named_target_unmatched` — "clear the
