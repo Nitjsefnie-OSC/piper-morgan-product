@@ -1,14 +1,14 @@
 # Comms carry-forward
 
 ## ⭐ CURRENT STATE — 2026-10-12 21:2x PT. Read this first, it supersedes older lines below
-- **Log**: 10-12 is DAY-CLOSED (`dev/2026/10/12/2026-10-12-0619-comms-code-log.md`). Tue 10-13 START creates a new log.
+- **Log**: `dev/2026/10/13/2026-10-13-0619-comms-code-log.md` (today). 10-12 is DAY-CLOSED.
 - **Close a log with exactly `<!-- DAY-CLOSED: YYYY-MM-DD -->`** (the watchdog anchors on it). A bare `DAY-CLOSED …` line is a new form and trips the drift check (Lead fixed my 10-10 one).
 - Plain `gh` works again (checked 10-11 08:0x), the GODEBUG workaround is no longer needed.
 - 10-11 done: "Access ends right away" is live on /privacy and /support (website `44ebaca`, content checked). Listing copy v2 is voiced, and PM ruled "yet" stays. Thu 10-15 pre-check notes are in the 10-11 log.
 - **Publishing**:
   - "No Undo" published Sat 10-10 04:26, live, crossposted (calendar `distributed`, 10-10).
   - Sun 10-11 "It Doesn't Count if You Skip It": published 08:05 (late, Docs' seat was held overnight), live, crossposted (`distributed`).
-  - Tue 10-13 "Giving It Away, and Wondering Who May Want It": PM rewrite + art 10-12, 5 fixes PM-OK'd, **publish-ready sent to Docs 10-12 14:5x** (`ready-for-docs`). Verify live Tue.
+  - Tue 10-13 "Giving It Away, and Wondering Who May Want It": published 10-13, live-verified (fixes present), Medium crossposted (`distributed`).
   - Thu 10-15 "The Overzealous Cleanup Routine": waiting for PM's "ready". Note: current L10 "on its list" (Exec → their).
   - Italic aside paragraphs are a PM device; leave them (xian 10-12).
   - Wed 10-14 Ship #064: Exec's draft `docs/public/comms/drafts/weekly-ship-064-draft-2026-10-12.md`, calendar row set (drafted + draftPath, 10-12). My pre-check went to Exec 10-12: External clean; L31 + Blockers L80 stale (revoke gate cleared 10-11). Run template-audit after xian's edit, and re-raise L31/L80 if still there.
