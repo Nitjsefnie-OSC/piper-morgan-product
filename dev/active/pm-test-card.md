@@ -1,6 +1,6 @@
 # PM test card — the standing "what should I test?" surface
 
-**Owner**: Lead. **Started**: 2026-09-19. **Rewritten fresh for the 10-13 morning**: v24 (12:09 10-13: alpha promoted to b713b91cb5 on xian's word — every row is live); v23 (07:05 10-13: Web's run judged, two landings on main, not live); v22, 22:30 PDT 10-12 (PM's ask: "pick it up then
+**Owner**: Lead. **Started**: 2026-09-19. **Rewritten fresh for the 10-13 morning**: v25 (12:33 10-13: Web's three served runs on b713b91cb5 judged by CXO — #1987 all three ACs, #2001, #1976 done; #2002/#2003 fixed on main 75ac141ed6, served checks owed after the next promotion); v24 (12:09 10-13: alpha promoted to b713b91cb5 on xian's word — every row is live); v23 (07:05 10-13: Web's run judged, two landings on main, not live); v22, 22:30 PDT 10-12 (PM's ask: "pick it up then
 with a fresh test card"). Rolling doc: rows get added when a fix needs PM's live verification and struck when done. When PM asks
 "what do I test?", the answer is this file. Earlier versions and all struck history: `git log -p` of this file. Mirror artifact
 (https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi) is v15 and BEHIND; this file is current.
@@ -15,11 +15,16 @@ gh workflow run fly-deploy.yml -R mediajunkie/piper-morgan-product --ref main -f
 Promotion takes ~4 min; `curl -s https://alpha.pipermorgan.ai/health` shows `git_sha`. (The 10-12 `pending_deployments` approval
 call is gone: the alpha environment has no reviewers now, Fly B.)
 
+## Owed after the NEXT promotion (fixed on main 75ac141ed6 at 12:33 10-13, NOT live on b713b91cb5)
+
+N1. **#2002 layout** — `delete a reminder` with 2+ reminders → in the served HTML the closing sentence ("Say the number or the name, or 'never mind'…") is its own paragraph AFTER the `<ol>`, not inside the last `<li>`. Web reads `.message-row` innerHTML. Same for `delete todo`.
+N2. **#2003 named miss** — with the numbered ask armed, `delete the reminder "a title that is not in the list"` → `I don't see a reminder called "…".` then the SAME numbered list, still armed (a following `2` binds and asks the yes/no); nothing deleted. Then `"<an existing title>"` quoted → the yes/no confirm for THAT title (unchanged). Unquoted miss (`delete the reminder web check alpha nine`) → "Still not sure which reminder you mean — you have:" + list, no guess.
+
 ## Morning order — everything below is live on alpha now (each ~1 min unless noted)
 
 **New since your last pass (the 21:46 build):**
 1. **#1987 pointer delete.** `remind me to water the plants tomorrow at 9`, then `delete that reminder`. Pass: `Delete the reminder
-   "…"? (yes/no)`; `yes` removes it (check the Todos page). **Half 2 (LIVE since the 12:00 promotion, 71e213b885 + a9f8cd16d1):** with two
+   "…"? (yes/no)`; `yes` removes it (check the Todos page). **Half 2 — PASSED on Web's 12:08 run, CXO closed #1987 12:40; the gone-row line PASSED in one conversation 13:00 (71e213b885 + a9f8cd16d1):** with two
    reminders set, `delete a reminder` → `Which reminder should I delete?` + a numbered list → `2` → `Delete the reminder "…"? (yes/no)` →
    `yes` → gone. Also (49e90de36f, Arch's condition 3): with the numbered ask open, say `thanks` → `You're welcome.` + the same numbered question
    again (a9f8cd16d1, CXO's 09:50 copy); then `2` still binds. `bye` instead drops the ask: `Goodbye for now.` On the live build it still answers the old generic prompt (Web saw that at 06:53).
@@ -27,10 +32,10 @@ call is gone: the alpha environment has no reviewers now, Fly B.)
    "…" anymore — it may already have been removed. Say 'show my todos' to see the list — nothing has been deleted.` (CXO judges this line.)
 3. **#1975 delete by title** — PASSED on Web's 06:53 run (CXO judged); yours is optional. A reminder with a distinctive title, `delete the <title> reminder`, `yes`. Pass: that one gone on the
    Todos page and nothing else missing. Fail: a different due item deleted (the old bug).
-4. **#1996 / #1997 ages** — PASSED on Web's 06:53 run (CXO judged); yours is optional. #2001 ('1 days' → '1 day', 143f9a9a83, LIVE since 12:00) is the one open copy nit. With one overdue item and one due earlier today: `what needs my attention?` then `show my todos`. Pass:
+4. **#1996 / #1997 ages** — PASSED on Web's 06:53 run (CXO judged); yours is optional. #2001 ('1 day overdue') PASSED twice on Web's runs, CXO closed it 12:40. With one overdue item and one due earlier today: `what needs my attention?` then `show my todos`. Pass:
    ages in calendar days on your clock; the earlier-today item under `Today:` as "(due earlier today)"; never "0 days overdue"; the
    list is never called clear while due reminders remain.
-5a. **#1976 stray 'to' (84a313394d, LIVE since 12:00):** `add a todo to web test one` → the Todos page title reads `web test one`, not `to web test one`. Remove it after.
+5a. ~~#1976~~ **PASSED on Web's 12:40 run (Todos page title `web test one`), closed by Lead 12:2x.** Was: `add a todo to web test one` → the Todos page title reads `web test one`, not `to web test one`. Remove it after.
 5. **#1992 angle brackets.** With no timezone set, `what time is it`. Pass: the hint's bracketed city placeholder is visible. Any
    `<tag>`-shaped text in a reply must show, not vanish.
 
