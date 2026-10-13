@@ -3157,6 +3157,13 @@ def register_default_workflows() -> None:
         entry_point=run_create_todo_workflow,
         effect=EffectClass.WRITE,
         outwardness=Outwardness.PRIVATE,
+        # #1976 (2026-10-13): the handler consumes the router's `text` arg
+        # (todo_handlers._router_todo_text). This description is deliberately
+        # UNCHANGED — measured ×3 under it, the served router already names
+        # text='web test one' for 'add a todo to web test one' (scorer row,
+        # action AND args right 3/3), so no router-prompt change was needed;
+        # two candidate wordings were screened and dropped (attributed
+        # regressions at ×6: dev/2026/10/13/controls/1976-*). Zero prompt delta.
         description="Create-todo via action dispatch (#1685)",
         requires_context=["intent", "intent_service"],
         action_triggered=True,

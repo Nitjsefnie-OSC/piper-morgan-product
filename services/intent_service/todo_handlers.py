@@ -1280,7 +1280,11 @@ class TodoIntentHandlers:
         # depending on how the Intent was created (Issue #744)
         original_message = intent.original_message or intent.context.get("original_message", "")
 
-        text = self._extract_todo_text(original_message)
+        # #1976: the router's extracted text first ('add a todo to X' → X), the
+        # regex extractor as the fallback for every other path.
+        text = self._router_todo_text(intent, original_message) or self._extract_todo_text(
+            original_message
+        )
         if not text:
             return "I didn't catch what you'd like me to add. Could you try: 'add todo: [description]'?"
 
@@ -1981,6 +1985,30 @@ class TodoIntentHandlers:
     # (existing), dash/en-dash/em-dash ('new todo - water the plants'), or
     # plain whitespace ('add todo buy oat milk', unchanged).
     _TODO_SEP = r"(?:\s*[:\-–—]\s*|\s+)"
+
+    @staticmethod
+    def _router_todo_text(intent: Intent, message: str) -> str:
+        """#1976 (Web, alpha 4bd1a236e9: 'add a todo to web test one' stored
+        'to web test one'): the router's extracted ``text`` arg
+        (``context["inversion_args"]["text"]``, the #1943 family — consume the
+        router's args, add no binder) is the todo's own words without the
+        command lead-in. Honesty guard: every word of it must occur in the
+        user's message (a word-SET check, no regex) — an LLM-written arg
+        never puts words in the stored title the user did not say. Empty,
+        absent, non-string or unsupported → "" and the caller falls back to
+        the regex extractor (the legacy path, byte-for-byte unchanged)."""
+        ctx = intent.context or {}
+        args = ctx.get("inversion_args")
+        raw = args.get("text") if isinstance(args, dict) else None
+        if not isinstance(raw, str) or not raw.strip():
+            return ""
+        text = " ".join(raw.split())
+        said = {w.strip(string.punctuation).lower() for w in (message or "").split()}
+        wanted = {w.strip(string.punctuation).lower() for w in text.split()}
+        wanted.discard("")
+        if not wanted or not wanted <= said:
+            return ""
+        return text
 
     def _extract_todo_text(self, message: str) -> str:
         """Extract todo text from 'add todo: TEXT' pattern.

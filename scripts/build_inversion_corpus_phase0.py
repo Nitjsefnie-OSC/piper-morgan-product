@@ -661,6 +661,19 @@ HAND_ROWS = [
     #   the worst draw in the table. Using that measured phrase rather than
     #   inventing PM's redacted one.
     {
+        "phrase": "add a todo to web test one",
+        "category": "EXECUTION",
+        "expected": "action:create_todo",
+        "expected_args": {"text": "web test one"},
+        "source": "#1976 alpha 4bd1a236e9 2026-10-11 (Web's served run: the stored title was 'to web test one')",
+        "notes": (
+            "args row (Arch's (a) shape): the router must name the todo's own words WITHOUT the "
+            "command lead-in — 'add a todo to X' is a todo ABOUT X. The handler consumes "
+            "inversion_args.text (#1976) with the regex extractor as the fallback; the regex "
+            "alone stores 'to web test one'."
+        ),
+    },
+    {
         "phrase": "add todo buy oat milk",
         "category": "EXECUTION",
         "expected": "action:create_todo",
