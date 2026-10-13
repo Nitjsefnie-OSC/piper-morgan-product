@@ -1233,10 +1233,10 @@ def row_disposition(
 # routing). They still count toward the literal-ratchet CEILING (nothing may
 # grow); they are only excluded from the Phase 3 routing TAIL.
 NOT_ROUTING: Dict[str, str] = {
-    "FILE_REFERENCE_PATTERNS": (
-        "context flag (has_file_reference, classifier.py) — never picks an intent; "
-        "Arch 10-04, restated 10-09. If it is ever model-decided, that is its own issue."
-    ),
+    # FILE_REFERENCE_PATTERNS was the one entry (Arch 10-04/10-09, "context flag");
+    # Arch 2026-10-13 (decisions.log 4905a9d746) found the flag unconsumed and the
+    # list was DELETED outright (Lead, same day). The dict stays so a future
+    # non-routing list is still skipped BY NAME with its reason, never by inference.
 }
 
 

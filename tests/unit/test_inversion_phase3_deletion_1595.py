@@ -1911,9 +1911,17 @@ class TestMisservedAtDeletionEscapeIsReVerified:
 # --- Arch 2026-10-09: non-routing lists are skipped BY NAME, never by inference ---
 
 
-def test_file_reference_is_named_not_routing_with_its_reason():
-    assert "FILE_REFERENCE_PATTERNS" in gate.NOT_ROUTING
-    assert "context flag" in gate.NOT_ROUTING["FILE_REFERENCE_PATTERNS"]
+def test_file_reference_list_is_gone_and_nothing_is_named_not_routing():
+    """Arch 2026-10-13 (decisions.log 4905a9d746): FILE_REFERENCE_PATTERNS's only
+    reader produced outputs no caller consumed, so the list was DELETED (Lead,
+    same day) rather than carried as a non-routing exception. The by-name
+    mechanism stays for a future list; today it names nothing."""
+    from services.intent_service.pre_classifier import PreClassifier
+
+    assert not hasattr(PreClassifier, "FILE_REFERENCE_PATTERNS")
+    assert not hasattr(PreClassifier, "detect_file_reference")
+    assert not hasattr(PreClassifier, "get_file_reference_confidence")
+    assert gate.NOT_ROUTING == {}
     # Pleasantry filler stays IN the tail, with the greeting family (Arch 10-09).
     assert "_PLEASANTRY_FILLER_PATTERNS" not in gate.NOT_ROUTING
 
@@ -1922,7 +1930,7 @@ def test_routing_tail_excludes_not_routing_but_the_ceiling_counts_everything():
     counts = pattern_literal_counts.per_list_literal_counts()
     skipped = sum(counts.get(n, 0) for n in gate.NOT_ROUTING)
     assert gate.routing_tail(counts) == sum(counts.values()) - skipped
-    assert skipped > 0  # FILE_REFERENCE still has live literals; a recount, not a deletion
+    assert skipped == 0  # nothing is named non-routing since the 10-13 deletion
 
 
 def test_a_not_routing_list_can_never_be_reported_deletable():

@@ -490,16 +490,6 @@ class IntentClassifier:
         if user_id:
             graph_context = await self._get_graph_context(message, user_id)
 
-        # Check for file references
-        has_file_reference = PreClassifier.detect_file_reference(message)
-
-        # Prepare file context
-        file_context = ""
-        if session and has_file_reference:
-            recent_files = session.get_recent_files()
-            if recent_files:
-                file_context = f"Recent uploads: {[f['filename'] for f in recent_files]}"
-
         # Capture input context for learning
         classification_context = {
             "message": message,
@@ -508,8 +498,6 @@ class IntentClassifier:
                 context or {}
             ),  # #1436: callee is dict-typed
             "user_context": context or {},
-            "has_file_reference": has_file_reference,
-            "file_context": file_context,
             "spatial_context": spatial_context or {},
             "graph_context": graph_context,  # Issue #278: Include graph context
         }
@@ -517,7 +505,7 @@ class IntentClassifier:
         try:
             # Perform classification with confidence scoring
             intent, reasoning = await self._classify_with_reasoning(
-                message, context, file_context, spatial_context, user_id
+                message, context, "", spatial_context, user_id
             )
 
             # --- ACTION NORMALIZATION ---
