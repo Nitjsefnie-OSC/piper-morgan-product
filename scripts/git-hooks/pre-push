@@ -2,9 +2,20 @@
 # Candidate COMMON-DIR .git/hooks/pre-push: Spec's CI-gate package item 5 (PM-approved 2026-10-04):
 # "a fast smoke run before any push touching code paths; a hook, not a prose rule."
 #
-# STATUS: PROPOSED, NOT INSTALLED. Installing it changes every seat's push, so it waits for CIO
-# (hook owner) and Pard to co-sign. Install/refresh, once agreed:
+# STATUS: INSTALLED in the common dir (byte-identical to this file, checked 2026-10-13). Refresh:
 #   cp scripts/git-hooks/pre-push "$(git rev-parse --git-common-dir)/hooks/pre-push"
+#
+# OLD-HISTORY GUARD (CIO, 2026-10-13, for the depth-A history rewrite; runbook step 1). Every seat
+# shares one git store, so a seat that merges the rewritten origin/main into its old branch and
+# pushes HEAD:main would bring the whole old history back as a fast-forward. The guard refuses any
+# pushed commit that has an old-history "sentinel" commit as an ancestor. It is DORMANT until the
+# sentinel file exists: "$(git rev-parse --git-common-dir)/piper-old-history-sentinels", one full
+# sha per line (# comments allowed). Before the rewrite every push contains old main, so the file
+# must be written only at the force-push (runbook step 5), never earlier. Best sentinel: the OLDEST
+# commit the rewrite changed (from filter-repo's commit-map), since every old branch that carries
+# rewritten content descends from it; add old main's tip too. PIPER_SKIP_PREPUSH_SMOKE does not
+# skip it; only `git push --no-verify` does (advisory, like every hook). Refusals are logged to
+# "$(git rev-parse --git-common-dir)/piper-old-history-guard.log".
 #
 # Coverage (CIO's condition 2, restated after Pard's env work 2026-10-04): the interpreter now
 # comes from scripts/ensure-pytest-env.sh, a SHARED pinned env keyed on requirements.txt + CI's
@@ -55,6 +66,30 @@ common="$(git rev-parse --git-common-dir)"
 code_re='^(services/|web/|tests/|main\.py$|alembic/|pytest\.ini$|requirements[^/]*\.txt$)'
 zero=0000000000000000000000000000000000000000
 
+pushes="$(cat)"
+
+# --- Old-history guard (see header). Runs before everything else, on every push. ---
+sentinels="$common/piper-old-history-sentinels"
+if [ -f "$sentinels" ]; then
+  while read -r local_ref local_sha remote_ref remote_sha; do
+    [ -z "${local_sha:-}" ] && continue
+    [ "$local_sha" = "$zero" ] && continue
+    while read -r s _rest; do
+      case "$s" in ''|\#*) continue ;; esac
+      git cat-file -e "$s^{commit}" 2>/dev/null || continue
+      if git merge-base --is-ancestor "$s" "$local_sha" 2>/dev/null; then
+        echo "❌ pre-push: REFUSED. $local_sha (for $remote_ref) contains pre-rewrite history (ancestor $s)." >&2
+        echo "   The history was rewritten. Do not merge your old branch. In your worktree:" >&2
+        echo "   git status --short   (save anything listed), then git fetch origin && git reset --hard origin/main" >&2
+        printf 'ts=%s worktree=%s ref=%s sha=%s sentinel=%s outcome=refused\n' \
+          "$(date +%Y-%m-%dT%H:%M:%S%z)" "$top" "$remote_ref" "$local_sha" "$s" \
+          >> "$common/piper-old-history-guard.log" 2>/dev/null
+        exit 1
+      fi
+    done < "$sentinels"
+  done <<< "$pushes"
+fi
+
 touched=""
 while read -r local_ref local_sha remote_ref remote_sha; do
   [ "$local_sha" = "$zero" ] && continue                   # branch deletion
@@ -70,7 +105,7 @@ while read -r local_ref local_sha remote_ref remote_sha; do
   fi
   hit="$(printf '%s\n' "$files" | grep -E "$code_re" | head -1 || true)"
   [ -n "$hit" ] && touched="$hit"
-done
+done <<< "$pushes"
 
 [ -z "$touched" ] && exit 0
 
