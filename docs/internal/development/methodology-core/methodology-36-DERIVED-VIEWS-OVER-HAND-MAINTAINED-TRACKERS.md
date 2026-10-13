@@ -2,7 +2,7 @@
 type: methodology
 title: Mechanism Beats Vigilance — Promote Recurring Vigilance-Disciplines to Mechanisms
 valid_from: "2026-05-24"
-last_updated: "2026-08-29"
+last_updated: "2026-10-13"
 ---
 
 # Mechanism Beats Vigilance — Promote Recurring Vigilance-Disciplines to Mechanisms
@@ -107,6 +107,14 @@ Pattern catalog entries describe **architectural / surface failure modes** (e.g.
 Derived Views Over Hand-Maintained Trackers is **a discipline-shape principle** — about how cohort tracking *should be authored* to avoid the trackers-go-stale failure mode. It belongs in the methodology corpus (discipline-of-rule-authoring) alongside methodology-35 (Asymmetric Discipline).
 
 The instances of trackers-gone-stale (Pattern-074 instances; Pattern-073 inbox-MANIFEST instance; methodology-35 worktree-proliferation instance) are pattern-shaped; the meta-pattern about choosing derived-views-over-hand-maintained is the methodology.
+
+## Corollary — work that cannot be mechanized gets crowded out by work that has been (2026-10-13)
+
+Promotion has a side effect the diagnostic doesn't cover. Step 3 assumes the lapse can be mechanized. **Judgement work can't be**: a methodology audit, a voice-quality read, an ADR citation audit, a product-shadow observation. Those duties can't become a hook. They can only be *triggered*. Once the routines around them are mechanized, the routines run on schedule and fill the day, while the untriggered judgement work silently stops.
+
+**Evidence (CIO, 2026-10-13, `docs/internal/research/role-duties-operational-vs-official-2026-10-13.md`):** across 11 roles, 13 of 164 written duties had moved into a script, skill step or hook, and **none of those 13 had lapsed**. Of the 37 not seen in 30 days of logs, nearly all were specialist judgement duties: CXO's scoring and voice work, PA's product-shadow moments, CIO's methodology audit (179 days against an 8-week maximum), Arch's ADR audits, PPM's PDR work. Where it was measurable, roles spent 20 to 35% of their entries on their own priorities. CIO spent 0%.
+
+**What to do:** give unmechanizable work a *trigger* with a visible miss, not a mechanism. The role card plus the daily `Drift:` line (duty-cycle-tick v1.51) is the first such trigger. It names priority 1 at every start and asks once a day whether yesterday served it. The check is whether the specialist share moves on a re-run (about 10-27). If it doesn't, the trigger is being written, not acted on, and it needs a cost when missed, such as a dated standing-items row per role.
 
 ## Adoption signal — operating as a working cohort frame (2026-06-09)
 
