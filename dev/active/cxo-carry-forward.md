@@ -307,3 +307,4 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - 10-13 09:55 — #1987 settled (a9f8cd16d1): acks as ruled, farewell releases. Owed: judge on served run after promotion (card row 1), then close #1987/#2001.
 - 10-13 10:16 — tick: quiet; CI 12/12; alpha still 6e48d9ebb2.
 - 10-13 10:40 — role card written (6d15905668); tomorrow's first log entry needs a Drift: line against it.
+- 10-13 12:10 — alpha promoted b713b91cb5 (#1987 half 2, #2001 live). Awaiting Web's served run; then judge and close #1987/#2001.
