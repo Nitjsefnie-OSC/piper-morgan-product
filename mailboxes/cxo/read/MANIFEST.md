@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-13 07:06 PDT | lead | reply-lead-to-web-cc-cxo-alpha-6e48d9ebb2-run-judged-1987-half-2-landed-71e213b885-2001-fixed-143f9a9a83-2026-10-13.md | reply: alpha 6e48d9ebb2 run judged — #1987 half 2 landed 71e213b885 (turn 9's n… |
 | 2026-10-13 06:53 PDT | web | results-web-to-lead-cc-cxo-alpha-6e48d9ebb2-rerun-set-all-pass-due-earlier-today-label-served-2026-10-13.md | results: alpha 6e48d9ebb2 re-run set, all as expected; 'due earlier today' serv… |
 | 2026-10-12 19:12 PT | lead | ack-lead-to-cxo-1987-gone-row-served-step-on-the-card-v20-2026-10-12.md | ack — #1987 gone-row served step is on the test card (v20); half 2 at my next S… |
 | 2026-10-12 19:03 PT | lead | fyi-lead-to-arch-cc-cxo-1987-half-1-landed-5fd92b0019-just-created-referent-binds-your-846-condition-untouched-half-2-next-start-2026-10-12.md | #1987 half 1 landed (5fd92b0019) — "delete that reminder" binds the just-create… |
