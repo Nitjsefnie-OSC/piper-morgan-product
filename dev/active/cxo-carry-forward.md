@@ -320,3 +320,4 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - 10-13 15:15 — website#47 live; default link colour ruled (light #0F766E now + two-page computed-colour audit). Owed: Web's audit numbers.
 - 10-13 15:20 — CIO asks: no cc on website colour threads (only duty trigger/mechanism changes or 10-27 re-run).
 - 10-13 15:35 — website#48 ruled (dark text on teal buttons; orange links #C2410C site-wide). Owed: Web's results + counts.
+- 10-13 15:45 — website#48 live (f2a0fd1); colour thread #46/#47/#48 done. Unrendered caveats are Web's.
