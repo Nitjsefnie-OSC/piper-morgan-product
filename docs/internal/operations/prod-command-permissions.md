@@ -23,6 +23,7 @@ read-only `prod_user_lookup` and the invite mint).
   `env fly …`, `command fly …`, `FLY_API_TOKEN=x fly …`, or a double space after `fly`. Those go to the reviewer.
   The current catch-all file has the same hole. Whether Claude Code's matcher strips such prefixes is unmeasured.
   The attended check adds `env fly tokens list` (in DENY, harmless if it runs). Never test this with `deploy`.
+  **Result, 2026-10-13 (HOST's attended check, xian present, 5 of 5 as expected):** `fly status` ran with no prompt; `fly logs` prompted and xian declined; `fly deploy --help`, `fly m stop --help` and `env fly tokens list --help` were refused with no prompt. So the `env` prefix did not get through on HOST's auto seat. The check can't tell whether the matcher removed the prefix and hit a deny, or the auto-mode reviewer refused it. On a bypass seat there is no reviewer, so treat the prefix residual as open there. Limits: one seat, one run each, and the `--help` forms test rule matching only.
 - **Drift check:** Pard owns it, as a cycle-check arm added at install. It also asserts that HOST's installed rules
   equal this JSON.
 - **Install:** `mediajunkie:scripts/apply-fly-split.py`, which backs up the file, refuses if any non-fly rule would
