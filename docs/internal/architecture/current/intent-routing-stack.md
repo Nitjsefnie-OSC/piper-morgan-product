@@ -263,6 +263,23 @@ turn-9 drop on an armed slot). The rail entry point stamps `delete_todo_pick_pen
 (no session / no store) is an instruction, not a question — the #2000
 census row for `handle_delete_todo` shrank out (Arch's condition). No new
 regex (word-set checks only). Regression: `test_delete_todo_pick_1987.py`.
+**#2002 / #2003 — the ask's layout and a named miss (2026-10-13, both found by CXO on
+Web's served run of alpha b713b91cb5)**: the chat page renders replies as Markdown
+(`marked`), and a line following a list item with no blank line is a lazy continuation
+of that item — the ask's closing sentence rendered INSIDE the last `<li>`.
+`render_pick_question` now puts a blank line before the tail (#2002). The shared #1906
+binder (`reminder_clear._name_index`) used to bind a name that matched nothing to the
+candidate sharing the most words ('"web check alpha one"', already deleted, offered
+"web check alpha two"). Now a QUOTED name binds only by literal containment (either
+direction) and is never fuzzy-matched; an unquoted reference binds only when exactly one
+candidate's words COVER every significant word of it (frame words like "reminder"/"remove"
+dropped from the message side), with a sibling guard — when both sides carry a number
+word and share none, 'none'. In the delete pick, a quoted miss answers
+`I don't see a reminder called "X".` plus the same numbered list, record unchanged, still
+armed (#2003); an unquoted miss takes the ordinary re-ask. Same binder serves the #1906
+clear-pick carrier, whose own re-ask copy is unchanged. Regression:
+`test_delete_pick_no_match_2003.py`, `test_pick_question_layout_2002.py` (the latter
+renders through the vendored `marked` under node when present).
 **#1976 create_todo consumes the router's `text` arg (2026-10-13)**: 'add a
 todo to web test one' stored the title 'to web test one' (alpha 4bd1a236e9,
 Web) — the regex extractor kept the verb phrase's 'to'. The #1943 family's

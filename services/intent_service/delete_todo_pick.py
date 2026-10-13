@@ -108,8 +108,11 @@ def render_pick_question(noun: str, texts: List[str], more: int = 0, reasked: bo
     tail = "Say the number or the name, or 'never mind' to leave them alone."
     if more:
         tail = f"(+{more} more — say 'show my todos' for the full list.) " + tail
-    lines.append(tail)
-    return "\n".join(lines)
+    # #2002: the chat page renders replies as Markdown (marked). A line that
+    # follows a list item with no blank line is a lazy continuation of that
+    # item, so the tail used to render INSIDE the last <li>. The blank line
+    # makes it its own paragraph after the list.
+    return "\n".join(lines) + "\n\n" + tail
 
 
 def _pick_offer(
@@ -223,6 +226,7 @@ async def handle_delete_todo_pick_turn(
 
     from services.intent_service.reminder_clear import (
         _principal_mismatch,
+        _quoted_name,
         _resolve_pick_target,
     )
 
@@ -329,6 +333,41 @@ async def handle_delete_todo_pick_turn(
             payload,
             intent_service,
         )
+
+    # #2003 (served on alpha b713b91cb5, 2026-10-13): a QUOTED name that
+    # matches no candidate is a named miss, not a bare unresolved turn —
+    # say so, re-show the same list, stay armed with the record unchanged,
+    # guess nothing. (The binder no longer fuzzy-matches a quoted name at
+    # all, and an unquoted sibling title — "…alpha one" against "…alpha
+    # two" — is 'none' too; that one takes the ordinary re-ask below.)
+    quoted = _quoted_name(text)
+    if status == "none" and quoted:
+        question = render_pick_question(noun, texts, 0)
+        intent_service.workflow_offer_service.set_pending_offer(
+            session_id,
+            _pick_offer(
+                payload.get("user_id"),
+                noun,
+                ids,
+                texts,
+                due_iso,
+                original_message,
+                question,
+                reasked=bool(payload.get("pick_reasked")),
+            ),
+            user_id=user_id,
+        )
+        logger.info("delete_todo_pick_named_miss", session_id=session_id)
+        return {
+            "message": f'I don\'t see a {noun} called "{quoted}".\n\n{question}',
+            "intent_data": {
+                "category": "execution",
+                "action": CLARIFY_DELETE_PICK_WORKFLOW,
+                PICK_PENDING_FLAG: True,
+                "pick_named_miss": True,
+            },
+            "requires_clarification": True,
+        }
 
     # Unresolved. A command-shaped turn releases (the #1906 discriminator:
     # surface-1 pre_classify first, then the router-read oracle for a
