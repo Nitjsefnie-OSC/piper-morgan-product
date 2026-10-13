@@ -5,7 +5,7 @@
 #   1. Session log continuity (find today's log, warn if resuming)
 #   2. Mailbox check (count unread messages)
 #   3. Briefing freshness (warn if BRIEFING-CURRENT-STATE.md > 7 days old)
-#   4. Role identity injection
+#   4. Role identity injection (8. role card from the briefing, outside the budget)
 #
 # Token budget: Total stdout must stay under 500 characters.
 # Safety: Must NEVER exit non-zero (exit 2 blocks agent start).
@@ -375,7 +375,46 @@ if [ -x "$DELTA_SCRIPT" ] && [ -n "${SEEN_SLUGS// /}" ]; then
     fi
 fi
 
+# ─── 8. Role card (xian approved 2026-10-13, via Exec) ───────────────────────
+# A running seat reloads nothing that says what its role is for (HOST's cold-start
+# test 10-12: 0.5 of 6 without a card, 6 of 6 with one). Print the card from the top
+# of the role's briefing, at start and after every compaction. Role comes from the
+# worktree folder name (~/Development/piper-morgan-worktrees/{role}); the shared
+# checkout and a briefing with no card print nothing. Kept OUTSIDE the 490-char
+# budget below so it is never cut; Claude Code's own cap on stdout is 10,000 chars.
+card=""
+_wt_parent=$(basename "$(dirname "$PROJECT_ROOT")")
+_wt_role=$(basename "$PROJECT_ROOT")
+if [ "$_wt_parent" = "piper-morgan-worktrees" ]; then
+    case "$_wt_role" in
+        lead)  _card_brief="BRIEFING-ESSENTIAL-LEAD-DEV.md" ;;
+        exec)  _card_brief="BRIEFING-ESSENTIAL-CHIEF-STAFF.md" ;;
+        arch)  _card_brief="BRIEFING-ESSENTIAL-ARCHITECT.md" ;;
+        pa)    _card_brief="BRIEFING-piper-alpha.md" ;;
+        prog)  _card_brief="BRIEFING-ESSENTIAL-AGENT.md" ;;
+        *)     _card_brief="BRIEFING-ESSENTIAL-$(echo "$_wt_role" | tr '[:lower:]' '[:upper:]').md" ;;
+    esac
+    _card_path="$PROJECT_ROOT/docs/briefing/$_card_brief"
+    if [ -f "$_card_path" ] && grep -q '^<!-- ROLE-CARD ' "$_card_path"; then
+        card=$(awk '/^<!-- ROLE-CARD /{on=1; next} /^<!-- \/ROLE-CARD -->/{on=0} on' "$_card_path" 2>/dev/null | head -c 3000)
+        _card_meta=$(grep -m1 '^<!-- ROLE-CARD ' "$_card_path")
+        _card_upd=$(echo "$_card_meta" | sed -n 's/.*updated: \([0-9-]*\).*/\1/p')
+        _card_max=$(echo "$_card_meta" | sed -n 's/.*max_age_days: \([0-9]*\).*/\1/p')
+        _card_epoch=$(date -j -f %Y-%m-%d "$_card_upd" +%s 2>/dev/null || date -d "$_card_upd" +%s 2>/dev/null || echo "")
+        if [ -n "$_card_epoch" ] && [ -n "$_card_max" ]; then
+            _card_age=$(( ( $(date +%s) - _card_epoch ) / 86400 ))
+            if [ "$_card_age" -gt "$_card_max" ]; then
+                card+=$'\n'"⚠️ Card is ${_card_age} days old (max ${_card_max}): review it with xian via Exec."
+            fi
+        fi
+    fi
+fi
+
 # ─── Output ───────────────────────────────────────────────────────────────────
+if [ -n "$card" ]; then
+    echo "$card"
+    echo
+fi
 if [ -n "$output" ]; then
     # ⚠️ TRUNCATION MADE DIAGNOSTIC 2026-07-30 (Docs). This used to cut at a raw byte
     # offset — `${output:0:480}... (truncated)` — which severs a line mid-word and gives
