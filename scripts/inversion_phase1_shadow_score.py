@@ -305,7 +305,20 @@ def args_match(expected_args: dict, got_args: dict) -> tuple[bool, str]:
     if "scope" in expected_args:
         if str(got_args.get("scope") or "").strip().lower() != str(expected_args["scope"]).lower():
             return False, f"scope: {expected_args['scope']}≠{got_args.get('scope')}"
+    if "text" in expected_args:
+        # #1976: a free-text arg (create_todo's task) — compared after
+        # whitespace/case normalisation and with trailing punctuation shed,
+        # verbatim otherwise (the handler stores it as the title).
+        want = _norm_text(expected_args["text"])
+        got = _norm_text(got_args.get("text"))
+        if want != got:
+            return False, f"text: {expected_args['text']!r}≠{got_args.get('text')!r}"
     return True, ""
+
+
+def _norm_text(value) -> str:
+    s = " ".join(str(value or "").split()).lower()
+    return s.rstrip(".!?,;:")
 
 
 def score(rows: list[dict], decisions: list) -> dict:

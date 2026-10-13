@@ -256,6 +256,26 @@ re-ask, then release. The rail entry point stamps `delete_todo_pick_pending`
 (no session / no store) is an instruction, not a question — the #2000
 census row for `handle_delete_todo` shrank out (Arch's condition). No new
 regex (word-set checks only). Regression: `test_delete_todo_pick_1987.py`.
+**#1976 create_todo consumes the router's `text` arg (2026-10-13)**: 'add a
+todo to web test one' stored the title 'to web test one' (alpha 4bd1a236e9,
+Web) — the regex extractor kept the verb phrase's 'to'. The #1943 family's
+fix: `handle_create_todo` consumes the router's `args.text` first. **The rail
+description is unchanged** — measured ×3 under main's wording, the served router
+already names `text='web test one'` (scorer row, action AND args right 3/3), so
+no router-prompt change was needed; two candidate wordings were screened under
+rule 7 and DROPPED (wording 1: full run 474/532 but ×6 attribution put
+'add octocat/hello-world to the project' link_repo→CLARIFY 6/6 and 'when am i
+in a meeting' meeting_time→CLARIFY 4/6 on it; wording 2 restored link_repo but
+not the meeting row, which also flips on 3 of the 4 prior candidate trees — a
+perturbation-sensitive row; `dev/2026/10/13/controls/1976-*`, report
+`inversion-1976-create-todo-text-description-CANDIDATE-DROPPED-full-score-2026-10-13-anthropic.md`).
+The handler consumes the arg (`_router_todo_text`: a non-empty string
+every word of which occurs in the user's message — the honesty guard, a
+word-set check, so an LLM-written arg never adds words the user did not say),
+falling back to the unchanged regex extractor otherwise. The scorer's
+`args_match` gains a `text` key (normalised, verbatim); corpus row 'add a todo
+to web test one' carries `expected_args: {text: 'web test one'}` (a measured
+args row, 3/3 on main's wording); census pin 596. Regression: `test_create_todo_router_text_1976.py`.
 **#1906 pick-target carrier (2026-09-30) — the ONE unarmed branch in
 `reminder_clear.py` now arms.** PM live, test card session: a named-target ask
 that matches zero or several candidates (`named_target_unmatched` — "clear the
