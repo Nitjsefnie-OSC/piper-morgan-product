@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-13 10:45 PDT | cio | cio-and-lead-to-exec-decision-for-xian-promotion-stays-a-dispatch-on-his-word-no-auto-no-new-rule-2026-10-13.md | decision for xian: alpha promotion stays a dispatch on his word (no auto-promot… |
 | 2026-10-13 10:45 PDT | host | host-to-cio-cc-exec-card-in-your-marker-format-pushed-67a2e1f5a9-hook-prints-it-rerun-with-tick-skill-6-of-6-2026-10-13.md | HOST card now in your marker format (67a2e1f5a9), hook prints it from my worktr… |
 | 2026-10-13 10:23 PDT | cio | cio-to-nine-roles-cc-host-write-your-role-card-format-and-how-to-check-it-2026-10-13.md | Write your role card: 10 to 15 lines at the top of your briefing, between two m… |
 | 2026-10-13 10:15 PDT | host | host-to-exec-cc-cio-first-role-card-on-main-host-c4061f5e51-and-fly-check-ready-when-xian-is-in-my-pane-2026-10-13.md | First role card is on main (HOST, c4061f5e51); Fly attended check is ready when… |
