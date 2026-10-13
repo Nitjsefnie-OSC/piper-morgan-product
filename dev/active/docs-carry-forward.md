@@ -16,11 +16,11 @@
 - Roadmap v19.0 fold LANDED (`aca130a366`). I re-audited it and **closed #1644** (05:3x). Reply to PPM filed (`114a882b5`). Enterprise milestone date (GitHub 2028-10-30 vs decisions.log 2027-10-30) is PM's via Exec, PPM routed it, nothing owed from Docs. Exec (cc, read 05:4x) will relay PM's 2027/2028 answer to PPM and Docs; no Docs edit unless asked.
 
 ## NEXT (named triggers)
-- **Tue 10-13 04:12 fire**: PUBLISH "Giving It Away, and Wondering Who May Want It" (`ready-for-docs`, Comms memo received and pre-flight + dry-run done 10-12 15:0x). Real publish with `--category building --work-date 2026-08-13`, image `...-pleased-customer-removes-brakes-maker-worries.jpg`; re-fetch first. Medium-only crosspost reminder to PM after.
-- **Mon 10-12**: (done, see header) Weekly Docs Audit. `roadmap.md` flag is CLEAR (fold landed 10-10, audited). Mention only the Enterprise date discrepancy as PM-pending.
-- **~11-30**: glossary 60-day re-verify.
-
-- **Wed 10-14**: Weekly Ship #064, row now `drafted` with draftPath (Comms set it 10-12 17:1x). Publish only after Comms/Exec set `ready-for-docs` + memo. Row title is still the placeholder "Weekly Ship #064" (Comms offered "Weekly Ship #064: Code Decides Permission"), set it at publish.
+- **Giving It Away**: PUBLISHED 10-13 (website `d1f39f2`). Owed: PM's Medium-only crosspost; on the URL set `mediumURL`, `status=distributed`, `canonicalSite=distributed`.
+- **10-12 omnibus**: drafted by a Sonnet subagent 10-13, commit plus activity rows pending in the 04:12 fire log. Exec and CIO 10-12 logs unclosed (nudged).
+- **Wed 10-14**: Weekly Ship #064, row `drafted` with draftPath. Publish only after Comms/Exec set `ready-for-docs` + memo. Row title is the placeholder "Weekly Ship #064" (Comms offered "Weekly Ship #064: Code Decides Permission"), set it at publish.
+- **Thu 10-15**: "The Overzealous Cleanup Routine" (`drafted`).
+- **Mon 10-19**: next weekly audit. **~11-30**: glossary 60-day re-verify.
 
 ## Held on PM (via Exec)
 - `git rm` of `dev/active/covapitchdeckv2.pptx` and `dev/active/Treatment`. #1909's two open boxes.
