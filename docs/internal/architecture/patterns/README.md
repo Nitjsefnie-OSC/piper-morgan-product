@@ -4,7 +4,7 @@ number: "N/A"
 title: "Pattern Index"
 status: "Unknown"
 valid_from: "2025-09-16"
-last_updated: "2026-08-29"
+last_updated: "2026-10-13"
 ---
 
 # Pattern Index
@@ -12,7 +12,7 @@ last_updated: "2026-08-29"
 _Consolidated from pattern-catalog.md and PATTERN-INDEX.md_
 _Format: ADR-style numbered patterns_
 
-**Total Patterns**: 74 patterns (001-074), plus a template (000). Recent additions (2026-05-09 → 2026-05-24); all are now integrated into the category index below (this highlights box is a recent-filing snapshot, not the authoritative list):
+**Total Patterns**: 75 patterns (001-075), plus a template (000). Recent additions (2026-05-09 → 2026-05-24); all are now integrated into the category index below (this highlights box is a recent-filing snapshot, not the authoritative list):
 - **Pattern-066 (Stacked Silent Failures)** Emerging — filed 2026-05-09 (CIO Pattern Sweep #1025 Phase 2C TRUE EMERGENCE finding)
 - **Pattern-067 (Issue-Body Reality Mismatch)** Emerging — filed 2026-05-09 (Lead Dev; 3-of-5 evidence from M2f Group A+B dead-code dispositions same day)
 - **Pattern-068 (Silent State Mutation in Shared Working Tree)** Emerging — filed 2026-05-11 (CIO; parent meta-pattern over P-13 branch-drift + P-15 residue-drift + P-16 index-drift + P-17 working-tree-path-fragmentation)
@@ -22,6 +22,7 @@ _Format: ADR-style numbered patterns_
 - **Pattern-072 (Registries that Grow into Architectural Shapes)** **Proven** — filed Emerging 2026-05-15 (Lead Dev); promoted to **Proven** 2026-05-16 (CIO) after #1094 ENGINE-DELETION close-out landed Slack handler dispatch as the fourth behavior-deciding consumer of the `task_type` registry, with all four formalization-discipline invariants intact. First sub-day Emerging-to-Proven promotion in the catalog (~6 hours between recognition trigger and Proven trigger).
 - **Pattern-073 (Documentation-Asserted-Behavior Drift)** **Proven** (promoted 2026-05-18) — filed 2026-05-16 (Lead Dev; CIO methodology cosign). Six independent reference instances in ≤48 hours across five narrative-artifact layers (methodology docs / code docstrings / templated user-facing copy / orphan dependency / test fixture vs. classification / incomplete pattern translation). Pattern-064-adjacent sibling at the narrative layer: where Pattern-064 names code-that-looks-live-but-does-nothing, Pattern-073 names narrative-that-asserts-a-contract-the-code-doesn't-honor. Operational recognition discipline: `doc-sync-sweep` v0.1 skill at `.claude/skills/doc-sync-sweep/`. Promotion-to-Proven contingent on one more independent instance within 14 days + skill operating cleanly on a fresh-fix flow by an agent who didn't draft it.
 - **Pattern-074 (Visibility Loss After Premature Retirement)** Emerging — filed 2026-05-24 (CIO per Comms seed memo `memo-comms-to-cio-cc-host-pa-pm-pattern-of-visibility-loss-lapses-plus-guards-2026-05-24.md`). Two reference instances logged within a single day (both Comms-side, May 24, 2026). Needs ≥1 more independent cross-role instance to graduate Emerging → Proven.
+- **Pattern-075 (Load-Bearing Work Crowded Out by Commodity Work)** Emerging — elevated 2026-10-13 (CIO) from PP-002 on the 10-13 role-duties measurement: 13 mechanized duties, none lapsed; 37 unseen, clustered in specialist judgement work. Mechanism: methodology-36 corollary. Needs the 10-27 re-run or an outside-team instance for Proven.
 
 CIO carries the catalog-management authority; full index updates per category live below.
 
@@ -125,6 +126,7 @@ _Development methodology, quality assurance, and workflow management patterns_
 - [Pattern-069: Coarse Triggers Causing False-Positive Triage Cost](pattern-069-coarse-triggers-false-positive-triage-cost.md) - Hook/trigger granularity too coarse generates false-positive triage load (**Proven**)
 - [Pattern-073: Documentation-Asserted-Behavior Drift](pattern-073-documentation-asserted-behavior-drift.md) - Documentation asserts a contract the code no longer honors (Proven)
 - [Pattern-074: Visibility Loss After Premature Retirement](pattern-074-visibility-loss-after-premature-retirement.md) - Retiring a tracker/surface before its function is replaced loses visibility (Emerging)
+- [Pattern-075: Load-Bearing Work Crowded Out by Commodity Work](pattern-075-load-bearing-work-crowded-out-by-commodity-work.md) - Mechanized routine work fills the day; untriggered judgement work silently stops (Emerging)
 
 ### Grammar Application Patterns
 
@@ -226,4 +228,4 @@ Use the anti-pattern index to:
 ---
 
 _Last updated: 2026-07-08 (Docs audit — added Pattern-074 to recent-additions list; footer count corrected)_
-_Total: 74 patterns (001-074) plus template (000). Previous footer noted 62 (as of 2026-03-03, when pattern-061 was last addition tracked here)._
+_Total: 75 patterns (001-075) plus template (000). Previous footer noted 62 (as of 2026-03-03, when pattern-061 was last addition tracked here)._
