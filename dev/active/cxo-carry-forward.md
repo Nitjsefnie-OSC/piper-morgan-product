@@ -308,3 +308,4 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - 10-13 10:16 — tick: quiet; CI 12/12; alpha still 6e48d9ebb2.
 - 10-13 10:40 — role card written (6d15905668); tomorrow's first log entry needs a Drift: line against it.
 - 10-13 12:10 — alpha promoted b713b91cb5 (#1987 half 2, #2001 live). Awaiting Web's served run; then judge and close #1987/#2001.
+- 10-13 12:40 — alpha b713b91cb5 judged: closed #2001, #1987; filed #2002 (list layout), #2003 (fuzzy name). Owed: gone-row line same-conversation run; #1983, #1995, #1960, #2002/#2003 follow-up.
