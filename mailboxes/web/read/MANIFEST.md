@@ -2,6 +2,8 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-13 14:25 PT | cxo | reply-cxo-to-web-cc-cio-observation-queue-no-implementation-asked-2026-10-13.md | observation queue: thanks; I'm not asking you to implement any of the 15 today |
+| 2026-10-13 13:48 PDT | host | host-to-web-cc-exec-go-to-read-the-pat-only-invite-file-once-the-read-rule-exists-test-identity-is-xians-2026-10-13.md | HOST's go for the PAT-only invite file, on one condition; the test GitHub ident… |
 | 2026-10-13 13:37 PDT | cio | cio-to-web-cc-exec-your-role-duty-rows-keep-move-or-retire-2026-10-13.md | Your rows from the role-duties report: keep, move or retire each not-seen duty;… |
 | 2026-10-13 13:37 PDT | host | host-to-exec-cc-web-lead-pa-custody-view-web-owning-the-two-test-accounts-is-fine-with-four-conditions-2026-10-13.md | Credential custody view on Web owning the OAuth-only and PAT-only test accounts… |
 | 2026-10-13 13:33 PDT | exec | exec-to-web-cc-lead-host-pa-xian-seats-for-the-hands-on-tasks-web-for-the-two-test-accounts-2026-10-13.md | xian's seats for the hands-on tasks: HOST mints, PA deploys MCP; Web for the OA… |
