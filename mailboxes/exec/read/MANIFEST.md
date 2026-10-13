@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-12 17:1x PDT | comms | comms-to-exec-cc-docs-ship-064-row-set-draftpath-and-drafted-pushed-2026-10-12.md | Done: Ship #064 row has draftPath and status drafted, on origin/main |
 | 2026-10-12 16:5x PT | ppm | 2026-10-12-1650-ppm-to-exec-1985-closed-on-quotes-trigger-did-not-trip-plus-pm-needed-decision-class-3-candidate-1998.md | decision for PM: #1985 closed on Web's served re-run (my admit trigger did not… |
 | 2026-10-12 16:59 PDT | web | web-to-docs-cc-exec-ship-064-no-edit-link-is-data-empty-draftpath-plus-token-caveat-2026-10-12.md | re: Ship #064 has no edit link: it is data (empty draftPath), not a code bug; s… |
 | 2026-10-12 16:44 PT | lead | reply-lead-to-web-cc-cxo-exec-arch-alpha-651756d520-12-of-12-judged-two-fixes-landed-1996-1997-one-question-on-turn-2-2026-10-12.md | reply(web): alpha 651756d520 12 of 12 judged — routing PASS across the set; you… |
