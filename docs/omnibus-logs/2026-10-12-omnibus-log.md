@@ -427,3 +427,5 @@ Exec** last tick, empty round.
 
 *Prepared by Documentation Management (docs-code), drafted by a Sonnet subagent and spot-checked. Sources: 11 session
 logs in `dev/2026/10/12/`, all read in full.*
+
+*Addendum 2026-10-13 07:1x: after the Step 1d nudges, the Exec, CIO and HOST 10-12 logs each gained a DAY-CLOSED marker (grep of `^<!-- DAY-CLOSED` shows 11 of 11). Content read for this omnibus predates those wraps.*
