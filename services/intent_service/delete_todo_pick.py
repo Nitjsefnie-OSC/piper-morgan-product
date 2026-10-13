@@ -1,0 +1,460 @@
+"""#1987 (half 2) — the which-todo ask lists the candidates and ARMS the pick.
+
+CXO's addition on #1987 (Web's alpha run, 651756d520, 2026-10-12): after two
+reminders were just set, `delete a reminder` was answered "Which todo should
+I remove? Try: 'delete todo [number]'" — the generic prompt. The user has
+to leave the chat and find numbers. CXO's bar: when the candidates are known
+and few, list them (numbered, with titles) in the question itself.
+
+Arch's condition (the #2000 unarmed-ask census row on
+``TodoIntentHandlers.handle_delete_todo``): the numbered pick must ARM via
+the #846 pending-offer store, not ride ``last_numbered_list`` alone — the
+answer turn ("2", "the first one", "water the plants") binds against the
+list the question named (#1665: the rendered candidates ride the record),
+never a fresh classification.
+
+The shape is the #1906 pick-target carrier's, with one difference: a
+reminder-clear pick re-enters the clear flow's own act path, whereas this
+pick re-enters the #1666 title-bound DESTRUCTIVE confirm — delete ALWAYS
+confirms (Arch's ruling carried from #1666), so the bound pick arms CXO's
+D1 'Delete the reminder "X"? (yes/no)' (or the #1527 'Delete todo: "X"?'
+copy for a plain todo) with the row bound BY ID into the intent
+(``destructive_confirm._armed_todo_delete``), and the confirmed yes deletes
+exactly that row through the unchanged #1666 path. Two short questions, each
+armed, rather than one unarmed prompt that sends the user to another page.
+
+Binding is the SHARED #1906 binder (``reminder_clear._resolve_pick_target``:
+ordinal / unambiguous status word / name match) — not reimplemented, and no
+new extraction regex (the #1595 ratchet is untouched; the only text reads
+here are word-set checks).
+
+Candidates: the user's active rows, scoped to reminders (rows carrying a
+``reminder_date``) when the ask says "reminder(s)", due-soonest first; at
+most ``MAX_LISTED`` are shown and bound (the question names exactly what the
+pick can choose from; a longer list says how many more there are and how to
+see them). No candidates → an honest "nothing to delete" line, nothing armed
+(not a question, so not an unarmed ask).
+"""
+
+from __future__ import annotations
+
+from typing import Any, Dict, List, Optional
+from uuid import UUID
+
+import structlog
+
+from services.domain.models import Intent
+from services.shared_types import IntentCategory
+
+logger = structlog.get_logger(__name__)
+
+# The #846 record kind (handled kind-specifically at the pop seam, before
+# generic accept/decline — the same sanctioned seam the #1605/#1906 turns use).
+DELETE_PICK_KIND = "delete_todo_pick_question"
+# The registered offer-only workflow (action_triggered=False): the generic
+# seam's ACCEPT path lands a bare "yes" here, which re-asks and re-arms.
+CLARIFY_DELETE_PICK_WORKFLOW = "clarify_delete_todo_pick"
+# The intent_data flag the ARM turn stamps so ``_apply_soft_offer`` never
+# clobbers the one-slot store with a soft workflow offer (the #1648 belt).
+PICK_PENDING_FLAG = "delete_todo_pick_pending"
+# "Few" — CXO's word. Above this the question still lists this many (bound)
+# and says how many more there are.
+MAX_LISTED = 5
+
+_REMINDER_WORDS = frozenset({"reminder", "reminders"})
+
+
+def _mentions_reminder(message: str) -> bool:
+    words = {w.strip(".,!?;:'\"").lower() for w in (message or "").split()}
+    return bool(words & _REMINDER_WORDS)
+
+
+def _candidates(todos: List[Any], noun: str) -> List[Any]:
+    """Reminders (rows with a reminder_date), due-soonest first, when the
+    ask said "reminder"; otherwise every active row in list order."""
+    if noun != "reminder":
+        return list(todos)
+    from services.utils.datetime_utils import ensure_utc
+
+    rows = [t for t in todos if getattr(t, "reminder_date", None) is not None]
+    return sorted(rows, key=lambda t: ensure_utc(t.reminder_date))
+
+
+def render_pick_question(noun: str, texts: List[str], more: int = 0, reasked: bool = False) -> str:
+    """The armed ask: the candidates numbered with their titles, then how to
+    answer — and the #1920 exit ("never mind") so the user learns they can
+    bail before failing once."""
+    head = (
+        f"Still not sure which {noun} you mean — you have:"
+        if reasked
+        else f"Which {noun} should I delete?"
+    )
+    lines = [head] + [f"{i}. {t}" for i, t in enumerate(texts, 1)]
+    tail = "Say the number or the name, or 'never mind' to leave them alone."
+    if more:
+        tail = f"(+{more} more — say 'show my todos' for the full list.) " + tail
+    lines.append(tail)
+    return "\n".join(lines)
+
+
+def _pick_offer(
+    principal: Optional[str],
+    noun: str,
+    ids: List[str],
+    texts: List[str],
+    due_iso: List[Optional[str]],
+    original_message: str,
+    question: str,
+    reasked: bool = False,
+) -> Dict[str, Any]:
+    """The #846 record: the rendered candidates bound at ARM time (ids +
+    texts in the order shown, #1665) plus each one's due timestamp so "the
+    overdue one" binds offline on the answer turn (the #1906 idiom)."""
+    return {
+        "workflow_type": CLARIFY_DELETE_PICK_WORKFLOW,
+        "question": question,
+        "pending_action": {
+            "kind": DELETE_PICK_KIND,
+            "action": CLARIFY_DELETE_PICK_WORKFLOW,
+            "user_id": principal,
+            "noun": noun,
+            "pick_ids": list(ids),
+            "pick_texts": list(texts),
+            "pick_due": list(due_iso),
+            "original_message": original_message,
+            "pick_reasked": reasked,
+            "summary": f"pick which {noun} to delete",
+        },
+        "decline_message": (f"Okay — I haven't touched your {noun}s. Nothing has been deleted."),
+    }
+
+
+async def arm_delete_pick(
+    message: str,
+    session_id: Optional[str],
+    principal: Optional[str],
+    todo_user_id: Any,
+    todo_service: Any,
+    offer_service: Any,
+) -> Optional[str]:
+    """The ARM half, called by ``handle_delete_todo`` when the message names
+    no number (and the #1666 gate's legs found no name and no referent).
+
+    Returns the turn's message — the armed numbered question, or the honest
+    "nothing to delete" line — or ``None`` when the ask cannot be armed here
+    (no session, no store, or the list read failed), in which case the
+    caller keeps its non-interrogative fallback instruction.
+    """
+    if not session_id or offer_service is None or todo_service is None:
+        return None
+    noun = "reminder" if _mentions_reminder(message) else "todo"
+    try:
+        todos = await todo_service.list_todos(user_id=todo_user_id, include_completed=False)
+    except Exception as e:  # silent-ok: warning-logged; the caller falls back to its instruction copy, nothing armed, nothing deleted
+        logger.warning("delete_todo_pick_list_failed", error=str(e), user_id=str(todo_user_id))
+        return None
+    candidates = _candidates(todos or [], noun)
+    if not candidates:
+        return f"You don't have any {noun}s right now — nothing to delete."
+    shown = candidates[:MAX_LISTED]
+    more = len(candidates) - len(shown)
+
+    from services.intent_service.reminder_clear import _due_iso
+
+    ids = [str(t.id) for t in shown]
+    texts = [t.text for t in shown]
+    due = [_due_iso(t, noun) for t in shown]
+    question = render_pick_question(noun, texts, more)
+    offer_service.set_pending_offer(
+        session_id,
+        _pick_offer(principal, noun, ids, texts, due, message, question),
+        user_id=principal,
+    )
+    logger.info(
+        "delete_todo_pick_armed",
+        session_id=session_id,
+        noun=noun,
+        listed=len(shown),
+        more=more,
+    )
+    return question
+
+
+async def handle_delete_todo_pick_turn(
+    pending_offer: Dict[str, Any],
+    message: str,
+    session_id: Optional[str],
+    user_id: Optional[str],
+    intent_service: Any,
+) -> Optional[Dict[str, Any]]:
+    """The ANSWER half, at the pop seam (before generic accept/decline).
+
+    A bound pick arms the #1666 title-bound confirm with the row bound by
+    id; the confirmed yes deletes exactly that row. Returns ``None`` to fall
+    through to the generic seam for a state question (LOW_CEREMONY: the
+    seam re-arms silently and normal processing answers), a decline (the
+    honest ``decline_message``), a bare accept (the registered landing
+    re-asks), or a released command (routes normally).
+    """
+    payload = pending_offer.get("pending_action") or {}
+    if payload.get("kind") != DELETE_PICK_KIND:
+        return None
+    text = (message or "").strip()
+    if not text:
+        return None
+
+    from services.intent_service.reminder_clear import (
+        _principal_mismatch,
+        _resolve_pick_target,
+    )
+
+    if _principal_mismatch(payload, user_id):
+        logger.warning(
+            "delete_todo_pick_principal_mismatch",
+            offer_user=payload.get("user_id"),
+            turn_user=user_id,
+        )
+        return {
+            "message": "Let's hold off on that — nothing has been changed.",
+            "intent_data": {
+                "category": "execution",
+                "action": CLARIFY_DELETE_PICK_WORKFLOW,
+                "principal_mismatch": True,
+            },
+        }
+
+    from services.intent_service.acceptance import (
+        AcceptanceVerdict,
+        declared_axes_for_workflow,
+        evaluate_acceptance,
+    )
+
+    axes = declared_axes_for_workflow(CLARIFY_DELETE_PICK_WORKFLOW)
+    verdict = evaluate_acceptance(
+        text,
+        effect=axes[0] if axes else None,
+        outwardness=axes[1] if axes else None,
+        armed_question=pending_offer.get("question"),  # #1665: threaded from the record
+    )
+    if verdict is AcceptanceVerdict.STATE_QUESTION:
+        logger.info("delete_todo_pick_state_question_falls_through", session_id=session_id)
+        return None
+    if verdict is AcceptanceVerdict.DECLINE:
+        logger.info("delete_todo_pick_declined", session_id=session_id)
+        return None
+    if verdict is AcceptanceVerdict.ACCEPT:
+        logger.info("delete_todo_pick_bare_accept", session_id=session_id)
+        return None  # names nothing — the registered landing re-asks + re-arms
+
+    ids = payload.get("pick_ids") or []
+    texts = payload.get("pick_texts") or []
+    due_iso = payload.get("pick_due") or []
+    noun = payload.get("noun") or "todo"
+    original_message = payload.get("original_message") or ""
+
+    status, idx = _resolve_pick_target(text, texts, due_iso)
+    if status == "bound" and idx is not None and 0 <= idx < len(ids):
+        return await _arm_bound_delete(
+            ids[idx],
+            texts[idx],
+            noun,
+            original_message,
+            session_id,
+            user_id,
+            payload,
+            intent_service,
+        )
+
+    # Unresolved. A command-shaped turn releases (the #1906 discriminator:
+    # surface-1 pre_classify first, then the router-read oracle for a
+    # cross-family write) — an unrelated command is never swallowed as a
+    # failed pick.
+    from services.intent_service.pre_classifier import PreClassifier
+
+    claimed = PreClassifier.pre_classify(text)
+    if claimed is not None:
+        logger.info(
+            "delete_todo_pick_command_released",
+            session_id=session_id,
+            claimed_action=claimed.action,
+        )
+        return None
+
+    from services.intent_service.inversion_live import (
+        read_op_claims_turn,
+        registry_category_for,
+    )
+
+    read_op = await read_op_claims_turn(
+        text,
+        session_id=session_id,
+        user_id=user_id,
+        intent_service=intent_service,
+        carrier_category=registry_category_for("delete_todo"),
+    )
+    if read_op is not None:
+        logger.info(
+            "delete_todo_pick_command_released", session_id=session_id, claimed_action=read_op
+        )
+        return None
+
+    if payload.get("pick_reasked"):
+        logger.info("delete_todo_pick_release_after_reask", session_id=session_id)
+        return None  # second unresolved turn in a row — release, no loop
+
+    question = render_pick_question(noun, texts, 0, reasked=True)
+    intent_service.workflow_offer_service.set_pending_offer(
+        session_id,
+        _pick_offer(
+            payload.get("user_id"),
+            noun,
+            ids,
+            texts,
+            due_iso,
+            original_message,
+            question,
+            reasked=True,
+        ),
+        user_id=user_id,
+    )
+    logger.info("delete_todo_pick_reasked", session_id=session_id)
+    return {
+        "message": question,
+        "intent_data": {
+            "category": "execution",
+            "action": CLARIFY_DELETE_PICK_WORKFLOW,
+            PICK_PENDING_FLAG: True,
+        },
+        "requires_clarification": True,
+    }
+
+
+async def _arm_bound_delete(
+    todo_id: str,
+    text: str,
+    noun: str,
+    original_message: str,
+    session_id: Optional[str],
+    user_id: Optional[str],
+    payload: Dict[str, Any],
+    intent_service: Any,
+) -> Dict[str, Any]:
+    """A bound pick → the #1666 title-bound confirm, row bound BY ID. The
+    row is re-read first: a pick that names a row gone since the ask gets
+    the #1987 didn't-find line, nothing armed."""
+    from services.intent_service.destructive_confirm import _armed_todo_delete
+    from services.intent_service.todo_handlers import _delete_confirm_question
+
+    principal = str(user_id) if user_id else payload.get("user_id")
+    try:
+        todo_user_id = UUID(str(principal))
+    except (ValueError, TypeError):
+        return {
+            "message": "I need you to be logged in to delete todos. Nothing has been changed.",
+            "intent_data": {
+                "category": "execution",
+                "action": CLARIFY_DELETE_PICK_WORKFLOW,
+                "error_type": "AuthenticationRequired",
+            },
+        }
+    todo_service = intent_service.todo_handlers.todo_service
+    try:
+        todos = await todo_service.list_todos(user_id=todo_user_id, include_completed=False)
+    except Exception as e:  # silent-ok: error-logged with exc_info; honest no-op copy, nothing armed, nothing deleted
+        logger.error("delete_todo_pick_list_failed", error=str(e), exc_info=True)
+        return {
+            "message": (
+                "I couldn't look up your todos just now, so I haven't deleted anything. "
+                "Try again in a moment."
+            ),
+            "intent_data": {"category": "execution", "action": CLARIFY_DELETE_PICK_WORKFLOW},
+        }
+    row = next((t for t in todos or [] if str(t.id) == str(todo_id)), None)
+    if row is None:
+        return {
+            "message": (
+                f'I can\'t find "{text}" anymore — it may already have been removed. '
+                "Say 'show my todos' to see the list — nothing has been deleted."
+            ),
+            "intent_data": {
+                "category": "execution",
+                "action": CLARIFY_DELETE_PICK_WORKFLOW,
+                "pick_target_gone": True,
+            },
+        }
+    position = next(i + 1 for i, t in enumerate(todos) if str(t.id) == str(row.id))
+    intent = Intent(
+        category=IntentCategory.EXECUTION,
+        action="delete_todo",
+        original_message=original_message,
+        confidence=1.0,
+        context={"original_message": original_message},
+    )
+    if noun == "reminder":
+        question = _delete_confirm_question([row.text], [])  # CXO's D1
+        summary = f'delete the reminder "{row.text}"'
+    else:
+        question = f'Delete todo: "{row.text}"? (yes/no)'  # the #1527 named-leg copy
+        summary = f'delete the todo "{row.text}"'
+    gate = _armed_todo_delete(intent, row, position, question=question, summary=summary)
+    confirmation = gate.offer
+    assert confirmation is not None  # _armed_todo_delete always arms (the offer leg)
+    intent_service.workflow_offer_service.set_pending_offer(
+        session_id, confirmation.offer, user_id=user_id
+    )
+    logger.info("delete_todo_pick_bound", session_id=session_id, todo_id=str(row.id))
+    return {
+        "message": question,
+        "intent_data": {
+            "category": "execution",
+            "action": "delete_todo",
+            "delete_todo_pick_bound": True,
+            "destructive_confirmation_pending": True,
+        },
+        "requires_clarification": True,
+    }
+
+
+async def run_clarify_delete_todo_pick_workflow(
+    session_id: str,
+    user_id: Optional[str] = None,
+    context: Optional[Dict[str, Any]] = None,
+) -> Any:
+    """Generic-accept landing for the pick (registered
+    ``clarify_delete_todo_pick``, action_triggered=False): a bare "yes"
+    names no candidate — re-ask and re-arm. effect: READ (nothing written;
+    the bind happens on an ANSWERED turn at the pop seam)."""
+    ctx = context or {}
+    payload = ctx.get("pending_action") or {}
+    intent_service = ctx.get("intent_service")
+    if payload.get("kind") != DELETE_PICK_KIND or intent_service is None:
+        logger.error(
+            "delete_todo_pick_missing_or_foreign_payload",
+            kind=payload.get("kind"),
+            has_intent_service=intent_service is not None,
+        )
+        return None
+    noun = payload.get("noun") or "todo"
+    texts = payload.get("pick_texts") or []
+    question = "Just so I get it right:\n" + render_pick_question(noun, texts, 0)
+    intent_service.workflow_offer_service.set_pending_offer(
+        session_id,
+        {
+            "workflow_type": CLARIFY_DELETE_PICK_WORKFLOW,
+            "question": question,
+            "pending_action": dict(payload),
+            "decline_message": (
+                f"Okay — I haven't touched your {noun}s. Nothing has been deleted."
+            ),
+        },
+        user_id=user_id,
+    )
+    return {
+        "message": question,
+        "intent_data": {
+            "category": "execution",
+            "action": CLARIFY_DELETE_PICK_WORKFLOW,
+            PICK_PENDING_FLAG: True,
+        },
+        "requires_clarification": True,
+    }

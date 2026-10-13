@@ -4299,9 +4299,11 @@ class TestUnarmedAskSiteRatchet:
             # unarmed; the old predicate could not see a '?' followed by a
             # same-line hint ("…? Try …", "…? Say …", "…? Tell …"). Each
             # classified by reading its holder: none arms. SHRINK-ONLY from
-            # here, same as every row above. #1987 (Arch's condition): when
-            # handle_delete_todo's ask lists numbered candidates it must arm
-            # through the #846 store, removing its row.
+            # here, same as every row above. #1987 (Arch's condition, met
+            # 2026-10-13): handle_delete_todo's ask now lists the numbered
+            # candidates and arms through the #846 store
+            # (delete_todo_pick.arm_delete_pick); its row shrank out. The
+            # handler's unarmable fallback is an instruction, not a question.
             (
                 "services/intent/intent_service.py",
                 "IntentService._handle_set_timezone",
@@ -4331,12 +4333,6 @@ class TestUnarmedAskSiteRatchet:
                 "TodoIntentHandlers.handle_complete_todo",
                 2,
                 "I found {} todos matching '{}': {}. Which one should I compl",
-            ),
-            (
-                "services/intent_service/todo_handlers.py",
-                "TodoIntentHandlers.handle_delete_todo",
-                1,
-                "Which todo should I remove? Try: 'delete todo [number]'",
             ),
         }
     )
