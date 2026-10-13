@@ -9,7 +9,7 @@ last_updated: "2026-10-13"
 
 # ADR-070: MCP-Consumer Connector Architecture
 
-**Status**: v0.1 (filed 2026-06-15) — Architect-authored; PM-ratified direction (2026-06-14: connectors move to MCP-consumer; staying native is "dated and clunky"); gates Lead Dev WS-1..9 decomposition on the RECONNECT sprint (#1220 umbrella + 12 issues).
+**Status**: v0.1 (filed 2026-06-15) — Architect-authored; PM-ratified direction (2026-06-14: connectors move to MCP-consumer; staying native is "dated and clunky"); gates Lead Dev WS-1..9 decomposition on the RECONNECT sprint (#1220 umbrella + 12 issues). Amended: A (2026-07-10, logical server key) and B (2026-10-13, one credential resolver per connector).
 
 **Date**: 2026-06-15
 

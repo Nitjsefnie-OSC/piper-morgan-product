@@ -3,14 +3,14 @@ type: adr
 title: "Architectural Decision Records (ADR) Index — DERIVED VIEW"
 status: "Unknown"
 valid_from: "2025-08-29"
-last_updated: "2026-09-01"
+last_updated: "2026-10-13"
 ---
 
 # Architectural Decision Records (ADR) Index — DERIVED VIEW
 
 > 🤖 **GENERATED FILE — DO NOT EDIT.** Regenerate with `python3 scripts/derive-adr-index.py`; verify with `--check`. The individual ADR files' own Status lines are the single source of truth; this index is a build artifact (Architectural Review 2026 workstream B4, closes #1455). Per the B3 rule: counts here TRIAGE, they never DISPOSE — check the live document before treating any status as the whole story.
 
-**Total ADR files**: 78 · **Numbering gaps (never filed)**: 067, 068 · **Counts by status**: Accepted: 53 · Proposed: 11 · Dormant (Proposed, unratified): 2 · Superseded: 8 · Other: 4
+**Total ADR files**: 79 · **Numbering gaps (never filed)**: 067, 068 · **Counts by status**: Accepted: 53 · Proposed: 11 · Dormant (Proposed, unratified): 2 · Superseded: 9 · Other: 4
 
 
 ## Accepted (53)
@@ -20,7 +20,6 @@ last_updated: "2026-09-01"
 - [ADR-004: Action Humanizer Integration](adr-004-action-humanizer-integration.md) — Accepted
 - [ADR-005: Eliminate Dual Repository Implementations via Pattern #1 Migration](adr-005-eliminate-dual-repository-implementations.md) — Accepted · July 14, 2025
 - [ADR-006: Standardize Async Session Management Pattern](adr-006-standardize-async-session-management.md) — Accepted · July 14, 2025
-- [ADR-007: Staging Environment Architecture with Docker Compose](adr-007-staging-environment-architecture.md) — Superseded 2026-09-29 (Fly staging, pipeline plan §4f) · July 20, 2025
 - [ADR-008: MCP Connection Pooling Strategy for Production](adr-008-mcp-connection-pooling-production.md) — Accepted · July 20, 2025
 - [ADR-009: Health Monitoring System Design](adr-009-health-monitoring-system.md) — Accepted · July 20, 2025
 - [ADR-010: Configuration Access Patterns](adr-010-configuration-patterns.md) — ✅ Implemented (October 2025, Phase 3)
@@ -59,7 +58,7 @@ last_updated: "2026-09-01"
 - [ADR-060: Floor-First Routing Architecture](adr-060-floor-first-routing.md) — Approved · 2026-03-19
 - [ADR-061: LLM-Touch Boundary Enforcement — Two-Layer Detection with Floor as De-Facto Ethics Layer](adr-061-llm-touch-boundary-enforcement.md) — **Ratified** v1.0 (PM verbal ratification 2026-05-03); **v1.1 amendment 2026-05-15** (output-side companion shipped per #1017 — see §"Amendment 2026-05-15") · 2026-04-28 (v0.1) → 2026-04-30 (v1.0 — Lead Dev fixes + CEO calibration reframe applied) → 2026-05-03 (verbally ratified) → 2026-05-04 (status block updated) → 2026-05-15 (v1.1 — output-side companion amendment per #1017)
 - [ADR-069: Domain Concept Projection Contract — System of Record vs. In-Process Working State](adr-069-domain-concept-projection-contract.md) — **v0.2 (RATIFIED 2026-06-12)** — Lead-Dev-authored from the #1207 implementation; Architect ratified the carve (memo ~19:35 "strong concur") and the artifact (memo ~22:30 "v0.1 clean, ratified"). v0.2 folds in Arch's three optional polish edits (D6 Intent-shape sketch · Source-incidents tracer · D5 negative-pattern made code-explicit). · 2026-06-12
-- [ADR-070: MCP-Consumer Connector Architecture](adr-070-mcp-consumer-connector-architecture.md) — v0.1 (filed 2026-06-15) — Architect-authored; PM-ratified direction (2026-06-14: connectors move to MCP-consumer; staying native is "dated and clunky"); gates Lead Dev WS-1..9 decomposition on the RECONNECT sprint (#1220 umbrella + 12 issues). **Amendment B (2026-10-13)**: one credential resolver per connector; GitHub resolves OAuth grant, then the user's own PAT, then CONNECT_REQUIRED, never the env token for a real user (#1965, #1966). · 2026-06-15
+- [ADR-070: MCP-Consumer Connector Architecture](adr-070-mcp-consumer-connector-architecture.md) — v0.1 (filed 2026-06-15) — Architect-authored; PM-ratified direction (2026-06-14: connectors move to MCP-consumer; staying native is "dated and clunky"); gates Lead Dev WS-1..9 decomposition on the RECONNECT sprint (#1220 umbrella + 12 issues). Amended: A (2026-07-10, logical server key) and B (2026-10-13, one credential resolver per connector). · 2026-06-15
 - [ADR-071: User-Auth Anchoring Pattern for Content Stores](adr-071-user-auth-anchoring-pattern.md) — v0.1 (Lead-authored 2026-06-15) — **RATIFIED by Arch 2026-06-15** ("clean fold; every guidance point folded faithfully"; 2 minor cross-refs folded below). Grounded in the #1241 content-anchoring audit (PM-directed systemic flag 2026-06-14; Arch D1 ruling + D1–D7 grounding-confirm 2026-06-15). Companion to **ADR-058** (Multi-Tenancy Isolation) at the *content* altitude — same make-impossible-by-construction shape, one layer down from credentials. · 2026-06-15
 - [ADR-072: Skill-Routing Architecture — Fluid Model with Defense-in-Depth](adr-072-skill-routing-architecture.md) — ACCEPTED (v0.2) — D1–D4 Arch-ratified in-lane; **D5 ratified 2026-06-17 with CXO + HOST trust-lens folded** (both aligned: gate Piper-initiated, never user-reaching-for-own; + HOST's consequential-action carve-out + transparency-when-gated) · 2026-06-17
 - [ADR-073: No Destructive Git in PM's Main Checkout Working Tree](adr-073-no-destructive-git-in-pm-main-checkout.md) — ACCEPTED — PM-approved 2026-06-27. The operational rule has been in force via the CLAUDE.md ⚠️ HARD RULE callout since 2026-06-21 (`6d1292d09`); this ADR is the formal decision record + rationale for the archive. · 2026-06-27
@@ -68,7 +67,7 @@ last_updated: "2026-09-01"
 - [ADR-076 — Usage-Cap Enforcement (Alpha Load Backstop)](adr-076-usage-cap-enforcement.md) — ACCEPTED (v0.1, 2026-07-06) — Arch-authored; HOST trust-lens PASS folded; **implemented and closed** (#1370, `01c28848b`, 2026-07-06; BUILD-ratified clean against D1-D6 by Arch 2026-07-07; live-verified 2026-07-07 against a real server + real Redis — rate limit, concurrency cap, and fail-closed all hit their exact documented boundary and response shape) — `web/middleware/usage_cap_middleware.py`, 12 unit tests. Fully closed, no open items.
 - [ADR-077 — Routing-Integrity Contract (Action↔Handler Reachability)](adr-077-routing-integrity-contract.md) — ACCEPTED (v0.1, 2026-07-09) — Arch-authored; formalizes the #1283 AC-4 SSOT ruling (2026-07-08) after Lead's static audit + behavioral probe validated the approach. Lead builds the enforcement.
 - [ADR-079 — Owner-Scoping Integrity Contract (unscoped reads impossible-by-construction, mechanically enforced)](adr-079-owner-scoping-integrity-contract.md) — **ACCEPTED (v0.1, 2026-07-16)** — Arch-authored, on the integrity authority PM delegated + Lead's confirmation that the #1419 multi-tenancy audit's scope is systemic. Synthesizes already-accepted per-feature owner-scoping decisions into one contract + its mechanical enforcement. **HOST trust-lens welcome** (this is a trust-boundary contract) — informative, not gating, since the constituent decisions are already accepted. **PM retains veto.**
-- [ADR-080 — LLM decides meaning; code decides permission, checks meaning against real data, and shows before it acts](adr-080-llm-decides-meaning-code-decides-permission.md) — **ACCEPTED (2026-10-06)** — Arch-authored; PM confirmed the division 2026-10-06. Interpretation goes to the router's args; resolution, permission and the enumerating confirm stay in code; the interpretation layer only shrinks (ratchets).
+- [ADR-080 — LLM decides meaning; code decides permission, checks meaning against real data, and shows before it acts](adr-080-llm-decides-meaning-code-decides-permission.md) — **ACCEPTED (2026-10-06)**. Arch-authored; **PM confirmed the division** on 2026-10-06 (via Exec): *"I agree with the division Arch laid
 
 ## Proposed (11)
 
@@ -89,8 +88,9 @@ last_updated: "2026-09-01"
 - [ADR-046: Moment.type Agent Architecture](adr-046-moment-type-agent-architecture.md) — Proposed — DORMANT since 2025-12 (status annotated 2026-08-29) · November 30, 2025 (Updated December 1, 2025)
 - [ADR-056: Consciousness Expression Patterns](adr-056-consciousness-expression-patterns.md) — Proposed — DORMANT since 2026-01 (status annotated 2026-08-29) · January 21, 2026
 
-## Superseded (8)
+## Superseded (9)
 
+- [ADR-007: Staging Environment Architecture with Docker Compose](adr-007-staging-environment-architecture.md) — Superseded (2026-09-29, Arch) · July 20, 2025
 - [ADR-013: MCP + Spatial Intelligence Integration Pattern](adr-013-mcp-spatial-integration-pattern.md) — Superseded/Deprecated (via notice heading — no formal Status line)
 - [ADR-016: Ambiguity-Driven Architecture with Chain-of-Draft Integration](adr-016-ambiguity-driven.md) — Superseded (status corrected 2026-08-29) · August 17, 2025
 - [ADR-018: Server Functionality Architecture](adr-018-server-functionality.md) — Superseded (status corrected 2026-08-29; prior status 'Implemented' was inaccurate) · August 17, 2025
