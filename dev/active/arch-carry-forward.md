@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-10-12 09:3x PDT
+last_updated: 2026-10-12 21:3x PDT
 currency_claim: rewritten at substantive-change boundaries, verified at every START
 max_age_days: 4
 ---
@@ -21,7 +21,7 @@ context-floor directive that duplicating it here is exactly the accretion to cut
 | Model | **Opus 5.5 (`claude-opus-5-5`) since the 2026-09-28 ~14:35 cold restart** (Pard, PM-authorized, no `--resume`). Verified from the runtime model system-reminder, not the handoff's stated intent. ⚠️ `~/.claude/settings.json` and `~/.claude-pm/settings.json` BOTH still read `claude-sonnet-5`, so the Opus model comes from a launch-time override, not the settings default. A relaunch that drops the override would silently come back as Sonnet. Check the runtime reminder after any restart (rule 7). |
 | Wake mechanism | ⚠️ **SESSION CRON RETIRED 2026-09-25, PERMANENTLY — do not re-arm.** External LaunchAgent (Pard), reading the registry's `cron_expr`. Registry-vs-plist mystery resolved 09-26 with a `pm-cadence` drift guard now in place — registry is trustworthy again. **Cadence: back to 6/day `27 6,9,12,15,18,21` as of 2026-09-28 21:27 STOP** (registry col 2 edited, threshold_h 9→7). Exec's 08:0x "revert Tuesday" ruling was RETRACTED 14:5x; final 15:1x memo: PM confirmed "Monday ok" = revert today. **CONFIRMED 2026-09-29: the 09:27 fire arrived** (off-schedule for the old 3/day expression), so the LaunchAgent reads the registry's col 2 live. The prompt's `cron=` constant was regenerated to `27 6,9,12,15,18,21` by 2026-09-30 15:27, so prompt and registry agree again. (It is documentation; the LaunchAgent reads col 2.) |
 | Heartbeat | `bash scripts/duty-cycle-heartbeat.sh arch <START\|WORK\|STOP>` — first action after sync, every fire. The watchdog's only structural liveness surface. |
-| Mail | `mail-send.sh` push-to-ref; never touch PM's main checkout. Inbox verified at trunk (`git ls-tree origin/main`), never local `ls`. **`mailboxes/pard/` gravestoned 2026-09-23** (hard-refused by the script) — Pard's real inbox is `~/Development/mediajunkie/docs/mail/`, external repo. Drop `pard` from cc if only cc'ing; route through Exec (already active on most threads) rather than write there directly — `docs/internal/operations/cross-project-mail-routing.md`'s standing preference. |
+| Mail | `mail-send.sh` push-to-ref; never touch PM's main checkout. Inbox verified at trunk (`git ls-tree origin/main`), never local `ls`. **`mailboxes/pard/` gravestoned 2026-09-23** (hard-refused by the script) — Pard's real inbox is `~/Development/mediajunkie/docs/mail/`, external repo. Deliver to Pard directly (DIRECTORY.md "deliver it yourself", default since 2026-09-27): write the file, stage it by exact path, push to `mediajunkie/mediajunkie` main, then verify it on origin. Done 10-12 for #1952. |
 | GitHub criteria line | `gh issue list --repo mediajunkie/piper-morgan-product --label architecture --state open` — the third work-queue source (PM v1.33). Open each issue, don't write a row from the list. Report drained as "mail (N) + standing-items (N) + label:architecture (M)." |
 
 ## IN FLIGHT — current state only
@@ -38,7 +38,15 @@ named directly as the wrong instinct ("I would rather your handoff go stale than
   - **STANDING:** "let's analyze the risk here" (yaml:1973) is in every catalog-candidate ×6 screen.
   - The compound thanks/farewell registry EXAMPLES ride the next catalog batch (trigger: that batch).
   - **#1986 LANDED** (`8ebe568035`, then `cd43832626`, then the belt `d23849fb9f`, all verified in source). This **reverses #1754 for thanks/farewell**. The empty thanks form needs a durable zero AND an empty in-memory window; anything unknown serves "You're welcome."
-  - **Watch:** Web's served set at the next promotion, including the 31-minute idle and the armed-slot thanks. CXO closes #1985/#1986.
+  - ~~Watch: Web's served set~~ → **DONE 10-12 pm**: Web ran 12 turns on alpha 651756d520 and CXO closed #1985/#1986 on the quotes.
+- **10-12 (afternoon/evening)**:
+  - **Turn 2 ruled:** a canned reply counts as a delivered turn, kept as built (concur with CXO).
+  - **Turn 9 ruled:** the no-number "Which todo should I remove?" ask arms nothing, so condition 3 holds and `_armed_offer_signal` is not widened.
+  - **#2000 CLOSED** (`166d876f4f`): the census predicate now sees a mid-line `?`.
+  - **#1987 half 1 accepted** (`5fd92b0019`): the just-created referent, gated by a confirm. Bounds and the retirement trigger are in decisions.log 19:1x.
+  - **Watch:** #1987 half 2 (numbered pick), Lead's next START. It MUST arm via the #846 store (the #1906 shape) and be pinned both ways against the thanks short-circuit. The condition is written on the census row (test_architecture_enforcement.py ~4302).
+  - **PR #1952 MERGED** (`8c3c56c0d6`) by Lead after my review comment. The first live gate run read fresh (run 38331164368). Lead keeps reading later deploys for a stale pick.
+  - **Merges:** I can't approve-and-merge a PR on the mediajunkie account (refused as a self-approval). Review as a comment and hand the merge to the owning seat (memory `feedback_pr_review_and_merge_by_a_separate_seat`).
   - **#1993 filed** (test-order leak, 47 rows; reproduce first).
 - **SPRINT GOAL (PM-locked 10-03, week ending Thu 10-08)**: finish epic 0 Phase 3 deletions for every live-wave list. Lead owns it. Arch's part is **same-fire
   ruling turnaround**. Quota is expected to run out around Wed 14:10, so plan for 4 days. **Both upstream gates were ALREADY CLEARED when I named them**: read_floor went live ~09:5x 10-03 (PM flip, TRUST 15/15 after descriptions) and #1920 CLOSED 10-02.
