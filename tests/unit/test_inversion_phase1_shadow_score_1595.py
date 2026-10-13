@@ -420,6 +420,10 @@ class TestCorpusCarriesExpectedArgs:
         # exclude relaxed 2026-10-06 after the first score (see the row's notes): only
         # load-bearing when targets is "all"
         assert pm["expected_args"] == {"targets": ["1-3"]}
+        # Every args-asserting row is labelled as the args family at its source
+        # (an expected_args row from another lane — #1976's create_todo text row,
+        # 2026-10-13 — carries the prefix too; the scorer's args table reads
+        # the family off the row, not the prefix, so this is a labelling pin).
         assert all(r["source"].startswith("phase3-args/") for r in rows)
 
 

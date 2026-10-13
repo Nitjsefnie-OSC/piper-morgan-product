@@ -665,7 +665,7 @@ HAND_ROWS = [
         "category": "EXECUTION",
         "expected": "action:create_todo",
         "expected_args": {"text": "web test one"},
-        "source": "#1976 alpha 4bd1a236e9 2026-10-11 (Web's served run: the stored title was 'to web test one')",
+        "source": "phase3-args/create_todo text — #1976 alpha 4bd1a236e9 2026-10-11 (Web's served run: the stored title was 'to web test one')",
         "notes": (
             "args row (Arch's (a) shape): the router must name the todo's own words WITHOUT the "
             "command lead-in — 'add a todo to X' is a todo ABOUT X. The handler consumes "

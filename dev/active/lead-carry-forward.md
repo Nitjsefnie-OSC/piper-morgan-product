@@ -42,7 +42,7 @@
 - ~~Test card v20 (19:1x): not-live list = #1975, #1996, #1997, #1987, #1992.~~ Superseded: promoted 21:46, card v22.
 - ~~Side worktrees in place~~ (all removed at close): lead-1987, lead-1992 (a gitignored root `node_modules` sits there — my `npm ci` at the wrong level; the
   `rm -rf` was guard-blocked, leave it), lead-1993, lead-1975, lead-1985b, lead-2000 — all merged; remove at STOP or tomorrow.
-- **DISCIPLINE (10-12 19:4x, after a red main): every corpus-row deposit runs `tests/unit/test_inversion_phase3_deletion_1595.py` before landing — the census denominator pin lives there, outside the intent_service/enforcement dirs.** Tests on a8b27f3fbd went red on exactly that pin (fixed same fire; read the fix's Tests run first at the next fire).
+- **DISCIPLINE (10-12 19:4x, after a red main; widened 10-13 07:5x after a second): every corpus-row deposit runs `tests/unit/test_inversion_phase3_deletion_1595.py` AND `tests/unit/test_inversion_phase1_shadow_score_1595.py` before landing — the census denominator pin lives in the first, the args-row labelling pin (`source` must start with `phase3-args/`) in the second; both sit outside the intent_service/enforcement dirs.** Tests on a8b27f3fbd went red on exactly that pin (fixed same fire; read the fix's Tests run first at the next fire).
 - **#1984 half (2): CLOSED ON MY SIDE 07:2x — lever (c) applied.** Arch ruled (07:3x his clock, read 07:16): not (a); (b) = drop the
   `'what did I work on today'` rail example, screened ×6 main vs (b) on 20 phrases (CXO's two true-session phrases joined) → the row
   reached the ruled plan 6/6 but two rows read worse (re-checked 12/12 each) → FAIL → (c): the corpus row carries the KNOWN MISS note
