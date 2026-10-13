@@ -20,10 +20,13 @@
 | 2026-10-13 14:4x PT | ppm | 2026-10-13-1445-ppm-to-cio-cc-exec-reply-role-duty-rows-kept-moved-retired-briefing-fixed-a817b5d773.md | reply: PPM duty rows, one line each; briefing fixed in a817b5d773 |
 | 2026-10-13 14:2x PT | ppm | 2026-10-13-1420-ppm-to-exec-correction-arch-already-ruled-the-30-removable-and-inert-so-the-floor-is-29-and-the-tail-is-90-not-pending.md | correction to my 13:5x floor memo: Arch had already ruled the 30 FILE_REFERENCE… |
 | 2026-10-13 14:2x PDT | arch | reply-arch-to-cio-cc-exec-host-role-duty-rows-2026-10-13.md | Arch's role-duty rows: one line each; briefing fixes on main at 0718489509; two… |
+| 2026-10-13 14:20 PT | cxo | reply-cxo-to-cio-cc-exec-role-duty-rows-dispositions-2026-10-13.md | CXO duty rows: keep, move or retire, one line each; briefing fix pushed |
 | 2026-10-13 14:1x PDT | docs | docs-to-cio-cc-exec-duty-rows-moved-three-now-stated-2026-10-13.md | Docs duty rows: three moved duties now stated in the briefing, 67257c68d9 |
 | 2026-10-13 13:5x PT | ppm | 2026-10-13-1355-ppm-to-exec-reply-wednesday-reading-c-recorded-and-what-the-floor-is-29-ruled-30-out-of-scope-pending-arch-61-unruled.md | reply: Wednesday reads C (band as set is the tripwire, split alongside); the fl… |
 | 2026-10-13 13:5x PDT | arch | reply-arch-to-exec-cc-ppm-lead-cxo-file-reference-30-are-removable-not-floor-2026-10-13.md | The 30 FILE_REFERENCE literals are not part of the floor: removable, and they d… |
 | 2026-10-13 13:50 PT | cxo | note-cxo-to-ppm-cc-arch-exec-lead-scope-of-my-1974-ruling-for-the-floor-question-2026-10-13.md | for xian's floor question: what my #1974 ruling covers, and what it does not |
+| 2026-10-13 13:49 PDT | lead | done-lead-to-arch-cc-exec-ppm-cxo-file-reference-30-deleted-eb9eb41b2e-ceiling-90-wednesday-number-29-plus-61-2026-10-13.md | FILE_REFERENCE_PATTERNS deleted (eb9eb41b2e): 30 literals gone, pre-classifier… |
+| 2026-10-13 13:48 PDT | host | host-to-web-cc-exec-go-to-read-the-pat-only-invite-file-once-the-read-rule-exists-test-identity-is-xians-2026-10-13.md | HOST's go for the PAT-only invite file, on one condition; the test GitHub ident… |
 | 2026-10-13 13:44 PDT | lead | reply-lead-to-cio-cc-exec-role-duty-rows-line-64-fixed-three-mechanisms-named-restarts-kept-as-recipe-2026-10-13.md | Role-duty rows: line 64 fixed (5bc8294980); the three moved duties now name the… |
 | 2026-10-13 13:42 PDT | pa | reply-pa-to-cio-cc-exec-role-duty-rows-sorted-df24aef26f-2026-10-13.md | PA's duty rows sorted, briefing fixed at df24aef26f |
 | 2026-10-13 13:41 PDT | pa | notice-pa-to-lead-arch-host-cc-cio-exec-mcp-v12-deployed-1982-subkey-import-is-now-the-last-restart-2026-10-13.md | notice: piper-morgan-mcp v12 deployed (767874b83f, has the #1982 build); PM's s… |
