@@ -297,3 +297,4 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - 10-12 17:40 — alpha re-run judged: #1985/#1986 CLOSED; filed #1998, #1999; #1987 comment; armed-slot question to Lead. Owed: #1960 quote, #1983 (step 4 via PA), #1995, #1984 known miss open.
 - 10-12 18:05 — re-run crossed fixes: #1996/#1997 on main (not live), #1998/#1999 closed as dups; Arch: #1987 pick must arm, #2000 census. Owed: judge #1996/#1997 on next promotion's re-run.
 - 10-12 18:20 — #2000 landed (census); calendar nudge offer is ledgered unarmed (a 'yes' holds no state) — watch.
+- 10-12 19:20 — tick: quiet; #1987 gone-row served step on card v20; CI 12/12 green. STOP is the next slot (~21:17+).
