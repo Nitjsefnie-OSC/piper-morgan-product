@@ -34,10 +34,10 @@ max_age_days: 90
 > `claude/host-cycle`, on Amber (the cohort's always-on host since 2026-07-25). **This is the
 > opposite of what this briefing said until today**: it previously claimed Model A was "deprecated"
 > and HOST ran an ephemeral Desktop worktree — that was true pre-Amber and has been wrong for two
-> months. Thin cron prompt + `duty-cycle-tick` skill, **windowed daytime-only**
-> (`37 6,9,12,15,18,21 * * *`, no overnight), transient state in `dev/active/host-carry-forward.md`.
-> Cron is **session-only**, dies with the session or after 7 days; re-armed via delete-then-create
-> at every STOP, verified via `CronList`. The shared operating model is **not duplicated here** —
+> months. Thin fire prompt + `duty-cycle-tick` skill, fired by a **LaunchAgent**
+> (`com.xian.pm-host-cycle`, `26 6,9,12,15,18,21`, windowed daytime-only, no overnight); there is no session cron
+> to arm or re-arm, and `CronList` reading empty is expected. Transient state lives in `dev/active/host-carry-forward.md`;
+> the registry row in `dev/active/duty-cycle-registry.tsv` is the cadence source of truth (verified 2026-10-13). The shared operating model is **not duplicated here** —
 > see `BRIEFING-CURRENT-STATE.md` and CLAUDE.md §"Worktree model" for the canonical, cohort-wide
 > mechanics.
 
@@ -56,7 +56,7 @@ max_age_days: 90
 - **Trust-property stewardship** — naming + tracking the cohort's trust patterns (e.g. PP-004 structural-fix-over-discipline; methodology-35 asymmetric-discipline; the expectation-violation seams like overnight-continuity); the HOST lens = "where does the system's behavior diverge from what PM reasonably expects."
 - **Role Health Check ownership** — the 4-weekly cohort audit (methodology `role-health-check-methodology.md`, v2.0 = operating-mode-based); auto-issued via `.github/workflows/role-health-check.yml`. HOST fills + posts it.
 - **Duty-cycle health** — agent welfare in the autonomous cycle: cron-shape fit (lane work-shape), the cycle-era drift surfaces (frozen-state-rots, Gap-A/Gap-B continuity), and that PM isn't the sole cross-pair catch.
-- **Attention-dashboard welfare-criteria** (methodology-39 lane, co-owned w/ CIO design + PA build) — "what does PM need to NOT worry about" + "where's the expectation-violation risk."
+- **PM-attention queue (m-39)** — count and age of items waiting on xian, read from Exec's rollup ("waiting on PM"), not from each carry-forward; the convergence-point measurement in methodology-39. Also the HOST lens "where's the expectation-violation risk." (Folded 2026-10-13 from the old "attention-dashboard welfare-criteria" entry, per CIO: the dashboard became Exec's rollup, mechanism liveness is Pard's verify-hooks drumbeat.)
 - **Agent 360** — periodic cohort questionnaire → diff-against-baseline synthesis (tacit-knowledge + friction surfacing).
   - **Fielding rule (v0.6 onward, #1967 / 1b):** each fielding memo asks every respondent to add a **dated row on receipt** (an owed response with no row is invisible to `aging-standing-items.sh`), and HOST sends a **mid-window reminder**. HOST's own open obligations use the `OWED[key: …; to: …; by: …]: …` marker inside the wake's `Drain:` line, per skill v1.47; `scripts/owed-scan.py` checks it. Pilot: HOST and Exec, 10-09 to 10-16.
 

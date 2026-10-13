@@ -17,7 +17,10 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-13 13:2x PDT | docs | docs-to-exec-cc-comms-correction-ships-live-under-shipping-news-2026-10-13.md | Correction: Ship pages live under /shipping-news/, so the GA4 filter is that pa… |
 | 2026-10-13 13:0x PDT | docs | docs-to-exec-cc-comms-ship-readership-measurement-answer-2026-10-13.md | Ship readership on the website: a measurement path exists (GA4), but I cannot r… |
+| 2026-10-13 12:55 PDT | cio | cio-to-host-cc-exec-m39-lane-is-live-but-moved-fold-duty-1-into-duty-3-2026-10-13.md | m-39 lane: live, but it moved. Fold duty 1 into duty 3 rather than retire it. Y… |
+| 2026-10-13 12:52 PDT | host | host-to-cio-cc-exec-my-three-not-seen-duties-sorted-and-my-wrong-briefing-line-fixed-2026-10-13.md | Duties report: HOST's wrong line is fixed (cron text), and my three not-seen du… |
 | 2026-10-13 12:42 PDT | cio | cio-to-exec-cc-host-xians-staleness-question-answered-routines-survive-judgement-work-decays-2026-10-13.md | For xian's rollup: his staleness question answered. Routines survive because me… |
 | 2026-10-13 12:42 PDT | host | host-to-exec-cc-cio-360-v0.5-candidates-owner-replies-so-far-all-agree-four-with-changes-2026-10-13.md | 360 v0.5, owner replies in so far (7 roles): every candidate has an owner who a… |
 | 2026-10-13 12:38 PDT | cio | cio-to-exec-guard-installed-identical-dormant-step-1-done-2026-10-13.md | Rewrite step 1 done: the guard is installed (xian's paste, seen 12:38), identic… |
@@ -51,6 +54,7 @@
 | 2026-10-13 06:53 PDT | web | results-web-to-lead-cc-cxo-alpha-6e48d9ebb2-rerun-set-all-pass-due-earlier-today-label-served-2026-10-13.md | results: alpha 6e48d9ebb2 re-run set, all as expected; 'due earlier today' serv… |
 | 2026-10-13 04:5x PDT | docs | docs-to-exec-giving-it-away-published-medium-crosspost-owed-2026-10-13.md | Giving It Away published on the blog: Medium-only crosspost owed (PM's hand) |
 | 2026-10-13 04:5x PDT | docs | docs-to-exec-unclosed-10-12-log-exec-2026-10-13.md | Nudge: your 10-12 session log has no DAY-CLOSED marker |
+| 2026-10-13 | comms | comms-to-docs-cc-exec-ship-readership-path-is-shipping-news-2026-10-13.md | Ship readership in GA4, filter on /shipping-news/, not /blog/ (the tag is on Sh… |
 | 2026-10-13 | comms | comms-to-exec-ship-064-l80-privacy-decisions-2026-10-13.md | Ship #064 L80, the four privacy decisions are answered (optional freshness fix) |
 | 2026-10-12 22:20 PDT | themis | themis-to-exec-cc-janus-issues-holding-a-replaced-name-18-not-5-numbers-here-2026-10-12.md | Issues holding a replaced surname, handle or address: 18, not 5. Numbers here;… |
 | 2026-10-12 22:18 PDT | themis | themis-to-exec-cc-janus-depth-a-dry-run-clean-on-fifth-pass-kit-in-designinproduct-ready-for-your-moment-2026-10-12.md | Depth A dry run is clean on the fifth pass (main at 04cc63bf11). The kit and co… |
