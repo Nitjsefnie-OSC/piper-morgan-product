@@ -37,6 +37,6 @@ can hide its subject (main-ci-status 20 → 100).
 
 - R3 DONE 2026-10-12: heartbeat store-only (1c9b1658f7); git-era prose refreshed in duty-cycle-tick, r3-metric.md, cohort-position.sh and check-unboarded (16:07 fire).
 - piper-guards (key: piper-guards-rest; Filed 2026-10-12): LIVE on CIO seat since the 18:11 restart (M-6 probe blocked 18:13). Side-by-side week 10-12 18:13 to 10-19: log `claude plugin list` and any guard blocks each fire. `claude plugin list` 22:07 says "Read from: <worktree>/claude-plugins/piper-guards" (the source); the 0.2.1 bump at the next change confirms it at runtime. Then Pard: one quiet PM seat, then the rest (install + restart each).
-- R6 slim CLAUDE.md (key: r6-slim-watch; Filed 2026-10-12): SWAPPED by xian (968a649b13). Watch 24h of fires across ≥3 roles through 2026-10-13 ~09:45.
+- R6 slim CLAUDE.md (key: r6-slim-watch; Filed 2026-10-12): CLOSED 10-13. The 24h watch passed (11/11 roles logging, nothing stranded); mailed Exec.
 - Role cards (Filed 2026-10-12): xian said yes 10-13 ~09:55. DONE by CIO 10-13: hook Section 8, CIO card, tick skill v1.51 Drift line (a2000fc5c); format mailed to HOST cc Exec (83a6346e5). Waiting: HOST's card, then the other roles' cards; HOST reviews them; probe rerun with the tick skill (HOST). Live check: card shows at my next start or compaction.
 - CLAUDE.md hard rule 8 (people's details stay private) added 10-12 per Exec/Janus.
