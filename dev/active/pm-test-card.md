@@ -24,7 +24,7 @@ N2. **#2003 named miss** — with the numbered ask armed, `delete the reminder "
 
 **New since your last pass (the 21:46 build):**
 1. **#1987 pointer delete.** `remind me to water the plants tomorrow at 9`, then `delete that reminder`. Pass: `Delete the reminder
-   "…"? (yes/no)`; `yes` removes it (check the Todos page). **Half 2 — PASSED on Web's 12:08 run, CXO closed #1987 12:40; the gone-row line PASSED in one conversation 13:00 (71e213b885 + a9f8cd16d1):** with two
+   "…"? (yes/no)`; `yes` removes it (check the Todos page). **Half 2 — PASSED on Web's 12:08 run, CXO closed #1987 12:40; the gone-row line PASSED in one conversation (Web's 12:21 memo) (71e213b885 + a9f8cd16d1):** with two
    reminders set, `delete a reminder` → `Which reminder should I delete?` + a numbered list → `2` → `Delete the reminder "…"? (yes/no)` →
    `yes` → gone. Also (49e90de36f, Arch's condition 3): with the numbered ask open, say `thanks` → `You're welcome.` + the same numbered question
    again (a9f8cd16d1, CXO's 09:50 copy); then `2` still binds. `bye` instead drops the ask: `Goodbye for now.` On the live build it still answers the old generic prompt (Web saw that at 06:53).
