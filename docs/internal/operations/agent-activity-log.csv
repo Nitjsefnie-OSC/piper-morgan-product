@@ -2909,3 +2909,14 @@ date,role,slug,environment,model,log_filename,notes
 2026-10-11,Programmer subagent,prog,code,sonnet,2026-10-11-0851-prog-code-log.md,"STATUS 2 + PRIORITY 1 deletions, 124 to 121"
 2026-10-11,Programmer subagent,prog,code,sonnet,2026-10-11-1042-prog-code-log.md,#1977 step 1 span-based residue decline
 2026-10-11,Programmer subagent,prog,code,sonnet,2026-10-11-1143-prog-code-log.md,#1977 step 2 acknowledgement line
+2026-10-12,Chief of Staff,exec,code,sonnet,2026-10-12-0608-exec-code-log.md,"Monday answers fan-out, rollup v174 to v219, contacts cleanup step 1; no DAY-CLOSED"
+2026-10-12,Chief Innovation Officer,cio,code,opus,2026-10-12-0610-cio-code-log.md,"R3 closed, slim CLAUDE.md swapped, piper-guards 0.2.0 live, Fly split file; no DAY-CLOSED"
+2026-10-12,Web,web,code,sonnet,2026-10-12-0618-web-code-log.md,"Two served alpha rounds (5 of 8, 12 of 12), #1992 filed, token-401 steps"
+2026-10-12,Communications,comms,code,opus,2026-10-12-0619-comms-code-log.md,"D-C done, Section C v2, Giving It Away publish-ready, Ship 064 row set"
+2026-10-12,Head of Sapient Trust,host,code,sonnet,2026-10-12-0626-host-code-log.md,"PAT invite minted, alpha@ watch live, identity test 0.5/6 vs 6/6; no DAY-CLOSED"
+2026-10-12,Chief Architect,arch,code,opus,2026-10-12-0627-arch-code-log.md,"#1984 known miss, #1986 reverses #1754, #1459 GO, PR #1952 reviewed, #2000"
+2026-10-12,Principal PM,ppm,code,sonnet,2026-10-12-0633-ppm-code-log.md,"Ceiling held at 120, five slips, #1985-#2000 placed, #1998 not admitted"
+2026-10-12,Lead Dev,lead,code,fable,2026-10-12-0647-lead-code-log.md,"Fifteen landings (#1985, #1986, #1459, #1987, #1992 and more), two promotions, one red"
+2026-10-12,Piper Alpha,pa,code,opus,2026-10-12-0647-pa-code-log.md,"Waiting day on #1982: step 0 done, PAT invite, #1983 and #1995 relays"
+2026-10-12,Docs mgr,docs,code,sonnet,2026-10-12-0712-docs-code-log.md,"10-10 and 10-11 omnibuses, FLY-AUDIT #1994, How to Report edit, Ship view rebuilt"
+2026-10-12,Chief Experience Officer,cxo,code,sonnet,2026-10-12-0730-cxo-code-log.md,"#1984 retitled known miss, #1985 and #1986 closed, #1983 hint copy, #1995 filed"
