@@ -191,8 +191,8 @@ Before producing anything, work this checklist:
 
 1. **SessionStart hook output** — unread mailbox counts, today's session logs, xpoll brief location
 2. **Check `mailboxes/cxo/inbox/`** — process any pending memos; move to `read/` after processing
-3. **Scan recent omnibus logs** in `docs/omnibus-logs/` for CXO-relevant events (voice drift, PDR/ADR drift, floor quality signals, ethics activation events)
-4. **Check `BRIEFING-CURRENT-STATE.md`** for sprint context
+3. **Omnibus logs** (`docs/omnibus-logs/`): no longer a startup scan (retired 2026-10-13; Docs produces them and I read the relevant one when mail or a ruling points there)
+4. **Check `BRIEFING-CURRENT-STATE.md`** for sprint context (carried by: `.claude/hooks/session-start.sh` and CLAUDE.md "Session start" step 3)
 5. **Check today's session logs** in `dev/active/` and `dev/YYYY/MM/DD/` for in-flight Comms drafts and Lead Dev work — Comms drafts are now readable at draft stage, before publication
 6. **Then decide what to produce** — not before
 
@@ -204,7 +204,7 @@ Before producing anything, work this checklist:
 | Send mail to other roles | Write directly to `mailboxes/[role]/inbox/` (not PM-mediated relay) |
 | Read GitHub issue body | `gh issue view {number}` |
 | Read prompt evolution | `git log services/intent_service/conversational_floor.py` |
-| Read canonical retest scores | Read `services/intent_service/canonical_retest_scorer/` outputs directly |
+| Judge floor quality | Quote Web's served replies (through Lead) and read the source; the retired `canonical_retest_scorer/` directory no longer exists |
 | Score Colleague Test | Read response text from repo (`Grep`, `Read` on response logs) and score against `docs/internal/testing/colleague-test-rubric.md` |
 | Verify a PDR/ADR/Pattern claim | Open the canonical doc before citing — never paraphrase from memory (Step 7 in create-omnibus skill) |
 
@@ -227,7 +227,7 @@ These are standing CXO disciplines, not one-off tasks. They run in parallel with
 
 **1. Ethics-decline voice oversight (#992)**: Review actual production decline responses when BoundaryEnforcer activates. Score against the Colleague Test (decline-path scoring per the **canonical** rubric — open it rather than citing a version from here). Tone=0 auto-fail on content-filter cadence — denials must sound like a colleague drawing a line, not a content moderator. Pattern surfaces in the audit trail (`decision_id` + `boundary_type`) and in production response logs.
 
-**2. Floor quality monitoring (#950)**: Watch canonical retest scores after each M2c change for tone regressions. Current: 72.1% vs. 80% target. Flag anti-flattening capstone failures — the "express investment, not emotion" rule has to hold as the prompt grows more complex. Read scorer outputs directly (`services/intent_service/canonical_retest_scorer/`); don't rely on memos summarizing the scores.
+**2. Floor quality monitoring (#950)**: Judge floor tone on quoted served replies (Web's runs, through Lead), not on memos summarizing scores. The April 72.1% vs. 80% canonical-retest figure is historical; the scorer directory it came from does not exist on main (checked 2026-10-13). Flag anti-flattening failures ("express investment, not emotion" must hold as prompts grow). Trigger: any promotion that touches floor copy.
 
 **3. Verification-before-assertion**: Before citing any PDR/ADR/Pattern by principle name, open the canonical document. Never paraphrase from memory — the corruption mode is silent and accelerates through paraphrase chains. Origin: PDR-004 chain Apr 16. Now codified as Step 7 in the create-omnibus skill and applies to every CXO memo, briefing edit, and review.
 
