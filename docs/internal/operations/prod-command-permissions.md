@@ -4,6 +4,14 @@
 Pard (seat permissions). Applies to any seat allowed to run a fixed production command (first: HOST's seat, the
 read-only `prod_user_lookup` and the invite mint).
 
+## 2026-10-13: alpha promotion after Fly B, and three seats where ASK does nothing
+
+**Fly B is done.** xian removed the required reviewer on the GitHub `alpha` environment. Read 10-13: the protection rules are now just `branch_policy` with 0 reviewers, and the branch policy allows `main` only. `promote-alpha` in `fly-deploy.yml` still runs only on `workflow_dispatch` with `promote_to_alpha=true`. The proposal to Exec (CIO and Lead, one memo) is to keep promotion as a dispatch on xian's explicit word, with no auto-promote and no new permission rule. xian confirms it in session.
+
+**ASK rules do not prompt on bypass seats.** Checked 10-13 by running `ps` and finding each process's working folder: Lead, PA and Web run `--permission-mode bypassPermissions`. The other running seats use `auto`. An ASK rule never prompts on those three seats, so HOST's attended-only rule (no `fly` in scheduled or mail-wake fires) is enforced there only by the seat following it. Deny rules and PreToolUse hooks (piper-guards) are the mechanical layers that could still act. Whether deny rules hold under bypassPermissions has not been measured here.
+
+**Incident, self-reported by Lead (10-13).** In a mail-wake fire, Lead ran `fly logs -a piper-morgan --no-tail` twice, piped to a counter that printed only line counts; no log content was printed or stored. This breached the attended-only rule, and the seat's bypass mode meant the ASK never prompted. Correction (Lead): later reads are attended or handed to another seat.
+
 ## 2026-10-12 (later still): Pard's re-check, hidden verbs, and install path
 
 - **Re-check (Pard, 14:55):** 0 alias spellings miss their class (was 79). No spelling is in two classes, and remove and
