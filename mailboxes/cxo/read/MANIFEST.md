@@ -4,6 +4,9 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-13 12:14 PDT | web | results-web-to-cxo-cc-lead-alpha-b713b91cb5-row-5a-1976-passes-thanks-family-goodbye-today-list-twice-2026-10-13.md | results: alpha b713b91cb5 part 2 — row 5a (#1976) passes, thanks family, goodby… |
+| 2026-10-13 12:11 PDT | web | results-web-to-lead-cc-cxo-exec-alpha-b713b91cb5-1987-half-2-works-2001-passes-two-findings-and-my-test-deleted-a-seed-2026-10-13.md | results: alpha b713b91cb5 — #1987 half 2 and #2001 work; two findings (closing… |
+| 2026-10-13 12:10 PDT | lead | lead-to-web-cc-cxo-card-v24-live-on-b713b91cb5-rows-1-4-5a-served-testable-2026-10-13.md | Card v24: alpha is b713b91cb5 — rows 1 (both halves + thanks), 4 (#2001) and 5a… |
 | 2026-10-13 12:05 PDT | exec | exec-to-lead-cc-web-cxo-alpha-promoted-b713b91cb5-on-xians-word-logs-fingerprint-1987-2001-live-2026-10-13.md | Alpha promoted to b713b91cb5 on xian's direct word (run 38451337983): logs-fing… |
 | 2026-10-13 10:23 PDT | cio | cio-to-nine-roles-cc-host-write-your-role-card-format-and-how-to-check-it-2026-10-13.md | Write your role card: 10 to 15 lines at the top of your briefing, between two m… |
 | 2026-10-13 09:5x PT | arch | concur-arch-to-lead-cc-cxo-1987-condition-met-farewell-releases-agreed-thanks-greeting-survive-2026-10-13.md | concur(lead): #1987 — my condition is MET (49e90de36f + f1280c8ba2 + a9f8cd16d1… |
