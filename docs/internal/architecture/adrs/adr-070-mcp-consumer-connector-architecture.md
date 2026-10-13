@@ -4,7 +4,7 @@ number: 70
 title: "MCP-Consumer Connector Architecture"
 status: "v0.1"
 valid_from: "2026-06-15"
-last_updated: "2026-08-29"
+last_updated: "2026-10-13"
 ---
 
 # ADR-070: MCP-Consumer Connector Architecture
@@ -285,6 +285,28 @@ The GitHub prefs-file band-aid (#1226-trigger M3 work-around) **is not the WS-1 
 **Sequencing**: not tonight; before the next connector port mints more rows (Lead). Both live environments have correct refs right now (alpha's compose host; Fly's `.internal`, repointed at cutover) — no runtime gate.
 
 *Amendment A — Chief Architect, 2026-07-10, on Lead's PM-requested design question; Lead leaned B, Arch ruled B + the single-resolver-authority (A2) and honest-degrade (A4) conditions.*
+
+---
+
+# Amendment B (2026-10-13) — one credential resolver per connector; GitHub has two legs
+
+**Trigger**: #1965 (Radar/standup work-items read) found two GitHub credential resolvers that disagreed: the adapter's grant-aware path and the PAT-only `GitHubConfigService.get_authentication_token`. A user connected one way read as unconnected the other way, the #1547 false-clear shape. Arch ruled on 10-08 in mail and decisions.log; PPM's Agent 360 v0.5 answer (8.3) asked whether it needs a PDR. It does not: it is a credential and status architecture rule, and it amends D3 below. This amendment is its durable home.
+
+**Ruling:**
+
+- **B1 — one credential resolver per connector, and every read goes through it.** For GitHub that is `GitHubMCPSpatialAdapter.resolve_credential` (`services/mcp/consumer/github_adapter.py`). A second resolver is not taught the first one's rules to keep them in sync; its callers move onto the one resolver (#1966 tracks the remaining `get_authentication_token` callers).
+- **B2 — GitHub's resolver has two legs, in this order**: (1) a BOUND binding with a stored grant → the OAuth leg; (2) else the user's own PAT (the encrypted `user_api_keys` row first, then the keychain path) → the PAT leg; (3) else an honest degrade: no binding → CONNECT_REQUIRED, a non-BOUND binding → its mapped reason. **Never the env/system token for a real user** (#1812, #1461); `"system"` and empty user ids are refused outright.
+- **B3 — the PAT leg is read-time and creates no binding row.** A binding keeps meaning "OAuth connected" (bind-on-save rejected). A stale OAuth binding plus a working PAT → the PAT serves the read and the resolver carries `stale_oauth_reason`, so Settings can show the stale leg. Transport may differ per leg; leg choice stays in the resolver.
+- **B4 — every status claim about a connector derives from its resolver** (#1966), never from row presence.
+- **B5 — honest failure names the reason.** A failed strict read carries its `DegradationReason` (CONNECT_REQUIRED / STALE_TOKEN / UNREACHABLE / MISCONFIGURED) on the SOURCE_FAILED record, so the user sees "connect GitHub" or "couldn't reach GitHub", not an empty list. Copy is CXO's (accepted 10-08).
+
+**What this changes in D3.** D3 says Piper stores bindings, not raw connector tokens. B2's PAT leg is the one exception: a user's own PAT, which they pasted into Settings, encrypted at rest under ADR-058's per-user scoping. Piper does not mint, refresh or share it, and never substitutes a deployment token for it. OAuth tokens stay with the MCP server as D3 says.
+
+**Known edge, accepted, not handled:** a BOUND binding whose grant is missing does not fall back to the PAT; it degrades at the call, as before #1965.
+
+**Verified how:** read `resolve_credential`, `_user_pat_at_rest` and `_user_pat` in `github_adapter.py` on main at this commit; the order, the refusal of `"system"`, the no-binding-row PAT leg and `stale_oauth_reason` all match B2–B3. Layer: source, not a served read. Denominator: the GitHub connector only; no other connector has a second leg today.
+
+*Amendment B — Chief Architect, 2026-10-13, recording the 10-08 #1965 (a)/(b) rulings (PA caught the missing PAT leg in the first one).*
 
 ---
 
