@@ -11,9 +11,9 @@
   - Tue 10-13 "Giving It Away, and Wondering Who May Want It": published 10-13, live-verified (fixes present), Medium crossposted (`distributed`).
   - Thu 10-15 "The Overzealous Cleanup Routine": waiting for PM's "ready". Note: current L10 "on its list" (Exec → their).
   - Italic aside paragraphs are a PM device; leave them (xian 10-12).
-  - Wed 10-14 Ship #064: Exec's draft `docs/public/comms/drafts/weekly-ship-064-draft-2026-10-12.md`, calendar row set (drafted + draftPath, 10-12). My pre-check went to Exec 10-12: External clean; L31 + Blockers L80 stale (revoke gate cleared 10-11). Run template-audit after xian's edit, and re-raise L31/L80 if still there.
+  - Wed 10-14 Ship #064: Exec's draft `docs/public/comms/drafts/weekly-ship-064-draft-2026-10-12.md`, calendar row drafted + draftPath. Exec fixed L31 and the revoke blocker 10-12 (fbbf6a8657). 10-13: sent Exec an optional L80 freshness edit (the four privacy decisions were answered). Run template-audit (Ship N/A rows) after xian's edit, then publish-ready to Docs.
 - **Waiting on PM** (all on Exec's rollup):
-  - privacy Section C **v2 (10-12)**: NOT yet answered (told Exec 10-12; Exec puts them to PM one at a time). 4 blanks ⟦PM⟧ (3 goals + N days), to PM's goal-and-gap principle. On his answers, give Web the final text + widen the opening sentence.
+  - privacy Section C **FINAL v3 (10-13)**: all 4 answered by PM (trash then purge, manual deletion via support@ meanwhile, 14 days, logs keep only fingerprints, Lead ec2cc9d44f). Asked PM in conversation for the go to send to Web (outward-facing). On the go: send Web the final text, the opening-sentence widening (page.tsx L36) and a bump to "Last updated".
   - the mining-pass picks (sent 10-09).
   - a verdict on the first scaffold (Sep 6, `the-unguarded-entrance.md`, Tue 11-03). The next scaffold (Sep 7–10) waits on it.
 - **Done since the lines below were written**: the mining pass (10-09, next due 10-23); the blog template review; the No Undo alt
