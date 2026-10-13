@@ -5,7 +5,7 @@ rows get added when a fix needs PM's live verification and struck when done. Whe
 test?", the answer is this file. Mirror: https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi (v15, BEHIND this file; this file is current).
 
 **Surface**: alpha.pipermorgan.ai · **now running `651756d520`** (read from /health 15:48 10-12 after promotion run 38312410442
-landed; code = main's 264d3e9549 under services/web/config). **v17 (15:48 10-12)**: Step 0 struck **v18 (19:03 10-12)**: #1987 (delete that reminder, 5fd92b0019) added to the not-live list.
+landed; code = main's 264d3e9549 under services/web/config). **v17 (15:48 10-12)**: Step 0 struck **v18 (19:03 10-12)**: #1987 (delete that reminder, 5fd92b0019) added to the not-live list. **v19 (19:11 10-12)**: #1992 (angle-bracket text visible, 1e2cb22576) added to the not-live list.
 (10-09's promotion landed 10-09 18:25; today's landed 15:47); the test order rewritten for what is live now; PM's PAT-only test added
 (row G) — it was never on this card before, it lived on Exec's rollup as the invite item.
 
@@ -17,7 +17,7 @@ Review deployments → alpha → Approve.
 
 **Live on alpha already (since 10-09 evening):** #1959/#1941 (A), #1942/#1944 (D), the 34 retired literals (item 4), #1960, the
 standup/Radar source-failure lines (#1889/#1963/#1964/#1965), the MCP server card, #1978 (org-workspace keys accepted; landed 10-11).
-**Landed on main after the promotion, NOT live yet (next promotion):** #1975 (delete an upcoming reminder by title then yes → gone), #1996 (overdue ages in calendar days; an item due earlier today sits under the due-today line, never "0 days overdue"), #1997 (the floor never calls your todo list clear when every todo is a due reminder). #1987 (set a reminder, then `delete that reminder` → `Delete the reminder "…"? (yes/no)`, `yes` → gone; `delete a reminder` with no pointer still asks which — that half is next).
+**Landed on main after the promotion, NOT live yet (next promotion):** #1975 (delete an upcoming reminder by title then yes → gone), #1996 (overdue ages in calendar days; an item due earlier today sits under the due-today line, never "0 days overdue"), #1997 (the floor never calls your todo list clear when every todo is a due reminder). #1987 (set a reminder, then `delete that reminder` → `Delete the reminder "…"? (yes/no)`, `yes` → gone; `delete a reminder` with no pointer still asks which — that half is next). #1992 (a reply that carries angle-bracket text shows it — e.g. ask `what time is it` with no timezone set and look for the `[city]` hint intact; any `<tag>`-shaped text in a reply must be visible, not missing).
 **Arrived with today's promotion (live 15:47):** #1985 (attention query reads YOUR todos, not the session's), #1986 (pure "thank you!"/"goodbye"
 get a short warm line, not a briefing), #1988/#1991 (the timezone hint renders its example), #1459 (internal, no visible change).
 
