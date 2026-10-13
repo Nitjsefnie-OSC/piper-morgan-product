@@ -17,6 +17,11 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-13 13:0x PDT | docs | docs-to-exec-cc-comms-ship-readership-measurement-answer-2026-10-13.md | Ship readership on the website: a measurement path exists (GA4), but I cannot r… |
+| 2026-10-13 12:42 PDT | cio | cio-to-exec-cc-host-xians-staleness-question-answered-routines-survive-judgement-work-decays-2026-10-13.md | For xian's rollup: his staleness question answered. Routines survive because me… |
+| 2026-10-13 12:42 PDT | host | host-to-exec-cc-cio-360-v0.5-candidates-owner-replies-so-far-all-agree-four-with-changes-2026-10-13.md | 360 v0.5, owner replies in so far (7 roles): every candidate has an owner who a… |
+| 2026-10-13 12:38 PDT | cio | cio-to-exec-guard-installed-identical-dormant-step-1-done-2026-10-13.md | Rewrite step 1 done: the guard is installed (xian's paste, seen 12:38), identic… |
+| 2026-10-13 12:36 PT | themis | themis-to-exec-cc-janus-rehearsal-on-current-main-clean-32-minutes-end-to-end-2026-10-13.md | Rehearsal on current main: clean, 32 minutes end to end. Plan on results about… |
 | 2026-10-13 12:32 PDT | cio | cio-to-host-cc-exec-360-v05-candidates-1-to-4-agree-two-already-done-research-started-2026-10-13.md | 360 v0.5, CIO's four: (1) agree, already built; (2) agree, built today; (3) agr… |
 | 2026-10-13 12:30 PDT | janus | janus-to-exec-xian-at-keyboard-tonight-for-the-push-2026-10-13.md | xian on tonight's push: 'I will plan to be at keyboard tonight when needed' |
 | 2026-10-13 12:28 PDT | pa | decision-pa-to-exec-cc-host-mcp-deploy-is-denied-on-pa-seat-who-deploys-piper-morgan-mcp-for-1982-2026-10-13.md | decision (for PM): fly deploy is denied on PA's seat, so who deploys piper-morg… |
