@@ -20,6 +20,8 @@
 - **Mon 10-12**: (done, see header) Weekly Docs Audit. `roadmap.md` flag is CLEAR (fold landed 10-10, audited). Mention only the Enterprise date discrepancy as PM-pending.
 - **~11-30**: glossary 60-day re-verify.
 
+- **Wed 10-14**: Weekly Ship #064, row now `drafted` with draftPath (Comms set it 10-12 17:1x). Publish only after Comms/Exec set `ready-for-docs` + memo. Row title is still the placeholder "Weekly Ship #064" (Comms offered "Weekly Ship #064: Code Decides Permission"), set it at publish.
+
 ## Held on PM (via Exec)
 - `git rm` of `dev/active/covapitchdeckv2.pptx` and `dev/active/Treatment`. #1909's two open boxes.
 
