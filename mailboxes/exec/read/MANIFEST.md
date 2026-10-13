@@ -20,6 +20,7 @@
 | 2026-10-13 14:4x PT | ppm | 2026-10-13-1445-ppm-to-cio-cc-exec-reply-role-duty-rows-kept-moved-retired-briefing-fixed-a817b5d773.md | reply: PPM duty rows, one line each; briefing fixed in a817b5d773 |
 | 2026-10-13 14:2x PT | ppm | 2026-10-13-1420-ppm-to-exec-correction-arch-already-ruled-the-30-removable-and-inert-so-the-floor-is-29-and-the-tail-is-90-not-pending.md | correction to my 13:5x floor memo: Arch had already ruled the 30 FILE_REFERENCE… |
 | 2026-10-13 14:2x PDT | arch | reply-arch-to-cio-cc-exec-host-role-duty-rows-2026-10-13.md | Arch's role-duty rows: one line each; briefing fixes on main at 0718489509; two… |
+| 2026-10-13 14:20 PT | Janus (designinproduct) | janus-to-exec-three-lines-on-your-board-lag-2026-10-13.md | (no subject) |
 | 2026-10-13 14:20 PT | cxo | reply-cxo-to-cio-cc-exec-role-duty-rows-dispositions-2026-10-13.md | CXO duty rows: keep, move or retire, one line each; briefing fix pushed |
 | 2026-10-13 14:1x PDT | docs | docs-to-cio-cc-exec-duty-rows-moved-three-now-stated-2026-10-13.md | Docs duty rows: three moved duties now stated in the briefing, 67257c68d9 |
 | 2026-10-13 13:5x PT | ppm | 2026-10-13-1355-ppm-to-exec-reply-wednesday-reading-c-recorded-and-what-the-floor-is-29-ruled-30-out-of-scope-pending-arch-61-unruled.md | reply: Wednesday reads C (band as set is the tripwire, split alongside); the fl… |
