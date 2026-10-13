@@ -9,7 +9,7 @@ last_verified: "2026-10-01"
 # BRIEFING-ESSENTIAL-CIO
 <!-- Target: 2.5K tokens max -->
 
-<!-- ROLE-CARD updated: 2026-10-13 max_age_days: 30 -->
+<!-- ROLE-CARD updated: 2026-10-13 max_age_days: 90 -->
 ## Role card (CIO)
 - **For**: evolve how the cohort works. Notice patterns in real work, write them down, and keep the practice honest by measuring it.
 - **Priorities, in order**:
