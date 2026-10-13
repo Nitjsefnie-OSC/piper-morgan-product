@@ -81,7 +81,7 @@
 - **#1996 + #1997 LANDED 3469ac2633 + CLOSED 10-12 17:0x** (calendar-day overdue ages at local midnight; dedup-emptied list never 'none'; reminder ages in the floor prompt). **Owed after the next promotion (Web's set, named in my 17:0x reply):** turns 8/11a/11b/12 + a later-today reminder past its time + #1975's delete-by-title. Turn-2 CLOSED (CXO + Arch: keep as built). Turn 9: arms nothing, condition 3 met (Arch concurs). **#2000 LANDED 166d876f4f + CLOSED** (census predicate widened, 9 rows measured, 4 marked). **#1987 (Arch's condition on the row): a numbered delete pick must arm via the #846 store — #1943's family, with Arch.** #1998/#1999 closed as dups of #1997/#1996; CXO's bars quoted on mine. 42f8fe6933 ('due earlier today') landed 729647c019.
 - **#1975 LANDED e6b4fdf413 + CLOSED 10-12 16:3x** (gate-confirmed delete honours its bound row); owed: served re-check on alpha after the next promotion (create upcoming reminder → delete by title → yes → gone). **#1983:** copy RULED by CXO 16:4x (two branches, Read first; parenthesis cut per my 17:0x confirm check — close/reopen ask, create/comment proceed on an imperative). **HELD until PA relays PM's PAT-only step-4 result**; then land the template change (hint + placeholder + JS fallback placeholder at ~:577) and ask CXO to read the served Settings page. **#1995 (CXO, permission gap reads as empty — honesty):** queued behind #1983's landing; needs a served repro with a token lacking Pull requests: Read on PA's PAT-only account. **#1993 LANDED fa8b9efe1a + CLOSED.**
 - **#1982:** held branch `claude/lead-1982-pat-dual-write` (4400ee3d9f, still on origin) — land when PA relays PM's PAT-only alpha test is
-  done; flip `GITHUB_LEGACY_CONTEXT_FALLBACK` to False in the commit that records `legacy=0`.
+  done. **Step 3 DONE 10-13 16:5x (7cc00113bc): fallback flipped False on PM's `legacy=0` (16:36 PT); `--snapshot` now refuses placeholders.**
 - **#1459 LANDED a488e4fa65 + CLOSED 10-12 13:12** (Arch GO 13:1x with three amendments, all applied): `Intent.bind_original_message` one
   writer; `__post_init__` normalizes to the attribute + logs; classifier fill deleted with proof; `TestOriginalMessageWriteRatchet1459`
   (four shapes, AST, ceiling 0, denominator asserted). **Addendum 264d3e9549 (Arch's one gap: bare `{}` exempt only under its own
@@ -135,9 +135,10 @@
   **#1984 half (1) DONE** (three landings: label fallback never prints an action id + catalog-wide pin; CXO's copy + the dropped
   "On the {topic} front" template; `_lowercase_first` keeps proper nouns — CXO's five exceptions). CXO accepted on quotes.
 - **#1982:** built 10-11 (079477fb15, MCP gets ONE scoped subkey). Held branch `claude/lead-1982-pat-dual-write` (4400ee3d9f): land
-  when PA relays PM's PAT-only alpha test is done (merge into cycle, push main, issue comment, decisions.log). Waiting on PM's pipe +
-  snapshot + re-encrypt per the runbook; **mine when the report reads `legacy=0`: flip `GITHUB_LEGACY_CONTEXT_FALLBACK` to False in the
-  commit that records it.** PM's account is OAuth (PA), so the MCP live check does not wait on the held branch.
+  when PA relays PM's PAT-only alpha test is done (merge into cycle, push main, issue comment, decisions.log). **Steps 1–3 DONE 10-13:**
+  PM set the subkey + re-encrypted (16:36 PT, total=2 rewritten=2 legacy=0); I flipped `GITHUB_LEGACY_CONTEXT_FALLBACK` False at
+  7cc00113bc with the count on the issue + decisions.log + runbook, and made `--apply --snapshot` refuse non-`vs_` values (the apply had
+  taken the literal `<snapshot-id>`). Remaining: PA's live check (Exec asked), Registry publish, the held branch on its own trigger.
 - **read_floor_3 wave** (get_project_status + get_top_priority adapters; real scoring replaces the lenient FLOOR rule; Arch's four 20:5x
   conditions): trigger = the deletion lane's next STATUS/PRIORITY pass, not #1984. The routing-stack doc now says the grammar has two
   sources (rail + registry FLOOR/CANONICAL ops) — an adapter changes dispatch/scoring, not nameability.
