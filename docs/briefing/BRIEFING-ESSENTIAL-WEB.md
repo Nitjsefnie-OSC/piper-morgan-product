@@ -43,7 +43,7 @@ Run `basename "$(pwd)"` + `git branch --show-current` before any commit — the 
 
 ## Environment facts — verify each fire, don't assume from memory
 
-- **No Chrome on this host.** `mcp__chrome-devtools__*` tools fail (executable not found). No in-browser click-through testing is available here — verify via `tsc`/lint/build + targeted extracted-logic tests (standalone Node reproductions for timing/closure bugs), and say so explicitly rather than implying browser verification happened.
+- **Chrome works on this host** (checked 2026-10-13: `mcp__chrome-devtools__*` drove the alpha web app in an isolated browser context all week). Use it for served checks, and still say which layer you checked: a browser read of the rendered page is not a build or lint result, and neither is a `curl` 200. Without a live secret you still cannot exercise the real success path of the compose API or the live calendar read.
 - **No live secrets locally** (`GITHUB_DRAFT_TOKEN`, `ADMIN_PASSWORD_HASH`, `ADMIN_SESSION_SECRET`). You can exercise failure/fallback branches (a bogus-token 401, an unauthenticated redirect) but not the real success path for anything touching the compose API or the live GitHub-backed calendar read. Vercel has the real values — the first authenticated load after a deploy is the actual test, and PM's own use of the tool is stronger verification evidence than anything reproducible here.
 - **`node_modules` isn't pre-installed** in the website worktree at provisioning time — `npm install` before any build/dev work. Turbopack panics in this worktree; use plain `next dev`, not `next dev --turbopack`.
 - **Secrets recipes are stdin-based only, never argv** — zsh mangles special characters in command-line arguments.
@@ -76,7 +76,7 @@ Run `basename "$(pwd)"` + `git branch --show-current` before any commit — the 
 - Newsletter/CTA infrastructure — Buttondown integration, `/newsletter` redirect, form health.
 - Accessibility maintenance — WCAG 2.1 AA, `imageAlt` completeness, keyboard nav.
 - Admin routes — `/admin/calendar/`, the compose UI.
-- The rolling observation-pass queue (design/UX backlog) — keep it from growing unchecked; this role has no browser on this host, so a PM live pass or CXO involvement is the only way most of that queue actually clears.
+- The rolling observation-pass queue (design/UX backlog, `dev/2026/05/24/site-observation-pass-2026-05-24.md`): read its state at the first fire with an empty drain and log how many items are open; CXO ratifies visual direction, Web implements. A browser is available, so the queue can now be checked, not only waited on.
 - Continuity — session log + carry-forward maintenance; every duty-cycle fire closes clean (see `.claude/skills/duty-cycle-tick/SKILL.md`, which this role runs on every cron fire).
 
 ## Co-ownership seams
@@ -91,7 +91,7 @@ Full detail with consent-gradient (freely / sign-off / unilateral) per seam: `RO
 
 ## Progressive Loading
 
-- **Current priorities / what's actively being worked** → `ROLE-PORTFOLIO-WEB.md` §2 (reviewed, not automatically refreshed, at duty-cycle START — see that doc's §5 for the honest version of this claim; "reads it" and "updates it" are different activities, corrected 2026-08-04)
+- **Current priorities** → the role card at the top of this file. `ROLE-PORTFOLIO-WEB.md` §2 is dated 2026-08-04 and is read when a new workstream starts, not at every duty-cycle START (that per-START review was not happening; corrected 2026-10-13).
 - **Duty-cycle fire procedure** → `.claude/skills/duty-cycle-tick/SKILL.md`
 - **Amber worktree model, gotchas** → `docs/internal/operations/amber-worktree-lifecycle.md`, CLAUDE.md §"Worktree model"
 - **Mailbox/mail-send mechanics** → CLAUDE.md §"Branch / Worktree / Mailbox Discipline"
