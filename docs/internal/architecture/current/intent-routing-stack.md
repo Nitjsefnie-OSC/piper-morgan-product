@@ -276,6 +276,25 @@ falling back to the unchanged regex extractor otherwise. The scorer's
 `args_match` gains a `text` key (normalised, verbatim); corpus row 'add a todo
 to web test one' carries `expected_args: {text: 'web test one'}` (a measured
 args row, 3/3 on main's wording); census pin 596. Regression: `test_create_todo_router_text_1976.py`.
+**meeting_time registry example: the day-less 'when' question (2026-10-13, Arch's
+rule-10 licence-row ruling)**: 'when am i in a meeting' (yaml:1350) licenses the
+deleted TEMPORAL literal `\bwhen am i.{0,10}meeting\b` and flipped meeting_time →
+CLARIFY on 4 of the 5 candidate trees since 10-10 (the router: "Ambiguous: could
+mean today's meetings, this week's schedule, or recurring meetings"). Arch ruled it
+must be stabilized by its own screened candidate, never excluded from attribution.
+Six wordings screened ×6 on main+edit and on three perturbed trees: every
+rail-description sentence fixed the row but perturbed other lists' licence rows
+('what meetings are coming up', 'what meetings do i have', 'when's the milestone
+deadline', the upstream row) or the standing member; an example SWAP lost the
+time-in-meetings family on a perturbed tree. The landing is the ADDITIVE example —
+`ACTION_EXAMPLES[('QUERY','meeting_time')]` = 'How much time do I spend in meetings
+today? / When am I in a meeting?' — description unchanged: the licence row
+meeting_time ×6 @0.95 on main+edit and all three perturbed trees, the calendar
+family unchanged, full run 476/532 (`inversion-meeting-time-when-row-example-full-
+score-2026-10-13-anthropic.md`), standing member 16/18 vs main 18/18 disclosed.
+Controls: `dev/2026/10/13/controls/mt-*.md`; the wording-4 full run is kept
+CANDIDATE-HELD. Arch's narrow perturbation-sensitive ledger (decisions.log
+2026-10-13 07:4x) is defined but has no entries yet.
 **#1906 pick-target carrier (2026-09-30) — the ONE unarmed branch in
 `reminder_clear.py` now arms.** PM live, test card session: a named-target ask
 that matches zero or several candidates (`named_target_unmatched` — "clear the

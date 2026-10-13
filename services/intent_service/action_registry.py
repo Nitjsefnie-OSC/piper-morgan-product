@@ -304,7 +304,14 @@ ACTION_EXAMPLES: dict[tuple[str, str], str] = {
     ("PORTFOLIO", "link_repo"): "Link octocat/hello-world to Piper Morgan",
     ("PORTFOLIO", "unlink_repo"): "Unlink octocat/hello-world from Piper Morgan",
     ("PROVENANCE", "explain_suggestion"): "Why did you suggest that?",
-    ("QUERY", "meeting_time"): "How much time do I spend in meetings today?",
+    # 2026-10-13 (Arch's ruling on the rule-10 licence row "when am i in a
+    # meeting", yaml:1350): the day-less "when" question joins the example —
+    # ADDED, not swapped: dropping the time-in-meetings example moved that
+    # family to week_calendar on a perturbed tree (controls mt-w5-*).
+    (
+        "QUERY",
+        "meeting_time",
+    ): "How much time do I spend in meetings today? / When am I in a meeting?",
     ("QUERY", "recurring_meetings"): "Show me my recurring meetings",
     ("QUERY", "week_calendar"): "What does my week look like?",
     ("QUERY", "shipped_query"): "What shipped this week?",
