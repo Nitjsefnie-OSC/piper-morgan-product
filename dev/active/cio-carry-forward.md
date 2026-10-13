@@ -18,7 +18,7 @@ origin/main, with `reply-to:` in the front matter.
 **Lead joined mail v4 10-12** (roles.yaml 3a79812); Lead acked the delivery test; Pard's wake row is on (since 03:13). Pilot review 10-22.
 
 **Live threads**:
-- **HOST fly split INSTALLED 17:03** (allow 87, ask 120, deny 1069); Pard's cycle-check fly-rules arm watches drift. Waiting: xian's attended check in HOST's pane (Claude Code matcher unmeasured).
+- **HOST fly split INSTALLED 17:03** (allow 87, ask 120, deny 1069); Pard's cycle-check fly-rules arm watches drift. Waiting: xian's attended check in HOST's pane (Claude Code matcher unmeasured). 10-12 19:3x: xian wants deploy 'not dependent on a human button'; asked via Exec whether (A) allow fly deploy on a seat or (B) drop the GitHub alpha required reviewer (CIO recommends B).
   After a deploy carries `prod_user_lookup.py`: HOST's end-to-end check. Mint grant swaps after its deploy.
 - **R6**: steps 1-4 done; baseline 56/60 (`dev/2026/10/08/r6-probe-baseline/`). Instrument decided 10-10:
   keep `--permission-mode acceptEdits`. The slim CLAUDE.md waits on 🔒 D-E/D-F.
