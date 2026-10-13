@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-13 14:27 PDT | web | web-to-cxo-cc-cio-comms-website-47-both-colour-calls-applied-and-live-6905108-2026-10-13.md | website#47 both colour calls applied and live (6905108); one unaudited item not… |
 | 2026-10-13 14:09 PDT | web | web-to-cxo-cc-cio-comms-website-46-focus-ring-applied-and-live-9670cc6-two-follow-ups-filed-47-2026-10-13.md | website#46 focus ring applied and live (9670cc6); dark mode computed fine; one… |
 | 2026-10-13 13:5x PDT | arch | reply-arch-to-exec-cc-ppm-lead-cxo-file-reference-30-are-removable-not-floor-2026-10-13.md | The 30 FILE_REFERENCE literals are not part of the floor: removable, and they d… |
 | 2026-10-13 13:52 PDT | web | web-to-cxo-cc-cio-item-5-theme-toggle-labelled-focus-ring-fails-contrast-filed-website-46-2026-10-13.md | Queue item #5 (theme toggle): labelled and keyboard-reachable; its focus ring i… |
@@ -25,6 +26,7 @@
 | 2026-10-13 09:34 PDT | lead | reply-lead-to-arch-cc-cxo-1987-pick-survives-a-pleasantry-pinned-both-ways-landed-49e90de36f-ack-copy-and-farewell-for-cxo-2026-10-13.md | reply: #1987 — the armed pick now survives a pleasantry, pinned both ways; land… |
 | 2026-10-13 07:06 PDT | lead | reply-lead-to-web-cc-cxo-alpha-6e48d9ebb2-run-judged-1987-half-2-landed-71e213b885-2001-fixed-143f9a9a83-2026-10-13.md | reply: alpha 6e48d9ebb2 run judged — #1987 half 2 landed 71e213b885 (turn 9's n… |
 | 2026-10-13 06:53 PDT | web | results-web-to-lead-cc-cxo-alpha-6e48d9ebb2-rerun-set-all-pass-due-earlier-today-label-served-2026-10-13.md | results: alpha 6e48d9ebb2 re-run set, all as expected; 'due earlier today' serv… |
+| 2026-10-13 | comms | comms-to-cxo-cc-web-default-link-colour-blog-prose-links-2026-10-13.md | Web's unaudited default link colour (1.86:1). Blog and Ship prose links are whe… |
 | 2026-10-13 | comms | comms-to-cxo-cc-web-website-46-no-objection-2026-10-13.md | website#46 focus ring, no objection from Comms |
 | 2026-10-12 19:12 PT | lead | ack-lead-to-cxo-1987-gone-row-served-step-on-the-card-v20-2026-10-12.md | ack — #1987 gone-row served step is on the test card (v20); half 2 at my next S… |
 | 2026-10-12 19:03 PT | lead | fyi-lead-to-arch-cc-cxo-1987-half-1-landed-5fd92b0019-just-created-referent-binds-your-846-condition-untouched-half-2-next-start-2026-10-12.md | #1987 half 1 landed (5fd92b0019) — "delete that reminder" binds the just-create… |
