@@ -12,13 +12,19 @@ Rows in scope: ``user_api_keys`` where ``provider`` is one of GITHUB_PROVIDERS a
     (no flags)         DRY RUN. Counts rows under the legacy context and the new
                        context, decrypts every legacy row and re-encrypts it to a
                        scratch value (round-tripped), writes nothing.
-    --apply --snapshot "<id or note>"
+    --apply --snapshot vs_<id>
                        Re-encrypts the legacy rows in one transaction, then re-reads
                        every GitHub row and decrypt-round-trips it under the new
                        context. Refuses without --snapshot (the operator asserts a DB
                        snapshot exists; the value is echoed into the report so the
-                       claim is on the record) and refuses if the dry-run phase finds
-                       any row it cannot decrypt.
+                       claim is on the record), refuses a value that is not shaped
+                       like a Fly volume snapshot id (``vs_`` + alphanumerics: on
+                       2026-10-13 the literal placeholder ``<snapshot-id>`` was
+                       accepted, so the "snapshot exists" claim was empty), and
+                       refuses if the dry-run phase finds any row it cannot decrypt.
+                       Existence is not checked here: this runs inside the app
+                       machine, which has no flyctl. The operator's ``fly volumes
+                       snapshots list`` output is the existence evidence.
 
 Exit status: 0 on a clean run (including a dry run), 1 if any row is undecryptable,
 2 on a refused --apply. When the final report reads ``legacy=0``, flip
@@ -29,6 +35,7 @@ in the same commit that records the count.
 from __future__ import annotations
 
 import argparse
+import re
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -63,6 +70,16 @@ def classify(enc, token: str, new_ctx: str, legacy_ctx: str) -> str:
         return "undecryptable"
 
 
+# A Fly volume snapshot id: ``vs_`` then alphanumerics (observed: 24 characters after
+# the prefix). Anything else is a placeholder or a note, which is not a snapshot.
+SNAPSHOT_ID_RE = re.compile(r"^vs_[A-Za-z0-9]{8,}$")
+
+
+def is_snapshot_id(value: str | None) -> bool:
+    """True when ``value`` is shaped like a Fly volume snapshot id (not its existence)."""
+    return bool(value) and SNAPSHOT_ID_RE.match(value or "") is not None
+
+
 def run(*, apply: bool, snapshot: str | None) -> int:
     from prod_db import _database_url, _redacted  # noqa: PLC0415
     from sqlalchemy import create_engine, text  # noqa: PLC0415
@@ -82,7 +99,14 @@ def run(*, apply: bool, snapshot: str | None) -> int:
         print(f"!!! {ENV_MASTER_KEY} is required (master mode); refusing", file=sys.stderr)
         return 2
     if apply and not snapshot:
-        print("!!! --apply requires --snapshot '<id or note>' (HOST condition 2); refusing")
+        print("!!! --apply requires --snapshot vs_<id> (HOST condition 2); refusing")
+        return 2
+    if apply and not is_snapshot_id(snapshot):
+        print(
+            f"!!! --snapshot {snapshot!r} is not a Fly volume snapshot id (vs_ + alphanumerics); "
+            "a placeholder or a note is not a snapshot. Run `fly volumes snapshots list "
+            "<vol-id> -a piper-morgan-db` and pass the newest id; refusing"
+        )
         return 2
 
     mode = "APPLY" if apply else "DRY-RUN"
@@ -131,7 +155,7 @@ def run(*, apply: bool, snapshot: str | None) -> int:
         return 1
     if not apply:
         print(
-            "DRY-RUN complete — no writes. Re-run with --apply --snapshot '<id>' to rewrite "
+            "DRY-RUN complete — no writes. Re-run with --apply --snapshot vs_<id> to rewrite "
             f"the {rep.legacy} legacy row(s)."
         )
         return 0
@@ -180,7 +204,9 @@ def main(argv: list[str] | None = None) -> int:
     )
     ap.add_argument("--apply", action="store_true", help="rewrite legacy rows (default: dry run)")
     ap.add_argument(
-        "--snapshot", default=None, help="id or note of the DB snapshot taken before --apply"
+        "--snapshot",
+        default=None,
+        help="id (vs_…) of the DB volume snapshot taken before --apply; a note is refused",
     )
     args = ap.parse_args(argv)
     return run(apply=args.apply, snapshot=args.snapshot)

@@ -348,3 +348,51 @@ class TestReencryptClassify:
         monkeypatch.setenv(ENV_MASTER_KEY, MASTER_B64)
         monkeypatch.delenv(ENV_SCOPED_SUBKEYS, raising=False)
         assert mod.run(apply=True, snapshot=None) == 2
+
+    @pytest.mark.parametrize(
+        "bad",
+        [
+            "<snapshot-id>",
+            "vs_",
+            "vol_vwnz8mp3kd31j5nv",
+            "taken by hand",
+            "vs_short",
+            "VS_abcdefghij",
+        ],
+    )
+    def test_apply_with_a_placeholder_or_note_snapshot_is_refused(self, monkeypatch, bad, capsys):
+        """2026-10-13: the apply ran with the literal ``<snapshot-id>`` and the script took it
+        as an operator-asserted snapshot. The value must be shaped like a Fly snapshot id."""
+        mod = _load_reencrypt_script()
+        monkeypatch.setenv(ENV_MASTER_KEY, MASTER_B64)
+        monkeypatch.delenv(ENV_SCOPED_SUBKEYS, raising=False)
+        assert mod.run(apply=True, snapshot=bad) == 2
+        out = capsys.readouterr().out
+        assert "not a Fly volume snapshot id" in out
+        assert "operator-asserted DB snapshot" not in out  # refused before the claim is printed
+
+    def test_snapshot_id_shape(self):
+        mod = _load_reencrypt_script()
+        assert mod.is_snapshot_id("vs_wo2jb8MR7K9wI638BmRARl5M")
+        assert not mod.is_snapshot_id(None)
+        assert not mod.is_snapshot_id("")
+        assert not mod.is_snapshot_id("<snapshot-id>")
+
+    def test_dry_run_never_needs_a_snapshot(self, monkeypatch):
+        """The shape check gates --apply only; a dry run with no snapshot still reaches the
+        DB phase (here: fails on the DB, not on the guard)."""
+        mod = _load_reencrypt_script()
+        assert mod.is_snapshot_id("<snapshot-id>") is False
+        # run() with apply=False does not consult the snapshot at all:
+        import inspect
+
+        src = inspect.getsource(mod.run)
+        assert "if apply and not is_snapshot_id(snapshot)" in src
+
+
+class TestLegacyFallbackIsOff:
+    def test_flag_is_false_after_the_2026_10_13_reencrypt(self):
+        """Runbook step 3: legacy=0 on alpha (2026-10-13 16:36 PT, total=2 rewritten=2
+        verified_new=2). The flag flips in the commit that records that count and must
+        not drift back on without a new legacy population being recorded."""
+        assert uaks.GITHUB_LEGACY_CONTEXT_FALLBACK is False

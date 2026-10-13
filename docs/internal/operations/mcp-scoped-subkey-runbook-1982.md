@@ -74,9 +74,25 @@ fly ssh console -a piper-morgan -C "python scripts/reencrypt_github_secrets_1982
 ```
 
 The script prints counts and row ids only. A non-zero exit means stop and read the
-output; `--apply` refuses without `--snapshot` and refuses if any row is undecryptable.
+output; `--apply` refuses without `--snapshot`, refuses a `--snapshot` value that is not
+shaped like a Fly snapshot id (`vs_` + alphanumerics: a pasted placeholder such as
+`<snapshot-id>` is refused, since 2026-10-13), and refuses if any row is undecryptable.
+It cannot check the snapshot exists (no flyctl inside the machine); the `snapshots list`
+output in step a is that evidence. Run the four lines one at a time, substituting each id
+from the previous line's output, not as one pasted block.
+
+**Done 2026-10-13 16:36 PT (PM's hand):** step 1 wrote one subkey for one context; both
+MCP machines healthy; `fly secrets list -a piper-morgan-mcp` names `DATABASE_URL` and
+`ENCRYPTION_SCOPED_SUBKEYS` only. Step 2 dry run `total=2 new=0 legacy=2 undecryptable=0`;
+apply `total=2 rewritten=2 verified_new=2 legacy=0 failed=0`. The manual snapshot was not
+taken (the placeholder failed in zsh and the apply then accepted the literal placeholder,
+the gap the shape check above now closes); Fly's automatic daily snapshot from six hours
+before the apply holds the pre-state of both rows (5-day retention).
 
 ## 3. Drop the legacy fallback
+
+**Done 2026-10-13 (Lead), the commit that carries this line:** `GITHUB_LEGACY_CONTEXT_FALLBACK = False`,
+count recorded on #1982 and in decisions.log; pinned by `TestLegacyFallbackIsOff`.
 
 When step 2's final report reads `legacy=0`: set `GITHUB_LEGACY_CONTEXT_FALLBACK = False`
 in `services/security/user_api_key_service.py` in the same commit that records the count

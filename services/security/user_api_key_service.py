@@ -32,12 +32,14 @@ USER_SECRET_CONTEXT = "user_api_keys.secret"
 # (ConnectorGrantStore). Every other provider stays on USER_SECRET_CONTEXT.
 GITHUB_SECRET_CONTEXT = "user_api_keys.secret.github"
 GITHUB_PROVIDERS = frozenset({"github", "github_mcp_oauth"})
-# Reads of a GitHub row try GITHUB_SECRET_CONTEXT first, then the legacy shared context,
-# until scripts/reencrypt_github_secrets_1982.py reports zero legacy rows on alpha.
-# Flip to False in the same commit that records that count (HOST's condition 2).
-# A scoped process (the MCP app) never holds the legacy subkey, so the fallback is
-# skipped there by construction (``supports`` is False), not by this flag.
-GITHUB_LEGACY_CONTEXT_FALLBACK = True
+# Reads of a GitHub row use GITHUB_SECRET_CONTEXT only. The legacy-shared-context
+# fallback was live until scripts/reencrypt_github_secrets_1982.py reported zero
+# legacy rows on alpha: 2026-10-13 16:36 PT, PM's hand, total=2 rewritten=2
+# verified_new=2 legacy=0 failed=0 (HOST's condition 2; #1982). Flipped to False in
+# the commit that records that count. The branch stays as code so a future context
+# split can reuse it; a scoped process (the MCP app) never holds the legacy subkey, so
+# the fallback is skipped there by construction (``supports`` is False), not by this flag.
+GITHUB_LEGACY_CONTEXT_FALLBACK = False
 
 
 def secret_context(provider: str) -> str:
