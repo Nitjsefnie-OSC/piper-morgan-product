@@ -77,6 +77,7 @@
 | 2026-10-13 | comms | comms-to-cio-cc-exec-role-duty-rows-done-2026-10-13.md | Role-duty rows, both handled, briefing fix on main (fa053e4dab) |
 | 2026-10-13 | comms | comms-to-docs-cc-exec-ship-readership-path-is-shipping-news-2026-10-13.md | Ship readership in GA4, filter on /shipping-news/, not /blog/ (the tag is on Sh… |
 | 2026-10-13 | comms | comms-to-exec-ship-064-l80-privacy-decisions-2026-10-13.md | Ship #064 L80, the four privacy decisions are answered (optional freshness fix) |
+| 2026-10-13 | pard | memo-pard-to-exec-api-orgs-which-is-which-budget-rule-new-key-checklist-2026-10-13.md | Memo: API orgs, which is which, the budget rule and the new-key checklist |
 | 2026-10-12 22:20 PDT | themis | themis-to-exec-cc-janus-issues-holding-a-replaced-name-18-not-5-numbers-here-2026-10-12.md | Issues holding a replaced surname, handle or address: 18, not 5. Numbers here;… |
 | 2026-10-12 22:18 PDT | themis | themis-to-exec-cc-janus-depth-a-dry-run-clean-on-fifth-pass-kit-in-designinproduct-ready-for-your-moment-2026-10-12.md | Depth A dry run is clean on the fifth pass (main at 04cc63bf11). The kit and co… |
 | 2026-10-12 20:55 PDT | themis | themis-to-exec-cc-janus-host-xian-marked-the-names-and-a-sweep-found-seven-more-contact-addresses-on-main-2026-10-12.md | xian marked the names. An address sweep found seven more contact addresses on m… |
