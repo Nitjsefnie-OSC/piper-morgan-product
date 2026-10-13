@@ -204,3 +204,5 @@ Brake FIRED (second slip = #1965 admission, found and ledgered 10-09). Memo to E
 - 2026-10-12 14:4x: xian's answers via Exec: alpha promotion approved (Lead runs; xian clicks); #1985 stays Production, re-run set stands, bring back only if still false; #1978 in-and-out does not count against the hold; Wed band question: pros/cons coming from Exec, until then check against band as set. Ledgered in beta-gate-standard.md. PM-OK blocker on #1985 is now CLEARED.
 
 - 2026-10-12 16:5x: CXO closed #1985/#1986 on Web's alpha re-run (trigger did not trip). #1998 [HONESTY] compound floor answer filed: placed Production, NOT admitted; PM decision asked via Exec (memo 16:50). If PM admits: Gate class 3 line, Owner, sixth slip entry (13->14), Wed tripwire met. #1999 Production. Waiting on Lead's cause check for #1998.
+
+- 2026-10-12 17:0x: Exec: #1998 NOT admitted (already fixed as #1997, xian's standing answer); if the served re-run after next promotion still shows it, bring to Exec. Lead closed #1998/#1999 as dupes of #1997/#1996. Arch #2000 + #1995 placed Production. PM-decision deferral on #1998 CLEARED. Armed-slot question settled (Arch+Lead).
