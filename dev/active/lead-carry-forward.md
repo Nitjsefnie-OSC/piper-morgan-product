@@ -1,6 +1,19 @@
 # Lead carry-forward — Fable 5.1 seat; Model A worktree ~/Development/piper-morgan-worktrees/lead
 
-## STATE @ 2026-10-12 19:13 PT — through the 18:17 fire: fifteen code landings on main today (log dev/2026/10/12/2026-10-12-0647-lead-code-log.md, open)
+## STATE @ 2026-10-12 22:31 PT — DAY CLOSED. Alpha promoted 21:46 (`6e48d9ebb2`); PM tests in the 10-13 morning off card v22
+- **PROMOTION DONE 21:46 10-12 (run 38346886426):** PM dispatched + approved from his Mac with `gh` (no browser; the approve call needs
+  `-F 'environment_ids[]=<id>'` — `-f` sends a string and 422s). Alpha /health = `6e48d9ebb2` = the 21:00 staging image; code identical
+  to main's head 9ee7134e85 (verified: empty code diff; 1992/1987/1975/1996-1997 are ancestors). **Every "not live" row is now live.**
+- **PM ran out of evening at 21:5x before testing; "pick it up in the a.m. with a fresh test card."** Card rewritten **v22** (remaining-only,
+  89 lines): tonight's five (#1987 ×2, #1975, #1996/#1997, #1992) first, then #1985/#1986/#1988, A, D, item 4, the fresh-account block
+  (G/F/P5), P2–P4; parked C/H; setup E; P6. **At START: read alpha /health against origin/main and say on the card whether a promotion is
+  needed** (only if a code landing arrived overnight). Expect PM's results during the morning — answer them before carried work.
+- **The 21:17 STOP fire arrived at 21:48 during PM's session** → heartbeat WORK then; STOP recorded at day close (22:31). Cron e5491d18
+  present; rotation still Wed 10-14 START.
+- **Side worktrees lead-1987 and lead-1992 REMOVED at close** (only `venv` untracked). No side worktrees remain.
+- **Memory saved:** `reference_promote_alpha_via_gh_api_no_browser` (dispatch + approve recipe, the -F gotcha).
+
+## EARLIER 10-12 STATE @ 19:13 PT — through the 18:17 fire: fifteen code landings on main today (log dev/2026/10/12/2026-10-12-0647-lead-code-log.md)
 - **#1987 half 1 LANDED 5fd92b0019 (19:0x), issue OPEN:** "delete that reminder"/"delete it" after a save binds the just-created row
   (`conversation_context.last_created_todo`, the `last_numbered_list` idiom) into the #1666 title-bound confirm; 20 pins; corpus row;
   routing-stack paragraph. CXO ACCEPTED the gone-row copy (19:10). **Half 2 = NEXT START, named trigger:** the generic which-todo
@@ -12,8 +25,8 @@
 - **#1976 SIZED (19:13), not tonight:** the router's args are prompt-described (no schema) and the create_todo entry names no text
   arg → a router-prompt change + handler consume of `inversion_args.text` + a MEASURED corpus row → rule 7 full run before landing.
   Take at a START with #1987 half 2 (same family, #1943).
-- **Test card v20 (19:1x):** not-live list = #1975, #1996, #1997, #1987, #1992 (+ the gone-row served step). Next promotion = PM's hand.
-- **Side worktrees in place:** lead-1987, lead-1992 (a gitignored root `node_modules` sits there — my `npm ci` at the wrong level; the
+- ~~Test card v20 (19:1x): not-live list = #1975, #1996, #1997, #1987, #1992.~~ Superseded: promoted 21:46, card v22.
+- ~~Side worktrees in place~~ (all removed at close): lead-1987, lead-1992 (a gitignored root `node_modules` sits there — my `npm ci` at the wrong level; the
   `rm -rf` was guard-blocked, leave it), lead-1993, lead-1975, lead-1985b, lead-2000 — all merged; remove at STOP or tomorrow.
 - **DISCIPLINE (10-12 19:4x, after a red main): every corpus-row deposit runs `tests/unit/test_inversion_phase3_deletion_1595.py` before landing — the census denominator pin lives there, outside the intent_service/enforcement dirs.** Tests on a8b27f3fbd went red on exactly that pin (fixed same fire; read the fix's Tests run first at the next fire).
 - **#1984 half (2): CLOSED ON MY SIDE 07:2x — lever (c) applied.** Arch ruled (07:3x his clock, read 07:16): not (a); (b) = drop the
