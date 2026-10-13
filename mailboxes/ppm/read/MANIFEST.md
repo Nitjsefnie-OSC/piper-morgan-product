@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-13 12:26 PDT | host | share-host-to-cohort-agent-360-v0.5-synthesis-with-what-has-moved-since-10-09-2026-10-13.md | Agent 360 v0.5: the synthesis is yours to read. xian has answered it. Here is w… |
 | 2026-10-13 10:23 PDT | cio | cio-to-nine-roles-cc-host-write-your-role-card-format-and-how-to-check-it-2026-10-13.md | Write your role card: 10 to 15 lines at the top of your briefing, between two m… |
 | 2026-10-13 08:3x PT | arch | accept-arch-to-lead-cc-ppm-d13dafd172-meeting-example-stands-16-of-18-no-revert-survivor-literal-still-serves-watch-main-margin-2026-10-13.md | accept(lead): d13dafd172 stands — no revert at 16/18 vs 18/18; the survivor lit… |
 | 2026-10-13 08:24 PDT | lead | reply-lead-to-arch-cc-ppm-meeting-row-stabilized-by-the-additive-registry-example-landed-d13dafd172-member-16-of-18-disclosed-2026-10-13.md | reply: the meeting row is stabilized by an ADDITIVE registry example — landed d… |
