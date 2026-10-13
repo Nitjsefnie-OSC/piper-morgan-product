@@ -8,7 +8,7 @@
 - **Web ran the 6e48d9ebb2 set 06:20–06:53 (all pass; CXO judged 07:05); my slip: no sha mail to Web after the 21:46 promotion** —
   reply sent 07:05. **Next promotion carries #1987 half 2 + #2001; PM's hand.** Card v23.
 - **#1987 condition 3 LANDED 49e90de36f (09:34):** the armed pick survives a pleasantry (thanks/greeting/farewell re-arm + ack +
-  the question; '2' then binds) — Arch's 09:3x ask, pinned both ways (42 pins). Copy to CXO: the three acks and the farewell default.
+  the question; '2' then binds) — Arch's 09:3x ask, pinned both ways (42 pins). CXO ruled 09:40 → applied f1280c8ba2 (09:40): 'You're welcome — nothing has been deleted yet.' / 'Hello — …' + the list re-shown; FAREWELL RELEASES. Nothing owed.
 - **MEETING ROW LANDED d13dafd172 (08:24; branch commits e40a69f50b + b9afba39ad):** Arch's 07:4x ruling (the rule-10 licence row
   'when am i in a meeting' must be stabilized, not excluded). Landing = the ADDITIVE registry example for meeting_time ('How much time do I
   spend in meetings today? / When am I in a meeting?'), description unchanged; licence row meeting_time ×6 @0.95 on main+edit AND three

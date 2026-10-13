@@ -23,8 +23,8 @@ Alpha's env id was 23175672771 on 10-12. Promotion takes ~4 min; `curl -s https:
 1. **#1987 pointer delete.** `remind me to water the plants tomorrow at 9`, then `delete that reminder`. Pass: `Delete the reminder
    "…"? (yes/no)`; `yes` removes it (check the Todos page). **Half 2 (on main 71e213b885, NOT live until the next promotion):** with two
    reminders set, `delete a reminder` → `Which reminder should I delete?` + a numbered list → `2` → `Delete the reminder "…"? (yes/no)` →
-   `yes` → gone. Also (49e90de36f, Arch's condition 3): with the numbered ask open, say `thanks` → a short acknowledgement + the
-   same question again; then `2` still binds. On the live build it still answers the old generic prompt (Web saw that at 06:53).
+   `yes` → gone. Also (49e90de36f, Arch's condition 3): with the numbered ask open, say `thanks` → `You're welcome — nothing has been deleted yet.` +
+   the same numbered question again (f1280c8ba2, CXO's copy); then `2` still binds. `bye` instead drops the ask: `Goodbye for now.` On the live build it still answers the old generic prompt (Web saw that at 06:53).
 2. **#1987 gone row.** Set another reminder, delete it on the Todos page, then in chat `delete that reminder`. Pass: `I can't find
    "…" anymore — it may already have been removed. Say 'show my todos' to see the list — nothing has been deleted.` (CXO judges this line.)
 3. **#1975 delete by title** — PASSED on Web's 06:53 run (CXO judged); yours is optional. A reminder with a distinctive title, `delete the <title> reminder`, `yes`. Pass: that one gone on the
