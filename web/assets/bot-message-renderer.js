@@ -7,6 +7,9 @@
  * the user's chat context isn't replaced. Internal/relative links stay
  * same-tab (those are intra-app navigation like /settings/...).
  *
+ * #1992 RAW-HTML-VISIBLE: the same configuration also overrides marked's
+ * `html` renderer (see htmlRenderer below).
+ *
  * Configured once on first use; idempotent. Marked supports a custom renderer
  * via marked.use({ renderer: ... }) (modern) or new marked.Renderer() (legacy).
  * Try the modern path first; fall back to legacy.
@@ -33,12 +36,30 @@ function _ensureLinkRendererConfigured() {
         }
         return `<a href="${safeUrl}"${titleAttr}>${textStr || safeUrl}</a>`;
     };
+    // #1992: marked passes raw inline/block HTML through untouched, and the
+    // #1732 DOMPurify step then strips any tag it does not allow — so literal
+    // text that merely LOOKS like a tag (`<city>`, a quoted `<title>`)
+    // vanished from the served reply (alpha c613beabf5, 2026-10-12: 'say
+    // "set my timezone to "' with the placeholder gone). Render raw HTML as
+    // VISIBLE text instead: entity-escape it here, keep DOMPurify as the
+    // backstop. Security-neutral or better — nothing new is let through; a
+    // `<script>` in a reply now reads as text. No served string carries
+    // intentional HTML (grep over services/ and web/ quoted strings,
+    // 2026-10-12: 0 hits) and the floor prompt asks for markdown, so nothing
+    // legitimate loses its rendering. Modern marked passes a token
+    // ({ text }); legacy passes the raw string — accept both.
+    const htmlRenderer = (tokenOrHtml) => {
+        const raw =
+            tokenOrHtml && typeof tokenOrHtml === 'object' ? tokenOrHtml.text : tokenOrHtml;
+        return _escapeHtml(raw);
+    };
     try {
         if (typeof marked.use === 'function') {
-            marked.use({ renderer: { link: linkRenderer } });
+            marked.use({ renderer: { link: linkRenderer, html: htmlRenderer } });
         } else {
             const renderer = new marked.Renderer();
             renderer.link = linkRenderer;
+            renderer.html = htmlRenderer;
             marked.setOptions({ renderer });
         }
         renderBotMessage._linkRendererConfigured = true;
