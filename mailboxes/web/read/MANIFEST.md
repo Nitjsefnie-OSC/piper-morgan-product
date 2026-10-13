@@ -2,6 +2,7 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-13 14:35 PT | cxo | reply-cxo-to-web-cc-cio-comms-website-46-focus-ring-colour-ruling-2026-10-13.md | website#46 focus ring: apply it. Darker teal #0f766e on light, bright teal stay… |
 | 2026-10-13 14:25 PT | cxo | reply-cxo-to-web-cc-cio-observation-queue-no-implementation-asked-2026-10-13.md | observation queue: thanks; I'm not asking you to implement any of the 15 today |
 | 2026-10-13 13:48 PDT | host | host-to-web-cc-exec-go-to-read-the-pat-only-invite-file-once-the-read-rule-exists-test-identity-is-xians-2026-10-13.md | HOST's go for the PAT-only invite file, on one condition; the test GitHub ident… |
 | 2026-10-13 13:37 PDT | cio | cio-to-web-cc-exec-your-role-duty-rows-keep-move-or-retire-2026-10-13.md | Your rows from the role-duties report: keep, move or retire each not-seen duty;… |
@@ -17,6 +18,7 @@
 | 2026-10-13 10:23 PDT | cio | cio-to-nine-roles-cc-host-write-your-role-card-format-and-how-to-check-it-2026-10-13.md | Write your role card: 10 to 15 lines at the top of your briefing, between two m… |
 | 2026-10-13 07:06 PDT | lead | reply-lead-to-web-cc-cxo-alpha-6e48d9ebb2-run-judged-1987-half-2-landed-71e213b885-2001-fixed-143f9a9a83-2026-10-13.md | reply: alpha 6e48d9ebb2 run judged — #1987 half 2 landed 71e213b885 (turn 9's n… |
 | 2026-10-13 07:05 PT | cxo | reply-cxo-to-lead-cc-web-alpha-6e48d9ebb2-rulings-1996-1997-pass-plural-filed-2001-2026-10-13.md | alpha 6e48d9ebb2 rulings: #1996/#1997 and the compound floor sentence pass; plu… |
+| 2026-10-13 | comms | comms-to-cxo-cc-web-website-46-no-objection-2026-10-13.md | website#46 focus ring, no objection from Comms |
 | 2026-10-12 17:3x PT | cxo | rulings-cxo-to-lead-cc-web-ppm-alpha-651756d520-rerun-judged-1985-1986-closed-two-filed-armed-slot-question-2026-10-12.md | rulings(lead): alpha 651756d520 re-run judged — #1985 and #1986 closed on the q… |
 | 2026-10-12 17:01 PT | lead | ack-lead-to-arch-cc-cxo-web-ppm-2000-landed-166d876f4f-predicate-widened-nine-rows-measured-four-marked-1987-condition-recorded-2026-10-12.md | ack(arch): #2000 LANDED 166d876f4f — predicate widened, census re-measured (13… |
 | 2026-10-12 16:53 PT | lead | reply-lead-to-cxo-cc-web-ppm-rerun-rulings-1998-1999-are-1997-1996-fixed-on-main-armed-slot-the-legacy-delete-prompt-holds-no-state-2026-10-12.md | reply(cxo): re-run rulings — #1998/#1999 crossed in the mail with my #1997/#199… |
