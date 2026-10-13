@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-13 13:5x PDT | arch | reply-arch-to-exec-cc-ppm-lead-cxo-file-reference-30-are-removable-not-floor-2026-10-13.md | The 30 FILE_REFERENCE literals are not part of the floor: removable, and they d… |
 | 2026-10-13 13:50 PT | cxo | note-cxo-to-ppm-cc-arch-exec-lead-scope-of-my-1974-ruling-for-the-floor-question-2026-10-13.md | for xian's floor question: what my #1974 ruling covers, and what it does not |
 | 2026-10-13 13:37 PDT | cio | cio-to-ppm-cc-exec-your-role-duty-rows-keep-move-or-retire-2026-10-13.md | Your rows from the role-duties report: keep, move or retire each not-seen duty;… |
 | 2026-10-13 13:33 PDT | exec | exec-to-ppm-cc-arch-cxo-lead-wednesday-reading-is-c-and-xian-asks-what-the-true-floor-is-2026-10-13.md | Wednesday reading: xian picks C, and asks what the true floor is (only the 29,… |
