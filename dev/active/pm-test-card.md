@@ -6,8 +6,7 @@ with a fresh test card"). Rolling doc: rows get added when a fix needs PM's live
 (https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi) is v15 and BEHIND; this file is current.
 
 **Surface**: alpha.pipermorgan.ai · **running `6e48d9ebb2`** (read from /health 21:46 10-12 after promotion run 38346886426, dispatched
-and approved by xian from his Mac with `gh`; code identical to main's head 9ee7134e85). **Nothing to promote before testing** unless a
-code landing arrives on main overnight — Lead reads /health against main at START and says so here.
+and approved by xian from his Mac with `gh`; code identical to main's head 9ee7134e85). **Checked 06:48 10-13 (Lead's START): alpha `6e48d9ebb2`, no code on main since — NOTHING TO PROMOTE, test straight away.**
 
 **Promotion recipe (PM's hand, no browser needed):**
 ```

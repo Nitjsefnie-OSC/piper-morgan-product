@@ -27,8 +27,8 @@ log, never here. Bump `last_updated` to the newest line's date, or CI fails. Ski
 
 ## Now
 
-- **Alpha (live)** *(Docs, 2026-10-12 10:13 PDT, `curl https://piper-morgan.fly.dev/health`)*: healthy, **v0.8.14.0**,
-  git_sha `c613beabf5` (the version string has not moved since 09-23, so the sha is the identity). Fly `piper-morgan` serves
+- **Alpha (live)** *(Lead, 2026-10-13 06:48 PDT, `curl https://alpha.pipermorgan.ai/health`)*: healthy, **v0.8.14.0**,
+  git_sha `6e48d9ebb2` (promoted 10-12 21:46 by PM via `gh`, run 38346886426; carries #1975/#1987/#1992/#1996/#1997) (the version string has not moved since 09-23, so the sha is the identity). Fly `piper-morgan` serves
   `origin/main` builds; the droplet and `origin/production` are gone (09-29).
 - **Version** *(CIO, 2026-10-08, `git tag`)*: latest tag **v0.8.14.0** ("On Your Clock", 09-23). 0.9.0 is
   reserved for beta.
@@ -36,9 +36,10 @@ log, never here. Bump `last_updated` to the newest line's date, or CI fails. Ski
   **13 not done** (2 Sprint Backlog, 2 In Progress, 1 In Review, 8 Product Backlog), 1,238 done. The MVP milestone **is**
   the beta gate. **Dates: design partners Fri 10-23, hard stop Fri 10-30** (baseline 10-05; slips are logged in
   `docs/internal/planning/beta-gate-standard.md` and only PM moves either date). Read the ledger, not this line, for slips.
-- **Engineering focus** *(Docs, 2026-10-12, from the 10-10 and 10-11 omnibus logs; Lead to overwrite)*: the router-gate
-  deletion lane took the literal ceiling 127 to 120 on 10-11 (PPM recount on merged main), #1979's fix landed 19:11 (which met #1977's preregistered licence),
-  and xian's MCP revoke test found #1982 (scoped-subkey design in progress). Epic 0 per PM's rule continues.
+- **Engineering focus** *(Lead, 2026-10-13 06:48 PDT, from the 10-12 Lead log)*: 10-12 landed fifteen code units on main (the
+  todo/reminder family #1975/#1985/#1996/#1997/#1999, #1987 half 1, #1992 raw-HTML visibility, census + enforcement pins); all live on
+  alpha since 21:46. Next: #1987 half 2 (numbered which-todo ask + #846-store arm) and #1976 (router text arg for create_todo); #1982/#1983
+  held on PM's PAT-only run (card row G). Literal ceiling 120. Health gate (#1952) first live run read fresh/green 10-12.
 - **PM's open asks** *(Exec, 2026-10-09 06:4x PDT)*: on Exec's attention rollup at
   `claude.ai/artifact/719UZ4h1NELjEwWZbDCceT` (its own header line carries the current version; do not pin one here, it was v90 at 04:2x and v95 by 06:4x). Do not copy the list here: it goes stale within hours.
 - **Usage** *(CIO, 2026-10-08)*: the weekly window reset Thu 10-08 21:59 PDT; stop line **95%** of the weekly
