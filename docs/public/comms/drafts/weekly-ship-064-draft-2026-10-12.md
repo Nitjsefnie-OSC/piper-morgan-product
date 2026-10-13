@@ -2,18 +2,22 @@
 image: 'piper-ship.png'
 alt: 'A child and a crew of robots checking each other''s work on a boat.'
 caption: ''
-status: draft
 ---
 
 # Weekly Ship #064: Code Decides Permission
 
 *October 2–8, 2026*
 
-On Monday I ran my first end-to-end test round against the live alpha, and it failed in three places. One failure was a sentence I really do say: "Mark the first three complete and leave the fourth one pending." Lead had a quick fix ready, a new pair of pattern-matching rules, and I pushed back, since we had spent months replacing exactly that kind of brittle parsing. My verdict that night was that I would not use this product.
+On Monday I ran an end-to-end test round against the live alpha and it failed in three places. Piper was fumbling natural language such as "Mark the first three complete and leave the fourth one pending." Lead prepared a quick fix: a new pair of pattern-matching rules, and I pushed back, since we had spent plenty of time replacing exactly that kind of brittle parsing before I had asked if we were "doing it backwards." To drive home how inadequate Piper's conversational intent-processing still is, I wrote that (as of right now) "*I* would not use this product.
 
-That evening Arch wrote down a line we had never actually drawn. The language model decides what a request means. Code decides whether it's permitted, checks that meaning against the user's real data, and shows the user before it acts. I confirmed it on Tuesday and it became an architecture decision record. By Wednesday afternoon the same sentence worked on alpha: Piper answered "Complete 3 reminders … Leaving 'revise the pr' as is. (yes/no)", got a yes, and did exactly that.
+This ended up forcing me to clarify something that should already have been determined in the architecture but up to that point had escape me and all my agentic helpers. Finally, 15 months in, Arch wrote it down:
 
-Most of what changed for users this week is that rule applied. A second thread turned up inside it: when Piper can't read something, they should say so, instead of telling you there's nothing there.
+* The language model decides what a request means. 
+* Code decides whether it's permitted, checks that meaning against the user's real data, and shows the user before it acts. 
+
+I confirmed this clear bright boundary on Tuesday and it became the newest architecture decision record. By Wednesday afternoon Piper could handle requests like the above (This time, Piper answered "Complete 3 reminders … Leaving 'revise the pr' as is. (yes/no)", got a yes, and did the deed.
+
+Another rule that got locked down this week: when Piper can't read something, they should say so outright instead of telling you there's nothing there.
 
 # 🚀 Shipped this week
 
@@ -21,9 +25,9 @@ Most of what changed for users this week is that rule applied. A second thread t
 
 On alpha:
 
-- **Say which items you mean, and see them before anything happens.** "Mark the first three complete and leave the fourth pending" gets a confirmation listing what will change and what won't. Lead ran it on our test account and checked the stored items afterward.
-- **Answer Piper's question, or change the subject.** While Piper waits for a new project's name, "show my projects" or "close issue 108" now goes through as a command instead of becoming a project with that name. When the router isn't sure, Piper asks.
-- **Back out mid-request** with "never mind," or **ask a wider range of everyday questions** and get the model-based router's answer instead of a hand-written pattern's.
+- **Confirm that Piper is going to act on the item you meant before anything happens.** "Mark the first three complete and leave the fourth pending" gets a confirmation listing what will change and what won't. Lead ran it on our test account and checked the stored items afterward.
+- **Answer Piper's question or change the subject without getting trapped in a loop.** For example, if Piper has asked you to provide a name for a new project, a response such as "show my projects" or a non sequitur such as "close issue 108" now gets handled as a command, as intended, instead of being interpreted literally as the answer to the question of what to name the project. When the router isn't sure, Piper asks.
+- **Back out of a process mid-request** with "never mind," or **ask a wider range of everyday questions** and get the model-based router's answer instead of a hand-written pattern's.
 - **Look up or close a GitHub issue by its number, and set a default repo by its bare name.** The default-repo fix was first closed on a test that had set up its own precondition. I caught it by choosing the default in Settings the way a user would, and it was fixed and re-checked on alpha the next day.
 - **Unlink a repo and be asked first**, and **say "delete my project" and get the truth**: Piper can't delete projects from chat yet, says so, and offers to archive instead. It used to ask for confirmation and then do nothing.
 - **Remove ChatGPT's or Claude's access to your Piper account yourself**, from Settings → Connected apps. The first Revoke button silently did nothing when I tried it Monday. The fixed one worked when I pressed it Thursday. The sign-in consent screen now shows your name and email instead of a raw ID.
