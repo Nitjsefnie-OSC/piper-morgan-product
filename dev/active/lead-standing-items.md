@@ -15,7 +15,7 @@ lives in GitHub, this file holds only durable owed/queued items.)
      produce, computed from the corpus instead of live traffic, and it licensed all 30 deletions to date (ceiling 120, 29 ruled
      floor). The gate even threads the claiming list's NAME through the probe's own code path. A live-traffic pass on alpha
      (PIPER_PRECLAIM_SHADOW=1, PM's hand) stays available as an optional cross-check, no longer owed; the instrument stays. -->
-- **#1987 half 2 — the generic which-todo ask lists the few known candidates numbered (CXO's 10-12 bar) and the numbered pick ARMS via
+- ~~#1987 half 2~~ **DONE 10-13 07:05: landed 71e213b885** (delete_todo_pick.py; served check on the card, next promotion). Was: the generic which-todo ask lists the few known candidates numbered (CXO's 10-12 bar) and the numbered pick ARMS via
   the #846 store (Arch's condition on the `handle_delete_todo` census row; the #1906 carrier shape)** — **Filed**: 2026-10-12 · trigger:
   my next START (fresh session; deferred from the 10-12 tail on purpose). Half 1 landed 5fd92b0019; served checks on the card v20.
 - **#1976 — create_todo consumes the router's text arg ('add a todo to X' keeps the stray 'to')** — **Filed**: 2026-10-12 · sized 10-12:
@@ -100,3 +100,4 @@ lives in GitHub, this file holds only durable owed/queued items.)
 - Pinned-ruff (0.6.9) format+check before code-bearing pushes; belt green is per-push discipline.
 - Deploys only on PM's explicit word; flag changes to deployed env count.
 - Verify awaited items against the ISSUE, not local files; merge origin/main BEFORE inbox listing.
+- **#2001 served check — '1 day overdue' singular in the Today: list** — **Filed**: 2026-10-13 · fixed on main 143f9a9a83 (07:05); CXO's issue, CXO judges on the next served run after a promotion; issue stays OPEN until then. Trigger: the next promotion (PM's hand) + Web's/PM's run.

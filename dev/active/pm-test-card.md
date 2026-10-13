@@ -1,12 +1,12 @@
 # PM test card — the standing "what should I test?" surface
 
-**Owner**: Lead. **Started**: 2026-09-19. **Rewritten fresh for the 10-13 morning**: v22, 22:30 PDT 10-12 (PM's ask: "pick it up then
+**Owner**: Lead. **Started**: 2026-09-19. **Rewritten fresh for the 10-13 morning**: v23 (07:05 10-13: Web's run judged, two landings on main, not live); v22, 22:30 PDT 10-12 (PM's ask: "pick it up then
 with a fresh test card"). Rolling doc: rows get added when a fix needs PM's live verification and struck when done. When PM asks
 "what do I test?", the answer is this file. Earlier versions and all struck history: `git log -p` of this file. Mirror artifact
 (https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi) is v15 and BEHIND; this file is current.
 
 **Surface**: alpha.pipermorgan.ai · **running `6e48d9ebb2`** (read from /health 21:46 10-12 after promotion run 38346886426, dispatched
-and approved by xian from his Mac with `gh`; code identical to main's head 9ee7134e85). **Checked 06:48 10-13 (Lead's START): alpha `6e48d9ebb2`, no code on main since — NOTHING TO PROMOTE, test straight away.**
+and approved by xian from his Mac with `gh`; code identical to main's head 9ee7134e85). **Checked 07:04 10-13 (Lead): alpha `6e48d9ebb2`. Two code landings since (on main, NOT live): #1987 half 2 (71e213b885, the numbered which-reminder ask) and #2001 (143f9a9a83, '1 day overdue'). Rows 1–5 and 7–17 are live now; promote first only if you want to test row 1's numbered ask and row 4's singular in the same sitting.**
 
 **Promotion recipe (PM's hand, no browser needed):**
 ```
@@ -21,13 +21,14 @@ Alpha's env id was 23175672771 on 10-12. Promotion takes ~4 min; `curl -s https:
 
 **New since your last pass (the 21:46 build):**
 1. **#1987 pointer delete.** `remind me to water the plants tomorrow at 9`, then `delete that reminder`. Pass: `Delete the reminder
-   "…"? (yes/no)`; `yes` removes it (check the Todos page). Then `delete a reminder` alone: it still asks which one — that half is
-   owed (numbered candidates); try-and-tell, not pass/fail.
+   "…"? (yes/no)`; `yes` removes it (check the Todos page). **Half 2 (on main 71e213b885, NOT live until the next promotion):** with two
+   reminders set, `delete a reminder` → `Which reminder should I delete?` + a numbered list → `2` → `Delete the reminder "…"? (yes/no)` →
+   `yes` → gone. On the live build it still answers the old generic prompt (Web saw that at 06:53).
 2. **#1987 gone row.** Set another reminder, delete it on the Todos page, then in chat `delete that reminder`. Pass: `I can't find
    "…" anymore — it may already have been removed. Say 'show my todos' to see the list — nothing has been deleted.` (CXO judges this line.)
-3. **#1975 delete by title.** A reminder with a distinctive title, `delete the <title> reminder`, `yes`. Pass: that one gone on the
+3. **#1975 delete by title** — PASSED on Web's 06:53 run (CXO judged); yours is optional. A reminder with a distinctive title, `delete the <title> reminder`, `yes`. Pass: that one gone on the
    Todos page and nothing else missing. Fail: a different due item deleted (the old bug).
-4. **#1996 / #1997 ages.** With one overdue item and one due earlier today: `what needs my attention?` then `show my todos`. Pass:
+4. **#1996 / #1997 ages** — PASSED on Web's 06:53 run (CXO judged); yours is optional. #2001 ('1 days' → '1 day', on main 143f9a9a83, NOT live) is the one open copy nit. With one overdue item and one due earlier today: `what needs my attention?` then `show my todos`. Pass:
    ages in calendar days on your clock; the earlier-today item under `Today:` as "(due earlier today)"; never "0 days overdue"; the
    list is never called clear while due reminders remain.
 5. **#1992 angle brackets.** With no timezone set, `what time is it`. Pass: the hint's bracketed city placeholder is visible. Any

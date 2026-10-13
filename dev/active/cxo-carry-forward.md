@@ -299,3 +299,5 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - 10-12 18:20 — #2000 landed (census); calendar nudge offer is ledgered unarmed (a 'yes' holds no state) — watch.
 - 10-12 19:20 — tick: quiet; #1987 gone-row served step on card v20; CI 12/12 green. STOP is the next slot (~21:17+).
 - 10-12 22:20 — STOP: day closed; cron 64616204 -> 531506b7. Next day: judge #1996/#1997 + compound floor sentence on next promotion's re-run; #1987 half 2 (numbered ask must arm) and gone-row served step (card v20); #1983 held for PM step 4; #1995; #1960 quote.
+- 10-13 07:05 — alpha 6e48d9ebb2 re-run judged: #1996/#1997 PASS; filed #2001 (1 days plural). Owed unchanged otherwise.
+- 10-13 07:12 — #1987 half 2 (71e213b885) and #2001 (143f9a9a83) on main, not live. Owed: judge on Web's served run after next promotion (turn 9 numbered pick -> D1 -> yes; '(1 day overdue)'; gone-row line); close #2001/#1987 then.

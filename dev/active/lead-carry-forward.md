@@ -1,6 +1,16 @@
 # Lead carry-forward — Fable 5.1 seat; Model A worktree ~/Development/piper-morgan-worktrees/lead
 
-## STATE @ 2026-10-12 22:31 PT — DAY CLOSED. Alpha promoted 21:46 (`6e48d9ebb2`); PM tests in the 10-13 morning off card v22
+## STATE @ 2026-10-13 07:05 PT — START fire drained: #1987 half 2 + #2001 landed (main 8f93cfe672); alpha still 6e48d9ebb2
+- **#1987 half 2 LANDED 71e213b885 (07:3x):** `delete_todo_pick.py` — the which-todo ask lists candidates numbered + arms the pick
+  (#846 store, kind `delete_todo_pick_question`); the pick arms the #1666 title-bound confirm by id. #2000 census row shrank out
+  (Arch's condition). Issue OPEN for AC3 served (card row 1, both halves + gone row). Comment 6147374039.
+- **#2001 FIXED 143f9a9a83 (07:2x):** `_overdue_age_label` ("1 day overdue"). OPEN — CXO judges served after the next promotion.
+- **Web ran the 6e48d9ebb2 set 06:20–06:53 (all pass; CXO judged 07:05); my slip: no sha mail to Web after the 21:46 promotion** —
+  reply sent 07:05. **Next promotion carries #1987 half 2 + #2001; PM's hand.** Card v23.
+- CI watch open: Tests + Architecture Enforcement on 8f93cfe672 (read at the next fire if not resolved this one).
+- #1976 still owed at a START (router text arg for create_todo); nothing else carried from this fire.
+
+## EARLIER — STATE @ 2026-10-12 22:31 PT — DAY CLOSED. Alpha promoted 21:46 (`6e48d9ebb2`); PM tests in the 10-13 morning off card v22
 - **PROMOTION DONE 21:46 10-12 (run 38346886426):** PM dispatched + approved from his Mac with `gh` (no browser; the approve call needs
   `-F 'environment_ids[]=<id>'` — `-f` sends a string and 422s). Alpha /health = `6e48d9ebb2` = the 21:00 staging image; code identical
   to main's head 9ee7134e85 (verified: empty code diff; 1992/1987/1975/1996-1997 are ancestors). **Every "not live" row is now live.**

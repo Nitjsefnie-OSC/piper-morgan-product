@@ -1876,8 +1876,20 @@ class TodoIntentHandlers:
                 "'complete todo [number]', or say 'show my todos' to check the list first."
             )
 
-    async def handle_delete_todo(self, intent: Intent, session_id: str, user_id: UUID) -> str:
-        """Handle: "delete todo 3" or "remove todo about meeting"""
+    async def handle_delete_todo(
+        self,
+        intent: Intent,
+        session_id: str,
+        user_id: UUID,
+        offer_service: Any = None,
+        principal: Optional[str] = None,
+    ) -> str:
+        """Handle: "delete todo 3" or "remove todo about meeting"
+
+        #1987 half 2: ``offer_service`` / ``principal`` (passed by the rail
+        entry point) let the no-number ask list the candidates numbered and
+        ARM the pick via the #846 store (``delete_todo_pick.arm_delete_pick``).
+        """
         # #1666: a rail-confirmed delete carries the todo resolved AT ASK TIME
         # (destructive_confirm.build_todo_delete_confirmation stashed it before
         # the #1190 gate asked 'Delete todo N: "text"?'). Delete exactly what
@@ -1910,7 +1922,21 @@ class TodoIntentHandlers:
         original_message = intent.original_message or intent.context.get("original_message", "")
         todo_number = self._extract_todo_id(original_message)
         if not todo_number:
-            return "Which todo should I remove? Try: 'delete todo [number]'"
+            # #1987 half 2 (CXO's bar + Arch's condition): list the known
+            # candidates numbered IN the question and arm the pick through
+            # the #846 store, so the answer ("2", "the first one", a title)
+            # binds against exactly the rows the question named. None →
+            # the ask cannot be armed here (no session / no store / list
+            # read failed): an instruction, not a question — never an
+            # unarmed ask (#1766 / #2000 census).
+            from services.intent_service.delete_todo_pick import arm_delete_pick
+
+            armed = await arm_delete_pick(
+                original_message, session_id, principal, user_id, self.todo_service, offer_service
+            )
+            if armed is not None:
+                return armed
+            return "Tell me which todo to remove — 'delete todo [number]' works, or say 'show my todos' to see the list."
 
         try:
             # Get user's todo list to find the todo by position

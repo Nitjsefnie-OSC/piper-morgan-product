@@ -1017,6 +1017,38 @@ class TestAttentionReplyShape1985b:
         assert result.intent_data["overdue_todos"][0]["days_overdue"] == 5
 
     @pytest.mark.asyncio
+    async def test_2001_one_day_overdue_is_singular_two_is_plural(self, intent_service):
+        """CXO #2001 (Web's served run on 6e48d9ebb2): the Today: list said
+        "(1 days overdue)" while the prose said "1 day overdue". One source
+        for the age label: 1 → "1 day overdue", N → "N days overdue", in the
+        list line AND the attention item's detail."""
+        from zoneinfo import ZoneInfo
+
+        from services.intent.intent_service import _overdue_age_label
+
+        assert _overdue_age_label(1) == "1 day overdue"
+        assert _overdue_age_label(2) == "2 days overdue"
+        assert _overdue_age_label(0) == "0 days overdue"  # never rendered (#1999), pinned for shape
+        tz = ZoneInfo("America/Los_Angeles")
+        local_now = datetime.now(timezone.utc).astimezone(tz)
+        one = self._Todo(
+            "send the budget review to the board",
+            due_date=(local_now - timedelta(days=1))
+            .replace(hour=9, minute=0)
+            .astimezone(timezone.utc),
+        )
+        two = self._Todo(
+            "send the budget review to finance",
+            due_date=(local_now - timedelta(days=2))
+            .replace(hour=9, minute=0)
+            .astimezone(timezone.utc),
+        )
+        result = await self._run(intent_service, [], [one, two])
+        assert "⏰ send the budget review to the board (1 day overdue)" in result.message
+        assert "⏰ send the budget review to finance (2 days overdue)" in result.message
+        assert "1 days overdue" not in result.message
+
+    @pytest.mark.asyncio
     async def test_1996_both_reads_split_at_local_midnight_not_now(self, intent_service):
         """The due-today read's lower bound and the overdue read's upper bound
         are the SAME instant: local midnight on the user's clock. Before #1996

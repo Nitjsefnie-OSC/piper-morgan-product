@@ -230,8 +230,32 @@ pointer may mean a row on screen) → the unchanged passthrough; a created row
 no longer in the list → an honest didn't-find turn, nothing armed. CXO's
 10-12 bar on the generic which-todo ask (list the candidates numbered, and —
 Arch's condition — the numbered pick must arm via the #846 store) is the
-second half of #1987, not built here. Regression:
+second half of #1987. Regression:
 `test_delete_that_reminder_1987.py`.
+**#1987 half 2 — the which-todo ask lists the candidates and ARMS the pick
+(2026-10-13)**: `handle_delete_todo`'s no-number branch (reached by
+'delete a reminder' — indefinite, no name, no pointer — after the gate's
+legs pass through) used to answer the unarmed generic prompt. It now calls
+`delete_todo_pick.arm_delete_pick`: the user's active rows (reminders only,
+due-soonest first, when the ask says "reminder"), at most 5 shown, rendered
+numbered with titles IN the question, and the pick armed in the #846 store
+(kind `delete_todo_pick_question`, ids + texts + due timestamps bound at
+arm time, #1665). The answer turn is handled kind-specifically at the pop
+seam (`handle_delete_todo_pick_turn`) with the SHARED #1906 binder
+(`reminder_clear._resolve_pick_target`: ordinal / status word / name) — a
+bound pick re-reads the row and arms the #1666 title-bound DESTRUCTIVE
+confirm with the row bound BY ID (`_armed_todo_delete`; D1 copy for a
+reminder, the #1527 copy for a todo), so the confirmed yes deletes exactly
+that row through the unchanged path; a row gone since the ask gets the
+#1987 didn't-find line. State question → silent survival; decline → the
+honest decline_message; bare yes → the registered offer-only landing
+`clarify_delete_todo_pick` (READ, action_triggered=False) re-asks + re-arms;
+a pre-classifier-claimed or router-read command releases and routes; one
+re-ask, then release. The rail entry point stamps `delete_todo_pick_pending`
+(the `_apply_soft_offer` no-clobber list). The handler's unarmable fallback
+(no session / no store) is an instruction, not a question — the #2000
+census row for `handle_delete_todo` shrank out (Arch's condition). No new
+regex (word-set checks only). Regression: `test_delete_todo_pick_1987.py`.
 **#1906 pick-target carrier (2026-09-30) — the ONE unarmed branch in
 `reminder_clear.py` now arms.** PM live, test card session: a named-target ask
 that matches zero or several candidates (`named_target_unmatched` — "clear the

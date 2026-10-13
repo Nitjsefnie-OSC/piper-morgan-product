@@ -321,6 +321,14 @@ def _principal_from_intent(intent) -> Optional[str]:
     return context.get("user_id")
 
 
+def _overdue_age_label(days: int) -> str:
+    """#2001 (CXO, alpha 6e48d9ebb2 2026-10-13): the overdue age in words —
+    "1 day overdue", otherwise "N days overdue" — one source for BOTH the
+    Today: list line and the attention item's detail, which had disagreed
+    ("(1 days overdue)" in the list, "1 day overdue" in the floor prose)."""
+    return f"{days} day overdue" if days == 1 else f"{days} days overdue"
+
+
 def _coerce_todo_principal(user_id: Optional[str]) -> Optional[UUID]:
     """#1466: safe UUID coercion for the todo/reminder rail.
 
@@ -661,6 +669,8 @@ class IntentService:
             # #1654: the armed reminder TASK question (the no-task clarify's
             # carrier — same clobber risk, one question earlier).
             "reminder_task_question_pending",
+            # #1987 half 2: the armed which-todo pick (numbered candidates).
+            "delete_todo_pick_pending",
             # #1651: the standup's bound overdue-todo offer must survive
             # this turn (armed on the rail-dispatched get_standup path).
             "standup_todo_offer_pending",
@@ -1534,6 +1544,31 @@ class IntentService:
                 # falls through: declines/bare exits drop honestly via
                 # decline_message; full restatements and unrelated commands
                 # abandon via the pop and route normally.
+                # #1987 half 2: a pending WHICH-TODO PICK (armed by
+                # handle_delete_todo's numbered candidates ask) binds "2" /
+                # "the first one" / a title against the rows the question
+                # named and arms the #1666 title-bound confirm — the delete
+                # still runs only off the confirmed yes. Returning None falls
+                # through: a state question survives silently, declines drop
+                # honestly via decline_message, a bare "yes" re-asks via the
+                # registered landing, claimed commands release and route.
+                elif _vi_payload.get("kind") == "delete_todo_pick_question":
+                    from services.intent_service import delete_todo_pick as _dtp
+
+                    _dtp_turn = await _dtp.handle_delete_todo_pick_turn(
+                        pending_offer,
+                        message,
+                        session_id=session_id,
+                        user_id=user_id,
+                        intent_service=self,
+                    )
+                    if _dtp_turn is not None:
+                        return IntentProcessingResult(
+                            success=True,
+                            message=_dtp_turn["message"],
+                            intent_data=_dtp_turn["intent_data"],
+                            requires_clarification=_dtp_turn.get("requires_clarification", False),
+                        )
                 elif _vi_payload.get("kind") == "reminder_time_question":
                     from services.intent_service import todo_handlers as _th
 
@@ -2140,6 +2175,10 @@ class IntentService:
                         # #1648: a released reminder time question (full
                         # restatement or unrelated command) routes normally.
                         "reminder_time_question": "reminder_time_question_abandoned",
+                        # #1987 half 2: a released which-todo pick (claimed
+                        # command, decline, bare exit) drops via the pop;
+                        # nothing bound, nothing deleted.
+                        "delete_todo_pick_question": "delete_todo_pick_question_released",
                         # #1688: a released interview question (decline, bare
                         # exit, or claimed command) drops via the pop; nothing
                         # was bound, nothing is claimed.
@@ -9585,7 +9624,7 @@ class IntentService:
                                 "item": todo.text,
                                 "urgency": "urgent" if days_overdue > 7 else "high",
                                 "icon": "⏰",
-                                "detail": f"{days_overdue} days overdue",
+                                "detail": _overdue_age_label(days_overdue),  # #2001
                             }
                         )
             except Exception as overdue_error:
@@ -9712,8 +9751,8 @@ class IntentService:
                     lines.append("Nothing due today.")
                 for late_item in overdue_todos:
                     lines.append(
-                        f"⏰ {late_item['text']} ({late_item['days_overdue']} days overdue)"
-                    )
+                        f"⏰ {late_item['text']} ({_overdue_age_label(int(late_item.get('days_overdue') or 0))})"
+                    )  # #2001: "1 day", "N days"
             # Other signals follow the list. A flagged todo already listed
             # above is not repeated (CXO: an item appears once).
             following = [

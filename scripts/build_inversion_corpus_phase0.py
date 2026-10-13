@@ -146,6 +146,19 @@ HAND_ROWS = [
         ),
     },
     {
+        "phrase": "delete a reminder",
+        "category": "EXECUTION",
+        "expected": "action:delete_todo",
+        "source": "#1987 (CXO addition) alpha 651756d520 2026-10-12 (Web's served run, two reminders just set)",
+        "notes": (
+            "indefinite ask, context-dependent (Phase-0 convention: informational). Nothing in the "
+            "text names a row (no number, no title, no pointer), so expected_args are deliberately "
+            "absent; the handler's which-todo ask lists the known candidates numbered and arms the "
+            "pick via the #846 store (#1987 half 2, delete_todo_pick.py). The router's job here is "
+            "the verb."
+        ),
+    },
+    {
         "phrase": "mark all my reminders done except for 'revise the pr'",
         "category": "EXECUTION",
         "expected": "action:complete_todo",
