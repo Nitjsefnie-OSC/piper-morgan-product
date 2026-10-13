@@ -303,3 +303,4 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - 10-13 07:12 — #1987 half 2 (71e213b885) and #2001 (143f9a9a83) on main, not live. Owed: judge on Web's served run after next promotion (turn 9 numbered pick -> D1 -> yes; '(1 day overdue)'; gone-row line); close #2001/#1987 then.
 - 10-13 07:16 — tick: quiet; CI Code Quality red 0h ago (Lead watching, not mine); UX line 9.
 - 10-13 09:40 — #1987 half 2: ruled thanks-on-armed-pick copy (survive + 'nothing has been deleted yet' + list) and farewell releases; pins are Lead's.
+- 10-13 09:50 — #1987 pleasantry survival landed (49e90de36f); acks accepted, farewell must release (asked Lead to drop it from survive set). Judge on served run after promotion.
