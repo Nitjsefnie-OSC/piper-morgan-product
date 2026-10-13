@@ -62,6 +62,21 @@ PICK_PENDING_FLAG = "delete_todo_pick_pending"
 MAX_LISTED = 5
 
 _REMINDER_WORDS = frozenset({"reminder", "reminders"})
+# The pre-classifier's pleasantry-only claims (its own GREETING / THANKS
+# pattern sets; nothing re-declared here) that an armed pick survives, and
+# the one-line acknowledgement each gets before the open question (with its
+# numbered list) is repeated. CXO's copy (2026-10-13 09:50 ruling, which
+# superseded the 09:40 "nothing has been deleted yet" prefix): the plain
+# ack — "You're welcome." matches the canned thanks constant, so there is
+# one string, not two — and the numbered question directly under it already
+# says nothing is done. FAREWELL RELEASES (CXO, both rulings): the user is
+# leaving, not answering — the pick drops via the pop and the canned
+# "Goodbye for now." serves unchanged.
+_PLEASANTRY_ACTIONS = frozenset({"greeting", "thanks"})
+_PLEASANTRY_ACK = {
+    "thanks": "You're welcome.",
+    "greeting": "Hi!",
+}
 
 
 def _mentions_reminder(message: str) -> bool:
@@ -194,7 +209,10 @@ async def handle_delete_todo_pick_turn(
     through to the generic seam for a state question (LOW_CEREMONY: the
     seam re-arms silently and normal processing answers), a decline (the
     honest ``decline_message``), a bare accept (the registered landing
-    re-asks), or a released command (routes normally).
+    re-asks), or a released command (routes normally). A pure pleasantry
+    (thanks / greeting) SURVIVES: the record is re-armed here and the reply
+    acknowledges, then repeats the question with its list (Arch's condition
+    3; CXO's copy). A farewell releases (CXO's ruling).
     """
     payload = pending_offer.get("pending_action") or {}
     if payload.get("kind") != DELETE_PICK_KIND:
@@ -251,6 +269,53 @@ async def handle_delete_todo_pick_turn(
     due_iso = payload.get("pick_due") or []
     noun = payload.get("noun") or "todo"
     original_message = payload.get("original_message") or ""
+
+    # Arch's condition 3 on #1987 (2026-10-12 ruling; 2026-10-13 ask): the
+    # pick must SURVIVE a pleasantry. "thanks" reads PASS at the acceptance
+    # seam, binds nothing, and surface-1 pre_classify CLAIMS it — so without
+    # this branch the release discriminator below dropped the armed pick and
+    # the user's next "2" bound nothing (the turn-9 drop CXO raised, on an
+    # armed slot). A pure pleasantry (greeting / thanks / farewell, the
+    # pre-classifier's own pleasantry-only claim — no new pattern) re-arms
+    # the SAME record and answers with a short acknowledgement plus the
+    # open question and its list (CXO's copy, 2026-10-13). Farewell is NOT
+    # in the set: CXO ruled it releases (the user is leaving, not
+    # answering) — it falls through to the discriminator like any claimed
+    # turn and the canned "Goodbye for now." serves.
+    # Beside STATE_QUESTION in spirit; handled here rather than at the
+    # generic seam because the pop already cleared the slot.
+    from services.intent_service.pre_classifier import PreClassifier
+
+    claimed = PreClassifier.pre_classify(text)
+    if claimed is not None and claimed.action in _PLEASANTRY_ACTIONS:
+        question = pending_offer.get("question") or render_pick_question(noun, texts, 0)
+        intent_service.workflow_offer_service.set_pending_offer(
+            session_id,
+            {
+                "workflow_type": CLARIFY_DELETE_PICK_WORKFLOW,
+                "question": question,
+                "pending_action": dict(payload),
+                "decline_message": (
+                    f"Okay — I haven't touched your {noun}s. Nothing has been deleted."
+                ),
+            },
+            user_id=user_id,
+        )
+        logger.info(
+            "delete_todo_pick_survives_pleasantry",
+            session_id=session_id,
+            pleasantry=claimed.action,
+        )
+        return {
+            "message": f"{_PLEASANTRY_ACK[claimed.action]}\n{question}",
+            "intent_data": {
+                "category": "execution",
+                "action": CLARIFY_DELETE_PICK_WORKFLOW,
+                PICK_PENDING_FLAG: True,
+                "pick_survived_pleasantry": claimed.action,
+            },
+            "requires_clarification": True,
+        }
 
     status, idx = _resolve_pick_target(text, texts, due_iso)
     if status == "bound" and idx is not None and 0 <= idx < len(ids):

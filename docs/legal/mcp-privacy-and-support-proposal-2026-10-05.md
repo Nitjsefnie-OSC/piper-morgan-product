@@ -92,7 +92,7 @@ each cited there to code on `origin/main` = alpha `e8ecd10d5a`. Bracketed notes 
 publish. Insert after Section A.*
 
 *v2.1 (10-13): PM answered GOAL 2 (trash, then purge), GOAL 3 (plan to add, manual deletion via support@ meanwhile)
-and N = 14 days, in conversation with Comms. GOAL 1 (logs) is open: PM asked why we log the text today.*
+and N = 14 days, in conversation with Comms. GOAL 1 (logs), later the same morning: "keep only fingerprints of logs."*
 
 *v2 (10-12), PM's principle via Janus: "We must always honestly say what the product does now. If we plan to do
 something different we should acknowledge the goal and the current gap." So every sentence below states what
@@ -123,10 +123,17 @@ Our admin tools don't display your conversations, and the stored copies are encr
 **your own key**. From then on they're handled under that provider's privacy terms. There's no shared Piper key
 processing your conversations. [#1812, `provider_selection.py`]
 
-**Logs.** Our server logs include the text of messages you send to Piper, which we use to fix how Piper
-understands requests. ⟦PM GOAL 1, e.g. "Our goal is to keep only a scrambled fingerprint of each message, not
-its text." Or "none".⟧ [Today's default: `PIPER_INVERSION_LOG_UTTERANCE` on. Lead's hash-only switch is the way to
-close this gap. Log retention on Fly: unverified]
+**Logs.** ⟦TWO VERSIONS. Publish the one that's true on the day Web ships it.⟧
+- *Before the switch is confirmed off on alpha:* Our server logs include the text of messages you send to Piper,
+  which we use to fix how Piper understands requests. We're changing this so our logs keep only a scrambled
+  fingerprint of each message, not its text.
+- *After Lead confirms it (the target):* Our server logs keep only a scrambled fingerprint of each message you send
+  to Piper, not its text. This doesn't affect your conversations, which you can still see in Piper.
+  [+ if Fly's log retention means older lines with text still exist: "Logs from before ⟦date⟧ may still contain
+  message text until they expire after ⟦N⟧ days."]
+[PM 10-13: "keep only fingerprints of logs." Mechanism: `PIPER_INVERSION_LOG_UTTERANCE=0` (hash only; the sha256 is
+always logged), read in `inversion_live.py`, `inversion_shadow.py`, `preclaim_shadow.py`. Routed to Lead 10-13.
+Log retention on Fly: unverified]
 
 **Services you connect.** If you connect GitHub, Google Calendar, Slack or Notion, Piper reads and writes there
 when you ask. For GitHub and Slack, Piper never sees your password. Piper keeps the access the service grants,
@@ -162,8 +169,8 @@ about you, your settings, and your to-dos, projects and linked repositories. Del
    and Web to publish. Bump the policy's "Last updated" date.
 3. The "Turning it off" sentence waits for the Revoke fix to be live and seen working.
 4. **Section C (your Piper account), v2 2026-10-12.** Rewritten to PM's "say what it does now, plus the goal and
-   the gap" principle. GOAL 2, GOAL 3 and N (14 days) answered 10-13. **Open: GOAL 1 (logs)**, after PM's question
-   "why do we log that text now?" Then
+   the gap" principle. GOAL 2, GOAL 3 and N (14 days) answered 10-13. GOAL 1 (logs) answered 10-13: "keep only fingerprints". It
+   waits on Lead switching it off on alpha and confirming it, then the target wording ships. Then
    Comms gives Web the final text. When Section C ships, the policy's opening sentence widens to cover using Piper
    (Comms rewords it in the same hand-off).
 5. ~~One check only PM can run~~ **No longer needed for the privacy claim** (PA 10-08 09:5x traced GitHub's no-key

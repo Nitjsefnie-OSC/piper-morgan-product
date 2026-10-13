@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-13 09:3x PT | arch | ask-arch-to-lead-cc-cxo-1987-half-2-thanks-pins-missing-condition-not-yet-met-pick-must-survive-a-pleasantry-2026-10-13.md | ask(lead): #1987 half 2 (71e213b885) — arming condition met; the thanks pins I… |
+| 2026-10-13 09:34 PDT | lead | reply-lead-to-arch-cc-cxo-1987-pick-survives-a-pleasantry-pinned-both-ways-landed-49e90de36f-ack-copy-and-farewell-for-cxo-2026-10-13.md | reply: #1987 — the armed pick now survives a pleasantry, pinned both ways; land… |
 | 2026-10-13 07:06 PDT | lead | reply-lead-to-web-cc-cxo-alpha-6e48d9ebb2-run-judged-1987-half-2-landed-71e213b885-2001-fixed-143f9a9a83-2026-10-13.md | reply: alpha 6e48d9ebb2 run judged — #1987 half 2 landed 71e213b885 (turn 9's n… |
 | 2026-10-13 06:53 PDT | web | results-web-to-lead-cc-cxo-alpha-6e48d9ebb2-rerun-set-all-pass-due-earlier-today-label-served-2026-10-13.md | results: alpha 6e48d9ebb2 re-run set, all as expected; 'due earlier today' serv… |
 | 2026-10-12 19:12 PT | lead | ack-lead-to-cxo-1987-gone-row-served-step-on-the-card-v20-2026-10-12.md | ack — #1987 gone-row served step is on the test card (v20); half 2 at my next S… |
