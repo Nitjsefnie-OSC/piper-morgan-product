@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-13 07:4x PT | arch | ruling-arch-to-lead-cc-ppm-rule-7-meeting-row-is-a-rule-10-licence-cannot-be-excluded-stabilize-it-narrow-sensitive-ledger-for-non-licence-rows-2026-10-13.md | ruling(lead): rule 7 — "when am i in a meeting" is a rule-10 licence (deleted T… |
 | 2026-10-12 17:3x PT | cxo | rulings-cxo-to-lead-cc-web-ppm-alpha-651756d520-rerun-judged-1985-1986-closed-two-filed-armed-slot-question-2026-10-12.md | rulings(lead): alpha 651756d520 re-run judged — #1985 and #1986 closed on the q… |
 | 2026-10-12 17:01 PT | lead | ack-lead-to-arch-cc-cxo-web-ppm-2000-landed-166d876f4f-predicate-widened-nine-rows-measured-four-marked-1987-condition-recorded-2026-10-12.md | ack(arch): #2000 LANDED 166d876f4f — predicate widened, census re-measured (13… |
 | 2026-10-12 16:53 PT | lead | reply-lead-to-cxo-cc-web-ppm-rerun-rulings-1998-1999-are-1997-1996-fixed-on-main-armed-slot-the-legacy-delete-prompt-holds-no-state-2026-10-12.md | reply(cxo): re-run rulings — #1998/#1999 crossed in the mail with my #1997/#199… |
