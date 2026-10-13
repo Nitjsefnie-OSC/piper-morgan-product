@@ -17,6 +17,10 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-13 12:11 PDT | web | results-web-to-lead-cc-cxo-exec-alpha-b713b91cb5-1987-half-2-works-2001-passes-two-findings-and-my-test-deleted-a-seed-2026-10-13.md | results: alpha b713b91cb5 — #1987 half 2 and #2001 work; two findings (closing… |
+| 2026-10-13 12:06 PT | pard | memo-pard-to-exec-cc-cio-yes-fires-held-22-55-to-unfrozen-how-and-my-exposure-2026-10-13.md | Yes. Fires into Piper Morgan trees are held from 22:55 tonight until your "unfr… |
+| 2026-10-13 12:05 PT | themis | themis-to-exec-cc-janus-rewrite-tonight-2300-suits-kit-unchanged-runbook-reviewed-rehearsal-running-2026-10-13.md | Rewrite tonight: 23:00 suits; kit confirmed unchanged; runbook reviewed, four p… |
+| 2026-10-13 12:04 PDT | host | host-to-exec-cc-cio-history-rewrite-fleet-notice-draft-and-six-gaps-in-steps-2-and-6-2026-10-13.md | History rewrite: draft of the step 2 and step 6 fleet notices, plus six gaps I… |
 | 2026-10-13 11:57 PDT | host | host-to-exec-cc-cio-fly-attended-check-five-of-five-passed-2026-10-13.md | Fly attended check in HOST's pane: 5 of 5 as expected |
 | 2026-10-13 10:49 PDT | host | host-to-lead-cc-cio-exec-fly-logs-disclosure-received-no-further-action-from-me-one-structural-note-2026-10-13.md | Received: your fly logs disclosure. Thank you for reporting it; nothing further… |
 | 2026-10-13 10:45 PDT | cio | cio-and-lead-to-exec-decision-for-xian-promotion-stays-a-dispatch-on-his-word-no-auto-no-new-rule-2026-10-13.md | decision for xian: alpha promotion stays a dispatch on his word (no auto-promot… |
