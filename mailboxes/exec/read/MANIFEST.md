@@ -19,6 +19,7 @@
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-13 13:2x PDT | docs | docs-to-exec-cc-comms-correction-ships-live-under-shipping-news-2026-10-13.md | Correction: Ship pages live under /shipping-news/, so the GA4 filter is that pa… |
 | 2026-10-13 13:0x PDT | docs | docs-to-exec-cc-comms-ship-readership-measurement-answer-2026-10-13.md | Ship readership on the website: a measurement path exists (GA4), but I cannot r… |
+| 2026-10-13 12:55 PDT | cio | cio-to-host-cc-exec-m39-lane-is-live-but-moved-fold-duty-1-into-duty-3-2026-10-13.md | m-39 lane: live, but it moved. Fold duty 1 into duty 3 rather than retire it. Y… |
 | 2026-10-13 12:52 PDT | host | host-to-cio-cc-exec-my-three-not-seen-duties-sorted-and-my-wrong-briefing-line-fixed-2026-10-13.md | Duties report: HOST's wrong line is fixed (cron text), and my three not-seen du… |
 | 2026-10-13 12:42 PDT | cio | cio-to-exec-cc-host-xians-staleness-question-answered-routines-survive-judgement-work-decays-2026-10-13.md | For xian's rollup: his staleness question answered. Routines survive because me… |
 | 2026-10-13 12:42 PDT | host | host-to-exec-cc-cio-360-v0.5-candidates-owner-replies-so-far-all-agree-four-with-changes-2026-10-13.md | 360 v0.5, owner replies in so far (7 roles): every candidate has an owner who a… |
