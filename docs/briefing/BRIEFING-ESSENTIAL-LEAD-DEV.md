@@ -35,8 +35,8 @@ last_verified: "2026-09-02"
 **Core responsibilities**:
 - Dispatch prog lanes (Task-tool subagents) with precise prompts; verify their work independently before merging
 - Enforce anti-80% completion standards; close issues only with evidence at the layer the defect lived
-- Hold the CI belt green per-push; hold the ratchets frozen
-- Execute deploys on PM's explicit word only; verify in the running environment
+- Hold the CI belt green per-push (carried by `scripts/main-ci-status.sh`, every START and after each own push: 12 workflows, one line each); hold the ratchets frozen
+- Promotions to alpha on PM's explicit word only (the `fly-deploy.yml` dispatch); verify in the running environment
 - Escalate architectural decisions to Arch; correct holds are wins, not delays (Rule 0 / STOP-10)
 
 **Key methodologies** (unchanged, still load-bearing):
@@ -48,21 +48,21 @@ last_verified: "2026-09-02"
 ## Environment & Rhythm (Amber, since 2026-07-25)
 - **Model A worktree**: `~/Development/piper-morgan-worktrees/lead` on `claude/lead-cycle`, stable across sessions. Push finished units to `origin/main` continuously (`git push origin HEAD:main`); mail via `scripts/mail-send.sh` push-to-ref. NEVER touch PM's main checkout working tree. Full rules: CLAUDE.md §Branch/Worktree/Mailbox.
 - **Duty cycle**: cron fires ~6×/day; a fire is a WAKE, not a time-box — drain the queue. Cron ID/expiry/rotation date live in the carry-forward and the session-log header. Park your `dev/active/duty-cycle-registry.tsv` row BEFORE going dark deliberately.
-- **Heartbeat daily-START rule** (adopted 2026-09-01 after Exec's "Lead is dark" — signal right, state wrong, error mine): **the first fire of each calendar day is START, period.** START always writes a heartbeat row; WORK rows are `--if-quiet`-suppressed, so active-and-committing looks identical to gone without it.
+- **Heartbeat daily-START rule** (adopted 2026-09-01 after Exec's "Lead is dark" — signal right, state wrong, error mine): **the first fire of each calendar day is START, period.** START always writes a heartbeat row; WORK rows are `--if-quiet`-suppressed, so active-and-committing looks identical to gone without it. Carried by `scripts/duty-cycle-heartbeat.sh lead <START|WORK|STOP|MAIL>`, every fire.
 - **One lane at a time in this worktree — NO commits of ANY kind while a lane is active, docs included** (hardened 2026-08-31 after a mid-lane docs commit swept a lane's staged deletions off the shared index). Concurrent work is safe only with no shared state (e.g., lane in worktree + probe in scratch).
 
 ## Working the Code
 - **Tests**: `scripts/run-sweep.sh {smoke|unit|full|ratchets}` is canonical — it carries the ANTHROPIC_* env-strip + `POSTGRES_PORT=5433` + addopts so nobody hand-assembles them. `full` output is judged via `scripts/check_fullsuite_backlog.py`, never eyeballed.
-- **Before code-bearing pushes**: pinned ruff **0.6.9** format+check (lanes run their venv's ruff; CI pins — the skew cost two format chases on 08-31). Belt green is a per-push discipline; a close gated on CI is closed when CI is GREEN, not when it's expected to be.
+- **Before code-bearing pushes**: pinned ruff **0.6.9** format+check (carried by `scripts/ensure-ruff.sh`; lanes run their venv's ruff; CI pins — the skew cost two format chases on 08-31). Belt green is a per-push discipline; a close gated on CI is closed when CI is GREEN, not when it's expected to be.
 - **Ratchets are frozen surfaces**: dispatch-site ratchet (#1124, `MAX_DISPATCH_SITES`) and the **extraction-pattern ratchet** (`TestExtractionPatternRatchet`, PM-ratified 2026-08-29): argument-extraction-by-regex is interpretation-layer work — the default answer to a new failing phrasing is a **corpus row, not a new pattern**. New symbols get frozen by measuring the ratchet's own counter, never by guessing a ceiling.
 - **Supersession gate** (PM standing ask, 2026-08-18): before fixing anything, check whether the thing is superseded — a fix to a superseded surface is waste at best, regression at worst.
 - **mypy**: deltas with per-file attribution are the reliable local measure; CI is the sole authority on absolutes (macOS reads ±1 off CI even pinned). Never raise ceilings silently; lower them in the same commit as the work that earns it.
-- **Server restarts**: kill by PORT (`kill $(lsof -ti:8001)`), verify port empty, relaunch env-stripped, verify the new owner's PID + start-time. `pgrep`-by-pattern and bare `/health` both lie (three silent layers, 08-30/31). A `reload=False` dev server is a SNAPSHOT — compare its start time to the fix's merge time before trusting any verification against it. These + the Keychain ACL hang: `docs/internal/operations/github-and-tooling-gotchas.md`.
+- **Local server restarts** (a local probe server only; alpha is never restarted by hand): kill by PORT (`kill $(lsof -ti:8001)`), verify port empty, relaunch env-stripped, verify the new owner's PID + start-time — recipe in `docs/internal/operations/github-and-tooling-gotchas.md`. `pgrep`-by-pattern and bare `/health` both lie (three silent layers, 08-30/31). A `reload=False` dev server is a SNAPSHOT — compare its start time to the fix's merge time before trusting any verification against it. These + the Keychain ACL hang: `docs/internal/operations/github-and-tooling-gotchas.md`.
 
 ## Deploys
 - **Only on PM's explicit word** — and flag/secrets changes to the deployed env count as deploys. Rollback for flag flips = unset.
-- Deployment model: on PM's explicit word ONLY (env/secrets changes count), from the main checkout `~/Development/piper-morgan-product`: `git pull && fly deploy`, then verify `fly releases` + `/health` — never bare curls (see `scripts/check-release-parity.sh`; `origin/production` tracks nothing — never cite it as "what's live").
-- Verify after: `fly releases` + machine on the new version + `/health` green **in the running env**. A version number is not a content claim — "a deploy happened" and "what's in it" are two claims (decisions.log 2026-08-28). Fly release numbers are consumed by secrets restarts, so don't assume consecutive.
+- Deployment model (since 2026-10-07, Fly B 10-13): staging deploys itself on every push to main (`deploy-staging` in `.github/workflows/fly-deploy.yml`, health-gated); alpha is a PROMOTION of staging's exact image on PM's explicit word — `gh workflow run fly-deploy.yml -R mediajunkie/piper-morgan-product --ref main -f promote_to_alpha=true` (no approval step; the job refuses unless Tests concluded success on the exact sha staging reports, then copies the image, deploys, and verifies alpha /health attests that sha). `fly deploy`, `fly secrets set` and prod reads are denied on this seat; never run `fly` in an unattended fire (HOST, 10-13). Never from the shared checkout.
+- Verify after: the workflow's own verify step plus `curl -s https://alpha.pipermorgan.ai/health` (`git_sha`) and `git merge-base --is-ancestor <landing> <served sha>` for each landing the card claims. A version number is not a content claim — "a deploy happened" and "what's in it" are two claims; mail Web the sha the minute /health moves.
 - Live env receipts beat file census: `fly secrets` state is invisible to config-file greps (the 08-29 Inversion census correction).
 - Release cuts: `cut-release` skill + `docs/internal/operations/release-runbook.md`.
 
