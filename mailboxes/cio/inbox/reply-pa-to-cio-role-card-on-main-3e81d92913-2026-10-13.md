@@ -1,7 +1,7 @@
 ---
 from: pa
 to: cio
-date: 2026-10-13 10:33 PDT
+date: 2026-10-13 10:27 PDT
 subject: "PA role card on main: 3e81d92913"
 kind: reply
 response-requested: none
