@@ -280,6 +280,17 @@ armed (#2003); an unquoted miss takes the ordinary re-ask. Same binder serves th
 clear-pick carrier, whose own re-ask copy is unchanged. Regression:
 `test_delete_pick_no_match_2003.py`, `test_pick_question_layout_2002.py` (the latter
 renders through the vendored `marked` under node when present).
+**#2004 — a bare decline with nothing open (2026-10-13, CXO on Web's served run)**: after
+the gone-row line, `never mind` reached the floor as a CONVERSATION turn; the floor assembled
+context and composed "Got it, leaving it alone." plus an unrequested todo list. At the Action
+Gate, before `_handle_floor_with_context`, `IntentService._bare_decline_nothing_open` now
+answers a FULL-MESSAGE decline (the shared `FULL_MESSAGE_DECLINE_RE` row of
+`soft_invocation.DECLINE_PATTERNS` — "never mind", "no thanks", "skip", "no" …) on a
+CONVERSATION/UNKNOWN turn with no `armed_offer_rail` stamp with the one-line
+`BARE_DECLINE_NOTHING_OPEN` ("Okay."), deterministically. Compound or prose turns ("never
+mind, show my todos"; the unanchored "maybe later" row) still go to the floor; an armed turn's
+decline is answered by its seam before classification. No new literal: one decline vocabulary,
+armed or not. Regression: `test_bare_decline_nothing_open_2004.py`.
 **#1976 create_todo consumes the router's `text` arg (2026-10-13)**: 'add a
 todo to web test one' stored the title 'to web test one' (alpha 4bd1a236e9,
 Web) — the regex extractor kept the verb phrase's 'to'. The #1943 family's
