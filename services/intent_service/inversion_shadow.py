@@ -43,10 +43,10 @@ Config (read at call time, never import time):
 - ``PIPER_INVERSION_SHADOW``          — "1"/"true"/"on" enables; default OFF.
 - ``PIPER_INVERSION_SHADOW_SAMPLE``   — sampling rate 0.0–1.0; default 1.0
                                         (shadow phase samples everything).
-- ``PIPER_INVERSION_LOG_UTTERANCE``   — "0" logs the utterance hash only;
-                                        default "1" (full utterance — shadow
-                                        mode is itself operator-opt-in, and
-                                        the lines are corpus material). The
+- ``PIPER_INVERSION_LOG_UTTERANCE``   — "1" logs the full utterance (a
+                                        dev-shell opt-in for corpus material);
+                                        DEFAULT "0" since 2026-10-13 (PM:
+                                        "keep only fingerprints of logs"). The
                                         sha256 is always logged either way.
 
 EffectClass: n/a — observer only; nothing dispatches, nothing is written.
@@ -89,7 +89,11 @@ def _sample_rate() -> float:
 
 
 def _log_full_utterance() -> bool:
-    return os.environ.get("PIPER_INVERSION_LOG_UTTERANCE", "1").strip().lower() in _TRUTHY
+    # DEFAULT OFF since 2026-10-13 (PM: "keep only fingerprints of logs");
+    # the knob is owned by services.utils.utterance_log.
+    from services.utils.utterance_log import log_full_utterance
+
+    return log_full_utterance()
 
 
 # ── #1668 legacy-counterfactual mode: the layer statement (m-43) ─────────────

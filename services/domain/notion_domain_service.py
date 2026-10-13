@@ -13,6 +13,10 @@ from notion_client.errors import APIResponseError, RequestTimeoutError
 
 from services.integrations.notion.notion_integration_router import NotionIntegrationRouter
 
+# 2026-10-13 (PM: "keep only fingerprints of logs"): a search query is user
+# text — sha256 by default in the error lines, the text only under the knob.
+from services.utils.utterance_log import utterance_fields as _utterance_fields
+
 # Re-export exceptions for clean domain boundary
 __all__ = ["NotionDomainService", "APIResponseError", "RequestTimeoutError"]
 
@@ -234,13 +238,25 @@ class NotionDomainService:
         try:
             return await self._notion_adapter.search_notion(query, filter_type, page_size)
         except APIResponseError as e:
-            logger.error("Notion API error searching workspace", query=query, error=str(e))
+            logger.error(
+                "Notion API error searching workspace",
+                error=str(e),
+                **_utterance_fields(query, key="query"),
+            )
             return []
         except RequestTimeoutError as e:
-            logger.error("Notion request timeout searching workspace", query=query, error=str(e))
+            logger.error(
+                "Notion request timeout searching workspace",
+                error=str(e),
+                **_utterance_fields(query, key="query"),
+            )
             return []
         except Exception as e:
-            logger.error("Notion workspace search failed", query=query, error=str(e))
+            logger.error(
+                "Notion workspace search failed",
+                error=str(e),
+                **_utterance_fields(query, key="query"),
+            )
             return []
 
     # Health and Status Operations

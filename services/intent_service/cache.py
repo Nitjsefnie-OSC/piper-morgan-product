@@ -10,6 +10,18 @@ Issue: #206 (CORE-GREAT-4B Phase 3)
 
 import hashlib
 import logging
+
+# 2026-10-13 (PM: "keep only fingerprints of logs"): the cache lines carry
+# the text's sha256 by default, the text only under the opt-in knob.
+from services.utils.utterance_log import log_full_utterance, utterance_sha256
+
+
+def _text_ref(text: str) -> str:
+    """What the cache lines say about the text: its sha256 by default, the
+    old 50-char prefix only under the opt-in knob (stdlib logger — no fields)."""
+    return f"{text[:50]}..." if log_full_utterance() else f"sha256={utterance_sha256(text)}"
+
+
 import time
 from typing import Any, Dict, Optional
 
@@ -59,15 +71,15 @@ class IntentCache:
             # Check expiration
             if time.time() < entry["expires_at"]:
                 self.hits += 1
-                logger.debug(f"Cache HIT for: {text[:50]}...")
+                logger.debug("Cache HIT for: %s", _text_ref(text))
                 return entry["intent"]
             else:
                 # Expired - remove
                 del self.cache[key]
-                logger.debug(f"Cache EXPIRED for: {text[:50]}...")
+                logger.debug("Cache EXPIRED for: %s", _text_ref(text))
 
         self.misses += 1
-        logger.debug(f"Cache MISS for: {text[:50]}...")
+        logger.debug("Cache MISS for: %s", _text_ref(text))
         return None
 
     def set(self, text: str, intent: Dict[str, Any]) -> None:
@@ -86,7 +98,7 @@ class IntentCache:
             "cached_at": time.time(),
         }
 
-        logger.debug(f"Cache SET for: {text[:50]}...")
+        logger.debug("Cache SET for: %s", _text_ref(text))
 
     def invalidate(self, text: str) -> bool:
         """
@@ -101,7 +113,7 @@ class IntentCache:
         key = self._hash_text(text)
         if key in self.cache:
             del self.cache[key]
-            logger.debug(f"Cache INVALIDATED for: {text[:50]}...")
+            logger.debug("Cache INVALIDATED for: %s", _text_ref(text))
             return True
         return False
 
