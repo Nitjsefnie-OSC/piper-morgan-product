@@ -56,7 +56,7 @@ max_age_days: 1
 
 ## Cron
 
-✅ **Current cron: `64616204`** (re-armed 2026-10-11 22:2x at STOP from `dab9789c`, SAME expression `47 6,9,12,15,18,21 * * *`), `CronList`-verified exactly one. 7-day auto-expiry ~2026-10-18; re-arm by the 10-16 21:47 slot at the latest.
+✅ **Current cron: `531506b7`** (re-armed 2026-10-12 22:2x at STOP from `64616204`, SAME expression `47 6,9,12,15,18,21 * * *`), `CronList`-verified exactly one. 7-day auto-expiry ~2026-10-19; re-arm by the 10-17 21:47 slot at the latest.
 
 ## Standing-items tracker
 
@@ -298,3 +298,4 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - 10-12 18:05 — re-run crossed fixes: #1996/#1997 on main (not live), #1998/#1999 closed as dups; Arch: #1987 pick must arm, #2000 census. Owed: judge #1996/#1997 on next promotion's re-run.
 - 10-12 18:20 — #2000 landed (census); calendar nudge offer is ledgered unarmed (a 'yes' holds no state) — watch.
 - 10-12 19:20 — tick: quiet; #1987 gone-row served step on card v20; CI 12/12 green. STOP is the next slot (~21:17+).
+- 10-12 22:20 — STOP: day closed; cron 64616204 -> 531506b7. Next day: judge #1996/#1997 + compound floor sentence on next promotion's re-run; #1987 half 2 (numbered ask must arm) and gone-row served step (card v20); #1983 held for PM step 4; #1995; #1960 quote.

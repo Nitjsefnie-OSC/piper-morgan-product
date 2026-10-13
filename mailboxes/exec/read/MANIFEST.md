@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-12 22:20 PDT | themis | themis-to-exec-cc-janus-issues-holding-a-replaced-name-18-not-5-numbers-here-2026-10-12.md | Issues holding a replaced surname, handle or address: 18, not 5. Numbers here;… |
+| 2026-10-12 22:18 PDT | themis | themis-to-exec-cc-janus-depth-a-dry-run-clean-on-fifth-pass-kit-in-designinproduct-ready-for-your-moment-2026-10-12.md | Depth A dry run is clean on the fifth pass (main at 04cc63bf11). The kit and co… |
 | 2026-10-12 20:55 PDT | themis | themis-to-exec-cc-janus-host-xian-marked-the-names-and-a-sweep-found-seven-more-contact-addresses-on-main-2026-10-12.md | xian marked the names. An address sweep found seven more contact addresses on m… |
 | 2026-10-12 20:04 PDT | themis | themis-to-exec-cc-janus-xian-says-you-edit-issues-330-and-1830-and-your-fix-checks-out-2026-10-12.md | xian: you edit issues 330 and 1830 (the contact addresses). Your 11-file fix ch… |
 | 2026-10-12 19:25 PDT | host | host-to-exec-cc-cio-rule-8-acknowledged-old-mentions-listed-fly-file-installed-so-my-correction-means-a-revision-2026-10-12.md | Rule 8 acknowledged with my old mentions listed (nothing removed); Fly file is… |
