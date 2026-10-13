@@ -91,6 +91,9 @@ tested, so the timing claim stays on that one.)*
 each cited there to code on `origin/main` = alpha `e8ecd10d5a`. Bracketed notes are sources and get stripped at
 publish. Insert after Section A.*
 
+*v2.1 (10-13): PM answered GOAL 2 (trash, then purge), GOAL 3 (plan to add, manual deletion via support@ meanwhile)
+and N = 14 days, in conversation with Comms. GOAL 1 (logs) is open: PM asked why we log the text today.*
+
 *v2 (10-12), PM's principle via Janus: "We must always honestly say what the product does now. If we plan to do
 something different we should acknowledge the goal and the current gap." So every sentence below states what
 Piper does today, and the three gaps now read as "today X, our goal is Y". **PM fills four blanks, marked ⟦PM …⟧:**
@@ -144,11 +147,10 @@ the app only, not this website]
 **Deleting your data.** In Piper you can delete files you uploaded, your AI provider key, what Piper has learned
 about you, your settings, and your to-dos, projects and linked repositories. Deleting removes them.
 - **Conversations.** Deleting a conversation hides it from you, but the encrypted copy stays on our servers.
-  ⟦PM GOAL 2, e.g. "Our goal is for deleting a conversation to erase it." Or "none".⟧
+  Our goal is for deleted conversations to go to a trash, where you can purge them from your data for good.
   [`conversations.py` sets `lifecycle_state="deleted"`.]
-- **Your whole account.** There's no way to delete your account inside Piper yet. ⟦PM GOAL 3, e.g. "We plan to
-  add one." Or "none".⟧ Until then, email support@pipermorgan.ai and we'll delete your account and everything in
-  it within ⟦PM: N⟧ days.
+- **Your whole account.** There's no way to delete your account inside Piper yet. We plan to add one.
+  Until then, email support@pipermorgan.ai and we'll delete your account and everything in it within 14 days.
   [Lead: promise "on request" only if someone will act on requests. support@ is PM's address (live on /support).
   The person who carries out a deletion is PM's call, and it isn't written into the policy.]
 
@@ -160,8 +162,8 @@ about you, your settings, and your to-dos, projects and linked repositories. Del
    and Web to publish. Bump the policy's "Last updated" date.
 3. The "Turning it off" sentence waits for the Revoke fix to be live and seen working.
 4. **Section C (your Piper account), v2 2026-10-12.** Rewritten to PM's "say what it does now, plus the goal and
-   the gap" principle. Four blanks to fill in one read: GOAL 1 (logs), GOAL 2 (deleted conversations), GOAL 3
-   (account deletion), each a phrase or "none", and N (days to act on an emailed account-deletion request). Then
+   the gap" principle. GOAL 2, GOAL 3 and N (14 days) answered 10-13. **Open: GOAL 1 (logs)**, after PM's question
+   "why do we log that text now?" Then
    Comms gives Web the final text. When Section C ships, the policy's opening sentence widens to cover using Piper
    (Comms rewords it in the same hand-off).
 5. ~~One check only PM can run~~ **No longer needed for the privacy claim** (PA 10-08 09:5x traced GitHub's no-key
