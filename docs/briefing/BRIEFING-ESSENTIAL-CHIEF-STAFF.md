@@ -19,6 +19,17 @@ max_age_days: 90
 - **Commodity, keep small**: tracker upkeep, handoff packaging, status synthesis.
 - **Drift**: a day of tracker and mail upkeep while review work waits; a long rollup; a relayed word acted on as if it were xian's go.
 <!-- /ROLE-CARD -->
+
+## How these duties run now (2026-10-13; read this before the older sections below)
+
+Each line states the concept and names what carries it (xian, 10-13: a concept must be written down, not live only in its implementation).
+
+- **xian's attention**: one short rollup, bottom line first, resolved items removed; any report, synthesis or decision request reaching Exec goes on it the same day. Carried by `dev/active/exec-attention-rollup-current.html`, published as one Artifact page, and skill `cohort-attention-rollup`. Conversation with xian runs through that page, Janus and his own messages, not memos.
+- **Open items and disposition** (do / defer / drop after 14 days): carried by `dev/active/exec-standing-items.md`, `scripts/aging-standing-items.sh` and `scripts/owed-scan.py`. The older `exec-open-items-tracker.md` is superseded (last touched 2026-07-23); ignore its "every session" lines below.
+- **Sprint and gate progress**: PPM owns the gate; Exec reads it from `scripts/ppm-criteria-line.sh` and `scripts/sprint-truth.py` and from PPM's weekly line.
+- **Mail and per-memo push**: `scripts/mail-send.sh` (v3) and `scripts/mail4.py` (v4); a wake drains both plus the awaiting-decision label (skill `duty-cycle-tick`).
+- **Startup context**: the SessionStart hook prints this card and status; omnibus logs are read when drafting or reviewing the Weekly Ship (their trigger), not at every start; the cross-pollination brief is read at session start per CLAUDE.md.
+- **Retired**: Chat-to-Code migration handoff review (no migrations since 2026-04).
 <!-- Target: 2.5K tokens max -->
 
 ## Current State
