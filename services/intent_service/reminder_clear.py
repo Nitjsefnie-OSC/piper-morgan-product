@@ -1263,6 +1263,53 @@ _ORDINAL_WORD_RE = re.compile(r"\b(" + "|".join(_ORDINAL_WORDS) + r"|last)\b", r
 _NUMERIC_ORDINAL_RE = re.compile(r"#\s*(\d+)\b|\b(\d+)(?:st|nd|rd|th)?\b")
 _OVERDUE_WORD_RE = re.compile(r"\boverdue\b", re.IGNORECASE)
 _WORD_RE = re.compile(r"[a-z0-9']+")
+# #2003 — a quoted name is the user's exact reference: it binds only by
+# literal containment (either direction) and is NEVER fuzzy-matched; a
+# name that matches nothing stays unmatched. Shape detection (quotes),
+# not argument extraction.
+_QUOTED_NAME_RE = re.compile(r"[\"\u201c\u201d']([^\"\u201c\u201d']{2,})[\"\u201c\u201d']")
+_NUMBER_WORDS = frozenset(
+    {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"}
+)
+# Words that frame a pick answer ("delete the plants reminder") and must
+# not count against the candidate in the #2003 coverage rule; they are
+# dropped from the MESSAGE side only, never from the candidate titles.
+_PICK_FRAME_WORDS = frozenset(
+    {
+        "reminder",
+        "reminders",
+        "todo",
+        "todos",
+        "task",
+        "tasks",
+        "item",
+        "items",
+        "remove",
+        "removing",
+        "deleting",
+        "clearing",
+        "want",
+        "wanna",
+        "just",
+        "actually",
+        "get",
+        "rid",
+        "drop",
+        "kill",
+        "called",
+        "named",
+        "about",
+        "with",
+    }
+)
+
+
+def _quoted_name(text: str) -> Optional[str]:
+    """The first quoted segment of an answer turn, or None."""
+    m = _QUOTED_NAME_RE.search(text or "")
+    return m.group(1).strip() if m else None
+
+
 _PICK_STOPWORDS = frozenset(
     {
         "the",
@@ -1346,9 +1393,31 @@ def _overdue_status(text: str, due_iso: List[Optional[str]]) -> Tuple[str, Optio
 def _name_index(text: str, texts: List[str]) -> Tuple[str, Optional[int]]:
     """Name/substring match against the rendered candidate texts ('review
     the pr' -> the literal match; 'the test card one' -> the candidate
-    sharing the most significant words). Returns ('bound', idx),
-    ('ambiguous', None) on a tie, or ('none', None)."""
-    lower = text.lower()
+    whose words COVER every significant word the user typed). Returns
+    ('bound', idx), ('ambiguous', None) on a tie, or ('none', None).
+
+    #2003 (served on alpha b713b91cb5): 'delete the reminder "web check
+    alpha one"' — a title that no longer existed — used to bind to "web
+    check alpha two" on word overlap. Two rules close that: a QUOTED name
+    binds only by literal containment and is never fuzzy-matched; an
+    unquoted reference binds only when ONE candidate contains every
+    significant word of it (number words count when any candidate title
+    uses them, so "…alpha one" cannot cover "…alpha two")."""
+    lower = (text or "").lower()
+    quoted = _quoted_name(text)
+    if quoted:
+        q = quoted.lower()
+        hits = [
+            i
+            for i, t in enumerate(texts)
+            if (t or "").strip() and ((t or "").lower() in q or q in (t or "").lower())
+        ]
+        if len(hits) == 1:
+            return "bound", hits[0]
+        if len(hits) > 1:
+            return "ambiguous", None
+        return "none", None
+
     exact_hits = [
         i for i, t in enumerate(texts) if (t or "").strip() and (t or "").lower() in lower
     ]
@@ -1357,24 +1426,40 @@ def _name_index(text: str, texts: List[str]) -> Tuple[str, Optional[int]]:
     if len(exact_hits) > 1:
         return "ambiguous", None
 
-    message_words = {w for w in _WORD_RE.findall(lower) if w not in _PICK_STOPWORDS and len(w) >= 3}
+    def _significant(words: List[str], drop_frame: bool) -> set:
+        out = set()
+        for w in words:
+            if len(w) < 3 or w in _PICK_STOPWORDS:
+                continue
+            if drop_frame and w in _PICK_FRAME_WORDS:
+                continue
+            out.add(w)
+        return out
+
+    raw_message_words = _WORD_RE.findall(lower)
+    message_words = _significant(raw_message_words, drop_frame=True)
     if not message_words:
         return "none", None
-    scores = []
-    for t in texts:
-        sig = {
-            w
-            for w in _WORD_RE.findall((t or "").lower())
-            if w not in _PICK_STOPWORDS and len(w) >= 3
-        }
-        scores.append(len(sig & message_words))
-    best = max(scores) if scores else 0
-    if best == 0:
+    covering = [
+        i
+        for i, t in enumerate(texts)
+        if message_words <= _significant(_WORD_RE.findall((t or "").lower()), drop_frame=False)
+    ]
+    if len(covering) > 1:
+        return "ambiguous", None
+    if not covering:
         return "none", None
-    winners = [i for i, s in enumerate(scores) if s == best]
-    if len(winners) == 1:
-        return "bound", winners[0]
-    return "ambiguous", None
+    # Sibling guard: "web check alpha one" covers "web check alpha two" once
+    # the number words are set aside ("one" is also the pronoun in "the
+    # plants one"). When BOTH sides carry a number word and they share
+    # none, the user named a sibling that is not in the list — no guess.
+    msg_nums = {w for w in raw_message_words if w in _NUMBER_WORDS}
+    cand_nums = {
+        w for w in _WORD_RE.findall((texts[covering[0]] or "").lower()) if w in _NUMBER_WORDS
+    }
+    if msg_nums and cand_nums and not (msg_nums & cand_nums):
+        return "none", None
+    return "bound", covering[0]
 
 
 def _resolve_pick_target(

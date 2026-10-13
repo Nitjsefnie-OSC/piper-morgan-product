@@ -163,6 +163,7 @@ class TestRenderQuestion:
             "Which reminder should I delete?",
             "1. water the plants",
             "2. send the invoice",
+            "",  # #2002: a blank line so the tail is its own paragraph, not item N's
             "Say the number or the name, or 'never mind' to leave them alone.",
         ]
 
@@ -432,7 +433,8 @@ class TestPickTurn:
             "1. water the plants",
             "2. send the invoice",
         ]
-        assert lines[4] == "Say the number or the name, or 'never mind' to leave them alone."
+        assert lines[4] == ""  # #2002 blank line before the tail
+        assert lines[5] == "Say the number or the name, or 'never mind' to leave them alone."
         assert out["intent_data"][PICK_PENDING_FLAG] is True
         assert out["requires_clarification"] is True
         assert store.slot["pending_action"]["kind"] == DELETE_PICK_KIND
