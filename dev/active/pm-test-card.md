@@ -1,27 +1,25 @@
 # PM test card — the standing "what should I test?" surface
 
-**Owner**: Lead. **Started**: 2026-09-19. **Rewritten fresh for the 10-13 morning**: v23 (07:05 10-13: Web's run judged, two landings on main, not live); v22, 22:30 PDT 10-12 (PM's ask: "pick it up then
+**Owner**: Lead. **Started**: 2026-09-19. **Rewritten fresh for the 10-13 morning**: v24 (12:09 10-13: alpha promoted to b713b91cb5 on xian's word — every row is live); v23 (07:05 10-13: Web's run judged, two landings on main, not live); v22, 22:30 PDT 10-12 (PM's ask: "pick it up then
 with a fresh test card"). Rolling doc: rows get added when a fix needs PM's live verification and struck when done. When PM asks
 "what do I test?", the answer is this file. Earlier versions and all struck history: `git log -p` of this file. Mirror artifact
 (https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi) is v15 and BEHIND; this file is current.
 
-**Surface**: alpha.pipermorgan.ai · **running `6e48d9ebb2`** (read from /health 21:46 10-12 after promotion run 38346886426, dispatched
-and approved by xian from his Mac with `gh`; code identical to main's head 9ee7134e85). **Checked 07:04 10-13 (Lead): alpha `6e48d9ebb2`. Two code landings since (on main, NOT live): #1987 half 2 (71e213b885, the numbered which-reminder ask) and #2001 (143f9a9a83, '1 day overdue'). Rows 1–5 and 7–17 are live now; promote first only if you want to test row 1's numbered ask and row 4's singular in the same sitting.**
+**Surface**: alpha.pipermorgan.ai · **running `b713b91cb5`** (read from /health 12:09 10-13 after promotion run 38451337983, dispatched
+by Exec at 12:00 on xian's direct word; no approval step any more). **Everything on this card is live: #1987 both halves + the thanks step (71e213b885 / a9f8cd16d1), #2001 (143f9a9a83), #1976 (84a313394d), the meeting_time example (d13dafd172), logs-keep-only-fingerprints (ec2cc9d44f). Previous: `6e48d9ebb2` (10-12 21:46).**
 
-**Promotion recipe (PM's hand, no browser needed):**
+**Promotion recipe (on PM's explicit word only; no browser, no approval step since 10-13):**
 ```
 gh workflow run fly-deploy.yml -R mediajunkie/piper-morgan-product --ref main -f promote_to_alpha=true
-gh api repos/mediajunkie/piper-morgan-product/actions/runs/<RUN_ID>/pending_deployments        # shows the alpha env id
-gh api -X POST repos/mediajunkie/piper-morgan-product/actions/runs/<RUN_ID>/pending_deployments \
-  -F 'environment_ids[]=<ENV_ID>' -f state=approved -f comment="promote"                       # -F, not -f: the id is an integer
 ```
-Alpha's env id was 23175672771 on 10-12. Promotion takes ~4 min; `curl -s https://alpha.pipermorgan.ai/health` shows `git_sha`.
+Promotion takes ~4 min; `curl -s https://alpha.pipermorgan.ai/health` shows `git_sha`. (The 10-12 `pending_deployments` approval
+call is gone: the alpha environment has no reviewers now, Fly B.)
 
 ## Morning order — everything below is live on alpha now (each ~1 min unless noted)
 
 **New since your last pass (the 21:46 build):**
 1. **#1987 pointer delete.** `remind me to water the plants tomorrow at 9`, then `delete that reminder`. Pass: `Delete the reminder
-   "…"? (yes/no)`; `yes` removes it (check the Todos page). **Half 2 (on main 71e213b885, NOT live until the next promotion):** with two
+   "…"? (yes/no)`; `yes` removes it (check the Todos page). **Half 2 (LIVE since the 12:00 promotion, 71e213b885 + a9f8cd16d1):** with two
    reminders set, `delete a reminder` → `Which reminder should I delete?` + a numbered list → `2` → `Delete the reminder "…"? (yes/no)` →
    `yes` → gone. Also (49e90de36f, Arch's condition 3): with the numbered ask open, say `thanks` → `You're welcome.` + the same numbered question
    again (a9f8cd16d1, CXO's 09:50 copy); then `2` still binds. `bye` instead drops the ask: `Goodbye for now.` On the live build it still answers the old generic prompt (Web saw that at 06:53).
@@ -29,10 +27,10 @@ Alpha's env id was 23175672771 on 10-12. Promotion takes ~4 min; `curl -s https:
    "…" anymore — it may already have been removed. Say 'show my todos' to see the list — nothing has been deleted.` (CXO judges this line.)
 3. **#1975 delete by title** — PASSED on Web's 06:53 run (CXO judged); yours is optional. A reminder with a distinctive title, `delete the <title> reminder`, `yes`. Pass: that one gone on the
    Todos page and nothing else missing. Fail: a different due item deleted (the old bug).
-4. **#1996 / #1997 ages** — PASSED on Web's 06:53 run (CXO judged); yours is optional. #2001 ('1 days' → '1 day', on main 143f9a9a83, NOT live) is the one open copy nit. With one overdue item and one due earlier today: `what needs my attention?` then `show my todos`. Pass:
+4. **#1996 / #1997 ages** — PASSED on Web's 06:53 run (CXO judged); yours is optional. #2001 ('1 days' → '1 day', 143f9a9a83, LIVE since 12:00) is the one open copy nit. With one overdue item and one due earlier today: `what needs my attention?` then `show my todos`. Pass:
    ages in calendar days on your clock; the earlier-today item under `Today:` as "(due earlier today)"; never "0 days overdue"; the
    list is never called clear while due reminders remain.
-5a. **#1976 stray 'to' (on main 84a313394d, NOT live until the next promotion):** `add a todo to web test one` → the Todos page title reads `web test one`, not `to web test one`. Remove it after.
+5a. **#1976 stray 'to' (84a313394d, LIVE since 12:00):** `add a todo to web test one` → the Todos page title reads `web test one`, not `to web test one`. Remove it after.
 5. **#1992 angle brackets.** With no timezone set, `what time is it`. Pass: the hint's bracketed city placeholder is visible. Any
    `<tag>`-shaped text in a reply must show, not vanish.
 
