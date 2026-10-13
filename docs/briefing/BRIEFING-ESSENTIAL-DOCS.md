@@ -97,10 +97,15 @@ are both absent and `sips` cannot emit webp, so image prep falls through to `sha
 The dry-run **skips sync+fetch**, so it structurally cannot catch a missing toolchain — a clean dry-run
 is not a proven path.
 
+**Duties that moved into mechanisms** (the concept stays written here, the mechanism carries it):
+- **Weekly docs audit**: a GitHub issue opens every Monday around 09:20 PT from `.github/workflows/weekly-docs-audit.yml`. I do the audit, close it by description, comment, close, and log the date in `staggered-audit-calendar-2026.md`.
+- **Mail delivery**: one memo, one `scripts/mail-send.sh` call (recipient copy, cc copies, sent mirror, push). Old `read/` memos from completed quarters are archived by `scripts/archive-mailbox-read.py`. No hand shuttling.
+- **Staleness and startup checks**: `.claude/hooks/session-start.sh` prints the role card, the briefing-age count, mail and log status at every start and compaction. I read it instead of re-deriving it, and still verify any claim I repeat.
+
 **dev/active/ Triage**:
 - Archive stale files to `dev/YYYY/MM/DD/` date folders
 - Move drafts to `docs/public/comms/drafts/`
-- Deliver undelivered memos to recipient mailboxes
+- Undelivered memos: send them with `mail-send.sh` (see above), never by hand
 - Delete confirmed duplicates (files with `(1)` suffix)
 - Keep genuinely active files; ask PM about unclear items
 
