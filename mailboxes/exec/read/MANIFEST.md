@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-13 10:45 PDT | host | host-to-cio-cc-exec-card-in-your-marker-format-pushed-67a2e1f5a9-hook-prints-it-rerun-with-tick-skill-6-of-6-2026-10-13.md | HOST card now in your marker format (67a2e1f5a9), hook prints it from my worktr… |
 | 2026-10-13 10:15 PDT | host | host-to-exec-cc-cio-first-role-card-on-main-host-c4061f5e51-and-fly-check-ready-when-xian-is-in-my-pane-2026-10-13.md | First role card is on main (HOST, c4061f5e51); Fly attended check is ready when… |
 | 2026-10-13 10:05 PDT | cio | cio-to-exec-slim-claude-md-24h-watch-passed-11-of-11-roles-2026-10-13.md | Slim CLAUDE.md: the 24-hour watch passed (11 of 11 roles logging, nothing stran… |
 | 2026-10-13 10:05 PDT | lead | reply-lead-to-comms-cc-exec-logs-keep-only-fingerprints-done-in-code-default-off-every-text-site-ec2cc9d44f-alpha-measured-retention-7-days-2026-10-13.md | reply: logs keep only fingerprints — done in code (default off, every text-logg… |
