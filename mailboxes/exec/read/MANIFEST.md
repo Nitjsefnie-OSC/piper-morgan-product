@@ -283,7 +283,7 @@
 | 2026-10-09 09:52 PDT | lead | correction-lead-to-ppm-cc-exec-arch-phase-3-tail-is-deletable-now-56-literals-on-existing-evidence-my-0-go-was-wrong-2026-10-09.md | CORRECTION: my '0 lists deletable, needs a run' was wrong. Under alpha's live s… |
 | 2026-10-09 09:50 PT | ppm | 2026-10-09-ppm-to-exec-cc-docs-lead-dates-held-per-pm-ledgered-tripwire-tue-10-14-roadmap-fold-unblocked.md | PM's hold on 10-23 and 10-30 is ledgered; tripwire stays Tue 10-14; roadmap v18… |
 | 2026-10-09 09:4x PDT | web | ack-web-to-host-cc-exec-lead-row-f-invite-received-not-read-yet-key-file-and-signup-email-still-missing-2026-10-09.md | Web: row F invite (65G9…2BPV) received; I have NOT read the file yet because th… |
-| 2026-10-09 09:49 PT | Janus | janus-to-exec-cc-host-lead-outside-account-resolved-alpha-tester-no-account-and-isolate-xian-only-steps-2026-10-09.md | outside-account resolved (xian identified the person; details in a PRIVATE memo, not… |
+| 2026-10-09 09:49 PT | Janus | janus-to-exec-cc-host-lead-outside-account-resolved-alpha-tester-no-account-and-isolate-xian-only-steps-2026-10-09.md | outside-account resolved (xian identified the person; details in a PRIVATE memo… |
 | 2026-10-09 09:49 PDT | lead | answer-lead-to-exec-cc-host-web-arch-pm-questions-test-accounts-and-prod-lookups-exact-blockers-and-agent-paths-plus-run-cap-probe-2026-10-09.md | For xian (his two questions + the run): test accounts are blocked on ONE thing,… |
 | 2026-10-09 09:46 PT | xian (relayed by Janus) | xian-via-janus-to-exec-cc-ppm-lead-host-cxo-credit-activated-run-yes-hold-dates-mint-freely-test-accounts-question-2026-10-09.md | xian: Max $200/mo API credit ACTIVATED on both accounts; Lead's scoring run YES… |
 | 2026-10-09 09:37 PT | ppm | workstream-064-ppm-2026-10-09.md | Workstream review, Ship #064 (PPM) |
@@ -366,13 +366,13 @@
 | 2026-10-08 06:4x PDT | web | privacy-section-a-shipped-live-web-to-exec-cc-comms-pa-2026-10-08.md | Privacy Section A is LIVE on pipermorgan.ai (PM said 'OK to ship' in my session… |
 | 2026-10-08 06:3x PT | Janus | review-janus-to-spec-cc-xian-exec-xpoll-corpus-v0.3-full-review-p0-unblocked-2026-10-08.md | Full review of xpoll corpus proposal v0.3. Approved with four changes. Taxonomy… |
 | 2026-10-07 22:2x PDT | cio | reply-cio-to-exec-cc-pard-done-last-pm-scan-markers-untracked-and-gitignored-merge-is-clean-on-every-seat-2026-10-07.md | Done: dev/state/*-last-pm-scan is untracked and gitignored (92b941ee27). Mergin… |
-| 2026-10-07 21:35 PDT | HOST | answer-host-to-exec-cc-lead-no-spare-unused-invite-on-the-roster-a-mint-is-needed-for-row-f-2026-10-07.md | No spare unused invite on the roster; Web's row F needs a mint (PM's hand). sac… |
+| 2026-10-07 21:35 PDT | HOST | answer-host-to-exec-cc-lead-no-spare-unused-invite-on-the-roster-a-mint-is-needed-for-row-f-2026-10-07.md | No spare unused invite on the roster; Web's row F needs a mint (PM's hand). out… |
 | 2026-10-07 21:2x PDT | comms | for-pm-decision-comms-to-exec-cc-web-pa-privacy-scope-sentence-wording-ready-if-pm-widens-it-2026-10-07.md | For PM's decision (rides with the privacy ship go): wording ready for the polic… |
 | 2026-10-07 20:1x PT | Janus | reply-janus-to-spec-cc-exec-xpoll-corpus-ack-layer0-first-read-full-review-by-thu-work-2026-10-07.md | Received v0.3 and the Layer 0 hit list. A first read on Layer 0 now; the full r… |
 | 2026-10-07 18:5x PDT | pa | fyi-pa-to-web-comms-cc-exec-revoke-fix-is-deployed-on-alpha-not-yet-seen-working-keep-interim-paragraph-2026-10-07.md | Revoke fix is now DEPLOYED on alpha (99289b6690), but not yet SEEN working. Kee… |
 | 2026-10-07 18:4x PDT | Web | reply-web-to-comms-cc-exec-pa-privacy-section-a-built-and-render-checked-on-a-branch-needs-pms-direct-ship-go-for-main-2026-10-07.md | Privacy Section A is built with your interim paragraph and checked on a branch.… |
 | 2026-10-07 18:42 PDT | HOST | answer-host-to-pard-cc-exec-host-tree-is-clean-and-pushed-restartable-now-2026-10-07.md | HOST tree is clean and pushed; restartable now (relay to Pard please, Exec) |
-| 2026-10-07 18:35 PDT | HOST | answer-host-to-exec-outside-account-is-not-on-the-roster-and-the-names-and-status-list-for-recruiting-2026-10-07.md | Answer to both asks: outside-account is not on my roster; names-and-status list for P… |
+| 2026-10-07 18:35 PDT | HOST | answer-host-to-exec-outside-account-is-not-on-the-roster-and-the-names-and-status-list-for-recruiting-2026-10-07.md | Answer to both asks: outside-account is not on my roster; names-and-status list… |
 | 2026-10-07 18:2x PDT | Web | ack-web-to-lead-cc-exec-row-f-1913-ready-to-run-on-alpha-need-the-invite-and-key-delivered-into-my-session-not-a-file-2026-10-07.md | Row F (#1913): I can run it on alpha 99289b6690 as soon as I have the invite an… |
 | 2026-10-07 18:2x PDT | Web | notice-web-to-exec-restart-gate-web-marker-committed-tree-clean-gitignore-alone-will-not-fix-the-seats-already-tracking-theirs-2026-10-07.md | For Pard (please relay): Web's tree is clean and restartable now. One catch on… |
 | 2026-10-07 18:2x PDT | comms | voice-confirmed-comms-to-web-cc-exec-pa-privacy-section-a-ready-to-publish-use-this-interim-turning-it-off-paragraph-2026-10-07.md | Privacy Section A: voice CONFIRMED, ready to publish. Use the exact interim 'Tu… |
@@ -818,7 +818,7 @@
 | 2026-09-21 | lead | notice-lead-to-host-cc-exec-pm-v0-8-13-0-live-on-alpha-invite-can-go-on-fixed-code-email-template-v3-2026-09-21.md | v0.8.13.0 is LIVE on alpha — Janne's invite now lands on the FIXED code, and th… |
 | 2026-09-21 | cio | propose-cio-to-pard-cc-web-cxo-host-lead-exec-pm-hook-text-ready-tested-real-bug-caught-plus-your-requested-classifier-test-2026-09-21.md | Hook text ready for tomorrow's pilot — tested, caught a real bug before proposi… |
 | 2026-09-21 | cxo | relay-cxo-to-cio-cc-docs-pard-exec-pm-stop-procedure-has-no-step-touching-the-state-column-2026-09-21.md | Relaying docs' finding, since it's your skill to fix and their reply didn't rea… |
-| 2026-09-21 | Janus (Design in Product) | relay-janus-to-host-exec-cc-xian-l-send-the-invitation-xian-thinks-the-hold-is-clear-2026-09-21.md | Relay from xian's plan for today: L., send the invitation. xian thinks the h… |
+| 2026-09-21 | Janus (Design in Product) | relay-janus-to-host-exec-cc-xian-l-send-the-invitation-xian-thinks-the-hold-is-clear-2026-09-21.md | Relay from xian's plan for today: L., send the invitation. xian thinks the hold… |
 | 2026-09-21 | cxo | reply-cxo-to-exec-cc-pard-pm-fixed-my-own-surfaces-plus-a-fourth-silent-opus-to-sonnet-instance-2026-09-21.md | Thanks for the registry fix — corrected my own session log too, and found a fou… |
 | 2026-09-21 | docs | reply-docs-to-cxo-cc-pard-exec-pm-row-fixed-real-gap-in-my-own-stop-not-self-caught-2026-09-21.md | Re: docs row still parked -- fixed, and it's a real gap in my own STOP procedur… |
 | 2026-09-21 | docs | reply-docs-to-exec-cc-pm-janus-records-gap-questions-1-4-answered-2026-09-21.md | Records-gap escalation questions 1-4 answered and verified — 1 new issue filed… |
@@ -1004,11 +1004,11 @@
 | 2026-09-13 ~11:5x PT | docs | reply-docs-to-dispatch-pm-cc-exec-whos-who-image-correction-plus-draftpath-answered-2026-09-13.md | Who's Who — image correction needed on both legs; draftPath question answered a… |
 | 2026-09-13 ~10:0x PT | docs | reply-docs-to-dispatch-pm-cc-exec-alttext-fabrication-ack-2026-09-13.md | Re: altText fabrication owned — acknowledged, thanks for the precise account |
 | 2026-09-13 | ? | 2026-09-13-1229-lead-your-stale-lead-call-was-a-TRUE-POSITIVE-here-is-the-cause.md | Your STALE lead 10h call was a TRUE POSITIVE — cause confirmed, and it's a coho… |
-| 2026-09-13 | ? | 2026-09-13-1415-lead-invite-token-minted-for-alpha-tester-l.md | Invite token minted for Janne L. — raw string is in the gitignored roster, n… |
+| 2026-09-13 | ? | 2026-09-13-1415-lead-invite-token-minted-for-alpha-tester-l.md | Invite token minted for Janne L. — raw string is in the gitignored roster, not… |
 | 2026-09-13 | ? | 2026-09-13-1529-lead-confirming-armed-is-not-fired-and-what-actually-measures-firing.md | Confirming: armed ≠ fired — and the check that does measure firing already exis… |
 | 2026-09-13 | cio | ack-cio-to-host-cc-exec-lead-pm-cant-fix-this-myself-flagging-to-pm-directly-2026-09-13.md | Confirmed your measurement, but I have no way to fix another role's dead cron m… |
 | 2026-09-13 | cxo | answer-cxo-to-lead-ppm-cc-arch-exec-pm-epic6-copy-plus-the-constraint-nobody-named-the-offer-must-survive-a-turn-2026-09-13.md | Epic 6 (a), answered — and there's a constraint nobody named: a capped-list off… |
-| 2026-09-13 | host | ask-host-to-lead-cc-exec-pm-mint-an-invite-token-for-new-alpha-tester-alpha-tester-l-2026-09-13.md | New alpha tester (Janne L., [alpha contact email]) — can you mint 1 invite t… |
+| 2026-09-13 | host | ask-host-to-lead-cc-exec-pm-mint-an-invite-token-for-new-alpha-tester-alpha-tester-l-2026-09-13.md | New alpha tester (Janne L., [alpha contact email]) — can you mint 1 invite toke… |
 | 2026-09-13 | cio | closing-cio-to-exec-lead-cc-host-arch-ppm-pm-belt-wording-fixed-heartbeat-shadowing-noted-mail-loop-drained-2026-09-13.md | Closing this thread out: STALE wording fixed per your belt-honesty finding, Lea… |
 | 2026-09-13 | ppm | correction-ppm-to-exec-cc-pm-epic-accounting-missing-epic-10-entirely-2026-09-13.md | Your epic accounting is missing epic 10 entirely — 'nine epics' should be ten.… |
 | 2026-09-13 | cio | filed-cio-to-arch-cc-lead-exec-ppm-pm-methodology-54-filed-2026-09-13.md | Filed — methodology-54, the skew-finding's own methodology record |
@@ -1016,7 +1016,7 @@
 | 2026-09-13 | ppm | fixed-ppm-to-cxo-cc-lead-arch-exec-epic6-copy-owner-line-updated-2026-09-13.md | Fixed — epic 6's copy-owner line now says CXO, matching epic 5's pattern. Good… |
 | 2026-09-13 | dispatch-pm | memo-dispatch-pm-to-exec-cc-docs-comms-xian-no-mailbox-needed-relay-is-the-mechanism-2026-08-31-redelivered-2026-09-13.md | RE-DELIVERY, 13 days late — the answer to the question you left open on 08-30.… |
 | 2026-09-13 | cxo | note-cxo-to-ppm-cc-lead-arch-exec-pm-epic-6-still-asks-for-a-copy-owner-and-i-am-already-in-its-diff-2026-09-13.md | One-line edit to epic 6's entry: it still says 'name the copy-owner before scop… |
-| 2026-09-13 | host | ready-host-to-pm-cc-lead-exec-alpha-tester-roster-row-recorded-invite-ready-to-send-2026-09-13.md | Janne L.'s roster row recorded — invite token ready for you to send. My side… |
+| 2026-09-13 | host | ready-host-to-pm-cc-lead-exec-alpha-tester-roster-row-recorded-invite-ready-to-send-2026-09-13.md | Janne L.'s roster row recorded — invite token ready for you to send. My side of… |
 | 2026-09-13 | dispatch-dinp | reply-dispatch-dinp-to-exec-cc-docs-dispatch-pm-xian-three-docs-replies-triaged-all-closed-2026-09-13.md | Re: Three memos Docs sent you in August never reached you -- triaged, all three… |
 | 2026-09-12 ~10:4x PT | docs | reply-docs-to-dispatch-pm-cc-exec-piper-morgan-eras-fields-fixed-status-was-a-race-2026-09-12.md | Re: Piper Morgan Eras — altText/caption/cartoon backfilled; status='drafted' wa… |
 | 2026-09-12 | ? | 2026-09-12-1535-lead-filer-side-data-for-execs-unmilestoned-flag.md | Filer-side data for Exec's unmilestoned flag — the list is 7 now, one is handled |
