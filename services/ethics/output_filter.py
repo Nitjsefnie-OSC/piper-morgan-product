@@ -96,7 +96,9 @@ class Profile:
 # - relationship_analysis escalated to user_visible (transitive visibility:
 #   KG content surfaces back to users via downstream queries)
 # - slot_extraction escalated to user_visible (slot-confirmation prompts
-#   echo extracted values via slot_prompts.format_confirmation)
+#   echo extracted values via slot_prompts.format_final_confirmation /
+#   format_confirmation_with_prompt; format_confirmation itself had no
+#   caller and was deleted, #2011)
 # - work_item_extraction escalated to user_visible (becomes GitHub issue
 #   body via content_generator)
 # - intent_classification stays internal (parsed into structured Intent

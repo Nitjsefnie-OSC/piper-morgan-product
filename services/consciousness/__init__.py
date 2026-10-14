@@ -37,7 +37,6 @@ from services.consciousness.cli_consciousness import (
     format_shutdown_conscious,
     format_startup_conscious,
 )
-from services.consciousness.context import ConsciousnessContext, analyze_context
 
 # #1754: format_chitchat/farewell/thanks_conscious deleted with
 # ConversationHandler's live-unreachable non-greeting branches.
@@ -51,10 +50,6 @@ from services.consciousness.files_consciousness import (
 )
 from services.consciousness.learning_consciousness import (
     format_patterns_learned_conscious,
-)
-from services.consciousness.loading_consciousness import (
-    format_progress_conscious,
-    get_conscious_loading_message,
 )
 from services.consciousness.search_consciousness import (
     format_no_results_conscious,
@@ -72,8 +67,6 @@ from services.consciousness.validation import MVCResult, validate_mvc
 
 __all__ = [
     # Core framework
-    "ConsciousnessContext",
-    "analyze_context",
     "validate_mvc",
     "MVCResult",
     # Todo consciousness (Phase 3)
@@ -84,9 +77,6 @@ __all__ = [
     "format_next_todo_conscious",
     # Conversation consciousness (Phase 3; greeting-only since #1754)
     "format_greeting_conscious",
-    # Loading consciousness (Wave 1)
-    "get_conscious_loading_message",
-    "format_progress_conscious",
     # Error consciousness (Wave 1)
     "format_conversational_error_conscious",
     "enhance_error_pattern",

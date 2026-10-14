@@ -15,7 +15,6 @@ Tests cover:
 import pytest
 
 from services.slot_filling.slot_prompts import (
-    format_confirmation,
     format_confirmation_with_prompt,
     format_final_confirmation,
     format_grouped_prompt,
@@ -55,38 +54,6 @@ def explicit_template():
 @pytest.fixture
 def meeting_state(meeting_template):
     return SlotState(template=meeting_template)
-
-
-# --- format_confirmation Tests ---
-
-
-class TestFormatConfirmation:
-    def test_implicit_confirmation(self, meeting_state):
-        meeting_state.set_value("attendee", "Sarah")
-        meeting_state.set_value("day", "Tuesday")
-        result = format_confirmation(meeting_state)
-        assert "Got it" in result
-        assert "Sarah" in result
-        assert "Tuesday" in result
-
-    def test_explicit_confirmation(self, explicit_template):
-        state = SlotState(template=explicit_template)
-        state.set_value("action", "delete")
-        state.set_value("target", "database")
-        result = format_confirmation(state)
-        assert "I have:" in result
-        assert "Is that correct?" in result
-        assert "delete" in result
-        assert "database" in result
-
-    def test_empty_state_returns_empty(self, meeting_state):
-        result = format_confirmation(meeting_state)
-        assert result == ""
-
-    def test_single_value(self, meeting_state):
-        meeting_state.set_value("attendee", "Sarah")
-        result = format_confirmation(meeting_state)
-        assert "Sarah" in result
 
 
 # --- format_prompt Tests ---

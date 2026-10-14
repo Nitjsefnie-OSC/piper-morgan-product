@@ -4526,7 +4526,12 @@ class TestUnarmedAskSiteRatchet:
             # text it follows (sent back to CXO). Loading copy is unreachable
             # (web/utils/streaming_responses has no importer) but its modules
             # are not ruled for deletion: rows stay.
-            # -- services/consciousness/ (9)
+            # 20 -> 17 (2026-10-14, Arch round 2 Rule-0 GO): the loading
+            # chain (loading_consciousness -> ui_messages/loading_states ->
+            # web/utils/streaming_responses) and slot_prompts
+            # .format_confirmation deleted — CONSCIOUS_LOADING_MESSAGES,
+            # _get_generic_conscious_message and format_confirmation leave.
+            # -- services/consciousness/ (7)
             (
                 "services/consciousness/error_consciousness.py",
                 "format_conversational_error_conscious",
@@ -4550,18 +4555,6 @@ class TestUnarmedAskSiteRatchet:
                 "format_patterns_learned_conscious",
                 1,
                 "I looked through {} items but didn't spot any clear patterns",
-            ),
-            (
-                "services/consciousness/loading_consciousness.py",
-                "CONSCIOUS_LOADING_MESSAGES",
-                18,
-                "GitHub is taking a while to respond. Should I keep waiting?",
-            ),
-            (
-                "services/consciousness/loading_consciousness.py",
-                "_get_generic_conscious_message",
-                2,
-                "I ran into a problem. Want me to try again?",
             ),
             (
                 "services/consciousness/todo_consciousness.py",
@@ -4621,18 +4614,12 @@ class TestUnarmedAskSiteRatchet:
                 1,
                 "Would you like me to explain any of these, or correct someth",
             ),
-            # -- services/slot_filling/ (2)
+            # -- services/slot_filling/ (1)
             (
                 "services/slot_filling/slot_filling_manager.py",
                 "_SLOT_MESSAGES",
                 3,
                 "I lost track of what we were setting up — could you start ag",
-            ),
-            (
-                "services/slot_filling/slot_prompts.py",
-                "format_confirmation",
-                1,
-                "I have: {}. Is that correct?",
             ),
             # -- services/trust/ (3)
             (

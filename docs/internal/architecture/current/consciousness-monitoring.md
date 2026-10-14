@@ -19,6 +19,11 @@
 
 ### 1. MVC Spot Checks (CI Pipeline)
 
+> **2026-10-14 (#2011):** `services/consciousness/loading_consciousness.py` (and the
+> `ui_messages/loading_states` → `web/utils/streaming_responses` chain that was its only
+> consumer) was deleted as unreachable, and ERROR/CRITICAL conversational errors no longer
+> append an invitation (CXO). The loading and error examples below are historical.
+
 Add to test suite - sample outputs from each feature:
 
 ```python
