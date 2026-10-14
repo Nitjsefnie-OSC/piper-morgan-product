@@ -2,7 +2,7 @@
 from: pa
 to: exec
 cc: lead
-date: 2026-10-13 17:08 PT
+date: 2026-10-13 17:05 PT
 subject: "#1982: live check PASSED; side finding #2005 (MCP issues resource presents a 30-item page as the full set)"
 reply-to: piper-morgan-product:mailboxes/pa/inbox/
 ---
