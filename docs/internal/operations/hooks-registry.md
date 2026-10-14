@@ -25,7 +25,7 @@ PostToolUse or PreCompact hook can only **warn**: the tool has already run, or c
 | Hook | Event / matcher / if | Must do | Blocks? | Concept |
 |---|---|---|---|---|
 | `session-start.sh` | SessionStart (also fires with source `compact`) | Print status within budget: log, mail counts, briefing freshness, role card (from the briefing's `ROLE-CARD` block), deltas | No | CLAUDE.md "Session start"; #853 |
-| `check-branch.sh` | PreToolUse Bash, if `git commit*` | Refuse a commit of `mailboxes/**` on any branch but main; warn on other non-main commits | Yes (mailbox case) | `branch-worktree-mailbox-discipline.md`; `amber-hooks-investigation-2026-07.md` |
+| `check-branch.sh` | PreToolUse Bash, if `git commit*` | Refuse a commit of `mailboxes/**` on any branch but main, and tell the agent to send by `scripts/mail-send.sh` (fix steps corrected 10-14); warn on other non-main commits | Yes, on a pre-staged index. The git `pre-commit` row (section 4) is the enforcing check. | `branch-worktree-mailbox-discipline.md`; `amber-hooks-investigation-2026-07.md` |
 | `guard-pm-checkout.sh` (+ `guard_pm_checkout.py`) | PreToolUse Bash, every call | Refuse working-tree-discarding git aimed at PM's main checkout | Yes | CLAUDE.md hard rule 1; decisions.log (R6 step 1, 10-04) |
 | `pre-commit-reconcile-drafts.sh` | PreToolUse Bash, if `git commit*` | When a commit touches `docs/public/comms/drafts/`, run `reconcile-drafts-calendar.py` for draft and calendar drift | Can exit 2 | decisions.log (Layer C). Header cites a missing `docs/read/...` path. |
 | `autoclose-guard.sh` | PreToolUse Bash, if `git commit*` | Pass the message to `scripts/check_autoclose_keywords.py`: refuse close/fix/resolve plus `#N` without `Auto-Close: intentional`, and refuse credential-shaped messages | Yes | CLAUDE.md hard rules 5 and 3; #1691, #1845 |
@@ -33,6 +33,11 @@ PostToolUse or PreCompact hook can only **warn**: the tool has already run, or c
 | `context-usage-reminder.sh` | PostToolUse Bash | Once per session at roughly 75 to 85% context, suggest compacting at the next break | No | **None written.** Runs on every Bash call. Needs Cost/Benefit/Review (sunset rule, 11-01). |
 | `issue-checkbox-lint.sh` | PostToolUse Bash | After a commit that closes an issue, warn if the issue body still has unchecked boxes | Warns (exit 2 is advisory after the fact) | `agent-protocols/issue-closure-protocol.md` |
 | `memory-index-overlimit-warn.sh` | PostToolUse Edit, Write, MultiEdit | Warn when the shared memory index nears its silent-truncation limit | No | `memory-index-size-limits.md` (explains the limit; this page names the hook) |
+
+**The time-of-check split** (Arch's ruling, 07-29; Arch's review, 10-14). `check-branch.sh` runs at two layers, and neither alone is the rule:
+- As a **PreToolUse** hook, it reads `git diff --cached` *before* the command runs. On a compound `git add … && git commit` the index isn't staged yet, so it passes. That's why CLAUDE.md says to stage in one call and commit in the next.
+- As part of the **git pre-commit** (section 4), it runs on the settled index. This is the enforcing layer, and it catches the compound form.
+- The PreToolUse copy adds one thing: it still sees a `git commit --no-verify` (which skips git hooks), as long as the index was staged beforehand.
 
 ## 2. Claude Code hooks, user level (`~/.claude-pm/settings.json`, every seat on Amber; Pard installs)
 
@@ -43,8 +48,8 @@ sessions (`amber-hooks-investigation-2026-07.md`). The repo copy of this config 
 
 | Hook | Event | Must do | Notes |
 |---|---|---|---|
-| `check-branch.sh` | PreToolUse Bash | As above | **Also wired at project level.** Whether both fire on a worktree seat isn't measured here. |
-| `pre-commit-broad-staging-warn.sh` | PreToolUse Bash | Warn on broad staging | **Its own header says it moved to the git pre-commit on 09-28 (#1798)**, which still runs it. This user-level entry may be a leftover double. Open question for Pard. |
+| `check-branch.sh` | PreToolUse Bash | As above | **Also wired at project level.** It's a different command string (this one runs PM's checkout's copy), so both run. |
+| `pre-commit-broad-staging-warn.sh` | PreToolUse Bash | Warn on broad staging | **Leftover** (Pard agrees, 10-14): the git pre-commit runs it since 09-28 (#1798). To be removed with the other duplicates (below). |
 | `pre-commit-reconcile-drafts.sh` | PreToolUse Bash | As above | Also wired at project level |
 | `log-maintenance-reminder.sh`, `context-usage-reminder.sh`, `issue-checkbox-lint.sh` | PostToolUse Bash | As above | Also wired at project level |
 | `precompact-signoff-warning.sh` | PreCompact | Before compaction, warn about uncommitted, unpushed or unmerged work | User level only. Concept: `branch-worktree-mailbox-discipline.md` |
@@ -69,22 +74,38 @@ Smaller push-time scripts in `scripts/hooks/` (`pre-push-release-notes-check.sh`
 `editorial-calendar-reconcile-warn.sh`) aren't installed in the common dir as of 10-14 (`ls .git/hooks`).
 The audit lists them as having no concept doc.
 
-## Open questions (each to the named role)
+## Decided 10-14: drop the user-level duplicates
 
-1. **Pard:** is the user-level `pre-commit-broad-staging-warn.sh` PreToolUse entry a leftover from before
-   09-28? If so, remove it. The git pre-commit already runs it.
-2. **Pard and Arch:** project-level and user-level both wire `check-branch.sh`, `pre-commit-reconcile-drafts.sh`
-   and the three PostToolUse reminders. Do worktree seats run each one twice? The July finding that made the
-   user-level copies necessary may no longer hold.
-3. **CIO:** at the piper-guards week's end (10-19), decide per rule whether the mod replaces the settings hook,
-   then update sections 1 and 3.
+**Facts:**
+- **Project-level SessionStart fires on worktree seats** (Arch, from its own session at start and after compaction; user level doesn't wire SessionStart).
+- **Project-level PreToolUse fires on a worktree seat.** CIO measured it 10-14, between 10:35 and 10:37 PT (after the 10:35 mail read, before this edit): `git commit --dry-run -m "fix #1"` in CIO's worktree was BLOCKED by `autoclose-guard.sh`, which only the project settings wire. The piper-guards plugin has no auto-close rule, so the refusal could only come from the project hook. One seat, in auto mode.
+- **Project-level PostToolUse firing on a worktree seat isn't measured.** Its exit-0 output isn't visible to the agent.
+- **The two levels run different commands.** User level runs `bash /Users/xian/Development/piper-morgan-product/.claude/hooks/X.sh`, PM's checkout's copy. Project level runs the seat's worktree copy. So both run, and Claude Code's dedup of identical commands doesn't apply (Pard, from the JSON; an expectation, not a measurement).
+- **PM's checkout's copies lag main**, because only `sync-pm-local.sh` fast-forwards it. On 10-14 all 7 user-level scripts differed from main (Arch, `diff -q`).
+
+**Ruling** (Arch, the architecture half): two copies of one rule, read from two places and kept in step by hand, is a second-resolver shape. Since project-level PreToolUse fires, remove the user-level duplicates:
+- `check-branch.sh`
+- `pre-commit-broad-staging-warn.sh`
+- `pre-commit-reconcile-drafts.sh`
+- the three PostToolUse reminders
+
+Keep `precompact-signoff-warning.sh` at user level, since it has no project copy. It should eventually move to project level, so it runs the seat's own version.
+
+**Action:**
+- Pard edits `~/.claude-pm/settings.json`, or puts the exact lines on xian's card if Pard's seat is refused.
+- After the edit, CIO re-runs the autoclose probe and checks a PostToolUse reminder still appears on a worktree seat.
+- **Residual risk:** project-level PostToolUse firing is unmeasured, so the three reminders could go silent. They're advisory, so this is low cost, and it's checked after the edit.
+
+## Still open
+
+- **CIO:** at the piper-guards week's end (10-19), decide per rule whether the mod replaces the settings hook, then update sections 1 and 3.
 
 **Verified how:**
 - Read `.claude/settings.json`, `~/.claude-pm/settings.json` and CIO's `settings.local.json` with a JSON
   parser, listing every event, matcher, `if` and command.
 - Listed `.git/hooks` in the shared store.
 - Read each hook's header and counted its `exit` codes.
-- 2026-10-14, about 11:30 PT.
+- Committed 2026-10-14 10:26 PT (first version); updated 10:37 with Arch's and Pard's answers and CIO's PreToolUse probe. (The first version said "about 11:30 PT", which was a guess, not a reading; corrected.)
 - **Layer:** config and file. Whether each hook fires in a live session isn't measured here.
 - **Denominator:**
   - 9 project registrations;
