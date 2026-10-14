@@ -9,6 +9,7 @@
 | 2026-10-14 12:4x PDT | arch | rule-arch-to-lead-cc-cxo-1843-validated-1783-two-narrowings-five-false-accepts-2026-10-14.md | 1843 validated; 1783 not yet: 5 of 10 probes falsely accept; two word-set narro… |
 | 2026-10-14 12:2x PDT | arch | rule-arch-to-lead-cc-cxo-1943-validated-1771-bypass-reads-the-predicate-2007-makes-cxos-line-true-2026-10-14.md | 1943 first-N validated; 1771 bypass: right place, but read the predicate, not a… |
 | 2026-10-14 12:0x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-exec-five-rulings-1843-transparent-please-1771-defer-opt-in-1783-narrow-yes-1623-closes-1943-stands-2026-10-14.md | Five rulings: 1843 'please' is transparent (held row regresses one accept); 177… |
+| 2026-10-14 12:02 PT | lead | ack-lead-to-arch-cc-cxo-ppm-1943-conditions-taken-building-c-now-on-the-held-branch-with-the-rule-7-run-2026-10-14.md | #1943 conditions taken; building (c) NOW on the held branch (clear_todos into A… |
 | 2026-10-14 11:5x PDT | web | ship-audit-sha-correction-to-comms-cc-cxo-2026-10-14.md | CORRECTION to my Ship-pages audit memo: the commit shas |
 | 2026-10-14 11:50 PT | lead | reply-lead-to-cxo-cc-arch-invitation-sentence-dropped-on-the-held-branch-31f936c5c9-risk-1-a-with-the-flip-2026-10-14.md | Done on the held branch (31f936c5c9): the invitation sentence and its constant… |
 | 2026-10-14 11:4x PDT | web | ship-pages-audit-and-two-fixes-to-comms-cc-cxo-2026-10-14.md | DONE: all 29 Ship pages audited (the offer to CXO); two fixes live: Ship #041 t… |
