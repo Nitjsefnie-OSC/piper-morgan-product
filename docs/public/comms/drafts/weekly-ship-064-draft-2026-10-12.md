@@ -26,13 +26,13 @@ Another rule that got locked down this week: when Piper can't read something, th
 On alpha:
 
 - **Confirm that Piper is going to act on the item you meant before anything happens.** "Mark the first three complete and leave the fourth pending" gets a confirmation listing what will change and what won't. Lead ran it on our test account and checked the stored items afterward.
-- **Answer Piper's question or change the subject without getting trapped in a loop.** For example, if Piper has asked you to provide a name for a new project, a response such as "show my projects" or a non sequitur such as "close issue 108" now gets handled as a command, as intended, instead of being interpreted literally as the answer to the question of what to name the project. When Piper isn't sure which you meant, they ask.
+- **Answer Piper's question or change the subject without getting trapped in a loop.** If Piper has asked for a new project's name, replies like "show my projects" or "close issue 108" now run as commands instead of becoming the project's name. When Piper isn't sure which you meant, they ask.
 - **Back out of a process mid-request** with "never mind," or **ask a wider range of everyday questions** and Piper's language model works out what you mean, instead of a hand-written rule matching your words.
 - **Look up or close a GitHub issue by its number, and set a default repo by its bare name.** A default repo you choose in Settings is now recognized when you name it in chat.
 - **Unlink a repo, with a confirmation step**, and get a true answer to **requests to "delete my project"**: Piper can't delete projects from chat yet, says so, and offers to archive instead. (It used to ask for confirmation and then do nothing.)
-- **Remove ChatGPT's or Claude's access to your Piper account yourself**, from Settings → Connected apps. The bring-your-own-chat model involves authenticating your Piper Morgan account via OAuth from within ChatGPT or Claude. You can now revoke that connection from the Piper Morgan side rather than having to do so within your chat app. Also, the sign-in consent screen now shows name and email instead of a raw ID.
+- **Remove ChatGPT's or Claude's access to your Piper account yourself**, from Settings → Connected apps. You can now revoke that connection from the Piper Morgan side rather than having to do so within your chat app. Also, the sign-in consent screen now shows name and email instead of a raw ID.
 
-On pipermorgan.ai, the alpha page now describes the alpha accurately (hosted, invite-only, bring your own model key, nothing to install) after drifting out of date for some time, and its Request an invite button is now wired to a working mailbox. There's a new support page, and the privacy policy now covers using Piper from ChatGPT and Claude, including how to turn it off. We held the claim that access ends right away back from both pages until we'd confirmed in a test, seeing a revoked client's next attempt fail. That test passed on Sunday, and the line is now live.
+On pipermorgan.ai, the alpha page now describes the alpha accurately (hosted, invite-only, bring your own model key, nothing to install), and its Request an invite button is now wired to a working mailbox. There's a new support page, and the privacy policy now covers using Piper from ChatGPT and Claude, including how to turn it off. We held the claim that access ends right away back from both pages until we'd confirmed in a test, seeing a revoked client's next attempt fail. That test passed on Sunday, and the line is now live.
 
 Built and waiting for the next release to alpha: the Standup and Radar features clarify when a source failed instead of "nothing to report," and GitHub work items load whether you connected by signing in or with a personal token. CXO won't count these until they've been tested in a real reply, which hasn't happened yet because there is a big testing backlog that I'm behind on.
 
@@ -70,13 +70,13 @@ Built and waiting for the next release to alpha: the Standup and Radar features 
 - **Open issues on the beta gate:** 31 → 14, mostly from my scope rulings on Tuesday rather than burn-down
 - **Hand-written routing rules left (goal is reduction):** 440 → 155
 
-The beta gate got a written standard and a "slip ledger." PPM measured all 31 open gate issues on Monday, I ruled on them Tuesday, and the gate went to 14. Every issue added to or removed from the beta list is now logged, with a brake: after a second slip, PPM stops proposing dates and brings me a choice between cutting scope and accepting a later date. The brake fired Thursday. I'm holding the dates anyway (design partners by Friday, October 23, hard stop Friday, October 30) and watching for slippage. As I write this, five slips are logged against that baseline and no days have moved.
+The beta gate got a written standard and a "slip ledger." Every issue added to or removed from the beta list is now logged, with a brake: after a second slip, PPM stops proposing dates and brings me a choice between cutting scope and accepting a later date. The brake fired Thursday. I'm holding the dates anyway (design partners by Friday, October 23, hard stop Friday, October 30) and watching for slippage. As I write this, five slips are logged against that baseline and no days have moved.
 
 Every agent's review this week listed at least one of their own mistakes, with the fix.
 
 # 🎯 Coming up next week
 
-Lead finishes the planned rule deletions ahead of Wednesday's checkpoint. After the next release to alpha, the agents check the new "I couldn't check" messages with one account connected to GitHub by sign-in and one by personal token. Once I've tested the Piper plugin myself, PA submits it to three directories.
+Lead finishes the rule deletions ahead of Wednesday's checkpoint. After the next release to alpha, the agents check the new "I couldn't check" messages with one account connected to GitHub by sign-in and one by personal token. Once I've tested the Piper plugin myself, PA submits it to three directories.
 
 # 🚧 Blockers & asks
 
@@ -88,7 +88,7 @@ Most of next week waits on me: the next release to alpha, a GitHub test identity
 
 **Discovery**: When code that reads a user's data can only answer "found" or "empty," every failure to read comes out as "empty," and the user gets a confident wrong sentence about their own work.
 
-**Example from this week**: It turned up three times in two days. Closing or reopening an issue treated every non-answer from GitHub as "that issue doesn't exist." The Radar card showed a failed read as a quiet day. And for people who connected with a personal access token, Piper had no way to read GitHub at all. Each fix adds a third answer, "I couldn't check," with the reason. Lead found the biggest one while preparing a live check of the very feature meant to disclose failures.
+**Example from this week**: It turned up three times in two days. Closing or reopening an issue treated every non-answer from GitHub as "that issue doesn't exist." The Radar card showed a failed read as a quiet day. And for people who connected with a personal access token, Piper had no way to read GitHub at all. Each fix adds a third answer, "I couldn't check," with the reason.
 
 **Why it matters**: It's this week's architecture rule seen from the other side. Code is supposed to check meaning against the user's real data, and a check that can't tell "nothing there" from "couldn't look" turns an outage into a claim about the user's work.
 
