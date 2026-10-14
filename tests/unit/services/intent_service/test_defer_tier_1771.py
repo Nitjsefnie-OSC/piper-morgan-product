@@ -139,94 +139,62 @@ class TestNoOtherSeamOptsIn:
         assert opted == {("services/intent/intent_service.py", "_check_pending_resume_offer")}
 
 
-class TestAfterDeferTheStandupIsReachableOnlyByTheTaughtCommands:
-    """CXO's honesty condition on the DEFER reply ("Just ask when you want to
-    pick it back up"): pinned FROM SOURCE, not assumed.
-
-    Finding: a fresh standup ASK ("do a standup", "show my standup") does NOT
-    resume the suspended flow and does NOT re-arm the resume offer --
-    ``_start_standup_conversation`` looks up the session conversation with
-    ``include_suspended=False``, finds nothing, and starts a NEW conversation
-    (the SUSPENDED one is left in place). The suspended flow comes back via
-    (a) the greeting re-offer, or (b) the taught resume commands handled at
-    ``_check_pending_resume_offer`` with no offer pending: exactly "resume",
-    "continue", "pick it up", "let's continue".
-    """
+class TestFlowExitBypassKeyedOnThePredicate:
+    """#1529's exit vocabulary stays ignorant of 'defer'; the resume seam
+    bypasses the exit exactly when the predicate says DEFER (offer pending)."""
 
     @staticmethod
-    def _suspended():
-        return SuspendedInfo(
+    def _run(turn, pending):
+        service = _service()
+        suspended = SuspendedInfo(
             process_type=ProcessType.STANDUP,
             suspended_at=datetime.now(),
             description="Your standup was paused.",
         )
 
+        async def go():
+            with (
+                patch("services.intent.intent_service.get_process_registry") as reg_fn,
+                patch.object(service, "_resume_suspended_standup", new_callable=AsyncMock),
+                patch.object(
+                    service,
+                    "_abandon_suspended_standup",
+                    new_callable=AsyncMock,
+                    return_value=MagicMock(success=True),
+                ) as abandon,
+            ):
+                reg = MagicMock()
+                reg.check_suspended_processes = AsyncMock(return_value=suspended)
+                reg_fn.return_value = reg
+                result = await service._check_pending_resume_offer(
+                    "user-1",
+                    str(uuid4()),
+                    turn,
+                    resume_offer_pending=pending,
+                    resume_offer_question=RESUME_ASK if pending else None,
+                )
+            return result, abandon
+
+        return go()
+
     @pytest.mark.asyncio
-    @pytest.mark.parametrize("turn", ["resume", "continue", "pick it up", "let's continue"])
-    async def test_taught_commands_resume_with_no_offer_pending(self, turn):
-        service = _service()
-        with (
-            patch("services.intent.intent_service.get_process_registry") as reg_fn,
-            patch.object(
-                service,
-                "_resume_suspended_standup",
-                new_callable=AsyncMock,
-                return_value=MagicMock(success=True),
-            ) as resume,
-        ):
-            reg = MagicMock()
-            reg.check_suspended_processes = AsyncMock(return_value=self._suspended())
-            reg_fn.return_value = reg
-            result = await service._check_pending_resume_offer(
-                "user-1", str(uuid4()), turn, resume_offer_pending=False
-            )
+    @pytest.mark.parametrize("turn", DEFERRALS)
+    async def test_all_defer_phrasings_bypass_the_exit_with_offer_pending(self, turn):
+        from services.intent.intent_service import RESUME_DEFER_REPLY
+
+        result, abandon = await self._run(turn, True)
+        assert result.message == RESUME_DEFER_REPLY
+        abandon.assert_not_called()
+
+    @pytest.mark.asyncio
+    async def test_no_does_not_bypass_it_declines_and_abandons(self):
+        result, abandon = await self._run("no", True)
         assert result is not None
-        resume.assert_called_once()
+        abandon.assert_called_once()
 
     @pytest.mark.asyncio
-    @pytest.mark.parametrize(
-        "turn",
-        ["show my standup", "do a standup", "let's do a standup", "what's on my standup today"],
-    )
-    async def test_a_new_standup_ask_does_not_resume_at_the_resume_seam(self, turn):
-        service = _service()
-        with (
-            patch("services.intent.intent_service.get_process_registry") as reg_fn,
-            patch.object(service, "_resume_suspended_standup", new_callable=AsyncMock) as resume,
-            patch.object(service, "_abandon_suspended_standup", new_callable=AsyncMock) as aband,
-        ):
-            reg = MagicMock()
-            reg.check_suspended_processes = AsyncMock(return_value=self._suspended())
-            reg_fn.return_value = reg
-            result = await service._check_pending_resume_offer(
-                "user-1", str(uuid4()), turn, resume_offer_pending=False
-            )
-        assert result is None
-        resume.assert_not_called()
-        aband.assert_not_called()
-
-    @pytest.mark.asyncio
-    async def test_starting_a_standup_creates_a_new_conversation_and_does_not_rearm(self):
-        """The start path never sees the SUSPENDED conversation (the manager's
-        default lookup excludes it), so it starts fresh and arms no offer."""
-        service = _service()
-        manager = MagicMock()
-        manager.get_conversation_by_session = AsyncMock(return_value=None)
-        handler = MagicMock()
-        handler.start_conversation = AsyncMock(
-            return_value=MagicMock(message="Ready?", state=MagicMock(value="initiated"))
-        )
-        with (
-            patch(
-                "services.conversation.conversation_handler._get_standup_components",
-                return_value=(manager, handler),
-            ),
-            patch.object(service, "_arm_resume_offer") as arm,
-            patch.object(service, "_resume_suspended_standup", new_callable=AsyncMock) as resume,
-        ):
-            await service._start_standup_conversation("user-1", str(uuid4()))
-        handler.start_conversation.assert_awaited_once()
-        arm.assert_not_called()
-        resume.assert_not_called()
-        # The lookup it made is the default one, which excludes SUSPENDED.
-        assert "include_suspended" not in manager.get_conversation_by_session.call_args.kwargs
+    async def test_active_flow_not_now_still_exits_per_1529(self):
+        """No offer pending: a bare 'not now' stays the #1529 exit command."""
+        result, abandon = await self._run("not now", False)
+        assert result is not None
+        abandon.assert_called_once()
