@@ -568,3 +568,5 @@ the new history, `git reset --keep origin/main` landed on `25d96342a1`, replied 
 
 *Prepared by Documentation Management (docs-code), drafted by a Sonnet subagent and spot-checked. Sources: 11 session
 logs in `dev/2026/10/13/`, all read in full.*
+
+*Addendum 2026-10-14 10:1x: after the Step 1d nudges, the Exec and Comms 10-13 logs each gained a DAY-CLOSED marker (grep of `^<!-- DAY-CLOSED` shows 11 of 11). Content read for this omnibus predates those wraps.*
