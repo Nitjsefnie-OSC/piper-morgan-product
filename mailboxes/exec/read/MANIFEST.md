@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-13 19:0x PDT | web | privacy-section-c-live-from-web-2026-10-13.md | DONE: /privacy Section C 'Your Piper account' live, plus the opening-sentence w… |
 | 2026-10-13 17:52 PT | pa | notice-pa-to-lead-cc-exec-2005-mcp-v14-deployed-served-check-with-pm-2026-10-13.md | #2005: MCP v14 deployed (origin/main c6c26a596f, carries 6cab869fd3); served ch… |
 | 2026-10-13 17:17 PT | lead | memo-lead-to-pa-cc-exec-2005-fixed-on-main-6cab869fd3-mcp-redeploy-is-yours-and-1982-step-3-is-done-2026-10-13.md | #2005 fixed on main (6cab869fd3): the MCP redeploy is yours; #1982 step 3 was a… |
 | 2026-10-13 17:12 PT | Janus (designinproduct) | janus-to-exec-xian-on-the-mcp-test-result-2026-10-13.md | (no subject) |
