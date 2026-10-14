@@ -1,6 +1,25 @@
 # Lead carry-forward — Fable 5.1 seat; Model A worktree ~/Development/piper-morgan-worktrees/lead
 
-## STATE @ 2026-10-14 09:14 PT — history rewrite DONE (reset --keep to the new main 08:45); START drained; PM mid-card (row 5 next)
+## STATE @ 2026-10-14 11:16 PT — RUN-HOT (xian, until Thu 10-15 22:00): MVP pass in flight; 4 MVP closes today; 5 lanes; promotion NEEDED (N5)
+- **Run-hot ruling (Exec 10:36):** drain fully, deeper checks, subagents freely; mail Exec if xian blocks; no model ask (Fable). PM: morning work, then the card.
+- **MVP milestone today:** CLOSED #1886 (10-07 fix, 10-08 served), #1623 (member 2 = #1627), #1579 and #1860 (Web's served rows 1–2 on de7d0c1c57).
+  Open non-epic: #1965, #1943, #1913, #1889, #1843, #1783, #1771 (7, was 11).
+- **Landed on main:** #1943 delete "first N" 156bec12c3 (gate passthrough for positional targets; live probe PASS; card N5 waits on the next
+  promotion); CIO's concept-link gate in lint.yml 93978c4ddf; ab-a-isolation concept (recipes §6); Option 3 doc corrected (router before Stage 0).
+- **Pending in the cycle worktree (NOT pushed until the intent_service re-run reads green):** #1843 merge (196feeb23d, transparent "please" strip,
+  Arch's shape; 8 existing pins re-pinned) + data-model.md refresh (1df05f7945, 46-table inventory). Then: push, comment #1843 (served check owed
+  at the standup REFINING seam → Web round after promotion), land note for data-model (owner-scoping facts to read once, lane's 5 rule notes).
+- **Lanes:** #1771 built to Arch's shape, HELD 759c331937 — CXO must pick the line ((a) "say 'resume'" or (b) make a fresh standup ask resume; memo
+  sent); #1783 Sonnet lane running (Arch's three conditions, CXO yes); #1943 clear_todos piece 2 + rework (1) Opus lane running from the held
+  resolver branch → then MY ×6 screen + full corpus run before the flip. Land 1783/1943c only after Arch's read.
+- **Served checks owed:** Web row 3 JSON reads (/api/v1/radar degraded_sources etc.), row 5 #1913 blocked on a spare Anthropic key for web-agent
+  (ask on Exec/xian's card), row 6 #1943 after promotion; PA asked for the OAuth broken-grant leg (#1965/#1889).
+- **Promotion:** staging serves 0aefd70dca; its tested ancestor 93978c4ddf has Tests in progress → when SUCCESS, say "ready" (Step 0, card v32).
+- **Cron:** session 46638333 until the first `pm-lead-cycle` LaunchAgent fire lands (Exec/Pard), then CronDelete + registry row.
+- Earlier today: history rewrite reset 08:45 (new main from d217d8f1ca), unfrozen 09:02; push-wrappers R9 (push-main.sh canonical, four retired);
+  Option 3 verdict none; sync-pm-local resumed 09:5x (xian's checkout a4915e6d2b+); data/chromadb untracked 7a498b2aec.
+
+## EARLIER — STATE @ 2026-10-14 09:14 PT — history rewrite DONE (reset --keep to the new main 08:45); START drained; PM mid-card (row 5 next)
 - **History rewrite (Exec's runbook `dev/active/exec-history-rewrite-runbook-2026-10-13.md`):** froze 22:43 10-13 (reply sent, counts 0/0), reset
   08:45 to 25d96342a1 (new main descends from `d217d8f1ca`), unfrozen 09:02. **Carried rules (24h at least):** never merge an old branch, `stash
   pop`, or check out an old sha; the pre-push guard holds 57 old shas; **do not run `scripts/sync-pm-local.sh` until xian says his checkout is
