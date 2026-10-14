@@ -2403,7 +2403,8 @@ class StandupSummary:
             (
                 "**Yesterday** — what got done",
                 self._yesterday_prose(),
-                "No completions yesterday — looks like you were in planning mode.",
+                # #2008 (CXO ruled 2026-10-14): no guess about what the person was doing.
+                "No completions yesterday.",
             ),
             (
                 "**Today** — what's active",
