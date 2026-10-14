@@ -5,6 +5,7 @@ description: >-
   calibrated to your audience (exec, team, investors, board). Draws on your
   project context. Trigger phrases: "write a stakeholder update", "draft an
   update for", "what should I tell [audience]", "write a status update".
+concept: "Concept: docs/internal/product/piper-pm-skills-concept.md (added 2026-10-14, sunset-or-renew inventory; PPM)"
 ---
 
 # stakeholder-update

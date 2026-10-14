@@ -6,6 +6,7 @@ description: >-
   grounded in your actual product. Trigger phrases: "synthesize this feedback",
   "what are users saying", "themes from these interviews",
   "analyze this feedback".
+concept: "Concept: docs/internal/product/piper-pm-skills-concept.md (added 2026-10-14, sunset-or-renew inventory; PPM)"
 ---
 
 # synthesize-feedback

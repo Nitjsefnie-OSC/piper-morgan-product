@@ -7,6 +7,7 @@ description: >-
   but is significantly richer with it. Trigger phrases: "let's plan the sprint",
   "help me scope [sprint name]", "what should go in this sprint",
   "which issues should we tackle next".
+concept: "Concept: docs/internal/product/piper-pm-skills-concept.md (added 2026-10-14, sunset-or-renew inventory; PPM)"
 ---
 
 # sprint-plan
