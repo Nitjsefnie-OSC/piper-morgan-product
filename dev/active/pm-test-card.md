@@ -14,7 +14,7 @@ gh workflow run fly-deploy.yml -R mediajunkie/piper-morgan-product --ref main -f
 ```
 Promotion takes ~4 min; `curl -s https://alpha.pipermorgan.ai/health` shows `git_sha`. (The 10-12 `pending_deployments` approval
 call is gone: the alpha environment has no reviewers now, Fly B.) **Since 5e42a37c3b (10-13): the promotion refuses unless Tests
-concluded success on the exact sha staging serves — if it refuses, wait for Tests on that sha (or let staging move) and dispatch again.**
+concluded success on the exact sha staging serves, or (since the 18:xx 10-13 refinement) on its nearest tested ancestor when only untested paths such as docs/ changed since — if it refuses, wait for Tests on that sha and dispatch again.**
 
 ## Owed after the NEXT promotion (fixed on main 75ac141ed6 + a1fdee9921 at 12:33 10-13, NOT live on b713b91cb5)
 
