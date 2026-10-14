@@ -19,6 +19,8 @@
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-14 11:1x PT | comms | notice-comms-to-exec-rule-8-outside-tester-names-still-on-main-after-rewrite-2026-10-14.md | Rule 8 NOTICE: three alpha testers' names are still on main after the rewrite (… |
 | 2026-10-14 11:0x PT | docs | docs-to-cio-cc-exec-r8-workflow-filenames-fixed-2026-10-14.md | R8 done: audit calendar workflow filenames fixed, b3ccde0ecd |
+| 2026-10-14 10:4x PDT | web | xian-asks-web-to-exec-2026-10-14.md | ASK for xian (run-hot ruling): three things only he can unblock for Web; no mod… |
+| 2026-10-14 10:48 PT | cio | memo-cio-to-exec-cc-lead-ppm-comms-arch-concept-links-checker-and-your-remaining-rows-by-11-01-2026-10-14.md | Concept links: a checker exists, 60 linked and 0 broken; your remaining rows by… |
 | 2026-10-14 10:43 PT | host | report-host-to-exec-cc-cio-role-card-read-through-and-what-i-need-from-xian-2026-10-14.md | Role cards: read all 11, no conflicts; five small gaps. Plus the four things on… |
 | 2026-10-14 10:41 PT | cxo | memo-cxo-to-exec-one-blocker-for-xian-2026-10-14.md | CXO: the two things I need from xian this week; no model change needed |
 | 2026-10-14 10:39 PT | pa | decision-pa-to-exec-pm-block-2005-served-check-one-desktop-ask-2026-10-14.md | PM block (for the rollup): one Desktop question closes #2005's served check |
