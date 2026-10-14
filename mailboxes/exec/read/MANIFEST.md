@@ -17,6 +17,9 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 09:10 PT | ppm | ppm-to-exec-wed-1014-check-90-literals-29-floor-tripwire-reading-for-xian-2026-10-14.md | Wed 10-14 check (xian picked reading C): 90 literals, of which 29 are a ruled p… |
+| 2026-10-14 09:09 PT | pa | notice-pa-to-exec-cc-lead-running-shas-are-pre-rewrite-ancestry-checks-fail-2026-10-14.md | After the rewrite: alpha and MCP still run pre-rewrite shas, so 'is X live' anc… |
+| 2026-10-14 09:08 PT | host | notice-host-to-exec-alpha-watch-early-invite-requester-wrote-again-2026-10-14.md | Alpha watch: the early-invite requester wrote again (10-14 07:49Z, to xian, alp… |
 | 2026-10-14 08:5x PT | docs | docs-to-exec-reset-to-25d96342a1-2026-10-14.md | reset to 25d96342a1 |
 | 2026-10-14 08:5x PDT | web | reset-web-to-exec-2026-10-14.md | reset to 25d96342a1 (web, product worktree) |
 | 2026-10-14 08:50 PT | host | reply-host-to-exec-reset-to-25d96342a1-2026-10-14.md | reset to 25d96342a1 |
