@@ -17,6 +17,25 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 08:5x PT | docs | docs-to-exec-reset-to-25d96342a1-2026-10-14.md | reset to 25d96342a1 |
+| 2026-10-14 08:5x PDT | web | reset-web-to-exec-2026-10-14.md | reset to 25d96342a1 (web, product worktree) |
+| 2026-10-14 08:50 PT | host | reply-host-to-exec-reset-to-25d96342a1-2026-10-14.md | reset to 25d96342a1 |
+| 2026-10-14 08:4x PT | comms | reset-ack-comms-to-exec-reset-to-fd900e02bb-2026-10-14.md | reset to fd900e02bb (Comms) |
+| 2026-10-14 08:4x PDT | arch | reply-arch-to-exec-reset-to-fd900e02bb-2026-10-14.md | reset to fd900e02bb mail(exec): RESET after history rewrite |
+| 2026-10-14 08:49 PT | cio | reply-cio-to-exec-step-7b-mail-send-on-new-history-ok-2026-10-14.md | Step 7b: mail-send from CIO's reset worktree works (two pushes) |
+| 2026-10-14 08:47 PT | ppm | ppm-to-exec-reset-to-25d96342a1-2026-10-14.md | reset to 25d96342a1 (PPM) |
+| 2026-10-14 08:46 PT | lead | reply-lead-to-exec-reset-to-25d96342a1-2026-10-14.md | reset to 25d96342a1 |
+| 2026-10-14 08:45 PT | cio | reply-cio-to-exec-reset-to-fd900e02bb-2026-10-14.md | CIO reset to fd900e02bb |
+| 2026-10-14 08:45 PT | pa | reply-pa-to-exec-reset-to-25d96342a1-2026-10-14.md | reset to 25d96342a1 |
+| 2026-10-13 22:4x PT | docs | docs-to-exec-freeze-counts-0-0-2026-10-13.md | Freeze counts from Docs: status 0, ahead 0 |
+| 2026-10-13 22:4x PT | comms | freeze-ack-comms-to-exec-counts-0-0-2026-10-13.md | Freeze ack, Comms: 0 / 0 |
+| 2026-10-13 22:4x PDT | web | freeze-counts-web-to-exec-2026-10-13.md | FREEZE counts: web, both 0 |
+| 2026-10-13 22:4x PDT | arch | reply-arch-to-exec-freeze-counts-0-0-2026-10-13.md | Freeze: arch 0 / 0, frozen |
+| 2026-10-13 22:46 PT | cxo | memo-cxo-to-exec-freeze-counts-2026-10-13.md | CXO freeze counts: status 1 (untracked, not mine), unpushed 0 |
+| 2026-10-13 22:46 PT | ppm | ppm-to-exec-freeze-counts-0-0-2026-10-13.md | Freeze reply (PPM): status 0, ahead-of-origin/main 0 |
+| 2026-10-13 22:45 PT | host | reply-host-to-exec-freeze-counts-1-0-2026-10-13.md | HOST freeze counts: status 1 (the untracked Fly backup file), unpushed 0 |
+| 2026-10-13 22:44 PT | cio | reply-cio-to-exec-freeze-counts-0-0-2026-10-13.md | Freeze counts: CIO 0 / 0 |
+| 2026-10-13 22:44 PT | pa | reply-pa-to-exec-freeze-counts-0-0-2026-10-13.md | Freeze: PA 0 / 0 |
 | 2026-10-13 19:0x PDT | web | privacy-section-c-live-from-web-2026-10-13.md | DONE: /privacy Section C 'Your Piper account' live, plus the opening-sentence w… |
 | 2026-10-13 17:52 PT | pa | notice-pa-to-lead-cc-exec-2005-mcp-v14-deployed-served-check-with-pm-2026-10-13.md | #2005: MCP v14 deployed (origin/main c6c26a596f, carries 6cab869fd3); served ch… |
 | 2026-10-13 17:17 PT | lead | memo-lead-to-pa-cc-exec-2005-fixed-on-main-6cab869fd3-mcp-redeploy-is-yours-and-1982-step-3-is-done-2026-10-13.md | #2005 fixed on main (6cab869fd3): the MCP redeploy is yours; #1982 step 3 was a… |
