@@ -589,7 +589,11 @@ class StandupProcessAdapter:
         return SuspendedInfo(
             process_type=ProcessType.STANDUP,
             suspended_at=(suspended.updated_at if hasattr(suspended, "updated_at") else None),
-            description="Your standup was paused. Want to pick it up?",
+            # #2011 call 3: a statement only. The resume QUESTION is the
+            # caller's (ConversationHandler._check_suspended_session_reentry
+            # appends "Would you like to continue, or start fresh?" and arms
+            # it as LastOffer); a question here was rendered unarmed, twice.
+            description="Your standup was paused.",
         )
 
 

@@ -8,14 +8,12 @@ ADR: ADR-056 Consciousness Expression Patterns
 This module provides helpers for:
 - Empty state messages
 - Confirmation dialogs
-- Toast notifications
 - Button labels
 
 Usage:
     from services.consciousness.ui_consciousness import (
         format_empty_state_conscious,
         format_delete_confirmation_conscious,
-        format_toast_success_conscious,
     )
 
     # Empty state for a todos list
@@ -178,64 +176,6 @@ def format_delete_confirmation_conscious(
     if entity_name:
         return f'Remove "{entity_name}"? This can\'t be undone.'
     return f"Remove this {entity_type}? This can't be undone."
-
-
-def format_toast_success_conscious(action: str, target: str) -> str:
-    """
-    Format success toast with warm acknowledgment.
-
-    Args:
-        action: The action performed (saved, created, updated, etc.)
-        target: What the action was performed on
-
-    Returns:
-        Warm success message with identity
-
-    Examples:
-        >>> format_toast_success_conscious("saved", "your settings")
-        "Done - I've saved your settings."
-        >>> format_toast_success_conscious("created", "the project")
-        "Done - I've created the project."
-    """
-    return f"Done - I've {action} {target}."
-
-
-def format_toast_error_conscious(attempted_action: str) -> str:
-    """
-    Format error toast with recovery path, not blame.
-
-    Args:
-        attempted_action: What was being attempted (save your changes, upload the file, etc.)
-
-    Returns:
-        Helpful error message that offers recovery
-
-    Examples:
-        >>> format_toast_error_conscious("save your changes")
-        "I couldn't save your changes. Want to try again?"
-        >>> format_toast_error_conscious("upload the file")
-        "I couldn't upload the file. Want to try again?"
-    """
-    return f"I couldn't {attempted_action}. Want to try again?"
-
-
-def format_toast_delete_conscious(entity_type: str) -> str:
-    """
-    Format delete confirmation toast with reassurance.
-
-    Args:
-        entity_type: Type of entity that was deleted
-
-    Returns:
-        Reassuring confirmation that the deletion is complete
-
-    Examples:
-        >>> format_toast_delete_conscious("todo")
-        "Removed. The todo is gone."
-        >>> format_toast_delete_conscious("file")
-        "Removed. The file is gone."
-    """
-    return f"Removed. The {entity_type} is gone."
 
 
 def format_button_label_conscious(action: str) -> str:

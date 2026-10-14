@@ -22,6 +22,7 @@ TEMPORAL_GREETINGS: Dict[str, List[str]] = {
         "Good morning! Here's what I see as we start the day...",
     ],
     "late_morning": [
+        # ask-census: question answered by its own directive on the same line; nothing waits for a reply (CXO ruling 2026-10-14 15:20/15:35, #2011 call 1)
         "Starting a bit later? No worries - let me catch you up...",
         "Good morning! Here's what I found looking through your context...",
         "Late morning check-in - here's what I see...",
@@ -32,7 +33,9 @@ TEMPORAL_GREETINGS: Dict[str, List[str]] = {
         "Checking in this afternoon - here's the picture...",
     ],
     "evening": [
+        # ask-census: question answered by its own directive on the same line; nothing waits for a reply (CXO ruling 2026-10-14 15:20/15:35, #2011 call 1)
         "End of day? Let's look at what you accomplished...",
+        # ask-census: question answered by its own directive on the same line; nothing waits for a reply (CXO ruling 2026-10-14 15:20/15:35, #2011 call 1)
         "Wrapping up? Here's how the day went from what I can see...",
         "Evening reflection - here's what I noticed today...",
     ],

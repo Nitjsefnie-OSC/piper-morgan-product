@@ -275,7 +275,10 @@ class SlotFillingManager:
             return self._complete_session(session)
 
         # User might be updating a slot during confirmation
-        # For now, re-prompt for confirmation
+        # For now, re-prompt for confirmation. The machine stays in
+        # CONFIRMING, so the re-asked confirmation's reply is bound by this
+        # handler again (#2011 call 2: the transition is the arm, stated here).
+        session.filling_state = SlotFillingState.CONFIRMING
         msg = format_final_confirmation(session.slot_state)
         return SlotFillingResponse(
             message=msg,

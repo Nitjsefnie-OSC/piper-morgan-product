@@ -4021,7 +4021,13 @@ class TestUnarmedAskSiteRatchet:
       by construction;
     - ``services/standup/`` — its conversation machine arms via its own
       adopted state rail, not the one-slot store (#1739 table);
-    - ``services/onboarding/`` — on ice (ADR-059).
+    - ``services/onboarding/`` — on ice (ADR-059);
+    - ``services/consciousness/{ui,auth,cli}_consciousness.py`` — NON-CHAT
+      surfaces (#2011 call 4, Arch 2026-10-14): web page UI copy, the
+      login/session routes, and terminal output. The one-slot store is a
+      chat mechanism. Each exclusion is held true by a CONSUMER TRIPWIRE
+      (``test_2011_non_chat_surface_consumers``) pinning its measured
+      importer set; a chat-path importer fails the build.
 
     An INTERROGATIVE LITERAL is any string constant or f-string (constant
     parts joined with ``{}`` placeholders) in which some line, after
@@ -4064,6 +4070,20 @@ class TestUnarmedAskSiteRatchet:
           ``self.question_templates = {...: ["How urgent is this
           issue?", ...]}``). Local variables do NOT qualify: a local
           ``question = "…?"`` returned unarmed stays counted;
+    - #2011 call 5 (Arch 2026-10-14) — OPEN INVITATIONS, a CLASS: a literal
+      every one of whose question sentences is a closed-set invitation
+      shape (what can I help (you) with · anything else I can help with /
+      you need · what's on your mind · how does that sound · does that
+      help · what would you like to work on / focus on · need anything
+      else; optionally + today / now / this morning|afternoon|evening),
+      carrying NO action offer (want me to · should I · shall I|we ·
+      would you|you'd like me to). Any reply to such a question is a fresh
+      request, so nothing needs binding. Measured both ways: EXEMPT
+      ``home_state_service`` "Welcome. What can I help you with?"; COUNTED
+      ``templates.py`` DIALOGUE_INVITATION "How does that sound? Anything
+      you'd like me to adjust?" (the same literal offers an action). A
+      second question of any other shape — a slot request — keeps the
+      literal counted;
     - literals carrying an ``# ask-census: <reason>`` marker on their own
       line or the line directly above — the residual hand-annotation lives
       AT the site, never in this table, and the marker count is ceilinged
@@ -4081,8 +4101,19 @@ class TestUnarmedAskSiteRatchet:
     ``ConversationHandler._check_suspended_session_reentry`` stores its
     "Welcome back! … Would you like to continue, or start fresh?" as
     ``LastOffer(offer_type="process_resume", offer_text=resume_message)``,
-    the same holder that renders it). The census is
-    every holder with >= 1 interrogative literal that does not arm.
+    the same holder that renders it); or assign
+    ``<x>.filling_state = SlotFillingState.PROMPTING|CONFIRMING`` (#2011
+    call 2, Arch 2026-10-14: the slot-filling machine's transition into an
+    answer-binding state — the next reply is routed by that state to the
+    handler that binds it; terminal COMPLETE/CANCELLED are not arms, so
+    ``_SLOT_MESSAGES``' post-terminal "wrapped up! Want to start a new
+    one?" stays counted). CONSUMER-ARMED (one hop, #2011 call 2): a
+    MODULE-LEVEL function whose EVERY call site in the scan sits in an
+    arming holder is treated as arming — its copy reaches the user only
+    through an arm (``slot_prompts.format_final_confirmation``, called only
+    by ``_determine_next_step`` / ``_handle_confirming``, which enter/hold
+    CONFIRMING). Zero call sites never qualifies. The census is every
+    holder with >= 1 interrogative literal that does not arm.
 
     KNOWN_UNARMED_ASK_SITES starts at the census MEASURED 2026-09-12
     (measured, never base-minus-predicted) and is SHRINK-ONLY — the
@@ -4101,7 +4132,8 @@ class TestUnarmedAskSiteRatchet:
     1. SCOPE: ``services/**`` (#2011). Question-emitting code elsewhere is
        not censused: ``services/standup/`` (its conversation machine arms
        via its own adopted state rail, not the one-slot store — #1739
-       table), onboarding (on ice, ADR-059), web templates, ``web/`` and
+       table), onboarding (on ice, ADR-059), the three non-chat
+       consciousness modules (tripwired, #2011 call 4), web templates, ``web/`` and
        ``main.py``, and above all LLM FREE TEXT — the conversational floor can generate
        a question in prose at runtime; no static census can see it. Those
        surfaces' ask-only-when-armed compliance is Present, not Enforced.
@@ -4119,7 +4151,61 @@ class TestUnarmedAskSiteRatchet:
     # scanned nor named escaped it. Recursive over all of services/ now.
     _SCAN_GLOBS = (os.path.join("services", "**", "*.py"),)
 
-    _EXCLUDED_MODULES = frozenset({"services/intent_service/soft_invocation.py"})
+    _EXCLUDED_MODULES = frozenset(
+        {
+            "services/intent_service/soft_invocation.py",
+            # #2011 call 4 (Arch 2026-10-14): NON-CHAT SURFACES, excluded by
+            # name. The one-slot store is a chat mechanism; these modules'
+            # copy never reaches a chat reply. Each exclusion is held TRUE by
+            # a consumer tripwire (test_2011_non_chat_surface_consumers): if a
+            # chat path ever imports one, the build fails and the exclusion
+            # must be re-ruled.
+            #  - ui_consciousness: web page empty states / delete-confirm
+            #    modal copy (no chat consumer; measured: no consumer at all
+            #    beyond the package re-export);
+            #  - auth_consciousness: login/session pages (web/api/routes/auth.py);
+            #  - cli_consciousness: terminal output of main.py.
+            "services/consciousness/ui_consciousness.py",
+            "services/consciousness/auth_consciousness.py",
+            "services/consciousness/cli_consciousness.py",
+        }
+    )
+
+    # #2011 call 4: the measured importer set per excluded non-chat module
+    # (production code only — tests/ and dev/ excluded). `git grep` 2026-10-14.
+    _NON_CHAT_SURFACE_IMPORTERS = {
+        "ui_consciousness": frozenset({"services/consciousness/__init__.py"}),
+        "auth_consciousness": frozenset(
+            {"services/consciousness/__init__.py", "web/api/routes/auth.py"}
+        ),
+        "cli_consciousness": frozenset({"services/consciousness/__init__.py", "main.py"}),
+    }
+
+    # #2011 call 2: SlotFillingState members whose assignment arms (the reply
+    # is bound by the PROMPTING/CONFIRMING handler).
+    _SLOT_ARM_STATES = frozenset({"PROMPTING", "CONFIRMING"})
+
+    # #2011 call 5 (Arch 2026-10-14): OPEN INVITATIONS — a CLOSED word-set of
+    # invitation shapes whose any reply is a fresh request (nothing to bind).
+    # A literal is in the class iff EVERY question sentence in it is one of
+    # these shapes (optionally followed by a time phrase) AND it carries no
+    # action offer. A second question of any other shape (a slot request, an
+    # adjust-offer) keeps the whole literal counted.
+    _OPEN_INVITATION_RE = re.compile(
+        r"(?i)^(?:"
+        r"what can i help(?: you)? with"
+        r"|anything else (?:i can help(?: you)? with|you need)"
+        r"|what['’]?s on your mind"
+        r"|how does that sound"
+        r"|does that help"
+        r"|what would you like to (?:work on|focus on)"
+        r"|need anything else"
+        r")(?: today| now| this (?:morning|afternoon|evening))?\?$"
+    )
+    _ACTION_OFFER_RE = re.compile(
+        r"(?i)\b(?:want me to|should i|shall i|shall we|(?:would you|you'd|you would) like me to)\b"
+    )
+    _QUESTION_SENTENCE_RE = re.compile(r"[^.!?\n]*\?")
 
     # Excluded BY NAME, each with its reason (class docstring, Scope).
     _EXCLUDED_PACKAGES = ("services/standup/", "services/onboarding/")
@@ -4179,7 +4265,17 @@ class TestUnarmedAskSiteRatchet:
     #      stores `"question": question`), conversational_floor
     #      .FLOOR_FALLBACK_TRANSIENT ("Could you try again in a moment?" is
     #      error copy asking for a retry; it binds no answer).
-    MAX_MARKER_EXEMPTIONS = 6
+    #   7–13. #2011 call 1 (Arch 2026-10-14; CXO ruling 2026-10-14 15:20
+    #      tiers / 15:35 deliberate list): a question answered by its own
+    #      directive on the same line, nothing waits for a reply —
+    #      api/errors.py ERROR_MESSAGES ×3 ("Need help? Check our …",
+    #      "Did you mean to '…'? For more examples, see …"),
+    #      ui_messages UserFriendlyErrorService.__init__ ×1 ("Need help?
+    #      Check our examples."), consciousness/templates.py
+    #      TEMPORAL_GREETINGS ×3 ("Starting a bit later? No worries …",
+    #      "End of day? Let's look …", "Wrapping up? Here's …"). 6 -> 13,
+    #      the measured count.
+    MAX_MARKER_EXEMPTIONS = 13
 
     # THE RATCHET TABLE — census MEASURED 2026-09-12 (predicate above, run
     # over the scope above). SHRINK-ONLY: arm the site through the one-slot
@@ -4393,55 +4489,23 @@ class TestUnarmedAskSiteRatchet:
             # (rendered by IntentService._handle_projects_query, which does
             # not arm); that row leaves when #2010 lands. Holders per package:
             # consciousness 34 · slot_filling 3 · trust 3 · integrations 2 · memory 2 · mux 2 · api 1 · conversation 1 · home 1 · mcp 1 · personality 1 · process 1 · ui_messages 1 (total 53).
-            # -- services/api/ (1)
-            (
-                "services/api/errors.py",
-                "ERROR_MESSAGES",
-                3,
-                "I couldn't connect to GitHub. Please verify your access toke",
-            ),
-            # -- services/consciousness/ (34)
-            (
-                "services/consciousness/auth_consciousness.py",
-                "format_account_inactive_conscious",
-                1,
-                "Your account isn't active right now. Need help getting acces",
-            ),
-            (
-                "services/consciousness/auth_consciousness.py",
-                "format_invalid_credentials_conscious",
-                1,
-                "Hmm, those credentials didn't work. Want to try again, or ne",
-            ),
-            (
-                "services/consciousness/auth_consciousness.py",
-                "format_session_expired_conscious",
-                1,
-                "Your session timed out - mind logging in again? I'll pick up",
-            ),
-            (
-                "services/consciousness/cli_consciousness.py",
-                "format_cli_error_conscious",
-                1,
-                "I ran into a problem: {}. Want me to try again, or can I hel",
-            ),
-            (
-                "services/consciousness/conversation_consciousness.py",
-                "_build_greeting_invitation",
-                3,
-                "What can I help you with this afternoon?",
-            ),
-            (
-                "services/consciousness/conversation_consciousness.py",
-                "_fix_mvc_gaps",
-                1,
-                ". What can I help you with?",
-            ),
+            # RE-SHAPED 2026-10-14 per Arch's five calls (#2011), re-measured:
+            # 53 -> 34 holders. Call 1: 7 literals marked deliberate at their
+            # sites (CXO) — api ERROR_MESSAGES, ui_messages, TEMPORAL_GREETINGS
+            # leave. Call 2: the slot-filling transition arm + one-hop
+            # consumer-armed rule — slot_prompts.format_final_confirmation
+            # leaves. Call 3: has_suspended_session's question moved to its
+            # arming caller — leaves. Call 4: ui/auth/cli excluded by name —
+            # 7 holders leave (toast formatters deleted). Call 5: the open-
+            # invitation class — 15 literals; 7 holders leave, 3 shrink.
+            # Holders per package now: consciousness 23 · trust 3 ·
+            # slot_filling 2 · integrations 2 · mux 2 · mcp 1 · memory 1 (34).
+            # -- services/consciousness/ (23)
             (
                 "services/consciousness/error_consciousness.py",
                 "_add_dialogue_invitation",
-                2,
-                "{}. Does that help?",
+                1,
+                "{}. Would you like me to try again?",
             ),
             (
                 "services/consciousness/error_consciousness.py",
@@ -4476,7 +4540,7 @@ class TestUnarmedAskSiteRatchet:
             (
                 "services/consciousness/injection.py",
                 "fix_mvc_gaps",
-                2,
+                1,
                 "Anything you'd like me to adjust?",
             ),
             (
@@ -4558,12 +4622,6 @@ class TestUnarmedAskSiteRatchet:
                 "Given your {meeting_count} meetings, maybe focus on {priorit",
             ),
             (
-                "services/consciousness/templates.py",
-                "TEMPORAL_GREETINGS",
-                3,
-                "End of day? Let's look at what you accomplished...",
-            ),
-            (
                 "services/consciousness/todo_consciousness.py",
                 "_build_closing",
                 3,
@@ -4580,44 +4638,6 @@ class TestUnarmedAskSiteRatchet:
                 "format_next_todo_conscious",
                 1,
                 "Does that priority feel right?",
-            ),
-            (
-                "services/consciousness/todo_consciousness.py",
-                "format_todo_deleted_conscious",
-                1,
-                "I've removed '{}' from your list. If that was a mistake, jus",
-            ),
-            (
-                "services/consciousness/ui_consciousness.py",
-                "EMPTY_STATE_MESSAGES",
-                8,
-                "No conversations yet. What would you like to talk about?",
-            ),
-            (
-                "services/consciousness/ui_consciousness.py",
-                "format_delete_confirmation_conscious",
-                2,
-                'Remove "{}"? This can\'t be undone.',
-            ),
-            (
-                "services/consciousness/ui_consciousness.py",
-                "format_toast_error_conscious",
-                1,
-                "I couldn't {}. Want to try again?",
-            ),
-            # -- services/conversation/ (1)
-            (
-                "services/conversation/conversation_handler.py",
-                "ConversationHandler._format_calendar_greeting",
-                1,
-                "What would you like to focus on?",
-            ),
-            # -- services/home/ (1)
-            (
-                "services/home/home_state_service.py",
-                "HomeStateService._generate_greeting",
-                1,
-                "Welcome. What can I help you with?",
             ),
             # -- services/integrations/ (2)
             (
@@ -4639,18 +4659,12 @@ class TestUnarmedAskSiteRatchet:
                 1,
                 "Which repo? I couldn't tell which repository you mean — name",
             ),
-            # -- services/memory/ (2)
+            # -- services/memory/ (1)
             (
                 "services/memory/greeting_context.py",
                 "GREETING_APPROACHES",
-                7,
+                4,
                 "Back already! We were working on {topic}—continue?",
-            ),
-            (
-                "services/memory/greeting_context.py",
-                "GreetingContextService._get_suggested_approach",
-                1,
-                "Hello! What can I help you with?",
             ),
             # -- services/mux/ (2)
             (
@@ -4665,21 +4679,7 @@ class TestUnarmedAskSiteRatchet:
                 1,
                 "Would you like me to explain any of these, or correct someth",
             ),
-            # -- services/personality/ (1)
-            (
-                "services/personality/grammar_bridge.py",
-                "PersonalityGrammarBridge.CLOSING_PHRASES",
-                2,
-                "Anything else I can help with?",
-            ),
-            # -- services/process/ (1)
-            (
-                "services/process/adapters.py",
-                "StandupProcessAdapter.has_suspended_session",
-                1,
-                "Your standup was paused. Want to pick it up?",
-            ),
-            # -- services/slot_filling/ (3)
+            # -- services/slot_filling/ (2)
             (
                 "services/slot_filling/slot_filling_manager.py",
                 "_SLOT_MESSAGES",
@@ -4691,12 +4691,6 @@ class TestUnarmedAskSiteRatchet:
                 "format_confirmation",
                 1,
                 "I have: {}. Is that correct?",
-            ),
-            (
-                "services/slot_filling/slot_prompts.py",
-                "format_final_confirmation",
-                2,
-                "Done — {}. Want me to proceed?",
             ),
             # -- services/trust/ (3)
             (
@@ -4716,13 +4710,6 @@ class TestUnarmedAskSiteRatchet:
                 "TrustExplainer.get_followup_offer",
                 4,
                 "Does this way of working together feel right to you?",
-            ),
-            # -- services/ui_messages/ (1)
-            (
-                "services/ui_messages/user_friendly_errors.py",
-                "UserFriendlyErrorService.__init__",
-                1,
-                "Please check the format and try again. Need help? Check our ",
             ),
         }
     )
@@ -4796,6 +4783,116 @@ class TestUnarmedAskSiteRatchet:
             list(ast.walk(ast.parse('ctx.last_offer = LastOffer(offer_text="x")')))
         )
 
+    @classmethod
+    def _open_invitation(cls, text: str) -> bool:
+        """#2011 call 5: True iff every question sentence in ``text`` is a
+        closed-set open invitation and ``text`` offers no action."""
+        if cls._ACTION_OFFER_RE.search(text):
+            return False
+        questions = [q.strip() for q in cls._QUESTION_SENTENCE_RE.findall(text)]
+        questions = [q for q in questions if q]
+        return bool(questions) and all(cls._OPEN_INVITATION_RE.match(q) for q in questions)
+
+    def test_2011_reshape_call2_call5(self):
+        """#2011 calls 2 and 5 (Arch 2026-10-14), pinned on measured
+        literals: the slot-filling transition arms (terminal states do not),
+        and the open-invitation class exempts a closed-set invitation but
+        not one that also carries an offer."""
+        import ast
+
+        cls = TestUnarmedAskSiteRatchet
+
+        def arms(code):
+            return cls._holder_arms(list(ast.walk(ast.parse(code))))
+
+        # call 2: transition INTO an answer-binding state arms ...
+        assert arms("session.filling_state = SlotFillingState.CONFIRMING")
+        assert arms("session.filling_state = SlotFillingState.PROMPTING")
+        # ... a terminal state does not (the post-terminal "wrapped up! Want
+        # to start a new one?" in _SLOT_MESSAGES stays counted).
+        assert not arms("session.filling_state = SlotFillingState.COMPLETE")
+        assert not arms("session.filling_state = SlotFillingState.CANCELLED")
+
+        # call 5, measured both ways:
+        # EXEMPT — home_state_service.HomeStateService._generate_greeting.
+        assert cls._open_invitation("Welcome. What can I help you with?")
+        # COUNTED — templates.DIALOGUE_INVITATION: an invitation shape, but
+        # the same literal offers an action ("you'd like me to adjust").
+        assert not cls._open_invitation("How does that sound? Anything you'd like me to adjust?")
+        # an offer anywhere disqualifies; a non-shape question (a slot
+        # request) disqualifies.
+        assert not cls._open_invitation("Does that help? Want me to try again?")
+        assert not cls._open_invitation("What can I help you with? Which repo do you mean?")
+        assert not cls._open_invitation("Want me to try again?")
+
+    def test_2011_non_chat_surface_consumers(self):
+        """#2011 call 4 TRIPWIRE: each non-chat module excluded by name in
+        _EXCLUDED_MODULES is imported by EXACTLY its measured consumer set
+        (production code; tests/ and dev/ not counted) — directly, or by
+        importing one of its names through the ``services.consciousness``
+        package. A new importer (above all a chat path) fails here, and the
+        exclusion must be re-ruled instead of silently going false."""
+        import ast
+
+        root = self._repo_root()
+        mods = self._NON_CHAT_SURFACE_IMPORTERS
+        public = {}
+        for mod in mods:
+            with open(os.path.join(root, "services", "consciousness", f"{mod}.py")) as fh:
+                tree = ast.parse(fh.read())
+            public[mod] = {
+                n.name
+                for n in tree.body
+                if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
+                and not n.name.startswith("_")
+            } | {
+                t.id
+                for n in tree.body
+                if isinstance(n, ast.Assign)
+                for t in n.targets
+                if isinstance(t, ast.Name)
+            }
+        found = {mod: set() for mod in mods}
+        paths = [os.path.join(root, "main.py"), os.path.join(root, "main_mcp.py")]
+        for top in ("services", "web", "cli", "scripts", "shared", "tools", "config"):
+            paths += glob.glob(os.path.join(root, top, "**", "*.py"), recursive=True)
+        scanned = 0
+        for path in paths:
+            if not os.path.isfile(path):
+                continue
+            rel = os.path.relpath(path, root).replace(os.sep, "/")
+            with open(path, encoding="utf-8") as fh:
+                src = fh.read()
+            if "consciousness" not in src:
+                continue
+            scanned += 1
+            for node in ast.walk(ast.parse(src)):
+                if isinstance(node, ast.ImportFrom) and node.module:
+                    for mod in mods:
+                        full = f"services.consciousness.{mod}"
+                        if node.module == full or (
+                            node.module == "services.consciousness"
+                            and any(a.name in (mod, *public[mod]) for a in node.names)
+                        ):
+                            found[mod].add(rel)
+                elif isinstance(node, ast.Import):
+                    for mod in mods:
+                        if any(a.name == f"services.consciousness.{mod}" for a in node.names):
+                            found[mod].add(rel)
+        assert scanned >= 10, f"tripwire scanned only {scanned} files — the walk broke"
+        for mod, expected in mods.items():
+            if mod != "ui_consciousness":
+                assert found[mod] - {
+                    "services/consciousness/__init__.py"
+                }, f"{mod}: its measured surface consumer vanished — re-measure"
+            assert found[mod] == set(expected), (
+                f"#2011 call 4 tripwire: {mod} is excluded from the unarmed-ask "
+                f"census as a NON-CHAT surface, measured importers "
+                f"{sorted(expected)}; now imported by {sorted(found[mod])}. "
+                f"If a chat path now renders its copy, the exclusion is false: "
+                f"remove it from _EXCLUDED_MODULES and census its asks."
+            )
+
     @staticmethod
     def _joined_text(node) -> str:
         import ast
@@ -4845,6 +4942,22 @@ class TestUnarmedAskSiteRatchet:
                 if attr in ("set_pending_offer", "LastOffer"):
                     return True
                 if any(kw.arg == "question" for kw in sub.keywords):
+                    return True
+            # #2011 call 2 (Arch 2026-10-14): the slot-filling machine's
+            # transition INTO an answer-binding state is an arm — the next
+            # reply is routed by `filling_state` to the handler that binds it
+            # (slot_filling_manager.handle_turn). Terminal states
+            # (COMPLETE/CANCELLED) are NOT arms.
+            if isinstance(sub, (ast.Assign, ast.AnnAssign)):
+                targets = sub.targets if isinstance(sub, ast.Assign) else [sub.target]
+                v = sub.value
+                if (
+                    any(isinstance(t, ast.Attribute) and t.attr == "filling_state" for t in targets)
+                    and isinstance(v, ast.Attribute)
+                    and v.attr in cls._SLOT_ARM_STATES
+                    and isinstance(v.value, ast.Name)
+                    and v.value.id == "SlotFillingState"
+                ):
                     return True
             if isinstance(sub, ast.Dict) and any(
                 isinstance(k, ast.Constant) and k.value == "question" for k in sub.keys
@@ -5017,6 +5130,22 @@ class TestUnarmedAskSiteRatchet:
         sites = {}
         arming = set()
         marker_exemptions = []
+        open_invitations = []
+        # #2011 call 2: call sites per simple callee name -> caller holders,
+        # for the one-hop consumer-armed rule below.
+        callers_of = {}
+        for rel, _source, tree in parsed:
+            for qual, nodes in self._collect_holders(tree):
+                for sub in nodes:
+                    if isinstance(sub, ast.Call):
+                        f = sub.func
+                        name = (
+                            f.attr
+                            if isinstance(f, ast.Attribute)
+                            else (f.id if isinstance(f, ast.Name) else None)
+                        )
+                        if name:
+                            callers_of.setdefault(name, set()).add((rel, qual))
         for rel, source, tree in parsed:
             marked = self._marker_lines(source)
             excluded = self._excluded_string_ids(tree, utterance_ctors)
@@ -5048,15 +5177,33 @@ class TestUnarmedAskSiteRatchet:
                         continue
                     if skip_holder:
                         continue
+                    if self._open_invitation(text):
+                        open_invitations.append((rel, qual, text))
+                        continue
                     lineno = getattr(sub, "lineno", 0)
                     if lineno in marked or (lineno - 1) in marked:
                         marker_exemptions.append((rel, qual, lineno))
                         continue
                     sites.setdefault(key, []).append(text)
 
+        # #2011 call 2 — CONSUMER-ARMED (one hop): a MODULE-LEVEL function
+        # whose every call site in the scan sits in an arming holder renders
+        # copy that only ever reaches the user through an arm (e.g.
+        # slot_prompts.format_final_confirmation, called only by the
+        # slot-filling handlers that enter/hold CONFIRMING). Matched by simple
+        # name, so a same-named call elsewhere only makes the rule stricter;
+        # zero call sites never qualifies (dead copy stays counted).
+        consumer_armed = set()
+        for rel, qual in sites:
+            if "." in qual or (rel, qual) in arming:
+                continue
+            callers = callers_of.get(qual, set()) - {(rel, qual)}
+            if callers and callers <= arming:
+                consumer_armed.add((rel, qual))
+
         rows = set()
         for (rel, qual), texts in sites.items():
-            if (rel, qual) in arming:
+            if (rel, qual) in arming or (rel, qual) in consumer_armed:
                 continue
             normalized = sorted(" ".join(t.split()) for t in texts)
             rows.add((rel, qual, len(texts), normalized[0][:60]))
@@ -5067,6 +5214,8 @@ class TestUnarmedAskSiteRatchet:
             "arming_holders": len(arming),
             "arming": arming,
             "marker_exemptions": marker_exemptions,
+            "open_invitations": open_invitations,
+            "consumer_armed": consumer_armed,
         }
         return rows, stats
 

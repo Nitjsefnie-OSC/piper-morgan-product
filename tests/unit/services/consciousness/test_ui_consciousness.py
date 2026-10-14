@@ -90,57 +90,6 @@ class TestConfirmationConsciousness:
         )
 
 
-class TestToastConsciousness:
-    """Test consciousness wrapper for toast messages."""
-
-    def test_success_toast_has_identity(self):
-        """Success toast should acknowledge warmly."""
-        from services.consciousness.ui_consciousness import format_toast_success_conscious
-
-        output = format_toast_success_conscious("saved", "your settings")
-        assert "I" in output or "done" in output.lower() or "saved" in output.lower()
-
-    def test_success_toast_confirms_action(self):
-        """Success toast should confirm what happened."""
-        from services.consciousness.ui_consciousness import format_toast_success_conscious
-
-        output = format_toast_success_conscious("created", "the project")
-        assert "created" in output.lower() or "done" in output.lower()
-
-    def test_error_toast_offers_help(self):
-        """Error toast should offer recovery."""
-        from services.consciousness.ui_consciousness import format_toast_error_conscious
-
-        output = format_toast_error_conscious("save your changes")
-        assert "?" in output or "try" in output.lower()
-
-    def test_error_toast_not_blaming(self):
-        """Error toast should not blame the user."""
-        from services.consciousness.ui_consciousness import format_toast_error_conscious
-
-        output = format_toast_error_conscious("upload the file")
-        # Should not say "you failed" or similar
-        assert "you failed" not in output.lower()
-        assert "your fault" not in output.lower()
-
-    def test_delete_toast_confirms_action(self):
-        """Delete toast should confirm the action."""
-        from services.consciousness.ui_consciousness import format_toast_delete_conscious
-
-        output = format_toast_delete_conscious("todo")
-        assert "removed" in output.lower() or "deleted" in output.lower()
-
-    def test_delete_toast_is_reassuring(self):
-        """Delete toast should be reassuring (done, not scary)."""
-        from services.consciousness.ui_consciousness import format_toast_delete_conscious
-
-        output = format_toast_delete_conscious("file")
-        # Should feel complete, not ominous
-        assert (
-            "gone" in output.lower() or "removed" in output.lower() or "deleted" in output.lower()
-        )
-
-
 class TestButtonLabelConsciousness:
     """Test consciousness wrapper for button labels."""
 

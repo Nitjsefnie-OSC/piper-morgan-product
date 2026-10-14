@@ -2219,7 +2219,8 @@ class IntentService:
             #   NO flow-starter may claim this turn; the hint rides to the
             #   classifier.
             # - resume_offer_pending: the previous turn made a process-resume
-            #   offer ("Your standup was paused. Want to pick it up?") — bare
+            #   offer ("Welcome back! Your standup was paused. Would you like
+            #   to continue, or start fresh?") — bare
             #   affirmatives at the resume check are legitimate ONLY now.
             contextual_offer_bound = False
             resume_offer_pending = False
