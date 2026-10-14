@@ -20,7 +20,7 @@
 - **Open issues on my side:** #1987 OPEN for AC3 served (card row 1, both halves + gone row); #2001 OPEN for CXO's served judgement ("1 day overdue").
 - **Link checker:** red 18:53 (GitHub 500 batch), SUCCESS 21:19 on its own; nothing owed to Docs.
 - **Fri 10-16: PROD server key move (PM's hand).** CIO re-runs role-duties count 10-27. Alpha log-stream behavioural re-read: attended-only, on Exec's ask.
-- **Sync-pm-local:** PM's checkout has local commits/edits (fast-forward refused 19:0x and again at close) — leave it; hard rule 1.
+- **Sync-pm-local:** refused 19:0x (PM had local commits), fast-forwarded cleanly at close (21:51, to c4b804b390). Never force it; hard rule 1.
 - Worktrees: only the cycle one (scratch control worktree removed at close). Untracked `dev/active/canonical-retest-serving-llm.json` is a 10-10 artefact, not mine.
 
 ## EARLIER — STATE @ 2026-10-13 07:05 PT — START fire drained: #1987 half 2 + #2001 landed (main 8f93cfe672); alpha still 6e48d9ebb2
