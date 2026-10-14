@@ -5,6 +5,11 @@
 # HEAD:main` races other agents 3+ times/day; mail-send.sh auto-retries but
 # code pushes didn't. Same discipline as mail-send v3: rebuild on the new tip,
 # retry, bounded attempts, never force.
+#
+# Concept: docs/internal/operations/canonical-ops-recipes.md §5 (the canonical push
+# wrapper; CLAUDE.md's raw `git push origin HEAD:main` is the same command without
+# the retry). Canonical since 2026-10-14 (Lead, CIO methodology audit R9); the
+# earlier wrappers safe-push.sh / commit.sh / pull.sh / preserve.sh were retired then.
 set -u
 MAX=${MAX_RETRIES:-4}
 for i in $(seq 1 "$MAX"); do

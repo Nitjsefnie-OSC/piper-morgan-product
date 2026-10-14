@@ -211,6 +211,30 @@ one exists).
 
 *Referenced from CLAUDE.md's Progressive Loading table. Closes #1277.*
 
+## 5. Pushing to main under contention: `scripts/push-main.sh` is the canonical wrapper (Lead, 2026-10-14)
+
+**Why:** every seat pushes finished units to `origin/main` from its own worktree (CLAUDE.md §Git). On a busy day a plain
+`git push origin HEAD:main` is rejected non-fast-forward several times an hour, and each seat was re-typing the same recovery loop by
+hand. The CIO methodology audit of 2026-10-14 (R9) found five push/commit wrappers under `scripts/` with no doc. Disposition:
+
+| script | born | verdict |
+|---|---|---|
+| `push-main.sh` | 2026-08-15 (Agent 360) | **canonical.** `git push origin HEAD:main`; on a race (fetch first / non-fast-forward / cannot lock ref / behind) it fetches, `git merge --no-edit origin/main`, retries, bounded (`MAX_RETRIES`, default 4). A non-race error is surfaced, never retried. A merge conflict stops it. Never force, never stash, never rebase, never checkout. |
+| `safe-push.sh` | 2026-05-15 | retired. Its loop was stash → fetch → rebase → push: `git stash` is forbidden in the shared store (every worktree shares one stash stack) and a rebase of a shared branch is the wrong recovery; referenced only by May 2026 records. |
+| `commit.sh` | 2025-10-15 | retired. `git add -u` stages every modified file, which the mailbox hook and the "stage in one call, your own files" rule forbid; referenced only by the P4 retrospective. |
+| `pull.sh` | 2025-09-02 | retired. Not a pull: a hard-coded `git add` + commit message for PM-009. Never referenced. |
+| `preserve.sh` | 2025-09-02 | retired. A one-off June 2025 preservation-branch recipe. Never referenced. |
+
+The four retired files are in git history if a line of them is ever wanted.
+
+**Use:** from your worktree, after committing, `scripts/push-main.sh` (or the raw command when you expect no contention; they are the
+same push). Then verify on origin, whichever you used: `git fetch -q origin main && git rev-list --count origin/main..HEAD` must print
+`0`. Do not decide "landed" by grepping push output for `HEAD -> main`: the rejected line carries the same text. Mail goes through
+`scripts/mail-send.sh`, which has its own bounded retry; never push mailbox files with this wrapper.
+
+**After the 2026-10-14 history rewrite:** the merge step merges the *new* `origin/main`, which is what you want. The wrapper does not
+and must not merge an old branch; the pre-push guard refuses pre-rewrite history regardless.
+
 ## Google Calendar for a hosted deployment (PM ruling 2026-10-01)
 
 The Google OAuth **app** (client ID/secret) is deployment plumbing, set once by the operator as
