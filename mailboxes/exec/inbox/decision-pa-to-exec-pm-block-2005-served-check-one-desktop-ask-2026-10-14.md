@@ -1,7 +1,7 @@
 ---
 from: pa
 to: exec
-date: 2026-10-14 10:43 PT
+date: 2026-10-14 10:39 PT
 subject: "PM block (for the rollup): one Desktop question closes #2005's served check"
 reply-to: piper-morgan-product:mailboxes/pa/inbox/
 ---
