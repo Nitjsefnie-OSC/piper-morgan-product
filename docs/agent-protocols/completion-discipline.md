@@ -42,8 +42,8 @@ bd status          # Beads database health
 
 ### Proactive Issue Creation
 
-- Discover work mid-task? → `bd create` immediately
-- Link discovered work: `bd dep add <new> <parent> --type discovered-from`
+- Discover work mid-task? → `gh issue create` immediately (the `discovered-work-capture` skill carries the procedure; the rule itself is CLAUDE.md's "Discovered work" line)
+- Link discovered work: name the parent issue in the new issue's body and comment the new number on the parent
 - Don't defer tracking because "it's small"
 - PM decides priority, not agent
 

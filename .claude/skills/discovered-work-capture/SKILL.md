@@ -4,6 +4,7 @@ description: Capture discovered work as tracking issues immediately. Use when yo
 scope: cross-role
 version: 1.1
 created: 2026-01-26
+concept: "Concept: docs/agent-protocols/completion-discipline.md (added 2026-10-14, sunset-or-renew inventory; Docs)"
 ---
 
 # discovered-work-capture
