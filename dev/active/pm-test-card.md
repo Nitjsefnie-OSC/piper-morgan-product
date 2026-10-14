@@ -25,8 +25,8 @@ N1. **#2002 layout** — `delete a reminder` with 2+ reminders → in the served
 N2. **#2003 named miss** — with the numbered ask armed, `delete the reminder "a title that is not in the list"` → `I don't see a reminder called "…".` then the SAME numbered list, still armed (a following `2` binds and asks the yes/no); nothing deleted. Then `"<an existing title>"` quoted → the yes/no confirm for THAT title (unchanged). Unquoted miss (`delete the reminder web check alpha nine`) → "Still not sure which reminder you mean — you have:" + list, no guess.
 N3. **#2004 bare never-mind** — with nothing open (e.g. right after the gone-row line, or cold in a new conversation): `never mind` → **"Okay."** and nothing else (no todo list). Also `no thanks` cold → "Okay.". Control: `never mind, show my todos` → the todo list as before (compound goes to the floor). CXO sets the word if "Okay." is not it.
 N4. **#2005 MCP issue count** (after PA redeploys piper-morgan-mcp from a sha carrying 6cab869fd3): in Claude Desktop through the Piper
-   Alpha MCP connector,  → the count Claude states is GitHub's total (278 at filing; check with
-        278), not 30, and it must not say "that's the full set" when the
+   Alpha MCP connector, `What are my open GitHub issues in Piper?` → the count Claude states is GitHub's total (278 at 17:5x 10-13, from
+   `gh issue list --assignee mediajunkie --state open --limit 1000 | wc -l`), not 30, and it must not say "that's the full set" when the
    list shown is shorter than the total. Fail: 30, or "full set" with a 50-item list. PA judges (their surface); paste the answer here.
 
 ## Morning order — everything below is live on alpha now (each ~1 min unless noted)
