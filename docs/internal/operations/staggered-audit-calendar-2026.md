@@ -99,7 +99,7 @@
 
 ### Pattern Sweep Workflow
 ```yaml
-# .github/workflows/pattern-sweep-reminder.yml
+# .github/workflows/pattern-sweep.yml
 name: Pattern Sweep Reminder
 on:
   schedule:
@@ -124,7 +124,7 @@ on:
 
 ### Role Health Check Workflow
 ```yaml
-# .github/workflows/role-health-reminder.yml
+# .github/workflows/role-health-check.yml
 name: Role Health Check Reminder
 on:
   schedule:
