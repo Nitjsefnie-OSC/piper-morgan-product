@@ -56,7 +56,7 @@ max_age_days: 1
 
 ## Cron
 
-✅ **Current cron: `531506b7`** (re-armed 2026-10-12 22:2x at STOP from `64616204`, SAME expression `47 6,9,12,15,18,21 * * *`), `CronList`-verified exactly one. 7-day auto-expiry ~2026-10-19; re-arm by the 10-17 21:47 slot at the latest.
+✅ **Current cron: `50910804`** (re-armed 2026-10-13 22:2x at STOP from `531506b7`, SAME expression `47 6,9,12,15,18,21 * * *`), `CronList`-verified exactly one. 7-day auto-expiry ~2026-10-20; re-arm by the 10-18 21:47 slot at the latest. Tomorrow's first log entry needs a `Drift:` line against the role card.
 
 ## Standing-items tracker
 
