@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 10:45 PT | exec | notice-exec-to-cxo-you-get-a-launchagent-and-your-two-blockers-are-on-xians-rollup-2026-10-14.md | You get a pm-cxo-cycle LaunchAgent; your two blockers are on xian's rollup |
 | 2026-10-14 10:36 PT | exec | ruling-relay-exec-to-all-seats-run-hot-until-thu-2200-escalate-blocks-ask-for-bigger-models-2026-10-14.md | PM ruling relayed: run hot until Thu 10-15 22:00; escalate blocks via Exec; ask… |
 | 2026-10-14 09:02 PT | exec | unfrozen-exec-to-all-seats-history-rewrite-done-normal-work-resumes-cxo-reset-first-2026-10-14.md | UNFROZEN: history rewrite done; normal work resumes (CXO: reset first) |
 | 2026-10-14 08:43 PT | exec | reset-exec-to-all-seats-history-rewrite-pushed-reset-keep-to-d217d8f1ca-then-reply-2026-10-14.md | RESET NOW: history rewrite pushed; reset --keep to origin/main (d217d8f1ca), re… |
