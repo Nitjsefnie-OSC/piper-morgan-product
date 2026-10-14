@@ -1,6 +1,6 @@
 # PM test card — the standing "what should I test?" surface
 
-**Owner**: Lead. **Started**: 2026-09-19. **Rewritten fresh for the 10-13 morning**: v26 (12:43 10-13: #2004 fixed on main a1fdee9921, row N3); v25 (12:33 10-13: Web's three served runs on b713b91cb5 judged by CXO — #1987 all three ACs, #2001, #1976 done; #2002/#2003 fixed on main 75ac141ed6, served checks owed after the next promotion); v24 (12:09 10-13: alpha promoted to b713b91cb5 on xian's word — every row is live); v23 (07:05 10-13: Web's run judged, two landings on main, not live); v22, 22:30 PDT 10-12 (PM's ask: "pick it up then
+**Owner**: Lead. **Started**: 2026-09-19. **Rewritten fresh for the 10-13 morning**: v27 (17:18 10-13: row N4 #2005 after PA's MCP redeploy; #1982 fallback off 7cc00113bc rides the next promotion with nothing for PM to test); v26 (12:43 10-13: #2004 fixed on main a1fdee9921, row N3); v25 (12:33 10-13: Web's three served runs on b713b91cb5 judged by CXO — #1987 all three ACs, #2001, #1976 done; #2002/#2003 fixed on main 75ac141ed6, served checks owed after the next promotion); v24 (12:09 10-13: alpha promoted to b713b91cb5 on xian's word — every row is live); v23 (07:05 10-13: Web's run judged, two landings on main, not live); v22, 22:30 PDT 10-12 (PM's ask: "pick it up then
 with a fresh test card"). Rolling doc: rows get added when a fix needs PM's live verification and struck when done. When PM asks
 "what do I test?", the answer is this file. Earlier versions and all struck history: `git log -p` of this file. Mirror artifact
 (https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi) is v15 and BEHIND; this file is current.
@@ -18,9 +18,16 @@ concluded success on the exact sha staging serves — if it refuses, wait for Te
 
 ## Owed after the NEXT promotion (fixed on main 75ac141ed6 + a1fdee9921 at 12:33 10-13, NOT live on b713b91cb5)
 
+Also riding it with nothing to test by hand: #1982 step 3 (7cc00113bc, the legacy GitHub-context fallback off; the MCP live read
+already passed on PA's 17:05 memo). **N4 is on a different app** (piper-morgan-mcp, PA's redeploy), not the alpha promotion.
+
 N1. **#2002 layout** — `delete a reminder` with 2+ reminders → in the served HTML the closing sentence ("Say the number or the name, or 'never mind'…") is its own paragraph AFTER the `<ol>`, not inside the last `<li>`. Web reads `.message-row` innerHTML. Same for `delete todo`.
 N2. **#2003 named miss** — with the numbered ask armed, `delete the reminder "a title that is not in the list"` → `I don't see a reminder called "…".` then the SAME numbered list, still armed (a following `2` binds and asks the yes/no); nothing deleted. Then `"<an existing title>"` quoted → the yes/no confirm for THAT title (unchanged). Unquoted miss (`delete the reminder web check alpha nine`) → "Still not sure which reminder you mean — you have:" + list, no guess.
 N3. **#2004 bare never-mind** — with nothing open (e.g. right after the gone-row line, or cold in a new conversation): `never mind` → **"Okay."** and nothing else (no todo list). Also `no thanks` cold → "Okay.". Control: `never mind, show my todos` → the todo list as before (compound goes to the floor). CXO sets the word if "Okay." is not it.
+N4. **#2005 MCP issue count** (after PA redeploys piper-morgan-mcp from a sha carrying 6cab869fd3): in Claude Desktop through the Piper
+   Alpha MCP connector,  → the count Claude states is GitHub's total (278 at filing; check with
+        278), not 30, and it must not say "that's the full set" when the
+   list shown is shorter than the total. Fail: 30, or "full set" with a 50-item list. PA judges (their surface); paste the answer here.
 
 ## Morning order — everything below is live on alpha now (each ~1 min unless noted)
 
