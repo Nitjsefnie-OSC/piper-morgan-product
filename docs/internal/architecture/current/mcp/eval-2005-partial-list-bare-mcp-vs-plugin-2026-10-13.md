@@ -2,7 +2,25 @@
 
 **Author**: PA, 2026-10-13, on xian's ruling relayed by Exec ("use this as an eval and figure out how to better
 prompt… this is a bare MCP. the full plugin can provide skills, hooks, and other agentic guidance").
-**Status**: proposal. **Not MVP critical path**: private-beta work (xian, same evening). Registry publish held.
+**Status**: proposal, **run 2026-10-14** (results below). **Not MVP critical path**: private-beta work (xian, same evening). Registry publish held.
+
+## Results (2026-10-14, run under xian's run-hot ruling)
+
+Run in `mediajunkie/piper-morgan-plugin` at `2ba22e3`: `evals-2005/RESULTS-2026-10-14.md` (generator, runner
+and per-run JSON alongside). 90 runs, $7.47, mocked connector, Claude Code harness.
+
+- **The server data is the fix.** On the 10-13 payload, every run that read it called 30 the full set: 0 of 16,
+  bare and plugin alike. On Lead's `total`/`truncated` payload: 33 of 33 (two Haiku-judge FAILs overturned on
+  reading; both quoted in the results).
+- **Skills can't rescue a missing total.** The full plugin also scored 0 of 9 on the old payload.
+- **The extra description sentence (layer 2) adds nothing measurable.** The runs were at the ceiling without
+  it, with no over-hedging on the short-list controls. So there's no need to ship it.
+- **The plugin's measured value is routing.** On "How many open GitHub issues do I have?" (no "Piper"), the
+  full plugin called Piper 15 of 15 times; the bare connector, 7 of 15. When it didn't, it tried `gh` and gave
+  up.
+- **So the answer to the order question:** the server fix was necessary and is enough for this case, and it's
+  already live (v14). The plugin's job is getting the question to Piper, and that's what to optimize in its
+  skill descriptions.
 
 ## What happened
 
