@@ -4,7 +4,11 @@
 - **READY sent 12:xx-ish (card v33, 12:0x):** staging `1746f1ebec`, Tests SUCCESS on `bc3ede7e35`, gate accepts. PM promotes (his hand); then Web/CXO served rows:
   N5 #1943 delete-first-two; #1843 REFINING seam ("please remove the fluff" edits, "please go ahead" finalizes); #1771+#2007 (`not now` at the resume
   offer → CXO's line; `do a standup` → continue/restart offer); #1783 (capped list → `could you show me the rest?` pulls the rest; `can you delete the
-  rest?` not cashed); #2008 copy ("No completions yesterday."). Mail Web the alpha sha when it changes.
+  rest?` not cashed); #2008 copy ("No completions yesterday."); **after the margin fix lands: `list my projects` once (active projects shown, CXO judges)**.
+  Mail Web the alpha sha when it changes.
+- **READY TO LAND after the promotion (Arch accepted 12:52):** `claude/lead-analysis-margin` de54cb5daf = ANALYSIS margin example + corpus row
+  and /projects pointer re-pointed to list_projects (Arch's 10-04 ruling); rule 7 PASS (member 6/6; full run 478/532; one row judged not attributable);
+  branch suites running. Landing note cites the controls; decisions.log line.
 - **HOLD code pushes to main until PM promotes** (each push cancels the in-progress Tests run and moves what staging serves). Docs pushes are fine.
 - **MVP milestone:** CLOSED today #1886, #1623, #1579, #1860. Open non-epic 7: #1965 + #1889 (wait on the broken-grant OAuth leg, PM's hand with PA),
   #1943 (held branch; see below), #1913 (Web needs a spare Anthropic key for web-agent; on xian's card via Exec), #1843 / #1783 / #1771 (fixed on
