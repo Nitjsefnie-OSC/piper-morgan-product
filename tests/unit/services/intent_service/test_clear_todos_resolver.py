@@ -281,9 +281,7 @@ class TestStoredDone:
         result = await ct.run_clear_todos(intent, "s1", _USER_ID, intent_service)
         assert result.requires_clarification is False
         intent_service.todo_handlers.todo_service.complete_todo.assert_awaited_once()
-        assert result.message.endswith(
-            "That's what 'clear' has meant for you. " "Say so if you meant delete this time."
-        )
+        assert result.message.endswith("That's what 'clear' has meant for you.")
 
     @pytest.mark.asyncio
     async def test_multi_item_confirm_is_complete_todos_own_unchanged(
@@ -334,9 +332,7 @@ class TestStoredDone:
             intent, "s1", _USER_ID, intent_service.workflow_offer_service, _USER_ID
         )
         assert armed is False
-        assert msg.endswith(
-            "That's what 'clear' has meant for you. Say so if you meant delete this time."
-        )
+        assert msg.endswith("That's what 'clear' has meant for you.")
         assert msg.startswith("Marked 3 reminders done:")
 
 

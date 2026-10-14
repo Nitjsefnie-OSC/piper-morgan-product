@@ -234,13 +234,12 @@ def _clear_variant_three_question(picked_texts: List[str], left_texts: List[str]
 def _clear_disclosure_clause() -> str:
     """CXO ruling point 2's disclosure clause, appended to a stored=done
     single-item auto-apply's reply: 'That's what 'clear' has meant for
-    you. Say so if you meant delete this time.' Reuses CORRECTION_WINDOW_ASK
-    (the ratified constant) for the tail; the lead clause is new glue copy
-    at this seam (not a #1605 original — spelled out verbatim in the build
-    task, not guessed)."""
-    from services.intent_service.reminder_clear import CORRECTION_WINDOW_ASK
-
-    return f"That's what '{_CLEAR_VERB_LITERAL}' has meant for you. {CORRECTION_WINDOW_ASK}"
+    you.' The invitation that used to follow it ("Say so if you meant
+    delete this time.") was DROPPED by CXO on 2026-10-14 12:45 with the
+    retirement of the correction window: it invited a reply nothing
+    answered, and the #1190 confirm already names what a delete would
+    remove."""
+    return f"That's what '{_CLEAR_VERB_LITERAL}' has meant for you."
 
 
 # ---------------------------------------------------------------------------

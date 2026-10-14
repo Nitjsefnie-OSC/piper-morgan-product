@@ -44,10 +44,11 @@ class TestRatifiedCopyPins:
         """#1569 vocabulary rule: the noun parameter still renders."""
         assert "'clear' on a todo" in variant_one_question(noun="todo")
 
-    def test_correction_window_ask_verbatim(self):
-        """The ratified standing invitation the resolver's variant-2
-        disclosure clause ends with."""
-        assert rc.CORRECTION_WINDOW_ASK == "Say so if you meant delete this time."
+    def test_correction_window_invitation_is_gone(self):
+        """CXO 2026-10-14 12:45: "Say so if you meant delete this time." invited
+        a reply nothing answers once the correction window retired; the
+        constant and the sentence are gone, not kept for the clause."""
+        assert not hasattr(rc, "CORRECTION_WINDOW_ASK")
 
 
 # ---------------------------------------------------------------------------

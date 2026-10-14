@@ -15,8 +15,9 @@ RESOLVER rail entry (services/intent_service/clear_todos.py): the router
 decides family membership and WHICH items, the resolver owns set-then-verb,
 and every execution re-enters the rail via ``dispatch_workflow``. What stays
 here: the verb-question carrier (kind, offer builder, bare-"yes" re-ask
-workflow) the resolver arms, the ratified variant-1 sentence and
-``CORRECTION_WINDOW_ASK`` it composes, the per-verb inference key, the
+workflow) the resolver arms, the ratified variant-1 sentence (the
+standing invitation ``CORRECTION_WINDOW_ASK`` was dropped by CXO 2026-10-14
+with the correction window it belonged to), the per-verb inference key, the
 fallback answer patterns, the #1696 explicit bulk-delete seam and its
 #1190-confirmed batch delete, and the pick binders #1987 shares. The text
 below is the design history of the retired flow.
@@ -139,13 +140,6 @@ def variant_one_question(verb: str = "clear", noun: str = "reminder") -> str:
         f"do you want me to mark it done, or delete it? "
         f"I'll remember for next time."
     )
-
-
-# #1665: the correction window's standing invitation — ONE constant. Since
-# the 2026-10-14 retirement (module docstring) its one reader is the
-# clear_todos resolver's variant-2 disclosure clause
-# (clear_todos._clear_disclosure_clause).
-CORRECTION_WINDOW_ASK = "Say so if you meant delete this time."
 
 
 # ---------------------------------------------------------------------------

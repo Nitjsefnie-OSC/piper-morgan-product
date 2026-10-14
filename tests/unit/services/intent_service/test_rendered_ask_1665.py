@@ -378,12 +378,14 @@ class TestReminderClearAsks:
         )
         assert _stored(svc)["question"] == result.message
 
-    def test_correction_window_ask_is_the_disclosure_sentence(self):
-        """Drift guard: the resolver's variant-2 disclosure clause ends with
-        the ratified standing invitation (one meaning, one constant)."""
+    def test_disclosure_clause_carries_no_invitation(self):
+        """Drift guard (CXO 2026-10-14 12:45): the variant-2 disclosure clause
+        states the meaning and invites nothing; the correction-window
+        sentence and its constant are gone."""
         from services.intent_service.clear_todos import _clear_disclosure_clause
 
-        assert _clear_disclosure_clause().endswith(rc.CORRECTION_WINDOW_ASK)
+        assert _clear_disclosure_clause() == "That's what 'clear' has meant for you."
+        assert "meant delete" not in _clear_disclosure_clause()
 
     async def test_unrecognized_answer_rearm_stores_the_reask(self, monkeypatch):
         from services.intent_service import inversion_router as ir
