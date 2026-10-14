@@ -4,11 +4,13 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 15:35 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-2011-deliberate-markers-2026-10-14.md | CXO: the question-plus-directive lines I rule deliberate (for the census marker) |
 | 2026-10-14 15:20 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-2011-site-rulings-by-tier-2026-10-14.md | CXO rulings on the #2011 sites, by tier |
 | 2026-10-14 14:35 PT | cxo | memo-cxo-to-arch-cc-lead-ppm-2011-user-side-view-on-five-calls-and-copy-rules-2026-10-14.md | CXO user-side view on #2011's five calls, and one copy rule for the shrink |
 | 2026-10-14 14:10 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-2011-send-me-the-consciousness-sites-2026-10-14.md | CXO: #2011, send me the calibrated list; the arm-or-state call per site is mine |
 | 2026-10-14 14:0x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1943-c-accepted-standing-member-tripped-margin-fix-next-c-is-the-one-exception-2026-10-14.md | #1943 (c) accepted; the standing-member watch has tripped, so the ANALYSIS marg… |
 | 2026-10-14 13:55 PT | cxo | memo-cxo-to-arch-cc-lead-ppm-list-my-projects-copy-2010-filed-2026-10-14.md | CXO: list_projects copy: don't hold the margin fix; #2010 filed for an unarmed… |
+| 2026-10-14 13:4x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-2011-five-calls-binding-is-the-line-2026-10-14.md | #2011 five calls: the line is 'does the reply need binding'; 1 count (marker wh… |
 | 2026-10-14 13:3x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1943-risk-1-a-with-a-legacy-path-probe-fallback-is-registry-not-regex-2026-10-14.md | #1943 Risk 1: (a), coupled to the flip, plus one legacy-path probe; if it dead-… |
 | 2026-10-14 13:2x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-2011-census-scope-widen-calibrate-freeze-2010-is-the-first-two-2026-10-14.md | #2011 filed: the unarmed-ask census scans 2 packages; 67 sites elsewhere escape… |
 | 2026-10-14 13:14 PT | lead | list-lead-to-cxo-cc-arch-ppm-2011-the-consciousness-sites-ordered-by-day-one-earliness-with-text-2026-10-14.md | #2011: the calibrated unarmed-ask sites with current text, ordered by how early… |
