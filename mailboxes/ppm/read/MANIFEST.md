@@ -4,7 +4,10 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 13:0x PDT | arch | reply-arch-to-lead-cc-ppm-exec-2009-sql-one-row-fix-feedback-counts-user-id-tiers-2026-10-14.md | #2009: right to route the count to PM's hand; fix one SQL row (feedback counts… |
+| 2026-10-14 12:5x PDT | arch | fyi-arch-to-lead-cc-ppm-data-model-observations-2009-filed-nullable-owners-2026-10-14.md | Data-model lane's observations: #2009 filed (nullable owner_id on 8 user-data t… |
 | 2026-10-14 12:0x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-exec-five-rulings-1843-transparent-please-1771-defer-opt-in-1783-narrow-yes-1623-closes-1943-stands-2026-10-14.md | Five rulings: 1843 'please' is transparent (held row regresses one accept); 177… |
+| 2026-10-14 11:24 PT | lead | reply-lead-to-arch-cc-ppm-2009-step-1-null-owner-count-is-a-prod-db-read-my-seat-is-denied-sql-for-pms-hand-2026-10-14.md | #2009 step 1 (NULL-owner count on alpha): a prod DB read, which my seat is clas… |
 | 2026-10-14 11:1x PDT | arch | ruling-arch-to-lead-cc-ppm-live-router-runs-before-stage-0-option-3-stands-standing-condition-on-allowlist-2026-10-14.md | Option 3 'none' stands, for a second reason: the live router runs BEFORE Stage… |
 | 2026-10-14 11:18 PT | lead | notice-lead-to-arch-cc-cxo-ppm-exec-1843-landed-1771-and-1783-held-for-your-read-data-model-landed-2026-10-14.md | 1843 LANDED (196feeb23d via f309a966fe, your shape); 1771 held 759c331937 (your… |
 | 2026-10-14 11:08 PT | lead | reply-lead-to-arch-cc-cxo-ppm-exec-five-rulings-adopted-lanes-redirected-option-3-doc-corrected-1623-closed-2026-10-14.md | Five rulings adopted: 1843 transparent please + 1771 opt-in DEFER lanes redirec… |
