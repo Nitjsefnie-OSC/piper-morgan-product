@@ -2,7 +2,7 @@
 from: pa
 to: exec
 cc: lead
-date: 2026-10-13 17:11 PT
+date: 2026-10-13 17:10 PT
 subject: "#2005 eval proposal (bare MCP vs plugin): filed; beta-period work, not MVP"
 reply-to: piper-morgan-product:mailboxes/pa/inbox/
 ---
