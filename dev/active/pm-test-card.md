@@ -1,14 +1,14 @@
 # PM test card — the standing "what should I test?" surface
 
-**Owner**: Lead. **Started**: 2026-09-19. **Rewritten fresh for the 10-13 morning**: v27 (17:18 10-13: row N4 #2005 after PA's MCP redeploy; #1982 fallback off 7cc00113bc rides the next promotion with nothing for PM to test); v26 (12:43 10-13: #2004 fixed on main a1fdee9921, row N3); v25 (12:33 10-13: Web's three served runs on b713b91cb5 judged by CXO — #1987 all three ACs, #2001, #1976 done; #2002/#2003 fixed on main 75ac141ed6, served checks owed after the next promotion); v24 (12:09 10-13: alpha promoted to b713b91cb5 on xian's word — every row is live); v23 (07:05 10-13: Web's run judged, two landings on main, not live); v22, 22:30 PDT 10-12 (PM's ask: "pick it up then
+**Owner**: Lead. **Started**: 2026-09-19. **Rewritten fresh for the 10-13 morning**: v28 (18:52 10-13: alpha promoted to de7d0c1c57 by PM at 18:49, run 38497735645, first pass of the refined gate; N1–N3 now live); v27 (17:18 10-13: row N4 #2005 after PA's MCP redeploy; #1982 fallback off 7cc00113bc rides the next promotion with nothing for PM to test); v26 (12:43 10-13: #2004 fixed on main a1fdee9921, row N3); v25 (12:33 10-13: Web's three served runs on b713b91cb5 judged by CXO — #1987 all three ACs, #2001, #1976 done; #2002/#2003 fixed on main 75ac141ed6, served checks owed after the next promotion); v24 (12:09 10-13: alpha promoted to b713b91cb5 on xian's word — every row is live); v23 (07:05 10-13: Web's run judged, two landings on main, not live); v22, 22:30 PDT 10-12 (PM's ask: "pick it up then
 with a fresh test card"). Rolling doc: rows get added when a fix needs PM's live verification and struck when done. When PM asks
 "what do I test?", the answer is this file. Earlier versions and all struck history: `git log -p` of this file. Mirror artifact
 (https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi) was republished from v27 at 17:26 10-13; between republishes this file is current and wins.
 
-**Surface**: alpha.pipermorgan.ai · **running `b713b91cb5`** (read from /health 12:09 10-13 after promotion run 38451337983, dispatched
-by Exec at 12:00 on xian's direct word; no approval step any more). **Everything on this card is live: #1987 both halves + the thanks step (71e213b885 / a9f8cd16d1), #2001 (143f9a9a83), #1976 (84a313394d), the meeting_time example (d13dafd172), logs-keep-only-fingerprints (ec2cc9d44f). Previous: `6e48d9ebb2` (10-12 21:46).**
+**Surface**: alpha.pipermorgan.ai · **running `de7d0c1c57`** (read from /health 18:52 10-13 after promotion run 38497735645, dispatched
+by PM at 18:49; the gate accepted staging's sha via its tested ancestor cd73af1b6e). **Everything on this card is live, including #2002 / #2003 / #2004 (75ac141ed6, a1fdee9921) and #1982 step 3 (7cc00113bc). Previous: `b713b91cb5` (10-13 12:04), `6e48d9ebb2` (10-12 21:46).**
 
-**Step 0 — promote the build (PM's hand, on PM's explicit word only; no browser, no approval step since 10-13). Do this before row 1; wait for Lead's "ready" first, since the gate refuses until Tests is green on the staging code:**
+**Step 0 — promote the build (PM's hand, on PM's explicit word only; no browser, no approval step since 10-13). DONE 18:49 10-13 (de7d0c1c57). For the next one: wait for Lead's "ready" first, since the gate refuses until Tests is green on the staging code:**
 ```
 gh workflow run fly-deploy.yml -R mediajunkie/piper-morgan-product --ref main -f promote_to_alpha=true
 ```
@@ -16,10 +16,10 @@ Promotion takes ~4 min; `curl -s https://alpha.pipermorgan.ai/health` shows `git
 call is gone: the alpha environment has no reviewers now, Fly B.) **Since 5e42a37c3b (10-13): the promotion refuses unless Tests
 concluded success on the exact sha staging serves, or (since the 17:21 10-13 refinement, 6164ab3ceb) on its nearest tested ancestor when only untested paths such as docs/ changed since — if it refuses, wait for Tests on that sha and dispatch again.**
 
-## Owed after the NEXT promotion (fixed on main 75ac141ed6 + a1fdee9921 at 12:33 10-13, NOT live on b713b91cb5)
+## Live since 18:49 — served checks owed (fixed on main 75ac141ed6 + a1fdee9921 at 12:33 10-13; on alpha de7d0c1c57)
 
-Also riding it with nothing to test by hand: #1982 step 3 (7cc00113bc, the legacy GitHub-context fallback off; the MCP live read
-already passed on PA's 17:05 memo). **N4 is on a different app** (piper-morgan-mcp, PA's redeploy), not the alpha promotion.
+Also live with nothing to test by hand: #1982 step 3 (7cc00113bc, the legacy GitHub-context fallback off; the MCP live read
+already passed on PA's 17:05 memo). **N4 is on a different app** (piper-morgan-mcp, PA's v14), not alpha.
 
 N1. **#2002 layout** — `delete a reminder` with 2+ reminders → in the served HTML the closing sentence ("Say the number or the name, or 'never mind'…") is its own paragraph AFTER the `<ol>`, not inside the last `<li>`. Web reads `.message-row` innerHTML. Same for `delete todo`.
 N2. **#2003 named miss** — with the numbered ask armed, `delete the reminder "a title that is not in the list"` → `I don't see a reminder called "…".` then the SAME numbered list, still armed (a following `2` binds and asks the yes/no); nothing deleted. Then `"<an existing title>"` quoted → the yes/no confirm for THAT title (unchanged). Unquoted miss (`delete the reminder web check alpha nine`) → "Still not sure which reminder you mean — you have:" + list, no guess.
