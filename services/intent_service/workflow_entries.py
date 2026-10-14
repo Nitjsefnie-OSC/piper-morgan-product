@@ -26,8 +26,6 @@ from services.intent_service.delete_todo_pick import (
 from services.intent_service.reminder_clear import (
     run_clarify_reminder_clear_verb_workflow,
     run_clear_reminders_delete_workflow,
-    run_reminder_clear_correction_workflow,
-    run_reminder_clear_pick_target_workflow,
 )
 from services.intent_service.standup_todo_offer import (
     run_standup_complete_todo_workflow,
@@ -764,12 +762,11 @@ async def run_delete_todo_workflow(
     """#1666: delete_todo via the action-dispatch rail (DESTRUCTIVE, #1190-gated).
 
     Carries the removed ``elif mapped_action == "delete_todo"`` branch's exact
-    body: principal coercion (#1466), the #1605 clear-family seam with
-    candidate effect DESTRUCTIVE (ambiguous "clear my reminders" shapes get
-    the three-variant flow — this seam keeps FIRST CLAIM on them because the
-    rail's confirm gate passes clear-family shapes through untouched, see
-    ``destructive_confirm.build_todo_delete_confirmation``), then the real
-    ``todo_handlers.handle_delete_todo``.
+    body: principal coercion (#1466), then the real
+    ``todo_handlers.handle_delete_todo``. (The #1605 clear-family regex seam
+    that used to run first here retired 2026-10-14 — ambiguous clear asks
+    route to the ``clear_todos`` resolver entry, which re-enters this entry
+    via ``dispatch_workflow`` with the router's args.)
 
     Consent lives UPSTREAM at the rail (#1190): an explicit "delete todo 3"
     only reaches this entry point via ``run_confirm_pending_action_workflow``
@@ -783,7 +780,6 @@ async def run_delete_todo_workflow(
         _coerce_todo_principal,
     )
     from services.intent_service import reminder_clear as _rc
-    from services.shared_types import EffectClass as _EffectClass
 
     ctx = context or {}
     intent_service = ctx.get("intent_service")
@@ -807,25 +803,14 @@ async def run_delete_todo_workflow(
             error_type="AuthenticationRequired",
         )
 
-    # #1605: clear-family disambiguation, candidate effect DESTRUCTIVE — the
-    # ask fires in EVERY meta mode below the auto-apply bar (process steering
-    # never lowers a destructive ask). Explicit deletion phrasings
-    # ("delete todo 3") return None and proceed unchanged.
-    _clear_result = await _rc.maybe_handle_clear_family(
-        intent_service, intent, session_id, user_id, todo_user_id, _EffectClass.DESTRUCTIVE
-    )
-    if _clear_result is not None:
-        return _clear_result
-
     # #1696: an EXPLICIT bulk delete ("delete my reminders" — plural noun,
     # no number, no named target) used to fall to handle_delete_todo's
     # single-item which-todo ask; the one flow built for bulk clears
-    # (#1605) deliberately declines explicit imperatives, so the MORE
+    # (#1605) deliberately declined explicit imperatives, so the MORE
     # explicit user got LESS capability. This seam hands the bulk shape to
-    # the clear-family flow's already-#1190-gated delete leg (targets bound
-    # at offer time; "yes" dispatches clear_reminders_delete). Runs AFTER
-    # the clear seam so #1605 keeps first claim; every non-bulk shape
-    # returns None and proceeds unchanged.
+    # the #1190-gated batch delete leg (targets bound at offer time; "yes"
+    # dispatches clear_reminders_delete). Every non-bulk shape returns None
+    # and proceeds unchanged.
     _bulk_result = await _rc.maybe_handle_explicit_bulk_delete(
         intent_service, intent, session_id, user_id, todo_user_id
     )
@@ -901,11 +886,11 @@ async def run_complete_todo_workflow(
     """#1595 Phase 3: complete_todo via the action-dispatch rail (WRITE, consent-evaluated).
 
     Carries the removed ``elif mapped_action == "complete_todo"`` branch's
-    exact body: principal coercion (#1466) with its auth-failure result, the
-    #1605 clear-family seam with candidate effect WRITE (an ambiguous
-    "clear/handle/take care of" phrasing over the todo/reminder domain gets
-    the three-variant flow before executing — this branch's own guess is
-    completion), then the real ``todo_handlers.handle_complete_todo``.
+    exact body: principal coercion (#1466) with its auth-failure result, then
+    the real ``todo_handlers.handle_complete_todo``. (The #1605 clear-family
+    regex seam that used to run first here retired 2026-10-14 — ambiguous
+    clear asks route to the ``clear_todos`` resolver entry, which re-enters
+    this entry via ``dispatch_workflow`` with the router's args.)
 
     effect: WRITE, never DESTRUCTIVE — ``TodoManagementService.complete_todo``
     (via ``TodoRepository.complete_todo``) flips the row's ``status`` /
@@ -928,8 +913,6 @@ async def run_complete_todo_workflow(
         IntentProcessingResult,
         _coerce_todo_principal,
     )
-    from services.intent_service import reminder_clear as _rc
-    from services.shared_types import EffectClass as _EffectClass
 
     ctx = context or {}
     intent_service = ctx.get("intent_service")
@@ -952,17 +935,6 @@ async def run_complete_todo_workflow(
             error="User not authenticated",
             error_type="AuthenticationRequired",
         )
-
-    # #1605: a clear-family verb ("clear/handle/take care of/reset" over the
-    # reminder/todo domain) is an AMBIGUOUS mapping the classifier happened to
-    # guess as complete — disambiguate via the three-variant flow before
-    # executing. Candidate effect WRITE (this branch's guess: complete_todo).
-    # Explicit completion phrasings return None and proceed unchanged.
-    _clear_result = await _rc.maybe_handle_clear_family(
-        intent_service, intent, session_id, user_id, todo_user_id, _EffectClass.WRITE
-    )
-    if _clear_result is not None:
-        return _clear_result
 
     # Arch's (a), #1943 (2026-10-06): when the ROUTER named the targets
     # (context["inversion_args"].targets), the handler resolves them against
@@ -3395,8 +3367,8 @@ def register_default_workflows() -> None:
     # inside run_clear_todos (_op_is_live_eligible), via the SAME
     # resolve_live_match + _effect_guard_passes consult_inversion_live
     # uses — "a resolver must never become a back door to an op that isn't
-    # live" (Arch). A resolved-but-not-live op returns None so the legacy
-    # #1605 regex-triggered path handles the turn.
+    # live" (Arch). A resolved-but-not-live op gets an honest not-live reply
+    # (the legacy #1605 regex path it once fell back to retired 2026-10-14).
     clear_todos_entry = WorkflowEntry(
         entry_point=run_clear_todos_workflow,
         effect=EffectClass.READ,
@@ -3605,9 +3577,13 @@ def register_default_workflows() -> None:
             requires_context=["pending_action", "intent_service"],
         ),
         # #1605: reminder-clear verb disambiguation (CXO/PPM joint design,
-        # signed off 2026-08-13). Three offer-seam-only entries (all
+        # signed off 2026-08-13). Offer-seam-only entries (all
         # action_triggered=False — the classifier/rail can never emit them;
-        # the #1190/verify_inference pattern).
+        # the #1190/verify_inference pattern). The variant-2 correction
+        # window's entry (reminder_clear_correction) and #1906's pick-target
+        # entry (reminder_clear_pick_target) retired 2026-10-14 with the
+        # regex seam that armed them; the verb question is now armed only by
+        # the clear_todos resolver.
         # effect: READ — a bare "yes" against the variant-1 either/or
         # question re-asks and re-arms the offer; nothing is written on this
         # path (the writes happen on an ANSWERED turn, handled kind-
@@ -3616,14 +3592,6 @@ def register_default_workflows() -> None:
             entry_point=run_clarify_reminder_clear_verb_workflow,
             effect=EffectClass.READ,
             description="Re-ask the #1605 clear-verb either/or on a bare affirmative",
-            requires_context=["pending_action", "intent_service"],
-        ),
-        # effect: READ — a bare "yes" after the variant-2 disclosure points
-        # at the working correction phrase and re-arms the window; no write.
-        "reminder_clear_correction": WorkflowEntry(
-            entry_point=run_reminder_clear_correction_workflow,
-            effect=EffectClass.READ,
-            description="Hold the #1605 variant-2 correction window on a bare affirmative",
             requires_context=["pending_action", "intent_service"],
         ),
         # effect: DESTRUCTIVE (explicit + defaultless per #1557) — deletes
@@ -3641,15 +3609,6 @@ def register_default_workflows() -> None:
             description="Execute a #1190-confirmed #1605 batch reminder/todo delete",
             requires_context=["intent", "intent_service"],
         ),
-        # #1906: the "which one do you mean?" clarify (the named-target
-        # UNMATCHED branch) — previously the one unarmed ask in this module.
-        # Offer-seam-only (action_triggered=False — the classifier/rail can
-        # never emit it). effect: READ — a bare "yes" against "tell me
-        # which one you mean" re-asks and re-arms; the REAL bind + act
-        # happens on an ANSWERED turn (ordinal / name / status word),
-        # handled kind-specifically at the offer seam
-        # (reminder_clear._handle_pick_target_turn), which re-enters the
-        # SAME post-resolution flow a single matched name would have taken.
         # #1987 half 2: offer-seam-only landing for the which-todo PICK (the
         # carrier armed by handle_delete_todo's numbered candidates ask).
         # effect: READ — a bare "yes" against "which one?" re-asks and
@@ -3661,12 +3620,6 @@ def register_default_workflows() -> None:
             entry_point=run_clarify_delete_todo_pick_workflow,
             effect=EffectClass.READ,
             description="Re-ask the #1987 which-todo pick on a bare affirmative",
-            requires_context=["pending_action", "intent_service"],
-        ),
-        "reminder_clear_pick_target": WorkflowEntry(
-            entry_point=run_reminder_clear_pick_target_workflow,
-            effect=EffectClass.READ,
-            description="Re-ask the #1906 which-one-do-you-mean clarify on a bare affirmative",
             requires_context=["pending_action", "intent_service"],
         ),
         # #1648: offer-seam-only landing for the reminder time question (the

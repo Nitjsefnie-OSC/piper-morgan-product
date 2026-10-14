@@ -40,39 +40,25 @@ function, not a quoted example of it, is the copy-seam authority here (the
 module's own "a drifted word is a bug" discipline). This build's output
 therefore says "these", matching the test-pinned source.
 
-⚠️ Second deviation, and why: the verb-answer-turn re-entry (the "no stored
-verb" branch's answer) is NOT routed through ``_handle_verb_answer_turn``
-(reminder_clear.py) — that function is RATIFIED #1605 behavior, shared by
-the OLD regex-triggered carrier, and redirecting it through the new
-router-args rail for every caller risks changing #1605's tested behavior
-for messages that never touch this new resolver. Instead: this module arms
-the EXISTING ``_verb_question_offer`` carrier (same kind, same offer shape
-— ids/texts ARE already parameters of that function, so no carrier change
-was needed to bind them) with one added marker key
-(``clear_todos_resolver``), and ``reminder_clear._handle_verb_answer_turn``
-gets a 3-line, purely-additive early-return guard at its very top: when the
-marker is present, delegate to THIS module's own answer handler instead of
-running any of the ratified code below that guard. Every existing caller
-(the old regex-triggered ``maybe_handle_clear_family`` offers) never sets
-the marker, so #1605's ratified code path is byte-for-byte unreached and
-unchanged for them. See the guard in reminder_clear.py for the one-line
-citation back to this module AND its NAMED RETIREMENT condition (Arch's
-2026-10-07 ruling point 1): this guard is an interim transition shape,
-deleted — along with the ratified code it guards — once ``clear_todos``
-flips live and ``detect_clear_family_ask`` retires.
+⚠️ Second deviation, and its RETIREMENT (2026-10-14): the verb-answer
+turn was first delegated from ``reminder_clear._handle_verb_answer_turn`` by
+a 3-line marker guard (``clear_todos_resolver``) so #1605's ratified
+off-rail answer path stayed byte-for-byte unchanged for the OLD regex-
+triggered carrier. Arch ruled that guard a TRANSITION (2026-10-07, point 1)
+with a named retirement, executed in this lane alongside the ``clear_todos``
+flip: ``detect_clear_family_ask``, its ``maybe_handle_clear_family`` seam and
+the off-rail answer path are deleted. ``reminder_clear.
+handle_reminder_clear_turn`` now hands every verb-question answer straight
+to ``handle_clear_todos_verb_answer`` below (this module is that carrier's
+only arm site), so no marker is needed.
 
 Re-entry Intents (every branch below, and the verb-answer handler) carry
-the SAME ``original_message`` the resolver was called with — NOT blanked.
-Arch's 2026-10-07 ruling, point 2, corrected an earlier version of this
-build that blanked the message to stop ``reminder_clear.
-maybe_handle_clear_family`` reclaiming the re-entered turn via its own
-regex seam: blanking destroyed information every downstream consumer might
-read (decline copy, logging, consent framing) and fought #1942's
-one-Intent-shape guarantee. Instead, every re-entered Intent's context
-carries ``reminder_clear.CLEAR_FAMILY_RESOLVED_KEY: True`` — a CODE-WRITTEN
-marker, never sourced from ``inversion_args`` or any user input — and
-``maybe_handle_clear_family`` stands down unconditionally when it sees that
-key (reminder_clear.py, checked first thing in that function).
+the SAME ``original_message`` the resolver was called with — NOT blanked
+(Arch's 2026-10-07 ruling, point 2: blanking destroys information every
+downstream consumer might read and fights #1942's one-Intent-shape
+guarantee). The interim ``clear_family_resolved`` context marker that made
+the old regex seam stand down on a re-entered turn went with that seam
+(its only reader) on 2026-10-14 — there is nothing left to reclaim the turn.
 
 CXO ruling 4 ("if the answer turn carries its own targets/exclude … refine
 the set") IS implemented, via Arch's 2026-10-07 generalization of the
@@ -101,12 +87,6 @@ import structlog
 
 logger = structlog.get_logger(__name__)
 
-# The marker on a ``reminder_clear._verb_question_offer`` pending_action
-# payload that tells reminder_clear._handle_verb_answer_turn to delegate the
-# answer turn to THIS module instead of running #1605's ratified inline
-# completion. Never set by the old regex-triggered carrier.
-CLEAR_TODOS_RESOLVER_MARKER = "clear_todos_resolver"
-
 # Context marker threaded onto the re-entered complete_todo/delete_todo
 # Intent so that op's own confirmed-reentry can tell "this mutation was
 # reached via the clear-family resolver" — todo_handlers.
@@ -121,30 +101,14 @@ VIA_CLEAR_VERB_CONTEXT_KEY = "via_clear_verb"
 # contract.
 _ANSWERING_OPERATIONS: FrozenSet[str] = frozenset({"complete_todo", "delete_todo"})
 
+# The not-live reply (resolver + verb-answer turn share it; see
+# _not_live_result).
+_NOT_LIVE_MESSAGE = (
+    "I can't do that yet — that capability isn't live right now. Nothing has been changed."
+)
+
 _CLEAR_VERB_LITERAL = "clear"
 _CLEAR_NOUN_LITERAL = "reminder"
-
-
-def _rail_reentry_context(icx: Dict[str, Any]) -> Dict[str, Any]:
-    """Context for a rail-re-entry Intent (complete_todo / delete_todo).
-
-    Arch's 2026-10-07 ruling, point 2 (superseding this function's earlier
-    behavior, which blanked ``original_message``): ``inversion_args`` AND
-    ``original_message`` both carry forward UNCHANGED — the message is
-    never blanked. The earlier mechanism (dropping the message so
-    ``reminder_clear.maybe_handle_clear_family``'s own regex seam,
-    ``detect_clear_family_ask``, couldn't re-claim the re-entered turn)
-    destroyed information every downstream consumer might read (decline
-    copy, logging, consent framing) and fought #1942's one-Intent-shape
-    guarantee (``Intent.__post_init__`` mirrors the message into both
-    ``original_message`` and ``context["original_message"]`` — blanking one
-    without the other would have created a third, unmirrored shape).
-    ``maybe_handle_clear_family`` now stands down on a CODE-WRITTEN marker
-    instead (``reminder_clear.CLEAR_FAMILY_RESOLVED_KEY`` — set by every
-    caller of this helper, never by this function itself, so the marker is
-    always visibly added at the call site, not hidden inside a generic
-    context-builder)."""
-    return dict(icx)
 
 
 # ---------------------------------------------------------------------------
@@ -187,6 +151,22 @@ def _op_is_live_eligible(op: str) -> bool:
     if live_match is None:
         return False
     return _effect_guard_passes(entry, op, op)
+
+
+def _not_live_result(category: str, action: Optional[str]):
+    """The honest answer when a resolved op is not live-eligible. Until
+    2026-10-14 the resolver returned None here so the legacy #1605 regex
+    seam could take the turn; that seam is retired (module docstring), so
+    None would now drop an ambiguous clear ask into a chain that no longer
+    asks the verb question. Nothing is armed and nothing changes. Same
+    sentence as the verb-answer handler's own not-live reply below."""
+    from services.intent.intent_service import IntentProcessingResult
+
+    return IntentProcessingResult(
+        success=True,
+        message=_NOT_LIVE_MESSAGE,
+        intent_data={"category": category, "action": action, "op_not_live": True},
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -353,7 +333,6 @@ async def run_clear_todos(
     )
     from services.intent_service.reminder_clear import (
         CLARIFY_CLEAR_VERB_WORKFLOW,
-        CLEAR_FAMILY_RESOLVED_KEY,
         CLEAR_VERB_QUESTION_KIND,
         VALUE_COMPLETE,
         VALUE_DELETE,
@@ -455,16 +434,15 @@ async def run_clear_todos(
     # ── stored = done (WRITE): re-enter as complete_todo with the SAME args.
     if stored_value == VALUE_COMPLETE:
         if not _op_is_live_eligible("complete_todo"):
-            return None  # legacy #1605 path handles the turn
+            return _not_live_result(category, intent.action)
         new_intent = Intent(
             category=IntentCategory.EXECUTION,
             action="complete_todo",
             original_message=original_message,
             confidence=intent.confidence,
             context={
-                **_rail_reentry_context(icx),
+                **icx,
                 VIA_CLEAR_VERB_CONTEXT_KEY: _CLEAR_VERB_LITERAL,
-                CLEAR_FAMILY_RESOLVED_KEY: True,
             },
         )
         result = await dispatch_workflow(
@@ -501,16 +479,15 @@ async def run_clear_todos(
     #    branch is the one case CXO ruled DIFFERENT copy for).
     if stored_value == VALUE_DELETE:
         if not _op_is_live_eligible("delete_todo"):
-            return None  # legacy #1605 path handles the turn
+            return _not_live_result(category, intent.action)
         new_intent = Intent(
             category=IntentCategory.EXECUTION,
             action="delete_todo",
             original_message=original_message,
             confidence=intent.confidence,
             context={
-                **_rail_reentry_context(icx),
+                **icx,
                 VIA_CLEAR_VERB_CONTEXT_KEY: _CLEAR_VERB_LITERAL,
-                CLEAR_FAMILY_RESOLVED_KEY: True,
             },
         )
         result = await dispatch_workflow(
@@ -549,7 +526,7 @@ async def run_clear_todos(
     # ── no stored default: ask (CXO variant-1-with-set), binding the
     #    RESOLVED ids onto the EXISTING #1605 verb-question carrier.
     if not (_op_is_live_eligible("complete_todo") and _op_is_live_eligible("delete_todo")):
-        return None  # legacy #1605 path handles the turn
+        return _not_live_result(category, intent.action)
     if offer_service is None or not session_id:
         return IntentProcessingResult(
             success=True,
@@ -569,7 +546,6 @@ async def run_clear_todos(
         original_message,
         question=question,
     )
-    offer["pending_action"][CLEAR_TODOS_RESOLVER_MARKER] = True
     offer_service.set_pending_offer(session_id, offer, user_id=principal)
     logger.info(
         "clear_todos_verb_question_offered",
@@ -590,8 +566,8 @@ async def run_clear_todos(
 
 # ---------------------------------------------------------------------------
 # Answer-turn handling for the verb question armed above (the
-# CLEAR_TODOS_RESOLVER_MARKER branch reminder_clear._handle_verb_answer_turn
-# delegates to). Reuses #1605's crisp-claim regexes and acceptance-tier
+# verb-question kind reminder_clear.handle_reminder_clear_turn hands
+# straight here — this module is that carrier's only arm site). Reuses #1605's crisp-claim regexes and acceptance-tier
 # machinery (same axes, same STATE_QUESTION passthrough contract) as the
 # SHARED-FALLBACK path only; the primary discriminator is the generalized
 # #1886(b) armed-turn consult (Arch's 2026-10-07 ruling, point 3) — see
@@ -769,18 +745,30 @@ async def handle_clear_todos_verb_answer(
         )
         wants_complete = not prose and bool(_rc._COMPLETE_ANSWER_RE.search(message))
         if wants_delete == wants_complete:
-            # Neither claimed, or both (contradictory) — re-ask + re-arm,
-            # keeping the marker so this module keeps claiming the answer turn.
+            # Neither claimed, or both (contradictory). #1648's contract for
+            # this carrier, carried over from the retired off-rail path
+            # (reminder_clear._reask_verb_question_if_unrecognized,
+            # 2026-10-14): an accept / decline / bare exit / command-shaped
+            # turn falls through to the generic seam (bare "yes" -> the
+            # registered re-ask workflow; "no"/exit -> the offer's honest
+            # decline; a command abandons via the pop and routes normally).
+            # Only a genuinely unrecognized turn re-asks + re-arms.
+            from services.intent_service.destructive_confirm import detect_bare_exit
+            from services.intent_service.drafted_issue import is_command_shaped
+
+            if (
+                verdict in (AcceptanceVerdict.ACCEPT, AcceptanceVerdict.DECLINE)
+                or detect_bare_exit(text)
+                or is_command_shaped(text)
+            ):
+                return None
             return _reask_clear_todos_verb_question(payload, intent_service, session_id, user_id)
         value = _rc.VALUE_DELETE if wants_delete else _rc.VALUE_COMPLETE
         target_op = "delete_todo" if wants_delete else "complete_todo"
 
     if not _op_is_live_eligible(target_op):
         return {
-            "message": (
-                "I can't do that yet — that capability isn't live right now. "
-                "Nothing has been changed."
-            ),
+            "message": _NOT_LIVE_MESSAGE,
             "intent_data": {
                 "category": "execution",
                 "action": _rc.CLARIFY_CLEAR_VERB_WORKFLOW,
@@ -801,9 +789,8 @@ async def handle_clear_todos_verb_answer(
     # the render).
     tokens = [f"name:{t}" for t in dict.fromkeys(refined_texts)]
     # original_message carries forward UNCHANGED (Arch's 2026-10-07 ruling,
-    # point 2 — see _rail_reentry_context's docstring for why blanking was
-    # the wrong mechanism). maybe_handle_clear_family stands down on the
-    # CLEAR_FAMILY_RESOLVED_KEY marker below instead.
+    # point 2 — see the module docstring for why blanking was the wrong
+    # mechanism).
     new_intent = Intent(
         category=IntentCategory.EXECUTION,
         action=target_op,
@@ -812,7 +799,6 @@ async def handle_clear_todos_verb_answer(
         context={
             "inversion_args": {"targets": tokens},
             VIA_CLEAR_VERB_CONTEXT_KEY: _CLEAR_VERB_LITERAL,
-            _rc.CLEAR_FAMILY_RESOLVED_KEY: True,
         },
     )
     result = await dispatch_workflow(
@@ -859,13 +845,12 @@ def _reask_clear_todos_verb_question(
 ) -> Dict[str, Any]:
     """Generic re-ask + re-arm for an unrecognized answer turn — mirrors
     reminder_clear's own re-arm idiom (store the question verbatim,
-    #1665), keeping the CLEAR_TODOS_RESOLVER_MARKER so this module keeps
-    claiming the answer turn on the next try."""
+    #1665); the re-armed verb-question kind keeps routing the next answer
+    turn back here (reminder_clear.handle_reminder_clear_turn)."""
     from services.intent_service import reminder_clear as _rc
 
     question = "Just so I get it right — for these reminders: mark them done, or delete them?"
     payload = dict(payload)
-    payload[CLEAR_TODOS_RESOLVER_MARKER] = True
     intent_service.workflow_offer_service.set_pending_offer(
         session_id,
         {

@@ -2887,7 +2887,11 @@ class TestExtractionPatternRatchet:
         # 9 -> 8 (2026-10-08, #1943 step 6): the #1914 ordinal binder (_ORDINAL_SHAPE_RE) retired
         # now that complete_todo is live and the router names targets.
         "todo-floor-binding": 8,
-        "reminder-clear-binding": 17,
+        # 17 -> 10 (2026-10-14, #1943 rework point 1): the #1605 regex seam retired —
+        # _REMINDER_NOUN_RE, _TODO_NOUN_RE, _EXPLICIT_VERB_RE, _QUOTED_TARGET_RE,
+        # _THE_X_TARGET_RE, _DIFFERENT_ANSWER_RE, _USUAL_ANSWER_RE deleted (7 literals);
+        # detect_clear_family_ask / _extract_named_target (0 literals) deleted with them.
+        "reminder-clear-binding": 10,
         "todo-create": 11,  # 5 + _extract_completion_text's 6, frozen at measured value 2026-09-01
         "reminder-extraction": 11,
         "issue-slot-extraction": 15,
@@ -3319,16 +3323,17 @@ class TestExtractionPatternRatchet:
             (
                 "services/intent_service/reminder_clear.py",
                 [
-                    "_REMINDER_NOUN_RE",
-                    "_TODO_NOUN_RE",
-                    "_EXPLICIT_VERB_RE",
+                    # 2026-10-14 (#1943, Arch's clear_todos point 1):
+                    # detect_clear_family_ask + its regexes (_REMINDER_NOUN_RE,
+                    # _TODO_NOUN_RE, _EXPLICIT_VERB_RE), the named-target
+                    # binders (_QUOTED_TARGET_RE, _THE_X_TARGET_RE,
+                    # _extract_named_target) and the ALWAYS_ASK answer
+                    # patterns (_DIFFERENT_ANSWER_RE, _USUAL_ANSWER_RE) are
+                    # DELETED with the #1605 regex seam — names removed here
+                    # because the code is gone, ceiling lowered to match.
                     "_EXCEPTION_RE",
                     "_BULK_REMINDER_PLURAL_RE",
                     "_BULK_TODO_PLURAL_RE",
-                    "_QUOTED_TARGET_RE",
-                    "_THE_X_TARGET_RE",
-                    "_DIFFERENT_ANSWER_RE",
-                    "_USUAL_ANSWER_RE",
                     "_COMPLETE_ANSWER_RE",
                     "_NEGATED_DELETE_RE",
                     "_CORRECTION_CLAIM_RE",
@@ -3336,8 +3341,6 @@ class TestExtractionPatternRatchet:
                     "_NUMERIC_ORDINAL_RE",
                     "_OVERDUE_WORD_RE",
                     "_WORD_RE",
-                    "detect_clear_family_ask",  # 0 literals — existence guards
-                    "_extract_named_target",
                     "_ordinal_index",
                     "_name_index",
                     "_resolve_pick_target",
@@ -3675,11 +3678,10 @@ class TestAcceptanceContractRatchet:
     LOW_CEREMONY) keeps word-level detection behind the prose floor (axis
     (c)). The correction window gets the same axis-(a) STATE_QUESTION gate
     ("delete them?" no longer arms the confirm off a question). The
-    reminder_clear.py ``detect_offer_response`` row REMAINS below: its one
-    call is ``_reask_verb_question_if_unrecognized``'s DEFERRAL shape read
-    (returns None so the generic seam decides accepts/declines — the
-    drafted_issue/repo_clarification row rationale, not an acceptance
-    decision). Echo-answers at the armed delete confirm ("yes, delete
+    reminder_clear.py ``detect_offer_response`` row remained (its one call
+    was ``_reask_verb_question_if_unrecognized``'s DEFERRAL shape read) until
+    2026-10-14, when that function retired with the off-rail verb-answer
+    path (#1943) and the row shrank out. Echo-answers at the armed delete confirm ("yes, delete
     them") stay deliberately non-firing (issue #1653 note 2; evidence-gated
     to change).
 
@@ -3838,7 +3840,10 @@ class TestAcceptanceContractRatchet:
             ("services/intent_service/drafted_issue.py", "detect_offer_response"),
             # 2026-09-12: the todo_handlers row shrank out (#1654) — both
             # reminder question turns consult the predicate directly.
-            ("services/intent_service/reminder_clear.py", "detect_offer_response"),
+            # 2026-10-14: the reminder_clear.py row shrank out (#1943) — its one
+            # call (_reask_verb_question_if_unrecognized) retired with the
+            # off-rail verb-answer path; the resolver's fallback reads the
+            # contract verdict instead.
             ("services/intent_service/first_contact.py", "detect_offer_response"),
             ("services/intent_service/verified_inference.py", "detect_offer_response"),
         }

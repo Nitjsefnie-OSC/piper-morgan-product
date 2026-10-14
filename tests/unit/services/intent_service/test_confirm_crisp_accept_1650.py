@@ -207,11 +207,11 @@ class TestCorrectionClaimAnchoring:
     @pytest.mark.asyncio
     async def test_correction_turn_falls_through_on_the_aside(self):
         """Through the real turn handler: the aside returns None (off-intent
-        fall-through — the pop drops the window; nothing is armed)."""
-        from services.intent_service.reminder_clear import (
-            CLEAR_CORRECTION_KIND,
-            handle_reminder_clear_turn,
-        )
+        fall-through — the pop drops the window; nothing is armed).
+        2026-10-14: the variant-2 correction window itself retired with the
+        #1605 regex seam; a stale record of that kind (armed before deploy)
+        is no longer claimed at all, so the aside still arms nothing."""
+        from services.intent_service.reminder_clear import handle_reminder_clear_turn
 
         class _ExplosiveOfferService:
             def set_pending_offer(self, *a, **k):
@@ -222,7 +222,7 @@ class TestCorrectionClaimAnchoring:
 
         pending_offer = {
             "pending_action": {
-                "kind": CLEAR_CORRECTION_KIND,
+                "kind": "reminder_clear_correction",
                 "user_id": _USER,
                 "clear_verb": "clear",
                 "clear_noun": "reminder",

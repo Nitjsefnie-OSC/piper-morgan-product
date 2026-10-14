@@ -1,5 +1,26 @@
 """#1605 — reminder/todo "clear"-family verb disambiguation (three-variant copy).
 
+⚠️ RETIRED 2026-10-14 (Arch's clear_todos ruling 2026-10-07, point 1, restated
+2026-10-14 point 5; named on the guard comment and the epic-0 entry): the
+regex-triggered three-variant flow this docstring describes below —
+``detect_clear_family_ask`` and its ``maybe_handle_clear_family`` seam at the
+complete_todo / delete_todo rail entries and the #1333 unmapped branch, the
+``is_clear_family_passthrough`` predicate both consent tiers called, the
+off-rail verb-answer path (``_handle_verb_answer_turn``, which completed /
+armed deletes OUTSIDE the action-dispatch rail), the variant-2 correction
+window and the #1906 pick-target carrier (armed only by that seam), and the
+``clear_family_resolved`` stand-down marker (whose only reader was that
+seam) — is DELETED. The family's turns enter through the ``clear_todos``
+RESOLVER rail entry (services/intent_service/clear_todos.py): the router
+decides family membership and WHICH items, the resolver owns set-then-verb,
+and every execution re-enters the rail via ``dispatch_workflow``. What stays
+here: the verb-question carrier (kind, offer builder, bare-"yes" re-ask
+workflow) the resolver arms, the ratified variant-1 sentence and
+``CORRECTION_WINDOW_ASK`` it composes, the per-verb inference key, the
+fallback answer patterns, the #1696 explicit bulk-delete seam and its
+#1190-confirmed batch delete, and the pick binders #1987 shares. The text
+below is the design history of the retired flow.
+
 PM ruling (decisions.log 2026-08-13 ~14:1x, relayed by Lead): when a verb has
 no confident mapping onto the baked-in operations, Piper ASKS — never a
 term-of-art decree ("'clear' shall mean delete"). CXO+PPM joint design
@@ -69,31 +90,22 @@ never a fresh classification. See ``_handle_pick_target_turn``.
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional, Tuple
 from uuid import UUID
 
 import structlog
 
-from services.shared_types import EffectClass
-
 logger = structlog.get_logger(__name__)
 
 # ── Carrier kinds (the #1190 pending_action carrier is action-agnostic;
 #    ``kind`` is how the offer seam recognizes ours without a parallel store)
 CLEAR_VERB_QUESTION_KIND = "reminder_clear_verb_question"
-CLEAR_CORRECTION_KIND = "reminder_clear_correction"
 CLEAR_DELETE_CONFIRMATION_KIND = "reminder_clear_delete_confirmation"
-# #1906: the "which one do you mean?" clarify, now ARMED (previously the
-# one unarmed branch in this file — see module docstring addendum below).
-CLEAR_PICK_TARGET_KIND = "reminder_clear_pick_target_question"
 
 # ── Registered workflow types (all action_triggered=False — offer-seam only)
 CLARIFY_CLEAR_VERB_WORKFLOW = "clarify_reminder_clear_verb"
-CLEAR_CORRECTION_WORKFLOW = "reminder_clear_correction"
 CLEAR_DELETE_WORKFLOW = "clear_reminders_delete"
-CLEAR_PICK_TARGET_WORKFLOW = "reminder_clear_pick_target"
 
 # Effect-weighted gate input: a clear-family verb is a plausible-but-
 # unverified mapping — between the suggestion floor (0.4) and the auto-apply
@@ -102,24 +114,6 @@ VERB_CONFIDENCE = 0.7
 
 VALUE_COMPLETE = "complete"
 VALUE_DELETE = "delete"
-
-# Clear-family build plan piece 2, Arch's 2026-10-07 correction (mail
-# rule-arch-to-lead-cc-cxo-clear-todos-three-points-...-2026-10-07.md, point
-# 2): a context key the ``clear_todos`` RESOLVER (services.intent_service.
-# clear_todos) writes on every Intent it re-enters the action-dispatch rail
-# with — CODE-WRITTEN only, after resolution, NEVER sourced from
-# ``inversion_args`` or any user-controllable input. When present,
-# ``maybe_handle_clear_family`` stands down unconditionally: the resolver has
-# already decided the operation, so the OLD #1605 regex seam
-# (``detect_clear_family_ask``) must not re-claim a turn the resolver
-# produced — even though that turn's ``original_message`` is the SAME
-# ambiguous "clear ..." text that caused the resolver to run in the first
-# place (deliberately NOT blanked — see clear_todos.py's module docstring
-# for why blanking was the wrong mechanism: it destroyed information every
-# downstream consumer might read, and fought #1942's one-Intent-shape
-# guarantee). This key is read in exactly one place (below); it exists
-# solely to stop THIS function reclaiming a resolver-originated re-entry.
-CLEAR_FAMILY_RESOLVED_KEY = "clear_family_resolved"
 
 
 def inference_key(verb: str) -> str:
@@ -147,69 +141,17 @@ def variant_one_question(verb: str = "clear", noun: str = "reminder") -> str:
     )
 
 
-def variant_two_disclosure(verb: str = "clear") -> str:
-    """Variant 2 — stored default = complete (WRITE): auto-apply,
-    disclosure-after, no block. The closing sentence is CORRECTION_WINDOW_ASK
-    (defined below) — the same string stored on the correction offer (#1665)."""
-    return (
-        f"Marking these done — that's what '{verb}' has meant for you. "
-        f"Say so if you meant delete this time."
-    )
-
-
-def variant_two_always_ask_question() -> str:
-    """RATIFIED COPY (CXO 2026-08-14 07:19, PPM confirmed 07:22) — V2's form
-    under ALWAYS_ASK: a stored mapping is a prior EXPLICIT answer, not an
-    assumption, so it is never flushed — but under "don't make assumptions"
-    the assert-then-disclose form becomes a QUESTION that leads with the
-    stored value as the suggested answer. Verbatim; a drifted word is a bug."""
-    return "Want me to mark these done, like usual, or something different this time?"
-
-
-def variant_three_question(count: int, verb: str = "clear", noun: str = "reminder") -> str:
-    """Variant 3 — stored default = delete (DESTRUCTIVE): the question that
-    rides the #1190 confirm gate. Ratified form is the N>1 shape; N==1 takes
-    the grammatical singular (seam note: same sentence, singular referent)."""
-    target = f"these {count} {noun}s" if count != 1 else f"this {noun}"
-    return f"You've set '{verb}' to mean delete — delete {target}? (yes/no)"
-
-
-# #1665: the correction window's standing invitation — ONE constant, embedded
-# in both variant-2 surfaces (ratified disclosure + meta-auto glue) and stored
-# on the correction offer as its open question (same string, no drift).
+# #1665: the correction window's standing invitation — ONE constant. Since
+# the 2026-10-14 retirement (module docstring) its one reader is the
+# clear_todos resolver's variant-2 disclosure clause
+# (clear_todos._clear_disclosure_clause).
 CORRECTION_WINDOW_ASK = "Say so if you meant delete this time."
 
 
 # ---------------------------------------------------------------------------
-# Detection (handler-internal — the routing moratorium's sanctioned seam)
+# #1696 explicit-bulk-delete shape detection (the clear-family ASK detector,
+# detect_clear_family_ask, retired 2026-10-14 — see the module docstring)
 # ---------------------------------------------------------------------------
-
-# The clear family: the named verbs (clear / handle / take care of / reset).
-# Unmapped classifier SIBLINGS ("clear_reminders", "reset_todos", ...) reach
-# the else-branch call site and are detected by the SAME message scan.
-_CLEAR_FAMILY_VERBS: Tuple[Tuple[str, str], ...] = (
-    ("clear", r"\bclear\b"),
-    ("handle", r"\bhandle\b"),
-    ("take care of", r"\btake\s+care\s+of\b"),
-    ("reset", r"\breset\b"),
-)
-
-# Domain nouns — the reminder/todo family only (the unified model's two
-# vocabularies, #1569). No noun, no claim.
-_REMINDER_NOUN_RE = re.compile(r"\breminders?\b", re.IGNORECASE)
-_TODO_NOUN_RE = re.compile(r"\bto-?dos?\b", re.IGNORECASE)
-
-# An explicit disambiguating verb in the same message means the ask is NOT
-# ambiguous — the user already said which operation they mean.
-_EXPLICIT_VERB_RE = re.compile(
-    r"""
-    \bdelete\b | \bremove\b | \berase\b
-    | \bcomplete(?:d)?\b | \bfinish(?:ed)?\b
-    | \bmark(?:ing)?\b [^.!?]{0,40} \b(?:done|complete)\b
-    | \bdone\s+with\b
-    """,
-    re.IGNORECASE | re.VERBOSE,
-)
 
 # Exception clauses — set-complement scope, #1563's lane, never guessed here.
 _EXCEPTION_RE = re.compile(
@@ -227,100 +169,11 @@ _BULK_REMINDER_PLURAL_RE = re.compile(r"\breminders\b", re.IGNORECASE)
 _BULK_TODO_PLURAL_RE = re.compile(r"\b(?:to-?dos|tasks)\b", re.IGNORECASE)
 
 
-@dataclass(frozen=True)
-class ClearAsk:
-    """A detected clear-family utterance over the reminder/todo domain."""
-
-    verb: str  # family label ("clear", "handle", "take care of", "reset")
-    noun: str  # "reminder" | "todo" — the user's own vocabulary (#1569)
-    has_exception: bool  # exception clause present (fall back, never guess)
-    named_target: Optional[str] = None  # quoted/'the X reminder' single-target ask
-
-
-def detect_clear_family_ask(message: Optional[str]) -> Optional[ClearAsk]:
-    """Detect an ambiguous clear-family ask over the reminder/todo domain.
-
-    Fires only when (a) a clear-family verb is present, (b) a reminder/todo
-    noun is present, and (c) NO explicit complete/delete verb disambiguates
-    the ask already. Explicit messages ("delete todo 3", "mark the PR review
-    done") pass through untouched — the gate confiscates ambiguity, never
-    imperatives (#1510's principle)."""
-    text = (message or "").strip()
-    if not text:
-        return None
-    if _EXPLICIT_VERB_RE.search(text):
-        return None
-    has_reminder = bool(_REMINDER_NOUN_RE.search(text))
-    has_todo = bool(_TODO_NOUN_RE.search(text))
-    if not (has_reminder or has_todo):
-        return None
-    for label, pattern in _CLEAR_FAMILY_VERBS:
-        if re.search(pattern, text, re.IGNORECASE):
-            return ClearAsk(
-                verb=label,
-                # The user's own noun wins; "reminder" wins a mixed mention
-                # (the more specific origin — same tiebreak as the render
-                # rule's item-in-both-blocks case, #1569).
-                noun="reminder" if has_reminder else "todo",
-                has_exception=bool(_EXCEPTION_RE.search(text)),
-                named_target=_extract_named_target(text),
-            )
-    return None
-
-
-def is_clear_family_passthrough(message: Optional[str]) -> bool:
-    """#1595 Phase 3 (Arch ruling 2026-10-04): THE shared clear-family
-    passthrough predicate, factored out of ``destructive_confirm.
-    build_todo_delete_confirmation``'s inline ``detect_clear_family_ask(...)
-    is not None`` check (its original, only call site) so both consent
-    tiers call the SAME function instead of a second hand-written carve-out.
-
-    True exactly when :func:`detect_clear_family_ask` claims the message —
-    i.e. an ambiguous clear/handle/take-care-of/reset ask over the
-    reminder/todo domain, with no explicit complete/delete verb already
-    disambiguating it. A caller that gets True must NOT arm its own
-    consent/confirm question on this turn; it passes through so #1605's own
-    three-variant "complete or delete?" flow
-    (:func:`maybe_handle_clear_family`) gets first and only claim. Called
-    from exactly two sites: the DESTRUCTIVE tier
-    (``destructive_confirm.build_todo_delete_confirmation``, gated there by
-    ``is_delete_todo_action``) and the WRITE tier (the COLLABORATE branch in
-    ``intent_service._dispatch_action_rail``, gated there by rail-entry
-    identity against ``complete_todo``'s own entry) — one question per
-    clear-family turn, never two."""
-    return detect_clear_family_ask(message) is not None
-
-
-# PM live 2026-08-15: `clear the "test the safe clarfication" reminder` acted
-# on ALL FOUR reminders — the batch resolver had no concept of a named single
-# target, so a specific ask executed against everything (with a stored DELETE
-# default this would have been unconfirmed bulk destruction had V3 not
-# counted). A named target narrows the set to the match, or CLARIFIES on
-# no/ambiguous match — never falls back to the whole set.
-_QUOTED_TARGET_RE = re.compile(r"[\"\u201c']([^\"\u201d']{2,80})[\"\u201d']")
-_THE_X_TARGET_RE = re.compile(r"\bthe\s+(.{2,60}?)\s+(?:reminder|todo)\b", re.IGNORECASE)
-
-
-def _extract_named_target(text: str) -> Optional[str]:
-    m = _QUOTED_TARGET_RE.search(text)
-    if m:
-        return m.group(1).strip()
-    m = _THE_X_TARGET_RE.search(text)
-    if m:
-        candidate = m.group(1).strip().strip("\"'\u201c\u201d")
-        # articles/pronouns alone are not names ("clear the last reminder"
-        # stays a batch-family question, not a match attempt)
-        if candidate.lower() in {"", "first", "last", "next", "that", "this", "one"}:
-            return None
-        return candidate
-    return None
-
-
 def detect_explicit_bulk_delete_ask(message: Optional[str]) -> Optional[str]:
     """#1696 — detect an EXPLICIT bulk delete over the reminder/todo domain.
 
-    The inverse face of ``detect_clear_family_ask``: that seam deliberately
-    declines explicit imperatives (``_EXPLICIT_VERB_RE`` — the verb is not
+    The inverse face of the (retired 2026-10-14) ``detect_clear_family_ask``:
+    that seam deliberately declined explicit imperatives (the verb is not
     ambiguous), which left 'delete my reminders' with LESS capability than
     the ambiguous 'clear my reminders' (the 1527 lane's filed finding: the
     single-item which-todo ask answered a bulk ask). This detector claims
@@ -335,7 +188,7 @@ def detect_explicit_bulk_delete_ask(message: Optional[str]) -> Optional[str]:
     without this module growing a verb vocabulary.
 
     Returns the copy noun ("reminder" | "todo", #1569 — reminder wins a
-    mixed mention, same tiebreak as ``detect_clear_family_ask``), or None.
+    mixed mention, the #1569 render-rule tiebreak), or None.
     """
     text = (message or "").strip()
     if not text:
@@ -352,12 +205,6 @@ def detect_explicit_bulk_delete_ask(message: Optional[str]) -> Optional[str]:
 # ---------------------------------------------------------------------------
 # Target resolution + batch operations
 # ---------------------------------------------------------------------------
-
-
-_DIFFERENT_ANSWER_RE = re.compile(r"\b(different|something else|not (this|that)|delete)\b", re.I)
-_USUAL_ANSWER_RE = re.compile(
-    r"\b(yes|yeah|yep|sure|ok(ay)?|usual|as usual|like usual|done|please do)\b", re.I
-)
 
 
 def _plural(noun: str, n: int) -> str:
@@ -391,34 +238,6 @@ def _due_iso(todo: Any, noun: str) -> Optional[str]:
     return dt.isoformat() if dt is not None else None
 
 
-async def _complete_ids(
-    todo_service, ids: List[str], texts: List[str], user_uuid: UUID
-) -> Tuple[List[str], int]:
-    """Batch-complete by id. Returns (completed texts, failure count) —
-    failures are counted honestly, never silently dropped."""
-    done: List[str] = []
-    failed = 0
-    for tid, text in zip(ids, texts):
-        try:
-            result = await todo_service.complete_todo(todo_id=UUID(tid), user_id=user_uuid)
-            if result:
-                done.append(text)
-            else:
-                failed += 1
-        except Exception as e:  # silent-ok: counted + logged; the summary copy states the honest denominator (m-44), never a fabricated all-done
-            failed += 1
-            logger.warning("reminder_clear_complete_failed", todo_id=tid, error=str(e))
-    return done, failed
-
-
-def _completion_summary(done: List[str], failed: int, noun: str) -> str:
-    lines = [f"Marked {len(done)} {_plural(noun, len(done))} done:"]
-    lines.extend(f"• {text}" for text in done)
-    if failed:
-        lines.append(f"({failed} couldn't be updated just now — say 'show my todos' to check.)")
-    return "\n".join(lines)
-
-
 def _empty_targets_message(verb: str, noun: str) -> str:
     # Pattern-073 discipline: describe what was actually queried.
     scope = "saved reminders" if noun == "reminder" else "active todos"
@@ -449,8 +268,8 @@ def _delete_confirmation_offer(
     what a "yes" deletes — no drift between the ask and the act.
 
     ``question`` (#1665): the ALREADY-RENDERED confirm ask the caller returns
-    this turn (variant_three_question output, or the correction-claimed
-    form) — stored verbatim, never re-rendered."""
+    this turn (since 2026-10-14 only #1696's plain bulk-delete confirm) —
+    stored verbatim, never re-rendered."""
     from services.domain.models import Intent
     from services.intent_service.destructive_confirm import (
         CONFIRM_PENDING_ACTION_WORKFLOW,
@@ -505,8 +324,8 @@ def _verb_question_offer(
     an entry that re-asks and re-arms this same offer.
 
     ``question`` (#1665): the ALREADY-RENDERED either/or ask the caller
-    returns this turn (variant one, or the ALWAYS_ASK leading form) — stored
-    verbatim, never re-rendered. NOT a yes/no: the verb question is pinned
+    returns this turn (the clear_todos resolver's variant-1-with-set ask —
+    its only arm site since 2026-10-14) — stored verbatim, never re-rendered. NOT a yes/no: the verb question is pinned
     OUTSIDE the #1664 confirm-kind set."""
     return {
         "workflow_type": CLARIFY_CLEAR_VERB_WORKFLOW,
@@ -529,513 +348,9 @@ def _verb_question_offer(
     }
 
 
-def _correction_offer(
-    principal: Optional[str],
-    verb: str,
-    noun: str,
-    completed_ids: List[str],
-    completed_texts: List[str],
-    original_message: str,
-) -> Dict[str, Any]:
-    """The one-turn correction window after a variant-2 auto-apply ("Say so
-    if you meant delete this time"). A correction phrase next turn routes to
-    a #1190-gated delete of the just-completed items; anything else abandons
-    it via the pop (the #1529 off-intent tier).
-
-    #1665: the stored question is CORRECTION_WINDOW_ASK — the exact standing
-    invitation both variant-2 surfaces render. Not a yes/no (the expected
-    answer is a correction phrase), so the kind stays OUTSIDE the #1664
-    confirm set."""
-    return {
-        "workflow_type": CLEAR_CORRECTION_WORKFLOW,
-        "question": CORRECTION_WINDOW_ASK,
-        "pending_action": {
-            "kind": CLEAR_CORRECTION_KIND,
-            "action": CLEAR_CORRECTION_WORKFLOW,
-            "user_id": principal,
-            "clear_verb": verb,
-            "clear_noun": noun,
-            "clear_target_ids": list(completed_ids),
-            "clear_target_texts": list(completed_texts),
-            "original_message": original_message,
-            "summary": f"correct '{verb}' to delete",
-        },
-        "decline_message": "Good — they stay marked done.",
-    }
-
-
-def _pick_target_offer(
-    principal: Optional[str],
-    verb: str,
-    noun: str,
-    ids: List[str],
-    texts: List[str],
-    due_iso: List[Optional[str]],
-    original_message: str,
-    question: str,
-    reasked: bool = False,
-    candidate_effect: Optional[str] = None,
-) -> Dict[str, Any]:
-    """#1906 — the "which one do you mean?" offer: the rendered candidate
-    list bound at offer time (ids + texts, in the order shown — exactly
-    what the question named, #1665), plus each candidate's relevant
-    due-ish timestamp (ISO, or None) so a later "the overdue one" can be
-    judged WITHOUT a fresh DB read (deterministic, offline). ``reasked``
-    marks a re-armed record so a SECOND unresolved turn releases rather
-    than looping (see ``_handle_pick_target_turn``)."""
-    return {
-        "workflow_type": CLEAR_PICK_TARGET_WORKFLOW,
-        "question": question,
-        "pending_action": {
-            "kind": CLEAR_PICK_TARGET_KIND,
-            "action": CLEAR_PICK_TARGET_WORKFLOW,
-            "user_id": principal,
-            "clear_verb": verb,
-            "clear_noun": noun,
-            "clear_target_ids": list(ids),
-            "clear_target_texts": list(texts),
-            "clear_target_due": list(due_iso),
-            "original_message": original_message,
-            "pick_target_reasked": reasked,
-            "clear_candidate_effect": candidate_effect,
-            "summary": f"pick which {noun} to {verb}",
-        },
-        "decline_message": (
-            f"Okay — I haven't touched your {_plural(noun, 2)}. " f"Nothing has been changed."
-        ),
-    }
-
-
 # ---------------------------------------------------------------------------
 # The main flow — called from _handle_execution_intent's claiming branches
 # ---------------------------------------------------------------------------
-
-
-async def maybe_handle_clear_family(
-    intent_service,
-    intent,
-    session_id: Optional[str],
-    user_id: Optional[str],
-    todo_user_id: UUID,
-    candidate_effect: EffectClass,
-):
-    """Run the #1605 three-variant flow for a clear-family utterance, or
-    return None -> the caller proceeds with its normal handling (explicit
-    verbs, non-domain messages).
-
-    ``candidate_effect`` is the CLASSIFIER'S candidate mapping's declared
-    effect (WRITE at the complete_todo call site, DESTRUCTIVE at the
-    delete_todo and unmapped call sites) — the quantity
-    ``decide_verb_interpretation`` weights (#1557): a WRITE candidate under
-    TRUST_INFERENCES may auto-apply; a DESTRUCTIVE candidate reads back even
-    then (process steering never lowers a destructive ask).
-    """
-    from services.intent.intent_service import IntentProcessingResult
-    from services.intent_service.consent_gate import decide_verb_interpretation
-    from services.intent_service.verified_inference import (
-        SOURCE_META_AUTO,
-        VerificationDecision,
-        get_meta_mode,
-        get_verified_inference,
-        store_verified_inference,
-    )
-
-    # Arch's 2026-10-07 correction (point 2): a resolver-originated re-entry
-    # carries this code-written marker and must never be reclaimed here,
-    # regardless of what its (deliberately intact) original_message says.
-    if (intent.context or {}).get(CLEAR_FAMILY_RESOLVED_KEY):
-        return None
-
-    original_message = intent.original_message or (intent.context or {}).get("original_message", "")
-    ask = detect_clear_family_ask(original_message)
-    if ask is None:
-        return None
-    if not session_id:
-        # No session to bind an answer to — never guess a destructive-capable
-        # mapping without one. Fall through to the caller's normal handling.
-        return None
-
-    principal = str(user_id) if user_id else str(todo_user_id)
-    base_intent_data = {
-        "category": intent.category.value if intent.category else "execution",
-        "action": intent.action,
-        "confidence": intent.confidence,
-        "clear_verb": ask.verb,
-        "clear_noun": ask.noun,
-    }
-
-    # ── Exception clause: #1563's set-complement lane — clarify the whole
-    #    ask (variant-1-style), never guess the set. No write; PM live-found
-    #    (2026-08-15) that the original no-offer version asked the verb
-    #    question and then had nowhere to land the bare answer it INVITED
-    #    ("delete" fell to the floor's canned denial). The offer is armed
-    #    with NO TARGETS: the answer stores the verb (the question promises
-    #    "I'll remember"), and the reply re-asks for the explicit list —
-    #    still never acting on a guessed set.
-    if ask.has_exception:
-        logger.info(
-            "reminder_clear_exception_clause_fallback",
-            verb=ask.verb,
-            noun=ask.noun,
-            session_id=session_id,
-        )
-        question = variant_one_question(ask.verb, ask.noun)
-        offer = _verb_question_offer(
-            principal,
-            ask.verb,
-            ask.noun,
-            [],
-            [],
-            original_message,
-            question=question,  # #1665: rendered once, stored + said
-        )
-        offer["pending_action"]["exception_no_targets"] = True
-        intent_service.workflow_offer_service.set_pending_offer(session_id, offer, user_id=user_id)
-        message = (
-            f"{question}\n\n"
-            f"Also — you carved out an exception, and I don't want to guess "
-            f"which {_plural(ask.noun, 2)} you mean. Once you answer, tell me "
-            f"exactly which ones to include and I'll act on just those."
-        )
-        return IntentProcessingResult(
-            success=True,
-            message=message,
-            intent_data={
-                **base_intent_data,
-                "verb_disambiguation_pending": True,
-                "exception_clause_fallback": True,
-            },
-            requires_clarification=True,
-        )
-
-    todo_service = intent_service.todo_handlers.todo_service
-    try:
-        targets = await _resolve_targets(todo_service, todo_user_id, ask.noun)
-        if ask.named_target:
-            wanted = ask.named_target.lower()
-            matches = [t for t in targets if wanted in (t.text or "").lower()]
-            if len(matches) == 1:
-                targets = matches
-            else:
-                # no match or ambiguous — CLARIFY, never ACT on the whole set.
-                # #1762: but DO name the whole set. The `[:6]` cap here was
-                # silent and sat under the definite claim "you have: …", which
-                # is simply false past six — and the user is being asked to
-                # pick from a list that omits candidates. The render is also
-                # the only per-turn record reaching next-turn context
-                # (build_recent_history, #1122), so the hidden candidates were
-                # ones the assistant believed did not exist (#1738's
-                # mechanism). The target set is the user's own active
-                # reminders/todos — bounded and theirs; GatherOutcome §5b.
-                names = ", ".join(f"'{t.text}'" for t in targets)
-                logger.info(
-                    "reminder_clear_named_target_unmatched",
-                    wanted=ask.named_target,
-                    candidates=len(matches),
-                    session_id=session_id,
-                )
-                question = (
-                    f"I couldn't confidently match '{ask.named_target}' to exactly one "
-                    f"{ask.noun}"
-                    + (f" — you have: {names}." if names else " — you don't have any right now.")
-                    # #1920 exit (CXO's copy, 2026-10-02): the user learns they
-                    # can bail BEFORE failing once; "never mind" is the one
-                    # phrase at both prompt sites and resolves as a DECLINE
-                    # at the acceptance seam (probed, not assumed).
-                    + " Tell me which one you mean, or say 'never mind' and I'll "
-                    "leave it alone."
-                )
-                # #1906: ARM the pick — the one branch in this module that
-                # used to answer "tell me which one" without a carrier for
-                # the answer. No targets -> nothing to bind to; stays
-                # unarmed (the "you don't have any right now" case).
-                if targets:
-                    pick_ids = [str(t.id) for t in targets]
-                    pick_texts = [t.text for t in targets]
-                    pick_due = [_due_iso(t, ask.noun) for t in targets]
-                    intent_service.workflow_offer_service.set_pending_offer(
-                        session_id,
-                        _pick_target_offer(
-                            principal,
-                            ask.verb,
-                            ask.noun,
-                            pick_ids,
-                            pick_texts,
-                            pick_due,
-                            original_message,
-                            question=question,  # #1665: rendered once, stored + said
-                            candidate_effect=candidate_effect.name,
-                        ),
-                        user_id=user_id,
-                    )
-                return IntentProcessingResult(
-                    success=True,
-                    message=question,
-                    intent_data={**base_intent_data, "named_target_unmatched": True},
-                    requires_clarification=True,
-                )
-    except Exception as e:  # silent-ok: logged at error w/ exc_info; a source failure must read as trouble-loading (#1425), never fall through to a guessed mapping
-        logger.error(
-            "reminder_clear_target_resolution_failed",
-            error=str(e),
-            user_id=principal,
-            exc_info=True,
-        )
-        scope = "reminders" if ask.noun == "reminder" else "todos"
-        return IntentProcessingResult(
-            success=True,
-            message=(
-                f"I had trouble loading your {scope} just now, so I haven't "
-                f"touched anything. You can try again in a moment."
-            ),
-            intent_data=base_intent_data,
-        )
-
-    return await _act_on_resolved_targets(
-        intent_service,
-        session_id,
-        user_id,
-        principal,
-        todo_user_id,
-        todo_service,
-        ask.verb,
-        ask.noun,
-        [str(t.id) for t in targets],
-        [t.text for t in targets],
-        candidate_effect,
-        original_message,
-        base_intent_data,
-    )
-
-
-async def _act_on_resolved_targets(
-    intent_service,
-    session_id: Optional[str],
-    user_id: Optional[str],
-    principal: Optional[str],
-    todo_user_id: UUID,
-    todo_service,
-    verb: str,
-    noun: str,
-    ids: List[str],
-    texts: List[str],
-    candidate_effect: EffectClass,
-    original_message: str,
-    base_intent_data: Dict[str, Any],
-):
-    """#1906 — the SHARED three-variant decision tree, reached once a
-    clear-family ask has exactly ONE resolved target set: the detected
-    batch, a single named-target match, or (new) a bound pick-target
-    answer (``_handle_pick_target_turn`` re-enters HERE with the bound
-    id/text, never a fresh classification). Extracted verbatim from
-    ``maybe_handle_clear_family`` — one source of truth for the decision
-    tree, not a parallel copy that can drift."""
-    from services.intent.intent_service import IntentProcessingResult
-    from services.intent_service.consent_gate import decide_verb_interpretation
-    from services.intent_service.verified_inference import (
-        SOURCE_META_AUTO,
-        VerificationDecision,
-        get_meta_mode,
-        get_verified_inference,
-        store_verified_inference,
-    )
-
-    if not ids:
-        return IntentProcessingResult(
-            success=True,
-            message=_empty_targets_message(verb, noun),
-            intent_data=base_intent_data,
-        )
-
-    stored = await get_verified_inference(principal, inference_key(verb))
-    stored_value = (stored or {}).get("value")
-
-    # ── Variant 2: stored default = complete (WRITE) — auto-apply +
-    #    disclosure-after; no block; one-turn correction window armed.
-    #    EXCEPT under ALWAYS_ASK (CXO/PPM ruling 2026-08-14): the stored
-    #    mapping is NOT flushed (a prior explicit answer is not an
-    #    assumption), but the form flips from assert-then-disclose to a
-    #    question that LEADS with the stored value. V3 needs no such flip —
-    #    it already blocks in every mode.
-    if stored_value == VALUE_COMPLETE:
-        from services.intent_service.verified_inference import (
-            VerificationMetaMode as _VMM,
-        )
-
-        if await get_meta_mode(principal) is _VMM.ALWAYS_ASK:
-            question = variant_two_always_ask_question()
-            offer = _verb_question_offer(
-                principal,
-                verb,
-                noun,
-                ids,
-                texts,
-                original_message,
-                question=question,  # #1665: rendered once, stored + said
-            )
-            offer["pending_action"]["stored_default_leading"] = VALUE_COMPLETE
-            intent_service.workflow_offer_service.set_pending_offer(
-                session_id, offer, user_id=user_id
-            )
-            logger.info(
-                "reminder_clear_always_ask_question",
-                verb=verb,
-                targets=len(ids),
-                session_id=session_id,
-            )
-            return IntentProcessingResult(
-                success=True,
-                message=question,
-                intent_data={
-                    **base_intent_data,
-                    "verb_default_leading": VALUE_COMPLETE,
-                    "verb_disambiguation_pending": True,
-                },
-                requires_clarification=True,
-            )
-        done, failed = await _complete_ids(todo_service, ids, texts, todo_user_id)
-        intent_service.workflow_offer_service.set_pending_offer(
-            session_id,
-            _correction_offer(principal, verb, noun, ids, texts, original_message),
-            user_id=user_id,
-        )
-        logger.info(
-            "reminder_clear_default_applied",
-            value=VALUE_COMPLETE,
-            verb=verb,
-            completed=len(done),
-            failed=failed,
-            session_id=session_id,
-        )
-        return IntentProcessingResult(
-            success=True,
-            message=(
-                f"{variant_two_disclosure(verb)}\n\n" f"{_completion_summary(done, failed, noun)}"
-            ),
-            intent_data={
-                **base_intent_data,
-                "verb_default_applied": VALUE_COMPLETE,
-                "reminder_clear_correction_pending": True,
-            },
-        )
-
-    # ── Variant 3: stored default = delete (DESTRUCTIVE) — the stored
-    #    preference changes the mapping, never the consent tier: the batch
-    #    routes through the REAL #1190 confirm gate. Blocks in every meta
-    #    mode (consent matrix: DESTRUCTIVE -> CONFIRM in every cell).
-    if stored_value == VALUE_DELETE:
-        question = variant_three_question(len(ids), verb, noun)
-        intent_service.workflow_offer_service.set_pending_offer(
-            session_id,
-            _delete_confirmation_offer(
-                principal,
-                verb,
-                noun,
-                ids,
-                texts,
-                original_message,
-                question=question,  # #1665: rendered once, stored + said
-            ),
-            user_id=user_id,
-        )
-        logger.info(
-            "reminder_clear_delete_confirmation_offered",
-            verb=verb,
-            count=len(ids),
-            session_id=session_id,
-        )
-        return IntentProcessingResult(
-            success=True,
-            message=question,
-            intent_data={
-                **base_intent_data,
-                "action": CLEAR_DELETE_WORKFLOW,
-                "verb_default_applied": VALUE_DELETE,
-                "destructive_confirmation_pending": True,
-            },
-            requires_clarification=True,
-        )
-
-    # ── No stored default: effect-weighted gate (one scoring system).
-    meta_mode = await get_meta_mode(principal)
-    decision = decide_verb_interpretation(VERB_CONFIDENCE, candidate_effect, meta_mode)
-
-    if decision is VerificationDecision.AUTO_APPLY:
-        # Only reachable with a WRITE candidate under TRUST_INFERENCES
-        # ("stop asking me every time") — the rail's meta semantics: apply
-        # the candidate without a read-back, store with meta_auto provenance
-        # so the next 'clear' is a variant-2 turn. A DESTRUCTIVE candidate
-        # never lands here (decide_verb_interpretation pins READ_BACK).
-        done, failed = await _complete_ids(todo_service, ids, texts, todo_user_id)
-        persisted = await store_verified_inference(
-            principal,
-            inference_key(verb),
-            VALUE_COMPLETE,
-            source=SOURCE_META_AUTO,
-            confidence=VERB_CONFIDENCE,
-        )
-        intent_service.workflow_offer_service.set_pending_offer(
-            session_id,
-            _correction_offer(principal, verb, noun, ids, texts, original_message),
-            user_id=user_id,
-        )
-        logger.info(
-            "reminder_clear_meta_auto_applied",
-            verb=verb,
-            completed=len(done),
-            failed=failed,
-            persisted=persisted,
-            session_id=session_id,
-        )
-        # Glue copy (seam): variant 2's middle clause claims a history this
-        # first meta-endorsed apply doesn't have — dropped honestly.
-        return IntentProcessingResult(
-            success=True,
-            message=(
-                f"Marking these done. Say so if you meant delete this time.\n\n"
-                f"{_completion_summary(done, failed, noun)}"
-            ),
-            intent_data={
-                **base_intent_data,
-                "verb_default_applied": VALUE_COMPLETE,
-                "verb_default_source": SOURCE_META_AUTO,
-                "reminder_clear_correction_pending": True,
-            },
-        )
-
-    if decision is not VerificationDecision.READ_BACK:
-        # DISCARD is unreachable at VERB_CONFIDENCE (0.7 > suggestion floor);
-        # defensive fall-through to the caller's normal handling.
-        return None
-
-    # ── Variant 1: first encounter — ask, bind the answer via the offer seam.
-    question = variant_one_question(verb, noun)
-    intent_service.workflow_offer_service.set_pending_offer(
-        session_id,
-        _verb_question_offer(
-            principal,
-            verb,
-            noun,
-            ids,
-            texts,
-            original_message,
-            question=question,  # #1665: rendered once, stored + said
-        ),
-        user_id=user_id,
-    )
-    logger.info(
-        "reminder_clear_verb_question_offered",
-        verb=verb,
-        noun=noun,
-        count=len(ids),
-        session_id=session_id,
-    )
-    return IntentProcessingResult(
-        success=True,
-        message=question,
-        intent_data={**base_intent_data, "verb_disambiguation_pending": True},
-        requires_clarification=True,
-    )
 
 
 async def maybe_handle_explicit_bulk_delete(
@@ -1047,8 +362,9 @@ async def maybe_handle_explicit_bulk_delete(
 ):
     """#1696 — the EXPLICIT bulk delete seam ('delete my reminders').
 
-    Runs inside ``run_delete_todo_workflow`` AFTER ``maybe_handle_clear_family``
-    declines (so #1605 keeps first claim on ambiguous shapes). Claims a turn
+    Runs inside ``run_delete_todo_workflow`` (the #1605 clear-family seam
+    that used to run first retired 2026-10-14 — ambiguous clear shapes now
+    route to the ``clear_todos`` resolver, never here). Claims a turn
     only when ALL of: bulk plural shape (``detect_explicit_bulk_delete_ask``),
     a session to bind the confirm to, NO todo number, and NO named target —
     i.e. exactly the turns whose only prior answer was the single-item
@@ -1158,7 +474,10 @@ async def maybe_handle_explicit_bulk_delete(
 
 # ---------------------------------------------------------------------------
 # Offer-seam turn handling (kind-specific, BEFORE generic accept/decline —
-# the verified_inference.handle_verification_turn_meta precedent)
+# the verified_inference.handle_verification_turn_meta precedent). The three
+# answer patterns below are the clear_todos resolver's SHARED-FALLBACK parse
+# (clear_todos.handle_clear_todos_verb_answer) — their only reader since the
+# 2026-10-14 retirement.
 # ---------------------------------------------------------------------------
 
 _COMPLETE_ANSWER_RE = re.compile(
@@ -1182,9 +501,9 @@ _NEGATED_DELETE_RE = re.compile(
 #
 # #1653: the SAME pattern (reused, not duplicated — no new extraction regex
 # per the TestExtractionPatternRatchet discipline) is also the verb-answer
-# turn's delete claim: the verb question's delete branch targets
-# clear_reminders_delete (registry-declared DESTRUCTIVE×PRIVATE →
-# NAMED_OBJECT tier), so the claim takes this crisp bar too. The unanchored
+# turn's delete claim (now the clear_todos resolver's fallback parse, whose
+# delete answer re-enters the rail as delete_todo — DESTRUCTIVE, #1190-
+# confirmed), so the claim takes this crisp bar too. The unanchored
 # _DELETE_ANSWER_RE it replaces was the #1650 residue the issue filed: with
 # the verb QUESTION armed, the same PM aside read as "the verb means delete"
 # and stored a wrong, STICKY verb default.
@@ -1217,30 +536,35 @@ async def handle_reminder_clear_turn(
     when this turn was claimed; None falls through to generic accept /
     decline / off-intent handling (bare "yes" -> the registered workflow's
     re-ask; "no"/bare exit -> the offer's honest decline copy; anything
-    else -> abandoned via the pop)."""
+    else -> abandoned via the pop).
+
+    Since the 2026-10-14 retirement (Arch's clear_todos ruling, point 1 —
+    module docstring), the ONLY reminder-clear kind left with an answer
+    turn is the verb question, and its only arm site is the ``clear_todos``
+    resolver; the answer goes straight to that resolver's handler, which
+    re-enters the rail via ``dispatch_workflow`` (never acts off-rail)."""
     payload = pending_offer.get("pending_action") or {}
-    kind = payload.get("kind")
+    if payload.get("kind") != CLEAR_VERB_QUESTION_KIND:
+        return None
+    from services.intent_service.clear_todos import handle_clear_todos_verb_answer
+
     # #1665/#1653: the arm-site's rendered ask rides the offer record —
     # threaded so the contract consult states what it knows (Arch's
     # input-adequacy condition), even when that is None.
-    armed_question = pending_offer.get("question")
-    if kind == CLEAR_VERB_QUESTION_KIND:
-        return await _handle_verb_answer_turn(
-            payload, message, session_id, user_id, intent_service, armed_question=armed_question
-        )
-    if kind == CLEAR_CORRECTION_KIND:
-        return await _handle_correction_turn(
-            payload, message, session_id, user_id, intent_service, armed_question=armed_question
-        )
-    if kind == CLEAR_PICK_TARGET_KIND:
-        return await _handle_pick_target_turn(
-            payload, message, session_id, user_id, intent_service, armed_question=armed_question
-        )
-    return None
+    return await handle_clear_todos_verb_answer(
+        payload,
+        message,
+        session_id,
+        user_id,
+        intent_service,
+        armed_question=pending_offer.get("question"),
+    )
 
 
 # ---------------------------------------------------------------------------
-# #1906 — "which one do you mean?" answer binding
+# Pick-target binders — written for #1906's reminder-clear pick carrier
+# (retired 2026-10-14 with the clear-family regex seam); still shared by
+# #1987's delete_todo pick (delete_todo_pick.py) and todo_handlers.
 # ---------------------------------------------------------------------------
 
 _ORDINAL_WORDS: Dict[str, int] = {
@@ -1480,752 +804,6 @@ def _resolve_pick_target(
     return _name_index(text, texts)
 
 
-async def _handle_pick_target_turn(
-    payload: Dict[str, Any],
-    message: str,
-    session_id: Optional[str],
-    user_id: Optional[str],
-    intent_service,
-    armed_question: Optional[str] = None,
-) -> Optional[Dict[str, Any]]:
-    """#1906 — the FIX: the "which one do you mean?" clarify is now an
-    armed carrier. Binds the answer to exactly one of the candidates stored
-    at offer time (ordinal / name / an unambiguous status word), then
-    re-enters ``_act_on_resolved_targets`` with the bound id/text — the
-    SAME post-resolution flow a single matched name would have taken.
-    Never a fresh classification.
-
-    Returns None to fall through to the generic seam for STATE_QUESTION,
-    DECLINE, and a bare accept naming nothing — the SAME idiom
-    ``_handle_verb_answer_turn`` uses: the generic seam's ACCEPT path
-    dispatches the registered ``run_reminder_clear_pick_target_workflow``,
-    which re-asks and re-arms (nothing to bind in a bare "yes")."""
-    text = (message or "").strip()
-    if not text:
-        return None
-
-    if _principal_mismatch(payload, user_id):
-        logger.warning(
-            "reminder_clear_pick_target_principal_mismatch",
-            offer_user=payload.get("user_id"),
-            turn_user=user_id,
-        )
-        return {
-            "message": "Let's hold off on that — nothing has been changed.",
-            "intent_data": {
-                "category": "execution",
-                "action": CLEAR_PICK_TARGET_WORKFLOW,
-                "principal_mismatch": True,
-            },
-        }
-
-    from services.intent_service.acceptance import (
-        AcceptanceVerdict,
-        declared_axes_for_workflow,
-        evaluate_acceptance,
-    )
-
-    _axes = declared_axes_for_workflow(CLEAR_PICK_TARGET_WORKFLOW)
-    verdict = evaluate_acceptance(
-        text,
-        effect=_axes[0] if _axes else None,
-        outwardness=_axes[1] if _axes else None,
-        armed_question=armed_question,  # #1665: threaded from the offer record
-    )
-    if verdict is AcceptanceVerdict.STATE_QUESTION:
-        logger.info(
-            "reminder_clear_pick_target_state_question_falls_through",
-            session_id=session_id,
-        )
-        return None  # LOW_CEREMONY: generic seam re-arms silently, answers
-    if verdict is AcceptanceVerdict.DECLINE:
-        logger.info("reminder_clear_pick_target_declined", session_id=session_id)
-        return None  # generic flow -> honest decline via decline_message
-    if verdict is AcceptanceVerdict.ACCEPT:
-        # A bare "yes" names nothing — the generic seam's ACCEPT path
-        # dispatches the registered re-ask + re-arm (never bind blind).
-        logger.info("reminder_clear_pick_target_bare_accept", session_id=session_id)
-        return None
-
-    ids = payload.get("clear_target_ids") or []
-    texts = payload.get("clear_target_texts") or []
-    due_iso = payload.get("clear_target_due") or []
-    verb = payload.get("clear_verb") or "clear"
-    noun = payload.get("clear_noun") or "reminder"
-    original_message = payload.get("original_message") or ""
-
-    status, idx = _resolve_pick_target(text, texts, due_iso)
-
-    if status == "bound" and idx is not None and 0 <= idx < len(ids):
-        logger.info("reminder_clear_pick_target_bound", index=idx, session_id=session_id)
-        principal = str(user_id) if user_id else payload.get("user_id")
-        try:
-            todo_user_id = UUID(str(principal))
-        except (ValueError, TypeError):
-            return {
-                "message": (
-                    "I need you to be logged in to update todos. " "Nothing has been changed."
-                ),
-                "intent_data": {
-                    "category": "execution",
-                    "action": CLEAR_PICK_TARGET_WORKFLOW,
-                    "error_type": "AuthenticationRequired",
-                },
-            }
-        try:
-            candidate_effect = EffectClass[
-                payload.get("clear_candidate_effect") or EffectClass.WRITE.name
-            ]
-        except KeyError:
-            candidate_effect = EffectClass.WRITE
-        todo_service = intent_service.todo_handlers.todo_service
-        result = await _act_on_resolved_targets(
-            intent_service,
-            session_id,
-            user_id,
-            principal,
-            todo_user_id,
-            todo_service,
-            verb,
-            noun,
-            [ids[idx]],
-            [texts[idx]],
-            candidate_effect,
-            original_message,
-            {
-                "category": "execution",
-                "action": verb,
-                "clear_verb": verb,
-                "clear_noun": noun,
-                "pick_target_bound": True,
-            },
-        )
-        if result is None:
-            return None  # defensive fall-through (DISCARD — unreachable)
-        return {
-            "message": result.message,
-            "intent_data": result.intent_data,
-            "requires_clarification": result.requires_clarification,
-        }
-
-    # Unresolved (no reference named, or an ambiguous one). A command-shaped
-    # turn releases — the SAME #1899 reads-only discriminator the reminder-
-    # task carrier uses (surface 1 pre_classify first, free + deterministic;
-    # a second, narrower oracle only for a live-flagged READ verdict) — an
-    # unrelated product command must not be swallowed as a failed pick.
-    from services.intent_service.pre_classifier import PreClassifier
-
-    claimed = PreClassifier.pre_classify(text)
-    if claimed is not None:
-        logger.info(
-            "reminder_clear_pick_target_command_released",
-            session_id=session_id,
-            claimed_action=claimed.action,
-        )
-        return None
-
-    from services.intent_service.inversion_live import (
-        read_op_claims_turn,
-        registry_category_for,
-    )
-
-    # #1920 (CXO/Arch 2026-10-02): a cross-family WRITE the router names
-    # ("close issue #108" — QUERY-registered GitHub writes — inside a
-    # reminder pick) releases too; a same-family write never does. The
-    # carrier's own family comes from the registry, for its pending op.
-    read_op = await read_op_claims_turn(
-        text,
-        session_id=session_id,
-        user_id=user_id,
-        intent_service=intent_service,
-        carrier_category=registry_category_for("delete_todo"),
-    )
-    if read_op is not None:
-        logger.info(
-            "reminder_clear_pick_target_command_released",
-            session_id=session_id,
-            claimed_action=read_op,
-        )
-        return None
-
-    if payload.get("pick_target_reasked"):
-        logger.info("reminder_clear_pick_target_release_after_reask", session_id=session_id)
-        return None  # second unresolved turn in a row — release, no loop
-
-    names = ", ".join(f"'{t}'" for t in texts)
-    question = (
-        (f"Still not sure which one — you have: {names}. " if names else "")
-        + "Tell me which one you mean (first, second, by name, or "
-        "'the overdue one'), or say 'never mind' to drop it."  # #1920 exit, CXO's copy
-    )
-    intent_service.workflow_offer_service.set_pending_offer(
-        session_id,
-        _pick_target_offer(
-            payload.get("user_id"),
-            verb,
-            noun,
-            ids,
-            texts,
-            due_iso,
-            original_message,
-            question=question,  # #1665: rendered once, stored + said
-            reasked=True,
-            candidate_effect=payload.get("clear_candidate_effect"),
-        ),
-        user_id=user_id,
-    )
-    logger.info("reminder_clear_pick_target_reasked", session_id=session_id)
-    return {
-        "message": question,
-        "intent_data": {
-            "category": "execution",
-            "action": CLEAR_PICK_TARGET_WORKFLOW,
-            "named_target_unmatched": True,
-            "pick_target_pending": True,
-        },
-        "requires_clarification": True,
-    }
-
-
-async def _handle_verb_answer_turn(
-    payload: Dict[str, Any],
-    message: str,
-    session_id: Optional[str],
-    user_id: Optional[str],
-    intent_service,
-    armed_question: Optional[str] = None,
-) -> Optional[Dict[str, Any]]:
-    # Clear-family build plan piece 2 (2026-10-07): a verb-question offer
-    # armed by the NEW router-args resolver (services.intent_service.
-    # clear_todos.run_clear_todos) carries this marker. Delegate to that
-    # module's own answer handler — purely additive, no existing payload
-    # ever sets this key, so every line below is unreached and unchanged
-    # for #1605's OLD regex-triggered carrier. See clear_todos.py's module
-    # docstring for why this answer turn is NOT routed through the ratified
-    # code below.
-    #
-    # NAMED RETIREMENT (Arch, 2026-10-07 ruling point 1 — also logged on the
-    # clear-family epic-0 entry, dev/2026/09/25/inversion-epic0-remaining-
-    # scope-2026-09-25.md, so it can't be orphaned): this guard is an
-    # INTERIM shape, acceptable only because it leaves two implementations
-    # of "act on the verb answer" — one of which (the ratified code below)
-    # acts OUTSIDE the rail, so the consent gate, the write allowlist, and
-    # the live-dispatch flag don't apply to it. When ``clear_todos`` flips
-    # live and ``detect_clear_family_ask`` retires under the
-    # reminder-clear-binding ratchet, DELETE this function's direct-action
-    # path below the guard — every verb answer then goes through the
-    # resolver and re-enters the rail, and this early-return/marker check
-    # goes with it.
-    if payload.get("clear_todos_resolver"):
-        from services.intent_service.clear_todos import handle_clear_todos_verb_answer
-
-        return await handle_clear_todos_verb_answer(
-            payload, message, session_id, user_id, intent_service, armed_question=armed_question
-        )
-
-    from services.intent_service.verified_inference import (
-        SOURCE_USER_VERIFIED,
-        VerificationMetaMode,
-        detect_meta_feedback,
-        set_meta_mode,
-        store_verified_inference,
-    )
-
-    verb = payload.get("clear_verb") or "clear"
-    noun = payload.get("clear_noun") or "reminder"
-    ids = payload.get("clear_target_ids") or []
-    texts = payload.get("clear_target_texts") or []
-    key = payload.get("inference_key") or inference_key(verb)
-    original_message = payload.get("original_message") or ""
-
-    if _principal_mismatch(payload, user_id):
-        logger.warning(
-            "reminder_clear_principal_mismatch",
-            offer_user=payload.get("user_id"),
-            turn_user=user_id,
-        )
-        return {
-            "message": "Let's hold off on that — nothing has been changed or stored.",
-            "intent_data": {
-                "category": "execution",
-                "action": CLARIFY_CLEAR_VERB_WORKFLOW,
-                "principal_mismatch": True,
-            },
-        }
-    principal = str(user_id) if user_id else payload.get("user_id")
-
-    # Meta-feedback is the DISTINCT channel (PM's #1510 ruling) — it steers
-    # the process, but delete stays on the table for THIS ask, so the verb
-    # question re-arms rather than resolving silently (the same principle
-    # that keeps variant 3 blocking under TRUST_INFERENCES).
-    meta = detect_meta_feedback(message)
-    if meta is not None:
-        meta_persisted = await set_meta_mode(principal, meta)
-        # #1665: the re-armed record's open question is this turn's re-ask.
-        reask = (
-            "For this one I still need the call, since delete isn't "
-            "something I'll guess at: mark these done, or delete them?"
-        )
-        _rearm_verb_question(intent_service, session_id, user_id, payload, question=reask)
-        if meta is VerificationMetaMode.TRUST_INFERENCES:
-            lead = "Understood — I'll stop checking my inferences with you."
-        else:
-            lead = (
-                "Understood — I won't act on my own inferences without " "checking with you first."
-            )
-        msg = f"{lead} {reask}"
-        if not meta_persisted:
-            msg += (
-                "\n\n(Heads up: I couldn't save that preference just now, "
-                "so it may not stick across sessions.)"
-            )
-        return {
-            "message": msg,
-            "intent_data": {
-                "category": "execution",
-                "action": CLARIFY_CLEAR_VERB_WORKFLOW,
-                "meta_mode": meta.value,
-                "verb_disambiguation_pending": True,
-            },
-            "requires_clarification": True,
-        }
-
-    # ── #1653 (#1739 acceptance-contract adoption for this seam). AXES,
-    #    MAPPED EXPLICITLY: the ARMED workflow (clarify_reminder_clear_verb)
-    #    is registry-declared READ×PRIVATE → LOW_CEREMONY.
-    #
-    #    ARM SURVIVAL — the SILENT LOW-tier form, stated per CXO's
-    #    survival-must-be-stated rule (contract doc §5a READ row): a
-    #    STATE_QUESTION verdict returns None, which lands the turn on the
-    #    generic seam's already-adopted READ branch — that branch re-arms
-    #    THIS offer silently and normal processing answers the question.
-    #    Silent (not the standup_complete_todo visible form) because nothing
-    #    can fire from the survived arm: the delete branch still runs
-    #    through the #1190 NAMED_OBJECT confirm, and a stale "delete" answer
-    #    only arms a fresh, fully-rendered confirm. Before #1653 a question
-    #    mentioning 'delete' ("delete them?") was CLAIMED as a verb answer
-    #    by the unanchored substring below — a state query stored a sticky
-    #    preference (contract axis (a) violated at this seam).
-    #
-    #    ACCEPT/DECLINE verdicts deliberately do NOT act here: crisp verb
-    #    answers legitimately open with accept/decline lead-ins ("yes,
-    #    delete them" / "no, delete them") and must reach the claims below
-    #    first; a bare accept/decline matches no claim and falls through to
-    #    the generic seam's adopted READ branch exactly as before.
-    from services.intent_service.acceptance import (
-        AcceptanceVerdict,
-        declared_axes_for_workflow,
-        evaluate_acceptance,
-    )
-    from services.intent_service.soft_invocation import is_prose_reply
-
-    _axes = declared_axes_for_workflow(CLARIFY_CLEAR_VERB_WORKFLOW)
-    verdict = evaluate_acceptance(
-        message,
-        effect=_axes[0] if _axes else None,
-        outwardness=_axes[1] if _axes else None,
-        armed_question=armed_question,  # #1665: threaded from the offer record
-    )
-    if verdict is AcceptanceVerdict.STATE_QUESTION:
-        logger.info(
-            "reminder_clear_verb_state_question_falls_through",
-            session_id=session_id,
-        )
-        return None
-
-    # ── The verb claims. TIER JUDGMENT (#1653): each claim is judged at its
-    #    TARGET action's registry-declared axes, not the seam's —
-    #    - delete → clear_reminders_delete: DESTRUCTIVE×PRIVATE →
-    #      NAMED_OBJECT, so the claim takes the #1650 crisp bar: the SAME
-    #      anchored _CORRECTION_CLAIM_RE (reused, no new regex) + the #1631
-    #      prose floor. A missed crisp phrasing costs an honest re-ask turn,
-    #      never a wrong sticky store (the filed defect).
-    #    - complete → complete_todo: WRITE×PRIVATE → LOW_CEREMONY, so
-    #      word-level detection stands, gated by the prose floor only
-    #      (contract axis (c): asides neither accept nor steal, every tier).
-    text = (message or "").strip()
-    prose = is_prose_reply(text)
-    wants_delete = (
-        not prose and bool(_CORRECTION_CLAIM_RE.match(text)) and not _NEGATED_DELETE_RE.search(text)
-    )
-    wants_complete = not prose and bool(_COMPLETE_ANSWER_RE.search(message))
-    if wants_delete and wants_complete:
-        # contradictory — command-shaped forms ("delete the completed ones")
-        # fall through and route normally; a genuinely garbled answer gets
-        # the #1648 honest re-ask instead of a silent abandon.
-        return _reask_verb_question_if_unrecognized(
-            payload, message, session_id, user_id, intent_service
-        )
-
-    # ── Exception-clause answers (PM live 2026-08-15): the verb STORES (the
-    #    question promised "I'll remember"), but there are NO bound targets —
-    #    the exception made the set unresolved, so nothing executes and no
-    #    V3 confirm arms. The reply confirms the stored verb and re-asks for
-    #    the explicit list. Never guess the set.
-    if payload.get("exception_no_targets"):
-        value = None
-        if wants_delete:
-            value = VALUE_DELETE
-        elif wants_complete:
-            value = VALUE_COMPLETE
-        if value is None:
-            # not a verb answer — #1648: unrecognized non-command turns
-            # re-ask + re-arm; accepts/declines/exits/commands fall through.
-            return _reask_verb_question_if_unrecognized(
-                payload, message, session_id, user_id, intent_service
-            )
-        persisted = await store_verified_inference(
-            principal, key, value, source=SOURCE_USER_VERIFIED, confidence=VERB_CONFIDENCE
-        )
-        logger.info(
-            "reminder_clear_exception_verb_stored",
-            value=value,
-            persisted=persisted,
-            session_id=session_id,
-        )
-        verb_meaning = "delete" if value == VALUE_DELETE else "mark done"
-        msg = (
-            f"Got it — '{verb}' means {verb_meaning}, and I'll remember that. "
-            f"Now tell me exactly which {_plural(noun, 2)} to include "
-            f"(your exception noted), and I'll act on just those."
-        )
-        if not persisted:
-            msg += (
-                "\n\n(Heads up: I couldn't save that preference just now, "
-                "so I may ask again in a future session.)"
-            )
-        return {
-            "message": msg,
-            "intent_data": {
-                "category": "execution",
-                "action": CLARIFY_CLEAR_VERB_WORKFLOW,
-                "verb_default_stored": value,
-                "exception_list_pending": True,
-            },
-            "requires_clarification": True,
-        }
-
-    # ── ALWAYS_ASK leading-question answers (CXO/PPM 2026-08-14): the stored
-    #    default is a prior explicit answer — NEVER flipped here. "like
-    #    usual"/bare yes → complete without re-store ceremony; "different"/
-    #    delete → the V3 confirm for THIS batch only, stored default intact.
-    if payload.get("stored_default_leading") == VALUE_COMPLETE:
-        if wants_delete or _DIFFERENT_ANSWER_RE.search(message):
-            question = variant_three_question(len(ids), verb, noun)
-            intent_service.workflow_offer_service.set_pending_offer(
-                session_id,
-                _delete_confirmation_offer(
-                    principal,
-                    verb,
-                    noun,
-                    ids,
-                    texts,
-                    original_message,
-                    question=question,  # #1665: rendered once, stored + said
-                ),
-                user_id=user_id,
-            )
-            logger.info(
-                "reminder_clear_always_ask_this_time_delete",
-                session_id=session_id,
-            )
-            return {
-                # ⚠️ COPY SEAM (glue): the parenthetical is Lead-drafted.
-                "message": (
-                    f"{question}\n"
-                    f"(Your usual '{verb}' stays mark-done — this is just "
-                    f"for this batch.)"
-                ),
-                "intent_data": {
-                    "category": "execution",
-                    "action": CLEAR_DELETE_WORKFLOW,
-                    "this_time_only": True,
-                    "destructive_confirmation_pending": True,
-                },
-                "requires_clarification": True,
-            }
-        if wants_complete or _USUAL_ANSWER_RE.search(message):
-            todo_service = intent_service.todo_handlers.todo_service
-            try:
-                user_uuid = UUID(str(principal))
-            except (ValueError, TypeError):
-                return {
-                    "message": (
-                        "I need you to be logged in to update todos. " "Nothing has been changed."
-                    ),
-                    "intent_data": {
-                        "category": "execution",
-                        "action": CLARIFY_CLEAR_VERB_WORKFLOW,
-                        "error_type": "AuthenticationRequired",
-                    },
-                }
-            done, failed = await _complete_ids(todo_service, ids, texts, user_uuid)
-            logger.info(
-                "reminder_clear_always_ask_usual_applied",
-                completed=len(done),
-                failed=failed,
-                session_id=session_id,
-            )
-            return {
-                "message": _completion_summary(done, failed, noun),
-                "intent_data": {
-                    "category": "execution",
-                    "action": "complete_todo",
-                    "verb_default_applied": VALUE_COMPLETE,
-                },
-            }
-        # not an answer — #1648: unrecognized non-command turns re-ask +
-        # re-arm; accepts/declines/exits/commands keep their handling.
-        return _reask_verb_question_if_unrecognized(
-            payload, message, session_id, user_id, intent_service
-        )
-
-    if wants_delete:
-        persisted = await store_verified_inference(
-            principal, key, VALUE_DELETE, source=SOURCE_USER_VERIFIED, confidence=VERB_CONFIDENCE
-        )
-        question = variant_three_question(len(ids), verb, noun)
-        intent_service.workflow_offer_service.set_pending_offer(
-            session_id,
-            _delete_confirmation_offer(
-                principal,
-                verb,
-                noun,
-                ids,
-                texts,
-                original_message,
-                question=question,  # #1665: rendered once, stored + said
-            ),
-            user_id=user_id,
-        )
-        logger.info(
-            "reminder_clear_verb_answered",
-            value=VALUE_DELETE,
-            persisted=persisted,
-            session_id=session_id,
-        )
-        msg = question
-        if not persisted:
-            msg += (
-                "\n\n(Heads up: I couldn't save that preference just now, "
-                "so I may ask again in a future session.)"
-            )
-        return {
-            "message": msg,
-            "intent_data": {
-                "category": "execution",
-                "action": CLEAR_DELETE_WORKFLOW,
-                "verb_default_stored": VALUE_DELETE,
-                "verb_default_persisted": persisted,
-                "destructive_confirmation_pending": True,
-            },
-            "requires_clarification": True,
-        }
-
-    if wants_complete:
-        persisted = await store_verified_inference(
-            principal, key, VALUE_COMPLETE, source=SOURCE_USER_VERIFIED, confidence=VERB_CONFIDENCE
-        )
-        todo_service = intent_service.todo_handlers.todo_service
-        try:
-            user_uuid = UUID(str(principal))
-        except (ValueError, TypeError):
-            return {
-                "message": (
-                    "I need you to be logged in to update todos. " "Nothing has been changed."
-                ),
-                "intent_data": {
-                    "category": "execution",
-                    "action": CLARIFY_CLEAR_VERB_WORKFLOW,
-                    "error_type": "AuthenticationRequired",
-                },
-            }
-        done, failed = await _complete_ids(todo_service, ids, texts, user_uuid)
-        logger.info(
-            "reminder_clear_verb_answered",
-            value=VALUE_COMPLETE,
-            persisted=persisted,
-            completed=len(done),
-            failed=failed,
-            session_id=session_id,
-        )
-        msg = (
-            f"Got it — '{verb}' means mark done, and I'll remember that.\n\n"
-            f"{_completion_summary(done, failed, noun)}"
-        )
-        if not persisted:
-            msg += (
-                "\n\n(Heads up: I couldn't save that preference just now, "
-                "so I may ask again in a future session.)"
-            )
-        return {
-            "message": msg,
-            "intent_data": {
-                "category": "execution",
-                "action": "complete_todo",
-                "verb_default_stored": VALUE_COMPLETE,
-                "verb_default_persisted": persisted,
-            },
-        }
-
-    # not an answer — #1648: unrecognized non-command turns re-ask + re-arm
-    # (the silent-abandon audit found the same gap here as in the drafted-
-    # issue carrier); accepts/declines/exits fall to the generic flow and
-    # command-shaped turns abandon via the pop, exactly as before.
-    return _reask_verb_question_if_unrecognized(
-        payload, message, session_id, user_id, intent_service
-    )
-
-
-async def _handle_correction_turn(
-    payload: Dict[str, Any],
-    message: str,
-    session_id: Optional[str],
-    user_id: Optional[str],
-    intent_service,
-    armed_question: Optional[str] = None,
-) -> Optional[Dict[str, Any]]:
-    """ "I meant delete" on the turn after a variant-2 auto-apply: route the
-    just-completed batch to a #1190-gated delete. Does NOT flip the stored
-    default (ratified copy: "this time"). Anything else falls through.
-
-    #1650: the claim is ANCHORED and non-prose — a turn that merely mentions
-    deleting mid-sentence (PM's live aside) is not a correction and falls
-    through to the off-intent tier (the pop drops the window; the new turn
-    routes normally).
-
-    #1653 (contract axis (a)): an interrogative turn is a state query, not a
-    correction claim — "delete them?" is head-anchored AND question-shaped,
-    and before this gate it armed the delete confirm off a question. A
-    STATE_QUESTION verdict falls through to the generic seam's adopted READ
-    branch (reminder_clear_correction: READ×PRIVATE → LOW_CEREMONY), which
-    re-arms the window silently (§5a) and lets normal processing answer."""
-    text = (message or "").strip()
-    from services.intent_service.acceptance import (
-        AcceptanceVerdict,
-        declared_axes_for_workflow,
-        evaluate_acceptance,
-    )
-    from services.intent_service.soft_invocation import is_prose_reply
-
-    if is_prose_reply(text):
-        return None  # multi-line / long prose never claims the correction
-    _axes = declared_axes_for_workflow(CLEAR_CORRECTION_WORKFLOW)
-    if (
-        evaluate_acceptance(
-            message,
-            effect=_axes[0] if _axes else None,
-            outwardness=_axes[1] if _axes else None,
-            armed_question=armed_question,  # #1665: threaded from the record
-        )
-        is AcceptanceVerdict.STATE_QUESTION
-    ):
-        logger.info(
-            "reminder_clear_correction_state_question_falls_through",
-            session_id=session_id,
-        )
-        return None
-    if not _CORRECTION_CLAIM_RE.match(text) or _NEGATED_DELETE_RE.search(text):
-        return None
-    if _principal_mismatch(payload, user_id):
-        logger.warning(
-            "reminder_clear_correction_principal_mismatch",
-            offer_user=payload.get("user_id"),
-            turn_user=user_id,
-        )
-        return {
-            "message": "Let's hold off on that — nothing has been changed.",
-            "intent_data": {
-                "category": "execution",
-                "action": CLEAR_CORRECTION_WORKFLOW,
-                "principal_mismatch": True,
-            },
-        }
-
-    principal = str(user_id) if user_id else payload.get("user_id")
-    verb = payload.get("clear_verb") or "clear"
-    noun = payload.get("clear_noun") or "reminder"
-    ids = payload.get("clear_target_ids") or []
-    texts = payload.get("clear_target_texts") or []
-    n = len(ids)
-    target = f"these {n} {_plural(noun, n)}" if n != 1 else f"this {noun}"
-    question = f"Got it — delete {target} instead? (yes/no)"
-    intent_service.workflow_offer_service.set_pending_offer(
-        session_id,
-        _delete_confirmation_offer(
-            principal,
-            verb,
-            noun,
-            ids,
-            texts,
-            payload.get("original_message") or "",
-            question=question,  # #1665: rendered once, stored + said
-        ),
-        user_id=user_id,
-    )
-    logger.info("reminder_clear_correction_claimed", count=n, session_id=session_id)
-    return {
-        "message": question,
-        "intent_data": {
-            "category": "execution",
-            "action": CLEAR_DELETE_WORKFLOW,
-            "destructive_confirmation_pending": True,
-            "correction_of": VALUE_COMPLETE,
-        },
-        "requires_clarification": True,
-    }
-
-
-def _reask_verb_question_if_unrecognized(
-    payload: Dict[str, Any],
-    message: str,
-    session_id: Optional[str],
-    user_id: Optional[str],
-    intent_service,
-) -> Optional[Dict[str, Any]]:
-    """#1648 audit (the drafted-issue silent-abandon, checked on the reminder
-    side — it existed here too): an armed either/or question whose turn is
-    neither a verb answer, meta-feedback, an accept/decline/bare-exit, nor a
-    command-shaped new ask ("the first one", "whichever is safer") used to
-    return None and silently abandon into the routing chain mid-flow — where
-    the floor is the likeliest claimant and cannot clear anything. Such a
-    turn now RE-ASKS honestly and RE-ARMS.
-
-    Returns the re-ask dict, or None when the turn should keep its existing
-    handling: accepts/declines/exits fall to the generic flow (bare "yes" →
-    the registered re-ask workflow; "no"/exit → the honest decline), and
-    command-shaped turns abandon via the pop and route normally (the
-    carrier's documented off-intent rule)."""
-    from services.intent_service.destructive_confirm import detect_bare_exit
-    from services.intent_service.drafted_issue import is_command_shaped
-    from services.intent_service.soft_invocation import detect_offer_response
-
-    text = (message or "").strip()
-    if not text:
-        return None
-    if detect_bare_exit(text):
-        return None
-    if detect_offer_response(text) is not None:
-        return None
-    if is_command_shaped(text):
-        return None
-    noun = payload.get("clear_noun") or "reminder"
-    # #1665: the re-armed record's open question is this turn's re-ask copy.
-    reask = f"For these {_plural(noun, 2)}: mark them done, or delete them?"
-    _rearm_verb_question(intent_service, session_id, user_id, payload, question=reask)
-    logger.info("reminder_clear_verb_unrecognized_reasked", session_id=session_id)
-    return {
-        "message": (f"I didn't catch that as an answer — nothing has been changed. " f"{reask}"),
-        "intent_data": {
-            "category": "execution",
-            "action": CLARIFY_CLEAR_VERB_WORKFLOW,
-            "verb_disambiguation_pending": True,
-            "verb_question_reasked": True,
-        },
-        "requires_clarification": True,
-    }
-
-
 def _rearm_verb_question(
     intent_service, session_id, user_id, payload, question: Optional[str] = None
 ) -> None:
@@ -2287,97 +865,6 @@ async def run_clarify_reminder_clear_verb_workflow(
             "category": "execution",
             "action": CLARIFY_CLEAR_VERB_WORKFLOW,
             "verb_disambiguation_pending": True,
-        },
-    }
-
-
-async def run_reminder_clear_pick_target_workflow(
-    session_id: str,
-    user_id: Optional[str] = None,
-    context: Optional[Dict[str, Any]] = None,
-) -> Any:
-    """#1906 — generic-accept landing for the pick-target offer: a bare
-    "yes" doesn't name a candidate — re-ask and re-arm. effect: READ
-    (nothing written; the real bind + act happens on an ANSWERED turn,
-    handled kind-specifically at the offer seam — ``_handle_pick_target_turn``)."""
-    ctx = context or {}
-    payload = ctx.get("pending_action") or {}
-    intent_service = ctx.get("intent_service")
-    if payload.get("kind") != CLEAR_PICK_TARGET_KIND or intent_service is None:
-        logger.error(
-            "reminder_clear_pick_target_missing_or_foreign_payload",
-            kind=payload.get("kind"),
-            has_intent_service=intent_service is not None,
-        )
-        return None
-    texts = payload.get("clear_target_texts") or []
-    # #1665: the re-armed record's open question is this turn's re-ask copy.
-    names = ", ".join(f"'{t}'" for t in texts)
-    question = (
-        f"Just so I get it right — you have: {names}. " if names else ""
-    ) + "Which one do you mean?"
-    intent_service.workflow_offer_service.set_pending_offer(
-        session_id,
-        {
-            "workflow_type": CLEAR_PICK_TARGET_WORKFLOW,
-            "question": question,
-            "pending_action": dict(payload),
-            "decline_message": (
-                f"Okay — I haven't touched your "
-                f"{_plural(payload.get('clear_noun') or 'reminder', 2)}. "
-                f"Nothing has been changed."
-            ),
-        },
-        user_id=user_id,
-    )
-    return {
-        "message": question,
-        "intent_data": {
-            "category": "execution",
-            "action": CLEAR_PICK_TARGET_WORKFLOW,
-            "named_target_unmatched": True,
-            "pick_target_pending": True,
-        },
-    }
-
-
-async def run_reminder_clear_correction_workflow(
-    session_id: str,
-    user_id: Optional[str] = None,
-    context: Optional[Dict[str, Any]] = None,
-) -> Any:
-    """Generic-accept landing for the correction window: a bare "yes" after
-    "Say so if you meant delete this time" is ambiguous — point at the
-    working phrase and re-arm the window one more turn. effect: READ."""
-    ctx = context or {}
-    payload = ctx.get("pending_action") or {}
-    intent_service = ctx.get("intent_service")
-    if payload.get("kind") != CLEAR_CORRECTION_KIND or intent_service is None:
-        logger.error(
-            "reminder_clear_correction_missing_or_foreign_payload",
-            kind=payload.get("kind"),
-            has_intent_service=intent_service is not None,
-        )
-        return None
-    # #1665: this re-arm turn's own re-ask copy (not CORRECTION_WINDOW_ASK —
-    # the bare-yes turn renders the working phrase, so store THAT).
-    reask = "If you meant delete, say 'I meant delete' and I'll take care of it."
-    intent_service.workflow_offer_service.set_pending_offer(
-        session_id,
-        {
-            "workflow_type": CLEAR_CORRECTION_WORKFLOW,
-            "question": reask,
-            "pending_action": dict(payload),
-            "decline_message": "Good — they stay marked done.",
-        },
-        user_id=user_id,
-    )
-    return {
-        "message": f"They're marked done. {reask}",
-        "intent_data": {
-            "category": "execution",
-            "action": CLEAR_CORRECTION_WORKFLOW,
-            "reminder_clear_correction_pending": True,
         },
     }
 

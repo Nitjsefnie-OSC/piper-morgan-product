@@ -262,36 +262,42 @@ def todo_boundary(monkeypatch):
     return todos
 
 
-def _stub_classification(monkeypatch, service, message, action):
-    intent = Intent(
-        category=IntentCategory.EXECUTION,
-        action=action,
-        original_message=message,
-        confidence=0.95,
-        context={"original_message": message},
-    )
-
-    async def _classify_multiple(msg, context=None, user_id=None, session_id=None):
-        return SimpleNamespace(
-            intents=[intent],
-            is_multi_intent=False,
-            has_greeting=False,
-            has_substantive_intent=True,
-            primary_intent=intent,
-            secondary_intents=[],
-        )
-
-    monkeypatch.setattr(service.intent_classifier, "classify_multiple", _classify_multiple)
-
-
 class TestReminderVerbQuestionSurvivalOutlivesSoftOffer:
     pytestmark = pytest.mark.asyncio
 
-    async def _arm_verb_question(self, monkeypatch, service, sid):
-        """Turn 1: 'clear my reminders' arms the #1605 variant-1 verb
-        question (the #1653 idiom)."""
-        _stub_classification(monkeypatch, service, "clear my reminders", "complete_todo")
-        await service.process_intent(message="clear my reminders", session_id=sid, user_id=_USER)
+    @pytest.fixture(autouse=True)
+    def _resolver_answer_path(self, monkeypatch):
+        """2026-10-14: the verb question is armed only by the clear_todos
+        resolver and answered by its handler (the #1605 regex seam this
+        class first drove is retired). The answer turn's router consult says
+        ``none`` (fallback parse; deterministic, no LLM) and both concrete
+        ops are live-eligible so a claimed answer re-enters the rail."""
+        from services.intent_service import clear_todos as ct
+        from services.intent_service import inversion_router as ir
+        from services.intent_service.inversion_router import RoutingDecision
+
+        async def _route(message, session_state=None, **kwargs):
+            return RoutingDecision(outcome="none", operation=None, confidence=None, args={})
+
+        monkeypatch.setattr(ir, "route", _route)
+        monkeypatch.setattr(ct, "_op_is_live_eligible", lambda op: True)
+
+    async def _arm_verb_question(self, monkeypatch, service, sid, todos):
+        """Turn 1, as the clear_todos resolver leaves it: the variant-1-
+        with-set verb question with both reminders bound."""
+        from services.intent_service.clear_todos import _clear_variant_one_with_set
+
+        texts = [t.text for t in todos]
+        offer = rc._verb_question_offer(
+            _USER,
+            "clear",
+            "reminder",
+            [t.id for t in todos],
+            texts,
+            "clear my reminders",
+            question=_clear_variant_one_with_set(texts, []),
+        )
+        service.workflow_offer_service.set_pending_offer(sid, offer, user_id=_USER)
         stored = _pending_offers(service).get(sid)
         assert stored is not None
         assert stored["pending_action"]["kind"] == rc.CLEAR_VERB_QUESTION_KIND
@@ -305,7 +311,7 @@ class TestReminderVerbQuestionSurvivalOutlivesSoftOffer:
         branch's silent §5a re-arm — then the open soft-offer path replaces
         the survived verb question in the one-slot store."""
         sid = "e2e-1753-verb-survival"
-        await self._arm_verb_question(monkeypatch, live_service, sid)
+        await self._arm_verb_question(monkeypatch, live_service, sid, todo_boundary)
         _open_soft_offer_conditions(live_service)
         question = "are you going to delete them?"
         p_classify, p_floor = _stub_fallthrough_routing(live_service, question)
@@ -323,14 +329,14 @@ class TestReminderVerbQuestionSurvivalOutlivesSoftOffer:
     ):
         """Across BOTH hazards, the survived verb question is a live ask:
         the next crisp 'delete them' stores the mapping and arms the REAL
-        #1190 confirm (delete still explosive-gated behind the yes)."""
+        #1190 confirm (delete_todo's own, via the rail; delete still
+        explosive-gated behind the yes)."""
         from services.intent_service.destructive_confirm import (
             CONFIRM_PENDING_ACTION_WORKFLOW,
         )
-        from services.intent_service.reminder_clear import variant_three_question
 
         sid = "e2e-1753-verb-survival-answer"
-        await self._arm_verb_question(monkeypatch, live_service, sid)
+        await self._arm_verb_question(monkeypatch, live_service, sid, todo_boundary)
         _open_soft_offer_conditions(live_service)
         question = "are you going to delete them?"
         p_classify, p_floor = _stub_fallthrough_routing(live_service, question)
@@ -340,7 +346,9 @@ class TestReminderVerbQuestionSurvivalOutlivesSoftOffer:
         result = await live_service.process_intent(
             message="delete them", session_id=sid, user_id=_USER
         )
-        assert result.message.startswith(variant_three_question(2))
+        assert result.message == (
+            'Delete 2 reminders: "Review the PR" and "Call the vendor"? (yes/no)'
+        )
         record = pref_store["verified_inferences"][rc.inference_key("clear")]
         assert record["value"] == rc.VALUE_DELETE
         stored = _pending_offers(live_service).get(sid)

@@ -300,9 +300,13 @@ class TestDraftedIssueAsks:
 
 
 # ---------------------------------------------------------------------------
-# #1665 — reminder-clear: every variant's arm stores the exact rendered ask.
-# Driven through the REAL maybe_handle_clear_family / turn handlers, with the
-# prefs seam double and a fake todo boundary.
+# #1665 — reminder-clear: every arm stores the exact rendered ask.
+# 2026-10-14: the #1605 regex seam these pins first drove
+# (maybe_handle_clear_family, its ALWAYS_ASK leading question and the
+# variant-2 correction window) is RETIRED; the verb question's only arm site
+# is the clear_todos resolver. Driven through the REAL resolver
+# (clear_todos.run_clear_todos -> dispatch_workflow -> the concrete op) with
+# the prefs seam double and a fake todo boundary. No LLM.
 # ---------------------------------------------------------------------------
 
 
@@ -319,25 +323,47 @@ class _FakeTodoService:
         return True
 
 
-async def _run_clear(svc, message="clear my reminders", effect=EffectClass.WRITE):
-    return await rc.maybe_handle_clear_family(
-        svc,
-        _intent(message, "complete_todo"),
-        _SESSION,
-        _USER,
-        UUID(_USER),
-        effect,
+def _clear_service(todo_service):
+    """The resolver needs the real handlers (pool resolution + the concrete
+    ops' target hooks) behind the same real offer store."""
+    handlers = TodoIntentHandlers()
+    handlers.todo_service = todo_service
+    return SimpleNamespace(workflow_offer_service=WorkflowOfferService(), todo_handlers=handlers)
+
+
+@pytest.fixture
+def resolver_live(monkeypatch):
+    from services.intent_service import clear_todos as ct
+    from services.intent_service.workflow_entries import register_default_workflows
+
+    register_default_workflows()
+    monkeypatch.setattr(ct, "_op_is_live_eligible", lambda op: True)
+
+
+async def _run_clear(svc, message="clear my reminders"):
+    from services.intent_service import clear_todos as ct
+
+    intent = Intent(
+        category=IntentCategory.EXECUTION,
+        action="clear_todos",
+        original_message=message,
+        confidence=0.95,
+        context={"original_message": message, "inversion_args": {"targets": ["all"]}},
     )
+    return await ct.run_clear_todos(intent, _SESSION, _USER, svc)
 
 
 class TestReminderClearAsks:
-    async def test_variant_one_arm_stores_the_ratified_ask(self, mem_prefs):
-        svc = _fake_service(_FakeTodoService([_todo()]))
+    async def test_variant_one_arm_stores_the_ratified_ask(self, mem_prefs, resolver_live):
+        svc = _clear_service(_FakeTodoService([_todo()]))
         result = await _run_clear(svc)
-        assert result.message == rc.variant_one_question("clear", "reminder")
+        assert result.message == (
+            'You want to clear the reminder "pay the invoice". '
+            + rc.variant_one_question("clear", "reminder")
+        )
         assert _stored(svc)["question"] == result.message
 
-    async def test_variant_three_arm_stores_the_confirm_ask(self, mem_prefs):
+    async def test_variant_three_arm_stores_the_confirm_ask(self, mem_prefs, resolver_live):
         from services.intent_service.verified_inference import (
             VERIFIED_INFERENCES_PREF_KEY,
         )
@@ -345,73 +371,30 @@ class TestReminderClearAsks:
         mem_prefs[_USER][VERIFIED_INFERENCES_PREF_KEY] = {
             rc.inference_key("clear"): {"value": "delete", "source": "user_verified"}
         }
-        svc = _fake_service(_FakeTodoService([_todo()]))
+        svc = _clear_service(_FakeTodoService([_todo()]))
         result = await _run_clear(svc)
-        assert result.message == rc.variant_three_question(1, "clear", "reminder")
-        assert _stored(svc)["question"] == result.message
-
-    async def test_always_ask_arm_stores_the_leading_question(self, mem_prefs):
-        from services.intent_service.verified_inference import (
-            VERIFICATION_META_PREF_KEY,
-            VERIFIED_INFERENCES_PREF_KEY,
+        assert result.message == (
+            "You've set 'clear' to mean delete — delete the reminder \"pay the invoice\"? (yes/no)"
         )
-
-        mem_prefs[_USER][VERIFIED_INFERENCES_PREF_KEY] = {
-            rc.inference_key("clear"): {"value": "complete", "source": "user_verified"}
-        }
-        mem_prefs[_USER][VERIFICATION_META_PREF_KEY] = {"mode": "always_ask"}
-        svc = _fake_service(_FakeTodoService([_todo()]))
-        result = await _run_clear(svc)
-        assert result.message == rc.variant_two_always_ask_question()
         assert _stored(svc)["question"] == result.message
-
-    async def test_correction_window_stores_the_standing_invitation(self, mem_prefs):
-        """Variant-2 auto-apply arms the correction window; its open question
-        is CORRECTION_WINDOW_ASK — the exact sentence the disclosure renders."""
-        from services.intent_service.verified_inference import (
-            VERIFIED_INFERENCES_PREF_KEY,
-        )
-
-        mem_prefs[_USER][VERIFIED_INFERENCES_PREF_KEY] = {
-            rc.inference_key("clear"): {"value": "complete", "source": "user_verified"}
-        }
-        svc = _fake_service(_FakeTodoService([_todo()]))
-        result = await _run_clear(svc)
-        assert rc.CORRECTION_WINDOW_ASK in result.message
-        assert _stored(svc)["question"] == rc.CORRECTION_WINDOW_ASK
 
     def test_correction_window_ask_is_the_disclosure_sentence(self):
-        """Drift guard: the ratified variant-2 disclosure ends with the same
-        sentence the correction offer stores (one meaning, two surfaces)."""
-        assert rc.CORRECTION_WINDOW_ASK in rc.variant_two_disclosure("clear")
+        """Drift guard: the resolver's variant-2 disclosure clause ends with
+        the ratified standing invitation (one meaning, one constant)."""
+        from services.intent_service.clear_todos import _clear_disclosure_clause
 
-    async def test_correction_claim_arms_delete_confirm_with_its_ask(self):
-        todo = _todo()
-        svc = _fake_service(_FakeTodoService([todo]))
-        result = await rc.handle_reminder_clear_turn(
-            {
-                "workflow_type": rc.CLEAR_CORRECTION_WORKFLOW,
-                "pending_action": {
-                    "kind": rc.CLEAR_CORRECTION_KIND,
-                    "user_id": _USER,
-                    "clear_verb": "clear",
-                    "clear_noun": "reminder",
-                    "clear_target_ids": [str(todo.id)],
-                    "clear_target_texts": [todo.text],
-                },
-            },
-            "I meant delete",
-            _SESSION,
-            _USER,
-            svc,
-        )
-        assert result is not None
-        assert result["message"] == "Got it — delete this reminder instead? (yes/no)"
-        assert _stored(svc)["question"] == result["message"]
+        assert _clear_disclosure_clause().endswith(rc.CORRECTION_WINDOW_ASK)
 
-    async def test_unrecognized_answer_rearm_stores_the_reask(self):
+    async def test_unrecognized_answer_rearm_stores_the_reask(self, monkeypatch):
+        from services.intent_service import inversion_router as ir
+        from services.intent_service.inversion_router import RoutingDecision
+
+        async def _route(message, session_state=None, **kwargs):
+            return RoutingDecision(outcome="none", operation=None, confidence=None, args={})
+
+        monkeypatch.setattr(ir, "route", _route)
         todo = _todo()
-        svc = _fake_service(_FakeTodoService([todo]))
+        svc = _clear_service(_FakeTodoService([todo]))
         result = await rc.handle_reminder_clear_turn(
             {
                 "workflow_type": rc.CLARIFY_CLEAR_VERB_WORKFLOW,
@@ -431,8 +414,10 @@ class TestReminderClearAsks:
         )
         assert result is not None
         stored_q = _stored(svc)["question"]
-        assert stored_q == "For these reminders: mark them done, or delete them?"
-        assert stored_q in result["message"]
+        assert stored_q == (
+            "Just so I get it right — for these reminders: mark them done, or delete them?"
+        )
+        assert stored_q == result["message"]
 
 
 # ---------------------------------------------------------------------------
@@ -601,12 +586,12 @@ class TestIntentServiceArmSites:
 
 
 class TestAssemblyPicksUpStoredAsk:
-    async def test_snapshot_carries_the_arm_sites_rendered_copy(self, mem_prefs):
+    async def test_snapshot_carries_the_arm_sites_rendered_copy(self, mem_prefs, resolver_live):
         from services.intent_service.snapshot_assembly import (
             assemble_session_snapshot,
         )
 
-        svc = _fake_service(_FakeTodoService([_todo()]))
+        svc = _clear_service(_FakeTodoService([_todo()]))
         result = await _run_clear(svc)
         snap = await assemble_session_snapshot(_SESSION, _USER, svc)
         assert snap.pending_offer_question == result.message
@@ -684,10 +669,6 @@ class TestIsConfirmKindTable:
         )
         assert offer_is_confirm(offer) is False
 
-    def test_correction_window_false(self):
-        offer = rc._correction_offer(_USER, "clear", "reminder", [], [], "clear my reminders")
-        assert offer_is_confirm(offer) is False
-
     def test_drafted_issue_mid_compose_false_ready_to_file_true(self):
         mid = build_drafted_issue_offer(_intent("help me write a ticket"), "Fix login")
         ready = build_drafted_issue_offer(
@@ -735,7 +716,6 @@ class TestKindLiteralDriftPins:
         assert dc._REPO_QUESTION_KIND == REPO_QUESTION_KIND
         # The pinned negatives are NOT in the always-confirm set.
         assert rc.CLEAR_VERB_QUESTION_KIND not in dc._CONFIRM_KINDS
-        assert rc.CLEAR_CORRECTION_KIND not in dc._CONFIRM_KINDS
         assert REMINDER_TIME_QUESTION_KIND not in dc._CONFIRM_KINDS
         assert REMINDER_TASK_QUESTION_KIND not in dc._CONFIRM_KINDS  # #1654
         assert STANDUP_TODO_OFFER_KIND not in dc._CONFIRM_KINDS

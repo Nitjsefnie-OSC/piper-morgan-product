@@ -492,7 +492,25 @@ class TestPhantomReminderEndToEnd:
 
 
 class TestClearVerbQuestionHonestFallback:
+    """2026-10-14: the verb question's answer turn now runs the clear_todos
+    resolver's handler (the off-rail path this class was written against is
+    retired). The #1648 contract is unchanged and pinned against that
+    handler: an unrecognized non-command turn re-asks + re-arms; a
+    command-shaped turn or a decline falls through. The armed-turn router
+    consult is stubbed to ``none`` (its fallback parse is what's under test;
+    deterministic, no LLM)."""
+
     pytestmark = pytest.mark.asyncio
+
+    @pytest.fixture(autouse=True)
+    def _router_says_none(self, monkeypatch):
+        from services.intent_service import inversion_router as ir
+        from services.intent_service.inversion_router import RoutingDecision
+
+        async def _route(message, session_state=None, **kwargs):
+            return RoutingDecision(outcome="none", operation=None, confidence=None, args={})
+
+        monkeypatch.setattr(ir, "route", _route)
 
     def _offer(self):
         from services.intent_service.reminder_clear import (
@@ -529,9 +547,11 @@ class TestClearVerbQuestionHonestFallback:
             intent_service=intent_service,
         )
         assert result is not None
-        assert "I didn't catch that as an answer" in result["message"]
-        assert "nothing has been changed" in result["message"].lower()
-        assert result["intent_data"].get("verb_question_reasked") is True
+        assert result["message"] == (
+            "Just so I get it right — for these reminders: mark them done, or delete them?"
+        )
+        assert result["intent_data"].get("verb_disambiguation_pending") is True
+        assert result["requires_clarification"] is True
         intent_service.workflow_offer_service.set_pending_offer.assert_called_once()
 
     async def test_command_shaped_turn_still_falls_through(self):

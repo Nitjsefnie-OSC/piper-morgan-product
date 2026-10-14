@@ -16,12 +16,13 @@ owner-scoped list read), binding the REAL todo text into the question
 WHICH) and the resolved row into the intent (the confirmed yes deletes
 exactly the row named in the ask, never a positional re-resolve).
 
-Boundary with #1605, pinned BOTH directions:
-- ambiguous clear-family shapes classified delete_todo pass through the
-  gate untouched → the rail entry point's ``maybe_handle_clear_family``
-  seam keeps first claim (three-variant flow, its own #1190-gated delete);
-- explicit imperatives ("delete todo 3") are None to
-  ``detect_clear_family_ask`` → this gate owns them.
+Boundary with #1605: until 2026-10-14 ambiguous clear-family shapes
+classified delete_todo passed through this gate to the rail entry's #1605
+regex seam. That seam (and the passthrough) retired with
+``detect_clear_family_ask`` — the clear family routes to the ``clear_todos``
+resolver, which re-enters delete_todo via ``dispatch_workflow`` (below this
+gate). A clear shape MISROUTED onto delete_todo is now this gate's like any
+other delete: confirm-gated, never deleted on the ask turn (pinned below).
 
 Layer honesty (m-43): the end-to-end classes drive the REAL
 ``IntentService.process_intent`` (the #1190/#1605 test idiom), mocked ONLY
@@ -291,14 +292,16 @@ class TestConfirmBuilder:
         )
         assert '"Call the vendor"' in gate.offer.question
 
-    async def test_clear_family_shape_passes_through(self):
-        """Boundary direction 1: the #1605 seam keeps first claim — the gate
-        never steals an ambiguous clear-family shape, even one carrying a
-        number the extractor could read."""
+    async def test_misrouted_clear_shape_with_a_number_is_confirm_gated(self):
+        """2026-10-14: the clear-family passthrough leg retired. A numbered
+        clear shape the classifier guessed as delete_todo gets THIS gate's
+        named confirm (the user confirms WHAT) — never an unconfirmed
+        delete."""
         handlers = _BuilderHandlers()
-        for message in ("clear my reminders", "clear todo 1", "reset my todos"):
-            gate = await build_todo_delete_confirmation(_delete_intent(message), handlers, _USER)
-            assert gate.passthrough and gate.offer is None, message
+        gate = await build_todo_delete_confirmation(_delete_intent("clear todo 1"), handlers, _USER)
+        assert gate.offer is not None
+        assert gate.offer.question.startswith("Delete todo 1")
+        assert gate.offer.question.endswith("(yes/no)")
 
     async def test_no_number_no_named_target_passes_through(self):
         """No number AND nothing named — the handler's which-todo ask is the
@@ -554,31 +557,31 @@ class TestEndToEndReadOnlyLegs:
 
 
 class TestClearFamilyBoundaryBothWays:
-    """The #1605 ↔ #1666 seam, pinned from the #1666 side (the 1605 suite
-    pins its own side: explicit deletes get the #1190 confirm there)."""
+    """The #1605 ↔ #1666 seam, pinned from the #1666 side. Since 2026-10-14
+    the clear family's own side is the clear_todos resolver
+    (test_clear_todos_resolver.py)."""
 
     pytestmark = pytest.mark.asyncio
 
-    async def test_ambiguous_clear_shape_gets_variant_one_not_delete_confirm(
+    async def test_misrouted_clear_shape_never_deletes(
         self, live_service, monkeypatch, todo_boundary
     ):
-        """Direction 1: 'clear my reminders' classified delete_todo — the
-        rail entry's clear-family seam runs the three-variant flow; the new
-        gate never steals the shape with a 'Delete todo N' confirm."""
+        """Direction 1 (2026-10-14): 'clear my reminders' MISROUTED onto
+        delete_todo no longer gets the retired #1605 variant-1 question
+        here — the router's clear_todos resolver asks it. delete_todo's own
+        handling answers instead, and nothing is deleted on the turn."""
         sid = "e2e-1666-clear"
         _stub_classification(monkeypatch, live_service, "clear my reminders", "delete_todo")
         result = await live_service.process_intent(
             message="clear my reminders", session_id=sid, user_id=_USER
         )
-        assert result.message == variant_one_question()
-        assert "Delete todo" not in result.message
+        assert variant_one_question() not in result.message
         assert todo_boundary["deleted"] == []
 
     async def test_explicit_delete_never_gets_variant_one(
         self, live_service, monkeypatch, todo_boundary
     ):
-        """Direction 2: the imperative is this gate's — the clear flow's
-        _EXPLICIT_VERB_RE guarantees it never claims 'delete todo 1'."""
+        """Direction 2: the imperative is this gate's."""
         sid = "e2e-1666-imperative"
         _stub_classification(monkeypatch, live_service, "delete todo 1", "delete_todo")
         result = await live_service.process_intent(

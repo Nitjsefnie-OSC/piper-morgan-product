@@ -1,6 +1,20 @@
 """#1653 [MVP] — confirm-greed residue: the verb-question answer shared the
 unanchored delete claim (#1650's fix covered the correction window only).
 
+2026-10-14 (Arch's clear_todos ruling, point 1): the off-rail verb-answer
+path this file was written against (``_handle_verb_answer_turn``) and the
+correction window are RETIRED. The verb question is now armed only by the
+``clear_todos`` resolver, and its answer turn runs
+``clear_todos.handle_clear_todos_verb_answer`` — whose FALLBACK parse (the
+router consult names neither complete_todo nor delete_todo) reuses the SAME
+anchored ``_CORRECTION_CLAIM_RE`` + prose floor + STATE_QUESTION gate. The
+defect class is unchanged, so these pins now drive that path: the arm is
+the resolver's own offer, the router consult is stubbed to ``none``
+(deterministic, no LLM), and a claimed answer re-enters the rail as
+delete_todo / complete_todo, whose own enumerating #1190 confirm arms —
+nothing mutates on the answer turn. The correction-window class retired
+with the window. Historical description follows.
+
 The filed defect: ``reminder_clear._handle_verb_answer_turn`` detected the
 delete answer with the same unanchored ``\\bdelete\\b`` substring the
 correction window had before #1650 — so with the verb QUESTION armed
@@ -64,8 +78,11 @@ from services.intent_service.classifier import IntentClassifier
 from services.intent_service.destructive_confirm import (
     CONFIRM_PENDING_ACTION_WORKFLOW,
 )
-from services.intent_service.reminder_clear import variant_three_question
 from services.shared_types import EffectClass, IntentCategory, Outwardness
+
+# The delete answer re-enters the rail as delete_todo, whose enumerating
+# #1190 confirm (todo_handlers._confirm_question) names the bound set.
+_DELETE_CONFIRM = 'Delete 2 reminders: "Review the PR" and "Call the vendor"? (yes/no)'
 
 _USER = "3f7b8a52-1653-4b00-9e00-000000001653"  # valid UUID: survives principal parsing
 
@@ -95,31 +112,6 @@ def live_service():
 
 def _pending_offers(service):
     return service.workflow_offer_service._pending_offers
-
-
-def _stub_classification(monkeypatch, service, message, action, category=IntentCategory.EXECUTION):
-    """Deterministic classification for the arming turn (the LLM boundary
-    stays explosive for everything else)."""
-    intent = Intent(
-        category=category,
-        action=action,
-        original_message=message,
-        confidence=0.95,
-        context={"original_message": message},
-    )
-
-    async def _classify_multiple(msg, context=None, user_id=None, session_id=None):
-        return SimpleNamespace(
-            intents=[intent],
-            is_multi_intent=False,
-            has_greeting=False,
-            has_substantive_intent=True,
-            primary_intent=intent,
-            secondary_intents=[],
-        )
-
-    monkeypatch.setattr(service.intent_classifier, "classify_multiple", _classify_multiple)
-    return intent
 
 
 def _stub_fallthrough_routing(service, message):
@@ -246,15 +238,41 @@ def _seed_verb_default(pref_store, value, source="user_verified"):
     }
 
 
-async def _arm_verb_question(monkeypatch, service, sid):
-    """Turn 1: 'clear my reminders' (classified complete_todo) arms the
-    variant-1 verb question."""
-    _stub_classification(monkeypatch, service, "clear my reminders", "complete_todo")
-    await service.process_intent(message="clear my reminders", session_id=sid, user_id=_USER)
+async def _arm_verb_question(service, sid, todos):
+    """Turn 1, as the clear_todos resolver leaves it: the variant-1-with-set
+    verb question armed with BOTH reminders bound (exactly what
+    ``clear_todos.run_clear_todos`` stores on the no-stored-default branch —
+    the same offer builder, the same rendered question)."""
+    from services.intent_service.clear_todos import _clear_variant_one_with_set
+
+    ids = [t.id for t in todos]
+    texts = [t.text for t in todos]
+    question = _clear_variant_one_with_set(texts, [])
+    offer = rc._verb_question_offer(
+        _USER, "clear", "reminder", ids, texts, "clear my reminders", question=question
+    )
+    service.workflow_offer_service.set_pending_offer(sid, offer, user_id=_USER)
     stored = _pending_offers(service).get(sid)
     assert stored is not None
     assert stored["pending_action"]["kind"] == rc.CLEAR_VERB_QUESTION_KIND
     return stored
+
+
+@pytest.fixture(autouse=True)
+def _resolver_answer_path(monkeypatch):
+    """The answer turn's router consult answers ``none`` (the verb carrier
+    falls back to the #1605/#1653 crisp parse — the path under test), and
+    both concrete ops are live-eligible so a claimed answer re-enters the
+    rail. Deterministic: no LLM, no network."""
+    from services.intent_service import clear_todos as ct
+    from services.intent_service import inversion_router as ir
+    from services.intent_service.inversion_router import RoutingDecision
+
+    async def _route(message, session_state=None, **kwargs):
+        return RoutingDecision(outcome="none", operation=None, confidence=None, args={})
+
+    monkeypatch.setattr(ir, "route", _route)
+    monkeypatch.setattr(ct, "_op_is_live_eligible", lambda op: True)
 
 
 def _no_delete_default_stored(pref_store):
@@ -273,16 +291,12 @@ class TestAxesAndTierMapping:
         assert axes == (EffectClass.READ, Outwardness.PRIVATE)
         assert acceptance_tier(*axes) == AcceptanceTier.LOW_CEREMONY
 
-    def test_correction_window_is_read_private_low_ceremony(self):
-        axes = declared_axes_for_workflow(rc.CLEAR_CORRECTION_WORKFLOW)
-        assert axes == (EffectClass.READ, Outwardness.PRIVATE)
-        assert acceptance_tier(*axes) == AcceptanceTier.LOW_CEREMONY
-
     def test_delete_claim_target_is_destructive_named_object(self):
         """The claim's crispness bar derives from its TARGET action's axes —
-        clear_reminders_delete is DESTRUCTIVE×PRIVATE → NAMED_OBJECT, which
-        is why the delete claim takes the anchored #1650 treatment."""
-        axes = declared_axes_for_workflow(rc.CLEAR_DELETE_WORKFLOW)
+        the delete answer re-enters as delete_todo (DESTRUCTIVE×PRIVATE →
+        NAMED_OBJECT), which is why the delete claim takes the anchored
+        #1650 treatment."""
+        axes = declared_axes_for_workflow("delete_todo")
         assert axes == (EffectClass.DESTRUCTIVE, Outwardness.PRIVATE)
         assert acceptance_tier(*axes) == AcceptanceTier.NAMED_OBJECT
 
@@ -305,7 +319,7 @@ class TestFiledDefect:
         sticky) and armed the V3 delete confirm."""
         assert len(PM_ASIDE) < 160 and "\n" not in PM_ASIDE
         sid = "e2e-1653-aside"
-        await _arm_verb_question(monkeypatch, live_service, sid)
+        await _arm_verb_question(live_service, sid, todo_boundary["todos"])
         p_classify, p_floor = _stub_fallthrough_routing(live_service, PM_ASIDE)
         with p_classify, p_floor:
             result = await live_service.process_intent(
@@ -321,7 +335,7 @@ class TestFiledDefect:
                 "#1653: the aside armed the V3 delete confirm — one crisp "
                 "'yes' from deleting a batch PM never asked to delete"
             )
-        assert variant_three_question(2) not in (result.message or "")
+        assert _DELETE_CONFIRM not in (result.message or "")
         assert todo_boundary["completed"] == [] and todo_boundary["deleted"] == []
 
     async def test_multiline_prose_mentioning_delete_never_claims(
@@ -330,7 +344,7 @@ class TestFiledDefect:
         """Contract axis (c) at this seam: prose by shape (multi-line) never
         claims a verb answer, whatever words it contains."""
         sid = "e2e-1653-prose-delete"
-        await _arm_verb_question(monkeypatch, live_service, sid)
+        await _arm_verb_question(live_service, sid, todo_boundary["todos"])
         prose = (
             "A few thoughts on this.\n"
             "I'm not sure whether delete is ever the right default here —\n"
@@ -354,7 +368,7 @@ class TestFiledDefect:
         long prose stored value=complete and tried to complete the batch
         (the explosive boundary is the tell)."""
         sid = "e2e-1653-prose-done"
-        await _arm_verb_question(monkeypatch, live_service, sid)
+        await _arm_verb_question(live_service, sid, todo_boundary["todos"])
         prose = (
             "I keep going back and forth on whether we are actually done "
             "with the vendor thread or whether there is still a follow-up "
@@ -394,7 +408,7 @@ class TestStateQuestionSurvival:
         question survives (silent §5a re-arm via the generic READ branch),
         normal processing answers."""
         sid = f"e2e-1653-q-{abs(hash(question)) % 10000}"
-        await _arm_verb_question(monkeypatch, live_service, sid)
+        await _arm_verb_question(live_service, sid, todo_boundary["todos"])
         p_classify, p_floor = _stub_fallthrough_routing(live_service, question)
         with p_classify, p_floor:
             await live_service.process_intent(message=question, session_id=sid, user_id=_USER)
@@ -411,16 +425,17 @@ class TestStateQuestionSurvival:
         self, live_service, monkeypatch, pref_store, todo_boundary
     ):
         """The survived arm is a live ask: after the question turn, a crisp
-        'delete them' stores the mapping and routes to the REAL confirm."""
+        'delete them' stores the mapping and routes to the REAL confirm
+        (delete_todo's own enumerating #1190 confirm, via the rail)."""
         sid = "e2e-1653-q-then-answer"
-        await _arm_verb_question(monkeypatch, live_service, sid)
+        await _arm_verb_question(live_service, sid, todo_boundary["todos"])
         p_classify, p_floor = _stub_fallthrough_routing(live_service, "delete them?")
         with p_classify, p_floor:
             await live_service.process_intent(message="delete them?", session_id=sid, user_id=_USER)
         result = await live_service.process_intent(
             message="delete them", session_id=sid, user_id=_USER
         )
-        assert result.message.startswith(variant_three_question(2))
+        assert result.message == _DELETE_CONFIRM
         record = pref_store["verified_inferences"][rc.inference_key("clear")]
         assert record["value"] == rc.VALUE_DELETE
         stored = _pending_offers(live_service).get(sid)
@@ -457,34 +472,36 @@ class TestCrispAnswersStillBind:
         lead-ins ('yes, delete them' / 'no, delete them'), which is why the
         claims run BEFORE generic accept/decline at this seam."""
         sid = f"e2e-1653-crisp-{abs(hash(answer)) % 10000}"
-        await _arm_verb_question(monkeypatch, live_service, sid)
+        await _arm_verb_question(live_service, sid, todo_boundary["todos"])
         result = await live_service.process_intent(message=answer, session_id=sid, user_id=_USER)
-        assert result.message.startswith(variant_three_question(2)), answer
+        assert result.message == _DELETE_CONFIRM, answer
         record = pref_store["verified_inferences"][rc.inference_key("clear")]
         assert record["value"] == rc.VALUE_DELETE, answer
         stored = _pending_offers(live_service).get(sid)
         assert stored["workflow_type"] == CONFIRM_PENDING_ACTION_WORKFLOW
         assert todo_boundary["deleted"] == []  # explosive until confirmed
 
-    async def test_mark_done_answer_still_completes(
+    async def test_mark_done_answer_still_binds(
         self, live_service, monkeypatch, pref_store, todo_boundary
     ):
+        """'mark them done' stores the mapping and re-enters complete_todo,
+        whose own gate arms the enumerating confirm for 2+ items (CXO
+        ruling 2) — nothing completes on the answer turn itself."""
         sid = "e2e-1653-done"
-        await _arm_verb_question(monkeypatch, live_service, sid)
-        todo_boundary["allow_complete"] = True
+        await _arm_verb_question(live_service, sid, todo_boundary["todos"])
         result = await live_service.process_intent(
             message="mark them done", session_id=sid, user_id=_USER
         )
         record = pref_store["verified_inferences"][rc.inference_key("clear")]
         assert record["value"] == rc.VALUE_COMPLETE
-        assert len(todo_boundary["completed"]) == 2
-        assert "Marked 2 reminders done" in result.message
+        assert result.message.startswith("Complete 2 reminders: ")
+        assert todo_boundary["completed"] == []
 
     async def test_negated_delete_never_stores(
         self, live_service, monkeypatch, pref_store, todo_boundary
     ):
         sid = "e2e-1653-negated"
-        await _arm_verb_question(monkeypatch, live_service, sid)
+        await _arm_verb_question(live_service, sid, todo_boundary["todos"])
         p_classify, p_floor = _stub_fallthrough_routing(live_service, "no, don't delete them")
         with p_classify, p_floor:
             await live_service.process_intent(
@@ -492,45 +509,6 @@ class TestCrispAnswersStillBind:
             )
         assert _no_delete_default_stored(pref_store)
         assert todo_boundary["deleted"] == []
-
-
-# ---------------------------------------------------------------------------
-# 5. The correction window gets the same axis-(a) gate
-# ---------------------------------------------------------------------------
-
-
-class TestCorrectionWindowQuestionGate:
-    pytestmark = pytest.mark.asyncio
-
-    async def test_delete_question_does_not_claim_the_correction_window(
-        self, live_service, monkeypatch, pref_store, todo_boundary
-    ):
-        """'delete them?' inside the one-turn correction window is a state
-        query — RED pre-fix it matched the anchored claim (head-anchored
-        'delete' + terminal '?') and armed the delete confirm off a
-        question. GREEN: no confirm arms; the window survives silently."""
-        sid = "e2e-1653-corr-q"
-        _seed_verb_default(pref_store, rc.VALUE_COMPLETE)
-        _stub_classification(monkeypatch, live_service, "clear my reminders", "complete_todo")
-        todo_boundary["allow_complete"] = True
-        await live_service.process_intent(
-            message="clear my reminders", session_id=sid, user_id=_USER
-        )
-        stored = _pending_offers(live_service).get(sid)
-        assert stored["pending_action"]["kind"] == rc.CLEAR_CORRECTION_KIND
-        p_classify, p_floor = _stub_fallthrough_routing(live_service, "delete them?")
-        with p_classify, p_floor:
-            await live_service.process_intent(message="delete them?", session_id=sid, user_id=_USER)
-        stored = _pending_offers(live_service).get(sid)
-        assert stored is not None
-        assert stored["workflow_type"] != CONFIRM_PENDING_ACTION_WORKFLOW, (
-            "#1653: a question-shaped turn armed the delete confirm from the " "correction window"
-        )
-        assert stored["pending_action"]["kind"] == rc.CLEAR_CORRECTION_KIND
-        assert todo_boundary["deleted"] == []
-        # The stored default did not flip either.
-        record = pref_store["verified_inferences"][rc.inference_key("clear")]
-        assert record["value"] == rc.VALUE_COMPLETE
 
 
 # ---------------------------------------------------------------------------
@@ -552,7 +530,7 @@ class TestEchoAnswerAtDeleteConfirmStaysSafe:
         echoes are common, verb-echo forms matching the ARMED action's verb
         may join the crisp set — evidence-gated, not this change."""
         sid = "e2e-1653-echo"
-        await _arm_verb_question(monkeypatch, live_service, sid)
+        await _arm_verb_question(live_service, sid, todo_boundary["todos"])
         await live_service.process_intent(message="delete them", session_id=sid, user_id=_USER)
         stored = _pending_offers(live_service).get(sid)
         assert stored["workflow_type"] == CONFIRM_PENDING_ACTION_WORKFLOW

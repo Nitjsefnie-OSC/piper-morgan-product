@@ -6,10 +6,11 @@ delete — 'delete my reminders', the literal phrase in 1527's title —
 dispatches the delete_todo rail, names no single target (every word is
 command vocabulary), and got the single-item clarification "Which todo
 should I remove? Try: 'delete todo [number]'". The user who was MORE
-explicit got LESS capability: the ambiguous 'clear my reminders' has the
+explicit got LESS capability: the ambiguous 'clear my reminders' had the
 full #1605 three-variant flow, while the explicit imperative was declined
-by that flow's ``_EXPLICIT_VERB_RE`` (correctly — the verb isn't ambiguous)
-and then fell to a single-item-only handler.
+by that flow's explicit-verb check (correctly — the verb isn't ambiguous)
+and then fell to a single-item-only handler. (That #1605 regex seam retired
+2026-10-14; the clear family routes to the clear_todos resolver.)
 
 The fix under test (the issue's candidate direction, chosen from evidence):
 a second seam in ``run_delete_todo_workflow``, AFTER the #1605 clear-family
@@ -95,7 +96,7 @@ class TestDetectExplicitBulkDeleteAsk:
         assert rc.detect_explicit_bulk_delete_ask(message) is None
 
     def test_reminder_noun_wins_mixed_mention(self):
-        # same tiebreak as detect_clear_family_ask (#1569)
+        # #1569 render-rule tiebreak (reminder wins a mixed mention)
         assert rc.detect_explicit_bulk_delete_ask("delete my reminders and todos") == "reminder"
 
 
@@ -321,21 +322,22 @@ class TestBulkConfirmArms:
 class TestBoundariesUnregressed:
     pytestmark = pytest.mark.asyncio
 
-    async def test_ambiguous_clear_still_gets_the_1605_flow_first(
+    async def test_ambiguous_clear_misrouted_to_delete_never_deletes(
         self, live_service, monkeypatch, todo_boundary, pref_store
     ):
-        """#1605 keeps FIRST CLAIM: an ambiguous 'clear my reminders' the
-        classifier guessed as delete_todo runs the three-variant flow (the
-        variant-1 verb question here — no stored default), never the
-        explicit bulk confirm."""
+        """2026-10-14: #1605's regex seam no longer claims a 'clear my
+        reminders' the classifier guessed as delete_todo (retired — the
+        router's clear_todos resolver is the family's way in). A misroute
+        onto delete_todo therefore gets delete_todo's own handling, which
+        must stay non-destructive on this turn: nothing is deleted."""
         sid = "e2e-1696-clear"
         _stub_classification(monkeypatch, live_service, "clear my reminders", "delete_todo")
         result = await live_service.process_intent(
             message="clear my reminders", session_id=sid, user_id=_USER
         )
-        assert result.message == rc.variant_one_question("clear", "reminder")
-        stored = _pending_offers(live_service).get(sid)
-        assert stored["pending_action"]["kind"] == rc.CLEAR_VERB_QUESTION_KIND
+        # Measured 2026-10-14: the #1527 named leg reads "clear" as a name,
+        # finds nothing, and says so — honest, nothing armed, nothing gone.
+        assert "nothing has been deleted" in result.message
         assert todo_boundary["deleted"] == []
 
     async def test_singular_unnamed_delete_keeps_the_which_todo_ask(

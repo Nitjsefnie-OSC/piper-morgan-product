@@ -562,28 +562,17 @@ async def build_todo_delete_confirmation(
     entry point (mirror of the _CLOSE_FAMILY invariant; if any of these paths
     ever deletes, its passthrough must be removed in the same commit):
 
-    - **clear-family shape** (#1605 boundary, pinned both ways): an ambiguous
-      clear/handle/reset utterance the classifier guessed as delete_todo
-      belongs to ``reminder_clear.maybe_handle_clear_family``'s three-variant
-      flow, which the rail entry point runs FIRST — this gate never steals
-      those shapes, and reminder_clear's own delete confirms stay #1190-gated
-      inside that flow. Conversely, explicit imperatives ("delete todo 3")
-      are ``None`` to the shared ``is_clear_family_passthrough`` predicate
-      (via ``detect_clear_family_ask``'s ``_EXPLICIT_VERB_RE``), so this gate
-      owns them — the boundary holds in both directions. #1595 Phase 3
-      (Arch ruling 2026-10-04) factored this check into
-      ``reminder_clear.is_clear_family_passthrough`` — the SAME predicate
-      the WRITE-tier consent branch (``intent_service._dispatch_action_rail``)
-      now calls for ``complete_todo``, so a clear-family turn gets exactly
-      ONE question (#1605's own) instead of a consent "shall I?" first on
-      one tier and the real question on the other.
+    (The #1605 clear-family passthrough leg — ``reminder_clear.
+    is_clear_family_passthrough`` — retired 2026-10-14 with
+    ``detect_clear_family_ask``: ambiguous clear asks route to the
+    ``clear_todos`` resolver entry, which re-enters delete_todo via
+    ``dispatch_workflow`` — the entry point, not this gate.)
     - **no principal**: the entry point returns the auth-required decline.
     - **no parseable todo number AND no named target**: passthrough. At the
       rail entry point the #1696 explicit bulk seam
       (``reminder_clear.maybe_handle_explicit_bulk_delete``, after the
       clear-family seam) claims the PLURAL/bulk shape ("delete my
-      reminders") and arms the clear-family flow's #1190-gated batch
-      confirm; a singular unnamed ask falls to handle_delete_todo's
+      reminders") and arms the #1190-gated batch confirm; a singular unnamed ask falls to handle_delete_todo's
       "Which todo should I remove?" clarification (its only no-number
       path). Both are read-only on this turn.
     - **number out of range / non-numeric**: handle_delete_todo returns the
@@ -598,18 +587,11 @@ async def build_todo_delete_confirmation(
     by real list position. Zero → the clarification leg answers honestly in
     todo/reminder vocabulary — never a project lookup.
     """
-    # Lazy import: reminder_clear imports THIS module (kind constants), so a
-    # module-level import back would be circular.
-    from services.intent_service.reminder_clear import is_clear_family_passthrough
-
     message = ""
     if intent.context:
         message = intent.context.get("original_message", "") or ""
     if not message:
         message = intent.original_message or ""
-
-    if is_clear_family_passthrough(message):
-        return TodoDeleteGate(passthrough=True)
 
     if todo_user_id is None:
         return TodoDeleteGate(passthrough=True)

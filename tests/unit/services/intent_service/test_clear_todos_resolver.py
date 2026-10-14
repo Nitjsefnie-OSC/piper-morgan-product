@@ -179,6 +179,23 @@ class TestUnresolved:
         )
 
 
+class TestUnresolvedListingStatesItsElision:
+    """#1762's defect class (a silent cap under a definite "you have:")
+    must not return with the retired #1605 clarify's successor: past ten,
+    the resolver's unresolved reply SAYS how many it left out."""
+
+    @pytest.mark.asyncio
+    async def test_twelve_candidates_list_ten_and_count_the_rest(self, intent_service, no_stored):
+        many = [_due(f"reminder {i}", 500 - i) for i in range(12)]
+        intent_service.todo_handlers.todo_service.list_todos = AsyncMock(return_value=many)
+        result = await ct.run_clear_todos(
+            _clear_intent(["name:nothing like this"]), "s1", _USER_ID, intent_service
+        )
+        lines = result.message.splitlines()
+        assert sum(1 for ln in lines if ln[:1].isdigit()) == 10
+        assert "…and 2 more." in lines
+
+
 class TestNoStoredDefault:
     @pytest.mark.asyncio
     async def test_variant_one_with_set_and_carve_out(self, intent_service, no_stored, four):
@@ -200,7 +217,9 @@ class TestNoStoredDefault:
         assert offer["question"] == result.message
         pa = offer["pending_action"]
         assert pa["kind"] == rc.CLEAR_VERB_QUESTION_KIND
-        assert pa[ct.CLEAR_TODOS_RESOLVER_MARKER] is True
+        # 2026-10-14: the interim delegation marker retired with the
+        # off-rail answer path — the kind alone routes the answer here.
+        assert "clear_todos_resolver" not in pa
         assert len(pa["clear_target_ids"]) == 2
 
     @pytest.mark.asyncio
@@ -219,13 +238,38 @@ class TestNoStoredDefault:
         assert "Leaving" not in result.message
 
     @pytest.mark.asyncio
-    async def test_guard_returns_none_when_either_op_not_live(
+    async def test_guard_declines_honestly_when_either_op_not_live(
         self, intent_service, no_stored, monkeypatch
     ):
+        """A resolver is never a back door (Arch). Until 2026-10-14 this
+        returned None for the legacy #1605 regex seam to take the turn;
+        that seam is retired, so the guard answers honestly instead —
+        nothing armed, nothing changed."""
         monkeypatch.setattr(ct, "_op_is_live_eligible", lambda op: op == "complete_todo")
         intent = _clear_intent(["name:review the pr"])
         result = await ct.run_clear_todos(intent, "s1", _USER_ID, intent_service)
-        assert result is None
+        assert result.message == (
+            "I can't do that yet — that capability isn't live right now. Nothing has been changed."
+        )
+        assert result.requires_clarification is False
+        assert result.intent_data["op_not_live"] is True
+        intent_service.workflow_offer_service.set_pending_offer.assert_not_called()
+        intent_service.todo_handlers.todo_service.complete_todo.assert_not_awaited()
+        intent_service.todo_handlers.todo_service.delete_todo.assert_not_awaited()
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("stored", [rc.VALUE_COMPLETE, rc.VALUE_DELETE])
+    async def test_stored_branch_declines_honestly_when_its_op_not_live(
+        self, intent_service, monkeypatch, stored
+    ):
+        monkeypatch.setattr(ct, "_op_is_live_eligible", lambda op: False)
+        _stored(monkeypatch, stored)
+        intent = _clear_intent(["name:review the pr"])
+        result = await ct.run_clear_todos(intent, "s1", _USER_ID, intent_service)
+        assert result.intent_data["op_not_live"] is True
+        intent_service.workflow_offer_service.set_pending_offer.assert_not_called()
+        intent_service.todo_handlers.todo_service.complete_todo.assert_not_awaited()
+        intent_service.todo_handlers.todo_service.delete_todo.assert_not_awaited()
 
 
 class TestStoredDone:
@@ -340,9 +384,7 @@ class TestReentryUsesDispatchWorkflowWithSameArgs:
             captured["workflow_type"] = workflow_type
             captured["args"] = context["intent"].context.get("inversion_args")
             captured["original_message"] = context["intent"].original_message
-            captured["resolved_marker"] = context["intent"].context.get(
-                rc.CLEAR_FAMILY_RESOLVED_KEY
-            )
+            captured["context_keys"] = set(context["intent"].context)
             from services.intent.intent_service import IntentProcessingResult
 
             return IntentProcessingResult(
@@ -358,10 +400,10 @@ class TestReentryUsesDispatchWorkflowWithSameArgs:
             "targets": ["name:review the pr"],
             "exclude": ["name:revise the pr"],
         }
-        # Arch's 2026-10-07 ruling, point 2: the message is NOT blanked, and
-        # the re-entered Intent carries the code-written stand-down marker.
+        # Arch's 2026-10-07 ruling, point 2: the message is NOT blanked. The
+        # interim stand-down marker retired 2026-10-14 with its only reader.
         assert captured["original_message"] == "clear my reminders"
-        assert captured["resolved_marker"] is True
+        assert "clear_family_resolved" not in captured["context_keys"]
 
     @pytest.mark.asyncio
     async def test_delete_reentry_carries_the_same_args(self, intent_service, monkeypatch):
@@ -371,9 +413,7 @@ class TestReentryUsesDispatchWorkflowWithSameArgs:
             captured["workflow_type"] = workflow_type
             captured["args"] = context["intent"].context.get("inversion_args")
             captured["original_message"] = context["intent"].original_message
-            captured["resolved_marker"] = context["intent"].context.get(
-                rc.CLEAR_FAMILY_RESOLVED_KEY
-            )
+            captured["context_keys"] = set(context["intent"].context)
             from services.intent.intent_service import IntentProcessingResult
 
             return IntentProcessingResult(
@@ -387,13 +427,12 @@ class TestReentryUsesDispatchWorkflowWithSameArgs:
         assert captured["workflow_type"] == "delete_todo"
         assert captured["args"] == {"targets": ["name:review the pr"]}
         assert captured["original_message"] == "clear my reminders"
-        assert captured["resolved_marker"] is True
+        assert "clear_family_resolved" not in captured["context_keys"]
 
 
 def _bound_payload(ids, texts, message="clear my reminders"):
     return {
         "kind": rc.CLEAR_VERB_QUESTION_KIND,
-        ct.CLEAR_TODOS_RESOLVER_MARKER: True,
         "clear_target_ids": list(ids),
         "clear_target_texts": list(texts),
         "original_message": message,
@@ -413,9 +452,7 @@ class TestAnswerTurnReentry:
             captured["workflow_type"] = workflow_type
             captured["targets"] = context["intent"].context["inversion_args"]["targets"]
             captured["original_message"] = context["intent"].original_message
-            captured["resolved_marker"] = context["intent"].context.get(
-                rc.CLEAR_FAMILY_RESOLVED_KEY
-            )
+            captured["context_keys"] = set(context["intent"].context)
             from services.intent.intent_service import IntentProcessingResult
 
             return IntentProcessingResult(
@@ -436,9 +473,10 @@ class TestAnswerTurnReentry:
         assert captured["targets"] == ["name:review the pr", "name:revise the pr"]
         assert result["message"] == "Marked done."
         assert result["intent_data"]["verb_default_stored"] == rc.VALUE_COMPLETE
-        # Arch's 2026-10-07 ruling, point 2: message intact, marker present.
+        # Arch's 2026-10-07 ruling, point 2: message intact (no marker since
+        # the 2026-10-14 retirement).
         assert captured["original_message"] == "clear my reminders"
-        assert captured["resolved_marker"] is True
+        assert "clear_family_resolved" not in captured["context_keys"]
 
     @pytest.mark.asyncio
     async def test_answer_turn_refines_the_set_from_the_routers_own_args(
@@ -553,45 +591,164 @@ class TestAnswerTurnReentry:
         dispatch_spy.assert_not_awaited()
 
     @pytest.mark.asyncio
-    async def test_dispatch_entry_point_delegates_through_the_marker(
+    async def test_offer_seam_hands_every_verb_answer_to_the_resolver(
         self, intent_service, monkeypatch
     ):
-        """reminder_clear._handle_verb_answer_turn's added guard delegates
-        to this module ONLY when the marker is set — the ratified #1605
-        code below the guard is unreached for marker-bearing payloads."""
+        """2026-10-14 (Arch's point 1, the named retirement): the offer
+        seam's reminder-clear entry, ``handle_reminder_clear_turn``, hands a
+        verb-question answer STRAIGHT to the resolver's handler — no marker
+        check, no off-rail path left to fall into — threading the armed
+        question through."""
         called = {}
 
         async def fake_handler(
             payload, message, session_id, user_id, intent_service, armed_question=None
         ):
-            called["hit"] = True
+            called["payload"] = payload
+            called["armed_question"] = armed_question
             return {"message": "delegated", "intent_data": {}}
 
         monkeypatch.setattr(ct, "handle_clear_todos_verb_answer", fake_handler)
-        payload = {"kind": rc.CLEAR_VERB_QUESTION_KIND, ct.CLEAR_TODOS_RESOLVER_MARKER: True}
-        out = await rc._handle_verb_answer_turn(payload, "anything", "s1", _USER_ID, intent_service)
-        assert called.get("hit") is True
+        payload = {"kind": rc.CLEAR_VERB_QUESTION_KIND}
+        out = await rc.handle_reminder_clear_turn(
+            {"pending_action": payload, "question": "Q?"},
+            "anything",
+            "s1",
+            _USER_ID,
+            intent_service,
+        )
         assert out == {"message": "delegated", "intent_data": {}}
-
-
-class TestMarkerStandDown:
-    """Arch's 2026-10-07 ruling, point 2: a resolver-originated re-entry
-    carries ``reminder_clear.CLEAR_FAMILY_RESOLVED_KEY`` and
-    ``maybe_handle_clear_family`` must stand down unconditionally on it —
-    even though ``original_message`` is (deliberately, per the same
-    ruling) left intact as the SAME ambiguous "clear ..." text that caused
-    the resolver to run in the first place."""
+        assert called["payload"] is payload
+        assert called["armed_question"] == "Q?"
 
     @pytest.mark.asyncio
-    async def test_stands_down_when_the_marker_is_present(self):
-        intent = Intent(
-            category=IntentCategory.EXECUTION,
-            action="complete_todo",
-            original_message="clear my reminders",
-            confidence=0.9,
-            context={"inversion_args": {"targets": []}, rc.CLEAR_FAMILY_RESOLVED_KEY: True},
+    @pytest.mark.parametrize(
+        "kind", ["reminder_clear_correction", "reminder_clear_pick_target_question", None]
+    )
+    async def test_offer_seam_claims_no_retired_kind(self, intent_service, monkeypatch, kind):
+        """The retired carriers' kinds (and a kindless payload) are never
+        claimed — they fall through to the generic seam."""
+        monkeypatch.setattr(
+            ct, "handle_clear_todos_verb_answer", AsyncMock(side_effect=AssertionError("claimed"))
         )
-        result = await rc.maybe_handle_clear_family(
-            MagicMock(), intent, "s1", _USER_ID, _USER_ID, EffectClass.WRITE
+        out = await rc.handle_reminder_clear_turn(
+            {"pending_action": {"kind": kind}}, "anything", "s1", _USER_ID, intent_service
         )
-        assert result is None
+        assert out is None
+
+
+class TestOneQuestionPerClearTurn:
+    """The #1605 three variants, through the RESOLVER and the REAL rail
+    (``workflow_entries.run_clear_todos_workflow`` -> ``run_clear_todos`` ->
+    ``dispatch_workflow`` -> the concrete op), each turn asking exactly ONE
+    question: one offer armed, and the reply IS the armed question (#1665).
+    With ``detect_clear_family_ask`` gone nothing else can arm a second ask
+    (the old consent passthrough existed only to prevent that)."""
+
+    async def _run(self, intent_service, four, targets, exclude=None):
+        intent_service._session_ctx.last_numbered_list = NumberedList(
+            kind="reminders", ids=[t.id for t in four], texts=[t.text for t in four]
+        )
+        return await we.run_clear_todos_workflow(
+            session_id="s1",
+            user_id=_USER_ID,
+            context={
+                "intent": _clear_intent(targets, exclude=exclude),
+                "intent_service": intent_service,
+            },
+        )
+
+    def _one_armed_question(self, intent_service, result):
+        offers = intent_service.workflow_offer_service
+        # The stored-delete branch re-stores the SAME offer with CXO's
+        # variant-3 text, so count distinct live records, not writes.
+        armed = offers.peek_pending_offer("s1", user_id=_USER_ID)
+        assert armed is not None
+        assert result.requires_clarification is True
+        assert armed["question"] == result.message
+        assert result.message.count("?") == 1, result.message
+        intent_service.todo_handlers.todo_service.complete_todo.assert_not_awaited()
+        intent_service.todo_handlers.todo_service.delete_todo.assert_not_awaited()
+        return armed
+
+    @pytest.mark.asyncio
+    async def test_variant_one_no_stored_default(self, intent_service, no_stored, four):
+        result = await self._run(intent_service, four, ["1-3"])
+        armed = self._one_armed_question(intent_service, result)
+        assert armed["pending_action"]["kind"] == rc.CLEAR_VERB_QUESTION_KIND
+        assert result.message.endswith(rc.variant_one_question())
+        intent_service.workflow_offer_service.set_pending_offer.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_variant_two_stored_done(self, intent_service, monkeypatch, four):
+        _stored(monkeypatch, rc.VALUE_COMPLETE)
+        result = await self._run(intent_service, four, ["1-3"])
+        self._one_armed_question(intent_service, result)
+        assert result.message.startswith("Complete 3 reminders: ")
+        intent_service.workflow_offer_service.set_pending_offer.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_variant_three_stored_delete(self, intent_service, monkeypatch, four):
+        _stored(monkeypatch, rc.VALUE_DELETE)
+        result = await self._run(intent_service, four, ["1-3"])
+        self._one_armed_question(intent_service, result)
+        assert result.message.startswith("You've set 'clear' to mean delete — delete 3 reminders")
+
+
+class TestRetiredOffRailPathIsGone:
+    """Source pins for Arch's rework point 1 (2026-10-07; restated
+    2026-10-14 point 5): the regex ask-detector, its seam, the consent
+    passthrough it fed, the off-rail verb-answer path and both interim
+    markers are DELETED — not commented out, not unreachable-but-present."""
+
+    @pytest.mark.parametrize(
+        "name",
+        [
+            "detect_clear_family_ask",
+            "maybe_handle_clear_family",
+            "is_clear_family_passthrough",
+            "_handle_verb_answer_turn",
+            "_act_on_resolved_targets",
+            "_handle_correction_turn",
+            "_handle_pick_target_turn",
+            "CLEAR_FAMILY_RESOLVED_KEY",
+            "_EXPLICIT_VERB_RE",
+        ],
+    )
+    def test_reminder_clear_no_longer_defines(self, name):
+        assert not hasattr(rc, name), f"reminder_clear.{name} must stay deleted"
+
+    def test_resolver_marker_is_gone(self):
+        assert not hasattr(ct, "CLEAR_TODOS_RESOLVER_MARKER")
+
+    @pytest.mark.parametrize(
+        "path",
+        [
+            "services/intent/intent_service.py",
+            "services/intent_service/workflow_entries.py",
+            "services/intent_service/destructive_confirm.py",
+            "services/intent_service/reminder_clear.py",
+            "services/intent_service/clear_todos.py",
+        ],
+    )
+    def test_no_caller_or_definition_left_in_source(self, path):
+        import ast
+        import pathlib
+
+        root = pathlib.Path(__file__).resolve().parents[4]
+        tree = ast.parse((root / path).read_text())
+        retired = {
+            "detect_clear_family_ask",
+            "maybe_handle_clear_family",
+            "is_clear_family_passthrough",
+            "_handle_verb_answer_turn",
+        }
+        for node in ast.walk(tree):
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                assert node.name not in retired, f"{path} defines {node.name}"
+            if isinstance(node, ast.Attribute):
+                assert node.attr not in retired, f"{path} calls .{node.attr}"
+            if isinstance(node, ast.Name):
+                assert node.id not in retired, f"{path} references {node.id}"
+            if isinstance(node, ast.alias):
+                assert node.name not in retired, f"{path} imports {node.name}"

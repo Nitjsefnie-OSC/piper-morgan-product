@@ -119,8 +119,37 @@ Still on the chain and outside the gate: complete_todo / list_todos / next_todo 
 create_reminder's backstop elif — its rail entry is the consented surface);
 `capability_legibility.catalog_coverage()` states the denominator.
 
+**`clear_todos` resolver rail entry; the #1605 regex seam RETIRED (2026-10-14, #1943,
+Arch's clear_todos ruling 2026-10-07 point 1, restated 2026-10-14 point 5).** The
+clear family ("clear / handle / take care of / reset" over reminders or todos, done-vs-delete
+unsaid) enters through ONE door: the router's `clear_todos` op, a READ RESOLVER rail entry
+(`services/intent_service/clear_todos.py`, `workflow_entries.run_clear_todos_workflow`; no
+`flip_group`, its own PM token). It mutates nothing: it resolves the router's
+`targets`/`exclude` against the real list (set first), then the verb — stored done → re-enters
+`complete_todo` with the same args (one item completes + CXO's disclosure clause; 2+ arms
+complete_todo's own enumerating confirm); stored delete → re-enters `delete_todo` with CXO's
+variant-3 copy on its confirm; no stored default → the variant-1-with-set question, arming the
+`reminder_clear_verb_question` carrier with the resolved ids. Every execution re-enters the
+rail via `dispatch_workflow` (never `todo_handlers` directly), and a resolved op that is not
+live-eligible gets an honest "can't do that yet" (no back door, no fallback). The answer turn
+runs `clear_todos.handle_clear_todos_verb_answer` (the #1886(b) armed-turn consult with the
+per-carrier answering set {complete_todo, delete_todo}; fallback = the #1605/#1653 crisp parse;
+accept / decline / bare exit / command-shaped turns fall through per #1648; unrecognized turns
+re-ask). **Deleted with the retirement**: `detect_clear_family_ask` (+ `_EXPLICIT_VERB_RE`,
+the noun regexes, the named-target binders), `maybe_handle_clear_family` and its three call
+sites (complete_todo / delete_todo rail entries, the #1333 unmapped branch),
+`is_clear_family_passthrough` and its two consent-tier call sites, the off-rail verb-answer
+path `_handle_verb_answer_turn` (it completed and armed deletes OUTSIDE the rail), the
+variant-2 correction window and the #1906 pick-target carrier (both armed only by that seam),
+the ALWAYS_ASK leading question, and the interim `clear_family_resolved` /
+`clear_todos_resolver` markers. `reminder-clear-binding` ceiling 17 → 10. A clear shape the
+router MISROUTES onto complete_todo / delete_todo now gets that op's own gated handling (no
+verb question). The #1605 / #1906 / passthrough paragraphs below are design history.
+Regression: `test_clear_todos_resolver.py` (incl. `TestOneQuestionPerClearTurn`,
+`TestRetiredOffRailPathIsGone`).
+
 **#1605 reminder-clear verb disambiguation (2026-08-14, CXO/PPM jointly-signed-off
-design)** — surface-internal to the EXECUTION lane, NOT a routing change (routing
+design; regex seam RETIRED 2026-10-14 — see the `clear_todos` paragraph above)** — surface-internal to the EXECUTION lane, NOT a routing change (routing
 moratorium honored; no pre-classifier or prompt-pattern additions).
 `services/intent_service/reminder_clear.py`: a clear-family verb (clear / handle /
 take care of / reset) over the reminder/todo domain, with NO explicit
@@ -331,7 +360,8 @@ score-2026-10-13-anthropic.md`), standing member 16/18 vs main 18/18 disclosed.
 Controls: `dev/2026/10/13/controls/mt-*.md`; the wording-4 full run is kept
 CANDIDATE-HELD. Arch's narrow perturbation-sensitive ledger (decisions.log
 2026-10-13 07:4x) is defined but has no entries yet.
-**#1906 pick-target carrier (2026-09-30) — the ONE unarmed branch in
+**#1906 pick-target carrier (2026-09-30; carrier RETIRED 2026-10-14 with the #1605 regex
+seam — its binders survive for #1987's delete pick) — the ONE unarmed branch in
 `reminder_clear.py` now arms.** PM live, test card session: a named-target ask
 that matches zero or several candidates (`named_target_unmatched` — "clear the
 overdue reminder" against candidates none of whom literally say "overdue")
@@ -4571,7 +4601,8 @@ existing contract. Three changes, all landed this pass:
    turn" examples) will fail this test the moment they register without
    vocabulary.
 3. **One shared clear-family passthrough predicate, called from BOTH
-   tiers.** `reminder_clear.is_clear_family_passthrough(message)` (wraps the
+   tiers** (RETIRED 2026-10-14 with `detect_clear_family_ask`, #1943 — clear-family
+   turns route to the `clear_todos` resolver, below both gates). `reminder_clear.is_clear_family_passthrough(message)` (wraps the
    pre-existing `detect_clear_family_ask`) is now the ONE place that answers
    "is this an ambiguous clear-family ask that must reach #1605's own
    question before anything else arms." Two call sites:

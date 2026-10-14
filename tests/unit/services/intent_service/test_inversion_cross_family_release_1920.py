@@ -169,65 +169,64 @@ class TestCrossFamilyWriteRelease:
 
 
 class TestCarrierWiringAndExit:
-    def test_both_reminder_carriers_pass_their_registry_family(self):
-        """The pick-target carrier (unchanged, out of #1886's scope) still
-        names its pending op's family from the registry via
-        ``read_op_claims_turn``'s ``carrier_category``.
+    """2026-10-14: the reminder-clear pick-target carrier this class first
+    pinned retired with the #1605 regex seam that armed it (Arch's
+    clear_todos ruling, point 1). The #1920 mechanism's remaining
+    reminder-side carrier is #1987's delete_todo pick
+    (delete_todo_pick.handle_delete_todo_pick_turn); the pins follow it."""
+
+    def test_delete_pick_carrier_passes_its_registry_family(self):
+        """The delete pick names its pending op's family from the registry
+        via ``read_op_claims_turn``'s ``carrier_category``.
 
         #1886(b) (Arch's binding ruling, 2026-10-07): the reminder-TASK
         carrier (``todo_handlers.handle_reminder_task_turn``) no longer
         calls ``read_op_claims_turn`` at all — its off-intent release is
-        now the SHARED, stateless armed-turn consult
-        (``armed_turn_consult.classify_armed_reply``), which releases on
-        ANY operation at/above threshold regardless of registry family (no
-        ``carrier_category`` concept at that layer — see
+        the SHARED, stateless armed-turn consult
+        (``armed_turn_consult.classify_armed_reply``); see
         test_task_clarify_1654.py::TestTaskTurnHandlerSeam::
-        test_write_op_now_releases_per_1886b for the pin). This assertion
-        is narrowed to the carrier that still owns the #1920 mechanism;
-        asserting the OLD literal against ``todo_handlers`` would require
-        reintroducing the call site #1886(b) deliberately removed."""
+        test_write_op_now_releases_per_1886b."""
         import inspect
 
-        from services.intent_service import reminder_clear
+        from services.intent_service import delete_todo_pick
 
-        pick = inspect.getsource(reminder_clear._handle_pick_target_turn)
+        pick = inspect.getsource(delete_todo_pick.handle_delete_todo_pick_turn)
         assert 'carrier_category=registry_category_for("delete_todo")' in pick
         # The FTUX interview carrier stays reads-only.
         from services.intent_service import first_contact
 
         assert "carrier_category" not in inspect.getsource(first_contact)
 
-    def test_exit_copy_at_both_prompt_sites(self):
-        """CXO's copy, one exit phrase at both sites."""
+    def test_exit_copy_at_the_pick_prompt(self):
+        """CXO's exit phrase rides the delete pick's prompt, both the first
+        ask and the re-ask; the retired reminder-clear prompt sites are
+        gone from reminder_clear.py."""
         import inspect
 
         from services.intent_service import reminder_clear
+        from services.intent_service.delete_todo_pick import render_pick_question
 
+        for reasked in (False, True):
+            q = render_pick_question("reminder", ["hydrate", "review the pr"], reasked=reasked)
+            assert "'never mind'" in q
         src = inspect.getsource(reminder_clear)
-        # The initial-arm string is split across two literals in source;
-        # check its two halves and the re-ask's whole clause.
-        assert "or say 'never mind' and I'll " in src and '"leave it alone."' in src
-        assert "or say 'never mind' to drop it." in src
-        assert "act on just that" not in src
+        assert "or say 'never mind' and I'll " not in src
 
-    def test_never_mind_is_a_decline_at_the_pick_target_seam(self):
+    def test_never_mind_is_a_decline_at_the_pick_seam(self):
         """CXO's open build question, answered by probing the real seam:
         the exact phrase already resolves as DECLINE — no special case.
         (Variants — 'nevermind', 'forget it' — do NOT; a tolerance question
-        for CXO, recorded here as measured.)"""
+        for CXO, recorded here as measured.) Measured at the delete pick's
+        own offer-seam entry (READ, like the retired pick-target entry)."""
         from services.intent_service.acceptance import (
             AcceptanceVerdict,
             declared_axes_for_workflow,
             evaluate_acceptance,
         )
-        from services.intent_service.reminder_clear import CLEAR_PICK_TARGET_WORKFLOW
+        from services.intent_service.delete_todo_pick import render_pick_question
 
-        axes = declared_axes_for_workflow(CLEAR_PICK_TARGET_WORKFLOW)
-        question = (
-            "Still not sure which one — you have: 'hydrate', 'review the pr'. Tell me which "
-            "one you mean (first, second, by name, or 'the overdue one'), or say 'never mind' "
-            "to drop it."
-        )
+        axes = declared_axes_for_workflow("clarify_delete_todo_pick")
+        question = render_pick_question("reminder", ["hydrate", "review the pr"], reasked=True)
         verdict = evaluate_acceptance(
             "never mind",
             effect=axes[0] if axes else None,

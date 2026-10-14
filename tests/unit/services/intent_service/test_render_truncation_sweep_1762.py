@@ -35,8 +35,7 @@ items the same prompt had elided.
 Layer honesty (m-43): pure render-layer (formatters called directly with
 their real signatures), the canonical handler seam with the data source
 mocked, the floor's prompt-composition layer (a real ``ConversationalFloor``
-with a mocked LLM client, calling the real ``_format_domain_context``), the
-reminder_clear clarify seam (real function, mocked todo service), and ONE
+with a mocked LLM client, calling the real ``_format_domain_context``), and ONE
 history-assembly pin using the in-memory ``ConversationContext`` and the REAL
 ``build_recent_history``. No live classifier, no DB, no delivered turn.
 """
@@ -426,54 +425,11 @@ class TestFloorDueRemindersDataChannelCarriesFullSet:
         assert len(bullets) == len(rems)
 
 
-# ---------------------------------------------------------------------------
-# a13 — reminder_clear's ambiguity clarification. Silent [:6] under the
-# definite claim "you have: …", which is simply false past six.
-# ---------------------------------------------------------------------------
-
-
-class TestReminderClearClarifyListsEveryCandidate:
-    @pytest.mark.asyncio
-    async def test_unmatched_named_target_lists_all_candidates(self):
-        from services.intent_service.reminder_clear import maybe_handle_clear_family
-
-        targets = [
-            SimpleNamespace(
-                id=uuid.uuid4(),
-                text=f"Reminder {i}",
-                completed=False,
-                reminder_date=datetime(2026, 9, 12),
-            )
-            for i in range(1, 9)
-        ]
-
-        todo_service = MagicMock()
-        todo_service.list_todos = AsyncMock(return_value=targets)
-        intent_service = MagicMock()
-        intent_service.todo_handlers.todo_service = todo_service
-
-        intent = Intent(
-            category=IntentCategory.EXECUTION,
-            action="delete_todo",
-            confidence=1.0,
-            context={"original_message": 'clear the "nothing matches this" reminder'},
-        )
-        intent.original_message = 'clear the "nothing matches this" reminder'
-
-        result = await maybe_handle_clear_family(
-            intent_service,
-            intent,
-            session_id="s1762-clear",
-            user_id=str(uuid.uuid4()),
-            todo_user_id=uuid.uuid4(),
-            candidate_effect=EffectClass.DESTRUCTIVE,
-        )
-
-        assert result is not None, "the clear-family clarify path did not run"
-        assert "you have:" in result.message, f"unexpected branch: {result.message!r}"
-        _assert_all_present(
-            result.message, [t.text for t in targets], "the reminder_clear clarify list"
-        )
+# a13 — reminder_clear's ambiguity clarification (silent [:6] under "you
+# have: …") was fixed here, then RETIRED 2026-10-14 with the #1605 regex seam
+# that produced it (Arch's clear_todos ruling, point 1). Its successor, the
+# clear_todos resolver's unresolved reply, states its own elision ("…and N
+# more."), pinned in test_clear_todos_resolver.py.
 
 
 # ---------------------------------------------------------------------------

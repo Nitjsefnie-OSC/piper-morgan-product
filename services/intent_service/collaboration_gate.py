@@ -167,10 +167,11 @@ _COMPOSE_RE = re.compile(
 # "clear" is deliberately NOT added here — it is where completion and
 # deletion collide (#1605); a clear-family ask must reach that
 # disambiguation BEFORE either this gate or the #1190 destructive-confirm
-# gate arms its own question. See reminder_clear.is_clear_family_passthrough
-# (the single predicate both tiers call) and its two call sites:
-# destructive_confirm.build_todo_delete_confirmation and the WRITE/COLLABORATE
-# branch in intent_service._dispatch_action_rail.
+# gate arms its own question. Since 2026-10-14 that is structural: the router
+# sends clear-family asks to the clear_todos resolver entry (READ, no consent
+# check), which re-enters complete_todo / delete_todo via dispatch_workflow
+# below both gates (the reminder_clear.is_clear_family_passthrough predicate
+# both tiers used to call retired with detect_clear_family_ask).
 #
 # archive/restore (#1595 Phase 3, Arch's 2026-10-04 manage_portfolio split,
 # §2): archive_project / restore_project register as WRITE rail entries with

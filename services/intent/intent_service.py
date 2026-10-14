@@ -647,8 +647,8 @@ class IntentService:
 
         # #1605 (+ #1190/#1509 belt): a result that just ARMED a pending
         # action in the session-scoped offer store (a destructive
-        # confirmation, consent check, verb-disambiguation question, or
-        # correction window) must never have that offer clobbered by a soft
+        # confirmation, consent check, or verb-disambiguation question)
+        # must never have that offer clobbered by a soft
         # workflow offer — both live in the SAME one-slot store. The #1190
         # gate returns directly to avoid this; results funneled through
         # here carry a pending flag instead.
@@ -656,7 +656,6 @@ class IntentService:
             "destructive_confirmation_pending",
             "consent_check_pending",
             "verb_disambiguation_pending",
-            "reminder_clear_correction_pending",
             "drafted_issue_pending",  # #1571: the bound draft must survive this turn
             "issue_repo_question_pending",  # #1567: the armed repo question
             # #1567 (belt gap found in passing): the #1411 unmapped-status
@@ -1480,18 +1479,14 @@ class IntentService:
                             message=_vi_meta["message"],
                             intent_data=_vi_meta["intent_data"],
                         )
-                # #1605: a pending reminder-clear turn (the variant-1 verb
-                # question's either/or answer, the variant-2 correction
-                # window's "I meant delete", or — #1906 — the "which one do
-                # you mean?" pick-target answer) is handled kind-specifically
-                # BEFORE generic accept/decline — the answers aren't yes/no
-                # (same sanctioned handler-internal seam as the #1510 meta
-                # check above; routing moratorium honored).
-                elif _vi_payload.get("kind") in (
-                    "reminder_clear_verb_question",
-                    "reminder_clear_correction",
-                    "reminder_clear_pick_target_question",
-                ):
+                # #1605: a pending clear-verb question (the clear_todos
+                # resolver's either/or "mark done, or delete?") is handled
+                # kind-specifically BEFORE generic accept/decline — the
+                # answer isn't yes/no (same sanctioned handler-internal seam
+                # as the #1510 meta check above). The variant-2 correction
+                # window and #1906 pick-target kinds retired 2026-10-14 with
+                # the regex seam that armed them.
+                elif _vi_payload.get("kind") == "reminder_clear_verb_question":
                     from services.intent_service import reminder_clear as _rc
 
                     _rc_turn = await _rc.handle_reminder_clear_turn(
@@ -2166,10 +2161,9 @@ class IntentService:
                         "verify_inference": "verification_read_back_abandoned",
                         "standup_interview_invitation": "standup_invitation_abandoned",
                         "consent_check": "consent_check_abandoned",
-                        # #1605: an ignored clear-verb question / correction
-                        # window is dropped by the pop like every other offer.
+                        # #1605: an ignored clear-verb question is dropped
+                        # by the pop like every other offer.
                         "reminder_clear_verb_question": "reminder_clear_question_abandoned",
-                        "reminder_clear_correction": "reminder_clear_correction_abandoned",
                         # #1567: an ignored repo question is dropped by the
                         # pop like every other offer; the new turn routes.
                         "issue_repo_question": "issue_repo_question_abandoned",
@@ -10167,44 +10161,11 @@ class IntentService:
                 f"Unhandled EXECUTION action: {mapped_action} (original: {intent.action}) - checking contextual fallback"
             )
 
-            # #1605: an UNMAPPED clear-family sibling ("clear_reminders",
-            # "reset_todos", ...) previously landed on the honest-decline
-            # below — a false capability denial for a capability we HAVE
-            # (the exact transcript bug the joint design fixes). Detection
-            # is message-based, inside this already-claiming EXECUTION
-            # surface (routing moratorium honored — no pre-classifier
-            # change). Candidate effect DESTRUCTIVE: with no mapped action,
-            # delete is a live candidate, so the ask never auto-applies.
-            _clear_message = intent.original_message or (intent.context or {}).get(
-                "original_message", ""
-            )
-            from services.intent_service import reminder_clear as _rc
-
-            if _rc.detect_clear_family_ask(_clear_message) is not None:
-                _clear_user_id = _coerce_todo_principal(user_id)
-                if not _clear_user_id:
-                    return IntentProcessingResult(
-                        success=False,
-                        message="I need you to be logged in to manage todos. Please log in and try again.",
-                        intent_data={
-                            "category": intent.category.value,
-                            "action": intent.action,
-                        },
-                        error="User not authenticated",
-                        error_type="AuthenticationRequired",
-                    )
-                from services.shared_types import EffectClass as _EffectClass
-
-                _clear_result = await _rc.maybe_handle_clear_family(
-                    self,
-                    intent,
-                    session_id,
-                    user_id,
-                    _clear_user_id,
-                    _EffectClass.DESTRUCTIVE,
-                )
-                if _clear_result is not None:
-                    return _clear_result
+            # #1605's unmapped clear-family claim (message-regex detection of
+            # "clear_reminders"-style siblings) retired 2026-10-14 with
+            # detect_clear_family_ask: the router's clear_todos resolver entry
+            # is the family's one way in. An unmapped emission reaching this
+            # branch gets the #1333 honest decline below like any other.
 
             # Try specific contextual fallback first (#886 — these are genuinely
             # useful "I can't do X but I can do Y" responses)
@@ -16687,10 +16648,7 @@ Add any additional information here.
                 )
             # None → verified read-only clarification shape (no
             # parseable target; the handler asks "which issue?" /
-            # "which todo?") — or, for the #1666 delete-todo family,
-            # a clear-family shape whose three-variant flow the rail
-            # entry point's #1605 seam owns (its delete leg is
-            # #1190-gated inside that flow, never ungated).
+            # "which todo?").
         elif _consent_verdict is not None and (
             _consent_verdict is _consent.ConsentDecision.COLLABORATE
         ):
@@ -16707,27 +16665,15 @@ Add any additional information here.
             from services.intent_service import (
                 collaboration_gate as _collab_gate,
             )
-            from services.intent_service.reminder_clear import (
-                is_clear_family_passthrough,
-            )
 
-            # #1595 Phase 3 (Arch ruling 2026-10-04): the SAME clear-family
-            # passthrough predicate the DESTRUCTIVE tier already uses
-            # (destructive_confirm.build_todo_delete_confirmation), called
-            # here too so a clear-family turn ("clear my reminders") that
-            # the classifier guessed onto complete_todo reaches #1605's own
-            # three-variant "complete or delete?" question instead of this
-            # generic consent "shall I?" arming first. Identity-scoped to
-            # complete_todo's OWN entry object (never a bare action-string
-            # allowlist) — the same precedent is_delete_todo_action sets on
-            # the DESTRUCTIVE side, just expressed via rail-entry identity
-            # since every complete_todo alias (finish_todo/mark_complete/
-            # mark_done) shares the one registered entry object.
-            _is_complete_todo_turn = _rail_entry is _action_workflows.get("complete_todo")
-            if _is_complete_todo_turn and is_clear_family_passthrough(message):
-                pass  # fall through to dispatch_workflow; run_complete_todo_workflow's
-                # own maybe_handle_clear_family seam (candidate effect WRITE) claims it.
-            elif not _collab_gate.is_draft_collaboration_action(intent.action):
+            # The #1595 Phase 3 clear-family passthrough that stood here
+            # (reminder_clear.is_clear_family_passthrough, so a "clear my
+            # reminders" turn guessed onto complete_todo reached #1605's own
+            # question first) retired 2026-10-14 with the regex seam it fed:
+            # clear-family turns now route to the clear_todos resolver
+            # (READ — no consent check), which re-enters complete_todo via
+            # dispatch_workflow, below this gate.
+            if not _collab_gate.is_draft_collaboration_action(intent.action):
                 _check = _consent.build_consent_check_offer(intent, _rail_entry.effect)
                 self.workflow_offer_service.set_pending_offer(
                     session_id, _check.offer, user_id=user_id

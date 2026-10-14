@@ -288,7 +288,6 @@ class TestHandlerAndRail:
         async def _none(*a, **k):
             return None
 
-        monkeypatch.setattr(rc, "maybe_handle_clear_family", _none)
         monkeypatch.setattr(rc, "maybe_handle_explicit_bulk_delete", _none)
         result = await run_delete_todo_workflow(
             _SESSION,
