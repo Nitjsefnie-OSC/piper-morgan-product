@@ -8,7 +8,7 @@ caption: ''
 
 *August 14, 2026*
 
-Friday morning, my chief of staff agent (Exec) sent out the week's workstream-review kickoff — a message to ten different roles across the team, asking each of them to write up their week for the regular Friday report we call Ship. The message went out clean. It landed in all ten inboxes, plus my own copy, plus Exec's own sent folder, and Exec checked that it had actually landed before moving on to the next thing on its list.
+Friday morning, my chief of staff agent (Exec) sent out the week's workstream-review kickoff — a message to ten different roles across the team, asking each of them to write up their week for the regular Friday report we call Ship. The message landed in all ten inboxes, plus my own copy, plus Exec's own sent folder, and Exec checked that it had actually landed before moving on to the next thing on its list.
 
 Twenty-two seconds later, it was gone.
 
