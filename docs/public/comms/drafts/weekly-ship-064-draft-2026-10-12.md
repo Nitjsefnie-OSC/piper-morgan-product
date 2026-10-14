@@ -34,7 +34,7 @@ On alpha:
 
 On pipermorgan.ai, the alpha page now describes the alpha accurately (hosted, invite-only, bring your own model key, nothing to install) after drifting out of date for some time, and its Request an invite button is now wired to a working mailbox. There's a new support page, and the privacy policy now covers using Piper from ChatGPT and Claude, including how to turn it off. We held the claim that access ends right away back from both pages until we'd confirmed in a test, seeing a revoked client's next attempt fail. That test passed on Sunday, and the line is now live.
 
-Built and waiting for the next promotion to alpha: the Standup and Radar features clarify when a source failed instead of "nothing to report," and GitHub work items load whether you connected by signing in or with a personal token. CXO won't count these until they've been tested in a real reply, which hasn't happened yet because there is a big testing backlog that I'm behind on.
+Built and waiting for the next release to alpha: the Standup and Radar features clarify when a source failed instead of "nothing to report," and GitHub work items load whether you connected by signing in or with a personal token. CXO won't count these until they've been tested in a real reply, which hasn't happened yet because there is a big testing backlog that I'm behind on.
 
 ## ⚙️ Below the line: engineering & architecture
 
@@ -46,7 +46,7 @@ Built and waiting for the next promotion to alpha: the Standup and Radar feature
 
 ## 🔬 Methodology & process innovation
 
-- **Rulings from an assumed state.** Arch corrected six of their own rulings and claims this week, each made before reading everything. The sharpest: Arch treated "the router is unsure" as "not a command" until ten live test requests showed a delete request would have been saved as a new project. Arch now checks what the code and Piper actually do before ruling.
+- **Rulings from an assumed state.** Arch corrected six of their own rulings and claims this week, each made before reading everything. The sharpest: Arch treated "Piper isn't sure what you meant" as "not a command" until ten live test requests showed a delete request would have been saved as a new project. Arch now checks what the code and Piper actually do before ruling.
 - **Cheaper, safer machinery.** CIO cut the briefing every agent loads at session start from 169 KB to a 5 KB page, and destructive git commands aimed at my working copy are now blocked automatically instead of by a sentence in the instructions.
 - **AI prompts human.** After outside feedback from a trusted human advisor that blog posts give off that "AI-written" smell, I've reverted to an approach I'm using elsewhere, writing all of the prose myself from a scaffold Comms supplies with the facts checked. The editorial calendar has a number of drafts that I am carefully rewriting as I come to them, and forthcoming posts will follow the model in which Claude prompts me to write instead of the other way around.
 - **Checking the content, not the file.** Saturday's post went live with the wrong hero image for about three and a half hours until I noticed. The publish check had confirmed the file existed. It now opens the image and compares it to the alt text.
@@ -80,7 +80,7 @@ Lead finishes the planned rule deletions ahead of Wednesday's checkpoint. After 
 
 # 🚧 Blockers & asks
 
-Most of next week waits on me: the next alpha promotion, a GitHub test identity for those checks, the go to publish the new privacy section about Piper accounts, and my plugin test.
+Most of next week waits on me: the next release to alpha, a GitHub test identity for those checks, the go to publish the new privacy section about Piper accounts, and my plugin test.
 
 # 🔎 This week's learning pattern
 
@@ -88,7 +88,7 @@ Most of next week waits on me: the next alpha promotion, a GitHub test identity 
 
 **Discovery**: When code that reads a user's data can only answer "found" or "empty," every failure to read comes out as "empty," and the user gets a confident wrong sentence about their own work.
 
-**Example from this week**: It turned up three times in two days. Closing or reopening an issue treated every non-answer from GitHub as "that issue doesn't exist." The Radar card showed a failed read as a quiet day. And the credential lookup had no path at all for personal-token users. Each fix adds a third answer, "I couldn't check," with the reason. Lead found the biggest one while preparing a live check of the very feature meant to disclose failures.
+**Example from this week**: It turned up three times in two days. Closing or reopening an issue treated every non-answer from GitHub as "that issue doesn't exist." The Radar card showed a failed read as a quiet day. And for people who connected with a personal access token, Piper had no way to read GitHub at all. Each fix adds a third answer, "I couldn't check," with the reason. Lead found the biggest one while preparing a live check of the very feature meant to disclose failures.
 
 **Why it matters**: It's this week's architecture rule seen from the other side. Code is supposed to check meaning against the user's real data, and a check that can't tell "nothing there" from "couldn't look" turns an outage into a claim about the user's work.
 
