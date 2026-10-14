@@ -216,3 +216,5 @@ Brake FIRED (second slip = #1965 admission, found and ledgered 10-09). Memo to E
 - 2026-10-14 09:5x: Option 3 result from Lead: none of the 61 misroutes a day-one turn; no MVP issue; ledgered. Wed tripwire closed on the number. Remaining Epic 0 post-MVP notes (cold "change ... to" row; PORTFOLIO's 14) are Lead's doc §4, not gate items.
 
 - 2026-10-14 13:xx: #2009 (nullable owner_id on 8 tables) placed Production. Trigger to re-place: PM-hand count (Arch's corrected SQL) shows tier-A non-zero or feedback user_id NULL = real data -> classify Class 1/2 and bring to Exec for admission. Result arrives via Exec/Lead/#2009.
+
+- 2026-10-14 13:4x: #1771/#2007/#1783 landed (bc3ede7e35), close on CXO served readings after next promotion. #1943 rework (1) HELD ba732d825a; lands with the clear_todos flip = PM's token on alpha's live flag. When Lead asks for the flip, route to Exec as a decision/ruling item; recount the ceiling after it lands (17->10 ratchet row, regex deletions).
