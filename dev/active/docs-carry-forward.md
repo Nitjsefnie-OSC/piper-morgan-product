@@ -19,7 +19,7 @@
 - **Giving It Away**: PUBLISHED 10-13 (website `d1f39f2`). Medium crosspost DONE 10-13 (row `distributed`).
 - **10-12 omnibus**: drafted by a Sonnet subagent 10-13, commit plus activity rows pending in the 04:12 fire log. Exec and CIO 10-12 logs unclosed (nudged).
 - **Wed 10-14 04:12 fire**: PUBLISH Ship #064 "Weekly Ship #064: Code Decides Permission" (`ready-for-docs`, Comms memo received, pre-flight and dry-run done 10-13). Real publish from the website worktree: `--draft .../weekly-ship-064-draft-2026-10-12.md --slug weekly-ship-064-code-decides-permission --category ship --work-date 2026-10-02` (no image flag, reuses piper-ship.webp). Re-fetch first. Live URL is under `/shipping-news/`. Then row `published` with blogURL/blogPath, archive the draft, LinkedIn-only reminder to Exec.
-- **Thu 10-15**: "The Overzealous Cleanup Routine" (`drafted`).
+- **Thu 10-15 04:12 fire**: PUBLISH "The Overzealous Cleanup Routine" (`ready-for-docs`, Comms memo received, pre-flight and dry-run done 10-13). `--draft .../the-overzealous-cleanup-routine.md --image .../the-overzealous-cleanup-routine-waiter-carries-away-untouched-dinners.png --slug the-overzealous-cleanup-routine --category building --work-date 2026-08-14`. Re-fetch first. Then archive draft and png, row `published` with `draftPath` to `drafts/published/`, Medium-only reminder to Exec.
 - **Mon 10-19**: next weekly audit. **~11-30**: glossary 60-day re-verify.
 
 ## Held on PM (via Exec)
