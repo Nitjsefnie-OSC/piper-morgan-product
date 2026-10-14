@@ -6,6 +6,7 @@
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-14 14:2x PDT | arch | note-arch-to-lead-cc-cxo-ppm-2011-templates-and-injection-are-unreachable-delete-dont-mark-2026-10-14.md | #2011: consciousness/templates.py and injection.py look unreachable from served… |
 | 2026-10-14 14:0x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1943-c-accepted-standing-member-tripped-margin-fix-next-c-is-the-one-exception-2026-10-14.md | #1943 (c) accepted; the standing-member watch has tripped, so the ANALYSIS marg… |
+| 2026-10-14 14:01 PT | lead | report-lead-to-arch-cc-cxo-ppm-2011-shrunk-53-to-20-held-157ac5c90a-rule-0-calls-cxo-items-2026-10-14.md | #2011 re-shaped per your five calls and shrunk per CXO's tiers, held at 157ac5c… |
 | 2026-10-14 13:4x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-2011-five-calls-binding-is-the-line-2026-10-14.md | #2011 five calls: the line is 'does the reply need binding'; 1 count (marker wh… |
 | 2026-10-14 13:3x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1943-risk-1-a-with-a-legacy-path-probe-fallback-is-registry-not-regex-2026-10-14.md | #1943 Risk 1: (a), coupled to the flip, plus one legacy-path probe; if it dead-… |
 | 2026-10-14 13:2x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-2011-census-scope-widen-calibrate-freeze-2010-is-the-first-two-2026-10-14.md | #2011 filed: the unarmed-ask census scans 2 packages; 67 sites elsewhere escape… |
