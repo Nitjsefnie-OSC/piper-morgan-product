@@ -139,6 +139,9 @@
   PM set the subkey + re-encrypted (16:36 PT, total=2 rewritten=2 legacy=0); I flipped `GITHUB_LEGACY_CONTEXT_FALLBACK` False at
   7cc00113bc with the count on the issue + decisions.log + runbook, and made `--apply --snapshot` refuse non-`vs_` values (the apply had
   taken the literal `<snapshot-id>`). Remaining: PA's live check (Exec asked), Registry publish, the held branch on its own trigger.
+- **#2005 (PA, 17:05): MCP github-issues resource presented a 30-item page as the full set.** FIXED on main 6cab869fd3 (17:5x): payload
+  carries `total` + `truncated`, description says report total never count, adapter passes `perPage=limit`. Live needs PA's MCP redeploy
+  (memo to PA cc Exec); served check = card v27 row N4; PA holds Registry publish until then. Close after PA's served read.
 - **read_floor_3 wave** (get_project_status + get_top_priority adapters; real scoring replaces the lenient FLOOR rule; Arch's four 20:5x
   conditions): trigger = the deletion lane's next STATUS/PRIORITY pass, not #1984. The routing-stack doc now says the grammar has two
   sources (rail + registry FLOOR/CANONICAL ops) — an adapter changes dispatch/scoring, not nameability.
