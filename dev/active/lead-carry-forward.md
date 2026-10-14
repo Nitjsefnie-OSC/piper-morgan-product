@@ -1,6 +1,24 @@
 # Lead carry-forward — Fable 5.1 seat; Model A worktree ~/Development/piper-morgan-worktrees/lead
 
-## STATE @ 2026-10-13 21:49 PT — DAY CLOSED. Alpha serves `de7d0c1c57` (PM's 18:49 promotion); PM mid-card (row 5 next); main 12/12 green
+## STATE @ 2026-10-14 09:14 PT — history rewrite DONE (reset --keep to the new main 08:45); START drained; PM mid-card (row 5 next)
+- **History rewrite (Exec's runbook `dev/active/exec-history-rewrite-runbook-2026-10-13.md`):** froze 22:43 10-13 (reply sent, counts 0/0), reset
+  08:45 to 25d96342a1 (new main descends from `d217d8f1ca`), unfrozen 09:02. **Carried rules (24h at least):** never merge an old branch, `stash
+  pop`, or check out an old sha; the pre-push guard holds 57 old shas; **do not run `scripts/sync-pm-local.sh` until xian says his checkout is
+  reset**; no `scope-guard.yml` dispatch today; mail-send that gives up after 6 → re-run the same command. Held branches on origin were rewritten
+  with main (181 refs equal), so `claude/lead-1982-pat-dual-write` lives on under a NEW sha: re-resolve by name, never by 4400ee3d9f.
+- **Cron ROTATED 06:5x: 46638333** (`17 6,9,12,15,18,21`, expires ~10-21; next rotation Mon 10-19 START). Registry row updated (94eafbf565).
+- **Alpha `de7d0c1c57` = pre-rewrite id;** served code equals `d217d8f1ca` on every served path (one operator-script line differs). Staging serves
+  `d217d8f1ca`, Tests green → the next promotion passes the gate without waiting. No code landing since the rewrite tip. Card **v31** says so.
+- **Wednesday trip-wire reading: literal ceiling 90 (35 lists)**, unchanged since my 10-13 13:45 FILE_REFERENCE deletion (a1a02d11f3); PPM/Arch/Exec
+  were told 10-13 (done-lead-to-arch… memo). PPM's re-plan is PPM's; nothing owed by Lead unless asked.
+- **Card v31** (`dev/active/pm-test-card.md`; mirror artifact ALxfaRpLn5wjBVUPjzLvbi). PM's remaining rows: 5 (#1992), 6 onward, fresh-account
+  block 12–14, Spec's P2–P4; setup E (calendar) and P6 (prod counts) are his hand. Answer pastes before carried work; file failures as issues.
+- **Open on my side:** #1987 OPEN for AC3 served (row 1); #2001 OPEN for CXO's served judgement; #1982 Registry publish HELD (xian), PAT dual-write
+  branch behind PM's PAT-only run, #1983/#1995 behind it; #2005 paused (eval, PA). **Fri 10-16 PROD server key move (PM's hand).** CIO role-duties
+  count re-run 10-27. Alpha log-stream behavioural re-read: attended-only, on Exec's ask.
+- Main 12/12 green at START (post-rewrite deploy-staging on d217d8f1ca SUCCESS 08:24). Briefing "Now" alpha + engineering lines refreshed (94eafbf565).
+
+## EARLIER — ## STATE @ 2026-10-13 21:49 PT — DAY CLOSED. Alpha serves `de7d0c1c57` (PM's 18:49 promotion); PM mid-card (row 5 next); main 12/12 green
 - **At START 10-14: (1) ROTATE CRON e5491d18** (armed 10-10 17:29, expires ~10-17): CronList → CronDelete → CronCreate `17 6,9,12,15,18,21 * * *`
   → CronList exactly one; update the lead row in `dev/active/duty-cycle-registry.tsv`. **(2) Epic 0 Phase 3 trip-wire (PPM, Wed 10-14):**
   read the literal ceiling (120 at close; `TOTAL: 120 (36 lists)`), say whether anything moved. (3) Read alpha /health against origin/main

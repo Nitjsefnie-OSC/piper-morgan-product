@@ -25,7 +25,7 @@ lives in GitHub, this file holds only durable owed/queued items.)
   `b3f684822f` · dual-write/`get_github_repository` DONE 10-06 (`e394c6e084`). Places removed 10-06 (`d06e81186b`). `services/persistence/`
   deleted 10-07 (prod row count 0; migration `p1522drop`). Still open: Documents HELD on #1270, Pard/PM on pytest.ini ignore + the Next.js scaffold, I2 error pages (product call).
 - Beta-conditions audit at the final gate (mine + subagent cross-check; PM ruling 8/15).
-- **Epic 0 Phase 3 tail — re-plan trip-wire Wed 10-14** (PPM ruled 10-10 05:3x; the earlier "Tue" was a label error) — **Filed**: 2026-10-09 · end of 10-10: ceiling **127** (121 + 6 restores), routing tail re-measure Mon; 10-09 was 121/91 (measured 17:5x PDT: `pattern_literal_counts` TOTAL 121, `routing_tail` 91; reported to PPM). Batch 26 + chunk 8 (5) + GUIDANCE (3).
+- **Epic 0 Phase 3 tail — re-plan trip-wire Wed 10-14: READ 09:14 10-14 → literal ceiling 90 (35 lists), told PPM/Arch/Exec 10-13; PPM's re-plan.** Was: re-plan trip-wire Wed 10-14 (PPM ruled 10-10 05:3x; the earlier "Tue" was a label error) — **Filed**: 2026-10-09 · end of 10-10: ceiling **127** (121 + 6 restores), routing tail re-measure Mon; 10-09 was 121/91 (measured 17:5x PDT: `pattern_literal_counts` TOTAL 121, `routing_tail` 91; reported to PPM). Batch 26 + chunk 8 (5) + GUIDANCE (3).
   121 is still just above PPM's 110–120 band. The gate (rules 10/11 + the #1973 threshold in every arm) reads no list GO. What's left needs
   router/catalog work or new rows: COMPLETION_HISTORY (#1117 row @0.72; 4 rule-10 holds), the greeting/thanks/farewell family (rule-10 holds;
   pleasantry is NOT ROUTING), STAKEHOLDER (#1256, blocked on DOCUMENT_QUERY's loose "update … with", rule 11), and the 3 delete-family
