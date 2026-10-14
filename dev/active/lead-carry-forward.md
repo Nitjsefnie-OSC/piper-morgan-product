@@ -1,6 +1,32 @@
 # Lead carry-forward — Fable 5.1 seat; Model A worktree ~/Development/piper-morgan-worktrees/lead
 
-## STATE @ 2026-10-14 11:16 PT — RUN-HOT (xian, until Thu 10-15 22:00): MVP pass in flight; 4 MVP closes today; 5 lanes; promotion NEEDED (N5)
+## STATE @ 2026-10-14 12:21 PT — RUN-HOT (until Thu 22:00): 4 MVP closes, 7 landings, 1 held lane; Step 0 READY for PM (staging 1746f1ebec)
+- **READY sent 12:xx-ish (card v33, 12:0x):** staging `1746f1ebec`, Tests SUCCESS on `bc3ede7e35`, gate accepts. PM promotes (his hand); then Web/CXO served rows:
+  N5 #1943 delete-first-two; #1843 REFINING seam ("please remove the fluff" edits, "please go ahead" finalizes); #1771+#2007 (`not now` at the resume
+  offer → CXO's line; `do a standup` → continue/restart offer); #1783 (capped list → `could you show me the rest?` pulls the rest; `can you delete the
+  rest?` not cashed); #2008 copy ("No completions yesterday."). Mail Web the alpha sha when it changes.
+- **HOLD code pushes to main until PM promotes** (each push cancels the in-progress Tests run and moves what staging serves). Docs pushes are fine.
+- **MVP milestone:** CLOSED today #1886, #1623, #1579, #1860. Open non-epic 7: #1965 + #1889 (wait on the broken-grant OAuth leg, PM's hand with PA),
+  #1943 (held branch; see below), #1913 (Web needs a spare Anthropic key for web-agent; on xian's card via Exec), #1843 / #1783 / #1771 (fixed on
+  main; CXO closes on served readings after the promotion).
+- **Landed on main today:** #1943 first-N 156bec12c3; #1843 196feeb23d; #1771+#2007 271fccc508; #1783 39dcb603d1; #2008 82f83be6ff; data-model.md
+  1df05f7945; CIO concept-link gate in lint.yml + ab-a-isolation concept 93978c4ddf; push-wrappers R9 c4f64da4e7; data/chromadb untracked 7a498b2aec.
+- **HELD: `claude/lead-1943-clear-todos-resolver` (6fd438bba0)** = rework (1) (the #1605 net retired) + (c) (clear_todos in ACTION_REGISTRY, Verb.CLEAR,
+  todo-domain shim cells, example) + CXO's sentence drop. Rule 7 PASS (×6 identical on 11 rows; full run 472/532; both named regressions read the same on
+  main). Branch suites 5827/1 skipped + 151 on the (c) files; mypy at ceiling. **Lands ONLY with PM's `clear_todos` flip** (alpha live flag, his token):
+  merge main into the branch, land in the same push with a landing note stating the coupling, then MY served probe on alpha: the three #1605 variants,
+  Arch's legacy-path turn (a #846 offer pending, then `clear my reminders`), CXO's two quotes (not-live sentence in context; a plain `no` at the resolver),
+  each with the turn before it. Worktree `lead-1943c` kept for it.
+- **#2009 (nullable owner_id, 8 tables, three tiers):** step 1 is a prod DB read (seat-denied) → Arch's corrected SQL is on xian's card via Exec; I build
+  the NOT NULL migration on the count (A: NOT NULL; B: backfill from parent then NOT NULL; C: feedback.user_id). Production unless the count moves it.
+- **Standing watch reported to Arch 12:21:** `let's analyze the risk here` reads CLARIFY ×5 / analyze_blockers ×1 on main today.
+- **Chores waiting for a post-promotion idle fire (they touch Tests' trigger paths):** Concept lines on the 8 product CI workflows (due 11-01).
+- **Cron:** session 46638333 until the first `pm-lead-cycle` LaunchAgent fire lands → CronDelete + registry row. 12:17 fire not yet delivered at 12:21
+  (cron fires only when idle; the session has been busy).
+- Earlier today: history rewrite reset 08:45 (new main from d217d8f1ca), unfrozen 09:02; sync-pm-local resumed 09:5x; Option 3 verdict none (doc
+  corrected: router before Stage 0).
+
+## EARLIER — STATE @ 2026-10-14 11:16 PT — RUN-HOT (xian, until Thu 10-15 22:00): MVP pass in flight; 4 MVP closes today; 5 lanes; promotion NEEDED (N5)
 - **Run-hot ruling (Exec 10:36):** drain fully, deeper checks, subagents freely; mail Exec if xian blocks; no model ask (Fable). PM: morning work, then the card.
 - **MVP milestone today:** CLOSED #1886 (10-07 fix, 10-08 served), #1623 (member 2 = #1627), #1579 and #1860 (Web's served rows 1–2 on de7d0c1c57).
   Open non-epic: #1965, #1943, #1913, #1889, #1843, #1783, #1771 (7, was 11).

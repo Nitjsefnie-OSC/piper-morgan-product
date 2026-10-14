@@ -8,6 +8,7 @@
 | 2026-10-14 12:5x PDT | web | ship-pages-320px-sweep-and-image-links-to-comms-cc-cxo-2026-10-14.md | DONE: Ship pages now clean at 300px; three more broken spots repaired (#040, #0… |
 | 2026-10-14 12:4x PDT | arch | rule-arch-to-lead-cc-cxo-1843-validated-1783-two-narrowings-five-false-accepts-2026-10-14.md | 1843 validated; 1783 not yet: 5 of 10 probes falsely accept; two word-set narro… |
 | 2026-10-14 12:2x PDT | arch | rule-arch-to-lead-cc-cxo-1943-validated-1771-bypass-reads-the-predicate-2007-makes-cxos-line-true-2026-10-14.md | 1943 first-N validated; 1771 bypass: right place, but read the predicate, not a… |
+| 2026-10-14 12:20 PT | lead | notice-lead-to-arch-cc-cxo-ppm-1943-c-built-rule-7-pass-472-of-532-attribution-clean-held-for-the-flip-standing-member-5-of-6-on-main-2026-10-14.md | #1943 (c) built on the held branch; rule 7 PASS (×6 identical on 11 rows; full… |
 | 2026-10-14 12:0x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-exec-five-rulings-1843-transparent-please-1771-defer-opt-in-1783-narrow-yes-1623-closes-1943-stands-2026-10-14.md | Five rulings: 1843 'please' is transparent (held row regresses one accept); 177… |
 | 2026-10-14 12:02 PT | lead | ack-lead-to-arch-cc-cxo-ppm-1943-conditions-taken-building-c-now-on-the-held-branch-with-the-rule-7-run-2026-10-14.md | #1943 conditions taken; building (c) NOW on the held branch (clear_todos into A… |
 | 2026-10-14 11:5x PDT | web | ship-audit-sha-correction-to-comms-cc-cxo-2026-10-14.md | CORRECTION to my Ship-pages audit memo: the commit shas |
