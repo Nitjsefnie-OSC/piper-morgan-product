@@ -180,6 +180,14 @@ P7 and P9 reaches the router unclaimed.
 | Actually, change the title to 'Mobile login timeout' (P3, original B3) | DOCUMENT_QUERY (`\bchange\s+(?:the\s+)?[\w\s]+\s+to\b`) → `update_document_query` | `update_issue` ×6 @0.85 | **yes in the day-one turn** — see below |
 | create a project called Mobile Login (P8) | PORTFOLIO (`\b(?:add|create)\s+(?:a\s+)?(?:new\s+)?project\b`) → `manage_portfolio` | `add_project` ×6 @0.99 | **yes** — same handler, see below |
 
+**Correction (11:06 10-14, Arch's reading of `intent_service.py` ~2520–2577):** on an UNARMED turn the live router consult
+(`consult_inversion_live`) runs BEFORE `classify_multiple`, and Stage 0 and surface 1 both live inside `classify_multiple`; inside the
+consult, `pre_classify` is telemetry only. So the order is router → (if the consult falls through) Stage 0 → surface 1, not Stage 0 first.
+The verdict holds for a second reason: the router emits `update_issue`, a WRITE that is NOT in `FLIP_WRITE_ALLOWLIST`
+(`workflow_dispatcher.py` ~483), so the consult falls through and Stage 0 resolves the session's issue as described below. Standing
+condition (Arch, decisions.log 10-14 11:1x): no referent-dependent write (`update_issue` today) enters the allowlist until the consult
+stands down when Stage 0 would resolve a referent.
+
 **P3, the implicit title change.** Surface 1 is not the first surface this turn meets. `IntentClassifier.classify` and
 `detect_multiple_intents` both run Stage 0 first (`classifier.py` ~361 and ~676, #1394 / ADR-078 D2): `_resolve_issue_referent`
 reads the session's created-issue ledger and emits `update_issue` directly when the message is an issue-field follow-up with no

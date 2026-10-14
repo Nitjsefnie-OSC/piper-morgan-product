@@ -4,6 +4,7 @@ description: The A/B/A stash experiment — decide in minutes whether a test fai
 scope: cross-role
 version: 1.0
 created: 2026-08-15
+concept: "Concept: docs/internal/operations/canonical-ops-recipes.md"
 ---
 
 # ab-a-isolation
