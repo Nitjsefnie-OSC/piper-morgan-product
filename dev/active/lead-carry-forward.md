@@ -8,7 +8,7 @@
   Mail Web the alpha sha when it changes.
 - **READY TO LAND after the promotion, in ONE push, each re-run at merge (14:02):** (1) `claude/lead-analysis-margin` de54cb5daf (ANALYSIS margin
   example + corpus/pointer re-point; Arch accepted (b)); (2) `claude/lead-2010-list-projects-offers` b0545125c7 (CXO's #2010; her served check after);
-  (3) `claude/lead-2011-unarmed-census-b` 157ac5c90a (census re-shaped per Arch + shrunk per CXO, 53→20; Arch's Rule-0 word on 5 dead modules + 2
+  (3) `claude/lead-2011-unarmed-census-b` 94310057c7 (census re-shaped per Arch + shrunk per CXO, 53→20; Arch's Rule-0 word on 5 dead modules + 2
   orphans and CXO's word on error_consciousness:124 can land later as further shrink). Landing order: 2011-b, then 2010 (its two literals lower the
   frozen row in the 2010 landing), then the margin fix. Decisions.log lines + landing notes citing the controls. SEPARATE: `claude/lead-1943-clear-todos-resolver`
   6fd438bba0 lands ONLY with PM's clear_todos flip + my served probe.
