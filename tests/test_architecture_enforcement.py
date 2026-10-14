@@ -4514,19 +4514,14 @@ class TestUnarmedAskSiteRatchet:
             # deleted (no consumer beyond the package re-export). todo
             # _build_closing re-measured (CXO 265; 268's reprioritize claim
             # dropped — no op changes a todo's priority).
-            # -- services/consciousness/ (11)
-            (
-                "services/consciousness/error_consciousness.py",
-                "_add_dialogue_invitation",
-                1,
-                "{}. Would you like me to try again?",
-            ),
-            (
-                "services/consciousness/error_consciousness.py",
-                "_fix_mvc_gaps",
-                1,
-                ". Would you like me to try again?",
-            ),
+            # 22 -> 20 (2026-10-14, T4 per CXO): error_consciousness
+            # format_error_conscious + _add_dialogue_invitation + _fix_mvc_gaps
+            # deleted (no consumer beyond the package re-export). Line 124's
+            # live retry offer stays: CXO's replacement doubles the recovery
+            # text it follows (sent back to CXO). Loading copy is unreachable
+            # (web/utils/streaming_responses has no importer) but its modules
+            # are not ruled for deletion: rows stay.
+            # -- services/consciousness/ (9)
             (
                 "services/consciousness/error_consciousness.py",
                 "format_conversational_error_conscious",

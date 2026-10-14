@@ -45,7 +45,6 @@ from services.consciousness.conversation_consciousness import format_greeting_co
 from services.consciousness.error_consciousness import (
     enhance_error_pattern,
     format_conversational_error_conscious,
-    format_error_conscious,
 )
 from services.consciousness.files_consciousness import (
     format_projects_conscious,
@@ -98,7 +97,6 @@ __all__ = [
     "get_conscious_loading_message",
     "format_progress_conscious",
     # Error consciousness (Wave 1)
-    "format_error_conscious",
     "format_conversational_error_conscious",
     "enhance_error_pattern",
     # CLI consciousness (Wave 2)
