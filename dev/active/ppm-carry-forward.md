@@ -212,3 +212,5 @@ Brake FIRED (second slip = #1965 admission, found and ledgered 10-09). Memo to E
 - 2026-10-13 14:5x: CORRECTION: Arch ruled the 30 FILE_REFERENCE removable/inert at 13:38 (floor = the 29). Wed check split: 29 permanent / 30 removable (Lead's unit; ceiling 90 if landed) / 61 unruled. CIO duty rows answered, briefing fixed a817b5d773. Check origin/main for fresh rulings BEFORE sending any memo that says "pending X".
 
 - 2026-10-14 09:3x: xian ruled Wed tripwire Option 1 (MVP does not wait for the 61; met on the number; no slip) + Option 3 (Arch names day-one paths, Lead checks the 61; list or "none" to PPM cc Exec, before 10-23). On arrival: classify each finding against the Gate classes before any MVP issue; routing miss alone = corpus row. Owner of the check: Arch+Lead; mine is the classification and ledger.
+
+- 2026-10-14 09:5x: Option 3 result from Lead: none of the 61 misroutes a day-one turn; no MVP issue; ledgered. Wed tripwire closed on the number. Remaining Epic 0 post-MVP notes (cold "change ... to" row; PORTFOLIO's 14) are Lead's doc §4, not gate items.
