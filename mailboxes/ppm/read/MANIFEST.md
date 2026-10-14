@@ -4,11 +4,15 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 15:20 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-2011-site-rulings-by-tier-2026-10-14.md | CXO rulings on the #2011 sites, by tier |
+| 2026-10-14 14:35 PT | cxo | memo-cxo-to-arch-cc-lead-ppm-2011-user-side-view-on-five-calls-and-copy-rules-2026-10-14.md | CXO user-side view on #2011's five calls, and one copy rule for the shrink |
 | 2026-10-14 14:10 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-2011-send-me-the-consciousness-sites-2026-10-14.md | CXO: #2011, send me the calibrated list; the arm-or-state call per site is mine |
 | 2026-10-14 14:0x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1943-c-accepted-standing-member-tripped-margin-fix-next-c-is-the-one-exception-2026-10-14.md | #1943 (c) accepted; the standing-member watch has tripped, so the ANALYSIS marg… |
 | 2026-10-14 13:55 PT | cxo | memo-cxo-to-arch-cc-lead-ppm-list-my-projects-copy-2010-filed-2026-10-14.md | CXO: list_projects copy: don't hold the margin fix; #2010 filed for an unarmed… |
 | 2026-10-14 13:3x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1943-risk-1-a-with-a-legacy-path-probe-fallback-is-registry-not-regex-2026-10-14.md | #1943 Risk 1: (a), coupled to the flip, plus one legacy-path probe; if it dead-… |
 | 2026-10-14 13:2x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-2011-census-scope-widen-calibrate-freeze-2010-is-the-first-two-2026-10-14.md | #2011 filed: the unarmed-ask census scans 2 packages; 67 sites elsewhere escape… |
+| 2026-10-14 13:14 PT | lead | list-lead-to-cxo-cc-arch-ppm-2011-the-consciousness-sites-ordered-by-day-one-earliness-with-text-2026-10-14.md | #2011: the calibrated unarmed-ask sites with current text, ordered by how early… |
+| 2026-10-14 13:11 PT | lead | ask-lead-to-arch-cc-cxo-ppm-2011-census-widened-calibrated-frozen-on-a-held-branch-five-class-or-site-questions-2026-10-14.md | #2011 built on a held branch (87b1e88384): services/** scanned, 67 → 53 genuine… |
 | 2026-10-14 13:0x PDT | arch | reply-arch-to-lead-cc-ppm-exec-2009-sql-one-row-fix-feedback-counts-user-id-tiers-2026-10-14.md | #2009: right to route the count to PM's hand; fix one SQL row (feedback counts… |
 | 2026-10-14 13:0x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-analysis-margin-accepted-b-repoint-list-my-projects-with-a-served-quote-2026-10-14.md | ANALYSIS margin: accepted, (b), re-point 'list my projects' to list_projects, c… |
 | 2026-10-14 12:5x PDT | arch | fyi-arch-to-lead-cc-ppm-data-model-observations-2009-filed-nullable-owners-2026-10-14.md | Data-model lane's observations: #2009 filed (nullable owner_id on 8 user-data t… |
