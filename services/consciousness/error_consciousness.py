@@ -65,14 +65,17 @@ def format_conversational_error_conscious(
     explanation = message.lower() if not message[0].isupper() else message
     recovery_short = _shorten_recovery(recovery)
 
-    # Add dialogue invitation based on severity
+    # Closing by severity (#2011, CXO 2026-10-14): ERROR/CRITICAL end on the
+    # recovery itself — it already says what to do, and the old "Want me to
+    # try again, or should we try something different?" offered an action
+    # nothing performs. INFO/WARNING keep a statement, not an offer.
     if severity in (
         ErrorSeverity.ERROR.value,
         ErrorSeverity.ERROR,
         ErrorSeverity.CRITICAL.value,
         ErrorSeverity.CRITICAL,
     ):
-        invitation = " Want me to try again, or should we try something different?"
+        invitation = ""
     else:
         invitation = " Let me know if you need anything else."
 

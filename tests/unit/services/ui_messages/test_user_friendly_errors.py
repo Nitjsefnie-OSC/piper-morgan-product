@@ -213,8 +213,12 @@ class TestUserFriendlyErrorService:
         # ERROR severity should use consciousness pattern with identity voice
         assert "I ran into something:" in message or "I" in message
         assert "trouble accessing the database" in message
-        # Should have dialogue invitation
-        assert "?" in message or "try again" in message.lower()
+        # #2011 (CXO 2026-10-14): ERROR/CRITICAL end on the recovery itself —
+        # no unbuilt "Want me to try again, or should we try something
+        # different?" offer, and no invitation appended.
+        assert "Want me to" not in message
+        assert "?" not in message
+        assert "Let me know if you need anything else" not in message
 
     @pytest.mark.smoke
     def test_convenience_function_make_error_user_friendly(self):

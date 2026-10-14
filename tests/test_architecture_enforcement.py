@@ -4531,13 +4531,10 @@ class TestUnarmedAskSiteRatchet:
             # web/utils/streaming_responses) and slot_prompts
             # .format_confirmation deleted — CONSCIOUS_LOADING_MESSAGES,
             # _get_generic_conscious_message and format_confirmation leave.
-            # -- services/consciousness/ (7)
-            (
-                "services/consciousness/error_consciousness.py",
-                "format_conversational_error_conscious",
-                1,
-                "Want me to try again, or should we try something different?",
-            ),
+            # 17 -> 16 (2026-10-14, CXO 16:10): format_conversational_error_
+            # conscious drops its ERROR/CRITICAL invitation (the recovery
+            # already says what to do) — its row leaves.
+            # -- services/consciousness/ (6)
             (
                 "services/consciousness/files_consciousness.py",
                 "_fix_mvc_gaps",
