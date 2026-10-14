@@ -2,7 +2,7 @@
 type: methodology
 title: methodology-48 — A Proxy Count Is Not The Quantity (and at selection time it propagates)
 valid_from: "2026-08-10"
-last_updated: "2026-08-10"
+last_updated: "2026-10-14"
 ---
 
 # methodology-48 — A Proxy Count Is Not The Quantity (and at selection time it propagates)
@@ -64,6 +64,10 @@ unwarranted*. **The count supports neither claim.** Three corrections is genuine
 exactly what you get when three colleagues run a new tool and report what they see. **The honest position
 is that the count tells you about the attention, and you must look at the artifact to learn about the
 artifact.**
+
+### Second worked example, same filer, 2026-10-14: a citation count read as a status
+
+The 10-14 methodology audit's subagent marked 7 methodology docs SILENT, because no session log in 26 weeks cited them. I wrote them up as "undecided" and promised Docs dispositions. **The disposition already existed.** B3's tracker (Arch-ratified 09-01) had ruled all 7 EFFECTIVE, and said in plain words that "citation count mispredicts effective". The count measured *attention*, as this entry's rule says, and I substituted it for the quantity I cared about, *status*, at selection time: which docs to act on. Caught before any doc changed, by reading the tracker before writing the dispositions. Corrected in the audit and by mail the same hour. **What to do, sharpened:** before acting on a count-derived verdict about an artifact, look for the artifact's own decision record. A ratified disposition outranks a proxy.
 
 ## What to do
 
