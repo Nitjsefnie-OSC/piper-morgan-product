@@ -136,3 +136,4 @@ Seen-set lives in `dev/state/pa-gh-criteria-seen` (not sprint-cleaned); "newly o
 today's query, absent from the file. Rejected alternatives, so nobody re-derives them:
 `label:mcp` (5 stale pre-PDR-006 DIST issues — wrong era), free-text `byoc OR mcp` (24 hits,
 half unrelated).
+- 10-13 17:05: #1982 LIVE CHECK PASSED (PM via Desktop, OAuth path). MCP secrets: DATABASE_URL + ENCRYPTION_SCOPED_SUBKEYS only, v13. Left: Lead step 3 (drop the fallback); Registry publish, held by PA's recommendation for #2005 (the issues resource reports a 30-page as the full set; 278 real). PAT path untested.
