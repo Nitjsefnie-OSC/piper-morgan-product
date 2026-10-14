@@ -214,3 +214,5 @@ Brake FIRED (second slip = #1965 admission, found and ledgered 10-09). Memo to E
 - 2026-10-14 09:3x: xian ruled Wed tripwire Option 1 (MVP does not wait for the 61; met on the number; no slip) + Option 3 (Arch names day-one paths, Lead checks the 61; list or "none" to PPM cc Exec, before 10-23). On arrival: classify each finding against the Gate classes before any MVP issue; routing miss alone = corpus row. Owner of the check: Arch+Lead; mine is the classification and ledger.
 
 - 2026-10-14 09:5x: Option 3 result from Lead: none of the 61 misroutes a day-one turn; no MVP issue; ledgered. Wed tripwire closed on the number. Remaining Epic 0 post-MVP notes (cold "change ... to" row; PORTFOLIO's 14) are Lead's doc §4, not gate items.
+
+- 2026-10-14 13:xx: #2009 (nullable owner_id on 8 tables) placed Production. Trigger to re-place: PM-hand count (Arch's corrected SQL) shows tier-A non-zero or feedback user_id NULL = real data -> classify Class 1/2 and bring to Exec for admission. Result arrives via Exec/Lead/#2009.
