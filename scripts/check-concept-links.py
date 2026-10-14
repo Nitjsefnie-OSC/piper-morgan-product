@@ -38,16 +38,32 @@ import subprocess
 import sys
 from pathlib import Path
 
-ROOT = Path(subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True, check=True).stdout.strip())
+ROOT = Path(
+    subprocess.run(
+        ["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True, check=True
+    ).stdout.strip()
+)
 CONCEPT = re.compile(r"Concept:\s*(.+)")
 MD_PATH = re.compile(r"[\w./-]+\.md")
 
 CLASSES = [
-    ("hooks", lambda: sorted(p for p in (ROOT / ".claude/hooks").glob("*") if p.suffix in (".sh", ".py") and p.is_file())),
+    (
+        "hooks",
+        lambda: sorted(
+            p
+            for p in (ROOT / ".claude/hooks").glob("*")
+            if p.suffix in (".sh", ".py") and p.is_file()
+        ),
+    ),
     ("git-hooks", lambda: sorted(p for p in (ROOT / "scripts/git-hooks").glob("*") if p.is_file())),
     ("skills", lambda: sorted((ROOT / ".claude/skills").glob("*/SKILL.md"))),
     ("workflows", lambda: sorted((ROOT / ".github/workflows").glob("*.yml"))),
-    ("scripts", lambda: sorted(p for p in (ROOT / "scripts").glob("*") if p.suffix in (".sh", ".py") and p.is_file())),
+    (
+        "scripts",
+        lambda: sorted(
+            p for p in (ROOT / "scripts").glob("*") if p.suffix in (".sh", ".py") and p.is_file()
+        ),
+    ),
 ]
 
 
@@ -117,16 +133,24 @@ def main() -> int:
             print(f"NO-CONCEPT  {rel}")
     print()
     print(f"{'class':<10} {'linked':>6} {'broken':>6} {'none':>5} {'total':>6}")
-    nb = {cls: sum(1 for b in broken if b.split()[1].startswith(prefix)) for cls, prefix in
-          (("hooks", ".claude/hooks"), ("git-hooks", "scripts/git-hooks"), ("skills", ".claude/skills"),
-           ("workflows", ".github/workflows"))}
+    nb = {
+        cls: sum(1 for b in broken if b.split()[1].startswith(prefix))
+        for cls, prefix in (
+            ("hooks", ".claude/hooks"),
+            ("git-hooks", "scripts/git-hooks"),
+            ("skills", ".claude/skills"),
+            ("workflows", ".github/workflows"),
+        )
+    }
     nb["scripts"] = len(broken) - sum(nb.values())
     for cls, (linked, none, total) in totals.items():
         print(f"{cls:<10} {linked:>6} {nb[cls]:>6} {none:>5} {total:>6}")
     t = [sum(v[i] for v in totals.values()) for i in range(3)]
     print(f"{'all':<10} {t[0]:>6} {len(broken):>6} {t[1]:>5} {t[2]:>6}")
-    print("check-concept-links: textual layer (pointers exist and agree), not behaviour. "
-          "Missing Concept lines are due by 2026-11-01 (mechanism-sunset-or-renew.md).")
+    print(
+        "check-concept-links: textual layer (pointers exist and agree), not behaviour. "
+        "Missing Concept lines are due by 2026-11-01 (mechanism-sunset-or-renew.md)."
+    )
     return 1 if broken else 0
 
 
