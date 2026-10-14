@@ -7,6 +7,7 @@ scope: all-agents
 version: 2.0
 created: 2026-04-07
 updated: 2026-10-08
+concept: "Concept: CLAUDE.md (added 2026-10-14, sunset-or-renew inventory; CIO)"
 ---
 
 # update-current-state

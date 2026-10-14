@@ -5,6 +5,7 @@ scope: cross-role
 version: 1.3
 created: 2026-01-21
 updated: 2026-10-12
+concept: "Concept: docs/agent-protocols/issue-closure-protocol.md (added 2026-10-14, sunset-or-renew inventory; CIO)"
 ---
 
 # close-issue-properly

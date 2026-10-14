@@ -11,6 +11,7 @@ changelog: >
   week's Fable-ceiling investigation (one seat's fan-out inheriting its dispatcher's model
   exhausted a shared tier that two unrelated seats then paid for). v1.1 -- prior worktree-preamble
   update (Step 0, 2026-08-23).
+concept: "Concept: docs/internal/architecture/patterns/pattern-049-audit-cascade.md (added 2026-10-14, sunset-or-renew inventory; CIO)"
 ---
 
 # audit-cascade

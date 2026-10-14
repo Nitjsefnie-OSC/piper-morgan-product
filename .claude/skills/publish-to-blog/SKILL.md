@@ -7,6 +7,7 @@ scope: role-specific
 version: 0.26
 created: 2026-03-16
 updated: 2026-09-29
+concept: "Concept: docs/internal/planning/comms/content-publishing-run-of-show.md (added 2026-10-14, sunset-or-renew inventory; CIO)"
 ---
 
 # publish-to-blog

@@ -5,6 +5,7 @@ scope: role-specific
 version: 1.5
 created: 2026-05-15
 updated: 2026-10-12
+concept: "Concept: docs/internal/planning/comms/building-narrative-method.md (added 2026-10-14, sunset-or-renew inventory; CIO)"
 ---
 
 # draft-blog-post

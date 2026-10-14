@@ -4,6 +4,7 @@ description: Draft the Piper Morgan Weekly Ship newsletter from collected workst
 scope: exec
 version: 1.13
 created: 2026-05-19
+concept: "Concept: docs/internal/operations/weekly-cycle-runbook.md (added 2026-10-14, sunset-or-renew inventory; CIO)"
 ---
 
 # draft-weekly-ship

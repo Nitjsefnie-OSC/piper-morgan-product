@@ -5,6 +5,7 @@ scope: comms
 version: 1.16
 created: 2026-06-19
 updated: 2026-09-12
+concept: "Concept: docs/internal/planning/comms/blog-post-template.md (added 2026-10-14, sunset-or-renew inventory; CIO)"
 ---
 
 # template-audit

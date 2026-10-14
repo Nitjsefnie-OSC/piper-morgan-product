@@ -5,6 +5,7 @@ scope: cross-role
 version: 1.2
 created: 2026-01-21
 updated: 2026-07-06
+concept: "Concept: CLAUDE.md (added 2026-10-14, sunset-or-renew inventory; CIO)"
 ---
 
 # create-session-log

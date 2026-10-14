@@ -5,6 +5,7 @@ scope: cross-role (Lead/Arch lanes primarily)
 version: 1.2
 created: 2026-07-19
 updated: 2026-09-24
+concept: "Concept: docs/internal/operations/false-trails-audit-2026-08-08.md (added 2026-10-14, sunset-or-renew inventory; CIO)"
 ---
 
 # delete-module-safely

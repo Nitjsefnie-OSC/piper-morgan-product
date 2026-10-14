@@ -2,11 +2,13 @@
 type: methodology
 title: "Methodology 20: Omnibus Session Log Creation"
 valid_from: "2025-09-21"
-last_updated: "2026-07-29"
+last_updated: "2026-10-14"
 ---
 
 # Methodology 20: Omnibus Session Log Creation
 *Living document - Last updated: March 21, 2026*
+
+**Procedure:** the `create-omnibus` skill (`.claude/skills/create-omnibus/SKILL.md`) is the current procedure. This page is its concept: why the omnibus exists and what it must contain. Where the two differ, the skill is current. For example, the skill adds an `agent-activity-log.csv` row step this page doesn't mention (10-14 methodology audit). *(Added 2026-10-14, CIO.)*
 
 ## Purpose
 Omnibus logs synthesize multiple parallel session logs into a single **unified chronological narrative**, revealing the multi-agent "dance" of collaboration and the complete story of a day's work.

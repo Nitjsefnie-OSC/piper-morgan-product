@@ -8,6 +8,7 @@ description: Show PM what trust tier Piper is at, what's unlocked at this tier, 
 scope: cross-role
 version: 1.0
 created: 2026-06-15
+concept: "Concept: docs/internal/architecture/adrs/adr-072-skill-routing-architecture.md (added 2026-10-14, sunset-or-renew inventory; CIO)"
 ---
 
 # trust-check

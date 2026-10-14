@@ -1,3 +1,4 @@
+# Concept: docs/operations/regression-prevention.md (added 2026-10-14, sunset-or-renew inventory; CIO)
 name: Configuration Validation
 
 # Configuration Validation Workflow — fires on service config / YAML / architecture changes

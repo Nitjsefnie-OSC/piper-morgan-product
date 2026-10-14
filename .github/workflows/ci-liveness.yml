@@ -1,3 +1,4 @@
+# Concept: docs/internal/operations/canonical-ops-recipes.md (added 2026-10-14, sunset-or-renew inventory; CIO)
 name: CI Liveness Detector
 
 # #1608 — the "red nobody sees" detector. Weekly + manual. Companion to
