@@ -222,7 +222,7 @@ _RESUME_TAUGHT_DECLINES = frozenset(
     }
 )
 # Reply when the user defers the resume offer ("not now"); the suspended flow
-# stays SUSPENDED. CXO's string 2026-10-14 11:20; verbatim.
+# stays SUSPENDED. CXO's string 2026-10-14 11:20; true via 2007.
 RESUME_DEFER_REPLY = (
     "Okay, I'll leave your standup where it is. Just ask when you want to pick it back up."
 )
@@ -4564,7 +4564,11 @@ class IntentService:
             manager, handler = _get_standup_components()
 
             # Check for existing active conversation
-            existing = await manager.get_conversation_by_session(session_id) if session_id else None
+            existing = (
+                await manager.get_conversation_by_session(session_id, include_suspended=True)
+                if session_id
+                else None
+            )
             if existing and existing.state not in (
                 StandupConversationState.COMPLETE,
                 StandupConversationState.ABANDONED,
