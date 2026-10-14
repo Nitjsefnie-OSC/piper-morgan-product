@@ -260,6 +260,11 @@ ACTION_REGISTRY: dict[tuple[str, str], ActionDisposition] = {
     # surface); the forward-guard test asserts no mapped_action token can exist
     # OUTSIDE this registry again.
     ("EXECUTION", "complete_todo"): ActionDisposition.WORKFLOW,
+    # #1943 rework (c): the clear_todos resolver rail entry gains its registry
+    # canonical so the LEGACY classifier can emit it (its vocabulary is registry
+    # canonicals, #1283). The op itself was already in the router grammar via
+    # the rail entry; only the ACTION_EXAMPLES row below changes the catalog.
+    ("EXECUTION", "clear_todos"): ActionDisposition.WORKFLOW,
     ("EXECUTION", "create_todo"): ActionDisposition.WORKFLOW,
     ("EXECUTION", "create_reminder"): ActionDisposition.WORKFLOW,
     ("EXECUTION", "list_todos"): ActionDisposition.WORKFLOW,
@@ -347,6 +352,11 @@ ACTION_EXAMPLES: dict[tuple[str, str], str] = {
     ("QUERY", "list_reminders_query"): "What reminders do I have?",
     ("QUERY", "get_feature_info"): "Tell me more about the GitHub integration",
     ("EXECUTION", "complete_todo"): "Mark my first todo as done",
+    # #1943 rework (c): the registry invariant (every entry has an example)
+    # wins over a byte-identical grammar; this example reaches the router's
+    # catalog, so it was screened x6 and full-corpus-run under rule 7 (Lead
+    # 2026-10-14) before landing.
+    ("EXECUTION", "clear_todos"): "Clear my reminders",
     ("EXECUTION", "create_todo"): "Add a todo to review the Q3 roadmap",
     ("EXECUTION", "create_reminder"): "Remind me tomorrow at 9am to follow up with Sam",
     # The four below are mapper-path phrasings (probe-verified pre_classify → None):
@@ -543,6 +553,10 @@ ACTION_DESCRIPTIONS: dict[tuple[str, str], str] = {
     # todo_handlers.handle_complete_todo / handle_create_todo /
     # handle_delete_todo (mapper-path cohort, Arch memo 2026-07-16 §A).
     ("EXECUTION", "complete_todo"): "Mark an existing todo as done",
+    ("EXECUTION", "clear_todos"): (
+        "Clear, handle, take care of or reset reminders or todos when the user does "
+        "not say whether they mean mark done or delete"
+    ),
     ("EXECUTION", "create_todo"): "Add a new todo to the user's list",
     ("EXECUTION", "delete_todo"): "Delete an existing todo from the user's list",
     # pre_classifier ANALYSIS_PATTERNS ("what's blocking the milestone?");
@@ -652,6 +666,11 @@ class Verb(Enum):
     SUMMARIZE = "summarize"
     PRIORITIZE = "prioritize"
     COMPOSE = "compose"  # #1256: outbound content composition (stakeholder updates)
+    # #1943 rework (c), Arch 2026-10-14 13:3x: the clear family ("clear my
+    # reminders", "handle these", "reset my todos") when the user does not say
+    # whether they mean done or delete; the clear_todos resolver asks. Lets the
+    # legacy LLM classifier emit the canonical the router already has.
+    CLEAR = "clear"
 
 
 # Bridge: every existing ACTION_REGISTRY action -> its canonical Verb.
@@ -717,6 +736,7 @@ ACTION_TO_VERB: dict[str, Verb] = {
     "next_todo_query": Verb.GET,
     "get_feature_info": Verb.GET,
     "complete_todo": Verb.COMPLETE,
+    "clear_todos": Verb.CLEAR,  # #1943 rework (c)
     "create_todo": Verb.CREATE,
     "create_reminder": Verb.CREATE,
     "list_todos": Verb.LIST,
@@ -814,6 +834,13 @@ _VERB_SOURCE_TO_ACTION: dict[tuple["Verb", Optional[str]], str] = {
     (Verb.DELETE, "reminder"): "delete_todo",
     (Verb.DELETE, "todo"): "delete_todo",
     (Verb.DELETE, "task"): "delete_todo",
+    # #1943 rework (c): a CLEAR aimed at the todo domain canonicalizes to the
+    # resolver (set first, then the verb question); deliberately NO
+    # (CLEAR, None) cell — "clear my calendar" / "clear the cache" keep their
+    # free-form action and the honest-decline default, as with DELETE.
+    (Verb.CLEAR, "reminder"): "clear_todos",
+    (Verb.CLEAR, "todo"): "clear_todos",
+    (Verb.CLEAR, "task"): "clear_todos",
 }
 
 

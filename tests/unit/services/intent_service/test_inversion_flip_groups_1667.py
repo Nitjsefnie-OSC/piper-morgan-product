@@ -601,7 +601,13 @@ class TestLiveConsultSurfaces:
         wave 2 the audit's b-list (ungrouped READ ops that still carry an
         ACTION_REGISTRY category) is empty — every category-carrying READ op
         was either wave-1-grouped or is now read_temporal. The strategic
-        cohort (wave 3's own scope) carries no registry category at all."""
+        cohort (wave 3's own scope) carries no registry category at all.
+
+        ``clear_todos`` is the ONE named exception (same ruling as the wave-3
+        test below): ungrouped by Arch's 2026-10-06 ruling, and categorized
+        since #1943 rework (c) (Arch 2026-10-14) gave it an ACTION_REGISTRY
+        row so the LEGACY classifier can emit it. It flips by its own token,
+        never by a group sweep. Stated denominator: 1 named key."""
         from services.intent_service.inversion_live import _category_by_operation
         from services.intent_service.inversion_router import derive_routing_grammar
 
@@ -613,7 +619,7 @@ class TestLiveConsultSurfaces:
             for k, e in rail.items()
             if e.effect == EffectClass.READ and e.flip_group is None and k in cat_by_op
         ]
-        assert b_list == []
+        assert b_list == ["clear_todos"]
 
     def test_no_real_read_op_is_ungrouped_after_wave_3(self):
         """States wave 3's design outcome directly, over the real registry:

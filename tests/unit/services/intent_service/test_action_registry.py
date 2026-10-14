@@ -404,6 +404,7 @@ class TestNoStubPhrases:
         # guarded by TestForwardGuardExecutionCohort (test_routing_vocabulary_1283).
         known_handled_execution_actions = {
             "complete_todo",
+            "clear_todos",  # #1943 rework (c): the resolver rail entry (clear_todos.py)
             "create_todo",
             "create_reminder",
             "list_todos",
