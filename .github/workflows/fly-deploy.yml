@@ -354,6 +354,12 @@ jobs:
           # is not green, still refuses. A green on a DESCENDANT is never accepted.
           # Operator remedy: wait for Tests on that sha (or push and let staging move on), then
           # dispatch again. Read-only (actions: read); nothing is promoted when this fails.
+          #
+          # Refinement (Lead, 2026-10-14 15:5x): the ancestor walk used one API call per commit and
+          # stopped at 60. A busy docs day lands far more untested commits than that between code
+          # pushes (186 on 10-14, all logs and mail), so the gate refused a sha whose code WAS green.
+          # Now: one call lists Tests' 100 newest run heads on main; the walk is a local rev-list
+          # (2000 commits) intersected with that set, so its bound is commits and runs, not calls.
           runs_conclusion() {
             gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/test.yml/runs?head_sha=$1&per_page=20" \
               -q '[.workflow_runs[] | select(.status=="completed") | .conclusion] | if index("success") then "success" else (.[0] // "none") end'
@@ -373,12 +379,13 @@ jobs:
             echo "::error title=Tests not green on the staging sha::Tests on ${SHA} reads '${conclusion}' (a run exists; need a completed run with conclusion success). Nothing was promoted. Wait for Tests on that exact sha, or let staging move to a sha that has one, then dispatch again."
             exit 1
           fi
+          run_heads="$(gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/test.yml/runs?branch=main&per_page=100" -q '.workflow_runs[].head_sha')"
           anc=""; anc_conc="none"
-          for c in $(git rev-list --max-count=60 "${SHA}^"); do
-            if has_any_run "$c"; then anc="$c"; anc_conc="$(runs_conclusion "$c")"; break; fi
+          for c in $(git rev-list --max-count=2000 "${SHA}^"); do
+            if grep -qx "$c" <<<"$run_heads"; then anc="$c"; anc_conc="$(runs_conclusion "$c")"; break; fi
           done
           if [ -z "$anc" ]; then
-            echo "::error title=No Tests run found::No Tests run on ${SHA} or its last 60 ancestors. Nothing was promoted."
+            echo "::error title=No Tests run found::None of the last 2000 ancestors of ${SHA} is the head of one of Tests' 100 newest runs on main. Nothing was promoted."
             exit 1
           fi
           changed="$(git diff --name-only "$anc" "$SHA" | grep -E "$TESTED_PATHS_RE" || true)"
