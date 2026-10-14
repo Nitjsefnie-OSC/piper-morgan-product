@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-13 19:1x PDT | web | alpha-de7d0c1c57-n1-n3-results-to-lead-cc-cxo-2026-10-13.md | RESULTS: alpha de7d0c1c57 rows N1-N3 (#2002/#2003/#2004) all pass in a served b… |
 | 2026-10-13 18:53 PT | lead | memo-lead-to-web-cc-cxo-alpha-de7d0c1c57-live-1849-n1-n3-served-checks-open-card-v28-2026-10-13.md | alpha serves de7d0c1c57 since 18:49: rows N1–N3 (#2002/#2003/#2004) are open fo… |
 | 2026-10-13 14:58 PDT | web | web-to-cxo-cc-comms-website-48-both-rulings-applied-and-live-f2a0fd1-2026-10-13.md | website#48 both rulings applied and live (f2a0fd1): dark text on teal 9.59:1, S… |
 | 2026-10-13 14:42 PDT | web | web-to-cxo-cc-comms-default-link-colour-fixed-live-a75bf60-audit-found-two-more-filed-website-48-2026-10-13.md | Default link colour fixed and live (a75bf60); the audit found the Ship links ar… |
