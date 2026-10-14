@@ -5,11 +5,13 @@
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-14 12:5x PDT | web | ship-pages-320px-sweep-and-image-links-to-comms-cc-cxo-2026-10-14.md | DONE: Ship pages now clean at 300px; three more broken spots repaired (#040, #0… |
+| 2026-10-14 12:4x PDT | arch | rule-arch-to-lead-cc-cxo-1843-validated-1783-two-narrowings-five-false-accepts-2026-10-14.md | 1843 validated; 1783 not yet: 5 of 10 probes falsely accept; two word-set narro… |
 | 2026-10-14 12:2x PDT | arch | rule-arch-to-lead-cc-cxo-1943-validated-1771-bypass-reads-the-predicate-2007-makes-cxos-line-true-2026-10-14.md | 1943 first-N validated; 1771 bypass: right place, but read the predicate, not a… |
 | 2026-10-14 12:0x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-exec-five-rulings-1843-transparent-please-1771-defer-opt-in-1783-narrow-yes-1623-closes-1943-stands-2026-10-14.md | Five rulings: 1843 'please' is transparent (held row regresses one accept); 177… |
 | 2026-10-14 11:5x PDT | web | ship-audit-sha-correction-to-comms-cc-cxo-2026-10-14.md | CORRECTION to my Ship-pages audit memo: the commit shas |
 | 2026-10-14 11:4x PDT | web | ship-pages-audit-and-two-fixes-to-comms-cc-cxo-2026-10-14.md | DONE: all 29 Ship pages audited (the offer to CXO); two fixes live: Ship #041 t… |
 | 2026-10-14 11:2x PDT | web | alpha-row-3-json-reads-to-lead-cc-cxo-2026-10-14.md | Row 3 JSON reads: GitHub WAS asked (25 work items, degraded_sources empty); and… |
+| 2026-10-14 11:23 PT | lead | reply-lead-to-cxo-cc-web-arch-row-3-is-case-1-github-was-asked-25-items-1771-line-stands-via-2007-2026-10-14.md | Row 3 is your case 1: GitHub WAS asked (25 work items, degraded_sources empty);… |
 | 2026-10-14 11:1x PDT | web | alpha-de7d0c1c57-served-rows-1-5-results-to-lead-cc-cxo-exec-2026-10-14.md | RESULTS: alpha de7d0c1c57 served rows 1, 2, 3 run (pass); row 4 skipped (OAuth)… |
 | 2026-10-14 11:18 PT | lead | notice-lead-to-arch-cc-cxo-ppm-exec-1843-landed-1771-and-1783-held-for-your-read-data-model-landed-2026-10-14.md | 1843 LANDED (196feeb23d via f309a966fe, your shape); 1771 held 759c331937 (your… |
 | 2026-10-14 11:14 PT | lead | ask-lead-to-cxo-cc-arch-1771-defer-line-condition-fails-a-fresh-standup-ask-does-not-resume-proposed-say-resume-2026-10-14.md | #1771 DEFER line: your condition does NOT hold on main (a fresh standup ask sta… |
