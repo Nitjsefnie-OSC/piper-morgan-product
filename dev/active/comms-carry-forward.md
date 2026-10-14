@@ -1,7 +1,7 @@
 # Comms carry-forward
 
-## ⭐ CURRENT STATE — 2026-10-12 21:2x PT. Read this first, it supersedes older lines below
-- **Log**: `dev/2026/10/13/2026-10-13-0619-comms-code-log.md` (today). 10-12 is DAY-CLOSED.
+## ⭐ CURRENT STATE — 2026-10-14 12:2x PT. Read this first, it supersedes older lines below
+- **Log**: `dev/2026/10/14/2026-10-14-0905-comms-code-log.md` (today). 10-13 is DAY-CLOSED. Main was rewritten 10-13/14 (reset to fd900e02bb): never merge an old branch, stash pop or check out a pre-rewrite sha. Hold `sync-pm-local.sh` until Exec says PM's checkout is reset.
 - **Close a log with exactly `<!-- DAY-CLOSED: YYYY-MM-DD -->`** (the watchdog anchors on it). A bare `DAY-CLOSED …` line is a new form and trips the drift check (Lead fixed my 10-10 one).
 - Plain `gh` works again (checked 10-11 08:0x), the GODEBUG workaround is no longer needed.
 - 10-11 done: "Access ends right away" is live on /privacy and /support (website `44ebaca`, content checked). Listing copy v2 is voiced, and PM ruled "yet" stays. Thu 10-15 pre-check notes are in the 10-11 log.
@@ -9,11 +9,14 @@
   - "No Undo" published Sat 10-10 04:26, live, crossposted (calendar `distributed`, 10-10).
   - Sun 10-11 "It Doesn't Count if You Skip It": published 08:05 (late, Docs' seat was held overnight), live, crossposted (`distributed`).
   - Tue 10-13 "Giving It Away, and Wondering Who May Want It": published 10-13, live-verified (fixes present), Medium crossposted (`distributed`).
-  - Thu 10-15 "The Overzealous Cleanup Routine": waiting for PM's "ready". Note: current L10 "on its list" (Exec → their).
+  - Thu 10-15 "The Overzealous Cleanup Routine": PM-approved edits applied (d85b0c960c), audit clean, PUBLISH-READY sent to Docs 10-13, Docs pre-flight ack. Next: live check after Docs publishes Thu.
   - Italic aside paragraphs are a PM device; leave them (xian 10-12).
-  - Wed 10-14 Ship #064 "Code Decides Permission": PUBLISH-READY sent to Docs 10-13 (PM's edits + Comms fixes with PM's OK, 1,959 words). Calendar ready-for-docs. Docs pre-flight clean, publishing Wed at /shipping-news/weekly-ship-064-code-decides-permission/. Next: live check after Docs publishes.
+  - Wed 10-14 Ship #064 "Code Decides Permission": PUBLISHED and live-checked 10-14 (title, 0 semicolons, 5 links 200, hero loads). Web also fixed Ship #040–#042 image links (checked against sources 10-14).
 - **Waiting on PM** (all on Exec's rollup):
   - privacy Section C: LIVE 10-13 ~19:0x (website f4f0d53). Comms fact-checked the rendered page: Section C text identical to the PM-approved memo (390 words), 13 bold runs as marked, opening sentence widened, mailto present. Closed.
+  - the 12-beat slate (Sep 7 – Oct 13), `docs/internal/planning/comms/narrative-slate-2026-09-07-to-10-13.md`: keep 12 or merge to 8, and which to drop. Ledger 37/37 in the 10-14 log.
+  - Sat "Convergent Claims" + Sun "Measure the Start": fact findings given 10-14; PM rewrites or asks for outlines.
+  - Rule 8 NOTICE to Exec 10-14 (~588 files on main still carry three alpha testers' given names). Exec/xian's call.
   - the mining-pass picks (sent 10-09).
   - a verdict on the first scaffold (Sep 6, `the-unguarded-entrance.md`, Tue 11-03). The next scaffold (Sep 7–10) waits on it.
 - **Done since the lines below were written**: the mining pass (10-09, next due 10-23); the blog template review; the No Undo alt
