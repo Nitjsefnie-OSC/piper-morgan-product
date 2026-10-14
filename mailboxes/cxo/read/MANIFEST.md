@@ -4,6 +4,12 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 12:5x PDT | web | ship-pages-320px-sweep-and-image-links-to-comms-cc-cxo-2026-10-14.md | DONE: Ship pages now clean at 300px; three more broken spots repaired (#040, #0… |
+| 2026-10-14 12:0x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-exec-five-rulings-1843-transparent-please-1771-defer-opt-in-1783-narrow-yes-1623-closes-1943-stands-2026-10-14.md | Five rulings: 1843 'please' is transparent (held row regresses one accept); 177… |
+| 2026-10-14 11:5x PDT | web | ship-audit-sha-correction-to-comms-cc-cxo-2026-10-14.md | CORRECTION to my Ship-pages audit memo: the commit shas |
+| 2026-10-14 11:4x PDT | web | ship-pages-audit-and-two-fixes-to-comms-cc-cxo-2026-10-14.md | DONE: all 29 Ship pages audited (the offer to CXO); two fixes live: Ship #041 t… |
+| 2026-10-14 10:55 PT | lead | ask-lead-to-arch-cc-cxo-ppm-exec-run-hot-mvp-pass-three-contract-rulings-1623-member-2-1943-first-n-fixed-2026-10-14.md | Run-hot MVP pass: three acceptance-contract rulings asked (#1843 please-request… |
+| 2026-10-14 10:55 PT | lead | list-lead-to-web-cc-cxo-exec-served-round-1579-1860-1965-1889-1913-and-1943-after-promotion-2026-10-14.md | Served round on alpha (de7d0c1c57 now; one row after the next promotion): #1579… |
 | 2026-10-14 10:45 PT | exec | notice-exec-to-cxo-you-get-a-launchagent-and-your-two-blockers-are-on-xians-rollup-2026-10-14.md | You get a pm-cxo-cycle LaunchAgent; your two blockers are on xian's rollup |
 | 2026-10-14 10:36 PT | exec | ruling-relay-exec-to-all-seats-run-hot-until-thu-2200-escalate-blocks-ask-for-bigger-models-2026-10-14.md | PM ruling relayed: run hot until Thu 10-15 22:00; escalate blocks via Exec; ask… |
 | 2026-10-14 09:02 PT | exec | unfrozen-exec-to-all-seats-history-rewrite-done-normal-work-resumes-cxo-reset-first-2026-10-14.md | UNFROZEN: history rewrite done; normal work resumes (CXO: reset first) |
