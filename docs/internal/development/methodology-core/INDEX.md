@@ -144,6 +144,7 @@ last_updated: "2026-10-05"
 - [53-CHOKEPOINT-VS-BOLT-ON.md](methodology-53-CHOKEPOINT-VS-BOLT-ON.md) - Chokepoint vs. Bolt-On — a recurring obligation survives only if attached to something that already can't be skipped without visibly breaking a procedure in progress; sharper phrasing (CXO, 09-12): if success and skipping produce the same visible output, the step will rot regardless of who consumes it. Filed 2026-09-08 (CIO) — proven-by-use across 4+ shipped mechanisms plus a second independent natural experiment (CXO, five lapses on one seat, contrasted against Exec's clean seat).
 - [54-A-FALSE-CLAIM-IN-A-DURABLE-DOC-IS-A-LENS.md](methodology-54-A-FALSE-CLAIM-IN-A-DURABLE-DOC-IS-A-LENS.md) - A False Claim in a Durable Doc Is a Lens — an unverified claim written into a durable doc doesn't just sit there wrong; it becomes a lens that makes subsequent real evidence read as confirmation, including to the person who wrote it. Sequel to m-44 (a documented false clear re-emits to every reader) and distinct from m-46 (this claim was never true, not verified-then-stale). Filed 2026-09-13 (CIO), from Lead's self-reported 09-11 finding (4 days of real CI red misread as "known platform noise" against an unmeasured claim). Emerging, one instance, one seat.
 - [55-A-NAME-IS-NOT-A-DEFINITION.md](methodology-55-A-NAME-IS-NOT-A-DEFINITION.md) - A Name Is Not a Definition — an enum value's name, a checkbox's glyph, a docstring's framing reads as a decision already made; the real definition lives one hop away (the branching logic, a comment one line off). Distinct from m-49 (not a liveness question) and m-52 (the artifact WAS opened; the read just stopped one level too early). Filed 2026-09-25 (Arch, self-authored from own two rulings), ruled Emerging by CIO same day. Emerging, two instances, one seat, explicitly 0-cross-author.
+- [56-CONCEPT-AND-MECHANISM-POINT-AT-EACH-OTHER.md](methodology-56-CONCEPT-AND-MECHANISM-POINT-AT-EACH-OTHER.md) - A Concept and Its Mechanism Point at Each Other: every mechanism names the doc that says why it exists, the doc names it back, and `scripts/check-concept-links.py` checks both (Emerging, CIO, 2026-10-14)
 
 ### Historical / absorbed files (intentionally not indexed as live methodology)
 
@@ -161,7 +162,8 @@ These nine files in this directory carry a HISTORICAL or ABSORBED banner from th
 
 ---
 
-**Last Updated**: October 5, 2026 (Docs — added the Historical / absorbed section listing the 9 B3-dispositioned files that were absent from this index, per weekly-docs-audit #1938 finding, issue 1939.)
+**Last Updated**: October 14, 2026 (CIO — added methodology-56, filed same day.)
+**Prior**: October 5, 2026 (Docs — added the Historical / absorbed section listing the 9 B3-dispositioned files that were absent from this index, per weekly-docs-audit #1938 finding, issue 1939.)
 **Prior**: September 25, 2026 (Arch — added methodology-55, filed same day.)
 **Prior**: September 14, 2026 (Docs — banner metadata only, per weekly-docs-audit #1801: content was already current through methodology-54 (confirmed present at line 138), the banner text itself had just gone stale describing an older fill-point. No missing entries found this pass.)
 **Prior**: August 17, 2026 (Docs — added methodology-48 through -49, missing from this catalog since filing; same gap pattern as the Aug 10 fix below, found again during weekly-docs-audit #1643. Two independent subagent audits converged on this same finding.)
