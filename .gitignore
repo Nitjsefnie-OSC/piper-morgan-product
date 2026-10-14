@@ -87,6 +87,9 @@ data_backup/
 
 # Redis runtime data (local persistence — recreated on each docker compose up)
 data/redis/
+# generated Chroma vector store: untracked 2026-10-14 (regenerate with scripts/backfill_documents_1238.py); keep the skeleton dir for the compose bind mount
+data/chromadb/*
+!data/chromadb/.gitkeep
 
 # Learning data (runtime-mutated by app — churns on every session)
 data/learning/
