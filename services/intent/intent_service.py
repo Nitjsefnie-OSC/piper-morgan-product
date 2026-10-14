@@ -221,6 +221,11 @@ _RESUME_TAUGHT_DECLINES = frozenset(
         "start fresh",
     }
 )
+# Reply when the user defers the resume offer ("not now"); the suspended flow
+# stays SUSPENDED. CXO's string 2026-10-14 11:20; true via 2007.
+RESUME_DEFER_REPLY = (
+    "Okay, I'll leave your standup where it is. Just ask when you want to pick it back up."
+)
 _RESUME_ARMED_ONLY_DECLINES = frozenset(
     {
         "restart",
@@ -3963,9 +3968,40 @@ class IntentService:
             # #1529: "end standup" against a suspended standup ends it — no
             # classifier involved. Deterministic, checked FIRST (a flow exit
             # is a command, not an offer reply).
+            from services.intent_service.acceptance import (
+                AcceptanceVerdict,
+                declared_axes_for_workflow,
+                evaluate_acceptance,
+            )
             from services.process.escape import detect_flow_exit
 
-            if detect_flow_exit(message, suspended.process_type):
+            _axes = declared_axes_for_workflow(_RESUME_AXES_WORKFLOW)
+            _effect = _axes[0] if _axes else None
+            _outward = _axes[1] if _axes else None
+
+            # The armed-offer verdict (consulted again below; computed first
+            # because the flow-exit gate keys on it).
+            verdict = None
+            if resume_offer_pending:
+                verdict = evaluate_acceptance(
+                    message,
+                    effect=_effect,
+                    outwardness=_outward,
+                    armed_question=resume_offer_question,  # #1665: as rendered
+                    taught_accepts=_RESUME_TAUGHT_ACCEPTS,
+                    taught_declines=_RESUME_TAUGHT_DECLINES | _RESUME_ARMED_ONLY_DECLINES,
+                    distinguish_defer=True,  # #1771: the one seam that tells defer from decline
+                )
+
+            # #1771 (Arch): while the resume offer is pending, a DEFER verdict
+            # from THE predicate ("not now", "maybe later" ...) is an answer to
+            # the offer (handled below; the flow stays suspended), not the
+            # #1529 bare-exit command that closes an ACTIVE flow. Keyed on the
+            # predicate, not a second phrase set; #1529's exit vocabulary stays
+            # ignorant of "defer". An ACTIVE flow (no offer pending) still exits.
+            if detect_flow_exit(message, suspended.process_type) and not (
+                verdict is AcceptanceVerdict.DEFER
+            ):
                 self.logger.info(
                     "Suspended process ended by flow-exit phrase",
                     user_id=user_id,
@@ -3991,26 +4027,8 @@ class IntentService:
             #    flow the user can end or re-suspend (recoverable), and the
             #    seam inherits the CXO-owned LOW-tier tightening
             #    automatically when it lands.
-            from services.intent_service.acceptance import (
-                AcceptanceVerdict,
-                declared_axes_for_workflow,
-                evaluate_acceptance,
-            )
-
-            _axes = declared_axes_for_workflow(_RESUME_AXES_WORKFLOW)
-            _effect = _axes[0] if _axes else None
-            _outward = _axes[1] if _axes else None
-
-            if resume_offer_pending:
-                verdict = evaluate_acceptance(
-                    message,
-                    effect=_effect,
-                    outwardness=_outward,
-                    armed_question=resume_offer_question,  # #1665: as rendered
-                    taught_accepts=_RESUME_TAUGHT_ACCEPTS,
-                    taught_declines=_RESUME_TAUGHT_DECLINES | _RESUME_ARMED_ONLY_DECLINES,
-                )
-            else:
+            # (resume_offer_pending: verdict computed above, before the exit gate)
+            if not resume_offer_pending:
                 # No offer pending: ONLY the flow-naming taught commands act
                 # (#1529's explicit tier). DIFFERENTIAL consultation keeps
                 # this on THE predicate with no local matcher: a verdict that
@@ -4049,6 +4067,34 @@ class IntentService:
                 if suspended.process_type == ProcessType.STANDUP:
                     return await self._resume_suspended_standup(user_id, session_id)
                 # ADR-059: Onboarding resume disabled (onboarding on ice)
+
+            elif verdict is AcceptanceVerdict.DEFER:
+                # #1771: "not now" / "maybe later" is not "start fresh". The
+                # offer is dismissed for this turn (one-turn expiry, not
+                # re-armed) and the suspended flow stays SUSPENDED — nothing
+                # is abandoned; the next greeting re-offers it.
+                self.logger.info(
+                    "User deferred resume offer",
+                    user_id=user_id,
+                    process_type=suspended.process_type.value,
+                )
+                if suspended.process_type == ProcessType.STANDUP:
+                    return IntentProcessingResult(
+                        success=True,
+                        # CXO's string 2026-10-14 11:20 (see RESUME_DEFER_REPLY).
+                        message=RESUME_DEFER_REPLY,
+                        intent_data={
+                            "category": "guidance",
+                            "action": "suspended_session_deferred",
+                            "confidence": 1.0,
+                            "context": {
+                                "user_id": user_id,
+                                "process_type": ProcessType.STANDUP.value,
+                            },
+                        },
+                        workflow_id=None,
+                        requires_clarification=False,
+                    )
 
             elif verdict is AcceptanceVerdict.DECLINE:
                 self.logger.info(
@@ -4518,7 +4564,11 @@ class IntentService:
             manager, handler = _get_standup_components()
 
             # Check for existing active conversation
-            existing = await manager.get_conversation_by_session(session_id) if session_id else None
+            existing = (
+                await manager.get_conversation_by_session(session_id, include_suspended=True)
+                if session_id
+                else None
+            )
             if existing and existing.state not in (
                 StandupConversationState.COMPLETE,
                 StandupConversationState.ABANDONED,

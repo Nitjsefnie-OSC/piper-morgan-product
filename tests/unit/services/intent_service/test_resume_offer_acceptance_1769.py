@@ -23,8 +23,8 @@ each found by feeding both surfaces the same turn:
   the inherited LOW-tier greedy residue, pinned DELIBERATELY (CXO-owned
   tightening lands here automatically).
 - "not now" (deferral phrasing): word-sets ignored it (flow stayed
-  suspended); the shared decline vocabulary declines → abandon. Pinned
-  deliberately; the deferral-vs-abandon vocabulary question is filed.
+  suspended). #1771 gave deferrals their own DEFER tier: the flow stays
+  SUSPENDED, nothing is abandoned (was: shared decline → abandon).
 - "n" / "yea": bespoke-only tokens, no longer in any vocabulary — narrowing
   pinned (the flow stays suspended for greeting re-entry; nothing is lost).
 
@@ -240,11 +240,10 @@ class TestContractAcceptsTheWordSetsMissed:
             h.resume.assert_called_once()
 
     @pytest.mark.asyncio
-    async def test_deferral_phrasing_declines_deliberately(self):
-        """ "not now" takes the SHARED decline vocabulary → abandon (the
-        seam's #888 decline semantics). Pinned deliberately; whether
-        deferral rows should defer rather than abandon at resumable-flow
-        seams is filed vocabulary-lane work."""
+    async def test_deferral_phrasing_defers_and_keeps_flow_suspended(self):
+        """#1771: "not now" is a DEFER, not a decline. The offer is dismissed
+        for this turn, the flow stays SUSPENDED (nothing abandoned, nothing
+        resumed), and the reply says so."""
         service = _service()
         with _SeamHarness(service) as h:
             result = await service._check_pending_resume_offer(
@@ -255,7 +254,8 @@ class TestContractAcceptsTheWordSetsMissed:
                 resume_offer_question=RESUME_ASK,
             )
             assert result is not None
-            h.abandon.assert_called_once()
+            h.abandon.assert_not_called()
+            h.resume.assert_not_called()
 
 
 class TestBespokeOnlyTokensNarrowedDeliberately:
