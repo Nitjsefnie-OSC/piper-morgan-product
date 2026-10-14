@@ -60,11 +60,6 @@ jobs:
             - [ ] Verify \`.claude/hooks/\` are functional
             - [ ] Check editorial calendar CSV column count consistency
 
-            ### Beads Health
-            - [ ] \`bd status\` - Check database health
-            - [ ] \`bd list\` - Review open beads for staleness
-            - [ ] Close any completed beads that were missed
-
             ---
             *This issue was automatically created by the quarterly-maintenance workflow.*
             `,
