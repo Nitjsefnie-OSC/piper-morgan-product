@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # log-maintenance-reminder.sh — PostToolUse hook for Bash
+# Concept: docs/internal/operations/hooks-registry.md (index); see the row for this hook.
 #
 # Fires after Bash tool calls. Uses a counter file to avoid noise —
 # only reminds every 15 Bash calls. Checks whether a session log

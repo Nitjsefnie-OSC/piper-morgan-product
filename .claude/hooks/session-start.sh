@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # session-start.sh — Enhanced SessionStart hook for Piper Morgan (#853)
+# Concept: docs/internal/operations/hooks-registry.md (index); see the row for this hook.
 #
 # Performs four checks at agent session start:
 #   1. Session log continuity (find today's log, warn if resuming)

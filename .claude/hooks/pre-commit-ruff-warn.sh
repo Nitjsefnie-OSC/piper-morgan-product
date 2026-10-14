@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # pre-commit-ruff-warn.sh — git-native pre-commit WARNING for ruff drift in staged .py (exit 0 always)
+# Concept: docs/internal/operations/hooks-registry.md (index); see the row for this hook.
 #
 # 2026-10-01 (CIO, on Docs's datum + Lead's widening): the ruff advisory lived in
 # .claude/hooks/post-commit.sh §2, but the post-commit shim has been DISARMED since the 09-21

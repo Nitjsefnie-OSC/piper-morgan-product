@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # check-branch.sh — PreToolUse hook for git commit
+# Concept: docs/internal/operations/hooks-registry.md (index); see the row for this hook.
 #
 # Enforces branch discipline:
 # - Mailbox writes (mailboxes/**) MUST commit to main. Other branches blocked.

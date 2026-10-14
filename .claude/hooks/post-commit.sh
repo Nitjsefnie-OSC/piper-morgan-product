@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # post-commit.sh — git-native post-commit hook, common-dir install (see docs/internal/operations/
+# Concept: docs/internal/operations/hooks-registry.md (index); see the row for this hook.
 # amber-hooks-investigation-2026-07.md for how the common-dir/PreToolUse split works; this is the
 # post-commit sibling of check-branch.sh's pre-commit).
 #

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # guard-pm-checkout.sh — PreToolUse (Bash): refuse destructive git aimed at PM's MAIN checkout.
+# Concept: docs/internal/operations/hooks-registry.md (index); see the row for this hook.
 #
 # R6 step 1 (PM approved 2026-10-04, "guard first"). CLAUDE.md's HARD RULE (never discard working-tree
 # state in /Users/xian/Development/piper-morgan-product) was prose-only, and the project allow-list

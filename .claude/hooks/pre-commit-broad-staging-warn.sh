@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # pre-commit-broad-staging-warn.sh — git-native pre-commit WARNING (exit 0 always)
+# Concept: docs/internal/operations/hooks-registry.md (index); see the row for this hook.
 #
 # ✅ #1798 RESOLVED 2026-09-28 (CIO, PM-approved). Both fixes landed with ONE mechanism, not two:
 # this script now runs from the COMMON-DIR `.git/hooks/pre-commit` (canonical source tracked at

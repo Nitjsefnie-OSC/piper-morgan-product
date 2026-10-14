@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # SEAT-LOCAL PROBE (CIO 2026-08-05). Pure observation: does UserPromptSubmit fire, and what does it see?
+# Concept: docs/internal/operations/hooks-registry.md (index); see the row for this hook.
 # Writes only to a scratch log. Never blocks, never edits, always exit 0.
 # Purpose: establish whether a WRAPPER-WRITTEN heartbeat is possible before proposing one to 11 roles.
 # 2026-09-28 (standing items 8d/8e): original question answered 08-05. KEPT as a SUBMISSION ledger:

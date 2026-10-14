@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # pre-commit-reconcile-drafts.sh — PreToolUse hook for `git commit*`
+# Concept: docs/internal/operations/hooks-registry.md (index); see the row for this hook.
 #
 # Layer C: orphan-prevention check. When a commit touches docs/public/comms/drafts/
 # (a new or modified draft file), runs reconcile-drafts-calendar.py to detect

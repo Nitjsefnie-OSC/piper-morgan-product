@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # memory-index-overlimit-warn.sh — PostToolUse hook for Edit|Write|MultiEdit
+# Concept: docs/internal/operations/hooks-registry.md (index); see the row for this hook.
 #
 # Closes the one unguarded path to a silently-truncated shared memory index.
 #

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # precompact-signoff-warning.sh — PreCompact hook for sign-off discipline.
+# Concept: docs/internal/operations/hooks-registry.md (index); see the row for this hook.
 #
 # Fires before context compaction. Warns the agent if their work is at risk
 # of being stranded: uncommitted changes, unpushed commits, or commits not

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # context-usage-reminder.sh — proactive PostToolUse advisory.
+# Concept: docs/internal/operations/hooks-registry.md (index); see the row for this hook.
 #
 # Fires once per session at high but pre-limit context usage (~75-85% based on
 # transcript byte size). Surfaces a soft, non-blocking advisory: "consider

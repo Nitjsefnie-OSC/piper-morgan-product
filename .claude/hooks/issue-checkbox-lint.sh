@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # issue-checkbox-lint.sh — PostToolUse hook for Bash (post-commit)
+# Concept: docs/internal/operations/hooks-registry.md (index); see the row for this hook.
 #
 # When a commit message references an issue via "Closes #N" / "Fixes #N" /
 # "Resolves #N", GitHub auto-closes the issue when the commit lands on the
