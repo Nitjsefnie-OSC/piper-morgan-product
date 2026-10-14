@@ -1,8 +1,18 @@
+---
+last_updated: 2026-10-14
+currency_claim: updated same-commit with any migration or change to services/database/models.py; verified against main d00ce14774 (alembic head p1522drop)
+max_age_days: 60
+---
+
 # Piper Morgan 1.0 - Data Model Document
+
+> **Living core doc #4** (see `reviews/2026-08-architectural-review/living-core-docs.md`). Owner: Lead. Ground truth is `services/database/models.py` (46 tables as of 2026-10-14) and `alembic/versions/`; if this page and the code disagree, the code wins and this page is stale.
 
 ## Overview
 
 This document describes the complete data model for Piper Morgan, including domain models, database schema, and the mapping between them. The system follows a domain-first approach where business logic drives technical implementation.
+
+**Persisted vs domain-only**: not every domain dataclass below has a table. `Product`, `Feature`, `Stakeholder`, `Intent`, `Task` and `Event` are domain-only (their tables were dropped in #1797 or never existed; see [Removed and never-persisted](#removed-and-never-persisted)). The persisted set is the inventory under [Database Schema](#database-schema).
 
 ## Model Distinctions
 
@@ -33,209 +43,214 @@ This document describes the complete data model for Piper Morgan, including doma
 
 #### Product
 
-Represents a product or project being managed.
+Represents a product being managed. **Domain-only**: no `products` table (dropped in #1797). `Project` no longer extends it.
 
 ```python
 @dataclass
 class Product:
     """A product being managed"""
+
     id: str = field(default_factory=lambda: str(uuid4()))
     name: str = ""
-    description: str = ""
     vision: str = ""
     strategy: str = ""
-    is_default: bool = False
-    is_archived: bool = False
     created_at: datetime = field(default_factory=datetime.now)
-    updated_at: Optional[datetime] = None
-
-    # Relationships
-    features: List['Feature'] = field(default_factory=list)
-    stakeholders: List['Stakeholder'] = field(default_factory=list)
-    metrics: List['Metric'] = field(default_factory=list)
-    integrations: List['ProjectIntegration'] = field(default_factory=list)
+    updated_at: datetime = field(default_factory=datetime.now)
+    features: list["Feature"] = field(default_factory=list)
+    stakeholders: list["Stakeholder"] = field(default_factory=list)
+    metrics: list[Any] = field(default_factory=list)
+    work_items: list["WorkItem"] = field(default_factory=list)
 ```
 
-#### Project (extends Product)
+#### Project
 
-Alias for Product with additional project-specific methods.
+A PM workspace with tool integrations and linked repositories. Persisted as `projects` (`ProjectDB`); owner-scoped, with per-project sharing and a lifecycle state.
 
 ```python
 @dataclass
-class Project(Product):
-    """Project is a Product with additional context"""
+class Project:
+    """A PM project with multiple tool integrations"""
 
-    def get_integration(self, integration_type: IntegrationType) -> Optional[ProjectIntegration]:
-        """Get integration configuration by type"""
-        for integration in self.integrations:
-            if integration.type == integration_type:
-                return integration
-        return None
-
-    def get_github_repository(self) -> Optional[str]:
-        """Convenience method to get GitHub repository"""
-        github = self.get_integration(IntegrationType.GITHUB)
-        return github.config.get("repository") if github else None
+    id: str = field(default_factory=lambda: str(uuid4()))
+    owner_id: str = ""
+    name: str = ""
+    description: str = ""
+    integrations: list[ProjectIntegration] = field(default_factory=list)
+    repositories: list["Repository"] = field(default_factory=list)
+    shared_with: list[SharePermission] = field(default_factory=list)
+    is_default: bool = False
+    is_archived: bool = False
+    created_at: datetime = field(default_factory=datetime.now)
+    updated_at: datetime = field(default_factory=datetime.now)
+    mux_ownership: Optional[OwnershipMetadata] = None
+    lifecycle_state: Optional[LifecycleState] = None
 ```
 
 #### ProjectIntegration
 
-Configuration for external system integrations.
+Configuration for external system integrations. Persisted as `project_integrations`. `validate_config()` (e.g. GitHub requires a string `repository` key) lives on the dataclass.
 
 ```python
 @dataclass
 class ProjectIntegration:
-    """External system integration configuration"""
-    id: str = field(default_factory=lambda: str(uuid4()))
+    """Integration configuration for a project"""
+
     type: IntegrationType
+    id: str = field(default_factory=lambda: str(uuid4()))
+    project_id: str = ""
     name: str = ""
     config: Dict[str, Any] = field(default_factory=dict)
     is_active: bool = True
     created_at: datetime = field(default_factory=datetime.now)
-
-    def validate_config(self) -> bool:
-        """Validate integration config. Example: GitHub requires 'repository' key."""
-        if self.type == IntegrationType.GITHUB:
-            return "repository" in self.config and isinstance(self.config["repository"], str)
-        # Add validation for other types as needed
-        return True
+    project: Optional["Project"] = None
 ```
 
 #### Feature
 
-A feature or capability within a product.
+A feature or capability within a product. **Domain-only**: no `features` table (dropped in #1797).
 
 ```python
 @dataclass
 class Feature:
     """A feature or capability"""
+
     id: str = field(default_factory=lambda: str(uuid4()))
-    product_id: Optional[str] = None
     name: str = ""
     description: str = ""
     hypothesis: str = ""
-    acceptance_criteria: List[str] = field(default_factory=list)
+    acceptance_criteria: list[str] = field(default_factory=list)
     status: str = "draft"
-    priority: int = 0
+    product_id: Optional[str] = None
     created_at: datetime = field(default_factory=datetime.now)
-    updated_at: Optional[datetime] = None
-
-    # Relationships
-    dependencies: List['Feature'] = field(default_factory=list)
-    risks: List['Risk'] = field(default_factory=list)
-    work_items: List['WorkItem'] = field(default_factory=list)
+    updated_at: datetime = field(default_factory=datetime.now)
+    lifecycle_state: Optional[LifecycleState] = None
+    lifecycle_history: list[LifecycleTransition] = field(default_factory=list)
+    dependencies: list["Feature"] = field(default_factory=list)
+    risks: list[Any] = field(default_factory=list)
+    work_items: list["WorkItem"] = field(default_factory=list)
 ```
 
 #### Stakeholder
 
-Someone with interest in the product.
+Someone with interest in the product. **Domain-only**: no `stakeholders` table (dropped in #1797).
 
 ```python
 @dataclass
 class Stakeholder:
     """Someone with interest in the product"""
+
     id: str = field(default_factory=lambda: str(uuid4()))
-    product_id: Optional[str] = None
     name: str = ""
-    role: str = ""
     email: Optional[str] = None
-    interests: List[str] = field(default_factory=list)
-    influence_level: int = 1  # 1-5 scale
-    satisfaction: Optional[float] = None  # Stakeholder satisfaction level (0-10 scale)
+    role: str = ""
+    interests: list[str] = field(default_factory=list)
+    influence_level: int = 1
+    satisfaction: Optional[float] = None
     created_at: datetime = field(default_factory=datetime.now)
 ```
 
 #### WorkItem
 
-Universal work item that can map to any external system.
+Universal work item that can map to any external system. Persisted as `work_items`. `product_id` and `feature_id` are plain string columns (the FKs went with the dropped tables); the domain class carries both `metadata` and `item_metadata`, the table only `item_metadata`. `work_items` has no owner column.
 
 ```python
 @dataclass
 class WorkItem:
     """Universal work item - can be from any system"""
+
     id: str = field(default_factory=lambda: str(uuid4()))
-    feature_id: Optional[str] = None
     title: str = ""
     description: str = ""
+    type: str = "task"
     status: str = "open"
-    source_system: str = ""  # github, jira, etc.
-    external_id: str = ""    # ID in external system
-    external_refs: Dict[str, str] = field(default_factory=dict)  # Multiple system refs
-    item_metadata: Dict[str, Any] = field(default_factory=dict)  # Renamed to avoid SQLAlchemy conflicts
-    created_at: datetime = field(default_factory=datetime.now)
+    priority: str = "medium"
+    labels: list[str] = field(default_factory=list)
+    assignee: Optional[str] = None
+    project_id: Optional[str] = None
+    source_system: str = ""
+    external_id: str = ""
+    external_url: Optional[str] = None
+    metadata: Dict[str, Any] = field(default_factory=dict)
     updated_at: Optional[datetime] = None
+    feature_id: Optional[str] = None
+    external_refs: Optional[Dict[str, Any]] = None
+    product_id: Optional[str] = None
+    item_metadata: Optional[Dict[str, Any]] = None
+    created_at: datetime = field(default_factory=datetime.now)
+    lifecycle_state: Optional[LifecycleState] = None
+    lifecycle_history: list[LifecycleTransition] = field(default_factory=list)
+    feature: Optional["Feature"] = None
+    product: Optional["Product"] = None
 ```
 
 ### Intent System
 
 #### Intent
 
-User intent parsed from natural language.
+User intent parsed from natural language. **Domain-only**: no `intents` table (dropped in #1797); a workflow keeps only `intent_id` as a plain string.
 
 ```python
 @dataclass
 class Intent:
     """User intent parsed from natural language"""
-    id: str = field(default_factory=lambda: str(uuid4()))
+
     category: IntentCategory
     action: str
+    id: str = field(default_factory=lambda: str(uuid4()))
     context: Dict[str, Any] = field(default_factory=dict)
     confidence: float = 0.0
-    knowledge_context: List[str] = field(default_factory=list)
     original_message: str = ""
+    workflow_id: Optional[str] = None
     created_at: datetime = field(default_factory=datetime.now)
+    workflow: Optional["Workflow"] = None
 ```
 
 ### Conversation System (PM-034 Phase 3)
 
 #### Conversation
 
-Represents a conversational interaction session with context management.
+A conversational session. Persisted as `conversations`, whose `context`, `topics` and `preview` columns are encrypted at rest. The table also carries `owner_id`, `topics`, `preview`, `is_private`, `turn_count` that the dataclass does not mirror one-to-one.
 
 ```python
 @dataclass
 class Conversation:
     """Domain model for conversational interactions"""
-    id: str = field(default_factory=lambda: str(uuid4()))
-    user_id: str = ""
-    session_id: str = ""
-    title: str = ""  # Optional conversation title/summary
-    context: Dict[str, Any] = field(default_factory=dict)  # Conversation context
-    is_active: bool = True
 
-    # Timestamps
+    id: str = field(default_factory=lambda: str(uuid4()))
+    user_id: UUID = ""
+    session_id: str = ""
+    title: str = ""
+    context: Dict[str, Any] = field(default_factory=dict)
+    is_active: bool = True
+    lifecycle_state: ConversationLifecycleState = ConversationLifecycleState.ACTIVE
+    archived_at: Optional[datetime] = None
+    deleted_at: Optional[datetime] = None
     created_at: datetime = field(default_factory=datetime.now)
     updated_at: datetime = field(default_factory=datetime.now)
     last_activity_at: Optional[datetime] = None
+    mux_ownership: Optional[OwnershipMetadata] = None
 ```
 
 #### ConversationTurn
 
-Individual turn within a conversation, supporting anaphoric reference resolution.
+Individual turn within a conversation, supporting anaphoric reference resolution. Persisted as `conversation_turns`; message text and the JSON context columns are encrypted at rest.
 
 ```python
 @dataclass
 class ConversationTurn:
     """Domain model for individual turns in a conversation"""
+
     id: str = field(default_factory=lambda: str(uuid4()))
     conversation_id: str = ""
-    turn_number: int = 0  # Sequential turn number within conversation
-
-    # Turn content
+    turn_number: int = 0
     user_message: str = ""
     assistant_response: str = ""
-    intent: Optional[str] = None  # Classified intent for this turn
-
-    # Context and entities for anaphoric reference resolution
-    entities: List[str] = field(default_factory=list)  # Extracted entities
-    references: Dict[str, str] = field(default_factory=dict)  # Anaphoric references
-    context_used: Dict[str, Any] = field(default_factory=dict)  # Context used in response
-
-    # Metadata
+    intent: Optional[str] = None
+    entities: list[str] = field(default_factory=list)
+    references: Dict[str, str] = field(default_factory=dict)
+    context_used: Dict[str, Any] = field(default_factory=dict)
     metadata: Dict[str, Any] = field(default_factory=dict)
-    processing_time: Optional[float] = None  # Response processing time in ms
-
-    # Timestamps
+    processing_time: Optional[float] = None
     created_at: datetime = field(default_factory=datetime.now)
     completed_at: Optional[datetime] = None
 ```
@@ -244,272 +259,237 @@ class ConversationTurn:
 
 #### Workflow
 
-Orchestrates multi-step processes.
+Orchestrates multi-step processes. Persisted as `workflows`. `tasks` and `intent` are in-memory relations only: there is no `tasks` or `intents` table, and `workflows.intent_id` is a plain string.
 
 ```python
 @dataclass
 class Workflow:
-    """Workflow orchestration"""
-    id: str = field(default_factory=lambda: str(uuid4()))
-    type: WorkflowType
-    status: WorkflowStatus = WorkflowStatus.PENDING
-    intent_id: Optional[str] = None
-    context: Dict[str, Any] = field(default_factory=dict)
-    tasks: List['Task'] = field(default_factory=list)
-    result: Optional['WorkflowResult'] = None
-    error: Optional[str] = None
-    created_at: datetime = field(default_factory=datetime.now)
-    completed_at: Optional[datetime] = None
+    """Workflow definition and state"""
 
-    def get_next_task(self) -> Optional['Task']:
-        """Get next pending task"""
-        for task in self.tasks:
-            if task.status == TaskStatus.PENDING:
-                return task
-        return None
+    type: WorkflowType
+    id: str = field(default_factory=lambda: str(uuid4()))
+    status: WorkflowStatus = WorkflowStatus.PENDING
+    tasks: list[Task] = field(default_factory=list)
+    context: Dict[str, Any] = field(default_factory=dict)
+    result: Optional[WorkflowResult] = None
+    error: Optional[str] = None
+    intent_id: Optional[str] = None
+    output_data: Optional[Dict[str, Any]] = None
+    started_at: Optional[datetime] = None
+    completed_at: Optional[datetime] = None
+    input_data: Optional[Dict[str, Any]] = None
+    created_at: datetime = field(default_factory=datetime.now)
+    updated_at: datetime = field(default_factory=datetime.now)
+    intent: Optional["Intent"] = None
 ```
 
 #### Task
 
-Individual unit of work within a workflow.
+Individual unit of work within a workflow. **Domain-only**: no `tasks` table (dropped in #1797); tasks live inside the workflow object while it runs.
 
 ```python
 @dataclass
 class Task:
-    """Task within a workflow"""
+    """Individual task within a workflow"""
+
     id: str = field(default_factory=lambda: str(uuid4()))
-    workflow_id: Optional[str] = None
-    type: TaskType
+    name: str = ""
+    type: TaskType = TaskType.ANALYZE_REQUEST
     status: TaskStatus = TaskStatus.PENDING
-    input_data: Dict[str, Any] = field(default_factory=dict)
-    output_data: Dict[str, Any] = field(default_factory=dict)
+    result: Optional[Dict[str, Any]] = None
     error: Optional[str] = None
-    created_at: datetime = field(default_factory=datetime.now)
-    started_at: Optional[datetime] = None
+    output_data: Optional[Dict[str, Any]] = None
+    updated_at: Optional[datetime] = None
     completed_at: Optional[datetime] = None
+    started_at: Optional[datetime] = None
+    workflow_id: Optional[str] = None
+    input_data: Optional[Dict[str, Any]] = None
+    created_at: datetime = field(default_factory=datetime.now)
+    workflow: Optional["Workflow"] = None
 ```
 
 ### Event System
 
 #### Event
 
-Base event for system activity tracking.
+Base event for system activity tracking. **Domain-only**: there is no `events` table (the old schema section describing one never matched a migration). Durable audit trails are `audit_logs` and `ethics_audit_log`.
 
 ```python
 @dataclass
 class Event:
     """Base event class"""
+
     id: str = field(default_factory=lambda: str(uuid4()))
     type: str = ""
-    aggregate_id: Optional[str] = None
-    aggregate_type: Optional[str] = None
     data: Dict[str, Any] = field(default_factory=dict)
     timestamp: datetime = field(default_factory=datetime.now)
 ```
 
 ## Database Schema
 
+The ORM lives in `services/database/models.py` (`Base` from `services/database/connection.py`). **46 tables** as of 2026-10-14 (the 2026-08-11 revision described 8 persisted tables; five have since been dropped and one, `events`, never existed). Types are `String` ids unless noted; `CrossDialectUUID` / `postgresql.UUID` columns are native UUIDs on Postgres and `CHAR(36)` on SQLite so unit tests can run in memory.
+
 ### SQLAlchemy Models
 
 #### Base Model
 
 ```python
-class Base(DeclarativeBase):
-    """Base class for all database models"""
-    pass
-
 class TimestampMixin:
-    """Mixin for created/updated timestamps"""
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
-    updated_at = Column(DateTime, onupdate=datetime.utcnow)
+    """Mixin to add created_at and updated_at timestamps to models"""
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc),
+                        onupdate=lambda: datetime.now(timezone.utc))
 ```
 
-#### Product Table
+Not every table uses the mixin; some declare their own timestamps.
+
+#### Table inventory
+
+"Owner column" is the column a row is scoped to. See [Owner scoping](#owner-scoping) for what that does and does not guarantee.
+
+| Table | Model | Owner column | Notes |
+|---|---|---|---|
+| `users` | `User` | (is the principal) | unique `username`, `email`; `role`, `is_alpha`, `is_admin`, `setup_complete`, `orientation_seen`, `preferences` JSONB (#1422) |
+| `user_api_keys` | `UserAPIKey` | `user_id` NN, FK | unique `(user_id, provider)`; `encrypted_secret`; int PK |
+| `token_blacklist` | `TokenBlacklist` | `user_id` FK, nullable | unique `token_id`; int PK |
+| `invite_tokens` | `InviteToken` | none | token is the PK; `used_by_user_id` FK |
+| `password_reset_tokens` | `PasswordResetToken` | `user_id` NN, FK | token is the PK |
+| `mcp_access_tokens` | `MCPAccessToken` | `user_id` NN, FK | hash-only (`token_hash`), revocable, expiring (#1462) |
+| `mcp_oauth_clients` | `MCPOAuthClient` | none | DCR client registry; `client_secret` encrypted |
+| `mcp_oauth_codes` | `MCPOAuthCode` | `user_id` NN, FK | `code_hash`, PKCE `code_challenge`, single use (`used_at`) |
+| `mcp_oauth_refresh_tokens` | `MCPOAuthRefreshToken` | `user_id` NN, FK | `token_hash`, revocable |
+| `slack_identities` | `SlackIdentity` | `owner_id` NN, FK | unique `(slack_user_id, slack_team_id)` (#1466, ADR-079) |
+| `slack_link_codes` | `SlackLinkCode` | `user_id` NN, FK | code is the PK; `expires_at`, `used_at` |
+| `slack_link_attempts` | `SlackLinkAttempt` | none | attempt ledger keyed by Slack user and team; int PK |
+| `audit_logs` | `AuditLog` | `user_id` FK, nullable | |
+| `ethics_audit_log` | `EthicsAuditLogDB` | `user_id` (no FK) | `entry_id` PK, `redacted` flag |
+| `secure_credentials` | `SecureCredentialDB` | none | keyed by composed `KeychainService` name; `encrypted_value` |
+| `connector_configs` | `ConnectorConfig` | `owner_id` NN, FK | unique `(owner_id, connector)`; also `tenant_id` |
+| `connector_bindings` | `ConnectorBinding` | `owner_id` NN, FK | unique `(owner_id, connector)`; also `tenant_id` |
+| `personalization_contexts` | `PersonalizationContext` | `owner_id` NN, FK | unique per owner; also `tenant_id` |
+| `projects` | `ProjectDB` | `owner_id` FK, nullable | unique `(owner_id, name)`; `shared_with`, `is_archived`, `lifecycle_state` |
+| `project_integrations` | `ProjectIntegrationDB` | `owner_id` FK, nullable | `project_id` FK to `projects` |
+| `repositories` | `RepositoryDB` | `owner_id` NN, FK | unique `(owner_id, provider, full_name)` |
+| `project_repository_links` | `ProjectRepositoryLinkDB` | none | unique `(project_id, repository_id)` |
+| `work_items` | `WorkItem` | none | `product_id` / `feature_id` plain strings; `lifecycle_state`, `external_refs` |
+| `workflows` | `Workflow` | none | `intent_id` plain string; JSON `context` / `result` |
+| `uploaded_files` | `UploadedFileDB` | `owner_id` NN, FK | |
+| `documents` | `DocumentDB` | `owner_id` FK, nullable | unique `chromadb_base_id`; `is_global_pm_domain` (#1238) |
+| `artifacts` | `ArtifactDB` | `owner_id` NN (string, no FK) | `content` encrypted; `lifecycle_state` (#952) |
+| `conversations` | `ConversationDB` | `user_id` NN + `owner_id` nullable | `lifecycle_state` (default `active`), `archived_at`, `deleted_at`; `context` / `topics` / `preview` encrypted |
+| `conversation_turns` | `ConversationTurnDB` | none (via `conversation_id`) | text and JSON columns encrypted |
+| `conversation_links` | `ConversationLinkDB` | none (via `conversation_id`) | links between turns |
+| `conversational_memory_entries` | `ConversationalMemoryEntryDB` | `user_id` NN + `owner_id` nullable | ADR-054 layer 1 |
+| `standup_conversations` | `StandupConversationDB` | `user_id` NN + `owner_id` nullable | JSONB turns, context, versions |
+| `session_activity` | `SessionActivityDB` | `owner_id` NN (string, soft refs) | ADR-078 D1 ledger of external artifacts a session created (#1394) |
+| `insights` | `InsightDB` | `user_id` NN + `owner_id` nullable | `is_deleted` soft delete |
+| `knowledge_nodes` | `KnowledgeNodeDB` | `owner_id` FK, nullable | |
+| `knowledge_edges` | `KnowledgeEdgeDB` | `owner_id` FK, nullable | FKs to `knowledge_nodes` |
+| `lists` | `ListDB` | `owner_id` NN, FK | `shared_with` JSONB (role-based), `is_archived`, `project_ids` |
+| `list_items` | `ListItemDB` | `owner_id` FK, nullable | unique `(list_id, item_id)` |
+| `list_memberships` | `ListMembershipDB` | `owner_id` FK, nullable | unique `(list_id, todo_id)` |
+| `items` | `ItemDB` | none | polymorphic base for `todo_items` (joined-table inheritance) |
+| `todo_items` | `TodoDB` | `owner_id` NN, FK | `id` is FK to `items.id`; `lifecycle_state`, `assigned_to`, `reminder_date`, `external_refs` |
+| `feedback` | `FeedbackDB` | `user_id` + `owner_id`, FKs, nullable | |
+| `personality_profiles` | `PersonalityProfileModel` | `user_id` NN (unique) + `owner_id` nullable | |
+| `learned_patterns` | `LearnedPattern` | `user_id` NN, FK | `pattern_data` encrypted (leaf-split, `action_type` plaintext) |
+| `learning_settings` | `LearningSettings` | `user_id` NN, FK (unique) | |
+| `user_trust_profiles` | `UserTrustProfileDB` | `user_id` NN, FK (unique) | trust stage and history |
+
+#### Removed and never-persisted
+
+| Table | Status |
+|---|---|
+| `products`, `features`, `intents`, `stakeholders`, `tasks` | Dropped by `m1797drop` (#1797). No create-table migration ever managed them; they existed only where `create_all` ran. The domain dataclasses remain. |
+| `action_humanizations` | Dropped by `p1522drop` (#1522) with `services/persistence/`. |
+| `events` | Never existed in the ORM or in any migration; the earlier section describing it was aspirational. |
+
+#### Representative tables
+
+`projects`, the owner-scoped workspace row (abridged):
 
 ```python
-class ProductDB(Base, TimestampMixin):
-    __tablename__ = "products"
-
-    id = Column(String, primary_key=True, default=lambda: str(uuid4()))
-    name = Column(String(255), nullable=False)
-    description = Column(Text)
-    vision = Column(Text)
-    strategy = Column(Text)
-    is_default = Column(Boolean, default=False)
-    is_archived = Column(Boolean, default=False)
-
-    # Relationships
-    features = relationship("FeatureDB", back_populates="product", cascade="all, delete-orphan")
-    stakeholders = relationship("StakeholderDB", back_populates="product", cascade="all, delete-orphan")
-    integrations = relationship("ProjectIntegrationDB", back_populates="project", cascade="all, delete-orphan")
-```
-
-#### ProjectIntegration Table
-
-```python
-class ProjectIntegrationDB(Base, TimestampMixin):
-    __tablename__ = "project_integrations"
-
-    id = Column(String, primary_key=True, default=lambda: str(uuid4()))
-    project_id = Column(String, ForeignKey("products.id", ondelete="CASCADE"))
-    type = Column(Enum(IntegrationType), nullable=False)
-    name = Column(String(255), nullable=False)
-    config = Column(JSON, default=dict)
-    is_active = Column(Boolean, default=True)
-
-    # Relationships
-    project = relationship("ProductDB", back_populates="integrations")
-```
-
-#### Feature Table
-
-```python
-class FeatureDB(Base, TimestampMixin):
-    __tablename__ = "features"
-
-    id = Column(String, primary_key=True, default=lambda: str(uuid4()))
-    product_id = Column(String, ForeignKey("products.id", ondelete="CASCADE"))
-    name = Column(String(255), nullable=False)
-    description = Column(Text)
-    hypothesis = Column(Text)
-    acceptance_criteria = Column(JSON, default=list)
-    status = Column(String(50), default="draft")
-    priority = Column(Integer, default=0)
-
-    # Relationships
-    product = relationship("ProductDB", back_populates="features")
-    work_items = relationship("WorkItemDB", back_populates="feature", cascade="all, delete-orphan")
-```
-
-#### WorkItem Table
-
-```python
-class WorkItem(Base):
-    __tablename__ = "work_items"
-
+class ProjectDB(Base):
+    __tablename__ = "projects"
     id = Column(String, primary_key=True)
-    product_id = Column(String, ForeignKey("products.id"))
-    feature_id = Column(String, ForeignKey("features.id"))
-    title = Column(String, nullable=False)
+    owner_id = Column(UUID, ForeignKey("users.id"))        # nullable in the model
+    name = Column(String, nullable=False)
     description = Column(Text)
-    type = Column(String)  # bug, feature, task, improvement
-    status = Column(String, default="open")
-    priority = Column(String, default="medium")
-    labels = Column(JSON)  # List of labels
-    assignee = Column(String)  # Assigned person
-    project_id = Column(String)  # Project association (separate from FK)
-    source_system = Column(String)  # Source system name
-    external_id = Column(String)  # External system ID
-    external_url = Column(String)  # External system URL
-    item_metadata = Column(JSON)  # Additional metadata (renamed to avoid SQLAlchemy conflict)
-
-    # Relationships
-    feature = relationship("Feature", back_populates="work_items")
-
-    # Indexes
-    __table_args__ = (
-        Index('idx_work_items_external', 'source_system', 'external_id'),
-    )
+    shared_with = Column(JSON)                              # role-based SharePermission list
+    is_default = Column(Boolean, nullable=False)
+    is_archived = Column(Boolean, nullable=False)
+    lifecycle_state = Column(String(50), nullable=True)
+    # UniqueConstraint("owner_id", "name", name="uq_projects_owner_name")
 ```
 
-#### Intent Table
+`session_activity`, the ADR-078 D1 ledger (abridged):
 
 ```python
-class IntentDB(Base):
-    __tablename__ = "intents"
-
-    id = Column(String, primary_key=True, default=lambda: str(uuid4()))
-    category = Column(Enum(IntentCategory), nullable=False)
-    action = Column(String(255), nullable=False)
-    context = Column(JSON, default=dict)
-    confidence = Column(Float, default=0.0)
-    knowledge_context = Column(JSON, default=list)
-    original_message = Column(Text)
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
-
-    # Relationships
-    workflows = relationship("WorkflowDB", back_populates="intent")
+class SessionActivityDB(Base):
+    __tablename__ = "session_activity"
+    id, conversation_id, owner_id    # String, NOT NULL
+    turn_id                          # nullable soft ref
+    action_type, target_ref          # target_ref like "owner/repo#107"; NOT NULL
+    target_title, created_at
+    # Index("idx_session_activity_owner_conv", owner_id, conversation_id, created_at)
 ```
 
-#### Workflow Table
+It holds external pointers, not content. `owner_id` is NOT NULL and `SessionActivityRepository` always keys its WHERE on it.
 
-```python
-class Workflow(Base):
-    __tablename__ = "workflows"
+### Cross-cutting rules
 
-    id = Column(String, primary_key=True)
-    type = Column(Enum(WorkflowType))
-    status = Column(Enum(WorkflowStatus))
-    input_data = Column(JSON)
-    output_data = Column(JSON)
-    context = Column(JSON)
-    result = Column(JSON)  # Workflow execution result (added in Phase 1A)
-    error = Column(Text)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    started_at = Column(DateTime)
-    completed_at = Column(DateTime)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)  # Added in Phase 1A
+#### Owner scoping
 
-    # Relationships
-    intent = relationship("Intent", back_populates="workflow", uselist=False)
-    tasks = relationship("Task", back_populates="workflow", cascade="all, delete-orphan")
-```
+Rows that belong to a user carry an owner column and repositories filter on it (ADR-070, ADR-071 D2, ADR-079). Two facts matter:
 
-#### Task Table
+- **Two generations coexist.** Older tables have a string `user_id`; ADR-071 D2 added a UUID `owner_id` alongside it (additive, FK-less, nullable) on `conversations`, `conversational_memory_entries`, `standup_conversations`, `insights` and `personality_profiles`. Newer tables are `owner_id` only. Column types differ across tables (`String`, `UUID`, `CHAR(36)`).
+- **The database does not enforce it.** There is no row-level security; scoping is the repository `WHERE` clause. `projects.owner_id`, `documents.owner_id`, `knowledge_*`, `list_items`, `list_memberships` and `project_integrations` allow NULL owners. `work_items`, `workflows`, `items`, `conversation_turns` and `conversation_links` have no owner column and inherit it, if at all, from a parent.
 
-```python
-class Task(Base, TimestampMixin):
-    __tablename__ = "tasks"
+#### Lifecycle and deletion
 
-    id = Column(String, primary_key=True)
-    workflow_id = Column(String, ForeignKey("workflows.id"))
-    name = Column(String, nullable=False)  # Task name (added in Phase 1A)
-    type = Column(Enum(TaskType))
-    status = Column(Enum(TaskStatus))
-    input_data = Column(JSON)
-    output_data = Column(JSON)
-    result = Column(JSON)  # Task execution result (added in Phase 1A)
-    error = Column(Text)
-    started_at = Column(DateTime)
-    completed_at = Column(DateTime)
+There is no single soft-delete mechanism. `lifecycle_state` (the `LifecycleState` enum from `services/mux/lifecycle.py`, stored as a string) exists on `work_items`, `projects`, `artifacts`, `conversations` and `todo_items`. Separate flags: `projects.is_archived`, `lists.is_archived`, `insights.is_deleted`, `conversations.archived_at` / `deleted_at`. Other tables delete rows physically.
 
-    # Relationships
-    workflow = relationship("Workflow", back_populates="tasks")
-```
+#### Encryption at rest
 
-#### Event Table
+Field-level AES-256-GCM with a per-context HKDF subkey (`services/security/field_encryption.py`, #358). Two mechanisms:
 
-```python
-class EventDB(Base):
-    __tablename__ = "events"
+- **ORM column types** `EncryptedString` / `EncryptedJSON` (`services/security/encrypted_types.py`): `mcp_oauth_clients.client_secret`, `artifacts.content`, `conversations.{context,topics,preview}`, `conversation_turns.{user_message,assistant_response,entities,references,context_used,metadata}`, `learned_patterns.pattern_data` (leaf-split; `action_type` stays plaintext). The context label is the `table.column` string.
+- **Service-level encryption into plain text columns**: `user_api_keys.encrypted_secret` and `secure_credentials.encrypted_value`. A user's key is encrypted under context `user_api_keys.secret`, except GitHub providers (`github`, `github_mcp_oauth`), which use `user_api_keys.secret.github` (#1982, `services/security/user_api_key_service.py`). The legacy shared-context read fallback for GitHub rows is off (`GITHUB_LEGACY_CONTEXT_FALLBACK = False`) since the 2026-10-13 re-encryption reported zero legacy rows on alpha.
 
-    id = Column(String, primary_key=True, default=lambda: str(uuid4()))
-    type = Column(String(100), nullable=False)
-    aggregate_id = Column(String)
-    aggregate_type = Column(String(50))
-    data = Column(JSON, nullable=False)
-    timestamp = Column(DateTime, default=datetime.utcnow, nullable=False)
+Two process modes (#1982): the web app holds `ENCRYPTION_MASTER_KEY` and derives any context; the MCP app holds only pre-derived, decrypt-only subkeys in `ENCRYPTION_SCOPED_SUBKEYS` (today, the GitHub context), refuses every encrypt and every unlisted context, and fails closed at startup if a master key is present (`services/mcp/server/app.py`).
 
-    # Indexes
-    __table_args__ = (
-        Index('idx_events_aggregate', 'aggregate_type', 'aggregate_id'),
-        Index('idx_events_timestamp', 'timestamp'),
-    )
-```
+Inbound bearer credentials are never stored raw: `mcp_access_tokens.token_hash`, `mcp_oauth_codes.code_hash` and `mcp_oauth_refresh_tokens.token_hash` hold SHA-256 digests. `invite_tokens` and `password_reset_tokens` store the token itself as the primary key.
 
 ## Enumerations
+
+Canonical definitions: `services/shared_types.py`. Values below are the current members.
 
 ### IntentCategory
 
 ```python
 class IntentCategory(Enum):
-    EXECUTION = "execution"    # Create, update, status changes
-    ANALYSIS = "analysis"      # Trends, risks, opportunities
-    SYNTHESIS = "synthesis"    # Generate docs, summarize
-    STRATEGY = "strategy"      # Prioritize, plan, recommend
-    LEARNING = "learning"      # What worked, patterns
-    QUERY = "query"           # Read-only data retrieval
+    EXECUTION = "execution"
+    ANALYSIS = "analysis"
+    SYNTHESIS = "synthesis"
+    STRATEGY = "strategy"
+    PLANNING = "planning"
+    REVIEW = "review"
+    LEARNING = "learning"
+    QUERY = "query"
+    CONVERSATION = "conversation"
+    IDENTITY = "identity"
+    DISCOVERY = "discovery"
+    TEMPORAL = "temporal"
+    STATUS = "status"
+    PRIORITY = "priority"
+    GUIDANCE = "guidance"
+    TRUST = "trust"
+    MEMORY = "memory"
+    PORTFOLIO = "portfolio"
+    PROVENANCE = "provenance"
+    UNKNOWN = "unknown"
 ```
+See `intent-categories-reference.md` for what each category means.
 
 ### WorkflowType
 
@@ -523,6 +503,12 @@ class WorkflowType(Enum):
     GENERATE_REPORT = "generate_report"
     PLAN_STRATEGY = "plan_strategy"
     LEARN_PATTERN = "learn_pattern"
+    ANALYZE_FEEDBACK = "analyze_feedback"
+    CONFIRM_PROJECT = "confirm_project"
+    SELECT_PROJECT = "select_project"
+    ANALYZE_FILE = "analyze_file"
+    LIST_PROJECTS = "list_projects"
+    MULTI_AGENT = "multi_agent"
 ```
 
 ### IntegrationType
@@ -531,9 +517,8 @@ class WorkflowType(Enum):
 class IntegrationType(Enum):
     GITHUB = "github"
     JIRA = "jira"
-    SLACK = "slack"
     LINEAR = "linear"
-    ASANA = "asana"
+    SLACK = "slack"
 ```
 
 ### WorkflowStatus
@@ -551,21 +536,29 @@ class WorkflowStatus(Enum):
 
 ```python
 class TaskType(Enum):
-    # Analysis tasks
     ANALYZE_REQUEST = "analyze_request"
     EXTRACT_REQUIREMENTS = "extract_requirements"
     IDENTIFY_DEPENDENCIES = "identify_dependencies"
-
-    # Execution tasks
     CREATE_WORK_ITEM = "create_work_item"
     UPDATE_WORK_ITEM = "update_work_item"
     NOTIFY_STAKEHOLDERS = "notify_stakeholders"
-
-    # Integration tasks
+    GENERATE_DOCUMENT = "generate_document"
+    CREATE_SUMMARY = "create_summary"
     GITHUB_CREATE_ISSUE = "github_create_issue"
+    GENERATE_GITHUB_ISSUE_CONTENT = "generate_github_issue_content"
     ANALYZE_GITHUB_ISSUE = "analyze_github_issue"
+    ANALYZE_FILE = "analyze_file"
+    SUMMARIZE = "summarize"
+    LIST_PROJECTS = "list_projects"
+    EXTRACT_WORK_ITEM = "extract_work_item"
     JIRA_CREATE_TICKET = "jira_create_ticket"
     SLACK_SEND_MESSAGE = "slack_send_message"
+    PROCESS_USER_FEEDBACK = "process_user_feedback"
+    ANALYZE_DOCUMENT = "analyze_document"
+    QUESTION_ANSWER_DOCUMENT = "qa_document"
+    COMPARE_DOCUMENTS = "compare_documents"
+    SUMMARIZE_DOCUMENT = "summarize_document"
+    SEARCH_DOCUMENTS = "search_documents"
 ```
 
 ### TaskStatus
@@ -583,100 +576,49 @@ class TaskStatus(Enum):
 
 ### Base Repository
 
+`services/database/repositories.py`. Repositories take an `AsyncSession` and a class-level `model`. They `flush` and `refresh` but **do not commit**; the commit belongs to the session scope (below).
+
 ```python
 class BaseRepository:
     """Base repository with common CRUD operations"""
 
-    def __init__(self, db_session: AsyncSession, model_class: Type[Base]):
-        self.db = db_session
-        self.model_class = model_class
+    model = None
 
-    async def create(self, **kwargs) -> Any:
-        instance = self.model_class(**kwargs)
-        self.db.add(instance)
-        await self.db.commit()
-        await self.db.refresh(instance)
-        return instance
+    def __init__(self, session: AsyncSession):
+        self.session = session
 
-    async def get_by_id(self, id: str) -> Optional[Any]:
-        return await self.db.get(self.model_class, id)
-
-    async def update(self, id: str, **kwargs) -> Optional[Any]:
-        instance = await self.get_by_id(id)
-        if instance:
-            for key, value in kwargs.items():
-                setattr(instance, key, value)
-            await self.db.commit()
-            await self.db.refresh(instance)
-        return instance
-
-    async def delete(self, id: str) -> bool:
-        instance = await self.get_by_id(id)
-        if instance:
-            await self.db.delete(instance)
-            await self.db.commit()
-            return True
-        return False
+    async def create(self, **kwargs) -> Any: ...      # add, flush, refresh; generates a uuid4 id if absent
+    async def get_by_id(self, id: str) -> Optional[Any]: ...
+    async def list(self, limit: int = 100) -> List[Any]: ...
+    async def update(self, id: str, **kwargs) -> Optional[Any]: ...   # mutates the ORM row (#1464)
+    async def delete(self, id: str) -> bool: ...      # awaits session.delete (#1464)
 ```
+
+Subclasses such as `ProjectRepository` override `get_by_id` to return **domain** objects, so mutations go through `_get_db_row` (`session.get(self.model, id)`), never through `get_by_id` (#1464).
 
 ### Domain-Specific Repositories
 
+Classes in `services/database/repositories.py` (as of 2026-10-14): `WorkItemRepository`, `WorkflowRepository`, `ProjectRepository`, `ProjectIntegrationRepository`, `RepositoryRepository`, `KnowledgeGraphRepository`, `ConversationRepository`, `DBUserHistoryRepository`, `EthicsAuditRepository`, `InsightRepository`, `StandupConversationRepository`, `ArtifactRepository`, `SessionActivityRepository`. More live in `services/repositories/` (conversational memory, documents, files, todos, universal lists, user trust profiles). The #1797 twins' repository subgraph was deleted with their tables.
+
 #### ProjectRepository
+
+Owner-scoped reads take `owner_id` (and `is_admin`, which bypasses the owner filter per SEC-RBAC Phase 3):
 
 ```python
 class ProjectRepository(BaseRepository):
-    """Repository for Project/Product operations"""
+    """Repository for Project operations"""
 
-    def __init__(self, db_session: AsyncSession):
-        super().__init__(db_session, ProductDB)
+    model = ProjectDB
 
-    async def list_active_projects(self) -> List[Project]:
-        result = await self.db.execute(
-            select(ProductDB).where(ProductDB.is_archived == False)
-        )
-        db_projects = result.scalars().all()
-        return [self._to_domain(p) for p in db_projects]
-
-    async def get_default_project(self) -> Optional[Project]:
-        result = await self.db.execute(
-            select(ProductDB).where(ProductDB.is_default == True)
-        )
-        db_project = result.scalar_one_or_none()
-        return self._to_domain(db_project) if db_project else None
-
-    async def find_by_name(self, name: str) -> List[Project]:
-        result = await self.db.execute(
-            select(ProductDB).where(
-                ProductDB.name.ilike(f"%{name}%"),
-                ProductDB.is_archived == False
-            )
-        )
-        db_projects = result.scalars().all()
-        return [self._to_domain(p) for p in db_projects]
-
-    def _to_domain(self, db_model: ProductDB) -> Project:
-        """Convert database model to domain model"""
-        return Project(
-            id=db_model.id,
-            name=db_model.name,
-            description=db_model.description,
-            vision=db_model.vision,
-            strategy=db_model.strategy,
-            is_default=db_model.is_default,
-            is_archived=db_model.is_archived,
-            created_at=db_model.created_at,
-            updated_at=db_model.updated_at,
-            integrations=[
-                ProjectIntegration(
-                    id=i.id,
-                    type=i.type,
-                    name=i.name,
-                    config=i.config,
-                    is_active=i.is_active
-                ) for i in db_model.integrations
-            ]
-        )
+    async def get_by_id(self, project_id: str, owner_id: Optional[str] = None,
+                        is_admin: bool = False) -> Optional[domain.Project]:
+        filters = [ProjectDB.id == project_id]
+        if owner_id and not is_admin:
+            filters.append(ProjectDB.owner_id == owner_id)
+        ...
 ```
+
+`ProjectDB.to_domain()` and `ProjectDB.from_domain()` do the conversion at the repository boundary (see Model Distinctions).
 
 ## Data Access Patterns
 
@@ -701,38 +643,50 @@ result = await orchestration_engine.execute_workflow(workflow.id)
 
 ### Transaction Boundaries
 
-- Each repository method is a transaction
-- Workflows may span multiple transactions
-- Use database transactions for consistency
-- Event sourcing for audit trail
+- Repository methods `flush` but do not commit; the unit of work is the session scope.
+- `session_scope()` (`services/database/session_factory.py`) commits on clean exit and rolls back on error (#1193: it documented "automatic commit" for a long time without doing it).
+- Workflows may span multiple transactions.
+- There is no event-sourced audit trail: auditing is explicit rows in `audit_logs` / `ethics_audit_log`.
 
 ## Migration Strategy
 
 ### Schema Evolution
 
-1. Use Alembic for database migrations
-2. Domain models drive schema changes
+1. Use Alembic for database migrations (`alembic/versions/`, 84 files; single head `p1522drop` as of 2026-10-14).
+2. Domain models drive schema changes, but the ORM models in `services/database/models.py` are what autogenerate compares against; the #1312 reconciliation guard keeps them equal to the live schema.
 3. Backward compatibility for API changes
 4. Zero-downtime deployment support
 
+### Recent migrations (since the 2026-08-11 revision of this page)
+
+| Revision | Change |
+|---|---|
+| `a1599admin` | `is_admin` grant for PM's beta account; zero-row guard keys on the `users` table state (not `FLY_APP_NAME`) |
+| `j1394ledger` | `session_activity` table (ADR-078 D1) |
+| `k1422prefs` | `users.preferences` JSONB column |
+| `l1466slack` | `slack_identities`, `slack_link_codes` (plus `slack_link_attempts`) |
+| `m1797drop` | drops `products`, `features`, `intents`, `stakeholders`, `tasks` (never migration-managed; `CASCADE` also dropped the two FKs on `work_items`; downgrade is a deliberate no-op) |
+| `n1462mcpt` | `mcp_access_tokens` |
+| `o1462oaut` | `mcp_oauth_clients`, `mcp_oauth_codes`, `mcp_oauth_refresh_tokens` |
+| `p1522drop` | drops `action_humanizations` (#1522) |
+
 ### Example Migration
 
+The shape to copy is a small, reversible-or-documented migration with its reasoning in the module docstring, e.g. `alembic/versions/m1797drop_dead_persistence_twin_tables.py`:
+
 ```python
-# alembic/versions/001_add_project_integrations.py
-def upgrade():
-    op.create_table(
-        'project_integrations',
-        sa.Column('id', sa.String(), nullable=False),
-        sa.Column('project_id', sa.String(), nullable=False),
-        sa.Column('type', sa.Enum(IntegrationType), nullable=False),
-        sa.Column('name', sa.String(255), nullable=False),
-        sa.Column('config', sa.JSON(), nullable=False),
-        sa.Column('is_active', sa.Boolean(), default=True),
-        sa.Column('created_at', sa.DateTime(), nullable=False),
-        sa.Column('updated_at', sa.DateTime()),
-        sa.PrimaryKeyConstraint('id'),
-        sa.ForeignKeyConstraint(['project_id'], ['products.id'], ondelete='CASCADE')
-    )
+revision = "m1797drop"
+down_revision = "a1599admin"
+
+_TABLES = ("tasks", "intents", "stakeholders", "features", "products")
+
+def upgrade() -> None:
+    for t in _TABLES:
+        op.execute(f'DROP TABLE IF EXISTS "{t}" CASCADE')
+
+def downgrade() -> None:
+    # Intentionally a no-op: never migration-managed, empty everywhere.
+    pass
 ```
 
 ## Performance Considerations
@@ -778,16 +732,19 @@ Workflows carry a context dictionary that is enriched automatically during creat
 - The `repository` field is injected automatically if available from project context.
 - Downstream handlers (e.g., GitHub issue creation) consume this context.
 
-## TaskResult Model
+## WorkflowResult Model
 
+```python
 @dataclass
-class TaskResult:
-"""Result of a completed task"""
-task_id: str
-status: TaskStatus
-output: Dict[str, Any] = field(default_factory=dict)
-error: Optional[str] = None
-completed_at: Optional[datetime] = None
+class WorkflowResult:
+    """Result of workflow execution"""
+    success: bool = False
+    data: Dict[str, Any] = field(default_factory=dict)
+    error: Optional[str] = None
+    created_at: datetime = field(default_factory=datetime.now)
+```
+
+(An earlier revision of this page documented a `TaskResult` dataclass; no such class exists in `services/domain/models.py`. Task output lives in `Task.result` / `Task.output_data`.)
 
 ## Integration Configuration Examples
 
@@ -828,77 +785,24 @@ workflow = await workflow_factory.create_from_intent(intent, session_id, project
 # The resulting workflow.context will include 'repository' if available from project
 ```
 
-### Action Humanization Model
+### Action Humanization Model (persistence removed)
 
-The `ActionHumanization` model caches human-readable versions of technical action strings to improve user experience and performance.
-
-```python
-@dataclass
-class ActionHumanization:
-    """Cached human-readable version of technical action strings"""
-    id: str = field(default_factory=lambda: str(uuid4()))
-    action: str = ""  # e.g., "investigate_crash"
-    category: Optional[str] = None  # e.g., "ANALYSIS"
-    human_readable: str = ""  # e.g., "investigate a crash"
-    created_at: datetime = field(default_factory=datetime.now)
-    usage_count: int = 0
-    last_used: Optional[datetime] = None
-```
-
-**Purpose**:
-
-- Convert technical action strings to natural language for improved UX
-- Cache humanizations to avoid repeated processing and database lookups
-- Track usage patterns for optimization and analytics
-- Support both rule-based and future ML-based humanization
-
-**Persistence**:
-
-- Stored in `action_humanizations` table
-- Indexed on `action` field for fast lookups
-- Usage tracking via `usage_count` and `last_used` fields
-
-**Usage Example**:
-
-```python
-# Cached lookup
-humanization = await repo.get_by_action("investigate_crash")
-if humanization:
-    return humanization.human_readable  # "investigate a crash"
-```
+The `action_humanizations` table was dropped in #1522 (migration `p1522drop`) together with `services/persistence/`. The `ActionHumanization` dataclass (`services/domain/models.py`) still exists but has no persistence layer and no importer outside the domain module; it is dead code awaiting deletion.
 
 ## Schema Validation
 
 ### PM-056 Schema Validator Tool
 
-The PM-056 Schema Validator tool automatically prevents domain/database model drift by comparing field names, types, and structures between domain models (`services/domain/models.py`) and SQLAlchemy database models (`services/database/models.py`).
-
-**Key Features:**
-- **Field Validation**: Detects missing fields and type mismatches
-- **Enum Consistency**: Ensures consistent enum usage across models
-- **Relationship Validation**: Validates SQLAlchemy relationships
-- **CI Integration**: Provides exit codes for automated validation
-- **Architectural Awareness**: Zero false positives via FIELD_MAPPINGS configuration (2025-07-31 enhancement)
-- **100% Reliability**: Never cries wolf - only reports actionable issues
+The PM-056 Schema Validator tool compares field names, types, and structures between domain models (`services/domain/models.py`) and SQLAlchemy database models (`services/database/models.py`). Its `FIELD_MAPPINGS` configuration records the intentional differences so it only reports actionable drift.
 
 **Usage:**
 ```bash
-# Validate all models
-python tools/schema_validator.py
-
-# CI mode (exits with error code on critical issues)
-python tools/schema_validator.py --ci
-
-# Validate specific model
+python tools/schema_validator.py            # validate all models
+python tools/schema_validator.py --ci       # exit non-zero on critical issues
 python tools/schema_validator.py --model Product
 ```
 
-**Prevention Examples:**
-- Catches `object_id` vs `object_position` type mismatches
-- Detects missing database columns before runtime errors
-- Validates enum consistency between domain and database models
-
-See `docs/tools/PM-056-schema-validator.md` for complete documentation.
+See `docs/internal/development/tools/legacy-tools/PM-056-schema-validator.md` for the original documentation. Run on 2026-10-14 against main `d00ce14774`: `--ci` exits 0 (no critical issues, 5 informational).
 
 ## Revision Log
 
@@ -924,7 +828,14 @@ See `docs/tools/PM-056-schema-validator.md` for complete documentation.
   - Created Alembic migration: 20251122_upgrade_shared_with_to_roles (converts old format to role-based)
   - Migration defaults existing shares to "viewer" role for backward compatibility
   - Updated serialization: `to_dict()` now includes full role information
+- **October 14, 2026**: Brought current against main `d00ce14774` (alembic head `p1522drop`), 64 days after the previous revision:
+  - Removed the `products`, `features`, `intents`, `stakeholders`, `tasks` and `events` table sections (#1797 dropped the first five; `events` never existed) and the `action_humanizations` persistence (#1522)
+  - Added the table inventory (46 tables, owner column per table) and cross-cutting rules: owner scoping, lifecycle and deletion, encryption at rest (including the #1982 scoped GitHub subkey)
+  - Added Slack identities and link codes, MCP access tokens, MCP OAuth authorization server tables, and the session-activity ledger (ADR-078)
+  - Rewrote the domain-model field blocks from `services/domain/models.py`; refreshed the enumerations from `services/shared_types.py`
+  - Corrected the repository and transaction rules to the code (repositories flush, `session_scope()` commits)
+  - Replaced the fictional example migration and the nonexistent `TaskResult` with real ones
 
 ---
 
-_Last Updated: November 22, 2025_
+_Last Updated: October 14, 2026_
