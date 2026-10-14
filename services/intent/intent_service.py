@@ -5216,7 +5216,11 @@ class IntentService:
             )
 
     async def _handle_projects_query(
-        self, intent: Intent, workflow_id: str, user_id: Optional[str] = None
+        self,
+        intent: Intent,
+        workflow_id: str,
+        session_id: Optional[str] = None,
+        user_id: Optional[str] = None,
     ) -> IntentProcessingResult:
         """
         Handle list_projects/show_projects query actions.
@@ -5280,6 +5284,14 @@ class IntentService:
 
         # Transform domain Project objects → dicts for format_projects_conscious.
         project_dicts = [{"name": p.name, "active": not p.is_archived} for p in projects]
+
+        # #2010: the empty state asks "Would you like to add one?" — arm it with
+        # the same #852 offer_hint the manage_portfolio list branch sets, so a
+        # "yes" starts the add-project flow. The non-empty list ends plainly.
+        if not project_dicts and session_id:
+            from services.consciousness.files_consciousness import empty_projects_offer_hint
+
+            self._track_offer_hint({"offer_hint": empty_projects_offer_hint()}, session_id, user_id)
 
         return IntentProcessingResult(
             success=True,

@@ -4389,7 +4389,12 @@ class TestUnarmedAskSiteRatchet:
                 # already first among the 7 — the two removed texts start
                 # "I couldn't find any projects matching", which sorts
                 # after "I can help...").
-                5,
+                # 5 → 3 (#2010): the list branch's empty-state message literal
+                # now reads the shared EMPTY_PROJECTS_MESSAGE constant
+                # (files_consciousness.py), and its offer_hint literal comes
+                # from empty_projects_offer_hint() (still armed, #852); both
+                # leave the census.
+                3,
                 "I can help you manage your projects. You can ask me to: - Sh",
             ),
             (
