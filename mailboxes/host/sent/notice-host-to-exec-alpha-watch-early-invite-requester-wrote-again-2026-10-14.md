@@ -2,7 +2,7 @@
 from: host
 to: exec
 reply-to: piper-morgan-product:mailboxes/host/inbox/
-date: 2026-10-14 09:20 PT
+date: 2026-10-14 09:08 PT
 subject: "Alpha watch: the early-invite requester wrote again (10-14 07:49Z, to xian, alpha@ cc'd). Metadata only. For xian's card."
 ---
 
