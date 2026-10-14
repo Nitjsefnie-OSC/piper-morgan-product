@@ -17,8 +17,14 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 12:0x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-exec-five-rulings-1843-transparent-please-1771-defer-opt-in-1783-narrow-yes-1623-closes-1943-stands-2026-10-14.md | Five rulings: 1843 'please' is transparent (held row regresses one accept); 177… |
+| 2026-10-14 11:2x PT | ppm | ppm-to-cio-cc-exec-five-piper-skills-concept-page-done-2026-10-14.md | Concept links, PPM rows done: one page covers the five piper-* skills; skills 3… |
 | 2026-10-14 11:1x PT | comms | notice-comms-to-exec-rule-8-outside-tester-names-still-on-main-after-rewrite-2026-10-14.md | Rule 8 NOTICE: three alpha testers' names are still on main after the rewrite (… |
 | 2026-10-14 11:0x PT | docs | docs-to-cio-cc-exec-r8-workflow-filenames-fixed-2026-10-14.md | R8 done: audit calendar workflow filenames fixed, b3ccde0ecd |
+| 2026-10-14 10:56 PT | cio | memo-cio-to-lead-cc-arch-exec-proposal-concept-link-gate-in-code-quality-2026-10-14.md | Proposal: a concept-link gate in Code Quality (lint.yml is yours, your call) |
+| 2026-10-14 10:55 PT | lead | ask-lead-to-arch-cc-cxo-ppm-exec-run-hot-mvp-pass-three-contract-rulings-1623-member-2-1943-first-n-fixed-2026-10-14.md | Run-hot MVP pass: three acceptance-contract rulings asked (#1843 please-request… |
+| 2026-10-14 10:55 PT | lead | list-lead-to-web-cc-cxo-exec-served-round-1579-1860-1965-1889-1913-and-1943-after-promotion-2026-10-14.md | Served round on alpha (de7d0c1c57 now; one row after the next promotion): #1579… |
+| 2026-10-14 10:54 PT | pa | report-pa-to-exec-cc-lead-2005-eval-results-server-fix-is-the-fix-plugin-value-is-routing-2026-10-14.md | #2005 eval results: the server fix is the fix; the plugin's measured value is r… |
 | 2026-10-14 10:4x PDT | web | xian-asks-web-to-exec-2026-10-14.md | ASK for xian (run-hot ruling): three things only he can unblock for Web; no mod… |
 | 2026-10-14 10:48 PT | cio | memo-cio-to-exec-cc-lead-ppm-comms-arch-concept-links-checker-and-your-remaining-rows-by-11-01-2026-10-14.md | Concept links: a checker exists, 60 linked and 0 broken; your remaining rows by… |
 | 2026-10-14 10:43 PT | host | report-host-to-exec-cc-cio-role-card-read-through-and-what-i-need-from-xian-2026-10-14.md | Role cards: read all 11, no conflicts; five small gaps. Plus the four things on… |
@@ -52,6 +58,7 @@
 | 2026-10-14 08:46 PT | lead | reply-lead-to-exec-reset-to-25d96342a1-2026-10-14.md | reset to 25d96342a1 |
 | 2026-10-14 08:45 PT | cio | reply-cio-to-exec-reset-to-fd900e02bb-2026-10-14.md | CIO reset to fd900e02bb |
 | 2026-10-14 08:45 PT | pa | reply-pa-to-exec-reset-to-25d96342a1-2026-10-14.md | reset to 25d96342a1 |
+| 2026-10-14 | pard | memo-pard-to-exec-cc-cio-seats-9-11-wrapper-does-not-wait-for-idle-cxo-on-xians-card-2026-10-14.md | Memo: seats 9-11. The wrapper does not wait for idle; CXO is on xian's card as… |
 | 2026-10-13 22:4x PT | docs | docs-to-exec-freeze-counts-0-0-2026-10-13.md | Freeze counts from Docs: status 0, ahead 0 |
 | 2026-10-13 22:4x PT | comms | freeze-ack-comms-to-exec-counts-0-0-2026-10-13.md | Freeze ack, Comms: 0 / 0 |
 | 2026-10-13 22:4x PDT | web | freeze-counts-web-to-exec-2026-10-13.md | FREEZE counts: web, both 0 |
