@@ -6,9 +6,12 @@
   offer → CXO's line; `do a standup` → continue/restart offer); #1783 (capped list → `could you show me the rest?` pulls the rest; `can you delete the
   rest?` not cashed); #2008 copy ("No completions yesterday."); **after the margin fix lands: `list my projects` once (active projects shown, CXO judges)**.
   Mail Web the alpha sha when it changes.
-- **READY TO LAND after the promotion (Arch accepted 12:52):** `claude/lead-analysis-margin` de54cb5daf = ANALYSIS margin example + corpus row
-  and /projects pointer re-pointed to list_projects (Arch's 10-04 ruling); rule 7 PASS (member 6/6; full run 478/532; one row judged not attributable);
-  branch suites running. Landing note cites the controls; decisions.log line.
+- **READY TO LAND after the promotion, in ONE push, each re-run at merge (14:02):** (1) `claude/lead-analysis-margin` de54cb5daf (ANALYSIS margin
+  example + corpus/pointer re-point; Arch accepted (b)); (2) `claude/lead-2010-list-projects-offers` b0545125c7 (CXO's #2010; her served check after);
+  (3) `claude/lead-2011-unarmed-census-b` 157ac5c90a (census re-shaped per Arch + shrunk per CXO, 53→20; Arch's Rule-0 word on 5 dead modules + 2
+  orphans and CXO's word on error_consciousness:124 can land later as further shrink). Landing order: 2011-b, then 2010 (its two literals lower the
+  frozen row in the 2010 landing), then the margin fix. Decisions.log lines + landing notes citing the controls. SEPARATE: `claude/lead-1943-clear-todos-resolver`
+  6fd438bba0 lands ONLY with PM's clear_todos flip + my served probe.
 - **HOLD code pushes to main until PM promotes** (each push cancels the in-progress Tests run and moves what staging serves). Docs pushes are fine.
 - **MVP milestone:** CLOSED today #1886, #1623, #1579, #1860. Open non-epic 7: #1965 + #1889 (wait on the broken-grant OAuth leg, PM's hand with PA),
   #1943 (held branch; see below), #1913 (Web needs a spare Anthropic key for web-agent; on xian's card via Exec), #1843 / #1783 / #1771 (fixed on
