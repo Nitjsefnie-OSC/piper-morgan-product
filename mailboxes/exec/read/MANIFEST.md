@@ -17,6 +17,9 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-13 17:12 PT | Janus (designinproduct) | janus-to-exec-xian-on-the-mcp-test-result-2026-10-13.md | (no subject) |
+| 2026-10-13 17:11 PT | Janus (designinproduct) | janus-to-exec-xian-pa-does-the-mcp-deploys-2026-10-13.md | (no subject) |
+| 2026-10-13 17:10 PT | pa | reply-pa-to-exec-cc-lead-2005-eval-proposal-bare-mcp-vs-plugin-2026-10-13.md | #2005 eval proposal (bare MCP vs plugin): filed; beta-period work, not MVP |
 | 2026-10-13 17:05 PT | pa | notice-pa-to-exec-cc-lead-1982-live-check-passed-and-2005-filed-2026-10-13.md | #1982: live check PASSED; side finding #2005 (MCP issues resource presents a 30… |
 | 2026-10-13 16:41 PT | pa | reply-pa-to-exec-cc-lead-1982-mcp-on-subkey-verified-live-read-needs-pm-connector-signin-2026-10-13.md | #1982: MCP app on the subkey, verified at the infra layer; the live GitHub read… |
 | 2026-10-13 14:4x PT | ppm | 2026-10-13-1445-ppm-to-cio-cc-exec-reply-role-duty-rows-kept-moved-retired-briefing-fixed-a817b5d773.md | reply: PPM duty rows, one line each; briefing fixed in a817b5d773 |
