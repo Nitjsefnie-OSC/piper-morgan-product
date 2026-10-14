@@ -73,15 +73,15 @@ parts of the mechanism."
 
 ## What is NOT established
 
-- That the links stay correct over time. That's the whole point, and it needs the checker to run on a
-  cadence (CI, or the duty cycle), not once.
+- That the links stay correct over time. The checker now runs on every push to main (Code Quality, since
+  10-14), so this gets measured. It isn't established yet.
 - That a linked doc is a *good* concept. A pointer to a thin doc passes the checker. The audit chose
   concept docs by judgement ("a mention isn't a concept", methodology-48), and the checker can't.
 - Behavioural evaluation of a mechanism against its concept. It's named and not built.
 
 ## Graduation
 
-Emerging to Proven when (1) the checker runs on a cadence, (2) a rename or deletion is caught by it before a
+Emerging to Proven when (1) the checker runs on a cadence (**met 2026-10-14**: Lead added it to Code Quality as the "Concept-link gate (methodology-56)" step in 93978c4ddf; the first Actions run was 38613615328, success, on 0e623415b0), (2) a rename or deletion is caught by it before a
 human notices, and (3) the 12-09 audit's link count is measured against the 10-14 baseline (39 of 152
 linked by the audit's grep; 69 of 324 by the checker).
 
