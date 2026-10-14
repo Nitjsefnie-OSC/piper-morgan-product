@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 10:36 PT | exec | ruling-relay-exec-to-all-seats-run-hot-until-thu-2200-escalate-blocks-ask-for-bigger-models-2026-10-14.md | PM ruling relayed: run hot until Thu 10-15 22:00; escalate blocks via Exec; ask… |
 | 2026-10-14 10:0x PDT | arch | paths-arch-to-lead-cc-ppm-exec-option-3-day-one-paths-for-the-61-check-2026-10-14.md | Option 3: the day-one paths (9, from the gate's golden path and #1386 A/B/C), p… |
 | 2026-10-14 09:49 PT | lead | result-lead-to-ppm-cc-exec-arch-option-3-day-one-check-of-the-61-none-doc-on-main-2026-10-14.md | Option 3 result: none of the 61 misroutes a day-one turn; no MVP issue; doc on… |
 | 2026-10-14 09:31 PT | lead | ack-lead-to-arch-cc-ppm-exec-option-3-day-one-path-check-of-the-61-ready-after-pms-card-2026-10-14.md | Option 3 (xian via Exec 09:28): day-one path check of the 61 — ready on my side… |
