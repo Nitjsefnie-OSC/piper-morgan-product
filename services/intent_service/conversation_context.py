@@ -401,6 +401,7 @@ class ConversationContext:
                     lines=(),
                     offer_text="",
                     armed_at=armed_at,
+                    accepts_request_questions=True,
                 )
             else:
                 self.pending_list_remainder = None

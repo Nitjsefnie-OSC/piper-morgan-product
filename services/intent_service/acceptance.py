@@ -186,6 +186,49 @@ def is_state_question(message: str) -> bool:
     return bool(_INTERROGATIVE_OPENER_RE.match(clean)) and len(clean.split()) >= 2
 
 
+# --- Request-question detection (#1783; Arch ruling 2026-10-14, CXO yes) ----
+#
+# Axis (a) stays absolute EXCEPT where an offer has DECLARED (opt-in, READ /
+# LOW_CEREMONY only) that it accepts interrogative REQUESTS, and the turn
+# NAMES THE OFFERED REMAINDER. Word-set + opener check, deliberately not a
+# regex (TestExtractionPatternRatchet counts pattern lists). A modal opener
+# plus any verb is TOO BROAD ("can you delete the first one?"), so the
+# remainder word is required, not optional.
+REQUEST_QUESTION_REMAINDER_WORDS = frozenset({"rest", "others", "remaining", "more"})
+_REQUEST_MODALS = frozenset({"can", "could", "would", "will"})
+_REQUEST_SUBJECTS = frozenset({"you", "i"})
+# #1783 narrowing (Arch): the modal form needs a VIEWING verb right after the
+# subject - "delete", "complete", "tell", "add" are not requests to see.
+_REQUEST_VIEWING_VERBS = frozenset({"see", "show", "view", "get", "have", "read", "list", "give"})
+_REQUEST_TRAILING_FILLER = frozenset({"ones", "items", "too", "please"})
+_WH_REQUEST_OPENERS = frozenset({"are", "is", "'s"})
+_WORD_EDGE_PUNCT = "?!.,;:\"'\u2019\u201c\u201d()[]"
+
+
+def is_remainder_request_question(message: str) -> bool:
+    """True for a request-shaped question that NAMES the offered remainder:
+    ``(can|could|would|will) (you|I) … <rest|others|remaining|more>`` or
+    ``what (are|is|'s) … <remainder word>``. Pure shape check; the caller
+    decides whether the offer opted in (see :func:`evaluate_acceptance`)."""
+    words = [w.strip(_WORD_EDGE_PUNCT) for w in (message or "").lower().split()]
+    words = [w for w in words if w]
+    if len(words) < 3:
+        return False
+    # The remainder word must be the LAST content word (only a filler from
+    # _REQUEST_TRAILING_FILLER may follow): "more about the second one",
+    # "the rest of my day like" name a different thing.
+    tail = list(words)
+    while len(tail) > 2 and tail[-1] in _REQUEST_TRAILING_FILLER:
+        tail.pop()
+    if len(tail) < 3 or tail[-1] not in REQUEST_QUESTION_REMAINDER_WORDS:
+        return False
+    if words[0] in _REQUEST_MODALS and words[1] in _REQUEST_SUBJECTS:
+        return words[2] in _REQUEST_VIEWING_VERBS
+    if words[0] == "what" and words[1] in _WH_REQUEST_OPENERS:
+        return True
+    return words[0] == "what's"
+
+
 # --- Taught-vocabulary normalization ----------------------------------------
 
 _TRAILING_PUNCT_RE = re.compile(r"[\s.!,;:]+$")
@@ -207,6 +250,7 @@ def evaluate_acceptance(
     taught_accepts: Optional[Iterable[str]] = None,
     taught_declines: Optional[Iterable[str]] = None,
     distinguish_defer: bool = False,
+    accepts_request_questions: bool = False,
 ) -> AcceptanceVerdict:
     """THE acceptance predicate — one function, consulted by every adopted
     armed seam (#1739; the ``decide_consent`` idiom at the reply-half).
@@ -239,6 +283,14 @@ def evaluate_acceptance(
             ("not now", "maybe later") return DECLINE, exactly the pre-#1771
             behavior. True: they return DEFER. Only the resume-offer seam
             passes True.
+        accepts_request_questions: the OFFER's own declaration (#1783, Arch
+            ruling 2026-10-14): this armed offer accepts an interrogative
+            REQUEST that names the offered remainder ("could you show me the
+            rest?"). Legal ONLY for a declared READ effect at LOW_CEREMONY —
+            anything else raises ValueError (a declaration on a write or an
+            undeclared seam is a build error, never a silent loosening).
+            Never reaches a completion or NAMED_OBJECT seam: "are we done
+            with that standup?" stays STATE_QUESTION (#1617).
 
     Verdict order (most protective first):
         empty/prose → PASS  (asides neither accept nor steal, #1631)
@@ -274,10 +326,20 @@ def evaluate_acceptance(
     if is_prose_reply(clean):
         return AcceptanceVerdict.PASS
 
-    if is_state_question(clean):
-        return AcceptanceVerdict.STATE_QUESTION
-
     tier = acceptance_tier(effect, outwardness)
+
+    if accepts_request_questions and (
+        effect != EffectClass.READ or tier != AcceptanceTier.LOW_CEREMONY
+    ):
+        raise ValueError(
+            "accepts_request_questions is legal only for a READ effect at "
+            f"LOW_CEREMONY (#1783); got effect={effect!r}, tier={tier.name}"
+        )
+
+    if is_state_question(clean):
+        if accepts_request_questions and is_remainder_request_question(clean):
+            return AcceptanceVerdict.ACCEPT
+        return AcceptanceVerdict.STATE_QUESTION
 
     if tier == AcceptanceTier.NAMED_OBJECT:
         if CONFIRM_ACCEPT_RE.match(clean):

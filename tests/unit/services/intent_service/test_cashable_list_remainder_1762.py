@@ -940,16 +940,15 @@ class TestDeliberateBoundariesPinned:
 
     pytestmark = pytest.mark.asyncio
 
-    async def test_an_interrogative_request_does_not_cash_it_asks(self, live_service):
-        """PINNED, and filed as discovered work: contract axis (a) —
-        *question-forms NEVER accept* — means "can I see the rest?" is a
-        STATE_QUESTION, not an ACCEPT, even though a colleague would read it
-        as a request. The arm survives and normal processing answers, so
-        nothing is lost; but it is the #1579 shape CXO warns about and the
-        contract, not this seam, is where it would be changed."""
+    async def test_a_state_question_does_not_cash_and_the_arm_survives(self, live_service):
+        """PINNED: contract axis (a) still holds for a STATE query that does not
+        name the remainder. (#1783 moved the INTERROGATIVE REQUEST that names
+        it — "can I see the rest?" — to ACCEPT, opted in by this offer; see
+        test_request_question_accepts_1783.py.) The arm survives and normal
+        processing answers."""
         sid = "1762-e2e-interrogative"
         _arm_a_capped_list(sid)
-        q = "can I see the rest?"
+        q = "are we done with that standup?"
         p_registry, mock_registry = _inert_registry()
         p_classify, p_floor, p_floor2 = _stub_fallthrough_routing(live_service, q)
         with p_registry as registry_fn, p_classify, p_floor, p_floor2:

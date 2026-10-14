@@ -3850,6 +3850,9 @@ class IntentService:
             outwardness=Outwardness.PRIVATE,
             armed_question=remainder.offer_text,
             taught_accepts=LIST_REMAINDER_TAUGHT_ACCEPTS,
+            # #1783: the offer declares it accepts request-questions that name
+            # the remainder ("could you show me the rest?"); READ-only.
+            accepts_request_questions=remainder.accepts_request_questions,
         )
 
         if verdict is AcceptanceVerdict.DECLINE:
