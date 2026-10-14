@@ -4022,9 +4022,10 @@ class TestUnarmedAskSiteRatchet:
     - ``services/standup/`` — its conversation machine arms via its own
       adopted state rail, not the one-slot store (#1739 table);
     - ``services/onboarding/`` — on ice (ADR-059);
-    - ``services/consciousness/{ui,auth,cli}_consciousness.py`` — NON-CHAT
-      surfaces (#2011 call 4, Arch 2026-10-14): web page UI copy, the
-      login/session routes, and terminal output. The one-slot store is a
+    - ``services/consciousness/{auth,cli}_consciousness.py`` — NON-CHAT
+      surfaces (#2011 call 4, Arch 2026-10-14): the login/session routes
+      and terminal output (``ui_consciousness`` was ruled a third, then
+      found dead and deleted, Arch round 2). The one-slot store is a
       chat mechanism. Each exclusion is held true by a CONSUMER TRIPWIRE
       (``test_2011_non_chat_surface_consumers``) pinning its measured
       importer set; a chat-path importer fails the build.
@@ -4110,12 +4111,18 @@ class TestUnarmedAskSiteRatchet:
     answer-binding state — the next reply is routed by that state to the
     handler that binds it; terminal COMPLETE/CANCELLED are not arms, so
     ``_SLOT_MESSAGES``' post-terminal "wrapped up! Want to start a new
-    one?" stays counted). CONSUMER-ARMED (one hop, #2011 call 2): a
-    MODULE-LEVEL function whose EVERY call site in the scan sits in an
-    arming holder is treated as arming — its copy reaches the user only
-    through an arm (``slot_prompts.format_final_confirmation``, called only
-    by ``_determine_next_step`` / ``_handle_confirming``, which enter/hold
-    CONFIRMING). Zero call sites never qualifies. The census is every
+    one?" stays counted). CONSUMER-ARMED (one hop, #2011 call 2; four
+    bounds blessed by Arch round 2, each pinned in
+    test_2011_one_hop_bounds): a MODULE-LEVEL function is treated as
+    arming iff (1) at least one caller exists and EVERY caller arms by its
+    own body; (2) callers are searched across ``services/**``, ``web/**``
+    and ``main.py`` — a caller in an excluded package still counts; (3)
+    test callers count neither way; (4) a function referenced other than
+    by a direct call (callback, dict value, getattr) has unknown callers
+    and is NOT armed; one hop only, never transitive. Measured:
+    ``slot_prompts.format_final_confirmation`` (called only by
+    ``_determine_next_step`` / ``_handle_confirming``, which enter/hold
+    CONFIRMING). The census is every
     holder with >= 1 interrogative literal that does not arm.
 
     KNOWN_UNARMED_ASK_SITES starts at the census MEASURED 2026-09-12
@@ -4135,7 +4142,7 @@ class TestUnarmedAskSiteRatchet:
     1. SCOPE: ``services/**`` (#2011). Question-emitting code elsewhere is
        not censused: ``services/standup/`` (its conversation machine arms
        via its own adopted state rail, not the one-slot store — #1739
-       table), onboarding (on ice, ADR-059), the three non-chat
+       table), onboarding (on ice, ADR-059), the two non-chat
        consciousness modules (tripwired, #2011 call 4), web templates, ``web/`` and
        ``main.py``, and above all LLM FREE TEXT — the conversational floor can generate
        a question in prose at runtime; no static census can see it. Those
@@ -4163,12 +4170,11 @@ class TestUnarmedAskSiteRatchet:
             # a consumer tripwire (test_2011_non_chat_surface_consumers): if a
             # chat path ever imports one, the build fails and the exclusion
             # must be re-ruled.
-            #  - ui_consciousness: web page empty states / delete-confirm
-            #    modal copy (no chat consumer; measured: no consumer at all
-            #    beyond the package re-export);
+            #  (ui_consciousness was a third, until Arch's round-2 correction:
+            #  its template mentions were Jinja comments — it was dead, and
+            #  was deleted.)
             #  - auth_consciousness: login/session pages (web/api/routes/auth.py);
             #  - cli_consciousness: terminal output of main.py.
-            "services/consciousness/ui_consciousness.py",
             "services/consciousness/auth_consciousness.py",
             "services/consciousness/cli_consciousness.py",
         }
@@ -4177,7 +4183,6 @@ class TestUnarmedAskSiteRatchet:
     # #2011 call 4: the measured importer set per excluded non-chat module
     # (production code only — tests/ and dev/ excluded). `git grep` 2026-10-14.
     _NON_CHAT_SURFACE_IMPORTERS = {
-        "ui_consciousness": frozenset({"services/consciousness/__init__.py"}),
         "auth_consciousness": frozenset(
             {"services/consciousness/__init__.py", "web/api/routes/auth.py"}
         ),
@@ -4763,6 +4768,68 @@ class TestUnarmedAskSiteRatchet:
         assert not cls._open_invitation("What can I help you with? Which repo do you mean?")
         assert not cls._open_invitation("Want me to try again?")
 
+    def test_2011_one_hop_bounds(self):
+        """#2011 call 2 one-hop CONSUMER-ARMED rule — Arch's four bounds
+        (round 2, 2026-10-14), each pinned on a minimal fixture (the house
+        idiom of this class's self-tests) and anchored on real measurement."""
+        import ast
+
+        cls = TestUnarmedAskSiteRatchet
+
+        def idx(files):
+            return cls._caller_index([(r, ast.parse(c)) for r, c in files.items()])
+
+        fmt = {"svc/f.py": "def fmt():\n    return 'Shall I go ahead?'\n"}
+        arm = {
+            "svc/a.py": "def h(s):\n"
+            "    s.filling_state = SlotFillingState.CONFIRMING\n"
+            "    return fmt()\n"
+        }
+        noarm = {"svc/b.py": "def g():\n    return fmt()\n"}
+
+        def armed(files):
+            return cls._consumer_armed("svc/f.py", "fmt", idx(files))
+
+        # Bound 1: >= 1 caller AND every caller arms.
+        assert not armed({**fmt})  # zero callers: dead copy stays counted
+        assert armed({**fmt, **arm})
+        assert not armed({**fmt, **arm, **noarm})
+        # Bound 2: a caller in a census-EXCLUDED package still counts.
+        assert not armed({**fmt, **arm, "services/standup/x.py": noarm["svc/b.py"]})
+        # Bound 4: referenced other than by a direct call -> unknown callers.
+        assert not armed({**fmt, **arm, "svc/c.py": "HANDLERS = {'x': fmt}\n"})
+        assert not armed({**fmt, **arm, "svc/c.py": "def k():\n    register(fmt)\n"})
+        assert not armed({**fmt, **arm, "svc/c.py": "def k(m):\n    return getattr(m, 'fmt')()\n"})
+        # Bound 4: one hop only — mid() is consumer-armed by top(); fmt(),
+        # called only by mid(), is NOT (never transitive).
+        chain = idx(
+            {
+                **fmt,
+                "svc/m.py": "def mid():\n    return fmt()\n",
+                "svc/t.py": "def top(s):\n"
+                "    s.filling_state = SlotFillingState.PROMPTING\n"
+                "    return mid()\n",
+            }
+        )
+        assert cls._consumer_armed("svc/m.py", "mid", chain)
+        assert not cls._consumer_armed("svc/f.py", "fmt", chain)
+
+        # Real measurement. Bound 2: the caller roots reach web/, main.py
+        # and the census-excluded services/standup/. Bound 3: never tests/.
+        rels = {rel for rel, _tree in self._caller_trees()}
+        assert "main.py" in rels
+        assert any(r.startswith("web/") for r in rels)
+        assert any(r.startswith("services/standup/") for r in rels)
+        assert not any(r.startswith("tests/") for r in rels)
+        # Bound 1 + 3, measured: format_final_confirmation's production
+        # callers (_determine_next_step, _handle_confirming) all arm; its
+        # non-arming TEST callers (test_slot_prompts.py) count neither way.
+        _rows, stats = self._census()
+        assert (
+            "services/slot_filling/slot_prompts.py",
+            "format_final_confirmation",
+        ) in stats["consumer_armed"]
+
     def test_2011_non_chat_surface_consumers(self):
         """#2011 call 4 TRIPWIRE: each non-chat module excluded by name in
         _EXCLUDED_MODULES is imported by EXACTLY its measured consumer set
@@ -4819,10 +4886,9 @@ class TestUnarmedAskSiteRatchet:
                             found[mod].add(rel)
         assert scanned >= 10, f"tripwire scanned only {scanned} files — the walk broke"
         for mod, expected in mods.items():
-            if mod != "ui_consciousness":
-                assert found[mod] - {
-                    "services/consciousness/__init__.py"
-                }, f"{mod}: its measured surface consumer vanished — re-measure"
+            assert found[mod] - {
+                "services/consciousness/__init__.py"
+            }, f"{mod}: its measured surface consumer vanished — re-measure"
             assert found[mod] == set(expected), (
                 f"#2011 call 4 tripwire: {mod} is excluded from the unarmed-ask "
                 f"census as a NON-CHAT surface, measured importers "
@@ -5045,6 +5111,83 @@ class TestUnarmedAskSiteRatchet:
         rec(tree, "", True)
         return result
 
+    # #2011 bound 2: the one-hop caller search spans production code beyond
+    # the census scope (an excluded package's caller still counts); bound 3:
+    # tests/ is not a root, so a test caller counts neither way.
+    _CALLER_ROOTS = (
+        os.path.join("services", "**", "*.py"),
+        os.path.join("web", "**", "*.py"),
+        "main.py",
+    )
+
+    def _caller_trees(self):
+        """(rel, tree) for every file under _CALLER_ROOTS — no exclusions."""
+        import ast
+
+        root = self._repo_root()
+        out = []
+        for pattern in self._CALLER_ROOTS:
+            for path in sorted(glob.glob(os.path.join(root, pattern), recursive=True)):
+                rel = os.path.relpath(path, root).replace(os.sep, "/")
+                with open(path, encoding="utf-8") as fh:
+                    out.append((rel, ast.parse(fh.read())))
+        return out
+
+    @classmethod
+    def _caller_index(cls, trees):
+        """One-hop caller index over ``trees``: (callers, indirect, arming).
+        callers: simple name -> {(rel, holder)} that CALL it directly.
+        indirect: names referenced other than as a call's callee (a Load of
+        the name / attribute outside a call position, or a string argument
+        to getattr/hasattr) — their callers are unknown (bound 4).
+        arming: holders that arm by their OWN body (never consumer-armed —
+        one hop only, bound 4)."""
+        import ast
+
+        callers, indirect, arming = {}, set(), set()
+        for rel, tree in trees:
+            for qual, nodes in cls._collect_holders(tree):
+                if cls._holder_arms(nodes):
+                    arming.add((rel, qual))
+                callee_ids = set()
+                for sub in nodes:
+                    if not isinstance(sub, ast.Call):
+                        continue
+                    f = sub.func
+                    callee_ids.add(id(f))
+                    name = (
+                        f.attr
+                        if isinstance(f, ast.Attribute)
+                        else (f.id if isinstance(f, ast.Name) else None)
+                    )
+                    if name:
+                        callers.setdefault(name, set()).add((rel, qual))
+                    if name in ("getattr", "hasattr") and len(sub.args) >= 2:
+                        a = sub.args[1]
+                        if isinstance(a, ast.Constant) and isinstance(a.value, str):
+                            indirect.add(a.value)
+                for sub in nodes:
+                    if id(sub) in callee_ids:
+                        continue
+                    if isinstance(sub, ast.Name) and isinstance(sub.ctx, ast.Load):
+                        indirect.add(sub.id)
+                    elif isinstance(sub, ast.Attribute) and isinstance(sub.ctx, ast.Load):
+                        indirect.add(sub.attr)
+        return callers, indirect, arming
+
+    @staticmethod
+    def _consumer_armed(rel, qual, index) -> bool:
+        """#2011 call 2, Arch's four bounds: a MODULE-LEVEL function is armed
+        iff (1) at least one caller exists and EVERY caller arms by its own
+        body, (2) callers drawn from services/**, web/** and main.py, (3)
+        tests never counted, (4) never if referenced other than by a direct
+        call; one hop only (a consumer-armed caller does not arm)."""
+        callers_of, indirect, arming = index
+        if "." in qual or qual in indirect:
+            return False
+        callers = callers_of.get(qual, set()) - {(rel, qual)}
+        return bool(callers) and callers <= arming
+
     def _census(self):
         """Run the predicate. Returns (rows, stats) where rows is the set of
         (file, holder, literal-count, fingerprint) for UNARMED ask sites and
@@ -5069,21 +5212,10 @@ class TestUnarmedAskSiteRatchet:
         arming = set()
         marker_exemptions = []
         open_invitations = []
-        # #2011 call 2: call sites per simple callee name -> caller holders,
-        # for the one-hop consumer-armed rule below.
-        callers_of = {}
-        for rel, _source, tree in parsed:
-            for qual, nodes in self._collect_holders(tree):
-                for sub in nodes:
-                    if isinstance(sub, ast.Call):
-                        f = sub.func
-                        name = (
-                            f.attr
-                            if isinstance(f, ast.Attribute)
-                            else (f.id if isinstance(f, ast.Name) else None)
-                        )
-                        if name:
-                            callers_of.setdefault(name, set()).add((rel, qual))
+        # #2011 call 2 (bounds blessed by Arch 2026-10-14 round 2): the
+        # one-hop caller index spans services/**, web/** and main.py (bound
+        # 2), never tests/ (bound 3).
+        caller_index = self._caller_index(self._caller_trees())
         for rel, source, tree in parsed:
             marked = self._marker_lines(source)
             excluded = self._excluded_string_ids(tree, utterance_ctors)
@@ -5124,20 +5256,14 @@ class TestUnarmedAskSiteRatchet:
                         continue
                     sites.setdefault(key, []).append(text)
 
-        # #2011 call 2 — CONSUMER-ARMED (one hop): a MODULE-LEVEL function
-        # whose every call site in the scan sits in an arming holder renders
-        # copy that only ever reaches the user through an arm (e.g.
-        # slot_prompts.format_final_confirmation, called only by the
-        # slot-filling handlers that enter/hold CONFIRMING). Matched by simple
-        # name, so a same-named call elsewhere only makes the rule stricter;
-        # zero call sites never qualifies (dead copy stays counted).
-        consumer_armed = set()
-        for rel, qual in sites:
-            if "." in qual or (rel, qual) in arming:
-                continue
-            callers = callers_of.get(qual, set()) - {(rel, qual)}
-            if callers and callers <= arming:
-                consumer_armed.add((rel, qual))
+        # #2011 call 2 — CONSUMER-ARMED (one hop, four bounds; see
+        # _consumer_armed). E.g. slot_prompts.format_final_confirmation,
+        # called only by the slot-filling handlers that enter/hold CONFIRMING.
+        consumer_armed = {
+            (rel, qual)
+            for rel, qual in sites
+            if (rel, qual) not in arming and self._consumer_armed(rel, qual, caller_index)
+        }
 
         rows = set()
         for (rel, qual), texts in sites.items():

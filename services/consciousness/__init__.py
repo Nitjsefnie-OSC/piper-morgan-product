@@ -68,15 +68,6 @@ from services.consciousness.todo_consciousness import (
     format_todo_deleted_conscious,
     format_todo_list_conscious,
 )
-from services.consciousness.ui_consciousness import (
-    format_button_label_conscious,
-    format_delete_confirmation_conscious,
-    format_empty_state_conscious,
-    format_empty_state_title_conscious,
-    get_empty_state_cta,
-    get_empty_state_data,
-    get_empty_state_icon,
-)
 from services.consciousness.validation import MVCResult, validate_mvc
 
 __all__ = [
@@ -123,12 +114,4 @@ __all__ = [
     "format_settings_saved_conscious",
     "format_account_inactive_conscious",
     "format_password_changed_conscious",
-    # UI/Template consciousness (Issue #638)
-    "format_empty_state_conscious",
-    "format_empty_state_title_conscious",
-    "format_delete_confirmation_conscious",
-    "format_button_label_conscious",
-    "get_empty_state_icon",
-    "get_empty_state_cta",
-    "get_empty_state_data",
 ]
