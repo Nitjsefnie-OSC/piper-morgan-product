@@ -59,6 +59,7 @@ G() { git -C "$REPO" "$@"; }
 # "ask(ppm): close #1677/#1488 properly" closed #1677 from this exact path on 2026-08-28 —
 # nobody decided anything; GitHub's parser read a close-keyword next to #N. commit-tree bypasses
 # every git hook, so the guard lives HERE. Reword, or add the trailer `Auto-Close: intentional`.
+# Concept: docs/internal/operations/commit-message-guards.md (doorway 2).
 # check_autoclose_keywords.py ALSO scans the subject for a bearer-credential shape (#1845, added
 # 2026-10-04): a full invite token sat in a commit SUBJECT on main (`7941ae4b97`) — the --files
 # bearer check below only ever looked at the memo BODY, never this $MSG string. The detailed

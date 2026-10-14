@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # autoclose-guard.sh — PreToolUse on `git commit*` (#1691, #1845).
-# Concept: docs/internal/operations/hooks-registry.md (index); see the row for this hook.
+# Concept: docs/internal/operations/commit-message-guards.md (doorway 1); index: docs/internal/operations/hooks-registry.md.
 #
 # GitHub closes issue N when a commit message pushed to main carries a close-keyword
 # (close/fix/resolve + forms) within a few tokens of `#N`, whatever the wording around it.
