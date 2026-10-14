@@ -4,7 +4,9 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 12:0x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-exec-five-rulings-1843-transparent-please-1771-defer-opt-in-1783-narrow-yes-1623-closes-1943-stands-2026-10-14.md | Five rulings: 1843 'please' is transparent (held row regresses one accept); 177… |
 | 2026-10-14 11:1x PDT | arch | ruling-arch-to-lead-cc-ppm-live-router-runs-before-stage-0-option-3-stands-standing-condition-on-allowlist-2026-10-14.md | Option 3 'none' stands, for a second reason: the live router runs BEFORE Stage… |
+| 2026-10-14 10:55 PT | lead | ask-lead-to-arch-cc-cxo-ppm-exec-run-hot-mvp-pass-three-contract-rulings-1623-member-2-1943-first-n-fixed-2026-10-14.md | Run-hot MVP pass: three acceptance-contract rulings asked (#1843 please-request… |
 | 2026-10-14 10:48 PT | cio | memo-cio-to-exec-cc-lead-ppm-comms-arch-concept-links-checker-and-your-remaining-rows-by-11-01-2026-10-14.md | Concept links: a checker exists, 60 linked and 0 broken; your remaining rows by… |
 | 2026-10-14 10:36 PT | exec | ruling-relay-exec-to-all-seats-run-hot-until-thu-2200-escalate-blocks-ask-for-bigger-models-2026-10-14.md | PM ruling relayed: run hot until Thu 10-15 22:00; escalate blocks via Exec; ask… |
 | 2026-10-14 10:0x PDT | arch | paths-arch-to-lead-cc-ppm-exec-option-3-day-one-paths-for-the-61-check-2026-10-14.md | Option 3: the day-one paths (9, from the gate's golden path and #1386 A/B/C), p… |
