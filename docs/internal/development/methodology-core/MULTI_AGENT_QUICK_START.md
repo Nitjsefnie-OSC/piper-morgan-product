@@ -5,6 +5,8 @@ valid_from: "2025-09-21"
 last_updated: "2025-09-21"
 ---
 
+> **⚠️ HISTORICAL — not current practice.** Dispositioned HISTORICAL in the 2026-08 architectural review (B3), ratified by Arch 2026-09-01 (tracker: `docs/internal/architecture/reviews/2026-08-architectural-review/b3-methodology-disposition.md`). **Why** (the tracker's words): "describes deploying a script confirmed absent and calling an API path that violates CLAUDE.md's current `/api/v1/` convention." Kept for history. Do not follow it as current instructions. *(Marker added 2026-10-14 by CIO; it was missed in the 10-01 banner pass, found by the 10-14 methodology audit.)*
+
 # Multi-Agent Coordinator Quick Start Guide
 
 **Purpose**: Get Multi-Agent coordination working in 5 minutes

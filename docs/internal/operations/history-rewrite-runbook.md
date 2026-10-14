@@ -1,4 +1,10 @@
-# History rewrite (depth A): runbook
+# History rewrite: runbook and as-run record
+
+**What this is:** the procedure for rewriting this repo's public git history (removing outside people's details, Rule 8) and the record of the one time it was run, 2026-10-13 to 10-14. It is the only record of an irreversible procedure, so it lives here, not in `dev/active/`. The steps below are as planned for that run; **"As run" and "Next time" at the end correct them**, so read those before reusing any step. Moved from `dev/active/exec-history-rewrite-runbook-2026-10-13.md` on 2026-10-14 (CIO's methodology audit, R5).
+
+**Concept:** an old-history commit that reaches GitHub after the rewrite undoes it, and every Amber seat shares one git store, so the procedure is a freeze, a mechanical guard (`scripts/git-hooks/pre-push` plus a sentinel file), one push by xian, and a reset of every checkout with `git reset --keep`. The rule list itself is private (Themis's kit in designinproduct) and never copied here.
+
+## The 2026-10-13 run, as planned
 
 **Owner:** Exec. **Go:** xian, direct in Exec's session, 2026-10-13 12:02 PDT ("yes do the history re-write"). **Kit:** Themis, designinproduct `docs/agents/themis/deliverables/pm-history-clean-private/` (private; never copy here). **Window:** freeze 22:30 PDT (Themis: rewrite plus checks run over an hour); push when xian is at the keyboard (see step 5). Pard's hold covers 22:55 to 04:00 and lifts on "unfrozen". Reviewers before the window: CIO (hooks, control plane), Pard (LaunchAgents), Themis (kit), HOST (fleet notice).
 
@@ -31,3 +37,26 @@ Every seat on Amber shares one git store (`~/Development/piper-morgan-product/.g
 ## Abort
 
 Before step 5, anything failing stops the run with nothing changed. After step 5, the bundle restores every ref (`git push --force` from the backup mirror).
+
+## As run (2026-10-13 to 10-14)
+
+- **Freeze** sent 22:43, 13 minutes late: nothing woke Exec at 22:30 (the nearest cron fire was 22:38 and arrived at 22:43). Replies 10 of 10 by 22:51, all 0 unpushed.
+- **Guard** armed 22:52 on old main `f3d7e92e02`; a dry-run push of a new ref was refused, as designed. The backup mirror was refreshed to the same sha; bundle at 22:44.
+- **Themis's final run:** 22:58 to 23:36, clean. Commits 39,262 to 39,171; refs 196 to 196; rule strings in paths 140 to 0 and in messages 29 to 0. **Step 4 (Exec):** 16 passed on the rewritten main `d217d8f1ca`; 436 modified plus 38 renamed files, lines balanced 1,114 in and 1,114 out.
+- **Push:** xian ran it the next morning. The first try (05:54 to 06:29) was **refused atomically** by a forgotten classic protection rule on `main-old` (no force-push, enforce_admins); `--atomic` meant nothing changed. xian deleted the rule; the second push landed at 08:24. `main`'s ruleset has an admin bypass ("Bypassed rule violations" in the output). Upload is about 1.15 GB and took 35 to 75 minutes on Amber's uplink.
+- **Verification:** GitHub's 181 heads and tags equal the rewritten mirror, sha for sha. A fresh-clone scan found 0 rule strings in paths and recent messages, and 1 binary file with a name (see below).
+- **Resets:** 9 seats by 09:00; CXO's classifier refused `git reset --keep`, so xian ran it with `!` in CXO's pane. CIO's step 7b test send passed. Unfrozen about 08:55. PM's checkout was reset by xian (`git reset --hard origin/main`, no edits to save). Faoilean re-cloned; its stranded local commits were checked file by file against main, and nothing needed carrying.
+- **Caught by the guard:** at 06:46, six pushes from PM's checkout (a stall-watchdog committing alerts there, because the freeze looked like a stall). All refused.
+- **Binary leftover:** `--replace-text` and Themis's scanner both skip files with NUL bytes. Two binary versions kept one passing mention of a public figure; xian accepted them (no further rewrite). Lead untracked the generated Chroma store from main (7a498b2aec).
+
+## Next time (corrections to the steps above)
+
+1. **Preflight the remote before the push**: `gh api repos/OWNER/REPO/branches --paginate -q '.[]|select(.protected)|.name'`, each one's `/protection`, and every ruleset's rules and `bypass_actors`. Remove or relax anything that blocks a force-push to a ref in the push, then restore it.
+2. **Every timed step gets its own wake** (a one-shot cron at the minute), not the nearest duty-cycle fire.
+3. **Never give xian a paste block with placeholders**; give each command whole, one line at a time where a value comes from the line before. Arm a watcher on any long hand-run step and notify him the moment it ends or fails.
+4. **Fetch tags with force** after the push: `git fetch --prune --force --tags origin`. A plain fetch leaves the old local tags in the shared store.
+5. **Widen the sentinels against the new-history set, not one ref**: `git rev-list --remotes=origin --tags | sort -u > new.txt`, then keep only old tips: `{ cat sentinels; git for-each-ref --format='%(objectname)' refs/heads; } | sort -u | comm -23 - new.txt`. The original loop (`refs/remotes` not an ancestor of `origin/main`) adds the rewritten feature-branch tips too.
+6. **Binary pass in the kit**: scan blobs with NUL bytes (`git rev-list --objects --all`); remove any binary hit with `--invert-paths` instead of text replacement.
+7. **Check the per-seat permission layer in advance**: run the exact reset command once on each seat, on a scratch branch, before the window.
+8. **Stop or relocate anything that commits in PM's checkout** (the stall watchdog and its wrapper's `pull --rebase`) for the whole window, until his checkout is reset. A rebase of old history onto the new main would not be caught by the guard.
+9. **Fresh-clone checks need full history** for any "last touched" claim; a shallow clone reports its boundary commit.

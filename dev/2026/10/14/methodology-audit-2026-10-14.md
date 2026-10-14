@@ -18,7 +18,7 @@
    - Hooks are the weakest class: 1 of 14 is linked. Most of the gap is in things that run unattended.
 2. **When a doc and a mechanism are linked, the doc is usually right about behaviour.** In eight spot-checks, the four behavioural claims matched the code. The four failures were all stale names, paths or counts left behind by a rename, a fold-in or a later edit. Drift comes from renames, not from rules changing under the doc.
 3. **Methodology-core grew, and the new half is alive.** There are 70 files: 56 numbered, plus 14 unnumbered. Of these, 19 are LIVE (cited in logs and by an instruction surface), 20 are cited only in logs, 23 are marked historical and 8 are silent. The live set is almost entirely m-29 to m-55, filed this period. The top two (m-44 "Clear is not a measurement", 243 logs; m-43 "Name the layer", 213 logs) are working vocabulary.
-4. **The April "silent docs" problem was solved by cutting them, not refreshing them.** Of the 21 silent docs, 11 now carry a HISTORICAL banner (B3, 10-01), 3 revived, and **7 are still silent with no marker**: m-01, m-03, m-04, m-13, m-15, m-17 and m-21. One live doc now **contradicts current practice**: m-31 says the cycle branch "never rebases or merges main in", and CLAUDE.md says to merge origin/main and push.
+4. **The April "silent docs" problem was settled by disposition, not by refreshing.** Of the 21 silent docs, 11 now carry a HISTORICAL banner (B3, 10-01) and 3 revived. The other 7 (m-01, m-03, m-04, m-13, m-15, m-17, m-21) are still silent in logs, but **B3 ruled each one EFFECTIVE** (Arch-ratified 09-01; "citation count mispredicts effective"). *Correction: the first version of this audit called these 7 undecided; B3's tracker says otherwise.* MULTI_AGENT_QUICK_START was ruled HISTORICAL but never bannered; it is now. One live doc now **contradicts current practice**: m-31 says the cycle branch "never rebases or merges main in", and CLAUDE.md says to merge origin/main and push.
 5. **The period's main movement was from vigilance to mechanism, then a cost correction.** Every incident-driven rule got a guard. Then the October evaluation measured the cost (5.3 coordination lines per product line; about 65 heartbeat commits a day) and cut back: the slim CLAUDE.md, heartbeats out of git, and the sunset-or-renew rule. The 10-13 duty research adds the consequence: judgement work that can't be mechanized gets crowded out (Pattern-075, m-36 corollary).
 
 **Verdict**: the methodology works operationally and is unusually well recorded *as history* (claude-md-history.log, the tick changelog, decisions.log). It is poorly recorded *as concept*. A rebuilder would have to reconstruct intent from post-mortems, design proposals and mail. The fix is cheap and mechanical: one more line on the rule we already have (Section 6, R1).
@@ -103,7 +103,9 @@ By instruction surfaces, m-36 leads (12, mostly role portfolios), then m-44 (9) 
 - m-41 records the displacement incident that changed this. A reader who stops at m-31 gets the opposite rule. **CIO's slot. A superseded banner is added with this audit.**
 - **Minor lag:** m-20 (omnibus, "last updated March 21") lags the create-omnibus skill, which has a CSV row step m-20 doesn't mention.
 
-**Silent and unmarked (8):** m-01, m-03, m-04, m-13, m-15, m-17, m-21, and MULTI_AGENT_QUICK_START. INDEX lists QUICK_START as historical, but the file has no banner.
+**Silent in logs (8):**
+- **m-01, m-03, m-04, m-13, m-15, m-17 and m-21:** B3 ruled each EFFECTIVE (`docs/internal/architecture/reviews/2026-08-architectural-review/b3-methodology-disposition.md`, ratified 09-01). They're kept on purpose; low citation isn't a defect for these.
+- **MULTI_AGENT_QUICK_START:** B3 ruled it HISTORICAL, but the banner was never applied. Applied 10-14 (CIO, executing B3).
 
 **The evidence base is narrow.**
 - The m-43 to m-55 family is 13 docs filed in two months, almost all by CIO. Several are marked one-agent or zero-cross-author (m-51, m-55).
@@ -150,16 +152,16 @@ A full dated timeline is kept in the audit's working notes; the principal shifts
 | A2 | Hooks Phase 1 | Closed with rationale; superseded by the Amber hooks investigation |
 | A3 | Retire the flywheel integration module | Done (04-28) |
 | B1 | Flywheel downstream sweep (~146 files) | **Partial, unverified.** No completion record. 9 docs still say "Four Pillars" (some are history). |
-| B2 | Triage the silent methodology docs | **Partial, by another route.** B3 put banners on 19 files; 7 are still silent and unmarked. |
+| B2 | Triage the silent methodology docs | **Done, by another route.** B3 (Arch-ratified 09-01) dispositioned every one: 19 bannered HISTORICAL and 7 kept EFFECTIVE. One banner (QUICK_START) was missed and was applied 10-14. |
 | B3 | Indoor plumbing | Done (m-26) |
 | B4 | Continuity memo pattern | Done; Proven (Pattern-065) |
 | B5 | Roundtable format | Done by incorporation (m-22) |
 | B6 | Briefings cite, not paraphrase, the Flywheel | **Partial.** Lead cites m-00 as v2.0; it's v3.0. Others unchecked. |
 | S1 | Canonical-term drift in the weekly audit | **Built, thinly operated.** The watch file exists. 3 of 4 later weekly-audit findings files never mention vocabulary. The weekly audit ran irregularly. |
-| S2 | ADR-045 citation watch | **Not evidenced.** Retire it as a standing watch. |
-| S3 | Scaffolded probing for E2E | **Superseded** by the R6 probe suite (different purpose). Close. |
+| S2 | ADR-045 citation watch | **Not evidenced. Closed 10-14 (CIO, R11):** passive watches with no trigger don't run (Pattern-075). If grammar drift matters again, it comes back as a dated check. |
+| S3 | Scaffolded probing for E2E | **Superseded. Closed 10-14 (CIO, R11).** The R6 probe suite took the probing slot for rules; E2E probing returns with its own issue if Lead scopes it. |
 
-Score: 6 done, 4 partial, 1 not evidenced, 1 superseded. Every partial item is documentation upkeep. That repeats both earlier audits: the method maintains its practice well and its documents poorly. That's the same finding as Pattern-075, one level up.
+Score: 7 done, 3 partial, 1 not evidenced, 1 superseded. Every partial item is documentation upkeep. That repeats both earlier audits: the method maintains its practice well and its documents poorly. That's the same finding as Pattern-075, one level up.
 
 ---
 
@@ -183,7 +185,7 @@ Score: 6 done, 4 partial, 1 not evidenced, 1 superseded. Every partial item is d
 | R5 | Move the history-rewrite runbook and freeze protocol from `dev/active/` to `docs/internal/operations/` before sprint cleanup | Exec | Only record of an irreversible procedure. Rule 7. |
 | R6 | Concept docs for `commit-msg` (rules 3 and 5) and the old-history guard | CIO | Both are mine and both guard hard rules. Trigger: the 8s install. |
 | R7 | Agent 360 procedure doc | HOST | Run four times, with no written procedure |
-| R8 | Fix the audit calendar's workflow filenames; decide the 7 silent, unmarked methodology docs (keep, refresh or banner) | Docs (calendar); CIO decides the m-docs | B2 left these. CIO will propose dispositions to Docs. |
+| R8 | Fix the audit calendar's workflow filenames | Docs | Two workflow names are wrong. (The 7 silent methodology docs need nothing: B3 kept them. Only the QUICK_START banner was missing, applied 10-14.) |
 | R9 | Say which push/pull wrappers are canonical; retire the rest | Lead | Five wrappers, no doc, and CLAUDE.md prescribes the raw command |
 | R10 | Current-state liveness doc (belts, LaunchAgents, heartbeat store, freeze check) | CIO with Pard | No single page since the 09-24 and 10-12 changes |
 | R11 | Close S2 and S3 from the April audit | CIO | Not evidenced or superseded |
