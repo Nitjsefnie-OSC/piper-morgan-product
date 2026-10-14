@@ -232,3 +232,5 @@ Brake FIRED (second slip = #1965 admission, found and ledgered 10-09). Memo to E
 - 2026-10-14 13:3x: #2011 five calls ruled (Arch). Watch list now four: "import an existing project", todo "reprioritize" (l.268), templates 179, files_consciousness 176. Toast removed (Arch: 3 formatters have no consumer; deleted).
 
 - 2026-10-14 13:4x: Arch: consciousness templates.py/injection.py unreachable (pending Lead's confirmation) -> templates 179 off the watch list. Watch list now three: "import an existing project", todo "reprioritize" (l.268), files_consciousness 176 (each needs Lead's reachability check).
+
+- 2026-10-14 14:0x: #2011 shrunk 53->20 (held 157ac5c90a). Watch list now ONE: "import an existing project" (#2010; chat path unconfirmed). "reprioritize" failed Lead's check, rewritten on the branch (offer of help, not Class 3 in my read). Held branches awaiting PM's promotion: #1943 (c) + flip, ANALYSIS margin, #2011 shrink, #1771/#1783/#1843 served readings after it.
