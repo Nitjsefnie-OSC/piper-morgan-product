@@ -4,6 +4,7 @@ description: Prevent fabrication when writing narrative blog posts from session 
 scope: role-specific
 version: 1.0
 created: 2026-02-12
+concept: "Concept: docs/internal/development/methodology-core/methodology-30-CONSUMER-TRACE-VERIFICATION.md (added 2026-10-14, sunset-or-renew inventory; CIO)"
 ---
 
 # Narrative Verification Skill

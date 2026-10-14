@@ -5,6 +5,7 @@ scope: cross-role
 version: 1.0
 created: 2026-07-14
 updated: 2026-07-14
+concept: "Concept: CLAUDE.md (added 2026-10-14, sunset-or-renew inventory; CIO)"
 ---
 
 # assign-sprint-safely

@@ -5,6 +5,7 @@ scope: cross-role
 version: 0.1
 created: 2026-05-16
 status: DRAFT — propose for CIO methodology review
+concept: "Concept: docs/internal/architecture/patterns/pattern-073-documentation-asserted-behavior-drift.md (added 2026-10-14, sunset-or-renew inventory; CIO)"
 ---
 
 # doc-sync-sweep

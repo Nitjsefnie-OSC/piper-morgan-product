@@ -4,6 +4,7 @@ description: Execute a Piper Morgan release end-to-end — pre-flight, version b
 scope: cross-role
 version: 1.3
 created: 2026-06-20
+concept: "Concept: docs/internal/operations/deploy-environments-and-release-train.md (added 2026-10-14, sunset-or-renew inventory; CIO)"
 ---
 
 # cut-release

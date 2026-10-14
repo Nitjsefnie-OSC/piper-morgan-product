@@ -9,6 +9,7 @@ description: Surface what Piper learned when projects, features, or decisions re
 scope: cross-role
 version: 1.0
 created: 2026-06-15
+concept: "Concept: docs/internal/architecture/adrs/adr-072-skill-routing-architecture.md (added 2026-10-14, sunset-or-renew inventory; CIO)"
 ---
 
 # compost-review

@@ -4,7 +4,7 @@ number: "049"
 title: "Audit Cascade"
 status: "**Proven** - Validated through sustained velocity improvement (Jan 9-11, 2026: 23+ issues in 3 days)"
 valid_from: "2026-01-14"
-last_updated: "2026-08-29"
+last_updated: "2026-10-14"
 ---
 
 # Pattern-049: Audit Cascade
@@ -12,6 +12,8 @@ last_updated: "2026-08-29"
 ## Status
 
 **Proven** - Validated through sustained velocity improvement (Jan 9-11, 2026: 23+ issues in 3 days)
+
+**Operational form:** the `audit-cascade` skill (`.claude/skills/audit-cascade/SKILL.md`) runs this pattern as a procedure. This page is its concept. *(Back-pointer added 2026-10-14, CIO, concept-link inventory.)*
 
 ## Context
 

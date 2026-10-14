@@ -7,6 +7,7 @@ version: 2.0
 created: 2026-01-21
 retired: 2026-06-19
 superseded-by: check-mailbox (receive); CLAUDE.md "The mailbox workflow (most-frequent case)" + scripts/mail-send.sh (send)
+concept: "Concept: docs/internal/operations/mailbox-bridge-transparency-design-2026-06-16.md (added 2026-10-14, sunset-or-renew inventory; CIO)"
 ---
 
 # deliver-mail — RETIRED

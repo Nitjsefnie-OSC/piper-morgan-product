@@ -7,6 +7,7 @@ scope: cross-role
 version: 1.2
 created: 2026-03-30
 updated: 2026-09-10
+concept: "Concept: docs/internal/development/methodology-core/methodology-35-ASYMMETRIC-DISCIPLINE-CREATION-WITHOUT-PAIRED-CLEANUP.md (added 2026-10-14, sunset-or-renew inventory; CIO)"
 ---
 
 # cleanup-dev-active

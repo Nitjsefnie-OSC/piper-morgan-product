@@ -4,6 +4,7 @@ description: Generate a standard "Coding Agent" subagent prompt from a GitHub is
 scope: cross-role
 version: 1.0
 created: 2026-06-15
+concept: "Concept: CLAUDE.md (added 2026-10-14, sunset-or-renew inventory; CIO)"
 ---
 
 # brief-coding-agent

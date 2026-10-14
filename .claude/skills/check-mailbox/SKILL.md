@@ -4,6 +4,7 @@ description: Check your agent mailbox for messages at session start. Use at the 
 scope: cross-role
 version: 1.0
 created: 2026-01-21
+concept: "Concept: docs/internal/operations/branch-worktree-mailbox-discipline.md (added 2026-10-14, sunset-or-renew inventory; CIO)"
 ---
 
 # check-mailbox
