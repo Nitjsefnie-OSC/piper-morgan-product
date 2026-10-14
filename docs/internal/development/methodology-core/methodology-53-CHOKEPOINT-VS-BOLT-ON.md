@@ -2,7 +2,7 @@
 type: methodology
 title: Chokepoint vs. Bolt-On — Attach the Obligation to Something That Can't Be Skipped
 valid_from: "2026-09-08"
-last_updated: "2026-09-12"
+last_updated: "2026-10-14"
 ---
 
 # Chokepoint vs. Bolt-On — Attach the Obligation to Something That Can't Be Skipped
@@ -157,3 +157,14 @@ Operational corollaries:
 - When judging whether a design change is "adding a layer," check separately whether it adds a new
   artifact/reminder/surface and whether it completes an existing step's definition — these are not
   the same question and a change can pass one test while failing the other.
+
+### Mechanisms built on this rule (concept back-pointers, added 2026-10-14)
+
+- **The scope-drift chokepoint**, designed jointly by Arch and CIO on 09-09/10:
+  - `scripts/scope-drift-check.sh`, the detection half (CIO);
+  - `.github/workflows/scope-guard.yml`, the delivery half (Arch). It delivers flags as a mailbox memo,
+    because mail is the one surface with a verified per-fire drain.
+
+  It's an application of this entry: deliver into the path the consumer already runs, not into a
+  bolt-on channel nobody drains. **Not armed** (dispatch only) until #1687 is resolved. The arming
+  checklist is in the workflow header.

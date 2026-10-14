@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Concept: docs/internal/development/methodology-core/methodology-53-CHOKEPOINT-VS-BOLT-ON.md (the 'Mechanisms built on this rule' section; added 2026-10-14, CIO)
 # scope-drift-check.sh — detection predicate for standing-item 7t (the "scope-guard chokepoint").
 #
 # ORIGIN: PM found the duty-cycle has no intake from the backlog (2026-09-08); the same week's
