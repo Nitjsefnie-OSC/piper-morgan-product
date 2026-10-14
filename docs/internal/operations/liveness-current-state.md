@@ -12,7 +12,7 @@ last_updated: "2026-10-14"
 - Pard: everything launchd and crontab (installs, runs, measures).
 - Each row below names its owner.
 
-**Status: drafted 2026-10-14 (methodology audit R10). Pard confirmed the wake rows the same morning. One question stays open: whether Lead and CXO are woken on a schedule.**
+**Status: drafted 2026-10-14 (methodology audit R10). Pard confirmed the wake rows the same morning. Exec designated seats 9 to 11 for LaunchAgents at 10:44; provisioning is pending Pard.**
 **Why this page exists:** the design record (`docs/operations/duty-cycle design/`, v0.1 to v0.7) and the
 registry's header prose describe the June and July system (session `CronCreate` jobs, heartbeats committed
 to git). Both changed: LaunchAgent wakes from 09-24, and the heartbeat moved out of git on 10-12. Nothing
@@ -32,9 +32,16 @@ wake ──► fire runs ──► heartbeat ──► freeze check ──► wa
      `pm-arch`, `pm-pa`, `pm-web`, `pm-docs`, `pm-host`, `pm-comms`, `pm-cio`, `pm-ppm`. **Exec, Lead
      and CXO have no `pm-*-cycle` agent, by design.** They were held out of the cascade pending Exec's
      designation of seats 9 to 11 (Pard, 10-14). All three still get mail wakes. Exec also runs a session
-     cron of its own. **Whether Lead or CXO are woken on a schedule at all isn't established.** If they
-     are, it's by session cron, with its two silent death modes. That's the question for those seats
-     (and Exec, who designates).
+     cron of its own. **Update 10-14 10:44 (Exec, v4 01M4XR81EPJFMQEF0NND7SH603):** all three run on session crons today
+     (Exec 055dff43, Lead 46638333, CXO 50910804), and CXO slept through the unfreeze on 10-13. Exec
+     designated all three for LaunchAgents:
+     - exec: `38 6,10,14,18,22 * * *`
+     - lead: `17 6,9,12,15,18,21 * * *`
+     - cxo: `47 6,9,12,15,18,21 * * *`
+
+     Two conditions to Pard: a fire must wait for an idle session (Exec and Lead are often mid-conversation
+     with xian), and each seat deletes its own session cron after its first LaunchAgent fire lands. Update
+     this row when Pard confirms provisioning.
    - *Mail wakes.* `com.xian.mail-wake` (Pard; `scripts/mail-wake.py`, every 180 s). It injects "MAIL WAKE" when new mail for a role lands on
      origin/main, for both v3 files and v4 IDs.
    - *Hold.* Pard's `fire-hold.sh` can suspend fires, as during the 10-13 rewrite freeze.
@@ -111,4 +118,4 @@ wake ──► fire runs ──► heartbeat ──► freeze check ──► wa
 - Read Pard's re-armed wrapper (lines 14 to 15).
 - Committed 2026-10-14 10:27 PT. (The first version said "about 11:45 PT", which was a guess, not a reading; corrected.)
 - **Layer:** files and launchctl state. No wake or alert was triggered to test the chain.
-- **Denominator:** the 11 registry roles. 8 have a LaunchAgent. 3 don't, by design (Exec has a session cron; Lead and CXO aren't established).
+- **Denominator:** the 11 registry roles. 8 have a LaunchAgent. 3 don't yet (session crons; designated 10-14, provisioning pending).
