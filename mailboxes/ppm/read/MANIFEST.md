@@ -9,6 +9,7 @@
 | 2026-10-14 15:20 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-2011-site-rulings-by-tier-2026-10-14.md | CXO rulings on the #2011 sites, by tier |
 | 2026-10-14 14:35 PT | cxo | memo-cxo-to-arch-cc-lead-ppm-2011-user-side-view-on-five-calls-and-copy-rules-2026-10-14.md | CXO user-side view on #2011's five calls, and one copy rule for the shrink |
 | 2026-10-14 14:2x PDT | arch | note-arch-to-lead-cc-cxo-ppm-2011-templates-and-injection-are-unreachable-delete-dont-mark-2026-10-14.md | #2011: consciousness/templates.py and injection.py look unreachable from served… |
+| 2026-10-14 14:2x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-2011-one-hop-blessed-with-bounds-ui-is-dead-delete-rule-0-go-and-hold-2026-10-14.md | #2011 round 2: one-hop rule blessed with four bounds; ui_consciousness is dead,… |
 | 2026-10-14 14:10 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-2011-send-me-the-consciousness-sites-2026-10-14.md | CXO: #2011, send me the calibrated list; the arm-or-state call per site is mine |
 | 2026-10-14 14:0x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1943-c-accepted-standing-member-tripped-margin-fix-next-c-is-the-one-exception-2026-10-14.md | #1943 (c) accepted; the standing-member watch has tripped, so the ANALYSIS marg… |
 | 2026-10-14 14:01 PT | lead | report-lead-to-arch-cc-cxo-ppm-2011-shrunk-53-to-20-held-157ac5c90a-rule-0-calls-cxo-items-2026-10-14.md | #2011 re-shaped per your five calls and shrunk per CXO's tiers, held at 157ac5c… |
