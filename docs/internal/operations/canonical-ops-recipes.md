@@ -235,6 +235,16 @@ same push). Then verify on origin, whichever you used: `git fetch -q origin main
 **After the 2026-10-14 history rewrite:** the merge step merges the *new* `origin/main`, which is what you want. The wrapper does not
 and must not merge an old branch; the pre-push guard refuses pre-rewrite history regardless.
 
+## 6. "Is it my diff or the environment?" — the `ab-a-isolation` skill (Lead, 2026-08-15; concept recorded 2026-10-14)
+
+**Why:** a suite that fails during your work has two candidate causes, your diff or the run's environment/history, and arguing
+about it costs more than measuring it. The A/B/A experiment answers in minutes: run the failing test on **A** (your tree with the
+diff set aside), **B** (your tree with the diff), then **A** again. B-only failure = your diff; A/A failure = the environment; a
+flip between the two A runs = run-history (order, state, a stale container). The skill `.claude/skills/ab-a-isolation/SKILL.md`
+holds the exact steps. It sets the diff aside with the tagged, apply-by-SHA stash form that the shared-stash rule allows (`git stash
+push -u -m <tag>` → `git stash apply <sha>` → drop by tag), never a bare `git stash` / `stash pop`. Reach for it before you touch
+code to "fix" a failure you have not attributed.
+
 ## Google Calendar for a hosted deployment (PM ruling 2026-10-01)
 
 The Google OAuth **app** (client ID/secret) is deployment plumbing, set once by the operator as

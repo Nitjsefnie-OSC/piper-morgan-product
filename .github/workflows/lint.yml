@@ -146,6 +146,15 @@ jobs:
           # its newest attested line. History lives in briefing-current-state-history.log.
           python scripts/check-current-state.py
 
+      - name: Concept-link gate (methodology-56)
+        run: |
+          # Every declared `Concept:` path must exist and name the mechanism back
+          # (scripts/check-concept-links.py). A missing Concept line is counted, not
+          # failed, until 2026-11-01 (mechanism-sunset-or-renew). Only a BROKEN link
+          # (renamed/deleted concept doc, or a doc edit that drops the mechanism's
+          # name) turns main red. CIO's proposal 2026-10-14; Lead's gate, Lead's yes.
+          python scripts/check-concept-links.py
+
       - name: Quality summary
         run: |
           echo "## Code Quality Results" >> $GITHUB_STEP_SUMMARY
