@@ -166,7 +166,7 @@ about you, your settings, and your to-dos, projects and linked repositories. Del
 3. The "Turning it off" sentence waits for the Revoke fix to be live and seen working.
 4. **Section C (your Piper account), v2 2026-10-12.** Rewritten to PM's "say what it does now, plus the goal and
    the gap" principle. GOAL 2, GOAL 3 and N (14 days) answered 10-13. GOAL 1 (logs) answered 10-13: "keep only fingerprints", done in
-   code by Lead and measured on alpha the same day. **Section C is final (v3, 10-13), pending PM's go to publish.**
+   code by Lead and measured on alpha the same day. **Section C is final (v3, 10-13). PM's go 10-13 (in conversation with Comms); handed to Web the same evening with the opening-sentence widening.**
    Opening sentence for Web: "…when you visit our website, subscribe to our newsletter, use Piper, or connect Piper
    to an AI assistant." Then
    Comms gives Web the final text. When Section C ships, the policy's opening sentence widens to cover using Piper
