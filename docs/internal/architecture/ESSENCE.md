@@ -3,7 +3,7 @@
 **Version**: **v1.0 — RATIFIED by PM 2026-08-30** (in-conversation, after the full trifecta pass:
 CXO concur + one challenge + two amendments · PPM concur + one amendment · HOST trust lens. The
 synthesis and its addendum: `reviews/2026-08-architectural-review/trifecta-synthesis.md`.)
-**Date**: 2026-08-29 (v0.1) · 2026-08-30 (v1.0)
+**Date**: 2026-08-29 (v0.1) · 2026-08-30 (v1.0) · 2026-10-14 (v1.0.3, amendment log at the end)
 **Authors**: Chief Architect, from the Architectural Review 2026 (PM+Arch co-led); every claim
 traces to the review's evidence (`docs/internal/architecture/reviews/2026-08-architectural-review/`)
 or a PM ratification recorded in `decisions.log` on 2026-08-29.
@@ -92,7 +92,9 @@ else.
 - **Live surface**: the web-chat app (alpha, ~11 testers + PM), in **explicit maintenance mode**
   as of 2026-08-29 — bugs fixed, nothing new built. It classifies intents (legacy chain carries
   observed traffic; flip-1 live for `read_status` since 08-21 via deployment secrets, unexercised
-  to date; full staged flip ratified and sequenced by Lead into PM's next watched round),
+  to date; full staged flip ratified and sequenced by Lead into PM's next watched round — *superseded
+  10-14: the live router now runs first on unarmed turns for the flipped read waves and ten
+  allowlisted writes, per ADR-080; see SYSTEM.md*),
   files/updates GitHub issues via a real MCP consumer path, manages todos/reminders
   (consent-gated), generates the standup, ingests and answers questions about documents, and holds
   the conversational floor with the honesty rails.
@@ -149,9 +151,17 @@ scope-bet gate governs all *becoming*; this document governs all *being*.
   effect class — so no routing change can ever loosen a safety check. *(Verified how, per HOST's
   2026-08-29 trust-lens flag: the single-convergence-point structure is verified by static trace
   (08-25); the legacy-routed path is verified behaviorally by #1685's A/B seam assertion; the
-  successor-routed path's behavioral receipt is PENDING — scheduled onto Lead's watched flip
-  round. Until it lands, this line's "can ever" is design-intent for that path, not settled
-  fact.)*
+  successor-routed path's behavioral receipt LANDED for one write: 2026-10-06, Lead, in-process app
+  plus Postgres, `complete_todo` chosen by the live router (`route=inversion`) stopped at the confirm
+  and acted only after "yes"; served again on the alpha test account 10-07. That is one write op of
+  the ten in `FLIP_WRITE_ALLOWLIST`; for the other nine the "can ever" rests on the static trace
+  (the router hands the rail the same WorkflowEntry the legacy chain does, Arch 09-25), not on a
+  served receipt.)*
+- **The LLM decides meaning; code decides permission, checks meaning against real data, and shows
+  you before it acts** (ADR-080, PM-confirmed 2026-10-06). Permission code (identity and ownership,
+  consent and confirm, the single dispatch rail, honest refusal, CI and deploy gates) stays.
+  Uncertain meaning never writes. The interpretation layer only shrinks, by ratchet: the
+  pre-classifier literal ceiling fell 567 → 90 (10-14), of which 29 are a ruled permanent floor.
 - The LLM floor guarantee: at least as good as a well-prompted LLM with the user's context —
   handlers make it better, never different.
 - Derive, don't hand-maintain: registries, catalogs, prompts, and manifests are generated from
@@ -179,3 +189,8 @@ scope-bet gate governs all *becoming*; this document governs all *being*.
   probe revised the scale's criteria rather than validating them; rubric now v0.2). The drift this
   fixes is requirement-vs-instrument running the subtle direction: law saying slightly more than
   its instrument permits, which reads as progress.*
+- *v1.0.3, 2026-10-14 (Arch; recording a PM-confirmed ratification and a landed receipt, no new
+  commitment): ADR-080 added to the standing rules; the consent-invariance footnote moves from
+  PENDING to landed-for-one-write with its denominator (1 of 10 allowlisted writes served; the rest
+  static); the 08-29 snapshot's flip-1 clause marked superseded. Overdue against this doc's own
+  rule (same-day on a ratification touching the boundary): ADR-080 was confirmed 10-06.*
