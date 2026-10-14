@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-08-31
+last_updated: 2026-10-14
 currency_claim: updated same-commit when entry points, module classification, or deploy topology change
 max_age_days: 30
 ---
@@ -31,17 +31,25 @@ plus the disposal record since. **Arch authored v1; Lead maintains.**
 
 ## The understanding stack (chat path)
 
-Four surfaces in order: deterministic **pre-classifier** → **inversion consult** (flip-1 live for
-`read_status` since 08-21 **via fly secrets** — deployment layer, invisible to config files; full
-staged flip ratified, sequenced into PM's next watched round) → **legacy LLM classifier** →
-**action rail** (~130 registered keys; elif chains fully migrated, `MAX_DISPATCH_SITES = 0`) →
-category handlers → **conversational floor** (the safety net; carries the anti-fabrication rails).
-Consent evaluates the rail entry's EffectClass regardless of which router produced the intent
-(structurally verified; inversion-path behavioral receipt pending the watched round — see
-ESSENCE's footnote). **The legacy classifier retires when flip coverage completes — criterion and
-check date (2026-09-30) in the reorientation plan.** On the BYOC path there is no classifier at
-all: the host LLM selects tools against the derived catalog; there is also **no floor there** —
-honesty must ride tool payloads (CONNECTORS.md rule 1, evidence-backed).
+Governing law: **ADR-080** (10-06): the LLM decides meaning; code decides permission. Order on a turn
+(detail and file anchors: `current/intent-routing-stack.md`, rows L and 0-4):
+
+1. **Live inversion router**, first, on UNARMED turns only: one constrained, stateless LLM call
+   (`inversion_live.consult_inversion_live`). It dispatches only an operation named live by
+   `PIPER_INVERSION_LIVE_CATEGORIES` (set **via fly secrets**, invisible to config files) that is READ
+   or in `FLIP_WRITE_ALLOWLIST` (10 writes as of 10-14). Everything else falls through unchanged.
+2. **Stage 0** referent resolution (B3, session-scoped ledger), then the deterministic
+   **pre-classifier** (literal ceiling **90** in 35 lists on 10-14: 29 a ruled permanent floor, 61
+   router-quality work after MVP), then the **legacy LLM classifier**.
+3. The **action rail** (`MAX_DISPATCH_SITES = 0`), whichever surface chose the key; then category
+   handlers; then the **conversational floor** (the safety net, with the anti-fabrication rails).
+
+Consent evaluates the rail entry's EffectClass regardless of which surface produced the intent. **The
+legacy classifier's retirement check (2026-09-30) was missed; stated 10-13: not met** (it still serves
+four call sites plus Slack). Re-check when the #1595 Phase 3 tail reaches the ruled floor
+(decisions.log 10-13). On the BYOC path there is no classifier at all: the host LLM selects tools
+against the derived catalog. There is also **no floor there**, so honesty must ride tool payloads
+(CONNECTORS.md rule 1).
 
 ## Module classification (census 2026-08-29, disposal in flight)
 
@@ -51,7 +59,7 @@ removed ~10K LOC across three batches** (epic #1698 holds the execution record; 
 fresh-sweep-contradicts-census holds honored — the census is caller *evidence*, never a
 skip-verification pass). Live-state detail: `reviews/2026-08-architectural-review/findings/
 leg-b-live-state-census.md` (with correction block). The biggest single module remains
-`services/intent/intent_service.py` (~14.4K lines) — shrinks as the legacy classifier retires.
+`services/intent/intent_service.py` (~17.4K lines on 10-14, up from ~14.4K at census) — it has grown with the inversion work, and shrinks only as the legacy classifier retires.
 
 ## Data layer
 
@@ -64,7 +72,7 @@ routed through the disposal/fix pipeline.
 
 ## Deploy topology
 
-**Fly.io** (the hosted alpha, machine versions v6x), plus local docker-compose for dev. ⚠️ **The
+**Fly.io**, four apps as of 10-14: `piper-morgan` (the web app, `fly.toml`), `piper-morgan-mcp` (the hosted MCP server, `fly.mcp.toml`; deployed only via `scripts/deploy-mcp.sh`, v12 on 10-13), `piper-morgan-gh-mcp` (the github-mcp-server v1.5.0 sidecar, `deploy/fly/github-mcp.fly.toml`) and `piper-morgan-chroma` (`deploy/fly/chroma.fly.toml`). Local docker-compose for dev. Staging is promote-the-image on Fly (ADR-007 superseded 09-29). ⚠️ **The
 deployment layer diverges from config files by design**: fly secrets carry env that no file shows
 (the flip-1 lesson — a config-file census cannot see deployment state; verify on-machine).
 `origin/production` is NOT what's deployed; builds trigger from `main`.
