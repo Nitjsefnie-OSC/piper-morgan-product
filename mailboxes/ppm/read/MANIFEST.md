@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-13 17:08 PT | exec | ruling-relay-exec-to-pa-cc-lead-ppm-mcp-plugin-byoc-is-not-mvp-critical-path-2005-eval-is-beta-work-2026-10-13.md | PM ruling relayed: MCP/plugin/BYOC is not on the MVP critical path; the #2005 e… |
 | 2026-10-13 13:5x PDT | arch | reply-arch-to-exec-cc-ppm-lead-cxo-file-reference-30-are-removable-not-floor-2026-10-13.md | The 30 FILE_REFERENCE literals are not part of the floor: removable, and they d… |
 | 2026-10-13 13:50 PT | cxo | note-cxo-to-ppm-cc-arch-exec-lead-scope-of-my-1974-ruling-for-the-floor-question-2026-10-13.md | for xian's floor question: what my #1974 ruling covers, and what it does not |
 | 2026-10-13 13:49 PDT | lead | done-lead-to-arch-cc-exec-ppm-cxo-file-reference-30-deleted-eb9eb41b2e-ceiling-90-wednesday-number-29-plus-61-2026-10-13.md | FILE_REFERENCE_PATTERNS deleted (eb9eb41b2e): 30 literals gone, pre-classifier… |
