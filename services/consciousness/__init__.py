@@ -9,15 +9,14 @@ Issue: #407 MUX-VISION-STANDUP-EXTRACT
 ADR: ADR-056 Consciousness Expression Patterns
 
 Usage:
-    from services.consciousness import inject_consciousness, validate_mvc
-
-    # Transform data into conscious narrative
-    output = await inject_consciousness(standup_result)
+    from services.consciousness import validate_mvc
 
     # Validate output meets MVC requirements
     result = validate_mvc(output)
-    if not result.passes:
-        output = ensure_mvc(output)
+
+#2011 (2026-10-14, Arch): the standup narrative chain (``injection.py``:
+inject_consciousness / construct_narrative / ensure_mvc, and its copy in
+``templates.py``) had no consumer outside this package and was deleted.
 """
 
 from services.consciousness.auth_consciousness import (
@@ -52,7 +51,6 @@ from services.consciousness.files_consciousness import (
     format_project_detail_conscious,
     format_projects_conscious,
 )
-from services.consciousness.injection import ensure_mvc, inject_consciousness
 from services.consciousness.learning_consciousness import (
     format_learning_event_conscious,
     format_patterns_learned_conscious,
@@ -89,8 +87,6 @@ __all__ = [
     # Core framework
     "ConsciousnessContext",
     "analyze_context",
-    "inject_consciousness",
-    "ensure_mvc",
     "validate_mvc",
     "MVCResult",
     # Todo consciousness (Phase 3)

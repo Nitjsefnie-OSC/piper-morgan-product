@@ -4080,8 +4080,11 @@ class TestUnarmedAskSiteRatchet:
       would you|you'd like me to). Any reply to such a question is a fresh
       request, so nothing needs binding. Measured both ways: EXEMPT
       ``home_state_service`` "Welcome. What can I help you with?"; COUNTED
-      ``templates.py`` DIALOGUE_INVITATION "How does that sound? Anything
-      you'd like me to adjust?" (the same literal offers an action). A
+      "How does that sound? Anything you'd like me to adjust?" (the same
+      literal offers an action; measured 2026-10-14 in
+      consciousness/templates.py DIALOGUE_INVITATION, the only measured
+      literal of that kind, and deleted the same day with that unreachable
+      module — the pin keeps its text). A
       second question of any other shape — a slot request — keeps the
       literal counted;
     - literals carrying an ``# ask-census: <reason>`` marker on their own
@@ -4265,17 +4268,16 @@ class TestUnarmedAskSiteRatchet:
     #      stores `"question": question`), conversational_floor
     #      .FLOOR_FALLBACK_TRANSIENT ("Could you try again in a moment?" is
     #      error copy asking for a retry; it binds no answer).
-    #   7–13. #2011 call 1 (Arch 2026-10-14; CXO ruling 2026-10-14 15:20
-    #      tiers / 15:35 deliberate list): a question answered by its own
-    #      directive on the same line, nothing waits for a reply —
-    #      api/errors.py ERROR_MESSAGES ×3 ("Need help? Check our …",
-    #      "Did you mean to '…'? For more examples, see …"),
-    #      ui_messages UserFriendlyErrorService.__init__ ×1 ("Need help?
-    #      Check our examples."), consciousness/templates.py
-    #      TEMPORAL_GREETINGS ×3 ("Starting a bit later? No worries …",
-    #      "End of day? Let's look …", "Wrapping up? Here's …"). 6 -> 13,
-    #      the measured count.
-    MAX_MARKER_EXEMPTIONS = 13
+    #   7–10. #2011 call 1 (Arch 2026-10-14; CXO's deliberate list
+    #      2026-10-14 15:35): a question answered by its own directive on
+    #      the same line, nothing waits for a reply — api/errors.py
+    #      ERROR_MESSAGES ×3 ("Need help? Check our …", "Did you mean to
+    #      '…'? For more examples, see …"), ui_messages
+    #      UserFriendlyErrorService.__init__ ×1 ("Need help? Check our
+    #      examples."). CXO's templates.py TEMPORAL_GREETINGS ×3 were NOT
+    #      marked: the module was unreachable and deleted (Arch 14:2x).
+    #      6 -> 10, the measured count.
+    MAX_MARKER_EXEMPTIONS = 10
 
     # THE RATCHET TABLE — census MEASURED 2026-09-12 (predicate above, run
     # over the scope above). SHRINK-ONLY: arm the site through the one-slot
@@ -4490,9 +4492,9 @@ class TestUnarmedAskSiteRatchet:
             # not arm); that row leaves when #2010 lands. Holders per package:
             # consciousness 34 · slot_filling 3 · trust 3 · integrations 2 · memory 2 · mux 2 · api 1 · conversation 1 · home 1 · mcp 1 · personality 1 · process 1 · ui_messages 1 (total 53).
             # RE-SHAPED 2026-10-14 per Arch's five calls (#2011), re-measured:
-            # 53 -> 34 holders. Call 1: 7 literals marked deliberate at their
-            # sites (CXO) — api ERROR_MESSAGES, ui_messages, TEMPORAL_GREETINGS
-            # leave. Call 2: the slot-filling transition arm + one-hop
+            # 53 -> 34 holders. Call 1: literals marked deliberate at their
+            # sites (CXO) — api ERROR_MESSAGES, ui_messages and (until its
+            # module was deleted, below) TEMPORAL_GREETINGS leave. Call 2: the slot-filling transition arm + one-hop
             # consumer-armed rule — slot_prompts.format_final_confirmation
             # leaves. Call 3: has_suspended_session's question moved to its
             # arming caller — leaves. Call 4: ui/auth/cli excluded by name —
@@ -4500,7 +4502,12 @@ class TestUnarmedAskSiteRatchet:
             # invitation class — 15 literals; 7 holders leave, 3 shrink.
             # Holders per package now: consciousness 23 · trust 3 ·
             # slot_filling 2 · integrations 2 · mux 2 · mcp 1 · memory 1 (34).
-            # -- services/consciousness/ (23)
+            # 34 -> 28 (2026-10-14, Arch 14:2x): consciousness/templates.py +
+            # injection.py had no consumer outside the package (no served
+            # path rendered them); deleted, their 6 holders with them
+            # (ACCOMPLISHMENT_RECOGNITION, DIALOGUE_INVITATION, GENTLE_FLAGGING,
+            # MISSING_DATA_EXPLANATION, PRIORITY_FRAMING, injection.fix_mvc_gaps).
+            # -- services/consciousness/ (17)
             (
                 "services/consciousness/error_consciousness.py",
                 "_add_dialogue_invitation",
@@ -4536,12 +4543,6 @@ class TestUnarmedAskSiteRatchet:
                 "format_projects_conscious",
                 2,
                 "I don't see any projects set up yet. Want me to help you cre",
-            ),
-            (
-                "services/consciousness/injection.py",
-                "fix_mvc_gaps",
-                1,
-                "Anything you'd like me to adjust?",
             ),
             (
                 "services/consciousness/learning_consciousness.py",
@@ -4590,36 +4591,6 @@ class TestUnarmedAskSiteRatchet:
                 "format_search_results_conscious",
                 1,
                 "Want me to summarize any of these, or search for something m",
-            ),
-            (
-                "services/consciousness/templates.py",
-                "ACCOMPLISHMENT_RECOGNITION",
-                2,
-                "I didn't find much recorded activity yesterday. You might ha",
-            ),
-            (
-                "services/consciousness/templates.py",
-                "DIALOGUE_INVITATION",
-                4,
-                "Anything I missed or got wrong?",
-            ),
-            (
-                "services/consciousness/templates.py",
-                "GENTLE_FLAGGING",
-                1,
-                "That's a full agenda. If something needs to slip, what would",
-            ),
-            (
-                "services/consciousness/templates.py",
-                "MISSING_DATA_EXPLANATION",
-                6,
-                "I didn't see much GitHub activity yesterday - you might have",
-            ),
-            (
-                "services/consciousness/templates.py",
-                "PRIORITY_FRAMING",
-                3,
-                "Given your {meeting_count} meetings, maybe focus on {priorit",
             ),
             (
                 "services/consciousness/todo_consciousness.py",
@@ -4816,8 +4787,9 @@ class TestUnarmedAskSiteRatchet:
         # call 5, measured both ways:
         # EXEMPT — home_state_service.HomeStateService._generate_greeting.
         assert cls._open_invitation("Welcome. What can I help you with?")
-        # COUNTED — templates.DIALOGUE_INVITATION: an invitation shape, but
-        # the same literal offers an action ("you'd like me to adjust").
+        # COUNTED — measured in templates.DIALOGUE_INVITATION (since deleted,
+        # unreachable): an invitation shape, but the same literal offers an
+        # action ("you'd like me to adjust").
         assert not cls._open_invitation("How does that sound? Anything you'd like me to adjust?")
         # an offer anywhere disqualifies; a non-shape question (a slot
         # request) disqualifies.
