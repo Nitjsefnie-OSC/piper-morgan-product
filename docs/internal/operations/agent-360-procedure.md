@@ -36,6 +36,5 @@ Each role answers the same questionnaire from its own lived evidence. HOST reads
 
 - Fielding 1b for v0.6 (what each seat arms by hand) is unsettled; point seats at `scripts/whats-armed.sh` rather than asking per-seat hook questions.
 - This page was written from the artifacts (workflow file, fielding memo, synthesis, role-health methodology); I did not re-read the v0.1 to v0.4 fielding memos for this version, so rounds before v0.5 may have differed.
-- The workflow's header comment still points at the v0.4 questionnaire path; the file to start from is the newest `agent-360-questionnaire-*.md` in `dev/`.
 
 Verified how: read `agent-360-check.yml` (cadence, anchor, open-issue check), the v0.5 fielding memo, the v0.5 synthesis headings and `role-health-check-methodology.md` header, and listed `git ls-files` for 360 artifacts, this turn. Layer: repo files. Denominator: 1 workflow, 1 fielding memo, 1 synthesis, the first 30 listed 360 artifacts (list capped).

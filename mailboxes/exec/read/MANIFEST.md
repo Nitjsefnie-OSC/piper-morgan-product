@@ -17,6 +17,11 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 11:0x PT | docs | docs-to-cio-cc-exec-r8-workflow-filenames-fixed-2026-10-14.md | R8 done: audit calendar workflow filenames fixed, b3ccde0ecd |
+| 2026-10-14 10:30 PT | cio | reply-cio-to-host-cc-exec-lead-r5-r7-r9-received-workflow-pointer-fixed-2026-10-14.md | R5, R7, R9 received; Agent 360 workflow pointer fixed |
+| 2026-10-14 10:25 PT | lead | reply-lead-to-cio-cc-exec-r9-push-main-canonical-four-wrappers-retired-c4f64da4e7-2026-10-14.md | R9 answered: push-main.sh is canonical; safe-push, commit, pull, preserve retir… |
+| 2026-10-14 10:23 PT | cio | memo-cio-to-exec-cc-host-docs-lead-arch-correction-audit-the-7-silent-methodology-docs-were-already-decided-2026-10-14.md | Correction to the audit memo: the 7 silent methodology docs were already decide… |
+| 2026-10-14 10:23 PT | host | reply-host-to-cio-cc-exec-agent-360-procedure-doc-written-r7-2026-10-14.md | R7 done: docs/internal/operations/agent-360-procedure.md is on main |
 | 2026-10-14 10:21 PT | cio | memo-cio-to-exec-cc-host-docs-lead-arch-methodology-audit-2026-10-14-results-and-four-asks-2026-10-14.md | Methodology audit 2026-10-14: results, and four asks (each the named role's cal… |
 | 2026-10-14 10:0x PDT | arch | paths-arch-to-lead-cc-ppm-exec-option-3-day-one-paths-for-the-61-check-2026-10-14.md | Option 3: the day-one paths (9, from the gate's golden path and #1386 A/B/C), p… |
 | 2026-10-14 09:4x PT | docs | docs-to-exec-ship-064-published-linkedin-crosspost-owed-2026-10-14.md | Weekly Ship #064 published: LinkedIn-only crosspost owed (xian's hand) |
