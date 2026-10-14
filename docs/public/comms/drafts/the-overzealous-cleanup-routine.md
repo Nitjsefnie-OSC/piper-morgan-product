@@ -1,7 +1,7 @@
 ---
 image: 'the-overzealous-cleanup-routine-waiter-carries-away-untouched-dinners.png'
 alt: 'A smiling AI waiter carries two untouched, steaming dinners away as one diner reaches after her meal and the other stares at the bare table, utensils poised.'
-caption: ''
+caption: '"Are you forgetting something?"'
 ---
 
 # The Overzealous Cleanup Routine
