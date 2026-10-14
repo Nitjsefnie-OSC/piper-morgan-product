@@ -42,7 +42,9 @@ class TestOptedInSeam:
     def test_the_three_issue_phrasings_accept(self, msg):
         assert _eval(msg, opt_in=True) is AcceptanceVerdict.ACCEPT
 
-    @pytest.mark.parametrize("msg", ["can you show me the remaining ones?", "will you pull more?"])
+    @pytest.mark.parametrize(
+        "msg", ["can you show me the remaining ones?", "will you give me more?"]
+    )
     def test_other_remainder_words_accept(self, msg):
         assert _eval(msg, opt_in=True) is AcceptanceVerdict.ACCEPT
 
@@ -63,6 +65,33 @@ class TestOptedInSeam:
         assert is_remainder_request_question("could you show me the rest?")
         assert not is_remainder_request_question("is the rest done?")
         assert not is_remainder_request_question("")
+
+
+TEN_ROWS = [
+    ("could you show me the rest?", True),
+    ("can I see the rest?", True),
+    ("what are the others?", True),
+    ("can I see more?", True),
+    ("can you delete the rest?", False),
+    ("can you tell me more about the second one?", False),
+    ("would you add more detail?", False),
+    ("what is the rest of my day like?", False),
+    ("can you complete the remaining ones?", False),
+    ("what's more important?", False),
+]
+
+
+class TestTenRowsArchNarrowing:
+    @pytest.mark.parametrize("msg,accepts", TEN_ROWS)
+    def test_ten_rows_at_the_opted_in_seam(self, msg, accepts):
+        want = AcceptanceVerdict.ACCEPT if accepts else AcceptanceVerdict.STATE_QUESTION
+        assert _eval(msg, opt_in=True) is want
+
+    @pytest.mark.parametrize(
+        "msg", ["can you show me the remaining ones, please?", "can I see more items?"]
+    )
+    def test_trailing_fillers_still_accept(self, msg):
+        assert _eval(msg, opt_in=True) is AcceptanceVerdict.ACCEPT
 
 
 class TestNoOptIn:

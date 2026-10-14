@@ -190,6 +190,10 @@ def is_state_question(message: str) -> bool:
 REQUEST_QUESTION_REMAINDER_WORDS = frozenset({"rest", "others", "remaining", "more"})
 _REQUEST_MODALS = frozenset({"can", "could", "would", "will"})
 _REQUEST_SUBJECTS = frozenset({"you", "i"})
+# #1783 narrowing (Arch): the modal form needs a VIEWING verb right after the
+# subject - "delete", "complete", "tell", "add" are not requests to see.
+_REQUEST_VIEWING_VERBS = frozenset({"see", "show", "view", "get", "have", "read", "list", "give"})
+_REQUEST_TRAILING_FILLER = frozenset({"ones", "items", "too", "please"})
 _WH_REQUEST_OPENERS = frozenset({"are", "is", "'s"})
 _WORD_EDGE_PUNCT = "?!.,;:\"'\u2019\u201c\u201d()[]"
 
@@ -203,15 +207,19 @@ def is_remainder_request_question(message: str) -> bool:
     words = [w for w in words if w]
     if len(words) < 3:
         return False
-    if not REQUEST_QUESTION_REMAINDER_WORDS.intersection(words[2:]):
+    # The remainder word must be the LAST content word (only a filler from
+    # _REQUEST_TRAILING_FILLER may follow): "more about the second one",
+    # "the rest of my day like" name a different thing.
+    tail = list(words)
+    while len(tail) > 2 and tail[-1] in _REQUEST_TRAILING_FILLER:
+        tail.pop()
+    if len(tail) < 3 or tail[-1] not in REQUEST_QUESTION_REMAINDER_WORDS:
         return False
     if words[0] in _REQUEST_MODALS and words[1] in _REQUEST_SUBJECTS:
-        return True
+        return words[2] in _REQUEST_VIEWING_VERBS
     if words[0] == "what" and words[1] in _WH_REQUEST_OPENERS:
         return True
-    if words[0] == "what's":
-        return True
-    return False
+    return words[0] == "what's"
 
 
 # --- Taught-vocabulary normalization ----------------------------------------
