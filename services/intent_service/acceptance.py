@@ -81,10 +81,11 @@ class AcceptanceVerdict(Enum):
     ACCEPT = "accept"  # consent granted — the armed action may fire
     DECLINE = "decline"  # consent withheld — cancel honestly, nothing fires
     # #1771: a DEFERRAL ("not now", "maybe later") — not consent, but not a
-    # refusal either. Every adopted seam treats it as DECLINE
-    # (``defer_as_decline``: a one-turn offer is simply dropped) EXCEPT the
-    # resume-offer seam (#1769), where DECLINE abandons the suspended flow
-    # and DEFER leaves it SUSPENDED.
+    # refusal either. OPT-IN AT THE PREDICATE: only returned when the caller
+    # passes ``distinguish_defer=True`` (the resume-offer seam, #1769, where
+    # DECLINE abandons the suspended flow and DEFER leaves it SUSPENDED).
+    # By default deferrals read DECLINE, so a new seam can never silently
+    # stop declining "not now".
     DEFER = "defer"
     # A query about state — NOT a failed acceptance (CXO's ruling). The seam
     # answers truthfully and the arm is neither consumed nor silently
@@ -106,13 +107,6 @@ class AcceptanceVerdict(Enum):
     # documented off-intent rule applies (#1190: the pop already cancelled
     # the action; normal processing answers the turn).
     PASS = "pass"
-
-
-def defer_as_decline(verdict: "AcceptanceVerdict") -> "AcceptanceVerdict":
-    """#1771: seams with no use for the deferral distinction read DEFER as
-    DECLINE (their pre-#1771 behavior). Only the resume-offer seam consults
-    the raw verdict."""
-    return AcceptanceVerdict.DECLINE if verdict is AcceptanceVerdict.DEFER else verdict
 
 
 class AcceptanceTier(IntEnum):
@@ -212,6 +206,7 @@ def evaluate_acceptance(
     armed_question,  # Optional[str], or LEGACY_UNTHREADED (alias path only)
     taught_accepts: Optional[Iterable[str]] = None,
     taught_declines: Optional[Iterable[str]] = None,
+    distinguish_defer: bool = False,
 ) -> AcceptanceVerdict:
     """THE acceptance predicate — one function, consulted by every adopted
     armed seam (#1739; the ``decide_consent`` idiom at the reply-half).
@@ -239,6 +234,11 @@ def evaluate_acceptance(
             LOW_CEREMONY tier only: taught vocabulary never loosens the
             NAMED_OBJECT bar in either direction — a strict-tier seam's
             declines are the shared vocabulary alone.
+
+        distinguish_defer: #1771 opt-in. False (default): deferral phrasings
+            ("not now", "maybe later") return DECLINE, exactly the pre-#1771
+            behavior. True: they return DEFER. Only the resume-offer seam
+            passes True.
 
     Verdict order (most protective first):
         empty/prose → PASS  (asides neither accept nor steal, #1631)
@@ -319,7 +319,7 @@ def evaluate_acceptance(
 
     for pattern in DEFER_PATTERNS:
         if pattern.search(clean):
-            return AcceptanceVerdict.DEFER
+            return AcceptanceVerdict.DEFER if distinguish_defer else AcceptanceVerdict.DECLINE
 
     return AcceptanceVerdict.PASS
 

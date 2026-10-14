@@ -1,32 +1,22 @@
-"""#1771 -- DEFER tier in the acceptance contract (#1739).
+"""#1771 -- DEFER tier in the acceptance contract (#1739), opt-in at the predicate.
 
-"not now" / "maybe later" are deferrals, not refusals. The shared DECLINE
-vocabulary used to swallow them, which was harmless where a decline only
-cancels a one-turn offer and wrong at the resume-offer seam (#1769), where
-DECLINE abandons the suspended standup. Contract after #1771:
-
-- ``evaluate_acceptance`` returns DEFER for the deferral phrasings.
-- Every adopted seam reads DEFER as DECLINE (``defer_as_decline``) -- their
-  old behavior -- EXCEPT the resume-offer seam, where DEFER leaves the flow
-  SUSPENDED (nothing abandoned) and says so in one line.
+"not now" / "maybe later" are deferrals, not refusals. Arch's shape: the
+predicate returns DECLINE for them by DEFAULT (byte-identical to pre-#1771),
+and DEFER only when the caller passes ``distinguish_defer=True``. Only the
+resume-offer seam (#1769) does, because only there DECLINE abandons a
+suspended standup; DEFER leaves it SUSPENDED. A seam added later cannot
+silently stop declining "not now".
 """
 
 import ast
 import pathlib
-import re
 from datetime import datetime
 from unittest.mock import AsyncMock, MagicMock, patch
 from uuid import uuid4
 
 import pytest
 
-from services.intent_service import delete_todo_pick as dtp
-from services.intent_service.acceptance import (
-    AcceptanceVerdict,
-    declared_axes_for_workflow,
-    defer_as_decline,
-    evaluate_acceptance,
-)
+from services.intent_service.acceptance import AcceptanceVerdict, evaluate_acceptance
 from services.intent_service.soft_invocation import (
     DECLINE_PATTERNS,
     DEFER_PATTERNS,
@@ -35,7 +25,7 @@ from services.intent_service.soft_invocation import (
     is_bare_decline,
 )
 from services.process.registry import ProcessType, SuspendedInfo
-from services.shared_types import EffectClass, Outwardness
+from services.shared_types import EffectClass
 
 RESUME_ASK = "Welcome back! Your standup was paused. Would you like to continue, or start fresh?"
 DEFERRALS = ["not now", "not right now", "not today", "maybe later"]
@@ -44,16 +34,24 @@ DEFERRALS = ["not now", "not right now", "not today", "maybe later"]
 @pytest.mark.parametrize("effect", [EffectClass.READ, EffectClass.DESTRUCTIVE])
 class TestVerdict:
     @pytest.mark.parametrize("turn", DEFERRALS)
-    def test_deferral_phrasings_are_defer(self, turn, effect):
-        assert evaluate_acceptance(turn, effect=effect, armed_question=RESUME_ASK) is (
-            AcceptanceVerdict.DEFER
+    def test_default_call_declines_deferrals(self, turn, effect):
+        verdict = evaluate_acceptance(turn, effect=effect, armed_question=RESUME_ASK)
+        assert verdict is AcceptanceVerdict.DECLINE
+
+    @pytest.mark.parametrize("turn", DEFERRALS)
+    def test_distinguish_defer_returns_defer(self, turn, effect):
+        verdict = evaluate_acceptance(
+            turn, effect=effect, armed_question=RESUME_ASK, distinguish_defer=True
         )
+        assert verdict is AcceptanceVerdict.DEFER
 
     @pytest.mark.parametrize("turn", ["no", "no thanks", "nope", "never mind", "no, not now"])
-    def test_refusals_stay_decline(self, turn, effect):
-        assert evaluate_acceptance(turn, effect=effect, armed_question=RESUME_ASK) is (
-            AcceptanceVerdict.DECLINE
+    @pytest.mark.parametrize("distinguish", [False, True])
+    def test_refusals_stay_decline(self, turn, effect, distinguish):
+        verdict = evaluate_acceptance(
+            turn, effect=effect, armed_question=RESUME_ASK, distinguish_defer=distinguish
         )
+        assert verdict is AcceptanceVerdict.DECLINE
 
 
 class TestVocabulary:
@@ -61,16 +59,6 @@ class TestVocabulary:
         for turn in DEFERRALS:
             assert any(p.search(turn) for p in DEFER_PATTERNS)
             assert not any(p.search(turn) for p in DECLINE_PATTERNS)
-
-    def test_defer_as_decline_collapses_only_defer(self):
-        assert defer_as_decline(AcceptanceVerdict.DEFER) is AcceptanceVerdict.DECLINE
-        for v in (
-            AcceptanceVerdict.ACCEPT,
-            AcceptanceVerdict.DECLINE,
-            AcceptanceVerdict.PASS,
-            AcceptanceVerdict.STATE_QUESTION,
-        ):
-            assert defer_as_decline(v) is v
 
     @pytest.mark.parametrize("turn", DEFERRALS)
     def test_legacy_detectors_still_read_decline(self, turn):
@@ -115,72 +103,130 @@ class TestResumeSeamKeepsFlowSuspended:
                 resume_offer_pending=True,
                 resume_offer_question=RESUME_ASK,
             )
-        assert result is not None and result.message == RESUME_DEFER_REPLY
+        assert result is not None and result.message == RESUME_DEFER_REPLY  # CXO-pending copy
         assert result.intent_data["action"] == "suspended_session_deferred"
         resume.assert_not_called()
         abandon.assert_not_called()
 
 
-class TestOtherSeamsReadDeferAsDecline:
-    @pytest.mark.asyncio
-    async def test_delete_pick_seam_defer_matches_decline(self):
-        """Drives the real predicate through a real adopted seam."""
-        axes = declared_axes_for_workflow(dtp.CLARIFY_DELETE_PICK_WORKFLOW)
-        assert axes is not None
-        offer = {
-            "pending_action": {
-                "kind": dtp.DELETE_PICK_KIND,
-                "user_id": "u1",
-                "pick_ids": ["a", "b"],
-                "pick_texts": ["one", "two"],
-            },
-            "question": "Which one?",
-        }
-        outcomes = {}
-        for turn in ("no", "not now"):
-            with patch.object(dtp, "logger") as log:
-                result = await dtp.handle_delete_todo_pick_turn(
-                    offer, turn, session_id="s", user_id="u1", intent_service=MagicMock()
-                )
-            events = [c.args[0] for c in log.info.call_args_list]
-            outcomes[turn] = (result, events)
-        assert outcomes["not now"] == outcomes["no"]
-        assert "delete_todo_pick_declined" in outcomes["not now"][1]
-
-    def test_every_other_call_site_collapses_defer(self):
-        """Structural: all production verdict consumers wrap the predicate in
-        ``defer_as_decline`` except the resume seam and the one STATE_QUESTION-
-        only probe (reminder_clear correction), which never reads DECLINE."""
+class TestNoOtherSeamOptsIn:
+    def test_only_the_resume_seam_opts_into_defer(self):
+        """Structural: no production `evaluate_acceptance(` call passes
+        ``distinguish_defer=True`` except `_check_pending_resume_offer`."""
         root = pathlib.Path(__file__).resolve().parents[4]
-        unwrapped = []
+        opted = set()
         for top in ("services", "web"):
             for path in (root / top).rglob("*.py"):
-                if path.name == "acceptance.py":
-                    continue
                 src = path.read_text()
-                if "evaluate_acceptance(" not in src:
+                if "distinguish_defer" not in src:
                     continue
-                tree = ast.parse(src)
-                wrapped = {
-                    id(n.args[0])
-                    for n in ast.walk(tree)
-                    if isinstance(n, ast.Call)
-                    and getattr(n.func, "id", None) == "defer_as_decline"
-                    and n.args
-                }
-                for n in ast.walk(tree):
-                    if (
-                        isinstance(n, ast.Call)
-                        and getattr(n.func, "id", None) == "evaluate_acceptance"
-                        and id(n) not in wrapped
-                    ):
-                        unwrapped.append(f"{path.relative_to(root)}:{n.lineno}")
-        # Allowed: resume seam (3 calls: raw verdict by design), the
-        # detect_confirm_response alias (maps DEFER itself), and the
-        # STATE_QUESTION-only probe in reminder_clear.
-        allowed = re.compile(
-            r"services/intent/intent_service\.py|services/intent_service/soft_invocation\.py"
-            r"|services/intent_service/reminder_clear\.py"
+                for fn in ast.walk(ast.parse(src)):
+                    if not isinstance(fn, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                        continue
+                    for n in ast.walk(fn):
+                        if (
+                            isinstance(n, ast.Call)
+                            and getattr(n.func, "id", None) == "evaluate_acceptance"
+                            and any(
+                                k.arg == "distinguish_defer"
+                                and not (
+                                    isinstance(k.value, ast.Constant) and k.value.value is False
+                                )
+                                for k in n.keywords
+                            )
+                        ):
+                            opted.add((str(path.relative_to(root)), fn.name))
+        assert opted == {("services/intent/intent_service.py", "_check_pending_resume_offer")}
+
+
+class TestAfterDeferTheStandupIsReachableOnlyByTheTaughtCommands:
+    """CXO's honesty condition on the DEFER reply ("Just ask when you want to
+    pick it back up"): pinned FROM SOURCE, not assumed.
+
+    Finding: a fresh standup ASK ("do a standup", "show my standup") does NOT
+    resume the suspended flow and does NOT re-arm the resume offer --
+    ``_start_standup_conversation`` looks up the session conversation with
+    ``include_suspended=False``, finds nothing, and starts a NEW conversation
+    (the SUSPENDED one is left in place). The suspended flow comes back via
+    (a) the greeting re-offer, or (b) the taught resume commands handled at
+    ``_check_pending_resume_offer`` with no offer pending: exactly "resume",
+    "continue", "pick it up", "let's continue".
+    """
+
+    @staticmethod
+    def _suspended():
+        return SuspendedInfo(
+            process_type=ProcessType.STANDUP,
+            suspended_at=datetime.now(),
+            description="Your standup was paused.",
         )
-        stray = [u for u in unwrapped if not allowed.match(u)]
-        assert not stray, f"unwrapped evaluate_acceptance call sites: {stray}"
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("turn", ["resume", "continue", "pick it up", "let's continue"])
+    async def test_taught_commands_resume_with_no_offer_pending(self, turn):
+        service = _service()
+        with (
+            patch("services.intent.intent_service.get_process_registry") as reg_fn,
+            patch.object(
+                service,
+                "_resume_suspended_standup",
+                new_callable=AsyncMock,
+                return_value=MagicMock(success=True),
+            ) as resume,
+        ):
+            reg = MagicMock()
+            reg.check_suspended_processes = AsyncMock(return_value=self._suspended())
+            reg_fn.return_value = reg
+            result = await service._check_pending_resume_offer(
+                "user-1", str(uuid4()), turn, resume_offer_pending=False
+            )
+        assert result is not None
+        resume.assert_called_once()
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        "turn",
+        ["show my standup", "do a standup", "let's do a standup", "what's on my standup today"],
+    )
+    async def test_a_new_standup_ask_does_not_resume_at_the_resume_seam(self, turn):
+        service = _service()
+        with (
+            patch("services.intent.intent_service.get_process_registry") as reg_fn,
+            patch.object(service, "_resume_suspended_standup", new_callable=AsyncMock) as resume,
+            patch.object(service, "_abandon_suspended_standup", new_callable=AsyncMock) as aband,
+        ):
+            reg = MagicMock()
+            reg.check_suspended_processes = AsyncMock(return_value=self._suspended())
+            reg_fn.return_value = reg
+            result = await service._check_pending_resume_offer(
+                "user-1", str(uuid4()), turn, resume_offer_pending=False
+            )
+        assert result is None
+        resume.assert_not_called()
+        aband.assert_not_called()
+
+    @pytest.mark.asyncio
+    async def test_starting_a_standup_creates_a_new_conversation_and_does_not_rearm(self):
+        """The start path never sees the SUSPENDED conversation (the manager's
+        default lookup excludes it), so it starts fresh and arms no offer."""
+        service = _service()
+        manager = MagicMock()
+        manager.get_conversation_by_session = AsyncMock(return_value=None)
+        handler = MagicMock()
+        handler.start_conversation = AsyncMock(
+            return_value=MagicMock(message="Ready?", state=MagicMock(value="initiated"))
+        )
+        with (
+            patch(
+                "services.conversation.conversation_handler._get_standup_components",
+                return_value=(manager, handler),
+            ),
+            patch.object(service, "_arm_resume_offer") as arm,
+            patch.object(service, "_resume_suspended_standup", new_callable=AsyncMock) as resume,
+        ):
+            await service._start_standup_conversation("user-1", str(uuid4()))
+        handler.start_conversation.assert_awaited_once()
+        arm.assert_not_called()
+        resume.assert_not_called()
+        # The lookup it made is the default one, which excludes SUSPENDED.
+        assert "include_suspended" not in manager.get_conversation_by_session.call_args.kwargs

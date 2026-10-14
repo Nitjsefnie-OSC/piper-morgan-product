@@ -610,7 +610,6 @@ class StandupConversationHandler:
         """
         from services.intent_service.acceptance import (
             AcceptanceVerdict,
-            defer_as_decline,
             evaluate_acceptance,
         )
         from services.shared_types import EffectClass, Outwardness
@@ -618,14 +617,12 @@ class StandupConversationHandler:
         message_lower = user_message.lower()
 
         armed_ask = conversation.context.get("refining_ask") or _REFINING_DEFAULT_ASK
-        verdict = defer_as_decline(
-            evaluate_acceptance(
-                user_message,
-                effect=EffectClass.READ,
-                outwardness=Outwardness.PRIVATE,
-                armed_question=armed_ask,
-                taught_accepts=_REFINING_TAUGHT_ACCEPTS,
-            )
+        verdict = evaluate_acceptance(
+            user_message,
+            effect=EffectClass.READ,
+            outwardness=Outwardness.PRIVATE,
+            armed_question=armed_ask,
+            taught_accepts=_REFINING_TAUGHT_ACCEPTS,
         )
 
         if verdict is AcceptanceVerdict.STATE_QUESTION:

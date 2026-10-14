@@ -729,18 +729,15 @@ async def handle_drafted_issue_turn(
         from services.intent_service.acceptance import (
             AcceptanceVerdict,
             declared_axes_for_workflow,
-            defer_as_decline,
             evaluate_acceptance,
         )
 
         _axes = declared_axes_for_workflow(pending_action.get("action")) or (None, None)
-        verdict = defer_as_decline(
-            evaluate_acceptance(
-                message,
-                effect=_axes[0],
-                outwardness=_axes[1],
-                armed_question=pending_offer.get("question"),
-            )
+        verdict = evaluate_acceptance(
+            message,
+            effect=_axes[0],
+            outwardness=_axes[1],
+            armed_question=pending_offer.get("question"),
         )
         if verdict is AcceptanceVerdict.STATE_QUESTION:
             # Contract §3 + CXO's arm-survival ruling (§5a/§5b): a short

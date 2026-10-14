@@ -310,9 +310,10 @@ DECLINE_PATTERNS = [
 # #1771: DEFERRAL phrasings, split out of the decline vocabulary (moved, not
 # added: the literal count of this module is unchanged). "Not now" is not
 # "no": at most seams a deferral only cancels a one-turn offer, exactly like
-# a decline, so every adopted seam treats DEFER as DECLINE
-# (``defer_as_decline``); the resume-offer seam (#1769) is the one place the
-# difference matters (decline abandons the suspended flow, defer leaves it).
+# a decline, so ``evaluate_acceptance`` returns DECLINE for them unless a
+# caller opts in with ``distinguish_defer=True``; the resume-offer seam
+# (#1769) is the one place the difference matters (decline abandons the
+# suspended flow, defer leaves it).
 DEFER_PATTERNS = [
     re.compile(p, re.IGNORECASE)
     for p in [
@@ -400,8 +401,8 @@ def detect_confirm_response(message: str) -> Optional[str]:
     )
     if verdict is AcceptanceVerdict.ACCEPT:
         return "accept"
-    if verdict in (AcceptanceVerdict.DECLINE, AcceptanceVerdict.DEFER):
-        return "decline"  # #1771: legacy callers only know decline
+    if verdict is AcceptanceVerdict.DECLINE:
+        return "decline"
     return None
 
 
