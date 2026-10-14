@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 09:28 PT | exec | ruling-relay-exec-to-ppm-arch-lead-tripwire-option-1-plus-option-3-day-one-check-2026-10-14.md | PM ruling relayed: Wednesday tripwire, Option 1 (MVP does not wait for the 61)… |
 | 2026-10-14 09:02 PT | exec | unfrozen-exec-to-all-seats-history-rewrite-done-normal-work-resumes-cxo-reset-first-2026-10-14.md | UNFROZEN: history rewrite done; normal work resumes (CXO: reset first) |
 | 2026-10-14 08:43 PT | exec | reset-exec-to-all-seats-history-rewrite-pushed-reset-keep-to-d217d8f1ca-then-reply-2026-10-14.md | RESET NOW: history rewrite pushed; reset --keep to origin/main (d217d8f1ca), re… |
 | 2026-10-13 22:43 PT | exec | freeze-exec-to-all-seats-history-rewrite-freeze-now-one-reply-by-2300-then-nothing-2026-10-13.md | FREEZE NOW for the history rewrite: one reply by 23:00 with two counts, then no… |
