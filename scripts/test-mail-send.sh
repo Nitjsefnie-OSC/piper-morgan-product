@@ -405,6 +405,29 @@ out=$(PIPER_REPO="$T/wtT" bash "$V3" "mail(t): T20 triage move" \
     mailboxes/cxo/read/memo-a.md mailboxes/cxo/inbox/memo-a.md 2>&1)
 echo "$out" | grep -q "no reply-to:" && no "false-positive on a triage move" || ok "silent on an inbox->read triage move"
 
+echo "── T21: R4(a) — a NEW file in the retired xian (ceo) inbox is refused; edits and moves of old files pass ──"
+clone wtU
+mkdir -p "$T/wtU/mailboxes/xian (ceo)/inbox" "$T/wtU/mailboxes/xian (ceo)/read"
+printf 'old memo\n' > "$T/wtU/mailboxes/xian (ceo)/inbox/memo-old.md"
+printf 'old memo 2\n' > "$T/wtU/mailboxes/xian (ceo)/inbox/memo-old2.md"
+git -C "$T/wtU" add -A; git -C "$T/wtU" commit -qm "seed retired box"; git -C "$T/wtU" push -q origin HEAD:main
+git -C "$T/wtU" fetch -q origin
+before=$(git -C "$T/wtU" rev-parse origin/main)
+printf 'new memo\n' > "$T/wtU/mailboxes/xian (ceo)/inbox/memo-new.md"
+out=$(PIPER_REPO="$T/wtU" bash "$V3" "mail(u): T21 new to retired box" "mailboxes/xian (ceo)/inbox/memo-new.md" 2>&1); rc=$?
+git -C "$T/wtU" fetch -q origin
+[ "$rc" = 2 ] && [ "$(git -C "$T/wtU" rev-parse origin/main)" = "$before" ] && ok "new file refused (rc 2, nothing pushed)" || no "new file NOT refused (rc $rc)"
+echo "$out" | grep -q "send it to exec" && ok "refusal points at exec" || no "refusal lacks the exec pointer"
+rm -f "$T/wtU/mailboxes/xian (ceo)/inbox/memo-new.md"
+printf 'old memo, edited\n' > "$T/wtU/mailboxes/xian (ceo)/inbox/memo-old.md"
+PIPER_REPO="$T/wtU" bash "$V3" "mail(u): T21 edit old" "mailboxes/xian (ceo)/inbox/memo-old.md" >/dev/null 2>&1
+git -C "$T/wtU" fetch -q origin
+[ "$(git -C "$T/wtU" show "origin/main:mailboxes/xian (ceo)/inbox/memo-old.md")" = "old memo, edited" ] && ok "edit of an existing file passes" || no "edit of an existing file blocked"
+mv "$T/wtU/mailboxes/xian (ceo)/inbox/memo-old2.md" "$T/wtU/mailboxes/xian (ceo)/read/memo-old2.md"
+PIPER_REPO="$T/wtU" bash "$V3" "mail(u): T21 move old" "mailboxes/xian (ceo)/read/memo-old2.md" "mailboxes/xian (ceo)/inbox/memo-old2.md" >/dev/null 2>&1
+git -C "$T/wtU" fetch -q origin
+gone "$T/wtU" "mailboxes/xian (ceo)/inbox/memo-old2.md" && onmain "$T/wtU" "mailboxes/xian (ceo)/read/memo-old2.md" && ok "inbox->read move of an old file passes" || no "move of an old file blocked"
+
 echo ""
 echo "════════ RESULT: $PASS passed, $FAIL failed ════════"
 [ "$FAIL" = 0 ] && exit 0 || exit 1
