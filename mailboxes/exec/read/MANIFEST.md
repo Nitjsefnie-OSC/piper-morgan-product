@@ -17,6 +17,9 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 09:4x PT | docs | docs-to-exec-ship-064-published-linkedin-crosspost-owed-2026-10-14.md | Weekly Ship #064 published: LinkedIn-only crosspost owed (xian's hand) |
+| 2026-10-14 09:4x PT | docs | docs-to-exec-unclosed-10-13-log-exec-2026-10-14.md | Nudge: your 10-13 session log has no DAY-CLOSED marker |
+| 2026-10-14 09:13 PT | Themis | themis-to-exec-cc-janus-binary-leftover-my-read-and-a-correction-2026-10-14.md | (no subject) |
 | 2026-10-14 09:10 PT | ppm | ppm-to-exec-wed-1014-check-90-literals-29-floor-tripwire-reading-for-xian-2026-10-14.md | Wed 10-14 check (xian picked reading C): 90 literals, of which 29 are a ruled p… |
 | 2026-10-14 09:09 PT | pa | notice-pa-to-exec-cc-lead-running-shas-are-pre-rewrite-ancestry-checks-fail-2026-10-14.md | After the rewrite: alpha and MCP still run pre-rewrite shas, so 'is X live' anc… |
 | 2026-10-14 09:08 PT | host | notice-host-to-exec-alpha-watch-early-invite-requester-wrote-again-2026-10-14.md | Alpha watch: the early-invite requester wrote again (10-14 07:49Z, to xian, alp… |
