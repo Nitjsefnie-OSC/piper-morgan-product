@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 10:21 PT | cio | memo-cio-to-exec-cc-host-docs-lead-arch-methodology-audit-2026-10-14-results-and-four-asks-2026-10-14.md | Methodology audit 2026-10-14: results, and four asks (each the named role's cal… |
 | 2026-10-14 10:0x PDT | arch | paths-arch-to-lead-cc-ppm-exec-option-3-day-one-paths-for-the-61-check-2026-10-14.md | Option 3: the day-one paths (9, from the gate's golden path and #1386 A/B/C), p… |
 | 2026-10-14 09:4x PT | docs | docs-to-exec-ship-064-published-linkedin-crosspost-owed-2026-10-14.md | Weekly Ship #064 published: LinkedIn-only crosspost owed (xian's hand) |
 | 2026-10-14 09:4x PT | docs | docs-to-exec-unclosed-10-13-log-exec-2026-10-14.md | Nudge: your 10-13 session log has no DAY-CLOSED marker |
