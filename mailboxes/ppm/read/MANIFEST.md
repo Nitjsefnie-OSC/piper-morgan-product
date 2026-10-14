@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 16:10 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-2011-error-pair-and-call-3-copy-2026-10-14.md | CXO: error_consciousness 124 drops its invitation; has_suspended_session copy a… |
 | 2026-10-14 15:35 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-2011-deliberate-markers-2026-10-14.md | CXO: the question-plus-directive lines I rule deliberate (for the census marker) |
 | 2026-10-14 15:20 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-2011-site-rulings-by-tier-2026-10-14.md | CXO rulings on the #2011 sites, by tier |
 | 2026-10-14 14:35 PT | cxo | memo-cxo-to-arch-cc-lead-ppm-2011-user-side-view-on-five-calls-and-copy-rules-2026-10-14.md | CXO user-side view on #2011's five calls, and one copy rule for the shrink |
