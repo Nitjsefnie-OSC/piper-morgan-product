@@ -216,7 +216,7 @@ Ephemeral state lives in `dev/active/cio-carry-forward.md`, durable owed work in
 
 Request additional detail for:
 - **Pattern Catalog**: `docs/internal/architecture/patterns/` (see CURRENT-STATE for count)
-- **Methodology Docs**: `docs/internal/development/methodology-core/` (26 methodology files; canonical home)
+- **Methodology Docs**: `docs/internal/development/methodology-core/` (70 files: m-00 to m-55 plus 14 unnumbered, 23 marked historical; canonical home. Counted 2026-10-14)
 - **Excellence Flywheel** (canonical, v2.0): `docs/internal/development/methodology-core/methodology-00-EXCELLENCE-FLYWHEEL.md`
 - **Session Logs**: `archives/session-logs/YYYY/MM/` (raw material for patterns)
 - **Omnibus Logs**: `docs/omnibus-logs/` (synthesized daily work)

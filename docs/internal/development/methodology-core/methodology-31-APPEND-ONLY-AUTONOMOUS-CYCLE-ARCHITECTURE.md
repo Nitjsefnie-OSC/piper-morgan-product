@@ -2,8 +2,10 @@
 type: methodology
 title: Append-Only Autonomous-Cycle Architecture
 valid_from: "2026-05-18"
-last_updated: "2026-06-14"
+last_updated: "2026-10-14"
 ---
+
+> **SUPERSEDED in part (CIO, 2026-10-14, methodology audit).** The branch model below (a dated cycle branch, one mutable file, "never rebases or merges main in") is no longer the rule. Current rule: CLAUDE.md "Worktrees" and "Git, push, sign-off" (a stable `claude/{role}-cycle` worktree; merge `origin/main` when behind; push `HEAD:main`), and the one-log rule (the session log is the only durable log; a `dev/active/` cycle log is optional scratch). Why it changed: methodology-41 (the 06-09 displacement incident). The append-only idea survives as the session log's own discipline.
 
 # Append-Only Autonomous-Cycle Architecture
 

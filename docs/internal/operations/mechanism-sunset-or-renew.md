@@ -6,7 +6,7 @@
 `git grep` / `ls scripts/` for the problem's noun first. Twice in one week (10-01 ruff binary, 10-04 pre-push interpreter) the fix already existed in the tree and the finding was made again (Pard's observation).
 
 ## The rule
-Every **new** watcher, hook, gate, cron or recurring check carries four lines where it is defined (the
+Every **new** watcher, hook, gate, cron or recurring check carries five lines where it is defined (the
 script header, or the registry/settings comment that installs it):
 
 ```
@@ -14,7 +14,10 @@ Cost:    <what it spends: commits/day, tokens/fire, seconds/commit, a seat's att
 Benefit: <what it has caught, with counts, or "none yet: measuring">
 Review:  <YYYY-MM-DD, at most 8 weeks out>
 Owner:   <role>
+Concept: <path of the doc that says why this exists and what it must do; the doc names this mechanism back>
 ```
+
+The `Concept:` line (added 2026-10-14 from the methodology audit, xian's frame of 10-13: "a written version of the concept does need to exist ... we should be able to recreate our code from scratch just by following our own docs") points at a doc, not a commit or an issue. A design proposal counts only if it is updated to say what was built. If no doc exists, write one first; a header comment is not the concept. Audit baseline 10-14: 39 of 152 process mechanisms linked both ways, 44 with no concept doc (`dev/2026/10/14/methodology-audit-2026-10-14.md`).
 
 At the review date the owner writes one line, **renew** (with updated counts) or **sunset** (it gets
 removed, with a pointer to what replaces it, if anything). A mechanism with no benefit recorded at its
@@ -23,7 +26,7 @@ benefit (a guard that prevents rather than detects). That argument has to be mad
 assumed.
 
 ## Existing mechanisms: one-time inventory
-The existing mechanisms aren't grandfathered forever. Each gets the four lines at its next edit, or by
+The existing mechanisms aren't grandfathered forever. Each gets the five lines at its next edit, or by
 **2026-11-01**, whichever comes first. Watchers with a **false-clear history** get one consolidation
 review first:
 

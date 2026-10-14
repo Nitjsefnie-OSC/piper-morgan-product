@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """hb-store.py — reader for the non-git heartbeat store (R3 step 1), plus the git-vs-store parity check.
 
-R3 step 1 (PM-approved 2026-10-04; built 2026-10-08, CIO) moves heartbeats out of git. During the parity
-window scripts/duty-cycle-heartbeat.sh writes BOTH: the old git rows/markers (dev/heartbeats/, read by the
-freeze checks) and a local store (default ~/.local/state/piper-heartbeats, override PIPER_HB_STORE):
+R3 step 1 (PM-approved 2026-10-04; built 2026-10-08, CIO) moves heartbeats out of git. Since 2026-10-12
+(duty-cycle-heartbeat.sh v2.0) the heartbeat writes ONLY the local store, never git. During the parity
+window before that (10-08 to 10-12) it wrote BOTH the old git rows/markers (dev/heartbeats/) and a local store (default ~/.local/state/piper-heartbeats, override PIPER_HB_STORE):
   <store>/YYYY-MM-DD/<role>.tsv     ts, role, fire, source (fire|hook), epoch      (one row per invocation)
   <store>/last-invoked/<role>.txt   ts, fire, source, epoch                        (latest invocation)
-The git write stops only after this reader agrees with the git reader on 11/11 roles for 3 consecutive
-days (docs/internal/operations/r3-metric.md). Exec runs the parity test; this script is the instrument.
+The git write stopped once this reader agreed with the git reader (docs/internal/operations/r3-metric.md).
+`parity` is kept for history; after 10-12 git has no new heartbeat rows, so it measures nothing current.
 
   hb-store.py latest [--role R] [--epoch]   newest store signal per role (or one role's epoch)
   hb-store.py day --role R [--day YYYY-MM-DD]  that day's store rows for a role
@@ -24,6 +24,7 @@ Always prints its denominator; exit 0 = all roles agree, 1 = some disagree, 3 = 
 Single-host assumption: every seat and the watchdog run on Amber, so one local directory is the store.
 Cost: a few local file reads; parity adds ~2 git log calls per role. Benefit: none yet: measuring.
 Review: 2026-11-05. Owner: CIO.
+Concept: docs/internal/operations/r3-metric.md (docstring corrected 2026-10-14, methodology audit).
 """
 
 import argparse

@@ -8,6 +8,8 @@ valid_from: 2026-06-16
 
 # Mailbox-Bridge Transparency — design proposal
 
+> **Built (status note, CIO, 2026-10-14, methodology audit):** option B shipped on 2026-06-19 (#1259) as `scripts/mail-send.sh` v3, push-to-ref. The swap in the plan below was done, so `scripts/mail-send-v3.sh` and `scripts/test-mail-send-v3.sh` no longer exist. The implementation is `scripts/mail-send.sh`; the harnesses are `scripts/test-mail-send.sh` and `scripts/test-mail-send-reconcile.sh`. The rule agents follow is CLAUDE.md "Mail". This doc is the concept: why mail goes by commit-tree onto origin/main and never through a shared working tree.
+
 **One line:** mail today flows through the *one shared `main` checkout* (mutable state two agents can collide on). `mail-send.sh` v2 narrowed the collision hazards but didn't remove the root cause. This proposes removing the shared working tree from the mail path entirely, via a plumbing-based push straight to `main`.
 
 ## Problem

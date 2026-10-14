@@ -50,7 +50,7 @@ Pard read flyctl's `Aliases:` lines on 10-12 and found 79 spellings of gated ver
 The lists are now generated, not hand-written: `scripts/gen-fly-permissions.py` reads each level's `--help` and emits every
 alias spelling. The JSON records the flyctl version it was built from and the alias sets (`flyctl_version`, `aliases`), and
 it is marked do-not-hand-edit. Built from flyctl v0.4.115: 151 spellings (72 before, so 79 added, matching Pard's count),
-64 allow, 120 ask, 1028 deny rules.
+64 allow, 120 ask, 1052 deny rules (1028 before the 10-12 flag-first denies; corrected 10-14).
 
 - **Drift check:** `scripts/gen-fly-permissions.py --check` exits 1 when the installed flyctl's version or alias sets differ
   from the committed JSON. flyctl updates itself, so someone has to run this on a schedule. Who runs it is still open

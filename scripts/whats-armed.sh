@@ -13,6 +13,7 @@
 #   state  — a process or store reports itself (launchctl, the heartbeat store)
 #
 # Exit 0 = nothing NOT ARMED; 1 = at least one NOT ARMED. Unmeasured lines don't fail the run.
+# Concept: docs/internal/operations/whats-armed.md. Owner: CIO. Review: 2026-12-08.
 set -u
 top="$(git rev-parse --show-toplevel 2>/dev/null)" || { echo "whats-armed: not in a git repo" >&2; exit 2; }
 common="$(git -C "$top" rev-parse --git-common-dir)"
