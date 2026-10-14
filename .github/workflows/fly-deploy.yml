@@ -333,7 +333,7 @@ jobs:
           echo "sha=$sha" >> "$GITHUB_OUTPUT"
           echo "promoting image: $ref  (sha $sha)"
 
-      - name: Tests must have concluded success on the exact sha staging reports
+      - name: Tests must have concluded success on the code staging serves
         env:
           GH_TOKEN: ${{ github.token }}
           SHA: ${{ steps.img.outputs.sha }}
@@ -343,17 +343,54 @@ jobs:
           # an older sha than the one staging ends up serving: main moves fast and runs get cancelled
           # by newer pushes. This gate closes that gap at the promotion, where it matters: the sha
           # staging reports (captured once, above) must have a Tests run that COMPLETED with
-          # conclusion success. Cancelled, in-progress, failed or absent all refuse. Same-commit-
-          # family evidence is not accepted: a green on a descendant says nothing about THIS image.
+          # conclusion success. Cancelled, in-progress or failed refuse.
+          #
+          # Refinement (Lead, 2026-10-13 18:xx, first attended run): Tests only triggers on code paths
+          # (test.yml `on.push.paths`), so a docs-only push moves staging to a sha that has NO Tests
+          # run at all, and "absent" would refuse until the next code push. When no run exists for the
+          # exact sha, walk back to the nearest ancestor that has one and accept its success ONLY if
+          # nothing on Tests' trigger paths changed in between: the code Tests covers is then
+          # byte-identical to what staging serves. Any tested-path change since, or an ancestor that
+          # is not green, still refuses. A green on a DESCENDANT is never accepted.
           # Operator remedy: wait for Tests on that sha (or push and let staging move on), then
           # dispatch again. Read-only (actions: read); nothing is promoted when this fails.
-          conclusion="$(gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/test.yml/runs?head_sha=${SHA}&per_page=20" \
-                 -q '[.workflow_runs[] | select(.status=="completed") | .conclusion] | if index("success") then "success" else (.[0] // "none") end')"
-          if [ "$conclusion" != "success" ]; then
-            echo "::error title=Tests not green on the staging sha::Tests on ${SHA} reads '${conclusion}' (need a completed run with conclusion success). Nothing was promoted. Wait for Tests on that exact sha, or let staging move to a sha that has one, then dispatch again."
+          runs_conclusion() {
+            gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/test.yml/runs?head_sha=$1&per_page=20" \
+              -q '[.workflow_runs[] | select(.status=="completed") | .conclusion] | if index("success") then "success" else (.[0] // "none") end'
+          }
+          has_any_run() {
+            n="$(gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/test.yml/runs?head_sha=$1&per_page=5" -q '.workflow_runs | length')"
+            [ "${n:-0}" -gt 0 ]
+          }
+          # Mirrors .github/workflows/test.yml on.push.paths; keep the two in step.
+          TESTED_PATHS_RE='^(services/|tests/|web/|[^/]*\.py$|pyproject\.toml$|requirements[^/]*\.txt$|alembic/|scripts/|\.github/workflows/)'
+          conclusion="$(runs_conclusion "$SHA")"
+          if [ "$conclusion" = "success" ]; then
+            echo "Tests concluded success on ${SHA}"
+            exit 0
+          fi
+          if has_any_run "$SHA"; then
+            echo "::error title=Tests not green on the staging sha::Tests on ${SHA} reads '${conclusion}' (a run exists; need a completed run with conclusion success). Nothing was promoted. Wait for Tests on that exact sha, or let staging move to a sha that has one, then dispatch again."
             exit 1
           fi
-          echo "Tests concluded success on ${SHA}"
+          anc=""; anc_conc="none"
+          for c in $(git rev-list --max-count=60 "${SHA}^"); do
+            if has_any_run "$c"; then anc="$c"; anc_conc="$(runs_conclusion "$c")"; break; fi
+          done
+          if [ -z "$anc" ]; then
+            echo "::error title=No Tests run found::No Tests run on ${SHA} or its last 60 ancestors. Nothing was promoted."
+            exit 1
+          fi
+          changed="$(git diff --name-only "$anc" "$SHA" | grep -E "$TESTED_PATHS_RE" || true)"
+          if [ -n "$changed" ]; then
+            echo "::error title=Tests never ran on the code staging serves::${SHA} has no Tests run and changes tested paths since ${anc}: $(echo "$changed" | head -5 | tr '\n' ' '). Nothing was promoted."
+            exit 1
+          fi
+          if [ "$anc_conc" != "success" ]; then
+            echo "::error title=Tests not green on the staging code::Tests on ${anc} (the nearest tested ancestor of ${SHA}; only untested paths changed since) reads '${anc_conc}'. Nothing was promoted. Wait for it, then dispatch again."
+            exit 1
+          fi
+          echo "Tests concluded success on ${anc}; ${SHA} differs from it only outside Tests' trigger paths ($(git diff --name-only "$anc" "$SHA" | wc -l | tr -d ' ') files)"
 
       - name: Content-parity gate
         run: |
