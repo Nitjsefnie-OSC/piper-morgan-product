@@ -410,6 +410,56 @@ _DELETE_COMMAND_NOISE = frozenset(
 )
 
 
+# #1943, the "first N" delete shape (Web's served FAIL on alpha 4bd1a236e9,
+# 2026-10-11: `delete the first two reminders` armed ONE confirm naming the row
+# whose text contained "two"). A target that only POSITIONS ("first two",
+# "last", "1-3", "the second one") is not a NAME: resolved by the shared
+# matcher it fuzzy-binds to whatever row shares a word. A word-SET check (the
+# _named_delete_target idiom; no new message-parsing regex —
+# TestExtractionPatternRatchet untouched), reusing todo_handlers._is_positional
+# for the digit and range tokens. A positional-only target is nothing-named to
+# this leg, so the turn falls through to the rail entry point: with router
+# args the targets hook resolves the positions against the numbered list the
+# user was shown (or asks honestly); without them the handler's which-todo ask
+# lists the candidates numbered (#1987).
+_POSITIONAL_WORDS = frozenset(
+    {
+        "first",
+        "second",
+        "third",
+        "fourth",
+        "fifth",
+        "sixth",
+        "seventh",
+        "eighth",
+        "ninth",
+        "tenth",
+        "last",
+        "next",
+        "one",
+        "two",
+        "three",
+        "four",
+        "five",
+        "six",
+        "seven",
+        "eight",
+        "nine",
+        "ten",
+        "both",
+    }
+)
+
+
+def _is_positional_only(named_target: str) -> bool:
+    """True when every word of a candidate name is a position/count word or a
+    digit/range token — i.e. the user pointed at list positions, named nothing."""
+    from services.intent_service.todo_handlers import _is_positional
+
+    words = re.findall(r"\w+", named_target or "")
+    return bool(words) and all(w.lower() in _POSITIONAL_WORDS or _is_positional(w) for w in words)
+
+
 def _named_delete_target(message: str) -> str:
     """The message minus delete-command vocabulary and stopwords, in order.
 
@@ -569,6 +619,10 @@ async def build_todo_delete_confirmation(
     referent = None
     if todo_number is None:
         named_target = _named_delete_target(message)
+        if named_target and _is_positional_only(named_target):
+            # #1943: "first two" / "last" / "1-3" point at positions, they
+            # name nothing — never fuzzy-bind them (see _POSITIONAL_WORDS).
+            named_target = ""
         if not named_target:
             # #1987: nothing numbered, nothing named — but "delete that
             # reminder" / "delete it" the turn after "Reminder saved: …"
