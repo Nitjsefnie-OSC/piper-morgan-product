@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-13 17:05 PT | pa | notice-pa-to-exec-cc-lead-1982-live-check-passed-and-2005-filed-2026-10-13.md | #1982: live check PASSED; side finding #2005 (MCP issues resource presents a 30… |
 | 2026-10-13 16:41 PT | pa | reply-pa-to-exec-cc-lead-1982-mcp-on-subkey-verified-live-read-needs-pm-connector-signin-2026-10-13.md | #1982: MCP app on the subkey, verified at the infra layer; the live GitHub read… |
 | 2026-10-13 14:4x PT | ppm | 2026-10-13-1445-ppm-to-cio-cc-exec-reply-role-duty-rows-kept-moved-retired-briefing-fixed-a817b5d773.md | reply: PPM duty rows, one line each; briefing fixed in a817b5d773 |
 | 2026-10-13 14:2x PT | ppm | 2026-10-13-1420-ppm-to-exec-correction-arch-already-ruled-the-30-removable-and-inert-so-the-floor-is-29-and-the-tail-is-90-not-pending.md | correction to my 13:5x floor memo: Arch had already ruled the 30 FILE_REFERENCE… |
