@@ -3835,10 +3835,10 @@ class IntentService:
         if not session_id:
             return None
         from services.intent_service.acceptance import (
-        AcceptanceVerdict,
-        defer_as_decline,
-        evaluate_acceptance,
-    )
+            AcceptanceVerdict,
+            defer_as_decline,
+            evaluate_acceptance,
+        )
         from services.intent_service.conversation_context import get_or_create_context
         from services.intent_service.list_remainder import (
             LIST_REMAINDER_TAUGHT_ACCEPTS,

@@ -102,12 +102,8 @@ class TestResumeSeamKeepsFlowSuspended:
         )
         with (
             patch("services.intent.intent_service.get_process_registry") as reg_fn,
-            patch.object(
-                service, "_resume_suspended_standup", new_callable=AsyncMock
-            ) as resume,
-            patch.object(
-                service, "_abandon_suspended_standup", new_callable=AsyncMock
-            ) as abandon,
+            patch.object(service, "_resume_suspended_standup", new_callable=AsyncMock) as resume,
+            patch.object(service, "_abandon_suspended_standup", new_callable=AsyncMock) as abandon,
         ):
             reg = MagicMock()
             reg.check_suspended_processes = AsyncMock(return_value=suspended)
