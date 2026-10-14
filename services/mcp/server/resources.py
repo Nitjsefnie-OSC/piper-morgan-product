@@ -72,8 +72,10 @@ GITHUB_ISSUES_DESCRIPTION = (
     "connector (owner-scoped, logical-key binding per ADR-070 Amendment A). If the user "
     "hasn't connected GitHub yet, returns the connector's own honest ConnectRequired shape "
     "(available: false, reason: connect_required) — never an exception, never an empty list "
-    "pretending to be 'no issues'. The returned page is capped; capped_at states the cap so "
-    "a client can tell a short list from a truncated one."
+    "pretending to be 'no issues'. issues is ONE PAGE: count is the page length, total is "
+    "GitHub's full match count (total_count), truncated is total > count, and capped_at is "
+    "the page cap. Report total as the number of open issues, never count (#2005: a 30-item "
+    "page was read as the full set of 278)."
 )
 
 # Mirrors the chat surface's list_open_issues default page size
@@ -170,11 +172,19 @@ async def _read_github_issues() -> str:
     user_id = current_user_id()
     result = await GitHubMCPSpatialAdapter().list_open_issues(user_id, limit=GITHUB_ISSUES_PAGE_CAP)
     if result.issues is not None:
+        count = len(result.issues)
+        # #2005: GitHub search returns a page (its default is 30) with an authoritative
+        # total_count; the page length is not the number of issues. A missing total (a
+        # list_issues-shaped payload, or an unparseable one) falls back to the page length,
+        # which is then honestly not truncated as far as this payload can tell.
+        total = result.total if result.total is not None else count
         return _json(
             {
                 "available": True,
                 "issues": result.issues,
-                "count": len(result.issues),
+                "count": count,
+                "total": total,
+                "truncated": total > count,
                 "capped_at": GITHUB_ISSUES_PAGE_CAP,
             }
         )

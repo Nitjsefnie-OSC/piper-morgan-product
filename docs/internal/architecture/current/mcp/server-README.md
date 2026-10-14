@@ -288,12 +288,15 @@ Nothing confirmed yet (the honest-empty shape, not a failure):
 
 The caller's own open GitHub issues (`assignee:@me`), read via
 `services/mcp/consumer/github_adapter.py:GitHubMCPSpatialAdapter.list_open_issues` — the user's
-bound GitHub connector, resolved via a logical-key binding (ADR-070 Amendment A). Page capped at
-`GITHUB_ISSUES_PAGE_CAP` (50, mirroring the chat surface's own default); `capped_at` is always
-stated so a client can tell a short list from a truncated one (#1762 render-whole discipline).
+bound GitHub connector, resolved via a logical-key binding (ADR-070 Amendment A). `issues` is one
+page, capped at `GITHUB_ISSUES_PAGE_CAP` (50, mirroring the chat surface's own default; the adapter
+asks github-mcp-server for `perPage=50`, since its default page is 30). `count` is the page length,
+`total` is GitHub's `total_count` (the number of open issues; the description tells the client to
+report this one, never `count`), `truncated` is `total > count`, and `capped_at` is the cap
+(#1762 render-whole discipline; #2005 was a 30-item page read as the full set of 278).
 
 ```json
-{"available": true, "issues": [{"number": 1, "title": "A's issue"}], "count": 1, "capped_at": 50}
+{"available": true, "issues": [{"number": 1, "title": "A's issue"}], "count": 1, "total": 1, "truncated": false, "capped_at": 50}
 ```
 
 Unbound — the connector's own honest `ConnectRequired` degradation passed through as a
@@ -334,5 +337,5 @@ users' tokens, returns only that caller's data (the read surfaces are mocked per
 `user_id` each stub receives is asserted against the token's own owner); the profile
 honest-empty payload on a read failure; the colleague-model honest-empty shape when nothing is
 confirmed; the GitHub resource's `connect_required` payload when unbound and its
-`count`/`capped_at` payload when bound; the capability set is re-asserted resources-only now
+`count`/`total`/`truncated`/`capped_at` payload when bound; the capability set is re-asserted resources-only now
 that resources are actually registered.

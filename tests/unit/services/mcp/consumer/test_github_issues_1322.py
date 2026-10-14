@@ -76,12 +76,18 @@ async def _seed(maker, status):
         await s.commit()
 
 
-def _point_at_fixture(adapter, *, payload=_PAYLOAD, raises=False, tool=None):
-    """Patch _mcp_client_ctx to yield a FastMCP-backed client exposing the given search tool."""
+def _point_at_fixture(adapter, *, payload=_PAYLOAD, raises=False, tool=None, seen=None):
+    """Patch _mcp_client_ctx to yield a FastMCP-backed client exposing the given search tool.
+
+    ``seen`` (a list) records each call's arguments: github-mcp-server's search tools take
+    ``perPage`` (default 30, max 100) and the adapter must ask for the page it will show (#2005).
+    """
     server = FastMCP("github-search-fixture")
 
     @server.tool(name=tool or gh_mod._ISSUES_TOOL)
-    def search(query: str) -> str:
+    def search(query: str, perPage: int = 30) -> str:
+        if seen is not None:
+            seen.append({"query": query, "perPage": perPage})
         return payload
 
     @contextlib.asynccontextmanager
@@ -152,6 +158,20 @@ class TestListOpenIssuesHit:
         _point_at_fixture(adapter)
         res = await adapter.list_open_issues(_ALPHA, limit=1)
         assert len(res.issues) == 1
+
+    async def test_search_asks_for_a_page_the_size_of_the_limit_2005(self, sm):
+        """#2005: with no perPage the server pages at 30, so a 50-cap read returned 30 and the
+        MCP resource presented that page as the full set. The call must carry perPage=limit
+        (clamped to GitHub's 100)."""
+        await _seed(sm, "bound")
+        adapter = GitHubMCPSpatialAdapter()
+        seen: list = []
+        _point_at_fixture(adapter, seen=seen)
+        await adapter.list_open_issues(_ALPHA, limit=50)
+        await adapter.list_open_issues(_ALPHA, limit=500)
+        await adapter.list_open_issues(_ALPHA, limit=0)
+        assert [s["perPage"] for s in seen] == [50, 100, 1]
+        assert seen[0]["query"] == gh_mod._MY_OPEN_ISSUES_QUERY
 
     async def test_bound_empty_payload_is_empty_list_not_degrade(self, sm):
         await _seed(sm, "bound")

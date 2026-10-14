@@ -16,7 +16,7 @@ the resource functions:
 (d) colleague-model with nothing verified -> the honest-empty shape (`verified: []`,
     a `note` field), not an exception and not a fabricated entry.
 (e) the GitHub resource: unbound -> `{"available": false, "reason": "connect_required",
-    "connector": "github"}`; bound -> issues plus `count`/`capped_at`.
+    "connector": "github"}`; bound -> issues plus `count`/`total`/`truncated`/`capped_at`.
 (f) the server's advertised capabilities are still resources-only (re-asserted here,
     now WITH resources actually registered, complementing unit 0's zero-resources
     version of the same check).
@@ -379,11 +379,59 @@ class TestGithubIssuesResource:
             "available": True,
             "issues": [{"number": 1, "title": "A's issue"}],
             "count": 1,
+            "total": 1,
+            "truncated": False,
             "capped_at": GITHUB_ISSUES_PAGE_CAP,
         }
         assert payload_b["count"] == 2
         assert payload_a["issues"] != payload_b["issues"]
         assert seen_user_ids == [str(USER_A), str(USER_B)]
+
+    async def test_page_shorter_than_total_is_marked_truncated_2005(
+        self, monkeypatch, app_with_users
+    ) -> None:
+        """#2005: GitHub returned a 30-item page with total_count 278; the payload said
+        count 30 / capped_at 50 and the client read it as the full set. The payload must
+        carry GitHub's total and say the page is truncated."""
+        mcp, asgi_app, raw_a, _raw_b = app_with_users
+        page = [{"number": n, "title": f"issue {n}"} for n in range(30)]
+
+        async def _stub_bound(self, user_id, *, limit=50, repository=None):
+            return GitHubIssuesResult(issues=page, total=278)
+
+        monkeypatch.setattr(GitHubMCPSpatialAdapter, "list_open_issues", _stub_bound)
+
+        async with mcp.session_manager.run():
+            payload = await _read_json(asgi_app, raw_a, GITHUB_ISSUES_URI)
+
+        assert payload["count"] == 30
+        assert payload["total"] == 278
+        assert payload["truncated"] is True
+        assert payload["capped_at"] == GITHUB_ISSUES_PAGE_CAP
+
+    async def test_missing_total_falls_back_to_page_length_2005(
+        self, monkeypatch, app_with_users
+    ) -> None:
+        mcp, asgi_app, raw_a, _raw_b = app_with_users
+
+        async def _stub_bound(self, user_id, *, limit=50, repository=None):
+            return GitHubIssuesResult(issues=[{"number": 7, "title": "only"}], total=None)
+
+        monkeypatch.setattr(GitHubMCPSpatialAdapter, "list_open_issues", _stub_bound)
+
+        async with mcp.session_manager.run():
+            payload = await _read_json(asgi_app, raw_a, GITHUB_ISSUES_URI)
+
+        assert payload["count"] == 1
+        assert payload["total"] == 1
+        assert payload["truncated"] is False
+
+    def test_description_tells_the_client_to_report_total_2005(self) -> None:
+        from services.mcp.server.resources import GITHUB_ISSUES_DESCRIPTION
+
+        assert "total" in GITHUB_ISSUES_DESCRIPTION
+        assert "truncated" in GITHUB_ISSUES_DESCRIPTION
+        assert "never count" in GITHUB_ISSUES_DESCRIPTION
 
 
 class TestCapabilitiesResourcesStillServed:

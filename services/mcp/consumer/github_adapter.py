@@ -813,7 +813,12 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
             return GitHubIssuesResult(degradation=binding)
         try:
             async with self._mcp_client_ctx(binding) as client:
-                result = await client.call_tool(tool, {"query": query})
+                # #2005: github-mcp-server's search tools page at 30 by default; ask for the
+                # page we will show (perPage, its pagination arg, max 100) so a 50-cap read
+                # returns 50, not 30. total_count stays the authoritative count either way.
+                result = await client.call_tool(
+                    tool, {"query": query, "perPage": max(1, min(limit, 100))}
+                )
                 items, total = self._parse_issue_search(
                     self._first_text(result.content), limit=limit
                 )
