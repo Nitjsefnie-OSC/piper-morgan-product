@@ -1,6 +1,7 @@
 ---
 name: propose-feature
-description: Advance something from NOTICED to PROPOSED — surface a thing Piper
+description: >-
+  Advance something from NOTICED to PROPOSED — surface a thing Piper
   observed (from user signals, conversation patterns, or PM mention) and help PM
   decide whether to act on it. The output is a structured proposal PM can say yes/no/later
   to. Piper-unique; no marketplace equivalent. Trigger phrases: "I've been thinking

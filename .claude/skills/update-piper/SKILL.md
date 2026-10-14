@@ -1,6 +1,7 @@
 ---
 name: update-piper
-description: Refresh Piper's understanding of the PM's world when things have changed
+description: >-
+  Refresh Piper's understanding of the PM's world when things have changed
   — new projects, team changes, shifted focus, new tools. Shows PM what Piper currently
   knows, then updates only the sections that are stale. Prevents meet-piper from
   becoming a one-shot interview that degrades over time. Trigger phrases: "Piper

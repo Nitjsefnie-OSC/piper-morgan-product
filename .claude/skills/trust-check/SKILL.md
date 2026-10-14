@@ -1,6 +1,7 @@
 ---
 name: trust-check
-description: Show PM what trust tier Piper is at, what's unlocked at this tier, what's
+description: >-
+  Show PM what trust tier Piper is at, what's unlocked at this tier, what's
   coming at the next tier, and how to advance. Transparency into the Trust Gradient
   is itself a trust-building act. Piper-unique; no marketplace equivalent. Trigger
   phrases: "what can you do now", "what trust level are we at", "what have you unlocked",

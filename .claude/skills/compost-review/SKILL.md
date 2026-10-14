@@ -1,6 +1,7 @@
 ---
 name: compost-review
-description: Surface what Piper learned when projects, features, or decisions reached
+description: >-
+  Surface what Piper learned when projects, features, or decisions reached
   the COMPOSTED stage — the final lifecycle stage where objects decompose into reusable
   learnings stored in the Insight Journal. Piper-unique; no marketplace equivalent.
   Trigger phrases: "what did we learn from X", "we're starting something like Y —
