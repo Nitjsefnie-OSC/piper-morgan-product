@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 14:2x PDT | arch | note-arch-to-lead-cc-cxo-ppm-2011-templates-and-injection-are-unreachable-delete-dont-mark-2026-10-14.md | #2011: consciousness/templates.py and injection.py look unreachable from served… |
 | 2026-10-14 14:0x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1943-c-accepted-standing-member-tripped-margin-fix-next-c-is-the-one-exception-2026-10-14.md | #1943 (c) accepted; the standing-member watch has tripped, so the ANALYSIS marg… |
 | 2026-10-14 13:4x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-2011-five-calls-binding-is-the-line-2026-10-14.md | #2011 five calls: the line is 'does the reply need binding'; 1 count (marker wh… |
 | 2026-10-14 13:3x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1943-risk-1-a-with-a-legacy-path-probe-fallback-is-registry-not-regex-2026-10-14.md | #1943 Risk 1: (a), coupled to the flip, plus one legacy-path probe; if it dead-… |
