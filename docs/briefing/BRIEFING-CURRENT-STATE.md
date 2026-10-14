@@ -27,19 +27,24 @@ log, never here. Bump `last_updated` to the newest line's date, or CI fails. Ski
 
 ## Now
 
-- **Alpha (live)** *(Lead, 2026-10-13 06:48 PDT, `curl https://alpha.pipermorgan.ai/health`)*: healthy, **v0.8.14.0**,
-  git_sha `b713b91cb5` (promoted 10-13 12:04 by Exec on xian's direct word, run 38451337983, no approval step; carries everything landed through 10-13 12:00: #1987 both halves, #2001, #1976, the meeting_time example, logs-keep-only-fingerprints) (the version string has not moved since 09-23, so the sha is the identity). Fly `piper-morgan` serves
-  `origin/main` builds; the droplet and `origin/production` are gone (09-29).
+- **Alpha (live)** *(Lead, 2026-10-14 09:13 PDT, `curl https://alpha.pipermorgan.ai/health`)*: healthy, **v0.8.14.0**,
+  git_sha `de7d0c1c57` (promoted 10-13 18:49 by PM, run 38497735645, the refined gate's first pass). That sha is a **pre-rewrite id**: after
+  the 10-14 history rewrite (new main descends from `d217d8f1ca`) it no longer sits on main, but its served code equals `d217d8f1ca`'s on every
+  served path (`git diff` on services/web/scripts/main.py: one line of an operator script). Staging already serves `d217d8f1ca` with Tests
+  green, so the next promotion needs no wait; a promotion is optional hygiene until a code landing arrives. `origin/main` builds; the droplet
+  and `origin/production` are gone (09-29).
 - **Version** *(CIO, 2026-10-08, `git tag`)*: latest tag **v0.8.14.0** ("On Your Clock", 09-23). 0.9.0 is
   reserved for beta.
 - **MVP gate** *(Docs, 2026-10-12 10:1x PDT, `sprint-truth.py`, live board pull of 1,815 items)*:
   **13 not done** (2 Sprint Backlog, 2 In Progress, 1 In Review, 8 Product Backlog), 1,238 done. The MVP milestone **is**
   the beta gate. **Dates: design partners Fri 10-23, hard stop Fri 10-30** (baseline 10-05; slips are logged in
   `docs/internal/planning/beta-gate-standard.md` and only PM moves either date). Read the ledger, not this line, for slips.
-- **Engineering focus** *(Lead, 2026-10-13 06:48 PDT, from the 10-12 Lead log)*: 10-12 landed fifteen code units on main (the
-  todo/reminder family #1975/#1985/#1996/#1997/#1999, #1987 half 1, #1992 raw-HTML visibility, census + enforcement pins); all live on
-  alpha since 21:46. Next: #1987 half 2 (numbered which-todo ask + #846-store arm) and #1976 (router text arg for create_todo); #1982/#1983
-  held on PM's PAT-only run (card row G). Literal ceiling 120. Health gate (#1952) first live run read fresh/green 10-12.
+- **Engineering focus** *(Lead, 2026-10-14 09:13 PDT, from the 10-13 Lead log)*: 10-13 landed nine code units (#1987 half 2 + pick-survives-
+  pleasantry, #2001, #1976 with the description unchanged, the meeting-row additive example, utterance-log fingerprints, #1982 step 3 with the
+  legacy fallback off, #2005 total/truncated, the promote-gate ancestor refinement), all live on alpha since 18:49; #2002/#2003/#2004 closed by
+  CXO on Web's served run. Literal ceiling **90** (FILE_REFERENCE deleted 10-13; Wednesday trip-wire reading 90, PPM's re-plan). Held: #1982
+  Registry publish (xian), the PAT dual-write branch behind PM's PAT-only run (#1983/#1995), #2005 paused as an eval (xian, not MVP path).
+  Next: PM's test card rows (v31), then carried work.
 - **PM's open asks** *(Exec, 2026-10-09 06:4x PDT)*: on Exec's attention rollup at
   `claude.ai/artifact/719UZ4h1NELjEwWZbDCceT` (its own header line carries the current version; do not pin one here, it was v90 at 04:2x and v95 by 06:4x). Do not copy the list here: it goes stale within hours.
 - **Usage** *(CIO, 2026-10-08)*: the weekly window reset Thu 10-08 21:59 PDT; stop line **95%** of the weekly
