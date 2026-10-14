@@ -6,6 +6,7 @@ description: >-
   body (Problem Statement / Goal / Requirements / AC), and correct metadata
   (priority, labels, milestone, epic). Trigger phrases: "file an issue",
   "create a ticket", "draft an issue", "track this", "we should file a bug for".
+concept: "Concept: docs/internal/product/piper-pm-skills-concept.md (added 2026-10-14, sunset-or-renew inventory; PPM)"
 ---
 
 # draft-issue
