@@ -107,7 +107,7 @@ def test_caller_passes_user_id(workflow_entries_source: str) -> None:
     src = workflow_entries_source
     # The projects-query entry point must be registered with pass_user_id=True so
     # the factory threads user_id (rather than dropping it back to fake data).
-    assert '_make_query_dispatch_entry_point("_handle_projects_query", pass_user_id=True)' in src, (
+    assert '"_handle_projects_query", pass_session_id=True, pass_user_id=True' in src, (
         "projects query entry point must be registered with pass_user_id=True "
         "so user_id is threaded through to _handle_projects_query "
         "(was previously just (intent, workflow_id))"
