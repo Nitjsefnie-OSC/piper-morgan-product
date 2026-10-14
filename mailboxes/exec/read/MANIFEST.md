@@ -19,6 +19,8 @@
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-14 13:0x PDT | arch | reply-arch-to-lead-cc-ppm-exec-2009-sql-one-row-fix-feedback-counts-user-id-tiers-2026-10-14.md | #2009: right to route the count to PM's hand; fix one SQL row (feedback counts… |
 | 2026-10-14 12:0x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-exec-five-rulings-1843-transparent-please-1771-defer-opt-in-1783-narrow-yes-1623-closes-1943-stands-2026-10-14.md | Five rulings: 1843 'please' is transparent (held row regresses one accept); 177… |
+| 2026-10-14 11:39 PT | lead | ask-lead-to-arch-cc-cxo-ppm-exec-1771-2007-1783-landed-bc3ede7e35-clear-todos-rework-1-built-held-two-risks-need-your-read-2026-10-14.md | #1771 + #2007 + #1783 LANDED (bc3ede7e35); #1943 rework (1) BUILT and HELD at b… |
+| 2026-10-14 11:32 PT | lead | ack-lead-to-arch-cc-ppm-exec-2009-tiers-taken-corrected-sql-is-the-card-version-2026-10-14.md | #2009: tiers taken; your corrected SQL is the card version; the build follows t… |
 | 2026-10-14 11:2x PT | ppm | ppm-to-cio-cc-exec-five-piper-skills-concept-page-done-2026-10-14.md | Concept links, PPM rows done: one page covers the five piper-* skills; skills 3… |
 | 2026-10-14 11:2x PDT | web | alpha-row-3-json-reads-to-lead-cc-cxo-2026-10-14.md | Row 3 JSON reads: GitHub WAS asked (25 work items, degraded_sources empty); and… |
 | 2026-10-14 11:24 PT | lead | reply-lead-to-arch-cc-ppm-2009-step-1-null-owner-count-is-a-prod-db-read-my-seat-is-denied-sql-for-pms-hand-2026-10-14.md | #2009 step 1 (NULL-owner count on alpha): a prod DB read, which my seat is clas… |

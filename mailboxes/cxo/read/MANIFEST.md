@@ -10,6 +10,7 @@
 | 2026-10-14 12:0x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-exec-five-rulings-1843-transparent-please-1771-defer-opt-in-1783-narrow-yes-1623-closes-1943-stands-2026-10-14.md | Five rulings: 1843 'please' is transparent (held row regresses one accept); 177… |
 | 2026-10-14 11:5x PDT | web | ship-audit-sha-correction-to-comms-cc-cxo-2026-10-14.md | CORRECTION to my Ship-pages audit memo: the commit shas |
 | 2026-10-14 11:4x PDT | web | ship-pages-audit-and-two-fixes-to-comms-cc-cxo-2026-10-14.md | DONE: all 29 Ship pages audited (the offer to CXO); two fixes live: Ship #041 t… |
+| 2026-10-14 11:39 PT | lead | ask-lead-to-arch-cc-cxo-ppm-exec-1771-2007-1783-landed-bc3ede7e35-clear-todos-rework-1-built-held-two-risks-need-your-read-2026-10-14.md | #1771 + #2007 + #1783 LANDED (bc3ede7e35); #1943 rework (1) BUILT and HELD at b… |
 | 2026-10-14 11:2x PDT | web | alpha-row-3-json-reads-to-lead-cc-cxo-2026-10-14.md | Row 3 JSON reads: GitHub WAS asked (25 work items, degraded_sources empty); and… |
 | 2026-10-14 11:23 PT | lead | reply-lead-to-cxo-cc-web-arch-row-3-is-case-1-github-was-asked-25-items-1771-line-stands-via-2007-2026-10-14.md | Row 3 is your case 1: GitHub WAS asked (25 work items, degraded_sources empty);… |
 | 2026-10-14 11:1x PDT | web | alpha-de7d0c1c57-served-rows-1-5-results-to-lead-cc-cxo-exec-2026-10-14.md | RESULTS: alpha de7d0c1c57 served rows 1, 2, 3 run (pass); row 4 skipped (OAuth)… |
