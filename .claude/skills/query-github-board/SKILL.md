@@ -5,6 +5,7 @@ scope: cross-role
 version: 1.1
 created: 2026-07-18
 updated: 2026-08-08
+concept: "Concept: docs/internal/operations/github-and-tooling-gotchas.md (silent truncation; hard rule 4) (added 2026-10-14, concept-link inventory; CIO)"
 ---
 
 # query-github-board

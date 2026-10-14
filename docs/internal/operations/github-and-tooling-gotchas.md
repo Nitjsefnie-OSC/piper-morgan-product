@@ -218,6 +218,8 @@ invocation** — per-file runs cannot see cross-file import pollution by constru
 
 ## `gh issue list` silently truncates at 30, AND its date search is UTC not PDT (2026-09-26, Exec)
 
+*Mechanism: the `query-github-board` skill (`.claude/skills/query-github-board/SKILL.md`) is the procedure for reads that can't silently truncate (it reconciles against `totalCount`). This section and the Projects-v2 rule (hard rule 4) are its concept. Back-pointer added 2026-10-14, CIO, concept-link inventory.*
+
 Two independent, stacking defects, both silent — found while reconciling a "43 closed" vs
 "53 closed" vs "91 closed" three-way discrepancy across a workstream review, a raw Projects
 export, and a live rerun of the same query shape.

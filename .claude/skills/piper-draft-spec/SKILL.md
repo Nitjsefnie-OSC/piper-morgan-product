@@ -6,6 +6,7 @@ description: >-
   requirements, open questions, and success criteria. Piper grounds the spec
   in your project context. Trigger phrases: "write a spec for", "draft a PRD",
   "spec this out", "write this up properly", "I want to build X".
+concept: "Concept: docs/internal/product/piper-pm-skills-concept.md (added 2026-10-14, sunset-or-renew inventory; PPM)"
 ---
 
 # draft-spec
