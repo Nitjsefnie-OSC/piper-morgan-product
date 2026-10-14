@@ -4011,11 +4011,17 @@ class TestUnarmedAskSiteRatchet:
     visible here so its coverage is arguable — a new question-emitting site
     fails the build BY BEING FOUND, never by someone remembering a table):
 
-    Scope: every ``*.py`` under ``services/intent_service/`` and
-    ``services/intent/``, minus ``soft_invocation.py`` (the arming rail
-    itself — every offer template it declares reaches the user only through
-    the apply path that records + ``set_pending_offer``-arms it by
-    construction).
+    Scope (#2011, Arch 2026-10-14 — widened from the two intent packages):
+    every ``*.py`` under ``services/`` RECURSIVELY, minus, each BY NAME with
+    its reason (never by leaving a package out of the glob):
+
+    - ``services/intent_service/soft_invocation.py`` — the arming rail
+      itself: every offer template it declares reaches the user only
+      through the apply path that records + ``set_pending_offer``-arms it
+      by construction;
+    - ``services/standup/`` — its conversation machine arms via its own
+      adopted state rail, not the one-slot store (#1739 table);
+    - ``services/onboarding/`` — on ice (ADR-059).
 
     An INTERROGATIVE LITERAL is any string constant or f-string (constant
     parts joined with ``{}`` placeholders) in which some line, after
@@ -4038,6 +4044,26 @@ class TestUnarmedAskSiteRatchet:
       emission lives at their consumers; every current consumer verified
       arming at freeze time (they thread the copy as the stored
       ``question=`` — itself an arm signal);
+    - #2011 calibration (2026-10-14), three classes measured in the newly
+      scanned packages, each a false-positive SHAPE, never a site:
+      (a) strings in an ``examples=`` kwarg (any kwarg named ``*example*``)
+          — sample USER phrasings, the kwarg form of the ``*EXAMPLE*``
+          holder rule (e.g. ``commands/definitions.py`` IDENTITY_COMMAND
+          ``examples=["who are you?", "what's your name?"]``);
+      (b) strings in an ``original_message=`` kwarg — a synthesized USER
+          message handed to a handler, the same class as ``utterance=``
+          (e.g. ``integrations/slack/webhook_router.py``
+          ``_handle_priority_subcommand``: ``Intent(...,
+          original_message="what's my top priority?")``);
+      (c) strings inside a container whose OWN name says ``question`` —
+          an instance-attribute assignment target (``self.*question*``)
+          or a dict value under a ``*question*`` key — the container form
+          of the ``*question*``-named holder rule (e.g.
+          ``intelligence/clarifying_questions.py``
+          ``ClarifyingQuestionGenerator.__init__``:
+          ``self.question_templates = {...: ["How urgent is this
+          issue?", ...]}``). Local variables do NOT qualify: a local
+          ``question = "…?"`` returned unarmed stays counted;
     - literals carrying an ``# ask-census: <reason>`` marker on their own
       line or the line directly above — the residual hand-annotation lives
       AT the site, never in this table, and the marker count is ceilinged
@@ -4047,8 +4073,15 @@ class TestUnarmedAskSiteRatchet:
     name of a module/class-level assignment (copy constants/containers).
     A holder ARMS iff its OWN body (nested defs excluded) does any of:
     call ``set_pending_offer``; pass a ``question=`` kwarg or build a dict
-    with a ``"question"`` key (the #1665 stored-ask idiom); or mention a
-    string ending ``_pending`` (the no-clobber flag stamp). The census is
+    with a ``"question"`` key (the #1665 stored-ask idiom); mention a
+    string ending ``_pending`` (the no-clobber flag stamp); or construct a
+    ``LastOffer(...)`` (#2011 calibration: the #852/#1529 one-turn
+    ``last_offer`` rail, the SECOND one-slot arm store per #1770 — e.g.
+    ``conversation/conversation_handler.py``
+    ``ConversationHandler._check_suspended_session_reentry`` stores its
+    "Welcome back! … Would you like to continue, or start fresh?" as
+    ``LastOffer(offer_type="process_resume", offer_text=resume_message)``,
+    the same holder that renders it). The census is
     every holder with >= 1 interrogative literal that does not arm.
 
     KNOWN_UNARMED_ASK_SITES starts at the census MEASURED 2026-09-12
@@ -4065,11 +4098,11 @@ class TestUnarmedAskSiteRatchet:
     that scope, each carried here so "complete for the space it searched"
     stays visible, m-44):
 
-    1. SCOPE: the two intent reply surfaces only. Question-emitting code
-       elsewhere is not censused: ``services/standup/`` (its conversation
-       machine arms via its own adopted state rail, not the one-slot
-       store — #1739 table), onboarding (on ice, ADR-059), web templates,
-       and above all LLM FREE TEXT — the conversational floor can generate
+    1. SCOPE: ``services/**`` (#2011). Question-emitting code elsewhere is
+       not censused: ``services/standup/`` (its conversation machine arms
+       via its own adopted state rail, not the one-slot store — #1739
+       table), onboarding (on ice, ADR-059), web templates, ``web/`` and
+       ``main.py``, and above all LLM FREE TEXT — the conversational floor can generate
        a question in prose at runtime; no static census can see it. Those
        surfaces' ask-only-when-armed compliance is Present, not Enforced.
     2. GRANULARITY: holder-level. A holder that arms on one path is
@@ -4081,12 +4114,20 @@ class TestUnarmedAskSiteRatchet:
        holds no literal of its own and escapes the census.
     """
 
-    _SCAN_GLOBS = (
-        os.path.join("services", "intent_service", "*.py"),
-        os.path.join("services", "intent", "*.py"),
-    )
+    # #2011 (Arch, 2026-10-14): was services/intent_service/*.py +
+    # services/intent/*.py only; 67 holder sites in packages it neither
+    # scanned nor named escaped it. Recursive over all of services/ now.
+    _SCAN_GLOBS = (os.path.join("services", "**", "*.py"),)
 
     _EXCLUDED_MODULES = frozenset({"services/intent_service/soft_invocation.py"})
+
+    # Excluded BY NAME, each with its reason (class docstring, Scope).
+    _EXCLUDED_PACKAGES = ("services/standup/", "services/onboarding/")
+
+    # #2011 calibration (a)/(b): kwargs whose value is sample/synthesized
+    # USER text, not a Piper ask.
+    _USER_TEXT_KWARGS = frozenset({"utterance", "original_message"})
+    _EXAMPLE_NAME_RE = re.compile(r"(?i)example")
 
     _MATCHER_ATTRS = frozenset(
         {
@@ -4342,6 +4383,347 @@ class TestUnarmedAskSiteRatchet:
                 2,
                 "I found {} todos matching '{}': {}. Which one should I compl",
             ),
+            # ---- MEASURED 2026-10-14 under the #2011 widening (Arch): scope
+            # services/** minus standup/onboarding by name, after the #2011
+            # calibration (classes (a)-(c) + the LastOffer arm signal, class
+            # docstring). A measurement change, not new debt: these asks were
+            # always there, unscanned. Each read at its holder: none arms in
+            # the holder. SHRINK-ONLY from here, same as every row above —
+            # #2010's two questions are format_projects_conscious's 2 literals
+            # (rendered by IntentService._handle_projects_query, which does
+            # not arm); that row leaves when #2010 lands. Holders per package:
+            # consciousness 34 · slot_filling 3 · trust 3 · integrations 2 · memory 2 · mux 2 · api 1 · conversation 1 · home 1 · mcp 1 · personality 1 · process 1 · ui_messages 1 (total 53).
+            # -- services/api/ (1)
+            (
+                "services/api/errors.py",
+                "ERROR_MESSAGES",
+                3,
+                "I couldn't connect to GitHub. Please verify your access toke",
+            ),
+            # -- services/consciousness/ (34)
+            (
+                "services/consciousness/auth_consciousness.py",
+                "format_account_inactive_conscious",
+                1,
+                "Your account isn't active right now. Need help getting acces",
+            ),
+            (
+                "services/consciousness/auth_consciousness.py",
+                "format_invalid_credentials_conscious",
+                1,
+                "Hmm, those credentials didn't work. Want to try again, or ne",
+            ),
+            (
+                "services/consciousness/auth_consciousness.py",
+                "format_session_expired_conscious",
+                1,
+                "Your session timed out - mind logging in again? I'll pick up",
+            ),
+            (
+                "services/consciousness/cli_consciousness.py",
+                "format_cli_error_conscious",
+                1,
+                "I ran into a problem: {}. Want me to try again, or can I hel",
+            ),
+            (
+                "services/consciousness/conversation_consciousness.py",
+                "_build_greeting_invitation",
+                3,
+                "What can I help you with this afternoon?",
+            ),
+            (
+                "services/consciousness/conversation_consciousness.py",
+                "_fix_mvc_gaps",
+                1,
+                ". What can I help you with?",
+            ),
+            (
+                "services/consciousness/error_consciousness.py",
+                "_add_dialogue_invitation",
+                2,
+                "{}. Does that help?",
+            ),
+            (
+                "services/consciousness/error_consciousness.py",
+                "_fix_mvc_gaps",
+                1,
+                ". Would you like me to try again?",
+            ),
+            (
+                "services/consciousness/error_consciousness.py",
+                "format_conversational_error_conscious",
+                1,
+                "Want me to try again, or should we try something different?",
+            ),
+            (
+                "services/consciousness/files_consciousness.py",
+                "_fix_mvc_gaps",
+                1,
+                "Want me to tell you more about any of these?",
+            ),
+            (
+                "services/consciousness/files_consciousness.py",
+                "format_project_detail_conscious",
+                1,
+                "What would you like to do with this project? I can show file",
+            ),
+            (
+                "services/consciousness/files_consciousness.py",
+                "format_projects_conscious",
+                2,
+                "I don't see any projects set up yet. Want me to help you cre",
+            ),
+            (
+                "services/consciousness/injection.py",
+                "fix_mvc_gaps",
+                2,
+                "Anything you'd like me to adjust?",
+            ),
+            (
+                "services/consciousness/learning_consciousness.py",
+                "format_learning_event_conscious",
+                1,
+                "{}. Want me to keep that in mind going forward?",
+            ),
+            (
+                "services/consciousness/learning_consciousness.py",
+                "format_patterns_learned_conscious",
+                2,
+                "Does this match what you see, or should I look at the data d",
+            ),
+            (
+                "services/consciousness/learning_consciousness.py",
+                "format_preference_saved_conscious",
+                1,
+                "Got it - I've set {} to '{}'. Anything else you'd like to ad",
+            ),
+            (
+                "services/consciousness/loading_consciousness.py",
+                "CONSCIOUS_LOADING_MESSAGES",
+                18,
+                "GitHub is taking a while to respond. Should I keep waiting?",
+            ),
+            (
+                "services/consciousness/loading_consciousness.py",
+                "_get_generic_conscious_message",
+                2,
+                "I ran into a problem. Want me to try again?",
+            ),
+            (
+                "services/consciousness/search_consciousness.py",
+                "format_no_results_conscious",
+                1,
+                'I searched but didn\'t find any documents matching "{}". Want',
+            ),
+            (
+                "services/consciousness/search_consciousness.py",
+                "format_search_error_conscious",
+                1,
+                "I ran into a problem while searching: {}. Want me to try aga",
+            ),
+            (
+                "services/consciousness/search_consciousness.py",
+                "format_search_results_conscious",
+                1,
+                "Want me to summarize any of these, or search for something m",
+            ),
+            (
+                "services/consciousness/templates.py",
+                "ACCOMPLISHMENT_RECOGNITION",
+                2,
+                "I didn't find much recorded activity yesterday. You might ha",
+            ),
+            (
+                "services/consciousness/templates.py",
+                "DIALOGUE_INVITATION",
+                4,
+                "Anything I missed or got wrong?",
+            ),
+            (
+                "services/consciousness/templates.py",
+                "GENTLE_FLAGGING",
+                1,
+                "That's a full agenda. If something needs to slip, what would",
+            ),
+            (
+                "services/consciousness/templates.py",
+                "MISSING_DATA_EXPLANATION",
+                6,
+                "I didn't see much GitHub activity yesterday - you might have",
+            ),
+            (
+                "services/consciousness/templates.py",
+                "PRIORITY_FRAMING",
+                3,
+                "Given your {meeting_count} meetings, maybe focus on {priorit",
+            ),
+            (
+                "services/consciousness/templates.py",
+                "TEMPORAL_GREETINGS",
+                3,
+                "End of day? Let's look at what you accomplished...",
+            ),
+            (
+                "services/consciousness/todo_consciousness.py",
+                "_build_closing",
+                3,
+                "How would you like to tackle these? Let me know if you want ",
+            ),
+            (
+                "services/consciousness/todo_consciousness.py",
+                "_fix_mvc_gaps",
+                1,
+                ". Anything you'd like me to adjust?",
+            ),
+            (
+                "services/consciousness/todo_consciousness.py",
+                "format_next_todo_conscious",
+                1,
+                "Does that priority feel right?",
+            ),
+            (
+                "services/consciousness/todo_consciousness.py",
+                "format_todo_deleted_conscious",
+                1,
+                "I've removed '{}' from your list. If that was a mistake, jus",
+            ),
+            (
+                "services/consciousness/ui_consciousness.py",
+                "EMPTY_STATE_MESSAGES",
+                8,
+                "No conversations yet. What would you like to talk about?",
+            ),
+            (
+                "services/consciousness/ui_consciousness.py",
+                "format_delete_confirmation_conscious",
+                2,
+                'Remove "{}"? This can\'t be undone.',
+            ),
+            (
+                "services/consciousness/ui_consciousness.py",
+                "format_toast_error_conscious",
+                1,
+                "I couldn't {}. Want to try again?",
+            ),
+            # -- services/conversation/ (1)
+            (
+                "services/conversation/conversation_handler.py",
+                "ConversationHandler._format_calendar_greeting",
+                1,
+                "What would you like to focus on?",
+            ),
+            # -- services/home/ (1)
+            (
+                "services/home/home_state_service.py",
+                "HomeStateService._generate_greeting",
+                1,
+                "Welcome. What can I help you with?",
+            ),
+            # -- services/integrations/ (2)
+            (
+                "services/integrations/slack/response_handler.py",
+                "SlackResponseHandler._generate_query_response",
+                1,
+                "🤖 I'm Piper Morgan, your AI Product Management Assistant. Ho",
+            ),
+            (
+                "services/integrations/slack/socket_mode_runner.py",
+                "SlackSocketModeRunner._handle_event",
+                2,
+                "I heard you, but couldn't form a response — try me again?",
+            ),
+            # -- services/mcp/ (1)
+            (
+                "services/mcp/consumer/github_adapter.py",
+                "GitHubMCPSpatialAdapter.degrade",
+                1,
+                "Which repo? I couldn't tell which repository you mean — name",
+            ),
+            # -- services/memory/ (2)
+            (
+                "services/memory/greeting_context.py",
+                "GREETING_APPROACHES",
+                7,
+                "Back already! We were working on {topic}—continue?",
+            ),
+            (
+                "services/memory/greeting_context.py",
+                "GreetingContextService._get_suggested_approach",
+                1,
+                "Hello! What can I help you with?",
+            ),
+            # -- services/mux/ (2)
+            (
+                "services/mux/premonition.py",
+                "SURFACING_FRAMES",
+                1,
+                "Can I share something that might help?",
+            ),
+            (
+                "services/mux/pull_mode.py",
+                "CORRECTION_INVITATION",
+                1,
+                "Would you like me to explain any of these, or correct someth",
+            ),
+            # -- services/personality/ (1)
+            (
+                "services/personality/grammar_bridge.py",
+                "PersonalityGrammarBridge.CLOSING_PHRASES",
+                2,
+                "Anything else I can help with?",
+            ),
+            # -- services/process/ (1)
+            (
+                "services/process/adapters.py",
+                "StandupProcessAdapter.has_suspended_session",
+                1,
+                "Your standup was paused. Want to pick it up?",
+            ),
+            # -- services/slot_filling/ (3)
+            (
+                "services/slot_filling/slot_filling_manager.py",
+                "_SLOT_MESSAGES",
+                3,
+                "I lost track of what we were setting up — could you start ag",
+            ),
+            (
+                "services/slot_filling/slot_prompts.py",
+                "format_confirmation",
+                1,
+                "I have: {}. Is that correct?",
+            ),
+            (
+                "services/slot_filling/slot_prompts.py",
+                "format_final_confirmation",
+                2,
+                "Done — {}. Want me to proceed?",
+            ),
+            # -- services/trust/ (3)
+            (
+                "services/trust/delegation.py",
+                "DELEGATION_PATTERNS",
+                1,
+                "Would you like me to {action}?",
+            ),
+            (
+                "services/trust/trust_explainer.py",
+                "TrustExplainer.explain_proactive_action",
+                1,
+                "Can you tell me more about what happened?",
+            ),
+            (
+                "services/trust/trust_explainer.py",
+                "TrustExplainer.get_followup_offer",
+                4,
+                "Does this way of working together feel right to you?",
+            ),
+            # -- services/ui_messages/ (1)
+            (
+                "services/ui_messages/user_friendly_errors.py",
+                "UserFriendlyErrorService.__init__",
+                1,
+                "Please check the format and try again. Need help? Check our ",
+            ),
         }
     )
 
@@ -4378,6 +4760,41 @@ class TestUnarmedAskSiteRatchet:
         assert not p("the '?' character is not a question here")
         assert not p("what? no, not that one")  # '?' + lowercase
         assert not p("ok?")  # below the length floor
+
+    def test_2011_calibration_classes(self):
+        """#2011: the three false-positive classes and the LastOffer arm
+        signal, pinned on minimal shapes (each mirrors its measured example
+        in the class docstring); a local ``question`` variable stays
+        counted."""
+        import ast
+
+        cls = TestUnarmedAskSiteRatchet
+
+        def excluded_texts(code):
+            tree = ast.parse(code)
+            ids = cls._excluded_string_ids(tree, set())
+            return {
+                n.value
+                for n in ast.walk(tree)
+                if isinstance(n, ast.Constant) and isinstance(n.value, str) and id(n) in ids
+            }
+
+        assert "who are you?" in excluded_texts('C(examples=["who are you?"])')  # (a)
+        assert "what is my top priority?" in excluded_texts(
+            'Intent(original_message="what is my top priority?")'
+        )  # (b)
+        assert "How urgent is this issue?" in excluded_texts(
+            'self.question_templates = {1: ["How urgent is this issue?"]}'
+        )  # (c) attribute
+        assert "What day is it?" in excluded_texts(
+            'cfg = {"questions": ["What day is it?"]}'
+        )  # (c) dict key
+        assert "Which project do you mean?" not in excluded_texts(
+            'question = "Which project do you mean?"'
+        )  # a local stays counted
+        assert cls._holder_arms(
+            list(ast.walk(ast.parse('ctx.last_offer = LastOffer(offer_text="x")')))
+        )
 
     @staticmethod
     def _joined_text(node) -> str:
@@ -4425,7 +4842,7 @@ class TestUnarmedAskSiteRatchet:
                     if isinstance(f, ast.Attribute)
                     else (f.id if isinstance(f, ast.Name) else None)
                 )
-                if attr == "set_pending_offer":
+                if attr in ("set_pending_offer", "LastOffer"):
                     return True
                 if any(kw.arg == "question" for kw in sub.keywords):
                     return True
@@ -4489,14 +4906,33 @@ class TestUnarmedAskSiteRatchet:
                     for arg in node.args:
                         excluded.update(id(s) for s in ast.walk(arg))
                 for kw in node.keywords:
-                    if kw.arg == "utterance" or non_emitting:
+                    if (
+                        non_emitting
+                        or kw.arg in cls._USER_TEXT_KWARGS
+                        or (kw.arg is not None and cls._EXAMPLE_NAME_RE.search(kw.arg))
+                    ):
                         excluded.update(id(s) for s in ast.walk(kw.value))
             elif isinstance(node, ast.Compare):
                 excluded.update(id(s) for s in ast.walk(node))
             elif isinstance(node, ast.Dict):
-                for key in node.keys:
+                for key, value in zip(node.keys, node.values):
                     if key is not None:
                         excluded.update(id(s) for s in ast.walk(key))
+                        # #2011 (c): value under a *question*-named key.
+                        if (
+                            isinstance(key, ast.Constant)
+                            and isinstance(key.value, str)
+                            and cls._QUESTION_NAME_RE.search(key.value)
+                        ):
+                            excluded.update(id(s) for s in ast.walk(value))
+            elif isinstance(node, (ast.Assign, ast.AnnAssign)):
+                # #2011 (c): value assigned to a self.*question* attribute.
+                targets = node.targets if isinstance(node, ast.Assign) else [node.target]
+                if node.value is not None and any(
+                    isinstance(t, ast.Attribute) and cls._QUESTION_NAME_RE.search(t.attr)
+                    for t in targets
+                ):
+                    excluded.update(id(s) for s in ast.walk(node.value))
             elif isinstance(node, ast.Raise):
                 excluded.update(id(s) for s in ast.walk(node))
         return excluded
@@ -4568,9 +5004,9 @@ class TestUnarmedAskSiteRatchet:
         parsed = []
         utterance_ctors = set()
         for pattern in self._SCAN_GLOBS:
-            for path in sorted(glob.glob(os.path.join(root, pattern))):
+            for path in sorted(glob.glob(os.path.join(root, pattern), recursive=True)):
                 rel = os.path.relpath(path, root).replace(os.sep, "/")
-                if rel in self._EXCLUDED_MODULES:
+                if rel in self._EXCLUDED_MODULES or rel.startswith(self._EXCLUDED_PACKAGES):
                     continue
                 with open(path, encoding="utf-8") as fh:
                     source = fh.read()
@@ -4641,7 +5077,10 @@ class TestUnarmedAskSiteRatchet:
         world — an empty derivation is indistinguishable from a broken
         scanner and must fail loudly, never pass as 'no violations'."""
         rows, stats = self._census()
-        assert stats["files"] >= 40, (
+        # Floor 40 -> 400 (2026-10-14, #2011): measured 454 files under the
+        # services/** widening; 400 also fails if the glob silently reverts
+        # to the old two packages (56 files).
+        assert stats["files"] >= 400, (
             f"ask-site census scanned only {stats['files']} files — the scan "
             f"glob broke; fix the derivation before trusting any result."
         )
