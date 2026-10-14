@@ -293,7 +293,7 @@ ACCEPT_PATTERNS = [
 # row and never the unanchored prose rows below it. Same literal, same
 # position in DECLINE_PATTERNS — one vocabulary.
 FULL_MESSAGE_DECLINE_RE = re.compile(
-    r"^(?:no|nah|nope|not now|not right now|never mind|i'?m good|no thanks|no thank you|just venting|skip)\.?!?$",
+    r"^(?:no|nah|nope|never mind|i'?m good|no thanks|no thank you|just venting|skip)\.?!?$",
     re.IGNORECASE,
 )
 
@@ -303,10 +303,26 @@ DECLINE_PATTERNS = [
     re.compile(p, re.IGNORECASE)
     for p in [
         r"^(?:no|nah),?\s",
-        r"\b(?:not (?:now|right now|yet|today)|maybe later|i'?m (?:good|fine|okay)|just (?:venting|thinking|wondering))\b",
-        r"\bno,?\s*(?:thanks|thank you|i'?m good|that'?s okay)\b",
+        r"\b(?:i'?m (?:good|fine|okay)|just (?:venting|thinking|wondering)|no,?\s*(?:thanks|thank you|i'?m good|that'?s okay))\b",
     ]
 ]
+
+# #1771: DEFERRAL phrasings, split out of the decline vocabulary (moved, not
+# added: the literal count of this module is unchanged). "Not now" is not
+# "no": at most seams a deferral only cancels a one-turn offer, exactly like
+# a decline, so every adopted seam treats DEFER as DECLINE
+# (``defer_as_decline``); the resume-offer seam (#1769) is the one place the
+# difference matters (decline abandons the suspended flow, defer leaves it).
+DEFER_PATTERNS = [
+    re.compile(p, re.IGNORECASE)
+    for p in [
+        r"\b(?:not (?:now|right now|yet|today)|maybe later)\b",
+    ]
+]
+
+# #2004: the bare full-message deferrals that were rows of
+# FULL_MESSAGE_DECLINE_RE before #1771 (nothing-open pleasantry unchanged).
+_BARE_DEFERRALS = frozenset({"not now", "not right now"})
 
 
 # --- #1650: CONFIRM-tier accept vocabulary (stricter than generic offers) ---
@@ -384,8 +400,8 @@ def detect_confirm_response(message: str) -> Optional[str]:
     )
     if verdict is AcceptanceVerdict.ACCEPT:
         return "accept"
-    if verdict is AcceptanceVerdict.DECLINE:
-        return "decline"
+    if verdict in (AcceptanceVerdict.DECLINE, AcceptanceVerdict.DEFER):
+        return "decline"  # #1771: legacy callers only know decline
     return None
 
 
@@ -516,7 +532,7 @@ def detect_offer_response(message: str, *, prose_override: bool = True) -> Optio
         if pattern.search(clean):
             return "accept"
 
-    for pattern in DECLINE_PATTERNS:
+    for pattern in DECLINE_PATTERNS + DEFER_PATTERNS:  # #1771: defer reads as decline here
         if pattern.search(clean):
             return "decline"
 
@@ -757,4 +773,10 @@ def is_bare_decline(text: str) -> bool:
     decline forms ("never mind", "no thanks", "skip" …). Anchored both ends:
     "never mind, show my todos" is not bare. Reads the same row the armed
     seams decline on, so a bare decline means the same thing armed or not."""
-    return bool(FULL_MESSAGE_DECLINE_RE.match((text or "").strip()))
+    return bool(FULL_MESSAGE_DECLINE_RE.match((text or "").strip())) or is_bare_deferral(text)
+
+
+def is_bare_deferral(text: str) -> bool:
+    """#1771 — True when the WHOLE message is a bare full-message deferral
+    ("not now", "not right now")."""
+    return (text or "").strip().lower().rstrip(".!") in _BARE_DEFERRALS

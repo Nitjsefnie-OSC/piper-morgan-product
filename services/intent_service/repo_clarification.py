@@ -758,16 +758,19 @@ async def handle_repo_question_turn(
     from services.intent_service.acceptance import (
         AcceptanceVerdict,
         declared_axes_for_workflow,
+        defer_as_decline,
         evaluate_acceptance,
     )
     from services.intent_service.soft_invocation import detect_offer_response
 
     _axes = declared_axes_for_workflow(pending_offer.get("workflow_type")) or (None, None)
-    verdict = evaluate_acceptance(
-        text,
-        effect=_axes[0],
-        outwardness=_axes[1],
-        armed_question=pending_offer.get("question"),
+    verdict = defer_as_decline(
+        evaluate_acceptance(
+            text,
+            effect=_axes[0],
+            outwardness=_axes[1],
+            armed_question=pending_offer.get("question"),
+        )
     )
     if verdict is AcceptanceVerdict.STATE_QUESTION:
         # Contract §3 + CXO's arm-survival ruling (§5a/§5b): a question-form

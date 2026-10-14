@@ -248,15 +248,18 @@ async def handle_delete_todo_pick_turn(
     from services.intent_service.acceptance import (
         AcceptanceVerdict,
         declared_axes_for_workflow,
+        defer_as_decline,
         evaluate_acceptance,
     )
 
     axes = declared_axes_for_workflow(CLARIFY_DELETE_PICK_WORKFLOW)
-    verdict = evaluate_acceptance(
-        text,
-        effect=axes[0] if axes else None,
-        outwardness=axes[1] if axes else None,
-        armed_question=pending_offer.get("question"),  # #1665: threaded from the record
+    verdict = defer_as_decline(
+        evaluate_acceptance(
+            text,
+            effect=axes[0] if axes else None,
+            outwardness=axes[1] if axes else None,
+            armed_question=pending_offer.get("question"),  # #1665: threaded from the record
+        )
     )
     if verdict is AcceptanceVerdict.STATE_QUESTION:
         logger.info("delete_todo_pick_state_question_falls_through", session_id=session_id)

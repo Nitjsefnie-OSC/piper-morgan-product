@@ -1522,15 +1522,18 @@ async def _handle_pick_target_turn(
     from services.intent_service.acceptance import (
         AcceptanceVerdict,
         declared_axes_for_workflow,
+        defer_as_decline,
         evaluate_acceptance,
     )
 
     _axes = declared_axes_for_workflow(CLEAR_PICK_TARGET_WORKFLOW)
-    verdict = evaluate_acceptance(
-        text,
-        effect=_axes[0] if _axes else None,
-        outwardness=_axes[1] if _axes else None,
-        armed_question=armed_question,  # #1665: threaded from the offer record
+    verdict = defer_as_decline(
+        evaluate_acceptance(
+            text,
+            effect=_axes[0] if _axes else None,
+            outwardness=_axes[1] if _axes else None,
+            armed_question=armed_question,  # #1665: threaded from the offer record
+        )
     )
     if verdict is AcceptanceVerdict.STATE_QUESTION:
         logger.info(
@@ -1815,16 +1818,19 @@ async def _handle_verb_answer_turn(
     from services.intent_service.acceptance import (
         AcceptanceVerdict,
         declared_axes_for_workflow,
+        defer_as_decline,
         evaluate_acceptance,
     )
     from services.intent_service.soft_invocation import is_prose_reply
 
     _axes = declared_axes_for_workflow(CLARIFY_CLEAR_VERB_WORKFLOW)
-    verdict = evaluate_acceptance(
-        message,
-        effect=_axes[0] if _axes else None,
-        outwardness=_axes[1] if _axes else None,
-        armed_question=armed_question,  # #1665: threaded from the offer record
+    verdict = defer_as_decline(
+        evaluate_acceptance(
+            message,
+            effect=_axes[0] if _axes else None,
+            outwardness=_axes[1] if _axes else None,
+            armed_question=armed_question,  # #1665: threaded from the offer record
+        )
     )
     if verdict is AcceptanceVerdict.STATE_QUESTION:
         logger.info(
@@ -2104,6 +2110,7 @@ async def _handle_correction_turn(
     from services.intent_service.acceptance import (
         AcceptanceVerdict,
         declared_axes_for_workflow,
+        defer_as_decline,
         evaluate_acceptance,
     )
     from services.intent_service.soft_invocation import is_prose_reply

@@ -256,6 +256,7 @@ async def handle_add_project_name_turn(
     from services.intent_service.acceptance import (
         AcceptanceVerdict,
         declared_axes_for_workflow,
+        defer_as_decline,
         evaluate_acceptance,
     )
     from services.intent_service.destructive_confirm import detect_bare_exit
@@ -291,11 +292,13 @@ async def handle_add_project_name_turn(
         return None  # generic flow → honest decline via decline_message
 
     _axes = declared_axes_for_workflow(CLARIFY_ADD_PROJECT_NAME_WORKFLOW)
-    verdict = evaluate_acceptance(
-        text,
-        effect=_axes[0] if _axes else None,
-        outwardness=_axes[1] if _axes else None,
-        armed_question=pending_offer.get("question"),  # #1665: from the record
+    verdict = defer_as_decline(
+        evaluate_acceptance(
+            text,
+            effect=_axes[0] if _axes else None,
+            outwardness=_axes[1] if _axes else None,
+            armed_question=pending_offer.get("question"),  # #1665: from the record
+        )
     )
     if verdict is AcceptanceVerdict.DECLINE:
         return None  # generic flow → honest decline via decline_message
@@ -495,7 +498,11 @@ async def handle_add_project_confirm_turn(
     pending action; normal processing answers the new message. No copy is
     invented here beyond CXO's own confirm/decline strings.
     """
-    from services.intent_service.acceptance import AcceptanceVerdict, evaluate_acceptance
+    from services.intent_service.acceptance import (
+        AcceptanceVerdict,
+        defer_as_decline,
+        evaluate_acceptance,
+    )
     from services.intent_service.destructive_confirm import detect_bare_exit
 
     payload = pending_offer.get("pending_action") or {}
@@ -522,11 +529,13 @@ async def handle_add_project_confirm_turn(
     if detect_bare_exit(text):
         return None  # generic flow → honest decline via decline_message, no re-arm
 
-    verdict = evaluate_acceptance(
-        text,
-        effect=None,  # None → NAMED_OBJECT tier (acceptance_tier's safe direction)
-        outwardness=None,
-        armed_question=pending_offer.get("question"),
+    verdict = defer_as_decline(
+        evaluate_acceptance(
+            text,
+            effect=None,  # None → NAMED_OBJECT tier (acceptance_tier's safe direction)
+            outwardness=None,
+            armed_question=pending_offer.get("question"),
+        )
     )
     if verdict is AcceptanceVerdict.DECLINE:
         return None  # generic flow → honest decline via decline_message, no re-arm

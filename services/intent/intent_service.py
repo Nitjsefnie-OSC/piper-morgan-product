@@ -221,6 +221,9 @@ _RESUME_TAUGHT_DECLINES = frozenset(
         "start fresh",
     }
 )
+# CXO-PENDING (#1771): placeholder reply when the user defers the resume offer
+# ("not now"); the suspended flow stays SUSPENDED. Wording is CXO's call.
+RESUME_DEFER_REPLY = "Okay, I'll leave it where it is."
 _RESUME_ARMED_ONLY_DECLINES = frozenset(
     {
         "restart",
@@ -1766,6 +1769,7 @@ class IntentService:
                 from services.intent_service.acceptance import (
                     AcceptanceVerdict,
                     declared_axes_for_workflow,
+                    defer_as_decline,
                     evaluate_acceptance,
                 )
                 from services.shared_types import EffectClass as _EC
@@ -1788,11 +1792,13 @@ class IntentService:
                     # CXO-owned #1739 work; until then every kind on this
                     # carrier accepts at the CONFIRM bar exactly as #1650
                     # shipped it.
-                    _verdict = evaluate_acceptance(
-                        message,
-                        effect=_axes[0] if _axes else _EC.DESTRUCTIVE,
-                        outwardness=_axes[1] if _axes else None,
-                        armed_question=pending_offer.get("question"),
+                    _verdict = defer_as_decline(
+                        evaluate_acceptance(
+                            message,
+                            effect=_axes[0] if _axes else _EC.DESTRUCTIVE,
+                            outwardness=_axes[1] if _axes else None,
+                            armed_question=pending_offer.get("question"),
+                        )
                     )
                     if _verdict is AcceptanceVerdict.STATE_QUESTION:
                         # CXO's arm-survival ruling (contract doc §5a/§5b,
@@ -1843,13 +1849,15 @@ class IntentService:
                     )
 
                     if _axes is not None and _axes[0] == _EC.READ:
-                        _verdict = evaluate_acceptance(
-                            message,
-                            effect=_axes[0],
-                            outwardness=_axes[1],
-                            # #1665: the rendered ask rides the offer record;
-                            # arm sites for every READ kind here store it.
-                            armed_question=pending_offer.get("question"),
+                        _verdict = defer_as_decline(
+                            evaluate_acceptance(
+                                message,
+                                effect=_axes[0],
+                                outwardness=_axes[1],
+                                # #1665: the rendered ask rides the offer record;
+                                # arm sites for every READ kind here store it.
+                                armed_question=pending_offer.get("question"),
+                            )
                         )
                         if _verdict is AcceptanceVerdict.STATE_QUESTION:
                             self.workflow_offer_service.set_pending_offer(
@@ -1914,11 +1922,13 @@ class IntentService:
                         # "yes" binds to an ask the user saw this turn. No
                         # stored ask → nothing to restate → the pop stands
                         # (contract §3).
-                        _verdict = evaluate_acceptance(
-                            message,
-                            effect=_axes[0] if _axes else None,
-                            outwardness=_axes[1] if _axes else None,
-                            armed_question=pending_offer.get("question"),
+                        _verdict = defer_as_decline(
+                            evaluate_acceptance(
+                                message,
+                                effect=_axes[0] if _axes else None,
+                                outwardness=_axes[1] if _axes else None,
+                                armed_question=pending_offer.get("question"),
+                            )
                         )
                         if _verdict is AcceptanceVerdict.STATE_QUESTION:
                             response_type = None
@@ -1990,11 +2000,13 @@ class IntentService:
                         # other turn. Before #1652 the legacy detector
                         # returned None on a question and the off-intent pop
                         # silently cost the user the pending ask.
-                        _verdict = evaluate_acceptance(
-                            message,
-                            effect=_axes[0] if _axes else None,
-                            outwardness=_axes[1] if _axes else None,
-                            armed_question=pending_offer.get("question"),
+                        _verdict = defer_as_decline(
+                            evaluate_acceptance(
+                                message,
+                                effect=_axes[0] if _axes else None,
+                                outwardness=_axes[1] if _axes else None,
+                                armed_question=pending_offer.get("question"),
+                            )
                         )
                         if _verdict is AcceptanceVerdict.STATE_QUESTION:
                             self.workflow_offer_service.set_pending_offer(
@@ -3822,7 +3834,11 @@ class IntentService:
         """
         if not session_id:
             return None
-        from services.intent_service.acceptance import AcceptanceVerdict, evaluate_acceptance
+        from services.intent_service.acceptance import (
+        AcceptanceVerdict,
+        defer_as_decline,
+        evaluate_acceptance,
+    )
         from services.intent_service.conversation_context import get_or_create_context
         from services.intent_service.list_remainder import (
             LIST_REMAINDER_TAUGHT_ACCEPTS,
@@ -3839,12 +3855,14 @@ class IntentService:
         if remainder is None:
             return None
 
-        verdict = evaluate_acceptance(
-            message,
-            effect=EffectClass.READ,
-            outwardness=Outwardness.PRIVATE,
-            armed_question=remainder.offer_text,
-            taught_accepts=LIST_REMAINDER_TAUGHT_ACCEPTS,
+        verdict = defer_as_decline(
+            evaluate_acceptance(
+                message,
+                effect=EffectClass.READ,
+                outwardness=Outwardness.PRIVATE,
+                armed_question=remainder.offer_text,
+                taught_accepts=LIST_REMAINDER_TAUGHT_ACCEPTS,
+            )
         )
 
         if verdict is AcceptanceVerdict.DECLINE:
@@ -3963,9 +3981,15 @@ class IntentService:
             # #1529: "end standup" against a suspended standup ends it — no
             # classifier involved. Deterministic, checked FIRST (a flow exit
             # is a command, not an offer reply).
+            from services.intent_service.soft_invocation import is_bare_deferral
             from services.process.escape import detect_flow_exit
 
-            if detect_flow_exit(message, suspended.process_type):
+            # #1771: a bare "not now" answering the resume offer is a DEFER
+            # (handled below; the flow stays suspended), not the #1529
+            # bare-exit command that closes an ACTIVE flow.
+            if detect_flow_exit(message, suspended.process_type) and not (
+                resume_offer_pending and is_bare_deferral(message)
+            ):
                 self.logger.info(
                     "Suspended process ended by flow-exit phrase",
                     user_id=user_id,
@@ -3994,6 +4018,7 @@ class IntentService:
             from services.intent_service.acceptance import (
                 AcceptanceVerdict,
                 declared_axes_for_workflow,
+                defer_as_decline,
                 evaluate_acceptance,
             )
 
@@ -4049,6 +4074,34 @@ class IntentService:
                 if suspended.process_type == ProcessType.STANDUP:
                     return await self._resume_suspended_standup(user_id, session_id)
                 # ADR-059: Onboarding resume disabled (onboarding on ice)
+
+            elif verdict is AcceptanceVerdict.DEFER:
+                # #1771: "not now" / "maybe later" is not "start fresh". The
+                # offer is dismissed for this turn (one-turn expiry, not
+                # re-armed) and the suspended flow stays SUSPENDED — nothing
+                # is abandoned; the next greeting re-offers it.
+                self.logger.info(
+                    "User deferred resume offer",
+                    user_id=user_id,
+                    process_type=suspended.process_type.value,
+                )
+                if suspended.process_type == ProcessType.STANDUP:
+                    return IntentProcessingResult(
+                        success=True,
+                        # CXO-PENDING (#1771): placeholder copy, wording is CXO's call.
+                        message=RESUME_DEFER_REPLY,
+                        intent_data={
+                            "category": "guidance",
+                            "action": "suspended_session_deferred",
+                            "confidence": 1.0,
+                            "context": {
+                                "user_id": user_id,
+                                "process_type": ProcessType.STANDUP.value,
+                            },
+                        },
+                        workflow_id=None,
+                        requires_clarification=False,
+                    )
 
             elif verdict is AcceptanceVerdict.DECLINE:
                 self.logger.info(

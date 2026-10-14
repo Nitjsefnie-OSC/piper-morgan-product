@@ -665,6 +665,7 @@ async def handle_clear_todos_verb_answer(
     from services.intent_service.acceptance import (
         AcceptanceVerdict,
         declared_axes_for_workflow,
+        defer_as_decline,
         evaluate_acceptance,
     )
     from services.intent_service.armed_turn_consult import (
@@ -715,11 +716,13 @@ async def handle_clear_todos_verb_answer(
     key = _rc.inference_key(_CLEAR_VERB_LITERAL)
 
     _axes = declared_axes_for_workflow(_rc.CLARIFY_CLEAR_VERB_WORKFLOW)
-    verdict = evaluate_acceptance(
-        message,
-        effect=_axes[0] if _axes else None,
-        outwardness=_axes[1] if _axes else None,
-        armed_question=armed_question,
+    verdict = defer_as_decline(
+        evaluate_acceptance(
+            message,
+            effect=_axes[0] if _axes else None,
+            outwardness=_axes[1] if _axes else None,
+            armed_question=armed_question,
+        )
     )
     if verdict is AcceptanceVerdict.STATE_QUESTION:
         logger.info("clear_todos_verb_state_question_falls_through", session_id=session_id)

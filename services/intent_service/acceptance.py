@@ -80,6 +80,12 @@ class AcceptanceVerdict(Enum):
 
     ACCEPT = "accept"  # consent granted — the armed action may fire
     DECLINE = "decline"  # consent withheld — cancel honestly, nothing fires
+    # #1771: a DEFERRAL ("not now", "maybe later") — not consent, but not a
+    # refusal either. Every adopted seam treats it as DECLINE
+    # (``defer_as_decline``: a one-turn offer is simply dropped) EXCEPT the
+    # resume-offer seam (#1769), where DECLINE abandons the suspended flow
+    # and DEFER leaves it SUSPENDED.
+    DEFER = "defer"
     # A query about state — NOT a failed acceptance (CXO's ruling). The seam
     # answers truthfully and the arm is neither consumed nor silently
     # dropped. HOW it survives is PER-TIER, stated (not inherited) per CXO's
@@ -100,6 +106,13 @@ class AcceptanceVerdict(Enum):
     # documented off-intent rule applies (#1190: the pop already cancelled
     # the action; normal processing answers the turn).
     PASS = "pass"
+
+
+def defer_as_decline(verdict: "AcceptanceVerdict") -> "AcceptanceVerdict":
+    """#1771: seams with no use for the deferral distinction read DEFER as
+    DECLINE (their pre-#1771 behavior). Only the resume-offer seam consults
+    the raw verdict."""
+    return AcceptanceVerdict.DECLINE if verdict is AcceptanceVerdict.DEFER else verdict
 
 
 class AcceptanceTier(IntEnum):
@@ -237,6 +250,8 @@ def evaluate_acceptance(
         decline     → the shared decline vocabulary, plus taught phrases at
                       LOW_CEREMONY (declines were never the greedy hazard,
                       and a decline only cancels)
+        defer       → DEFER (#1771: "not now" / "maybe later"; after decline
+                      so "no, not now" stays a decline)
         otherwise   → PASS
     """
     # Absorbed #1650/#1631 machinery — the vocabularies stay declared at
@@ -245,6 +260,7 @@ def evaluate_acceptance(
         ACCEPT_PATTERNS,
         CONFIRM_ACCEPT_RE,
         DECLINE_PATTERNS,
+        DEFER_PATTERNS,
         is_prose_reply,
     )
 
@@ -300,6 +316,10 @@ def evaluate_acceptance(
     for pattern in DECLINE_PATTERNS:
         if pattern.search(clean):
             return AcceptanceVerdict.DECLINE
+
+    for pattern in DEFER_PATTERNS:
+        if pattern.search(clean):
+            return AcceptanceVerdict.DEFER
 
     return AcceptanceVerdict.PASS
 

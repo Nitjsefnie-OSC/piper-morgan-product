@@ -2240,6 +2240,7 @@ async def handle_reminder_time_turn(
     from services.intent_service.acceptance import (
         AcceptanceVerdict,
         declared_axes_for_workflow,
+        defer_as_decline,
         evaluate_acceptance,
     )
     from services.intent_service.destructive_confirm import detect_bare_exit
@@ -2287,11 +2288,13 @@ async def handle_reminder_time_turn(
     #    and ACCEPT at this seam only ever re-asks (never fires), so the
     #    accept surface loosens nothing (#1652's argument, verbatim).
     _axes = declared_axes_for_workflow(CLARIFY_REMINDER_TIME_WORKFLOW)
-    verdict = evaluate_acceptance(
-        text,
-        effect=_axes[0] if _axes else None,
-        outwardness=_axes[1] if _axes else None,
-        armed_question=pending_offer.get("question"),  # #1665: from the record
+    verdict = defer_as_decline(
+        evaluate_acceptance(
+            text,
+            effect=_axes[0] if _axes else None,
+            outwardness=_axes[1] if _axes else None,
+            armed_question=pending_offer.get("question"),  # #1665: from the record
+        )
     )
     if verdict is AcceptanceVerdict.DECLINE:
         return None  # generic flow → honest decline via decline_message
@@ -2614,6 +2617,7 @@ async def handle_reminder_task_turn(
     from services.intent_service.acceptance import (
         AcceptanceVerdict,
         declared_axes_for_workflow,
+        defer_as_decline,
         evaluate_acceptance,
     )
     from services.intent_service.destructive_confirm import detect_bare_exit
@@ -2657,11 +2661,13 @@ async def handle_reminder_task_turn(
     #    at all and BOUND as the task text, so the widening is a strict
     #    improvement here.
     _axes = declared_axes_for_workflow(CLARIFY_REMINDER_TASK_WORKFLOW)
-    verdict = evaluate_acceptance(
-        text,
-        effect=_axes[0] if _axes else None,
-        outwardness=_axes[1] if _axes else None,
-        armed_question=pending_offer.get("question"),  # #1665: from the record
+    verdict = defer_as_decline(
+        evaluate_acceptance(
+            text,
+            effect=_axes[0] if _axes else None,
+            outwardness=_axes[1] if _axes else None,
+            armed_question=pending_offer.get("question"),  # #1665: from the record
+        )
     )
     if verdict is AcceptanceVerdict.DECLINE:
         return None  # generic flow → honest decline via decline_message
