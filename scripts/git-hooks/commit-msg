@@ -2,6 +2,7 @@
 # Candidate COMMON-DIR .git/hooks/commit-msg: #1934's "better primary layer" proposal for the
 # #1691 auto-close guard and the #1845 bearer-credential guard.
 #
+# Concept: docs/internal/operations/commit-message-guards.md (doorway 3).
 # STATUS: CO-SIGNED by CIO 2026-10-13 (after a fail-open fix for a crashing checker), NOT INSTALLED.
 # Install after the 10-13 history rewrite has settled; xian pastes it (agent seats are refused writes
 # to .git/hooks):

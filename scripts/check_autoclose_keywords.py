@@ -30,6 +30,8 @@ Exit 0 = safe, 1 = refused (reasons on stderr; a bearer hit is printed MASKED on
 Usage:
     scripts/check_autoclose_keywords.py "message text"      # argument
     printf '%s' "message" | scripts/check_autoclose_keywords.py -   # stdin
+
+Concept: docs/internal/operations/commit-message-guards.md (one checker, three doorways; the third is scripts/git-hooks/commit-msg).
 """
 
 from __future__ import annotations
