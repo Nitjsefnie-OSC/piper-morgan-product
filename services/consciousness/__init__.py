@@ -48,13 +48,10 @@ from services.consciousness.error_consciousness import (
     format_error_conscious,
 )
 from services.consciousness.files_consciousness import (
-    format_project_detail_conscious,
     format_projects_conscious,
 )
 from services.consciousness.learning_consciousness import (
-    format_learning_event_conscious,
     format_patterns_learned_conscious,
-    format_preference_saved_conscious,
 )
 from services.consciousness.loading_consciousness import (
     format_progress_conscious,
@@ -118,11 +115,8 @@ __all__ = [
     "format_search_error_conscious",
     # Files/Projects consciousness (Issue #635)
     "format_projects_conscious",
-    "format_project_detail_conscious",
     # Learning consciousness (Issue #636)
     "format_patterns_learned_conscious",
-    "format_preference_saved_conscious",
-    "format_learning_event_conscious",
     # Auth/Settings consciousness (Issue #637)
     "format_login_success_conscious",
     "format_logout_success_conscious",

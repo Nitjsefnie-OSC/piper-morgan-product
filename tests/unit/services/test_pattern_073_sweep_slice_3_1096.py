@@ -41,7 +41,10 @@ def test_patterns_learned_does_not_promise_persistent_memory(
     # Find the function body
     src = learning_consciousness_source
     start = src.find("def format_patterns_learned_conscious")
-    end = src.find("def format_preference_saved_conscious")
+    # #2011: format_preference_saved_conscious (the old end marker) was
+    # deleted as unreachable; the block now runs to the next def or EOF.
+    end = src.find("\ndef ", start + 1)
+    end = len(src) if end < 0 else end
     assert start >= 0 and end > start
     block = src[start:end]
     # The promised-future phrasing must be gone

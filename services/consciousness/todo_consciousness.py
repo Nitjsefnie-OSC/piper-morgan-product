@@ -33,8 +33,7 @@ def format_todo_list_conscious(todos: List[Todo], include_completed: bool = Fals
          The Review PR item seems important based on the priority you set.
          There's also the Fix bug task waiting.
 
-         How would you like to tackle these? Let me know if you want to
-         reprioritize anything."
+         How would you like to tackle these?"
 
     Args:
         todos: List of Todo objects
@@ -262,11 +261,11 @@ def _build_closing(total: int, urgent: int) -> str:
     if urgent > 0:
         return "Those urgent items might be worth tackling first. How would you like to approach today?"
     elif total > 5:
-        return "That's a full list. Want help prioritizing, or should I focus on a specific area?"
+        return "That's a full list. Where would you like to start?"
     else:
-        return (
-            "How would you like to tackle these? Let me know if you want to reprioritize anything."
-        )
+        # #2011: "Let me know if you want to reprioritize anything." dropped —
+        # no op changes a todo's priority ("prioritize" is a READ ranking).
+        return "How would you like to tackle these?"
 
 
 def _fix_mvc_gaps(narrative: str, mvc_result) -> str:

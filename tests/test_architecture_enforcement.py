@@ -4507,7 +4507,14 @@ class TestUnarmedAskSiteRatchet:
             # path rendered them); deleted, their 6 holders with them
             # (ACCOMPLISHMENT_RECOGNITION, DIALOGUE_INVITATION, GENTLE_FLAGGING,
             # MISSING_DATA_EXPLANATION, PRIORITY_FRAMING, injection.fix_mvc_gaps).
-            # -- services/consciousness/ (17)
+            # 28 -> 22 (2026-10-14, T2 per CXO): search ×3 and learning's
+            # format_patterns_learned_conscious offer became statements (CXO
+            # verbatim); format_project_detail_conscious,
+            # format_learning_event_conscious, format_preference_saved_conscious
+            # deleted (no consumer beyond the package re-export). todo
+            # _build_closing re-measured (CXO 265; 268's reprioritize claim
+            # dropped — no op changes a todo's priority).
+            # -- services/consciousness/ (11)
             (
                 "services/consciousness/error_consciousness.py",
                 "_add_dialogue_invitation",
@@ -4534,33 +4541,15 @@ class TestUnarmedAskSiteRatchet:
             ),
             (
                 "services/consciousness/files_consciousness.py",
-                "format_project_detail_conscious",
-                1,
-                "What would you like to do with this project? I can show file",
-            ),
-            (
-                "services/consciousness/files_consciousness.py",
                 "format_projects_conscious",
                 2,
                 "I don't see any projects set up yet. Want me to help you cre",
             ),
             (
                 "services/consciousness/learning_consciousness.py",
-                "format_learning_event_conscious",
-                1,
-                "{}. Want me to keep that in mind going forward?",
-            ),
-            (
-                "services/consciousness/learning_consciousness.py",
                 "format_patterns_learned_conscious",
-                2,
-                "Does this match what you see, or should I look at the data d",
-            ),
-            (
-                "services/consciousness/learning_consciousness.py",
-                "format_preference_saved_conscious",
                 1,
-                "Got it - I've set {} to '{}'. Anything else you'd like to ad",
+                "I looked through {} items but didn't spot any clear patterns",
             ),
             (
                 "services/consciousness/loading_consciousness.py",
@@ -4575,28 +4564,10 @@ class TestUnarmedAskSiteRatchet:
                 "I ran into a problem. Want me to try again?",
             ),
             (
-                "services/consciousness/search_consciousness.py",
-                "format_no_results_conscious",
-                1,
-                'I searched but didn\'t find any documents matching "{}". Want',
-            ),
-            (
-                "services/consciousness/search_consciousness.py",
-                "format_search_error_conscious",
-                1,
-                "I ran into a problem while searching: {}. Want me to try aga",
-            ),
-            (
-                "services/consciousness/search_consciousness.py",
-                "format_search_results_conscious",
-                1,
-                "Want me to summarize any of these, or search for something m",
-            ),
-            (
                 "services/consciousness/todo_consciousness.py",
                 "_build_closing",
                 3,
-                "How would you like to tackle these? Let me know if you want ",
+                "How would you like to tackle these?",
             ),
             (
                 "services/consciousness/todo_consciousness.py",
