@@ -13,7 +13,7 @@
   - Italic aside paragraphs are a PM device; leave them (xian 10-12).
   - Wed 10-14 Ship #064 "Code Decides Permission": PUBLISH-READY sent to Docs 10-13 (PM's edits + Comms fixes with PM's OK, 1,959 words). Calendar ready-for-docs. Docs pre-flight clean, publishing Wed at /shipping-news/weekly-ship-064-code-decides-permission/. Next: live check after Docs publishes.
 - **Waiting on PM** (all on Exec's rollup):
-  - privacy Section C **FINAL v3 (10-13)**: all 4 answered by PM (trash then purge, manual deletion via support@ meanwhile, 14 days, logs keep only fingerprints, Lead ec2cc9d44f). Asked PM in conversation for the go to send to Web (outward-facing). On the go: send Web the final text, the opening-sentence widening (page.tsx L36) and a bump to "Last updated".
+  - privacy Section C: PM go 10-13 ~18:40, handed to Web (go-comms-to-web-cc-exec-privacy-section-c-your-piper-account-final-text-pm-go-2026-10-13.md, 1dd0aa5a4). Next: fact-check the rendered /privacy against the memo text when Web replies.
   - the mining-pass picks (sent 10-09).
   - a verdict on the first scaffold (Sep 6, `the-unguarded-entrance.md`, Tue 11-03). The next scaffold (Sep 7–10) waits on it.
 - **Done since the lines below were written**: the mining pass (10-09, next due 10-23); the blog template review; the No Undo alt
