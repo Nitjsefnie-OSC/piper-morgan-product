@@ -8,7 +8,7 @@ with a fresh test card"). Rolling doc: rows get added when a fix needs PM's live
 **Surface**: alpha.pipermorgan.ai · **running `b713b91cb5`** (read from /health 12:09 10-13 after promotion run 38451337983, dispatched
 by Exec at 12:00 on xian's direct word; no approval step any more). **Everything on this card is live: #1987 both halves + the thanks step (71e213b885 / a9f8cd16d1), #2001 (143f9a9a83), #1976 (84a313394d), the meeting_time example (d13dafd172), logs-keep-only-fingerprints (ec2cc9d44f). Previous: `6e48d9ebb2` (10-12 21:46).**
 
-**Promotion recipe (on PM's explicit word only; no browser, no approval step since 10-13):**
+**Step 0 — promote the build (PM's hand, on PM's explicit word only; no browser, no approval step since 10-13). Do this before row 1; wait for Lead's "ready" first, since the gate refuses until Tests is green on the staging code:**
 ```
 gh workflow run fly-deploy.yml -R mediajunkie/piper-morgan-product --ref main -f promote_to_alpha=true
 ```
