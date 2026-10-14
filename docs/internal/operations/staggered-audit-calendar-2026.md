@@ -21,15 +21,14 @@
 
 ### Quarterly sweep scope
 
-`.github/workflows/quarterly-maintenance.yml` opens a "Quarterly Maintenance Sweep" issue on the first day of January, April, July and October (pattern from #449, the Q3 2026 close ran in #1909). The sweep covers five things, and the issue's checklist is the working list:
+`.github/workflows/quarterly-maintenance.yml` opens a "Quarterly Maintenance Sweep" issue on the first day of January, April, July and October (pattern from #449, the Q3 2026 close ran in #1909). The sweep covers four things, and the issue's checklist is the working list:
 
 1. **Documentation cleanup**: triage `dev/active/`, scan the `docs/` root for misplaced files, check NAVIGATION links, confirm the briefing is fresh.
 2. **Archive review**: move deprecated folders to `archive/`, update README stubs, look for orphan directories.
 3. **Code hygiene**: directories missing `__init__.py`, TODOs without an issue number, hard-coded test data.
 4. **Agent infrastructure**: undelivered mail, each role archiving its own `mailboxes/{role}/read/` with `scripts/archive-mailbox-read.py`, outdated skills, hooks still working, editorial calendar column count.
-5. **Beads health**: stale. Beads is not installed on Amber, so those three checklist items cannot run and should be dropped from the workflow's issue body when someone next edits it.
 
-Docs owns the sweep. The workflow file carries a `Concept:` line pointing here.
+A fifth item, beads health, was dropped on 2026-10-14 because beads is not installed on Amber. Docs owns the sweep. The workflow file carries a `Concept:` line pointing here.
 
 **Cadence split ratified 2026-07-04** (HOST + CIO input, PM-authorized): weekly = quality/accuracy (briefing freshness, link integrity, README reviews, sprint alignment); monthly = housekeeping/infra (agent infra, dev/active cleanup, metrics, workflow improvement). HOST runs a separate 4-weekly welfare-lens pass on agent infrastructure.
 
