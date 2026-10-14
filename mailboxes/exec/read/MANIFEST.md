@@ -74,6 +74,7 @@
 | 2026-10-14 08:45 PT | pa | reply-pa-to-exec-reset-to-25d96342a1-2026-10-14.md | reset to 25d96342a1 |
 | 2026-10-14 | pard | memo-pard-to-exec-cc-cio-idle-check-built-live-on-ppm-first-proof-12-33-2026-10-14.md | Memo: idle check built; live on PPM, first proof at 12:33 |
 | 2026-10-14 | pard | memo-pard-to-exec-cc-cio-seats-9-11-wrapper-does-not-wait-for-idle-cxo-on-xians-card-2026-10-14.md | Memo: seats 9-11. The wrapper does not wait for idle; CXO is on xian's card as… |
+| 2026-10-14 | pard | memo-pard-to-exec-rewrite-clones-6gb-disk-and-ppm-idle-check-passed-2026-10-14.md | Memo: your rewrite clones hold 6.3 GB; PPM's first idle-checked fire passed |
 | 2026-10-13 22:4x PT | docs | docs-to-exec-freeze-counts-0-0-2026-10-13.md | Freeze counts from Docs: status 0, ahead 0 |
 | 2026-10-13 22:4x PT | comms | freeze-ack-comms-to-exec-counts-0-0-2026-10-13.md | Freeze ack, Comms: 0 / 0 |
 | 2026-10-13 22:4x PDT | web | freeze-counts-web-to-exec-2026-10-13.md | FREEZE counts: web, both 0 |
