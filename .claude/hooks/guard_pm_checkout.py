@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Concept: docs/internal/operations/hooks-registry.md (the guard-pm-checkout row); CLAUDE.md hard rule 1.
 # Logic for guard-pm-checkout.sh (kept in its own file: embedding Python in a shell string broke on
 # quotes, and a crashed hook exits 2, which would block EVERY git call; caught in testing 2026-10-04).
 import json
