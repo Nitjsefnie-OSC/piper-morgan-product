@@ -1,6 +1,6 @@
 ---
 name: continue-narrative
-description: Assess where the building-narrative blog sequence stands and decide the next move — draft the next beat or wait. Use BEFORE draft-blog-post whenever the task is to continue the building narrative: "what's the next beat", "continue the story", "review the logs since X and assess narrative beats", "where are we in the narrative", or any narrative-continuation/assessment work. Loads the conceptual model (linear-and-continuous, advance-the-front, narrative-vs-insight, wait-when-no-beat-has-formed) that templates don't carry, so the stance is right before any drafting. Hands off to draft-blog-post once a beat is confirmed.
+description: 'Assess where the building-narrative blog sequence stands and decide the next move — draft the next beat or wait. Use BEFORE draft-blog-post whenever the task is to continue the building narrative: "what''s the next beat", "continue the story", "review the logs since X and assess narrative beats", "where are we in the narrative", or any narrative-continuation/assessment work. Loads the conceptual model (linear-and-continuous, advance-the-front, narrative-vs-insight, wait-when-no-beat-has-formed) that templates don''t carry, so the stance is right before any drafting. Hands off to draft-blog-post once a beat is confirmed.'
 scope: role-specific
 version: 1.2
 created: 2026-06-03
