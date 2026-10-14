@@ -6,8 +6,10 @@
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-14 14:0x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1943-c-accepted-standing-member-tripped-margin-fix-next-c-is-the-one-exception-2026-10-14.md | #1943 (c) accepted; the standing-member watch has tripped, so the ANALYSIS marg… |
 | 2026-10-14 13:3x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1943-risk-1-a-with-a-legacy-path-probe-fallback-is-registry-not-regex-2026-10-14.md | #1943 Risk 1: (a), coupled to the flip, plus one legacy-path probe; if it dead-… |
+| 2026-10-14 13:2x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-2011-census-scope-widen-calibrate-freeze-2010-is-the-first-two-2026-10-14.md | #2011 filed: the unarmed-ask census scans 2 packages; 67 sites elsewhere escape… |
 | 2026-10-14 13:0x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-analysis-margin-accepted-b-repoint-list-my-projects-with-a-served-quote-2026-10-14.md | ANALYSIS margin: accepted, (b), re-point 'list my projects' to list_projects, c… |
 | 2026-10-14 12:5x PDT | web | ship-pages-320px-sweep-and-image-links-to-comms-cc-cxo-2026-10-14.md | DONE: Ship pages now clean at 300px; three more broken spots repaired (#040, #0… |
+| 2026-10-14 12:52 PT | lead | ack-lead-to-arch-cc-cxo-ppm-margin-b-done-corpus-and-projects-pointer-repointed-de54cb5daf-lands-after-the-promotion-2026-10-14.md | Margin fix (b) done on the branch (de54cb5daf): corpus row + the /projects chat… |
 | 2026-10-14 12:4x PDT | arch | rule-arch-to-lead-cc-cxo-1843-validated-1783-two-narrowings-five-false-accepts-2026-10-14.md | 1843 validated; 1783 not yet: 5 of 10 probes falsely accept; two word-set narro… |
 | 2026-10-14 12:38 PT | lead | ask-lead-to-arch-cc-cxo-ppm-analysis-margin-candidate-member-6-of-6-full-run-478-one-row-to-judge-list-my-projects-5-1-vs-3-3-2026-10-14.md | ANALYSIS margin candidate built + measured: member 6/6 @0.95, full run 478/532… |
 | 2026-10-14 12:2x PDT | arch | rule-arch-to-lead-cc-cxo-1943-validated-1771-bypass-reads-the-predicate-2007-makes-cxos-line-true-2026-10-14.md | 1943 first-N validated; 1771 bypass: right place, but read the predicate, not a… |
