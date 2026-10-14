@@ -1,7 +1,8 @@
 # Lead carry-forward — Fable 5.1 seat; Model A worktree ~/Development/piper-morgan-worktrees/lead
 
-## STATE @ 2026-10-14 12:21 PT — RUN-HOT (until Thu 22:00): 4 MVP closes, 7 landings, 1 held lane; Step 0 READY for PM (staging 1746f1ebec)
-- **READY sent 12:xx-ish (card v33, 12:0x):** staging `1746f1ebec`, Tests SUCCESS on `bc3ede7e35`, gate accepts. PM promotes (his hand); then Web/CXO served rows:
+## STATE @ 2026-10-14 16:14 PT — RUN-HOT (until Thu 22:00): 4 MVP closes, 8 landings, 4 held branches; Step 0 re-arming (Tests on 85cef5be30 running; flip the card to READY when green)
+- **Promote gate WIDENED 3153ab903a (16:14 10-14):** staging had drifted on docs-only pushes to `d2a3f1e0c5`, 186 commits past the tested `bc3ede7e35`, beyond the gate's 60-ancestor one-call-per-commit walk → a dispatch would have been refused. Now one API call lists Tests' 100 newest run heads on main and a local rev-list (2000) walk intersects it. Probe accepts d2a3f1e0c5 via bc3ede7e35. Tests on 3153ab903a was cancelled by Exec's scripts push (85cef5be30, run 38652585915 in progress 16:12); staging moves to 85cef5be30; **when that run is SUCCESS, flip card Step 0 to READY (v35) + republish the mirror chip; if cancelled again, wait for the next run on main**. Probe: `SHA=<staging full sha> GITHUB_REPOSITORY=mediajunkie/piper-morgan-product bash scratchpad/gate.sh` (scratchpad copy mirrors the new walk).
+- **Was READY at 12:0x (card v33):** staging `1746f1ebec`, Tests SUCCESS on `bc3ede7e35`. PM promotes (his hand); then Web/CXO served rows:
   N5 #1943 delete-first-two; #1843 REFINING seam ("please remove the fluff" edits, "please go ahead" finalizes); #1771+#2007 (`not now` at the resume
   offer → CXO's line; `do a standup` → continue/restart offer); #1783 (capped list → `could you show me the rest?` pulls the rest; `can you delete the
   rest?` not cashed); #2008 copy ("No completions yesterday."); **after the margin fix lands: `list my projects` once (active projects shown, CXO judges)**.
