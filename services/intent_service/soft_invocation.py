@@ -282,11 +282,29 @@ ACCEPT_PATTERNS = [
     re.compile(p, re.IGNORECASE)
     for p in [
         r"^(?:yes|yeah|yep|yup|sure|please|okay|ok|go ahead|do it|let'?s do it|sounds good|sounds great|that would be great|please do|yes please)\.?!?$",
-        r"^(?:yes|yeah|sure|please|go ahead),?\s",
+        r"^(?:yes|yeah|sure|go ahead),?\s",
         r"\byes,?\s*(?:please|go ahead|do it|that would)\b",
         r"\bsure,?\s*(?:let'?s|go ahead|please)\b",
     ]
 ]
+
+# #1843 (Arch ruling): "please" is a politeness marker, not an acceptance.
+# A leading "please" is stripped and the REMAINDER is judged against the same
+# vocabulary ("please go ahead and file it" accepts via ``go ahead\\s``;
+# "please remove the fluff" does not). Code, not a pattern.
+_LEADING_PLEASE_RE = re.compile(r"^please,?\s*", re.IGNORECASE)
+
+
+def matches_accept_vocabulary(clean: str) -> bool:
+    """True when ``clean`` (or, with a leading "please" stripped, its
+    remainder) matches any ACCEPT_PATTERNS row. Shared by
+    ``detect_offer_response`` and ``evaluate_acceptance``."""
+    candidates = [clean]
+    stripped = _LEADING_PLEASE_RE.sub("", clean, count=1)
+    if stripped != clean and stripped:
+        candidates.append(stripped)
+    return any(p.search(c) for c in candidates for p in ACCEPT_PATTERNS)
+
 
 # #2004: the FULL-MESSAGE decline row, named so a seam that must only ever
 # see a bare decline (nothing open, nothing to cancel) can read exactly this
@@ -512,9 +530,8 @@ def detect_offer_response(message: str, *, prose_override: bool = True) -> Optio
     if prose_override and is_prose_reply(clean):
         return None
 
-    for pattern in ACCEPT_PATTERNS:
-        if pattern.search(clean):
-            return "accept"
+    if matches_accept_vocabulary(clean):
+        return "accept"
 
     for pattern in DECLINE_PATTERNS:
         if pattern.search(clean):

@@ -270,14 +270,27 @@ class TestAsidesNeitherAcceptNorSteal:
         is CXO-owned vocabulary work tracked on #1739. If this pin breaks
         because the vocabulary was tightened deliberately, update it WITH
         that decision's citation."""
+        # #1843: the "please" opener is narrowed (decision citation); PM's
+        # aside no longer accepts. The greedy "yes,"/"sure,"/"go ahead" openers
+        # remain the residue, pinned with a yes-opened aside.
+        aside = "yes, I'll need to figure out later why you thought that"
         verdict = evaluate_acceptance(
-            PM_ASIDE_1650,
+            aside,
             effect=EffectClass.WRITE,
             outwardness=Outwardness.PRIVATE,
             armed_question=_AN_ASK,
         )
         assert verdict is AcceptanceVerdict.ACCEPT
-        assert detect_offer_response(PM_ASIDE_1650) == "accept"  # parity with legacy
+        assert detect_offer_response(aside) == "accept"  # parity with legacy
+        assert (
+            evaluate_acceptance(
+                PM_ASIDE_1650,
+                effect=EffectClass.WRITE,
+                outwardness=Outwardness.PRIVATE,
+                armed_question=_AN_ASK,
+            )
+            is not AcceptanceVerdict.ACCEPT
+        )
 
     def test_prose_shapes_pass(self):
         long_turn = "yes " * 80
@@ -363,7 +376,8 @@ class TestConfirmAliasAbsorbed:
         the greedy prefix rows (the #1650 suite pins this too; restated here
         because the contract's adoption boundary depends on it)."""
         assert detect_offer_response("yes, that's right") == "accept"
-        assert detect_offer_response(PM_ASIDE_1650) == "accept"  # the known hazard, unadopted
+        assert detect_offer_response("yes, hold on a sec") == "accept"  # known hazard, unadopted
+        assert detect_offer_response(PM_ASIDE_1650) is None  # #1843 narrowed the please row
 
 
 # ---------------------------------------------------------------------------

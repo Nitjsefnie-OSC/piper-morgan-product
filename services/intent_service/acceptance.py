@@ -242,10 +242,10 @@ def evaluate_acceptance(
     # Absorbed #1650/#1631 machinery — the vocabularies stay declared at
     # their original site; this is the one place they are composed.
     from services.intent_service.soft_invocation import (
-        ACCEPT_PATTERNS,
         CONFIRM_ACCEPT_RE,
         DECLINE_PATTERNS,
         is_prose_reply,
+        matches_accept_vocabulary,
     )
 
     if not message:
@@ -288,9 +288,8 @@ def evaluate_acceptance(
         # "confirm" — strict vocabulary ⊂ loose acceptance).
         if CONFIRM_ACCEPT_RE.match(clean):
             return AcceptanceVerdict.ACCEPT
-        for pattern in ACCEPT_PATTERNS:
-            if pattern.search(clean):
-                return AcceptanceVerdict.ACCEPT
+        if matches_accept_vocabulary(clean):
+            return AcceptanceVerdict.ACCEPT
 
     if taught_declines and tier == AcceptanceTier.LOW_CEREMONY:
         normalized = _normalize_taught(clean)
