@@ -49,5 +49,17 @@ permission".
 3. **Drafting model:** under "AI prompts human", each confirmed beat gets a fact-checked scaffold from Comms (A plot,
    turn, sourced facts with paths, quotes), and PM writes the prose.
 
-Source detail for each beat (facts with path:line) is in the three subagent reports, as summarised in Comms' 10-14
-log entry. Comms re-verifies each fact when it builds a scaffold.
+## Sources per beat (from the survey; Comms re-verifies each fact before building a scaffold)
+Paths are under `dev/2026/`, except the omnibus logs.
+1. 09/07/2026-09-07-0902-exec-code-log.md:72 ("PM ruled: flip FTUX"), :103. 09/08/2026-09-08-0522-exec-code-log.md:56. 09/08/2026-09-08-0717-cxo-code-log.md:122. 09/08/2026-09-08-0647-lead-code-log.md:90 (store "has NO writer"). 09/08/2026-09-08-0707-host-code-log.md:23 (the PULL).
+2. 09/09/2026-09-09-0647-lead-code-log.md:37,41. 09/11/2026-09-11-0631-lead-code-log.md:81,90. 09/10 arch log :67, docs log :103.
+3. 09/12/2026-09-12-1321-prog-code-log.md:15-16 (ILIKE on ciphertext). 09/13 lead log :98,183,185,253. 09/14/2026-09-14-0708-exec-code-log.md:130. 09/14/2026-09-14-0932-arch-code-log.md:86. 09/14 lead log :199, ppm log :150. 09/15/2026-09-15-0629-lead-code-log.md:32.
+4. 09/16/2026-09-16-0708-exec-code-log.md:19. 09/16/2026-09-16-1230-web-code-log.md:76-78,85-86. 09/18/2026-09-18-0708-exec-code-log.md:48,86. 09/18 lead log :67 (37 tests making live OpenAI calls).
+5. 09/19/2026-09-19-0644-lead-code-log.md:310-313 (alpha runs 0.8.10.14, deployed July 16; Comms verified). 09/19/2026-09-19-0707-host-code-log.md:133,224,317. 09/20/2026-09-20-0626-lead-code-log.md:72,175-177 (Comms verified),182. 09/22/2026-09-22-0647-lead-code-log.md:83,93. 09/22/2026-09-22-0707-host-code-log.md:72. 09/22/2026-09-22-0759-cio-code-log.md:35.
+6. 09/24/2026-09-24-0626-web-code-log.md:18 (Comms verified). omnibus 2026-09-24:128-131. 09/23/2026-09-23-1537-prog-code-1718-log.md:122. 09/24/2026-09-24-1850-prog-code-1678-log.md:105-106.
+7. 09/25/2026-09-25-0657-arch-code-log.md:191-192. 09/25/2026-09-25-0642-lead-code-log.md:192. omnibus 2026-09-25:39-45. 09/27/2026-09-27-0717-cxo-code-log.md:50-51. 09/28/2026-09-28-0559-lead-code-log.md:52. 09/30/2026-09-30-0647-lead-code-log.md:27,34,58.
+8. 10/01/2026-10-01-0647-pa-code-log.md:16,63. 10/01/2026-10-01-0717-cxo-code-log.md:101. 10/01/2026-10-01-1250-prog-code-log-1912-project-remove.md:43. 09/26/2026-09-26-0642-lead-code-log.md:68 (PM = MCP tester #1).
+9. 10/03/2026-10-03-1012-spec-code-log.md:51. 10/03/2026-10-03-0708-exec-code-log.md:195. 10/04/2026-10-04-0634-lead-code-log.md:47.
+10. 10/05/2026-10-05-0647-lead-code-log.md:81,91. 10/05/2026-10-05-0627-arch-code-log.md:43. 10/07/2026-10-07-0623-lead-code-log.md:133,151.
+11. 10/08/2026-10-08-0623-lead-code-log.md:36-37. 10/08/2026-10-08-0647-pa-code-log.md:44. 10/09/2026-10-09-0638-lead-code-log.md:42. 10/11/2026-10-11-0647-pa-code-log.md:19. 10/11/2026-10-11-0647-lead-code-log.md:346.
+12. 10/10/2026-10-10-0619-comms-code-log.md:20. 10/10/2026-10-10-1007-cio-code-log.md:12. 10/12/2026-10-12-0610-cio-code-log.md:132. 10/13/2026-10-13-0647-pa-code-log.md:71. 10/13/2026-10-13-0422-exec-code-log.md:272,275.
