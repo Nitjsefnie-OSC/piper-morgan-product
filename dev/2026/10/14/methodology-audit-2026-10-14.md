@@ -183,7 +183,7 @@ Score: 7 done, 3 partial, 1 not evidenced, 1 superseded. Every partial item is d
 |---|---|---|---|
 | R4 **DRAFTED 10-14** (`hooks-registry.md`; Arch review pending) | One hooks registry page: every hook, event, matcher, why, and its concept doc | CIO drafts, Arch reviews | Hooks are 1 of 14 linked. The control plane is CIO's (role card priority 3). **CIO will draft it.** Trigger: R1 merged. |
 | R5 **DONE 10-14** (`docs/internal/operations/history-rewrite-runbook.md`) | Move the history-rewrite runbook and freeze protocol from `dev/active/` to `docs/internal/operations/` before sprint cleanup | Exec | Only record of an irreversible procedure. Rule 7. |
-| R6 | Concept docs for `commit-msg` (rules 3 and 5) and the old-history guard | CIO | Both are mine and both guard hard rules. Trigger: the 8s install. |
+| R6 **DONE 10-14** (`commit-message-guards.md` for all three doorways; the old-history guard via `history-rewrite-runbook.md`) | Concept docs for `commit-msg` (rules 3 and 5) and the old-history guard | CIO | Both are mine and both guard hard rules. Trigger: the 8s install. |
 | R7 **DONE 10-14** (`docs/internal/operations/agent-360-procedure.md`; CIO fixed the workflow's stale v0.4 pointers) | Agent 360 procedure doc | HOST | Run four times, with no written procedure |
 | R8 **DONE 10-14** (b3ccde0ecd) | Fix the audit calendar's workflow filenames | Docs | Two workflow names are wrong. (The 7 silent methodology docs need nothing: B3 kept them. Only the QUICK_START banner was missing, applied 10-14.) |
 | R9 **DONE 10-14** (`push-main.sh` canonical; four retired, c4f64da4e7; recipe §5) | Say which push/pull wrappers are canonical; retire the rest | Lead | Five wrappers, no doc, and CLAUDE.md prescribes the raw command |
