@@ -3,7 +3,7 @@
 **Owner**: Lead. **Started**: 2026-09-19. **Rewritten fresh for the 10-13 morning**: v27 (17:18 10-13: row N4 #2005 after PA's MCP redeploy; #1982 fallback off 7cc00113bc rides the next promotion with nothing for PM to test); v26 (12:43 10-13: #2004 fixed on main a1fdee9921, row N3); v25 (12:33 10-13: Web's three served runs on b713b91cb5 judged by CXO — #1987 all three ACs, #2001, #1976 done; #2002/#2003 fixed on main 75ac141ed6, served checks owed after the next promotion); v24 (12:09 10-13: alpha promoted to b713b91cb5 on xian's word — every row is live); v23 (07:05 10-13: Web's run judged, two landings on main, not live); v22, 22:30 PDT 10-12 (PM's ask: "pick it up then
 with a fresh test card"). Rolling doc: rows get added when a fix needs PM's live verification and struck when done. When PM asks
 "what do I test?", the answer is this file. Earlier versions and all struck history: `git log -p` of this file. Mirror artifact
-(https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi) is v15 and BEHIND; this file is current.
+(https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi) was republished from v27 at 17:26 10-13; between republishes this file is current and wins.
 
 **Surface**: alpha.pipermorgan.ai · **running `b713b91cb5`** (read from /health 12:09 10-13 after promotion run 38451337983, dispatched
 by Exec at 12:00 on xian's direct word; no approval step any more). **Everything on this card is live: #1987 both halves + the thanks step (71e213b885 / a9f8cd16d1), #2001 (143f9a9a83), #1976 (84a313394d), the meeting_time example (d13dafd172), logs-keep-only-fingerprints (ec2cc9d44f). Previous: `6e48d9ebb2` (10-12 21:46).**
@@ -14,7 +14,7 @@ gh workflow run fly-deploy.yml -R mediajunkie/piper-morgan-product --ref main -f
 ```
 Promotion takes ~4 min; `curl -s https://alpha.pipermorgan.ai/health` shows `git_sha`. (The 10-12 `pending_deployments` approval
 call is gone: the alpha environment has no reviewers now, Fly B.) **Since 5e42a37c3b (10-13): the promotion refuses unless Tests
-concluded success on the exact sha staging serves, or (since the 18:xx 10-13 refinement) on its nearest tested ancestor when only untested paths such as docs/ changed since — if it refuses, wait for Tests on that sha and dispatch again.**
+concluded success on the exact sha staging serves, or (since the 17:21 10-13 refinement, 6164ab3ceb) on its nearest tested ancestor when only untested paths such as docs/ changed since — if it refuses, wait for Tests on that sha and dispatch again.**
 
 ## Owed after the NEXT promotion (fixed on main 75ac141ed6 + a1fdee9921 at 12:33 10-13, NOT live on b713b91cb5)
 
@@ -65,8 +65,8 @@ N4. **#2005 MCP issue count** (after PA redeploys piper-morgan-mcp from a sha ca
     `mediajunkie/piper-morgan-product`; do NOT click OAuth connect. Then `what open issues do I have?` → `what's the issue count` →
     `give me a standup` → `What does Piper know about me?`. Pass: real issues and a count via the token; the standup's GitHub line
     populated with no "source failed"; "know about me" lists GitHub issues. Fail: the owner/name nudge, "I couldn't find an issue
-    number", an empty/failed GitHub source, or an OAuth prompt. On pass Lead lands `claude/lead-1982-pat-dual-write`, reports
-    `legacy=0`, then turns the legacy fallback off; #1983's copy change follows.
+    number", an empty/failed GitHub source, or an OAuth prompt. On pass Lead lands `claude/lead-1982-pat-dual-write`; the legacy
+    fallback is already off (7cc00113bc, 10-13 on PM's `legacy=0`); #1983's copy change follows.
 13. **F, #1913**: inside that account, BEFORE adding the key, send `hello, what can you do?` and note the conversation in the left rail;
     add the key; reload. Pass: the first conversation is still there with its title. Write which page you were on when you added it.
 14. **P5**: from first login, time finding (a) todos and (b) projects by clicking; look for any feedback path. Pass: both under a
