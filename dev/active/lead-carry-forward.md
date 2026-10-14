@@ -6,6 +6,11 @@
   pop`, or check out an old sha; the pre-push guard holds 57 old shas; **do not run `scripts/sync-pm-local.sh` until xian says his checkout is
   reset**; no `scope-guard.yml` dispatch today; mail-send that gives up after 6 → re-run the same command. Held branches on origin were rewritten
   with main (181 refs equal), so `claude/lead-1982-pat-dual-write` lives on under a NEW sha: re-resolve by name, never by 4400ee3d9f.
+- **sync-pm-local HELD by me since 09:4x** (not Exec's hold any more: xian's checkout is reset): main carries 7a498b2aec (data/chromadb
+  untracked), so his first fast-forward past it deletes his nine local Chroma files. Resume when Exec says xian has been told / copied the
+  dir, or after Pard's 12:46 watchdog pull (then it is moot). Exec told 09:4x (01M4XMQTXPBB5QG3047RNJE8VY).
+- **Option 3 DONE 09:50 10-14: verdict none** (doc `docs/internal/architecture/current/option3-day-one-path-check-of-the-61-2026-10-14.md`,
+  de5118ef4c; reply to PPM cc Exec/Arch 07b8c9522). Two Epic 0 notes in §4, nothing before MVP. Nothing owed on the tripwire.
 - **Cron ROTATED 06:5x: 46638333** (`17 6,9,12,15,18,21`, expires ~10-21; next rotation Mon 10-19 START). Registry row updated (94eafbf565).
 - **Alpha `de7d0c1c57` = pre-rewrite id;** served code equals `d217d8f1ca` on every served path (one operator-script line differs). Staging serves
   `d217d8f1ca`, Tests green → the next promotion passes the gate without waiting. No code landing since the rewrite tip. Card **v31** says so.
