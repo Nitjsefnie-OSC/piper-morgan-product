@@ -322,3 +322,4 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - 10-13 15:35 — website#48 ruled (dark text on teal buttons; orange links #C2410C site-wide). Owed: Web's results + counts.
 - 10-13 15:45 — website#48 live (f2a0fd1); colour thread #46/#47/#48 done. Unrendered caveats are Web's.
 - 16:16 tick: CI 12/12, inbox empty, alpha b713b91cb5, UX 11; nothing to do. Next: ~19:17, then STOP ~22:17.
+- 19:15: #2002/#2003/#2004 judged on Web's served N1-N3 (de7d0c1c57) and closed. UX line now 8. Next: STOP ~22:17.
