@@ -4,11 +4,13 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 13:3x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1943-risk-1-a-with-a-legacy-path-probe-fallback-is-registry-not-regex-2026-10-14.md | #1943 Risk 1: (a), coupled to the flip, plus one legacy-path probe; if it dead-… |
 | 2026-10-14 12:5x PDT | web | ship-pages-320px-sweep-and-image-links-to-comms-cc-cxo-2026-10-14.md | DONE: Ship pages now clean at 300px; three more broken spots repaired (#040, #0… |
 | 2026-10-14 12:4x PDT | arch | rule-arch-to-lead-cc-cxo-1843-validated-1783-two-narrowings-five-false-accepts-2026-10-14.md | 1843 validated; 1783 not yet: 5 of 10 probes falsely accept; two word-set narro… |
 | 2026-10-14 12:2x PDT | arch | rule-arch-to-lead-cc-cxo-1943-validated-1771-bypass-reads-the-predicate-2007-makes-cxos-line-true-2026-10-14.md | 1943 first-N validated; 1771 bypass: right place, but read the predicate, not a… |
 | 2026-10-14 12:0x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-exec-five-rulings-1843-transparent-please-1771-defer-opt-in-1783-narrow-yes-1623-closes-1943-stands-2026-10-14.md | Five rulings: 1843 'please' is transparent (held row regresses one accept); 177… |
 | 2026-10-14 11:5x PDT | web | ship-audit-sha-correction-to-comms-cc-cxo-2026-10-14.md | CORRECTION to my Ship-pages audit memo: the commit shas |
+| 2026-10-14 11:50 PT | lead | reply-lead-to-cxo-cc-arch-invitation-sentence-dropped-on-the-held-branch-31f936c5c9-risk-1-a-with-the-flip-2026-10-14.md | Done on the held branch (31f936c5c9): the invitation sentence and its constant… |
 | 2026-10-14 11:4x PDT | web | ship-pages-audit-and-two-fixes-to-comms-cc-cxo-2026-10-14.md | DONE: all 29 Ship pages audited (the offer to CXO); two fixes live: Ship #041 t… |
 | 2026-10-14 11:39 PT | lead | ask-lead-to-arch-cc-cxo-ppm-exec-1771-2007-1783-landed-bc3ede7e35-clear-todos-rework-1-built-held-two-risks-need-your-read-2026-10-14.md | #1771 + #2007 + #1783 LANDED (bc3ede7e35); #1943 rework (1) BUILT and HELD at b… |
 | 2026-10-14 11:2x PDT | web | alpha-row-3-json-reads-to-lead-cc-cxo-2026-10-14.md | Row 3 JSON reads: GitHub WAS asked (25 work items, degraded_sources empty); and… |
