@@ -29,8 +29,8 @@ PostToolUse or PreCompact hook can only **warn**: the tool has already run, or c
 | `guard-pm-checkout.sh` (+ `guard_pm_checkout.py`) | PreToolUse Bash, every call | Refuse working-tree-discarding git aimed at PM's main checkout | Yes | CLAUDE.md hard rule 1; decisions.log (R6 step 1, 10-04) |
 | `pre-commit-reconcile-drafts.sh` | PreToolUse Bash, if `git commit*` | When a commit touches `docs/public/comms/drafts/`, run `reconcile-drafts-calendar.py` for draft and calendar drift | Can exit 2 | decisions.log (Layer C). Header cites a missing `docs/read/...` path. |
 | `autoclose-guard.sh` | PreToolUse Bash, if `git commit*` | Pass the message to `scripts/check_autoclose_keywords.py`: refuse close/fix/resolve plus `#N` without `Auto-Close: intentional`, and refuse credential-shaped messages | Yes | `commit-message-guards.md` (doorway 1); CLAUDE.md hard rules 5 and 3 |
-| `log-maintenance-reminder.sh` | PostToolUse Bash | Every 15 Bash calls, remind if today's session log is missing or stale | No | CLAUDE.md "Role and session log"; methodology-31 and -41 |
-| `context-usage-reminder.sh` | PostToolUse Bash | Once per session at roughly 75 to 85% context, suggest compacting at the next break | No | **None written.** Runs on every Bash call. Needs Cost/Benefit/Review (sunset rule, 11-01). |
+| `log-maintenance-reminder.sh` | PostToolUse Bash | Every 15 Bash calls, remind if today's session log is missing or stale. **Note (10-14):** its counter is one shared file, `/tmp/piper-log-reminder-counter`, so "every 15 calls" counts across all seats on the host, not per seat. | No | CLAUDE.md "Role and session log"; methodology-31 and -41 |
+| `context-usage-reminder.sh` | PostToolUse Bash | Once per session at roughly 75 to 85% context, suggest compacting at the next break | No | **None written. Dead on Amber (found 10-14):** it reads `$CLAUDE_SESSION_ID` (unset in the CIO seat's Bash environment) and looks for the transcript under `~/.claude/projects`, but this fleet's transcripts are under `~/.claude-pm/projects` (`CLAUDE_CONFIG_DIR`). For this session the `find` returned 0 there and 1 under `~/.claude-pm`. So it exits 0 every call and never warns. **Sunset candidate at the piper-guards review (10-19):** M-9's status line covers it. If it's kept instead, read `transcript_path` from the hook's stdin JSON. |
 | `issue-checkbox-lint.sh` | PostToolUse Bash | After a commit that closes an issue, warn if the issue body still has unchecked boxes | Warns (exit 2 is advisory after the fact) | `agent-protocols/issue-closure-protocol.md` |
 | `memory-index-overlimit-warn.sh` | PostToolUse Edit, Write, MultiEdit | Warn when the shared memory index nears its silent-truncation limit | No | `memory-index-size-limits.md` (explains the limit; this page names the hook) |
 
@@ -41,18 +41,13 @@ PostToolUse or PreCompact hook can only **warn**: the tool has already run, or c
 
 ## 2. Claude Code hooks, user level (`~/.claude-pm/settings.json`, every seat on Amber; Pard installs)
 
-These point at the scripts in **PM's checkout path** (`/Users/xian/Development/piper-morgan-product/.claude/hooks/`),
-not the seat's worktree. They exist because, in July, project hooks didn't fire reliably in worktree
-sessions (`amber-hooks-investigation-2026-07.md`). The repo copy of this config is
-`amber-userlevel-hooks-mirror.json`.
+**Since 10-14 10:43 (Pard), one entry only:** PreCompact `precompact-signoff-warning.sh` (before compaction, warn about uncommitted, unpushed or unmerged work; concept `branch-worktree-mailbox-discipline.md`). It points at PM's checkout's copy, `/Users/xian/Development/piper-morgan-product/.claude/hooks/`, which lags main until `sync-pm-local.sh` runs. It should eventually move to project level, so it runs the seat's own version.
 
-| Hook | Event | Must do | Notes |
-|---|---|---|---|
-| `check-branch.sh` | PreToolUse Bash | As above | **Also wired at project level.** It's a different command string (this one runs PM's checkout's copy), so both run. |
-| `pre-commit-broad-staging-warn.sh` | PreToolUse Bash | Warn on broad staging | **Leftover** (Pard agrees, 10-14): the git pre-commit runs it since 09-28 (#1798). To be removed with the other duplicates (below). |
-| `pre-commit-reconcile-drafts.sh` | PreToolUse Bash | As above | Also wired at project level |
-| `log-maintenance-reminder.sh`, `context-usage-reminder.sh`, `issue-checkbox-lint.sh` | PostToolUse Bash | As above | Also wired at project level |
-| `precompact-signoff-warning.sh` | PreCompact | Before compaction, warn about uncommitted, unpushed or unmerged work | User level only. Concept: `branch-worktree-mailbox-discipline.md` |
+Removed 10-14 (decided below): six duplicates of project hooks. They ran PM's checkout's copies alongside the seat's own:
+- PreToolUse: `check-branch.sh`, `pre-commit-broad-staging-warn.sh`, `pre-commit-reconcile-drafts.sh`.
+- PostToolUse: `log-maintenance-reminder.sh`, `context-usage-reminder.sh`, `issue-checkbox-lint.sh`.
+
+Backup: `~/.claude-pm/settings.json.bak-20261014T104256`. History: in July, project hooks didn't fire reliably in worktree sessions (`amber-hooks-investigation-2026-07.md`), and that's why the copies existed.
 
 ## 3. Seat-local and plugin hooks
 
@@ -91,9 +86,7 @@ The audit lists them as having no concept doc.
 
 Keep `precompact-signoff-warning.sh` at user level, since it has no project copy. It should eventually move to project level, so it runs the seat's own version.
 
-**Action:**
-- Pard edits `~/.claude-pm/settings.json`, or puts the exact lines on xian's card if Pard's seat is refused.
-- After the edit, CIO re-runs the autoclose probe and checks a PostToolUse reminder still appears on a worktree seat.
+**Done 10-14 10:43** (Pard; the seat wasn't refused). **After the edit:** CIO re-ran the autoclose probe between 10:49 and 10:50 PT, and it was still BLOCKED by the project hook. PostToolUse is still not cleanly measured. The one instrument tried, the log-maintenance counter, is a host-wide shared file that every seat increments, so a rise can't be attributed to one seat. A clean PostToolUse probe needs a per-session signal.
 - **Residual risk:** project-level PostToolUse firing is unmeasured, so the three reminders could go silent. They're advisory, so this is low cost, and it's checked after the edit.
 
 ## Still open
