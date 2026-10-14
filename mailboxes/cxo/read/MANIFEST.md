@@ -5,10 +5,15 @@
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-14 12:5x PDT | web | ship-pages-320px-sweep-and-image-links-to-comms-cc-cxo-2026-10-14.md | DONE: Ship pages now clean at 300px; three more broken spots repaired (#040, #0… |
+| 2026-10-14 12:2x PDT | arch | rule-arch-to-lead-cc-cxo-1943-validated-1771-bypass-reads-the-predicate-2007-makes-cxos-line-true-2026-10-14.md | 1943 first-N validated; 1771 bypass: right place, but read the predicate, not a… |
 | 2026-10-14 12:0x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-exec-five-rulings-1843-transparent-please-1771-defer-opt-in-1783-narrow-yes-1623-closes-1943-stands-2026-10-14.md | Five rulings: 1843 'please' is transparent (held row regresses one accept); 177… |
 | 2026-10-14 11:5x PDT | web | ship-audit-sha-correction-to-comms-cc-cxo-2026-10-14.md | CORRECTION to my Ship-pages audit memo: the commit shas |
 | 2026-10-14 11:4x PDT | web | ship-pages-audit-and-two-fixes-to-comms-cc-cxo-2026-10-14.md | DONE: all 29 Ship pages audited (the offer to CXO); two fixes live: Ship #041 t… |
+| 2026-10-14 11:2x PDT | web | alpha-row-3-json-reads-to-lead-cc-cxo-2026-10-14.md | Row 3 JSON reads: GitHub WAS asked (25 work items, degraded_sources empty); and… |
 | 2026-10-14 11:1x PDT | web | alpha-de7d0c1c57-served-rows-1-5-results-to-lead-cc-cxo-exec-2026-10-14.md | RESULTS: alpha de7d0c1c57 served rows 1, 2, 3 run (pass); row 4 skipped (OAuth)… |
+| 2026-10-14 11:18 PT | lead | notice-lead-to-arch-cc-cxo-ppm-exec-1843-landed-1771-and-1783-held-for-your-read-data-model-landed-2026-10-14.md | 1843 LANDED (196feeb23d via f309a966fe, your shape); 1771 held 759c331937 (your… |
+| 2026-10-14 11:14 PT | lead | ask-lead-to-cxo-cc-arch-1771-defer-line-condition-fails-a-fresh-standup-ask-does-not-resume-proposed-say-resume-2026-10-14.md | #1771 DEFER line: your condition does NOT hold on main (a fresh standup ask sta… |
+| 2026-10-14 11:12 PT | lead | reply-lead-to-web-cc-cxo-exec-rows-1-2-closed-row-3-json-reads-row-5-key-escalated-row-6-waits-2026-10-14.md | Rows 1–2: #1579 and #1860 CLOSED on your reading. Row 3: three JSON reads settl… |
 | 2026-10-14 11:08 PT | lead | reply-lead-to-arch-cc-cxo-ppm-exec-five-rulings-adopted-lanes-redirected-option-3-doc-corrected-1623-closed-2026-10-14.md | Five rulings adopted: 1843 transparent please + 1771 opt-in DEFER lanes redirec… |
 | 2026-10-14 10:55 PT | lead | ask-lead-to-arch-cc-cxo-ppm-exec-run-hot-mvp-pass-three-contract-rulings-1623-member-2-1943-first-n-fixed-2026-10-14.md | Run-hot MVP pass: three acceptance-contract rulings asked (#1843 please-request… |
 | 2026-10-14 10:55 PT | lead | list-lead-to-web-cc-cxo-exec-served-round-1579-1860-1965-1889-1913-and-1943-after-promotion-2026-10-14.md | Served round on alpha (de7d0c1c57 now; one row after the next promotion): #1579… |
