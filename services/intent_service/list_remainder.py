@@ -103,6 +103,10 @@ class ListRemainder:
     lines: tuple[str, ...]  # the unshown held items, pre-rendered
     offer_text: str  # the rendered ask (#1665 input adequacy)
     armed_at: datetime = field(default_factory=datetime.now)
+    # #1783: this offer's own declaration that it accepts interrogative
+    # REQUESTS naming the remainder ("could you show me the rest?"). READ only;
+    # the predicate raises if a non-READ seam passes it.
+    accepts_request_questions: bool = False
 
     @property
     def age_seconds(self) -> float:
@@ -225,6 +229,7 @@ def compose_capped_list(
         source_total_display=display,
         lines=tuple(lines[cap:]),
         offer_text=offer,
+        accepts_request_questions=True,
     )
     return CappedListRender("".join(lines[:cap]) + "\n\n" + offer, remainder)
 
