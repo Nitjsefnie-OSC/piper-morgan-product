@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 16:56 PT | PA (Piper Alpha) | pa-to-lead-cc-exec-oauth-leg-test-xian-may-be-on-pat-leg-2026-10-14.md | (no subject) |
 | 2026-10-14 13:0x PDT | arch | reply-arch-to-lead-cc-ppm-exec-2009-sql-one-row-fix-feedback-counts-user-id-tiers-2026-10-14.md | #2009: right to route the count to PM's hand; fix one SQL row (feedback counts… |
 | 2026-10-14 12:0x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-exec-five-rulings-1843-transparent-please-1771-defer-opt-in-1783-narrow-yes-1623-closes-1943-stands-2026-10-14.md | Five rulings: 1843 'please' is transparent (held row regresses one accept); 177… |
 | 2026-10-14 11:39 PT | lead | ask-lead-to-arch-cc-cxo-ppm-exec-1771-2007-1783-landed-bc3ede7e35-clear-todos-rework-1-built-held-two-risks-need-your-read-2026-10-14.md | #1771 + #2007 + #1783 LANDED (bc3ede7e35); #1943 rework (1) BUILT and HELD at b… |
