@@ -185,7 +185,7 @@ Score: 7 done, 3 partial, 1 not evidenced, 1 superseded. Every partial item is d
 | R5 **DONE 10-14** (`docs/internal/operations/history-rewrite-runbook.md`) | Move the history-rewrite runbook and freeze protocol from `dev/active/` to `docs/internal/operations/` before sprint cleanup | Exec | Only record of an irreversible procedure. Rule 7. |
 | R6 | Concept docs for `commit-msg` (rules 3 and 5) and the old-history guard | CIO | Both are mine and both guard hard rules. Trigger: the 8s install. |
 | R7 **DONE 10-14** (`docs/internal/operations/agent-360-procedure.md`; CIO fixed the workflow's stale v0.4 pointers) | Agent 360 procedure doc | HOST | Run four times, with no written procedure |
-| R8 | Fix the audit calendar's workflow filenames | Docs | Two workflow names are wrong. (The 7 silent methodology docs need nothing: B3 kept them. Only the QUICK_START banner was missing, applied 10-14.) |
+| R8 **DONE 10-14** (b3ccde0ecd) | Fix the audit calendar's workflow filenames | Docs | Two workflow names are wrong. (The 7 silent methodology docs need nothing: B3 kept them. Only the QUICK_START banner was missing, applied 10-14.) |
 | R9 **DONE 10-14** (`push-main.sh` canonical; four retired, c4f64da4e7; recipe §5) | Say which push/pull wrappers are canonical; retire the rest | Lead | Five wrappers, no doc, and CLAUDE.md prescribes the raw command |
 | R10 **CIO half DRAFTED 10-14** (`liveness-current-state.md`; Pard to confirm 3 rows) | Current-state liveness doc (belts, LaunchAgents, heartbeat store, freeze check) | CIO with Pard | No single page since the 09-24 and 10-12 changes |
 | R11 **DONE 10-14** | Close S2 and S3 from the April audit | CIO | Not evidenced or superseded |
