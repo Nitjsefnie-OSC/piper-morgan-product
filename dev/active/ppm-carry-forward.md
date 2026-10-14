@@ -230,3 +230,5 @@ Brake FIRED (second slip = #1965 admission, found and ledgered 10-09). Memo to E
 - 2026-10-14 13:2x: #2011 built (held, lands after promotion); CXO ruled copy by tier. PPM: Production stays. Watch list for Class 3 (capability claim that does not exist, on a day-one reply): "import an existing project" (#2010), todo "reprioritize" (l.268), templates 179 "track going forward", files_consciousness 176, toast "Want to try again?". Ask/await Lead's reachability check; confirmed false capability -> classify -> Exec for admission.
 
 - 2026-10-14 13:3x: #2011 five calls ruled (Arch). Watch list now four: "import an existing project", todo "reprioritize" (l.268), templates 179, files_consciousness 176. Toast removed (Arch: 3 formatters have no consumer; deleted).
+
+- 2026-10-14 13:4x: Arch: consciousness templates.py/injection.py unreachable (pending Lead's confirmation) -> templates 179 off the watch list. Watch list now three: "import an existing project", todo "reprioritize" (l.268), files_consciousness 176 (each needs Lead's reachability check).
