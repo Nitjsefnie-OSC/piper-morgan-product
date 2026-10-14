@@ -6,7 +6,7 @@ read-only `prod_user_lookup` and the invite mint).
 
 ## 2026-10-13 (later): PA deploys the MCP app through a fixed wrapper (xian's delegation)
 
-xian (via Exec, 13:1x): PA does the MCP deploys (#1982), with an allow scoped to the MCP app on PA's seat. **No allow rule can do it alone.** PA's seat denies `fly deploy:*`, deny beats allow, and a glob deny narrow enough to spare `fly deploy -c fly.mcp.toml -a piper-morgan-mcp` would also spare a bare `fly deploy`, which reads `fly.toml` (production). So:
+xian (via Exec, 13:1x): PA does the MCP deploys (#1982), with an allow scoped to the MCP app on PA's seat. Standing, not one-off: xian confirmed at 17:11 ("Yes, PA does the MCP deploys", relayed by Janus and Exec, v4 01M4VWC2F1TCDC5V9YGPWTJHC5). **No allow rule can do it alone.** PA's seat denies `fly deploy:*`, deny beats allow, and a glob deny narrow enough to spare `fly deploy -c fly.mcp.toml -a piper-morgan-mcp` would also spare a bare `fly deploy`, which reads `fly.toml` (production). So:
 - **The deny stays** for every direct `fly deploy` on PA's seat.
 - **`scripts/deploy-mcp.sh`** is the one path. It deploys app `piper-morgan-mcp` from `fly.mcp.toml`, built remotely. It takes no arguments except `--dry-run`, and runs only from a tree whose tracked content equals origin/main with no untracked, non-ignored files. It prints the deployed sha and the latest releases.
 - **Rule for Pard (or xian) to add on PA's seat only:** allow `Bash(scripts/deploy-mcp.sh)` and `Bash(scripts/deploy-mcp.sh --dry-run)`, exact strings. PA's seat runs in bypassPermissions, where the allow changes nothing today. It matters if the seat moves to auto mode, where the reviewer would otherwise judge each deploy.
