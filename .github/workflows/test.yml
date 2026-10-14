@@ -33,7 +33,13 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  # Cancel superseded runs on pull requests only. On main, a newer push used to cancel the
+  # in-progress run, and on a busy day main never got a verdict: 2026-10-14 had 16 cancelled
+  # runs against 2 completed by 16:30, and the promotion gate (fly-deploy.yml) needs a
+  # COMPLETED success on the code staging serves. Queued instead: the running one finishes,
+  # the newest push waits behind it (GitHub keeps one pending run per group), so main gets a
+  # verdict roughly every run length however fast it moves. (Lead, 2026-10-14.)
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   smoke-tests:
