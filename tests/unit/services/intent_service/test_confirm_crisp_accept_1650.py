@@ -70,10 +70,20 @@ class TestConfirmAcceptVocabulary:
     def test_pm_aside_is_not_an_accept(self):
         """THE incident shape: single-line, under the floor, greedy-row
         prefix — the generic detector calls it an accept; the confirm
-        detector must not."""
+        detector must not. #1843 narrowed the greedy "please" row, so the
+        generic detector no longer reads it as an accept either (the fuel is
+        gone); the confirm detector stays None regardless."""
         assert len(PM_ASIDE) < PROSE_LENGTH_FLOOR and "\n" not in PM_ASIDE
-        assert detect_offer_response(PM_ASIDE) == "accept"  # the bug's fuel
+        assert detect_offer_response(PM_ASIDE) is None  # was "accept" pre-#1843
         assert detect_confirm_response(PM_ASIDE) is None
+
+    @pytest.mark.parametrize(
+        "message",
+        ["please hold on a sec", "please note that we should wait"],
+    )
+    def test_please_requests_are_not_accepts_to_either_detector_1843(self, message):
+        assert detect_offer_response(message) is None
+        assert detect_confirm_response(message) is None
 
     @pytest.mark.parametrize(
         "message",
@@ -110,12 +120,11 @@ class TestConfirmAcceptVocabulary:
             # affirmatives — the one-label-two-objects class
             "yes, but hold on",
             "sure, whatever you think",
-            "please hold on a sec",
-            "please note that we should wait",
+            "yes, please hold on a sec",
+            "yes, please note that we should wait",
             "yes and delete everything else too",
             "go ahead with the other one",
             "yes we should discuss this first",
-            PM_ASIDE,
         ],
     )
     def test_near_accepts_are_not_accepts(self, message):

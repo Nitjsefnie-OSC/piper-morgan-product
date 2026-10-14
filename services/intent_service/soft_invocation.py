@@ -282,7 +282,10 @@ ACCEPT_PATTERNS = [
     re.compile(p, re.IGNORECASE)
     for p in [
         r"^(?:yes|yeah|yep|yup|sure|please|okay|ok|go ahead|do it|let'?s do it|sounds good|sounds great|that would be great|please do|yes please)\.?!?$",
-        r"^(?:yes|yeah|sure|please|go ahead),?\s",
+        # #1843: "please" opens an accept ONLY when what follows is itself
+        # accept vocabulary ("please do", "please, yes"). "please <verb> ..."
+        # is a REQUEST, never consent.
+        r"^(?:(?:yes|yeah|sure|go ahead),?\s|please,?\s+(?:do(?:\s+it)?|go\s+ahead(?:\s+and\s+do\s+it)?|yes|yeah|yep|sure|ok(?:ay)?)[\s.!,]*$)",
         r"\byes,?\s*(?:please|go ahead|do it|that would)\b",
         r"\bsure,?\s*(?:let'?s|go ahead|please)\b",
     ]

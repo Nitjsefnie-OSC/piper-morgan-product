@@ -433,12 +433,13 @@ class TestPmTranscriptEndToEnd:
 
     async def test_near_accept_reasks_never_files_never_drops_1650(self, svc):
         """#1650 — filing is a CONFIRM: a short turn the greedy generic
-        accept rows would claim ('please hold on a sec') is not a crisp
+        accept rows would claim ('yes, hold on a sec'; #1843 narrowed the
+        'please hold on a sec' form out of that row) is not a crisp
         full-message affirmative. It must neither file (the aside wasn't a
         yes) nor abandon (the draft is composed work): re-ask, draft still
         armed, and the copy teaches the phrase that routes. A follow-up
         crisp 'yes' still files."""
-        near_accept = "please hold on a sec"
+        near_accept = "yes, hold on a sec"
         from services.intent_service.soft_invocation import detect_offer_response
 
         assert detect_offer_response(near_accept) == "accept"  # the hazard

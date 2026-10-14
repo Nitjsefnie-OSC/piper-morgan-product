@@ -212,17 +212,27 @@ class TestContractAcceptsTheWordSetsMissed:
 
     @pytest.mark.asyncio
     async def test_greedy_low_tier_residue_inherited_deliberately(self):
-        """ "please hold on a sec" (sub-floor aside, greedy "^please\\s" row)
-        now ACCEPTS while armed — the inherited LOW-tier residue, pinned so
-        the CXO-owned vocabulary tightening lands here automatically and
-        VISIBLY. Recoverable: the accept re-enters a flow the user can end
-        or re-suspend; WRITE×PRIVATE."""
+        """ "please hold on a sec" is a sub-floor aside. #1843 narrowed the
+        greedy "^please\\s" accept row, so it no longer ACCEPTS while armed
+        (this pin flipped visibly, as intended). The "yes, ..." opener of the
+        same row is the remaining inherited LOW-tier residue, pinned below."""
         service = _service()
         with _SeamHarness(service) as h:
             result = await service._check_pending_resume_offer(
                 "user-1",
                 str(uuid4()),
                 "please hold on a sec",
+                resume_offer_pending=True,
+                resume_offer_question=RESUME_ASK,
+            )
+            assert result is None
+            h.resume.assert_not_called()
+
+        with _SeamHarness(service) as h:
+            result = await service._check_pending_resume_offer(
+                "user-1",
+                str(uuid4()),
+                "yes, hold on a sec",
                 resume_offer_pending=True,
                 resume_offer_question=RESUME_ASK,
             )
