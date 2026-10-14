@@ -8,14 +8,14 @@ caption: ''
 
 *October 2–8, 2026*
 
-On Monday I ran an end-to-end test round against the live alpha and it failed in three places. Piper was fumbling natural language such as "Mark the first three complete and leave the fourth one pending." Lead prepared a quick fix: a new pair of pattern-matching rules, and I pushed back, since we had spent plenty of time replacing exactly that kind of brittle parsing before I had asked if we were "doing it backwards." To drive home how inadequate Piper's conversational intent-processing still is, I wrote that (as of right now) "*I* would not use this product.
+On Monday I ran an end-to-end test round against the live alpha and it failed in three places. Piper was fumbling natural language such as "Mark the first three complete and leave the fourth one pending." Lead prepared a quick fix: a new pair of pattern-matching rules, and I pushed back, since we had spent plenty of time replacing exactly that kind of brittle parsing ever since I asked whether we were "doing it backwards." To drive home how inadequate Piper's conversational intent-processing still is, I wrote that (as of right now) "*I* would not use this product."
 
-This ended up forcing me to clarify something that should already have been determined in the architecture but up to that point had escape me and all my agentic helpers. Finally, 15 months in, Arch wrote it down:
+This ended up forcing me to clarify something that should already have been determined in the architecture but up to that point had escaped me and all my agentic helpers. Finally, 15 months in, Arch wrote it down:
 
 * The language model decides what a request means. 
 * Code decides whether it's permitted, checks that meaning against the user's real data, and shows the user before it acts. 
 
-I confirmed this clear bright boundary on Tuesday and it became the newest architecture decision record. By Wednesday afternoon Piper could handle requests like the above (This time, Piper answered "Complete 3 reminders … Leaving 'revise the pr' as is. (yes/no)", got a yes, and did the deed.
+I confirmed this clear bright boundary on Tuesday and it became the newest architecture decision record. By Wednesday afternoon Piper could handle requests like the above. This time, Piper answered "Complete 3 reminders … Leaving 'revise the pr' as is. (yes/no)", got a yes, and did the deed.
 
 Another rule that got locked down this week: when Piper can't read something, they should say so outright instead of telling you there's nothing there.
 
@@ -26,29 +26,29 @@ Another rule that got locked down this week: when Piper can't read something, th
 On alpha:
 
 - **Confirm that Piper is going to act on the item you meant before anything happens.** "Mark the first three complete and leave the fourth pending" gets a confirmation listing what will change and what won't. Lead ran it on our test account and checked the stored items afterward.
-- **Answer Piper's question or change the subject without getting trapped in a loop.** For example, if Piper has asked you to provide a name for a new project, a response such as "show my projects" or a non sequitur such as "close issue 108" now gets handled as a command, as intended, instead of being interpreted literally as the answer to the question of what to name the project. When the router isn't sure, Piper asks.
-- **Back out of a process mid-request** with "never mind," or **ask a wider range of everyday questions** and get the model-based router's answer instead of a hand-written pattern's.
-- **Look up or close a GitHub issue by its number, and set a default repo by its bare name.** The default-repo fix keeps changes made conversationally with Piper or via the Settings UI aligned.
+- **Answer Piper's question or change the subject without getting trapped in a loop.** For example, if Piper has asked you to provide a name for a new project, a response such as "show my projects" or a non sequitur such as "close issue 108" now gets handled as a command, as intended, instead of being interpreted literally as the answer to the question of what to name the project. When Piper isn't sure which you meant, they ask.
+- **Back out of a process mid-request** with "never mind," or **ask a wider range of everyday questions** and Piper's language model works out what you mean, instead of a hand-written rule matching your words.
+- **Look up or close a GitHub issue by its number, and set a default repo by its bare name.** A default repo you choose in Settings is now recognized when you name it in chat.
 - **Unlink a repo, with a confirmation step**, and get a true answer to **requests to "delete my project"**: Piper can't delete projects from chat yet, says so, and offers to archive instead. (It used to ask for confirmation and then do nothing.)
-- **Remove ChatGPT's or Claude's access integration to your Piper account yourself**, from Settings → Connected apps. The bring-your-own-chat model involves authenticating your Piper Morgan account via oAuth from within ChatGPT or Claude. You can now revoke that connection from the Piper Morgan side rather than having to do within your chat app. Also, the sign-in consent screen now shows name and email instead of a raw ID.
+- **Remove ChatGPT's or Claude's access to your Piper account yourself**, from Settings → Connected apps. The bring-your-own-chat model involves authenticating your Piper Morgan account via OAuth from within ChatGPT or Claude. You can now revoke that connection from the Piper Morgan side rather than having to do so within your chat app. Also, the sign-in consent screen now shows name and email instead of a raw ID.
 
-On pipermorgan.ai, the alpha page now describes the alpha accurately  (hosted, invite-only, bring your own model key, nothing to install) after drifting out of date for some time, and its Request an invite button is now wired to a working mailbox. There's a new support page, and the privacy policy now covers using Piper from ChatGPT and Claude, including how to turn it off. We held the claim that access ends right away back from both pages until we'd confirmed in a test, seeing a revoked client's next attempt fail. That test passed on Sunday, and the line is now live.
+On pipermorgan.ai, the alpha page now describes the alpha accurately (hosted, invite-only, bring your own model key, nothing to install) after drifting out of date for some time, and its Request an invite button is now wired to a working mailbox. There's a new support page, and the privacy policy now covers using Piper from ChatGPT and Claude, including how to turn it off. We held the claim that access ends right away back from both pages until we'd confirmed in a test, seeing a revoked client's next attempt fail. That test passed on Sunday, and the line is now live.
 
 Built and waiting for the next promotion to alpha: the Standup and Radar features clarify when a source failed instead of "nothing to report," and GitHub work items load whether you connected by signing in or with a personal token. CXO won't count these until they've been tested in a real reply, which hasn't happened yet because there is a big testing backlog that I'm behind on.
 
 ## ⚙️ Below the line: engineering & architecture
 
-- **The best find of the week.** Preparing a live check for that "say when a source failed" feature, Lead found the GitHub work-items read turned every failure into "verified empty," and users who connected GitHub by signing in had no token on that path at all. The new disclosure could never have fired. PA found the other half: personal-token users had no path either, while Settings said they were connected. The fix is one resolver with two legs.
-- **The remaining number of literal routing patterns dropped from 440 to 155** in ten deletion lanes over Friday and Saturday, on rulings Arch gated. Nothing further landed after that, and the remaining tail didn't finish by Thursday night, which had been the goal. Nonetheless, the number of routing patterns is approaching the acceptable limit set to help determine whether we are on track for an October 30 beta. It's still touch and go, but still definitely possible.
-- **The first real promotion to alpha in the new Fly deploy GitHub Action workflow.** The promote workflow had only ever run as drills that skipped the steps that later failed. Its first real runs on Wednesday found three bugs in three attempts, each a safe refusal.
-- **The hosted connector is ready for a second caller.** Cross-caller isolation shipped with a two-user test and per-user rate limits. PA's review caught that the rate limiter would have enforced nothing in production while every test passed. [Comms: I don't really understand this item. Can you clarify it or ask Exec to... It needs to be in plain language. Less jargon. The whole draft needs a jargon review, imho. --xian]
-- **CI coverage.** One gating workflow had been red for 41 runs unseen, because the daily check named only the lint job. The check now covers all twelve. [QUESTION: Is it green (yet) now, or not, as of end of Thursday? Can we say so? --xian]
+- **The best find of the week.** Preparing a live check for that "say when a source failed" feature, Lead found that when Piper couldn't read your GitHub issues, it reported you had none, and for people who connected GitHub by signing in, Piper had no way to read them at all. The new "I couldn't check" message could never have appeared. PA found the other half: people who connected with a personal access token had no way in either, even though Settings showed them connected. One fix now handles both kinds of connection.
+- **The hand-written phrase-matching rules Piper still relies on dropped from 440 to 155** over Friday and Saturday, in ten batches of deletions, each approved by Arch. Nothing further landed after that, and the remaining tail didn't finish by Thursday night, which had been the goal. Finishing those deletions is one of the things the October 30 beta waits on. It's still touch and go, but still definitely possible.
+- **The first real release to alpha through our new automated release process.** It had only run as rehearsals that skipped the steps that later failed. Its first real runs on Wednesday found three bugs in three attempts, and each time it stopped rather than release something broken.
+- **The ChatGPT and Claude connection is ready for more people than me.** Each person's connection can only see their own Piper data, checked with two test accounts, and each person gets their own limit on how many requests they can make. PA's review caught that the limit had been switched off on the live server while every test still passed. It's fixed, and a test now fails if it's ever off again.
+- **Automated checks.** One of the checks code must pass had failed 41 times in a row without anyone noticing, because the daily look only covered one check. It now covers all twelve. When that check failed again on Wednesday, the daily look caught it within half an hour, and it was fixed that night. Every run through Thursday passed.
 
 ## 🔬 Methodology & process innovation
 
-- **Rulings from an assumed state.** Arch corrected six of their own rulings and claims this week, each made before reading everything. The sharpest: Arch treated "the router is unsure" as "not a command" until a ten-call live probe showed a delete request would have been saved as a new project. Arch now reads the callers and the measured router output before ruling.
-- **Cheaper, safer machinery.** CIO cut the briefing every agent loads at session start from 169 KB to a 5 KB page, and destructive git commands aimed at my working copy are now blocked by a hook instead of a sentence in the instructions.
-- **AI prompts human.** After outside feedback from a trusted human advisor that blog posts are given off that "AI-written" smell, I've reverted to an approach I'm using elsewhere, writing all of the prose myself from a scaffolding Comms supplies with the facts checked. The editorial calendar has a number of drafts that I am carefully rewriting as I come to them, and forthcoming posts will follow the model in which Claude prompts me to write instead of the other way around.
+- **Rulings from an assumed state.** Arch corrected six of their own rulings and claims this week, each made before reading everything. The sharpest: Arch treated "the router is unsure" as "not a command" until ten live test requests showed a delete request would have been saved as a new project. Arch now checks what the code and Piper actually do before ruling.
+- **Cheaper, safer machinery.** CIO cut the briefing every agent loads at session start from 169 KB to a 5 KB page, and destructive git commands aimed at my working copy are now blocked automatically instead of by a sentence in the instructions.
+- **AI prompts human.** After outside feedback from a trusted human advisor that blog posts give off that "AI-written" smell, I've reverted to an approach I'm using elsewhere, writing all of the prose myself from a scaffold Comms supplies with the facts checked. The editorial calendar has a number of drafts that I am carefully rewriting as I come to them, and forthcoming posts will follow the model in which Claude prompts me to write instead of the other way around.
 - **Checking the content, not the file.** Saturday's post went live with the wrong hero image for about three and a half hours until I noticed. The publish check had confirmed the file existed. It now opens the image and compares it to the alt text.
 
 ## 🌍 Published this week
@@ -67,20 +67,20 @@ Built and waiting for the next promotion to alpha: the Standup and Radar feature
 
 - **Issues closed:** 29
 - **Issues filed:** 46
-- **Open issues on the beta gate:** 28 → 14, mostly from my scope rulings on Tuesday rather than burn-down
-- **Routing pattern ceiling (goal is reduction):** 440 → 155
+- **Open issues on the beta gate:** 31 → 14, mostly from my scope rulings on Tuesday rather than burn-down
+- **Hand-written routing rules left (goal is reduction):** 440 → 155
 
-The beta gate got a written standard and a "slip ledger." PPM measured all 31 open gate issues on Monday, I ruled on them Tuesday, and the gate went to 14. Every admission and close is now a ledger row, with a brake: after a second slip, PPM stops proposing dates and brings me a choice between cutting scope and accepting a later date. The brake fired Thursday. I'm holding the dates anyway (design partners by Friday, October 23, hard stop Friday, October 30) and watching for slippage. As I write this, five slips are logged against that baseline and no days have moved.
+The beta gate got a written standard and a "slip ledger." PPM measured all 31 open gate issues on Monday, I ruled on them Tuesday, and the gate went to 14. Every issue added to or removed from the beta list is now logged, with a brake: after a second slip, PPM stops proposing dates and brings me a choice between cutting scope and accepting a later date. The brake fired Thursday. I'm holding the dates anyway (design partners by Friday, October 23, hard stop Friday, October 30) and watching for slippage. As I write this, five slips are logged against that baseline and no days have moved.
 
 Every agent's review this week listed at least one of their own mistakes, with the fix.
 
 # 🎯 Coming up next week
 
-Lead finishes the planned pattern deletions ahead of Wednesday's checkpoint. After the next promotion, the agents check the new failure messages against a sign-in-only account and a token-only account. Once I've tested the Piper plugin myself, PA submits it to three directories.
+Lead finishes the planned rule deletions ahead of Wednesday's checkpoint. After the next release to alpha, the agents check the new "I couldn't check" messages with one account connected to GitHub by sign-in and one by personal token. Once I've tested the Piper plugin myself, PA submits it to three directories.
 
 # 🚧 Blockers & asks
 
-Most of next week waits on me: the next alpha promotion, a GitHub test identity for those checks, four decisions on the privacy section about Piper accounts, and my plugin test.
+Most of next week waits on me: the next alpha promotion, a GitHub test identity for those checks, the go to publish the new privacy section about Piper accounts, and my plugin test.
 
 # 🔎 This week's learning pattern
 
