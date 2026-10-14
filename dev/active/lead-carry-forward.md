@@ -1,6 +1,29 @@
 # Lead carry-forward — Fable 5.1 seat; Model A worktree ~/Development/piper-morgan-worktrees/lead
 
-## STATE @ 2026-10-13 07:05 PT — START fire drained: #1987 half 2 + #2001 landed (main 8f93cfe672); alpha still 6e48d9ebb2
+## STATE @ 2026-10-13 21:49 PT — DAY CLOSED. Alpha serves `de7d0c1c57` (PM's 18:49 promotion); PM mid-card (row 5 next); main 12/12 green
+- **At START 10-14: (1) ROTATE CRON e5491d18** (armed 10-10 17:29, expires ~10-17): CronList → CronDelete → CronCreate `17 6,9,12,15,18,21 * * *`
+  → CronList exactly one; update the lead row in `dev/active/duty-cycle-registry.tsv`. **(2) Epic 0 Phase 3 trip-wire (PPM, Wed 10-14):**
+  read the literal ceiling (120 at close; `TOTAL: 120 (36 lists)`), say whether anything moved. (3) Read alpha /health against origin/main
+  and say on the card whether a promotion is needed (only if a code landing arrived overnight; every code landing of 10-13 is in de7d0c1c57).
+  (4) Answer any card pastes PM left after 21:5x before carried work.
+- **Card v30** (`dev/active/pm-test-card.md`; mirror https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi version 27 from `scratchpad/pm-test-card.html`,
+  which dies with this session — rebuild from the card if a republish is needed). Step 0 DONE 18:49; N1–N3 CLOSED by CXO 19:15 (#2002/#2003/#2004);
+  N4 (#2005 count) is PA's served check and judgement, paused by xian's ruling. PM's remaining rows: 5 (#1992), 6 onward, fresh-account block 12–14,
+  Spec's P2–P4, setup E (calendar) and P6 (prod counts) are his hand. File any failure as an issue; CXO reads the `yes` path / bare-no-after-unarmed-offer
+  if PM's paste lands them.
+- **#1982:** steps 1–3 DONE (fallback off 7cc00113bc; count recorded 16:36 PM's hand total=2 rewritten=2). **Registry publish HELD by xian** (via Exec
+  17:07). Held dual-write branch `claude/lead-1982-pat-dual-write` (4400ee3d9f) lands only after PM's PAT-only alpha test; #1983/#1995 behind it.
+- **#2005:** fixed 6cab869fd3 (total/truncated/perPage), live on PA's MCP v14 (17:49). **Paused per xian** (eval, bare MCP vs plugin — PA's proposal
+  `docs/internal/architecture/current/mcp/eval-2005-partial-list-bare-mcp-vs-plugin-2026-10-13.md`); not MVP critical path; nothing further from Lead.
+- **Promote gate refined 6164ab3ceb** (nearest tested ancestor when only untested paths changed); first real pass 18:49 run 38497735645. Keep reading the
+  gate line on later promotions; probe script was scratchpad-only (dies with the session; logic is in the workflow).
+- **Open issues on my side:** #1987 OPEN for AC3 served (card row 1, both halves + gone row); #2001 OPEN for CXO's served judgement ("1 day overdue").
+- **Link checker:** red 18:53 (GitHub 500 batch), SUCCESS 21:19 on its own; nothing owed to Docs.
+- **Fri 10-16: PROD server key move (PM's hand).** CIO re-runs role-duties count 10-27. Alpha log-stream behavioural re-read: attended-only, on Exec's ask.
+- **Sync-pm-local:** PM's checkout has local commits/edits (fast-forward refused 19:0x and again at close) — leave it; hard rule 1.
+- Worktrees: only the cycle one (scratch control worktree removed at close). Untracked `dev/active/canonical-retest-serving-llm.json` is a 10-10 artefact, not mine.
+
+## EARLIER — STATE @ 2026-10-13 07:05 PT — START fire drained: #1987 half 2 + #2001 landed (main 8f93cfe672); alpha still 6e48d9ebb2
 - **#1987 half 2 LANDED 71e213b885 (07:3x):** `delete_todo_pick.py` — the which-todo ask lists candidates numbered + arms the pick
   (#846 store, kind `delete_todo_pick_question`); the pick arms the #1666 title-bound confirm by id. #2000 census row shrank out
   (Arch's condition). Issue OPEN for AC3 served (card row 1, both halves + gone row). Comment 6147374039.
