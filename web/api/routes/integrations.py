@@ -116,9 +116,11 @@ INTEGRATION_REGISTRY = {
                 "fix": "Check repository permissions and token scope",
             },
             # #2012: the OAuth Test's live probe degrades with the connector taxonomy.
+            # #2029: one step — the OAuth callback upserts the grant and sets the binding
+            # BOUND over a STALE row, so no Disconnect is needed first.
             "stale_token": {
                 "message": "Your GitHub connection needs re-authorizing",
-                "fix": "In Settings → Integrations → GitHub, Disconnect, then Connect with GitHub",
+                "fix": "In Settings → Integrations → GitHub, Reconnect with GitHub",
             },
             "connect_required": {
                 "message": "GitHub is not connected for your account",

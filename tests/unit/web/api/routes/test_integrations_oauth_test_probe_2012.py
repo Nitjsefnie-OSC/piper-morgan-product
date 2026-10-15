@@ -62,7 +62,7 @@ async def test_revoked_grant_fails_the_test_with_a_reconnect_fix():
     probe.assert_awaited_once()
     message, fix = integrations._get_error_guidance("github", result["error_type"])
     assert "re-authoriz" in message
-    assert "Connect with GitHub" in fix
+    assert "Reconnect with GitHub" in fix  # #2029: one step, no Disconnect first
 
 
 async def test_live_oauth_grant_passes_and_names_the_connection():

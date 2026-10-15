@@ -422,9 +422,10 @@
       <div class="form-card" id="form-card">
         <h3 id="form-title">Connect GitHub</h3>
 
-        <!-- #1317 (ADR-070 C): OAuth connect — the MCP-connector path, recommended over a pasted PAT -->
+        <!-- #1317 (ADR-070 C): OAuth connect, recommended over a pasted PAT. #2029: kept (as
+             Reconnect) when the binding is stale; replaced by a line only when connected. -->
         <div class="form-group" id="oauth-connect-group">
-          <p class="form-hint">
+          <p class="form-hint" id="oauth-connect-hint">
             Recommended — connect securely with GitHub OAuth (nothing to copy or paste).
           </p>
           <button class="btn btn-primary" id="oauth-connect-btn" onclick="connectGitHubOAuth()">
@@ -604,29 +605,60 @@
         }
       }
 
-      // #1317: reflect the OAuth-connector binding (distinct from the native-PAT status above).
+      // #1317: reflect the GitHub OAuth binding (distinct from the native-PAT status above).
+      // #2029: three states from oauth-status — connected (BOUND), stale (GitHub rejected
+      // the grant; a read or the Test marked the binding STALE), or neither. Copy: CXO,
+      // 2026-10-15.
       async function checkGitHubOAuthStatus() {
         try {
           const resp = await fetch('/api/v1/settings/integrations/github/oauth-status');
           if (!resp.ok) return;
           const data = await resp.json();
           const group = document.getElementById('oauth-connect-group');
+          const iconEl = document.getElementById('status-icon');
+          const titleEl = document.getElementById('status-title');
+          const subtitleEl = document.getElementById('status-subtitle');
+          if (data.stale) {
+            // Keep the Connect group: its button is the way back (one step; the callback
+            // re-binds over the stale row).
+            const hintEl = document.getElementById('oauth-connect-hint');
+            const btnEl = document.getElementById('oauth-connect-btn');
+            if (hintEl) {
+              hintEl.textContent =
+                'Reconnect to give me access again. Nothing else on your account changes.';
+            }
+            if (btnEl) btnEl.textContent = 'Reconnect with GitHub';
+            if (data.serving === 'pat') {
+              // A working personal token is answering reads; the grant still needs fixing.
+              if (iconEl) { iconEl.className = 'status-icon connected'; iconEl.textContent = '✅'; }
+              if (titleEl) titleEl.textContent = 'Connected via your personal token';
+              if (subtitleEl) {
+                subtitleEl.textContent =
+                  "Your GitHub connection needs re-authorizing, so I'm not using it right now.";
+              }
+            } else {
+              if (iconEl) { iconEl.className = 'status-icon disconnected'; iconEl.textContent = '⚠️'; }
+              if (titleEl) titleEl.textContent = 'Needs reconnecting';
+              if (subtitleEl) {
+                subtitleEl.textContent =
+                  "GitHub no longer accepts your connection, so I can't read your GitHub right now.";
+              }
+            }
+            return;
+          }
           if (data.connected && group) {
             group.innerHTML =
               '<p class="form-hint" style="color: var(--success, #28a745); font-weight: 600;">' +
-              '✓ Connected with GitHub via OAuth (MCP connector).</p>';
+              '✓ Connected with GitHub.</p>';
           }
-          // #1329: when the OAuth connector is bound it is the live read path (not the
+          // #1329: when the OAuth binding is BOUND it is the live read path (not the
           // legacy native PAT), so override the top status card — which updateStatusUI set
           // from the expired-PAT check — to the real connected state instead of a
           // contradictory "Connection Issue / invalid token" banner.
           if (data.connected) {
-            const iconEl = document.getElementById('status-icon');
-            const titleEl = document.getElementById('status-title');
-            const subtitleEl = document.getElementById('status-subtitle');
             if (iconEl) { iconEl.className = 'status-icon connected'; iconEl.textContent = '✅'; }
             if (titleEl) titleEl.textContent = 'Connected';
-            if (subtitleEl) subtitleEl.textContent = 'Connected via OAuth (MCP connector)';
+            if (subtitleEl) subtitleEl.textContent = 'Connected with your GitHub account.';
           }
         } catch (e) {
           /* non-fatal — leave the Connect button as-is */

@@ -372,7 +372,7 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
             logger.warning(
                 "GitHub MCP resolve failed (server unreachable/unprovisioned)", exc_info=True
             )
-            return ResolveMiss(await self.degrade(self._degrade_reason_for_exc(exc)))
+            return ResolveMiss(await self._degrade_for_exc(binding, exc))
 
         if not handle:
             return ResolveMiss(await self.degrade(DegradationReason.RESOURCE_NOT_FOUND))
@@ -393,6 +393,40 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
             if isinstance(leaf, GitHubToolError):
                 return leaf.reason  # #1965 OAuth leg: GitHub's 401 is STALE_TOKEN, not an outage
         return DegradationReason.UNREACHABLE
+
+    async def _degrade_for_exc(self, credential, exc: BaseException) -> DegradationResponse:
+        """A connector call's exception → the honest degrade, and (#2029) GitHub's 401 on the
+        OAuth leg marks the binding STALE, so every status surface (Settings → GitHub's
+        ``oauth-status``, the Integrations card, the resolver's next pick) agrees from one
+        stored state instead of each re-deriving it."""
+        reason = self._degrade_reason_for_exc(exc)
+        if reason is DegradationReason.STALE_TOKEN:
+            await self._mark_oauth_binding_stale(credential)
+        return await self.degrade(reason)
+
+    @staticmethod
+    async def _mark_oauth_binding_stale(credential) -> bool:
+        """#2029: write ``STALE`` to the user's GitHub binding after GitHub rejected the
+        OAuth grant (401). Only the OAuth leg: a rejected personal token says nothing about
+        the grant. Only over ``BOUND``: never resurrect an unbound (disconnected) row or
+        overwrite another non-bound state. Best-effort: a failed write must never turn an
+        honest degrade into an error. Returns True when the row was flipped."""
+        if not isinstance(credential, GitHubCredential) or credential.leg != "oauth":
+            return False
+        try:
+            async with AsyncSessionFactory.session_scope() as session:
+                repo = ConnectorBindingRepository(session)
+                row = await repo.get(credential.owner_id, _GITHUB)
+                if row is None or row.status != ConnectorStatusState.BOUND.value:
+                    return False
+                await repo.set_status(
+                    credential.owner_id, _GITHUB, ConnectorStatusState.STALE.value
+                )
+            _slog.info("github_oauth_binding_marked_stale", owner_id=str(credential.owner_id))
+            return True
+        except Exception:
+            logger.warning("GitHub binding STALE write failed (best-effort)", exc_info=True)
+            return False
 
     async def degrade(self, reason: DegradationReason) -> DegradationResponse:
         messages = {
@@ -472,7 +506,7 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
                 exc_info=True,
             )
             return GitHubReposResult(
-                degradation=await self.degrade(self._degrade_reason_for_exc(exc))
+                degradation=await self._degrade_for_exc(binding_or_degrade, exc)
             )
         return GitHubReposResult(repositories=repos)
 
@@ -714,7 +748,7 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
             _slog.warning("github_write_failed_unreachable", tool=tool)
             return GitHubWriteResult(
                 attempted=True,
-                degradation=await self.degrade(self._degrade_reason_for_exc(exc)),
+                degradation=await self._degrade_for_exc(binding_or_degrade, exc),
             )
         if not readback or readback.get("number") != int(number):
             return GitHubWriteResult(verified=False, issue_number=int(number), raw=written)
@@ -859,9 +893,7 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
             logger.warning(
                 "GitHub MCP search failed (server unreachable/unprovisioned)", exc_info=True
             )
-            return GitHubIssuesResult(
-                degradation=await self.degrade(self._degrade_reason_for_exc(exc))
-            )
+            return GitHubIssuesResult(degradation=await self._degrade_for_exc(binding, exc))
         return GitHubIssuesResult(issues=items, total=total)
 
     @staticmethod
@@ -975,7 +1007,7 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
                 "GitHub MCP issue_read failed (server unreachable/unprovisioned)", exc_info=True
             )
             return GitHubIssueResult(
-                degradation=await self.degrade(self._degrade_reason_for_exc(exc))
+                degradation=await self._degrade_for_exc(binding_or_degrade, exc)
             )
         return GitHubIssueResult(item=item, resolved_repo=resolved.full_name)
 
@@ -1050,6 +1082,8 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
                 "GitHub MCP issue_read probe failed (server unreachable/unprovisioned)",
                 exc_info=True,
             )
+            if self._degrade_reason_for_exc(exc) is DegradationReason.STALE_TOKEN:
+                await self._mark_oauth_binding_stale(binding_or_degrade)  # #2029
             return "unknown", None, None
 
         if item is not None and item.get("number") is not None:
@@ -1108,7 +1142,7 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
                 exc_info=True,
             )
             return GitHubRepoScopedResult(
-                degradation=await self.degrade(self._degrade_reason_for_exc(exc))
+                degradation=await self._degrade_for_exc(binding_or_degrade, exc)
             )
         return GitHubRepoScopedResult(items=items, resolved_repo=resolved.full_name)
 
