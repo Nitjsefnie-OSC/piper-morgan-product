@@ -211,6 +211,10 @@
         color: #dc3545;
       }
 
+      .status-message.warning {
+        color: #b8860b;
+      }
+
       .status-detail {
         margin-top: 4px;
         font-size: 13px;
@@ -638,6 +642,12 @@
     }
   }
 
+  // The stale-OAuth sentence the Test endpoint appends when a personal token is
+  // covering for a connection GitHub no longer accepts (#2012).
+  function isStaleOAuthMessage(message) {
+    return typeof message === 'string' && message.includes('needs re-authorizing');
+  }
+
   async function testConnection(integrationName) {
     const btn = document.getElementById(`test-btn-${integrationName}`);
     const statusEl = document.getElementById(`status-${integrationName}`);
@@ -649,6 +659,7 @@
     btn.textContent = 'Testing...';
     statusEl.textContent = 'Testing connection...';
     statusEl.classList.remove('error');
+    statusEl.classList.remove('warning');
 
     try {
       const response = await fetch(`/api/v1/integrations/test/${integrationName}`, {
@@ -658,16 +669,21 @@
 
       // Update status
       const dot = card.querySelector('.status-dot');
-      dot.className = `status-dot ${result.success ? 'healthy' : 'failed'}`;
+      // #2037: the backend's message is the user text, verbatim (it names the serving
+      // GitHub leg); no latency. The stale-OAuth line (working, but the connection
+      // needs re-authorizing) is a warning, not a plain success.
+      const stale = result.success && isStaleOAuthMessage(result.message);
+      dot.className = `status-dot ${result.success ? (stale ? 'degraded' : 'healthy') : 'failed'}`;
 
       if (result.success) {
-        statusEl.textContent = `Connected (${result.latency_ms}ms)`;
+        statusEl.textContent = result.message;
         statusEl.classList.remove('error');
+        statusEl.classList.toggle('warning', stale);
         // Remove any existing fix suggestion
         const fixEl = document.getElementById(`fix-${integrationName}`);
         if (fixEl) fixEl.remove();
 
-        showToast('success', `${integrationName} connection successful`, 'Test Passed');
+        showToast(stale ? 'warning' : 'success', result.message, 'Test Passed');
       } else {
         statusEl.textContent = result.message;
         statusEl.classList.add('error');
@@ -718,9 +734,7 @@
         const statusEl = document.getElementById(`status-${result.integration}`);
 
         dot.className = `status-dot ${result.success ? 'healthy' : 'failed'}`;
-        statusEl.textContent = result.success
-          ? `Connected (${result.latency_ms}ms)`
-          : result.message;
+        statusEl.textContent = result.message;
         statusEl.classList.toggle('error', !result.success);
       }
 
