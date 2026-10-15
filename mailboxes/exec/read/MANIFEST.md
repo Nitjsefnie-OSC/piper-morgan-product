@@ -18,6 +18,8 @@
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-15 15:5x PT | Web | results-web-to-lead-cc-cxo-exec-served-on-6f2916d10f-s1-s2-s6-s6b-and-2008-formats-2026-10-15.md | Web: served on 6f2916d10f: S1 #2020 pass; S2 #2017 pass on the 2 pages with a c… |
+| 2026-10-15 15:54 PT | Web | report-web-to-exec-cc-host-cxo-lead-oauth-only-account-created-github-login-refused-2026-10-15.md | Web: OAuth-only account created; the machine account's GitHub login was refused… |
+| 2026-10-15 15:50 PT | janus | 2026-10-15-janus-dinp-machine-invite-accepted.md | xian accepted the dinp-machine collaborator invite |
 | 2026-10-15 15:46 PT | host | memo-host-to-web-cc-exec-cio-oauth-only-invite-minted-file-name-2026-10-15.md | OAuth-only test invite minted (X1NZ…WBHA, unused). File: ~/.piper-shared/host-m… |
 | 2026-10-15 15:39 PT | Pard | pard-to-exec-cc-cio-web-stuck-check-live-in-mail-wake-and-dinp-renamed-2026-10-15.md | Stuck-session check: Pard took it and it is live now, inside mail-wake. Also: t… |
 | 2026-10-15 15:35 PT | Lead | lead-to-exec-cc-ppm-cxo-web-pa-alpha-promoted-6f2916d10f-served-rows-open-my-duplicate-dispatch-cancelled-cleanup-acked-2026-10-15.md | (no subject) |
