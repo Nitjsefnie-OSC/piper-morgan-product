@@ -24,6 +24,14 @@ logger = structlog.get_logger(__name__)
 ONBOARDING_TIMEOUT_MINUTES = 30
 STANDUP_TIMEOUT_MINUTES = 15
 
+# #1771: the reply when an escape command ("stop") pauses an active standup.
+# CXO's string 2026-10-14 21:50 (was the registry's generic "No problem —
+# I've paused standup. We can pick it up anytime.", which read as an offer
+# with nothing armed). Same closing as the defer line: one state, one phrase.
+STANDUP_PAUSE_REPLY = (
+    "No problem — I've paused your standup. Just ask when you want to pick it back up."
+)
+
 
 class OnboardingProcessAdapter:
     """
@@ -301,6 +309,14 @@ class StandupProcessAdapter:
     @property
     def process_type(self) -> ProcessType:
         return ProcessType.STANDUP
+
+    def pause_message(self) -> str:
+        """#1771: the line when an escape command ("stop") pauses the standup.
+
+        CXO's string 2026-10-14 21:50, matching the defer line so one state
+        reads as one phrase. Read by ``registry.pause_message_for``.
+        """
+        return STANDUP_PAUSE_REPLY
 
     async def check_active(
         self,
