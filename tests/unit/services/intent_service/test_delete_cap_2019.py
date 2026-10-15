@@ -62,7 +62,12 @@ from services.shared_types import IntentCategory
 
 _USER = "5a1e2d40-2019-4b00-9e00-000000002019"
 _SESSION = "sess-2019-cap"
-_T0 = _dt.datetime(2026, 10, 15, 16, 0, tzinfo=_dt.timezone.utc)
+# A fixed clock in the PAST (the 1987/2003 files use the same date): the
+# targets handler's pool is the reminders that are DUE, so a base time on the
+# day the test runs made the served case straddle the clock (one reminder due
+# before 17:00 UTC, two after) — the two rail-entry pins passed in the morning
+# and failed in CI's 16:49Z run. Both reminders are always due now.
+_T0 = _dt.datetime(2026, 10, 14, 16, 0, tzinfo=_dt.timezone.utc)
 
 CXO_CAPPED_REPLY = (
     "I can delete one reminder at a time for now. You asked about these:\n"
