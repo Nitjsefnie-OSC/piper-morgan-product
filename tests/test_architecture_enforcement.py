@@ -4114,14 +4114,20 @@ class TestUnarmedAskSiteRatchet:
     credited only in ``_OFFER_HINT_BUILDER_MODULES``
     (``canonical_handlers.py``), whose builders were measured to reach a
     tracking seam (``CanonicalHandlers.handle`` dispatch, tracked in
-    ``_process_intent_internal``, or one of three rail adapters returning
-    through ``_finalize_canonical_rail_result``); a new builder module or a
-    new external caller fails ``test_2010_offer_hint_reach_tripwire``.
+    ``_process_intent_internal``, or a pinned rail adapter returning
+    through ``_finalize_canonical_rail_result``); a new builder module, or a
+    new external caller of a builder or of any in-class method that
+    transitively reaches one (#2024 (b)), fails
+    ``test_2010_offer_hint_reach_tripwire``.
     ADEQUACY (#1739 (a)) — the judge reads ``offer_text`` as the held
     question, so a holder armed by (ii) alone has its row removed only if
     every question sentence its literals render is verbatim a question
     sentence of an ``offer_text`` it builds; otherwise the row stays and the
-    mismatch is reported in ``stats["offer_text_mismatch"]``. A function
+    mismatch is reported in ``stats["offer_text_mismatch"]``. And an
+    ``offer_text`` must itself be a question (#2024 (a), Arch 2026-10-15: an
+    offer is ONE yes/no question; a directive or statement binds no "yes"):
+    a non-question constant fails ``test_2024_offer_text_is_a_question``,
+    naming holder and line. A function
     consumer-armed (below) through a (ii)-only caller is pinned and audited
     in ``test_2010_offer_hint_consumer_adequacy``. Or assign
     ``<x>.filling_state = SlotFillingState.PROMPTING|CONFIRMING`` (#2011
@@ -4224,15 +4230,34 @@ class TestUnarmedAskSiteRatchet:
     # through _finalize_canonical_rail_result). Held true by
     # test_2010_offer_hint_reach_tripwire.
     _OFFER_HINT_BUILDER_MODULES = frozenset({"services/intent_service/canonical_handlers.py"})
-    # The measured EXTERNAL callers (outside the builder modules) of every
-    # builder holder, 2026-10-15: the three #1595 Phase 3 rail adapters.
+    # The measured EXTERNAL referrers (outside the builder modules) of every
+    # builder holder AND of every in-class method that TRANSITIVELY reaches
+    # one (#2024 hardening (b), Arch 2026-10-15). Measured 2026-10-15 after
+    # #2024 dropped the archive/restore/search not-found hints (those three
+    # adapters were the #2010 set and are no longer builders' callers): one
+    # referrer, the read_canonical string table, whose
+    # "_handle_guidance_query" reaches _format_project_setup_guidance,
+    # _handle_project_setup_request and _format_integration_setup_guidance
+    # in-class. Its adapter getattr-dispatches the name and returns through
+    # _finalize_canonical_rail_result (check (c)).
     _OFFER_HINT_EXTERNAL_CALLERS = frozenset(
         {
-            ("services/intent_service/workflow_entries.py", "run_archive_project_workflow"),
-            ("services/intent_service/workflow_entries.py", "run_restore_project_workflow"),
-            ("services/intent_service/workflow_entries.py", "run_search_projects_workflow"),
+            ("services/intent_service/workflow_entries.py", "_READ_CANONICAL_MEMBERS"),
         }
     )
+    # A pinned referrer that is a NAME TABLE (strings dispatched by getattr)
+    # maps to the adapter holder that dispatches it; (c) checks that adapter.
+    _OFFER_HINT_TABLE_ADAPTERS = {
+        (
+            "services/intent_service/workflow_entries.py",
+            "_READ_CANONICAL_MEMBERS",
+        ): "_make_read_canonical_entry_point.run_read_canonical_workflow",
+    }
+    # The internal seam: CanonicalHandlers.handle reaches every builder by
+    # dispatch, and its tracked dispatch site is pinned by check (d). It is
+    # left out of the by-NAME external match ("handle" is a common attribute
+    # across services/; matching it by name would pin unrelated code).
+    _OFFER_HINT_SEAM_METHODS = frozenset({"handle"})
 
     # #2011 call 5 (Arch 2026-10-14): OPEN INVITATIONS — a CLOSED word-set of
     # invitation shapes whose any reply is a fresh request (nothing to bind).
@@ -4377,20 +4402,12 @@ class TestUnarmedAskSiteRatchet:
             # rows shrank out — each builds an "offer_hint" whose offer_text is,
             # verbatim, the question it renders (signal (ii), condition 2 audit
             # PASS, measured by the census). _format_project_setup_guidance
-            # below FAILED the audit (its offer_text holds only the first half
-            # of "…, or are you ready to set up your first project?") and stays.
-            (
-                "services/intent_service/canonical_handlers.py",
-                "CanonicalHandlers._format_project_setup_guidance",
-                # 4 → 2 (#1775): the has-projects branch (whose message +
-                # offer_hint each held an interrogative literal) was dead —
-                # both production callers always pass the 0-projects case;
-                # N>0 is handled inline by _handle_project_setup_request
-                # per #814 Option C. Only the no-projects branch's two
-                # literals (message + offer_hint) remain.
-                2,
-                "I'd be happy to help you set up your projects! To configure ",
-            ),
+            # FAILED that audit (its offer_text held only the first half of
+            # "…, or are you ready to set up your first project?") and stayed.
+            # 2026-10-15 (#2024, CXO copy): its either/or became the single
+            # question "Are you ready to set up your first project?", armed
+            # verbatim as offer_text; its row (2 literals) left BY MEASUREMENT
+            # (census 34 rows / 57 literals -> 33 / 55).
             (
                 "services/intent_service/canonical_handlers.py",
                 "CanonicalHandlers._handle_portfolio_query",
@@ -4961,7 +4978,7 @@ class TestUnarmedAskSiteRatchet:
             "Want X?"
         }
         assert cls._offer_texts(nodes('r["offer_hint"] = make_hint()')) == set()
-        # adequacy, on the measured 2383 shape (FAIL) and a verbatim match.
+        # adequacy, on the measured pre-#2024 2383 shape (FAIL) and a verbatim match.
         held = {"Would you like me to explain more about how Piper uses project context?"}
         assert not cls._offer_text_covers(
             "Would you like me to explain more about how Piper uses project "
@@ -4987,23 +5004,24 @@ class TestUnarmedAskSiteRatchet:
         (a) every holder that builds an "offer_hint" without tracking it
             itself lives in _OFFER_HINT_BUILDER_MODULES (a new builder
             module fails here until it is shown to reach a seam);
-        (b) the builders' EXTERNAL referrers are exactly the three pinned
-            rail adapters (a new external caller fails here);
-        (c) each pinned adapter returns the builder's result through
-            _finalize_canonical_rail_result, which calls _track_offer_hint;
+        (b) the EXTERNAL referrers of every builder AND of every in-class
+            method that transitively reaches one (#2024 hardening (b): the
+            ``ast`` call graph inside each builder-module class, closed
+            backwards from the builders) are exactly the pinned set (a new
+            external caller of any reaching method fails here);
+        (c) each pinned referrer returns the builder's result through
+            _finalize_canonical_rail_result, which calls _track_offer_hint
+            (a pinned NAME TABLE is checked at its getattr adapter);
         (d) the one CanonicalHandlers.handle dispatch site's holder calls
             _track_offer_hint (the internal route's seam)."""
         import ast
 
         cls = TestUnarmedAskSiteRatchet
         trees = self._caller_trees()
+        reach = cls._offer_hint_reach(trees)
+        builders = reach["builders"]
 
         # (a) builder modules
-        builders = set()
-        for rel, tree in trees:
-            for qual, nodes in cls._collect_holders(tree):
-                if cls._builds_offer_hint(nodes) and not cls._holder_arms(nodes):
-                    builders.add((rel, qual))
         modules = {rel for rel, _qual in builders}
         assert modules == set(cls._OFFER_HINT_BUILDER_MODULES), (
             f"#2010 reach tripwire: offer_hint builders that do not track "
@@ -5012,57 +5030,53 @@ class TestUnarmedAskSiteRatchet:
             f"arms only if its result reaches _track_offer_hint: show the "
             f"seam, then re-rule the scope (or call _track_offer_hint)."
         )
-        # vacuity: Arch measured 7 builder holders (8 builders) 2026-10-15.
-        assert len(builders) >= 7, f"only {len(builders)} builders found — the scan broke"
+        # vacuity: Arch measured 7 builder holders 2026-10-15; #2024 dropped
+        # the archive/restore/search not-found hints -> 4, measured.
+        assert len(builders) >= 4, f"only {len(builders)} builders found — the scan broke"
 
-        # (b) external referrers (a call, an attribute/name load, or a
-        # getattr/hasattr string) of any builder holder's name.
-        names = {qual.rsplit(".", 1)[-1] for _rel, qual in builders}
-        external = set()
-        for rel, tree in trees:
-            if rel in cls._OFFER_HINT_BUILDER_MODULES:
-                continue
-            for qual, nodes in cls._collect_holders(tree):
-                for sub in nodes:
-                    ref = None
-                    if isinstance(sub, ast.Attribute):
-                        ref = sub.attr
-                    elif isinstance(sub, ast.Name):
-                        ref = sub.id
-                    elif (
-                        isinstance(sub, ast.Call)
-                        and isinstance(sub.func, ast.Name)
-                        and sub.func.id in ("getattr", "hasattr")
-                        and len(sub.args) >= 2
-                        and isinstance(sub.args[1], ast.Constant)
-                    ):
-                        ref = sub.args[1].value
-                    if ref in names:
-                        external.add((rel, qual))
-        assert external == set(cls._OFFER_HINT_EXTERNAL_CALLERS), (
-            f"#2010 reach tripwire: the offer_hint builder holders "
-            f"{sorted(names)} are now referenced outside "
-            f"{sorted(cls._OFFER_HINT_BUILDER_MODULES)} by {sorted(external)}; "
-            f"measured {sorted(cls._OFFER_HINT_EXTERNAL_CALLERS)}. Show the new "
-            f"caller hands the result to _track_offer_hint, then pin it."
+        # (b) external referrers of every builder AND every in-class method
+        # that transitively reaches one (#2024 hardening (b)).
+        cls._assert_offer_hint_reach_pinned(reach)
+        # vacuity: 21 external entry points into the builder-module classes
+        # measured 2026-10-15 (the seam ``handle`` and dunders not counted).
+        assert len(reach["entry_points"]) >= 18, (
+            f"only {len(reach['entry_points'])} external entry points found — "
+            f"the referrer scan broke"
         )
+        names = reach["reaching"]
 
         # (c) each adapter returns the builder's result through the seam.
         index = dict(trees)
         for rel, name in sorted(cls._OFFER_HINT_EXTERNAL_CALLERS):
-            fn = next(
-                n
-                for n in index[rel].body
-                if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef)) and n.name == name
-            )
+            target = cls._OFFER_HINT_TABLE_ADAPTERS.get((rel, name), name)
+            fn = cls._find_def(index[rel], target)
+            assert fn is not None, f"pinned referrer {rel}::{target} not found"
             produced = set()
+            getattr_bound = {
+                t.id
+                for n in ast.walk(fn)
+                if isinstance(n, ast.Assign)
+                and isinstance(n.value, ast.Call)
+                and isinstance(n.value.func, ast.Name)
+                and n.value.func.id == "getattr"
+                for t in n.targets
+                if isinstance(t, ast.Name)
+            }
             for n in ast.walk(fn):
                 if (
                     isinstance(n, ast.Assign)
                     and isinstance(n.value, ast.Await)
                     and isinstance(n.value.value, ast.Call)
-                    and isinstance(n.value.value.func, ast.Attribute)
-                    and n.value.value.func.attr in names
+                    and (
+                        (
+                            isinstance(n.value.value.func, ast.Attribute)
+                            and n.value.value.func.attr in names
+                        )
+                        or (
+                            isinstance(n.value.value.func, ast.Name)
+                            and n.value.value.func.id in getattr_bound
+                        )
+                    )
                 ):
                     produced |= {t.id for t in n.targets if isinstance(t, ast.Name)}
             through, other = [], []
@@ -5081,7 +5095,7 @@ class TestUnarmedAskSiteRatchet:
                 else:
                     other.append(r)
             assert produced and through and not other, (
-                f"#2010 reach tripwire: {name} must return its builder result "
+                f"#2010 reach tripwire: {target} must return its builder result "
                 f"through _finalize_canonical_rail_result (the #852 seam); "
                 f"{len(other)} return(s) bypass it"
             )
@@ -5112,6 +5126,245 @@ class TestUnarmedAskSiteRatchet:
         assert cls._holder_arms(
             dispatch[0][2]
         ), "the CanonicalHandlers.handle dispatch holder no longer calls _track_offer_hint"
+
+    @staticmethod
+    def _find_def(tree, qual):
+        """The def node at dotted ``qual`` (nested defs allowed), or None."""
+        import ast
+
+        node = tree
+        for part in qual.split("."):
+            node = next(
+                (
+                    n
+                    for n in ast.iter_child_nodes(node)
+                    if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
+                    and n.name == part
+                ),
+                None,
+            )
+            if node is None:
+                return None
+        return node
+
+    @staticmethod
+    def _class_call_graph(cls_node) -> dict:
+        """#2024 (b): method -> the methods of the same class it references
+        (``self.x`` / ``cls.x`` / ``ClassName.x``, or a string constant naming
+        one, e.g. a getattr target or a dispatch table). Conservative: a
+        reference is an edge whether or not it is called."""
+        import ast
+
+        methods = {
+            n.name for n in cls_node.body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
+        }
+        graph = {}
+        for fn in cls_node.body:
+            if not isinstance(fn, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                continue
+            refs = set()
+            for sub in ast.walk(fn):
+                if (
+                    isinstance(sub, ast.Attribute)
+                    and isinstance(sub.value, ast.Name)
+                    and sub.value.id in ("self", "cls", cls_node.name)
+                ):
+                    refs.add(sub.attr)
+                elif isinstance(sub, ast.Constant) and isinstance(sub.value, str):
+                    refs.add(sub.value)
+            graph[fn.name] = (refs & methods) - {fn.name}
+        return graph
+
+    @classmethod
+    def _offer_hint_reach(cls, trees) -> dict:
+        """#2010 condition 1 + #2024 hardening (b), measured over ``trees``:
+
+        - ``builders``: (rel, qual) holders that build an ``"offer_hint"``
+          and do not track it themselves;
+        - ``reaching``: simple names of the builders plus every method of a
+          builder-module class whose in-class call graph reaches a builder
+          (transitive closure), minus the pinned seam (``handle``, check (d));
+        - ``entry_points``: method name -> {(rel, qual)} referrers OUTSIDE the
+          builder modules (attribute, name, or string constant naming it), for
+          every method of a builder-module class (dunders and the seam not
+          counted);
+        - ``external``: the referrers of any ``reaching`` name."""
+        import ast
+
+        builders = set()
+        for rel, tree in trees:
+            for qual, nodes in cls._collect_holders(tree):
+                if cls._builds_offer_hint(nodes) and not cls._holder_arms(nodes):
+                    builders.add((rel, qual))
+        builder_names = {qual.rsplit(".", 1)[-1] for _rel, qual in builders}
+        reaching = set(builder_names)
+        universe = set(builder_names)
+        for rel, tree in trees:
+            if rel not in cls._OFFER_HINT_BUILDER_MODULES:
+                continue
+            for cls_node in (n for n in tree.body if isinstance(n, ast.ClassDef)):
+                graph = cls._class_call_graph(cls_node)
+                universe |= set(graph)
+                own = {
+                    q.rsplit(".", 1)[-1]
+                    for r, q in builders
+                    if r == rel and q.startswith(cls_node.name + ".")
+                }
+                closed = set(own)
+                grew = True
+                while grew:
+                    grew = False
+                    for m, refs in graph.items():
+                        if m not in closed and refs & closed:
+                            closed.add(m)
+                            grew = True
+                reaching |= closed
+        excluded = set(cls._OFFER_HINT_SEAM_METHODS)
+        reaching -= excluded
+        universe = {n for n in universe - excluded if not n.startswith("__")}
+        entry_points = {}
+        for rel, tree in trees:
+            if rel in cls._OFFER_HINT_BUILDER_MODULES:
+                continue
+            for qual, nodes in cls._collect_holders(tree):
+                for sub in nodes:
+                    if isinstance(sub, ast.Attribute):
+                        ref = sub.attr
+                    elif isinstance(sub, ast.Name):
+                        ref = sub.id
+                    elif isinstance(sub, ast.Constant) and isinstance(sub.value, str):
+                        ref = sub.value
+                    else:
+                        continue
+                    if ref in universe:
+                        entry_points.setdefault(ref, set()).add((rel, qual))
+        external = set()
+        for name in reaching & set(entry_points):
+            external |= entry_points[name]
+        return {
+            "builders": builders,
+            "reaching": reaching,
+            "entry_points": entry_points,
+            "external": external,
+        }
+
+    @classmethod
+    def _assert_offer_hint_reach_pinned(cls, reach) -> None:
+        """#2024 hardening (b): fail if any external referrer reaches a
+        builder (directly or through the in-class closure) unless pinned."""
+        reaching_entries = sorted(n for n in reach["entry_points"] if n in reach["reaching"])
+        assert reach["external"] == set(cls._OFFER_HINT_EXTERNAL_CALLERS), (
+            f"#2010/#2024 reach tripwire: the offer_hint builders and the "
+            f"in-class methods that reach them {sorted(reach['reaching'])} are "
+            f"now referenced outside {sorted(cls._OFFER_HINT_BUILDER_MODULES)} "
+            f"by {sorted(reach['external'])} (via {reaching_entries}); measured "
+            f"{sorted(cls._OFFER_HINT_EXTERNAL_CALLERS)}. Show the new caller "
+            f"hands the result to _track_offer_hint, then pin it."
+        )
+
+    def test_2024_reach_closure_catches_an_indirect_caller(self):
+        """#2024 hardening (b), fed a fake in memory: an external caller of a
+        method that reaches a builder only THROUGH another in-class method
+        fails the pin; a caller of a method that reaches none does not."""
+        import ast
+
+        cls = TestUnarmedAskSiteRatchet
+        mod = next(iter(cls._OFFER_HINT_BUILDER_MODULES))
+        fake_builder = ast.parse(
+            "class CanonicalHandlers:\n"
+            "    async def handle(self, intent):\n"
+            "        return await self._entry(intent)\n"
+            "    async def _builder(self):\n"
+            '        return {"message": "m", "offer_hint": {"offer_text": "Want X?"}}\n'
+            "    async def _mid(self):\n"
+            "        return await self._builder()\n"
+            "    async def _entry(self, intent):\n"
+            "        return await self._mid()\n"
+            "    async def _other(self):\n"
+            '        return {"message": "no offer"}\n'
+        )
+        indirect = ast.parse("async def caller(ch):\n    return await ch._entry(None)\n")
+        unrelated = ast.parse("async def other_caller(ch):\n    return await ch._other()\n")
+        reach = cls._offer_hint_reach(
+            [(mod, fake_builder), ("services/x.py", indirect), ("services/y.py", unrelated)]
+        )
+        assert {"_builder", "_mid", "_entry"} <= reach["reaching"]
+        assert "_other" not in reach["reaching"]
+        assert "handle" not in reach["reaching"]  # the seam, pinned by (d)
+        assert reach["external"] == {("services/x.py", "caller")}
+        with pytest.raises(AssertionError, match="services/x.py"):
+            cls._assert_offer_hint_reach_pinned(reach)
+        # the unrelated caller alone reaches nothing: the pin's set-equality
+        # then fails only on the real pinned referrer being absent.
+        quiet = cls._offer_hint_reach([(mod, fake_builder), ("services/y.py", unrelated)])
+        assert quiet["external"] == set()
+        assert set(quiet["entry_points"]) == {"_other"}
+
+    def test_2024_offer_text_is_a_question(self):
+        """#2024 hardening (a) (Arch 2026-10-15): a built ``offer_hint``
+        whose constant ``offer_text`` resolves to a non-question fails the
+        build. A directive or a statement is not an offer: arming one binds
+        a "yes" to something the user was never asked."""
+        checked = self._assert_offer_texts_are_questions(self._caller_trees())
+        # vacuity: 4 constant offer_texts measured 2026-10-15 after #2024
+        # (_format_project_setup_guidance, _handle_project_setup_request,
+        # _format_integration_setup_guidance, _handle_portfolio_query's
+        # delete-not-found); a hint built by a call resolves to none.
+        assert checked >= 4, f"only {checked} offer_texts resolved — the scan broke"
+
+    def test_2024_offer_text_check_fails_on_a_directive(self):
+        """#2024 hardening (a), fed a fake: the directive offer_text the
+        archive/restore/search not-found branches carried before #2024
+        fails, naming holder and line; a question passes."""
+        import ast
+
+        cls = TestUnarmedAskSiteRatchet
+        directive = ast.parse(
+            "class H:\n"
+            "    def not_found(self):\n"
+            '        return {"message": "m", "offer_hint": {\n'
+            '            "continuation_hint": "list all projects",\n'
+            '            "offer_text": "Say \'list my projects\' to see what you have.",\n'
+            "        }}\n"
+        )
+        with pytest.raises(AssertionError, match=r"services/fake\.py:5 H\.not_found"):
+            cls._assert_offer_texts_are_questions([("services/fake.py", directive)])
+        statement = ast.parse(
+            "def f(project_count):\n"
+            '    outro = "I can help you add a new project or review your existing portfolio."\n'
+            '    r = {"message": outro}\n'
+            '    r["offer_hint"] = {"continuation_hint": "c", "offer_text": outro}\n'
+            "    return r\n"
+        )
+        with pytest.raises(AssertionError, match=r"services/fake\.py:2 f"):
+            cls._assert_offer_texts_are_questions([("services/fake.py", statement)])
+        question = ast.parse(
+            "def g():\n" '    return {"offer_hint": {"offer_text": "Want to add another?"}}\n'
+        )
+        cls._assert_offer_texts_are_questions([("services/fake.py", question)])
+
+    @classmethod
+    def _assert_offer_texts_are_questions(cls, trees) -> int:
+        """#2024 (a): every resolved constant offer_text of every built
+        offer_hint in ``trees`` is interrogative (``_interrogative``, the
+        census's own question test); returns how many were checked."""
+        bad = []
+        checked = 0
+        for rel, tree in trees:
+            for qual, nodes in cls._collect_holders(tree):
+                if not cls._builds_offer_hint(nodes):
+                    continue
+                for text, node in cls._offer_text_nodes(nodes):
+                    checked += 1
+                    if not cls._interrogative(text):
+                        bad.append(f"{rel}:{getattr(node, 'lineno', '?')} {qual}: {text!r}")
+        assert not bad, (
+            "#2024 (Arch 2026-10-15): an offer_hint arms only on ONE yes/no "
+            "question, and its offer_text is that question as rendered. These "
+            "offer_texts are not questions (a directive or a statement binds "
+            "no 'yes'; drop the offer_hint or ask): " + "; ".join(sorted(bad))
+        )
+        return checked
 
     # #2010: functions consumer-armed (one hop) through at least one caller
     # armed by signal (ii) alone, MEASURED 2026-10-15. The one-hop rule does
@@ -5269,6 +5522,12 @@ class TestUnarmedAskSiteRatchet:
         bound to either (``offer_text: outro``) or to the hint dict itself
         (``"offer_hint": offer_hint``). A value built elsewhere (a call)
         resolves to nothing — its holder's literals then cannot be covered."""
+        return {text for text, _node in cls._offer_text_nodes(nodes)}
+
+    @classmethod
+    def _offer_text_nodes(cls, nodes) -> list:
+        """(text, node) per resolved ``offer_text`` constant (see
+        ``_offer_texts``); the node carries the source line (#2024 (a))."""
         import ast
 
         assigns = {}
@@ -5289,7 +5548,7 @@ class TestUnarmedAskSiteRatchet:
                 return assigns.get(expr.id, [])
             return [expr]
 
-        out = set()
+        out = []
         for hint in cls._offer_hint_values(nodes):
             for d in resolve(hint):
                 if not isinstance(d, ast.Dict):
@@ -5299,9 +5558,9 @@ class TestUnarmedAskSiteRatchet:
                         continue
                     for e in resolve(v):
                         if isinstance(e, ast.Constant) and isinstance(e.value, str):
-                            out.add(e.value)
+                            out.append((e.value, e))
                         elif isinstance(e, ast.JoinedStr):
-                            out.add(cls._joined_text(e))
+                            out.append((cls._joined_text(e), e))
         return out
 
     @classmethod

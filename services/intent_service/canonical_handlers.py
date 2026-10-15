@@ -2359,11 +2359,15 @@ To configure your project portfolio:
 - **Description**: Brief summary of the project's purpose
 - **Repository**: (Optional) GitHub repo for issue integration
 
-Would you like me to explain more about how Piper uses project context, or are you ready to set up your first project?"""
-        # Issue #852: Track contextual offer for continuation
+Ask me how project context works any time. Are you ready to set up your first project?"""
+        # Issue #852: Track contextual offer for continuation.
+        # #2024 (Arch ruling + CXO copy, 2026-10-15): an armed offer is ONE
+        # yes/no question, and offer_text is that question as rendered. The
+        # old either/or ("explain more ..., or are you ready ...?") had no
+        # yes-answer; the explanation half is now a statement with no offer.
         offer_hint = {
-            "continuation_hint": "explain how Piper uses project context",
-            "offer_text": "Would you like me to explain more about how Piper uses project context?",
+            "continuation_hint": "add a new project",
+            "offer_text": "Are you ready to set up your first project?",
         }
 
         return {
@@ -2418,15 +2422,22 @@ Would you like me to explain more about how Piper uses project context, or are y
         # Case 2: N>0 projects — state-aware response (CXO Option C)
         label = formality_label(DEFAULT_WARMTH)
 
+        # #2024 (Arch ruling + CXO copy, 2026-10-15): an armed offer is ONE
+        # yes/no question whose offer_text is that question as rendered. The
+        # warm/balanced either/or outros became one question plus a review
+        # statement. The professional outro is a statement: it arms nothing,
+        # because a statement binds no "yes".
+        offer_text: Optional[str] = "Want to add another?"
         if label == "warm":
             intro = f"You've already got {project_count} project{'s' if project_count != 1 else ''} set up"
-            outro = "Want to add another, or would you like to review what you have?"
+            outro = "Say 'list my projects' to review what you have. Want to add another?"
         elif label == "professional":
             intro = f"You currently have {project_count} active project{'s' if project_count != 1 else ''}"
             outro = "I can help you add a new project or review your existing portfolio."
+            offer_text = None
         else:  # balanced
             intro = f"You have {project_count} project{'s' if project_count != 1 else ''} in your portfolio"
-            outro = "Would you like to add another project, or review your current setup?"
+            outro = "Say 'list my projects' to review what you have. Want to add another?"
 
         # #1762: the intro above states project_count; the list must match it.
         # Bounded user-owned set (PIPER.md), render == data (GatherOutcome §5b).
@@ -2440,7 +2451,7 @@ Would you like me to explain more about how Piper uses project context, or are y
 {project_list}
 {outro}"""
 
-        return {
+        result: Dict[str, Any] = {
             "message": message,
             "intent": {
                 "category": IntentCategoryEnum.GUIDANCE.value,
@@ -2455,11 +2466,13 @@ Would you like me to explain more about how Piper uses project context, or are y
             },
             "setup_type": "projects",
             "requires_clarification": False,
-            "offer_hint": {
-                "continuation_hint": "add another project or review existing portfolio",
-                "offer_text": outro,
-            },
         }
+        if offer_text is not None:
+            result["offer_hint"] = {
+                "continuation_hint": "add another project",
+                "offer_text": offer_text,
+            }
+        return result
 
     async def _format_integration_setup_guidance(self, user_id: Optional[str] = None) -> Dict:
         """
@@ -5046,6 +5059,8 @@ What would you like to set up first?"""
                 # again inside offer_hint's offer_text, a SEPARATE literal)
                 # would register as new unarmed-ask sites. Imperative
                 # phrasing instead; no test pins the old text for this path.
+                # #2024 (Arch 2026-10-15): a directive is not an offer, so
+                # this branch builds no offer_hint (nothing for "yes" to bind).
                 return {
                     "message": (
                         f"I couldn't find a project called '{project_name}'. "
@@ -5058,11 +5073,6 @@ What would you like to set up first?"""
                         "context": {"searched_name": project_name},
                     },
                     "requires_clarification": True,
-                    # Issue #852: Track contextual offer
-                    "offer_hint": {
-                        "continuation_hint": "list all projects",
-                        "offer_text": "Say 'list my projects' to see what you have.",
-                    },
                 }
 
     async def _handle_restore_project(
@@ -5163,6 +5173,7 @@ What would you like to set up first?"""
                 # #1766: same reasoning as _handle_archive_project's
                 # not-found branch — imperative phrasing instead of
                 # duplicating an unarmed-ask literal into this new holder.
+                # #2024: and, like it, no offer_hint (a directive binds no "yes").
                 return {
                     "message": (
                         f"I couldn't find an archived project called '{project_name}'. "
@@ -5175,11 +5186,6 @@ What would you like to set up first?"""
                         "context": {"searched_name": project_name},
                     },
                     "requires_clarification": True,
-                    # Issue #852: Track contextual offer
-                    "offer_hint": {
-                        "continuation_hint": "list archived projects",
-                        "offer_text": "Say 'list my archived projects' to see what you have.",
-                    },
                 }
 
     async def _handle_search_projects(
@@ -5281,12 +5287,8 @@ What would you like to set up first?"""
                 },
                 "requires_clarification": len(results) == 0,
             }
-            # Issue #852: Track contextual offer when search found no results
-            if not results:
-                result_dict["offer_hint"] = {
-                    "continuation_hint": "list all projects",
-                    "offer_text": "Say 'list my projects' to see what you have.",
-                }
+            # #2024 (Arch 2026-10-15): the no-results reply is a directive,
+            # not an offer, so it builds no offer_hint (was #852's hint here).
             return result_dict
 
     # -----------------------------------------------------------------

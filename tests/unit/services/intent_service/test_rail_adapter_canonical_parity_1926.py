@@ -316,11 +316,11 @@ async def test_guidance_adapter_reroutes_generic_response_to_the_floor():
 # Denominator: all 10 adapters in _ADAPTER_SPECS, using _not_found_dict —
 # by construction every op's not_found fixture carries an offer_hint and a
 # real question in offer_text (e.g. "Want me to try a different name for
-# archive_project?"). In production today only archive_project,
-# restore_project and search_projects actually emit this shape (verified
-# by reading canonical_handlers.py's offer_hint call sites: lines ~5059,
-# ~5176, ~5283 respectively); the other 7 ops' not_found fixture is
-# synthetic, matching this file's existing pinning methodology above
+# archive_project?"). Every op's not_found fixture is synthetic: since
+# #2024 (Arch 2026-10-15) the archive/restore/search not-found branches,
+# the only ones that once emitted this shape, build no offer_hint (their
+# "Say 'list my ...'" line is a directive, not an offer). This matches
+# this file's existing pinning methodology above
 # (mechanical coverage of the shared _finalize_canonical_rail_result /
 # _track_offer_hint code path, not a claim that each op's real handler
 # asks a question today).
