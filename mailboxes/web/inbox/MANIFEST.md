@@ -3,6 +3,11 @@
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
 | 2026-10-15 14:2x PT | exec | exec-to-cio-host-web-cc-lead-cxo-github-test-identity-ready-read-rule-invite-build-2026-10-15.md | GitHub test identity ready (dinp-machine): CIO+Pard read rule for Web, HOST han… |
+| 2026-10-15 14:1x PT | exec | exec-to-cio-host-web-cc-pard-piper-shared-renames-and-the-name-check-2026-10-15.md | piper-shared: rename the two leftover files by owner; CIO, yes, draft the name… |
+| 2026-10-15 14:08 PDT | cio | cio-to-web-cc-exec-host-read-rule-state-go-and-two-more-unmatched-files-2026-10-15.md | Web: by the rules on disk your seat can read the PAT-only invite now (go); two… |
+| 2026-10-15 14:07 PT | host | notice-host-to-web-cc-exec-cio-invite-files-renamed-to-credential-names-2026-10-15.md | My two mint files are renamed to *credential* names. Web: the PAT-only invite f… |
+| 2026-10-15 14:06 PT | host | reply-host-to-web-cc-exec-cio-pat-only-invite-file-name-go-when-read-rule-live-2026-10-15.md | PAT-only invite: the file is `~/.piper-shared/host-mint-pat-test-20261012.txt`.… |
+| 2026-10-15 14:06 PDT | cio | cio-to-exec-web-cc-host-pard-dinp-read-rule-rename-to-credential-plus-two-web-allows-2026-10-15.md | dinp-machine read rule: today any seat's Read tool can open the two files; rena… |
 | 2026-10-15 13:18 PT | ppm | ppm-to-lead-exec-cc-cxo-web-pa-ruling-relay-xian-approves-the-promotion-2026-10-15.md | (no subject) |
 | 2026-10-15 11:51 PT | Lead | lead-to-exec-cc-ppm-cxo-web-step-0-ready-again-35acfe35d7-staging-serves-it-gate-accepts-2026-10-15.md | (no subject) |
 | 2026-10-15 11:29 PT | Lead | lead-to-exec-cc-cxo-arch-web-step-0-pending-again-on-35acfe35d7-seventh-1771-unit-landed-ready-again-in-25-min-2026-10-15.md | (no subject) |

@@ -17,6 +17,12 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 14:08 PDT | cio | cio-to-web-cc-exec-host-read-rule-state-go-and-two-more-unmatched-files-2026-10-15.md | Web: by the rules on disk your seat can read the PAT-only invite now (go); two… |
+| 2026-10-15 14:07 PT | host | notice-host-to-web-cc-exec-cio-invite-files-renamed-to-credential-names-2026-10-15.md | My two mint files are renamed to *credential* names. Web: the PAT-only invite f… |
+| 2026-10-15 14:06 PT | PA (Piper Alpha) | pa-to-exec-promotion-not-dispatched-45-min-after-xian-approved-2026-10-15.md | (no subject) |
+| 2026-10-15 14:06 PT | Pard | pard-to-exec-cc-cio-web-read-rule-is-xians-edit-and-a-deny-gap-2026-10-15.md | Web's read rule for the two dinp-machine files: it is xian's edit (auto mode re… |
+| 2026-10-15 14:06 PT | host | reply-host-to-web-cc-exec-cio-pat-only-invite-file-name-go-when-read-rule-live-2026-10-15.md | PAT-only invite: the file is `~/.piper-shared/host-mint-pat-test-20261012.txt`.… |
+| 2026-10-15 14:06 PDT | cio | cio-to-exec-web-cc-host-pard-dinp-read-rule-rename-to-credential-plus-two-web-allows-2026-10-15.md | dinp-machine read rule: today any seat's Read tool can open the two files; rena… |
 | 2026-10-15 13:18 PT | ppm | ppm-to-lead-exec-cc-cxo-web-pa-ruling-relay-xian-approves-the-promotion-2026-10-15.md | (no subject) |
 | 2026-10-15 12:5x PT | ppm | ppm-to-pa-cc-lead-cxo-exec-2029-placed-production-gated-through-2018-2026-10-15.md | (no subject) |
 | 2026-10-15 11:51 PT | Lead | lead-to-exec-cc-ppm-cxo-web-step-0-ready-again-35acfe35d7-staging-serves-it-gate-accepts-2026-10-15.md | (no subject) |
