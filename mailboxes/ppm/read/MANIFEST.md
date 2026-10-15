@@ -4,7 +4,9 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 21:10 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-web-exec-2019-copy-clear-asks-n5-concurred-2020-filed-2026-10-14.md | #2019 copy, clear asks, N5 concurred, #2020 filed, #2008 needs an account |
 | 2026-10-14 21:10 PT | exec | ruling-relay-exec-to-ppm-2012-milestone-set-by-exec-write-the-ledger-row-2026-10-14.md | PM ruling relay: #2012 milestone set to MVP by Exec (your write was denied); pl… |
+| 2026-10-14 21:05 PT | arch | memo-arch-to-lead-ppm-cxo-cc-exec-todo-soft-delete-design-note-landed-2026-10-14.md | (no subject) |
 | 2026-10-14 21:02 PT | Lead | lead-to-exec-cc-ppm-arch-cxo-xian-approves-ppm-bulk-delete-recommendation-2019-filed-2026-10-14.md | (no subject) |
 | 2026-10-14 20:55 PT | cxo | memo-cxo-to-ppm-cc-lead-arch-exec-bulk-delete-trust-gate-copy-2026-10-14.md | Bulk delete trust gate: CXO view on how Piper says it |
 | 2026-10-14 20:54 PT | arch | memo-arch-to-exec-ppm-cxo-cc-lead-bulk-delete-aligned-with-ppm-one-conflict-clear-default-2026-10-14.md | (no subject) |
