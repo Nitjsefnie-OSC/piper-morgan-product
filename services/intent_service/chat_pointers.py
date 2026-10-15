@@ -181,7 +181,12 @@ CHAT_POINTERS = {
     ),
     "page:/lists": CHAT_INVISIBLE(untracked=True, note="census direction-1 gap"),
     "page:/todos": POINTER("show me my todos", expects=("query", "list_todos_query")),
-    "page:/projects": POINTER("list my projects", expects=("portfolio", "manage_portfolio")),
+    # 2026-10-14 (Lead): re-pointed to the post-split read per Arch's 2026-10-04
+    # ruling (list_projects, the live QUERY entry in read_status); was
+    # ("portfolio", "manage_portfolio"), the pre-split half. The corpus row
+    # moved in the same commit; the pointer's served reply (active projects via
+    # _handle_projects_query) is quoted once on the next promotion's read.
+    "page:/projects": POINTER("list my projects", expects=("query", "list_projects")),
     "page:/projects/{project_id}": CHAT_INVISIBLE(
         issue=711, note="detail deep-link surface; list reachable via /projects pointer"
     ),
