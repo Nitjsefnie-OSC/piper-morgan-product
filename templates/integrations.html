@@ -764,45 +764,45 @@
     const btn = document.getElementById(`disconnect-btn-${integrationName}`);
     const displayName = integrationName.charAt(0).toUpperCase() + integrationName.slice(1);
 
-    Dialog.confirm({
+    const ok = await Dialog.confirm({
       title: `Disconnect ${displayName}?`,
       message: `I'll disconnect your ${displayName} integration. You can set it up again anytime.`,
-      confirmText: 'Disconnect',
-      onConfirm: async () => {
-        if (btn) {
-          btn.disabled = true;
-          btn.textContent = 'Disconnecting...';
-        }
-
-        try {
-          const response = await fetch(`/api/v1/settings/integrations/${integrationName}/disconnect`, {
-            method: 'POST'
-          });
-
-          if (!response.ok) {
-            const error = await response.json();
-            throw new Error(parseApiDetail(error.detail, 'Disconnect failed'));
-          }
-
-          const data = await response.json();
-
-          if (data.success) {
-            showToast('success', data.message || `${displayName} disconnected`, 'Disconnected');
-            // Reload integrations to update UI
-            loadIntegrationsHealth();
-          } else {
-            throw new Error(data.message || 'Disconnect failed');
-          }
-        } catch (error) {
-          console.error('Disconnect failed:', error);
-          showToast('error', error.message, 'Disconnect Failed');
-          if (btn) {
-            btn.disabled = false;
-            btn.textContent = 'Disconnect';
-          }
-        }
-      }
+      confirmText: 'Disconnect'
     });
+    if (!ok) return;
+
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = 'Disconnecting...';
+    }
+
+    try {
+      const response = await fetch(`/api/v1/settings/integrations/${integrationName}/disconnect`, {
+        method: 'POST'
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(parseApiDetail(error.detail, 'Disconnect failed'));
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
+        showToast('success', data.message || `${displayName} disconnected`, 'Disconnected');
+        // Reload integrations to update UI
+        loadIntegrationsHealth();
+      } else {
+        throw new Error(data.message || 'Disconnect failed');
+      }
+    } catch (error) {
+      console.error('Disconnect failed:', error);
+      showToast('error', error.message, 'Disconnect Failed');
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = 'Disconnect';
+      }
+    }
   }
 
   // Disconnect API key integration (Issue #540: Notion, GitHub, etc.)
@@ -810,45 +810,45 @@
     const btn = document.getElementById(`disconnect-btn-${integrationName}`);
     const displayName = integrationName.charAt(0).toUpperCase() + integrationName.slice(1);
 
-    Dialog.confirm({
+    const ok = await Dialog.confirm({
       title: `Disconnect ${displayName}?`,
       message: `I'll disconnect your ${displayName} integration. You can set it up again anytime.`,
-      confirmText: 'Disconnect',
-      onConfirm: async () => {
-        if (btn) {
-          btn.disabled = true;
-          btn.textContent = 'Disconnecting...';
-        }
-
-        try {
-          const response = await fetch(`/api/v1/settings/integrations/${integrationName}/disconnect`, {
-            method: 'POST'
-          });
-
-          if (!response.ok) {
-            const error = await response.json();
-            throw new Error(parseApiDetail(error.detail, 'Disconnect failed'));
-          }
-
-          const data = await response.json();
-
-          if (data.success) {
-            showToast('success', data.message || `${displayName} disconnected`, 'Disconnected');
-            // Reload integrations to update UI
-            loadIntegrationsHealth();
-          } else {
-            throw new Error(data.message || 'Disconnect failed');
-          }
-        } catch (error) {
-          console.error('Disconnect failed:', error);
-          showToast('error', error.message, 'Disconnect Failed');
-          if (btn) {
-            btn.disabled = false;
-            btn.textContent = 'Disconnect';
-          }
-        }
-      }
+      confirmText: 'Disconnect'
     });
+    if (!ok) return;
+
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = 'Disconnecting...';
+    }
+
+    try {
+      const response = await fetch(`/api/v1/settings/integrations/${integrationName}/disconnect`, {
+        method: 'POST'
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(parseApiDetail(error.detail, 'Disconnect failed'));
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
+        showToast('success', data.message || `${displayName} disconnected`, 'Disconnected');
+        // Reload integrations to update UI
+        loadIntegrationsHealth();
+      } else {
+        throw new Error(data.message || 'Disconnect failed');
+      }
+    } catch (error) {
+      console.error('Disconnect failed:', error);
+      showToast('error', error.message, 'Disconnect Failed');
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = 'Disconnect';
+      }
+    }
   }
 
   // Disconnect All integrations (Issue #544)
@@ -874,20 +874,20 @@
 
     // Confirmation dialog
     const names = connected.map(i => `• ${i.display_name}`).join('\n');
-    Dialog.confirm({
+    const ok = await Dialog.confirm({
       title: 'Disconnect all integrations?',
       message: `I'll disconnect these integrations:\n${names}\n\nYou can set them up again anytime.`,
-      confirmText: 'Disconnect all',
-      onConfirm: async () => {
-        // Update button state
-        if (btn) {
-          btn.disabled = true;
-          btn.classList.add('disconnecting');
-          btn.textContent = 'Disconnecting...';
-        }
-        await performDisconnectAll(btn, connected);
-      }
+      confirmText: 'Disconnect all'
     });
+    if (!ok) return;
+
+    // Update button state
+    if (btn) {
+      btn.disabled = true;
+      btn.classList.add('disconnecting');
+      btn.textContent = 'Disconnecting...';
+    }
+    await performDisconnectAll(btn, connected);
   }
 
   async function performDisconnectAll(btn, connected) {
