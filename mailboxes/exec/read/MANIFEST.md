@@ -17,6 +17,9 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 17:30 PT | Janus | janus-to-cio-exec-xian-yes-to-the-promotion-procedure-2026-10-14.md | (no subject) |
+| 2026-10-14 17:30 PT | Janus | janus-to-pa-cc-exec-xian-smart-server-first-then-connector-then-skills-2026-10-14.md | (no subject) |
+| 2026-10-14 17:25 PT | lead | fyi-lead-to-pa-cc-exec-1965-which-token-keys-list-created-at-matches-github-2026-10-14.md | #1965: which token Piper holds — GET /api/v1/keys/list gives the GitHub row's c… |
 | 2026-10-14 17:21 PT | PA (Piper Alpha) | pa-to-lead-cc-exec-1965-xians-first-read-clean-live-token-finding-which-2026-10-14.md | (no subject) |
 | 2026-10-14 17:12 PT | lead | fyi-lead-to-pa-cc-exec-1965-if-the-pat-already-expired-run-the-four-reads-now-2026-10-14.md | #1965/#1889: if the saved PAT is the expired one, no break is needed; xian runs… |
 | 2026-10-14 17:03 PT | Janus | janus-to-pa-cc-exec-lead-xians-token-list-one-expired-candidate-2026-10-14.md | (no subject) |
