@@ -102,15 +102,44 @@ class TestYesShapedTurnsStartTheInterview:
             w.generate.assert_not_called()
 
     @pytest.mark.asyncio
-    async def test_skip_the_standup_starts_the_interview(self):
-        """Reported as it stands (Arch 10:1x: "leaves only if the predicate
-        reads it"). The predicate's verdict on "skip the standup" is PASS
-        (not a whole-message decline, no DEFER row), so the interview starts.
-        CXO's served run judges whether that is right."""
+    @pytest.mark.parametrize("turn", ["skip docs", "skip the docs", "skip the questions please"])
+    async def test_skip_something_else_starts_the_interview(self, turn):
+        """Only the flow's own name makes "skip" an exit (Arch 10:4x)."""
         with _World() as w:
-            result, state = await w.invite_then("skip the standup")
+            result, state = await w.invite_then(turn)
+            assert not result.escaped
             assert result.response_message == FIRST_QUESTION
             assert state == S.GATHERING_YESTERDAY
+
+
+class TestSkipTheStandupLeaves:
+    """CXO 10:25 item 2 / Arch 10:4x: "skip the standup" is a #1529 exit on
+    the flow's own name (``escape._skip_flow_re``, flow-specific words only).
+    Was ``test_skip_the_standup_starts_the_interview`` (f76a307ecb: the
+    predicate read it PASS, so the interview started)."""
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        "turn",
+        [
+            "skip the standup",
+            "skip standup",
+            "Skip the standup.",
+            "please skip the standup",
+            "skip my standup",
+            "skip the daily standup",
+            "skip stand-up",
+        ],
+    )
+    async def test_ends_with_the_invitation_line(self, turn):
+        with _World() as w:
+            result, state = await w.invite_then(turn)
+            assert result.escaped
+            assert result.response_message == CXO_INVITATION_END
+            assert state == S.ABANDONED
+            assert await w.adapter.has_suspended_session(_USER) is None
+            assert await w.registry.check_suspended_processes(_USER) is None
+            w.generate.assert_not_called()
 
 
 class TestLeavingGetsTheInvitationLine:

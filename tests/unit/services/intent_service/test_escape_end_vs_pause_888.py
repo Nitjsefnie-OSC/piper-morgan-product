@@ -623,3 +623,99 @@ class TestPolitenessAtTheHatch:
         result = await registry.check_active_processes(_USER, "s", turn)
         assert result.escaped
         assert bare.closed is closed and bare.suspended is not closed
+
+
+# --- #1771: "skip <flow name>" is a #1529 exit (Arch 2026-10-15) --------------
+
+
+class TestSkipTheFlowByName:
+    """``escape._skip_flow_re``: ``^(please )?skip (the|my)? <flow-specific
+    words>``, built with ``include_generic=False``. "skip it" / "skip this" /
+    "skip that" are never exits (mid-interview: "skip this question")."""
+
+    @pytest.mark.parametrize(
+        "turn,process_type",
+        [
+            ("skip the standup", ProcessType.STANDUP),
+            ("skip standup", ProcessType.STANDUP),
+            ("please skip my standup", ProcessType.STANDUP),
+            ("skip onboarding", ProcessType.ONBOARDING),
+            ("skip the planning session", ProcessType.PLANNING),
+            ("skip feedback", ProcessType.FEEDBACK),
+        ],
+    )
+    def test_flow_name_is_an_exit(self, turn, process_type):
+        from services.process.escape import detect_flow_exit
+
+        assert detect_flow_exit(turn, process_type)
+
+    @pytest.mark.parametrize("process_type", list(ProcessType), ids=lambda p: p.value)
+    @pytest.mark.parametrize(
+        "turn",
+        [
+            "skip it",
+            "skip this",
+            "skip that",
+            "skip",
+            "skip the flow",
+            "skip this one",
+            "skip the standup and the retro",
+        ],
+    )
+    def test_generic_words_are_not_exits(self, turn, process_type):
+        from services.process.escape import detect_flow_exit
+
+        assert not detect_flow_exit(turn, process_type)
+
+    def test_another_flows_name_is_not_an_exit(self):
+        from services.process.escape import detect_flow_exit
+
+        assert not detect_flow_exit("skip onboarding", ProcessType.STANDUP)
+        assert not detect_flow_exit("skip the standup", ProcessType.ONBOARDING)
+
+    def test_skip_is_not_an_exit_verb(self):
+        from services.process import escape
+
+        assert "skip" not in escape._EXIT_VERBS.split("|")
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("stage", MID_INTERVIEW_STAGES, ids=lambda s: s.value)
+    @pytest.mark.parametrize("turn", ["skip the standup", "skip standup"])
+    async def test_mid_interview_drops_through_exit_reply(self, turn, stage):
+        """It explicitly withdraws (CXO 09:15 rule): the adapter's
+        ``exit_reply`` reads no deferral, so it ENDS with the drop line."""
+        sid = str(uuid4())
+        with _World() as w:
+            conv = await w.at(sid, stage)
+            result = await w.registry.check_active_processes(_USER, sid, turn)
+            assert result.escaped
+            assert result.response_message == CXO_DROP
+            assert await w.state(conv) == S.ABANDONED
+            assert await w.adapter.has_suspended_session(_USER) is None
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        "stage,next_question",
+        [
+            (S.GATHERING_YESTERDAY, "What's planned for today?"),
+            (S.GATHERING_TODAY, "Any blockers or things you need help with?"),
+        ],
+        ids=lambda v: getattr(v, "value", v),
+    )
+    @pytest.mark.parametrize("turn", ["skip it", "skip this"])
+    async def test_mid_interview_skip_it_advances(self, turn, stage, next_question):
+        sid = str(uuid4())
+        with _World() as w:
+            conv = await _at_question(w, sid, stage)
+            result = await w.registry.check_active_processes(_USER, sid, turn)
+            assert not result.escaped
+            assert next_question in result.response_message
+            assert await w.state(conv) != S.ABANDONED
+
+    @pytest.mark.asyncio
+    async def test_generic_across_processes(self):
+        registry, bare = ProcessRegistry(), _Bare()
+        registry.register(bare)
+        result = await registry.check_active_processes(_USER, "s", "skip planning")
+        assert result.escaped and bare.closed
+        assert result.response_message == format_exit_message(ProcessType.PLANNING)

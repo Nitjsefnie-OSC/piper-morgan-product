@@ -18,7 +18,8 @@ Three signal kinds, most-specific first:
 
 1. **exit** — the whole message is an exit command aimed at the flow:
    "end standup", "stop the standup", "cancel this", "quit", plus bare forms
-   ("never mind", "not now", "forget it"). The flow is CLOSED (not suspended —
+   ("never mind", "not now", "forget it"), plus "skip <the flow's own name>"
+   ("skip the standup", "skip onboarding"; never "skip it", #1771). The flow is CLOSED (not suspended —
    a suspended flow re-offers itself, which is the nag loop #1529 documents)
    and the turn is claimed with honest exit copy. #1771 (CXO 2026-10-15): a
    handler may answer the exit itself through the optional ``exit_reply``
@@ -128,6 +129,21 @@ def _exit_re(process_type: ProcessType) -> Pattern[str]:
         rf"^(?:please\s+)?(?:let'?s\s+)?(?:{_EXIT_VERBS})\s+"
         rf"(?:the\s+|this\s+|my\s+)?(?:{words})"
         rf"(?:\s+(?:now|please|for\s+now|for\s+today))?\s*[.!?]*$",
+        re.IGNORECASE,
+    )
+
+
+def _skip_flow_re(process_type: ProcessType) -> Optional[Pattern[str]]:
+    """#1771 (Arch 2026-10-15): "skip the standup" / "skip standup" — a
+    full-message exit on the flow's OWN name only (``include_generic=False``).
+    "skip it" / "skip this" / "skip that" are never exits: mid-interview they
+    mean "skip this question" and reach the handler. ``skip`` is not added to
+    ``_EXIT_VERBS``. None for a flow with no user-facing name."""
+    words = _flow_words_for(process_type, include_generic=False)
+    if not words:
+        return None
+    return re.compile(
+        rf"^(?:please\s+)?skip\s+(?:the\s+|my\s+)?(?:{words})\s*[.!?]*$",
         re.IGNORECASE,
     )
 
@@ -252,7 +268,10 @@ def detect_flow_exit(message: str, process_type: ProcessType) -> bool:
     stripped = message.strip()
     if stripped.lower().rstrip(".!?") in BARE_EXIT_COMMANDS:
         return True
-    return bool(_exit_re(process_type).match(stripped))
+    if _exit_re(process_type).match(stripped):
+        return True
+    skip_re = _skip_flow_re(process_type)
+    return bool(skip_re and skip_re.match(stripped))
 
 
 def _residual_after(message: str, start: int, end: int) -> Optional[str]:

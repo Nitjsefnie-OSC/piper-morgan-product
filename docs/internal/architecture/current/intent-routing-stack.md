@@ -488,7 +488,18 @@ advances at every GATHERING_* question and leaves at the invitation; `quick`
 still bypasses).
 **Four further seams (2026-10-15, CXO's lines,
 Arch's mechanism): a deferral pauses, only a cancel or a "no" to the
-invitation ends.** On a #1529 whole-message exit the registry first asks the
+invitation ends.** A #1529 whole-message exit is `escape.detect_flow_exit`:
+`BARE_EXIT_COMMANDS`, or `_exit_re` (`^(please )?(let's )?(end|stop|cancel|
+quit|exit|abort) (the|this|my)? <flow's own words | generic this/it/that/…>`,
+so "cancel that", "cancel it", "please cancel it", "please cancel the standup"
+already leave), or, since #1771 (Arch 2026-10-15), its sibling `_skip_flow_re`
+(`^(please )?skip (the|my)? <flow's OWN words>`, built with
+`include_generic=False`): "skip the standup" / "skip standup" / "skip
+onboarding" exit, generically across processes, while "skip it" / "skip this"
+/ "skip that" never do (mid-interview they reach the handler and advance).
+`skip` is not an `_EXIT_VERBS` word; through the standup's `exit_reply`
+"skip the standup" gets the invitation line at INITIATED and the drop line
+mid-interview, and "skip docs" at the invitation starts the interview. On a #1529 whole-message exit the registry first asks the
 handler (`exit_reply`, optional async hook via `_handler_exit_reply`; no hook,
 None, or a raise → the generic close, so #1529 is unchanged for every other
 process and the registry holds no deferral words). The standup adapter's
