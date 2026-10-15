@@ -433,27 +433,46 @@ continue/restart ask is rendered and armed in one place,
 `_start_standup_conversation` (session lookup, then a user-scoped SUSPENDED
 lookup for a standup paused in another chat); the EMPTY-source branch of
 `_handle_standup_query` routes there when a paused standup exists, before the
-empty-source reply (a non-empty report still renders as asked). The escape-word pause line
-comes from the handler (`pause_message()`, optional; `registry.pause_message_for`
-keeps the generic default). **Four further seams (2026-10-15, CXO's lines,
+empty-source reply (a non-empty report still renders as asked). **#888 escape
+words, split END vs PAUSE (Arch 2026-10-15, generic across processes):**
+`ESCAPE_COMMANDS` (registry.py) is now the union of `ESCAPE_END_WORDS`
+(`cancel`, `quit`, `exit`, `never mind` → `_close_process`: the handler's
+`close()`, terminal, no resume re-offer) and `ESCAPE_PAUSE_WORDS` (`stop`,
+`skip` → `suspend()`; `skip` stays PAUSE until CXO places it). The registry
+picks the transition from the word alone, before any handler runs (PPM's
+#888 direction holds: the handler never interprets an escape word). The
+handler supplies only the line, through optional hooks `pause_message()` /
+`drop_message()` (sync no-arg, or async `(user_id, session_id)` so the copy
+can read the handler's own state), resolved by `registry.escape_reply_for`
+BEFORE the transition; generic defaults `pause_message_for` /
+`drop_message_for` (the latter is the #1529 exit copy). The word map is
+CXO's; each set is a one-line edit. **An unstarted standup is never
+suspended (Arch 2026-10-15, shape A):** `StandupProcessAdapter.suspend()`
+at INITIATED closes the row (ABANDONED), and every way of leaving at
+"ready to start?" (every escape word, every #1529 whole-message exit, a
+deferral, a "no") gets the invitation line, so no empty SUSPENDED record is
+ever offered back. Pins: `test_escape_end_vs_pause_888.py` (belt: every word
+× every stage → escaped, inactive; nothing suspended at INITIATED).
+**Four further seams (2026-10-15, CXO's lines,
 Arch's mechanism): a deferral pauses, only a cancel or a "no" to the
 invitation ends.** On a #1529 whole-message exit the registry first asks the
 handler (`exit_reply`, optional async hook via `_handler_exit_reply`; no hook,
 None, or a raise → the generic close, so #1529 is unchanged for every other
 process and the registry holds no deferral words). The standup adapter's
 `exit_reply` reads `standup_reads_as_deferral`: DEFER ("not now") →
-SUSPENDED + the defer line; anything else → ABANDONED + the drop line
-(mid-interview) or the invitation line (INITIATED). At the "ready to
-start?" invitation `_handle_initiated` reads the same predicate on every
-turn (deferrals → SUSPENDED), then its pre-existing decline words ("no",
-"nope", "cancel", "later") end. Mid-interview the predicate is consulted only
+SUSPENDED + the defer line (mid-interview); anything else → ABANDONED + the
+drop line; at INITIATED every exit, a deferral included, → ABANDONED + the
+invitation line. At the "ready to start?" invitation `_handle_initiated`
+reads the same predicate on every turn and a deferral ENDS there (shape A;
+was SUSPENDED until 2026-10-15), as do its pre-existing decline words ("no",
+"nope", "cancel", "later"). Mid-interview the predicate is consulted only
 on turns the #1529 exit already claims, so a clause like "not yet merged"
-inside an answer stays an answer. Not changed: bare #888 escape words
-("cancel", "stop" …) still pause with the escape line before any handler
-sees them; bare "later" is not a DEFER phrasing (Arch: known miss, no new
+inside an answer stays an answer. Bare #888 escape words are read before
+any handler sees them, split END/PAUSE as above; bare "later" is not a DEFER phrasing (Arch: known miss, no new
 row). Every leave-the-standup line is one constant in
 `services/process/standup_copy.py`. Regression: `test_defer_tier_1771.py`,
-`test_second_seam_1771.py`, `test_four_seams_1771.py`.
+`test_second_seam_1771.py`, `test_four_seams_1771.py`,
+`test_escape_end_vs_pause_888.py`.
 
 **#1762 capped-list remainder seam (2026-09-13, epic 6 first build) — a NEW
 pre-classification deterministic seam, and the chain's first PERSISTING arm.**
