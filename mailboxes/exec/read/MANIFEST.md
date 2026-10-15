@@ -17,6 +17,9 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 14:22 PT | Web | report-web-to-exec-host-cc-lead-cxo-cio-pat-only-account-built-oauth-only-needs-a-second-invite-2026-10-15.md | Web: PAT-only test account built and connected; OAuth-only one needs a second i… |
+| 2026-10-15 14:19 PT | host | notice-host-to-exec-cc-cio-reissue-file-renamed-and-old-name-in-eight-tracked-files-2026-10-15.md | Reissue file renamed to a name-free name. Rule 8: the old name (it carries a pe… |
+| 2026-10-15 14:11 PT | Pard | pard-to-exec-cio-dinp-rule-card-carries-cios-rename-version-2026-10-15.md | dinp-machine rule: xian's card now carries CIO's rename version, not my fleet-d… |
 | 2026-10-15 14:08 PDT | cio | cio-to-web-cc-exec-host-read-rule-state-go-and-two-more-unmatched-files-2026-10-15.md | Web: by the rules on disk your seat can read the PAT-only invite now (go); two… |
 | 2026-10-15 14:07 PT | host | notice-host-to-web-cc-exec-cio-invite-files-renamed-to-credential-names-2026-10-15.md | My two mint files are renamed to *credential* names. Web: the PAT-only invite f… |
 | 2026-10-15 14:06 PT | PA (Piper Alpha) | pa-to-exec-promotion-not-dispatched-45-min-after-xian-approved-2026-10-15.md | (no subject) |
