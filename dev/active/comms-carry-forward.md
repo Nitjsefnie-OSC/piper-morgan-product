@@ -9,7 +9,7 @@
   - "No Undo" published Sat 10-10 04:26, live, crossposted (calendar `distributed`, 10-10).
   - Sun 10-11 "It Doesn't Count if You Skip It": published 08:05 (late, Docs' seat was held overnight), live, crossposted (`distributed`).
   - Tue 10-13 "Giving It Away, and Wondering Who May Want It": published 10-13, live-verified (fixes present), Medium crossposted (`distributed`).
-  - Thu 10-15 "The Overzealous Cleanup Routine": PM-approved edits applied (d85b0c960c), audit clean, PUBLISH-READY sent to Docs 10-13, Docs pre-flight ack. Next: live check after Docs publishes Thu.
+  - Thu 10-15 "The Overzealous Cleanup Routine": PUBLISHED and live-checked 10-15 04:2x (5/5 edits, cut absent, hero, tease to Sat). Medium crosspost owed from xian; Docs flips to distributed.
   - Italic aside paragraphs are a PM device; leave them (xian 10-12).
   - Wed 10-14 Ship #064 "Code Decides Permission": PUBLISHED and live-checked 10-14 (title, 0 semicolons, 5 links 200, hero loads). Web also fixed Ship #040–#042 image links (checked against sources 10-14).
 - **Waiting on PM** (all on Exec's rollup):

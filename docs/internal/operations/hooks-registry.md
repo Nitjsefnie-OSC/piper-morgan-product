@@ -15,7 +15,9 @@ page is the concept index. Each hook's header should carry `Concept: docs/intern
 or a more specific doc (sunset-or-renew rule, `Concept:` line).
 **Is it actually firing?** This page says what is wired. `scripts/whats-armed.sh` measures what is armed
 (see `whats-armed.md`). Only Pard's drumbeat measures a hook firing inside a live session, and only for
-`check-branch.sh`.
+`check-branch.sh`. **Which copy:** since 10-14 19:15, PM's project copy, carried from origin/main
+(mediajunkie 9afa8c9). Before that, the drumbeat tested the user-level copy, because its temp repo has no
+project settings. See "Consequence" below.
 
 Exit codes: a PreToolUse hook that exits 2 **blocks** the tool call. Exit 0 lets it through. A
 PostToolUse or PreCompact hook can only **warn**: the tool has already run, or compaction proceeds.
@@ -87,6 +89,7 @@ The audit lists them as having no concept doc.
 Keep `precompact-signoff-warning.sh` at user level, since it has no project copy. It should eventually move to project level, so it runs the seat's own version.
 
 **Done 10-14 10:43** (Pard; the seat wasn't refused). **After the edit:** CIO re-ran the autoclose probe between 10:49 and 10:50 PT, and it was still BLOCKED by the project hook. PostToolUse is still not cleanly measured. The one instrument tried, the log-maintenance counter, is a host-wide shared file that every seat increments, so a rise can't be attributed to one seat. A clean PostToolUse probe needs a per-session signal.
+- **Consequence, found 19:05 (Pard):** the hook drumbeat went red ("probe commit LANDED"). It had only ever tested the user-level `check-branch.sh`, the copy this decision removed. PM seats load check-branch from project settings, and project-level PreToolUse fired (the autoclose probe above, a sibling hook). Pard's fixed probe now tests check-branch's project copy directly. Pard fixed the probe at 19:15 to carry PM's project `.claude/` from origin/main, and it PASSES. Neither Pard nor CIO checked what the drumbeat exercised before the removal. The sunset rule now has a "Before you remove" step.
 - **Residual risk:** project-level PostToolUse firing is unmeasured, so the three reminders could go silent. They're advisory, so this is low cost, and it's checked after the edit.
 
 ## Still open

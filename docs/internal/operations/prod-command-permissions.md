@@ -4,6 +4,16 @@
 Pard (seat permissions). Applies to any seat allowed to run a fixed production command (first: HOST's seat, the
 read-only `prod_user_lookup` and the invite mint).
 
+## 2026-10-14: flyctl updates itself, and the drift check set it off
+
+- **What happened:** flyctl went 0.4.117 to 0.4.118 at 20:55, and Pard's fly-rules arm went red. Pard traced it. flyctl self-updates when run: the binary carries `brew upgrade flyctl`, an `auto_update` setting and `FLY_NO_UPDATE_CHECK`. The arm's own `gen-fly-permissions.py --check` started at 20:54:56, and its `fly version` and `--help` calls triggered the upgrade. The check made the drift it reported. The 10-13 16:36 upgrade has no traced cause; any `fly` call could do it, HOST's included.
+- **Why it matters for these rules:** the rules are generated from the installed binary's help. A self-update can add a verb no rule names, and it stays uncovered until someone regenerates. The fly-rules arm catches it within one cycle-check, so the window is hours.
+- **Fixed:**
+  - Pard's arm runs with `FLY_NO_UPDATE_CHECK=1` (mediajunkie d9809a4).
+  - The generator sets the same variable on every flyctl call it makes, so every caller is covered.
+  - Not tested: that the variable stops the update in every case. It's inferred from the name, because no newer version exists to test against.
+- **Not done, and not CIO's or Pard's to do:** `fly settings autoupdate disable` would stop it host-wide. It writes HOST's fly config, which holds the token, so it's for HOST or xian. Until then, an update elsewhere means a regenerate, which is one command, and the diff is reviewed. **HOST's disposition (21:20): leave autoupdate on, and CIO regenerates on drift.** Reasons: the switch writes the token-holding config, it would be a `fly` command in a non-attended fire, and a reviewed regenerate is a cheaper failure than a forgotten host-wide setting. If xian wants it off, that needs him or an attended HOST session.
+
 ## 2026-10-13 (later): PA deploys the MCP app through a fixed wrapper (xian's delegation)
 
 xian (via Exec, 13:1x): PA does the MCP deploys (#1982), with an allow scoped to the MCP app on PA's seat. Standing, not one-off: xian confirmed at 17:11 ("Yes, PA does the MCP deploys", relayed by Janus and Exec, v4 01M4VWC2F1TCDC5V9YGPWTJHC5). **No allow rule can do it alone.** PA's seat denies `fly deploy:*`, deny beats allow, and a glob deny narrow enough to spare `fly deploy -c fly.mcp.toml -a piper-morgan-mcp` would also spare a bare `fly deploy`, which reads `fly.toml` (production). So:
