@@ -4761,10 +4761,10 @@ What would you like to set up first?"""
                         )
                     else:
                         from services.consciousness.files_consciousness import (
-                            EMPTY_PROJECTS_MESSAGE,
+                            empty_projects_message,
                         )
 
-                        response = EMPTY_PROJECTS_MESSAGE  # one source (#2010)
+                        response = empty_projects_message()  # one source (#2010)
                     result_dict = {
                         "message": response,
                         "intent": {

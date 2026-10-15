@@ -36,11 +36,18 @@ class TestProjectsConsciousness:
 
     def test_no_projects_has_identity(self):
         """No projects message should have identity."""
-        from services.consciousness.files_consciousness import format_projects_conscious
+        from services.consciousness.files_consciousness import (
+            empty_projects_message,
+            format_projects_conscious,
+        )
 
-        output = format_projects_conscious([])
-        # #2010: the empty state is the shared #852 string (one source).
-        assert output == "You don't have any active projects yet. Would you like to add one?"
+        # #2010: the empty state is the shared #852 string (one source),
+        # rendered by callers that arm it; the formatter itself never asks.
+        assert (
+            empty_projects_message()
+            == "You don't have any active projects yet. Would you like to add one?"
+        )
+        assert "?" not in format_projects_conscious([])
 
 
 class TestMVCCompliance:

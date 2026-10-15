@@ -6,6 +6,7 @@ path exists). Non-empty: the closing question is dropped (the list stands on
 its own).
 """
 
+import ast
 from pathlib import Path
 from types import SimpleNamespace
 from uuid import uuid4
@@ -14,7 +15,7 @@ import pytest
 
 from services.consciousness import files_consciousness as fc
 from services.consciousness.files_consciousness import (
-    EMPTY_PROJECTS_MESSAGE,
+    empty_projects_message,
     empty_projects_offer_hint,
     format_projects_conscious,
 )
@@ -82,7 +83,18 @@ def _stub_portfolio(monkeypatch, projects):
 
 class TestEmptyState:
     def test_returns_the_852_string(self):
-        assert format_projects_conscious([]) == EXPECTED == EMPTY_PROJECTS_MESSAGE
+        assert empty_projects_message() == EXPECTED
+
+    def test_formatter_never_asks_on_empty(self):
+        # The formatter cannot arm, so it must not render the empty-state
+        # question; callers render empty_projects_message() and arm it.
+        assert "?" not in format_projects_conscious([])
+
+    def test_message_question_is_the_offer_text(self):
+        # The acceptance judge reads offer_text as the held question (#1739 a).
+        question = EXPECTED.split(". ", 1)[1]
+        assert question == empty_projects_offer_hint()["offer_text"]
+        assert empty_projects_message().endswith(empty_projects_offer_hint()["offer_text"])
 
     def test_hint_has_the_852_keys_and_values(self):
         assert empty_projects_offer_hint() == {
@@ -93,16 +105,30 @@ class TestEmptyState:
     def test_import_clause_is_gone(self):
         src = Path("services/consciousness/files_consciousness.py").read_text()
         assert "import an existing project" not in src
-        assert "import an existing project" not in format_projects_conscious([])
+        assert "import an existing project" not in empty_projects_message()
 
-    def test_both_renderers_read_the_one_constant(self):
+    def test_both_renderers_read_the_one_source(self):
         canon = Path("services/intent_service/canonical_handlers.py").read_text()
-        assert "response = EMPTY_PROJECTS_MESSAGE" in canon
+        assert "response = empty_projects_message()" in canon
         assert "empty_projects_offer_hint()" in canon
         assert '"Would you like to add one?"' not in canon
         assert "Would you like to add one?" in Path(fc.__file__).read_text()
         svc = Path("services/intent/intent_service.py").read_text()
+        assert "message = empty_projects_message()" in svc
         assert "empty_projects_offer_hint()" in svc
+
+    def test_strings_are_functions_not_module_constants(self):
+        # Arch 2026-10-15: a module constant cannot be consumer-armed under
+        # the census's one-hop rule; the question lives only inside functions.
+        tree = ast.parse(Path(fc.__file__).read_text())
+        for node in tree.body:
+            if isinstance(node, (ast.Assign, ast.AnnAssign)) and node.value is not None:
+                for sub in ast.walk(node.value):
+                    assert not (
+                        isinstance(sub, ast.Constant)
+                        and isinstance(sub.value, str)
+                        and "?" in sub.value
+                    ), f"module-level question constant at line {node.lineno}"
 
 
 @pytest.mark.asyncio

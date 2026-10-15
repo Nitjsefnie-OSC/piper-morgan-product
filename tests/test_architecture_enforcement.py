@@ -4105,7 +4105,25 @@ class TestUnarmedAskSiteRatchet:
     ``ConversationHandler._check_suspended_session_reentry`` stores its
     "Welcome back! … Would you like to continue, or start fresh?" as
     ``LastOffer(offer_type="process_resume", offer_text=resume_message)``,
-    the same holder that renders it); or assign
+    the same holder that renders it); or call ``_track_offer_hint(`` (#2010
+    signal (i), Arch 2026-10-15: it converts an ``offer_hint`` into that same
+    ``LastOffer`` — the call is the arm); or build an ``"offer_hint"`` key, as
+    a dict-literal key or ``x["offer_hint"] = …`` (#2010 signal (ii): the
+    #852 idiom, which ``_track_offer_hint`` turns into ``LastOffer`` at the
+    seam the result reaches). Signal (ii) has two conditions: REACH — it is
+    credited only in ``_OFFER_HINT_BUILDER_MODULES``
+    (``canonical_handlers.py``), whose builders were measured to reach a
+    tracking seam (``CanonicalHandlers.handle`` dispatch, tracked in
+    ``_process_intent_internal``, or one of three rail adapters returning
+    through ``_finalize_canonical_rail_result``); a new builder module or a
+    new external caller fails ``test_2010_offer_hint_reach_tripwire``.
+    ADEQUACY (#1739 (a)) — the judge reads ``offer_text`` as the held
+    question, so a holder armed by (ii) alone has its row removed only if
+    every question sentence its literals render is verbatim a question
+    sentence of an ``offer_text`` it builds; otherwise the row stays and the
+    mismatch is reported in ``stats["offer_text_mismatch"]``. A function
+    consumer-armed (below) through a (ii)-only caller is pinned and audited
+    in ``test_2010_offer_hint_consumer_adequacy``. Or assign
     ``<x>.filling_state = SlotFillingState.PROMPTING|CONFIRMING`` (#2011
     call 2, Arch 2026-10-14: the slot-filling machine's transition into an
     answer-binding state — the next reply is routed by that state to the
@@ -4154,6 +4172,12 @@ class TestUnarmedAskSiteRatchet:
     3. The ``*question*``-named copy-helper exemption trusts the consumer:
        a FUTURE consumer that emits such a helper's copy without arming
        holds no literal of its own and escapes the census.
+    4. FIRST-ARM-WINS (#2010 signal (ii), Arch 2026-10-15): under #1770,
+       ``_track_offer_hint`` SKIPS the hint on a turn where a live same-turn
+       arm already holds the one-turn rail. The census still reads the
+       builder holder as armed, but on that turn its question renders
+       unbound. Rare (it needs a surviving arm plus a canonical answer);
+       the same holder-level granularity as item 2.
     """
 
     # #2011 (Arch, 2026-10-14): was services/intent_service/*.py +
@@ -4192,6 +4216,23 @@ class TestUnarmedAskSiteRatchet:
     # #2011 call 2: SlotFillingState members whose assignment arms (the reply
     # is bound by the PROMPTING/CONFIRMING handler).
     _SLOT_ARM_STATES = frozenset({"PROMPTING", "CONFIRMING"})
+
+    # #2010 signal (ii) (Arch 2026-10-15, condition 1): a built "offer_hint"
+    # key arms only in the modules whose builders were MEASURED to reach a
+    # tracking seam (CanonicalHandlers.handle dispatch, tracked in
+    # IntentService._process_intent_internal, or a rail adapter returning
+    # through _finalize_canonical_rail_result). Held true by
+    # test_2010_offer_hint_reach_tripwire.
+    _OFFER_HINT_BUILDER_MODULES = frozenset({"services/intent_service/canonical_handlers.py"})
+    # The measured EXTERNAL callers (outside the builder modules) of every
+    # builder holder, 2026-10-15: the three #1595 Phase 3 rail adapters.
+    _OFFER_HINT_EXTERNAL_CALLERS = frozenset(
+        {
+            ("services/intent_service/workflow_entries.py", "run_archive_project_workflow"),
+            ("services/intent_service/workflow_entries.py", "run_restore_project_workflow"),
+            ("services/intent_service/workflow_entries.py", "run_search_projects_workflow"),
+        }
+    )
 
     # #2011 call 5 (Arch 2026-10-14): OPEN INVITATIONS — a CLOSED word-set of
     # invitation shapes whose any reply is a fresh request (nothing to bind).
@@ -4331,12 +4372,13 @@ class TestUnarmedAskSiteRatchet:
                 1,
                 "I'd be happy to help you get set up with Piper! **Getting St",
             ),
-            (
-                "services/intent_service/canonical_handlers.py",
-                "CanonicalHandlers._format_integration_setup_guidance",
-                2,
-                "To connect integrations, visit the **Settings** hub: → [Sett",
-            ),
+            # 2026-10-15 (#2010, Arch's offer_hint ruling): the
+            # _format_integration_setup_guidance and _handle_project_setup_request
+            # rows shrank out — each builds an "offer_hint" whose offer_text is,
+            # verbatim, the question it renders (signal (ii), condition 2 audit
+            # PASS, measured by the census). _format_project_setup_guidance
+            # below FAILED the audit (its offer_text holds only the first half
+            # of "…, or are you ready to set up your first project?") and stays.
             (
                 "services/intent_service/canonical_handlers.py",
                 "CanonicalHandlers._format_project_setup_guidance",
@@ -4389,11 +4431,16 @@ class TestUnarmedAskSiteRatchet:
                 # already first among the 7 — the two removed texts start
                 # "I couldn't find any projects matching", which sorts
                 # after "I can help...").
-                # 5 → 3 (#2010): the list branch's empty-state message literal
-                # now reads the shared EMPTY_PROJECTS_MESSAGE constant
-                # (files_consciousness.py), and its offer_hint literal comes
-                # from empty_projects_offer_hint() (still armed, #852); both
-                # leave the census.
+                # 5 → 3 (#2010): the list branch's empty-state message and its
+                # offer_hint now come from empty_projects_message() /
+                # empty_projects_offer_hint() (files_consciousness.py, one
+                # source; consumer-armed, every caller arms); both literals
+                # leave this holder.
+                # Stays at 3 under the #2010 offer_hint signal (ii) (Arch
+                # 2026-10-15): condition-2 audit FAIL — the fallback menu's
+                # "What would you like to do?" is bound by no offer_text (the
+                # delete-not-found "Would you like me to list your projects?"
+                # matches its offer_text and would pass on its own).
                 3,
                 "I can help you manage your projects. You can ask me to: - Sh",
             ),
@@ -4402,12 +4449,6 @@ class TestUnarmedAskSiteRatchet:
                 "CanonicalHandlers._handle_priority_query",
                 2,
                 "I'm having trouble accessing your configuration right now. Y",
-            ),
-            (
-                "services/intent_service/canonical_handlers.py",
-                "CanonicalHandlers._handle_project_setup_request",
-                2,
-                "Want to add another, or would you like to review what you ha",
             ),
             (
                 "services/intent_service/canonical_handlers.py",
@@ -4497,9 +4538,11 @@ class TestUnarmedAskSiteRatchet:
             # docstring). A measurement change, not new debt: these asks were
             # always there, unscanned. Each read at its holder: none arms in
             # the holder. SHRINK-ONLY from here, same as every row above —
-            # #2010's two questions are format_projects_conscious's 2 literals
-            # (rendered by IntentService._handle_projects_query, which does
-            # not arm); that row leaves when #2010 lands. Holders per package:
+            # #2010's two questions were format_projects_conscious's 2 literals
+            # (rendered by IntentService._handle_projects_query, which did not
+            # arm); that row left when #2010 landed (2026-10-15: the empty
+            # state moved to empty_projects_message(), rendered and armed by
+            # its callers; the list ends with no question). Holders per package:
             # consciousness 34 · slot_filling 3 · trust 3 · integrations 2 · memory 2 · mux 2 · api 1 · conversation 1 · home 1 · mcp 1 · personality 1 · process 1 · ui_messages 1 (total 53).
             # RE-SHAPED 2026-10-14 per Arch's five calls (#2011), re-measured:
             # 53 -> 34 holders. Call 1: literals marked deliberate at their
@@ -4539,18 +4582,12 @@ class TestUnarmedAskSiteRatchet:
             # 17 -> 16 (2026-10-14, CXO 16:10): format_conversational_error_
             # conscious drops its ERROR/CRITICAL invitation (the recovery
             # already says what to do) — its row leaves.
-            # -- services/consciousness/ (6)
+            # -- services/consciousness/ (5; format_projects_conscious left, #2010)
             (
                 "services/consciousness/files_consciousness.py",
                 "_fix_mvc_gaps",
                 1,
                 "Want me to tell you more about any of these?",
-            ),
-            (
-                "services/consciousness/files_consciousness.py",
-                "format_projects_conscious",
-                2,
-                "I don't see any projects set up yet. Want me to help you cre",
             ),
             (
                 "services/consciousness/learning_consciousness.py",
@@ -4886,6 +4923,229 @@ class TestUnarmedAskSiteRatchet:
                 f"remove it from _EXCLUDED_MODULES and census its asks."
             )
 
+    def test_2010_offer_hint_signal(self):
+        """#2010 (Arch 2026-10-15): signal (i) ``_track_offer_hint(`` arms
+        anywhere; signal (ii), a built ``"offer_hint"`` key (dict-literal or
+        subscript assignment), arms only inside _OFFER_HINT_BUILDER_MODULES;
+        offer_text resolves within the holder; the condition-2 adequacy rule
+        covers a rendered question only by a verbatim offer_text question."""
+        import ast
+
+        cls = TestUnarmedAskSiteRatchet
+        scoped = next(iter(cls._OFFER_HINT_BUILDER_MODULES))
+
+        def nodes(code):
+            return list(ast.walk(ast.parse(code)))
+
+        # (i): the call is the arm, in any module.
+        track = "self._track_offer_hint(result, session_id, user_id)"
+        assert cls._holder_arms(nodes(track))
+        assert cls._holder_arms(nodes(track), "services/anywhere.py")
+        # (ii): both build forms, reach-scoped by module.
+        lit = (
+            'r = {"message": m, "offer_hint": {"continuation_hint": "c", "offer_text": "Shall I?"}}'
+        )
+        sub = 'r["offer_hint"] = {"continuation_hint": "c", "offer_text": "Shall I?"}'
+        for code in (lit, sub):
+            assert cls._holder_arms(nodes(code), scoped)
+            assert not cls._holder_arms(nodes(code), "services/elsewhere.py")
+            assert not cls._holder_arms(nodes(code))
+        # reading a hint is not building one.
+        assert not cls._holder_arms(nodes('h = r.get("offer_hint")'), scoped)
+        # offer_text resolution: a local name, a hint dict bound to a name,
+        # and a hint built elsewhere (a call) — which resolves to nothing.
+        assert cls._offer_texts(
+            nodes('outro = "Want X?"\nr = {"offer_hint": {"offer_text": outro}}')
+        ) == {"Want X?"}
+        assert cls._offer_texts(nodes('h = {"offer_text": "Want X?"}\nr = {"offer_hint": h}')) == {
+            "Want X?"
+        }
+        assert cls._offer_texts(nodes('r["offer_hint"] = make_hint()')) == set()
+        # adequacy, on the measured 2383 shape (FAIL) and a verbatim match.
+        held = {"Would you like me to explain more about how Piper uses project context?"}
+        assert not cls._offer_text_covers(
+            "Would you like me to explain more about how Piper uses project "
+            "context, or are you ready to set up your first project?",
+            held,
+        )
+        assert cls._offer_text_covers(
+            "Steps above. Would you like me to explain more about how Piper "
+            "uses project context?",
+            held,
+        )
+        # a directive offer_text binds no question.
+        assert not cls._offer_text_covers(
+            "Would you like me to list your projects?",
+            {"Say 'list my projects' to see what you have."},
+        )
+
+    def test_2010_offer_hint_reach_tripwire(self):
+        """#2010 condition 1 TRIPWIRE (Arch 2026-10-15): signal (ii) is
+        credible only because every builder's result reaches a tracking
+        seam — a fact about CALLERS, not the holder body. Measured over
+        services/**, web/** and main.py:
+        (a) every holder that builds an "offer_hint" without tracking it
+            itself lives in _OFFER_HINT_BUILDER_MODULES (a new builder
+            module fails here until it is shown to reach a seam);
+        (b) the builders' EXTERNAL referrers are exactly the three pinned
+            rail adapters (a new external caller fails here);
+        (c) each pinned adapter returns the builder's result through
+            _finalize_canonical_rail_result, which calls _track_offer_hint;
+        (d) the one CanonicalHandlers.handle dispatch site's holder calls
+            _track_offer_hint (the internal route's seam)."""
+        import ast
+
+        cls = TestUnarmedAskSiteRatchet
+        trees = self._caller_trees()
+
+        # (a) builder modules
+        builders = set()
+        for rel, tree in trees:
+            for qual, nodes in cls._collect_holders(tree):
+                if cls._builds_offer_hint(nodes) and not cls._holder_arms(nodes):
+                    builders.add((rel, qual))
+        modules = {rel for rel, _qual in builders}
+        assert modules == set(cls._OFFER_HINT_BUILDER_MODULES), (
+            f"#2010 reach tripwire: offer_hint builders that do not track "
+            f"themselves now live in {sorted(modules)}; measured scope "
+            f"{sorted(cls._OFFER_HINT_BUILDER_MODULES)}. A builder's hint "
+            f"arms only if its result reaches _track_offer_hint: show the "
+            f"seam, then re-rule the scope (or call _track_offer_hint)."
+        )
+        # vacuity: Arch measured 7 builder holders (8 builders) 2026-10-15.
+        assert len(builders) >= 7, f"only {len(builders)} builders found — the scan broke"
+
+        # (b) external referrers (a call, an attribute/name load, or a
+        # getattr/hasattr string) of any builder holder's name.
+        names = {qual.rsplit(".", 1)[-1] for _rel, qual in builders}
+        external = set()
+        for rel, tree in trees:
+            if rel in cls._OFFER_HINT_BUILDER_MODULES:
+                continue
+            for qual, nodes in cls._collect_holders(tree):
+                for sub in nodes:
+                    ref = None
+                    if isinstance(sub, ast.Attribute):
+                        ref = sub.attr
+                    elif isinstance(sub, ast.Name):
+                        ref = sub.id
+                    elif (
+                        isinstance(sub, ast.Call)
+                        and isinstance(sub.func, ast.Name)
+                        and sub.func.id in ("getattr", "hasattr")
+                        and len(sub.args) >= 2
+                        and isinstance(sub.args[1], ast.Constant)
+                    ):
+                        ref = sub.args[1].value
+                    if ref in names:
+                        external.add((rel, qual))
+        assert external == set(cls._OFFER_HINT_EXTERNAL_CALLERS), (
+            f"#2010 reach tripwire: the offer_hint builder holders "
+            f"{sorted(names)} are now referenced outside "
+            f"{sorted(cls._OFFER_HINT_BUILDER_MODULES)} by {sorted(external)}; "
+            f"measured {sorted(cls._OFFER_HINT_EXTERNAL_CALLERS)}. Show the new "
+            f"caller hands the result to _track_offer_hint, then pin it."
+        )
+
+        # (c) each adapter returns the builder's result through the seam.
+        index = dict(trees)
+        for rel, name in sorted(cls._OFFER_HINT_EXTERNAL_CALLERS):
+            fn = next(
+                n
+                for n in index[rel].body
+                if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef)) and n.name == name
+            )
+            produced = set()
+            for n in ast.walk(fn):
+                if (
+                    isinstance(n, ast.Assign)
+                    and isinstance(n.value, ast.Await)
+                    and isinstance(n.value.value, ast.Call)
+                    and isinstance(n.value.value.func, ast.Attribute)
+                    and n.value.value.func.attr in names
+                ):
+                    produced |= {t.id for t in n.targets if isinstance(t, ast.Name)}
+            through, other = [], []
+            for r in (n for n in ast.walk(fn) if isinstance(n, ast.Return)):
+                v = r.value
+                if v is None or (isinstance(v, ast.Constant) and v.value is None):
+                    continue  # missing-context exit: no result, no hint
+                if (
+                    isinstance(v, ast.Await)
+                    and isinstance(v.value, ast.Call)
+                    and isinstance(v.value.func, ast.Name)
+                    and v.value.func.id == "_finalize_canonical_rail_result"
+                    and produced & {a.id for a in v.value.args if isinstance(a, ast.Name)}
+                ):
+                    through.append(r)
+                else:
+                    other.append(r)
+            assert produced and through and not other, (
+                f"#2010 reach tripwire: {name} must return its builder result "
+                f"through _finalize_canonical_rail_result (the #852 seam); "
+                f"{len(other)} return(s) bypass it"
+            )
+        finalize = next(
+            n
+            for n in index["services/intent_service/workflow_entries.py"].body
+            if isinstance(n, ast.AsyncFunctionDef) and n.name == "_finalize_canonical_rail_result"
+        )
+        assert cls._holder_arms(
+            list(cls._own_nodes(finalize))
+        ), "_finalize_canonical_rail_result no longer calls _track_offer_hint"
+
+        # (d) the internal route: CanonicalHandlers.handle's dispatch site.
+        dispatch = [
+            (rel, qual, nodes)
+            for rel, tree in trees
+            for qual, nodes in cls._collect_holders(tree)
+            for sub in nodes
+            if isinstance(sub, ast.Call)
+            and isinstance(sub.func, ast.Attribute)
+            and sub.func.attr == "handle"
+            and isinstance(sub.func.value, ast.Attribute)
+            and sub.func.value.attr == "canonical_handlers"
+        ]
+        assert [(r, q) for r, q, _n in dispatch] == [
+            ("services/intent/intent_service.py", "IntentService._process_intent_internal")
+        ], f"CanonicalHandlers.handle dispatch sites changed: {[(r, q) for r, q, _n in dispatch]}"
+        assert cls._holder_arms(
+            dispatch[0][2]
+        ), "the CanonicalHandlers.handle dispatch holder no longer calls _track_offer_hint"
+
+    # #2010: functions consumer-armed (one hop) through at least one caller
+    # armed by signal (ii) alone, MEASURED 2026-10-15. The one-hop rule does
+    # not check offer_text adequacy for these mechanically (the caller's hint
+    # is built by a call); each is audited by hand below.
+    _OFFER_HINT_CONSUMER_ARMED = frozenset(
+        {
+            ("services/consciousness/files_consciousness.py", "empty_projects_message"),
+            ("services/consciousness/files_consciousness.py", "empty_projects_offer_hint"),
+        }
+    )
+
+    def test_2010_offer_hint_consumer_adequacy(self):
+        """#2010 condition 2 for the one-hop route: the functions credited
+        through a (ii)-only caller are exactly the measured set, and the
+        empty-projects question is verbatim the offer_text its callers arm
+        (the judge reads offer_text as the held question). A new function
+        credited this way fails here until audited."""
+        _rows, stats = self._census()
+        assert stats["consumer_armed_via_offer_hint"] == set(self._OFFER_HINT_CONSUMER_ARMED), (
+            f"consumer-armed through a signal-(ii) caller: "
+            f"{sorted(stats['consumer_armed_via_offer_hint'])}; measured "
+            f"{sorted(self._OFFER_HINT_CONSUMER_ARMED)}. Audit the new one's "
+            f"question against its callers' offer_text, then pin it."
+        )
+        from services.consciousness.files_consciousness import (
+            empty_projects_message,
+            empty_projects_offer_hint,
+        )
+
+        assert self._question_sentences(empty_projects_message()) == {
+            empty_projects_offer_hint()["offer_text"]
+        }
+
     @staticmethod
     def _joined_text(node) -> str:
         import ast
@@ -4921,9 +5181,14 @@ class TestUnarmedAskSiteRatchet:
                 stack.extend(ast.iter_child_nodes(child))
 
     @classmethod
-    def _holder_arms(cls, nodes) -> bool:
+    def _holder_arms(cls, nodes, rel=None) -> bool:
+        """True iff the holder's OWN body arms (class docstring). ``rel`` is
+        the holder's module: signal (ii), the built ``"offer_hint"`` key, is
+        credited only inside ``_OFFER_HINT_BUILDER_MODULES`` (#2010, Arch
+        2026-10-15 condition 1); without ``rel`` it is never credited."""
         import ast
 
+        nodes = list(nodes)
         for sub in nodes:
             if isinstance(sub, ast.Call):
                 f = sub.func
@@ -4932,7 +5197,9 @@ class TestUnarmedAskSiteRatchet:
                     if isinstance(f, ast.Attribute)
                     else (f.id if isinstance(f, ast.Name) else None)
                 )
-                if attr in ("set_pending_offer", "LastOffer"):
+                # #2010 signal (i): `_track_offer_hint(` converts an
+                # offer_hint into LastOffer itself — the call is the arm.
+                if attr in ("set_pending_offer", "LastOffer", "_track_offer_hint"):
                     return True
                 if any(kw.arg == "question" for kw in sub.keywords):
                     return True
@@ -4962,7 +5229,96 @@ class TestUnarmedAskSiteRatchet:
                 and sub.value.endswith("_pending")
             ):
                 return True
-        return False
+        # #2010 signal (ii), reach-scoped by module (condition 1).
+        return rel in cls._OFFER_HINT_BUILDER_MODULES and cls._builds_offer_hint(nodes)
+
+    @staticmethod
+    def _offer_hint_values(nodes):
+        """The value expressions of every ``"offer_hint"`` key the holder
+        builds: a dict-literal key, or a subscript assignment
+        ``x["offer_hint"] = ...``."""
+        import ast
+
+        out = []
+        for sub in nodes:
+            if isinstance(sub, ast.Dict):
+                out.extend(
+                    v
+                    for k, v in zip(sub.keys, sub.values)
+                    if isinstance(k, ast.Constant) and k.value == "offer_hint"
+                )
+            elif isinstance(sub, (ast.Assign, ast.AnnAssign)) and sub.value is not None:
+                targets = sub.targets if isinstance(sub, ast.Assign) else [sub.target]
+                if any(
+                    isinstance(t, ast.Subscript)
+                    and isinstance(t.slice, ast.Constant)
+                    and t.slice.value == "offer_hint"
+                    for t in targets
+                ):
+                    out.append(sub.value)
+        return out
+
+    @classmethod
+    def _builds_offer_hint(cls, nodes) -> bool:
+        return bool(cls._offer_hint_values(nodes))
+
+    @classmethod
+    def _offer_texts(cls, nodes) -> set:
+        """The ``offer_text`` strings the holder's built offer_hints carry,
+        resolved within the holder: a literal, an f-string, or a local name
+        bound to either (``offer_text: outro``) or to the hint dict itself
+        (``"offer_hint": offer_hint``). A value built elsewhere (a call)
+        resolves to nothing — its holder's literals then cannot be covered."""
+        import ast
+
+        assigns = {}
+        for sub in nodes:
+            if isinstance(sub, ast.Assign):
+                for t in sub.targets:
+                    if isinstance(t, ast.Name):
+                        assigns.setdefault(t.id, []).append(sub.value)
+            elif (
+                isinstance(sub, ast.AnnAssign)
+                and sub.value is not None
+                and isinstance(sub.target, ast.Name)
+            ):
+                assigns.setdefault(sub.target.id, []).append(sub.value)
+
+        def resolve(expr):
+            if isinstance(expr, ast.Name):
+                return assigns.get(expr.id, [])
+            return [expr]
+
+        out = set()
+        for hint in cls._offer_hint_values(nodes):
+            for d in resolve(hint):
+                if not isinstance(d, ast.Dict):
+                    continue
+                for k, v in zip(d.keys, d.values):
+                    if not (isinstance(k, ast.Constant) and k.value == "offer_text"):
+                        continue
+                    for e in resolve(v):
+                        if isinstance(e, ast.Constant) and isinstance(e.value, str):
+                            out.add(e.value)
+                        elif isinstance(e, ast.JoinedStr):
+                            out.add(cls._joined_text(e))
+        return out
+
+    @classmethod
+    def _question_sentences(cls, text: str) -> set:
+        return {" ".join(q.split()) for q in cls._QUESTION_SENTENCE_RE.findall(text) if q.strip()}
+
+    @classmethod
+    def _offer_text_covers(cls, text: str, offer_texts) -> bool:
+        """#2010 condition 2 (#1739 (a)), mechanically: every question
+        sentence ``text`` renders is, verbatim (whitespace-normalized), a
+        question sentence of an ``offer_text`` the holder arms — the judge
+        reads offer_text as the held question."""
+        held = set()
+        for ot in offer_texts:
+            held |= cls._question_sentences(ot)
+        asked = cls._question_sentences(text)
+        return bool(asked) and asked <= held
 
     @staticmethod
     def _utterance_ctors(tree) -> set:
@@ -5124,7 +5480,9 @@ class TestUnarmedAskSiteRatchet:
 
     @classmethod
     def _caller_index(cls, trees):
-        """One-hop caller index over ``trees``: (callers, indirect, arming).
+        """One-hop caller index over ``trees``: (callers, indirect, arming,
+        hint_only); hint_only: the arming holders armed by #2010 signal (ii)
+        alone.
         callers: simple name -> {(rel, holder)} that CALL it directly.
         indirect: names referenced other than as a call's callee (a Load of
         the name / attribute outside a call position, or a string argument
@@ -5133,11 +5491,13 @@ class TestUnarmedAskSiteRatchet:
         one hop only, bound 4)."""
         import ast
 
-        callers, indirect, arming = {}, set(), set()
+        callers, indirect, arming, hint_only = {}, set(), set(), set()
         for rel, tree in trees:
             for qual, nodes in cls._collect_holders(tree):
-                if cls._holder_arms(nodes):
+                if cls._holder_arms(nodes, rel):
                     arming.add((rel, qual))
+                    if not cls._holder_arms(nodes):
+                        hint_only.add((rel, qual))
                 callee_ids = set()
                 for sub in nodes:
                     if not isinstance(sub, ast.Call):
@@ -5162,7 +5522,7 @@ class TestUnarmedAskSiteRatchet:
                         indirect.add(sub.id)
                     elif isinstance(sub, ast.Attribute) and isinstance(sub.ctx, ast.Load):
                         indirect.add(sub.attr)
-        return callers, indirect, arming
+        return callers, indirect, arming, hint_only
 
     @staticmethod
     def _consumer_armed(rel, qual, index) -> bool:
@@ -5171,7 +5531,7 @@ class TestUnarmedAskSiteRatchet:
         body, (2) callers drawn from services/**, web/** and main.py, (3)
         tests never counted, (4) never if referenced other than by a direct
         call; one hop only (a consumer-armed caller does not arm)."""
-        callers_of, indirect, arming = index
+        callers_of, indirect, arming = index[:3]
         if "." in qual or qual in indirect:
             return False
         callers = callers_of.get(qual, set()) - {(rel, qual)}
@@ -5199,6 +5559,7 @@ class TestUnarmedAskSiteRatchet:
 
         sites = {}
         arming = set()
+        hint_armed = {}
         marker_exemptions = []
         open_invitations = []
         # #2011 call 2 (bounds blessed by Arch 2026-10-14 round 2): the
@@ -5217,8 +5578,12 @@ class TestUnarmedAskSiteRatchet:
                     or "PROMPT" in simple
                     or self._QUESTION_NAME_RE.search(simple)
                 )
-                if self._holder_arms(nodes):
+                if self._holder_arms(nodes, rel):
                     arming.add(key)
+                    if not self._holder_arms(nodes):
+                        # armed by #2010 signal (ii) alone: its rows are
+                        # credited only if offer_text covers them (below).
+                        hint_armed[key] = self._offer_texts(nodes)
                 for sub in nodes:
                     text = None
                     if isinstance(sub, ast.JoinedStr) and id(sub) not in excluded:
@@ -5248,15 +5613,35 @@ class TestUnarmedAskSiteRatchet:
         # #2011 call 2 — CONSUMER-ARMED (one hop, four bounds; see
         # _consumer_armed). E.g. slot_prompts.format_final_confirmation,
         # called only by the slot-filling handlers that enter/hold CONFIRMING.
+        # #2010 condition 2 (Arch 2026-10-15): a holder armed by signal (ii)
+        # alone has its row removed only if every interrogative literal it
+        # holds is covered by an offer_text it arms; otherwise the row STAYS
+        # and the mismatch is reported (stats["offer_text_mismatch"]).
+        offer_text_mismatch = {}
+        for key, offer_texts in hint_armed.items():
+            uncovered = [
+                t for t in sites.get(key, []) if not self._offer_text_covers(t, offer_texts)
+            ]
+            if uncovered:
+                offer_text_mismatch[key] = uncovered
+        row_arming = arming - set(offer_text_mismatch)
+
         consumer_armed = {
             (rel, qual)
             for rel, qual in sites
-            if (rel, qual) not in arming and self._consumer_armed(rel, qual, caller_index)
+            if (rel, qual) not in row_arming and self._consumer_armed(rel, qual, caller_index)
+        }
+        # consumer-armed through at least one caller armed by (ii) alone —
+        # pinned and audited in test_2010_offer_hint_consumer_adequacy.
+        consumer_armed_via_offer_hint = {
+            (rel, qual)
+            for rel, qual in consumer_armed
+            if (caller_index[0].get(qual, set()) - {(rel, qual)}) & caller_index[3]
         }
 
         rows = set()
         for (rel, qual), texts in sites.items():
-            if (rel, qual) in arming or (rel, qual) in consumer_armed:
+            if (rel, qual) in row_arming or (rel, qual) in consumer_armed:
                 continue
             normalized = sorted(" ".join(t.split()) for t in texts)
             rows.add((rel, qual, len(texts), normalized[0][:60]))
@@ -5269,6 +5654,9 @@ class TestUnarmedAskSiteRatchet:
             "marker_exemptions": marker_exemptions,
             "open_invitations": open_invitations,
             "consumer_armed": consumer_armed,
+            "offer_hint_credited": {k for k in hint_armed if k in sites} - set(offer_text_mismatch),
+            "offer_text_mismatch": offer_text_mismatch,
+            "consumer_armed_via_offer_hint": consumer_armed_via_offer_hint,
         }
         return rows, stats
 

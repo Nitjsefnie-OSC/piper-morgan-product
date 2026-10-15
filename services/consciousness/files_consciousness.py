@@ -39,21 +39,33 @@ def _fix_mvc_gaps(narrative: str, mvc_result, skip_invitation: bool = False) -> 
     return "\n".join(sections)
 
 
-# #2010: the ONE empty-state string and offer hint for "list my projects",
-# shared with the manage_portfolio list branch (#852) in
-# services/intent_service/canonical_handlers.py so the two renderers cannot
-# drift apart. The hint arms ConversationContext.last_offer (via
-# IntentService._track_offer_hint) so a "yes" starts the add-project flow.
-EMPTY_PROJECTS_MESSAGE = "You don't have any active projects yet. Would you like to add one?"
-EMPTY_PROJECTS_OFFER_TEXT = "Would you like to add one?"
-EMPTY_PROJECTS_CONTINUATION_HINT = "add a new project"
+# #2010: the ONE empty-state message and offer hint for "list my projects",
+# shared by both renderers so they cannot drift apart:
+# IntentService._handle_projects_query (arms via _track_offer_hint) and the
+# manage_portfolio list branch in services/intent_service/canonical_handlers.py
+# (arms via its result's "offer_hint", #852). The hint becomes
+# ConversationContext.last_offer, so a "yes" starts the add-project flow.
+#
+# Functions, not module constants (Arch 2026-10-15): the unarmed-ask census
+# (tests/test_architecture_enforcement.py TestUnarmedAskSiteRatchet) credits a
+# module-level function through its callers (one hop) when every caller arms;
+# a constant holder cannot be credited that way. Call these ONLY from a holder
+# that arms the hint in the same turn. The question is written in both on
+# purpose (neither calls the other, so each keeps arming callers only);
+# tests/unit/services/intent/test_list_projects_offers_2010.py pins that the
+# message's question IS the offer_text.
+
+
+def empty_projects_message() -> str:
+    """The empty-projects reply; its question is armed by the caller (#2010)."""
+    return "You don't have any active projects yet. Would you like to add one?"
 
 
 def empty_projects_offer_hint() -> Dict[str, str]:
     """Fresh offer_hint dict for the empty-projects state (#852 / #2010)."""
     return {
-        "continuation_hint": EMPTY_PROJECTS_CONTINUATION_HINT,
-        "offer_text": EMPTY_PROJECTS_OFFER_TEXT,
+        "continuation_hint": "add a new project",
+        "offer_text": "Would you like to add one?",
     }
 
 
@@ -73,6 +85,12 @@ def format_projects_conscious(projects: List[Dict[str, Any]]) -> str:
 
          (the list stands on its own; no closing offer, #2010)"
 
+    The empty state is NOT rendered here (#2010): its "Would you like to add
+    one?" must be armed in the same turn, which a formatter cannot do. Callers
+    render ``empty_projects_message()`` and arm ``empty_projects_offer_hint()``
+    themselves; given an empty list, this returns a plain statement that asks
+    nothing.
+
     Args:
         projects: List of project dicts with 'name' and optional 'active' keys
 
@@ -80,7 +98,7 @@ def format_projects_conscious(projects: List[Dict[str, Any]]) -> str:
         Conscious narrative string
     """
     if not projects:
-        return EMPTY_PROJECTS_MESSAGE
+        return "You don't have any active projects yet."
 
     count = len(projects)
     active_projects = [p for p in projects if p.get("active", True)]
