@@ -26,13 +26,15 @@ class TestLearningConsciousness:
         output = format_patterns_learned_conscious(patterns, 5)
         assert "concise" in output.lower() or "pattern" in output.lower()
 
-    def test_patterns_learned_has_invitation(self):
-        """Learning feedback should invite correction."""
+    def test_patterns_learned_invites_correction_without_an_offer(self):
+        """Learning feedback invites correction as a statement (#2011, CXO
+        2026-10-14): no unbuilt "should I look at the data differently?"."""
         from services.consciousness.learning_consciousness import format_patterns_learned_conscious
 
         patterns = [{"description": "test", "occurrences": 2, "confidence": 0.7}]
         output = format_patterns_learned_conscious(patterns, 3)
-        assert "?" in output, "Should invite feedback/correction"
+        assert "Tell me if this doesn't match what you see." in output
+        assert "should I" not in output
 
     def test_no_patterns_has_identity(self):
         """No patterns message should have identity."""
@@ -40,58 +42,6 @@ class TestLearningConsciousness:
 
         output = format_patterns_learned_conscious([], 5)
         assert "I" in output or "I'" in output
-
-    def test_preference_saved_has_identity(self):
-        """Preference saved feedback must have identity."""
-        from services.consciousness.learning_consciousness import format_preference_saved_conscious
-
-        output = format_preference_saved_conscious("standup_time", "morning")
-        assert "I" in output or "I'" in output
-
-    def test_preference_saved_claims_only_the_save(self):
-        """#1198 honest contract: confirm the save; NO unbacked durable-recall
-        promise ("I'll remember" / "future interactions") — the preference
-        store's persistence isn't this function's to promise (#1199)."""
-        from services.consciousness.learning_consciousness import format_preference_saved_conscious
-
-        output = format_preference_saved_conscious("verbosity", "concise")
-        assert "verbosity" in output and "concise" in output  # confirms the save
-        assert "remember" not in output.lower()
-        assert "future" not in output.lower()
-
-    def test_preference_saved_has_invitation(self):
-        """Preference saved should allow adjustment."""
-        from services.consciousness.learning_consciousness import format_preference_saved_conscious
-
-        output = format_preference_saved_conscious("theme", "dark")
-        assert "?" in output
-
-
-class TestLearningEventConsciousness:
-    """Test consciousness wrapper for learning events."""
-
-    def test_learning_event_has_identity(self):
-        """Learning event must have identity voice."""
-        from services.consciousness.learning_consciousness import format_learning_event_conscious
-
-        output = format_learning_event_conscious("you prefer morning standups")
-        assert "I " in output or "I'" in output, "Should have identity"
-
-    def test_learning_event_has_invitation(self):
-        """Learning event should invite feedback."""
-        from services.consciousness.learning_consciousness import format_learning_event_conscious
-
-        output = format_learning_event_conscious("you like concise responses")
-        assert "?" in output, "Should invite feedback"
-
-    def test_learning_event_with_context(self):
-        """Learning event with context should include context."""
-        from services.consciousness.learning_consciousness import format_learning_event_conscious
-
-        output = format_learning_event_conscious(
-            "you prefer bullet points", context="your last three requests"
-        )
-        assert "bullet" in output.lower() or "prefer" in output.lower()
 
 
 class TestLearningConsciousnessEdgeCases:

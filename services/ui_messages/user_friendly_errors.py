@@ -299,6 +299,7 @@ class UserFriendlyErrorService:
             },
             r"invalid.*format|malformed": {
                 "message": "The information provided isn't in the right format.",
+                # ask-census: question answered by its own directive on the same line; nothing waits for a reply; CXO 2026-10-14
                 "recovery": "Please check the format and try again. Need help? Check our examples.",
                 "severity": ErrorSeverity.INFO,
                 "category": "validation",

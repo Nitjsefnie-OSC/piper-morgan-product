@@ -58,7 +58,7 @@ def _suspended_standup() -> SuspendedInfo:
     return SuspendedInfo(
         process_type=ProcessType.STANDUP,
         suspended_at=datetime.now(timezone.utc),
-        description="Your standup was paused. Want to pick it up?",
+        description="Your standup was paused.",
     )
 
 
