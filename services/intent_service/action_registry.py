@@ -150,12 +150,12 @@ ACTION_REGISTRY: dict[tuple[str, str], ActionDisposition] = {
     # / restore_project / add_project each have a rail entry (workflow_entries.py,
     # NO flip_group — non-READ keys never carry one; each flips individually via
     # FLIP_WRITE_ALLOWLIST), so the live runtime now resolves WORKFLOW for all
-    # three, flipped from CANONICAL. archive_project/restore_project KEEP their
-    # `offer_hint` (#852 continuation-tracking) on the project-not-found branch:
-    # their rail adapters return through `_finalize_canonical_rail_result`,
-    # which calls `_track_offer_hint` (Arch's 2026-10-04 adapter-parity ruling
-    # fixed the earlier drop; pinned by TestUnarmedAskSiteRatchet
-    # test_2010_offer_hint_reach_tripwire). `list_projects` (the READ fourth) is
+    # three, flipped from CANONICAL. Their rail adapters return through
+    # `_finalize_canonical_rail_result`, which calls `_track_offer_hint`
+    # (Arch's 2026-10-04 adapter-parity ruling). archive_project/restore_project's
+    # project-not-found branch builds NO `offer_hint` since #2024 (Arch
+    # 2026-10-15): its "Say 'list my ...'" line is a directive, not an offer,
+    # so there is nothing for a "yes" to bind. `list_projects` (the READ fourth) is
     # unaffected — it was never built as a PORTFOLIO rail key at all (naming
     # collision with the EXISTING QUERY-category `list_projects`; see the
     # comment there).
@@ -165,8 +165,9 @@ ACTION_REGISTRY: dict[tuple[str, str], ActionDisposition] = {
     # Same generalized-can_handle reasoning as list_repos/archive_project above:
     # search_projects has a rail entry (flip_group read_portfolio, joining
     # list_repos), so the live runtime now resolves WORKFLOW, flipped from
-    # CANONICAL. Its not-found `offer_hint` (#852) is tracked through
-    # `_finalize_canonical_rail_result`, same as archive_project/restore_project.
+    # CANONICAL. Its adapter returns through `_finalize_canonical_rail_result`,
+    # same as archive_project/restore_project; its no-results branch builds no
+    # `offer_hint` since #2024 (a directive is not an offer).
     ("PORTFOLIO", "search_projects"): ActionDisposition.WORKFLOW,
     # Same generalized-can_handle reasoning: link_repo has a rail entry (NO
     # flip_group — allowlisted via FLIP_WRITE_ALLOWLIST), so the live runtime

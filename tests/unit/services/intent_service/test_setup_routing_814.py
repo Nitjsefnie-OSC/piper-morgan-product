@@ -163,7 +163,9 @@ class TestProjectSetupExistingProjects:
         msg = result["message"].lower()
         assert "add" in msg or "another" in msg
         assert "review" in msg or "existing" in msg
-        assert "offer_hint" in result
+        # #2024: one yes/no question, armed verbatim (CXO copy).
+        assert result["offer_hint"]["offer_text"] == "Want to add another?"
+        assert result["message"].rstrip().endswith("Want to add another?")
 
     @pytest.mark.asyncio
     async def test_existing_projects_does_not_start_onboarding(self, canonical_handlers):
