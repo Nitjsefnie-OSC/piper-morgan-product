@@ -5747,3 +5747,43 @@ class TestOwnerIdNullabilityPin2009:
             f"NULLABLE_OWNER_ALLOWED lists tables whose owner_id is no longer nullable "
             f"(or that no longer exist): {sorted(stale)}. Remove them; the list only shrinks."
         )
+
+
+class TestItemServiceNotReachableFromWeb2014:
+    """2014: ``ItemService.get_item`` / ``update_item_text`` / ``delete_item`` select by id
+    alone, with no list-ownership check (the four list-item routes scope through
+    ``get_list_by_id(list_id, owner_id=...)`` instead). No route calls them today, so the
+    exposure is zero. This pin keeps it that way: a route that wants one of these must give
+    it an ownership check first, then be named here with a reason.
+    """
+
+    METHODS = ("get_item", "update_item_text", "delete_item")
+    # Route-handler functions that merely share a method's name (they do not call the service).
+    ALLOWED_DEFS = {"web/api/routes/lists.py": {"delete_item"}}
+
+    @staticmethod
+    def _web_files():
+        return sorted(Path("web").rglob("*.py"))
+
+    def test_denominator_web_files_scanned(self):
+        assert len(self._web_files()) >= 20, "web/ scan found too few files to mean anything"
+
+    def test_no_web_module_calls_unscoped_item_service_methods(self):
+        violations = []
+        for path in self._web_files():
+            tree = ast.parse(path.read_text(encoding="utf-8"))
+            for node in ast.walk(tree):
+                if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute):
+                    if node.func.attr in self.METHODS:
+                        violations.append(f"{path}:{node.lineno} calls .{node.func.attr}()")
+                elif isinstance(node, ast.ImportFrom) and node.module == "services.item_service":
+                    violations.append(f"{path}:{node.lineno} imports services.item_service")
+                elif isinstance(node, ast.Import):
+                    for alias in node.names:
+                        if alias.name == "services.item_service":
+                            violations.append(f"{path}:{node.lineno} imports services.item_service")
+        assert not violations, (
+            "2014: web/ must not call ItemService.get_item/update_item_text/delete_item "
+            "(they select by id alone, no list-ownership check). Add the "
+            "get_list_by_id(list_id, owner_id=...) check first. " + "; ".join(violations)
+        )

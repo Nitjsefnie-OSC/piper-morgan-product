@@ -12,6 +12,7 @@ from sqlalchemy import (
     CHAR,
     JSON,
     Boolean,
+    CheckConstraint,
     Column,
     DateTime,
     Enum,
@@ -2818,7 +2819,13 @@ class ItemDB(Base):
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
     text = Column(String, nullable=False)  # Universal property - all items have text
     position = Column(Integer, default=0, nullable=False)  # Order within list
-    list_id = Column(String, nullable=True)  # Which list contains this item
+    # Which list contains this item. 2014: real FK to lists.id; NULL is legal only for
+    # non-base item types (todos are owned via todo_items.owner_id), see the CHECK below.
+    list_id = Column(
+        String,
+        ForeignKey("lists.id", name="fk_items_list_id_lists", ondelete="SET NULL"),
+        nullable=True,
+    )
     item_type = Column(String(50), nullable=False, default="item")  # Discriminator
 
     # Timestamps
@@ -2840,6 +2847,9 @@ class ItemDB(Base):
 
     # Indexes for performance
     __table_args__ = (
+        CheckConstraint(
+            "item_type <> 'item' OR list_id IS NOT NULL", name="ck_items_base_item_has_list"
+        ),
         Index("idx_items_list_id", "list_id"),
         Index("idx_items_item_type", "item_type"),
         Index("idx_items_list_position", "list_id", "position"),
