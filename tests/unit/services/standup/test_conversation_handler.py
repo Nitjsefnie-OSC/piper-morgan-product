@@ -135,15 +135,19 @@ class TestStartConversation:
         assert "morning" in response.message.lower() or "standup" in response.message.lower()
 
     @pytest.mark.asyncio
-    async def test_start_returns_suggestions(self, handler):
-        """Starting provides user suggestions."""
+    async def test_start_returns_no_suggestions(self, handler):
+        """#2027/#2028 (CXO 2026-10-15 10:10): the opening carries no
+        suggestion list (nothing renders it on web). Was
+        ``test_start_returns_suggestions``, asserting a list holding "quick".
+        The quick report is named in words by the intent service's teaching
+        line ("Say 'my standup report'")."""
         response = await handler.start_conversation(
             session_id="session1",
             user_id="user1",
         )
 
-        assert len(response.suggestions) > 0
-        assert any("quick" in s.lower() for s in response.suggestions)
+        assert response.suggestions == []
+        assert response.message == "Good morning! Ready for your standup?"
 
     @pytest.mark.asyncio
     async def test_start_with_context(self, handler):

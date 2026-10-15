@@ -64,6 +64,10 @@ _SKIP_SIGNAL_PHRASES = (
 # a persistence boundary). Input adequacy per Arch condition (a) on #1739.
 _REFINING_DEFAULT_ASK = "Would you like to make any changes?"
 _REFINING_ANYTHING_ELSE_ASK = "Anything else?"
+# #2027/#2028 (CXO 2026-10-15 10:10): the REFINING draft's unrendered
+# ["Looks good", …] list was the only hint of how to finish; the reply now says
+# it in words. A statement, never an offer (no "?": the census stays put).
+_REFINING_FINALIZE_HINT = "Say 'looks good' to finalize it."
 # (#1837: _REFINING_FALLBACK_ASK retired with _graceful_fallback — a failure
 # is an honest failure message now, never a template presented for refining.)
 
@@ -461,7 +465,6 @@ class StandupConversationHandler:
             message=greeting,
             state=conversation.state,
             requires_input=True,
-            suggestions=["Yes, let's do it", "Quick standup", "Not now"],
         )
 
     async def _handle_initiated(
@@ -668,11 +671,10 @@ class StandupConversationHandler:
             return ConversationResponse(
                 message=(
                     f"Here's your standup:\n\n{conversation.current_standup}\n\n"
-                    f"{_REFINING_DEFAULT_ASK}"
+                    f"{_REFINING_DEFAULT_ASK} {_REFINING_FINALIZE_HINT}"
                 ),
                 state=StandupConversationState.REFINING,
                 standup_content=conversation.current_standup,
-                suggestions=["Looks good", "Add a blocker", "Remove something"],
             )
 
         return await self._generate_standup(conversation, context)
@@ -764,7 +766,6 @@ class StandupConversationHandler:
                     state=StandupConversationState.REFINING,
                     standup_content=conversation.current_standup,
                     requires_input=True,
-                    suggestions=["Yes, start the interview", "Keep this draft"],
                 )
             draft = conversation.current_standup or "(no draft yet)"
             provenance = (
@@ -780,7 +781,6 @@ class StandupConversationHandler:
                 state=StandupConversationState.REFINING,
                 standup_content=conversation.current_standup,
                 requires_input=True,
-                suggestions=["Looks good", "Add a blocker", "Start over"],
             )
 
         if verdict is AcceptanceVerdict.ACCEPT:
@@ -878,7 +878,6 @@ class StandupConversationHandler:
                 state=StandupConversationState.REFINING,
                 standup_content=before,
                 requires_input=True,
-                suggestions=["Add a blocker", "Start over", "Looks good"],
             )
         except Exception as e:
             logger.error(
@@ -896,7 +895,6 @@ class StandupConversationHandler:
                 state=StandupConversationState.REFINING,
                 standup_content=before,
                 requires_input=True,
-                suggestions=["Try again", "Looks good", "Start over"],
                 metadata={"refinement_failed": True, "error": str(e)},
             )
         if refined == before:
@@ -914,14 +912,12 @@ class StandupConversationHandler:
                 state=StandupConversationState.REFINING,
                 standup_content=before,
                 requires_input=True,
-                suggestions=["Add a blocker", "Start over", "Looks good"],
             )
         await self.manager.set_standup_content(conversation.id, refined)
         return ConversationResponse(
             message=f"I've updated your standup:\n\n{refined}\n\nAnything else?",
             state=StandupConversationState.REFINING,
             standup_content=refined,
-            suggestions=["Looks good", "More changes", "Start over"],
         )
 
     async def _handle_finalizing(
@@ -1056,11 +1052,11 @@ class StandupConversationHandler:
 
             return ConversationResponse(
                 message=(
-                    f"Here's your standup:\n\n{standup_content}\n\n" f"{_REFINING_DEFAULT_ASK}"
+                    f"Here's your standup:\n\n{standup_content}\n\n"
+                    f"{_REFINING_DEFAULT_ASK} {_REFINING_FINALIZE_HINT}"
                 ),
                 state=StandupConversationState.REFINING,
                 standup_content=standup_content,
-                suggestions=["Looks good", "Add a blocker", "Focus on something else"],
             )
 
         except Exception as e:
@@ -1090,7 +1086,6 @@ class StandupConversationHandler:
                 ),
                 state=StandupConversationState.GENERATING,
                 requires_input=True,
-                suggestions=["Try again", "Cancel"],
                 metadata={"generation_failed": True, "error": str(e)},
             )
 
