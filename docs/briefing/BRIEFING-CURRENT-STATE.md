@@ -38,13 +38,14 @@ log, never here. Bump `last_updated` to the newest line's date, or CI fails. Ski
   **13 not done** (2 Sprint Backlog, 2 In Progress, 1 In Review, 8 Product Backlog), 1,238 done. The MVP milestone **is**
   the beta gate. **Dates: design partners Fri 10-23, hard stop Fri 10-30** (baseline 10-05; slips are logged in
   `docs/internal/planning/beta-gate-standard.md` and only PM moves either date). Read the ledger, not this line, for slips.
-- **Engineering focus** *(Lead, 2026-10-15 06:41 PDT, from the 10-14 Lead log and carry-forward)*: 10-14 closed four MVP issues
-  (#1886, #1623, #1579, #1860) and landed nine units, now live on alpha 5e5f3366c4. Seven code branches held through the 10-14 promotion
-  land this morning in order (#2011 census-b, #2010 list-projects offers, ANALYSIS margin example, #1965/#2012 OAuth-leg error, #2009
-  owner NOT NULL migration, #2013 KG owner, #2014 items check). Then #1771 second seam, #2019 interim delete cap (xian approved PPM's
-  recommendation 10-14 21:02: `clear_todos` flip HELD, #2021 soft delete first), #2020 strings, #2017 Disconnect; #2023 corpus rows first
-  (Arch's ruling). Held: #1982 Registry publish (xian), PAT dual-write branch (#1983/#1995), #2005 paused as an eval, `lead-1943-clear-todos-resolver`
-  (flip held). Next promotion only on xian's explicit word.
+- **Engineering focus** *(Lead, 2026-10-15 11:10 PDT, from the 10-15 Lead log)*: 20 landings on main today, each re-run at merge:
+  the seven-branch held batch (#2011 census, ANALYSIS margin, #1965+#2012, #2009/#2013/#2014 with three migrations, #2010 on Arch's
+  offer_hint census ruling), #2020, #2017, #2019's one-item delete cap (xian's 10-14 ruling), #1771 in six units with the #888 escape-word
+  map (END cancel/quit/exit; PAUSE stop/never mind; skip advances the interview; an unstarted standup never suspends), #2026, #2027's
+  17 dead suggestion lists, the CI Concept lines. Tests green on `f76a307ecb`; two reds today were test fixtures, fixed within the hour.
+  **Step 0 READY on the card (v38)** once staging redeploys past the known-broken guard; promotion only on xian's word. xian (10:48 via
+  PPM) admitted #2017/#2018 to MVP; #1943 → Production. Open: #2024 (census copy hardening) and a seventh #1771 unit (politeness at
+  the hatch, "skip the standup"). Held: #1982 (xian), PAT dual-write (#1983/#1995), #2005 paused, `lead-1943-clear-todos-resolver`.
 - **PM's open asks** *(Exec, 2026-10-09 06:4x PDT)*: on Exec's attention rollup at
   `claude.ai/artifact/719UZ4h1NELjEwWZbDCceT` (its own header line carries the current version; do not pin one here, it was v90 at 04:2x and v95 by 06:4x). Do not copy the list here: it goes stale within hours.
 - **Usage** *(CIO, 2026-10-15 10:1x PDT, last row of `dev/heartbeats/usage-per-account.tsv`, read 09:23)*: the pipermorgan.ai
