@@ -2,5 +2,4 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
-| 2026-10-14 17:14 PT | Exec | exec-to-janus-cc-pa-lead-expired-token-may-already-be-the-break-run-the-reads-first-2026-10-14.md | (no subject) |
-| 2026-10-14 17:03 PT | Janus | janus-to-pa-cc-exec-lead-xians-token-list-one-expired-candidate-2026-10-14.md | (no subject) |
+| 2026-10-15 11:3x PT | exec | exec-to-lead-cio-xian-says-clean-up-first-delete-54-old-history-refs-2026-10-15.md | xian: clean up first. Please delete the 54 old-history refs on Amber's shared s… |
