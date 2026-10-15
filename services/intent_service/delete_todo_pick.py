@@ -79,6 +79,38 @@ _PLEASANTRY_ACK = {
 }
 
 
+# Issue 2019: answers that point at EVERY shown candidate. A word-set check
+# (the _mentions_reminder idiom), not a message-parsing regex.
+_ALL_CANDIDATE_WORDS = frozenset({"both", "all", "every", "everything"})
+
+
+def _multi_pick_indices(text: str, texts: List[str], due_iso: List[Optional[str]]) -> List[int]:
+    """The shown positions an answer names when it names MORE than one
+    ("1 and 2", "the first and the last", "both"), in shown order; [] when it
+    names one or none (the single-bind path below is unchanged).
+
+    Reuses the shared binder's own ordinal reader one word at a time (no new
+    pattern). A quantifier ("both", "all of them") counts only when the
+    whole-answer binder does not bind a single candidate, so a title that
+    happens to contain "all" still binds by name."""
+    from services.intent_service.reminder_clear import _ordinal_index, _resolve_pick_target
+
+    n = len(texts)
+    words = [w.strip(".,!?;:'\"()").lower() for w in (text or "").split()]
+    picked: List[int] = []
+    for word in words:
+        idx = _ordinal_index(word, n) if word else None
+        if idx is not None and idx not in picked:
+            picked.append(idx)
+    if len(picked) > 1:
+        return sorted(picked)
+    if n > 1 and set(words) & _ALL_CANDIDATE_WORDS:
+        status, _ = _resolve_pick_target(text, texts, due_iso)
+        if status != "bound":
+            return list(range(n))
+    return []
+
+
 def _mentions_reminder(message: str) -> bool:
     words = {w.strip(".,!?;:'\"").lower() for w in (message or "").split()}
     return bool(words & _REMINDER_WORDS)
@@ -319,6 +351,30 @@ async def handle_delete_todo_pick_turn(
                 "pick_survived_pleasantry": claimed.action,
             },
             "requires_clarification": True,
+        }
+
+    # Issue 2019 (xian 2026-10-14, interim until soft delete): an answer that
+    # names several candidates arms NO delete and deletes nothing; CXO's
+    # capped reply names them in the order shown. The pick is not re-armed
+    # ("Tell me which one" is an instruction, not an offer).
+    multi = [i for i in _multi_pick_indices(text, texts, due_iso) if i < len(ids)]
+    if len(multi) > 1:
+        from services.intent_service.delete_cap import (
+            DELETE_CAPPED_FLAG,
+            capped_delete_reply,
+            remember_capped_list,
+        )
+
+        multi_texts = [texts[i] for i in multi]
+        remember_capped_list(session_id, user_id, [ids[i] for i in multi], multi_texts, f"{noun}s")
+        logger.info("delete_todo_pick_capped", session_id=session_id, count=len(multi))
+        return {
+            "message": capped_delete_reply(multi_texts, noun),
+            "intent_data": {
+                "category": "execution",
+                "action": CLARIFY_DELETE_PICK_WORKFLOW,
+                DELETE_CAPPED_FLAG: True,
+            },
         }
 
     status, idx = _resolve_pick_target(text, texts, due_iso)
