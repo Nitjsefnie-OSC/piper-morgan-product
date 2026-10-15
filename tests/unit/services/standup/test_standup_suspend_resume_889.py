@@ -210,7 +210,11 @@ class TestResumeDeclineWiring:
             result = await service._abandon_suspended_standup("user-1")
 
         assert result.success is True
-        assert "No problem" in result.message
+        # #1771: CXO's abandon line (2026-10-14 21:50); the /standup form went.
+        from services.intent.intent_service import RESUME_ABANDON_REPLY
+
+        assert result.message == RESUME_ABANDON_REPLY
+        assert "/standup" not in result.message
         updated = await manager.get_conversation(conv.id)
         assert updated.state == StandupConversationState.ABANDONED
 

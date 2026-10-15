@@ -326,8 +326,22 @@ class TestFlowExitBypassKeyedOnThePredicate:
         abandon.assert_called_once()
 
     @pytest.mark.asyncio
-    async def test_active_flow_not_now_still_exits_per_1529(self):
-        """No offer pending: a bare 'not now' stays the #1529 exit command."""
-        result, abandon = await self._run("not now", False)
+    @pytest.mark.parametrize("turn", DEFERRALS)
+    async def test_no_offer_pending_deferral_never_abandons(self, turn):
+        """#1771 second seam (Web, served 2026-10-14 21:42): this pin used to
+        read "no offer pending: a bare 'not now' stays the #1529 exit" and
+        asserted the abandon, which is the defect Web served ("The paused
+        standup has been cleared"). A deferral protects a SUSPENDED standup
+        with or without an offer: nothing abandoned, the turn falls through.
+        (An ACTIVE flow's "not now" is the registry's #1529 exit, another
+        seam, unchanged.)"""
+        result, abandon = await self._run(turn, False)
+        assert result is None
+        abandon.assert_not_called()
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("turn", ["cancel that", "forget it", "start over", "end standup"])
+    async def test_no_offer_pending_explicit_cancel_still_abandons(self, turn):
+        result, abandon = await self._run(turn, False)
         assert result is not None
         abandon.assert_called_once()
