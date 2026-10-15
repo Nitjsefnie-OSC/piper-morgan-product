@@ -35,6 +35,14 @@ class IntegrationStatus(BaseModel):
     fix_suggestion: Optional[str] = None
     configure_url: Optional[str] = None
     can_test: bool = True
+    # #2031 (CXO's GitHub card states): a warning glyph before the status line, a
+    # second line under it, whether the Test button shows at all, and a card action
+    # that replaces the default buttons ("reconnect" → a Reconnect link to
+    # ``configure_url``). All optional; other integrations leave them unset.
+    status_icon: Optional[str] = None
+    status_detail: Optional[str] = None
+    show_test: bool = True
+    action: Optional[str] = None
 
 
 class IntegrationHealthResponse(BaseModel):
@@ -322,17 +330,89 @@ async def check_all_connections(current_user: JWTClaims = Depends(get_current_us
     return results
 
 
-async def _github_oauth_bound(user_id: Optional[str]) -> bool:
-    """True if the user has a BOUND github OAuth-connector binding (#1329 / ADR-070 C).
+# #2031 — CXO's GitHub card words (2026-10-15), verbatim. The card is the third consumer
+# of the one credential resolver (ADR-070 B4), after the #2012 Test and #2029's
+# Settings → GitHub page; its state comes from ``resolve_credential``, never from
+# whether a binding row is BOUND.
+_GITHUB_CARD_CONNECTED = "Connected with your GitHub account."
+_GITHUB_CARD_PAT_TITLE = "Connected via your personal token"
+_GITHUB_CARD_PAT_DETAIL = (
+    "Your GitHub connection needs re-authorizing, so I'm not using it right now."
+)
+_GITHUB_CARD_RECONNECT_TITLE = "Needs reconnecting"
+_GITHUB_CARD_RECONNECT_DETAIL = "GitHub no longer accepts your connection."
+_GITHUB_CARD_NOT_CONFIGURED = "Not configured"
+_WARNING_ICON = "⚠️"
 
-    #1547: canonical logic hoisted to
-    services/integrations/integration_status_service.py (the ONE status source);
-    this thin delegate keeps /health and /test/* consuming it under the route's
-    historical name.
+
+async def _github_card(
+    metadata: Dict[str, Any], user_id: Optional[str]
+) -> Optional[IntegrationStatus]:
+    """GitHub's Integrations card from the resolver's outcome (#2031, ADR-070 B4/B5).
+
+    - OAuth leg serving → Connected.
+    - PAT leg serving with a STALE OAuth grant, and the token answers one read (the
+      #2012 Test's probe, the evidence #2029's page uses) → ⚠️ token-serving.
+    - Nothing serving with a STALE grant (no token, or a token GitHub also refuses)
+      → ⚠️ Needs reconnecting, a Reconnect action, Test hidden.
+    - Nothing serving and no stale grant → Not configured.
+
+    The words name the reason (B5), so they are used only where it is STALE_TOKEN.
+    Any other resolver outcome (the user's own PAT with no stale grant; a non-stale
+    degrade such as UNREACHABLE) returns ``None`` and the generic configured path
+    (cached Test result, else "Click 'Test'") governs, as it did before.
     """
-    from services.integrations.integration_status_service import github_oauth_bound
+    from services.mcp.consumer.connector import DegradationReason, DegradationResponse
+    from services.mcp.consumer.github_adapter import GitHubMCPSpatialAdapter
 
-    return await github_oauth_bound(user_id)
+    def card(**fields: Any) -> IntegrationStatus:
+        return IntegrationStatus(
+            name="github",
+            display_name=metadata["display_name"],
+            configure_url=metadata.get("configure_url"),
+            **fields,
+        )
+
+    not_configured = card(
+        status="not_configured", status_message=_GITHUB_CARD_NOT_CONFIGURED, can_test=False
+    )
+    needs_reconnecting = card(
+        status="degraded",
+        status_icon=_WARNING_ICON,
+        status_message=_GITHUB_CARD_RECONNECT_TITLE,
+        status_detail=_GITHUB_CARD_RECONNECT_DETAIL,
+        can_test=False,
+        show_test=False,
+        action="reconnect",
+    )
+    if not user_id:
+        return not_configured
+
+    adapter = GitHubMCPSpatialAdapter()
+    credential = await adapter.resolve_credential(user_id)
+    if isinstance(credential, DegradationResponse):
+        if credential.reason == DegradationReason.STALE_TOKEN:
+            return needs_reconnecting
+        if credential.reason in (
+            DegradationReason.CONNECT_REQUIRED,
+            DegradationReason.NOT_CONFIGURED,
+        ):
+            return not_configured
+        return None
+    if getattr(credential, "leg", None) == "oauth":
+        return card(status="healthy", status_message=_GITHUB_CARD_CONNECTED, can_test=True)
+    if getattr(credential, "stale_oauth_reason", None) == DegradationReason.STALE_TOKEN:
+        probe = await adapter.search_user_repositories(user_id, limit=1)
+        if probe.degradation is not None:
+            return needs_reconnecting
+        return card(
+            status="degraded",
+            status_icon=_WARNING_ICON,
+            status_message=_GITHUB_CARD_PAT_TITLE,
+            status_detail=_GITHUB_CARD_PAT_DETAIL,
+            can_test=True,
+        )
+    return None
 
 
 async def _check_integration_health(
@@ -348,21 +428,16 @@ async def _check_integration_health(
             visible — fine for non-user-scoped integrations).
     """
     try:
-        # RECONNECT (#1329): GitHub health follows the OAuth connector binding, not the
-        # legacy native PAT. A BOUND connector → healthy (the chat reads go through it),
-        # even if the old PAT is expired. Takes precedence over the native config/health.
-        if integration_id == "github" and await _github_oauth_bound(user_id):
-            return IntegrationStatus(
-                name=integration_id,
-                display_name=metadata["display_name"],
-                status="healthy",
-                status_message="Connected via OAuth (MCP connector)",
-                configure_url=metadata.get("configure_url"),
-                can_test=True,
-            )
-
-        # Try to get cached health status or check configuration
-        config_status = await _get_integration_config_status(integration_id, user_id=user_id)
+        # #2031 (ADR-070 B4): GitHub's card derives from the one credential resolver.
+        # A mapped outcome is the card; ``None`` means the user's own token serves with
+        # nothing stale, so the configured path below (cached Test result) governs.
+        if integration_id == "github":
+            github_card = await _github_card(metadata, user_id)
+            if github_card is not None:
+                return github_card
+            config_status = "configured"
+        else:
+            config_status = await _get_integration_config_status(integration_id, user_id=user_id)
 
         if config_status == "not_configured":
             return IntegrationStatus(
