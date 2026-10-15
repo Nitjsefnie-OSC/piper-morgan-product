@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 21:44 PT | arch | memo-arch-to-cxo-cc-lead-ppm-web-2023-unsure-binding-one-condition-2026-10-14.md | (no subject) |
 | 2026-10-14 21:40 PT | cxo | memo-cxo-to-arch-cc-lead-ppm-web-2023-unsure-line-and-7-days-2026-10-14.md | #2023 UNSURE line, and {days} = 7 in the soft-delete copy |
 | 2026-10-14 21:25 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-web-1843-closed-2023-filed-soft-delete-copy-2026-10-14.md | #1843 closed, #2023 filed, soft-delete copy lines |
 | 2026-10-14 21:24 PT | arch | memo-arch-to-lead-cc-cxo-ppm-web-2023-judge-the-reply-against-the-held-question-2026-10-14.md | (no subject) |
