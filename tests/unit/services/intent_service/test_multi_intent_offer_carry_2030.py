@@ -385,3 +385,32 @@ class TestSingleIntentPathUnchanged:
         )
         assert result.message == SETUP_MSG
         assert get_or_create_context(session_id).last_offer.offer_text == SETUP_Q
+
+
+class TestMultiIntentArmIsPrincipalKeyed:
+    """#1533 authenticated sibling: two real user_ids, one session_id. The
+    multi-intent arm lands under the acting user's composite key only."""
+
+    @pytest.mark.asyncio
+    async def test_the_arm_lands_under_the_acting_user(self, classifier):
+        service = _service(
+            classifier,
+            {
+                IntentCategory.TEMPORAL: _reply("It's 3:15 PM."),
+                IntentCategory.PORTFOLIO: _reply(EMPTY_MSG, EMPTY_HINT),
+            },
+        )
+        classifier.classify_multiple.return_value = _plan(TIME, PORTFOLIO)
+        session_id = str(uuid4())
+        user_a, user_b = str(uuid4()), str(uuid4())
+
+        with patch.object(service, "_track_offer_hint", wraps=service._track_offer_hint) as track:
+            result = await service.process_intent(
+                message=MESSAGE, session_id=session_id, user_id=user_a
+            )
+        track.assert_called_once_with({"offer_hint": EMPTY_HINT}, session_id, user_a)
+        assert result.message.endswith(EMPTY_Q)
+
+        offer_a = get_or_create_context(session_id, user_id=user_a).last_offer
+        assert offer_a is not None and offer_a.offer_text == EMPTY_Q
+        assert get_or_create_context(session_id, user_id=user_b).last_offer is None
