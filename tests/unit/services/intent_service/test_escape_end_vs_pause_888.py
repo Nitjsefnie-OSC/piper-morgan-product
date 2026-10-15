@@ -16,6 +16,14 @@ standup (INITIATED, "ready to start?") is never suspended. The standup
 adapter's ``suspend()`` closes it, and every way of leaving there gets the
 invitation line, so no empty SUSPENDED row is ever offered back.
 
+Word map (CXO 2026-10-15 09:15, Arch 09:4x / 09:5x, the converged ruling):
+END = {cancel, quit, exit}; PAUSE = {stop, never mind} ("never mind" can mean
+"forget that answer", so it takes the reversible path); ``skip`` is not an
+escape word for any process. A bare "skip" reaches the handler: mid-interview
+it is "nothing for this part, advance" (the chip Piper itself suggests); at the
+invitation it is the shared predicate's DECLINE verdict and leaves with the
+invitation line (dropped from the quick-bypass set; ``quick`` keeps it).
+
 Belt pins (Arch): for EVERY escape word at EVERY standup stage the result is
 ``escaped`` and ``check_active`` is False afterwards; at INITIATED every escape
 word, every whole-message #1529 exit and a deferral leave
@@ -26,7 +34,7 @@ real ``StandupConversationHandler`` over the in-memory manager double. Not a
 served run.
 """
 
-from unittest.mock import patch
+from unittest.mock import AsyncMock, patch
 from uuid import uuid4
 
 import pytest
@@ -45,7 +53,10 @@ from services.process.registry import (
     pause_message_for,
 )
 from services.shared_types import StandupConversationState
-from services.standup.conversation_handler import StandupConversationHandler
+from services.standup.conversation_handler import (
+    ConversationResponse,
+    StandupConversationHandler,
+)
 from tests.unit.services.standup._fake_conversation_manager import (
     FakeStandupConversationManager,
 )
@@ -117,14 +128,22 @@ class _World:
 
 
 class TestTheWordSets:
-    def test_arch_default_map(self):
-        assert ESCAPE_END_WORDS == {"cancel", "quit", "exit", "never mind"}
-        assert ESCAPE_PAUSE_WORDS == {"stop", "skip"}  # skip: CXO to place
+    def test_cxo_word_map(self):
+        """CXO 2026-10-15 09:15: a word that explicitly withdraws ends; a word
+        that could mean "not right now" pauses. Was END {cancel, quit, exit,
+        never mind} / PAUSE {stop, skip} (Arch's default, e08a9bcd50)."""
+        assert ESCAPE_END_WORDS == {"cancel", "quit", "exit"}
+        assert ESCAPE_PAUSE_WORDS == {"stop", "never mind"}
 
-    def test_the_union_is_todays_six_words_and_the_sets_are_disjoint(self):
-        assert ESCAPE_COMMANDS == {"cancel", "exit", "stop", "skip", "quit", "never mind"}
+    def test_the_union_is_five_words_and_the_sets_are_disjoint(self):
+        assert ESCAPE_COMMANDS == {"cancel", "exit", "stop", "quit", "never mind"}
         assert ESCAPE_END_WORDS | ESCAPE_PAUSE_WORDS == ESCAPE_COMMANDS
         assert not ESCAPE_END_WORDS & ESCAPE_PAUSE_WORDS
+
+    def test_skip_is_not_an_escape_word(self):
+        """Arch 2026-10-15: generic, every process; no per-process claim."""
+        assert "skip" not in ESCAPE_COMMANDS
+        assert not ProcessRegistry()._is_escape_command("skip")
 
 
 # --- Belt pin: every word, every stage ----------------------------------------
@@ -180,7 +199,8 @@ class TestBeltEveryWordEveryStage:
         with _World() as w:
             conv = await w.at(sid, S.GATHERING_TODAY)
             await w.registry.check_active_processes(_USER, sid, word)
-            expected = S.SUSPENDED if word.strip().lower() == "stop" else S.ABANDONED
+            pauses = word.strip().lower() in ("stop", "never mind")
+            expected = S.SUSPENDED if pauses else S.ABANDONED
             assert await w.state(conv) == expected
 
 
@@ -220,6 +240,191 @@ class TestNoEmptySuspendedRecordAtTheInvitation:
             conv = await w.at(sid, S.GATHERING_YESTERDAY)
             await w.adapter.suspend(_USER, sid)
             assert await w.state(conv) == S.SUSPENDED
+
+
+# --- never mind: the reversible path ------------------------------------------
+
+
+class TestNeverMindTakesTheReversiblePath:
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("stage", MID_INTERVIEW_STAGES, ids=lambda s: s.value)
+    async def test_mid_interview_never_mind_pauses_with_the_pause_line(self, stage):
+        """Was: END, the drop line (e08a9bcd50). CXO 09:15: it can mean
+        "forget that answer", so it pauses and keeps what was captured."""
+        sid = str(uuid4())
+        with _World() as w:
+            conv = await w.at(sid, stage)
+            result = await w.registry.check_active_processes(_USER, sid, "never mind")
+            assert result.escaped
+            assert result.response_message == CXO_PAUSE
+            assert await w.state(conv) == S.SUSPENDED
+            assert await w.adapter.has_suspended_session(_USER) is not None
+
+    @pytest.mark.asyncio
+    async def test_never_mind_at_the_invitation_ends_with_the_invitation_line(self):
+        sid = str(uuid4())
+        with _World() as w:
+            conv = await w.at(sid, S.INITIATED)
+            result = await w.registry.check_active_processes(_USER, sid, "never mind")
+            assert result.escaped
+            assert result.response_message == CXO_INVITATION_END
+            assert await w.state(conv) == S.ABANDONED
+            assert await w.adapter.has_suspended_session(_USER) is None
+
+
+# --- skip: the handler's word, not the hatch's ---------------------------------
+
+_GENERATED = "GENERATED-STANDUP-STUB"
+
+
+def _stub_generation(w):
+    """Stand in for ``_generate_standup`` (an LLM path): record the call and
+    hand back a marker, so a pin can see generation was reached."""
+    stub = AsyncMock(
+        return_value=ConversationResponse(message=_GENERATED, state=S.REFINING, requires_input=True)
+    )
+    w.handler._generate_standup = stub
+    return stub
+
+
+async def _at_question(w, session_id, stage):
+    """``stage``'s question pending, every slot empty (nothing captured)."""
+    conv = await w.manager.create_conversation(session_id, _USER)
+    path = [S.GATHERING_YESTERDAY, S.GATHERING_TODAY, S.GATHERING_BLOCKERS]
+    if stage == S.GATHERING_PREFERENCES:
+        path = [S.GATHERING_PREFERENCES]
+    for nxt in path:
+        await w.manager.transition_state(conv.id, nxt)
+        if nxt == stage:
+            break
+    return conv
+
+
+class TestSkipMidInterviewAdvances:
+    """The live chip defect (Arch 2026-10-15): Piper suggests ``skip`` at
+    every interview question, and the hatch used to suspend on it. Now the
+    handler reads it through ``_is_skip_signal``: nothing for this part,
+    advance."""
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        "stage,next_question,slot",
+        [
+            (S.GATHERING_YESTERDAY, "What's planned for today?", "yesterday"),
+            (S.GATHERING_TODAY, "Any blockers or things you need help with?", "today"),
+        ],
+        ids=["yesterday", "today"],
+    )
+    async def test_skip_renders_the_next_question(self, stage, next_question, slot):
+        sid = str(uuid4())
+        with _World() as w:
+            generate = _stub_generation(w)
+            conv = await _at_question(w, sid, stage)
+            result = await w.registry.check_active_processes(_USER, sid, "skip")
+            assert result.handled and not result.escaped
+            assert result.response_message == next_question
+            generate.assert_not_called()
+            after = await w.manager.get_conversation(conv.id)
+            capture = after.partial_capture or StandupPartialCapture()
+            assert getattr(capture, slot) == []
+            assert await w.adapter.check_active(_USER, sid) is True
+            assert await w.adapter.has_suspended_session(_USER) is None
+
+    @pytest.mark.asyncio
+    async def test_skip_at_blockers_advances_to_the_standup(self):
+        """Blockers is the last question: "next" is the generated standup."""
+        sid = str(uuid4())
+        with _World() as w:
+            generate = _stub_generation(w)
+            conv = await _at_question(w, sid, S.GATHERING_BLOCKERS)
+            result = await w.registry.check_active_processes(_USER, sid, "skip")
+            assert result.handled and not result.escaped
+            assert result.response_message == _GENERATED
+            generate.assert_awaited_once()
+            after = await w.manager.get_conversation(conv.id)
+            capture = after.partial_capture or StandupPartialCapture()
+            assert capture.blockers == []
+            assert after.state != S.SUSPENDED
+            assert await w.adapter.check_active(_USER, sid) is True
+            assert await w.adapter.has_suspended_session(_USER) is None
+
+    @pytest.mark.asyncio
+    async def test_skip_at_the_legacy_preferences_stage_does_not_escape(self):
+        sid = str(uuid4())
+        with _World() as w:
+            generate = _stub_generation(w)
+            conv = await _at_question(w, sid, S.GATHERING_PREFERENCES)
+            result = await w.registry.check_active_processes(_USER, sid, "skip")
+            assert result.handled and not result.escaped
+            generate.assert_awaited_once()
+            assert (await w.state(conv)) not in (S.SUSPENDED, S.ABANDONED)
+            assert await w.adapter.has_suspended_session(_USER) is None
+
+    @pytest.mark.asyncio
+    async def test_skip_keeps_earlier_answers(self):
+        """A skip after a real answer: the captured answer stays, the skipped
+        slot holds nothing."""
+        sid = str(uuid4())
+        with _World() as w:
+            _stub_generation(w)
+            conv = await w.at(sid, S.GATHERING_TODAY)
+            result = await w.registry.check_active_processes(_USER, sid, "skip")
+            assert not result.escaped
+            after = await w.manager.get_conversation(conv.id)
+            assert [i.display for i in after.partial_capture.yesterday] == ["shipped the cut"]
+            assert after.partial_capture.today == []
+            assert after.state == S.GATHERING_BLOCKERS
+
+
+class TestSkipAtTheInvitationLeaves:
+    """CXO 09:25 + Arch 09:5x: at "ready to start?" a bare "skip" leaves,
+    through the predicate's DECLINE verdict (no word added to the handler's
+    decline set); ``skip`` left the quick-bypass set."""
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("turn", ["skip", "Skip", "skip."])
+    async def test_skip_ends_with_the_invitation_line(self, turn):
+        sid = str(uuid4())
+        with _World() as w:
+            generate = _stub_generation(w)
+            conv = await w.at(sid, S.INITIATED)
+            result = await w.registry.check_active_processes(_USER, sid, turn)
+            assert result.handled and not result.escaped  # the handler, not the hatch
+            assert result.response_message == CXO_INVITATION_END
+            assert await w.state(conv) == S.ABANDONED
+            assert await w.adapter.has_suspended_session(_USER) is None
+            assert await w.registry.check_suspended_processes(_USER) is None
+            generate.assert_not_called()  # no standup generated
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("turn", ["quick", "Quick standup", "fast", "just the report"])
+    async def test_quick_still_generates_the_quick_standup(self, turn):
+        sid = str(uuid4())
+        with _World() as w:
+            generate = _stub_generation(w)
+            conv = await w.at(sid, S.INITIATED)
+            result = await w.registry.check_active_processes(_USER, sid, turn)
+            assert result.response_message == _GENERATED
+            generate.assert_awaited_once()
+            assert (await w.state(conv)) == S.GENERATING
+
+    def test_skip_is_not_in_the_local_decline_set_or_the_bypass_set(self):
+        """The verdict is the path: no word set in ``_handle_initiated``
+        (the quick-bypass set, the local decline set) holds "skip". The
+        first-question suggestion chip ``["nothing", "skip"]`` is a list and
+        stays: mid-interview "skip" advances."""
+        import ast
+        import inspect
+        import textwrap
+
+        src = textwrap.dedent(inspect.getsource(StandupConversationHandler._handle_initiated))
+        word_sets = [
+            {e.value for e in node.elts if isinstance(e, ast.Constant)}
+            for node in ast.walk(ast.parse(src))
+            if isinstance(node, ast.Set)
+        ]
+        assert {"quick", "fast"} in word_sets  # the bypass set is still read here
+        assert all("skip" not in ws for ws in word_sets)
 
 
 # --- The handler supplies copy, never the choice ------------------------------

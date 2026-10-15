@@ -141,9 +141,13 @@ class TestNoOtherSeamOptsIn:
         # deferrals through the SAME predicate, one call site
         # (``standup_reads_as_deferral``), used at the #1529 exit and at the
         # invitation. Widened by exactly that one site, on Arch's mechanism.
+        # #888 word map (Arch 2026-10-15): the one call moved into
+        # ``_standup_leave_verdict`` so the invitation can also read its
+        # DECLINE verdict; ``standup_reads_as_deferral`` reads the same call.
+        # Still one site, not a second.
         assert opted == {
             ("services/intent/intent_service.py", "_check_pending_resume_offer"),
-            ("services/standup/conversation_handler.py", "standup_reads_as_deferral"),
+            ("services/standup/conversation_handler.py", "_standup_leave_verdict"),
         }
 
 

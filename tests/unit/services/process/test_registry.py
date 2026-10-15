@@ -390,9 +390,11 @@ class TestEscapeCommands:
         assert "cancel" in ESCAPE_COMMANDS
         assert "exit" in ESCAPE_COMMANDS
         assert "stop" in ESCAPE_COMMANDS
-        assert "skip" in ESCAPE_COMMANDS
         assert "quit" in ESCAPE_COMMANDS
         assert "never mind" in ESCAPE_COMMANDS
+        # #888 word map (CXO/Arch 2026-10-15): "skip" left the set for every
+        # process; the handler owns it (standup: "nothing for this part").
+        assert "skip" not in ESCAPE_COMMANDS
 
     def test_is_escape_command_exact_match(self):
         """_is_escape_command requires exact match on full message."""

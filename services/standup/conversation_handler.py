@@ -20,7 +20,7 @@ import asyncio
 import re
 import time
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 import structlog
 from tenacity import (
@@ -40,6 +40,9 @@ from services.process.standup_copy import STANDUP_INVITATION_DECLINE_REPLY
 from services.shared_types import StandupConversationState
 from services.standup.completion_detector import detect_completion
 from services.standup.conversation_manager import StandupConversationManager
+
+if TYPE_CHECKING:
+    from services.intent_service.acceptance import AcceptanceVerdict
 
 # Issue #900 Phase 2: skip-signal phrases (case-insensitive substring match).
 # Used by per-part handlers to detect "no items for this part, advance".
@@ -98,6 +101,30 @@ _REFINING_TAUGHT_ACCEPTS = frozenset(
 _STANDUP_INTERVIEW_WORKFLOW = "standup_interview"
 
 
+def _standup_leave_verdict(message: str) -> "AcceptanceVerdict":
+    """THE predicate's verdict on a turn that might leave the standup:
+    ``evaluate_acceptance`` with ``distinguish_defer=True`` over the
+    interview's declared axes. One call, read by ``standup_reads_as_deferral``
+    (DEFER) and by the invitation (``_handle_initiated``: DEFER or DECLINE,
+    every way of leaving ends there)."""
+    from services.intent_service.acceptance import (
+        declared_axes_for_workflow,
+        evaluate_acceptance,
+    )
+
+    axes = declared_axes_for_workflow(_STANDUP_INTERVIEW_WORKFLOW)
+    return evaluate_acceptance(
+        message,
+        effect=axes[0] if axes else None,
+        outwardness=axes[1] if axes else None,
+        # No armed ask is being answered: the question is only "defer, or
+        # not?", and the DEFER tier never reads the armed ask (the resume
+        # seam passes None the same way when no offer is on screen).
+        armed_question=None,
+        distinguish_defer=True,  # #1771: deferral pauses, it never ends
+    )
+
+
 def standup_reads_as_deferral(message: str) -> bool:
     """#1771 (CXO 2026-10-15, Arch's mechanism): is this turn a deferral
     ("not now", "maybe later") rather than a cancel or a "no"?
@@ -112,24 +139,9 @@ def standup_reads_as_deferral(message: str) -> bool:
     ends (Arch 2026-10-15: nothing was started, so nothing to pause). Known miss, by Arch's ruling: bare "later" is not a DEFER
     phrasing (no new row; a ``later`` search would catch "remind me later").
     """
-    from services.intent_service.acceptance import (
-        AcceptanceVerdict,
-        declared_axes_for_workflow,
-        evaluate_acceptance,
-    )
+    from services.intent_service.acceptance import AcceptanceVerdict
 
-    axes = declared_axes_for_workflow(_STANDUP_INTERVIEW_WORKFLOW)
-    verdict = evaluate_acceptance(
-        message,
-        effect=axes[0] if axes else None,
-        outwardness=axes[1] if axes else None,
-        # No armed ask is being answered: the question is only "defer, or
-        # not?", and the DEFER tier never reads the armed ask (the resume
-        # seam passes None the same way when no offer is on screen).
-        armed_question=None,
-        distinguish_defer=True,  # #1771: deferral pauses, it never ends
-    )
-    return verdict is AcceptanceVerdict.DEFER
+    return _standup_leave_verdict(message) is AcceptanceVerdict.DEFER
 
 
 def _is_skip_signal(message: str) -> bool:
@@ -444,8 +456,11 @@ class StandupConversationHandler:
         """Handle INITIATED state - user just started.
 
         Issue #900 Phase 2: Default flow is now the 3-part structured
-        collection (yesterday → today → blockers). Quick/fast/skip still
-        bypasses to GENERATING for users who want a one-shot LLM standup.
+        collection (yesterday → today → blockers). Quick/fast/"just the
+        report" still bypass to GENERATING for users who want a one-shot LLM
+        standup. #888 word map (CXO/Arch 2026-10-15): "skip" is no longer a
+        bypass word here; a bare "skip" is a DECLINE verdict of the shared
+        predicate and leaves with the invitation line.
         """
         message_lower = user_message.lower()
         # #1837: WORD-BOUNDARY matching, not substring. The substring form is
@@ -455,8 +470,11 @@ class StandupConversationHandler:
         # "no" matching inside "nothing"/"know" on the cancel list below.
         words = set(re.findall(r"[a-z']+", message_lower))
 
-        # Quick/fast/skip → bypass guided collection, go straight to GENERATING
-        if words & {"quick", "fast", "skip"} or message_lower.strip() in ("just the report",):
+        # Quick/fast → bypass guided collection, go straight to GENERATING.
+        # "skip" left this set (Arch 2026-10-15): with it out of the #888
+        # hatch, a bare "skip" at "ready to start?" is a leave (CXO 09:25), and
+        # the predicate's DECLINE verdict below reads it, not a word here.
+        if words & {"quick", "fast"} or message_lower.strip() in ("just the report",):
             await self.manager.transition_state(
                 conversation.id, StandupConversationState.GENERATING
             )
@@ -469,8 +487,14 @@ class StandupConversationHandler:
         # began. A bare "no" or a cancel ends too (CXO 2026-10-15 item 2). The
         # word set is the pre-existing one. Bare "later" lands in it (Arch's
         # known miss: not a DEFER phrasing; a revisit is CXO's served read).
+        # #888 word map (Arch 2026-10-15): a DECLINE verdict from the same
+        # predicate call ends here too (bare "skip" is a row of the shared
+        # full-message decline); the local word set stays as the fallback.
+        from services.intent_service.acceptance import AcceptanceVerdict
+
         if (
-            standup_reads_as_deferral(user_message)
+            _standup_leave_verdict(user_message)
+            in (AcceptanceVerdict.DEFER, AcceptanceVerdict.DECLINE)
             or words & {"no", "nope", "cancel", "later"}
             or "not now" in message_lower
         ):
@@ -905,7 +929,7 @@ class StandupConversationHandler:
         Issue #900 Phase 5: When a 3-part `partial_capture` is non-empty,
         render the standup directly from captured StandupItems — the user
         has already authored the content, no LLM round-trip needed. The
-        legacy LLM-workflow path remains for the quick/skip bypass and
+        legacy LLM-workflow path remains for the quick bypass and
         for installations without a partial capture.
 
         #1837 (PM live, 2026-09-20): the third leg — `_generate_basic_standup`,
@@ -931,7 +955,7 @@ class StandupConversationHandler:
                 standup_content = _format_standup_from_capture(capture)
                 used_capture = True
             elif self._workflow:
-                # Legacy LLM workflow path (quick/skip bypass)
+                # Legacy LLM workflow path (quick bypass)
                 standup_content = await self._generate_with_retry(context)
                 used_workflow = True
             elif conversation.previous_state in (

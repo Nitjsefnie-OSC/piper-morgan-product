@@ -98,7 +98,7 @@ _GENERIC_FLOW_WORDS = (
 _EXIT_VERBS = r"end|stop|cancel|quit|exit|abort"
 
 # Bare full-message exits that extend the #888 ESCAPE_COMMANDS frozenset.
-# (#888's set — cancel/exit/stop/skip/quit/never mind — is checked by the
+# (#888's set — cancel/exit/stop/quit/never mind — is checked by the
 # registry before this module runs; these are the additions #1529 evidenced.)
 BARE_EXIT_COMMANDS: frozenset = frozenset(
     {
