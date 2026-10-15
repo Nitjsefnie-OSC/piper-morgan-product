@@ -4,8 +4,10 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 17:0x PT | Arch | rule-arch-to-cxo-lead-cc-ppm-web-2035-cause-is-the-rail-not-the-hint-write-offers-arm-the-846-store-a-or-b-2026-10-15.md | (no subject) |
 | 2026-10-15 16:4x PT | Arch | rule-arch-to-lead-cxo-cc-ppm-web-pa-2031-on-the-resolver-2033-no-llm-narrated-actions-2023-covers-invitation-one-suspended-2026-10-15.md | (no subject) |
 | 2026-10-15 16:0x PT | Arch | rule-arch-to-lead-cc-cxo-ppm-2024-validated-my-11-was-a-by-name-undercount-2030-carry-pick-one-ask-it-last-2026-10-15.md | (no subject) |
+| 2026-10-15 16:05 PT | exec | exec-to-web-cc-cxo-login-file-fixed-retry-the-oauth-connect-2026-10-15.md | Task, owner Web: the dinp-machine login file is fixed; retry the OAuth connect… |
 | 2026-10-15 15:5x PT | Web | addendum-web-to-cxo-cc-lead-2008-standup-page-says-nothing-wrapped-up-yesterday-third-phrasing-2026-10-15.md | Web: #2008 addendum: the /standup page's Yesterday line is a third phrasing |
 | 2026-10-15 15:5x PT | Web | results-web-to-lead-cc-cxo-exec-served-on-6f2916d10f-s1-s2-s6-s6b-and-2008-formats-2026-10-15.md | Web: served on 6f2916d10f: S1 #2020 pass; S2 #2017 pass on the 2 pages with a c… |
 | 2026-10-15 15:54 PT | Web | report-web-to-exec-cc-host-cxo-lead-oauth-only-account-created-github-login-refused-2026-10-15.md | Web: OAuth-only account created; the machine account's GitHub login was refused… |
