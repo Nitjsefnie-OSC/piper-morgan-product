@@ -59,3 +59,12 @@ STANDUP_INVITATION_DECLINE_REPLY = (
 STANDUP_RESUME_NOT_FOUND_REPLY = (
     "I couldn't find your paused standup. Say 'do a standup' to start a new one."
 )
+
+# #2033 (CXO, 2026-10-15; folds #2032): NO standup active or suspended, and the
+# turn leaves or defers one ("skip the standup", "no, not now"). Served from
+# code at the nothing-open seam (``IntentService._nothing_running_reply``),
+# nothing appended; never a "skipped"/"cancelled" claim for a standup that did
+# not exist. A statement plus an instruction; nothing to arm.
+STANDUP_NOT_RUNNING_REPLY = (
+    "There's no standup running right now. Say 'do a standup' whenever you want one."
+)

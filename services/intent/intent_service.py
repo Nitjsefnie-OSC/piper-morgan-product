@@ -2375,6 +2375,22 @@ class IntentService:
                 if list_remainder_result:
                     return list_remainder_result
 
+            # #2033 (Arch 2026-10-15, CXO's lines): with NOTHING active or
+            # suspended, a cancel/stop word, a flow exit, or a standup
+            # deferral is answered here by code, ahead of classification —
+            # these turns carry no deterministic category (pre_classify claims
+            # none of them), so the LLM's category decided whether the #2004
+            # floor seam ever saw them, and the floor narrated "standup
+            # cancelled" for an action nothing took. Placed after every arm
+            # that could consume the turn (the #846 pop, the #889 resume
+            # check, the #1762 remainder), so a live arm always wins.
+            if not contextual_offer_bound and escaped_process_type is None:
+                nothing_running = await self._nothing_running_reply(
+                    message, session_id=session_id, user_id=user_id
+                )
+                if nothing_running is not None:
+                    return nothing_running
+
             # Issue #585: Check for /standup command BEFORE classification
             # This routes the explicit command to the interactive handler
             # Note: This starts a NEW standup, not checking an active one (registry handles that)
@@ -16192,6 +16208,85 @@ Add any additional information here.
                 "category": category,
                 "action": intent.action,
                 "bare_decline_nothing_open": True,
+            },
+        )
+
+    async def _nothing_running_reply(
+        self,
+        message: str,
+        *,
+        session_id: Optional[str],
+        user_id: Optional[str],
+    ) -> Optional[IntentProcessingResult]:
+        """#2033 — the nothing-open seam's pre-classification half.
+
+        With no guided process active (the registry's active check already
+        ran and passed the turn through, nothing escaped) AND none suspended
+        for the user (``check_suspended_processes``, user-scoped, so a
+        standup paused in another chat counts) AND no armed offer rail, a
+        whole-message turn of one of these shapes gets CXO's fixed line, with
+        nothing appended:
+
+        (a) a registry escape word, please-stripped, read through the
+            registry's own ``_escape_word`` / ``ESCAPE_COMMANDS`` read ("cancel", "stop",
+            "never mind", "please cancel") → ``NOTHING_RUNNING_TO_CANCEL``;
+        (c) a deferral made only of bare declines ("not now", "no, not
+            now": ``contains_deferral`` plus every comma-part
+            ``is_bare_decline``) → ``STANDUP_NOT_RUNNING_REPLY``;
+        (b) a #1529 flow exit (``detect_flow_exit``) naming the standup
+            only ("skip the standup", "cancel the standup", "end standup")
+            → ``STANDUP_NOT_RUNNING_REPLY``; a generic exit that fits every
+            process ("forget it", "nevermind") or one naming another
+            process → ``NOTHING_RUNNING_TO_CANCEL``.
+
+        Everything else returns None and the turn classifies as before; a
+        plain bare decline ("no thanks", "skip") still gets the #2004
+        "Okay." at the floor gate. Any lookup failure returns None (the
+        pre-#2033 path), never a "nothing running" claim it could not check.
+        """
+        from services.intent_service.soft_invocation import contains_deferral, is_bare_decline
+        from services.process.escape import detect_flow_exit
+        from services.process.registry import ESCAPE_COMMANDS, _escape_word
+        from services.process.standup_copy import STANDUP_NOT_RUNNING_REPLY
+        from services.ui_messages.keyless_pleasantry import NOTHING_RUNNING_TO_CANCEL
+
+        text = (message or "").strip()
+        if not text:
+            return None
+        try:
+            registry = get_process_registry()
+            line: Optional[str] = None
+            # The registry's own word read (``_is_escape_command`` is exactly
+            # this), module-level so the check never depends on a registry
+            # instance: please-stripped, exact match on what remains.
+            if _escape_word(text) in ESCAPE_COMMANDS:
+                line = NOTHING_RUNNING_TO_CANCEL
+            elif contains_deferral(text) and all(is_bare_decline(part) for part in text.split(",")):
+                line = STANDUP_NOT_RUNNING_REPLY
+            else:
+                exits = {pt for pt in ProcessType if detect_flow_exit(text, pt)}
+                if exits == {ProcessType.STANDUP}:
+                    line = STANDUP_NOT_RUNNING_REPLY
+                elif exits:
+                    line = NOTHING_RUNNING_TO_CANCEL
+            if line is None:
+                return None
+            if self._armed_offer_signal(session_id, user_id) is not None:
+                return None
+            if await registry.check_suspended_processes(user_id) is not None:
+                return None
+        except Exception as e:  # silent-ok: logged; the turn takes the pre-#2033 path
+            self.logger.warning("nothing_running_check_failed", error=str(e))
+            return None
+
+        self.logger.info("nothing_running_reply", session_id=session_id)
+        return IntentProcessingResult(
+            success=True,
+            message=line,
+            intent_data={
+                "category": IntentCategory.CONVERSATION.value,
+                "action": "nothing_running",
+                "nothing_running": True,
             },
         )
 
