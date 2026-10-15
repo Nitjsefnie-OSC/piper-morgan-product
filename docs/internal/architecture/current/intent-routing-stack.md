@@ -215,6 +215,30 @@ keeps first claim on ambiguous shapes; singular unnamed 'delete my reminder'
 keeps the which-todo ask; the #1527 named-target and #1666 numbered legs
 unchanged. Regression: `test_bulk_delete_reminders_1696.py` + the updated
 bulk pin in `test_reminder_delete_misroute_1527.py`.
+**Issue 2019 one-item delete cap (2026-10-15, interim until soft delete, issue
+2021)**: xian's 10-14 ruling — no irreversible bulk delete — supersedes every
+MULTI-item delete arm described in this section. The cap lives in the delete
+handlers (Arch's placement), not the router allowlist: when the RESOLVED set has
+more than one item, no delete carrier arms, nothing is deleted, and the reply is
+CXO's capped copy from ONE builder (`services/intent_service/delete_cap.py`,
+`capped_delete_reply`: "I can delete one {reminder|todo} at a time for now. You
+asked about these:" + the items quoted and numbered in resolved order + "Tell me
+which one to delete first. Nothing has been changed."). It is an instruction,
+not an offer: nothing armed, no mark-done offer appended (the capped list is
+recorded as `last_numbered_list`, context only, so "delete the first one" binds
+to what was shown). Sites: `todo_handlers.handle_delete_todo_targets` (router
+targets; the `clear_todos` stored-delete and verb-answer re-entries land here),
+`delete_todo_pick.handle_delete_todo_pick_turn` (an answer naming several
+candidates, read word by word with the shared ordinal binder, no new regex),
+and `reminder_clear`'s five bulk arms (#1696 explicit bulk, variant 3, the
+verb-question "delete" answer — the verb default is still stored —, the
+ALWAYS_ASK "different this time" branch, the correction window). Belt: both
+confirmed sinks (`handle_delete_todo_targets`' `BATCH_DELETE_IDS_KEY` re-entry
+and `run_clear_reminders_delete_workflow`) refuse more than one id, so a
+carrier armed before the cap deletes nothing. Unchanged: single deletes (the
+#1666 gate, the legacy handler, D1, variant 3 / explicit confirm at N=1), and
+mark done on any set. Regression: `test_delete_cap_2019.py` plus the updated
+pins in the 1696, 1605, 1653, 1753, 1943, router-targets and clear_todos suites.
 **#1987 just-created referent leg (2026-10-12)**: 'delete that reminder' /
 'delete it' the turn after "Reminder saved: …" names nothing (that/it/this are
 `_STOPWORDS`, "reminder" is `_DELETE_COMMAND_NOISE`) and fell to the which-todo

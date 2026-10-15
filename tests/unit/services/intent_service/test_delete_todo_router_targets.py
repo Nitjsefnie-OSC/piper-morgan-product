@@ -314,30 +314,41 @@ class TestHandleDeleteTodoTargets:
         assert msg.endswith(" as is. (yes/no)")
 
     @pytest.mark.asyncio
-    async def test_duplicate_title_and_carve_out_arms_the_enumerating_confirm(
+    async def test_duplicate_title_and_carve_out_is_capped_issue_2019(
         self, handlers, offers, session_ctx, four
     ):
+        """Issue 2019 (xian 2026-10-14): two resolved items after a carve-out
+        arm NOTHING and delete nothing — CXO's capped reply names each item
+        in the order resolved (was: the D2 enumerating confirm)."""
         self._shown(session_ctx, four)
         intent = _intent("delete the first three except the pr one", ["1-3"], exclude=["3"])
         msg, armed = await handlers.handle_delete_todo_targets(intent, "s1", uuid4(), offers, "u")
-        assert armed is True
+        assert armed is False
         assert msg == (
-            'Delete 2 reminders: "check the test card again" (2 items)? '
-            'Leaving "review the pr" and "revise the pr" as is. (yes/no)'
+            "I can delete one reminder at a time for now. You asked about these:\n"
+            '1. "check the test card again"\n'
+            '2. "check the test card again"\n'
+            "\n"
+            "Tell me which one to delete first. Nothing has been changed."
         )
         handlers.todo_service.delete_todo.assert_not_awaited()
+        offers.set_pending_offer.assert_not_called()
 
     @pytest.mark.asyncio
-    async def test_more_than_five_renders_bullets(self, handlers, offers, session_ctx):
+    async def test_all_of_twelve_is_capped_issue_2019(self, handlers, offers, session_ctx):
+        """Issue 2019: "delete all of them" over 12 rows arms nothing and
+        lists all 12 numbered (was: the D3 bulleted confirm)."""
         twelve = [_due(f"item {i}", 100 - i) for i in range(12)]
         handlers.todo_service.list_todos = AsyncMock(return_value=twelve)
         intent = _intent("delete all of them", ["all"])
         msg, armed = await handlers.handle_delete_todo_targets(intent, "s1", uuid4(), offers, "u")
-        assert armed is True
+        assert armed is False
         lines = msg.splitlines()
-        assert lines[0] == "Delete 12 reminders?"
-        assert lines[1:13] == [f"• item {i}" for i in range(12)]
-        assert lines[-1] == "(yes/no)"
+        assert lines[0] == "I can delete one reminder at a time for now. You asked about these:"
+        assert lines[1:13] == [f'{i + 1}. "item {i}"' for i in range(12)]
+        assert lines[-1] == "Tell me which one to delete first. Nothing has been changed."
+        handlers.todo_service.delete_todo.assert_not_awaited()
+        offers.set_pending_offer.assert_not_called()
 
     @pytest.mark.asyncio
     async def test_ordinal_without_a_numbered_list_is_unresolved_says_delete_it(
@@ -414,15 +425,16 @@ class TestHandleDeleteTodoTargets:
         self, handlers, offers, session_ctx, four
     ):
         """The "yes" re-dispatches the bound intent's ids — never a
-        re-resolve of inversion_args at execution (Arch's provenance rule)."""
+        re-resolve of inversion_args at execution (Arch's provenance rule).
+        One bound id (issue 2019 caps the carrier at one item)."""
         intent = _intent(
-            "delete the first three",
-            ["1-3"],
+            "delete the third one",
+            ["3"],
             extra={
                 CONFIRMED_CONTEXT_KEY: True,
-                BATCH_DELETE_IDS_KEY: [t.id for t in four[:3]],
-                BATCH_DELETE_TEXTS_KEY: [t.text for t in four[:3]],
-                BATCH_DELETE_LEFT_KEY: ["revise the pr"],
+                BATCH_DELETE_IDS_KEY: [four[2].id],
+                BATCH_DELETE_TEXTS_KEY: [four[2].text],
+                BATCH_DELETE_LEFT_KEY: [],
             },
         )
         # the list may have shifted since the ask; the bound ids still rule,
@@ -435,23 +447,16 @@ class TestHandleDeleteTodoTargets:
         called = [
             str(c.kwargs["todo_id"]) for c in handlers.todo_service.delete_todo.call_args_list
         ]
-        assert called == [t.id for t in four[:3]]
-        assert msg.splitlines() == [
-            "Deleted 3 reminders:",
-            "• check the test card again (2 items)",
-            "• review the pr",
-            'Left "revise the pr" as is.',
-        ]
+        assert called == [four[2].id]
+        assert msg.splitlines() == ["Deleted 1 reminder:", "• review the pr"]
         offers.set_pending_offer.assert_not_called()
 
     @pytest.mark.asyncio
-    async def test_confirmed_reentry_reports_partial_failure_as_already_gone(
+    async def test_confirmed_reentry_with_several_bound_ids_is_capped_issue_2019(
         self, handlers, offers, session_ctx, four
     ):
-        gone = four[1]
-        handlers.todo_service.delete_todo = AsyncMock(
-            side_effect=lambda todo_id, user_id: False if str(todo_id) == gone.id else True
-        )
+        """Issue 2019 belt: a multi-id carrier armed before the cap shipped
+        deletes NOTHING on its "yes" — the capped reply instead."""
         intent = _intent(
             "x",
             ["1-3"],
@@ -462,9 +467,18 @@ class TestHandleDeleteTodoTargets:
                 BATCH_DELETE_LEFT_KEY: ["revise the pr"],
             },
         )
-        msg, _ = await handlers.handle_delete_todo_targets(intent, "s1", uuid4(), offers, "u")
-        assert msg.splitlines()[0] == "Deleted 2 reminders:"
-        assert "Couldn't delete \"check the test card again\" — it's already gone." in msg
+        msg, armed = await handlers.handle_delete_todo_targets(intent, "s1", uuid4(), offers, "u")
+        assert armed is False
+        assert msg == (
+            "I can delete one reminder at a time for now. You asked about these:\n"
+            '1. "check the test card again"\n'
+            '2. "check the test card again"\n'
+            '3. "review the pr"\n'
+            "\n"
+            "Tell me which one to delete first. Nothing has been changed."
+        )
+        handlers.todo_service.delete_todo.assert_not_awaited()
+        offers.set_pending_offer.assert_not_called()
 
     @pytest.mark.asyncio
     async def test_confirmed_reentry_nothing_deleted(self, handlers, offers, session_ctx, four):

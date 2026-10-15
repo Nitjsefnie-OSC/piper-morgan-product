@@ -315,9 +315,13 @@ class TestStoredDelete:
         assert offer["question"] == result.message
 
     @pytest.mark.asyncio
-    async def test_multi_item_confirm_is_variant_three_with_leaving(
+    async def test_multi_item_stored_delete_is_capped_issue_2019(
         self, intent_service, monkeypatch, four
     ):
+        """Issue 2019 (xian 2026-10-14): stored 'clear' = delete over 2+
+        items re-enters delete_todo (real dispatch), whose handler caps the
+        set — nothing armed, nothing deleted, CXO's capped reply (was the
+        variant-3 enumerating confirm)."""
         _stored(monkeypatch, rc.VALUE_DELETE)
         intent = _clear_intent(["1-3"], exclude=["3"])
         intent_service._session_ctx.last_numbered_list = NumberedList(
@@ -325,10 +329,87 @@ class TestStoredDelete:
         )
         result = await ct.run_clear_todos(intent, "s1", _USER_ID, intent_service)
         assert result.message == (
-            "You've set 'clear' to mean delete — "
-            'delete 2 reminders: "check the test card again" (2 items)? '
-            'Leaving "review the pr" and "revise the pr" as is. (yes/no)'
+            "I can delete one reminder at a time for now. You asked about these:\n"
+            '1. "check the test card again"\n'
+            '2. "check the test card again"\n'
+            "\n"
+            "Tell me which one to delete first. Nothing has been changed."
         )
+        assert result.requires_clarification is False
+        intent_service.todo_handlers.todo_service.delete_todo.assert_not_awaited()
+        intent_service.workflow_offer_service.set_pending_offer.assert_not_called()
+        assert intent_service.workflow_offer_service.peek_pending_offer("s1") is None
+
+
+class TestIssue2019VerbAnswerReentry:
+    """Issue 2019 on the clear_todos re-entry after the user answers the
+    "mark them done, or delete them?" question — REAL dispatch (no spy), so
+    the answer runs through run_delete_todo_workflow / run_complete_todo_
+    workflow and the handlers' own gates."""
+
+    @pytest.mark.asyncio
+    async def test_delete_answer_on_two_items_is_capped(self, intent_service, monkeypatch, four):
+        monkeypatch.setattr(
+            "services.intent_service.verified_inference.store_verified_inference",
+            AsyncMock(return_value=True),
+        )
+        _stub_router(monkeypatch, outcome="operation", operation="delete_todo", confidence=0.95)
+        payload = _bound_payload([four[2].id, four[3].id], [four[2].text, four[3].text])
+        result = await ct.handle_clear_todos_verb_answer(
+            payload, "delete them", "s1", _USER_ID, intent_service
+        )
+        assert result["message"] == (
+            "I can delete one reminder at a time for now. You asked about these:\n"
+            '1. "review the pr"\n'
+            '2. "revise the pr"\n'
+            "\n"
+            "Tell me which one to delete first. Nothing has been changed."
+        )
+        assert not result.get("requires_clarification")
+        intent_service.todo_handlers.todo_service.delete_todo.assert_not_awaited()
+        intent_service.workflow_offer_service.set_pending_offer.assert_not_called()
+        assert intent_service.workflow_offer_service.peek_pending_offer("s1") is None
+
+    @pytest.mark.asyncio
+    async def test_delete_answer_on_one_item_still_arms_the_named_confirm(
+        self, intent_service, monkeypatch, four
+    ):
+        monkeypatch.setattr(
+            "services.intent_service.verified_inference.store_verified_inference",
+            AsyncMock(return_value=True),
+        )
+        _stub_router(monkeypatch, outcome="operation", operation="delete_todo", confidence=0.95)
+        payload = _bound_payload([four[2].id], [four[2].text])
+        result = await ct.handle_clear_todos_verb_answer(
+            payload, "delete it", "s1", _USER_ID, intent_service
+        )
+        assert result["message"] == 'Delete the reminder "review the pr"? (yes/no)'
+        assert result["requires_clarification"] is True
+        armed = intent_service.workflow_offer_service.peek_pending_offer("s1")
+        assert armed["pending_action"]["kind"] == "todo_batch_delete"
+        intent_service.todo_handlers.todo_service.delete_todo.assert_not_awaited()
+
+    @pytest.mark.asyncio
+    async def test_mark_done_answer_on_two_items_is_uncapped(
+        self, intent_service, monkeypatch, four
+    ):
+        """Mark done on a bulk set stays uncapped: complete_todo's own
+        enumerating confirm arms for both items."""
+        monkeypatch.setattr(
+            "services.intent_service.verified_inference.store_verified_inference",
+            AsyncMock(return_value=True),
+        )
+        _stub_router(monkeypatch, outcome="operation", operation="complete_todo", confidence=0.95)
+        payload = _bound_payload([four[2].id, four[3].id], [four[2].text, four[3].text])
+        result = await ct.handle_clear_todos_verb_answer(
+            payload, "mark them done", "s1", _USER_ID, intent_service
+        )
+        assert result["message"].startswith(
+            'Complete 2 reminders: "review the pr" and "revise the pr"?'
+        )
+        assert "one reminder at a time" not in result["message"]
+        armed = intent_service.workflow_offer_service.peek_pending_offer("s1")
+        assert armed["pending_action"]["kind"] == "todo_batch_complete"
 
 
 class TestReentryUsesDispatchWorkflowWithSameArgs:

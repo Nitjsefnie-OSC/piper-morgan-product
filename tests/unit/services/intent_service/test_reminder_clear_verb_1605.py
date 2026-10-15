@@ -33,6 +33,7 @@ from services.domain.models import Intent, Todo
 from services.intent.intent_service import IntentService
 from services.intent_service import reminder_clear as rc
 from services.intent_service.classifier import IntentClassifier
+from services.intent_service.delete_cap import DELETE_CAPPED_FLAG
 from services.intent_service.destructive_confirm import (
     CONFIRM_PENDING_ACTION_WORKFLOW,
 )
@@ -412,7 +413,9 @@ class TestEndToEndVariantOne:
     ):
         """'delete' as the variant-1 answer stores the mapping but does NOT
         delete — the batch still routes through the #1190 confirm (a stored
-        preference changes the mapping, never the consent tier)."""
+        preference changes the mapping, never the consent tier). One item:
+        issue 2019 caps 2+ (pinned in TestIssue2019DeleteCap)."""
+        todo_boundary["todos"] = todo_boundary["todos"][:1]  # issue 2019: one item arms
         sid = "e2e-1605-v1-delete"
         _stub_classification(monkeypatch, live_service, "clear my reminders", "complete_todo")
         await live_service.process_intent(
@@ -421,7 +424,7 @@ class TestEndToEndVariantOne:
         result = await live_service.process_intent(
             message="delete them", session_id=sid, user_id=_USER
         )
-        assert result.message.startswith(variant_three_question(2))
+        assert result.message.startswith(variant_three_question(1))
         record = pref_store["verified_inferences"][rc.inference_key("clear")]
         assert record["value"] == "delete"
         assert todo_boundary["deleted"] == []  # explosive until confirmed
@@ -430,8 +433,8 @@ class TestEndToEndVariantOne:
 
         todo_boundary["allow_delete"] = True
         confirmed = await live_service.process_intent(message="yes", session_id=sid, user_id=_USER)
-        assert len(todo_boundary["deleted"]) == 2
-        assert "Deleted 2 reminders" in confirmed.message
+        assert len(todo_boundary["deleted"]) == 1
+        assert "Deleted 1 reminder" in confirmed.message
 
     async def test_decline_variant_one_changes_nothing(
         self, live_service, monkeypatch, pref_store, todo_boundary
@@ -474,7 +477,9 @@ class TestEndToEndVariantTwo:
     ):
         """'I meant delete' on the following turn re-asks via a REAL #1190
         confirm over the just-completed items; 'yes' deletes them. The
-        stored default stays 'complete' (ratified copy: 'this time')."""
+        stored default stays 'complete' (ratified copy: 'this time'). One
+        item: issue 2019 caps 2+ (pinned in TestIssue2019DeleteCap)."""
+        todo_boundary["todos"] = todo_boundary["todos"][:1]  # issue 2019: one item arms
         sid = "e2e-1605-v2-correct"
         _seed_verb_default(pref_store, "complete")
         _stub_classification(monkeypatch, live_service, "clear my reminders", "complete_todo")
@@ -489,8 +494,8 @@ class TestEndToEndVariantTwo:
         assert todo_boundary["deleted"] == []  # still gated
         todo_boundary["allow_delete"] = True
         confirmed = await live_service.process_intent(message="yes", session_id=sid, user_id=_USER)
-        assert len(todo_boundary["deleted"]) == 2
-        assert "Deleted 2 reminders" in confirmed.message
+        assert len(todo_boundary["deleted"]) == 1
+        assert "Deleted 1 reminder" in confirmed.message
         # This-time-only: the stored mapping did not flip.
         record = pref_store["verified_inferences"][rc.inference_key("clear")]
         assert record["value"] == "complete"
@@ -512,6 +517,7 @@ class TestEndToEndVariantTwo:
             "thought I wanted you to delete a project."
         )
         assert len(aside) < 160 and "\n" not in aside  # under the #1631 floor
+        todo_boundary["todos"] = todo_boundary["todos"][:1]  # issue 2019: one item arms
         sid = "e2e-1650-v2-aside"
         _seed_verb_default(pref_store, "complete")
         _stub_classification(monkeypatch, live_service, "clear my reminders", "complete_todo")
@@ -545,14 +551,16 @@ class TestEndToEndVariantThree:
     ):
         """Variant 3 reaches the REAL #1190 gate: the ratified question, the
         confirm_pending_action carrier, and NO delete until the explicit
-        yes (explosive service boundary proves it)."""
+        yes (explosive service boundary proves it). One item: issue 2019
+        caps 2+ (pinned in TestIssue2019DeleteCap)."""
+        todo_boundary["todos"] = todo_boundary["todos"][:1]  # issue 2019: one item arms
         sid = "e2e-1605-v3"
         _seed_verb_default(pref_store, "delete")
         _stub_classification(monkeypatch, live_service, "clear my reminders", "complete_todo")
         result = await live_service.process_intent(
             message="clear my reminders", session_id=sid, user_id=_USER
         )
-        assert result.message == variant_three_question(2)
+        assert result.message == variant_three_question(1)
         assert result.intent_data.get("destructive_confirmation_pending") is True
         stored = _pending_offers(live_service).get(sid)
         assert stored["workflow_type"] == CONFIRM_PENDING_ACTION_WORKFLOW
@@ -561,13 +569,14 @@ class TestEndToEndVariantThree:
 
         todo_boundary["allow_delete"] = True
         confirmed = await live_service.process_intent(message="yes", session_id=sid, user_id=_USER)
-        assert len(todo_boundary["deleted"]) == 2
-        assert "Deleted 2 reminders" in confirmed.message
+        assert len(todo_boundary["deleted"]) == 1
+        assert "Deleted 1 reminder" in confirmed.message
         assert "Review the PR" in confirmed.message
 
     async def test_no_cancels_honestly_and_nothing_fires(
         self, live_service, monkeypatch, pref_store, todo_boundary
     ):
+        todo_boundary["todos"] = todo_boundary["todos"][:1]  # issue 2019: one item arms
         sid = "e2e-1605-v3-no"
         _seed_verb_default(pref_store, "delete")
         _stub_classification(monkeypatch, live_service, "clear my reminders", "complete_todo")
@@ -609,6 +618,7 @@ class TestMetaChannelStillGoverns:
     ):
         """THE cell: stored delete + TRUST_INFERENCES meta -> still the
         blocking (yes/no) confirm, nothing deleted."""
+        todo_boundary["todos"] = todo_boundary["todos"][:1]  # issue 2019: one item arms
         sid = "e2e-1605-meta-destructive"
         _seed_meta_trust(pref_store)
         _seed_verb_default(pref_store, "delete")
@@ -616,7 +626,7 @@ class TestMetaChannelStillGoverns:
         result = await live_service.process_intent(
             message="clear my reminders", session_id=sid, user_id=_USER
         )
-        assert result.message == variant_three_question(2)
+        assert result.message == variant_three_question(1)
         assert "(yes/no)" in result.message
         assert todo_boundary["deleted"] == []
 
@@ -804,6 +814,7 @@ class TestAlwaysAskLeadingQuestion:
     async def test_different_this_time_blocks_via_v3_and_keeps_store(
         self, live_service, monkeypatch, pref_store, todo_boundary
     ):
+        todo_boundary["todos"] = todo_boundary["todos"][:1]  # issue 2019: one item arms
         sid = "e2e-1605-aa-diff"
         _seed_verb_default(pref_store, "complete")
         pref_store["inference_verification_meta"] = {
@@ -934,3 +945,144 @@ class TestNamedTargetNarrowing:
         # V3's ratified singular grammar: N=1 renders "delete this reminder?"
         assert "delete this reminder? (yes/no)" in result.message
         assert todo_boundary["deleted"] == []  # still gated pre-confirm
+
+
+_CAPPED_TWO = (
+    "I can delete one reminder at a time for now. You asked about these:\n"
+    '1. "Review the PR"\n'
+    '2. "Call the vendor"\n'
+    "\n"
+    "Tell me which one to delete first. Nothing has been changed."
+)
+
+
+class TestIssue2019DeleteCap:
+    """Issue 2019 (xian 2026-10-14, interim until soft delete) on the OLD
+    #1605 seam: every bulk-delete arm in reminder_clear answers with CXO's
+    capped reply over the 2-reminder fixture — no delete carrier armed,
+    nothing deleted (the explosive boundary would raise)."""
+
+    pytestmark = pytest.mark.asyncio
+
+    def _no_delete_armed(self, live_service, sid):
+        stored = _pending_offers(live_service).get(sid)
+        assert stored is None or stored["pending_action"].get("action") != rc.CLEAR_DELETE_WORKFLOW
+
+    async def test_variant_one_delete_answer_stores_the_verb_then_caps(
+        self, live_service, monkeypatch, pref_store, todo_boundary
+    ):
+        sid = "e2e-2019-v1-delete"
+        _stub_classification(monkeypatch, live_service, "clear my reminders", "complete_todo")
+        await live_service.process_intent(
+            message="clear my reminders", session_id=sid, user_id=_USER
+        )
+        result = await live_service.process_intent(
+            message="delete them", session_id=sid, user_id=_USER
+        )
+        assert result.message == _CAPPED_TWO
+        # The verb answer is still remembered; only the bulk delete is capped.
+        record = pref_store["verified_inferences"][rc.inference_key("clear")]
+        assert record["value"] == "delete"
+        self._no_delete_armed(live_service, sid)
+        await live_service.process_intent(message="yes", session_id=sid, user_id=_USER)
+        assert todo_boundary["deleted"] == []
+
+    async def test_variant_one_mark_done_answer_stays_uncapped(
+        self, live_service, monkeypatch, pref_store, todo_boundary
+    ):
+        sid = "e2e-2019-v1-done"
+        _stub_classification(monkeypatch, live_service, "clear my reminders", "complete_todo")
+        await live_service.process_intent(
+            message="clear my reminders", session_id=sid, user_id=_USER
+        )
+        todo_boundary["allow_complete"] = True
+        result = await live_service.process_intent(
+            message="mark them done", session_id=sid, user_id=_USER
+        )
+        assert len(todo_boundary["completed"]) == 2
+        assert "one reminder at a time" not in result.message
+
+    async def test_variant_two_correction_to_delete_is_capped(
+        self, live_service, monkeypatch, pref_store, todo_boundary
+    ):
+        sid = "e2e-2019-v2-correct"
+        _seed_verb_default(pref_store, "complete")
+        _stub_classification(monkeypatch, live_service, "clear my reminders", "complete_todo")
+        todo_boundary["allow_complete"] = True
+        await live_service.process_intent(
+            message="clear my reminders", session_id=sid, user_id=_USER
+        )
+        correction = await live_service.process_intent(
+            message="I meant delete", session_id=sid, user_id=_USER
+        )
+        assert correction.message == _CAPPED_TWO
+        self._no_delete_armed(live_service, sid)
+        assert todo_boundary["deleted"] == []
+        record = pref_store["verified_inferences"][rc.inference_key("clear")]
+        assert record["value"] == "complete"
+
+    async def test_variant_three_stored_delete_is_capped(
+        self, live_service, monkeypatch, pref_store, todo_boundary
+    ):
+        sid = "e2e-2019-v3"
+        _seed_verb_default(pref_store, "delete")
+        _stub_classification(monkeypatch, live_service, "clear my reminders", "complete_todo")
+        result = await live_service.process_intent(
+            message="clear my reminders", session_id=sid, user_id=_USER
+        )
+        assert result.message == _CAPPED_TWO
+        assert result.intent_data.get(DELETE_CAPPED_FLAG) is True
+        assert not result.intent_data.get("destructive_confirmation_pending")
+        self._no_delete_armed(live_service, sid)
+        await live_service.process_intent(message="yes", session_id=sid, user_id=_USER)
+        assert todo_boundary["deleted"] == []
+
+    async def test_always_ask_different_this_time_delete_is_capped(
+        self, live_service, monkeypatch, pref_store, todo_boundary
+    ):
+        sid = "e2e-2019-aa-diff"
+        _seed_verb_default(pref_store, "complete")
+        pref_store["inference_verification_meta"] = {
+            "mode": "always_ask",
+            "set_at": "2026-08-14T07:22:00+00:00",
+        }
+        _stub_classification(monkeypatch, live_service, "clear my reminders", "complete_todo")
+        await live_service.process_intent(
+            message="clear my reminders", session_id=sid, user_id=_USER
+        )
+        result = await live_service.process_intent(
+            message="something different this time — delete them", session_id=sid, user_id=_USER
+        )
+        assert result.message == _CAPPED_TWO
+        self._no_delete_armed(live_service, sid)
+        assert todo_boundary["deleted"] == []
+        assert pref_store["verified_inferences"][rc.inference_key("clear")]["value"] == "complete"
+
+    async def test_a_multi_id_carrier_armed_before_the_cap_deletes_nothing(
+        self, live_service, todo_boundary
+    ):
+        """The confirmed sink is capped too: a 2-id carrier (armed before
+        the cap shipped) answered "yes" deletes nothing."""
+        ids = [t.id for t in todo_boundary["todos"]]
+        texts = [t.text for t in todo_boundary["todos"]]
+        intent = Intent(
+            category=IntentCategory.EXECUTION,
+            action=rc.CLEAR_DELETE_WORKFLOW,
+            original_message="clear my reminders",
+            confidence=1.0,
+            context={
+                "original_message": "clear my reminders",
+                "user_id": _USER,
+                "clear_target_ids": ids,
+                "clear_target_texts": texts,
+                "clear_noun": "reminder",
+            },
+        )
+        out = await rc.run_clear_reminders_delete_workflow(
+            "e2e-2019-sink",
+            user_id=_USER,
+            context={"intent": intent, "intent_service": live_service},
+        )
+        assert out["message"] == _CAPPED_TWO
+        assert out["intent_data"][DELETE_CAPPED_FLAG] is True
+        assert todo_boundary["deleted"] == []
