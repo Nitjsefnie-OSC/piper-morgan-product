@@ -4760,9 +4760,11 @@ What would you like to set up first?"""
                             f"- {name}" for name in project_names
                         )
                     else:
-                        response = (
-                            "You don't have any active projects yet. " "Would you like to add one?"
+                        from services.consciousness.files_consciousness import (
+                            empty_projects_message,
                         )
+
+                        response = empty_projects_message()  # one source (#2010)
                     result_dict = {
                         "message": response,
                         "intent": {
@@ -4775,10 +4777,11 @@ What would you like to set up first?"""
                     }
                     # Issue #852: Track contextual offer when no projects exist
                     if not projects:
-                        result_dict["offer_hint"] = {
-                            "continuation_hint": "add a new project",
-                            "offer_text": "Would you like to add one?",
-                        }
+                        from services.consciousness.files_consciousness import (
+                            empty_projects_offer_hint,
+                        )
+
+                        result_dict["offer_hint"] = empty_projects_offer_hint()
                     return result_dict
 
                 # Handle delete operation — #1930 (CXO's 2026-10-04 ruling,

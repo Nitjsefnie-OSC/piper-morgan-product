@@ -1,3 +1,4 @@
+# Concept: docs/operations/regression-prevention.md (added 2026-10-15, sunset-or-renew inventory; Lead)
 name: Docker Build
 
 # Docker Build Workflow — fires on production code + Docker assets

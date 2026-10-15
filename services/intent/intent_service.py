@@ -21,7 +21,11 @@ import structlog
 from sqlalchemy import and_, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from services.consciousness.files_consciousness import format_projects_conscious
+from services.consciousness.files_consciousness import (
+    empty_projects_message,
+    empty_projects_offer_hint,
+    format_projects_conscious,
+)
 from services.consciousness.learning_consciousness import format_patterns_learned_conscious
 from services.consciousness.search_consciousness import (
     format_no_results_conscious,
@@ -5216,7 +5220,11 @@ class IntentService:
             )
 
     async def _handle_projects_query(
-        self, intent: Intent, workflow_id: str, user_id: Optional[str] = None
+        self,
+        intent: Intent,
+        workflow_id: str,
+        session_id: Optional[str] = None,
+        user_id: Optional[str] = None,
     ) -> IntentProcessingResult:
         """
         Handle list_projects/show_projects query actions.
@@ -5281,9 +5289,22 @@ class IntentService:
         # Transform domain Project objects → dicts for format_projects_conscious.
         project_dicts = [{"name": p.name, "active": not p.is_archived} for p in projects]
 
+        # #2010: the empty state asks "Would you like to add one?" — rendered
+        # HERE and armed in the same turn with the same #852 offer_hint the
+        # manage_portfolio list branch sets, so a "yes" starts the add-project
+        # flow. The non-empty list ends plainly (format_projects_conscious).
+        if project_dicts:
+            message = format_projects_conscious(project_dicts)
+        else:
+            message = empty_projects_message()
+            if session_id:
+                self._track_offer_hint(
+                    {"offer_hint": empty_projects_offer_hint()}, session_id, user_id
+                )
+
         return IntentProcessingResult(
             success=True,
-            message=format_projects_conscious(project_dicts),
+            message=message,
             intent_data={
                 "category": intent.category.value,
                 "action": intent.action,

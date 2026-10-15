@@ -140,20 +140,22 @@ ACTION_REGISTRY: dict[tuple[str, str], ActionDisposition] = {
     # runtime now resolves WORKFLOW for it (`_true_disposition_for_registry_row`
     # reaches step 3, normalize_action(action) in get_action_workflows()) —
     # flipped from CANONICAL, which would now fail
-    # test_registry_disposition_matches_live_runtime. Lost on this flip: the
-    # canonical-only `_is_generic_canonical_response` safety net and `offer_hint`
-    # #852 continuation-tracking the rail's dict->IntentProcessingResult
-    # conversion doesn't carry (neither applies to list_repos's own handler
-    # output today — see Lead's handback for the ops where it does).
+    # test_registry_disposition_matches_live_runtime. Nothing is lost on this
+    # flip: the rail adapter returns through `_finalize_canonical_rail_result`
+    # (workflow_entries.py), which runs the `_is_generic_canonical_response`
+    # safety net and the #852 `offer_hint` tracking (`_track_offer_hint`) the
+    # canonical path runs (Arch's 2026-10-04 adapter-parity ruling).
     ("PORTFOLIO", "list_repos"): ActionDisposition.WORKFLOW,
     # Same generalized-can_handle reasoning as list_repos above: archive_project
     # / restore_project / add_project each have a rail entry (workflow_entries.py,
     # NO flip_group — non-READ keys never carry one; each flips individually via
     # FLIP_WRITE_ALLOWLIST), so the live runtime now resolves WORKFLOW for all
-    # three, flipped from CANONICAL. archive_project/restore_project additionally
-    # lose their `offer_hint` (#852 continuation-tracking) on the project-not-found
-    # branch — the rail adapter's dict->IntentProcessingResult conversion drops
-    # that key (see Lead's handback). `list_projects` (the READ fourth) is
+    # three, flipped from CANONICAL. archive_project/restore_project KEEP their
+    # `offer_hint` (#852 continuation-tracking) on the project-not-found branch:
+    # their rail adapters return through `_finalize_canonical_rail_result`,
+    # which calls `_track_offer_hint` (Arch's 2026-10-04 adapter-parity ruling
+    # fixed the earlier drop; pinned by TestUnarmedAskSiteRatchet
+    # test_2010_offer_hint_reach_tripwire). `list_projects` (the READ fourth) is
     # unaffected — it was never built as a PORTFOLIO rail key at all (naming
     # collision with the EXISTING QUERY-category `list_projects`; see the
     # comment there).
@@ -163,8 +165,8 @@ ACTION_REGISTRY: dict[tuple[str, str], ActionDisposition] = {
     # Same generalized-can_handle reasoning as list_repos/archive_project above:
     # search_projects has a rail entry (flip_group read_portfolio, joining
     # list_repos), so the live runtime now resolves WORKFLOW, flipped from
-    # CANONICAL. Also loses its `offer_hint` (#852) on the not-found branch —
-    # same loss shape as archive_project/restore_project (see Lead's handback).
+    # CANONICAL. Its not-found `offer_hint` (#852) is tracked through
+    # `_finalize_canonical_rail_result`, same as archive_project/restore_project.
     ("PORTFOLIO", "search_projects"): ActionDisposition.WORKFLOW,
     # Same generalized-can_handle reasoning: link_repo has a rail entry (NO
     # flip_group — allowlisted via FLIP_WRITE_ALLOWLIST), so the live runtime

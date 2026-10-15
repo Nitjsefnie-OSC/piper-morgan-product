@@ -1,7 +1,7 @@
 ---
-image: ''
-alt: ''
-caption: ''
+image: 'convergent-claims-arent-independent-evidence-four-telescopes-all-still-capped.jpg'
+alt: 'Four luminous AI astronomers agree beside capped telescopes while a human gestures toward the abundant stars shining overhead.'
+caption: '"Should we try taking the lens caps off?"'
 ---
 
 # Convergent Claims Aren't Independent Evidence

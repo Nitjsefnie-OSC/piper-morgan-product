@@ -1,3 +1,4 @@
+# Concept: docs/operations/regression-prevention.md (added 2026-10-15, sunset-or-renew inventory; Lead)
 name: Security Tests
 
 # Issue #1304: tests/security/ never ran in any gating CI job. No workflow

@@ -765,42 +765,42 @@
       }
 
       async function disconnectCalendar() {
-        Dialog.confirm({
+        const ok = await Dialog.confirm({
           title: 'Disconnect Google Calendar?',
           message: "I'll disconnect your calendar. You can set it up again anytime.",
-          confirmText: 'Disconnect',
-          onConfirm: async () => {
-            const disconnectBtnEl = document.getElementById('disconnect-btn');
-            disconnectBtnEl.disabled = true;
-            disconnectBtnEl.textContent = 'Disconnecting...';
-
-            try {
-              const response = await fetch('/api/v1/settings/integrations/calendar/disconnect', {
-                method: 'POST',
-                credentials: 'include'
-              });
-
-              if (!response.ok) {
-                const error = await response.json();
-                throw new Error(parseApiDetail(error.detail, 'Failed to disconnect'));
-              }
-
-              const data = await response.json();
-
-              if (data.success) {
-                showToast('success', 'Google Calendar disconnected', 'Disconnected');
-                loadCalendarStatus();  // Refresh status
-              } else {
-                throw new Error(data.message || 'Failed to disconnect');
-              }
-            } catch (error) {
-              console.error('Disconnect failed:', error);
-              showToast('error', error.message, 'Disconnect Failed');
-              disconnectBtnEl.disabled = false;
-              disconnectBtnEl.textContent = 'Disconnect';
-            }
-          }
+          confirmText: 'Disconnect'
         });
+        if (!ok) return;
+
+        const disconnectBtnEl = document.getElementById('disconnect-btn');
+        disconnectBtnEl.disabled = true;
+        disconnectBtnEl.textContent = 'Disconnecting...';
+
+        try {
+          const response = await fetch('/api/v1/settings/integrations/calendar/disconnect', {
+            method: 'POST',
+            credentials: 'include'
+          });
+
+          if (!response.ok) {
+            const error = await response.json();
+            throw new Error(parseApiDetail(error.detail, 'Failed to disconnect'));
+          }
+
+          const data = await response.json();
+
+          if (data.success) {
+            showToast('success', 'Google Calendar disconnected', 'Disconnected');
+            loadCalendarStatus();  // Refresh status
+          } else {
+            throw new Error(data.message || 'Failed to disconnect');
+          }
+        } catch (error) {
+          console.error('Disconnect failed:', error);
+          showToast('error', error.message, 'Disconnect Failed');
+          disconnectBtnEl.disabled = false;
+          disconnectBtnEl.textContent = 'Disconnect';
+        }
       }
 
       // ============================================================================
