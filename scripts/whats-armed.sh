@@ -84,6 +84,20 @@ if [ -d "$store" ] && [ -w "$store" ]; then
   newest=$(ls -t "$store" 2>/dev/null | head -1)
   row ARMED state "heartbeat store" "writable; newest file ${newest:-none}"
 else row "NOT ARMED" state "heartbeat store" "missing or not writable: $store"; fi
+# The fleet's Read denies on ~/.piper-shared match names only (*credential*, *token*, *secret*), so a
+# credential file named any other way is readable by every seat (2026-10-15: 6 found, 2 renamed that day). Counts
+# only: a file name can carry a person's name (hard rule 8), and this output gets pasted into logs.
+shared="${PIPER_SHARED:-$HOME/.piper-shared}"
+if [ -d "$shared" ]; then
+  total=0; open=0
+  for f in "$shared"/*; do
+    [ -f "$f" ] || continue
+    total=$((total+1))
+    case "${f##*/}" in *credential*|*token*|*secret*) ;; *) open=$((open+1)) ;; esac
+  done
+  if [ $open -eq 0 ]; then row ARMED file "piper-shared names under a deny" "$total of $total files match *credential*/*token*/*secret*"
+  else row "NOT ARMED" file "piper-shared names under a deny" "$open of $total files match no deny pattern (rename to *credential*; names not printed)"; fi
+else row UNMEASURED file "piper-shared names under a deny" "no $shared"; fi
 
 # 5. File layer: pinned tools this worktree can resolve.
 r=$(scripts/ensure-ruff.sh 2>/dev/null | tail -1)
