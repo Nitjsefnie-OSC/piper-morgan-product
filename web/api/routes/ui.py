@@ -676,3 +676,50 @@ async def advanced_settings_ui(request: Request):
     return templates.TemplateResponse(
         "advanced-settings.html", {"request": request, "user": user_context}
     )
+
+
+# ---------------------------------------------------------------------------
+# #2039: guessable URLs that map to a page that exists. 302 (not 301): these
+# are guesses, not renames -- a permanent redirect would be cached by the
+# browser and pin a mapping we may later want to change. Only mappings whose
+# target is a real page above; nothing is invented (/settings/account and
+# /settings/profile deliberately fall through to the human 404).
+# ---------------------------------------------------------------------------
+GUESSED_PATH_REDIRECTS: dict[str, str] = {
+    "/settings/github": "/settings/integrations/github",
+    "/settings/notion": "/settings/integrations/notion",
+    "/settings/slack": "/settings/integrations/slack",
+    "/settings/calendar": "/settings/integrations/calendar",
+    "/settings/google-calendar": "/settings/integrations/calendar",
+    "/integrations": "/settings/integrations",
+    "/settings/api-keys": "/settings/llm-keys",
+    "/settings/llm": "/settings/llm-keys",
+}
+
+
+def _make_guess_redirect(target: str):
+    async def _redirect() -> RedirectResponse:
+        return RedirectResponse(target, status_code=302)
+
+    return _redirect
+
+
+for _guess, _target in GUESSED_PATH_REDIRECTS.items():
+    router.add_api_route(
+        _guess,
+        _make_guess_redirect(_target),
+        methods=["GET"],
+        include_in_schema=False,
+        name=f"guess_redirect_{_guess.strip('/').replace('/', '_').replace('-', '_')}",
+    )
+
+
+async def render_human_not_found(request: Request):
+    """#2039: the browser-facing 404 -- app shell, CXO's wording, status 404."""
+    templates = _get_templates(request)
+    user_context = _extract_user_context(request)
+    return templates.TemplateResponse(
+        "not_found.html",
+        {"request": request, "user": user_context},
+        status_code=404,
+    )
