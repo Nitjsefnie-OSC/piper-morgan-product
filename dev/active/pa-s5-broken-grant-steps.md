@@ -19,6 +19,9 @@ GitHub → Settings → Applications → **Authorized OAuth Apps** → **Piper M
    `markdown` say GitHub couldn't be read and to reconnect. **No** "no open issues" or ✅ for GitHub.
 2. Settings → Integration Health → GitHub → **Test**. **Pass**: it fails, and says to reconnect. (On 10-14 it
    said "connection successful".) CXO judges the wording.
+3. Open Settings → GitHub and note what it says. **Expected to still say ✅ Connected, with no Connect
+   button** (#2029, found in the code 10-15, not yet fixed). That's a known gap, not an S5 failure; a screenshot
+   helps #2029.
 
 ## 4. Reconnect
 Integrations → GitHub → **Disconnect** → confirm, then **Connect with GitHub** (#2017's fix rides the same
