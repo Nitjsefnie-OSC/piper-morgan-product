@@ -254,10 +254,15 @@ async def check_integration_connection(
         if result["success"]:
             # Record success in health monitor
             health_monitor.record_success(integration_name, latency_ms)
+            # #2012: the GitHub Test names its serving leg (CXO's lines); other
+            # integrations keep the generic line.
+            message = f"{metadata['display_name']} connection successful"
+            if integration_name == "github" and result.get("message"):
+                message = result["message"]
             return ConnectionTestResponse(
                 integration=integration_name,
                 success=True,
-                message=f"{metadata['display_name']} connection successful",
+                message=message,
                 latency_ms=round(latency_ms, 2),
             )
         else:
@@ -547,82 +552,75 @@ async def _test_slack(user_id: Optional[str] = None) -> Dict[str, Any]:
         return {"success": False, "error": str(e), "error_type": "connection_failed"}
 
 
-async def _probe_github_oauth(user_id: Optional[str]) -> Dict[str, Any]:
-    """#2012: the live half of the OAuth Test — one authenticated read over the connector.
+_GITHUB_WORKING_OAUTH = "GitHub is working, using your GitHub connection."
+_GITHUB_WORKING_PAT = "GitHub is working, using your personal token."
+_GITHUB_WORKING_PAT_STALE_OAUTH = (
+    "GitHub is working, using your personal token. "
+    "Your GitHub connection needs re-authorizing, so I'm not using it right now."
+)
 
-    ``search_user_repositories`` goes binding → grant → github-mcp-server → GitHub; a
-    revoked grant comes back as a STALE_TOKEN degrade (#1965's tool-error mapping), a
-    down server as UNREACHABLE, a missing grant as CONNECT_REQUIRED. Each maps to an
-    ``error_type`` the registry's guidance table knows, so the card shows the fix.
-    """
+
+def _github_success_line(credential) -> str:
+    """CXO's Test-button lines (2026-10-14): name the serving leg; never a plain green
+    when only the fallback leg works and the OAuth grant is stale (B3)."""
+    if getattr(credential, "leg", None) == "pat":
+        if getattr(credential, "stale_oauth_reason", None) is not None:
+            return _GITHUB_WORKING_PAT_STALE_OAUTH
+        return _GITHUB_WORKING_PAT
+    return _GITHUB_WORKING_OAUTH
+
+
+def _github_failure(degradation) -> Dict[str, Any]:
+    """A connector degrade → the Test result; ``error_type`` is the taxonomy value the
+    registry's guidance table maps to a message and a fix."""
     from services.mcp.consumer.connector import DegradationReason
-    from services.mcp.consumer.github_adapter import GitHubMCPSpatialAdapter
 
-    result = await GitHubMCPSpatialAdapter().search_user_repositories(user_id or "system", limit=1)
-    if result.degradation is None:
-        return {"success": True, "message": "Connected via OAuth (MCP connector)"}
-    reason = result.degradation.reason
-    error_type = reason.value if isinstance(reason, DegradationReason) else "connection_failed"
+    reason = getattr(degradation, "reason", None)
     return {
         "success": False,
-        "error": result.degradation.user_message,
-        "error_type": error_type,
+        "error": getattr(degradation, "user_message", "") or "GitHub is not reachable.",
+        "error_type": reason.value
+        if isinstance(reason, DegradationReason)
+        else "connection_failed",
     }
 
 
 async def _test_github(user_id: Optional[str] = None) -> Dict[str, Any]:
-    """Test GitHub connection (Issue #562).
+    """Test GitHub connection (Issue #562; reshaped for #2012, Arch's Amendment B).
 
-    #1329: the OAuth connector is the live read path post-#1322 cutover, so a BOUND
-    connector means "connected" regardless of the legacy native PAT — report success
-    and skip the native-PAT probe. Falls back to the native PAT test only when there is
-    no OAuth binding.
+    ONE probe through the adapter for both legs: ``resolve_credential`` picks the leg
+    exactly as the reads do (a BOUND binding's grant, else the user's own PAT from
+    ``user_api_keys`` then the keychain; never a global token), then one real
+    authenticated read (``search_user_repositories``, limit 1) says whether GitHub
+    answers. The result names the serving leg and surfaces a stale OAuth grant that a
+    working PAT is covering for (B3). A BOUND row alone is not "connected" (a revoked
+    grant leaves the row in place; xian, alpha, 2026-10-14), and a missing user is
+    not-configured, never a fallback to a global key.
     """
+    if not user_id:
+        return {
+            "success": False,
+            "error": "GitHub not connected. Please add your token.",
+            "error_type": "not_configured",
+        }
     try:
-        # #1329: OAuth connector takes precedence. #2012: a BOUND binding row is not a
-        # connection — a revoked or expired grant leaves the row in place — so make ONE real
-        # authenticated call through the same resolver the reads use (the user's own repos,
-        # limit 1) and report what GitHub actually answered.
-        if await _github_oauth_bound(user_id):
-            return await _probe_github_oauth(user_id)
+        from services.mcp.consumer.connector import DegradationResponse
+        from services.mcp.consumer.github_adapter import GitHubMCPSpatialAdapter
 
-        import aiohttp
-
-        from services.infrastructure.keychain_service import KeychainService
-
-        keychain = KeychainService()
-        token = (
-            keychain.get_api_key("github_token", username=user_id)
-            if user_id
-            else keychain.get_api_key("github_token")
-        )  # Issue #849: Correct key name + user-scoped
-
-        if not token:
-            return {
-                "success": False,
-                "error": "GitHub not connected. Please add your token.",
-                "error_type": "not_configured",
-            }
-
-        # Test with user endpoint using stored PAT
-        async with aiohttp.ClientSession() as session:
-            async with session.get(
-                "https://api.github.com/user",
-                headers={
-                    "Authorization": f"Bearer {token}",
-                    "Accept": "application/vnd.github.v3+json",
-                    "X-GitHub-Api-Version": "2022-11-28",
-                },
-            ) as response:
-                if response.status == 200:
-                    return {"success": True}
-                else:
-                    return {
-                        "success": False,
-                        "error": "Token invalid or expired",
-                        "error_type": "token_invalid",
-                    }
-
+        adapter = GitHubMCPSpatialAdapter()
+        credential = await adapter.resolve_credential(user_id)
+        if isinstance(credential, DegradationResponse):
+            return _github_failure(credential)
+        result = await adapter.search_user_repositories(user_id, limit=1)
+        if result.degradation is not None:
+            return _github_failure(result.degradation)
+        stale = getattr(credential, "stale_oauth_reason", None)
+        return {
+            "success": True,
+            "message": _github_success_line(credential),
+            "leg": getattr(credential, "leg", None),
+            "stale_oauth_reason": getattr(stale, "value", stale),
+        }
     except Exception as e:
         return {"success": False, "error": str(e), "error_type": "connection_failed"}
 
