@@ -169,6 +169,11 @@ def build():
 
 
 def main():
+    args = sys.argv[1:]
+    if args and args != ["--check"]:
+        # Anything else (--help, a typo) printed counts and rewrote the JSON until 2026-10-14.
+        print(__doc__)
+        sys.exit(0 if args[0] in ("-h", "--help") else 2)
     doc = build()
     if "--check" in sys.argv:
         old = json.loads(OUT.read_text())
