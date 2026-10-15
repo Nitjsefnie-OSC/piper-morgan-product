@@ -510,3 +510,212 @@ class TestGenericAcrossProcesses:
         src = (root / "services/process/registry.py").read_text()
         for line in (CXO_PAUSE, CXO_DROP, CXO_INVITATION_END):
             assert line not in src
+
+
+# --- #1771: "please" is politeness at the hatch (Arch 2026-10-15) --------------
+
+# One leading "please" (optional comma) or one trailing ", please" / " please"
+# is stripped, then the same exact-match lookup. The polite form means what the
+# bare word means: never a #1529 exit (which would END a "please stop").
+POLITE_END = ["please cancel", "cancel please", "Please, cancel", "cancel, please"]
+POLITE_PAUSE = ["please stop", "stop please", "Please stop", "stop, please"]
+NOT_ESCAPES = ["please cancel my 3pm meeting", "can you cancel my 3pm meeting?"]
+
+
+class TestPolitenessAtTheHatch:
+    @pytest.mark.parametrize(
+        "turn", POLITE_END + POLITE_PAUSE + ["please quit", "never mind please"]
+    )
+    def test_polite_word_is_an_escape(self, turn):
+        assert ProcessRegistry()._is_escape_command(turn)
+
+    @pytest.mark.parametrize("turn", POLITE_END)
+    def test_polite_cancel_is_an_end_word(self, turn):
+        assert ProcessRegistry()._is_escape_end_word(turn)
+
+    @pytest.mark.parametrize("turn", POLITE_PAUSE)
+    def test_polite_stop_is_not_an_end_word(self, turn):
+        assert not ProcessRegistry()._is_escape_end_word(turn)
+
+    @pytest.mark.parametrize(
+        "turn",
+        NOT_ESCAPES + ["please", "please please cancel", "please cancel please", "please skip"],
+    )
+    def test_not_an_escape(self, turn):
+        """One marker only, and the remainder must be a word in the sets."""
+        assert not ProcessRegistry()._is_escape_command(turn)
+
+    @pytest.mark.parametrize("turn", POLITE_END + POLITE_PAUSE)
+    def test_not_a_1529_exit(self, turn):
+        """Arch: not added as #1529 exits (an exit mid-interview ENDS anything
+        that is not a deferral, so "please stop" would drop the answers)."""
+        from services.process.escape import detect_flow_exit
+
+        assert not detect_flow_exit(turn, ProcessType.STANDUP)
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("stage", MID_INTERVIEW_STAGES, ids=lambda s: s.value)
+    @pytest.mark.parametrize("turn", POLITE_PAUSE)
+    async def test_mid_interview_polite_stop_pauses_and_keeps_answers(self, turn, stage):
+        sid = str(uuid4())
+        with _World() as w:
+            conv = await w.at(sid, stage)
+            result = await w.registry.check_active_processes(_USER, sid, turn)
+            assert result.escaped
+            assert result.response_message == CXO_PAUSE
+            assert await w.state(conv) == S.SUSPENDED
+            assert await w.adapter.has_suspended_session(_USER) is not None
+            if stage != S.GATHERING_PREFERENCES:
+                after = await w.manager.get_conversation(conv.id)
+                assert [i.display for i in after.partial_capture.yesterday] == ["shipped the cut"]
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("stage", MID_INTERVIEW_STAGES, ids=lambda s: s.value)
+    @pytest.mark.parametrize("turn", POLITE_END)
+    async def test_mid_interview_polite_cancel_drops(self, turn, stage):
+        sid = str(uuid4())
+        with _World() as w:
+            conv = await w.at(sid, stage)
+            result = await w.registry.check_active_processes(_USER, sid, turn)
+            assert result.escaped
+            assert result.response_message == CXO_DROP
+            assert await w.state(conv) == S.ABANDONED
+            assert await w.adapter.has_suspended_session(_USER) is None
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("turn", POLITE_END + POLITE_PAUSE)
+    async def test_at_the_invitation_every_polite_word_ends_with_the_invitation_line(self, turn):
+        sid = str(uuid4())
+        with _World() as w:
+            conv = await w.at(sid, S.INITIATED)
+            result = await w.registry.check_active_processes(_USER, sid, turn)
+            assert result.escaped
+            assert result.response_message == CXO_INVITATION_END
+            assert await w.state(conv) == S.ABANDONED
+            assert await w.adapter.has_suspended_session(_USER) is None
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("turn", NOT_ESCAPES)
+    async def test_mid_interview_a_request_naming_cancel_is_an_answer(self, turn):
+        """Normal answer path: the handler takes the turn, nothing escapes."""
+        sid = str(uuid4())
+        with _World() as w:
+            conv = await w.at(sid, S.GATHERING_TODAY)
+            result = await w.registry.check_active_processes(_USER, sid, turn)
+            assert not result.escaped
+            assert await w.state(conv) == S.GATHERING_BLOCKERS
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("turn", NOT_ESCAPES)
+    async def test_at_the_invitation_a_request_naming_cancel_is_not_an_escape(self, turn):
+        sid = str(uuid4())
+        with _World() as w:
+            conv = await w.at(sid, S.INITIATED)
+            result = await w.registry.check_active_processes(_USER, sid, turn)
+            assert not result.escaped
+            assert await w.state(conv) == S.GATHERING_YESTERDAY
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("turn,closed", [("please cancel", True), ("stop please", False)])
+    async def test_generic_across_processes(self, turn, closed):
+        registry, bare = ProcessRegistry(), _Bare()
+        registry.register(bare)
+        result = await registry.check_active_processes(_USER, "s", turn)
+        assert result.escaped
+        assert bare.closed is closed and bare.suspended is not closed
+
+
+# --- #1771: "skip <flow name>" is a #1529 exit (Arch 2026-10-15) --------------
+
+
+class TestSkipTheFlowByName:
+    """``escape._skip_flow_re``: ``^(please )?skip (the|my)? <flow-specific
+    words>``, built with ``include_generic=False``. "skip it" / "skip this" /
+    "skip that" are never exits (mid-interview: "skip this question")."""
+
+    @pytest.mark.parametrize(
+        "turn,process_type",
+        [
+            ("skip the standup", ProcessType.STANDUP),
+            ("skip standup", ProcessType.STANDUP),
+            ("please skip my standup", ProcessType.STANDUP),
+            ("skip onboarding", ProcessType.ONBOARDING),
+            ("skip the planning session", ProcessType.PLANNING),
+            ("skip feedback", ProcessType.FEEDBACK),
+        ],
+    )
+    def test_flow_name_is_an_exit(self, turn, process_type):
+        from services.process.escape import detect_flow_exit
+
+        assert detect_flow_exit(turn, process_type)
+
+    @pytest.mark.parametrize("process_type", list(ProcessType), ids=lambda p: p.value)
+    @pytest.mark.parametrize(
+        "turn",
+        [
+            "skip it",
+            "skip this",
+            "skip that",
+            "skip",
+            "skip the flow",
+            "skip this one",
+            "skip the standup and the retro",
+        ],
+    )
+    def test_generic_words_are_not_exits(self, turn, process_type):
+        from services.process.escape import detect_flow_exit
+
+        assert not detect_flow_exit(turn, process_type)
+
+    def test_another_flows_name_is_not_an_exit(self):
+        from services.process.escape import detect_flow_exit
+
+        assert not detect_flow_exit("skip onboarding", ProcessType.STANDUP)
+        assert not detect_flow_exit("skip the standup", ProcessType.ONBOARDING)
+
+    def test_skip_is_not_an_exit_verb(self):
+        from services.process import escape
+
+        assert "skip" not in escape._EXIT_VERBS.split("|")
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("stage", MID_INTERVIEW_STAGES, ids=lambda s: s.value)
+    @pytest.mark.parametrize("turn", ["skip the standup", "skip standup"])
+    async def test_mid_interview_drops_through_exit_reply(self, turn, stage):
+        """It explicitly withdraws (CXO 09:15 rule): the adapter's
+        ``exit_reply`` reads no deferral, so it ENDS with the drop line."""
+        sid = str(uuid4())
+        with _World() as w:
+            conv = await w.at(sid, stage)
+            result = await w.registry.check_active_processes(_USER, sid, turn)
+            assert result.escaped
+            assert result.response_message == CXO_DROP
+            assert await w.state(conv) == S.ABANDONED
+            assert await w.adapter.has_suspended_session(_USER) is None
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        "stage,next_question",
+        [
+            (S.GATHERING_YESTERDAY, "What's planned for today?"),
+            (S.GATHERING_TODAY, "Any blockers or things you need help with?"),
+        ],
+        ids=lambda v: getattr(v, "value", v),
+    )
+    @pytest.mark.parametrize("turn", ["skip it", "skip this"])
+    async def test_mid_interview_skip_it_advances(self, turn, stage, next_question):
+        sid = str(uuid4())
+        with _World() as w:
+            conv = await _at_question(w, sid, stage)
+            result = await w.registry.check_active_processes(_USER, sid, turn)
+            assert not result.escaped
+            assert next_question in result.response_message
+            assert await w.state(conv) != S.ABANDONED
+
+    @pytest.mark.asyncio
+    async def test_generic_across_processes(self):
+        registry, bare = ProcessRegistry(), _Bare()
+        registry.register(bare)
+        result = await registry.check_active_processes(_USER, "s", "skip planning")
+        assert result.escaped and bare.closed
+        assert result.response_message == format_exit_message(ProcessType.PLANNING)

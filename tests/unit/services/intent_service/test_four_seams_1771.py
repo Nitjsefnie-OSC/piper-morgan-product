@@ -405,13 +405,14 @@ class TestInvitation:
 
     @pytest.mark.asyncio
     @pytest.mark.parametrize(
-        "turn", ["no", "nope", "No.", "no, not now", "cancel that", "end standup"]
+        "turn",
+        ["no", "nope", "No.", "no, not now", "cancel that", "end standup", "please cancel"],
     )
     async def test_no_or_cancel_ends_with_the_invitation_line(self, turn):
-        """The turn "please cancel" left this list (1771 invitation edges, 2026-10-15):
-        it ended only through the dropped anywhere word set (``cancel``); it
-        is neither a #888 hatch word nor a #1529 flow exit. Pinned below as
-        a known miss, not re-pinned as wanted."""
+        """ "please cancel" is back on this list (1771 politeness, Arch
+        2026-10-15): the #888 hatch strips one "please", so it is ``cancel``.
+        Was: a known miss that started the interview (f76a307ecb), after the
+        anywhere word set (``cancel``) was dropped."""
         sid = str(uuid4())
         with _World() as w:
             conv = await w.invitation(sid)
@@ -464,20 +465,19 @@ class TestInvitation:
             assert await w.state(conv) == StandupConversationState.ABANDONED
 
     @pytest.mark.asyncio
-    async def test_please_cancel_is_a_known_miss_and_starts_the_interview(self):
-        """KNOWN MISS (1771 invitation edges, 2026-10-15). Arch 10:1x dropped
-        the anywhere word set on the premise that ``cancel`` never reaches the
-        handler (the #888 hatch ENDs it). True for bare "cancel"; "please
-        cancel" is not a hatch word and not a #1529 flow exit (that needs a
-        flow word: "please cancel the standup"), so it now starts the
-        interview, as it already was an ordinary answer mid-interview. Pinned
-        as it stands for a ruling; the fix is the exit vocabulary's, not a
-        word here."""
+    async def test_please_cancel_is_cancel_at_the_hatch(self):
+        """Was ``test_please_cancel_is_a_known_miss_and_starts_the_interview``
+        (f76a307ecb). CXO 10:25 ruled it must leave; Arch 10:4x put it at the
+        #888 hatch (one "please" stripped, then the exact-match lookup), not
+        in the #1529 exits, so it is the hatch's END and never reaches the
+        handler."""
         sid = str(uuid4())
         with _World() as w:
             conv = await w.invitation(sid)
-            await w.turn(sid, "please cancel")
-            assert await w.state(conv) == StandupConversationState.GATHERING_YESTERDAY
+            result = await w.turn(sid, "please cancel")
+            assert result.escaped
+            assert result.response_message == CXO_INVITATION_END
+            assert await w.state(conv) == StandupConversationState.ABANDONED
 
 
 # --- 3. The couldn't-find line ------------------------------------------------

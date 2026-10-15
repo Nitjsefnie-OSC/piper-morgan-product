@@ -513,12 +513,13 @@ class StandupConversationHandler:
         #   - a DECLINE verdict that also carries a deferral row ("no, not
         #     now", "no, maybe later"): the predicate orders decline before
         #     defer, so these read DECLINE, never DEFER, and the dropped
-        #     "not now" substring was what ended them (existing pin);
+        #     "not now" substring was what ended them (existing pin). Read
+        #     through ``contains_deferral`` (Arch 10:4x), never the rows;
         #   - bare "later", whole message only (Arch's known miss, anchored).
         # ``cancel`` / ``stop`` / … never reach here (the #888 hatch).
         from services.intent_service.acceptance import AcceptanceVerdict
         from services.intent_service.soft_invocation import (
-            DEFER_PATTERNS,
+            contains_deferral,
             is_bare_decline,
         )
 
@@ -526,10 +527,7 @@ class StandupConversationHandler:
         if (
             is_bare_decline(user_message)
             or verdict is AcceptanceVerdict.DEFER
-            or (
-                verdict is AcceptanceVerdict.DECLINE
-                and any(p.search(user_message) for p in DEFER_PATTERNS)
-            )
+            or (verdict is AcceptanceVerdict.DECLINE and contains_deferral(user_message))
             or whole == "later"
         ):
             await self.manager.transition_state(conversation.id, StandupConversationState.ABANDONED)

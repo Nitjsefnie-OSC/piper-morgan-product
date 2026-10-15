@@ -102,15 +102,44 @@ class TestYesShapedTurnsStartTheInterview:
             w.generate.assert_not_called()
 
     @pytest.mark.asyncio
-    async def test_skip_the_standup_starts_the_interview(self):
-        """Reported as it stands (Arch 10:1x: "leaves only if the predicate
-        reads it"). The predicate's verdict on "skip the standup" is PASS
-        (not a whole-message decline, no DEFER row), so the interview starts.
-        CXO's served run judges whether that is right."""
+    @pytest.mark.parametrize("turn", ["skip docs", "skip the docs", "skip the questions please"])
+    async def test_skip_something_else_starts_the_interview(self, turn):
+        """Only the flow's own name makes "skip" an exit (Arch 10:4x)."""
         with _World() as w:
-            result, state = await w.invite_then("skip the standup")
+            result, state = await w.invite_then(turn)
+            assert not result.escaped
             assert result.response_message == FIRST_QUESTION
             assert state == S.GATHERING_YESTERDAY
+
+
+class TestSkipTheStandupLeaves:
+    """CXO 10:25 item 2 / Arch 10:4x: "skip the standup" is a #1529 exit on
+    the flow's own name (``escape._skip_flow_re``, flow-specific words only).
+    Was ``test_skip_the_standup_starts_the_interview`` (f76a307ecb: the
+    predicate read it PASS, so the interview started)."""
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        "turn",
+        [
+            "skip the standup",
+            "skip standup",
+            "Skip the standup.",
+            "please skip the standup",
+            "skip my standup",
+            "skip the daily standup",
+            "skip stand-up",
+        ],
+    )
+    async def test_ends_with_the_invitation_line(self, turn):
+        with _World() as w:
+            result, state = await w.invite_then(turn)
+            assert result.escaped
+            assert result.response_message == CXO_INVITATION_END
+            assert state == S.ABANDONED
+            assert await w.adapter.has_suspended_session(_USER) is None
+            assert await w.registry.check_suspended_processes(_USER) is None
+            w.generate.assert_not_called()
 
 
 class TestLeavingGetsTheInvitationLine:
@@ -153,6 +182,63 @@ class TestLeavingGetsTheInvitationLine:
         """Was: ``later`` matched anywhere in the turn and ended the standup."""
         with _World() as w:
             result, state = await w.invite_then(turn)
+            assert state == S.GATHERING_YESTERDAY
+
+
+class TestCancelShapedTurnsLeave:
+    """CXO 10:25 item 1 / Arch 10:4x. At the invitation these END with the
+    invitation line and leave no suspended record:
+
+    - the polite #888 words: the hatch strips one "please", so "please
+      cancel" is ``cancel`` and "stop please" is ``stop`` (escaped, the
+      handler never sees them);
+    - turns that ALREADY left through the #1529 whole-message exit before
+      this change (Arch read them from ``_exit_re`` / ``BARE_EXIT_COMMANDS``;
+      these pins confirm by running them).
+
+    "can you cancel my 3pm meeting?" is not a leave: it reaches the handler
+    and starts the interview (the normal answer path)."""
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        "turn", ["please cancel", "cancel please", "please stop", "stop please"]
+    )
+    async def test_polite_hatch_word_ends(self, turn):
+        with _World() as w:
+            result, state = await w.invite_then(turn)
+            assert result.escaped
+            assert result.response_message == CXO_INVITATION_END
+            assert state == S.ABANDONED
+            assert await w.adapter.has_suspended_session(_USER) is None
+            w.generate.assert_not_called()
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        "turn",
+        ["cancel that", "cancel it", "please cancel it", "forget it", "please cancel the standup"],
+    )
+    async def test_already_a_1529_exit_ends(self, turn):
+        from services.process.escape import detect_flow_exit
+        from services.process.registry import ProcessType
+
+        assert detect_flow_exit(turn, ProcessType.STANDUP)
+        with _World() as w:
+            result, state = await w.invite_then(turn)
+            assert result.escaped
+            assert result.response_message == CXO_INVITATION_END
+            assert state == S.ABANDONED
+            assert await w.adapter.has_suspended_session(_USER) is None
+            w.generate.assert_not_called()
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        "turn", ["can you cancel my 3pm meeting?", "please cancel my 3pm meeting"]
+    )
+    async def test_a_request_naming_cancel_is_not_a_leave(self, turn):
+        with _World() as w:
+            result, state = await w.invite_then(turn)
+            assert not result.escaped
+            assert result.response_message == FIRST_QUESTION
             assert state == S.GATHERING_YESTERDAY
 
 
@@ -203,3 +289,47 @@ class TestQuickBypassIsWholeMessage:
             "skip the questions",
             "skip questions",
         }
+
+
+class TestDeferralReadThroughTheContractHelper:
+    """Arch 10:4x (deviation 1): "no, not now" keeps leaving, but the standup
+    reads the deferral through ``soft_invocation.contains_deferral``, not the
+    ``DEFER_PATTERNS`` list. No new row."""
+
+    def test_the_standup_package_does_not_name_the_pattern_list(self):
+        import pathlib
+
+        root = pathlib.Path(__file__).resolve().parents[4]
+        offenders = [
+            str(path.relative_to(root))
+            for path in sorted((root / "services/standup").rglob("*.py"))
+            if "DEFER_PATTERNS" in path.read_text()
+        ]
+        assert offenders == []
+
+    @pytest.mark.parametrize(
+        "text,expected",
+        [
+            ("no, not now", True),
+            ("no, maybe later", True),
+            ("not right now", True),
+            ("Not yet.", True),
+            ("no", False),
+            ("later", False),
+            ("let's start", False),
+            ("", False),
+        ],
+    )
+    def test_contains_deferral(self, text, expected):
+        from services.intent_service.soft_invocation import contains_deferral
+
+        assert contains_deferral(text) is expected
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("turn", ["no, not now", "No, not now."])
+    async def test_no_not_now_still_leaves(self, turn):
+        with _World() as w:
+            result, state = await w.invite_then(turn)
+            assert result.response_message == CXO_INVITATION_END
+            assert state == S.ABANDONED
+            assert await w.adapter.has_suspended_session(_USER) is None
