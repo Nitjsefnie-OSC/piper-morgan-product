@@ -35,7 +35,6 @@ from services.domain.models import Intent
 from services.intent.intent_service import (
     RESUME_ABANDON_REPLY,
     RESUME_DEFER_REPLY,
-    STANDUP_SESSION_EXISTS_ASK,
     IntentService,
 )
 from services.intent_service import standup_preferences as sp
@@ -50,6 +49,13 @@ from tests.unit.services.standup._fake_conversation_manager import (
 )
 
 _USER = "3f7b8a52-1771-4b00-9e00-000000001771"
+# The continue/restart ask (#585 copy, unchanged), rendered and armed by
+# _start_standup_conversation.
+STANDUP_SESSION_EXISTS_ASK = (
+    "You have a standup conversation in progress. "
+    "Would you like to continue where you left off, or start fresh?\n"
+    "Reply 'continue' or 'restart'."
+)
 DEFERRALS = ["not now", "not right now", "not today", "maybe later"]
 EXPLICIT_CANCELS = ["cancel that", "forget it", "start over"]
 

@@ -234,13 +234,6 @@ RESUME_DEFER_REPLY = (
 RESUME_ABANDON_REPLY = (
     "Okay, I've dropped your paused standup. Say 'do a standup' whenever you want a fresh one."
 )
-# The continue/restart ask for an existing standup conversation (#585 copy,
-# unchanged; one constant since #1771 gave it a second door).
-STANDUP_SESSION_EXISTS_ASK = (
-    "You have a standup conversation in progress. "
-    "Would you like to continue where you left off, or start fresh?\n"
-    "Reply 'continue' or 'restart'."
-)
 _RESUME_ARMED_ONLY_DECLINES = frozenset(
     {
         "restart",
@@ -4579,42 +4572,6 @@ class IntentService:
             self.logger.warning(f"Could not check active standup: {e}")
             return None
 
-    def _standup_session_exists_offer(
-        self, session_id: str, user_id: str, existing: Any
-    ) -> IntentProcessingResult:
-        """The continue/restart ask for an existing (active or SUSPENDED)
-        standup conversation, ARMED as the one-turn process-resume offer.
-
-        Shared by ``_start_standup_conversation`` (#2007) and the empty-source
-        branch of ``_handle_standup_query`` (#1771 second seam), so both doors
-        render the one ask and arm it the one way.
-        """
-        from services.shared_types import IntentCategory
-
-        response_msg = STANDUP_SESSION_EXISTS_ASK
-        # #1769 / #1766: this ask ARMS the one-turn process-resume
-        # offer with its rendered copy — a next-turn "yes"/"restart"
-        # binds to what was actually asked (#1665). If the
-        # conversation is ACTIVE the guided-process rail claims the
-        # reply first and the arm expires unused; it is load-bearing
-        # exactly when the conversation is SUSPENDED.
-        self._arm_resume_offer(session_id, user_id, question=response_msg)
-        return IntentProcessingResult(
-            success=True,
-            message=response_msg,
-            intent_data={
-                "category": IntentCategory.EXECUTION.value,
-                "action": "standup_session_exists",
-                "confidence": 1.0,
-                "context": {
-                    "conversation_id": existing.id,
-                    "state": existing.state.value,
-                },
-            },
-            workflow_id=None,
-            requires_clarification=False,
-        )
-
     async def _find_suspended_standup(self, user_id: Optional[str]) -> Optional[Any]:
         """#1771 second seam: the user's SUSPENDED standup conversation, if
         any, from any chat (the same user-scoped lookup the registry's
@@ -4668,20 +4625,47 @@ class IntentService:
                 if session_id
                 else None
             )
+            if not existing or existing.state in (
+                StandupConversationState.COMPLETE,
+                StandupConversationState.ABANDONED,
+            ):
+                # #1771 second seam: a standup paused in ANOTHER chat is the
+                # user's, not the session's (has_suspended_session is
+                # user-scoped too). Without this, a fresh ask in a new chat
+                # started a second conversation and orphaned the paused one.
+                existing = await self._find_suspended_standup(user_id)
             if existing and existing.state not in (
                 StandupConversationState.COMPLETE,
                 StandupConversationState.ABANDONED,
             ):
                 # Active session exists - offer to continue or restart
-                return self._standup_session_exists_offer(session_id, user_id, existing)
-
-            # #1771 second seam: a standup paused in ANOTHER chat is the
-            # user's, not the session's (has_suspended_session is user-scoped
-            # too). Without this, a fresh ask in a new chat started a second
-            # conversation and orphaned the paused one.
-            suspended_elsewhere = await self._find_suspended_standup(user_id)
-            if suspended_elsewhere is not None and session_id:
-                return self._standup_session_exists_offer(session_id, user_id, suspended_elsewhere)
+                response_msg = (
+                    "You have a standup conversation in progress. "
+                    "Would you like to continue where you left off, or start fresh?\n"
+                    "Reply 'continue' or 'restart'."
+                )
+                # #1769 / #1766: this ask ARMS the one-turn process-resume
+                # offer with its rendered copy — a next-turn "yes"/"restart"
+                # binds to what was actually asked (#1665). If the
+                # conversation is ACTIVE the guided-process rail claims the
+                # reply first and the arm expires unused; it is load-bearing
+                # exactly when the conversation is SUSPENDED.
+                self._arm_resume_offer(session_id, user_id, question=response_msg)
+                return IntentProcessingResult(
+                    success=True,
+                    message=response_msg,
+                    intent_data={
+                        "category": IntentCategory.EXECUTION.value,
+                        "action": "standup_session_exists",
+                        "confidence": 1.0,
+                        "context": {
+                            "conversation_id": existing.id,
+                            "state": existing.state.value,
+                        },
+                    },
+                    workflow_id=None,
+                    requires_clarification=False,
+                )
 
             # Start new standup conversation. #1837: an accepted invitation
             # arms the interview itself — the flag rides initial_context into
@@ -5042,15 +5026,15 @@ class IntentService:
                 # continue/restart offer was unreachable, so CXO's "Just ask
                 # when you want to pick it back up" was not true. Empty branch
                 # only: a non-empty report still renders as asked.
-                if session_id and user_id:
-                    _paused = await self._find_suspended_standup(user_id)
-                    if _paused is not None:
-                        self.logger.info(
-                            "standup_ask_offers_paused_standup",
-                            user_id=user_id,
-                            session_id=session_id,
-                        )
-                        return self._standup_session_exists_offer(session_id, user_id, _paused)
+                # The ask itself is _start_standup_conversation's (one door,
+                # one copy, armed there).
+                if session_id and user_id and await self._find_suspended_standup(user_id):
+                    self.logger.info(
+                        "standup_ask_offers_paused_standup",
+                        user_id=user_id,
+                        session_id=session_id,
+                    )
+                    return await self._start_standup_conversation(user_id, session_id)
                 # #1591 / PPM's rule: an empty report is "a null result wearing
                 # a report's format" — nothing to demonstrate, so demonstrate-
                 # then-ask yields to fail-honestly-and-offer: say so plainly

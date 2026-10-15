@@ -404,11 +404,11 @@ always bypasses the #1529 flow-exit gate: with the offer pending the reply is
 the seam returns None (normal processing answers the turn) and the standup
 stays SUSPENDED. Only an explicit cancel abandons ("cancel that", "forget
 it", "end standup", taught "start over"; `RESUME_ABANDON_REPLY`). The
-continue/restart ask (`STANDUP_SESSION_EXISTS_ASK`, armed) has two doors:
+continue/restart ask is rendered and armed in one place,
 `_start_standup_conversation` (session lookup, then a user-scoped SUSPENDED
-lookup for a standup paused in another chat) and the EMPTY-source branch of
-`_handle_standup_query`, which offers a paused standup before the empty-source
-reply (a non-empty report still renders as asked). The escape-word pause line
+lookup for a standup paused in another chat); the EMPTY-source branch of
+`_handle_standup_query` routes there when a paused standup exists, before the
+empty-source reply (a non-empty report still renders as asked). The escape-word pause line
 comes from the handler (`pause_message()`, optional; `registry.pause_message_for`
 keeps the generic default). Regression: `test_defer_tier_1771.py`,
 `test_second_seam_1771.py`.
