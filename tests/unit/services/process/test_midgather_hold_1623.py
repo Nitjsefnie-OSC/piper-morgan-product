@@ -299,9 +299,21 @@ class TestDeliberateEscapesSurviveTheHold:
     pytestmark = pytest.mark.asyncio
 
     async def test_universal_escape_still_exits(self, live_service):
+        """#888 split (Arch 2026-10-15), re-pinned: 'cancel' is now an END
+        word, so it drops (ABANDONED, CXO's drop line) where it used to
+        pause. The PAUSE word is pinned in the next test."""
         service, manager = live_service
         conv = await _conversation(manager, StandupConversationState.GATHERING_TODAY, stale=True)
         result = await service.process_intent(message="cancel", session_id=_SESSION, user_id=_USER)
+        assert conv.state == StandupConversationState.ABANDONED
+        from services.process.standup_copy import STANDUP_DROP_REPLY
+
+        assert result.message == STANDUP_DROP_REPLY
+
+    async def test_universal_pause_escape_still_pauses(self, live_service):
+        service, manager = live_service
+        conv = await _conversation(manager, StandupConversationState.GATHERING_TODAY, stale=True)
+        result = await service.process_intent(message="stop", session_id=_SESSION, user_id=_USER)
         assert conv.state == StandupConversationState.SUSPENDED
         # CXO 2026-10-15 08:35: one pause line for an escape word and a deferral.
         from services.process.standup_copy import STANDUP_ESCAPE_PAUSE_REPLY

@@ -9,8 +9,10 @@ exit stays the generic escape, and the pause-or-end choice is the handler's
 
 1. Active interview: "not now" pauses (the defer line); "cancel that" / "end
    standup" / "forget it" drop (the drop line, no "/standup").
-2. The "ready to start?" invitation: deferrals pause (the defer line); a bare
-   "no" or a cancel ends ("Okay, no standup for now. ...").
+2. The "ready to start?" invitation: a bare "no" or a cancel ends ("Okay, no
+   standup for now. ..."). Deferrals END there too, with the same line (Arch
+   2026-10-15 09:1x, shape A: an unstarted standup has nothing to pause; was
+   "pause with the defer line", CXO 08:30 item 2, re-pinned).
 3. ``_resume_suspended_standup``'s couldn't-find line: a statement plus an
    instruction, nothing armed.
 4. Bare "later" with the resume offer pending: the safety property only.
@@ -314,8 +316,9 @@ class TestActiveInterviewExplicitExitDrops:
 
     @pytest.mark.asyncio
     async def test_escape_words_keep_the_landed_pause_line(self):
-        """Unchanged by this unit: the #888 hatch ("stop") pauses with CXO's
-        10-14 escape line. Which pause line wins is CXO's open copy point."""
+        """The #888 hatch's PAUSE word ("stop") pauses with CXO's one pause
+        line (08:35). END words ("cancel") drop: see
+        ``test_escape_end_vs_pause_888.py``."""
         sid = str(uuid4())
         with _World() as w:
             conv = await w.mid_interview(sid)
@@ -386,14 +389,19 @@ class TestTheChoiceIsTheHandlers:
 class TestInvitation:
     @pytest.mark.asyncio
     @pytest.mark.parametrize("turn", EXIT_DEFERRALS + HANDLER_DEFERRALS)
-    async def test_deferral_pauses_with_the_defer_line(self, turn):
+    async def test_deferral_ends_with_the_invitation_line(self, turn):
+        """Re-pinned (Arch 2026-10-15 09:1x, shape A): a deferral at the
+        invitation ENDS with the invitation line and leaves nothing to offer
+        back. Was: pauses with the defer line (CXO 08:30 item 2), which left
+        an empty SUSPENDED standup the next ``do a standup`` offered back."""
         sid = str(uuid4())
         with _World() as w:
             conv = await w.invitation(sid)
             result = await w.turn(sid, turn)
             assert result.handled
-            assert result.response_message == CXO_DEFER_PAUSE
-            assert await w.state(conv) == StandupConversationState.SUSPENDED
+            assert result.response_message == CXO_INVITATION_END
+            assert await w.state(conv) == StandupConversationState.ABANDONED
+            assert await w.registry.check_suspended_processes(_USER) is None
 
     @pytest.mark.asyncio
     @pytest.mark.parametrize(
@@ -417,18 +425,21 @@ class TestInvitation:
             assert await w.state(conv) == StandupConversationState.GATHERING_YESTERDAY
 
     @pytest.mark.asyncio
-    async def test_bare_cancel_is_the_888_hatch_and_pauses(self):
-        """OPEN POINT, pinned as it stands: bare "cancel" is a #888 escape word
-        (PPM binding: intercepted before any handler), so at the invitation it
-        PAUSES with the escape line rather than ending. CXO's item 2 names
-        "cancel" as an end; flipping it means changing the #888 hatch, which
-        this unit does not do. A ruling flips this pin."""
+    @pytest.mark.parametrize("turn", ["cancel", "stop", "quit", "never mind", "exit", "skip"])
+    async def test_bare_escape_words_end_at_the_invitation(self, turn):
+        """OPEN POINT closed (Arch 2026-10-15): bare "cancel" (and every #888
+        escape word) at the invitation ENDS with the invitation line. The
+        hatch is not carved: it still intercepts first; the standup adapter's
+        ``suspend()`` closes an unstarted standup, and its copy hooks read the
+        state. Was: "cancel" pauses with the escape line (the landed
+        behaviour, pinned as an open point)."""
         sid = str(uuid4())
         with _World() as w:
             conv = await w.invitation(sid)
-            result = await w.turn(sid, "cancel")
-            assert result.response_message == CXO_ESCAPE_PAUSE
-            assert await w.state(conv) == StandupConversationState.SUSPENDED
+            result = await w.turn(sid, turn)
+            assert result.escaped
+            assert result.response_message == CXO_INVITATION_END
+            assert await w.state(conv) == StandupConversationState.ABANDONED
 
     @pytest.mark.asyncio
     async def test_bare_later_is_the_known_miss_and_ends(self):

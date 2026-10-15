@@ -315,13 +315,39 @@ class StandupProcessAdapter:
     def process_type(self) -> ProcessType:
         return ProcessType.STANDUP
 
-    def pause_message(self) -> str:
-        """#1771: the line when an escape command ("stop") pauses the standup.
+    async def _at_invitation(self, user_id: Optional[str], session_id: Optional[str]) -> bool:
+        """True while the standup is unstarted: INITIATED, "ready to start?"
+        on screen, no answer captured (Arch 2026-10-15)."""
+        from services.shared_types import StandupConversationState
 
-        CXO's string 2026-10-14 21:50, matching the defer line so one state
-        reads as one phrase. Read by ``registry.pause_message_for``.
+        conversation = await self._get_conversation(user_id, session_id)
+        return bool(conversation) and conversation.state == StandupConversationState.INITIATED
+
+    async def pause_message(
+        self, user_id: Optional[str] = None, session_id: Optional[str] = None
+    ) -> str:
+        """#1771: the line when a PAUSE escape word ("stop") leaves the standup.
+
+        Copy only (Arch 2026-10-15): read by ``registry.escape_reply_for``
+        BEFORE the transition, so it sees the state the user left from. At the
+        invitation nothing was started, ``suspend()`` ends it, and the line is
+        the invitation line (one state, one phrase); mid-interview it is CXO's
+        one pause line (08:35).
         """
+        if await self._at_invitation(user_id, session_id):
+            return STANDUP_INVITATION_DECLINE_REPLY
         return STANDUP_PAUSE_REPLY
+
+    async def drop_message(
+        self, user_id: Optional[str] = None, session_id: Optional[str] = None
+    ) -> str:
+        """#888 split: the line when an END escape word ("cancel") closes the
+        standup. Copy only, read before the transition like ``pause_message``:
+        the invitation line at "ready to start?", CXO's drop line once under way.
+        """
+        if await self._at_invitation(user_id, session_id):
+            return STANDUP_INVITATION_DECLINE_REPLY
+        return STANDUP_DROP_REPLY
 
     async def exit_reply(
         self,
@@ -333,12 +359,14 @@ class StandupProcessAdapter:
         choice for a #1529 whole-message exit, read by
         ``registry._handler_exit_reply``.
 
-        - A deferral ("not now"), read by THE predicate
+        - At the "ready to start?" invitation (INITIATED) every exit ENDS with
+          the invitation line, a deferral included: nothing was started, so
+          there is nothing to pause (Arch 2026-10-15, shape A).
+        - Mid-interview, a deferral ("not now"), read by THE predicate
           (``standup_reads_as_deferral``: ``evaluate_acceptance`` with
           ``distinguish_defer=True``), PAUSES: SUSPENDED, the defer line.
-        - Any other exit ("cancel that", "end standup", "forget it") ENDS:
-          ABANDONED, with the invitation line while the standup is still at
-          "ready to start?" (INITIATED) and the drop line once it is under way.
+        - Mid-interview, any other exit ("cancel that", "end standup",
+          "forget it") ENDS: ABANDONED, the drop line.
 
         Returns None (the registry's generic close) when there is no
         conversation to act on.
@@ -349,12 +377,14 @@ class StandupProcessAdapter:
         conversation = await self._get_conversation(user_id, session_id)
         if not conversation:
             return None
+        if conversation.state == StandupConversationState.INITIATED:
+            await self.close(user_id, session_id)
+            return STANDUP_INVITATION_DECLINE_REPLY
         if standup_reads_as_deferral(message):
             await self.suspend(user_id, session_id)
             return STANDUP_DEFER_PAUSE_REPLY
-        at_invitation = conversation.state == StandupConversationState.INITIATED
         await self.close(user_id, session_id)
-        return STANDUP_INVITATION_DECLINE_REPLY if at_invitation else STANDUP_DROP_REPLY
+        return STANDUP_DROP_REPLY
 
     async def check_active(
         self,
@@ -489,6 +519,11 @@ class StandupProcessAdapter:
 
         Issue #888: Transitions conversation to SUSPENDED state, preserving
         partial standup content for later resumption.
+
+        Arch 2026-10-15 (#1771, #888 "handler owns semantics"): an UNSTARTED
+        standup (INITIATED, nothing captured) has nothing to keep, so
+        suspending it CLOSES it (ABANDONED). No empty SUSPENDED row exists to
+        be offered back as a standup that never began.
         """
         from services.shared_types import StandupConversationState
 
@@ -499,6 +534,10 @@ class StandupProcessAdapter:
                 user_id=user_id,
                 session_id=session_id,
             )
+            return
+
+        if conversation.state == StandupConversationState.INITIATED:
+            await self.close(user_id, session_id)
             return
 
         manager, _ = self._get_components()

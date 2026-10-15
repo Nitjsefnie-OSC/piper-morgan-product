@@ -419,12 +419,14 @@ class TestEscapeCommands:
 
     @pytest.mark.asyncio
     async def test_escape_command_during_active_process(self):
-        """Escape command suspends active process and returns escaped result."""
+        """A PAUSE escape word suspends the active process and returns an
+        escaped result. #888 split (Arch 2026-10-15): re-pinned from 'cancel'
+        (now an END word) to 'stop'."""
         registry = get_process_registry()
         handler = MockGuidedProcess(ProcessType.ONBOARDING, is_active=True)
         registry.register(handler)
 
-        result = await registry.check_active_processes("user1", "session1", "cancel")
+        result = await registry.check_active_processes("user1", "session1", "stop")
 
         assert result.handled is True
         assert result.escaped is True
@@ -470,6 +472,8 @@ class TestEscapeCommands:
 
         assert result.handled is True
         assert result.escaped is True
+        # 'quit' is an END word (#888 split); this mock has no close(), so
+        # _close_process falls back to suspend() — the pre-split fallback.
         assert handler._suspend_called is True
 
 

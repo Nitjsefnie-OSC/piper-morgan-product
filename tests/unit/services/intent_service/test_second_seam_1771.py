@@ -42,7 +42,12 @@ from services.intent_service import verified_inference as vi
 from services.intent_service.classifier import IntentClassifier
 from services.intent_service.conversation_context import get_or_create_context
 from services.process.adapters import STANDUP_PAUSE_REPLY, StandupProcessAdapter
-from services.process.registry import ESCAPE_COMMANDS, ProcessRegistry, pause_message_for
+from services.process.registry import (
+    ESCAPE_END_WORDS,
+    ESCAPE_PAUSE_WORDS,
+    ProcessRegistry,
+    pause_message_for,
+)
 from services.shared_types import IntentCategory, StandupConversationState
 from tests.unit.services.standup._fake_conversation_manager import (
     FakeStandupConversationManager,
@@ -65,6 +70,7 @@ CXO_PAUSE = "Okay, I'll leave your standup where it is. Just ask when you want t
 CXO_ABANDON = (
     "Okay, I've dropped your paused standup. Say 'do a standup' whenever you want a fresh one."
 )
+CXO_DROP = "Okay, I've dropped your standup. Say 'do a standup' whenever you want a fresh one."
 CXO_DEFER = "Okay, I'll leave your standup where it is. Just ask when you want to pick it back up."
 
 
@@ -216,8 +222,10 @@ class TestStopPausesWithTheRuledLine:
     """(c) ``stop`` mid-interview: SUSPENDED, CXO's pause line, from the handler."""
 
     @pytest.mark.asyncio
-    @pytest.mark.parametrize("word", sorted(ESCAPE_COMMANDS))
-    async def test_every_escape_word_pauses_the_standup(self, word):
+    @pytest.mark.parametrize("word", sorted(ESCAPE_PAUSE_WORDS))
+    async def test_every_pause_escape_word_pauses_the_standup(self, word):
+        """Re-pinned for the #888 split (Arch 2026-10-15): was every word of
+        ``ESCAPE_COMMANDS``; the END words now drop (next test)."""
         sid = str(uuid4())
         with _World() as w:
             conv = await w.interview_mid_answer(sid)
@@ -225,6 +233,17 @@ class TestStopPausesWithTheRuledLine:
             assert result.handled and result.escaped
             assert result.response_message == CXO_PAUSE
             assert await w.state(conv) == StandupConversationState.SUSPENDED
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("word", sorted(ESCAPE_END_WORDS))
+    async def test_every_end_escape_word_drops_the_standup(self, word):
+        sid = str(uuid4())
+        with _World() as w:
+            conv = await w.interview_mid_answer(sid)
+            result = await w.registry.check_active_processes(_USER, sid, word)
+            assert result.handled and result.escaped
+            assert result.response_message == CXO_DROP
+            assert await w.state(conv) == StandupConversationState.ABANDONED
 
     def test_registry_keeps_the_generic_default_for_other_processes(self):
         handler = MagicMock(spec=["process_type"])
