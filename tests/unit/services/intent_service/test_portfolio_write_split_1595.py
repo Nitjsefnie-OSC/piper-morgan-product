@@ -115,6 +115,7 @@ async def test_archive_entry_point_calls_the_existing_handler_directly():
         # stays a thin "calls the handler directly" check, not a parity test
         # (that lives in test_rail_adapter_canonical_parity_1926.py).
         _is_generic_canonical_response=lambda *a, **k: False,
+        _arm_write_offer=lambda *a, **k: None,  # #2035: the rail seam arms write offers
         _track_offer_hint=lambda *a, **k: None,
     )
     intent = SimpleNamespace(action="archive_project", context={})
@@ -149,6 +150,7 @@ async def test_restore_entry_point_calls_the_existing_handler_directly():
         # stays a thin "calls the handler directly" check, not a parity test
         # (that lives in test_rail_adapter_canonical_parity_1926.py).
         _is_generic_canonical_response=lambda *a, **k: False,
+        _arm_write_offer=lambda *a, **k: None,  # #2035: the rail seam arms write offers
         _track_offer_hint=lambda *a, **k: None,
     )
     intent = SimpleNamespace(action="restore_project", context={})
@@ -189,6 +191,7 @@ async def test_add_project_entry_point_calls_the_existing_handler_directly():
         # stays a thin "calls the handler directly" check, not a parity test
         # (that lives in test_rail_adapter_canonical_parity_1926.py).
         _is_generic_canonical_response=lambda *a, **k: False,
+        _arm_write_offer=lambda *a, **k: None,  # #2035: the rail seam arms write offers
         _track_offer_hint=lambda *a, **k: None,
     )
     intent = SimpleNamespace(action="add_project", context={"original_message": "add project Foo"})

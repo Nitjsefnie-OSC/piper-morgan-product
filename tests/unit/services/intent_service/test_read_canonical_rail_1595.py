@@ -87,6 +87,7 @@ async def test_entry_point_calls_the_existing_provenance_handler_directly():
         # stays a thin "calls the handler directly" check, not a parity test
         # (that lives in test_rail_adapter_canonical_parity_1926.py).
         _is_generic_canonical_response=lambda *a, **k: False,
+        _arm_write_offer=lambda *a, **k: None,  # #2035: the rail seam arms write offers
         _track_offer_hint=lambda *a, **k: None,
     )
     intent = SimpleNamespace(action="explain_suggestion", context={})
@@ -110,6 +111,7 @@ async def test_entry_point_calls_the_existing_guidance_handler_directly():
     svc = SimpleNamespace(
         canonical_handlers=canonical_handlers,
         _is_generic_canonical_response=lambda *a, **k: False,
+        _arm_write_offer=lambda *a, **k: None,  # #2035: the rail seam arms write offers
         _track_offer_hint=lambda *a, **k: None,
     )
     intent = SimpleNamespace(action="get_contextual_guidance", context={})

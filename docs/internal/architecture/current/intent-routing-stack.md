@@ -176,7 +176,7 @@ start, before every apply-seam call site), one skip log naming the store
 argument (a live rail entry was armed THIS turn — the hint skip is logged, the
 #852 tracking unchanged on free turns). Regression:
 `test_soft_offer_survival_clobber_1753.py` (store half),
-`test_soft_offer_last_offer_clobber_1770.py` (rail half + no-over-block). **#1569 render half** (same commit): the floor's
+`test_soft_offer_last_offer_clobber_1770.py` (rail half + no-over-block). **#2035**: a #852 hint may only steer toward a READ; an offer whose "yes" leads to a write arms the #846 store with its own landing (section "Which rail an offer arms", below). **#1569 render half** (same commit): the floor's
 `_format_domain_context` renders the two context families as visually distinct
 sections with per-origin vocabulary instructions — `due_reminders` (from
 `context:reminders:{user_id}`) says "reminder", `pending_todos` (from
@@ -5676,6 +5676,54 @@ Readers are untouched (7 attribute-only, 15 dict-only, 16 either-or on the
 landing tree): with one writer, either surface is the same value. A local copy
 such as `context = dict(intent.context or {}); context.setdefault(...)` is
 outside the scan by design — it is not the Intent's context.
+
+## Which rail an offer arms: #846 for a write, #852 only for a read (2026-10-15, #2035, Arch's rule + CXO's shape B)
+
+Two one-slot arm stores hold a question Piper asked, and they are not interchangeable:
+
+- **#852 / #1529 `last_offer` (contextual)**: a canonical handler returns an `offer_hint`
+  (`continuation_hint` + `offer_text`), `_track_offer_hint` stores it, and an ACCEPT next turn
+  passes the hint INTO THE CLASSIFIER as steering (`contextual_continuation_hint`). The binding is
+  READ-tier (#1739): whatever the classifier reaches still runs its own gates, so a write reached
+  this way gets the #1509 consent check.
+- **#846 `WorkflowOfferService` (pending offer)**: a record with `workflow_type`, `question`,
+  `pending_action` (`kind`, …) and `decline_message`; an ACCEPT dispatches the registered landing
+  for `workflow_type` (`dispatch_workflow`), a decline returns `decline_message`, and kind-specific
+  turn handlers run first at the offer seam.
+
+**Rule (Arch, #2035): an offer whose "yes" leads to a WRITE arms the #846 store with its own
+landing, never the #852 hint.** The served defect it closes: no projects → `list my projects` →
+"…Would you like to add one?" → `yes` → the hint steered the classifier to `add_project`, whose
+rail then asked "Quick check before I act…" for a write with no name. The rail behaved as designed;
+the offer was on the wrong rail.
+
+The add-project offers (shape B, CXO's copy verbatim):
+
+| Builder (holder) | Question | Continuation it used to steer | Reaches | Rail now |
+|---|---|---|---|---|
+| `empty_projects_offer` (`files_consciousness`), armed by `IntentService._handle_projects_query` (directly) and the `manage_portfolio` list branch (`write_offer`) | "Would you like to add one?" | "add a new project" | `manage_portfolio` op `add` → `add_project` (WRITE) | #846 `offer_add_project` |
+| `CanonicalHandlers._format_project_setup_guidance` | "Are you ready to set up your first project?" | "add a new project" | `add_project` (WRITE) | #846 `offer_add_project` |
+| `CanonicalHandlers._handle_project_setup_request` (warm/balanced) | "Want to add another?" | "add another project" | `add_project` (WRITE) | #846 `offer_add_project` |
+| `CanonicalHandlers._format_integration_setup_guidance` | "Would you like guidance on setting up a specific integration?" | "provide guidance on setting up a specific integration" | `get_contextual_guidance` (READ) | #852, unchanged |
+| `CanonicalHandlers._handle_portfolio_query` delete-not-found | "Would you like me to list your projects?" | "list all projects" | `list_projects` (READ) | #852, unchanged |
+
+The flow (`services/intent_service/add_project_clarify.py`): the offer record is
+`build_add_project_offer(question=…)` (kind `add_project_offer_question`, `workflow_type`
+`offer_add_project`, decline "Okay, I'll leave it for now. Say 'add a project' any time.").
+`yes` dispatches `run_offer_add_project_workflow` (registered READ, offer-seam only,
+`action_triggered=False`): it writes nothing, replies "What would you like to call it?" and arms the
+EXISTING #1886 name question (`build_add_project_name_offer`). Only an answered name writes, through
+`handle_add_project_name_turn` and `_create_or_report_project`, unchanged. `no` / `not now` decline
+through the generic seam; `later` (PASS in the shared vocabulary) is taught at the kind-specific
+`handle_add_project_offer_turn`, which also holds the principal check. A `CanonicalHandlers` method has
+no offer-store access, so it hands the record back as `"write_offer"`; `IntentService._arm_write_offer`
+arms it at BOTH seams a canonical dict reaches (the main canonical dispatch and
+`_finalize_canonical_rail_result`), first-arm-wins (#1770: an entry present was armed this turn and is
+kept) and stamping the principal. Pins: `tests/unit/services/intent_service/test_write_offers_846_2035.py`
+(through `process_intent`, both seams, decline set, name create, first-arm-wins, integration offer
+unchanged). Not moved (outside the ruled scope, stated): the #1977 unanswered-half offer
+(`_append_unanswered_half`) arms a #852 hint whose continuation is the user's own unanswered clause,
+which can be a write.
 
 ## Pointers
 

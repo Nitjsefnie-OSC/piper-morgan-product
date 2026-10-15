@@ -4458,6 +4458,11 @@ class TestUnarmedAskSiteRatchet:
                 # "What would you like to do?" is bound by no offer_text (the
                 # delete-not-found "Would you like me to list your projects?"
                 # matches its offer_text and would pass on its own).
+                # Stays at 3 under #2035 (measured): the empty-state offer now
+                # rides "write_offer" from empty_projects_offer() (a #846
+                # record built by a self-arming helper), deliberately NOT a
+                # question= kwarg in this holder, which would credit the
+                # whole holder and hide the unarmed fallback menu.
                 3,
                 "I can help you manage your projects. You can ask me to: - Sh",
             ),
