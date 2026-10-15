@@ -1173,6 +1173,8 @@ without it. Arch ruled 10-08: (a) strict call carrying the existing `Degradation
 through the adapter's own grant-aware `_resolve_or_degrade`, one resolver per connector. Live served
 check for #1889/#1963 runs after (b). Epic 5 is now 35 items, 30 closed.
 
+**`#2012` folded in 2026-10-14, found by xian on alpha during the #1965/#1889 broken-grant check, admitted MVP on xian's yes (Gate class 3)**: Settings → Integrations → GitHub → Test reports "github connection successful" on a revoked OAuth grant (`_test_github` returns success when a binding row exists, no GitHub call). Same family as #1965/#1889: the surface a user would use to check the connection says it works while every read fails. Closes on a served reading (revoked grant: Test fails with a reconnect prompt; live grant: passes). Fix on Lead's held branch. Tracking issue for the whole recovery path: #2018 (Production, Class 4 candidate, not admitted).
+
 ### 6. Rendered deliverable (7 items, 5 closed + 2 shared with GatherOutcome/Security) — same reasoning as 5
 ~~`#1729`~~ (**CLOSED, caught 2026-09-26 by a reconciliation pass — not previously marked**) · shares `#1732` (security, **CLOSED**) and `#1738` (GatherOutcome). Plus, folded
 2026-09-12: ~~`#1762`~~ (render-truncation sweep, ~18 more "...and N more" sites, self-identified as
