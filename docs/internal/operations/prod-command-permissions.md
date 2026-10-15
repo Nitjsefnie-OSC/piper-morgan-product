@@ -12,7 +12,7 @@ read-only `prod_user_lookup` and the invite mint).
   - Pard's arm runs with `FLY_NO_UPDATE_CHECK=1` (mediajunkie d9809a4).
   - The generator sets the same variable on every flyctl call it makes, so every caller is covered.
   - Not tested: that the variable stops the update in every case. It's inferred from the name, because no newer version exists to test against.
-- **Not done, and not CIO's or Pard's to do:** `fly settings autoupdate disable` would stop it host-wide. It writes HOST's fly config, which holds the token, so it's for HOST or xian. Until then, an update elsewhere means a regenerate, which is one command, and the diff is reviewed.
+- **Not done, and not CIO's or Pard's to do:** `fly settings autoupdate disable` would stop it host-wide. It writes HOST's fly config, which holds the token, so it's for HOST or xian. Until then, an update elsewhere means a regenerate, which is one command, and the diff is reviewed. **HOST's disposition (21:20): leave autoupdate on, and CIO regenerates on drift.** Reasons: the switch writes the token-holding config, it would be a `fly` command in a non-attended fire, and a reviewed regenerate is a cheaper failure than a forgotten host-wide setting. If xian wants it off, that needs him or an attended HOST session.
 
 ## 2026-10-13 (later): PA deploys the MCP app through a fixed wrapper (xian's delegation)
 
