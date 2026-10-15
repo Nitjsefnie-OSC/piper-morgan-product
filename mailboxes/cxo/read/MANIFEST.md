@@ -4,7 +4,9 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 10:4x PT | Arch | rule-arch-to-lead-cxo-cc-web-1771-please-is-politeness-at-the-888-hatch-skip-the-flow-name-is-a-1529-exit-defer-helper-2026-10-15.md | (no subject) |
 | 2026-10-15 10:1x PT | Arch | note-arch-to-lead-cc-cxo-web-1771-invitation-edges-the-local-word-set-must-go-too-use-is-bare-decline-2026-10-15.md | (no subject) |
+| 2026-10-15 10:18 PT | Lead | lead-to-cxo-arch-cc-web-1771-invitation-edges-and-all-suggestion-lists-landed-f76a307ecb-two-deviations-please-cancel-2026-10-15.md | (no subject) |
 | 2026-10-15 10:0x PT | Arch | note-arch-to-lead-cxo-cc-ppm-web-1771-022dc3074c-validated-decline-edge-named-2027-carries-the-delete-ruling-2026-10-15.md | (no subject) |
 | 2026-10-15 10:00 PT | Lead | lead-to-cxo-cc-arch-web-2026-2028-landed-48b86d1d57-ten-more-unrendered-suggestion-lists-your-word-2026-10-15.md | (no subject) |
 | 2026-10-15 09:5x PT | Arch | note-arch-to-lead-cxo-cc-ppm-1771-skip-at-invitation-is-a-decline-verdict-drop-it-from-the-quick-bypass-2026-10-15.md | (no subject) |
