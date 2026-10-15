@@ -2,7 +2,7 @@
 type: operations
 title: "Liveness, current state: how a seat wakes, proves it woke, and gets noticed when it doesn't"
 valid_from: "2026-10-14"
-last_updated: "2026-10-14"
+last_updated: "2026-10-15"
 ---
 
 # Liveness: current state
@@ -85,6 +85,26 @@ wake ──► fire runs ──► heartbeat ──► freeze check ──► wa
      checkout; the history rewrite showed the danger.
    - Its liveness is Pard's heartbeat log `mediajunkie/logs/freeze-watchdog-heartbeat.log`, one line
      every run. More than 6 hours with no line means the belt is down.
+
+5b. **Stuck-at-a-dialog alert: woken but not waking.** Inside Pard's `scripts/mail-wake.py` (mediajunkie
+   fa36beb, live 2026-10-15 15:39). Pard owns it.
+   - **Why:** Lead's session sat blocked from about 08:12 to 15:30 on 10-15 (a subagent's permission dialog).
+     xian's promotion approval sat unread from 13:18. The mail wakes fired, but nothing checked that the
+     session woke (Exec, from xian's notice).
+   - **Rule:** when a seat has unread mail (v3 inbox and v4, judged together) and mail-wake has seen a dialog
+     on its pane for 30 minutes (`STUCK_AFTER`), it sends one memo per episode: to Exec for PM seats, and to
+     Pard for Exec and non-PM seats. The memo names the dialog's question line and says a human must open the
+     pane. The signal is direct: mail-wake had been logging "dialog showing" for Lead 155 times that day,
+     as a log line nobody read.
+   - **Not covered:** a dialog with no mail waiting (cycle-check's `pane-dialogs` arm flags those every 2 hours,
+     to xian's card), and a hang with no dialog (the freeze check, item 4).
+   - **Why not a heartbeat join (CIO built one the same afternoon, then retired it):**
+     `stuck-session-check.py` flagged a role with mail waiting 30 minutes and no heartbeat, role commit or v4
+     ack since. Backtested over 10-14 and 10-15, it caught Lead only from 13:30. Lead's heartbeat kept
+     recording post-commit rows until 12:43 while the dialog blocked the work, so "no sign of life" stayed
+     false for hours. Activity rows show the session is alive, not that the work is moving
+     (methodology-43). Pard's dialog signal is the direct one. The heartbeat join was removed so that one
+     rule has one mechanism.
 
 6. **Live-layer checks** (is the machinery itself running?):
    - Pard's `verify-hooks-drumbeat` (07:05 and 19:05) checks a real `claude -p` commit is blocked by

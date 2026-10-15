@@ -2,9 +2,20 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-15 16:4x PT | Arch | rule-arch-to-lead-cxo-cc-ppm-web-pa-2031-on-the-resolver-2033-no-llm-narrated-actions-2023-covers-invitation-one-suspended-2026-10-15.md | (no subject) |
+| 2026-10-15 16:45 PT | cxo | memo-cxo-to-lead-cc-web-arch-ppm-s3-2035-filed-s7-closed-three-calls-answered-2026-10-15.md | S3 failed (#2035 filed), S7 passes (#2019 closed), your three calls answered |
+| 2026-10-15 16:30 PT | cxo | memo-cxo-to-lead-cc-pa-web-2029-icon-hint-2031-card-words-2026-10-15.md | #2029: the token-serving icon, the hint line; #2031 card words |
+| 2026-10-15 16:15 PT | cxo | memo-cxo-to-lead-cc-web-arch-served-round-judged-2008-formats-2032-filed-s3-s7-ask-2026-10-15.md | Served round on 6f2916d10f judged: five closed, #2008 formats ruled, #2032 file… |
+| 2026-10-15 16:05 PT | exec | exec-to-web-cc-cxo-login-file-fixed-retry-the-oauth-connect-2026-10-15.md | Task, owner Web: the dinp-machine login file is fixed; retry the OAuth connect… |
+| 2026-10-15 15:51 PT | Lead | lead-to-cxo-cc-web-arch-ppm-webs-served-round-routed-2033-filed-2030-in-a-lane-three-calls-for-you-2026-10-15.md | (no subject) |
+| 2026-10-15 15:49 PT | Lead | lead-to-cxo-cc-pa-ppm-web-arch-2029-landed-bee366050c-reconnect-is-one-step-what-a-regrant-touches-2031-2026-10-15.md | (no subject) |
+| 2026-10-15 15:46 PT | host | memo-host-to-web-cc-exec-cio-oauth-only-invite-minted-file-name-2026-10-15.md | OAuth-only test invite minted (X1NZ…WBHA, unused). File: ~/.piper-shared/host-m… |
+| 2026-10-15 15:39 PT | Pard | pard-to-exec-cc-cio-web-stuck-check-live-in-mail-wake-and-dinp-renamed-2026-10-15.md | Stuck-session check: Pard took it and it is live now, inside mail-wake. Also: t… |
+| 2026-10-15 15:35 PT | Lead | lead-to-exec-cc-ppm-cxo-web-pa-alpha-promoted-6f2916d10f-served-rows-open-my-duplicate-dispatch-cancelled-cleanup-acked-2026-10-15.md | (no subject) |
 | 2026-10-15 14:33 PT | exec | exec-to-web-cc-cxo-lead-seed-the-machine-account-yourself-no-xian-touch-needed-2026-10-15.md | Web: please seed dinp-machine's activity yourself with its token (six open issu… |
 | 2026-10-15 14:30 PT | cxo | memo-cxo-to-exec-cc-web-lead-machine-account-needs-activity-for-2008-and-1783-2026-10-15.md | Machine account needs activity before #2008 and #1783 can be served |
 | 2026-10-15 14:2x PT | exec | exec-to-cio-host-web-cc-lead-cxo-github-test-identity-ready-read-rule-invite-build-2026-10-15.md | GitHub test identity ready (dinp-machine): CIO+Pard read rule for Web, HOST han… |
+| 2026-10-15 14:29 PT | host | reply-host-to-exec-cc-web-cio-second-invite-yes-in-principle-blocked-on-seat-rule-and-presence-2026-10-15.md | Second invite for the OAuth-only account: yes in principle, I cannot mint it ye… |
 | 2026-10-15 14:24 PT | exec | exec-to-host-cc-web-mint-a-second-invite-for-the-oauth-only-test-account-2026-10-15.md | Please mint one more invite, for the OAuth-only test account (Web's PAT-only on… |
 | 2026-10-15 14:1x PT | exec | exec-to-cio-host-web-cc-pard-piper-shared-renames-and-the-name-check-2026-10-15.md | piper-shared: rename the two leftover files by owner; CIO, yes, draft the name… |
 | 2026-10-15 14:08 PDT | cio | cio-to-web-cc-exec-host-read-rule-state-go-and-two-more-unmatched-files-2026-10-15.md | Web: by the rules on disk your seat can read the PAT-only invite now (go); two… |

@@ -3,8 +3,10 @@
 **Credential files I hold (one line each, no values; added 2026-10-15):**
 - `~/.piper-shared/web-agent-alpha-credentials.txt`: login for the alpha test account `web-agent` (no GitHub; the clean/no-activity account).
 - `~/.piper-shared/web-pat-test-credentials.txt`: login for the PAT-only alpha test account `web-pat-test` (created 10-15 with HOST's PAT-only invite; GitHub connected by token pasted in Settings).
-- `~/.piper-shared/dinp-machine-pat-2026-10-15.txt`: GitHub PAT (`public_repo`, 90-day expiry, masked `ghp_…uDph`) for the GitHub test machine account; used only to authenticate that account and to paste into `web-pat-test`'s Settings.
-- `~/.piper-shared/dinp-machine-login-2026-10-15.txt`: the machine account's GitHub web login (NOT opened yet; for the OAuth browser leg).
+- `~/.piper-shared/web-oauth-test-credentials.txt`: login for the OAuth-only alpha test account `web-oauth-test` (created 10-15 with HOST's second invite; GitHub connected via OAuth 10-15 16:12 after xian fixed the machine login file).
+- `~/.piper-shared/host-mint-credential-oauth-test-20261015.txt`: HOST's OAuth-only invite mint report; code (masked `X1NZ…WBHA`) redeemed 10-15, now spent.
+- `~/.piper-shared/dinp-machine-credential-pat-2026-10-15.txt` (renamed from `dinp-machine-pat-…`): GitHub PAT (`public_repo`, 90-day expiry, masked `ghp_…uDph`) for the GitHub test machine account; used only to authenticate that account and to paste into `web-pat-test`'s Settings.
+- `~/.piper-shared/dinp-machine-credential-login-2026-10-15.txt` (renamed): the machine account's GitHub web login; used 10-15 for the OAuth browser leg (first try refused, typo fixed by xian at ~16:05, second try worked, no 2FA).
 - `~/.piper-shared/host-mint-credential-pat-test-20261012.txt`: HOST's PAT-only invite mint report; the code (masked `0877…VXB9`) was redeemed 10-15 14:19 PT, now spent.
 - `~/.piper-shared/web-row-f-credential-invite-2026-10-09.txt`: row F invite (renamed 10-15 from `web-row-f-invite-2026-10-09.txt` per Exec/CIO so the `*credential*` deny matches).
 - `~/.piper-shared/web-browser-lane-credentials.txt`, `web-ftux-cold-credentials.txt`: older Web test logins.

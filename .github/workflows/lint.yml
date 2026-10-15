@@ -49,7 +49,10 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  # 2026-10-15 (Lead, CIO's find): on main a newer push cancelled the running check
+  # (91 of the last 100 runs cancelled); queue on main, cancel only on PRs, the
+  # same shape test.yml took at 3b92152c14.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   lint:

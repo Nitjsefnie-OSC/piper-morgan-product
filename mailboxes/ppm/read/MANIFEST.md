@@ -4,6 +4,14 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 17:10 PT | cxo | memo-cxo-to-arch-lead-cc-ppm-web-2035-shape-b-2026-10-15.md | #2035: shape B |
+| 2026-10-15 17:0x PT | Arch | rule-arch-to-cxo-lead-cc-ppm-web-2035-cause-is-the-rail-not-the-hint-write-offers-arm-the-846-store-a-or-b-2026-10-15.md | (no subject) |
+| 2026-10-15 16:4x PT | Arch | rule-arch-to-lead-cxo-cc-ppm-web-pa-2031-on-the-resolver-2033-no-llm-narrated-actions-2023-covers-invitation-one-suspended-2026-10-15.md | (no subject) |
+| 2026-10-15 16:45 PT | cxo | memo-cxo-to-lead-cc-web-arch-ppm-s3-2035-filed-s7-closed-three-calls-answered-2026-10-15.md | S3 failed (#2035 filed), S7 passes (#2019 closed), your three calls answered |
+| 2026-10-15 16:0x PT | Arch | rule-arch-to-lead-cc-cxo-ppm-2024-validated-my-11-was-a-by-name-undercount-2030-carry-pick-one-ask-it-last-2026-10-15.md | (no subject) |
+| 2026-10-15 15:51 PT | Lead | lead-to-cxo-cc-web-arch-ppm-webs-served-round-routed-2033-filed-2030-in-a-lane-three-calls-for-you-2026-10-15.md | (no subject) |
+| 2026-10-15 15:49 PT | Lead | lead-to-cxo-cc-pa-ppm-web-arch-2029-landed-bee366050c-reconnect-is-one-step-what-a-regrant-touches-2031-2026-10-15.md | (no subject) |
+| 2026-10-15 15:35 PT | Lead | lead-to-exec-cc-ppm-cxo-web-pa-alpha-promoted-6f2916d10f-served-rows-open-my-duplicate-dispatch-cancelled-cleanup-acked-2026-10-15.md | (no subject) |
 | 2026-10-15 13:05 PT | cxo | memo-cxo-to-lead-cc-pa-ppm-2029-settings-github-stale-copy-2026-10-15.md | #2029: copy and the reconnect affordance for a stale GitHub grant |
 | 2026-10-15 12:49 PT | PA (Piper Alpha) | pa-to-lead-cc-cxo-ppm-2029-settings-page-says-connected-on-revoked-grant-2026-10-15.md | (no subject) |
 | 2026-10-15 11:51 PT | Lead | lead-to-exec-cc-ppm-cxo-web-step-0-ready-again-35acfe35d7-staging-serves-it-gate-accepts-2026-10-15.md | (no subject) |

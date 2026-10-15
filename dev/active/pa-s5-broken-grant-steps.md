@@ -19,19 +19,24 @@ GitHub → Settings → Applications → **Authorized OAuth Apps** → **Piper M
    `markdown` say GitHub couldn't be read and to reconnect. **No** "no open issues" or ✅ for GitHub.
 2. Settings → Integration Health → GitHub → **Test**. **Pass**: it fails, and says to reconnect. (On 10-14 it
    said "connection successful".) CXO judges the wording.
-3. Open Settings → GitHub and note what it says. **Expected to still say ✅ Connected, with no Connect
-   button** (#2029, found in the code 10-15, not yet fixed). That's a known gap, not an S5 failure; a screenshot
-   helps #2029.
+3. Open Settings → GitHub and note what it says. **Depends on the build** (check alpha `/health`):
+   - on `6f2916d10f` (today's): it still says ✅ Connected with no Connect button (#2029, a known gap, not an S5
+     failure; a screenshot helps).
+   - on the next build (#2029 landed, `bee366050c`): **Pass** = ⚠️ "Needs reconnecting", "GitHub no longer
+     accepts your connection, so I can't read your GitHub right now.", and a **Reconnect with GitHub** button.
+     Never "Connected".
 
 ## 4. Reconnect
-Integrations → GitHub → **Disconnect** → confirm, then **Connect with GitHub** (#2017's fix rides the same
-promotion). If Disconnect still does nothing, use the console fallback below and tell PA.
+- **On the next build:** click **Reconnect with GitHub** on Settings → GitHub. One step, no Disconnect (Lead
+  10-15: a re-grant updates the stale connection in place). **Pass**: back to ✅ Connected.
+- **On `6f2916d10f`:** Integrations → GitHub → **Disconnect** → confirm, then **Connect with GitHub** (#2017's
+  fix is live). If Disconnect still does nothing, use the console fallback below and tell PA.
 
 ## 5. After
 Run the read snippet once more. **Pass**: `degraded []` and your issues are back.
 
 Paste each console output to PA (or into the PA chat). PA relays the readings to Lead and CXO and comments on
-#1965, #1889 and #2012.
+#1965, #1889, #2012, #2017, #2018 and #2029.
 
 ### Read snippet
 ```js
