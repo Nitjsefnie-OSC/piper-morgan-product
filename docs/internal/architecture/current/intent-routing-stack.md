@@ -757,6 +757,42 @@ measured the branch's plumbing and never the registry it dispatches against
 (m-43). Those cases now use categories canonical on BOTH sides (TEMPORAL,
 PORTFOLIO), and the new suite reads the REAL `CanonicalHandlers`.
 
+**#2030 the orchestrated branch carries `offer_hint`, arms ONE, and asks it LAST
+(2026-10-15, Arch's ruling issuecomment-6203827433).** `IntentOrchestrator.
+_execute_single` used to keep only `result["message"]`, so a canonical builder's
+yes/no question (`_format_project_setup_guidance`, `_handle_project_setup_request`,
+`_format_integration_setup_guidance`, the #2010 empty-projects reply) rendered
+mid-reply UNARMED on a multi-intent turn and a "yes" bound to nothing (the #1766
+shape). Now: (1) `IntentExecutionResult.offer_hint` carries the handler's hint;
+the orchestrator writes NO store. (2) `_pick_armed_offer` removes EVERY hinted
+sibling's `offer_text` from its response by EXACT match (`_remove_offer_text`:
+only the question and the whitespace at the cut; #2010 adequacy makes it
+verbatim, #2024 hardening (a) makes it a question) and picks the FIRST
+SUCCESSFUL sibling in plan order whose removal matched as
+`OrchestratedResponse.armed_offer_hint`. A sibling whose `offer_text` is not
+found verbatim (drift) arms nothing, gets nothing appended, and keeps its text
+exactly as rendered (logged `multi_intent_offer_text_drift`). (3)
+`_aggregate_messages` appends the armed `offer_text` once, as its own LAST
+paragraph (after any failure note). (4) The branch calls
+`_track_offer_hint({"offer_hint": orchestrated.armed_offer_hint}, …)` BEFORE
+`_apply_soft_offer`, so the #1770 guard sees the live `last_offer` and adds no
+second, soft ask. Worked example ("what time is it and list my projects", no
+projects): siblings render "It's 3:15 PM." and "You don't have any active
+projects yet. Would you like to add one?" (hint "add a new project"); the reply
+is "It's 3:15 PM. Regarding your portfolio, you don't have any active projects
+yet.\n\nWould you like to add one?" and `last_offer` carries "add a new
+project". With two hinted siblings only the first arms; the second's question
+is gone. The inversion multi-intent path (#1595) also calls
+`_aggregate_messages`, with unhinted parts, so it is unchanged. Reach
+tripwire check (d) (`test_2010_offer_hint_reach_tripwire`) now finds
+`CanonicalHandlers.handle(` dispatch sites by receiver BINDING, not name, and
+pins them by holder: `IntentService._process_intent_internal` (its dispatch
+result reaches `_track_offer_hint`) and `IntentOrchestrator._execute_single`
+(carries `offer_hint=` from its dispatch result; every `.execute_plan(` holder
+arms `armed_offer_hint` before its next `_apply_soft_offer`). Regression:
+`tests/unit/services/intent_service/test_multi_intent_offer_carry_2030.py`;
+fed-fake pin `test_2030_check_d_pins_dispatch_holders_fed_fakes`.
+
 **#1595 Phase 1 inversion shadow observer (2026-08-14) — an explicitly
 NON-dispatching fifth party that watches the chain, never joins it.** When
 `PIPER_INVERSION_SHADOW` is on (default OFF), `process_intent` fires-and-forgets
