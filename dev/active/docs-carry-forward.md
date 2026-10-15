@@ -20,7 +20,7 @@
 - **10-12 omnibus**: drafted by a Sonnet subagent 10-13, commit plus activity rows pending in the 04:12 fire log. Exec and CIO 10-12 logs unclosed (nudged).
 - **Ship #064**: PUBLISHED 10-14 (website `6bca437`). LinkedIn crosspost DONE 10-14 (row `distributed`).
 - **10-13 omnibus**: drafted by a Sonnet subagent 10-14, commit plus activity rows pending. Exec and Comms 10-13 logs unclosed (nudged).
-- **Overzealous Cleanup Routine**: PUBLISHED 10-15 (website commit pushed, live 200). Medium-only crosspost owed from xian (Exec notified). On URL: set `mediumURL`, status and `canonicalSite` to `distributed`.
+- **Overzealous Cleanup Routine**: PUBLISHED 10-15 (website commit pushed, live 200). Medium crosspost DONE 10-15 (row `distributed`).
 - **10-14 omnibus**: DONE 10-15 (568 lines, 1068 commits, 11 rows). Addendum owed when Exec's log and the four prog-code logs close (Exec nudged).
 - **Mon 10-19**: next weekly audit. **~11-30**: glossary 60-day re-verify.
 

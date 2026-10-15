@@ -22,6 +22,19 @@ and per-run JSON alongside). 90 runs, $7.47, mocked connector, Claude Code harne
   already live (v14). The plugin's job is getting the question to Piper, and that's what to optimize in its
   skill descriptions.
 
+## Routing follow-up (2026-10-15, PA)
+
+`piper-morgan-plugin` `6aab52f`: `evals-routing/RESULTS-2026-10-15.md`. 105 runs, $9.67. Tests the cheapest
+server lever for the bare connector's routing gap: a tool description that opens with the questions it answers.
+
+- **It doesn't fix routing.** Bare connector, current vs use-first description: 33 vs 37 of 45; on "How many
+  open GitHub issues do I have?", 8 vs 9 of 15 (noise). The full plugin: 15 of 15.
+- **The misses are GitHub-named questions.** "What should I work on today?" reached Piper 30 of 30 times without
+  the plugin.
+- **Untested server levers**: the tool name (it doesn't say "GitHub") and an MCP `instructions` string (the
+  harness can't mock one). Both would need a live, deployed server to measure, and the harness's `gh` instinct
+  may not match Desktop's. So the plugin stays the measured routing lever; the real check is PM in Desktop.
+
 ## What happened
 
 PM, Claude Desktop, bare connector (no plugin): "What are my open GitHub issues in Piper?" Claude answered

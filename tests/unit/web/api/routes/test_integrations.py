@@ -404,66 +404,55 @@ class TestGitHubIntegration:
 
     @pytest.mark.asyncio
     async def test_github_success_when_token_valid(self):
-        """GitHub test should succeed when stored PAT is valid (Issue #562)"""
-        mock_keychain = MagicMock()
-        mock_keychain.get_api_key.return_value = "ghp_test_token"
+        """GitHub test succeeds when the user's stored PAT serves (Issue #562; #2012 shape:
+        the resolver picks the PAT leg and one real read through the adapter answers)."""
+        from services.mcp.consumer.github_adapter import GitHubCredential, GitHubReposResult
 
-        mock_response = AsyncMock()
-        mock_response.status = 200
-
-        mock_session_instance = MagicMock()
-        mock_session_instance.get = MagicMock(
-            return_value=AsyncMock(
-                __aenter__=AsyncMock(return_value=mock_response), __aexit__=AsyncMock()
-            )
+        credential = GitHubCredential(
+            owner_id="u1", mcp_server_ref="github", token="ghp_test_token", leg="pat"
         )
-
-        mock_session = MagicMock()
-        mock_session.__aenter__ = AsyncMock(return_value=mock_session_instance)
-        mock_session.__aexit__ = AsyncMock()
-
         with (
             patch(
-                "services.infrastructure.keychain_service.KeychainService",
-                return_value=mock_keychain,
+                "services.mcp.consumer.github_adapter.GitHubMCPSpatialAdapter.resolve_credential",
+                new=AsyncMock(return_value=credential),
             ),
-            patch("aiohttp.ClientSession", return_value=mock_session),
+            patch(
+                "services.mcp.consumer.github_adapter.GitHubMCPSpatialAdapter.search_user_repositories",
+                new=AsyncMock(return_value=GitHubReposResult(repositories=[{"full_name": "o/r"}])),
+            ),
         ):
-            result = await _test_github()
-
+            result = await _test_github(user_id="u1")
             assert result["success"] is True
+            assert result["leg"] == "pat"
 
     @pytest.mark.asyncio
     async def test_github_failure_when_token_invalid(self):
-        """GitHub test should fail when token returns 401 (Issue #562)"""
-        mock_keychain = MagicMock()
-        mock_keychain.get_api_key.return_value = "invalid_token"
+        """GitHub test fails when the stored PAT gets a 401 (Issue #562; #2012 shape: the
+        adapter's read degrades STALE_TOKEN, the taxonomy value the guidance table maps)."""
+        from services.mcp.consumer.connector import DegradationReason, DegradationResponse
+        from services.mcp.consumer.github_adapter import GitHubCredential, GitHubReposResult
 
-        mock_response = AsyncMock()
-        mock_response.status = 401
-
-        mock_session_instance = MagicMock()
-        mock_session_instance.get = MagicMock(
-            return_value=AsyncMock(
-                __aenter__=AsyncMock(return_value=mock_response), __aexit__=AsyncMock()
+        credential = GitHubCredential(
+            owner_id="u1", mcp_server_ref="github", token="invalid_token", leg="pat"
+        )
+        degraded = GitHubReposResult(
+            degradation=DegradationResponse(
+                reason=DegradationReason.STALE_TOKEN, user_message="re-auth", action_hint=None
             )
         )
-
-        mock_session = MagicMock()
-        mock_session.__aenter__ = AsyncMock(return_value=mock_session_instance)
-        mock_session.__aexit__ = AsyncMock()
-
         with (
             patch(
-                "services.infrastructure.keychain_service.KeychainService",
-                return_value=mock_keychain,
+                "services.mcp.consumer.github_adapter.GitHubMCPSpatialAdapter.resolve_credential",
+                new=AsyncMock(return_value=credential),
             ),
-            patch("aiohttp.ClientSession", return_value=mock_session),
+            patch(
+                "services.mcp.consumer.github_adapter.GitHubMCPSpatialAdapter.search_user_repositories",
+                new=AsyncMock(return_value=degraded),
+            ),
         ):
-            result = await _test_github()
-
+            result = await _test_github(user_id="u1")
             assert result["success"] is False
-            assert result["error_type"] == "token_invalid"
+            assert result["error_type"] == "stale_token"
 
     @pytest.mark.asyncio
     async def test_github_not_configured_when_no_token(self):

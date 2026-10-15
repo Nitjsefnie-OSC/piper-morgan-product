@@ -4011,11 +4011,24 @@ class TestUnarmedAskSiteRatchet:
     visible here so its coverage is arguable — a new question-emitting site
     fails the build BY BEING FOUND, never by someone remembering a table):
 
-    Scope: every ``*.py`` under ``services/intent_service/`` and
-    ``services/intent/``, minus ``soft_invocation.py`` (the arming rail
-    itself — every offer template it declares reaches the user only through
-    the apply path that records + ``set_pending_offer``-arms it by
-    construction).
+    Scope (#2011, Arch 2026-10-14 — widened from the two intent packages):
+    every ``*.py`` under ``services/`` RECURSIVELY, minus, each BY NAME with
+    its reason (never by leaving a package out of the glob):
+
+    - ``services/intent_service/soft_invocation.py`` — the arming rail
+      itself: every offer template it declares reaches the user only
+      through the apply path that records + ``set_pending_offer``-arms it
+      by construction;
+    - ``services/standup/`` — its conversation machine arms via its own
+      adopted state rail, not the one-slot store (#1739 table);
+    - ``services/onboarding/`` — on ice (ADR-059);
+    - ``services/consciousness/{auth,cli}_consciousness.py`` — NON-CHAT
+      surfaces (#2011 call 4, Arch 2026-10-14): the login/session routes
+      and terminal output (``ui_consciousness`` was ruled a third, then
+      found dead and deleted, Arch round 2). The one-slot store is a
+      chat mechanism. Each exclusion is held true by a CONSUMER TRIPWIRE
+      (``test_2011_non_chat_surface_consumers``) pinning its measured
+      importer set; a chat-path importer fails the build.
 
     An INTERROGATIVE LITERAL is any string constant or f-string (constant
     parts joined with ``{}`` placeholders) in which some line, after
@@ -4038,6 +4051,43 @@ class TestUnarmedAskSiteRatchet:
       emission lives at their consumers; every current consumer verified
       arming at freeze time (they thread the copy as the stored
       ``question=`` — itself an arm signal);
+    - #2011 calibration (2026-10-14), three classes measured in the newly
+      scanned packages, each a false-positive SHAPE, never a site:
+      (a) strings in an ``examples=`` kwarg (any kwarg named ``*example*``)
+          — sample USER phrasings, the kwarg form of the ``*EXAMPLE*``
+          holder rule (e.g. ``commands/definitions.py`` IDENTITY_COMMAND
+          ``examples=["who are you?", "what's your name?"]``);
+      (b) strings in an ``original_message=`` kwarg — a synthesized USER
+          message handed to a handler, the same class as ``utterance=``
+          (e.g. ``integrations/slack/webhook_router.py``
+          ``_handle_priority_subcommand``: ``Intent(...,
+          original_message="what's my top priority?")``);
+      (c) strings inside a container whose OWN name says ``question`` —
+          an instance-attribute assignment target (``self.*question*``)
+          or a dict value under a ``*question*`` key — the container form
+          of the ``*question*``-named holder rule (e.g.
+          ``intelligence/clarifying_questions.py``
+          ``ClarifyingQuestionGenerator.__init__``:
+          ``self.question_templates = {...: ["How urgent is this
+          issue?", ...]}``). Local variables do NOT qualify: a local
+          ``question = "…?"`` returned unarmed stays counted;
+    - #2011 call 5 (Arch 2026-10-14) — OPEN INVITATIONS, a CLASS: a literal
+      every one of whose question sentences is a closed-set invitation
+      shape (what can I help (you) with · anything else I can help with /
+      you need · what's on your mind · how does that sound · does that
+      help · what would you like to work on / focus on · need anything
+      else; optionally + today / now / this morning|afternoon|evening),
+      carrying NO action offer (want me to · should I · shall I|we ·
+      would you|you'd like me to). Any reply to such a question is a fresh
+      request, so nothing needs binding. Measured both ways: EXEMPT
+      ``home_state_service`` "Welcome. What can I help you with?"; COUNTED
+      "How does that sound? Anything you'd like me to adjust?" (the same
+      literal offers an action; measured 2026-10-14 in
+      consciousness/templates.py DIALOGUE_INVITATION, the only measured
+      literal of that kind, and deleted the same day with that unreachable
+      module — the pin keeps its text). A
+      second question of any other shape — a slot request — keeps the
+      literal counted;
     - literals carrying an ``# ask-census: <reason>`` marker on their own
       line or the line directly above — the residual hand-annotation lives
       AT the site, never in this table, and the marker count is ceilinged
@@ -4047,9 +4097,33 @@ class TestUnarmedAskSiteRatchet:
     name of a module/class-level assignment (copy constants/containers).
     A holder ARMS iff its OWN body (nested defs excluded) does any of:
     call ``set_pending_offer``; pass a ``question=`` kwarg or build a dict
-    with a ``"question"`` key (the #1665 stored-ask idiom); or mention a
-    string ending ``_pending`` (the no-clobber flag stamp). The census is
-    every holder with >= 1 interrogative literal that does not arm.
+    with a ``"question"`` key (the #1665 stored-ask idiom); mention a
+    string ending ``_pending`` (the no-clobber flag stamp); or construct a
+    ``LastOffer(...)`` (#2011 calibration: the #852/#1529 one-turn
+    ``last_offer`` rail, the SECOND one-slot arm store per #1770 — e.g.
+    ``conversation/conversation_handler.py``
+    ``ConversationHandler._check_suspended_session_reentry`` stores its
+    "Welcome back! … Would you like to continue, or start fresh?" as
+    ``LastOffer(offer_type="process_resume", offer_text=resume_message)``,
+    the same holder that renders it); or assign
+    ``<x>.filling_state = SlotFillingState.PROMPTING|CONFIRMING`` (#2011
+    call 2, Arch 2026-10-14: the slot-filling machine's transition into an
+    answer-binding state — the next reply is routed by that state to the
+    handler that binds it; terminal COMPLETE/CANCELLED are not arms, so
+    ``_SLOT_MESSAGES``' post-terminal "wrapped up! Want to start a new
+    one?" stays counted). CONSUMER-ARMED (one hop, #2011 call 2; four
+    bounds blessed by Arch round 2, each pinned in
+    test_2011_one_hop_bounds): a MODULE-LEVEL function is treated as
+    arming iff (1) at least one caller exists and EVERY caller arms by its
+    own body; (2) callers are searched across ``services/**``, ``web/**``
+    and ``main.py`` — a caller in an excluded package still counts; (3)
+    test callers count neither way; (4) a function referenced other than
+    by a direct call (callback, dict value, getattr) has unknown callers
+    and is NOT armed; one hop only, never transitive. Measured:
+    ``slot_prompts.format_final_confirmation`` (called only by
+    ``_determine_next_step`` / ``_handle_confirming``, which enter/hold
+    CONFIRMING). The census is every
+    holder with >= 1 interrogative literal that does not arm.
 
     KNOWN_UNARMED_ASK_SITES starts at the census MEASURED 2026-09-12
     (measured, never base-minus-predicted) and is SHRINK-ONLY — the
@@ -4065,11 +4139,12 @@ class TestUnarmedAskSiteRatchet:
     that scope, each carried here so "complete for the space it searched"
     stays visible, m-44):
 
-    1. SCOPE: the two intent reply surfaces only. Question-emitting code
-       elsewhere is not censused: ``services/standup/`` (its conversation
-       machine arms via its own adopted state rail, not the one-slot
-       store — #1739 table), onboarding (on ice, ADR-059), web templates,
-       and above all LLM FREE TEXT — the conversational floor can generate
+    1. SCOPE: ``services/**`` (#2011). Question-emitting code elsewhere is
+       not censused: ``services/standup/`` (its conversation machine arms
+       via its own adopted state rail, not the one-slot store — #1739
+       table), onboarding (on ice, ADR-059), the two non-chat
+       consciousness modules (tripwired, #2011 call 4), web templates, ``web/`` and
+       ``main.py``, and above all LLM FREE TEXT — the conversational floor can generate
        a question in prose at runtime; no static census can see it. Those
        surfaces' ask-only-when-armed compliance is Present, not Enforced.
     2. GRANULARITY: holder-level. A holder that arms on one path is
@@ -4081,12 +4156,72 @@ class TestUnarmedAskSiteRatchet:
        holds no literal of its own and escapes the census.
     """
 
-    _SCAN_GLOBS = (
-        os.path.join("services", "intent_service", "*.py"),
-        os.path.join("services", "intent", "*.py"),
+    # #2011 (Arch, 2026-10-14): was services/intent_service/*.py +
+    # services/intent/*.py only; 67 holder sites in packages it neither
+    # scanned nor named escaped it. Recursive over all of services/ now.
+    _SCAN_GLOBS = (os.path.join("services", "**", "*.py"),)
+
+    _EXCLUDED_MODULES = frozenset(
+        {
+            "services/intent_service/soft_invocation.py",
+            # #2011 call 4 (Arch 2026-10-14): NON-CHAT SURFACES, excluded by
+            # name. The one-slot store is a chat mechanism; these modules'
+            # copy never reaches a chat reply. Each exclusion is held TRUE by
+            # a consumer tripwire (test_2011_non_chat_surface_consumers): if a
+            # chat path ever imports one, the build fails and the exclusion
+            # must be re-ruled.
+            #  (ui_consciousness was a third, until Arch's round-2 correction:
+            #  its template mentions were Jinja comments — it was dead, and
+            #  was deleted.)
+            #  - auth_consciousness: login/session pages (web/api/routes/auth.py);
+            #  - cli_consciousness: terminal output of main.py.
+            "services/consciousness/auth_consciousness.py",
+            "services/consciousness/cli_consciousness.py",
+        }
     )
 
-    _EXCLUDED_MODULES = frozenset({"services/intent_service/soft_invocation.py"})
+    # #2011 call 4: the measured importer set per excluded non-chat module
+    # (production code only — tests/ and dev/ excluded). `git grep` 2026-10-14.
+    _NON_CHAT_SURFACE_IMPORTERS = {
+        "auth_consciousness": frozenset(
+            {"services/consciousness/__init__.py", "web/api/routes/auth.py"}
+        ),
+        "cli_consciousness": frozenset({"services/consciousness/__init__.py", "main.py"}),
+    }
+
+    # #2011 call 2: SlotFillingState members whose assignment arms (the reply
+    # is bound by the PROMPTING/CONFIRMING handler).
+    _SLOT_ARM_STATES = frozenset({"PROMPTING", "CONFIRMING"})
+
+    # #2011 call 5 (Arch 2026-10-14): OPEN INVITATIONS — a CLOSED word-set of
+    # invitation shapes whose any reply is a fresh request (nothing to bind).
+    # A literal is in the class iff EVERY question sentence in it is one of
+    # these shapes (optionally followed by a time phrase) AND it carries no
+    # action offer. A second question of any other shape (a slot request, an
+    # adjust-offer) keeps the whole literal counted.
+    _OPEN_INVITATION_RE = re.compile(
+        r"(?i)^(?:"
+        r"what can i help(?: you)? with"
+        r"|anything else (?:i can help(?: you)? with|you need)"
+        r"|what['’]?s on your mind"
+        r"|how does that sound"
+        r"|does that help"
+        r"|what would you like to (?:work on|focus on)"
+        r"|need anything else"
+        r")(?: today| now| this (?:morning|afternoon|evening))?\?$"
+    )
+    _ACTION_OFFER_RE = re.compile(
+        r"(?i)\b(?:want me to|should i|shall i|shall we|(?:would you|you'd|you would) like me to)\b"
+    )
+    _QUESTION_SENTENCE_RE = re.compile(r"[^.!?\n]*\?")
+
+    # Excluded BY NAME, each with its reason (class docstring, Scope).
+    _EXCLUDED_PACKAGES = ("services/standup/", "services/onboarding/")
+
+    # #2011 calibration (a)/(b): kwargs whose value is sample/synthesized
+    # USER text, not a Piper ask.
+    _USER_TEXT_KWARGS = frozenset({"utterance", "original_message"})
+    _EXAMPLE_NAME_RE = re.compile(r"(?i)example")
 
     _MATCHER_ATTRS = frozenset(
         {
@@ -4138,7 +4273,16 @@ class TestUnarmedAskSiteRatchet:
     #      stores `"question": question`), conversational_floor
     #      .FLOOR_FALLBACK_TRANSIENT ("Could you try again in a moment?" is
     #      error copy asking for a retry; it binds no answer).
-    MAX_MARKER_EXEMPTIONS = 6
+    #   7–10. #2011 call 1 (Arch 2026-10-14; CXO's deliberate list
+    #      2026-10-14 15:35): a question answered by its own directive on
+    #      the same line, nothing waits for a reply — api/errors.py
+    #      ERROR_MESSAGES ×3 ("Need help? Check our …", "Did you mean to
+    #      '…'? For more examples, see …"), ui_messages
+    #      UserFriendlyErrorService.__init__ ×1 ("Need help? Check our
+    #      examples."). CXO's templates.py TEMPORAL_GREETINGS ×3 were NOT
+    #      marked: the module was unreachable and deleted (Arch 14:2x).
+    #      6 -> 10, the measured count.
+    MAX_MARKER_EXEMPTIONS = 10
 
     # THE RATCHET TABLE — census MEASURED 2026-09-12 (predicate above, run
     # over the scope above). SHRINK-ONLY: arm the site through the one-slot
@@ -4342,6 +4486,157 @@ class TestUnarmedAskSiteRatchet:
                 2,
                 "I found {} todos matching '{}': {}. Which one should I compl",
             ),
+            # ---- MEASURED 2026-10-14 under the #2011 widening (Arch): scope
+            # services/** minus standup/onboarding by name, after the #2011
+            # calibration (classes (a)-(c) + the LastOffer arm signal, class
+            # docstring). A measurement change, not new debt: these asks were
+            # always there, unscanned. Each read at its holder: none arms in
+            # the holder. SHRINK-ONLY from here, same as every row above —
+            # #2010's two questions are format_projects_conscious's 2 literals
+            # (rendered by IntentService._handle_projects_query, which does
+            # not arm); that row leaves when #2010 lands. Holders per package:
+            # consciousness 34 · slot_filling 3 · trust 3 · integrations 2 · memory 2 · mux 2 · api 1 · conversation 1 · home 1 · mcp 1 · personality 1 · process 1 · ui_messages 1 (total 53).
+            # RE-SHAPED 2026-10-14 per Arch's five calls (#2011), re-measured:
+            # 53 -> 34 holders. Call 1: literals marked deliberate at their
+            # sites (CXO) — api ERROR_MESSAGES, ui_messages and (until its
+            # module was deleted, below) TEMPORAL_GREETINGS leave. Call 2: the slot-filling transition arm + one-hop
+            # consumer-armed rule — slot_prompts.format_final_confirmation
+            # leaves. Call 3: has_suspended_session's question moved to its
+            # arming caller — leaves. Call 4: ui/auth/cli excluded by name —
+            # 7 holders leave (toast formatters deleted). Call 5: the open-
+            # invitation class — 15 literals; 7 holders leave, 3 shrink.
+            # Holders per package now: consciousness 23 · trust 3 ·
+            # slot_filling 2 · integrations 2 · mux 2 · mcp 1 · memory 1 (34).
+            # 34 -> 28 (2026-10-14, Arch 14:2x): consciousness/templates.py +
+            # injection.py had no consumer outside the package (no served
+            # path rendered them); deleted, their 6 holders with them
+            # (ACCOMPLISHMENT_RECOGNITION, DIALOGUE_INVITATION, GENTLE_FLAGGING,
+            # MISSING_DATA_EXPLANATION, PRIORITY_FRAMING, injection.fix_mvc_gaps).
+            # 28 -> 22 (2026-10-14, T2 per CXO): search ×3 and learning's
+            # format_patterns_learned_conscious offer became statements (CXO
+            # verbatim); format_project_detail_conscious,
+            # format_learning_event_conscious, format_preference_saved_conscious
+            # deleted (no consumer beyond the package re-export). todo
+            # _build_closing re-measured (CXO 265; 268's reprioritize claim
+            # dropped — no op changes a todo's priority).
+            # 22 -> 20 (2026-10-14, T4 per CXO): error_consciousness
+            # format_error_conscious + _add_dialogue_invitation + _fix_mvc_gaps
+            # deleted (no consumer beyond the package re-export). Line 124's
+            # live retry offer stays: CXO's replacement doubles the recovery
+            # text it follows (sent back to CXO). Loading copy is unreachable
+            # (web/utils/streaming_responses has no importer) but its modules
+            # are not ruled for deletion: rows stay.
+            # 20 -> 17 (2026-10-14, Arch round 2 Rule-0 GO): the loading
+            # chain (loading_consciousness -> ui_messages/loading_states ->
+            # web/utils/streaming_responses) and slot_prompts
+            # .format_confirmation deleted — CONSCIOUS_LOADING_MESSAGES,
+            # _get_generic_conscious_message and format_confirmation leave.
+            # 17 -> 16 (2026-10-14, CXO 16:10): format_conversational_error_
+            # conscious drops its ERROR/CRITICAL invitation (the recovery
+            # already says what to do) — its row leaves.
+            # -- services/consciousness/ (6)
+            (
+                "services/consciousness/files_consciousness.py",
+                "_fix_mvc_gaps",
+                1,
+                "Want me to tell you more about any of these?",
+            ),
+            (
+                "services/consciousness/files_consciousness.py",
+                "format_projects_conscious",
+                2,
+                "I don't see any projects set up yet. Want me to help you cre",
+            ),
+            (
+                "services/consciousness/learning_consciousness.py",
+                "format_patterns_learned_conscious",
+                1,
+                "I looked through {} items but didn't spot any clear patterns",
+            ),
+            (
+                "services/consciousness/todo_consciousness.py",
+                "_build_closing",
+                3,
+                "How would you like to tackle these?",
+            ),
+            (
+                "services/consciousness/todo_consciousness.py",
+                "_fix_mvc_gaps",
+                1,
+                ". Anything you'd like me to adjust?",
+            ),
+            (
+                "services/consciousness/todo_consciousness.py",
+                "format_next_todo_conscious",
+                1,
+                "Does that priority feel right?",
+            ),
+            # -- services/integrations/ (2)
+            (
+                "services/integrations/slack/response_handler.py",
+                "SlackResponseHandler._generate_query_response",
+                1,
+                "🤖 I'm Piper Morgan, your AI Product Management Assistant. Ho",
+            ),
+            (
+                "services/integrations/slack/socket_mode_runner.py",
+                "SlackSocketModeRunner._handle_event",
+                2,
+                "I heard you, but couldn't form a response — try me again?",
+            ),
+            # -- services/mcp/ (1)
+            (
+                "services/mcp/consumer/github_adapter.py",
+                "GitHubMCPSpatialAdapter.degrade",
+                1,
+                "Which repo? I couldn't tell which repository you mean — name",
+            ),
+            # -- services/memory/ (1)
+            (
+                "services/memory/greeting_context.py",
+                "GREETING_APPROACHES",
+                4,
+                "Back already! We were working on {topic}—continue?",
+            ),
+            # -- services/mux/ (2)
+            (
+                "services/mux/premonition.py",
+                "SURFACING_FRAMES",
+                1,
+                "Can I share something that might help?",
+            ),
+            (
+                "services/mux/pull_mode.py",
+                "CORRECTION_INVITATION",
+                1,
+                "Would you like me to explain any of these, or correct someth",
+            ),
+            # -- services/slot_filling/ (1)
+            (
+                "services/slot_filling/slot_filling_manager.py",
+                "_SLOT_MESSAGES",
+                3,
+                "I lost track of what we were setting up — could you start ag",
+            ),
+            # -- services/trust/ (3)
+            (
+                "services/trust/delegation.py",
+                "DELEGATION_PATTERNS",
+                1,
+                "Would you like me to {action}?",
+            ),
+            (
+                "services/trust/trust_explainer.py",
+                "TrustExplainer.explain_proactive_action",
+                1,
+                "Can you tell me more about what happened?",
+            ),
+            (
+                "services/trust/trust_explainer.py",
+                "TrustExplainer.get_followup_offer",
+                4,
+                "Does this way of working together feel right to you?",
+            ),
         }
     )
 
@@ -4378,6 +4673,213 @@ class TestUnarmedAskSiteRatchet:
         assert not p("the '?' character is not a question here")
         assert not p("what? no, not that one")  # '?' + lowercase
         assert not p("ok?")  # below the length floor
+
+    def test_2011_calibration_classes(self):
+        """#2011: the three false-positive classes and the LastOffer arm
+        signal, pinned on minimal shapes (each mirrors its measured example
+        in the class docstring); a local ``question`` variable stays
+        counted."""
+        import ast
+
+        cls = TestUnarmedAskSiteRatchet
+
+        def excluded_texts(code):
+            tree = ast.parse(code)
+            ids = cls._excluded_string_ids(tree, set())
+            return {
+                n.value
+                for n in ast.walk(tree)
+                if isinstance(n, ast.Constant) and isinstance(n.value, str) and id(n) in ids
+            }
+
+        assert "who are you?" in excluded_texts('C(examples=["who are you?"])')  # (a)
+        assert "what is my top priority?" in excluded_texts(
+            'Intent(original_message="what is my top priority?")'
+        )  # (b)
+        assert "How urgent is this issue?" in excluded_texts(
+            'self.question_templates = {1: ["How urgent is this issue?"]}'
+        )  # (c) attribute
+        assert "What day is it?" in excluded_texts(
+            'cfg = {"questions": ["What day is it?"]}'
+        )  # (c) dict key
+        assert "Which project do you mean?" not in excluded_texts(
+            'question = "Which project do you mean?"'
+        )  # a local stays counted
+        assert cls._holder_arms(
+            list(ast.walk(ast.parse('ctx.last_offer = LastOffer(offer_text="x")')))
+        )
+
+    @classmethod
+    def _open_invitation(cls, text: str) -> bool:
+        """#2011 call 5: True iff every question sentence in ``text`` is a
+        closed-set open invitation and ``text`` offers no action."""
+        if cls._ACTION_OFFER_RE.search(text):
+            return False
+        questions = [q.strip() for q in cls._QUESTION_SENTENCE_RE.findall(text)]
+        questions = [q for q in questions if q]
+        return bool(questions) and all(cls._OPEN_INVITATION_RE.match(q) for q in questions)
+
+    def test_2011_reshape_call2_call5(self):
+        """#2011 calls 2 and 5 (Arch 2026-10-14), pinned on measured
+        literals: the slot-filling transition arms (terminal states do not),
+        and the open-invitation class exempts a closed-set invitation but
+        not one that also carries an offer."""
+        import ast
+
+        cls = TestUnarmedAskSiteRatchet
+
+        def arms(code):
+            return cls._holder_arms(list(ast.walk(ast.parse(code))))
+
+        # call 2: transition INTO an answer-binding state arms ...
+        assert arms("session.filling_state = SlotFillingState.CONFIRMING")
+        assert arms("session.filling_state = SlotFillingState.PROMPTING")
+        # ... a terminal state does not (the post-terminal "wrapped up! Want
+        # to start a new one?" in _SLOT_MESSAGES stays counted).
+        assert not arms("session.filling_state = SlotFillingState.COMPLETE")
+        assert not arms("session.filling_state = SlotFillingState.CANCELLED")
+
+        # call 5, measured both ways:
+        # EXEMPT — home_state_service.HomeStateService._generate_greeting.
+        assert cls._open_invitation("Welcome. What can I help you with?")
+        # COUNTED — measured in templates.DIALOGUE_INVITATION (since deleted,
+        # unreachable): an invitation shape, but the same literal offers an
+        # action ("you'd like me to adjust").
+        assert not cls._open_invitation("How does that sound? Anything you'd like me to adjust?")
+        # an offer anywhere disqualifies; a non-shape question (a slot
+        # request) disqualifies.
+        assert not cls._open_invitation("Does that help? Want me to try again?")
+        assert not cls._open_invitation("What can I help you with? Which repo do you mean?")
+        assert not cls._open_invitation("Want me to try again?")
+
+    def test_2011_one_hop_bounds(self):
+        """#2011 call 2 one-hop CONSUMER-ARMED rule — Arch's four bounds
+        (round 2, 2026-10-14), each pinned on a minimal fixture (the house
+        idiom of this class's self-tests) and anchored on real measurement."""
+        import ast
+
+        cls = TestUnarmedAskSiteRatchet
+
+        def idx(files):
+            return cls._caller_index([(r, ast.parse(c)) for r, c in files.items()])
+
+        fmt = {"svc/f.py": "def fmt():\n    return 'Shall I go ahead?'\n"}
+        arm = {
+            "svc/a.py": "def h(s):\n"
+            "    s.filling_state = SlotFillingState.CONFIRMING\n"
+            "    return fmt()\n"
+        }
+        noarm = {"svc/b.py": "def g():\n    return fmt()\n"}
+
+        def armed(files):
+            return cls._consumer_armed("svc/f.py", "fmt", idx(files))
+
+        # Bound 1: >= 1 caller AND every caller arms.
+        assert not armed({**fmt})  # zero callers: dead copy stays counted
+        assert armed({**fmt, **arm})
+        assert not armed({**fmt, **arm, **noarm})
+        # Bound 2: a caller in a census-EXCLUDED package still counts.
+        assert not armed({**fmt, **arm, "services/standup/x.py": noarm["svc/b.py"]})
+        # Bound 4: referenced other than by a direct call -> unknown callers.
+        assert not armed({**fmt, **arm, "svc/c.py": "HANDLERS = {'x': fmt}\n"})
+        assert not armed({**fmt, **arm, "svc/c.py": "def k():\n    register(fmt)\n"})
+        assert not armed({**fmt, **arm, "svc/c.py": "def k(m):\n    return getattr(m, 'fmt')()\n"})
+        # Bound 4: one hop only — mid() is consumer-armed by top(); fmt(),
+        # called only by mid(), is NOT (never transitive).
+        chain = idx(
+            {
+                **fmt,
+                "svc/m.py": "def mid():\n    return fmt()\n",
+                "svc/t.py": "def top(s):\n"
+                "    s.filling_state = SlotFillingState.PROMPTING\n"
+                "    return mid()\n",
+            }
+        )
+        assert cls._consumer_armed("svc/m.py", "mid", chain)
+        assert not cls._consumer_armed("svc/f.py", "fmt", chain)
+
+        # Real measurement. Bound 2: the caller roots reach web/, main.py
+        # and the census-excluded services/standup/. Bound 3: never tests/.
+        rels = {rel for rel, _tree in self._caller_trees()}
+        assert "main.py" in rels
+        assert any(r.startswith("web/") for r in rels)
+        assert any(r.startswith("services/standup/") for r in rels)
+        assert not any(r.startswith("tests/") for r in rels)
+        # Bound 1 + 3, measured: format_final_confirmation's production
+        # callers (_determine_next_step, _handle_confirming) all arm; its
+        # non-arming TEST callers (test_slot_prompts.py) count neither way.
+        _rows, stats = self._census()
+        assert (
+            "services/slot_filling/slot_prompts.py",
+            "format_final_confirmation",
+        ) in stats["consumer_armed"]
+
+    def test_2011_non_chat_surface_consumers(self):
+        """#2011 call 4 TRIPWIRE: each non-chat module excluded by name in
+        _EXCLUDED_MODULES is imported by EXACTLY its measured consumer set
+        (production code; tests/ and dev/ not counted) — directly, or by
+        importing one of its names through the ``services.consciousness``
+        package. A new importer (above all a chat path) fails here, and the
+        exclusion must be re-ruled instead of silently going false."""
+        import ast
+
+        root = self._repo_root()
+        mods = self._NON_CHAT_SURFACE_IMPORTERS
+        public = {}
+        for mod in mods:
+            with open(os.path.join(root, "services", "consciousness", f"{mod}.py")) as fh:
+                tree = ast.parse(fh.read())
+            public[mod] = {
+                n.name
+                for n in tree.body
+                if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
+                and not n.name.startswith("_")
+            } | {
+                t.id
+                for n in tree.body
+                if isinstance(n, ast.Assign)
+                for t in n.targets
+                if isinstance(t, ast.Name)
+            }
+        found = {mod: set() for mod in mods}
+        paths = [os.path.join(root, "main.py"), os.path.join(root, "main_mcp.py")]
+        for top in ("services", "web", "cli", "scripts", "shared", "tools", "config"):
+            paths += glob.glob(os.path.join(root, top, "**", "*.py"), recursive=True)
+        scanned = 0
+        for path in paths:
+            if not os.path.isfile(path):
+                continue
+            rel = os.path.relpath(path, root).replace(os.sep, "/")
+            with open(path, encoding="utf-8") as fh:
+                src = fh.read()
+            if "consciousness" not in src:
+                continue
+            scanned += 1
+            for node in ast.walk(ast.parse(src)):
+                if isinstance(node, ast.ImportFrom) and node.module:
+                    for mod in mods:
+                        full = f"services.consciousness.{mod}"
+                        if node.module == full or (
+                            node.module == "services.consciousness"
+                            and any(a.name in (mod, *public[mod]) for a in node.names)
+                        ):
+                            found[mod].add(rel)
+                elif isinstance(node, ast.Import):
+                    for mod in mods:
+                        if any(a.name == f"services.consciousness.{mod}" for a in node.names):
+                            found[mod].add(rel)
+        assert scanned >= 10, f"tripwire scanned only {scanned} files — the walk broke"
+        for mod, expected in mods.items():
+            assert found[mod] - {
+                "services/consciousness/__init__.py"
+            }, f"{mod}: its measured surface consumer vanished — re-measure"
+            assert found[mod] == set(expected), (
+                f"#2011 call 4 tripwire: {mod} is excluded from the unarmed-ask "
+                f"census as a NON-CHAT surface, measured importers "
+                f"{sorted(expected)}; now imported by {sorted(found[mod])}. "
+                f"If a chat path now renders its copy, the exclusion is false: "
+                f"remove it from _EXCLUDED_MODULES and census its asks."
+            )
 
     @staticmethod
     def _joined_text(node) -> str:
@@ -4425,9 +4927,25 @@ class TestUnarmedAskSiteRatchet:
                     if isinstance(f, ast.Attribute)
                     else (f.id if isinstance(f, ast.Name) else None)
                 )
-                if attr == "set_pending_offer":
+                if attr in ("set_pending_offer", "LastOffer"):
                     return True
                 if any(kw.arg == "question" for kw in sub.keywords):
+                    return True
+            # #2011 call 2 (Arch 2026-10-14): the slot-filling machine's
+            # transition INTO an answer-binding state is an arm — the next
+            # reply is routed by `filling_state` to the handler that binds it
+            # (slot_filling_manager.handle_turn). Terminal states
+            # (COMPLETE/CANCELLED) are NOT arms.
+            if isinstance(sub, (ast.Assign, ast.AnnAssign)):
+                targets = sub.targets if isinstance(sub, ast.Assign) else [sub.target]
+                v = sub.value
+                if (
+                    any(isinstance(t, ast.Attribute) and t.attr == "filling_state" for t in targets)
+                    and isinstance(v, ast.Attribute)
+                    and v.attr in cls._SLOT_ARM_STATES
+                    and isinstance(v.value, ast.Name)
+                    and v.value.id == "SlotFillingState"
+                ):
                     return True
             if isinstance(sub, ast.Dict) and any(
                 isinstance(k, ast.Constant) and k.value == "question" for k in sub.keys
@@ -4489,14 +5007,33 @@ class TestUnarmedAskSiteRatchet:
                     for arg in node.args:
                         excluded.update(id(s) for s in ast.walk(arg))
                 for kw in node.keywords:
-                    if kw.arg == "utterance" or non_emitting:
+                    if (
+                        non_emitting
+                        or kw.arg in cls._USER_TEXT_KWARGS
+                        or (kw.arg is not None and cls._EXAMPLE_NAME_RE.search(kw.arg))
+                    ):
                         excluded.update(id(s) for s in ast.walk(kw.value))
             elif isinstance(node, ast.Compare):
                 excluded.update(id(s) for s in ast.walk(node))
             elif isinstance(node, ast.Dict):
-                for key in node.keys:
+                for key, value in zip(node.keys, node.values):
                     if key is not None:
                         excluded.update(id(s) for s in ast.walk(key))
+                        # #2011 (c): value under a *question*-named key.
+                        if (
+                            isinstance(key, ast.Constant)
+                            and isinstance(key.value, str)
+                            and cls._QUESTION_NAME_RE.search(key.value)
+                        ):
+                            excluded.update(id(s) for s in ast.walk(value))
+            elif isinstance(node, (ast.Assign, ast.AnnAssign)):
+                # #2011 (c): value assigned to a self.*question* attribute.
+                targets = node.targets if isinstance(node, ast.Assign) else [node.target]
+                if node.value is not None and any(
+                    isinstance(t, ast.Attribute) and cls._QUESTION_NAME_RE.search(t.attr)
+                    for t in targets
+                ):
+                    excluded.update(id(s) for s in ast.walk(node.value))
             elif isinstance(node, ast.Raise):
                 excluded.update(id(s) for s in ast.walk(node))
         return excluded
@@ -4558,6 +5095,83 @@ class TestUnarmedAskSiteRatchet:
         rec(tree, "", True)
         return result
 
+    # #2011 bound 2: the one-hop caller search spans production code beyond
+    # the census scope (an excluded package's caller still counts); bound 3:
+    # tests/ is not a root, so a test caller counts neither way.
+    _CALLER_ROOTS = (
+        os.path.join("services", "**", "*.py"),
+        os.path.join("web", "**", "*.py"),
+        "main.py",
+    )
+
+    def _caller_trees(self):
+        """(rel, tree) for every file under _CALLER_ROOTS — no exclusions."""
+        import ast
+
+        root = self._repo_root()
+        out = []
+        for pattern in self._CALLER_ROOTS:
+            for path in sorted(glob.glob(os.path.join(root, pattern), recursive=True)):
+                rel = os.path.relpath(path, root).replace(os.sep, "/")
+                with open(path, encoding="utf-8") as fh:
+                    out.append((rel, ast.parse(fh.read())))
+        return out
+
+    @classmethod
+    def _caller_index(cls, trees):
+        """One-hop caller index over ``trees``: (callers, indirect, arming).
+        callers: simple name -> {(rel, holder)} that CALL it directly.
+        indirect: names referenced other than as a call's callee (a Load of
+        the name / attribute outside a call position, or a string argument
+        to getattr/hasattr) — their callers are unknown (bound 4).
+        arming: holders that arm by their OWN body (never consumer-armed —
+        one hop only, bound 4)."""
+        import ast
+
+        callers, indirect, arming = {}, set(), set()
+        for rel, tree in trees:
+            for qual, nodes in cls._collect_holders(tree):
+                if cls._holder_arms(nodes):
+                    arming.add((rel, qual))
+                callee_ids = set()
+                for sub in nodes:
+                    if not isinstance(sub, ast.Call):
+                        continue
+                    f = sub.func
+                    callee_ids.add(id(f))
+                    name = (
+                        f.attr
+                        if isinstance(f, ast.Attribute)
+                        else (f.id if isinstance(f, ast.Name) else None)
+                    )
+                    if name:
+                        callers.setdefault(name, set()).add((rel, qual))
+                    if name in ("getattr", "hasattr") and len(sub.args) >= 2:
+                        a = sub.args[1]
+                        if isinstance(a, ast.Constant) and isinstance(a.value, str):
+                            indirect.add(a.value)
+                for sub in nodes:
+                    if id(sub) in callee_ids:
+                        continue
+                    if isinstance(sub, ast.Name) and isinstance(sub.ctx, ast.Load):
+                        indirect.add(sub.id)
+                    elif isinstance(sub, ast.Attribute) and isinstance(sub.ctx, ast.Load):
+                        indirect.add(sub.attr)
+        return callers, indirect, arming
+
+    @staticmethod
+    def _consumer_armed(rel, qual, index) -> bool:
+        """#2011 call 2, Arch's four bounds: a MODULE-LEVEL function is armed
+        iff (1) at least one caller exists and EVERY caller arms by its own
+        body, (2) callers drawn from services/**, web/** and main.py, (3)
+        tests never counted, (4) never if referenced other than by a direct
+        call; one hop only (a consumer-armed caller does not arm)."""
+        callers_of, indirect, arming = index
+        if "." in qual or qual in indirect:
+            return False
+        callers = callers_of.get(qual, set()) - {(rel, qual)}
+        return bool(callers) and callers <= arming
+
     def _census(self):
         """Run the predicate. Returns (rows, stats) where rows is the set of
         (file, holder, literal-count, fingerprint) for UNARMED ask sites and
@@ -4568,9 +5182,9 @@ class TestUnarmedAskSiteRatchet:
         parsed = []
         utterance_ctors = set()
         for pattern in self._SCAN_GLOBS:
-            for path in sorted(glob.glob(os.path.join(root, pattern))):
+            for path in sorted(glob.glob(os.path.join(root, pattern), recursive=True)):
                 rel = os.path.relpath(path, root).replace(os.sep, "/")
-                if rel in self._EXCLUDED_MODULES:
+                if rel in self._EXCLUDED_MODULES or rel.startswith(self._EXCLUDED_PACKAGES):
                     continue
                 with open(path, encoding="utf-8") as fh:
                     source = fh.read()
@@ -4581,6 +5195,11 @@ class TestUnarmedAskSiteRatchet:
         sites = {}
         arming = set()
         marker_exemptions = []
+        open_invitations = []
+        # #2011 call 2 (bounds blessed by Arch 2026-10-14 round 2): the
+        # one-hop caller index spans services/**, web/** and main.py (bound
+        # 2), never tests/ (bound 3).
+        caller_index = self._caller_index(self._caller_trees())
         for rel, source, tree in parsed:
             marked = self._marker_lines(source)
             excluded = self._excluded_string_ids(tree, utterance_ctors)
@@ -4612,15 +5231,27 @@ class TestUnarmedAskSiteRatchet:
                         continue
                     if skip_holder:
                         continue
+                    if self._open_invitation(text):
+                        open_invitations.append((rel, qual, text))
+                        continue
                     lineno = getattr(sub, "lineno", 0)
                     if lineno in marked or (lineno - 1) in marked:
                         marker_exemptions.append((rel, qual, lineno))
                         continue
                     sites.setdefault(key, []).append(text)
 
+        # #2011 call 2 — CONSUMER-ARMED (one hop, four bounds; see
+        # _consumer_armed). E.g. slot_prompts.format_final_confirmation,
+        # called only by the slot-filling handlers that enter/hold CONFIRMING.
+        consumer_armed = {
+            (rel, qual)
+            for rel, qual in sites
+            if (rel, qual) not in arming and self._consumer_armed(rel, qual, caller_index)
+        }
+
         rows = set()
         for (rel, qual), texts in sites.items():
-            if (rel, qual) in arming:
+            if (rel, qual) in arming or (rel, qual) in consumer_armed:
                 continue
             normalized = sorted(" ".join(t.split()) for t in texts)
             rows.add((rel, qual, len(texts), normalized[0][:60]))
@@ -4631,6 +5262,8 @@ class TestUnarmedAskSiteRatchet:
             "arming_holders": len(arming),
             "arming": arming,
             "marker_exemptions": marker_exemptions,
+            "open_invitations": open_invitations,
+            "consumer_armed": consumer_armed,
         }
         return rows, stats
 
@@ -4641,7 +5274,10 @@ class TestUnarmedAskSiteRatchet:
         world — an empty derivation is indistinguishable from a broken
         scanner and must fail loudly, never pass as 'no violations'."""
         rows, stats = self._census()
-        assert stats["files"] >= 40, (
+        # Floor 40 -> 400 (2026-10-14, #2011): measured 454 files under the
+        # services/** widening; 400 also fails if the glob silently reverts
+        # to the old two packages (56 files).
+        assert stats["files"] >= 400, (
             f"ask-site census scanned only {stats['files']} files — the scan "
             f"glob broke; fix the derivation before trusting any result."
         )
