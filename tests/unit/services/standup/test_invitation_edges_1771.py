@@ -289,3 +289,47 @@ class TestQuickBypassIsWholeMessage:
             "skip the questions",
             "skip questions",
         }
+
+
+class TestDeferralReadThroughTheContractHelper:
+    """Arch 10:4x (deviation 1): "no, not now" keeps leaving, but the standup
+    reads the deferral through ``soft_invocation.contains_deferral``, not the
+    ``DEFER_PATTERNS`` list. No new row."""
+
+    def test_the_standup_package_does_not_name_the_pattern_list(self):
+        import pathlib
+
+        root = pathlib.Path(__file__).resolve().parents[4]
+        offenders = [
+            str(path.relative_to(root))
+            for path in sorted((root / "services/standup").rglob("*.py"))
+            if "DEFER_PATTERNS" in path.read_text()
+        ]
+        assert offenders == []
+
+    @pytest.mark.parametrize(
+        "text,expected",
+        [
+            ("no, not now", True),
+            ("no, maybe later", True),
+            ("not right now", True),
+            ("Not yet.", True),
+            ("no", False),
+            ("later", False),
+            ("let's start", False),
+            ("", False),
+        ],
+    )
+    def test_contains_deferral(self, text, expected):
+        from services.intent_service.soft_invocation import contains_deferral
+
+        assert contains_deferral(text) is expected
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("turn", ["no, not now", "No, not now."])
+    async def test_no_not_now_still_leaves(self, turn):
+        with _World() as w:
+            result, state = await w.invite_then(turn)
+            assert result.response_message == CXO_INVITATION_END
+            assert state == S.ABANDONED
+            assert await w.adapter.has_suspended_session(_USER) is None

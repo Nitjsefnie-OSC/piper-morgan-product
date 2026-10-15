@@ -794,6 +794,15 @@ def is_bare_decline(text: str) -> bool:
     return bool(FULL_MESSAGE_DECLINE_RE.match((text or "").strip())) or is_bare_deferral(text)
 
 
+def contains_deferral(text: str) -> bool:
+    """#1771 (Arch 2026-10-15) — True when a ``DEFER_PATTERNS`` row matches
+    anywhere in the turn ("no, not now", "no, maybe later"). The read for a
+    caller that holds a DECLINE verdict and needs to know whether the turn
+    also defers; callers use this, never the pattern list itself, so the
+    vocabulary stays consumed through this contract module."""
+    return any(p.search(text or "") for p in DEFER_PATTERNS)
+
+
 def is_bare_deferral(text: str) -> bool:
     """#1771 — True when the WHOLE message is a bare full-message deferral
     ("not now", "not right now")."""

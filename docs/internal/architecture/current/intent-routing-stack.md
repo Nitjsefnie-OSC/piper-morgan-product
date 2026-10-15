@@ -517,7 +517,10 @@ leave test, which ENDS with the invitation line (shape A; was SUSPENDED until
 2026-10-15): `is_bare_decline(message)` (the whole-message decline row plus
 the bare deferrals) OR the predicate's DEFER verdict ("maybe later", "not
 right now") OR a DECLINE verdict whose turn also carries a `DEFER_PATTERNS`
-row ("no, not now": the predicate orders decline first) OR the whole message
+row ("no, not now": the predicate orders decline first; read through
+`soft_invocation.contains_deferral`, the contract helper beside
+`is_bare_decline`, so the standup never imports the row list, Arch
+2026-10-15) OR the whole message
 "later" (Arch's known miss, anchored). The predicate's plain DECLINE verdict
 is NOT read there: its unanchored rows (`^(?:no|nah),?\s`, `\bi'?m good\b`)
 told "I'm good to go" and "no, let's start" "no standup for now". The old
