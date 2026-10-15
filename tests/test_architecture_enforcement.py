@@ -4258,6 +4258,23 @@ class TestUnarmedAskSiteRatchet:
     # left out of the by-NAME external match ("handle" is a common attribute
     # across services/; matching it by name would pin unrelated code).
     _OFFER_HINT_SEAM_METHODS = frozenset({"handle"})
+    # #2030 (Arch's ruling, issuecomment-6203827433, item 5): check (d) pins
+    # the CanonicalHandlers.handle dispatch sites BY HOLDER, not by receiver
+    # name. A receiver is a CanonicalHandlers when it is named
+    # ``canonical_handlers`` or is a ``self.<attr>`` its module binds from a
+    # ``CanonicalHandlers(...)`` construction or from a ``canonical_handlers``
+    # name/attribute (the orchestrator's ``self._handlers``). Each holder
+    # either ARMS (calls _track_offer_hint itself) or CARRIES (puts
+    # ``offer_hint=`` on its result, and the holder that runs the plan arms
+    # the picked ``armed_offer_hint`` through _track_offer_hint before its
+    # _apply_soft_offer). A third dispatch site fails the build.
+    _CANONICAL_DISPATCH_HOLDERS = {
+        ("services/intent/intent_service.py", "IntentService._process_intent_internal"): "arms",
+        (
+            "services/intent_service/orchestrator.py",
+            "IntentOrchestrator._execute_single",
+        ): "carries",
+    }
 
     # #2011 call 5 (Arch 2026-10-14): OPEN INVITATIONS — a CLOSED word-set of
     # invitation shapes whose any reply is a fresh request (nothing to bind).
@@ -5012,8 +5029,11 @@ class TestUnarmedAskSiteRatchet:
         (c) each pinned referrer returns the builder's result through
             _finalize_canonical_rail_result, which calls _track_offer_hint
             (a pinned NAME TABLE is checked at its getattr adapter);
-        (d) the one CanonicalHandlers.handle dispatch site's holder calls
-            _track_offer_hint (the internal route's seam)."""
+        (d) the CanonicalHandlers.handle dispatch sites are exactly the
+            pinned HOLDERS (#2030: _process_intent_internal, which arms, and
+            IntentOrchestrator._execute_single, which carries the hint to the
+            plan-running holder's _track_offer_hint), found by receiver
+            binding, not receiver name."""
         import ast
 
         cls = TestUnarmedAskSiteRatchet
@@ -5108,24 +5128,191 @@ class TestUnarmedAskSiteRatchet:
             list(cls._own_nodes(finalize))
         ), "_finalize_canonical_rail_result no longer calls _track_offer_hint"
 
-        # (d) the internal route: CanonicalHandlers.handle's dispatch site.
-        dispatch = [
-            (rel, qual, nodes)
-            for rel, tree in trees
-            for qual, nodes in cls._collect_holders(tree)
-            for sub in nodes
-            if isinstance(sub, ast.Call)
-            and isinstance(sub.func, ast.Attribute)
-            and sub.func.attr == "handle"
-            and isinstance(sub.func.value, ast.Attribute)
-            and sub.func.value.attr == "canonical_handlers"
-        ]
-        assert [(r, q) for r, q, _n in dispatch] == [
-            ("services/intent/intent_service.py", "IntentService._process_intent_internal")
-        ], f"CanonicalHandlers.handle dispatch sites changed: {[(r, q) for r, q, _n in dispatch]}"
-        assert cls._holder_arms(
-            dispatch[0][2]
-        ), "the CanonicalHandlers.handle dispatch holder no longer calls _track_offer_hint"
+        # (d) the internal route: CanonicalHandlers.handle's dispatch sites,
+        # pinned by holder (#2030).
+        cls._assert_canonical_dispatch_reaches_seam(trees)
+
+    @staticmethod
+    def _canonical_receivers(tree) -> set:
+        """#2030: the ``self.<attr>`` names a module binds to a
+        CanonicalHandlers: from a ``CanonicalHandlers(...)`` construction or
+        from a ``canonical_handlers`` name/attribute (an alias of one)."""
+        import ast
+
+        out = {"canonical_handlers"}
+        for n in ast.walk(tree):
+            if not isinstance(n, (ast.Assign, ast.AnnAssign)) or n.value is None:
+                continue
+            v = n.value
+            if (
+                (
+                    isinstance(v, ast.Call)
+                    and isinstance(v.func, ast.Name)
+                    and v.func.id == "CanonicalHandlers"
+                )
+                or (isinstance(v, ast.Name) and v.id == "canonical_handlers")
+                or (isinstance(v, ast.Attribute) and v.attr == "canonical_handlers")
+            ):
+                targets = n.targets if isinstance(n, ast.Assign) else [n.target]
+                out |= {
+                    t.attr
+                    for t in targets
+                    if isinstance(t, ast.Attribute)
+                    and isinstance(t.value, ast.Name)
+                    and t.value.id == "self"
+                }
+        return out
+
+    @classmethod
+    def _canonical_dispatch_holders(cls, trees) -> dict:
+        """#2030: (rel, holder) -> (own nodes, names bound from the call's
+        result), for every holder that calls ``<CanonicalHandlers>.handle(``
+        (receiver resolved by binding)."""
+        import ast
+
+        found = {}
+        for rel, tree in trees:
+            receivers = cls._canonical_receivers(tree)
+            for qual, nodes in cls._collect_holders(tree):
+                dispatches = set()
+                for sub in nodes:
+                    if not (
+                        isinstance(sub, ast.Call)
+                        and isinstance(sub.func, ast.Attribute)
+                        and sub.func.attr == "handle"
+                    ):
+                        continue
+                    recv = sub.func.value
+                    name = (
+                        recv.attr
+                        if isinstance(recv, ast.Attribute)
+                        else (recv.id if isinstance(recv, ast.Name) else None)
+                    )
+                    if name in receivers:
+                        dispatches.add(id(sub))
+                if not dispatches:
+                    continue
+                produced = {
+                    t.id
+                    for n in nodes
+                    if isinstance(n, ast.Assign)
+                    and isinstance(n.value, ast.Await)
+                    and id(n.value.value) in dispatches
+                    for t in n.targets
+                    if isinstance(t, ast.Name)
+                }
+                found[(rel, qual)] = (nodes, produced)
+        return found
+
+    @staticmethod
+    def _carries_offer_hint(nodes, produced) -> bool:
+        """#2030: the holder puts ``offer_hint=`` on a result it builds, its
+        value read from the dispatch's result (a name in ``produced``)."""
+        import ast
+
+        return any(
+            isinstance(n, ast.Call)
+            and any(
+                kw.arg == "offer_hint"
+                and any(isinstance(v, ast.Name) and v.id in produced for v in ast.walk(kw.value))
+                for kw in n.keywords
+            )
+            for n in nodes
+        )
+
+    @classmethod
+    def _plan_arm_holders(cls, trees) -> list:
+        """#2030: (rel, holder, problem) for every holder that runs a plan
+        (``.execute_plan(``). ``problem`` is None when the holder passes the
+        picked ``<x>.armed_offer_hint`` to ``_track_offer_hint`` after the
+        plan runs and before its next ``_apply_soft_offer`` call (#1770: the
+        live arm then suppresses a second, soft ask)."""
+        import ast
+
+        out = []
+        for rel, tree in trees:
+            for qual, nodes in cls._collect_holders(tree):
+                calls = [
+                    n
+                    for n in nodes
+                    if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute)
+                ]
+                plans = [c.lineno for c in calls if c.func.attr == "execute_plan"]
+                if not plans:
+                    continue
+                arms = [
+                    c.lineno
+                    for c in calls
+                    if c.func.attr == "_track_offer_hint"
+                    and any(
+                        isinstance(a, ast.Attribute) and a.attr == "armed_offer_hint"
+                        for arg in c.args
+                        for a in ast.walk(arg)
+                    )
+                ]
+                softs = [c.lineno for c in calls if c.func.attr == "_apply_soft_offer"]
+                plan = min(plans)
+                arm = min((a for a in arms if a > plan), default=None)
+                soft = min((x for x in softs if x > plan), default=None)
+                if arm is None:
+                    problem = "never passes armed_offer_hint to _track_offer_hint"
+                elif soft is not None and soft < arm:
+                    problem = "arms armed_offer_hint AFTER _apply_soft_offer (#1770)"
+                else:
+                    problem = None
+                out.append((rel, qual, problem))
+        return out
+
+    @classmethod
+    def _assert_canonical_dispatch_reaches_seam(cls, trees) -> None:
+        """#2010 check (d), by holder (#2030): the dispatch holders are
+        exactly ``_CANONICAL_DISPATCH_HOLDERS``; an "arms" holder calls
+        _track_offer_hint; a "carries" holder puts ``offer_hint=`` on its
+        result AND every plan-running holder arms the picked hint before
+        its soft offer."""
+        found = cls._canonical_dispatch_holders(trees)
+        assert set(found) == set(cls._CANONICAL_DISPATCH_HOLDERS), (
+            f"#2030 check (d): CanonicalHandlers.handle dispatch holders are "
+            f"{sorted(found)}; pinned {sorted(cls._CANONICAL_DISPATCH_HOLDERS)}. "
+            f"A new dispatch site must arm (_track_offer_hint) or carry the "
+            f"offer_hint to a holder that does; show it, then pin it."
+        )
+        import ast
+
+        for key, mode in sorted(cls._CANONICAL_DISPATCH_HOLDERS.items()):
+            rel, qual = key
+            nodes, produced = found[key]
+            if mode == "arms":
+                # the dispatch's OWN result reaches _track_offer_hint (a
+                # different call in the same holder, e.g. the multi-intent
+                # arm, does not count).
+                arms_result = any(
+                    isinstance(n, ast.Call)
+                    and isinstance(n.func, ast.Attribute)
+                    and n.func.attr == "_track_offer_hint"
+                    and produced & {a.id for a in n.args if isinstance(a, ast.Name)}
+                    for n in nodes
+                )
+                assert produced and arms_result, (
+                    f"#2030 check (d): {rel}::{qual} dispatches "
+                    f"CanonicalHandlers.handle but its result no longer reaches "
+                    f"_track_offer_hint"
+                )
+            else:
+                assert cls._carries_offer_hint(nodes, produced), (
+                    f"#2030 check (d): {rel}::{qual} dispatches "
+                    f"CanonicalHandlers.handle but its result no longer carries offer_hint"
+                )
+                plan_arms = cls._plan_arm_holders(trees)
+                assert plan_arms, (
+                    f"#2030 check (d): {rel}::{qual} carries offer_hint but no "
+                    f"holder runs a plan (.execute_plan) and arms it"
+                )
+                bad = [(r, q, p) for r, q, p in plan_arms if p is not None]
+                assert not bad, (
+                    f"#2030 check (d): the carried offer_hint does not reach "
+                    f"_track_offer_hint: {bad}"
+                )
 
     @staticmethod
     def _find_def(tree, qual):
@@ -5299,6 +5486,91 @@ class TestUnarmedAskSiteRatchet:
         quiet = cls._offer_hint_reach([(mod, fake_builder), ("services/y.py", unrelated)])
         assert quiet["external"] == set()
         assert set(quiet["entry_points"]) == {"_other"}
+
+    def test_2030_check_d_pins_dispatch_holders_fed_fakes(self):
+        """#2030 (Arch's ruling item 5), check (d) fed fakes in memory: the
+        dispatch sites are found by receiver BINDING (the orchestrator's
+        ``self._handlers``), and the check fails when either pinned holder
+        stops reaching _track_offer_hint, when the plan-running holder arms
+        the picked hint after its soft offer (#1770), or when a third
+        dispatch site appears."""
+        import ast
+
+        cls = TestUnarmedAskSiteRatchet
+        svc_rel = "services/intent/intent_service.py"
+        orch_rel = "services/intent_service/orchestrator.py"
+        svc_ok = (
+            "class IntentService:\n"
+            "    def __init__(self):\n"
+            "        self.canonical_handlers = CanonicalHandlers()\n"
+            "    async def _process_intent_internal(self, intent, plan, s, u):\n"
+            "        orchestrated = await self.intent_orchestrator.execute_plan(plan, s, u)\n"
+            "        self._track_offer_hint({'offer_hint': orchestrated.armed_offer_hint}, s, u)\n"
+            "        multi = self._apply_soft_offer(orchestrated)\n"
+            "        canonical_result = await self.canonical_handlers.handle(intent, s, u)\n"
+            "        self._track_offer_hint(canonical_result, s, u)\n"
+            "        return self._apply_soft_offer(canonical_result)\n"
+        )
+        orch_ok = (
+            "class IntentOrchestrator:\n"
+            "    def __init__(self, canonical_handlers):\n"
+            "        self._handlers = canonical_handlers\n"
+            "    async def _execute_single(self, intent, s, u):\n"
+            "        result = await self._handlers.handle(intent, s, u)\n"
+            "        return IntentExecutionResult(\n"
+            "            intent=intent, response=result.get('message', ''),\n"
+            "            offer_hint=result.get('offer_hint') or None,\n"
+            "        )\n"
+        )
+
+        def trees(svc=svc_ok, orch=orch_ok, extra=None):
+            out = [(svc_rel, ast.parse(svc)), (orch_rel, ast.parse(orch))]
+            if extra is not None:
+                out.append(("services/z.py", ast.parse(extra)))
+            return out
+
+        cls._assert_canonical_dispatch_reaches_seam(trees())  # the shape as built
+
+        # the orchestrator stops carrying the hint
+        dropped = orch_ok.replace("            offer_hint=result.get('offer_hint') or None,\n", "")
+        with pytest.raises(AssertionError, match="IntentOrchestrator._execute_single"):
+            cls._assert_canonical_dispatch_reaches_seam(trees(orch=dropped))
+        # the single path stops arming its own result (the multi arm in the
+        # same holder must not mask it)
+        unarmed = svc_ok.replace("        self._track_offer_hint(canonical_result, s, u)\n", "")
+        with pytest.raises(AssertionError, match="_process_intent_internal"):
+            cls._assert_canonical_dispatch_reaches_seam(trees(svc=unarmed))
+        # the plan-running holder never arms the picked hint
+        no_plan_arm = svc_ok.replace(
+            "        self._track_offer_hint({'offer_hint': orchestrated.armed_offer_hint}, s, u)\n",
+            "",
+        )
+        with pytest.raises(AssertionError, match="never passes armed_offer_hint"):
+            cls._assert_canonical_dispatch_reaches_seam(trees(svc=no_plan_arm))
+        # ... or arms it AFTER the soft offer (#1770 guard cannot see it)
+        late = svc_ok.replace(
+            "        self._track_offer_hint({'offer_hint': orchestrated.armed_offer_hint}, s, u)\n"
+            "        multi = self._apply_soft_offer(orchestrated)\n",
+            "        multi = self._apply_soft_offer(orchestrated)\n"
+            "        self._track_offer_hint({'offer_hint': orchestrated.armed_offer_hint}, s, u)\n",
+        )
+        with pytest.raises(AssertionError, match="AFTER _apply_soft_offer"):
+            cls._assert_canonical_dispatch_reaches_seam(trees(svc=late))
+        # a third dispatch site, under a receiver name nobody pinned
+        third = (
+            "class Elsewhere:\n"
+            "    def __init__(self):\n"
+            "        self.ch = CanonicalHandlers()\n"
+            "    async def go(self, intent):\n"
+            "        r = await self.ch.handle(intent, None, None)\n"
+            "        self._track_offer_hint(r, None, None)\n"
+            "        return r\n"
+        )
+        with pytest.raises(AssertionError, match="services/z.py"):
+            cls._assert_canonical_dispatch_reaches_seam(trees(extra=third))
+        # an unrelated .handle( (not a CanonicalHandlers receiver) is not a site
+        unrelated = "async def f(sdk_handler, req):\n    return await sdk_handler.handle(req)\n"
+        cls._assert_canonical_dispatch_reaches_seam(trees(extra=unrelated))
 
     def test_2024_offer_text_is_a_question(self):
         """#2024 hardening (a) (Arch 2026-10-15): a built ``offer_hint``
