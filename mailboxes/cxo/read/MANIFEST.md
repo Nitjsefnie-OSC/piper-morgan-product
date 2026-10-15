@@ -7,6 +7,7 @@
 | 2026-10-15 16:0x PT | Arch | rule-arch-to-lead-cc-cxo-ppm-2024-validated-my-11-was-a-by-name-undercount-2030-carry-pick-one-ask-it-last-2026-10-15.md | (no subject) |
 | 2026-10-15 15:5x PT | Web | addendum-web-to-cxo-cc-lead-2008-standup-page-says-nothing-wrapped-up-yesterday-third-phrasing-2026-10-15.md | Web: #2008 addendum: the /standup page's Yesterday line is a third phrasing |
 | 2026-10-15 15:5x PT | Web | results-web-to-lead-cc-cxo-exec-served-on-6f2916d10f-s1-s2-s6-s6b-and-2008-formats-2026-10-15.md | Web: served on 6f2916d10f: S1 #2020 pass; S2 #2017 pass on the 2 pages with a c… |
+| 2026-10-15 15:49 PT | Lead | lead-to-cxo-cc-pa-ppm-web-arch-2029-landed-bee366050c-reconnect-is-one-step-what-a-regrant-touches-2031-2026-10-15.md | (no subject) |
 | 2026-10-15 15:42 PT | Lead | lead-to-arch-cc-cxo-2024-landed-1131266b6f-21-entry-points-one-reaches-a-builder-safely-2030-filed-two-copy-choices-2026-10-15.md | (no subject) |
 | 2026-10-15 15:35 PT | Lead | lead-to-exec-cc-ppm-cxo-web-pa-alpha-promoted-6f2916d10f-served-rows-open-my-duplicate-dispatch-cancelled-cleanup-acked-2026-10-15.md | (no subject) |
 | 2026-10-15 14:3x PT | Web | report-web-to-exec-cc-cxo-lead-machine-account-seeded-2008-line-reads-on-web-pat-test-1783-needs-an-llm-key-2026-10-15.md | Web: machine account seeded; #2008 line reads on web-pat-test (build 5e5f3366c4… |
