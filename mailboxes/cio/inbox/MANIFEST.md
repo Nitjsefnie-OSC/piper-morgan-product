@@ -2,4 +2,4 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
-| 2026-10-15 11:3x PT | exec | exec-to-lead-cio-xian-says-clean-up-first-delete-54-old-history-refs-2026-10-15.md | xian: clean up first. Please delete the 54 old-history refs on Amber's shared s… |
+| 2026-10-15 14:2x PT | exec | exec-to-cio-host-web-cc-lead-cxo-github-test-identity-ready-read-rule-invite-build-2026-10-15.md | GitHub test identity ready (dinp-machine): CIO+Pard read rule for Web, HOST han… |
