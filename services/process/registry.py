@@ -157,6 +157,21 @@ class ProcessType(str, Enum):
     CLARIFICATION = "clarification"
 
 
+class SuspendOutcome(str, Enum):
+    """What a handler's ``suspend()`` actually did (#2026).
+
+    ``suspend()`` asks a handler to pause; the handler owns what that means
+    (#888), and it may close instead (the standup adapter closes an unstarted
+    standup, Arch 2026-10-15). A caller that tells the user "I've paused it"
+    reads this answer, so the claim follows the transition that happened,
+    never a guess about the process's stage. ``None`` (a handler that returns
+    nothing, every implementer before #2026) reads as PAUSED.
+    """
+
+    PAUSED = "paused"
+    CLOSED = "closed"
+
+
 @dataclass
 class SuspendedInfo:
     """
@@ -210,7 +225,7 @@ class ProcessCheckResult:
     def off_topic_pause(
         cls,
         process_type: ProcessType,
-        pause_message: str,
+        pause_message: Optional[str],
     ) -> "ProcessCheckResult":
         """
         Process was paused because user sent an off-topic message.
@@ -218,6 +233,12 @@ class ProcessCheckResult:
         Issue #899: Layer C escape. Unlike escaped_from(), this returns
         handled=False so normal intent processing can answer the user's
         actual question. The pause_message is prepended by IntentService.
+
+        #2026: ``pause_message`` is None when the handler's ``suspend()``
+        CLOSED the process instead of pausing it (an unstarted standup): the
+        flow is still left behind (``escaped``, ``process_type``), but there is
+        no pause to claim, so nothing is prepended and the question is just
+        answered (CXO 2026-10-15 item 4).
         """
         return cls(
             handled=False,  # Let intent processing handle the actual question
@@ -314,13 +335,16 @@ class GuidedProcess(Protocol):
         self,
         user_id: Optional[str],
         session_id: Optional[str],
-    ) -> None:
+    ) -> Optional[SuspendOutcome]:
         """
         Suspend the active session, preserving state for later resumption.
 
         Issue #888: Called by ProcessRegistry when user issues an escape
         command. Transitions session to SUSPENDED state. Handler owns
         the semantics of what "suspended" means for its workflow.
+
+        #2026: returns what it did, ``SuspendOutcome.CLOSED`` when the
+        handler closed instead of pausing; ``PAUSED`` or None otherwise.
         """
         ...
 
@@ -461,6 +485,36 @@ class ProcessRegistry:
         """#888 split: is this escape word an END word (else it pauses)?
         Same normalisation as ``_is_escape_command``."""
         return message.strip().lower() in ESCAPE_END_WORDS
+
+    async def _suspend_for_fall_through(
+        self,
+        handler: GuidedProcess,
+        user_id: Optional[str],
+        session_id: Optional[str],
+    ) -> Optional[str]:
+        """Suspend ``handler`` on a fall-through turn (#899 off-topic, #1529
+        off-intent) and return the pause prefix, or None when nothing paused.
+
+        #2026: the prefix follows the transition the handler reports, not a
+        stage check here. A handler that CLOSED instead of pausing (the
+        standup at its "ready to start?" invitation) leaves nothing to
+        resume, so no "I've paused it" claim is made. A handler that answers
+        nothing, or a ``suspend()`` that raises, keeps the pre-#2026 prefix.
+        """
+        outcome: Optional[SuspendOutcome] = None
+        try:
+            outcome = await handler.suspend(user_id, session_id)
+        except Exception as suspend_err:
+            logger.warning(
+                "Error suspending process on a fall-through turn",
+                process_type=handler.process_type.value,
+                error=str(suspend_err),
+            )
+        if outcome == SuspendOutcome.CLOSED:
+            return None
+        from services.process.off_topic import format_off_topic_pause_message
+
+        return format_off_topic_pause_message(handler.process_type)
 
     async def _close_process(
         self,
@@ -663,20 +717,11 @@ class ProcessRegistry:
                 pause_message=format_release_prefix(handler.process_type),
             )
 
-        # Mid-flow — Option A UX (#899): pause (resumable) + answer.
-        try:
-            await handler.suspend(user_id, session_id)
-        except Exception as suspend_err:
-            logger.warning(
-                "Error suspending process after off-intent escape",
-                process_type=handler.process_type.value,
-                error=str(suspend_err),
-            )
-        from services.process.off_topic import format_off_topic_pause_message
-
+        # Mid-flow — Option A UX (#899): pause (resumable) + answer. The
+        # prefix follows what suspend() did (#2026).
         return ProcessCheckResult.off_topic_pause(
             process_type=handler.process_type,
-            pause_message=format_off_topic_pause_message(handler.process_type),
+            pause_message=await self._suspend_for_fall_through(handler, user_id, session_id),
         )
 
     async def check_suspended_processes(
@@ -808,22 +853,13 @@ class ProcessRegistry:
                             user_id=user_id,
                             session_id=session_id,
                         )
-                        # Option A UX: auto-pause + let normal intent processing answer
-                        try:
-                            await handler.suspend(user_id, session_id)
-                        except Exception as suspend_err:
-                            logger.warning(
-                                "Error suspending process after off-topic detection",
-                                process_type=handler.process_type.value,
-                                error=str(suspend_err),
-                            )
-
-                        from services.process.off_topic import format_off_topic_pause_message
-
-                        pause_msg = format_off_topic_pause_message(handler.process_type)
+                        # Option A UX: auto-pause + let normal intent processing
+                        # answer. The prefix follows what suspend() did (#2026).
                         return ProcessCheckResult.off_topic_pause(
                             process_type=handler.process_type,
-                            pause_message=pause_msg,
+                            pause_message=await self._suspend_for_fall_through(
+                                handler, user_id, session_id
+                            ),
                         )
 
                     # Let the handler process the message

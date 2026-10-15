@@ -14,7 +14,13 @@ from typing import Any, Dict, Optional
 
 import structlog
 
-from services.process.registry import GuidedProcess, ProcessCheckResult, ProcessType, SuspendedInfo
+from services.process.registry import (
+    GuidedProcess,
+    ProcessCheckResult,
+    ProcessType,
+    SuspendedInfo,
+    SuspendOutcome,
+)
 from services.process.standup_copy import (
     STANDUP_DEFER_PAUSE_REPLY,
     STANDUP_DROP_REPLY,
@@ -513,7 +519,7 @@ class StandupProcessAdapter:
         self,
         user_id: Optional[str],
         session_id: Optional[str],
-    ) -> None:
+    ) -> Optional[SuspendOutcome]:
         """
         Suspend the active standup conversation.
 
@@ -524,6 +530,11 @@ class StandupProcessAdapter:
         standup (INITIATED, nothing captured) has nothing to keep, so
         suspending it CLOSES it (ABANDONED). No empty SUSPENDED row exists to
         be offered back as a standup that never began.
+
+        #2026: returns what it did, so a caller's "I've paused it" prefix
+        follows the transition: ``CLOSED`` at the invitation, ``PAUSED``
+        once SUSPENDED, None when there was nothing to act on or the
+        transition failed (the caller keeps its pre-#2026 behaviour).
         """
         from services.shared_types import StandupConversationState
 
@@ -534,11 +545,11 @@ class StandupProcessAdapter:
                 user_id=user_id,
                 session_id=session_id,
             )
-            return
+            return None
 
         if conversation.state == StandupConversationState.INITIATED:
             await self.close(user_id, session_id)
-            return
+            return SuspendOutcome.CLOSED
 
         manager, _ = self._get_components()
         try:
@@ -557,6 +568,8 @@ class StandupProcessAdapter:
                 conversation_id=conversation.id,
                 error=str(e),
             )
+            return None
+        return SuspendOutcome.PAUSED
 
     async def in_completion_tail(
         self,
