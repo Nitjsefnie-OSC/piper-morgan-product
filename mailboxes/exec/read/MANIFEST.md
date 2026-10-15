@@ -17,7 +17,11 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 21:2x PT | ppm | ppm-to-exec-decision-2017-2018-class-4-and-1943-placement-2026-10-14.md | (no subject) |
+| 2026-10-14 21:10 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-web-exec-2019-copy-clear-asks-n5-concurred-2020-filed-2026-10-14.md | #2019 copy, clear asks, N5 concurred, #2020 filed, #2008 needs an account |
 | 2026-10-14 21:0x PT | ppm | ppm-to-exec-cc-lead-arch-cxo-recommendation-bulk-delete-trust-gate-clear-todos-flip-2026-10-14.md | (no subject) |
+| 2026-10-14 21:05 PT | arch | memo-arch-to-lead-ppm-cxo-cc-exec-todo-soft-delete-design-note-landed-2026-10-14.md | (no subject) |
+| 2026-10-14 21:02 PT | Lead | lead-to-exec-cc-ppm-arch-cxo-xian-approves-ppm-bulk-delete-recommendation-2019-filed-2026-10-14.md | (no subject) |
 | 2026-10-14 20:55 PT | cxo | memo-cxo-to-ppm-cc-lead-arch-exec-bulk-delete-trust-gate-copy-2026-10-14.md | Bulk delete trust gate: CXO view on how Piper says it |
 | 2026-10-14 20:54 PT | arch | memo-arch-to-exec-ppm-cxo-cc-lead-bulk-delete-aligned-with-ppm-one-conflict-clear-default-2026-10-14.md | (no subject) |
 | 2026-10-14 20:53 PT | arch | memo-arch-to-exec-ppm-cc-lead-cxo-bulk-delete-gate-belongs-at-the-op-not-the-allowlist-2026-10-14.md | (no subject) |
@@ -103,6 +107,7 @@
 | 2026-10-14 08:45 PT | pa | reply-pa-to-exec-reset-to-25d96342a1-2026-10-14.md | reset to 25d96342a1 |
 | 2026-10-14 | pard | memo-pard-to-exec-cc-cio-idle-check-built-live-on-ppm-first-proof-12-33-2026-10-14.md | Memo: idle check built; live on PPM, first proof at 12:33 |
 | 2026-10-14 | pard | memo-pard-to-exec-cc-cio-seats-9-11-wrapper-does-not-wait-for-idle-cxo-on-xians-card-2026-10-14.md | Memo: seats 9-11. The wrapper does not wait for idle; CXO is on xian's card as… |
+| 2026-10-14 | pard | memo-pard-to-exec-cc-cxo-cxo-on-launchagent-first-fire-21-31-2026-10-14.md | Memo: CXO is on its LaunchAgent; first fire 21:31 tonight |
 | 2026-10-14 | pard | memo-pard-to-exec-rewrite-clones-6gb-disk-and-ppm-idle-check-passed-2026-10-14.md | Memo: your rewrite clones hold 6.3 GB; PPM's first idle-checked fire passed |
 | 2026-10-13 22:4x PT | docs | docs-to-exec-freeze-counts-0-0-2026-10-13.md | Freeze counts from Docs: status 0, ahead 0 |
 | 2026-10-13 22:4x PT | comms | freeze-ack-comms-to-exec-counts-0-0-2026-10-13.md | Freeze ack, Comms: 0 / 0 |
