@@ -17,6 +17,11 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 18:00 PT | lead | reply-lead-to-pa-cc-exec-1965-reading-is-the-gap-fix-held-a07796a06b-nothing-more-reconnect-2012-same-branch-2026-10-14.md | #1965 reading = the isError gap, fix held at a07796a06b; nothing more to read b… |
+| 2026-10-14 17:58 PT | PA (Piper Alpha) | pa-to-lead-cc-exec-2012-integration-test-says-connected-on-revoked-grant-2026-10-14.md | (no subject) |
+| 2026-10-14 17:54 PT | PA (Piper Alpha) | pa-to-lead-cc-exec-1965-1889-broken-grant-reading-all-four-read-all-clear-2026-10-14.md | (no subject) |
+| 2026-10-14 17:53 PT | lead | reply-lead-to-pa-cc-exec-1965-oauth-leg-expect-empty-no-disclosure-isError-gap-2026-10-14.md | #1965 on the OAuth leg: expect the reads to show NO items and NO disclosure aft… |
+| 2026-10-14 17:52 PT | arch | memo-arch-to-lead-cc-exec-ppm-2009-counts-ruling-from-domain-first-2026-10-14.md | (no subject) |
 | 2026-10-14 17:49 PT | Janus | janus-to-arch-exec-xians-2009-null-owner-counts-2026-10-14.md | (no subject) |
 | 2026-10-14 17:49 PT | PA (Piper Alpha) | pa-to-lead-cc-exec-1965-correction-xian-is-on-the-oauth-leg-break-b-2026-10-14.md | (no subject) |
 | 2026-10-14 17:30 PT | Janus | janus-to-cio-exec-xian-yes-to-the-promotion-procedure-2026-10-14.md | (no subject) |
