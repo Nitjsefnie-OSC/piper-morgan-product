@@ -119,6 +119,36 @@ class GitHubReadFailed(Exception):
         self.reason = reason
 
 
+class GitHubToolError(Exception):
+    """#1965 (OAuth leg): github-mcp-server answered a tool call with ``isError: true``.
+
+    The MCP SDK returns such a result instead of raising, and its content is the error
+    text ("... 401 Bad credentials"), not JSON; left unchecked it fell into the tolerant
+    payload parsers and read as an EMPTY list, so a revoked grant looked like "verified
+    empty" (#1965's title). Raised by ``_tool_text`` so the call sites' existing
+    ``except Exception`` rail degrades it with the reason the text names.
+    """
+
+    def __init__(self, text: str):
+        super().__init__(text or "github-mcp-server tool error")
+        self.text = text or ""
+        self.reason = _reason_for_tool_error(self.text)
+
+
+_AUTH_FAILURE_MARKERS = ("401", "bad credentials", "requires authentication", "unauthorized")
+
+
+def _reason_for_tool_error(text: str) -> "DegradationReason":
+    """Tool-error text → the connector taxonomy: an auth failure is STALE_TOKEN (re-authorize),
+    a 404 is RESOURCE_NOT_FOUND, anything else UNREACHABLE (mirrors ``_reason_for_status``)."""
+    low = (text or "").lower()
+    if any(m in low for m in _AUTH_FAILURE_MARKERS):
+        return DegradationReason.STALE_TOKEN
+    if "404" in low or "not found" in low:
+        return DegradationReason.RESOURCE_NOT_FOUND
+    return DegradationReason.UNREACHABLE
+
+
 def _reason_for_status(status: int) -> "Optional[DegradationReason]":
     """#1965: HTTP status → the connector taxonomy (unknown codes → UNREACHABLE)."""
     if status == 401:
@@ -355,8 +385,13 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
         catch ``Exception`` and defer the reason to here rather than hard-coding it."""
         from services.connectors.server_ref_resolver import ServerRefResolutionError
 
-        if isinstance(exc, ServerRefResolutionError):
-            return DegradationReason.MISCONFIGURED
+        # The MCP session's task group wraps an exception raised inside ``_mcp_client_ctx``
+        # in an ExceptionGroup, so classify the LEAVES (``_leaf_exceptions``), not the wrapper.
+        for leaf in GitHubMCPSpatialAdapter._leaf_exceptions(exc):
+            if isinstance(leaf, ServerRefResolutionError):
+                return DegradationReason.MISCONFIGURED
+            if isinstance(leaf, GitHubToolError):
+                return leaf.reason  # #1965 OAuth leg: GitHub's 401 is STALE_TOKEN, not an outage
         return DegradationReason.UNREACHABLE
 
     async def degrade(self, reason: DegradationReason) -> DegradationResponse:
@@ -430,7 +465,7 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
         try:
             async with self._mcp_client_ctx(binding_or_degrade) as client:
                 result = await client.call_tool(_REPOS_TOOL, {"query": _MY_REPOS_QUERY})
-                repos = self._parse_repo_search(self._first_text(result.content), limit=limit)
+                repos = self._parse_repo_search(self._tool_text(result), limit=limit)
         except Exception as exc:
             logger.warning(
                 "GitHub MCP search_repositories failed (server unreachable/unprovisioned)",
@@ -819,9 +854,7 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
                 result = await client.call_tool(
                     tool, {"query": query, "perPage": max(1, min(limit, 100))}
                 )
-                items, total = self._parse_issue_search(
-                    self._first_text(result.content), limit=limit
-                )
+                items, total = self._parse_issue_search(self._tool_text(result), limit=limit)
         except Exception as exc:
             logger.warning(
                 "GitHub MCP search failed (server unreachable/unprovisioned)", exc_info=True
@@ -936,7 +969,7 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
                         "method": _ISSUE_READ_GET,
                     },
                 )
-                item = self._parse_issue_detail(self._first_text(result.content))
+                item = self._parse_issue_detail(self._tool_text(result))
         except Exception as exc:
             logger.warning(
                 "GitHub MCP issue_read failed (server unreachable/unprovisioned)", exc_info=True
@@ -999,7 +1032,7 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
                         "method": _ISSUE_READ_GET,
                     },
                 )
-                text = self._first_text(result.content)
+                text = self._tool_text(result)
                 item = self._parse_issue_detail(text)
         except Exception as exc:
             # Lead review (1959): see _github_404 — GitHub's 404 shape, not any "not found".
@@ -1068,7 +1101,7 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
                 result = await client.call_tool(
                     tool, {"owner": resolved.owner, "repo": resolved.name}
                 )
-                items = parse(self._first_text(result.content))
+                items = parse(self._tool_text(result))
         except Exception as exc:
             logger.warning(
                 "GitHub MCP repo-scoped read failed (server unreachable/unprovisioned)",
@@ -1355,7 +1388,16 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
         fixture, with the tool identifier (``_RESOLVE_TOOL``) the one provisional constant.
         """
         result = await client.call_tool(_RESOLVE_TOOL, {"kind": resource.kind, **resource.params})
-        return self._first_text(result.content) or None
+        return self._tool_text(result) or None
+
+    @classmethod
+    def _tool_text(cls, result) -> str:
+        """The text of a READ tool result, or ``GitHubToolError`` when the server flagged
+        ``isError`` (#1965 OAuth leg). Read sites use this instead of ``_first_text`` so an
+        error payload can never parse as an empty list."""
+        if getattr(result, "isError", False):
+            raise GitHubToolError(cls._first_text(getattr(result, "content", None)))
+        return cls._first_text(result.content)
 
     @staticmethod
     def _first_text(content) -> str:

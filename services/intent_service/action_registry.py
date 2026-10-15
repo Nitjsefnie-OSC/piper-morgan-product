@@ -356,7 +356,15 @@ ACTION_EXAMPLES: dict[tuple[str, str], str] = {
     ("EXECUTION", "list_todos"): "Show me my open todos",
     ("EXECUTION", "next_todo"): "Pull up whichever todo you think comes next",
     ("EXECUTION", "delete_todo"): "Scrap the todo about renaming things",
-    ("ANALYSIS", "analyze_blockers"): "What's blocking the milestone?",
+    # 2026-10-14 (Lead; Arch's standing-member rule, decisions.log 10-13/10-14): the
+    # ANALYSIS margin fix — an ADDITIVE example (the least-perturbing lever) for
+    # the corpus row "let's analyze the risk here" (expects analyze_blockers), which
+    # read CLARIFY 5/6 on main. Description unchanged. Rule 7: x6 vs same-minute
+    # main + full corpus run before landing.
+    (
+        "ANALYSIS",
+        "analyze_blockers",
+    ): "What's blocking the milestone? / Let's analyze the risk here",
     # #1624: LLM-lane phrasing (pre_classify declines it — verified in the
     # forensics measurement 2026-08-15, so validate_registry_coverage's
     # pre-classifier sweep is a no-op for this row by construction).

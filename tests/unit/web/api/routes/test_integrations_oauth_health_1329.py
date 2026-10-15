@@ -64,7 +64,23 @@ async def test_non_github_integration_unaffected_by_oauth_shortcircuit():
 async def test_github_test_button_succeeds_when_oauth_bound():
     """The Integration-Health 'Test' button reports success via the connector when BOUND,
     without probing the (possibly dead) native PAT — keeps it consistent with the health row."""
-    with patch.object(integrations, "_github_oauth_bound", new=AsyncMock(return_value=True)):
+    # #2012: the Test no longer selects a leg by row presence; the resolver picks it and one
+    # real read follows. A live OAuth credential whose probe answers is the pass case.
+    from services.mcp.consumer.github_adapter import GitHubCredential, GitHubReposResult
+
+    credential = GitHubCredential(owner_id="u1", mcp_server_ref="github", token=None, leg="oauth")
+    probe = AsyncMock(return_value=GitHubReposResult(repositories=[{"full_name": "o/r"}]))
+    with (
+        patch(
+            "services.mcp.consumer.github_adapter.GitHubMCPSpatialAdapter.resolve_credential",
+            new=AsyncMock(return_value=credential),
+        ),
+        patch(
+            "services.mcp.consumer.github_adapter.GitHubMCPSpatialAdapter.search_user_repositories",
+            new=probe,
+        ),
+    ):
         result = await integrations._test_github(user_id="u1")
     assert result["success"] is True
-    assert "OAuth" in result.get("message", "")
+    assert "GitHub connection" in result.get("message", "")
+    probe.assert_awaited_once()
