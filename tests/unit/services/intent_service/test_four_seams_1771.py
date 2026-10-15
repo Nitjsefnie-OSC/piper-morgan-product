@@ -425,14 +425,17 @@ class TestInvitation:
             assert await w.state(conv) == StandupConversationState.GATHERING_YESTERDAY
 
     @pytest.mark.asyncio
-    @pytest.mark.parametrize("turn", ["cancel", "stop", "quit", "never mind", "exit", "skip"])
+    @pytest.mark.parametrize("turn", ["cancel", "stop", "quit", "never mind", "exit"])
     async def test_bare_escape_words_end_at_the_invitation(self, turn):
         """OPEN POINT closed (Arch 2026-10-15): bare "cancel" (and every #888
         escape word) at the invitation ENDS with the invitation line. The
         hatch is not carved: it still intercepts first; the standup adapter's
         ``suspend()`` closes an unstarted standup, and its copy hooks read the
         state. Was: "cancel" pauses with the escape line (the landed
-        behaviour, pinned as an open point)."""
+        behaviour, pinned as an open point). "skip" left this list with the
+        #888 word map (2026-10-15): it is no longer an escape word; its
+        invitation pin is ``test_escape_end_vs_pause_888``
+        ``TestSkipAtTheInvitationLeaves`` (same line, via the handler)."""
         sid = str(uuid4())
         with _World() as w:
             conv = await w.invitation(sid)

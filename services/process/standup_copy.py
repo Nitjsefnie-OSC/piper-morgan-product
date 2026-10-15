@@ -24,7 +24,8 @@ STANDUP_DEFER_PAUSE_REPLY = (
     "Okay, I'll leave your standup where it is. Just ask when you want to pick it back up."
 )
 
-# PAUSE after a #888 PAUSE escape word (``registry.ESCAPE_PAUSE_WORDS``: "stop").
+# PAUSE after a #888 PAUSE escape word (``registry.ESCAPE_PAUSE_WORDS``: "stop",
+# "never mind").
 # Read by ``StandupProcessAdapter.pause_message``. CXO 2026-10-15 08:35: the
 # same line as a deferral (was the 2026-10-14 21:50 "No problem — I've paused
 # your standup…", retired that morning).

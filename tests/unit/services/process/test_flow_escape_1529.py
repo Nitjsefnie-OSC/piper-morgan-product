@@ -162,8 +162,9 @@ class TestOffIntentDetection:
         assert signal.kind == "off_intent"
 
     def test_skip_left_to_888_escape_commands(self):
-        """'skip' is #888 registry territory (and a legit per-part standup
-        skip); the escape module must not claim it."""
+        """'skip' is a legit per-part standup skip (and, since the #888 word
+        map of 2026-10-15, not a registry escape word either); the escape
+        module must not claim it."""
         assert check_escape("skip", ProcessType.STANDUP) is None
 
 

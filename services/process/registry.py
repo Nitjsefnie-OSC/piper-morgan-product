@@ -29,7 +29,7 @@ logger = structlog.get_logger(__name__)
 # PPM binding direction (2026-03-13): These bypass workflow handlers entirely.
 # Arch guidance: Exact match on stripped+lowercased full message. Use frozenset.
 #
-# #888 split (Arch 2026-10-15, on #1771): the six words are two sets, generic
+# #888 split (Arch 2026-10-15, on #1771): the escape words are two sets, generic
 # across processes. The REGISTRY decides the transition from the word alone,
 # before any handler runs; the handler supplies only the line for each outcome
 # (``pause_message`` / ``drop_message``), never the choice. The word map is
@@ -37,11 +37,15 @@ logger = structlog.get_logger(__name__)
 #
 # END: terminal, through ``_close_process`` (the handler's ``close()``; no
 # resume re-offer, the #1529 anti-nag).
-ESCAPE_END_WORDS: frozenset = frozenset({"cancel", "quit", "exit", "never mind"})
-# PAUSE: ``suspend()``, resumable. ``skip`` stays here, where it was (every
-# escape word paused before the split), until CXO places it: in a guided
-# interview it may mean "skip this question" (Arch 10-15, not ruled).
-ESCAPE_PAUSE_WORDS: frozenset = frozenset({"stop", "skip"})
+# A word that explicitly withdraws ends (CXO 2026-10-15 word map).
+ESCAPE_END_WORDS: frozenset = frozenset({"cancel", "quit", "exit"})
+# PAUSE: ``suspend()``, resumable. A word that could mean "not right now"
+# pauses; "never mind" can mean "forget that answer", so it takes the
+# reversible path (CXO 2026-10-15; Arch: uncertain meaning never destroys).
+# ``skip`` is NOT an escape word (Arch 2026-10-15, generic, every process): it
+# reaches the handler as ordinary text, which owns its meaning (the standup
+# reads it as "nothing for this part"; Piper offers it as a suggestion there).
+ESCAPE_PAUSE_WORDS: frozenset = frozenset({"stop", "never mind"})
 # The union, for readers that only ask "is this an escape word?" (the
 # destructive-confirm decline set, the #1529 bare-exit comment, tests).
 ESCAPE_COMMANDS: frozenset = ESCAPE_END_WORDS | ESCAPE_PAUSE_WORDS
