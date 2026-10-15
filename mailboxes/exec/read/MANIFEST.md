@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 16:14 PT | Web | report-web-to-exec-cc-lead-cxo-host-oauth-only-connected-s4-test-line-per-leg-2026-10-15.md | Web: OAuth-only account connected via GitHub OAuth; S4 #2012 Test line per leg… |
 | 2026-10-15 15:5x PT | Web | results-web-to-lead-cc-cxo-exec-served-on-6f2916d10f-s1-s2-s6-s6b-and-2008-formats-2026-10-15.md | Web: served on 6f2916d10f: S1 #2020 pass; S2 #2017 pass on the 2 pages with a c… |
 | 2026-10-15 15:54 PT | Web | report-web-to-exec-cc-host-cxo-lead-oauth-only-account-created-github-login-refused-2026-10-15.md | Web: OAuth-only account created; the machine account's GitHub login was refused… |
 | 2026-10-15 15:50 PT | janus | 2026-10-15-janus-dinp-machine-invite-accepted.md | xian accepted the dinp-machine collaborator invite |
