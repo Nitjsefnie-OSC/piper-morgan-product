@@ -100,9 +100,10 @@ corpus:
     source: "corpus-1283"
   - phrase: "list my projects"
     category: PORTFOLIO
-    expected: action:manage_portfolio
+    expected: action:list_projects
     source: "corpus-1283 + probe-row-9"
     surface1_claim: "portfolio/manage_portfolio"
+    notes: "RULED 2026-10-04 (Arch): list_projects is the post-split read (the live QUERY entry in read_status); was action:manage_portfolio, the pre-split half. Re-pointed 2026-10-14 (Lead) in the ANALYSIS margin-fix commit, where the row surfaced as a named regression (x6: main manage_portfolio 5/1, candidate 3/3; not attributable). Day-one path P8: quoted once on the next promotion's served read (active projects shown; CXO judges)."
     probe_verdict: "AGREE"
   - phrase: "close issue 42"
     category: EXECUTION
