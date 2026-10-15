@@ -48,6 +48,12 @@ THANKS_AFTER_DELIVERY = "You're welcome."
 # open gets a short acknowledgement and nothing else — the floor used to
 # compose an ack AND an unrequested todo list from the assembled context.
 BARE_DECLINE_NOTHING_OPEN = "Okay."
+# #2033 (CXO, 2026-10-15; folds #2032): with NO guided process active or
+# suspended, a bare cancel/stop word gets this line from code, nothing
+# appended. The floor used to narrate an action code never took ("Got it —
+# standup cancelled." plus a reminder tail; ADR-080 breach). A statement, not
+# an ask. Its standup sibling is ``standup_copy.STANDUP_NOT_RUNNING_REPLY``.
+NOTHING_RUNNING_TO_CANCEL = "There's nothing running to cancel."
 FAREWELL_LINE = "Goodbye for now."
 
 # Kind-matched acknowledgments — CXO's copy, verbatim.
