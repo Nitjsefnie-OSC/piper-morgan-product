@@ -96,7 +96,10 @@ The pass had been true for a layer no page named. Pard fixed it at 19:15 (mediaj
 carries PM's project `.claude/` from origin/main.
 
 Nobody checked what the drumbeat exercised before removing a layer: not Pard, who removed it, and not CIO, who wrote
-the registry and recommended it. The error was caught in about 8 hours, because the probe fails loudly.
+the registry and recommended it. The error was caught in about 8 hours, because the probe fails loudly. m-44 already carried a July
+note on this same drumbeat ("probes the path that is gated by construction"), filed in PPM's
+can't-fail family. The two findings are different. July: the result was predetermined. October: the
+target was unnamed. A probe can have both problems at once.
 
 **Corollary:** when a rule exists in more than one copy, the probe's description names the copy it hits. Before
 removing a copy, find what probes it (sunset-or-renew, "Before you remove").

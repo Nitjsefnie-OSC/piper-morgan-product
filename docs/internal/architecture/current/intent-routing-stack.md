@@ -56,6 +56,17 @@ Related fix, same commit: the #899 off-topic/release prefix used to be
 silently dropped by every early handler return — it now rides
 `_apply_soft_offer` (the 12-site funnel).
 
+**#2026 (2026-10-15) — the #899/#1529 pause prefix follows the transition**:
+a handler's `suspend()` reports what it did (`SuspendOutcome.PAUSED` /
+`CLOSED`; None reads as PAUSED). The registry renders the "I've paused it —
+you can say 'resume'" prefix only when something paused; the standup adapter
+CLOSES an unstarted standup (INITIATED, "ready to start?"), so an off-topic or
+off-intent turn there falls through with no prefix and is just answered (CXO
+2026-10-15). `_check_active_guided_process` then returns `(None, None,
+ProcessType)`: the flow is still named, so the #1596 `guided_flow_escape` stamp
+(now keyed on the flow, not the prefix) still tells the floor not to re-open
+the invitation. Pins: `tests/unit/services/process/test_invitation_fall_through_prefix_2026.py`.
+
 **#1623 mid-gathering hold (2026-08-15), the same seam's inverse guarantee**:
 an ACTIVE gathering flow HOLDS its turns. The thief was never a surface in
 this chain — measured, every content-dependent surface at/above the process
