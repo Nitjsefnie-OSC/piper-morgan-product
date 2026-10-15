@@ -115,6 +115,19 @@ INTEGRATION_REGISTRY = {
                 "message": "Repository not found or inaccessible",
                 "fix": "Check repository permissions and token scope",
             },
+            # #2012: the OAuth Test's live probe degrades with the connector taxonomy.
+            "stale_token": {
+                "message": "Your GitHub connection needs re-authorizing",
+                "fix": "In Settings → Integrations → GitHub, Disconnect, then Connect with GitHub",
+            },
+            "connect_required": {
+                "message": "GitHub is not connected for your account",
+                "fix": "In Settings → Integrations → GitHub, Connect with GitHub",
+            },
+            "unreachable": {
+                "message": "GitHub's MCP server is unreachable right now",
+                "fix": "Try again in a few minutes",
+            },
         },
     },
     "calendar": {
@@ -534,6 +547,29 @@ async def _test_slack(user_id: Optional[str] = None) -> Dict[str, Any]:
         return {"success": False, "error": str(e), "error_type": "connection_failed"}
 
 
+async def _probe_github_oauth(user_id: Optional[str]) -> Dict[str, Any]:
+    """#2012: the live half of the OAuth Test — one authenticated read over the connector.
+
+    ``search_user_repositories`` goes binding → grant → github-mcp-server → GitHub; a
+    revoked grant comes back as a STALE_TOKEN degrade (#1965's tool-error mapping), a
+    down server as UNREACHABLE, a missing grant as CONNECT_REQUIRED. Each maps to an
+    ``error_type`` the registry's guidance table knows, so the card shows the fix.
+    """
+    from services.mcp.consumer.connector import DegradationReason
+    from services.mcp.consumer.github_adapter import GitHubMCPSpatialAdapter
+
+    result = await GitHubMCPSpatialAdapter().search_user_repositories(user_id or "system", limit=1)
+    if result.degradation is None:
+        return {"success": True, "message": "Connected via OAuth (MCP connector)"}
+    reason = result.degradation.reason
+    error_type = reason.value if isinstance(reason, DegradationReason) else "connection_failed"
+    return {
+        "success": False,
+        "error": result.degradation.user_message,
+        "error_type": error_type,
+    }
+
+
 async def _test_github(user_id: Optional[str] = None) -> Dict[str, Any]:
     """Test GitHub connection (Issue #562).
 
@@ -543,9 +579,12 @@ async def _test_github(user_id: Optional[str] = None) -> Dict[str, Any]:
     no OAuth binding.
     """
     try:
-        # #1329: OAuth connector takes precedence — a bound connector is connected.
+        # #1329: OAuth connector takes precedence. #2012: a BOUND binding row is not a
+        # connection — a revoked or expired grant leaves the row in place — so make ONE real
+        # authenticated call through the same resolver the reads use (the user's own repos,
+        # limit 1) and report what GitHub actually answered.
         if await _github_oauth_bound(user_id):
-            return {"success": True, "message": "Connected via OAuth (MCP connector)"}
+            return await _probe_github_oauth(user_id)
 
         import aiohttp
 

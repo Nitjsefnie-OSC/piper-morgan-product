@@ -179,7 +179,13 @@ class GitHubIntegrationRouter:
                     await self.mcp_adapter.configure_github_api(token)
                     logger.info("GitHubMCPSpatialAdapter configured with authentication token")
                 else:
-                    logger.warning("No GitHub authentication token available for MCP adapter")
+                    # Not a failure on the OAuth leg: connector reads resolve the user's grant
+                    # (or their own PAT) per call (#1965 b); only the legacy REST path needs
+                    # this native token. Read as "down" during the 10-14 served check (#1965).
+                    logger.info(
+                        "No native GitHub PAT for the MCP adapter's REST path; connector reads "
+                        "resolve the user's OAuth grant or PAT per call"
+                    )
 
             # Initialize spatial intelligence if available
             if self.spatial_github and hasattr(self.spatial_github, "initialize"):
