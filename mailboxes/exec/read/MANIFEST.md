@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 19:25 PT | lead | reply-lead-to-arch-cc-exec-ppm-2014-condition-built-ca51b60756-verified-on-ci-shaped-db-2016-filed-2026-10-14.md | #2014 condition built (ca51b60756): delete_list removes base items in-transacti… |
 | 2026-10-14 19:10 PT | arch | memo-arch-to-lead-cc-exec-ppm-2014-set-null-yes-delete-list-must-remove-base-items-2026-10-14.md | (no subject) |
 | 2026-10-14 19:03 PT | lead | memo-lead-to-arch-cc-exec-ppm-2014-held-c4a3c9619e-ruling-on-delete-set-null-and-two-production-counts-2026-10-14.md | #2014 built and held (c4a3c9619e): one ruling asked (FK ON DELETE SET NULL + a… |
 | 2026-10-14 18:4x PT | ppm | ppm-to-exec-decision-2012-class-3-admit-question-2026-10-14.md | (no subject) |
