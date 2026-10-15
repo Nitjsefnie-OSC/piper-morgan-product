@@ -1,8 +1,8 @@
 # S5: GitHub reads with the Alpha app revoked (#1965, #1889, plus #2012's Test)
 
 **Owner**: PA, run by xian. **Written** 2026-10-15 09:48 from the code on main (Lead's landing `4a39c01ce2`).
-**Run it only after the promotion that carries it**: alpha `/health` `git_sha` must not be `5e5f3366c4`. PA
-confirms the sha has the fix before you start. About 10 minutes.
+**READY (15:34 10-15): alpha serves `6f2916d10f`, which carries #1965/#2012 (`4a39c01ce2`) and #2017 (`322681a4e2`).** PA checked both by ancestry.
+About 10 minutes.
 
 **Why**: on 10-14, with the Alpha app revoked, all four reads still said "no open issues" (4 of 4 FAIL). Lead's fix
 makes a revoked grant read as a broken connection. This run shows it on the served app.
