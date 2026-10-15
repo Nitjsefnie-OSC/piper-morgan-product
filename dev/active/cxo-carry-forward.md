@@ -328,3 +328,4 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - 10:15 tick: CI 12/12, inbox empty, alpha de7d0c1c57, UX 8; nothing to do. Next ~13:16.
 - 10:50 OWED: when the first pm-cxo-cycle LaunchAgent fire lands, CronDelete 50910804 and update registry row 100 (Exec notice). Until then keep the session cron.
 - 15:20 tick: CI 12/12, alpha de7d0c1c57, UX 10; ruled #2011 sites by tier (97 literals). Next ~19:17, then STOP ~22:17; LaunchAgent first-fire watch: delete 50910804 when it lands.
+- 19:17 tick: CI 12/12, inbox empty, alpha de7d0c1c57, UX 10; nothing to do. Next: STOP ~22:17 (delete 50910804 if LaunchAgent has fired, else re-arm).
