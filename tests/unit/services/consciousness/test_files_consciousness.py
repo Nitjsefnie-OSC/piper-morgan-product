@@ -15,13 +15,13 @@ class TestProjectsConsciousness:
         output = format_projects_conscious(projects)
         assert "I" in output or "I'" in output, "Should have identity"
 
-    def test_projects_list_has_invitation(self):
-        """Project listing must have dialogue invitation."""
+    def test_projects_list_has_no_unarmed_invitation(self):
+        """#2010: the list ends plainly; a closing offer nothing keeps is a broken promise."""
         from services.consciousness.files_consciousness import format_projects_conscious
 
         projects = [{"name": "project1", "active": True}]
         output = format_projects_conscious(projects)
-        assert "?" in output, "Should have invitation"
+        assert "?" not in output, "closing question dropped (#2010)"
 
     def test_projects_highlights_active(self):
         """Active project should be emphasized."""
@@ -36,10 +36,18 @@ class TestProjectsConsciousness:
 
     def test_no_projects_has_identity(self):
         """No projects message should have identity."""
-        from services.consciousness.files_consciousness import format_projects_conscious
+        from services.consciousness.files_consciousness import (
+            empty_projects_message,
+            format_projects_conscious,
+        )
 
-        output = format_projects_conscious([])
-        assert "I" in output or "I'" in output
+        # #2010: the empty state is the shared #852 string (one source),
+        # rendered by callers that arm it; the formatter itself never asks.
+        assert (
+            empty_projects_message()
+            == "You don't have any active projects yet. Would you like to add one?"
+        )
+        assert "?" not in format_projects_conscious([])
 
 
 class TestMVCCompliance:
@@ -53,6 +61,6 @@ class TestMVCCompliance:
         projects = [{"name": "test-project", "active": True}]
         output = format_projects_conscious(projects)
         result = validate_mvc(output)
-        # At minimum, should have identity and invitation
+        # Identity stays; the invitation is deliberately absent (#2010).
         assert result.checks["identity"], f"Missing identity in: {output}"
-        assert result.checks["invitation"], f"Missing invitation in: {output}"
+        assert "?" not in output

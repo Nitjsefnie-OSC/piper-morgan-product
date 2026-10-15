@@ -11,23 +11,62 @@ from typing import Any, Dict, List
 from services.consciousness.validation import validate_mvc
 
 
-def _fix_mvc_gaps(narrative: str, mvc_result) -> str:
-    """Fix MVC compliance gaps in narrative."""
+def _fix_mvc_gaps(narrative: str, mvc_result, skip_invitation: bool = False) -> str:
+    """Fix MVC compliance gaps in narrative.
+
+    ``skip_invitation`` (#2010): the project list deliberately carries no
+    closing question (nothing is armed to keep it), so the generic
+    "Want me to tell you more..." filler must not be re-added.
+    """
     sections = [narrative]
 
     if "identity" in mvc_result.missing:
         # Prepend identity statement
         sections.insert(0, "I looked at your projects.")
 
-    if "invitation" in mvc_result.missing:
+    if "invitation" in mvc_result.missing and not skip_invitation:
         # Append invitation
         sections.append("\nWant me to tell you more about any of these?")
 
     if "uncertainty" in mvc_result.missing:
         # Add uncertainty marker
-        sections[0] = "I think " + sections[0][0].lower() + sections[0][1:]
+        first = sections[0]
+        # Keep the pronoun "I" / "I'm" capitalised ("I think I'm", not "i'm").
+        if not (first.startswith("I ") or first.startswith("I'")):
+            first = first[0].lower() + first[1:]
+        sections[0] = "I think " + first
 
     return "\n".join(sections)
+
+
+# #2010: the ONE empty-state message and offer hint for "list my projects",
+# shared by both renderers so they cannot drift apart:
+# IntentService._handle_projects_query (arms via _track_offer_hint) and the
+# manage_portfolio list branch in services/intent_service/canonical_handlers.py
+# (arms via its result's "offer_hint", #852). The hint becomes
+# ConversationContext.last_offer, so a "yes" starts the add-project flow.
+#
+# Functions, not module constants (Arch 2026-10-15): the unarmed-ask census
+# (tests/test_architecture_enforcement.py TestUnarmedAskSiteRatchet) credits a
+# module-level function through its callers (one hop) when every caller arms;
+# a constant holder cannot be credited that way. Call these ONLY from a holder
+# that arms the hint in the same turn. The question is written in both on
+# purpose (neither calls the other, so each keeps arming callers only);
+# tests/unit/services/intent/test_list_projects_offers_2010.py pins that the
+# message's question IS the offer_text.
+
+
+def empty_projects_message() -> str:
+    """The empty-projects reply; its question is armed by the caller (#2010)."""
+    return "You don't have any active projects yet. Would you like to add one?"
+
+
+def empty_projects_offer_hint() -> Dict[str, str]:
+    """Fresh offer_hint dict for the empty-projects state (#852 / #2010)."""
+    return {
+        "continuation_hint": "add a new project",
+        "offer_text": "Would you like to add one?",
+    }
 
 
 def format_projects_conscious(projects: List[Dict[str, Any]]) -> str:
@@ -44,7 +83,13 @@ def format_projects_conscious(projects: List[Dict[str, Any]]) -> str:
          - Project A (active)
          - Project B (inactive)
 
-         Want me to show you the files in any of these?"
+         (the list stands on its own; no closing offer, #2010)"
+
+    The empty state is NOT rendered here (#2010): its "Would you like to add
+    one?" must be armed in the same turn, which a formatter cannot do. Callers
+    render ``empty_projects_message()`` and arm ``empty_projects_offer_hint()``
+    themselves; given an empty list, this returns a plain statement that asks
+    nothing.
 
     Args:
         projects: List of project dicts with 'name' and optional 'active' keys
@@ -53,10 +98,7 @@ def format_projects_conscious(projects: List[Dict[str, Any]]) -> str:
         Conscious narrative string
     """
     if not projects:
-        return (
-            "I don't see any projects set up yet. "
-            "Want me to help you create one, or would you like to import an existing project?"
-        )
+        return "You don't have any active projects yet."
 
     count = len(projects)
     active_projects = [p for p in projects if p.get("active", True)]
@@ -79,16 +121,15 @@ def format_projects_conscious(projects: List[Dict[str, Any]]) -> str:
 
     sections.append("\n".join(project_lines))
 
-    # Dialogue invitation
-    sections.append(
-        "Want me to show you the files in any of these, or tell you about recent activity?"
-    )
+    # #2010: no closing question. "Show you the files in any of these" and
+    # "recent activity" had no armed flow behind them, so a "yes" held no
+    # state; a plain list is the honest ending.
 
     narrative = "\n\n".join(sections)
 
     # Validate MVC and fix if needed
     mvc_result = validate_mvc(narrative)
     if not mvc_result.passes:
-        narrative = _fix_mvc_gaps(narrative, mvc_result)
+        narrative = _fix_mvc_gaps(narrative, mvc_result, skip_invitation=True)
 
     return narrative

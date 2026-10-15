@@ -4090,7 +4090,9 @@ def register_default_workflows() -> None:
         ),
         (
             _qentry(
-                _make_query_dispatch_entry_point("_handle_projects_query", pass_user_id=True),
+                _make_query_dispatch_entry_point(
+                    "_handle_projects_query", pass_session_id=True, pass_user_id=True
+                ),
                 "projects query via action dispatch",
                 # effect: READ — lists the user's projects; no writes.
                 EffectClass.READ,
