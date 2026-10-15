@@ -97,6 +97,13 @@ ADD_PROJECT_OFFER_DECLINE = "Okay, I'll leave it for now. Say 'add a project' an
 _ADD_PROJECT_OFFER_TAUGHT_DECLINES = ("later",)
 # CXO's accept landing copy (shape B memo, verbatim).
 ADD_PROJECT_ACCEPT_NAME_QUESTION = "What would you like to call it?"
+# CXO's fail-closed line (four-calls memo item 2, 2026-10-15, verbatim): the
+# accept landing could not arm the name question, so it asks nothing and
+# names the one working phrase with an example.
+ADD_PROJECT_OFFER_ARM_FAILED = (
+    "I lost track of that. Say 'add project' and a name, like 'add project Launch', "
+    "and I'll add it."
+)
 
 
 def build_add_project_offer(question: str, user_id=None) -> Dict[str, Any]:
@@ -221,7 +228,7 @@ async def run_offer_add_project_workflow(
     if armed:
         reply = offer["question"]
     else:
-        reply = "I couldn't keep the question open — say 'add project [name]' " "and I'll add it."
+        reply = ADD_PROJECT_OFFER_ARM_FAILED
     return {
         "message": reply,
         "intent_data": {

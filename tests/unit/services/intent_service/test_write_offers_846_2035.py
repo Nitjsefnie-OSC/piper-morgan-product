@@ -416,3 +416,27 @@ class TestOfferTurnHandler:
             user_id=_USER,
         )
         assert out is None
+
+    async def test_accept_landing_fails_closed_with_cxos_line_when_the_store_is_down(self):
+        """CXO's four-calls memo item 2 (2026-10-15): if the accept landing
+        cannot arm the name question, the reply asks nothing (no question a
+        store does not hold) and names the working phrase, verbatim."""
+        from services.intent_service.add_project_clarify import run_offer_add_project_workflow
+
+        exploding = SimpleNamespace(
+            workflow_offer_service=SimpleNamespace(
+                set_pending_offer=MagicMock(side_effect=RuntimeError("store down"))
+            )
+        )
+        offer = build_add_project_offer("Want to add another?", user_id=_USER)
+        out = await run_offer_add_project_workflow(
+            "s-2035-armfail",
+            user_id=_USER,
+            context={"pending_action": offer["pending_action"], "intent_service": exploding},
+        )
+        assert out["message"] == (
+            "I lost track of that. Say 'add project' and a name, like "
+            "'add project Launch', and I'll add it."
+        )
+        assert "?" not in out["message"]
+        assert out["intent_data"]["add_project_name_question_pending"] is False
