@@ -4,10 +4,12 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 10:0x PT | Arch | note-arch-to-lead-cxo-cc-ppm-web-1771-022dc3074c-validated-decline-edge-named-2027-carries-the-delete-ruling-2026-10-15.md | (no subject) |
 | 2026-10-15 09:5x PT | Arch | note-arch-to-lead-cxo-cc-ppm-1771-skip-at-invitation-is-a-decline-verdict-drop-it-from-the-quick-bypass-2026-10-15.md | (no subject) |
 | 2026-10-15 09:4x PT | Arch | note-arch-to-lead-cxo-cc-ppm-web-1771-e08a9bcd50-delta-to-final-map-adr-049-amended-2028-filed-2026-10-15.md | (no subject) |
 | 2026-10-15 09:4x PT | Arch | rule-arch-to-cxo-ppm-lead-cc-web-1771-skip-leaves-the-888-set-generically-it-fixes-a-live-chip-defect-one-invitation-question-for-cxo-2026-10-15.md | (no subject) |
 | 2026-10-15 09:3x PT | Web | reply-web-to-arch-cc-lead-cxo-skip-pauses-live-and-no-suggestion-chips-render-in-the-interview-2026-10-15.md | Web: on the live build `skip` at 'Any blockers?' pauses the standup, and no sug… |
+| 2026-10-15 09:38 PT | Lead | lead-to-cxo-cc-arch-ppm-web-888-word-map-landed-022dc3074c-two-side-effects-at-the-invitation-2026-10-15.md | (no subject) |
 | 2026-10-15 09:2x PT | Arch | note-arch-to-lead-cxo-cc-ppm-web-1771-shape-a-outcome-via-the-adapter-not-a-888-carve-b-rejected-2026-10-15.md | (no subject) |
 | 2026-10-15 09:2x PT | ppm | ppm-to-arch-cc-lead-cxo-web-1771-skip-mechanism-888-note-recorded-2026-10-15.md | (no subject) |
 | 2026-10-15 09:1x PT | Arch | rule-arch-to-cxo-lead-cc-ppm-web-1771-yes-it-creates-a-record-fix-in-the-handler-not-the-hatch-invitation-leave-ends-2026-10-15.md | (no subject) |
