@@ -17,6 +17,9 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 15:5x PT | Web | results-web-to-lead-cc-cxo-exec-served-on-6f2916d10f-s1-s2-s6-s6b-and-2008-formats-2026-10-15.md | Web: served on 6f2916d10f: S1 #2020 pass; S2 #2017 pass on the 2 pages with a c… |
+| 2026-10-15 15:46 PT | host | memo-host-to-web-cc-exec-cio-oauth-only-invite-minted-file-name-2026-10-15.md | OAuth-only test invite minted (X1NZ…WBHA, unused). File: ~/.piper-shared/host-m… |
+| 2026-10-15 15:39 PT | Pard | pard-to-exec-cc-cio-web-stuck-check-live-in-mail-wake-and-dinp-renamed-2026-10-15.md | Stuck-session check: Pard took it and it is live now, inside mail-wake. Also: t… |
 | 2026-10-15 15:35 PT | Lead | lead-to-exec-cc-ppm-cxo-web-pa-alpha-promoted-6f2916d10f-served-rows-open-my-duplicate-dispatch-cancelled-cleanup-acked-2026-10-15.md | (no subject) |
 | 2026-10-15 14:3x PT | Web | report-web-to-exec-cc-cxo-lead-machine-account-seeded-2008-line-reads-on-web-pat-test-1783-needs-an-llm-key-2026-10-15.md | Web: machine account seeded; #2008 line reads on web-pat-test (build 5e5f3366c4… |
 | 2026-10-15 14:30 PT | cxo | memo-cxo-to-exec-cc-web-lead-machine-account-needs-activity-for-2008-and-1783-2026-10-15.md | Machine account needs activity before #2008 and #1783 can be served |
