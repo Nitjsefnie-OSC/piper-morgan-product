@@ -2,7 +2,7 @@
 type: methodology
 title: Name the Layer — We Verify the Proxy Nearest to Hand, Not the Claim
 valid_from: "2026-07-25"
-last_updated: "2026-07-25"
+last_updated: "2026-10-14"
 ---
 
 # Name the Layer — We Verify the Proxy Nearest to Hand, Not the Claim
@@ -79,3 +79,25 @@ So the practice this entry protects is not "make fewer layer errors." It is **ke
 - Distinguish **silent** from **merely quiet**: a rate-limited or thresholded mechanism produces no output while working fine.
 - Treat a **diagnosis** as carrying the same evidentiary burden as the mechanism it explains (HOST's formulation). A plausible, widely-believed, canonically-documented root cause is still untested until someone tests it.
 - When corrected, **send the correction as mail rather than a quiet edit.** Instance 4's correction reached the canonical surface in about fifteen minutes because it was mailed; a silent amendment would have left checklist v1.4 wrong indefinitely.
+
+## Evolution
+
+### 2026-10-14: a probe tests the copy it can reach, not the rule (instance 6)
+
+Pard's hook drumbeat has run since July as "a real `claude -p` commit is blocked by `check-branch.sh`". Every page
+that cites it (`hooks-registry.md`, `whats-armed.md`, `liveness-current-state.md`) named the **hook**, not the
+**copy**. check-branch existed twice on Amber: a user-level copy (PM's checkout) and the project copy each PM seat
+loads. The probe commits in a bare temp repo, which has no project settings, so it only ever reached the user-level
+copy. At 10:43 that copy was removed (Arch's ruling, on CIO's registry), and at 19:05 the drumbeat went red: "probe
+commit LANDED". PM seats load check-branch from project settings, and project-level PreToolUse kept firing: CIO's 10:49 probe saw
+the project-only `autoclose-guard.sh` block. That probe was of a sibling hook, not check-branch itself (the same
+layer care applies to this sentence).
+The pass had been true for a layer no page named. Pard fixed it at 19:15 (mediajunkie 9afa8c9): the probe now
+carries PM's project `.claude/` from origin/main.
+
+Nobody checked what the drumbeat exercised before removing a layer: not Pard, who removed it, and not CIO, who wrote
+the registry and recommended it. The error was caught in about 8 hours, because the probe fails loudly.
+
+**Corollary:** when a rule exists in more than one copy, the probe's description names the copy it hits. Before
+removing a copy, find what probes it (sunset-or-renew, "Before you remove").
+

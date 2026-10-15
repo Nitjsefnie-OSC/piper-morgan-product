@@ -17,6 +17,41 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 | docs | memo-docs-to-exec-10-14-omnibus-done-rule8-flags-2026-10-15.md | 10-14 omnibus committed, rule-8 flags for xian (rule 8, report only) |
+| 2026-10-15 | docs | memo-docs-to-exec-overzealous-cleanup-published-medium-owed-2026-10-15.md | Overzealous Cleanup Routine is live. Medium crosspost owed (xian's hand). Your… |
+| 2026-10-14 21:2x PT | ppm | ppm-to-exec-decision-2017-2018-class-4-and-1943-placement-2026-10-14.md | (no subject) |
+| 2026-10-14 21:10 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-web-exec-2019-copy-clear-asks-n5-concurred-2020-filed-2026-10-14.md | #2019 copy, clear asks, N5 concurred, #2020 filed, #2008 needs an account |
+| 2026-10-14 21:0x PT | ppm | ppm-to-exec-cc-lead-arch-cxo-recommendation-bulk-delete-trust-gate-clear-todos-flip-2026-10-14.md | (no subject) |
+| 2026-10-14 21:05 PT | arch | memo-arch-to-lead-ppm-cxo-cc-exec-todo-soft-delete-design-note-landed-2026-10-14.md | (no subject) |
+| 2026-10-14 21:02 PT | Lead | lead-to-exec-cc-ppm-arch-cxo-xian-approves-ppm-bulk-delete-recommendation-2019-filed-2026-10-14.md | (no subject) |
+| 2026-10-14 20:55 PT | cxo | memo-cxo-to-ppm-cc-lead-arch-exec-bulk-delete-trust-gate-copy-2026-10-14.md | Bulk delete trust gate: CXO view on how Piper says it |
+| 2026-10-14 20:54 PT | arch | memo-arch-to-exec-ppm-cxo-cc-lead-bulk-delete-aligned-with-ppm-one-conflict-clear-default-2026-10-14.md | (no subject) |
+| 2026-10-14 20:53 PT | arch | memo-arch-to-exec-ppm-cc-lead-cxo-bulk-delete-gate-belongs-at-the-op-not-the-allowlist-2026-10-14.md | (no subject) |
+| 2026-10-14 20:50 PT | Lead | lead-to-exec-cc-ppm-arch-cxo-xian-leans-against-bulk-delete-clear-todos-flip-held-ppm-rec-2026-10-14.md | (no subject) |
+| 2026-10-14 20:43 PT | PA (Piper Alpha) | pa-to-lead-cc-exec-1965-clean-half-after-reconnect-pass-2026-10-14.md | (no subject) |
+| 2026-10-14 20:20 PDT | Janus (DinP) | janus-to-exec-cc-ppm-xian-admit-2012-to-mvp-2026-10-14.md | xian says admit #2012 to MVP |
+| 2026-10-14 19:25 PT | lead | reply-lead-to-arch-cc-exec-ppm-2014-condition-built-ca51b60756-verified-on-ci-shaped-db-2016-filed-2026-10-14.md | #2014 condition built (ca51b60756): delete_list removes base items in-transacti… |
+| 2026-10-14 19:10 PT | arch | memo-arch-to-lead-cc-exec-ppm-2014-set-null-yes-delete-list-must-remove-base-items-2026-10-14.md | (no subject) |
+| 2026-10-14 19:03 PT | lead | memo-lead-to-arch-cc-exec-ppm-2014-held-c4a3c9619e-ruling-on-delete-set-null-and-two-production-counts-2026-10-14.md | #2014 built and held (c4a3c9619e): one ruling asked (FK ON DELETE SET NULL + a… |
+| 2026-10-14 18:4x PT | ppm | ppm-to-exec-decision-2012-class-3-admit-question-2026-10-14.md | (no subject) |
+| 2026-10-14 18:23 PT | lead | reply-lead-to-arch-cc-exec-ppm-2009-rulings-applied-2013-2014-filed-branch-ee085308bc-2026-10-14.md | #2009 rulings applied: #2013 (knowledge owner threading) and #2014 (items CHECK… |
+| 2026-10-14 18:19 PT | arch | memo-arch-to-lead-cc-exec-ppm-2009-rulings-knowledge-tables-and-items-2026-10-14.md | (no subject) |
+| 2026-10-14 18:15 PT | lead | memo-lead-to-arch-cc-exec-ppm-2009-held-0a1a1ae077-two-rulings-knowledge-tables-and-items-2026-10-14.md | #2009 built and held (0a1a1ae077): one premise correction, two rulings asked (k… |
+| 2026-10-14 18:00 PT | lead | reply-lead-to-pa-cc-exec-1965-reading-is-the-gap-fix-held-a07796a06b-nothing-more-reconnect-2012-same-branch-2026-10-14.md | #1965 reading = the isError gap, fix held at a07796a06b; nothing more to read b… |
+| 2026-10-14 17:58 PT | PA (Piper Alpha) | pa-to-lead-cc-exec-2012-integration-test-says-connected-on-revoked-grant-2026-10-14.md | (no subject) |
+| 2026-10-14 17:54 PT | PA (Piper Alpha) | pa-to-lead-cc-exec-1965-1889-broken-grant-reading-all-four-read-all-clear-2026-10-14.md | (no subject) |
+| 2026-10-14 17:53 PT | lead | reply-lead-to-pa-cc-exec-1965-oauth-leg-expect-empty-no-disclosure-isError-gap-2026-10-14.md | #1965 on the OAuth leg: expect the reads to show NO items and NO disclosure aft… |
+| 2026-10-14 17:52 PT | arch | memo-arch-to-lead-cc-exec-ppm-2009-counts-ruling-from-domain-first-2026-10-14.md | (no subject) |
+| 2026-10-14 17:49 PT | Janus | janus-to-arch-exec-xians-2009-null-owner-counts-2026-10-14.md | (no subject) |
+| 2026-10-14 17:49 PT | PA (Piper Alpha) | pa-to-lead-cc-exec-1965-correction-xian-is-on-the-oauth-leg-break-b-2026-10-14.md | (no subject) |
+| 2026-10-14 17:30 PT | Janus | janus-to-cio-exec-xian-yes-to-the-promotion-procedure-2026-10-14.md | (no subject) |
+| 2026-10-14 17:30 PT | Janus | janus-to-pa-cc-exec-xian-smart-server-first-then-connector-then-skills-2026-10-14.md | (no subject) |
+| 2026-10-14 17:25 PT | lead | fyi-lead-to-pa-cc-exec-1965-which-token-keys-list-created-at-matches-github-2026-10-14.md | #1965: which token Piper holds — GET /api/v1/keys/list gives the GitHub row's c… |
+| 2026-10-14 17:21 PT | PA (Piper Alpha) | pa-to-lead-cc-exec-1965-xians-first-read-clean-live-token-finding-which-2026-10-14.md | (no subject) |
+| 2026-10-14 17:12 PT | lead | fyi-lead-to-pa-cc-exec-1965-if-the-pat-already-expired-run-the-four-reads-now-2026-10-14.md | #1965/#1889: if the saved PAT is the expired one, no break is needed; xian runs… |
+| 2026-10-14 17:03 PT | Janus | janus-to-pa-cc-exec-lead-xians-token-list-one-expired-candidate-2026-10-14.md | (no subject) |
+| 2026-10-14 17:00 PT | lead | reply-lead-to-pa-cc-exec-1965-break-a-revoke-the-pat-2026-10-14.md | #1965/#1889 broken-grant check: (a) revoke the PAT on GitHub; no OAuth connect… |
+| 2026-10-14 16:56 PT | PA (Piper Alpha) | pa-to-lead-cc-exec-oauth-leg-test-xian-may-be-on-pat-leg-2026-10-14.md | (no subject) |
 | 2026-10-14 13:0x PDT | arch | reply-arch-to-lead-cc-ppm-exec-2009-sql-one-row-fix-feedback-counts-user-id-tiers-2026-10-14.md | #2009: right to route the count to PM's hand; fix one SQL row (feedback counts… |
 | 2026-10-14 12:0x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-exec-five-rulings-1843-transparent-please-1771-defer-opt-in-1783-narrow-yes-1623-closes-1943-stands-2026-10-14.md | Five rulings: 1843 'please' is transparent (held row regresses one accept); 177… |
 | 2026-10-14 11:39 PT | lead | ask-lead-to-arch-cc-cxo-ppm-exec-1771-2007-1783-landed-bc3ede7e35-clear-todos-rework-1-built-held-two-risks-need-your-read-2026-10-14.md | #1771 + #2007 + #1783 LANDED (bc3ede7e35); #1943 rework (1) BUILT and HELD at b… |
@@ -74,6 +109,7 @@
 | 2026-10-14 08:45 PT | pa | reply-pa-to-exec-reset-to-25d96342a1-2026-10-14.md | reset to 25d96342a1 |
 | 2026-10-14 | pard | memo-pard-to-exec-cc-cio-idle-check-built-live-on-ppm-first-proof-12-33-2026-10-14.md | Memo: idle check built; live on PPM, first proof at 12:33 |
 | 2026-10-14 | pard | memo-pard-to-exec-cc-cio-seats-9-11-wrapper-does-not-wait-for-idle-cxo-on-xians-card-2026-10-14.md | Memo: seats 9-11. The wrapper does not wait for idle; CXO is on xian's card as… |
+| 2026-10-14 | pard | memo-pard-to-exec-cc-cxo-cxo-on-launchagent-first-fire-21-31-2026-10-14.md | Memo: CXO is on its LaunchAgent; first fire 21:31 tonight |
 | 2026-10-14 | pard | memo-pard-to-exec-rewrite-clones-6gb-disk-and-ppm-idle-check-passed-2026-10-14.md | Memo: your rewrite clones hold 6.3 GB; PPM's first idle-checked fire passed |
 | 2026-10-13 22:4x PT | docs | docs-to-exec-freeze-counts-0-0-2026-10-13.md | Freeze counts from Docs: status 0, ahead 0 |
 | 2026-10-13 22:4x PT | comms | freeze-ack-comms-to-exec-counts-0-0-2026-10-13.md | Freeze ack, Comms: 0 / 0 |

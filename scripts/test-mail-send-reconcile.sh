@@ -30,6 +30,13 @@ git -c init.defaultBranch=main clone -q "$S/origin.git" "$S/wt"
 W() { git -C "$S/wt" "$@"; }
 W config user.email test@example.com
 W config user.name "reconcile-test"
+# mail-send.sh runs its #1691 / #1845 / #1616 guards out of $REPO/scripts, so the clone needs them
+# (untracked, and excluded so the "worktree clean" checks below don't see them). Missing since the
+# 10-04 guards: all three cases failed on "can't open check_autoclose_keywords.py" (found 2026-10-14).
+mkdir -p "$S/wt/scripts"
+SRC="$(cd "$(dirname "$SCRIPT")" && pwd)"
+cp "$SRC"/check_autoclose_keywords.py "$SRC"/mailbox_bearer_lint.py "$SRC"/mailbox_filename_lint.py "$S/wt/scripts/"
+echo "scripts/" >> "$S/wt/.git/info/exclude"
 
 mkdir -p "$S/wt/mailboxes/lead/inbox" "$S/wt/mailboxes/lead/read"
 echo "memo body X" > "$S/wt/mailboxes/lead/inbox/memo-X.md"

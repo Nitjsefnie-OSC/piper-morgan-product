@@ -129,6 +129,24 @@ for f in "$@"; do
     esac
 done
 
+# Retired-recipient guard (R4(a)): PM retired `mailboxes/xian (ceo)/` on 2026-10-03; mail for PM goes
+# to exec. Refuses only a NEW file in that inbox (on disk, not on origin/main), so Exec's edits and
+# moves of the old files still go through. Built 2026-10-14 when Exec confirmed the soak trigger
+# (one alert, 033e6ab679, and one clean unboarded-items scan on the new routing).
+# Concept: mailboxes/DIRECTORY.md (the `xian (ceo)` row).
+for f in "$@"; do
+    case "$f" in
+        "mailboxes/xian (ceo)/inbox/"*)
+            if [ -f "$REPO/$f" ] && ! G cat-file -e "${PIPER_MAIL_REMOTE:-origin}/${PIPER_MAIL_BRANCH:-main}:$f" 2>/dev/null; then
+                echo "mail-send: ⛔ REFUSING '$f' — PM's mailbox was retired 2026-10-03. Never address" >&2
+                echo "mail-send:    or cc PM; send it to exec, with 'decision for xian' (or the ruling or" >&2
+                echo "mail-send:    contradiction it is) in the subject (CLAUDE.md, Mail). Nothing was sent." >&2
+                exit 2
+            fi
+            ;;
+    esac
+done
+
 REMOTE="${PIPER_MAIL_REMOTE:-origin}"
 BRANCH="${PIPER_MAIL_BRANCH:-main}"
 MAX=6

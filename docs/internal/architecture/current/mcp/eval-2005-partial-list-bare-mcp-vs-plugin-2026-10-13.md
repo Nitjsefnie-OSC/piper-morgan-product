@@ -2,7 +2,7 @@
 
 **Author**: PA, 2026-10-13, on xian's ruling relayed by Exec ("use this as an eval and figure out how to better
 prompt… this is a bare MCP. the full plugin can provide skills, hooks, and other agentic guidance").
-**Status**: proposal, **run 2026-10-14** (results below). **Not MVP critical path**: private-beta work (xian, same evening). Registry publish held.
+**Status**: proposal, **run 2026-10-14** (results below). **xian's direction 10-14: smart server first, then connector, then skills** (decisions.log). **Not MVP critical path**: private-beta work (xian, same evening). Registry publish held.
 
 ## Results (2026-10-14, run under xian's run-hot ruling)
 

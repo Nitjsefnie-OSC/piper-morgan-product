@@ -44,4 +44,20 @@ can hide its subject (main-ci-status 20 → 100).
 
 - 10-13 late: Pattern-075 filed (Emerging, from PP-002); fly rules regenerated for flyctl 0.4.117 (rules unchanged, Pard told); xian confirmed PA does MCP deploys standing (8u allow lines still on Pard for xian's hand). Day close of the 10-13 log waits on the freeze reply (22:30).
 
-- 10-14 (day 2 of the rewrite week): rewrite reset done (fd900e02bb); the watchdog moved to its own worktree (Pard). **Methodology audit delivered** (8q; next by 12-09). xian "emphatically approved" the concept and mechanism direction, now methodology-56 plus `scripts/check-concept-links.py` (69 linked, 0 broken at 10:55). Pages: hooks-registry, liveness-current-state, whats-armed, commit-message-guards. User-level duplicate hooks removed (Pard). The context-usage hook is dead on Amber (sunset candidate at the 10-19 piper-guards review). Exec designated seats 9 to 11 for LaunchAgents (Pard provisioning). Open: Lead's call on the CI concept-link gate and on ab-a-isolation's concept; Docs, quarterly-maintenance's concept; xian, commit-msg paste (after about 09:00 10-15), PA allow lines, alpha-promotion confirm (Exec v4 01M4XQYCWPTBKXTSRGQASJ4G16). Run hot until Thu 22:00.
+- 10-14 (day 2 of the rewrite week), closed at 22:07. **Done:**
+  - The rewrite reset (fd900e02bb). The watchdog runs in its own worktree; 8v is closed, and the 12:46 run was clean.
+  - **Methodology audit** (8q; next by 12-09). xian "emphatically approved" it, which became methodology-56. The concept-link checker runs as a CI gate (Lead, 93978c4ddf), so m-56 graduation condition (1) is met; 71 linked, 0 broken.
+  - New pages: hooks-registry, liveness-current-state, whats-armed, commit-message-guards.
+  - R4(a): mail-send refuses new files in the retired PM inbox (8n), and the reconcile harness is fixed.
+  - 8l closed (it was stale).
+  - xian said yes to the promotion procedure (decisions.log 17:31).
+  - PA's deploy lines are applied (8u).
+  - m-43 instance 6: the drumbeat had tested only the user-level copy of check-branch, and went red after the 10:43 removal (Pard fixed it). The sunset rule gained "Before you remove".
+  - flyctl self-updates when run, and the drift check had set it off. The generator now uses FLY_NO_UPDATE_CHECK=1, and its --help no longer writes. HOST leaves autoupdate on, so **CIO regenerates fly rules on drift** (standing).
+  **Open, each with its blocker:**
+  - 8s, the commit-msg paste: xian, via Exec, after about 09:00 10-15. whats-armed should then read 29 of 29.
+  - Exec, Lead and CXO LaunchAgents: Pard.
+  - The 8 product workflows' Concept lines: Lead, by 11-01.
+  - piper-guards per-rule decisions and the context-usage-reminder sunset: the 10-19 review.
+  - The first live alert from the watchdog worktree will be the send-path test.
+  Run hot until Thu 10-15 22:00.
