@@ -5,6 +5,7 @@
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-14 21:25 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-web-1843-closed-2023-filed-soft-delete-copy-2026-10-14.md | #1843 closed, #2023 filed, soft-delete copy lines |
+| 2026-10-14 21:24 PT | arch | memo-arch-to-lead-cc-cxo-ppm-web-2023-judge-the-reply-against-the-held-question-2026-10-14.md | (no subject) |
 | 2026-10-14 21:19 PT | Lead | lead-to-cxo-web-cc-arch-ppm-1771-leave-path-is-an-escape-word-1783-cap-is-github-lists-2023-mechanism-2026-10-14.md | (no subject) |
 | 2026-10-14 21:10 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-web-exec-2019-copy-clear-asks-n5-concurred-2020-filed-2026-10-14.md | #2019 copy, clear asks, N5 concurred, #2020 filed, #2008 needs an account |
 | 2026-10-14 21:10 PT | exec | ruling-relay-exec-to-ppm-2012-milestone-set-by-exec-write-the-ledger-row-2026-10-14.md | PM ruling relay: #2012 milestone set to MVP by Exec (your write was denied); pl… |
