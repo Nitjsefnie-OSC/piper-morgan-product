@@ -15,7 +15,7 @@
 - **Waiting on PM** (all on Exec's rollup):
   - privacy Section C: LIVE 10-13 ~19:0x (website f4f0d53). Comms fact-checked the rendered page: Section C text identical to the PM-approved memo (390 words), 13 bold runs as marked, opening sentence widened, mailto present. Closed.
   - the 12-beat slate (Sep 7 – Oct 13), `docs/internal/planning/comms/narrative-slate-2026-09-07-to-10-13.md`: keep 12 or merge to 8, and which to drop. Ledger 37/37 in the 10-14 log.
-  - Sat "Convergent Claims" + Sun "Measure the Start": fact findings given 10-14; PM rewrites or asks for outlines.
+  - Sat 10-17 "Convergent Claims": PUBLISH-READY to Docs 10-15 (PM-approved fixes, audit clean). Sun 10-18 "Measure the Start": fact findings given 10-14, waiting on PM's rewrite. Next: Sat live check.
   - Rule 8 NOTICE to Exec 10-14 (~588 files on main still carry three alpha testers' given names). Exec/xian's call.
   - the mining-pass picks (sent 10-09).
   - a verdict on the first scaffold (Sep 6, `the-unguarded-entrance.md`, Tue 11-03). The next scaffold (Sep 7–10) waits on it.
