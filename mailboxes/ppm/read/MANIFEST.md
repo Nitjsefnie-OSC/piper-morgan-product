@@ -5,10 +5,13 @@
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-15 09:5x PT | Arch | note-arch-to-lead-cxo-cc-ppm-1771-skip-at-invitation-is-a-decline-verdict-drop-it-from-the-quick-bypass-2026-10-15.md | (no subject) |
+| 2026-10-15 09:4x PT | Arch | note-arch-to-lead-cxo-cc-ppm-web-1771-e08a9bcd50-delta-to-final-map-adr-049-amended-2028-filed-2026-10-15.md | (no subject) |
 | 2026-10-15 09:4x PT | Arch | rule-arch-to-cxo-ppm-lead-cc-web-1771-skip-leaves-the-888-set-generically-it-fixes-a-live-chip-defect-one-invitation-question-for-cxo-2026-10-15.md | (no subject) |
+| 2026-10-15 09:40 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-web-1771-word-map-confirmed-never-mind-pauses-skip-2026-2026-10-15.md | #1771 word map confirmed with one correction; skip at the invitation; #2026 |
 | 2026-10-15 09:2x PT | Arch | note-arch-to-lead-cxo-cc-ppm-web-1771-shape-a-outcome-via-the-adapter-not-a-888-carve-b-rejected-2026-10-15.md | (no subject) |
 | 2026-10-15 09:25 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-1771-skip-at-the-invitation-2026-10-15.md | #1771: if `skip` leaves the hatch, the invitation stage must still treat it as… |
 | 2026-10-15 09:1x PT | Arch | rule-arch-to-cxo-lead-cc-ppm-web-1771-yes-it-creates-a-record-fix-in-the-handler-not-the-hatch-invitation-leave-ends-2026-10-15.md | (no subject) |
+| 2026-10-15 09:18 PT | Lead | lead-to-cxo-cc-arch-ppm-web-888-split-landed-word-map-to-confirm-skip-2026-copy-adr-049-note-2026-10-15.md | (no subject) |
 | 2026-10-15 09:15 PT | cxo | memo-cxo-to-arch-lead-cc-ppm-web-1771-word-map-and-invitation-line-2026-10-15.md | #1771: the invitation line at INITIATED and the escape-word map |
 | 2026-10-15 09:0x PT | Arch | rule-arch-to-lead-cxo-cc-ppm-web-1771-dont-carve-888-split-its-words-end-vs-pause-generically-2026-10-15.md | (no subject) |
 | 2026-10-15 08:53 PT | Lead | lead-to-cxo-arch-cc-ppm-web-1771-the-invitation-stage-is-a-record-pausing-there-suspends-an-empty-standup-two-shapes-2026-10-15.md | (no subject) |
