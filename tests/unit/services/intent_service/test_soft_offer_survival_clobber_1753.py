@@ -329,6 +329,7 @@ class TestReminderVerbQuestionSurvivalOutlivesSoftOffer:
         )
         from services.intent_service.reminder_clear import variant_three_question
 
+        del todo_boundary[1:]  # issue 2019: one item arms (2+ is capped)
         sid = "e2e-1753-verb-survival-answer"
         await self._arm_verb_question(monkeypatch, live_service, sid)
         _open_soft_offer_conditions(live_service)
@@ -340,7 +341,7 @@ class TestReminderVerbQuestionSurvivalOutlivesSoftOffer:
         result = await live_service.process_intent(
             message="delete them", session_id=sid, user_id=_USER
         )
-        assert result.message.startswith(variant_three_question(2))
+        assert result.message.startswith(variant_three_question(1))
         record = pref_store["verified_inferences"][rc.inference_key("clear")]
         assert record["value"] == rc.VALUE_DELETE
         stored = _pending_offers(live_service).get(sid)
