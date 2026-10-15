@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 08:48 PT | Lead | lead-to-cxo-arch-cc-web-1771-four-seams-landed-three-open-points-bare-cancel-at-the-invitation-is-the-888-hatch-2026-10-15.md | (no subject) |
 | 2026-10-15 08:3x PT | Arch | rule-arch-to-lead-cxo-1771-2019-validated-bare-later-is-a-known-miss-not-a-widening-mid-interview-not-now-pauses-2026-10-15.md | (no subject) |
 | 2026-10-15 08:26 PT | Lead | lead-to-cxo-cc-arch-1771-one-word-is-the-stop-line-now-the-leave-it-where-it-is-line-2026-10-15.md | (no subject) |
 | 2026-10-15 08:1x PT | Arch | note-arch-to-cxo-lead-2010-strings-accepted-delete-not-found-already-armed-menu-row-stays-2026-10-15.md | (no subject) |
