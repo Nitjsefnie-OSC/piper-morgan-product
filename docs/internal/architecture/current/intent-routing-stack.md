@@ -393,6 +393,25 @@ rendered ask; the other two ask sites (`_start_standup_conversation`
 session-exists ask, `_resume_suspended_standup` legacy either/or ask) now
 arm via `_arm_resume_offer(question=…)` — both census rows shrank out.
 Regression: `test_resume_offer_acceptance_1769.py`.
+**#1771 DEFER at the resume seam (2026-10-14 first seam, 2026-10-15 second
+seam).** `evaluate_acceptance(..., distinguish_defer=True)` returns DEFER for
+the deferral phrasings ("not now", "not right now", "not today", "maybe
+later"); `_check_pending_resume_offer` is the only call site that opts in
+(AST pin). The seam now computes that verdict whether or not the offer is
+pending (armed-only inputs still ride only while it is), and a DEFER verdict
+always bypasses the #1529 flow-exit gate: with the offer pending the reply is
+`RESUME_DEFER_REPLY` and the standup stays SUSPENDED; with no offer pending
+the seam returns None (normal processing answers the turn) and the standup
+stays SUSPENDED. Only an explicit cancel abandons ("cancel that", "forget
+it", "end standup", taught "start over"; `RESUME_ABANDON_REPLY`). The
+continue/restart ask is rendered and armed in one place,
+`_start_standup_conversation` (session lookup, then a user-scoped SUSPENDED
+lookup for a standup paused in another chat); the EMPTY-source branch of
+`_handle_standup_query` routes there when a paused standup exists, before the
+empty-source reply (a non-empty report still renders as asked). The escape-word pause line
+comes from the handler (`pause_message()`, optional; `registry.pause_message_for`
+keeps the generic default). Regression: `test_defer_tier_1771.py`,
+`test_second_seam_1771.py`.
 
 **#1762 capped-list remainder seam (2026-09-13, epic 6 first build) — a NEW
 pre-classification deterministic seam, and the chain's first PERSISTING arm.**

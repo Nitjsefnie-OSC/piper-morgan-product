@@ -13,6 +13,7 @@ Issue #427: MUX-IMPLEMENT-CONVERSE-MODEL
 Issue #687: ADR-049 Implementation
 """
 
+import inspect
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -37,6 +38,32 @@ ESCAPE_COMMANDS: frozenset = frozenset(
         "never mind",
     }
 )
+
+
+def pause_message_for(handler: Any) -> str:
+    """The reply when an escape command pauses ``handler``'s active session.
+
+    #1771 (Arch, on the issue 2026-10-14): the HANDLER supplies its pause
+    line through an optional ``pause_message()`` method; the registry keeps
+    only the generic default, so it stays the "dumb aggregator" #888 made it
+    and holds no per-process copy. Optional rather than a ``GuidedProcess``
+    protocol member on purpose: the protocol is ``runtime_checkable`` and
+    implemented structurally, so a new member would make every existing
+    implementer (and test double) fail ``register``'s isinstance check. A
+    hook that raises or returns nothing falls back to the generic line.
+    """
+    hook = getattr(handler, "pause_message", None)
+    # A sync hook only: an async attribute (an AsyncMock double, say) would
+    # hand back an un-awaited coroutine, never a line.
+    if callable(hook) and not inspect.iscoroutinefunction(hook):
+        try:
+            line = hook()
+        except Exception as e:  # silent-ok: logged; the generic line still pauses honestly
+            logger.warning("pause_message_hook_failed", error=str(e))
+            line = None
+        if isinstance(line, str) and line:
+            return line
+    return f"No problem — I've paused {handler.process_type.value}. We can pick it up anytime."
 
 
 class ProcessType(str, Enum):
@@ -176,6 +203,10 @@ class GuidedProcess(Protocol):
 
     Issue #888: Added suspend() and has_suspended_session() per
     PPM direction and Arch guidance (2026-03-13).
+
+    Optional, not a protocol member (#1771): ``pause_message() -> str``, the
+    line shown when an escape command pauses this process. See
+    :func:`pause_message_for` for the generic default and why it is optional.
     """
 
     @property
@@ -628,10 +659,8 @@ class ProcessRegistry:
                             )
                         return ProcessCheckResult.escaped_from(
                             process_type=handler.process_type,
-                            response_message=(
-                                f"No problem — I've paused {handler.process_type.value}. "
-                                "We can pick it up anytime."
-                            ),
+                            # #1771: the handler's own pause line (generic default)
+                            response_message=pause_message_for(handler),
                         )
 
                     # Issue #1529: universal escape check (FLOW-ESCAPE) — exits,
