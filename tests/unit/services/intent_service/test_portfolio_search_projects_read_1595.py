@@ -212,9 +212,12 @@ class TestSearchProjectsNoResultsIsImperativeNotInterrogative:
         assert out["requires_clarification"] is True
 
     @pytest.mark.asyncio
-    async def test_no_results_offer_hint_is_also_imperative(self):
+    async def test_no_results_builds_no_offer_hint(self):
+        """#2024 (Arch 2026-10-15): the reply is a directive, not an offer,
+        so nothing is armed for a "yes" to bind (was: an imperative
+        offer_text, which bound "yes" to a list nobody offered)."""
         out = await _run_search("search projects for nothing", [])
-        assert not out["offer_hint"]["offer_text"].rstrip().endswith("?")
+        assert "offer_hint" not in out
 
 
 class TestSearchProjectsNoUser:

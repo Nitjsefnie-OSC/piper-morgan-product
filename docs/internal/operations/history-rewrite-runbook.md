@@ -48,6 +48,11 @@ Before step 5, anything failing stops the run with nothing changed. After step 5
 - **Resets:** 9 seats by 09:00; CXO's classifier refused `git reset --keep`, so xian ran it with `!` in CXO's pane. CIO's step 7b test send passed. Unfrozen about 08:55. PM's checkout was reset by xian (`git reset --hard origin/main`, no edits to save). Faoilean re-cloned; its stranded local commits were checked file by file against main, and nothing needed carrying.
 - **Caught by the guard:** at 06:46, six pushes from PM's checkout (a stall-watchdog committing alerts there, because the freeze looked like a stall). All refused.
 - **Binary leftover:** `--replace-text` and Themis's scanner both skip files with NUL bytes. Two binary versions kept one passing mention of a public figure; xian accepted them (no further rewrite). Lead untracked the generated Chroma store from main (7a498b2aec).
+- **24-hour watch and guard retirement (10-15):**
+  - At 09:07, every GitHub branch and tag was clean, and the guard had refused nothing since the unfreeze.
+  - 54 local refs in the shared store still held old history: pre-rewrite branches, agent worktrees and stale `refs/remotes/agent/*`.
+  - On xian's "clean up first", CIO and Lead deleted them. Two tips not in the mirror were bundled first or shown to hold nothing unique. Exec force-removed the last two dirty worktrees on xian's in-session OK (CIO tarred one first).
+  - At 15:40, the sentinel loop printed nothing over 247 refs. Exec moved the sentinel file to `~/Development/backups/piper-old-history-sentinels-retired-2026-10-15`, so the guard is dormant. Copy it back to re-arm.
 
 ## Next time (corrections to the steps above)
 

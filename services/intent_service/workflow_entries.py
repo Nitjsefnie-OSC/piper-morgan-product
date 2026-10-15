@@ -2267,7 +2267,9 @@ list_repos_entry = WorkflowEntry(
 # this flip: the not-found branch's `offer_hint` (#852 continuation-
 # tracking — see the read_canonical block comment above for the same
 # loss shape) and the `multi_intent_greeting` prefix for a search_projects
-# sibling paired with a greeting.
+# sibling paired with a greeting. (The hint loss was remediated by adapter
+# parity the same day; since #2024 the no-results branch builds no
+# offer_hint at all: its "Say 'list my projects'" line is a directive.)
 #
 # Collision check (2026-10-04): `search_projects` is not an
 # ACTION_REGISTRY key, not a WORKFLOW_REGISTRY/rail key, and does not
@@ -2378,7 +2380,9 @@ search_projects_entry = WorkflowEntry(
 # below). Lost on this flip: archive_project/restore_project's not-found
 # `offer_hint` (#852 continuation-tracking — same loss shape as list_repos/
 # search_projects above) and the `multi_intent_greeting` prefix for any of
-# the three as a sibling paired with a greeting.
+# the three as a sibling paired with a greeting. (The hint loss was
+# remediated by adapter parity the same day; since #2024 those not-found
+# branches build no offer_hint at all: a directive is not an offer.)
 #
 # NO flip_group on any of the three (non-READ keys never carry one, per
 # WorkflowEntry.__post_init__'s structural guard) — each flips only by its
