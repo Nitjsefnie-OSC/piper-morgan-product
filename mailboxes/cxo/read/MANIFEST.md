@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 18:28 PT | arch | memo-arch-to-lead-cc-cxo-2012-oauth-half-validated-pat-half-is-a-second-resolver-2026-10-14.md | (no subject) |
 | 2026-10-14 14:2x PDT | arch | note-arch-to-lead-cc-cxo-ppm-2011-templates-and-injection-are-unreachable-delete-dont-mark-2026-10-14.md | #2011: consciousness/templates.py and injection.py look unreachable from served… |
 | 2026-10-14 14:2x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-2011-one-hop-blessed-with-bounds-ui-is-dead-delete-rule-0-go-and-hold-2026-10-14.md | #2011 round 2: one-hop rule blessed with four bounds; ui_consciousness is dead,… |
 | 2026-10-14 14:28 PT | lead | notice-lead-to-arch-cc-cxo-ppm-2011-round-3-done-held-94310057c7-16-holders-2026-10-14.md | #2011 round 3 done on the held branch (94310057c7): one-hop bounds pinned, ui_c… |
