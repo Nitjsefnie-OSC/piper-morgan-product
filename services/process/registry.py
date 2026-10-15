@@ -51,6 +51,26 @@ ESCAPE_PAUSE_WORDS: frozenset = frozenset({"stop", "never mind"})
 ESCAPE_COMMANDS: frozenset = ESCAPE_END_WORDS | ESCAPE_PAUSE_WORDS
 
 
+def _escape_word(message: str) -> str:
+    """#888 normalisation: the stripped, lowercased whole message, with ONE
+    politeness marker removed (#1771, Arch 2026-10-15, the #1843 rule: "please"
+    is politeness, not content). One leading "please" (optional comma) OR one
+    trailing ", please" / " please"; the remainder is what the exact-match
+    lookup reads. "please cancel" -> "cancel" (END), "stop please" -> "stop"
+    (PAUSE); "please cancel my 3pm meeting" -> "cancel my 3pm meeting" (not a
+    word in either set). No other interpretation happens here."""
+    normalized = message.strip().lower()
+    if normalized in ESCAPE_COMMANDS:
+        return normalized
+    for prefix in ("please, ", "please,", "please "):
+        if normalized.startswith(prefix):
+            return normalized[len(prefix) :].strip()
+    for suffix in (", please", " please"):
+        if normalized.endswith(suffix):
+            return normalized[: -len(suffix)].strip()
+    return normalized
+
+
 def _sync_hook_line(handler: Any, hook_name: str) -> Optional[str]:
     """A SYNC no-argument copy hook's line, or None (absent, async, raising,
     or returning nothing)."""
@@ -477,14 +497,18 @@ class ProcessRegistry:
         "cancel my standup" does NOT.
 
         Arch guidance (2026-03-13): Use frozenset for O(1) lookup.
+
+        #1771 (Arch 2026-10-15): one politeness marker is stripped first
+        (``_escape_word``), so "please cancel" / "cancel please" is ``cancel``
+        and "please stop" / "stop please" is ``stop``, at every stage, for
+        every process. Still an exact match on what remains.
         """
-        normalized = message.strip().lower()
-        return normalized in ESCAPE_COMMANDS
+        return _escape_word(message) in ESCAPE_COMMANDS
 
     def _is_escape_end_word(self, message: str) -> bool:
         """#888 split: is this escape word an END word (else it pauses)?
         Same normalisation as ``_is_escape_command``."""
-        return message.strip().lower() in ESCAPE_END_WORDS
+        return _escape_word(message) in ESCAPE_END_WORDS
 
     async def _suspend_for_fall_through(
         self,
@@ -803,7 +827,7 @@ class ProcessRegistry:
                         logger.info(
                             "Escape command intercepted by registry",
                             process_type=handler.process_type.value,
-                            escape_command=message.strip().lower(),
+                            escape_command=_escape_word(message),
                             user_id=user_id,
                             session_id=session_id,
                         )

@@ -451,7 +451,17 @@ words, split END vs PAUSE (Arch 2026-10-15, generic across processes):**
 `close()`, terminal, no resume re-offer) and `ESCAPE_PAUSE_WORDS` (`stop`,
 `never mind` → `suspend()`; CXO's word map 2026-10-15: a word that explicitly
 withdraws ends, a word that could mean "not right now" pauses, and "never
-mind" can mean "forget that answer"). **`skip` is not an escape word** for any
+mind" can mean "forget that answer"). **"please" is politeness at the hatch
+(#1771, Arch 2026-10-15, the #1843 rule):** `_is_escape_command` /
+`_is_escape_end_word` read `registry._escape_word`, which strips ONE leading
+"please" (optional comma) or ONE trailing ", please" / " please" and then does
+the same exact-match lookup, so "please cancel" / "cancel please" is `cancel`
+(END) and "please stop" / "stop please" is `stop` (PAUSE: mid-interview it
+keeps the answers) at every stage, for every process. "please cancel my 3pm
+meeting" and "can you cancel my 3pm meeting?" are not escapes (normal answer
+path). The polite forms are deliberately NOT #1529 exits: an exit
+mid-interview ENDS anything that is not a deferral, so "please stop" would
+drop what a bare `stop` keeps. **`skip` is not an escape word** for any
 process (Arch 2026-10-15, generic; no per-process claims): a bare "skip"
 reaches the handler as ordinary text. Mid-interview the standup reads it
 through `_is_skip_signal` as "nothing for this part, advance" (it is the
@@ -501,8 +511,8 @@ row ("no, not now": the predicate orders decline first) OR the whole message
 is NOT read there: its unanchored rows (`^(?:no|nah),?\s`, `\bi'?m good\b`)
 told "I'm good to go" and "no, let's start" "no standup for now". The old
 anywhere word set (`no`/`nope`/`cancel`/`later`) and the `"not now"`
-substring are gone; known miss: "please cancel" (not a hatch word, not a
-#1529 flow exit) now starts the interview, pinned for a ruling. Pins:
+substring are gone; "please cancel" leaves through the #888 hatch (one
+"please" stripped, above), never reaching the handler. Pins:
 `tests/unit/services/standup/test_invitation_edges_1771.py`. Mid-interview the predicate is consulted only
 on turns the #1529 exit already claims, so a clause like "not yet merged"
 inside an answer stays an answer. Bare #888 escape words are read before

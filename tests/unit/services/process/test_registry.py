@@ -409,7 +409,11 @@ class TestEscapeCommands:
         registry = get_process_registry()
         assert registry._is_escape_command("cancel my standup") is False
         assert registry._is_escape_command("I want to exit") is False
-        assert registry._is_escape_command("please stop") is False
+        # #1771 (Arch 2026-10-15): one "please" is politeness, stripped before
+        # the exact match, so "please stop" IS ``stop`` (was asserted False).
+        # A please-prefixed request is still not an escape.
+        assert registry._is_escape_command("please stop") is True
+        assert registry._is_escape_command("please stop the build") is False
         assert registry._is_escape_command("skip this step") is False
 
     def test_is_escape_command_never_mind(self):

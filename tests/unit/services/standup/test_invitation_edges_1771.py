@@ -156,6 +156,63 @@ class TestLeavingGetsTheInvitationLine:
             assert state == S.GATHERING_YESTERDAY
 
 
+class TestCancelShapedTurnsLeave:
+    """CXO 10:25 item 1 / Arch 10:4x. At the invitation these END with the
+    invitation line and leave no suspended record:
+
+    - the polite #888 words: the hatch strips one "please", so "please
+      cancel" is ``cancel`` and "stop please" is ``stop`` (escaped, the
+      handler never sees them);
+    - turns that ALREADY left through the #1529 whole-message exit before
+      this change (Arch read them from ``_exit_re`` / ``BARE_EXIT_COMMANDS``;
+      these pins confirm by running them).
+
+    "can you cancel my 3pm meeting?" is not a leave: it reaches the handler
+    and starts the interview (the normal answer path)."""
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        "turn", ["please cancel", "cancel please", "please stop", "stop please"]
+    )
+    async def test_polite_hatch_word_ends(self, turn):
+        with _World() as w:
+            result, state = await w.invite_then(turn)
+            assert result.escaped
+            assert result.response_message == CXO_INVITATION_END
+            assert state == S.ABANDONED
+            assert await w.adapter.has_suspended_session(_USER) is None
+            w.generate.assert_not_called()
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        "turn",
+        ["cancel that", "cancel it", "please cancel it", "forget it", "please cancel the standup"],
+    )
+    async def test_already_a_1529_exit_ends(self, turn):
+        from services.process.escape import detect_flow_exit
+        from services.process.registry import ProcessType
+
+        assert detect_flow_exit(turn, ProcessType.STANDUP)
+        with _World() as w:
+            result, state = await w.invite_then(turn)
+            assert result.escaped
+            assert result.response_message == CXO_INVITATION_END
+            assert state == S.ABANDONED
+            assert await w.adapter.has_suspended_session(_USER) is None
+            w.generate.assert_not_called()
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        "turn", ["can you cancel my 3pm meeting?", "please cancel my 3pm meeting"]
+    )
+    async def test_a_request_naming_cancel_is_not_a_leave(self, turn):
+        with _World() as w:
+            result, state = await w.invite_then(turn)
+            assert not result.escaped
+            assert result.response_message == FIRST_QUESTION
+            assert state == S.GATHERING_YESTERDAY
+
+
 class TestQuickBypassIsWholeMessage:
     @pytest.mark.asyncio
     @pytest.mark.parametrize(
