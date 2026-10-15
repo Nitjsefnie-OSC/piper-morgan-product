@@ -570,23 +570,6 @@ class ProjectRepository(BaseRepository):
         db_projects = result.scalars().all()
         return [db_project.to_domain() for db_project in db_projects]
 
-    async def create_default_project(self) -> domain.Project:
-        logger.info("Creating default project")
-        project = domain.Project(
-            id=str(uuid.uuid4()),
-            name="Piper Morgan Test",
-            description="Default project for Piper Morgan development and testing",
-            is_default=True,
-            is_archived=False,
-            created_at=datetime.now(timezone.utc),
-            updated_at=datetime.now(timezone.utc),
-        )
-        db_project = ProjectDB.from_domain(project)
-        self.session.add(db_project)
-        await self.session.commit()
-        await self.session.refresh(db_project)
-        return db_project.to_domain()
-
     async def get_project_with_integrations(
         self,
         project_id: str,

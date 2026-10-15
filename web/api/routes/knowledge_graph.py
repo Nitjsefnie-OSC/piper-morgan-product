@@ -81,8 +81,10 @@ async def create_node(
             node_type=node_type_enum,
             description=description or "",
             properties=properties or {},
-            # Owner rides session_id (the service/repo convention; the
-            # owner_id-column population gap is the tracked #1420 residual).
+            # Owner rides session_id (the service/repo convention). The owner_id column
+            # is NOT populated here, so the owner-filtered reads never return these rows
+            # to their creator: issue 2013 threads owner_id from current_user.sub through
+            # create_node/create_edge, then SET NOT NULL (2009's allowlist cites it).
             session_id=current_user.sub,
         )
 
