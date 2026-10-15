@@ -25,11 +25,26 @@ REPO = Path(__file__).resolve().parents[3]
 
 # page path -> (template, disconnect endpoint fragment expected in the handler)
 PAGES = {
-    "/settings/integrations": ("integrations.html", "/api/v1/settings/integrations/${integrationName}/disconnect"),
-    "/settings/integrations/github": ("settings_github.html", "/api/v1/settings/integrations/github/disconnect"),
-    "/settings/integrations/notion": ("settings_notion.html", "/api/v1/settings/integrations/notion/disconnect"),
-    "/settings/integrations/slack": ("settings_slack.html", "/api/v1/settings/integrations/slack/disconnect"),
-    "/settings/integrations/calendar": ("settings_calendar.html", "/api/v1/settings/integrations/calendar/disconnect"),
+    "/settings/integrations": (
+        "integrations.html",
+        "/api/v1/settings/integrations/${integrationName}/disconnect",
+    ),
+    "/settings/integrations/github": (
+        "settings_github.html",
+        "/api/v1/settings/integrations/github/disconnect",
+    ),
+    "/settings/integrations/notion": (
+        "settings_notion.html",
+        "/api/v1/settings/integrations/notion/disconnect",
+    ),
+    "/settings/integrations/slack": (
+        "settings_slack.html",
+        "/api/v1/settings/integrations/slack/disconnect",
+    ),
+    "/settings/integrations/calendar": (
+        "settings_calendar.html",
+        "/api/v1/settings/integrations/calendar/disconnect",
+    ),
 }
 
 
