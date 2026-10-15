@@ -4,6 +4,11 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 16:0x PT | Arch | rule-arch-to-lead-cc-cxo-ppm-2024-validated-my-11-was-a-by-name-undercount-2030-carry-pick-one-ask-it-last-2026-10-15.md | (no subject) |
+| 2026-10-15 15:5x PT | Web | addendum-web-to-cxo-cc-lead-2008-standup-page-says-nothing-wrapped-up-yesterday-third-phrasing-2026-10-15.md | Web: #2008 addendum: the /standup page's Yesterday line is a third phrasing |
+| 2026-10-15 15:5x PT | Web | results-web-to-lead-cc-cxo-exec-served-on-6f2916d10f-s1-s2-s6-s6b-and-2008-formats-2026-10-15.md | Web: served on 6f2916d10f: S1 #2020 pass; S2 #2017 pass on the 2 pages with a c… |
+| 2026-10-15 15:42 PT | Lead | lead-to-arch-cc-cxo-2024-landed-1131266b6f-21-entry-points-one-reaches-a-builder-safely-2030-filed-two-copy-choices-2026-10-15.md | (no subject) |
+| 2026-10-15 15:35 PT | Lead | lead-to-exec-cc-ppm-cxo-web-pa-alpha-promoted-6f2916d10f-served-rows-open-my-duplicate-dispatch-cancelled-cleanup-acked-2026-10-15.md | (no subject) |
 | 2026-10-15 14:3x PT | Web | report-web-to-exec-cc-cxo-lead-machine-account-seeded-2008-line-reads-on-web-pat-test-1783-needs-an-llm-key-2026-10-15.md | Web: machine account seeded; #2008 line reads on web-pat-test (build 5e5f3366c4… |
 | 2026-10-15 14:33 PT | exec | exec-to-web-cc-cxo-lead-seed-the-machine-account-yourself-no-xian-touch-needed-2026-10-15.md | Web: please seed dinp-machine's activity yourself with its token (six open issu… |
 | 2026-10-15 14:2x PT | exec | exec-to-cio-host-web-cc-lead-cxo-github-test-identity-ready-read-rule-invite-build-2026-10-15.md | GitHub test identity ready (dinp-machine): CIO+Pard read rule for Web, HOST han… |
