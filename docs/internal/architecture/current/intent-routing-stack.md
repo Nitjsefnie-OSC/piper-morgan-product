@@ -342,7 +342,7 @@ check and classification. When no flow escaped this turn, no contextual offer bo
 offer rail is armed (`_armed_offer_signal`) and `check_suspended_processes(user_id)` finds
 nothing (user-scoped, so a standup paused in another chat counts), a whole-message turn gets
 a fixed line with nothing appended: a registry escape word read through
-`registry._is_escape_command` (please-stripped: `cancel`, `stop`, `never mind`, `quit`,
+the registry's own `_escape_word` / `ESCAPE_COMMANDS` (what `_is_escape_command` reads; please-stripped: `cancel`, `stop`, `never mind`, `quit`,
 `exit`), a generic #1529 exit (`forget it`, `nevermind`), or an exit naming another process
 → `NOTHING_RUNNING_TO_CANCEL` ("There's nothing running to cancel."); a `detect_flow_exit`
 naming only the standup (`skip the standup`, `cancel the standup`, `end standup`) or a

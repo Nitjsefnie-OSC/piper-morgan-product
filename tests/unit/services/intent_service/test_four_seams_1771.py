@@ -234,7 +234,8 @@ class TestRuledStrings:
 
     def test_no_line_teaches_a_slash_command(self):
         lines = [v for k, v in vars(standup_copy).items() if k.isupper()]
-        assert len(lines) == 6
+        # 7 since #2033 added STANDUP_NOT_RUNNING_REPLY (nothing running).
+        assert len(lines) == 7
         assert not [line for line in lines if "/standup" in line]
 
     def test_the_1529_fallback_copy_is_the_drop_line(self):

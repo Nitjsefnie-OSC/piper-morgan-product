@@ -16218,7 +16218,7 @@ Add any additional information here.
         nothing appended:
 
         (a) a registry escape word, please-stripped, read through the
-            registry's own ``_is_escape_command`` ("cancel", "stop",
+            registry's own ``_escape_word`` / ``ESCAPE_COMMANDS`` read ("cancel", "stop",
             "never mind", "please cancel") → ``NOTHING_RUNNING_TO_CANCEL``;
         (c) a deferral made only of bare declines ("not now", "no, not
             now": ``contains_deferral`` plus every comma-part
@@ -16236,6 +16236,7 @@ Add any additional information here.
         """
         from services.intent_service.soft_invocation import contains_deferral, is_bare_decline
         from services.process.escape import detect_flow_exit
+        from services.process.registry import ESCAPE_COMMANDS, _escape_word
         from services.process.standup_copy import STANDUP_NOT_RUNNING_REPLY
         from services.ui_messages.keyless_pleasantry import NOTHING_RUNNING_TO_CANCEL
 
@@ -16245,7 +16246,10 @@ Add any additional information here.
         try:
             registry = get_process_registry()
             line: Optional[str] = None
-            if registry._is_escape_command(text):
+            # The registry's own word read (``_is_escape_command`` is exactly
+            # this), module-level so the check never depends on a registry
+            # instance: please-stripped, exact match on what remains.
+            if _escape_word(text) in ESCAPE_COMMANDS:
                 line = NOTHING_RUNNING_TO_CANCEL
             elif contains_deferral(text) and all(is_bare_decline(part) for part in text.split(",")):
                 line = STANDUP_NOT_RUNNING_REPLY
