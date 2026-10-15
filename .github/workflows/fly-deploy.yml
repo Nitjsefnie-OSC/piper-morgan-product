@@ -1,4 +1,4 @@
-# Concept: docs/internal/architecture/deployment-pipeline-plan-v0.1-2026-09-20.md (added 2026-10-15, sunset-or-renew inventory; Lead)
+# Concept: docs/internal/operations/deploy-environments-and-release-train.md (added 2026-10-15, sunset-or-renew inventory; Lead)
 # Deployment pipeline §4e/§4f — built by Pard to Arch's plan v0.4 ruling (2026-09-29).
 #
 # WHY THIS EXISTS. Every alpha deploy since the Fly cutover has been a hand-run
