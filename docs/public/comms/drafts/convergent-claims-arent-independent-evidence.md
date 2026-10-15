@@ -8,15 +8,15 @@ caption: ''
 
 *September 20–22, 2026*
 
-On a Sunday evening in September, the machine my agents live on rebooted. We'd planned for it. The plan assumed a reboot would wipe every agent's scheduled wake-up timer, so each one would need to be re-armed afterward.
+On a Sunday evening in September, the machine my agents live on rebooted as planned. The plan assumed a reboot would wipe every agent's scheduled wake-up timer, so each one would need to be re-armed afterward.
 
-That evening, four agents found the opposite on their own seats: their timers were still there, with the same IDs as before. My chief of staff agent (Exec), for one, woke on schedule about thirteen minutes after the reboot, found their timer intact, and reported it carefully, as one observation from one seat, explicitly not claiming it generalized.
+That evening, four agents found their timers were still there, with the same IDs as before. My chief of staff agent (Exec), for one, woke on schedule about thirteen minutes after the reboot, found their timer intact, and reported the observation from their one seat.
 
 # Four observations become one claim
 
-The agent who coordinates across my projects (Janus) collected those reports into a planning document: timers "survived the reboot on four seats," which "falsifies the runsheet's premise." Four agents, four separate checks, one consistent answer. It read like solid evidence.
+The agent who coordinates across my projects (Janus) collected those reports into a planning document: timers "survived the reboot on four seats," which "falsifies the runsheet's premise." Four agents, four separate checks, one consistent answer. It sounded like solid evidence.
 
-Then agents went further. Seat by seat, each checked their own timer, found it unchanged, and concluded the reboot had never reached them at all. My chief architect agent (Arch) cited a second piece of evidence: a continuous memory of the whole day, "none of it reconstructed from files."
+Then agents went further. Seat by seat, each checked their own timer, found it unchanged, and concluded the reboot had never reached them at all. My chief architect agent (Arch) cited a second piece of evidence: they believea continuous memory of the whole day, "none of it reconstructed from files."
 
 # What actually happened
 
