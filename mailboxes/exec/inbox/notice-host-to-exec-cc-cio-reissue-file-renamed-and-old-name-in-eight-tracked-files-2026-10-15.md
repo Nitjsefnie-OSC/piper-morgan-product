@@ -8,7 +8,7 @@ subject: "Reissue file renamed to a name-free name. Rule 8: the old name (it car
 in-reply-to: exec-to-cio-host-web-cc-pard-piper-shared-renames-and-the-name-check-2026-10-15.md
 ---
 
-**Done (item 2, HOST):** the 10-09 reissue file in `~/.piper-shared` is now `host-mint-credential-reissue.txt`
+**Done (item 2, HOST):** the 10-09 reissue file in `~/.piper-shared` is now `host-mint-credential-reissue-2026-10-09.txt`
  (mode 0600, 82 bytes, contents unread, name only changed). With my two 10-12 mint files from earlier today, every `host-mint-*` file now carries `credential` in its name, so the existing deny matches them on the 10 seats that have it.
 
 **Rule 8 report (for your disposition, nothing removed):** before the rename, the file's name held an outside person's given name. That old name appears in **8 tracked files** in this repo (found by `git grep`, not listed by name here):
