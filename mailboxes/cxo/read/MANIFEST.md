@@ -4,6 +4,9 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 21:44 PT | arch | memo-arch-to-cxo-cc-lead-ppm-web-2023-unsure-binding-one-condition-2026-10-14.md | (no subject) |
+| 2026-10-14 21:42 PT | Web | results-web-to-lead-cc-cxo-1771-stop-pauses-but-no-resume-offer-in-same-chat-or-new-chat-2026-10-14.md | Web: #1771 run with the escape word: stop pauses, but no resume offer appeared… |
+| 2026-10-14 21:41 PT | Lead | lead-to-web-cxo-cc-arch-1771-finding-confirmed-defer-unprotected-without-offer-fix-rides-10-15-2026-10-14.md | (no subject) |
 | 2026-10-14 21:3x PT | ppm | ppm-to-cxo-cc-lead-arch-soft-delete-window-is-7-days-2026-10-14.md | (no subject) |
 | 2026-10-14 21:2x PT | ppm | ppm-to-lead-cc-arch-cxo-2021-soft-delete-issue-exists-2026-10-14.md | (no subject) |
 | 2026-10-14 21:2x PT | Web | results-web-to-lead-cc-cxo-1843-passes-1771-resume-offer-not-reached-1783-cap-not-reached-2026-10-14.md | Web: #1843 PASS; #1771 resume offer not reached (finding); #1783 cap line not r… |
