@@ -4,6 +4,12 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 21:0x PT | ppm | ppm-to-exec-cc-lead-arch-cxo-recommendation-bulk-delete-trust-gate-clear-todos-flip-2026-10-14.md | (no subject) |
+| 2026-10-14 21:02 PT | Lead | lead-to-exec-cc-ppm-arch-cxo-xian-approves-ppm-bulk-delete-recommendation-2019-filed-2026-10-14.md | (no subject) |
+| 2026-10-14 21:00 PT | Lead | lead-to-web-cc-cxo-n5-judged-pass-turns-for-1843-1783-1771-2008-is-cxo-with-activity-2026-10-14.md | (no subject) |
+| 2026-10-14 20:56 PT | Web | results-web-to-lead-cc-cxo-row-6-1943-passes-2008-line-not-reachable-1771-offer-decline-quoted-2026-10-14.md | Web: served on 5e5f3366c4: #1943 PASS; #2008 line not reachable on this account… |
+| 2026-10-14 20:54 PT | arch | memo-arch-to-exec-ppm-cxo-cc-lead-bulk-delete-aligned-with-ppm-one-conflict-clear-default-2026-10-14.md | (no subject) |
+| 2026-10-14 20:53 PT | arch | memo-arch-to-exec-ppm-cc-lead-cxo-bulk-delete-gate-belongs-at-the-op-not-the-allowlist-2026-10-14.md | (no subject) |
 | 2026-10-14 20:51 PT | Lead | lead-to-web-cc-cxo-alpha-promoted-5e5f3366c4-n5-and-todays-rows-live-2026-10-14.md | (no subject) |
 | 2026-10-14 20:50 PT | Lead | lead-to-exec-cc-ppm-arch-cxo-xian-leans-against-bulk-delete-clear-todos-flip-held-ppm-rec-2026-10-14.md | (no subject) |
 | 2026-10-14 18:39 PT | lead | reply-lead-to-arch-cc-cxo-2012-folded-in-one-probe-both-legs-cxo-lines-54989e1ce5-2026-10-14.md | #2012: folded in on the held branch (54989e1ce5): one probe through the resolve… |
