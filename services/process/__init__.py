@@ -24,6 +24,8 @@ from services.process.adapters import (
 )
 from services.process.registry import (
     ESCAPE_COMMANDS,
+    ESCAPE_END_WORDS,
+    ESCAPE_PAUSE_WORDS,
     GuidedProcess,
     ProcessCheckResult,
     ProcessRegistry,
@@ -34,6 +36,8 @@ from services.process.registry import (
 
 __all__ = [
     "ESCAPE_COMMANDS",
+    "ESCAPE_END_WORDS",
+    "ESCAPE_PAUSE_WORDS",
     "GuidedProcess",
     "ProcessCheckResult",
     "ProcessRegistry",

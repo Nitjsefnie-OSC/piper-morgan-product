@@ -17,20 +17,23 @@ The drop line stays separate.
 """
 
 # PAUSE after a deferral ("not now", "maybe later" ... THE predicate's DEFER
-# verdict): at the resume offer (CXO 2026-10-14 11:20), mid-interview and at
-# the "ready to start?" invitation (CXO 2026-10-15 items 1 and 2).
+# verdict): at the resume offer (CXO 2026-10-14 11:20) and mid-interview (CXO
+# 2026-10-15 item 1). NOT at the "ready to start?" invitation: an unstarted
+# standup is never paused, it ends with the invitation line (Arch 2026-10-15).
 STANDUP_DEFER_PAUSE_REPLY = (
     "Okay, I'll leave your standup where it is. Just ask when you want to pick it back up."
 )
 
-# PAUSE after an escape word ("stop", "cancel", "never mind" ... the #888 set).
+# PAUSE after a #888 PAUSE escape word (``registry.ESCAPE_PAUSE_WORDS``: "stop").
 # Read by ``StandupProcessAdapter.pause_message``. CXO 2026-10-15 08:35: the
 # same line as a deferral (was the 2026-10-14 21:50 "No problem — I've paused
 # your standup…", retired that morning).
 STANDUP_ESCAPE_PAUSE_REPLY = STANDUP_DEFER_PAUSE_REPLY
 
 # DROP an ACTIVE standup on an explicit exit ("cancel that", "end standup",
-# "forget it": the #1529 exit). CXO 2026-10-15 item 1.
+# "forget it": the #1529 exit) or a #888 END escape word
+# (``registry.ESCAPE_END_WORDS``: "cancel", "quit" ...), read by
+# ``StandupProcessAdapter.drop_message``. CXO 2026-10-15 item 1.
 STANDUP_DROP_REPLY = (
     "Okay, I've dropped your standup. Say 'do a standup' whenever you want a fresh one."
 )
@@ -41,8 +44,10 @@ STANDUP_DROP_PAUSED_REPLY = (
     "Okay, I've dropped your paused standup. Say 'do a standup' whenever you want a fresh one."
 )
 
-# END at the invitation ("ready to start?") on a bare "no" or a cancel.
-# CXO 2026-10-15 item 2 (was "No problem! Just say 'standup' when you're ready.").
+# END at the invitation ("ready to start?"): every way of leaving there (a
+# bare "no", a cancel, an escape word, a deferral). CXO 2026-10-15 item 2 (was
+# "No problem! Just say 'standup' when you're ready."); Arch 2026-10-15 one
+# state, one phrase.
 STANDUP_INVITATION_DECLINE_REPLY = (
     "Okay, no standup for now. Say 'do a standup' whenever you want one."
 )

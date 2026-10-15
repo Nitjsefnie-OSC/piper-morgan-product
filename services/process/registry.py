@@ -28,16 +28,41 @@ logger = structlog.get_logger(__name__)
 # Issue #888, #889: Escape commands recognized at registry level.
 # PPM binding direction (2026-03-13): These bypass workflow handlers entirely.
 # Arch guidance: Exact match on stripped+lowercased full message. Use frozenset.
-ESCAPE_COMMANDS: frozenset = frozenset(
-    {
-        "cancel",
-        "exit",
-        "stop",
-        "skip",
-        "quit",
-        "never mind",
-    }
-)
+#
+# #888 split (Arch 2026-10-15, on #1771): the six words are two sets, generic
+# across processes. The REGISTRY decides the transition from the word alone,
+# before any handler runs; the handler supplies only the line for each outcome
+# (``pause_message`` / ``drop_message``), never the choice. The word map is
+# CXO's call (experience); each set is a one-line edit.
+#
+# END: terminal, through ``_close_process`` (the handler's ``close()``; no
+# resume re-offer, the #1529 anti-nag).
+ESCAPE_END_WORDS: frozenset = frozenset({"cancel", "quit", "exit", "never mind"})
+# PAUSE: ``suspend()``, resumable. ``skip`` stays here, where it was (every
+# escape word paused before the split), until CXO places it: in a guided
+# interview it may mean "skip this question" (Arch 10-15, not ruled).
+ESCAPE_PAUSE_WORDS: frozenset = frozenset({"stop", "skip"})
+# The union, for readers that only ask "is this an escape word?" (the
+# destructive-confirm decline set, the #1529 bare-exit comment, tests).
+ESCAPE_COMMANDS: frozenset = ESCAPE_END_WORDS | ESCAPE_PAUSE_WORDS
+
+
+def _sync_hook_line(handler: Any, hook_name: str) -> Optional[str]:
+    """A SYNC no-argument copy hook's line, or None (absent, async, raising,
+    or returning nothing)."""
+    hook = getattr(handler, hook_name, None)
+    # A sync hook only: an async attribute (an AsyncMock double, say) would
+    # hand back an un-awaited coroutine, never a line. Async hooks are read by
+    # ``escape_reply_for``, which can await them.
+    if callable(hook) and not inspect.iscoroutinefunction(hook):
+        try:
+            line = hook()
+        except Exception as e:  # silent-ok: logged; the generic line still exits honestly
+            logger.warning(f"{hook_name}_hook_failed", error=str(e))
+            line = None
+        if isinstance(line, str) and line:
+            return line
+    return None
 
 
 def pause_message_for(handler: Any) -> str:
@@ -52,18 +77,56 @@ def pause_message_for(handler: Any) -> str:
     implementer (and test double) fail ``register``'s isinstance check. A
     hook that raises or returns nothing falls back to the generic line.
     """
-    hook = getattr(handler, "pause_message", None)
-    # A sync hook only: an async attribute (an AsyncMock double, say) would
-    # hand back an un-awaited coroutine, never a line.
-    if callable(hook) and not inspect.iscoroutinefunction(hook):
+    line = _sync_hook_line(handler, "pause_message")
+    if line:
+        return line
+    return f"No problem — I've paused {handler.process_type.value}. We can pick it up anytime."
+
+
+def drop_message_for(handler: Any) -> str:
+    """The reply when an END escape word closes ``handler``'s active session.
+
+    #888 split (Arch 2026-10-15): the sibling of :func:`pause_message_for`,
+    through an optional ``drop_message()`` hook, same pattern and same
+    reasons. The generic default is the #1529 exit copy the generic close
+    already uses, so an END word and a whole-message exit read alike.
+    """
+    line = _sync_hook_line(handler, "drop_message")
+    if line:
+        return line
+    from services.process.escape import format_exit_message
+
+    return format_exit_message(handler.process_type)
+
+
+async def escape_reply_for(
+    handler: Any,
+    user_id: Optional[str],
+    session_id: Optional[str],
+    *,
+    end: bool,
+) -> str:
+    """The line for an escape word, read BEFORE the registry's transition.
+
+    A handler's copy hook (``drop_message`` for END, ``pause_message`` for
+    PAUSE) may be ASYNC and take ``(user_id, session_id)`` so it can read its
+    own conversation state to pick the copy (Arch 2026-10-15: an unstarted
+    standup gets the invitation line). Copy only: the hook never transitions
+    and never chooses; the word already chose. Read before the transition so
+    the hook sees the state the user left from. A sync no-argument hook, a
+    raising hook or a non-string answer falls back as the sync resolvers do.
+    """
+    hook_name = "drop_message" if end else "pause_message"
+    hook = getattr(handler, hook_name, None)
+    if hook is not None and inspect.iscoroutinefunction(hook):
         try:
-            line = hook()
-        except Exception as e:  # silent-ok: logged; the generic line still pauses honestly
-            logger.warning("pause_message_hook_failed", error=str(e))
+            line = await hook(user_id, session_id)
+        except Exception as e:  # silent-ok: logged; the generic line still exits honestly
+            logger.warning(f"{hook_name}_hook_failed", error=str(e))
             line = None
         if isinstance(line, str) and line:
             return line
-    return f"No problem — I've paused {handler.process_type.value}. We can pick it up anytime."
+    return drop_message_for(handler) if end else pause_message_for(handler)
 
 
 class ProcessType(str, Enum):
@@ -204,9 +267,12 @@ class GuidedProcess(Protocol):
     Issue #888: Added suspend() and has_suspended_session() per
     PPM direction and Arch guidance (2026-03-13).
 
-    Optional, not a protocol member (#1771): ``pause_message() -> str``, the
-    line shown when an escape command pauses this process. See
-    :func:`pause_message_for` for the generic default and why it is optional.
+    Optional, not protocol members (#1771, #888 split): ``pause_message()``
+    and ``drop_message()``, the lines shown when a PAUSE or an END escape word
+    leaves this process; sync with no arguments, or async taking
+    ``(user_id, session_id)`` to read the handler's own state (copy only).
+    See :func:`pause_message_for`, :func:`drop_message_for` and
+    :func:`escape_reply_for` for the generic defaults and why they are optional.
     """
 
     @property
@@ -386,6 +452,11 @@ class ProcessRegistry:
         """
         normalized = message.strip().lower()
         return normalized in ESCAPE_COMMANDS
+
+    def _is_escape_end_word(self, message: str) -> bool:
+        """#888 split: is this escape word an END word (else it pauses)?
+        Same normalisation as ``_is_escape_command``."""
+        return message.strip().lower() in ESCAPE_END_WORDS
 
     async def _close_process(
         self,
@@ -687,19 +758,28 @@ class ProcessRegistry:
                             user_id=user_id,
                             session_id=session_id,
                         )
-                        # Suspend the session (handler owns semantics)
-                        try:
-                            await handler.suspend(user_id, session_id)
-                        except Exception as suspend_err:
-                            logger.warning(
-                                "Error suspending process after escape",
-                                process_type=handler.process_type.value,
-                                error=str(suspend_err),
-                            )
+                        # #888 split (Arch 2026-10-15): the WORD picks the
+                        # transition, here, before any handler runs; the
+                        # handler supplies only the line (read first, so its
+                        # copy hook sees the state the user left from).
+                        end = self._is_escape_end_word(message)
+                        line = await escape_reply_for(handler, user_id, session_id, end=end)
+                        if end:
+                            # END: terminal (handler's close(); no re-offer)
+                            await self._close_process(handler, user_id, session_id)
+                        else:
+                            # PAUSE: suspend (handler owns what that means)
+                            try:
+                                await handler.suspend(user_id, session_id)
+                            except Exception as suspend_err:
+                                logger.warning(
+                                    "Error suspending process after escape",
+                                    process_type=handler.process_type.value,
+                                    error=str(suspend_err),
+                                )
                         return ProcessCheckResult.escaped_from(
                             process_type=handler.process_type,
-                            # #1771: the handler's own pause line (generic default)
-                            response_message=pause_message_for(handler),
+                            response_message=line,
                         )
 
                     # Issue #1529: universal escape check (FLOW-ESCAPE) — exits,

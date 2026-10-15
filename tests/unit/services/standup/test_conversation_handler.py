@@ -30,6 +30,7 @@ from unittest.mock import AsyncMock, MagicMock
 import pytest
 import pytest_asyncio
 
+from services.process.standup_copy import STANDUP_INVITATION_DECLINE_REPLY
 from services.shared_types import StandupConversationState
 from services.standup.conversation_handler import ConversationResponse, StandupConversationHandler
 from services.standup.conversation_manager import StandupConversationManager
@@ -191,20 +192,24 @@ class TestHandleTurnInitiated:
         assert response.state == StandupConversationState.GATHERING_YESTERDAY
 
     @pytest.mark.asyncio
-    async def test_not_now_pauses(self, handler, conversation):
-        """#1771 (CXO 2026-10-15 item 2), re-pinned: 'not now' to the
-        invitation PAUSES (was: abandons, the ruled-away behaviour)."""
+    async def test_not_now_ends(self, handler, conversation):
+        """#1771, re-pinned again (Arch 2026-10-15 shape A): 'not now' to the
+        invitation ENDS with the invitation line. Nothing was started, so a
+        pause would leave an empty SUSPENDED standup offered back later (was:
+        pauses, CXO's 08:30 item 2, ruled away by Arch's 09:1x follow-up)."""
         response = await handler.handle_turn(conversation, "not now")
 
-        assert response.state == StandupConversationState.SUSPENDED
+        assert response.state == StandupConversationState.ABANDONED
         assert response.requires_input is False
+        assert response.message == STANDUP_INVITATION_DECLINE_REPLY
 
     @pytest.mark.asyncio
-    async def test_maybe_later_pauses(self, handler, conversation):
-        """#1771, re-pinned: 'maybe later' also PAUSES (was: abandons)."""
+    async def test_maybe_later_ends(self, handler, conversation):
+        """#1771, re-pinned again: 'maybe later' also ENDS at the invitation."""
         response = await handler.handle_turn(conversation, "maybe later")
 
-        assert response.state == StandupConversationState.SUSPENDED
+        assert response.state == StandupConversationState.ABANDONED
+        assert response.message == STANDUP_INVITATION_DECLINE_REPLY
 
     @pytest.mark.asyncio
     async def test_no_abandons(self, handler, conversation):
