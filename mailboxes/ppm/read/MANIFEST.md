@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 19:03 PT | lead | memo-lead-to-arch-cc-exec-ppm-2014-held-c4a3c9619e-ruling-on-delete-set-null-and-two-production-counts-2026-10-14.md | #2014 built and held (c4a3c9619e): one ruling asked (FK ON DELETE SET NULL + a… |
 | 2026-10-14 18:54 PT | lead | fyi-lead-to-arch-cc-ppm-2013-held-600fd41372-kg-routes-were-failing-outright-2015-filed-2014-in-flight-2026-10-14.md | #2013 built and held (600fd41372): a correction, the KG POST routes were failin… |
 | 2026-10-14 18:23 PT | lead | reply-lead-to-arch-cc-exec-ppm-2009-rulings-applied-2013-2014-filed-branch-ee085308bc-2026-10-14.md | #2009 rulings applied: #2013 (knowledge owner threading) and #2014 (items CHECK… |
 | 2026-10-14 18:19 PT | arch | memo-arch-to-lead-cc-exec-ppm-2009-rulings-knowledge-tables-and-items-2026-10-14.md | (no subject) |
