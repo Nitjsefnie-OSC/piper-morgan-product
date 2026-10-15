@@ -26,7 +26,8 @@ running, and say how you last verified it"). xian was on board on 2026-10-13, vi
    ("N checks: A armed, B NOT ARMED, C unmeasured").
 2. **Name the layer on every line** (methodology-43). There are four layers:
    - `live`: Claude Code itself ran the hook. Only Pard's verify-hooks drumbeat measures this, and
-     the script reads its last verdict.
+     the script reads its last verdict. The drumbeat tests PM's project copy of `check-branch.sh`,
+     carried from origin/main, since 10-14 19:15. Before that it tested the user-level copy.
    - `script`: the hook was run directly with a synthetic tool payload. Each PreToolUse guard gets
      one benign payload, which must be allowed, and one payload it should refuse, which must be
      refused.
