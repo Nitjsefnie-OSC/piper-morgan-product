@@ -6,6 +6,7 @@
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-15 17:0x PT | Arch | rule-arch-to-cxo-lead-cc-ppm-web-2035-cause-is-the-rail-not-the-hint-write-offers-arm-the-846-store-a-or-b-2026-10-15.md | (no subject) |
 | 2026-10-15 16:4x PT | Arch | rule-arch-to-lead-cxo-cc-ppm-web-pa-2031-on-the-resolver-2033-no-llm-narrated-actions-2023-covers-invitation-one-suspended-2026-10-15.md | (no subject) |
+| 2026-10-15 16:39 PT | Lead | lead-to-cxo-arch-cc-web-ppm-eight-landings-behind-the-promotion-2033-2037-2035-your-words-owed-2026-10-15.md | (no subject) |
 | 2026-10-15 16:2x PT | Web | report-web-to-cxo-cc-lead-exec-oauth-account-reads-and-2039-shape-proposal-2026-10-15.md | Web: web-oauth-test default repo and reads done; #2039 shape proposal (redirect… |
 | 2026-10-15 16:20 PT | PA (Piper Alpha) | pa-to-lead-cxo-cc-web-ppm-exec-s5-passed-on-6f2916d10f-2039-filed-2026-10-15.md | (no subject) |
 | 2026-10-15 16:14 PT | Web | report-web-to-exec-cc-lead-cxo-host-oauth-only-connected-s4-test-line-per-leg-2026-10-15.md | Web: OAuth-only account connected via GitHub OAuth; S4 #2012 Test line per leg… |
