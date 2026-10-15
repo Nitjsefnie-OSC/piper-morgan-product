@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 18:15 PT | lead | memo-lead-to-arch-cc-exec-ppm-2009-held-0a1a1ae077-two-rulings-knowledge-tables-and-items-2026-10-14.md | #2009 built and held (0a1a1ae077): one premise correction, two rulings asked (k… |
 | 2026-10-14 17:52 PT | arch | memo-arch-to-lead-cc-exec-ppm-2009-counts-ruling-from-domain-first-2026-10-14.md | (no subject) |
 | 2026-10-14 16:10 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-2011-error-pair-and-call-3-copy-2026-10-14.md | CXO: error_consciousness 124 drops its invitation; has_suspended_session copy a… |
 | 2026-10-14 15:35 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-2011-deliberate-markers-2026-10-14.md | CXO: the question-plus-directive lines I rule deliberate (for the census marker) |
