@@ -2869,7 +2869,10 @@ class IntentService:
             # Multi-intent turns keep the accepted #899 parity (prefix-only);
             # the exit kind ("end standup") is consumed at the seam and never
             # classifies, so it needs no stamp.
-            if off_topic_prefix and escaped_process_type is not None:
+            # #2026: keyed on the flow, not the prefix: a flow CLOSED at its
+            # invitation by an off-topic turn carries no prefix but was still
+            # left on this turn.
+            if escaped_process_type is not None:
                 if intent.context is None:
                     intent.context = {}
                 intent.context["guided_flow_escape"] = {
@@ -3478,7 +3481,9 @@ class IntentService:
         compose with the flow's open question in history and nothing saying
         the flow ended. The classification seam stamps this onto
         intent.context["guided_flow_escape"]; the floor doors hand it to the
-        renderer. Always None when there is no fall-through prefix.
+        renderer. None when no flow was left behind on this turn; since
+        #2026 it can be set with a None prefix (the flow was CLOSED, not
+        paused, so there is no pause to claim).
 
         Args:
             user_id: Authenticated user ID
@@ -3495,13 +3500,18 @@ class IntentService:
 
             # Issue #899: Off-topic pause — process was suspended but message
             # should go through normal intent processing
-            if not result.handled and result.escaped and result.response_message:
+            # #2026: the prefix is None when the handler's suspend() CLOSED
+            # the flow instead of pausing it (an unstarted standup): the turn
+            # still falls through, and the flow is still named for #1596, but
+            # nothing is prepended.
+            if not result.handled and result.escaped:
                 self.logger.info(
-                    "Off-topic detected, process paused, continuing to intent processing",
+                    "Off-topic detected, process left, continuing to intent processing",
                     process_type=result.process_type.value if result.process_type else None,
+                    paused=bool(result.response_message),
                     user_id=user_id,
                 )
-                return None, result.response_message, result.process_type
+                return None, result.response_message or None, result.process_type
 
             if result.handled:
                 self.logger.info(

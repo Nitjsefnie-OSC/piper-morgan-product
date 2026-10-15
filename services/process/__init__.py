@@ -31,6 +31,7 @@ from services.process.registry import (
     ProcessRegistry,
     ProcessType,
     SuspendedInfo,
+    SuspendOutcome,
     get_process_registry,
 )
 
@@ -43,6 +44,7 @@ __all__ = [
     "ProcessRegistry",
     "ProcessType",
     "SuspendedInfo",
+    "SuspendOutcome",
     "get_process_registry",
     "OnboardingProcessAdapter",
     "StandupProcessAdapter",
