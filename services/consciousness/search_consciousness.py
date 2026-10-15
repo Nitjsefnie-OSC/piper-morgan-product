@@ -33,7 +33,7 @@ def format_search_results_conscious(
         "I searched through your Notion workspace for 'auth' and found 3 results.
          The top match is **Auth Guide**.
          ...
-         Want me to summarize any of these, or search for something more specific?"
+         Tell me which one to summarize, or ask for something more specific."
 
     Args:
         query: The search query that was performed
@@ -85,7 +85,7 @@ def format_search_results_conscious(
             sections.append(f"\n...and {count - 10} more results.")
 
     # Dialogue invitation
-    sections.append("\nWant me to summarize any of these, or search for something more specific?")
+    sections.append("\nTell me which one to summarize, or ask for something more specific.")
 
     return "\n".join(sections)
 
@@ -99,7 +99,7 @@ def format_no_results_conscious(query: str) -> str:
 
     To:
         "I searched but didn't find any documents matching 'obscure query'.
-         Want me to try a different search term, or maybe check a specific location?"
+         Try a different search term, or name a specific place to look."
 
     Args:
         query: The search query that returned no results
@@ -109,7 +109,7 @@ def format_no_results_conscious(query: str) -> str:
     """
     return (
         f'I searched but didn\'t find any documents matching "{query}". '
-        f"Want me to try a different search term, or maybe check a specific location?"
+        "Try a different search term, or name a specific place to look."
     )
 
 
@@ -122,7 +122,7 @@ def format_search_error_conscious(error: str) -> str:
 
     To:
         "I ran into a problem while searching: Connection timeout.
-         Want me to try again, or is there something else I can help with?"
+         Try again in a moment, or ask me something else."
 
     Args:
         error: The error message or description
@@ -132,5 +132,5 @@ def format_search_error_conscious(error: str) -> str:
     """
     return (
         f"I ran into a problem while searching: {error}. "
-        f"Want me to try again, or is there something else I can help with?"
+        "Try again in a moment, or ask me something else."
     )

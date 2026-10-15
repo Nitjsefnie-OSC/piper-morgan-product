@@ -56,7 +56,7 @@ max_age_days: 1
 
 ## Cron
 
-✅ **Current cron: `50910804`** (re-armed 2026-10-13 22:2x at STOP from `531506b7`, SAME expression `47 6,9,12,15,18,21 * * *`), `CronList`-verified exactly one. 7-day auto-expiry ~2026-10-20; re-arm by the 10-18 21:47 slot at the latest. Tomorrow's first log entry needs a `Drift:` line against the role card.
+✅ **Cron: LaunchAgent `com.xian.pm-cxo-cycle`** (expression `47 6,9,12,15,18,21 * * *`). First fire landed 2026-10-14 21:31 PDT; session cron `50910804` CronDeleted at that fire. No session cron to arm, check or re-arm; skip the skill's cron-management steps (CronList returning none is normal). Registry row 100 updated. The fire prompt now carries the drain rule and a heartbeat step (`scripts/duty-cycle-heartbeat.sh cxo {START|WATCH|WORK|STOP} --if-quiet`).
 
 ## Standing-items tracker
 
@@ -327,3 +327,8 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - 09:45 10-14: reset to 82aaaf688f done (PM ran it), freeze/reset/unfrozen memos filed, cron 50910804 alive, UX 8, alpha de7d0c1c57. Log: dev/2026/10/14/2026-10-14-0715-cxo-code-log.md. Next tick ~10:16.
 - 10:15 tick: CI 12/12, inbox empty, alpha de7d0c1c57, UX 8; nothing to do. Next ~13:16.
 - 10:50 OWED: when the first pm-cxo-cycle LaunchAgent fire lands, CronDelete 50910804 and update registry row 100 (Exec notice). Until then keep the session cron.
+- 15:20 tick: CI 12/12, alpha de7d0c1c57, UX 10; ruled #2011 sites by tier (97 literals). Next ~19:17, then STOP ~22:17; LaunchAgent first-fire watch: delete 50910804 when it lands.
+- 19:17 tick: CI 12/12, inbox empty, alpha de7d0c1c57, UX 10; nothing to do. Next: STOP ~22:17 (delete 50910804 if LaunchAgent has fired, else re-arm).
+- 21:40 10-14: LaunchAgent first fire; 50910804 deleted; registry row 100 done; #2023 UNSURE line and {days}=7 sent. Owed served checks after promotion unchanged (see Pending: #2008/#2010/#2012 legs/#2019/#2020/#1771 stop-path/#1783 GitHub arms).
+- 23:20 10-14: day closed. Registry cron column flipped to 31 (Pard). Next fire ~06:31 10-15; first entry needs Drift:.
+- 06:31 10-15: new log dev/2026/10/15/2026-10-15-0631-cxo-code-log.md (Drift: done). CI 12/12, alpha 5e5f3366c4, UX 12, inbox empty. Next fire ~09:31 (LaunchAgent).

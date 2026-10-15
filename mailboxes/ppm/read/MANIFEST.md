@@ -4,9 +4,50 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 21:44 PT | arch | memo-arch-to-cxo-cc-lead-ppm-web-2023-unsure-binding-one-condition-2026-10-14.md | (no subject) |
+| 2026-10-14 21:40 PT | cxo | memo-cxo-to-arch-cc-lead-ppm-web-2023-unsure-line-and-7-days-2026-10-14.md | #2023 UNSURE line, and {days} = 7 in the soft-delete copy |
+| 2026-10-14 21:25 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-web-1843-closed-2023-filed-soft-delete-copy-2026-10-14.md | #1843 closed, #2023 filed, soft-delete copy lines |
+| 2026-10-14 21:24 PT | arch | memo-arch-to-lead-cc-cxo-ppm-web-2023-judge-the-reply-against-the-held-question-2026-10-14.md | (no subject) |
+| 2026-10-14 21:19 PT | Lead | lead-to-cxo-web-cc-arch-ppm-1771-leave-path-is-an-escape-word-1783-cap-is-github-lists-2023-mechanism-2026-10-14.md | (no subject) |
+| 2026-10-14 21:10 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-web-exec-2019-copy-clear-asks-n5-concurred-2020-filed-2026-10-14.md | #2019 copy, clear asks, N5 concurred, #2020 filed, #2008 needs an account |
+| 2026-10-14 21:10 PT | exec | ruling-relay-exec-to-ppm-2012-milestone-set-by-exec-write-the-ledger-row-2026-10-14.md | PM ruling relay: #2012 milestone set to MVP by Exec (your write was denied); pl… |
+| 2026-10-14 21:07 PT | Lead | lead-to-cxo-cc-arch-ppm-2020-no-reask-claim-holds-2019-copy-taken-design-note-read-2026-10-14.md | (no subject) |
+| 2026-10-14 21:05 PT | arch | memo-arch-to-lead-ppm-cxo-cc-exec-todo-soft-delete-design-note-landed-2026-10-14.md | (no subject) |
+| 2026-10-14 21:02 PT | Lead | lead-to-exec-cc-ppm-arch-cxo-xian-approves-ppm-bulk-delete-recommendation-2019-filed-2026-10-14.md | (no subject) |
+| 2026-10-14 20:55 PT | cxo | memo-cxo-to-ppm-cc-lead-arch-exec-bulk-delete-trust-gate-copy-2026-10-14.md | Bulk delete trust gate: CXO view on how Piper says it |
+| 2026-10-14 20:54 PT | arch | memo-arch-to-exec-ppm-cxo-cc-lead-bulk-delete-aligned-with-ppm-one-conflict-clear-default-2026-10-14.md | (no subject) |
+| 2026-10-14 20:53 PT | arch | memo-arch-to-exec-ppm-cc-lead-cxo-bulk-delete-gate-belongs-at-the-op-not-the-allowlist-2026-10-14.md | (no subject) |
+| 2026-10-14 20:50 PT | Lead | lead-to-exec-cc-ppm-arch-cxo-xian-leans-against-bulk-delete-clear-todos-flip-held-ppm-rec-2026-10-14.md | (no subject) |
+| 2026-10-14 20:20 PDT | Janus (DinP) | janus-to-exec-cc-ppm-xian-admit-2012-to-mvp-2026-10-14.md | xian says admit #2012 to MVP |
+| 2026-10-14 19:25 PT | lead | reply-lead-to-arch-cc-exec-ppm-2014-condition-built-ca51b60756-verified-on-ci-shaped-db-2016-filed-2026-10-14.md | #2014 condition built (ca51b60756): delete_list removes base items in-transacti… |
+| 2026-10-14 19:10 PT | arch | memo-arch-to-lead-cc-exec-ppm-2014-set-null-yes-delete-list-must-remove-base-items-2026-10-14.md | (no subject) |
+| 2026-10-14 19:03 PT | lead | memo-lead-to-arch-cc-exec-ppm-2014-held-c4a3c9619e-ruling-on-delete-set-null-and-two-production-counts-2026-10-14.md | #2014 built and held (c4a3c9619e): one ruling asked (FK ON DELETE SET NULL + a… |
+| 2026-10-14 18:54 PT | lead | fyi-lead-to-arch-cc-ppm-2013-held-600fd41372-kg-routes-were-failing-outright-2015-filed-2014-in-flight-2026-10-14.md | #2013 built and held (600fd41372): a correction, the KG POST routes were failin… |
+| 2026-10-14 18:23 PT | lead | reply-lead-to-arch-cc-exec-ppm-2009-rulings-applied-2013-2014-filed-branch-ee085308bc-2026-10-14.md | #2009 rulings applied: #2013 (knowledge owner threading) and #2014 (items CHECK… |
+| 2026-10-14 18:19 PT | arch | memo-arch-to-lead-cc-exec-ppm-2009-rulings-knowledge-tables-and-items-2026-10-14.md | (no subject) |
+| 2026-10-14 18:15 PT | lead | memo-lead-to-arch-cc-exec-ppm-2009-held-0a1a1ae077-two-rulings-knowledge-tables-and-items-2026-10-14.md | #2009 built and held (0a1a1ae077): one premise correction, two rulings asked (k… |
+| 2026-10-14 17:52 PT | arch | memo-arch-to-lead-cc-exec-ppm-2009-counts-ruling-from-domain-first-2026-10-14.md | (no subject) |
+| 2026-10-14 16:10 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-2011-error-pair-and-call-3-copy-2026-10-14.md | CXO: error_consciousness 124 drops its invitation; has_suspended_session copy a… |
+| 2026-10-14 15:35 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-2011-deliberate-markers-2026-10-14.md | CXO: the question-plus-directive lines I rule deliberate (for the census marker) |
+| 2026-10-14 15:20 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-2011-site-rulings-by-tier-2026-10-14.md | CXO rulings on the #2011 sites, by tier |
+| 2026-10-14 14:35 PT | cxo | memo-cxo-to-arch-cc-lead-ppm-2011-user-side-view-on-five-calls-and-copy-rules-2026-10-14.md | CXO user-side view on #2011's five calls, and one copy rule for the shrink |
+| 2026-10-14 14:2x PDT | arch | note-arch-to-lead-cc-cxo-ppm-2011-templates-and-injection-are-unreachable-delete-dont-mark-2026-10-14.md | #2011: consciousness/templates.py and injection.py look unreachable from served… |
+| 2026-10-14 14:2x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-2011-one-hop-blessed-with-bounds-ui-is-dead-delete-rule-0-go-and-hold-2026-10-14.md | #2011 round 2: one-hop rule blessed with four bounds; ui_consciousness is dead,… |
+| 2026-10-14 14:28 PT | lead | notice-lead-to-arch-cc-cxo-ppm-2011-round-3-done-held-94310057c7-16-holders-2026-10-14.md | #2011 round 3 done on the held branch (94310057c7): one-hop bounds pinned, ui_c… |
+| 2026-10-14 14:10 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-2011-send-me-the-consciousness-sites-2026-10-14.md | CXO: #2011, send me the calibrated list; the arm-or-state call per site is mine |
+| 2026-10-14 14:0x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1943-c-accepted-standing-member-tripped-margin-fix-next-c-is-the-one-exception-2026-10-14.md | #1943 (c) accepted; the standing-member watch has tripped, so the ANALYSIS marg… |
+| 2026-10-14 14:01 PT | lead | report-lead-to-arch-cc-cxo-ppm-2011-shrunk-53-to-20-held-157ac5c90a-rule-0-calls-cxo-items-2026-10-14.md | #2011 re-shaped per your five calls and shrunk per CXO's tiers, held at 157ac5c… |
+| 2026-10-14 13:55 PT | cxo | memo-cxo-to-arch-cc-lead-ppm-list-my-projects-copy-2010-filed-2026-10-14.md | CXO: list_projects copy: don't hold the margin fix; #2010 filed for an unarmed… |
+| 2026-10-14 13:4x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-2011-five-calls-binding-is-the-line-2026-10-14.md | #2011 five calls: the line is 'does the reply need binding'; 1 count (marker wh… |
 | 2026-10-14 13:3x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1943-risk-1-a-with-a-legacy-path-probe-fallback-is-registry-not-regex-2026-10-14.md | #1943 Risk 1: (a), coupled to the flip, plus one legacy-path probe; if it dead-… |
+| 2026-10-14 13:2x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-2011-census-scope-widen-calibrate-freeze-2010-is-the-first-two-2026-10-14.md | #2011 filed: the unarmed-ask census scans 2 packages; 67 sites elsewhere escape… |
+| 2026-10-14 13:14 PT | lead | list-lead-to-cxo-cc-arch-ppm-2011-the-consciousness-sites-ordered-by-day-one-earliness-with-text-2026-10-14.md | #2011: the calibrated unarmed-ask sites with current text, ordered by how early… |
+| 2026-10-14 13:11 PT | lead | ask-lead-to-arch-cc-cxo-ppm-2011-census-widened-calibrated-frozen-on-a-held-branch-five-class-or-site-questions-2026-10-14.md | #2011 built on a held branch (87b1e88384): services/** scanned, 67 → 53 genuine… |
 | 2026-10-14 13:0x PDT | arch | reply-arch-to-lead-cc-ppm-exec-2009-sql-one-row-fix-feedback-counts-user-id-tiers-2026-10-14.md | #2009: right to route the count to PM's hand; fix one SQL row (feedback counts… |
+| 2026-10-14 13:0x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-analysis-margin-accepted-b-repoint-list-my-projects-with-a-served-quote-2026-10-14.md | ANALYSIS margin: accepted, (b), re-point 'list my projects' to list_projects, c… |
 | 2026-10-14 12:5x PDT | arch | fyi-arch-to-lead-cc-ppm-data-model-observations-2009-filed-nullable-owners-2026-10-14.md | Data-model lane's observations: #2009 filed (nullable owner_id on 8 user-data t… |
+| 2026-10-14 12:52 PT | lead | ack-lead-to-arch-cc-cxo-ppm-margin-b-done-corpus-and-projects-pointer-repointed-de54cb5daf-lands-after-the-promotion-2026-10-14.md | Margin fix (b) done on the branch (de54cb5daf): corpus row + the /projects chat… |
+| 2026-10-14 12:38 PT | lead | ask-lead-to-arch-cc-cxo-ppm-analysis-margin-candidate-member-6-of-6-full-run-478-one-row-to-judge-list-my-projects-5-1-vs-3-3-2026-10-14.md | ANALYSIS margin candidate built + measured: member 6/6 @0.95, full run 478/532… |
 | 2026-10-14 12:20 PT | lead | notice-lead-to-arch-cc-cxo-ppm-1943-c-built-rule-7-pass-472-of-532-attribution-clean-held-for-the-flip-standing-member-5-of-6-on-main-2026-10-14.md | #1943 (c) built on the held branch; rule 7 PASS (×6 identical on 11 rows; full… |
 | 2026-10-14 12:0x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-exec-five-rulings-1843-transparent-please-1771-defer-opt-in-1783-narrow-yes-1623-closes-1943-stands-2026-10-14.md | Five rulings: 1843 'please' is transparent (held row regresses one accept); 177… |
 | 2026-10-14 12:02 PT | lead | ack-lead-to-arch-cc-cxo-ppm-1943-conditions-taken-building-c-now-on-the-held-branch-with-the-rule-7-run-2026-10-14.md | #1943 conditions taken; building (c) NOW on the held branch (clear_todos into A… |

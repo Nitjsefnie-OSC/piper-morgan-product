@@ -5,6 +5,9 @@
 ## Before you build
 `git grep` / `ls scripts/` for the problem's noun first. Twice in one week (10-01 ruff binary, 10-04 pre-push interpreter) the fix already existed in the tree and the finding was made again (Pard's observation).
 
+## Before you remove
+Find what reads or probes the mechanism: `git grep` its name, and check which copy each live probe hits (`whats-armed.md`, Pard's drumbeat). On 10-14, removing the user-level `check-branch.sh` turned the hook drumbeat red at 19:05, because the drumbeat had been testing that copy and no page said so (methodology-43, instance 6).
+
 ## The rule
 Every **new** watcher, hook, gate, cron or recurring check carries five lines where it is defined (the
 script header, or the registry/settings comment that installs it):

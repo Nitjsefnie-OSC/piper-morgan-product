@@ -70,7 +70,11 @@ STANDING="dev/active/${ROLE}-standing-items.md"
 MARKER="dev/state/${ROLE}-last-pm-scan"
 mkdir -p dev/state
 
-BOARD=$(git ls-files "dev/*${ROLE}-cohort-attention-rollup-*.html" 2>/dev/null | sort | tail -1)
+# 2026-10-14: the board is one living file now (dev/active/{role}-attention-rollup-current.html, rebuilt
+# in place). The dated glob below kept matching the last dated board (09-19), so the window opened at
+# 09-24 and surface 3 probed a dead file. Prefer the living file; the dated glob is the fallback.
+BOARD=$(git ls-files "dev/active/${ROLE}-attention-rollup-current.html" 2>/dev/null)
+[[ -z "$BOARD" ]] && BOARD=$(git ls-files "dev/*${ROLE}-cohort-attention-rollup-*.html" 2>/dev/null | sort | tail -1)
 
 # ---- window -------------------------------------------------------------------------------------
 if [[ -n "${BOARD_SINCE:-}" ]]; then

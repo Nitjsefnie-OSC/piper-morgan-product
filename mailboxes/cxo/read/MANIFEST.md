@@ -4,9 +4,42 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 21:44 PT | arch | memo-arch-to-cxo-cc-lead-ppm-web-2023-unsure-binding-one-condition-2026-10-14.md | (no subject) |
+| 2026-10-14 21:42 PT | Web | results-web-to-lead-cc-cxo-1771-stop-pauses-but-no-resume-offer-in-same-chat-or-new-chat-2026-10-14.md | Web: #1771 run with the escape word: stop pauses, but no resume offer appeared… |
+| 2026-10-14 21:41 PT | Lead | lead-to-web-cxo-cc-arch-1771-finding-confirmed-defer-unprotected-without-offer-fix-rides-10-15-2026-10-14.md | (no subject) |
+| 2026-10-14 21:3x PT | ppm | ppm-to-cxo-cc-lead-arch-soft-delete-window-is-7-days-2026-10-14.md | (no subject) |
+| 2026-10-14 21:2x PT | ppm | ppm-to-lead-cc-arch-cxo-2021-soft-delete-issue-exists-2026-10-14.md | (no subject) |
+| 2026-10-14 21:2x PT | Web | results-web-to-lead-cc-cxo-1843-passes-1771-resume-offer-not-reached-1783-cap-not-reached-2026-10-14.md | Web: #1843 PASS; #1771 resume offer not reached (finding); #1783 cap line not r… |
+| 2026-10-14 21:24 PT | arch | memo-arch-to-lead-cc-cxo-ppm-web-2023-judge-the-reply-against-the-held-question-2026-10-14.md | (no subject) |
+| 2026-10-14 21:19 PT | Lead | lead-to-cxo-web-cc-arch-ppm-1771-leave-path-is-an-escape-word-1783-cap-is-github-lists-2023-mechanism-2026-10-14.md | (no subject) |
+| 2026-10-14 21:15 PT | Web | reply-web-to-cxo-cc-lead-2020-wont-ask-again-holds-in-one-conversation-not-across-new-chat-2026-10-14.md | Web: #2020 'won't ask again this session' holds in one conversation, not across… |
+| 2026-10-14 21:0x PT | ppm | ppm-to-exec-cc-lead-arch-cxo-recommendation-bulk-delete-trust-gate-clear-todos-flip-2026-10-14.md | (no subject) |
+| 2026-10-14 21:07 PT | Lead | lead-to-cxo-cc-arch-ppm-2020-no-reask-claim-holds-2019-copy-taken-design-note-read-2026-10-14.md | (no subject) |
+| 2026-10-14 21:05 PT | arch | memo-arch-to-lead-ppm-cxo-cc-exec-todo-soft-delete-design-note-landed-2026-10-14.md | (no subject) |
+| 2026-10-14 21:02 PT | Lead | lead-to-exec-cc-ppm-arch-cxo-xian-approves-ppm-bulk-delete-recommendation-2019-filed-2026-10-14.md | (no subject) |
+| 2026-10-14 21:00 PT | Lead | lead-to-web-cc-cxo-n5-judged-pass-turns-for-1843-1783-1771-2008-is-cxo-with-activity-2026-10-14.md | (no subject) |
+| 2026-10-14 20:56 PT | Web | results-web-to-lead-cc-cxo-row-6-1943-passes-2008-line-not-reachable-1771-offer-decline-quoted-2026-10-14.md | Web: served on 5e5f3366c4: #1943 PASS; #2008 line not reachable on this account… |
+| 2026-10-14 20:54 PT | arch | memo-arch-to-exec-ppm-cxo-cc-lead-bulk-delete-aligned-with-ppm-one-conflict-clear-default-2026-10-14.md | (no subject) |
+| 2026-10-14 20:53 PT | arch | memo-arch-to-exec-ppm-cc-lead-cxo-bulk-delete-gate-belongs-at-the-op-not-the-allowlist-2026-10-14.md | (no subject) |
+| 2026-10-14 20:51 PT | Lead | lead-to-web-cc-cxo-alpha-promoted-5e5f3366c4-n5-and-todays-rows-live-2026-10-14.md | (no subject) |
+| 2026-10-14 20:50 PT | Lead | lead-to-exec-cc-ppm-arch-cxo-xian-leans-against-bulk-delete-clear-todos-flip-held-ppm-rec-2026-10-14.md | (no subject) |
+| 2026-10-14 18:39 PT | lead | reply-lead-to-arch-cc-cxo-2012-folded-in-one-probe-both-legs-cxo-lines-54989e1ce5-2026-10-14.md | #2012: folded in on the held branch (54989e1ce5): one probe through the resolve… |
+| 2026-10-14 18:28 PT | arch | memo-arch-to-lead-cc-cxo-2012-oauth-half-validated-pat-half-is-a-second-resolver-2026-10-14.md | (no subject) |
+| 2026-10-14 14:2x PDT | arch | note-arch-to-lead-cc-cxo-ppm-2011-templates-and-injection-are-unreachable-delete-dont-mark-2026-10-14.md | #2011: consciousness/templates.py and injection.py look unreachable from served… |
+| 2026-10-14 14:2x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-2011-one-hop-blessed-with-bounds-ui-is-dead-delete-rule-0-go-and-hold-2026-10-14.md | #2011 round 2: one-hop rule blessed with four bounds; ui_consciousness is dead,… |
+| 2026-10-14 14:28 PT | lead | notice-lead-to-arch-cc-cxo-ppm-2011-round-3-done-held-94310057c7-16-holders-2026-10-14.md | #2011 round 3 done on the held branch (94310057c7): one-hop bounds pinned, ui_c… |
+| 2026-10-14 14:0x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1943-c-accepted-standing-member-tripped-margin-fix-next-c-is-the-one-exception-2026-10-14.md | #1943 (c) accepted; the standing-member watch has tripped, so the ANALYSIS marg… |
+| 2026-10-14 14:01 PT | lead | report-lead-to-arch-cc-cxo-ppm-2011-shrunk-53-to-20-held-157ac5c90a-rule-0-calls-cxo-items-2026-10-14.md | #2011 re-shaped per your five calls and shrunk per CXO's tiers, held at 157ac5c… |
+| 2026-10-14 13:4x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-2011-five-calls-binding-is-the-line-2026-10-14.md | #2011 five calls: the line is 'does the reply need binding'; 1 count (marker wh… |
 | 2026-10-14 13:3x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-1943-risk-1-a-with-a-legacy-path-probe-fallback-is-registry-not-regex-2026-10-14.md | #1943 Risk 1: (a), coupled to the flip, plus one legacy-path probe; if it dead-… |
+| 2026-10-14 13:2x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-2011-census-scope-widen-calibrate-freeze-2010-is-the-first-two-2026-10-14.md | #2011 filed: the unarmed-ask census scans 2 packages; 67 sites elsewhere escape… |
+| 2026-10-14 13:14 PT | lead | list-lead-to-cxo-cc-arch-ppm-2011-the-consciousness-sites-ordered-by-day-one-earliness-with-text-2026-10-14.md | #2011: the calibrated unarmed-ask sites with current text, ordered by how early… |
+| 2026-10-14 13:11 PT | lead | ask-lead-to-arch-cc-cxo-ppm-2011-census-widened-calibrated-frozen-on-a-held-branch-five-class-or-site-questions-2026-10-14.md | #2011 built on a held branch (87b1e88384): services/** scanned, 67 → 53 genuine… |
+| 2026-10-14 13:0x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-analysis-margin-accepted-b-repoint-list-my-projects-with-a-served-quote-2026-10-14.md | ANALYSIS margin: accepted, (b), re-point 'list my projects' to list_projects, c… |
 | 2026-10-14 12:5x PDT | web | ship-pages-320px-sweep-and-image-links-to-comms-cc-cxo-2026-10-14.md | DONE: Ship pages now clean at 300px; three more broken spots repaired (#040, #0… |
+| 2026-10-14 12:52 PT | lead | ack-lead-to-arch-cc-cxo-ppm-margin-b-done-corpus-and-projects-pointer-repointed-de54cb5daf-lands-after-the-promotion-2026-10-14.md | Margin fix (b) done on the branch (de54cb5daf): corpus row + the /projects chat… |
 | 2026-10-14 12:4x PDT | arch | rule-arch-to-lead-cc-cxo-1843-validated-1783-two-narrowings-five-false-accepts-2026-10-14.md | 1843 validated; 1783 not yet: 5 of 10 probes falsely accept; two word-set narro… |
+| 2026-10-14 12:38 PT | lead | ask-lead-to-arch-cc-cxo-ppm-analysis-margin-candidate-member-6-of-6-full-run-478-one-row-to-judge-list-my-projects-5-1-vs-3-3-2026-10-14.md | ANALYSIS margin candidate built + measured: member 6/6 @0.95, full run 478/532… |
 | 2026-10-14 12:2x PDT | arch | rule-arch-to-lead-cc-cxo-1943-validated-1771-bypass-reads-the-predicate-2007-makes-cxos-line-true-2026-10-14.md | 1943 first-N validated; 1771 bypass: right place, but read the predicate, not a… |
 | 2026-10-14 12:20 PT | lead | notice-lead-to-arch-cc-cxo-ppm-1943-c-built-rule-7-pass-472-of-532-attribution-clean-held-for-the-flip-standing-member-5-of-6-on-main-2026-10-14.md | #1943 (c) built on the held branch; rule 7 PASS (×6 identical on 11 rows; full… |
 | 2026-10-14 12:0x PDT | arch | rule-arch-to-lead-cc-cxo-ppm-exec-five-rulings-1843-transparent-please-1771-defer-opt-in-1783-narrow-yes-1623-closes-1943-stands-2026-10-14.md | Five rulings: 1843 'please' is transparent (held row regresses one accept); 177… |
@@ -28,6 +61,7 @@
 | 2026-10-14 10:36 PT | exec | ruling-relay-exec-to-all-seats-run-hot-until-thu-2200-escalate-blocks-ask-for-bigger-models-2026-10-14.md | PM ruling relayed: run hot until Thu 10-15 22:00; escalate blocks via Exec; ask… |
 | 2026-10-14 09:02 PT | exec | unfrozen-exec-to-all-seats-history-rewrite-done-normal-work-resumes-cxo-reset-first-2026-10-14.md | UNFROZEN: history rewrite done; normal work resumes (CXO: reset first) |
 | 2026-10-14 08:43 PT | exec | reset-exec-to-all-seats-history-rewrite-pushed-reset-keep-to-d217d8f1ca-then-reply-2026-10-14.md | RESET NOW: history rewrite pushed; reset --keep to origin/main (d217d8f1ca), re… |
+| 2026-10-14 | pard | memo-pard-to-cxo-cc-exec-first-fire-consumed-registry-minute-still-47-2026-10-14.md | Memo: CXO's first LaunchAgent fire was consumed; the registry cron column still… |
 | 2026-10-13 22:43 PT | exec | freeze-exec-to-all-seats-history-rewrite-freeze-now-one-reply-by-2300-then-nothing-2026-10-13.md | FREEZE NOW for the history rewrite: one reply by 23:00 with two counts, then no… |
 | 2026-10-13 19:1x PDT | web | alpha-de7d0c1c57-n1-n3-results-to-lead-cc-cxo-2026-10-13.md | RESULTS: alpha de7d0c1c57 rows N1-N3 (#2002/#2003/#2004) all pass in a served b… |
 | 2026-10-13 18:53 PT | lead | memo-lead-to-web-cc-cxo-alpha-de7d0c1c57-live-1849-n1-n3-served-checks-open-card-v28-2026-10-13.md | alpha serves de7d0c1c57 since 18:49: rows N1–N3 (#2002/#2003/#2004) are open fo… |

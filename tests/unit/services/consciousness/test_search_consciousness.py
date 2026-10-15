@@ -24,7 +24,9 @@ class TestSearchConsciousness:
 
         results = [{"title": "Doc 1", "url": "https://example.com"}]
         output = format_search_results_conscious("test", results, "Notion")
-        assert "?" in output, "Should have invitation"
+        # #2011 (CXO 2026-10-14): a next step stated, not an unarmed offer.
+        assert "Tell me which one to summarize, or ask for something more specific." in output
+        assert "Want me to" not in output
 
     def test_search_results_highlights_top(self):
         """Top result should get special mention."""
@@ -43,14 +45,16 @@ class TestSearchConsciousness:
 
         output = format_no_results_conscious("obscure query")
         assert "I " in output or "I'" in output, "Should have identity"
-        assert "?" in output, "Should suggest alternatives"
+        assert "Try a different search term, or name a specific place to look." in output
+        assert "Want me to" not in output
 
     def test_search_error_has_invitation(self):
         """Error message must have invitation."""
         from services.consciousness.search_consciousness import format_search_error_conscious
 
         output = format_search_error_conscious("Connection timeout")
-        assert "?" in output, "Should have invitation"
+        assert "Try again in a moment, or ask me something else." in output
+        assert "Want me to" not in output
         assert "I " in output or "I'" in output, "Should have identity"
 
     def test_single_result_format(self):
@@ -92,7 +96,7 @@ class TestSearchConsciousnessEdgeCases:
 
         output = format_search_results_conscious("test", [], "Notion")
         assert "I " in output or "I'" in output
-        assert "?" in output
+        assert "Try a different search term" in output
 
     def test_result_without_url(self):
         """Results without URL should still format correctly."""

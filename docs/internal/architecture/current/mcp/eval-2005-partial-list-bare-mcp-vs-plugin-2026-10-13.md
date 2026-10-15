@@ -2,7 +2,7 @@
 
 **Author**: PA, 2026-10-13, on xian's ruling relayed by Exec ("use this as an eval and figure out how to better
 prompt… this is a bare MCP. the full plugin can provide skills, hooks, and other agentic guidance").
-**Status**: proposal, **run 2026-10-14** (results below). **Not MVP critical path**: private-beta work (xian, same evening). Registry publish held.
+**Status**: proposal, **run 2026-10-14** (results below). **xian's direction 10-14: smart server first, then connector, then skills** (decisions.log). **Not MVP critical path**: private-beta work (xian, same evening). Registry publish held.
 
 ## Results (2026-10-14, run under xian's run-hot ruling)
 
@@ -21,6 +21,19 @@ and per-run JSON alongside). 90 runs, $7.47, mocked connector, Claude Code harne
 - **So the answer to the order question:** the server fix was necessary and is enough for this case, and it's
   already live (v14). The plugin's job is getting the question to Piper, and that's what to optimize in its
   skill descriptions.
+
+## Routing follow-up (2026-10-15, PA)
+
+`piper-morgan-plugin` `6aab52f`: `evals-routing/RESULTS-2026-10-15.md`. 105 runs, $9.67. Tests the cheapest
+server lever for the bare connector's routing gap: a tool description that opens with the questions it answers.
+
+- **It doesn't fix routing.** Bare connector, current vs use-first description: 33 vs 37 of 45; on "How many
+  open GitHub issues do I have?", 8 vs 9 of 15 (noise). The full plugin: 15 of 15.
+- **The misses are GitHub-named questions.** "What should I work on today?" reached Piper 30 of 30 times without
+  the plugin.
+- **Untested server levers**: the tool name (it doesn't say "GitHub") and an MCP `instructions` string (the
+  harness can't mock one). Both would need a live, deployed server to measure, and the harness's `gh` instinct
+  may not match Desktop's. So the plugin stays the measured routing lever; the real check is PM in Desktop.
 
 ## What happened
 

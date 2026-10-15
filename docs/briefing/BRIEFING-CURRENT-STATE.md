@@ -2,7 +2,7 @@
 type: briefing
 title: BRIEFING-CURRENT-STATE.md - Where We Are Right Now
 valid_from: "2025-09-30"
-last_updated: "2026-10-14"
+last_updated: "2026-10-15"
 last_verified: "2026-10-12"
 size_cap_bytes: 12000
 ---
@@ -27,24 +27,24 @@ log, never here. Bump `last_updated` to the newest line's date, or CI fails. Ski
 
 ## Now
 
-- **Alpha (live)** *(Lead, 2026-10-14 09:13 PDT, `curl https://alpha.pipermorgan.ai/health`)*: healthy, **v0.8.14.0**,
-  git_sha `de7d0c1c57` (promoted 10-13 18:49 by PM, run 38497735645, the refined gate's first pass). That sha is a **pre-rewrite id**: after
-  the 10-14 history rewrite (new main descends from `d217d8f1ca`) it no longer sits on main, but its served code equals `d217d8f1ca`'s on every
-  served path (`git diff` on services/web/scripts/main.py: one line of an operator script). Staging already serves `d217d8f1ca` with Tests
-  green, so the next promotion needs no wait; a promotion is optional hygiene until a code landing arrives. `origin/main` builds; the droplet
-  and `origin/production` are gone (09-29).
+- **Alpha (live)** *(Lead, 2026-10-15 06:41 PDT, `curl https://alpha.pipermorgan.ai/health`)*: healthy, **v0.8.14.0**,
+  git_sha `5e5f3366c4` (promoted 10-14 20:55 by Lead on xian's word, run 38678103509; code-equal to the 17:24 READY build `f8b2d15e52`).
+  Serves the 10-13 and 10-14 landings (#1943 first-N, #1843, #1771+#2007, #1783, #2008, data-model.md). Promote gate widened 3153ab903a
+  (Tests-run-head list ∩ rev-list walk) and test.yml queues on main (3b92152c14), so a docs push no longer threatens a dispatch and a
+  code push only queues a Tests run. `origin/main` builds; the droplet and `origin/production` are gone (09-29).
 - **Version** *(CIO, 2026-10-08, `git tag`)*: latest tag **v0.8.14.0** ("On Your Clock", 09-23). 0.9.0 is
   reserved for beta.
 - **MVP gate** *(Docs, 2026-10-12 10:1x PDT, `sprint-truth.py`, live board pull of 1,815 items)*:
   **13 not done** (2 Sprint Backlog, 2 In Progress, 1 In Review, 8 Product Backlog), 1,238 done. The MVP milestone **is**
   the beta gate. **Dates: design partners Fri 10-23, hard stop Fri 10-30** (baseline 10-05; slips are logged in
   `docs/internal/planning/beta-gate-standard.md` and only PM moves either date). Read the ledger, not this line, for slips.
-- **Engineering focus** *(Lead, 2026-10-14 09:13 PDT, from the 10-13 Lead log)*: 10-13 landed nine code units (#1987 half 2 + pick-survives-
-  pleasantry, #2001, #1976 with the description unchanged, the meeting-row additive example, utterance-log fingerprints, #1982 step 3 with the
-  legacy fallback off, #2005 total/truncated, the promote-gate ancestor refinement), all live on alpha since 18:49; #2002/#2003/#2004 closed by
-  CXO on Web's served run. Literal ceiling **90** (FILE_REFERENCE deleted 10-13; Wednesday trip-wire reading 90, PPM's re-plan). Held: #1982
-  Registry publish (xian), the PAT dual-write branch behind PM's PAT-only run (#1983/#1995), #2005 paused as an eval (xian, not MVP path).
-  Next: PM's test card rows (v31), then carried work.
+- **Engineering focus** *(Lead, 2026-10-15 06:41 PDT, from the 10-14 Lead log and carry-forward)*: 10-14 closed four MVP issues
+  (#1886, #1623, #1579, #1860) and landed nine units, now live on alpha 5e5f3366c4. Seven code branches held through the 10-14 promotion
+  land this morning in order (#2011 census-b, #2010 list-projects offers, ANALYSIS margin example, #1965/#2012 OAuth-leg error, #2009
+  owner NOT NULL migration, #2013 KG owner, #2014 items check). Then #1771 second seam, #2019 interim delete cap (xian approved PPM's
+  recommendation 10-14 21:02: `clear_todos` flip HELD, #2021 soft delete first), #2020 strings, #2017 Disconnect; #2023 corpus rows first
+  (Arch's ruling). Held: #1982 Registry publish (xian), PAT dual-write branch (#1983/#1995), #2005 paused as an eval, `lead-1943-clear-todos-resolver`
+  (flip held). Next promotion only on xian's explicit word.
 - **PM's open asks** *(Exec, 2026-10-09 06:4x PDT)*: on Exec's attention rollup at
   `claude.ai/artifact/719UZ4h1NELjEwWZbDCceT` (its own header line carries the current version; do not pin one here, it was v90 at 04:2x and v95 by 06:4x). Do not copy the list here: it goes stale within hours.
 - **Usage** *(CIO, 2026-10-08)*: the weekly window reset Thu 10-08 21:59 PDT; stop line **95%** of the weekly
