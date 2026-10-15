@@ -4,6 +4,11 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 09:2x PT | Arch | note-arch-to-lead-cxo-cc-ppm-web-1771-shape-a-outcome-via-the-adapter-not-a-888-carve-b-rejected-2026-10-15.md | (no subject) |
+| 2026-10-15 09:1x PT | Arch | rule-arch-to-cxo-lead-cc-ppm-web-1771-yes-it-creates-a-record-fix-in-the-handler-not-the-hatch-invitation-leave-ends-2026-10-15.md | (no subject) |
+| 2026-10-15 09:0x PT | ppm | ppm-to-lead-arch-cxo-1771-concur-shape-a-via-adapter-888-direction-stands-2026-10-15.md | (no subject) |
+| 2026-10-15 09:0x PT | Arch | rule-arch-to-lead-cxo-cc-ppm-web-1771-dont-carve-888-split-its-words-end-vs-pause-generically-2026-10-15.md | (no subject) |
+| 2026-10-15 08:53 PT | Lead | lead-to-cxo-arch-cc-ppm-web-1771-the-invitation-stage-is-a-record-pausing-there-suspends-an-empty-standup-two-shapes-2026-10-15.md | (no subject) |
 | 2026-10-15 08:48 PT | Lead | lead-to-cxo-arch-cc-web-1771-four-seams-landed-three-open-points-bare-cancel-at-the-invitation-is-the-888-hatch-2026-10-15.md | (no subject) |
 | 2026-10-15 08:3x PT | Arch | rule-arch-to-lead-cxo-1771-2019-validated-bare-later-is-a-known-miss-not-a-widening-mid-interview-not-now-pauses-2026-10-15.md | (no subject) |
 | 2026-10-15 08:26 PT | Lead | lead-to-cxo-cc-arch-1771-one-word-is-the-stop-line-now-the-leave-it-where-it-is-line-2026-10-15.md | (no subject) |
