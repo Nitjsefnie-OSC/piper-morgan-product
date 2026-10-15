@@ -57,6 +57,10 @@ class IntentExecutionResult:
     success: bool = True
     error: Optional[str] = None
     duration_ms: float = 0.0
+    # #2030 (Arch's ruling, issuecomment-6203827433): the handler's #852
+    # ``offer_hint``, carried — never armed here. The orchestrator does no
+    # session-store writes; IntentService arms the ONE picked hint.
+    offer_hint: Optional[Dict[str, Any]] = None
 
 
 @dataclass
@@ -68,6 +72,11 @@ class OrchestratedResponse:
     has_partial_failure: bool = False
     total_duration_ms: float = 0.0
     greeting_prefix: bool = False
+    # #2030: the one hint this turn arms (first successful sub-result, in
+    # plan order, whose offer_text was removed verbatim from its response).
+    # Its offer_text is the composed reply's LAST sentence. IntentService
+    # hands it to ``_track_offer_hint`` before ``_apply_soft_offer``.
+    armed_offer_hint: Optional[Dict[str, Any]] = None
 
     @property
     def successful_results(self) -> List[IntentExecutionResult]:
@@ -170,6 +179,10 @@ class IntentOrchestrator:
             greeting_prefix=plan.has_greeting,
         )
 
+        # #2030: pick the one armed hint and take every hinted question out
+        # of its sibling's text, BEFORE aggregation.
+        response.armed_offer_hint = self._pick_armed_offer(response.results)
+
         # Aggregate the messages
         response.aggregated_message = self._aggregate_messages(response)
 
@@ -230,6 +243,10 @@ class IntentOrchestrator:
                 intent_data=result.get("intent", {}),
                 success=True,
                 duration_ms=duration_ms,
+                # #2030: carry the hint (the single path arms it at
+                # _process_intent_internal; this path's holder arms it
+                # through OrchestratedResponse.armed_offer_hint).
+                offer_hint=result.get("offer_hint") or None,
             )
 
         except Exception as e:
@@ -248,13 +265,73 @@ class IntentOrchestrator:
                 duration_ms=duration_ms,
             )
 
+    def _pick_armed_offer(self, results: List[IntentExecutionResult]) -> Optional[Dict[str, Any]]:
+        """#2030 (Arch's ruling, issuecomment-6203827433): carry, pick one,
+        ask it last.
+
+        For EVERY sub-result with an ``offer_hint``, its ``offer_text`` is
+        removed from its response by exact match (#2010 adequacy makes the
+        rendered question verbatim ``offer_text``; #2024 hardening (a) makes
+        it a question). The first SUCCESSFUL sub-result in plan order whose
+        removal matched is the armed one; ``_aggregate_messages`` appends its
+        ``offer_text`` once, last. A sibling whose ``offer_text`` is not
+        found verbatim (drift) arms nothing and gets nothing appended; its
+        text is left exactly as the handler rendered it (nothing else is
+        stripped) and the drift is logged. Rewrites the hinted results'
+        ``response`` in place; returns the armed hint or None. No store writes.
+        """
+        armed: Optional[Dict[str, Any]] = None
+        for r in results:
+            hint = r.offer_hint
+            if not hint:
+                continue
+            offer_text = hint.get("offer_text") or ""
+            stripped = _remove_offer_text(r.response, offer_text) if offer_text else None
+            if stripped is None:
+                logger.warning(
+                    "multi_intent_offer_text_drift",
+                    action=r.intent.action,
+                    continuation_hint=hint.get("continuation_hint"),
+                    offer_text=offer_text,
+                    note="offer_text not found verbatim in the response; not armed",
+                )
+                continue
+            r.response = stripped
+            if armed is None and r.success:
+                armed = hint
+                logger.info(
+                    "multi_intent_offer_armed",
+                    action=r.intent.action,
+                    continuation_hint=hint.get("continuation_hint"),
+                )
+            else:
+                logger.info(
+                    "multi_intent_offer_dropped",
+                    action=r.intent.action,
+                    continuation_hint=hint.get("continuation_hint"),
+                    reason="already_armed" if armed is not None else "sub_result_failed",
+                )
+        return armed
+
     def _aggregate_messages(self, response: OrchestratedResponse) -> str:
         """
         Aggregate multiple intent responses into a single coherent message.
 
         Uses natural transitions between responses. Handles partial failures
-        by noting what couldn't be processed.
+        by noting what couldn't be processed. #2030: the armed offer's
+        ``offer_text`` (``response.armed_offer_hint``, set by
+        ``_pick_armed_offer``) is appended once as the LAST paragraph.
         """
+        body = self._aggregate_bodies(response)
+        armed = response.armed_offer_hint
+        if armed and armed.get("offer_text") and response.successful_results:
+            # Its own paragraph, like the failure note (#1431): a space-join
+            # after a bullet list would read as part of the last item.
+            body = f"{body}\n\n{armed['offer_text']}" if body else armed["offer_text"]
+        return body
+
+    def _aggregate_bodies(self, response: OrchestratedResponse) -> str:
+        """The statement parts of the composed reply (pre-#2030 aggregation)."""
         successful = response.successful_results
         failed = response.failed_results
 
@@ -339,6 +416,30 @@ class IntentOrchestrator:
             body = f"{body}\n\n{failure_note}" if body else failure_note
 
         return body
+
+
+def _remove_offer_text(response: str, offer_text: str) -> Optional[str]:
+    """#2030: ``response`` with its first verbatim ``offer_text`` removed, or
+    None when it does not occur verbatim (drift: the caller arms nothing).
+
+    Only the question and the whitespace at the cut are touched: spaces and
+    tabs either side of it go, and the two sides rejoin with one space
+    (mid-line), the line break(s) already there (capped at one blank line),
+    or nothing (at either end). No other text is stripped.
+    """
+    if not offer_text or offer_text not in response:
+        return None
+    before, after = response.split(offer_text, 1)
+    before = before.rstrip(" \t")
+    after = after.lstrip(" \t")
+    if not before.strip():
+        return after.lstrip("\n")
+    if not after.strip():
+        return before.rstrip("\n")
+    if before.endswith("\n") or after.startswith("\n"):
+        breaks = (len(before) - len(before.rstrip("\n"))) + (len(after) - len(after.lstrip("\n")))
+        return before.rstrip("\n") + "\n" * min(breaks, 2) + after.lstrip("\n")
+    return f"{before} {after}"
 
 
 # #1984 (Arch's placement, 2026-10-11): the words that stand in when an intent
