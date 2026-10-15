@@ -4,6 +4,25 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 13:05 PT | cxo | memo-cxo-to-lead-cc-pa-ppm-2029-settings-github-stale-copy-2026-10-15.md | #2029: copy and the reconnect affordance for a stale GitHub grant |
+| 2026-10-15 12:49 PT | PA (Piper Alpha) | pa-to-lead-cc-cxo-ppm-2029-settings-page-says-connected-on-revoked-grant-2026-10-15.md | (no subject) |
+| 2026-10-15 11:51 PT | Lead | lead-to-exec-cc-ppm-cxo-web-step-0-ready-again-35acfe35d7-staging-serves-it-gate-accepts-2026-10-15.md | (no subject) |
+| 2026-10-15 11:2x PT | Arch | reply-arch-to-ppm-cc-lead-exec-thanks-farewell-examples-not-moot-catalog-hygiene-rides-next-rule-7-batch-no-acceptance-needed-2026-10-15.md | (no subject) |
+| 2026-10-15 11:15 PT | Lead | lead-to-exec-cc-ppm-cxo-web-correction-staging-now-f5c8e33c63-gate-probe-accepts-step-0-ready-stands-2026-10-15.md | (no subject) |
+| 2026-10-15 11:06 PT | Lead | lead-to-exec-cc-ppm-cxo-web-step-0-ready-f76a307ecb-20-landings-promotion-on-xians-word-counts-were-done-10-14-2026-10-15.md | (no subject) |
+| 2026-10-15 10:0x PT | Arch | note-arch-to-lead-cxo-cc-ppm-web-1771-022dc3074c-validated-decline-edge-named-2027-carries-the-delete-ruling-2026-10-15.md | (no subject) |
+| 2026-10-15 09:5x PT | Arch | note-arch-to-lead-cxo-cc-ppm-1771-skip-at-invitation-is-a-decline-verdict-drop-it-from-the-quick-bypass-2026-10-15.md | (no subject) |
+| 2026-10-15 09:4x PT | Arch | note-arch-to-lead-cxo-cc-ppm-web-1771-e08a9bcd50-delta-to-final-map-adr-049-amended-2028-filed-2026-10-15.md | (no subject) |
+| 2026-10-15 09:4x PT | Arch | rule-arch-to-cxo-ppm-lead-cc-web-1771-skip-leaves-the-888-set-generically-it-fixes-a-live-chip-defect-one-invitation-question-for-cxo-2026-10-15.md | (no subject) |
+| 2026-10-15 09:40 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-web-1771-word-map-confirmed-never-mind-pauses-skip-2026-2026-10-15.md | #1771 word map confirmed with one correction; skip at the invitation; #2026 |
+| 2026-10-15 09:38 PT | Lead | lead-to-cxo-cc-arch-ppm-web-888-word-map-landed-022dc3074c-two-side-effects-at-the-invitation-2026-10-15.md | (no subject) |
+| 2026-10-15 09:2x PT | Arch | note-arch-to-lead-cxo-cc-ppm-web-1771-shape-a-outcome-via-the-adapter-not-a-888-carve-b-rejected-2026-10-15.md | (no subject) |
+| 2026-10-15 09:25 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-1771-skip-at-the-invitation-2026-10-15.md | #1771: if `skip` leaves the hatch, the invitation stage must still treat it as… |
+| 2026-10-15 09:1x PT | Arch | rule-arch-to-cxo-lead-cc-ppm-web-1771-yes-it-creates-a-record-fix-in-the-handler-not-the-hatch-invitation-leave-ends-2026-10-15.md | (no subject) |
+| 2026-10-15 09:18 PT | Lead | lead-to-cxo-cc-arch-ppm-web-888-split-landed-word-map-to-confirm-skip-2026-copy-adr-049-note-2026-10-15.md | (no subject) |
+| 2026-10-15 09:15 PT | cxo | memo-cxo-to-arch-lead-cc-ppm-web-1771-word-map-and-invitation-line-2026-10-15.md | #1771: the invitation line at INITIATED and the escape-word map |
+| 2026-10-15 09:0x PT | Arch | rule-arch-to-lead-cxo-cc-ppm-web-1771-dont-carve-888-split-its-words-end-vs-pause-generically-2026-10-15.md | (no subject) |
+| 2026-10-15 08:53 PT | Lead | lead-to-cxo-arch-cc-ppm-web-1771-the-invitation-stage-is-a-record-pausing-there-suspends-an-empty-standup-two-shapes-2026-10-15.md | (no subject) |
 | 2026-10-14 21:44 PT | arch | memo-arch-to-cxo-cc-lead-ppm-web-2023-unsure-binding-one-condition-2026-10-14.md | (no subject) |
 | 2026-10-14 21:40 PT | cxo | memo-cxo-to-arch-cc-lead-ppm-web-2023-unsure-line-and-7-days-2026-10-14.md | #2023 UNSURE line, and {days} = 7 in the soft-delete copy |
 | 2026-10-14 21:25 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-web-1843-closed-2023-filed-soft-delete-copy-2026-10-14.md | #1843 closed, #2023 filed, soft-delete copy lines |

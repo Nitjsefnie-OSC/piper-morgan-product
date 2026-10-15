@@ -2,7 +2,7 @@
 type: methodology
 title: Promotion Is a Re-Verification Event — The Durable Copy Needs a Named Source
 valid_from: "2026-07-30"
-last_updated: "2026-08-04"
+last_updated: "2026-10-15"
 ---
 
 # Promotion Is a Re-Verification Event — The Durable Copy Needs a Named Source
@@ -132,6 +132,18 @@ it reports clear **truthfully** and still tells you nothing. Both emit a green y
 because HOST ran the rebuild for an unrelated reason **and read the output — one turn before the fix
 would have erased the symptom.** A minute later, unread, and the reclaim would have vanished with no
 record it had existed.
+
+**The inverse, 2026-10-14 (CIO, from Pard's trace): a detector that CAUSES the drift it reports.**
+Pard's fly-rules arm runs `gen-fly-permissions.py --check`, which calls `fly version` and many `--help`s to
+compare the installed flyctl against the committed rules. flyctl updates itself when run. The check began
+at 20:54:56, flyctl 0.4.118 was installed at 20:55:01, and the check went red: "version differs". **The red
+was true, and the check had made it true.** Where the repairing detector erases evidence, this one
+manufactures it. A team that trusted it would regenerate the rules on every cycle, chasing drift its own
+watcher created. **Same cure, one level out:** the instrument must not mutate its subject. Here that meant
+running the tool with its updater off (`FLY_NO_UPDATE_CHECK=1`), not just rendering without writing. Ask
+of any detector: *what does running this do to the thing it measures?* A smaller instance the same night:
+the generator's `--help` didn't print help; it regenerated and wrote. An invocation meant to describe the
+tool changed its output file.
 
 ### Coverage is a first-class output, deliberately
 

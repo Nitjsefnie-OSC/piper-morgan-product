@@ -112,7 +112,8 @@ class TestResumeSeamKeepsFlowSuspended:
 class TestNoOtherSeamOptsIn:
     def test_only_the_resume_seam_opts_into_defer(self):
         """Structural: no production `evaluate_acceptance(` call passes
-        ``distinguish_defer=True`` except `_check_pending_resume_offer`."""
+        ``distinguish_defer=True`` except `_check_pending_resume_offer` and the
+        standup handler's one deferral reader (#1771 four seams)."""
         root = pathlib.Path(__file__).resolve().parents[4]
         opted = set()
         for top in ("services", "web"):
@@ -136,7 +137,18 @@ class TestNoOtherSeamOptsIn:
                             )
                         ):
                             opted.add((str(path.relative_to(root)), fn.name))
-        assert opted == {("services/intent/intent_service.py", "_check_pending_resume_offer")}
+        # #1771 four seams (CXO + Arch 2026-10-15): the standup handler reads
+        # deferrals through the SAME predicate, one call site
+        # (``standup_reads_as_deferral``), used at the #1529 exit and at the
+        # invitation. Widened by exactly that one site, on Arch's mechanism.
+        # #888 word map (Arch 2026-10-15): the one call moved into
+        # ``_standup_leave_verdict`` so the invitation can also read its
+        # DECLINE verdict; ``standup_reads_as_deferral`` reads the same call.
+        # Still one site, not a second.
+        assert opted == {
+            ("services/intent/intent_service.py", "_check_pending_resume_offer"),
+            ("services/standup/conversation_handler.py", "_standup_leave_verdict"),
+        }
 
 
 class TestAfterDeferTheStandupIsReachable:
@@ -326,8 +338,23 @@ class TestFlowExitBypassKeyedOnThePredicate:
         abandon.assert_called_once()
 
     @pytest.mark.asyncio
-    async def test_active_flow_not_now_still_exits_per_1529(self):
-        """No offer pending: a bare 'not now' stays the #1529 exit command."""
-        result, abandon = await self._run("not now", False)
+    @pytest.mark.parametrize("turn", DEFERRALS)
+    async def test_no_offer_pending_deferral_never_abandons(self, turn):
+        """#1771 second seam (Web, served 2026-10-14 21:42): this pin used to
+        read "no offer pending: a bare 'not now' stays the #1529 exit" and
+        asserted the abandon, which is the defect Web served ("The paused
+        standup has been cleared"). A deferral protects a SUSPENDED standup
+        with or without an offer: nothing abandoned, the turn falls through.
+        (An ACTIVE flow's "not now" is the registry's #1529 exit, another
+        seam; since the 10-15 four seams it pauses there too, pinned in
+        test_four_seams_1771.py.)"""
+        result, abandon = await self._run(turn, False)
+        assert result is None
+        abandon.assert_not_called()
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("turn", ["cancel that", "forget it", "start over", "end standup"])
+    async def test_no_offer_pending_explicit_cancel_still_abandons(self, turn):
+        result, abandon = await self._run(turn, False)
         assert result is not None
         abandon.assert_called_once()

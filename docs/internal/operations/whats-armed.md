@@ -2,7 +2,7 @@
 type: operations
 title: "What's armed: the one probe of which cohort mechanisms are live"
 valid_from: "2026-10-13"
-last_updated: "2026-10-14"
+last_updated: "2026-10-15"
 ---
 
 # What's armed
@@ -39,6 +39,12 @@ running, and say how you last verified it"). xian was on board on 2026-10-13, vi
    writes are the guards' own temp files.
 5. **Exit status:** 0 when nothing is NOT ARMED, 1 when anything is. Unmeasured lines don't fail the
    run.
+6. **Print no names it shouldn't.** The `piper-shared names under a deny` check (added 2026-10-15)
+   counts the files in `~/.piper-shared` whose names match none of the fleet's Read-deny patterns
+   (`*credential*`, `*token*`, `*secret*`). Such a file is readable by every seat's Read tool. It
+   prints counts only, because a file name can carry a person's name (hard rule 8) and this output
+   gets pasted into logs. Why: on 10-15 six credential files matched no pattern. HOST renamed two
+   the same day, and the fix for each is renaming it to include `credential`, which is the owner's call.
 
 ## What it does not do
 
@@ -56,6 +62,10 @@ running, and say how you last verified it"). xian was on board on 2026-10-13, vi
   `git hook commit-msg` ("source exists, not installed"). That's deliberate: it waits until the
   history rewrite settles (CIO standing item 8s, xian's paste). The old-history guard reads as
   armed while its sentinel file exists, which is through the rewrite's 24-hour watch.
+- **2026-10-15 13:2x:** 30 checks: **30 armed**, 0 NOT ARMED, 0 unmeasured (Exec's run, then CIO's). commit-msg was
+  installed by xian; the 30th check was added between 10-14 and 10-15.
+- **2026-10-15 14:09 (CIO):** 31 checks: 30 armed, **1 NOT ARMED**: the new piper-shared check reports
+  4 of 9 files matching no deny (the two dinp-machine files awaiting rename, plus two 10-09 invite files).
 
 ## Adding a mechanism
 

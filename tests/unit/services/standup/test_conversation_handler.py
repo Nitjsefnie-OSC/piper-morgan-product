@@ -30,6 +30,7 @@ from unittest.mock import AsyncMock, MagicMock
 import pytest
 import pytest_asyncio
 
+from services.process.standup_copy import STANDUP_INVITATION_DECLINE_REPLY
 from services.shared_types import StandupConversationState
 from services.standup.conversation_handler import ConversationResponse, StandupConversationHandler
 from services.standup.conversation_manager import StandupConversationManager
@@ -134,15 +135,19 @@ class TestStartConversation:
         assert "morning" in response.message.lower() or "standup" in response.message.lower()
 
     @pytest.mark.asyncio
-    async def test_start_returns_suggestions(self, handler):
-        """Starting provides user suggestions."""
+    async def test_start_returns_no_suggestions(self, handler):
+        """#2027/#2028 (CXO 2026-10-15 10:10): the opening carries no
+        suggestion list (nothing renders it on web). Was
+        ``test_start_returns_suggestions``, asserting a list holding "quick".
+        The quick report is named in words by the intent service's teaching
+        line ("Say 'my standup report'")."""
         response = await handler.start_conversation(
             session_id="session1",
             user_id="user1",
         )
 
-        assert len(response.suggestions) > 0
-        assert any("quick" in s.lower() for s in response.suggestions)
+        assert response.suggestions == []
+        assert response.message == "Good morning! Ready for your standup?"
 
     @pytest.mark.asyncio
     async def test_start_with_context(self, handler):
@@ -185,25 +190,41 @@ class TestHandleTurnInitiated:
 
     @pytest.mark.asyncio
     async def test_fast_with_no_data_reenters_interview(self, handler, conversation):
-        """'Fast' takes the same honest path (#1837 amendment, as above)."""
-        response = await handler.handle_turn(conversation, "fast please")
+        """'Fast' takes the same honest path (#1837 amendment, as above).
+        Was "fast please": the bypass is whole-message now (CXO 2026-10-15
+        10:10), so "fast please" starts the interview instead (same state,
+        not the bypass this test names)."""
+        response = await handler.handle_turn(conversation, "fast")
 
         assert response.state == StandupConversationState.GATHERING_YESTERDAY
 
     @pytest.mark.asyncio
-    async def test_cancel_abandons(self, handler, conversation):
-        """'Not now' abandons conversation."""
+    async def test_not_now_ends(self, handler, conversation):
+        """#1771, re-pinned again (Arch 2026-10-15 shape A): 'not now' to the
+        invitation ENDS with the invitation line. Nothing was started, so a
+        pause would leave an empty SUSPENDED standup offered back later (was:
+        pauses, CXO's 08:30 item 2, ruled away by Arch's 09:1x follow-up)."""
         response = await handler.handle_turn(conversation, "not now")
 
         assert response.state == StandupConversationState.ABANDONED
         assert response.requires_input is False
+        assert response.message == STANDUP_INVITATION_DECLINE_REPLY
 
     @pytest.mark.asyncio
-    async def test_later_abandons(self, handler, conversation):
-        """'Later' also abandons conversation."""
+    async def test_maybe_later_ends(self, handler, conversation):
+        """#1771, re-pinned again: 'maybe later' also ENDS at the invitation."""
         response = await handler.handle_turn(conversation, "maybe later")
 
         assert response.state == StandupConversationState.ABANDONED
+        assert response.message == STANDUP_INVITATION_DECLINE_REPLY
+
+    @pytest.mark.asyncio
+    async def test_no_abandons(self, handler, conversation):
+        """#1771: a bare 'no' to the invitation still ENDS it."""
+        response = await handler.handle_turn(conversation, "no")
+
+        assert response.state == StandupConversationState.ABANDONED
+        assert response.requires_input is False
 
     @pytest.mark.asyncio
     async def test_yes_enters_3part_flow_at_yesterday(self, handler, conversation):
@@ -597,13 +618,14 @@ class TestFullConversationFlow:
 
     @pytest.mark.asyncio
     async def test_abandon_flow(self, handler):
-        """Abandon path: start -> not now."""
+        """Abandon path: start -> no. (#1771: was 'not now', which now
+        pauses; a bare 'no' is the invitation decline that ends.)"""
         # Start
         response = await handler.start_conversation("s1", "u1")
 
         # Abandon
         conv = await handler.manager.get_conversation_by_session("s1")
-        response = await handler.handle_turn(conv, "not now")
+        response = await handler.handle_turn(conv, "no")
 
         assert response.state == StandupConversationState.ABANDONED
         assert response.requires_input is False
@@ -849,7 +871,8 @@ class TestMonitoringIntegration:
         """Issue #556: Abandoned conversation logs metrics."""
         conv = await handler.manager.create_conversation("s1", "u1")
 
-        await handler.handle_turn(conv, "not now")
+        # #1771: "no" ends at the invitation; "not now" now pauses.
+        await handler.handle_turn(conv, "no")
         conv = await handler.manager.get_conversation(conv.id)
 
         # Should be abandoned

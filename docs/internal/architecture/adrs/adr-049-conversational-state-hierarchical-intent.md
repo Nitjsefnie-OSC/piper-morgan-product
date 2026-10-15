@@ -4,7 +4,7 @@ number: 49
 title: "Conversational State and Hierarchical Intent Architecture"
 status: "Unknown"
 valid_from: "2026-01-09"
-last_updated: "2026-08-29"
+last_updated: "2026-10-15"
 ---
 
 # ADR-049: Conversational State and Hierarchical Intent Architecture
@@ -242,6 +242,31 @@ want onboarding had their messages hijacked by the process handler.
 - `services/conversation/conversation_handler.py`: Offer-first flow, suspended re-entry
 - `services/intent/intent_service.py`: _check_pending_onboarding_offer()
 
+### Issue #1771 Amendment: Escape Words End or Pause; an Unstarted Process Has Nothing to Suspend (October 2026)
+
+**Problem**: §1 above made every escape word call `handler.suspend()`. Three things went wrong in served use:
+- **"cancel" never cancelled.** A user who said "cancel" mid-interview kept a paused standup, and Piper offered it back the next time.
+- **An unstarted standup got paused.** Leaving at "ready to start?" left a SUSPENDED row holding no answers, so the next `do a standup` offered to continue a standup that never began.
+- **"skip" was claimed by the hatch,** although the standup already reads it as "nothing for this question" (`_is_skip_signal`). Typing `skip` at a question paused the interview (Web, served, alpha `5e5f3366c4`).
+
+**What does not change (PPM's binding direction, restated 2026-10-15):** escape words are recognised by the registry itself, first, at every stage, for every process, from the word alone. They are never handed to a handler to interpret, and every escape word takes the user out of the flow. "The session belongs to the user, not the workflow" holds.
+
+**Amended mechanism** (Arch, 2026-10-15; word map by CXO, PPM concurring):
+1. **The escape set splits in two, in the registry, generically:**
+   - **END words** → `_close_process` (the handler's `close()`: terminal, never re-offered): `cancel`, `quit`, `exit`.
+   - **PAUSE words** → `handler.suspend()`: `stop`, `never mind`. "Never mind" can mean "forget that answer", so it takes the reversible path (ADR-080 D4: uncertain meaning never destroys).
+   - **`skip` is not an escape word.** It reaches the handler as ordinary text. In the standup it means "nothing for this question" mid-interview, and a leave at the invitation, where it is read as a DECLINE by `evaluate_acceptance` through the shared full-message decline row. No stage is exempted from the hatch, and no process declares its own escape words.
+2. **The handler defines what suspend and close mean for its own state.** This was already true under #888; the amendment uses it. `StandupProcessAdapter.suspend()` at INITIATED (nothing captured) closes the row instead of suspending it, because an unstarted process has nothing to keep. A deferral at the invitation ends too. So no SUSPENDED record exists without user content, and nothing false is re-offered.
+3. **The handler supplies copy, never the transition.** Optional async copy hooks with `(user_id, session_id)`, awaited by `escape_reply_for` before the transition, return the line for the outcome the registry already chose. The hooks read state, so at INITIATED the line is the invitation line. A hook that raises or returns nothing falls back to the generic line, and a hook cannot change the transition.
+4. **Deferrals ("not now", "maybe later") are read by one predicate,** `evaluate_acceptance(..., distinguish_defer=True)`, never a second phrase list. A deferral pauses a standup that has content and ends one that has none. Only whole-message turns are read as exits mid-interview, so "PR not yet merged" stays an answer.
+
+**Pins** (`test_four_seams_1771.py` and the registry tests):
+- every escape word, at every stage, leaves the flow (`check_active` False);
+- at INITIATED, `has_suspended_session` returns None after any way of leaving;
+- a bare `skip` at a mid-interview question advances to the next question.
+
+**State at amendment:** e08a9bcd50 landed the END/PAUSE split and the INITIATED close with an earlier word map (`never mind` in END, `skip` in PAUSE). Moving `never mind` to PAUSE and taking `skip` out of the set is Lead's next #1771 unit. This section states the ruled target, and the code converges on it. Rulings: decisions.log 2026-10-15 09:0x–09:4x (arch).
+
 ### Original Files (MVP)
 
 - `services/onboarding/portfolio_manager.py`: PortfolioOnboardingManager
@@ -276,3 +301,4 @@ User-defined guided processes (analogous to Claude skills) could extend this arc
 | 2026-01-26 | PM (xian) | Accepted - implemented in #427 |
 | 2026-03-13 | PPM, Chief Architect | #888 amendment: escape commands, timeout, offer-first activation, suspended re-entry |
 | 2026-03-13 | PM (xian) | Approved and implemented in #888 |
+| 2026-10-15 | Chief Architect (CXO word map, PPM concurring) | #1771 amendment: escape words split END/PAUSE in the registry; `skip` leaves the escape set; an unstarted process closes rather than suspends; handlers supply copy only |

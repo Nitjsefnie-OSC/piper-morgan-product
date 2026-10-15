@@ -13,6 +13,7 @@ Issue #427: MUX-IMPLEMENT-CONVERSE-MODEL
 Issue #687: ADR-049 Implementation
 """
 
+import inspect
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -27,16 +28,129 @@ logger = structlog.get_logger(__name__)
 # Issue #888, #889: Escape commands recognized at registry level.
 # PPM binding direction (2026-03-13): These bypass workflow handlers entirely.
 # Arch guidance: Exact match on stripped+lowercased full message. Use frozenset.
-ESCAPE_COMMANDS: frozenset = frozenset(
-    {
-        "cancel",
-        "exit",
-        "stop",
-        "skip",
-        "quit",
-        "never mind",
-    }
-)
+#
+# #888 split (Arch 2026-10-15, on #1771): the escape words are two sets, generic
+# across processes. The REGISTRY decides the transition from the word alone,
+# before any handler runs; the handler supplies only the line for each outcome
+# (``pause_message`` / ``drop_message``), never the choice. The word map is
+# CXO's call (experience); each set is a one-line edit.
+#
+# END: terminal, through ``_close_process`` (the handler's ``close()``; no
+# resume re-offer, the #1529 anti-nag).
+# A word that explicitly withdraws ends (CXO 2026-10-15 word map).
+ESCAPE_END_WORDS: frozenset = frozenset({"cancel", "quit", "exit"})
+# PAUSE: ``suspend()``, resumable. A word that could mean "not right now"
+# pauses; "never mind" can mean "forget that answer", so it takes the
+# reversible path (CXO 2026-10-15; Arch: uncertain meaning never destroys).
+# ``skip`` is NOT an escape word (Arch 2026-10-15, generic, every process): it
+# reaches the handler as ordinary text, which owns its meaning (the standup
+# reads it as "nothing for this part").
+ESCAPE_PAUSE_WORDS: frozenset = frozenset({"stop", "never mind"})
+# The union, for readers that only ask "is this an escape word?" (the
+# destructive-confirm decline set, the #1529 bare-exit comment, tests).
+ESCAPE_COMMANDS: frozenset = ESCAPE_END_WORDS | ESCAPE_PAUSE_WORDS
+
+
+def _escape_word(message: str) -> str:
+    """#888 normalisation: the stripped, lowercased whole message, with ONE
+    politeness marker removed (#1771, Arch 2026-10-15, the #1843 rule: "please"
+    is politeness, not content). One leading "please" (optional comma) OR one
+    trailing ", please" / " please"; the remainder is what the exact-match
+    lookup reads. "please cancel" -> "cancel" (END), "stop please" -> "stop"
+    (PAUSE); "please cancel my 3pm meeting" -> "cancel my 3pm meeting" (not a
+    word in either set). No other interpretation happens here."""
+    normalized = message.strip().lower()
+    if normalized in ESCAPE_COMMANDS:
+        return normalized
+    for prefix in ("please, ", "please,", "please "):
+        if normalized.startswith(prefix):
+            return normalized[len(prefix) :].strip()
+    for suffix in (", please", " please"):
+        if normalized.endswith(suffix):
+            return normalized[: -len(suffix)].strip()
+    return normalized
+
+
+def _sync_hook_line(handler: Any, hook_name: str) -> Optional[str]:
+    """A SYNC no-argument copy hook's line, or None (absent, async, raising,
+    or returning nothing)."""
+    hook = getattr(handler, hook_name, None)
+    # A sync hook only: an async attribute (an AsyncMock double, say) would
+    # hand back an un-awaited coroutine, never a line. Async hooks are read by
+    # ``escape_reply_for``, which can await them.
+    if callable(hook) and not inspect.iscoroutinefunction(hook):
+        try:
+            line = hook()
+        except Exception as e:  # silent-ok: logged; the generic line still exits honestly
+            logger.warning(f"{hook_name}_hook_failed", error=str(e))
+            line = None
+        if isinstance(line, str) and line:
+            return line
+    return None
+
+
+def pause_message_for(handler: Any) -> str:
+    """The reply when an escape command pauses ``handler``'s active session.
+
+    #1771 (Arch, on the issue 2026-10-14): the HANDLER supplies its pause
+    line through an optional ``pause_message()`` method; the registry keeps
+    only the generic default, so it stays the "dumb aggregator" #888 made it
+    and holds no per-process copy. Optional rather than a ``GuidedProcess``
+    protocol member on purpose: the protocol is ``runtime_checkable`` and
+    implemented structurally, so a new member would make every existing
+    implementer (and test double) fail ``register``'s isinstance check. A
+    hook that raises or returns nothing falls back to the generic line.
+    """
+    line = _sync_hook_line(handler, "pause_message")
+    if line:
+        return line
+    return f"No problem — I've paused {handler.process_type.value}. We can pick it up anytime."
+
+
+def drop_message_for(handler: Any) -> str:
+    """The reply when an END escape word closes ``handler``'s active session.
+
+    #888 split (Arch 2026-10-15): the sibling of :func:`pause_message_for`,
+    through an optional ``drop_message()`` hook, same pattern and same
+    reasons. The generic default is the #1529 exit copy the generic close
+    already uses, so an END word and a whole-message exit read alike.
+    """
+    line = _sync_hook_line(handler, "drop_message")
+    if line:
+        return line
+    from services.process.escape import format_exit_message
+
+    return format_exit_message(handler.process_type)
+
+
+async def escape_reply_for(
+    handler: Any,
+    user_id: Optional[str],
+    session_id: Optional[str],
+    *,
+    end: bool,
+) -> str:
+    """The line for an escape word, read BEFORE the registry's transition.
+
+    A handler's copy hook (``drop_message`` for END, ``pause_message`` for
+    PAUSE) may be ASYNC and take ``(user_id, session_id)`` so it can read its
+    own conversation state to pick the copy (Arch 2026-10-15: an unstarted
+    standup gets the invitation line). Copy only: the hook never transitions
+    and never chooses; the word already chose. Read before the transition so
+    the hook sees the state the user left from. A sync no-argument hook, a
+    raising hook or a non-string answer falls back as the sync resolvers do.
+    """
+    hook_name = "drop_message" if end else "pause_message"
+    hook = getattr(handler, hook_name, None)
+    if hook is not None and inspect.iscoroutinefunction(hook):
+        try:
+            line = await hook(user_id, session_id)
+        except Exception as e:  # silent-ok: logged; the generic line still exits honestly
+            logger.warning(f"{hook_name}_hook_failed", error=str(e))
+            line = None
+        if isinstance(line, str) and line:
+            return line
+    return drop_message_for(handler) if end else pause_message_for(handler)
 
 
 class ProcessType(str, Enum):
@@ -61,6 +175,21 @@ class ProcessType(str, Enum):
     PLANNING = "planning"
     FEEDBACK = "feedback"
     CLARIFICATION = "clarification"
+
+
+class SuspendOutcome(str, Enum):
+    """What a handler's ``suspend()`` actually did (#2026).
+
+    ``suspend()`` asks a handler to pause; the handler owns what that means
+    (#888), and it may close instead (the standup adapter closes an unstarted
+    standup, Arch 2026-10-15). A caller that tells the user "I've paused it"
+    reads this answer, so the claim follows the transition that happened,
+    never a guess about the process's stage. ``None`` (a handler that returns
+    nothing, every implementer before #2026) reads as PAUSED.
+    """
+
+    PAUSED = "paused"
+    CLOSED = "closed"
 
 
 @dataclass
@@ -116,7 +245,7 @@ class ProcessCheckResult:
     def off_topic_pause(
         cls,
         process_type: ProcessType,
-        pause_message: str,
+        pause_message: Optional[str],
     ) -> "ProcessCheckResult":
         """
         Process was paused because user sent an off-topic message.
@@ -124,6 +253,12 @@ class ProcessCheckResult:
         Issue #899: Layer C escape. Unlike escaped_from(), this returns
         handled=False so normal intent processing can answer the user's
         actual question. The pause_message is prepended by IntentService.
+
+        #2026: ``pause_message`` is None when the handler's ``suspend()``
+        CLOSED the process instead of pausing it (an unstarted standup): the
+        flow is still left behind (``escaped``, ``process_type``), but there is
+        no pause to claim, so nothing is prepended and the question is just
+        answered (CXO 2026-10-15 item 4).
         """
         return cls(
             handled=False,  # Let intent processing handle the actual question
@@ -176,6 +311,13 @@ class GuidedProcess(Protocol):
 
     Issue #888: Added suspend() and has_suspended_session() per
     PPM direction and Arch guidance (2026-03-13).
+
+    Optional, not protocol members (#1771, #888 split): ``pause_message()``
+    and ``drop_message()``, the lines shown when a PAUSE or an END escape word
+    leaves this process; sync with no arguments, or async taking
+    ``(user_id, session_id)`` to read the handler's own state (copy only).
+    See :func:`pause_message_for`, :func:`drop_message_for` and
+    :func:`escape_reply_for` for the generic defaults and why they are optional.
     """
 
     @property
@@ -213,13 +355,16 @@ class GuidedProcess(Protocol):
         self,
         user_id: Optional[str],
         session_id: Optional[str],
-    ) -> None:
+    ) -> Optional[SuspendOutcome]:
         """
         Suspend the active session, preserving state for later resumption.
 
         Issue #888: Called by ProcessRegistry when user issues an escape
         command. Transitions session to SUSPENDED state. Handler owns
         the semantics of what "suspended" means for its workflow.
+
+        #2026: returns what it did, ``SuspendOutcome.CLOSED`` when the
+        handler closed instead of pausing; ``PAUSED`` or None otherwise.
         """
         ...
 
@@ -352,9 +497,48 @@ class ProcessRegistry:
         "cancel my standup" does NOT.
 
         Arch guidance (2026-03-13): Use frozenset for O(1) lookup.
+
+        #1771 (Arch 2026-10-15): one politeness marker is stripped first
+        (``_escape_word``), so "please cancel" / "cancel please" is ``cancel``
+        and "please stop" / "stop please" is ``stop``, at every stage, for
+        every process. Still an exact match on what remains.
         """
-        normalized = message.strip().lower()
-        return normalized in ESCAPE_COMMANDS
+        return _escape_word(message) in ESCAPE_COMMANDS
+
+    def _is_escape_end_word(self, message: str) -> bool:
+        """#888 split: is this escape word an END word (else it pauses)?
+        Same normalisation as ``_is_escape_command``."""
+        return _escape_word(message) in ESCAPE_END_WORDS
+
+    async def _suspend_for_fall_through(
+        self,
+        handler: GuidedProcess,
+        user_id: Optional[str],
+        session_id: Optional[str],
+    ) -> Optional[str]:
+        """Suspend ``handler`` on a fall-through turn (#899 off-topic, #1529
+        off-intent) and return the pause prefix, or None when nothing paused.
+
+        #2026: the prefix follows the transition the handler reports, not a
+        stage check here. A handler that CLOSED instead of pausing (the
+        standup at its "ready to start?" invitation) leaves nothing to
+        resume, so no "I've paused it" claim is made. A handler that answers
+        nothing, or a ``suspend()`` that raises, keeps the pre-#2026 prefix.
+        """
+        outcome: Optional[SuspendOutcome] = None
+        try:
+            outcome = await handler.suspend(user_id, session_id)
+        except Exception as suspend_err:
+            logger.warning(
+                "Error suspending process on a fall-through turn",
+                process_type=handler.process_type.value,
+                error=str(suspend_err),
+            )
+        if outcome == SuspendOutcome.CLOSED:
+            return None
+        from services.process.off_topic import format_off_topic_pause_message
+
+        return format_off_topic_pause_message(handler.process_type)
 
     async def _close_process(
         self,
@@ -381,6 +565,37 @@ class ProcessRegistry:
                 process_type=handler.process_type.value,
                 error=str(close_err),
             )
+
+    async def _handler_exit_reply(
+        self,
+        handler: GuidedProcess,
+        user_id: Optional[str],
+        session_id: Optional[str],
+        message: str,
+    ) -> Optional[str]:
+        """#1771: let the handler answer a #1529 whole-message exit itself.
+
+        Optional async hook ``exit_reply(user_id, session_id, message)``: the
+        handler performs its own transition (suspend or close) and returns
+        its line, or returns None to leave the exit to the generic close.
+        Duck-typed like ``close``/``release`` and ``pause_message`` (a new
+        protocol member would fail ``register``'s structural isinstance
+        check for every existing implementer). A hook that raises falls back
+        to the generic close, so an exit never traps the user in the flow.
+        """
+        hook = getattr(handler, "exit_reply", None)
+        if hook is None or not inspect.iscoroutinefunction(hook):
+            return None
+        try:
+            line = await hook(user_id, session_id, message)
+        except Exception as e:  # silent-ok: logged; the generic close still exits
+            logger.warning(
+                "exit_reply_hook_failed",
+                process_type=handler.process_type.value,
+                error=str(e),
+            )
+            return None
+        return line if isinstance(line, str) and line else None
 
     async def _in_completion_tail(
         self,
@@ -485,10 +700,18 @@ class ProcessRegistry:
         )
 
         if signal.kind == "exit":
-            await self._close_process(handler, user_id, session_id)
+            # #1771 (CXO 10-15, Arch's constraint): the HANDLER chooses pause
+            # or end for a whole-message exit ("not now" pauses a standup,
+            # "cancel that" drops it). The registry holds no deferral words;
+            # without the hook (or when it declines) the exit closes, as #1529
+            # built it.
+            line = await self._handler_exit_reply(handler, user_id, session_id, message)
+            if line is None:
+                await self._close_process(handler, user_id, session_id)
+                line = format_exit_message(handler.process_type)
             return ProcessCheckResult.escaped_from(
                 process_type=handler.process_type,
-                response_message=format_exit_message(handler.process_type),
+                response_message=line,
             )
 
         if signal.kind == "refusal":
@@ -518,20 +741,11 @@ class ProcessRegistry:
                 pause_message=format_release_prefix(handler.process_type),
             )
 
-        # Mid-flow — Option A UX (#899): pause (resumable) + answer.
-        try:
-            await handler.suspend(user_id, session_id)
-        except Exception as suspend_err:
-            logger.warning(
-                "Error suspending process after off-intent escape",
-                process_type=handler.process_type.value,
-                error=str(suspend_err),
-            )
-        from services.process.off_topic import format_off_topic_pause_message
-
+        # Mid-flow — Option A UX (#899): pause (resumable) + answer. The
+        # prefix follows what suspend() did (#2026).
         return ProcessCheckResult.off_topic_pause(
             process_type=handler.process_type,
-            pause_message=format_off_topic_pause_message(handler.process_type),
+            pause_message=await self._suspend_for_fall_through(handler, user_id, session_id),
         )
 
     async def check_suspended_processes(
@@ -613,25 +827,32 @@ class ProcessRegistry:
                         logger.info(
                             "Escape command intercepted by registry",
                             process_type=handler.process_type.value,
-                            escape_command=message.strip().lower(),
+                            escape_command=_escape_word(message),
                             user_id=user_id,
                             session_id=session_id,
                         )
-                        # Suspend the session (handler owns semantics)
-                        try:
-                            await handler.suspend(user_id, session_id)
-                        except Exception as suspend_err:
-                            logger.warning(
-                                "Error suspending process after escape",
-                                process_type=handler.process_type.value,
-                                error=str(suspend_err),
-                            )
+                        # #888 split (Arch 2026-10-15): the WORD picks the
+                        # transition, here, before any handler runs; the
+                        # handler supplies only the line (read first, so its
+                        # copy hook sees the state the user left from).
+                        end = self._is_escape_end_word(message)
+                        line = await escape_reply_for(handler, user_id, session_id, end=end)
+                        if end:
+                            # END: terminal (handler's close(); no re-offer)
+                            await self._close_process(handler, user_id, session_id)
+                        else:
+                            # PAUSE: suspend (handler owns what that means)
+                            try:
+                                await handler.suspend(user_id, session_id)
+                            except Exception as suspend_err:
+                                logger.warning(
+                                    "Error suspending process after escape",
+                                    process_type=handler.process_type.value,
+                                    error=str(suspend_err),
+                                )
                         return ProcessCheckResult.escaped_from(
                             process_type=handler.process_type,
-                            response_message=(
-                                f"No problem — I've paused {handler.process_type.value}. "
-                                "We can pick it up anytime."
-                            ),
+                            response_message=line,
                         )
 
                     # Issue #1529: universal escape check (FLOW-ESCAPE) — exits,
@@ -656,22 +877,13 @@ class ProcessRegistry:
                             user_id=user_id,
                             session_id=session_id,
                         )
-                        # Option A UX: auto-pause + let normal intent processing answer
-                        try:
-                            await handler.suspend(user_id, session_id)
-                        except Exception as suspend_err:
-                            logger.warning(
-                                "Error suspending process after off-topic detection",
-                                process_type=handler.process_type.value,
-                                error=str(suspend_err),
-                            )
-
-                        from services.process.off_topic import format_off_topic_pause_message
-
-                        pause_msg = format_off_topic_pause_message(handler.process_type)
+                        # Option A UX: auto-pause + let normal intent processing
+                        # answer. The prefix follows what suspend() did (#2026).
                         return ProcessCheckResult.off_topic_pause(
                             process_type=handler.process_type,
-                            pause_message=pause_msg,
+                            pause_message=await self._suspend_for_fall_through(
+                                handler, user_id, session_id
+                            ),
                         )
 
                     # Let the handler process the message

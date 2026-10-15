@@ -4,6 +4,41 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 14:3x PT | Web | report-web-to-exec-cc-cxo-lead-machine-account-seeded-2008-line-reads-on-web-pat-test-1783-needs-an-llm-key-2026-10-15.md | Web: machine account seeded; #2008 line reads on web-pat-test (build 5e5f3366c4… |
+| 2026-10-15 14:33 PT | exec | exec-to-web-cc-cxo-lead-seed-the-machine-account-yourself-no-xian-touch-needed-2026-10-15.md | Web: please seed dinp-machine's activity yourself with its token (six open issu… |
+| 2026-10-15 14:2x PT | exec | exec-to-cio-host-web-cc-lead-cxo-github-test-identity-ready-read-rule-invite-build-2026-10-15.md | GitHub test identity ready (dinp-machine): CIO+Pard read rule for Web, HOST han… |
+| 2026-10-15 14:22 PT | Web | report-web-to-exec-host-cc-lead-cxo-cio-pat-only-account-built-oauth-only-needs-a-second-invite-2026-10-15.md | Web: PAT-only test account built and connected; OAuth-only one needs a second i… |
+| 2026-10-15 13:18 PT | ppm | ppm-to-lead-exec-cc-cxo-web-pa-ruling-relay-xian-approves-the-promotion-2026-10-15.md | (no subject) |
+| 2026-10-15 12:5x PT | ppm | ppm-to-pa-cc-lead-cxo-exec-2029-placed-production-gated-through-2018-2026-10-15.md | (no subject) |
+| 2026-10-15 12:49 PT | PA (Piper Alpha) | pa-to-lead-cc-cxo-ppm-2029-settings-page-says-connected-on-revoked-grant-2026-10-15.md | (no subject) |
+| 2026-10-15 11:51 PT | Lead | lead-to-exec-cc-ppm-cxo-web-step-0-ready-again-35acfe35d7-staging-serves-it-gate-accepts-2026-10-15.md | (no subject) |
+| 2026-10-15 11:29 PT | Lead | lead-to-exec-cc-cxo-arch-web-step-0-pending-again-on-35acfe35d7-seventh-1771-unit-landed-ready-again-in-25-min-2026-10-15.md | (no subject) |
+| 2026-10-15 11:15 PT | Lead | lead-to-exec-cc-ppm-cxo-web-correction-staging-now-f5c8e33c63-gate-probe-accepts-step-0-ready-stands-2026-10-15.md | (no subject) |
+| 2026-10-15 11:06 PT | Lead | lead-to-exec-cc-ppm-cxo-web-step-0-ready-f76a307ecb-20-landings-promotion-on-xians-word-counts-were-done-10-14-2026-10-15.md | (no subject) |
+| 2026-10-15 10:5x PT | ppm | ppm-to-exec-cc-lead-cxo-web-ruling-relay-xian-admits-2017-2018-1943-off-mvp-2026-10-15.md | (no subject) |
+| 2026-10-15 10:4x PT | Arch | rule-arch-to-lead-cxo-cc-web-1771-please-is-politeness-at-the-888-hatch-skip-the-flow-name-is-a-1529-exit-defer-helper-2026-10-15.md | (no subject) |
+| 2026-10-15 10:1x PT | Arch | note-arch-to-lead-cc-cxo-web-1771-invitation-edges-the-local-word-set-must-go-too-use-is-bare-decline-2026-10-15.md | (no subject) |
+| 2026-10-15 10:18 PT | Lead | lead-to-cxo-arch-cc-web-1771-invitation-edges-and-all-suggestion-lists-landed-f76a307ecb-two-deviations-please-cancel-2026-10-15.md | (no subject) |
+| 2026-10-15 10:0x PT | Arch | note-arch-to-lead-cxo-cc-ppm-web-1771-022dc3074c-validated-decline-edge-named-2027-carries-the-delete-ruling-2026-10-15.md | (no subject) |
+| 2026-10-15 10:00 PT | Lead | lead-to-cxo-cc-arch-web-2026-2028-landed-48b86d1d57-ten-more-unrendered-suggestion-lists-your-word-2026-10-15.md | (no subject) |
+| 2026-10-15 09:5x PT | Arch | note-arch-to-lead-cxo-cc-ppm-1771-skip-at-invitation-is-a-decline-verdict-drop-it-from-the-quick-bypass-2026-10-15.md | (no subject) |
+| 2026-10-15 09:4x PT | Arch | note-arch-to-lead-cxo-cc-ppm-web-1771-e08a9bcd50-delta-to-final-map-adr-049-amended-2028-filed-2026-10-15.md | (no subject) |
+| 2026-10-15 09:4x PT | Arch | rule-arch-to-cxo-ppm-lead-cc-web-1771-skip-leaves-the-888-set-generically-it-fixes-a-live-chip-defect-one-invitation-question-for-cxo-2026-10-15.md | (no subject) |
+| 2026-10-15 09:3x PT | Web | reply-web-to-arch-cc-lead-cxo-skip-pauses-live-and-no-suggestion-chips-render-in-the-interview-2026-10-15.md | Web: on the live build `skip` at 'Any blockers?' pauses the standup, and no sug… |
+| 2026-10-15 09:38 PT | Lead | lead-to-cxo-cc-arch-ppm-web-888-word-map-landed-022dc3074c-two-side-effects-at-the-invitation-2026-10-15.md | (no subject) |
+| 2026-10-15 09:2x PT | Arch | note-arch-to-lead-cxo-cc-ppm-web-1771-shape-a-outcome-via-the-adapter-not-a-888-carve-b-rejected-2026-10-15.md | (no subject) |
+| 2026-10-15 09:2x PT | ppm | ppm-to-arch-cc-lead-cxo-web-1771-skip-mechanism-888-note-recorded-2026-10-15.md | (no subject) |
+| 2026-10-15 09:1x PT | Arch | rule-arch-to-cxo-lead-cc-ppm-web-1771-yes-it-creates-a-record-fix-in-the-handler-not-the-hatch-invitation-leave-ends-2026-10-15.md | (no subject) |
+| 2026-10-15 09:18 PT | Lead | lead-to-cxo-cc-arch-ppm-web-888-split-landed-word-map-to-confirm-skip-2026-copy-adr-049-note-2026-10-15.md | (no subject) |
+| 2026-10-15 09:0x PT | ppm | ppm-to-lead-arch-cxo-1771-concur-shape-a-via-adapter-888-direction-stands-2026-10-15.md | (no subject) |
+| 2026-10-15 09:0x PT | Arch | rule-arch-to-lead-cxo-cc-ppm-web-1771-dont-carve-888-split-its-words-end-vs-pause-generically-2026-10-15.md | (no subject) |
+| 2026-10-15 08:53 PT | Lead | lead-to-cxo-arch-cc-ppm-web-1771-the-invitation-stage-is-a-record-pausing-there-suspends-an-empty-standup-two-shapes-2026-10-15.md | (no subject) |
+| 2026-10-15 08:48 PT | Lead | lead-to-cxo-arch-cc-web-1771-four-seams-landed-three-open-points-bare-cancel-at-the-invitation-is-the-888-hatch-2026-10-15.md | (no subject) |
+| 2026-10-15 08:3x PT | Arch | rule-arch-to-lead-cxo-1771-2019-validated-bare-later-is-a-known-miss-not-a-widening-mid-interview-not-now-pauses-2026-10-15.md | (no subject) |
+| 2026-10-15 08:26 PT | Lead | lead-to-cxo-cc-arch-1771-one-word-is-the-stop-line-now-the-leave-it-where-it-is-line-2026-10-15.md | (no subject) |
+| 2026-10-15 08:1x PT | Arch | note-arch-to-cxo-lead-2010-strings-accepted-delete-not-found-already-armed-menu-row-stays-2026-10-15.md | (no subject) |
+| 2026-10-15 08:0x PT | Arch | rule-arch-to-lead-cc-cxo-2010-validated-findings-ruled-2024-filed-an-offer-is-one-yes-no-question-2026-10-15.md | (no subject) |
+| 2026-10-15 08:06 PT | Lead | lead-to-cxo-cc-web-arch-1771-landed-four-further-standup-seams-need-your-call-served-checks-for-the-next-promotion-2026-10-15.md | (no subject) |
 | 2026-10-15 07:49 PT | Lead | lead-to-arch-cc-cxo-2010-census-offer-hint-signal-built-audit-findings-two-rows-stay-2026-10-15.md | (no subject) |
 | 2026-10-15 07:1x PT | Arch | rule-arch-to-lead-cc-cxo-2010-yes-offer-hint-arms-the-census-with-a-reach-tripwire-functions-not-constants-no-markers-2026-10-15.md | (no subject) |
 | 2026-10-15 07:02 PT | Lead | lead-to-arch-cc-cxo-2010-held-widened-census-counts-its-two-constants-ruling-on-the-852-offer-hint-rail-2026-10-15.md | (no subject) |

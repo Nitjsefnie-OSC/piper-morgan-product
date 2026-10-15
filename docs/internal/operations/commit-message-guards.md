@@ -2,7 +2,7 @@
 type: operations
 title: "Commit-message guards: one checker, three doorways (hard rules 3 and 5)"
 valid_from: "2026-10-14"
-last_updated: "2026-10-14"
+last_updated: "2026-10-15"
 ---
 
 # Commit-message guards
@@ -48,7 +48,7 @@ harm:
 |---|---|---|---|---|
 | 1 | `autoclose-guard.sh` (Claude Code PreToolUse on `git commit*`) | Before the commit object exists | The message re-derived from the **shell command string** (`-m`, `-am`, `-F`, `-C`/`-c`, heredocs, compound commands; #1934 fixed five shapes the first version missed) | Any shape it doesn't parse, and any commit not made through the agent's Bash tool (editor, script, human at a terminal) |
 | 2 | `mail-send.sh` | Before its commit-tree push | The subject it was given | Only mail; commit-tree bypasses git hooks, which is why it calls the checker itself |
-| 3 | `scripts/git-hooks/commit-msg` (git's own hook, shared store) | After git has assembled the final message | The **final message file** (`$1`), whatever shape produced it | `--no-verify`. **Not installed as of 10-14** (CIO 8s; xian's paste, asked via Exec 10-14). |
+| 3 | `scripts/git-hooks/commit-msg` (git's own hook, shared store) | After git has assembled the final message | The **final message file** (`$1`), whatever shape produced it | `--no-verify`. **Installed 2026-10-15 13:2x** (xian's paste; CIO ran the installed hook: a "fix #1" message refused, a benign one allowed). |
 
 Doorway 3 is the shape-independent one: by the time it runs, there's no shell left to parse. Doorway
 1 still matters because it refuses earlier, before a commit object is made, which is a better

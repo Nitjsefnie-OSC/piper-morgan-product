@@ -390,9 +390,11 @@ class TestEscapeCommands:
         assert "cancel" in ESCAPE_COMMANDS
         assert "exit" in ESCAPE_COMMANDS
         assert "stop" in ESCAPE_COMMANDS
-        assert "skip" in ESCAPE_COMMANDS
         assert "quit" in ESCAPE_COMMANDS
         assert "never mind" in ESCAPE_COMMANDS
+        # #888 word map (CXO/Arch 2026-10-15): "skip" left the set for every
+        # process; the handler owns it (standup: "nothing for this part").
+        assert "skip" not in ESCAPE_COMMANDS
 
     def test_is_escape_command_exact_match(self):
         """_is_escape_command requires exact match on full message."""
@@ -407,7 +409,11 @@ class TestEscapeCommands:
         registry = get_process_registry()
         assert registry._is_escape_command("cancel my standup") is False
         assert registry._is_escape_command("I want to exit") is False
-        assert registry._is_escape_command("please stop") is False
+        # #1771 (Arch 2026-10-15): one "please" is politeness, stripped before
+        # the exact match, so "please stop" IS ``stop`` (was asserted False).
+        # A please-prefixed request is still not an escape.
+        assert registry._is_escape_command("please stop") is True
+        assert registry._is_escape_command("please stop the build") is False
         assert registry._is_escape_command("skip this step") is False
 
     def test_is_escape_command_never_mind(self):
@@ -419,12 +425,14 @@ class TestEscapeCommands:
 
     @pytest.mark.asyncio
     async def test_escape_command_during_active_process(self):
-        """Escape command suspends active process and returns escaped result."""
+        """A PAUSE escape word suspends the active process and returns an
+        escaped result. #888 split (Arch 2026-10-15): re-pinned from 'cancel'
+        (now an END word) to 'stop'."""
         registry = get_process_registry()
         handler = MockGuidedProcess(ProcessType.ONBOARDING, is_active=True)
         registry.register(handler)
 
-        result = await registry.check_active_processes("user1", "session1", "cancel")
+        result = await registry.check_active_processes("user1", "session1", "stop")
 
         assert result.handled is True
         assert result.escaped is True
@@ -470,6 +478,8 @@ class TestEscapeCommands:
 
         assert result.handled is True
         assert result.escaped is True
+        # 'quit' is an END word (#888 split); this mock has no close(), so
+        # _close_process falls back to suspend() — the pre-split fallback.
         assert handler._suspend_called is True
 
 

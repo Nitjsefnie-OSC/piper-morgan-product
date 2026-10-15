@@ -299,11 +299,26 @@ class TestDeliberateEscapesSurviveTheHold:
     pytestmark = pytest.mark.asyncio
 
     async def test_universal_escape_still_exits(self, live_service):
+        """#888 split (Arch 2026-10-15), re-pinned: 'cancel' is now an END
+        word, so it drops (ABANDONED, CXO's drop line) where it used to
+        pause. The PAUSE word is pinned in the next test."""
         service, manager = live_service
         conv = await _conversation(manager, StandupConversationState.GATHERING_TODAY, stale=True)
         result = await service.process_intent(message="cancel", session_id=_SESSION, user_id=_USER)
+        assert conv.state == StandupConversationState.ABANDONED
+        from services.process.standup_copy import STANDUP_DROP_REPLY
+
+        assert result.message == STANDUP_DROP_REPLY
+
+    async def test_universal_pause_escape_still_pauses(self, live_service):
+        service, manager = live_service
+        conv = await _conversation(manager, StandupConversationState.GATHERING_TODAY, stale=True)
+        result = await service.process_intent(message="stop", session_id=_SESSION, user_id=_USER)
         assert conv.state == StandupConversationState.SUSPENDED
-        assert "paused" in result.message.lower()
+        # CXO 2026-10-15 08:35: one pause line for an escape word and a deferral.
+        from services.process.standup_copy import STANDUP_ESCAPE_PAUSE_REPLY
+
+        assert result.message == STANDUP_ESCAPE_PAUSE_REPLY
 
     async def test_1529_flow_exit_still_ends_the_flow(self, live_service):
         service, manager = live_service
@@ -312,7 +327,9 @@ class TestDeliberateEscapesSurviveTheHold:
             message="end standup", session_id=_SESSION, user_id=_USER
         )
         assert conv.state == StandupConversationState.ABANDONED
-        assert "ended the standup" in result.message.lower()
+        # #1771 (CXO 2026-10-15 item 1): re-pinned from the "ended the
+        # standup ... '/standup'" copy, ruled away, to the drop line.
+        assert "dropped your standup" in result.message.lower()
 
     async def test_1529_off_intent_still_pauses_mid_gathering(self, live_service):
         """'remind me to …' is a cross-domain ACTION per the #1529 seam rules

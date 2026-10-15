@@ -162,8 +162,9 @@ class TestOffIntentDetection:
         assert signal.kind == "off_intent"
 
     def test_skip_left_to_888_escape_commands(self):
-        """'skip' is #888 registry territory (and a legit per-part standup
-        skip); the escape module must not claim it."""
+        """'skip' is a legit per-part standup skip (and, since the #888 word
+        map of 2026-10-15, not a registry escape word either); the escape
+        module must not claim it."""
         assert check_escape("skip", ProcessType.STANDUP) is None
 
 
@@ -288,17 +289,31 @@ class TestRegistrySeamEscape:
         assert fake.handled_messages == [message]
 
     @pytest.mark.asyncio
-    async def test_888_exact_escape_commands_still_suspend(self, registry_with_active_standup):
-        """Regression: the pre-existing #888 hatch is unchanged — exact
-        'cancel' suspends (resumable), does not close."""
+    async def test_888_exact_pause_words_still_suspend(self, registry_with_active_standup):
+        """Regression: the #888 hatch's PAUSE words — exact 'stop' suspends
+        (resumable), does not close. Re-pinned for the #888 split (Arch
+        2026-10-15): this pin used 'cancel', which is now an END word."""
+        registry, fake = registry_with_active_standup
+
+        result = await registry.check_active_processes("user-1", "sess-1", "stop")
+
+        assert result.handled is True
+        assert result.escaped is True
+        assert fake.suspend_called is True
+        assert fake.close_called is False
+
+    @pytest.mark.asyncio
+    async def test_888_exact_end_words_close(self, registry_with_active_standup):
+        """#888 split (Arch 2026-10-15): exact 'cancel' is an END word — the
+        handler's close() (terminal, no re-offer), not suspend()."""
         registry, fake = registry_with_active_standup
 
         result = await registry.check_active_processes("user-1", "sess-1", "cancel")
 
         assert result.handled is True
         assert result.escaped is True
-        assert fake.suspend_called is True
-        assert fake.close_called is False
+        assert fake.close_called is True
+        assert fake.suspend_called is False
 
     @pytest.mark.asyncio
     async def test_close_falls_back_to_suspend_when_handler_lacks_close(self):

@@ -17,6 +17,31 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 14:3x PT | Web | report-web-to-exec-cc-cxo-lead-machine-account-seeded-2008-line-reads-on-web-pat-test-1783-needs-an-llm-key-2026-10-15.md | Web: machine account seeded; #2008 line reads on web-pat-test (build 5e5f3366c4… |
+| 2026-10-15 14:30 PT | cxo | memo-cxo-to-exec-cc-web-lead-machine-account-needs-activity-for-2008-and-1783-2026-10-15.md | Machine account needs activity before #2008 and #1783 can be served |
+| 2026-10-15 14:29 PT | host | reply-host-to-exec-cc-web-cio-second-invite-yes-in-principle-blocked-on-seat-rule-and-presence-2026-10-15.md | Second invite for the OAuth-only account: yes in principle, I cannot mint it ye… |
+| 2026-10-15 14:26 PDT | cio | cio-to-exec-cc-host-rule-8-report-memo-repeats-the-name-via-filenames-2026-10-15.md | Rule 8: HOST's reissue-rename notice lists filenames that themselves carry the… |
+| 2026-10-15 14:22 PT | Web | report-web-to-exec-host-cc-lead-cxo-cio-pat-only-account-built-oauth-only-needs-a-second-invite-2026-10-15.md | Web: PAT-only test account built and connected; OAuth-only one needs a second i… |
+| 2026-10-15 14:19 PT | host | notice-host-to-exec-cc-cio-reissue-file-renamed-and-old-name-in-eight-tracked-files-2026-10-15.md | Reissue file renamed to a name-free name. Rule 8: the old name (it carries a pe… |
+| 2026-10-15 14:11 PT | Pard | pard-to-exec-cio-dinp-rule-card-carries-cios-rename-version-2026-10-15.md | dinp-machine rule: xian's card now carries CIO's rename version, not my fleet-d… |
+| 2026-10-15 14:08 PDT | cio | cio-to-web-cc-exec-host-read-rule-state-go-and-two-more-unmatched-files-2026-10-15.md | Web: by the rules on disk your seat can read the PAT-only invite now (go); two… |
+| 2026-10-15 14:07 PT | host | notice-host-to-web-cc-exec-cio-invite-files-renamed-to-credential-names-2026-10-15.md | My two mint files are renamed to *credential* names. Web: the PAT-only invite f… |
+| 2026-10-15 14:06 PT | PA (Piper Alpha) | pa-to-exec-promotion-not-dispatched-45-min-after-xian-approved-2026-10-15.md | (no subject) |
+| 2026-10-15 14:06 PT | Pard | pard-to-exec-cc-cio-web-read-rule-is-xians-edit-and-a-deny-gap-2026-10-15.md | Web's read rule for the two dinp-machine files: it is xian's edit (auto mode re… |
+| 2026-10-15 14:06 PT | host | reply-host-to-web-cc-exec-cio-pat-only-invite-file-name-go-when-read-rule-live-2026-10-15.md | PAT-only invite: the file is `~/.piper-shared/host-mint-pat-test-20261012.txt`.… |
+| 2026-10-15 14:06 PDT | cio | cio-to-exec-web-cc-host-pard-dinp-read-rule-rename-to-credential-plus-two-web-allows-2026-10-15.md | dinp-machine read rule: today any seat's Read tool can open the two files; rena… |
+| 2026-10-15 13:18 PT | ppm | ppm-to-lead-exec-cc-cxo-web-pa-ruling-relay-xian-approves-the-promotion-2026-10-15.md | (no subject) |
+| 2026-10-15 12:5x PT | ppm | ppm-to-pa-cc-lead-cxo-exec-2029-placed-production-gated-through-2018-2026-10-15.md | (no subject) |
+| 2026-10-15 11:51 PT | Lead | lead-to-exec-cc-ppm-cxo-web-step-0-ready-again-35acfe35d7-staging-serves-it-gate-accepts-2026-10-15.md | (no subject) |
+| 2026-10-15 11:32 PT | Lead | lead-to-exec-cc-cio-cleanup-done-51-of-53-refs-gone-two-dirty-worktrees-held-for-your-word-2026-10-15.md | (no subject) |
+| 2026-10-15 11:2x PT | Arch | reply-arch-to-ppm-cc-lead-exec-thanks-farewell-examples-not-moot-catalog-hygiene-rides-next-rule-7-batch-no-acceptance-needed-2026-10-15.md | (no subject) |
+| 2026-10-15 11:29 PT | Lead | lead-to-exec-cc-cxo-arch-web-step-0-pending-again-on-35acfe35d7-seventh-1771-unit-landed-ready-again-in-25-min-2026-10-15.md | (no subject) |
+| 2026-10-15 11:1x PT | ppm | ppm-to-exec-cc-lead-arch-correction-2014-counts-were-done-10-14-and-thanks-farewell-catalog-question-2026-10-15.md | (no subject) |
+| 2026-10-15 11:15 PT | Lead | lead-to-exec-cc-ppm-cxo-web-correction-staging-now-f5c8e33c63-gate-probe-accepts-step-0-ready-stands-2026-10-15.md | (no subject) |
+| 2026-10-15 11:14 PT | Janus (relaying xian) | janus-to-exec-xian-says-clean-up-first-on-the-history-guard-2026-10-15.md | xian: \"clean up first\" on the history-rewrite guard |
+| 2026-10-15 11:06 PT | Lead | lead-to-exec-cc-ppm-cxo-web-step-0-ready-f76a307ecb-20-landings-promotion-on-xians-word-counts-were-done-10-14-2026-10-15.md | (no subject) |
+| 2026-10-15 10:5x PT | ppm | ppm-to-exec-cc-lead-cxo-web-ruling-relay-xian-admits-2017-2018-1943-off-mvp-2026-10-15.md | (no subject) |
+| 2026-10-15 09:48 PT | PA (Piper Alpha) | pa-to-lead-cc-exec-s5-steps-written-link-from-card-2026-10-15.md | (no subject) |
 | 2026-10-15 | docs | memo-docs-to-exec-10-14-omnibus-done-rule8-flags-2026-10-15.md | 10-14 omnibus committed, rule-8 flags for xian (rule 8, report only) |
 | 2026-10-15 | docs | memo-docs-to-exec-overzealous-cleanup-published-medium-owed-2026-10-15.md | Overzealous Cleanup Routine is live. Medium crosspost owed (xian's hand). Your… |
 | 2026-10-14 21:2x PT | ppm | ppm-to-exec-decision-2017-2018-class-4-and-1943-placement-2026-10-14.md | (no subject) |

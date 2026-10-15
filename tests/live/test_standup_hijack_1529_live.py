@@ -79,8 +79,9 @@ class TestStandupHijackReplayLive:
             "standup" in body.get("message", "").lower()
         ), f"/standup did not start the interview: {body.get('message', '')[:300]!r}"
         body = turn_driver.turn("cancel", session_id=session_id)
+        # CXO 2026-10-15 08:35: one pause line for an escape word and a deferral.
         assert (
-            "paused" in body.get("message", "").lower()
+            "leave your standup where it is" in body.get("message", "").lower()
         ), f"#888 exact-match escape did not suspend: {body.get('message', '')[:300]!r}"
         states = await _standup_states(live_db_session, session_id)
         assert any(
@@ -195,7 +196,8 @@ class TestStandupHijackReplayLive:
             f"#1529 FAILED LIVE (exit routing): 'end standup' misrouted to "
             f"todo-complete: {msg[:300]!r}"
         )
-        assert "ended the standup" in msg, (
+        # #1771 (CXO 2026-10-15): the exit copy is the drop line now.
+        assert "dropped your standup" in msg, (
             f"#1529 FAILED LIVE (exit routing): 'end standup' did not return "
             f"the honest exit copy: {msg[:300]!r}"
         )

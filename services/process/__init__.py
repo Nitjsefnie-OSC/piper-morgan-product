@@ -24,21 +24,27 @@ from services.process.adapters import (
 )
 from services.process.registry import (
     ESCAPE_COMMANDS,
+    ESCAPE_END_WORDS,
+    ESCAPE_PAUSE_WORDS,
     GuidedProcess,
     ProcessCheckResult,
     ProcessRegistry,
     ProcessType,
     SuspendedInfo,
+    SuspendOutcome,
     get_process_registry,
 )
 
 __all__ = [
     "ESCAPE_COMMANDS",
+    "ESCAPE_END_WORDS",
+    "ESCAPE_PAUSE_WORDS",
     "GuidedProcess",
     "ProcessCheckResult",
     "ProcessRegistry",
     "ProcessType",
     "SuspendedInfo",
+    "SuspendOutcome",
     "get_process_registry",
     "OnboardingProcessAdapter",
     "StandupProcessAdapter",

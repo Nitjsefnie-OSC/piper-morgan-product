@@ -412,6 +412,7 @@ class TestStateQuestionSurvival:
     ):
         """The survived arm is a live ask: after the question turn, a crisp
         'delete them' stores the mapping and routes to the REAL confirm."""
+        todo_boundary["todos"] = todo_boundary["todos"][:1]  # issue 2019: one item arms
         sid = "e2e-1653-q-then-answer"
         await _arm_verb_question(monkeypatch, live_service, sid)
         p_classify, p_floor = _stub_fallthrough_routing(live_service, "delete them?")
@@ -420,7 +421,7 @@ class TestStateQuestionSurvival:
         result = await live_service.process_intent(
             message="delete them", session_id=sid, user_id=_USER
         )
-        assert result.message.startswith(variant_three_question(2))
+        assert result.message.startswith(variant_three_question(1))
         record = pref_store["verified_inferences"][rc.inference_key("clear")]
         assert record["value"] == rc.VALUE_DELETE
         stored = _pending_offers(live_service).get(sid)
@@ -456,10 +457,11 @@ class TestCrispAnswersStillBind:
         keeps every crisp answer shape working — including accept/decline
         lead-ins ('yes, delete them' / 'no, delete them'), which is why the
         claims run BEFORE generic accept/decline at this seam."""
+        todo_boundary["todos"] = todo_boundary["todos"][:1]  # issue 2019: one item arms
         sid = f"e2e-1653-crisp-{abs(hash(answer)) % 10000}"
         await _arm_verb_question(monkeypatch, live_service, sid)
         result = await live_service.process_intent(message=answer, session_id=sid, user_id=_USER)
-        assert result.message.startswith(variant_three_question(2)), answer
+        assert result.message.startswith(variant_three_question(1)), answer
         record = pref_store["verified_inferences"][rc.inference_key("clear")]
         assert record["value"] == rc.VALUE_DELETE, answer
         stored = _pending_offers(live_service).get(sid)
@@ -551,6 +553,7 @@ class TestEchoAnswerAtDeleteConfirmStaysSafe:
         (issue #1653 note 2): the safe direction. If live use shows verb
         echoes are common, verb-echo forms matching the ARMED action's verb
         may join the crisp set — evidence-gated, not this change."""
+        todo_boundary["todos"] = todo_boundary["todos"][:1]  # issue 2019: one item arms
         sid = "e2e-1653-echo"
         await _arm_verb_question(monkeypatch, live_service, sid)
         await live_service.process_intent(message="delete them", session_id=sid, user_id=_USER)

@@ -56,6 +56,17 @@ Related fix, same commit: the #899 off-topic/release prefix used to be
 silently dropped by every early handler return — it now rides
 `_apply_soft_offer` (the 12-site funnel).
 
+**#2026 (2026-10-15) — the #899/#1529 pause prefix follows the transition**:
+a handler's `suspend()` reports what it did (`SuspendOutcome.PAUSED` /
+`CLOSED`; None reads as PAUSED). The registry renders the "I've paused it —
+you can say 'resume'" prefix only when something paused; the standup adapter
+CLOSES an unstarted standup (INITIATED, "ready to start?"), so an off-topic or
+off-intent turn there falls through with no prefix and is just answered (CXO
+2026-10-15). `_check_active_guided_process` then returns `(None, None,
+ProcessType)`: the flow is still named, so the #1596 `guided_flow_escape` stamp
+(now keyed on the flow, not the prefix) still tells the floor not to re-open
+the invitation. Pins: `tests/unit/services/process/test_invitation_fall_through_prefix_2026.py`.
+
 **#1623 mid-gathering hold (2026-08-15), the same seam's inverse guarantee**:
 an ACTIVE gathering flow HOLDS its turns. The thief was never a surface in
 this chain — measured, every content-dependent surface at/above the process
@@ -215,6 +226,30 @@ keeps first claim on ambiguous shapes; singular unnamed 'delete my reminder'
 keeps the which-todo ask; the #1527 named-target and #1666 numbered legs
 unchanged. Regression: `test_bulk_delete_reminders_1696.py` + the updated
 bulk pin in `test_reminder_delete_misroute_1527.py`.
+**Issue 2019 one-item delete cap (2026-10-15, interim until soft delete, issue
+2021)**: xian's 10-14 ruling — no irreversible bulk delete — supersedes every
+MULTI-item delete arm described in this section. The cap lives in the delete
+handlers (Arch's placement), not the router allowlist: when the RESOLVED set has
+more than one item, no delete carrier arms, nothing is deleted, and the reply is
+CXO's capped copy from ONE builder (`services/intent_service/delete_cap.py`,
+`capped_delete_reply`: "I can delete one {reminder|todo} at a time for now. You
+asked about these:" + the items quoted and numbered in resolved order + "Tell me
+which one to delete first. Nothing has been changed."). It is an instruction,
+not an offer: nothing armed, no mark-done offer appended (the capped list is
+recorded as `last_numbered_list`, context only, so "delete the first one" binds
+to what was shown). Sites: `todo_handlers.handle_delete_todo_targets` (router
+targets; the `clear_todos` stored-delete and verb-answer re-entries land here),
+`delete_todo_pick.handle_delete_todo_pick_turn` (an answer naming several
+candidates, read word by word with the shared ordinal binder, no new regex),
+and `reminder_clear`'s five bulk arms (#1696 explicit bulk, variant 3, the
+verb-question "delete" answer — the verb default is still stored —, the
+ALWAYS_ASK "different this time" branch, the correction window). Belt: both
+confirmed sinks (`handle_delete_todo_targets`' `BATCH_DELETE_IDS_KEY` re-entry
+and `run_clear_reminders_delete_workflow`) refuse more than one id, so a
+carrier armed before the cap deletes nothing. Unchanged: single deletes (the
+#1666 gate, the legacy handler, D1, variant 3 / explicit confirm at N=1), and
+mark done on any set. Regression: `test_delete_cap_2019.py` plus the updated
+pins in the 1696, 1605, 1653, 1753, 1943, router-targets and clear_todos suites.
 **#1987 just-created referent leg (2026-10-12)**: 'delete that reminder' /
 'delete it' the turn after "Reminder saved: …" names nothing (that/it/this are
 `_STOPWORDS`, "reminder" is `_DELETE_COMMAND_NOISE`) and fell to the which-todo
@@ -393,6 +428,113 @@ rendered ask; the other two ask sites (`_start_standup_conversation`
 session-exists ask, `_resume_suspended_standup` legacy either/or ask) now
 arm via `_arm_resume_offer(question=…)` — both census rows shrank out.
 Regression: `test_resume_offer_acceptance_1769.py`.
+**#1771 DEFER at the resume seam (2026-10-14 first seam, 2026-10-15 second
+seam).** `evaluate_acceptance(..., distinguish_defer=True)` returns DEFER for
+the deferral phrasings ("not now", "not right now", "not today", "maybe
+later"); two call sites opt in (AST pin): `_check_pending_resume_offer` and
+the standup handler's one reader `standup_reads_as_deferral`
+(`services/standup/conversation_handler.py`). The seam now computes that verdict whether or not the offer is
+pending (armed-only inputs still ride only while it is), and a DEFER verdict
+always bypasses the #1529 flow-exit gate: with the offer pending the reply is
+`RESUME_DEFER_REPLY` and the standup stays SUSPENDED; with no offer pending
+the seam returns None (normal processing answers the turn) and the standup
+stays SUSPENDED. Only an explicit cancel abandons ("cancel that", "forget
+it", "end standup", taught "start over"; `RESUME_ABANDON_REPLY`). The
+continue/restart ask is rendered and armed in one place,
+`_start_standup_conversation` (session lookup, then a user-scoped SUSPENDED
+lookup for a standup paused in another chat); the EMPTY-source branch of
+`_handle_standup_query` routes there when a paused standup exists, before the
+empty-source reply (a non-empty report still renders as asked). **#888 escape
+words, split END vs PAUSE (Arch 2026-10-15, generic across processes):**
+`ESCAPE_COMMANDS` (registry.py) is now the union of `ESCAPE_END_WORDS`
+(`cancel`, `quit`, `exit` → `_close_process`: the handler's
+`close()`, terminal, no resume re-offer) and `ESCAPE_PAUSE_WORDS` (`stop`,
+`never mind` → `suspend()`; CXO's word map 2026-10-15: a word that explicitly
+withdraws ends, a word that could mean "not right now" pauses, and "never
+mind" can mean "forget that answer"). **"please" is politeness at the hatch
+(#1771, Arch 2026-10-15, the #1843 rule):** `_is_escape_command` /
+`_is_escape_end_word` read `registry._escape_word`, which strips ONE leading
+"please" (optional comma) or ONE trailing ", please" / " please" and then does
+the same exact-match lookup, so "please cancel" / "cancel please" is `cancel`
+(END) and "please stop" / "stop please" is `stop` (PAUSE: mid-interview it
+keeps the answers) at every stage, for every process. "please cancel my 3pm
+meeting" and "can you cancel my 3pm meeting?" are not escapes (normal answer
+path). The polite forms are deliberately NOT #1529 exits: an exit
+mid-interview ENDS anything that is not a deferral, so "please stop" would
+drop what a bare `stop` keeps. **`skip` is not an escape word** for any
+process (Arch 2026-10-15, generic; no per-process claims): a bare "skip"
+reaches the handler as ordinary text. Mid-interview the standup reads it
+through `_is_skip_signal` as "nothing for this part, advance" (it is the
+`suggestions=[…, "skip"]` chip Piper offers at every question, which the
+hatch used to suspend on). At "ready to start?" `skip` is not a quick-bypass
+entry, and the bare word is a whole-message decline (`is_bare_decline`, the
+shared `FULL_MESSAGE_DECLINE_RE` row), so it leaves with the invitation line. Escape words are recognised by the registry
+first at every stage; the registry still decides before any handler runs. The registry
+picks the transition from the word alone, before any handler runs (PPM's
+#888 direction holds: the handler never interprets an escape word). The
+handler supplies only the line, through optional hooks `pause_message()` /
+`drop_message()` (sync no-arg, or async `(user_id, session_id)` so the copy
+can read the handler's own state), resolved by `registry.escape_reply_for`
+BEFORE the transition; generic defaults `pause_message_for` /
+`drop_message_for` (the latter is the #1529 exit copy). The word map is
+CXO's; each set is a one-line edit. **An unstarted standup is never
+suspended (Arch 2026-10-15, shape A):** `StandupProcessAdapter.suspend()`
+at INITIATED closes the row (ABANDONED), and every way of leaving at
+"ready to start?" (every escape word, every #1529 whole-message exit, a
+deferral, a "no") gets the invitation line, so no empty SUSPENDED record is
+ever offered back. Pins: `test_escape_end_vs_pause_888.py` (belt: every word
+× every stage → escaped, inactive; nothing suspended at INITIATED; `skip`
+advances at every GATHERING_* question and leaves at the invitation; `quick`
+still bypasses).
+**Four further seams (2026-10-15, CXO's lines,
+Arch's mechanism): a deferral pauses, only a cancel or a "no" to the
+invitation ends.** A #1529 whole-message exit is `escape.detect_flow_exit`:
+`BARE_EXIT_COMMANDS`, or `_exit_re` (`^(please )?(let's )?(end|stop|cancel|
+quit|exit|abort) (the|this|my)? <flow's own words | generic this/it/that/…>`,
+so "cancel that", "cancel it", "please cancel it", "please cancel the standup"
+already leave), or, since #1771 (Arch 2026-10-15), its sibling `_skip_flow_re`
+(`^(please )?skip (the|my)? <flow's OWN words>`, built with
+`include_generic=False`): "skip the standup" / "skip standup" / "skip
+onboarding" exit, generically across processes, while "skip it" / "skip this"
+/ "skip that" never do (mid-interview they reach the handler and advance).
+`skip` is not an `_EXIT_VERBS` word; through the standup's `exit_reply`
+"skip the standup" gets the invitation line at INITIATED and the drop line
+mid-interview, and "skip docs" at the invitation starts the interview. On a #1529 whole-message exit the registry first asks the
+handler (`exit_reply`, optional async hook via `_handler_exit_reply`; no hook,
+None, or a raise → the generic close, so #1529 is unchanged for every other
+process and the registry holds no deferral words). The standup adapter's
+`exit_reply` reads `standup_reads_as_deferral`: DEFER ("not now") →
+SUSPENDED + the defer line (mid-interview); anything else → ABANDONED + the
+drop line; at INITIATED every exit, a deferral included, → ABANDONED + the
+invitation line. At the "ready to start?" invitation `_handle_initiated`
+reads every turn WHOLE-MESSAGE (1771 invitation edges, CXO 2026-10-15 09:55 /
+10:10, Arch 10:1x). First the quick bypass: exact entries only
+(`_QUICK_BYPASS_ENTRIES`: "quick", "fast", "just the report", "the quick
+one", "quick standup", "quick report", "the quick report", "skip the
+questions", "skip questions"; the turn is lowercased with trailing "."/"!"
+dropped), so "quick question before we start" starts the interview. Then the
+leave test, which ENDS with the invitation line (shape A; was SUSPENDED until
+2026-10-15): `is_bare_decline(message)` (the whole-message decline row plus
+the bare deferrals) OR the predicate's DEFER verdict ("maybe later", "not
+right now") OR a DECLINE verdict whose turn also carries a `DEFER_PATTERNS`
+row ("no, not now": the predicate orders decline first; read through
+`soft_invocation.contains_deferral`, the contract helper beside
+`is_bare_decline`, so the standup never imports the row list, Arch
+2026-10-15) OR the whole message
+"later" (Arch's known miss, anchored). The predicate's plain DECLINE verdict
+is NOT read there: its unanchored rows (`^(?:no|nah),?\s`, `\bi'?m good\b`)
+told "I'm good to go" and "no, let's start" "no standup for now". The old
+anywhere word set (`no`/`nope`/`cancel`/`later`) and the `"not now"`
+substring are gone; "please cancel" leaves through the #888 hatch (one
+"please" stripped, above), never reaching the handler. Pins:
+`tests/unit/services/standup/test_invitation_edges_1771.py`. Mid-interview the predicate is consulted only
+on turns the #1529 exit already claims, so a clause like "not yet merged"
+inside an answer stays an answer. Bare #888 escape words are read before
+any handler sees them, split END/PAUSE as above; bare "later" is not a DEFER phrasing (Arch: known miss, no new
+row). Every leave-the-standup line is one constant in
+`services/process/standup_copy.py`. Regression: `test_defer_tier_1771.py`,
+`test_second_seam_1771.py`, `test_four_seams_1771.py`,
+`test_escape_end_vs_pause_888.py`.
 
 **#1762 capped-list remainder seam (2026-09-13, epic 6 first build) — a NEW
 pre-classification deterministic seam, and the chain's first PERSISTING arm.**

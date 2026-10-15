@@ -17,10 +17,9 @@ Issue #556: Performance & Reliability enhancements:
 """
 
 import asyncio
-import re
 import time
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 import structlog
 from tenacity import (
@@ -36,9 +35,13 @@ from services.domain.models import (
     StandupItem,
     StandupPartialCapture,
 )
+from services.process.standup_copy import STANDUP_INVITATION_DECLINE_REPLY
 from services.shared_types import StandupConversationState
 from services.standup.completion_detector import detect_completion
 from services.standup.conversation_manager import StandupConversationManager
+
+if TYPE_CHECKING:
+    from services.intent_service.acceptance import AcceptanceVerdict
 
 # Issue #900 Phase 2: skip-signal phrases (case-insensitive substring match).
 # Used by per-part handlers to detect "no items for this part, advance".
@@ -61,6 +64,10 @@ _SKIP_SIGNAL_PHRASES = (
 # a persistence boundary). Input adequacy per Arch condition (a) on #1739.
 _REFINING_DEFAULT_ASK = "Would you like to make any changes?"
 _REFINING_ANYTHING_ELSE_ASK = "Anything else?"
+# #2027/#2028 (CXO 2026-10-15 10:10): the REFINING draft's unrendered
+# ["Looks good", …] list was the only hint of how to finish; the reply now says
+# it in words. A statement, never an offer (no "?": the census stays put).
+_REFINING_FINALIZE_HINT = "Say 'looks good' to finalize it."
 # (#1837: _REFINING_FALLBACK_ASK retired with _graceful_fallback — a failure
 # is an honest failure message now, never a template presented for refining.)
 
@@ -89,6 +96,74 @@ _REFINING_TAUGHT_ACCEPTS = frozenset(
         "that's it",
     }
 )
+
+
+# #1771 invitation edges (CXO 2026-10-15 09:55 + 10:10): the quick-standup
+# bypass at "ready to start?" — EXACT whole-message entries (lowercased,
+# trailing "."/"!" dropped), never words matched anywhere in the turn.
+_QUICK_BYPASS_ENTRIES = frozenset(
+    {
+        "quick",
+        "fast",
+        "just the report",
+        "the quick one",
+        "quick standup",
+        "quick report",
+        "the quick report",
+        "skip the questions",
+        "skip questions",
+    }
+)
+
+
+# #1771: the workflow whose declared axes the deferral reading uses. The same
+# lookup the resume-offer seam makes (intent_service ``_RESUME_AXES_WORKFLOW``):
+# resuming, pausing and starting all act on the one #585 interview row.
+_STANDUP_INTERVIEW_WORKFLOW = "standup_interview"
+
+
+def _standup_leave_verdict(message: str) -> "AcceptanceVerdict":
+    """THE predicate's verdict on a turn that might leave the standup:
+    ``evaluate_acceptance`` with ``distinguish_defer=True`` over the
+    interview's declared axes. One call, read by ``standup_reads_as_deferral``
+    (DEFER) and by the invitation (``_handle_initiated``: DEFER, or DECLINE
+    only when a deferral row is also in the turn; a plain no there is read
+    whole-message through ``is_bare_decline``)."""
+    from services.intent_service.acceptance import (
+        declared_axes_for_workflow,
+        evaluate_acceptance,
+    )
+
+    axes = declared_axes_for_workflow(_STANDUP_INTERVIEW_WORKFLOW)
+    return evaluate_acceptance(
+        message,
+        effect=axes[0] if axes else None,
+        outwardness=axes[1] if axes else None,
+        # No armed ask is being answered: the question is only "defer, or
+        # not?", and the DEFER tier never reads the armed ask (the resume
+        # seam passes None the same way when no offer is on screen).
+        armed_question=None,
+        distinguish_defer=True,  # #1771: deferral pauses, it never ends
+    )
+
+
+def standup_reads_as_deferral(message: str) -> bool:
+    """#1771 (CXO 2026-10-15, Arch's mechanism): is this turn a deferral
+    ("not now", "maybe later") rather than a cancel or a "no"?
+
+    THE predicate, not a phrase list: ``evaluate_acceptance`` with
+    ``distinguish_defer=True`` over the interview's declared axes, the same
+    verdict the resume-offer seam keys on. Read at the two places a standup
+    can be left before it is done: a #1529 whole-message exit
+    (``StandupProcessAdapter.exit_reply``) and the "ready to start?"
+    invitation (``_handle_initiated``). Mid-interview a deferral pauses and
+    anything else that leaves, ends; at the invitation every way of leaving
+    ends (Arch 2026-10-15: nothing was started, so nothing to pause). Known miss, by Arch's ruling: bare "later" is not a DEFER
+    phrasing (no new row; a ``later`` search would catch "remind me later").
+    """
+    from services.intent_service.acceptance import AcceptanceVerdict
+
+    return _standup_leave_verdict(message) is AcceptanceVerdict.DEFER
 
 
 def _is_skip_signal(message: str) -> bool:
@@ -381,7 +456,6 @@ class StandupConversationHandler:
                 message="Great — let's do it. What did you work on yesterday?",
                 state=StandupConversationState.GATHERING_YESTERDAY,
                 requires_input=True,
-                suggestions=["nothing", "skip"],
             )
 
         # Generate initial greeting based on available context
@@ -391,7 +465,6 @@ class StandupConversationHandler:
             message=greeting,
             state=conversation.state,
             requires_input=True,
-            suggestions=["Yes, let's do it", "Quick standup", "Not now"],
         )
 
     async def _handle_initiated(
@@ -403,29 +476,63 @@ class StandupConversationHandler:
         """Handle INITIATED state - user just started.
 
         Issue #900 Phase 2: Default flow is now the 3-part structured
-        collection (yesterday → today → blockers). Quick/fast/skip still
-        bypasses to GENERATING for users who want a one-shot LLM standup.
+        collection (yesterday → today → blockers). The exact whole-message
+        entries in ``_QUICK_BYPASS_ENTRIES`` ("quick", "just the report",
+        "skip the questions" …) bypass to GENERATING for users who want a
+        one-shot standup. #888 word map (CXO/Arch 2026-10-15): "skip" is not
+        a bypass word; a bare "skip" is a whole-message decline
+        (``is_bare_decline``) and leaves with the invitation line.
         """
-        message_lower = user_message.lower()
-        # #1837: WORD-BOUNDARY matching, not substring. The substring form is
-        # what turned PM's "ready (as I just said)" into a quick-mode bypass
-        # ("just" matched inside the aside) and then a fabricated template —
-        # the literal turn-3 mechanism of the live incident. Same disease as
-        # "no" matching inside "nothing"/"know" on the cancel list below.
-        words = set(re.findall(r"[a-z']+", message_lower))
+        # The whole turn, lowercased, trailing "." / "!" dropped: every test
+        # below is WHOLE-MESSAGE (#1771 invitation edges, CXO 09:55 / 10:10,
+        # Arch 10:1x). #1837's anywhere-matching word sets are gone: "quick
+        # question before we start" is not a bypass, and "no, let's start" is
+        # not a leave.
+        whole = user_message.strip().lower().rstrip(".!").strip()
 
-        # Quick/fast/skip → bypass guided collection, go straight to GENERATING
-        if words & {"quick", "fast", "skip"} or message_lower.strip() in ("just the report",):
+        # Quick bypass → straight to GENERATING, on exact whole-message
+        # entries only (CXO 10:10: "quick"/"fast" anywhere made a question
+        # read as a mode choice). "skip the questions" is the user saying
+        # what they want (CXO 09:55); "skip" alone is not here (a leave,
+        # below) and "skip docs" starts the interview.
+        if whole in _QUICK_BYPASS_ENTRIES:
             await self.manager.transition_state(
                 conversation.id, StandupConversationState.GENERATING
             )
             return await self._generate_standup(conversation, context)
 
-        # Cancel
-        if words & {"no", "nope", "cancel", "later"} or "not now" in message_lower:
+        # Leaving at the invitation ENDS, however it is phrased (Arch
+        # 2026-10-15, shape A): nothing was started, so a deferral has nothing
+        # to pause; a SUSPENDED row here would be offered back as a standup
+        # that never began. The leave test (Arch 10:1x, CXO 09:55):
+        #   - a bare decline, whole message: ``is_bare_decline`` (the shared
+        #     full-message decline row plus the bare deferrals). NOT the
+        #     predicate's DECLINE verdict, whose unanchored rows read "I'm
+        #     good to go" and "no, let's start" as a no;
+        #   - the predicate's DEFER verdict ("not right now", "maybe later");
+        #   - a DECLINE verdict that also carries a deferral row ("no, not
+        #     now", "no, maybe later"): the predicate orders decline before
+        #     defer, so these read DECLINE, never DEFER, and the dropped
+        #     "not now" substring was what ended them (existing pin). Read
+        #     through ``contains_deferral`` (Arch 10:4x), never the rows;
+        #   - bare "later", whole message only (Arch's known miss, anchored).
+        # ``cancel`` / ``stop`` / … never reach here (the #888 hatch).
+        from services.intent_service.acceptance import AcceptanceVerdict
+        from services.intent_service.soft_invocation import (
+            contains_deferral,
+            is_bare_decline,
+        )
+
+        verdict = _standup_leave_verdict(user_message)
+        if (
+            is_bare_decline(user_message)
+            or verdict is AcceptanceVerdict.DEFER
+            or (verdict is AcceptanceVerdict.DECLINE and contains_deferral(user_message))
+            or whole == "later"
+        ):
             await self.manager.transition_state(conversation.id, StandupConversationState.ABANDONED)
             return ConversationResponse(
-                message="No problem! Just say 'standup' when you're ready.",
+                message=STANDUP_INVITATION_DECLINE_REPLY,
                 state=StandupConversationState.ABANDONED,
                 requires_input=False,
             )
@@ -438,7 +545,6 @@ class StandupConversationHandler:
             message="What did you work on yesterday?",
             state=StandupConversationState.GATHERING_YESTERDAY,
             requires_input=True,
-            suggestions=["nothing", "skip"],
         )
 
     async def _handle_gathering_yesterday(
@@ -475,7 +581,6 @@ class StandupConversationHandler:
             message="What's planned for today?",
             state=StandupConversationState.GATHERING_TODAY,
             requires_input=True,
-            suggestions=["nothing", "skip"],
         )
 
     async def _handle_gathering_today(
@@ -511,7 +616,6 @@ class StandupConversationHandler:
             message="Any blockers or things you need help with?",
             state=StandupConversationState.GATHERING_BLOCKERS,
             requires_input=True,
-            suggestions=["no blockers", "skip"],
         )
 
     async def _handle_gathering_blockers(
@@ -565,11 +669,10 @@ class StandupConversationHandler:
             return ConversationResponse(
                 message=(
                     f"Here's your standup:\n\n{conversation.current_standup}\n\n"
-                    f"{_REFINING_DEFAULT_ASK}"
+                    f"{_REFINING_DEFAULT_ASK} {_REFINING_FINALIZE_HINT}"
                 ),
                 state=StandupConversationState.REFINING,
                 standup_content=conversation.current_standup,
-                suggestions=["Looks good", "Add a blocker", "Remove something"],
             )
 
         return await self._generate_standup(conversation, context)
@@ -661,7 +764,6 @@ class StandupConversationHandler:
                     state=StandupConversationState.REFINING,
                     standup_content=conversation.current_standup,
                     requires_input=True,
-                    suggestions=["Yes, start the interview", "Keep this draft"],
                 )
             draft = conversation.current_standup or "(no draft yet)"
             provenance = (
@@ -677,7 +779,6 @@ class StandupConversationHandler:
                 state=StandupConversationState.REFINING,
                 standup_content=conversation.current_standup,
                 requires_input=True,
-                suggestions=["Looks good", "Add a blocker", "Start over"],
             )
 
         if verdict is AcceptanceVerdict.ACCEPT:
@@ -696,7 +797,6 @@ class StandupConversationHandler:
                     message="Great — let's do it. What did you work on yesterday?",
                     state=StandupConversationState.GATHERING_YESTERDAY,
                     requires_input=True,
-                    suggestions=["nothing", "skip"],
                 )
             # #1617 (PM live 2026-08-13): the final confirmation COMPLETES the
             # flow — no FINALIZING tail turn. The old tail ('share this or
@@ -739,7 +839,6 @@ class StandupConversationHandler:
                 message="Fresh start. What did you work on yesterday?",
                 state=StandupConversationState.GATHERING_YESTERDAY,
                 requires_input=True,
-                suggestions=["nothing", "skip"],
             )
 
         # Handle refinement request. DECLINE falls through here deliberately:
@@ -777,7 +876,6 @@ class StandupConversationHandler:
                 state=StandupConversationState.REFINING,
                 standup_content=before,
                 requires_input=True,
-                suggestions=["Add a blocker", "Start over", "Looks good"],
             )
         except Exception as e:
             logger.error(
@@ -795,7 +893,6 @@ class StandupConversationHandler:
                 state=StandupConversationState.REFINING,
                 standup_content=before,
                 requires_input=True,
-                suggestions=["Try again", "Looks good", "Start over"],
                 metadata={"refinement_failed": True, "error": str(e)},
             )
         if refined == before:
@@ -813,14 +910,12 @@ class StandupConversationHandler:
                 state=StandupConversationState.REFINING,
                 standup_content=before,
                 requires_input=True,
-                suggestions=["Add a blocker", "Start over", "Looks good"],
             )
         await self.manager.set_standup_content(conversation.id, refined)
         return ConversationResponse(
             message=f"I've updated your standup:\n\n{refined}\n\nAnything else?",
             state=StandupConversationState.REFINING,
             standup_content=refined,
-            suggestions=["Looks good", "More changes", "Start over"],
         )
 
     async def _handle_finalizing(
@@ -854,7 +949,7 @@ class StandupConversationHandler:
         Issue #900 Phase 5: When a 3-part `partial_capture` is non-empty,
         render the standup directly from captured StandupItems — the user
         has already authored the content, no LLM round-trip needed. The
-        legacy LLM-workflow path remains for the quick/skip bypass and
+        legacy LLM-workflow path remains for the quick bypass and
         for installations without a partial capture.
 
         #1837 (PM live, 2026-09-20): the third leg — `_generate_basic_standup`,
@@ -880,7 +975,7 @@ class StandupConversationHandler:
                 standup_content = _format_standup_from_capture(capture)
                 used_capture = True
             elif self._workflow:
-                # Legacy LLM workflow path (quick/skip bypass)
+                # Legacy LLM workflow path (quick bypass)
                 standup_content = await self._generate_with_retry(context)
                 used_workflow = True
             elif conversation.previous_state in (
@@ -934,7 +1029,6 @@ class StandupConversationHandler:
                     ),
                     state=StandupConversationState.GATHERING_YESTERDAY,
                     requires_input=True,
-                    suggestions=["nothing", "skip"],
                 )
 
             generation_time_ms = (time.perf_counter() - generation_start) * 1000
@@ -956,11 +1050,11 @@ class StandupConversationHandler:
 
             return ConversationResponse(
                 message=(
-                    f"Here's your standup:\n\n{standup_content}\n\n" f"{_REFINING_DEFAULT_ASK}"
+                    f"Here's your standup:\n\n{standup_content}\n\n"
+                    f"{_REFINING_DEFAULT_ASK} {_REFINING_FINALIZE_HINT}"
                 ),
                 state=StandupConversationState.REFINING,
                 standup_content=standup_content,
-                suggestions=["Looks good", "Add a blocker", "Focus on something else"],
             )
 
         except Exception as e:
@@ -990,7 +1084,6 @@ class StandupConversationHandler:
                 ),
                 state=StandupConversationState.GENERATING,
                 requires_input=True,
-                suggestions=["Try again", "Cancel"],
                 metadata={"generation_failed": True, "error": str(e)},
             )
 

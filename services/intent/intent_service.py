@@ -59,6 +59,11 @@ from services.learning.learning_handler import LearningHandler
 from services.llm.request_key import LLMKeyRequiredError
 from services.personality.personality_profile import PersonalityProfile
 from services.process import ProcessCheckResult, ProcessType, get_process_registry
+from services.process.standup_copy import (
+    STANDUP_DEFER_PAUSE_REPLY,
+    STANDUP_DROP_PAUSED_REPLY,
+    STANDUP_RESUME_NOT_FOUND_REPLY,
+)
 from services.repositories.user_trust_profile_repository import UserTrustProfileRepository
 from services.shared_types import IntentCategory, TrustStage
 from services.slot_filling.slot_filling_adapter import SlotFillingProcessAdapter
@@ -227,9 +232,13 @@ _RESUME_TAUGHT_DECLINES = frozenset(
 )
 # Reply when the user defers the resume offer ("not now"); the suspended flow
 # stays SUSPENDED. CXO's string 2026-10-14 11:20; true via 2007.
-RESUME_DEFER_REPLY = (
-    "Okay, I'll leave your standup where it is. Just ask when you want to pick it back up."
-)
+RESUME_DEFER_REPLY = STANDUP_DEFER_PAUSE_REPLY  # the string: services/process/standup_copy.py
+# Reply when a suspended standup is ABANDONED: an explicit cancel ("cancel
+# that", "forget it", "start over", "end standup") or a decline at the resume
+# offer. Never reachable by a deferral (#1771 second seam). CXO's string
+# 2026-10-14 21:50; the old "/standup" slash form went (the chat never
+# taught it; the phrase to say is the one the user already used).
+RESUME_ABANDON_REPLY = STANDUP_DROP_PAUSED_REPLY  # the string: services/process/standup_copy.py
 _RESUME_ARMED_ONLY_DECLINES = frozenset(
     {
         "restart",
@@ -2860,7 +2869,10 @@ class IntentService:
             # Multi-intent turns keep the accepted #899 parity (prefix-only);
             # the exit kind ("end standup") is consumed at the seam and never
             # classifies, so it needs no stamp.
-            if off_topic_prefix and escaped_process_type is not None:
+            # #2026: keyed on the flow, not the prefix: a flow CLOSED at its
+            # invitation by an off-topic turn carries no prefix but was still
+            # left on this turn.
+            if escaped_process_type is not None:
                 if intent.context is None:
                     intent.context = {}
                 intent.context["guided_flow_escape"] = {
@@ -3469,7 +3481,9 @@ class IntentService:
         compose with the flow's open question in history and nothing saying
         the flow ended. The classification seam stamps this onto
         intent.context["guided_flow_escape"]; the floor doors hand it to the
-        renderer. Always None when there is no fall-through prefix.
+        renderer. None when no flow was left behind on this turn; since
+        #2026 it can be set with a None prefix (the flow was CLOSED, not
+        paused, so there is no pause to claim).
 
         Args:
             user_id: Authenticated user ID
@@ -3486,13 +3500,18 @@ class IntentService:
 
             # Issue #899: Off-topic pause — process was suspended but message
             # should go through normal intent processing
-            if not result.handled and result.escaped and result.response_message:
+            # #2026: the prefix is None when the handler's suspend() CLOSED
+            # the flow instead of pausing it (an unstarted standup): the turn
+            # still falls through, and the flow is still named for #1596, but
+            # nothing is prepended.
+            if not result.handled and result.escaped:
                 self.logger.info(
-                    "Off-topic detected, process paused, continuing to intent processing",
+                    "Off-topic detected, process left, continuing to intent processing",
                     process_type=result.process_type.value if result.process_type else None,
+                    paused=bool(result.response_message),
                     user_id=user_id,
                 )
-                return None, result.response_message, result.process_type
+                return None, result.response_message or None, result.process_type
 
             if result.handled:
                 self.logger.info(
@@ -3987,29 +4006,43 @@ class IntentService:
             _effect = _axes[0] if _axes else None
             _outward = _axes[1] if _axes else None
 
-            # The armed-offer verdict (consulted again below; computed first
-            # because the flow-exit gate keys on it).
-            verdict = None
-            if resume_offer_pending:
-                verdict = evaluate_acceptance(
-                    message,
-                    effect=_effect,
-                    outwardness=_outward,
-                    armed_question=resume_offer_question,  # #1665: as rendered
-                    taught_accepts=_RESUME_TAUGHT_ACCEPTS,
-                    taught_declines=_RESUME_TAUGHT_DECLINES | _RESUME_ARMED_ONLY_DECLINES,
-                    distinguish_defer=True,  # #1771: the one seam that tells defer from decline
-                )
+            # The verdict (consulted again below; computed first because the
+            # flow-exit gate keys on it). #1771 second seam (Web's served run
+            # 2026-10-14 21:42): computed WITH OR WITHOUT a pending offer.
+            # Before, it ran only while the offer was pending, so a "not now"
+            # with a suspended standup and no offer on screen fell to the
+            # #1529 bare exit below and ABANDONED the paused standup. The
+            # armed-only inputs (the rendered ask, the one-word "restart" /
+            # "fresh" declines) still ride only while the offer is pending.
+            verdict = evaluate_acceptance(
+                message,
+                effect=_effect,
+                outwardness=_outward,
+                # #1665: the ask as rendered, only while it is on screen
+                armed_question=resume_offer_question if resume_offer_pending else None,
+                taught_accepts=_RESUME_TAUGHT_ACCEPTS,
+                taught_declines=(
+                    _RESUME_TAUGHT_DECLINES | _RESUME_ARMED_ONLY_DECLINES
+                    if resume_offer_pending
+                    else _RESUME_TAUGHT_DECLINES
+                ),
+                distinguish_defer=True,  # #1771: the one seam that tells defer from decline
+            )
+            deferred = verdict is AcceptanceVerdict.DEFER
 
-            # #1771 (Arch): while the resume offer is pending, a DEFER verdict
-            # from THE predicate ("not now", "maybe later" ...) is an answer to
-            # the offer (handled below; the flow stays suspended), not the
-            # #1529 bare-exit command that closes an ACTIVE flow. Keyed on the
-            # predicate, not a second phrase set; #1529's exit vocabulary stays
-            # ignorant of "defer". An ACTIVE flow (no offer pending) still exits.
-            if detect_flow_exit(message, suspended.process_type) and not (
-                verdict is AcceptanceVerdict.DEFER
-            ):
+            # #1771 (Arch): a DEFER verdict from THE predicate ("not now",
+            # "maybe later" ...) protects the suspended flow; it is never the
+            # #1529 bare-exit command. With the offer pending it answers the
+            # offer (handled below); with no offer pending it is not ours to
+            # answer and falls through untouched (second seam). Keyed on the
+            # predicate, not a second phrase set; #1529's exit vocabulary
+            # stays ignorant of "defer". Only an explicit cancel ("cancel
+            # that", "forget it", "end standup", taught "start over")
+            # abandons a suspended standup. An ACTIVE flow's "not now" is
+            # the registry's #1529 exit, a different seam: there the standup
+            # adapter's exit_reply reads the same predicate and pauses
+            # (#1771 four seams, CXO 2026-10-15).
+            if detect_flow_exit(message, suspended.process_type) and not deferred:
                 self.logger.info(
                     "Suspended process ended by flow-exit phrase",
                     user_id=user_id,
@@ -4035,7 +4068,19 @@ class IntentService:
             #    flow the user can end or re-suspend (recoverable), and the
             #    seam inherits the CXO-owned LOW-tier tightening
             #    automatically when it lands.
-            # (resume_offer_pending: verdict computed above, before the exit gate)
+            # (verdict computed above, before the exit gate)
+            if not resume_offer_pending and deferred:
+                # #1771 second seam: no offer on screen, so a deferral is not
+                # an answer to it. Nothing is abandoned or resumed; normal
+                # processing answers the turn (another armed rail, or the
+                # #2004 nothing-open acknowledgement). The standup stays
+                # SUSPENDED and the next standup ask re-offers it.
+                self.logger.info(
+                    "Deferral with no resume offer pending; suspended flow kept",
+                    user_id=user_id,
+                    process_type=suspended.process_type.value,
+                )
+                return None
             if not resume_offer_pending:
                 # No offer pending: ONLY the flow-naming taught commands act
                 # (#1529's explicit tier). DIFFERENTIAL consultation keeps
@@ -4178,7 +4223,9 @@ class IntentService:
         if not conv or conv.state != StandupConversationState.SUSPENDED:
             return IntentProcessingResult(
                 success=True,
-                message="I couldn't find the paused standup. Want to start a fresh one with /standup?",
+                # CXO 2026-10-15 item 3: a statement plus an instruction,
+                # nothing armed (was a "/standup" question).
+                message=STANDUP_RESUME_NOT_FOUND_REPLY,
                 intent_data={
                     "category": "guidance",
                     "action": "suspended_session_resume_failed",
@@ -4256,7 +4303,7 @@ class IntentService:
         # asked. The 3-part resume prompt above and the not-found copy are
         # deliberately NOT armed: the former is the standup machine's own ask
         # (consumed on its adopted state rail, #1739 table row 1), the latter
-        # teaches the /standup command rather than offering a resume.
+        # is a statement plus an instruction, not an offer (#1771 item 3).
         self._arm_resume_offer(session_id, user_id, question=resume_msg)
 
         return IntentProcessingResult(
@@ -4294,7 +4341,7 @@ class IntentService:
 
         return IntentProcessingResult(
             success=True,
-            message="No problem! The paused standup has been cleared. Just say /standup when you're ready for a new one.",
+            message=RESUME_ABANDON_REPLY,  # CXO 2026-10-14 21:50 (#1771)
             intent_data={
                 "category": "guidance",
                 "action": "suspended_session_declined",
@@ -4544,6 +4591,26 @@ class IntentService:
             self.logger.warning(f"Could not check active standup: {e}")
             return None
 
+    async def _find_suspended_standup(self, user_id: Optional[str]) -> Optional[Any]:
+        """#1771 second seam: the user's SUSPENDED standup conversation, if
+        any, from any chat (the same user-scoped lookup the registry's
+        ``has_suspended_session`` uses). A lookup failure reads as "none":
+        the caller then serves the turn it would have served before."""
+        if not user_id:
+            return None
+        try:
+            from services.conversation.conversation_handler import _get_standup_components
+            from services.shared_types import StandupConversationState
+
+            manager, _ = _get_standup_components()
+            conv = await manager.get_suspended_for_user(user_id)
+        except Exception as e:  # silent-ok: logged; the standup ask is still answered, the paused one stays SUSPENDED
+            self.logger.warning("suspended_standup_lookup_failed", error=str(e), user_id=user_id)
+            return None
+        if conv is None or getattr(conv, "state", None) != StandupConversationState.SUSPENDED:
+            return None
+        return conv
+
     async def _start_standup_conversation(
         self, user_id: str, session_id: str, *, interview_accepted: bool = False
     ) -> IntentProcessingResult:
@@ -4577,6 +4644,15 @@ class IntentService:
                 if session_id
                 else None
             )
+            if not existing or existing.state in (
+                StandupConversationState.COMPLETE,
+                StandupConversationState.ABANDONED,
+            ):
+                # #1771 second seam: a standup paused in ANOTHER chat is the
+                # user's, not the session's (has_suspended_session is
+                # user-scoped too). Without this, a fresh ask in a new chat
+                # started a second conversation and orphaned the paused one.
+                existing = await self._find_suspended_standup(user_id)
             if existing and existing.state not in (
                 StandupConversationState.COMPLETE,
                 StandupConversationState.ABANDONED,
@@ -4592,7 +4668,7 @@ class IntentService:
                 # binds to what was actually asked (#1665). If the
                 # conversation is ACTIVE the guided-process rail claims the
                 # reply first and the arm expires unused; it is load-bearing
-                # exactly when the conversation is SUSPENDED-with-session.
+                # exactly when the conversation is SUSPENDED.
                 self._arm_resume_offer(session_id, user_id, question=response_msg)
                 return IntentProcessingResult(
                     success=True,
@@ -4962,6 +5038,22 @@ class IntentService:
             summary = await build_user_standup_summary(user_id)
 
             if summary.is_empty():
+                # #1771 second seam (Web's served run 2026-10-14 21:42): a
+                # PAUSED standup outranks the empty-source reply. Before, an
+                # account with no connected source answered "I don't have
+                # anything to build your standup from yet" here and the
+                # continue/restart offer was unreachable, so CXO's "Just ask
+                # when you want to pick it back up" was not true. Empty branch
+                # only: a non-empty report still renders as asked.
+                # The ask itself is _start_standup_conversation's (one door,
+                # one copy, armed there).
+                if session_id and user_id and await self._find_suspended_standup(user_id):
+                    self.logger.info(
+                        "standup_ask_offers_paused_standup",
+                        user_id=user_id,
+                        session_id=session_id,
+                    )
+                    return await self._start_standup_conversation(user_id, session_id)
                 # #1591 / PPM's rule: an empty report is "a null result wearing
                 # a report's format" — nothing to demonstrate, so demonstrate-
                 # then-ask yields to fail-honestly-and-offer: say so plainly

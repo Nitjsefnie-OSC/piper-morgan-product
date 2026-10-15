@@ -49,6 +49,7 @@ from services.domain.models import Intent, Todo
 from services.intent.intent_service import IntentService
 from services.intent_service import reminder_clear as rc
 from services.intent_service.classifier import IntentClassifier
+from services.intent_service.delete_cap import DELETE_CAPPED_FLAG
 from services.intent_service.destructive_confirm import (
     CONFIRM_PENDING_ACTION_WORKFLOW,
 )
@@ -235,62 +236,94 @@ class TestBulkConfirmArms:
             "get rid of my reminders",
         ),
     )
-    async def test_bulk_reminder_delete_arms_the_1190_confirm(
+    async def test_bulk_reminder_delete_is_capped_issue_2019(
         self, live_service, monkeypatch, todo_boundary, phrase
     ):
-        """RED pre-1696: 'Which todo should I remove?' (or, for the 'all'
-        form, a named-target miss on the word 'all'). GREEN: the bulk set
-        resolves at offer time (2 reminder-dated rows), the clear-family
-        flow's #1190-gated delete leg arms, nothing deleted on the ask."""
+        """RED pre-1696: 'Which todo should I remove?'. 1696 armed the
+        bulk #1190 confirm. Issue 2019 (xian 2026-10-14, interim until soft
+        delete): the bulk set (2 reminder-dated rows) still resolves at
+        offer time, but NOTHING arms and nothing is deleted — CXO's capped
+        reply names both, in list order."""
         sid = f"e2e-1696-{hash(phrase) & 0xFFFF}"
         _stub_classification(monkeypatch, live_service, phrase, "delete_todo")
         result = await live_service.process_intent(message=phrase, session_id=sid, user_id=_USER)
-        assert result.message == "Delete these 2 reminders? (yes/no)"
-        assert result.intent_data.get("destructive_confirmation_pending") is True
-        assert result.intent_data.get("action") == rc.CLEAR_DELETE_WORKFLOW
-        stored = _pending_offers(live_service).get(sid)
-        assert stored is not None
-        assert stored["workflow_type"] == CONFIRM_PENDING_ACTION_WORKFLOW
-        assert stored["pending_action"]["kind"] == rc.CLEAR_DELETE_CONFIRMATION_KIND
-        assert stored["pending_action"]["action"] == rc.CLEAR_DELETE_WORKFLOW
+        assert result.message == (
+            "I can delete one reminder at a time for now. You asked about these:\n"
+            '1. "Review the PR"\n'
+            '2. "Call the vendor"\n'
+            "\n"
+            "Tell me which one to delete first. Nothing has been changed."
+        )
+        assert result.intent_data.get(DELETE_CAPPED_FLAG) is True
+        assert not result.intent_data.get("destructive_confirmation_pending")
+        assert _pending_offers(live_service).get(sid) is None
         assert todo_boundary["deleted"] == []
 
     async def test_todo_noun_scopes_to_all_active_todos(
         self, live_service, monkeypatch, todo_boundary
     ):
         """'delete my todos' → todo vocabulary, ALL 3 active rows (#1569:
-        the noun scopes the set — reminders are the reminder-dated subset)."""
+        the noun scopes the set — reminders are the reminder-dated subset).
+        Capped (issue 2019) with the path's own noun, "todo"."""
         sid = "e2e-1696-todos"
         _stub_classification(monkeypatch, live_service, "delete my todos", "delete_todo")
         result = await live_service.process_intent(
             message="delete my todos", session_id=sid, user_id=_USER
         )
-        assert result.message == "Delete these 3 todos? (yes/no)"
-        stored = _pending_offers(live_service).get(sid)
-        assert stored["pending_action"]["kind"] == rc.CLEAR_DELETE_CONFIRMATION_KIND
+        assert result.message == (
+            "I can delete one todo at a time for now. You asked about these:\n"
+            '1. "Review the PR"\n'
+            '2. "Call the vendor"\n'
+            '3. "Draft the retro notes"\n'
+            "\n"
+            "Tell me which one to delete first. Nothing has been changed."
+        )
+        assert _pending_offers(live_service).get(sid) is None
         assert todo_boundary["deleted"] == []
 
-    async def test_yes_deletes_exactly_the_bound_reminder_rows(
+    async def test_yes_after_the_capped_reply_deletes_nothing_issue_2019(
         self, live_service, monkeypatch, todo_boundary
     ):
-        """The confirmed yes deletes the ids bound at OFFER time — the 2
-        reminder-dated rows, never the plain todo."""
-        sid = "e2e-1696-yes"
+        """'Tell me which one' is an instruction, not an offer: a bare
+        "yes" after the capped turn has nothing to confirm."""
+        sid = "e2e-1696-capped-yes"
         _stub_classification(monkeypatch, live_service, "delete my reminders", "delete_todo")
         await live_service.process_intent(
             message="delete my reminders", session_id=sid, user_id=_USER
         )
+        assert _pending_offers(live_service).get(sid) is None
+        await live_service.process_intent(message="yes", session_id=sid, user_id=_USER)
+        assert todo_boundary["deleted"] == []
+
+    async def test_one_reminder_still_arms_the_explicit_confirm_and_yes_deletes_it(
+        self, live_service, monkeypatch, todo_boundary
+    ):
+        """N=1 is unchanged by issue 2019: the explicit confirm arms, and
+        the confirmed yes deletes the id bound at OFFER time — the one
+        reminder-dated row, never the plain todo."""
+        todo_boundary["todos"] = todo_boundary["todos"][1:]  # one reminder + one plain todo
+        sid = "e2e-1696-yes"
+        _stub_classification(monkeypatch, live_service, "delete my reminders", "delete_todo")
+        asked = await live_service.process_intent(
+            message="delete my reminders", session_id=sid, user_id=_USER
+        )
+        assert asked.message == "Delete this reminder? (yes/no)"
+        stored = _pending_offers(live_service).get(sid)
+        assert stored["workflow_type"] == CONFIRM_PENDING_ACTION_WORKFLOW
+        assert stored["pending_action"]["kind"] == rc.CLEAR_DELETE_CONFIRMATION_KIND
+        assert todo_boundary["deleted"] == []
         todo_boundary["allow_delete"] = True
         confirmed = await live_service.process_intent(message="yes", session_id=sid, user_id=_USER)
         reminder_ids = {t.id for t in todo_boundary["todos"] if t.reminder_date is not None}
         assert set(todo_boundary["deleted"]) == reminder_ids
-        assert "Deleted 2 reminders" in confirmed.message
-        assert "Review the PR" in confirmed.message
+        assert "Deleted 1 reminder" in confirmed.message
+        assert "Call the vendor" in confirmed.message
         assert "Draft the retro notes" not in confirmed.message
 
     async def test_no_cancels_honestly_and_nothing_fires(
         self, live_service, monkeypatch, todo_boundary
     ):
+        todo_boundary["todos"] = todo_boundary["todos"][1:]  # one reminder: the confirm arms
         sid = "e2e-1696-no"
         _stub_classification(monkeypatch, live_service, "delete my reminders", "delete_todo")
         await live_service.process_intent(
