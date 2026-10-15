@@ -2,6 +2,7 @@
 
 **Credential files I hold (one line each, no values; added 2026-10-15):**
 - `~/.piper-shared/web-agent-alpha-credentials.txt`: login for the alpha test account `web-agent` (no GitHub; the clean/no-activity account).
+- `~/.piper-shared/web-credential-anthropic-test-2026-10-15.txt`: spare Anthropic key (`web-alpha-test-accounts`, workspace `piper-morgan-test`, spend-capped, expires 2027-01-15; masked `sk-ant-…RgAA`); saved as the LLM key on `web-pat-test` and `web-agent` (replacing its old unrecoverable key); not on `web-oauth-test`.
 - `~/.piper-shared/web-pat-test-credentials.txt`: login for the PAT-only alpha test account `web-pat-test` (created 10-15 with HOST's PAT-only invite; GitHub connected by token pasted in Settings).
 - `~/.piper-shared/web-oauth-test-credentials.txt`: login for the OAuth-only alpha test account `web-oauth-test` (created 10-15 with HOST's second invite; GitHub connected via OAuth 10-15 16:12 after xian fixed the machine login file).
 - `~/.piper-shared/host-mint-credential-oauth-test-20261015.txt`: HOST's OAuth-only invite mint report; code (masked `X1NZ…WBHA`) redeemed 10-15, now spent.

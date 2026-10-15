@@ -249,3 +249,20 @@ a dev page shouldn't ship to prod at all. Live examples: `web/api/routes/debug.p
 (#1149), `web/routers/dev_trust.py` (#1148), `web/routers/dev_composting.py` (#1143).
 *(Follow-up: migrate dev_trust + dev_composting off their hand-rolled copies onto
 `web/dev_gate.require_dev_environment` — small DRY cleanup, not done in #1149's scope.)*
+
+## Page URLs: guessed-path redirects and the 404 rule (#2039)
+
+Pages live outside `/api/v1/`. Two rules keep a mistyped page URL from ending in raw JSON.
+
+**Guessed-path redirects.** `GUESSED_PATH_REDIRECTS` in `web/api/routes/ui.py` sends a guess to the page that exists, with a 302 (a guess is not a rename, so nothing is cached permanently). A redirect is added only when its target is a real page; no page is invented for a guess.
+
+| Guessed path | Target |
+|---|---|
+| `/settings/github`, `/settings/notion`, `/settings/slack`, `/settings/calendar` | `/settings/integrations/<name>` |
+| `/settings/google-calendar` | `/settings/integrations/calendar` |
+| `/integrations` | `/settings/integrations` |
+| `/settings/api-keys`, `/settings/llm` | `/settings/llm-keys` |
+
+`/settings/account` and `/settings/profile` have no page and fall to the 404 below.
+
+**The 404 rule.** An unmatched path outside `/api/` whose `Accept` includes `text/html` gets `templates/not_found.html` (the app shell, CXO's wording, status 404). Everything else, including every `/api/*` path and any request without `text/html`, keeps the default JSON `{"detail": "Not Found"}`. The handler is the Starlette `HTTPException` handler in `web/app.py`; it only intercepts 404 and delegates the rest to FastAPI's default. The auth gate runs first: a signed-out request for an unknown page is redirected to `/login?next=...` before any 404 is produced. Pinned in `tests/unit/web/test_guessed_paths_and_human_404_2039.py`.
