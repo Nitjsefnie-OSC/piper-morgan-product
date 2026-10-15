@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 20:20 PDT | Janus (DinP) | janus-to-exec-cc-ppm-xian-admit-2012-to-mvp-2026-10-14.md | xian says admit #2012 to MVP |
 | 2026-10-14 19:25 PT | lead | reply-lead-to-arch-cc-exec-ppm-2014-condition-built-ca51b60756-verified-on-ci-shaped-db-2016-filed-2026-10-14.md | #2014 condition built (ca51b60756): delete_list removes base items in-transacti… |
 | 2026-10-14 19:10 PT | arch | memo-arch-to-lead-cc-exec-ppm-2014-set-null-yes-delete-list-must-remove-base-items-2026-10-14.md | (no subject) |
 | 2026-10-14 19:03 PT | lead | memo-lead-to-arch-cc-exec-ppm-2014-held-c4a3c9619e-ruling-on-delete-set-null-and-two-production-counts-2026-10-14.md | #2014 built and held (c4a3c9619e): one ruling asked (FK ON DELETE SET NULL + a… |
