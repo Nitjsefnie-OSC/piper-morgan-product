@@ -996,7 +996,14 @@ class TodoIntentHandlers:
         The confirmed "yes" re-entry deletes EXACTLY the ids bound onto the
         carrier at ask time (``BATCH_DELETE_IDS_KEY``) — never a re-resolve
         of ``inversion_args`` — and reports only what actually deleted.
+
+        Issue 2019 (xian 2026-10-14, interim until soft delete): a resolved
+        set of MORE than one item arms nothing and deletes nothing — the
+        reply is ``delete_cap.capped_delete_reply`` (CXO's copy). A carrier
+        bound to several ids before the cap shipped is capped at the
+        confirmed re-entry too. Single deletes keep the D1 confirm.
         """
+        from services.intent_service.delete_cap import capped_delete_reply, exceeds_delete_cap
         from services.intent_service.destructive_confirm import (
             CONFIRM_PENDING_ACTION_WORKFLOW,
             CONFIRMED_CONTEXT_KEY,
@@ -1028,6 +1035,11 @@ class TodoIntentHandlers:
             ids = list(ctx.get(BATCH_DELETE_IDS_KEY) or [])
             texts = list(ctx.get(BATCH_DELETE_TEXTS_KEY) or [])
             left = list(ctx.get(BATCH_DELETE_LEFT_KEY) or [])
+            if exceeds_delete_cap(len(ids)):
+                # Issue 2019 belt: a multi-item carrier armed before the cap
+                # shipped (or by any arm site the cap missed) deletes nothing.
+                logger.info("todo_batch_delete_capped_at_confirm", count=len(ids))
+                return capped_delete_reply(texts), False
             done_texts: List[str] = []
             failed: List[Tuple[str, str]] = []
             for tid, text in zip(ids, texts):
@@ -1126,7 +1138,25 @@ class TodoIntentHandlers:
             # the rest of the list (and the summary says nothing about the rest either).
             left = []
 
-        # ── DESTRUCTIVE: always confirm, even a single resolved target ──
+        if exceeds_delete_cap(len(picked)):
+            # Issue 2019 (xian 2026-10-14, interim until soft delete): a
+            # multi-item set arms NO delete carrier and deletes nothing — CXO's
+            # capped reply names the set in the order resolved. The list is
+            # remembered as the last numbered list (context, not an arm) so
+            # "delete the first one" binds to what the user was just shown.
+            from services.intent_service.delete_cap import remember_capped_list
+
+            remember_capped_list(
+                session_id,
+                principal or user_id,
+                [t.id for t in picked],
+                [t.text for t in picked],
+                pool_kind,
+            )
+            logger.info("todo_batch_delete_capped", picked=len(picked), session_id=session_id)
+            return capped_delete_reply([t.text for t in picked]), False
+
+        # ── DESTRUCTIVE: always confirm (issue 2019: one item at most) ──
         question = _delete_confirm_question([t.text for t in picked], left)
         bound_ctx = {
             **ctx,

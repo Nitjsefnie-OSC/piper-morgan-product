@@ -185,9 +185,11 @@ class TestThenTheTargetsHookOwnsTheTurn:
         return ctx
 
     @pytest.mark.asyncio
-    async def test_first_two_against_the_numbered_list_asks_for_exactly_those_two(
+    async def test_first_two_against_the_numbered_list_names_exactly_those_two(
         self, handlers, offers, session_ctx, four
     ):
+        """Resolution unchanged (exactly rows 1 and 2 of the list shown);
+        issue 2019 caps the turn: nothing armed, CXO's capped reply."""
         session_ctx.last_numbered_list = NumberedList(
             kind="reminders", ids=[t.id for t in four], texts=[t.text for t in four]
         )
@@ -196,11 +198,13 @@ class TestThenTheTargetsHookOwnsTheTurn:
         )
         assert out is not None
         msg, armed = out
-        assert armed is True
-        assert msg.startswith("Delete 2 reminders:"), msg
-        assert "revise the pr" in msg and "send the budget review to finance" in msg
-        assert "web check alpha" not in msg.split("Leaving")[0], msg
+        assert armed is False
+        assert msg.startswith("I can delete one reminder at a time for now."), msg
+        assert '1. "revise the pr"' in msg
+        assert '2. "send the budget review to finance"' in msg
+        assert "web check alpha" not in msg, msg
         handlers.todo_service.delete_todo.assert_not_awaited()
+        offers.set_pending_offer.assert_not_called()
 
     @pytest.mark.asyncio
     async def test_first_two_with_no_numbered_list_shown_asks_honestly_and_numbers_the_list(
