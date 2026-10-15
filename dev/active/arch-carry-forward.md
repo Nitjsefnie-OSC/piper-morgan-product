@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-10-14 12:3x PDT
+last_updated: 2026-10-14 21:3x PDT
 currency_claim: rewritten at substantive-change boundaries, verified at every START
 max_age_days: 4
 ---
@@ -33,13 +33,16 @@ description**: this carry-forward + session logs + commits are the current state
 job shrinks to orientation once it ages. **Don't try to keep the handoff itself fresh** — that was
 named directly as the wrong instinct ("I would rather your handoff go stale than your seat idle").
 
-- **10-14** (history rewrite overnight; main now descends from d217d8f1ca; xian's RUN-HOT window until Thu 10-15 22:00):
-  - **Option 3 (xian's Wednesday ruling) done: none.** Arch named the 9 day-one paths; Lead found no misroute. **STANDING CONDITION:** the live router runs BEFORE Stage 0, so no referent-dependent write (update_issue) enters FLIP_WRITE_ALLOWLIST until the consult stands down on a Stage-0 referent.
-  - **Docs current:** CONNECTORS (ADR-070 B), SYSTEM (ADR-080 order, 4 Fly apps), routing-stack row L, ESSENCE v1.0.3 (ADR-080; consent receipt scoped to 1 of 10 writes). The ADR-index generator emits frontmatter and sits in check-derived-drift.
-  - **Acceptance contract, all landed:** #1843 (please is transparent), #1771 (DEFER opt-in) with #2007 (include_suspended), #1783 (request-question: view verb + remainder word last). **Watch:** CXO's served reads after the next promotion close all four.
-  - **#1943 clear retirement + (c) ACCEPTED, held for PM's clear_todos flip.** Probe at the flip includes a legacy-path "clear my reminders". **STANDING MEMBER TRIPPED** (5/6 on main): the ANALYSIS margin fix (an additive example, member 6/6) precedes every catalog candidate after (c).
-  - **#2009** (nullable owner_id, three tiers; RLS considered and not adopted): step 1 is PM's SQL via Exec (the corrected version). #2006: my 4 skills fixed; continue-narrative is Comms's.
-  - CIO hooks registry: user-level duplicates go (Pard); project PreToolUse confirmed firing.
+- **10-14** (history rewrite overnight; RUN-HOT window until Thu 10-15 22:00):
+  - **Option 3 = none.** STANDING CONDITION: no referent-dependent write (update_issue) enters FLIP_WRITE_ALLOWLIST until the live consult stands down on a Stage-0 referent.
+  - **Acceptance contract landed** (#1843 CLOSED by CXO on served; #1771/#2007, #1783 await served reads). #1783's cap is GitHub lists only (needs a GitHub account with >5 issues); #1771's resume check needs `stop` as the leave word until #2023 lands.
+  - **Bulk delete (xian approved PPM's rec, 21:0x):** clear_todos flip HELD (#1943 branch 6fd438bba0 stays held); **#2019** caps N>1 delete in the delete handler (all entry paths), Lead builds 10-15; **#2021** soft delete, 7-day window then purge, built to MY DESIGN NOTE `docs/internal/architecture/design-records/design-note-todo-soft-delete-undo-2026-10-14.md` (exit criteria lift #2019; first instance of #336). "clear" ASKS (D4); CXO conceded.
+  - **#2009 chain (Lead, held behind the promotion):** prod counts in (tier A 0; project_integrations 3/3 → same-migration backfill). #2013 (KG owner threading; the KG POST routes were failing outright, not orphaning; my earlier read corrected) and #2014 (items CHECK per discriminator + FK ON DELETE SET NULL; delete_list removes base items; validated ca51b60756) **gate on xian's two read-only prod counts via Exec.** #2015/#2016 are Lead's.
+  - **#2012 validated** (54989e1ce5): Test derives from resolve_credential, both legs. Served per-leg check is CXO's after promotion.
+  - **#2023 RULED:** mid-process reply judged by the LLM against the held question (ANSWER/REQUEST/UNSURE), not the router, not a pattern; corpus rows before build. Watch Lead's build.
+  - **#2011 census** held at 94310057c7 (16 holders). ANALYSIS margin fix held. Both ride the next promotion.
+  - Standing member "let's analyze the risk here" TRIPPED 5/6 on main: the ANALYSIS margin fix precedes every catalog candidate after (c).
+  - **Watches:** PM's promotion → CXO/Web served reads (#1771, #1783, #2012 per leg, #1987); #2014's prod counts; #2023 build; #2021 build after #2019.
 - **10-13**:
   - **Role card** at the top of the briefing (`144578829f`); the session-start hook prints it. Each day's first fire writes a Drift: line (tick v1.51).
   - **Rule 7, perturbation-sensitive ledger** (decisions.log 07:4x). The meeting licence row was stabilized by `d13dafd172` (accepted). **Watch:** main's own ×6 on the standing member "let's analyze the risk here". If it reads below 6/6, the ANALYSIS margin fix goes ahead of the next catalog candidate (Lead reports it).
