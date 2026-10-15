@@ -57,8 +57,9 @@ _USER = "3f7b8a52-1771-4c00-9e00-000000001771"
 CXO_DEFER_PAUSE = (
     "Okay, I'll leave your standup where it is. Just ask when you want to pick it back up."
 )
+# CXO 2026-10-15 08:35: one pause line for `stop` and a deferral.
 CXO_ESCAPE_PAUSE = (
-    "No problem — I've paused your standup. Just ask when you want to pick it back up."
+    "Okay, I'll leave your standup where it is. Just ask when you want to pick it back up."
 )
 CXO_DROP = "Okay, I've dropped your standup. Say 'do a standup' whenever you want a fresh one."
 CXO_DROP_PAUSED = (

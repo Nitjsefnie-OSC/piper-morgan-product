@@ -79,8 +79,9 @@ class TestStandupHijackReplayLive:
             "standup" in body.get("message", "").lower()
         ), f"/standup did not start the interview: {body.get('message', '')[:300]!r}"
         body = turn_driver.turn("cancel", session_id=session_id)
+        # CXO 2026-10-15 08:35: one pause line for an escape word and a deferral.
         assert (
-            "paused" in body.get("message", "").lower()
+            "leave your standup where it is" in body.get("message", "").lower()
         ), f"#888 exact-match escape did not suspend: {body.get('message', '')[:300]!r}"
         states = await _standup_states(live_db_session, session_id)
         assert any(

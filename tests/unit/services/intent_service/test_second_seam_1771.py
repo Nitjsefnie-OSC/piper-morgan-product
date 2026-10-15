@@ -60,7 +60,8 @@ DEFERRALS = ["not now", "not right now", "not today", "maybe later"]
 EXPLICIT_CANCELS = ["cancel that", "forget it", "start over"]
 
 # CXO's ruled strings, quoted here so a drift in the constants fails loudly.
-CXO_PAUSE = "No problem — I've paused your standup. Just ask when you want to pick it back up."
+# CXO 2026-10-15 08:35: one pause line for `stop` and a deferral (was "No problem — I've paused…").
+CXO_PAUSE = "Okay, I'll leave your standup where it is. Just ask when you want to pick it back up."
 CXO_ABANDON = (
     "Okay, I've dropped your paused standup. Say 'do a standup' whenever you want a fresh one."
 )
