@@ -5683,3 +5683,71 @@ def f(intent, pre_intent, other):
             f"Ratchet drift: actual count {len(violations)}, target "
             f"{self.MAX_SINGLE_SURFACE_WRITES}; the direction is DOWN only."
         )
+
+
+class TestOwnerIdNullabilityPin2009:
+    """2009 (Arch step 3): every ``owner_id`` column is NOT NULL unless its table is
+    listed here with a reason.
+
+    A nullable ``owner_id`` on a table that has no other owner column is a second,
+    optional copy of who owns the row, and production showed what that costs:
+    ``project_integrations`` read 3 of 3 rows NULL because no writer ever set it.
+    The pin is on ``Base.metadata`` (the model), so a new user-data table cannot
+    ship a nullable owner without being named here. The allowlist only shrinks:
+    when a table's owner goes NOT NULL, remove its row (the second test fails
+    until you do).
+    """
+
+    NULLABLE_OWNER_ALLOWED = {
+        # ADR-071 D2 mid-transition tables: user_id (NOT NULL) scopes them.
+        "conversations": "ADR-071 D2 mid-transition; scoped by user_id (NOT NULL)",
+        "conversational_memory_entries": "ADR-071 D2 mid-transition; scoped by user_id",
+        "insights": "ADR-071 D2 mid-transition; scoped by user_id (NOT NULL)",
+        "personality_profiles": "ADR-071 D2 mid-transition; scoped by user_id (NOT NULL)",
+        "standup_conversations": "ADR-071 D2 mid-transition; scoped by user_id (NOT NULL)",
+        # 2009 tier C: user_id is the scoping column and went NOT NULL instead.
+        "feedback": "2009 tier C; scoped by user_id (NOT NULL); owner_id follows ADR-071 D2",
+        # 2009 held: writers never set owner_id (owner rides session_id, the 1420
+        # residual). NOT NULL before the writer fix would fail every node/edge insert.
+        "knowledge_nodes": "2009 held; KnowledgeNodeDB.from_domain never sets owner_id",
+        "knowledge_edges": "2009 held; KnowledgeEdgeDB.from_domain never sets owner_id",
+    }
+
+    @staticmethod
+    def _nullable_owner_tables() -> set:
+        import services.database.models  # noqa: F401  (registers every model table)
+        from services.database.models import Base
+
+        tables = set()
+        for table in Base.metadata.tables.values():
+            col = table.columns.get("owner_id")
+            if col is not None and col.nullable:
+                tables.add(table.name)
+        return tables
+
+    def test_denominator_metadata_has_owner_columns(self):
+        """m-44: the scan must see the owner-bearing tables, or a pass means nothing."""
+        import services.database.models  # noqa: F401
+        from services.database.models import Base
+
+        with_owner = [t for t in Base.metadata.tables.values() if "owner_id" in t.columns]
+        assert len(with_owner) >= 20, (
+            f"only {len(with_owner)} tables with owner_id in Base.metadata; "
+            "the model import broke, not the schema got clean"
+        )
+
+    def test_no_nullable_owner_id_outside_the_allowlist(self):
+        unexpected = self._nullable_owner_tables() - set(self.NULLABLE_OWNER_ALLOWED)
+        assert not unexpected, (
+            f"owner_id is nullable on {sorted(unexpected)}. A user-data table's owner is "
+            "NOT NULL (2009): set nullable=False and ship the backfill + NOT NULL "
+            "migration with the writer fix, or, if it is a genuine transition case, add "
+            "it to NULLABLE_OWNER_ALLOWED with a one-line reason in review."
+        )
+
+    def test_allowlist_stays_tight(self):
+        stale = set(self.NULLABLE_OWNER_ALLOWED) - self._nullable_owner_tables()
+        assert not stale, (
+            f"NULLABLE_OWNER_ALLOWED lists tables whose owner_id is no longer nullable "
+            f"(or that no longer exist): {sorted(stale)}. Remove them; the list only shrinks."
+        )

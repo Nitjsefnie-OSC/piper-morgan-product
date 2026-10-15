@@ -832,6 +832,33 @@ class ProjectIntegrationRepository(BaseRepository):
 
     model = ProjectIntegrationDB
 
+    async def create(self, **kwargs) -> Any:
+        """Create an integration, writing ``owner_id`` from the parent project.
+
+        2009: ``project_integrations.owner_id`` is NOT NULL, a denormalized copy of
+        ``projects.owner_id``. Before 2009 no writer set it (production read 3 of 3
+        rows NULL), so the owner is derived here, at the one write path, from the
+        parent row rather than trusted from callers. An explicit ``owner_id`` must
+        agree with the parent's.
+        """
+        from .models import ProjectDB
+
+        project_id = kwargs.get("project_id")
+        result = await self.session.execute(
+            select(ProjectDB.owner_id).where(ProjectDB.id == project_id)
+        )
+        parent_owner = result.scalar_one_or_none()
+        if parent_owner is None:
+            raise ValueError(
+                f"Cannot create a project integration for project {project_id!r}: "
+                "the project does not exist or has no owner (2009: owner_id is NOT NULL)"
+            )
+        supplied = kwargs.get("owner_id")
+        if supplied is not None and str(supplied) != str(parent_owner):
+            raise ValueError(f"owner_id {supplied!r} does not match project {project_id!r}'s owner")
+        kwargs["owner_id"] = parent_owner
+        return await super().create(**kwargs)
+
     async def get_by_project_and_type(
         self, project_id: str, integration_type: IntegrationType, owner_id: Optional[str] = None
     ) -> Optional[domain.ProjectIntegration]:

@@ -628,8 +628,8 @@ class DocumentDB(Base, TimestampMixin):
     chromadb_base_id = Column(String(255), unique=True, nullable=False, index=True)
 
     # Provenance: who ingested/owns. FK → users.id (ADR-071 D2 canonical).
-    # Nullable: m-40 graceful (None = unknown/unauthenticated provenance).
-    owner_id = Column(CrossDialectUUID(), ForeignKey("users.id"), nullable=True, index=True)
+    # 2009: NOT NULL (tier A; owner_id is the scoping column, a NULL is an orphan).
+    owner_id = Column(CrossDialectUUID(), ForeignKey("users.id"), nullable=False, index=True)
 
     # D1 exemption marker — true => readable by any principal (global PM domain).
     is_global_pm_domain = Column(
@@ -1302,7 +1302,7 @@ class ProjectDB(Base):
     owner_id = Column(
         postgresql.UUID(as_uuid=False),
         ForeignKey("users.id", name="fk_projects_owner_id", ondelete="CASCADE"),
-        nullable=True,
+        nullable=False,  # 2009: NOT NULL (prod 0/4 null at migration time)
     )
     name = Column(String, nullable=False)  # Unique per owner via __table_args__
     description = Column(Text)
@@ -1405,9 +1405,11 @@ class ProjectIntegrationDB(Base):
     config = Column(JSON, nullable=False)
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
-    # Owner anchor (ADR-071 D2; #1252 D2 fold). Nullable for m-40 grace (legacy/unknown
-    # provenance). CrossDialectUUID = native UUID on PostgreSQL, CHAR(36) on SQLite tests.
-    owner_id = Column(CrossDialectUUID(), ForeignKey("users.id"), nullable=True, index=True)
+    # Owner anchor (ADR-071 D2; #1252 D2 fold). A denormalized copy of the parent
+    # project's owner (tier B, 2009): NOT NULL, backfilled from projects.owner_id, and
+    # always written from the parent (ProjectIntegrationRepository.create / from_domain).
+    # CrossDialectUUID = native UUID on PostgreSQL, CHAR(36) on SQLite tests.
+    owner_id = Column(CrossDialectUUID(), ForeignKey("users.id"), nullable=False, index=True)
 
     # Relationships
     project = relationship("ProjectDB", back_populates="integrations")
@@ -1424,11 +1426,19 @@ class ProjectIntegrationDB(Base):
 
     @classmethod
     def from_domain(
-        cls, integration: domain.ProjectIntegration, project_id: str
+        cls, integration: domain.ProjectIntegration, project_id: str, owner_id: Any
     ) -> "ProjectIntegrationDB":
+        """Build the row. ``owner_id`` is the parent project's owner (2009: the column
+        is NOT NULL, a denormalized copy of ``projects.owner_id``)."""
+        if owner_id is None:
+            raise ValueError(
+                "ProjectIntegrationDB.from_domain needs the parent project's owner_id "
+                "(project_integrations.owner_id is NOT NULL, 2009)"
+            )
         return cls(
             id=integration.id,
             project_id=project_id,
+            owner_id=owner_id,
             type=integration.type,
             name=integration.name,
             config=integration.config,
@@ -2228,7 +2238,7 @@ class ListMembershipDB(Base):
     owner_id = Column(
         postgresql.UUID(as_uuid=False),
         ForeignKey("users.id", name="fk_list_memberships_owner_id", ondelete="CASCADE"),
-        nullable=True,
+        nullable=False,  # 2009: tier B, a copy of the parent list's owner
     )
 
     # Relationships: none. The list-side ORM relationship died with the orphan
@@ -2458,7 +2468,7 @@ class ListItemDB(Base):
     owner_id = Column(
         postgresql.UUID(as_uuid=False),
         ForeignKey("users.id", name="fk_list_items_owner_id", ondelete="CASCADE"),
-        nullable=True,
+        nullable=False,  # 2009: tier B, a copy of the parent list's owner
     )
 
     # Relationships
@@ -2532,8 +2542,8 @@ class FeedbackDB(Base, TimestampMixin):
 
     # User and session context
     user_id = Column(
-        postgresql.UUID(as_uuid=True), ForeignKey("users.id"), nullable=True
-    )  # index: idx_feedback_user_id (#1312)
+        postgresql.UUID(as_uuid=True), ForeignKey("users.id"), nullable=False
+    )  # index: idx_feedback_user_id (#1312). 2009: NOT NULL (tier C scoping column)
     # #1312: SEC-RBAC owner_id shipped DB-side (fk_feedback_owner_id, CASCADE);
     # model finally declares it — park-with-model, DB is truth.
     owner_id = Column(

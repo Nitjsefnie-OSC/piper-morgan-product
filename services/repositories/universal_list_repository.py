@@ -518,8 +518,23 @@ class UniversalListItemRepository(BaseRepository):
         super().__init__(session)
 
     async def create_item(self, item: domain.ListItem) -> domain.ListItem:
-        """Create a list item relationship"""
+        """Create a list item relationship.
+
+        2009: ``list_items.owner_id`` is NOT NULL, a denormalized copy of the parent
+        list's owner (``lists.owner_id`` is NOT NULL). The domain ListItem carries no
+        owner, so it is derived from the parent list here.
+        """
         db_item = ListItemDB.from_domain(item)
+        owner_result = await self.session.execute(
+            select(ListDB.owner_id).where(ListDB.id == item.list_id)
+        )
+        list_owner = owner_result.scalar_one_or_none()
+        if list_owner is None:
+            raise ValueError(
+                f"Cannot add an item to list {item.list_id!r}: the list does not exist "
+                "(2009: list_items.owner_id is NOT NULL, derived from the list's owner)"
+            )
+        db_item.owner_id = list_owner
         self.session.add(db_item)
         await self.session.flush()
         await self.session.refresh(db_item)
