@@ -405,9 +405,13 @@ class TestInvitation:
 
     @pytest.mark.asyncio
     @pytest.mark.parametrize(
-        "turn", ["no", "nope", "No.", "no, not now", "please cancel", "cancel that", "end standup"]
+        "turn", ["no", "nope", "No.", "no, not now", "cancel that", "end standup"]
     )
     async def test_no_or_cancel_ends_with_the_invitation_line(self, turn):
+        """The turn "please cancel" left this list (1771 invitation edges, 2026-10-15):
+        it ended only through the dropped anywhere word set (``cancel``); it
+        is neither a #888 hatch word nor a #1529 flow exit. Pinned below as
+        a known miss, not re-pinned as wanted."""
         sid = str(uuid4())
         with _World() as w:
             conv = await w.invitation(sid)
@@ -447,16 +451,33 @@ class TestInvitation:
     @pytest.mark.asyncio
     async def test_bare_later_is_the_known_miss_and_ends(self):
         """KNOWN MISS, pinned as it stands (Arch 10-15: bare "later" is not a
-        DEFER phrasing, no new row). At the invitation it still lands in the
-        handler's pre-existing decline words and ENDS (nothing was captured
-        yet). CXO's item 2 names "later" as a pause; the accepted fix shape is
-        Arch's exact full-message entry, on CXO's served read."""
+        DEFER phrasing, no new row). At the invitation it ENDS through the
+        handler's whole-message ``later`` check (Arch 10:1x: anchored, was a
+        word matched anywhere in the turn). CXO's item 2 names "later" as a
+        pause; the accepted fix shape is Arch's exact full-message entry, on
+        CXO's served read."""
         sid = str(uuid4())
         with _World() as w:
             conv = await w.invitation(sid)
             result = await w.turn(sid, "later")
             assert result.response_message == CXO_INVITATION_END
             assert await w.state(conv) == StandupConversationState.ABANDONED
+
+    @pytest.mark.asyncio
+    async def test_please_cancel_is_a_known_miss_and_starts_the_interview(self):
+        """KNOWN MISS (1771 invitation edges, 2026-10-15). Arch 10:1x dropped
+        the anywhere word set on the premise that ``cancel`` never reaches the
+        handler (the #888 hatch ENDs it). True for bare "cancel"; "please
+        cancel" is not a hatch word and not a #1529 flow exit (that needs a
+        flow word: "please cancel the standup"), so it now starts the
+        interview, as it already was an ordinary answer mid-interview. Pinned
+        as it stands for a ruling; the fix is the exit vocabulary's, not a
+        word here."""
+        sid = str(uuid4())
+        with _World() as w:
+            conv = await w.invitation(sid)
+            await w.turn(sid, "please cancel")
+            assert await w.state(conv) == StandupConversationState.GATHERING_YESTERDAY
 
 
 # --- 3. The couldn't-find line ------------------------------------------------

@@ -17,7 +17,6 @@ Issue #556: Performance & Reliability enhancements:
 """
 
 import asyncio
-import re
 import time
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any, Dict, List, Optional
@@ -95,6 +94,24 @@ _REFINING_TAUGHT_ACCEPTS = frozenset(
 )
 
 
+# #1771 invitation edges (CXO 2026-10-15 09:55 + 10:10): the quick-standup
+# bypass at "ready to start?" — EXACT whole-message entries (lowercased,
+# trailing "."/"!" dropped), never words matched anywhere in the turn.
+_QUICK_BYPASS_ENTRIES = frozenset(
+    {
+        "quick",
+        "fast",
+        "just the report",
+        "the quick one",
+        "quick standup",
+        "quick report",
+        "the quick report",
+        "skip the questions",
+        "skip questions",
+    }
+)
+
+
 # #1771: the workflow whose declared axes the deferral reading uses. The same
 # lookup the resume-offer seam makes (intent_service ``_RESUME_AXES_WORKFLOW``):
 # resuming, pausing and starting all act on the one #585 interview row.
@@ -105,8 +122,9 @@ def _standup_leave_verdict(message: str) -> "AcceptanceVerdict":
     """THE predicate's verdict on a turn that might leave the standup:
     ``evaluate_acceptance`` with ``distinguish_defer=True`` over the
     interview's declared axes. One call, read by ``standup_reads_as_deferral``
-    (DEFER) and by the invitation (``_handle_initiated``: DEFER or DECLINE,
-    every way of leaving ends there)."""
+    (DEFER) and by the invitation (``_handle_initiated``: DEFER, or DECLINE
+    only when a deferral row is also in the turn; a plain no there is read
+    whole-message through ``is_bare_decline``)."""
     from services.intent_service.acceptance import (
         declared_axes_for_workflow,
         evaluate_acceptance,
@@ -455,47 +473,61 @@ class StandupConversationHandler:
         """Handle INITIATED state - user just started.
 
         Issue #900 Phase 2: Default flow is now the 3-part structured
-        collection (yesterday → today → blockers). Quick/fast/"just the
-        report" still bypass to GENERATING for users who want a one-shot LLM
-        standup. #888 word map (CXO/Arch 2026-10-15): "skip" is no longer a
-        bypass word here; a bare "skip" is a DECLINE verdict of the shared
-        predicate and leaves with the invitation line.
+        collection (yesterday → today → blockers). The exact whole-message
+        entries in ``_QUICK_BYPASS_ENTRIES`` ("quick", "just the report",
+        "skip the questions" …) bypass to GENERATING for users who want a
+        one-shot standup. #888 word map (CXO/Arch 2026-10-15): "skip" is not
+        a bypass word; a bare "skip" is a whole-message decline
+        (``is_bare_decline``) and leaves with the invitation line.
         """
-        message_lower = user_message.lower()
-        # #1837: WORD-BOUNDARY matching, not substring. The substring form is
-        # what turned PM's "ready (as I just said)" into a quick-mode bypass
-        # ("just" matched inside the aside) and then a fabricated template —
-        # the literal turn-3 mechanism of the live incident. Same disease as
-        # "no" matching inside "nothing"/"know" on the cancel list below.
-        words = set(re.findall(r"[a-z']+", message_lower))
+        # The whole turn, lowercased, trailing "." / "!" dropped: every test
+        # below is WHOLE-MESSAGE (#1771 invitation edges, CXO 09:55 / 10:10,
+        # Arch 10:1x). #1837's anywhere-matching word sets are gone: "quick
+        # question before we start" is not a bypass, and "no, let's start" is
+        # not a leave.
+        whole = user_message.strip().lower().rstrip(".!").strip()
 
-        # Quick/fast → bypass guided collection, go straight to GENERATING.
-        # "skip" left this set (Arch 2026-10-15): with it out of the #888
-        # hatch, a bare "skip" at "ready to start?" is a leave (CXO 09:25), and
-        # the predicate's DECLINE verdict below reads it, not a word here.
-        if words & {"quick", "fast"} or message_lower.strip() in ("just the report",):
+        # Quick bypass → straight to GENERATING, on exact whole-message
+        # entries only (CXO 10:10: "quick"/"fast" anywhere made a question
+        # read as a mode choice). "skip the questions" is the user saying
+        # what they want (CXO 09:55); "skip" alone is not here (a leave,
+        # below) and "skip docs" starts the interview.
+        if whole in _QUICK_BYPASS_ENTRIES:
             await self.manager.transition_state(
                 conversation.id, StandupConversationState.GENERATING
             )
             return await self._generate_standup(conversation, context)
 
         # Leaving at the invitation ENDS, however it is phrased (Arch
-        # 2026-10-15, shape A): nothing was started, so a deferral ("not right
-        # now", "maybe later", read by THE predicate) has nothing to pause; a
-        # SUSPENDED row here would be offered back as a standup that never
-        # began. A bare "no" or a cancel ends too (CXO 2026-10-15 item 2). The
-        # word set is the pre-existing one. Bare "later" lands in it (Arch's
-        # known miss: not a DEFER phrasing; a revisit is CXO's served read).
-        # #888 word map (Arch 2026-10-15): a DECLINE verdict from the same
-        # predicate call ends here too (bare "skip" is a row of the shared
-        # full-message decline); the local word set stays as the fallback.
+        # 2026-10-15, shape A): nothing was started, so a deferral has nothing
+        # to pause; a SUSPENDED row here would be offered back as a standup
+        # that never began. The leave test (Arch 10:1x, CXO 09:55):
+        #   - a bare decline, whole message: ``is_bare_decline`` (the shared
+        #     full-message decline row plus the bare deferrals). NOT the
+        #     predicate's DECLINE verdict, whose unanchored rows read "I'm
+        #     good to go" and "no, let's start" as a no;
+        #   - the predicate's DEFER verdict ("not right now", "maybe later");
+        #   - a DECLINE verdict that also carries a deferral row ("no, not
+        #     now", "no, maybe later"): the predicate orders decline before
+        #     defer, so these read DECLINE, never DEFER, and the dropped
+        #     "not now" substring was what ended them (existing pin);
+        #   - bare "later", whole message only (Arch's known miss, anchored).
+        # ``cancel`` / ``stop`` / … never reach here (the #888 hatch).
         from services.intent_service.acceptance import AcceptanceVerdict
+        from services.intent_service.soft_invocation import (
+            DEFER_PATTERNS,
+            is_bare_decline,
+        )
 
+        verdict = _standup_leave_verdict(user_message)
         if (
-            _standup_leave_verdict(user_message)
-            in (AcceptanceVerdict.DEFER, AcceptanceVerdict.DECLINE)
-            or words & {"no", "nope", "cancel", "later"}
-            or "not now" in message_lower
+            is_bare_decline(user_message)
+            or verdict is AcceptanceVerdict.DEFER
+            or (
+                verdict is AcceptanceVerdict.DECLINE
+                and any(p.search(user_message) for p in DEFER_PATTERNS)
+            )
+            or whole == "later"
         ):
             await self.manager.transition_state(conversation.id, StandupConversationState.ABANDONED)
             return ConversationResponse(

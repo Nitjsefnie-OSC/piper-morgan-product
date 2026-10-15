@@ -186,8 +186,11 @@ class TestHandleTurnInitiated:
 
     @pytest.mark.asyncio
     async def test_fast_with_no_data_reenters_interview(self, handler, conversation):
-        """'Fast' takes the same honest path (#1837 amendment, as above)."""
-        response = await handler.handle_turn(conversation, "fast please")
+        """'Fast' takes the same honest path (#1837 amendment, as above).
+        Was "fast please": the bypass is whole-message now (CXO 2026-10-15
+        10:10), so "fast please" starts the interview instead (same state,
+        not the bypass this test names)."""
+        response = await handler.handle_turn(conversation, "fast")
 
         assert response.state == StandupConversationState.GATHERING_YESTERDAY
 

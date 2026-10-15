@@ -409,22 +409,25 @@ class TestSkipAtTheInvitationLeaves:
             assert (await w.state(conv)) == S.GENERATING
 
     def test_skip_is_not_in_the_local_decline_set_or_the_bypass_set(self):
-        """The verdict is the path: no word set in ``_handle_initiated``
-        (the quick-bypass set, the local decline set) holds "skip".
+        """The verdict is the path: ``_handle_initiated`` holds no word set at
+        all (1771 invitation edges, CXO 10:10 / Arch 10:1x: the anywhere
+        quick/fast bypass set and the anywhere no/nope/cancel/later decline
+        set are gone; every test there is whole-message), and the exact
+        bypass entries do not hold a bare "skip". Was: asserted
+        ``{"quick", "fast"}`` was still a set literal read there.
         Mid-interview a typed "skip" advances (#2028 deleted the unrendered
         ``["nothing", "skip"]`` suggestion lists; typed input is the path)."""
         import ast
         import inspect
         import textwrap
 
+        from services.standup.conversation_handler import _QUICK_BYPASS_ENTRIES
+
         src = textwrap.dedent(inspect.getsource(StandupConversationHandler._handle_initiated))
-        word_sets = [
-            {e.value for e in node.elts if isinstance(e, ast.Constant)}
-            for node in ast.walk(ast.parse(src))
-            if isinstance(node, ast.Set)
-        ]
-        assert {"quick", "fast"} in word_sets  # the bypass set is still read here
-        assert all("skip" not in ws for ws in word_sets)
+        word_sets = [node for node in ast.walk(ast.parse(src)) if isinstance(node, ast.Set)]
+        assert word_sets == []
+        assert "skip" not in _QUICK_BYPASS_ENTRIES
+        assert {"quick", "fast"} <= _QUICK_BYPASS_ENTRIES
 
 
 # --- The handler supplies copy, never the choice ------------------------------
