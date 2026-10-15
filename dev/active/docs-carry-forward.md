@@ -22,6 +22,7 @@
 - **10-13 omnibus**: drafted by a Sonnet subagent 10-14, commit plus activity rows pending. Exec and Comms 10-13 logs unclosed (nudged).
 - **Overzealous Cleanup Routine**: PUBLISHED 10-15 (website commit pushed, live 200). Medium crosspost DONE 10-15 (row `distributed`).
 - **10-14 omnibus**: DONE 10-15 (568 lines, 1068 commits, 11 rows). Addendum owed when Exec's log and the four prog-code logs close (Exec nudged).
+- **Sat 10-17 04:12 fire**: PUBLISH "Convergent Claims Aren't Independent Evidence" (`ready-for-docs`, pre-flight and dry-run done 10-15). `--draft docs/public/comms/drafts/convergent-claims-arent-independent-evidence.md --image .../convergent-claims-arent-independent-evidence-four-telescopes-all-still-capped.jpg --slug convergent-claims-arent-independent-evidence --category insight --work-date 2026-09-20`. Re-fetch first. Then archive, row `published`, Medium+LinkedIn reminder to Exec.
 - **Mon 10-19**: next weekly audit. **~11-30**: glossary 60-day re-verify.
 
 ## Held on PM (via Exec)
