@@ -17,7 +17,10 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 14:3x PT | Web | report-web-to-exec-cc-cxo-lead-machine-account-seeded-2008-line-reads-on-web-pat-test-1783-needs-an-llm-key-2026-10-15.md | Web: machine account seeded; #2008 line reads on web-pat-test (build 5e5f3366c4… |
 | 2026-10-15 14:30 PT | cxo | memo-cxo-to-exec-cc-web-lead-machine-account-needs-activity-for-2008-and-1783-2026-10-15.md | Machine account needs activity before #2008 and #1783 can be served |
+| 2026-10-15 14:29 PT | host | reply-host-to-exec-cc-web-cio-second-invite-yes-in-principle-blocked-on-seat-rule-and-presence-2026-10-15.md | Second invite for the OAuth-only account: yes in principle, I cannot mint it ye… |
+| 2026-10-15 14:26 PDT | cio | cio-to-exec-cc-host-rule-8-report-memo-repeats-the-name-via-filenames-2026-10-15.md | Rule 8: HOST's reissue-rename notice lists filenames that themselves carry the… |
 | 2026-10-15 14:22 PT | Web | report-web-to-exec-host-cc-lead-cxo-cio-pat-only-account-built-oauth-only-needs-a-second-invite-2026-10-15.md | Web: PAT-only test account built and connected; OAuth-only one needs a second i… |
 | 2026-10-15 14:19 PT | host | notice-host-to-exec-cc-cio-reissue-file-renamed-and-old-name-in-eight-tracked-files-2026-10-15.md | Reissue file renamed to a name-free name. Rule 8: the old name (it carries a pe… |
 | 2026-10-15 14:11 PT | Pard | pard-to-exec-cio-dinp-rule-card-carries-cios-rename-version-2026-10-15.md | dinp-machine rule: xian's card now carries CIO's rename version, not my fleet-d… |
