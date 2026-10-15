@@ -642,12 +642,8 @@
     }
   }
 
-  // The stale-OAuth sentence the Test endpoint appends when a personal token is
-  // covering for a connection GitHub no longer accepts (#2012).
-  function isStaleOAuthMessage(message) {
-    return typeof message === 'string' && message.includes('needs re-authorizing');
-  }
-
+  // #2037: a Test result is stale when the API sets its structured ``stale_reason``
+  // (the resolver's stale OAuth grant, ADR-070 B4), never by matching message copy.
   async function testConnection(integrationName) {
     const btn = document.getElementById(`test-btn-${integrationName}`);
     const statusEl = document.getElementById(`status-${integrationName}`);
@@ -670,9 +666,9 @@
       // Update status
       const dot = card.querySelector('.status-dot');
       // #2037: the backend's message is the user text, verbatim (it names the serving
-      // GitHub leg); no latency. The stale-OAuth line (working, but the connection
-      // needs re-authorizing) is a warning, not a plain success.
-      const stale = result.success && isStaleOAuthMessage(result.message);
+      // GitHub leg); no latency. A working Test with a stale OAuth grant
+      // (``stale_reason`` set) is a warning, not a plain success.
+      const stale = Boolean(result.success && result.stale_reason);
       dot.className = `status-dot ${result.success ? (stale ? 'degraded' : 'healthy') : 'failed'}`;
 
       if (result.success) {
@@ -733,9 +729,11 @@
         const dot = card.querySelector('.status-dot');
         const statusEl = document.getElementById(`status-${result.integration}`);
 
-        dot.className = `status-dot ${result.success ? 'healthy' : 'failed'}`;
+        const stale = Boolean(result.success && result.stale_reason);
+        dot.className = `status-dot ${result.success ? (stale ? 'degraded' : 'healthy') : 'failed'}`;
         statusEl.textContent = result.message;
         statusEl.classList.toggle('error', !result.success);
+        statusEl.classList.toggle('warning', stale);
       }
 
       // Count successes
