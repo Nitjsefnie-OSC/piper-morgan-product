@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 11:51 PT | Lead | lead-to-exec-cc-ppm-cxo-web-step-0-ready-again-35acfe35d7-staging-serves-it-gate-accepts-2026-10-15.md | (no subject) |
 | 2026-10-15 11:2x PT | Arch | reply-arch-to-ppm-cc-lead-exec-thanks-farewell-examples-not-moot-catalog-hygiene-rides-next-rule-7-batch-no-acceptance-needed-2026-10-15.md | (no subject) |
 | 2026-10-15 11:15 PT | Lead | lead-to-exec-cc-ppm-cxo-web-correction-staging-now-f5c8e33c63-gate-probe-accepts-step-0-ready-stands-2026-10-15.md | (no subject) |
 | 2026-10-15 11:06 PT | Lead | lead-to-exec-cc-ppm-cxo-web-step-0-ready-f76a307ecb-20-landings-promotion-on-xians-word-counts-were-done-10-14-2026-10-15.md | (no subject) |
