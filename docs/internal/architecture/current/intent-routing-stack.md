@@ -420,8 +420,9 @@ Regression: `test_resume_offer_acceptance_1769.py`.
 **#1771 DEFER at the resume seam (2026-10-14 first seam, 2026-10-15 second
 seam).** `evaluate_acceptance(..., distinguish_defer=True)` returns DEFER for
 the deferral phrasings ("not now", "not right now", "not today", "maybe
-later"); `_check_pending_resume_offer` is the only call site that opts in
-(AST pin). The seam now computes that verdict whether or not the offer is
+later"); two call sites opt in (AST pin): `_check_pending_resume_offer` and
+the standup handler's one reader `standup_reads_as_deferral`
+(`services/standup/conversation_handler.py`). The seam now computes that verdict whether or not the offer is
 pending (armed-only inputs still ride only while it is), and a DEFER verdict
 always bypasses the #1529 flow-exit gate: with the offer pending the reply is
 `RESUME_DEFER_REPLY` and the standup stays SUSPENDED; with no offer pending
@@ -434,8 +435,25 @@ lookup for a standup paused in another chat); the EMPTY-source branch of
 `_handle_standup_query` routes there when a paused standup exists, before the
 empty-source reply (a non-empty report still renders as asked). The escape-word pause line
 comes from the handler (`pause_message()`, optional; `registry.pause_message_for`
-keeps the generic default). Regression: `test_defer_tier_1771.py`,
-`test_second_seam_1771.py`.
+keeps the generic default). **Four further seams (2026-10-15, CXO's lines,
+Arch's mechanism): a deferral pauses, only a cancel or a "no" to the
+invitation ends.** On a #1529 whole-message exit the registry first asks the
+handler (`exit_reply`, optional async hook via `_handler_exit_reply`; no hook,
+None, or a raise → the generic close, so #1529 is unchanged for every other
+process and the registry holds no deferral words). The standup adapter's
+`exit_reply` reads `standup_reads_as_deferral`: DEFER ("not now") →
+SUSPENDED + the defer line; anything else → ABANDONED + the drop line
+(mid-interview) or the invitation line (INITIATED). At the "ready to
+start?" invitation `_handle_initiated` reads the same predicate on every
+turn (deferrals → SUSPENDED), then its pre-existing decline words ("no",
+"nope", "cancel", "later") end. Mid-interview the predicate is consulted only
+on turns the #1529 exit already claims, so a clause like "not yet merged"
+inside an answer stays an answer. Not changed: bare #888 escape words
+("cancel", "stop" …) still pause with the escape line before any handler
+sees them; bare "later" is not a DEFER phrasing (Arch: known miss, no new
+row). Every leave-the-standup line is one constant in
+`services/process/standup_copy.py`. Regression: `test_defer_tier_1771.py`,
+`test_second_seam_1771.py`, `test_four_seams_1771.py`.
 
 **#1762 capped-list remainder seam (2026-09-13, epic 6 first build) — a NEW
 pre-classification deterministic seam, and the chain's first PERSISTING arm.**
