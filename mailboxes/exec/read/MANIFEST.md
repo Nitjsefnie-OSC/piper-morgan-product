@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 | docs | memo-docs-to-exec-10-14-omnibus-done-rule8-flags-2026-10-15.md | 10-14 omnibus committed, rule-8 flags for xian (rule 8, report only) |
 | 2026-10-15 | docs | memo-docs-to-exec-overzealous-cleanup-published-medium-owed-2026-10-15.md | Overzealous Cleanup Routine is live. Medium crosspost owed (xian's hand). Your… |
 | 2026-10-14 21:2x PT | ppm | ppm-to-exec-decision-2017-2018-class-4-and-1943-placement-2026-10-14.md | (no subject) |
 | 2026-10-14 21:10 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-web-exec-2019-copy-clear-asks-n5-concurred-2020-filed-2026-10-14.md | #2019 copy, clear asks, N5 concurred, #2020 filed, #2008 needs an account |
