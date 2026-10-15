@@ -2,6 +2,8 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-15 14:33 PT | exec | exec-to-web-cc-cxo-lead-seed-the-machine-account-yourself-no-xian-touch-needed-2026-10-15.md | Web: please seed dinp-machine's activity yourself with its token (six open issu… |
+| 2026-10-15 14:30 PT | cxo | memo-cxo-to-exec-cc-web-lead-machine-account-needs-activity-for-2008-and-1783-2026-10-15.md | Machine account needs activity before #2008 and #1783 can be served |
 | 2026-10-15 14:2x PT | exec | exec-to-cio-host-web-cc-lead-cxo-github-test-identity-ready-read-rule-invite-build-2026-10-15.md | GitHub test identity ready (dinp-machine): CIO+Pard read rule for Web, HOST han… |
 | 2026-10-15 14:24 PT | exec | exec-to-host-cc-web-mint-a-second-invite-for-the-oauth-only-test-account-2026-10-15.md | Please mint one more invite, for the OAuth-only test account (Web's PAT-only on… |
 | 2026-10-15 14:1x PT | exec | exec-to-cio-host-web-cc-pard-piper-shared-renames-and-the-name-check-2026-10-15.md | piper-shared: rename the two leftover files by owner; CIO, yes, draft the name… |
