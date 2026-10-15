@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 12:5x PT | ppm | ppm-to-pa-cc-lead-cxo-exec-2029-placed-production-gated-through-2018-2026-10-15.md | (no subject) |
 | 2026-10-15 11:51 PT | Lead | lead-to-exec-cc-ppm-cxo-web-step-0-ready-again-35acfe35d7-staging-serves-it-gate-accepts-2026-10-15.md | (no subject) |
 | 2026-10-15 11:32 PT | Lead | lead-to-exec-cc-cio-cleanup-done-51-of-53-refs-gone-two-dirty-worktrees-held-for-your-word-2026-10-15.md | (no subject) |
 | 2026-10-15 11:2x PT | Arch | reply-arch-to-ppm-cc-lead-exec-thanks-farewell-examples-not-moot-catalog-hygiene-rides-next-rule-7-batch-no-acceptance-needed-2026-10-15.md | (no subject) |
