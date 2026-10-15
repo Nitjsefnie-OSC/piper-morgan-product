@@ -6,38 +6,9 @@ Issue: #635 CONSCIOUSNESS-TRANSFORM: Files/Projects
 ADR: ADR-056 Consciousness Expression Patterns
 """
 
-from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from services.consciousness.validation import validate_mvc
-
-
-def _format_relative_time(dt: datetime) -> str:
-    """Convert datetime to conversational relative time."""
-    if dt is None:
-        return "some time ago"
-
-    now = datetime.now()
-    if dt.tzinfo:
-        now = datetime.now(dt.tzinfo)
-
-    diff = now - dt
-
-    if diff < timedelta(minutes=5):
-        return "just now"
-    elif diff < timedelta(hours=1):
-        mins = int(diff.total_seconds() / 60)
-        return f"about {mins} minutes ago"
-    elif diff < timedelta(hours=24):
-        hours = int(diff.total_seconds() / 3600)
-        return f"about {hours} {'hour' if hours == 1 else 'hours'} ago"
-    elif diff < timedelta(days=2):
-        return "yesterday"
-    elif diff < timedelta(days=7):
-        days = diff.days
-        return f"{days} days ago"
-    else:
-        return dt.strftime("%b %d")
 
 
 def _fix_mvc_gaps(narrative: str, mvc_result) -> str:
@@ -121,60 +92,3 @@ def format_projects_conscious(projects: List[Dict[str, Any]]) -> str:
         narrative = _fix_mvc_gaps(narrative, mvc_result)
 
     return narrative
-
-
-def format_project_detail_conscious(
-    project: Dict[str, Any], recent_activity: Optional[List[Dict[str, Any]]] = None
-) -> str:
-    """
-    Format detailed project view with consciousness.
-
-    Args:
-        project: Project dict with name, description, stats
-        recent_activity: Optional list of recent activity items
-
-    Returns:
-        Conscious narrative string
-    """
-    name = project.get("name", "Untitled")
-    description = project.get("description", "")
-    file_count = project.get("file_count", 0)
-    active = project.get("active", True)
-
-    sections = []
-
-    # Opening with identity
-    status_text = "active" if active else "paused"
-    sections.append(f"I'm looking at **{name}** - it's currently {status_text}.")
-
-    # Description if available
-    if description:
-        sections.append(f"It looks like this project is about: {description}")
-
-    # Stats context
-    if file_count > 0:
-        sections.append(f"I see {file_count} files in this project.")
-    else:
-        sections.append("I don't see any files yet.")
-
-    # Recent activity if provided
-    if recent_activity:
-        activity_lines = ["Here's what happened recently:"]
-        for item in recent_activity[:3]:
-            action = item.get("action", "activity")
-            target = item.get("target", "")
-            when = item.get("when")
-            time_str = _format_relative_time(when) if when else ""
-            if time_str:
-                activity_lines.append(f"- {action} {target} ({time_str})")
-            else:
-                activity_lines.append(f"- {action} {target}")
-        sections.append("\n".join(activity_lines))
-
-    # Dialogue invitation
-    sections.append(
-        "What would you like to do with this project? I can show files, "
-        "recent changes, or help with something specific."
-    )
-
-    return "\n\n".join(sections)

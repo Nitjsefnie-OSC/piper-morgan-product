@@ -16,30 +16,6 @@ from typing import Optional
 from services.slot_filling.slot_template import ConfirmationStyle, SlotDefinition, SlotState
 
 
-def format_confirmation(state: SlotState) -> str:
-    """
-    Format a confirmation message summarizing filled slots.
-
-    Uses implicit or explicit style based on template setting.
-
-    Args:
-        state: Current slot state with filled values
-
-    Returns:
-        Natural-language confirmation string
-    """
-    if not state.filled_slots:
-        return ""
-
-    summary = _build_slot_summary(state)
-
-    if state.template.confirmation_style == ConfirmationStyle.EXPLICIT:
-        return f"I have: {summary}. Is that correct?"
-
-    # Implicit: just state what we have
-    return f"Got it — {summary}."
-
-
 def format_prompt(missing: list[SlotDefinition], lens: Optional[str] = None) -> str:
     """
     Format a prompt for a single missing slot.
