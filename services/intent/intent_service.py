@@ -2673,6 +2673,16 @@ class IntentService:
                                 for r in orchestrated.results[1:]
                             ],
                         )
+                        # #2030 (Arch's ruling, issuecomment-6203827433): arm
+                        # the ONE hint the orchestrator picked (its question is
+                        # the reply's last sentence) BEFORE the soft offer, so
+                        # the #1770 guard in _apply_soft_offer sees the live
+                        # last_offer and adds no second ask this turn. Same
+                        # seam as the single-intent path below; the
+                        # orchestrator itself never writes a store.
+                        self._track_offer_hint(
+                            {"offer_hint": orchestrated.armed_offer_hint}, session_id, user_id
+                        )
                         # Issue #819: Apply soft invocation to orchestrated responses
                         return self._apply_soft_offer(
                             orchestrated_result,

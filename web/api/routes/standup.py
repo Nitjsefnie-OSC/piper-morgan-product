@@ -381,7 +381,7 @@ def format_as_slack(result: StandupResult, tz_name: Optional[str] = None) -> str
         for item in result.yesterday_accomplishments:
             lines.append(f"  • {item}")
     else:
-        lines.append("  _No accomplishments recorded_")
+        lines.append("  _No completions yesterday._")
     lines.append("")
 
     # Today
@@ -463,7 +463,7 @@ def format_as_markdown(result: StandupResult, tz_name: Optional[str] = None) -> 
         for item in result.yesterday_accomplishments:
             lines.append(f"- {item}")
     else:
-        lines.append("*No accomplishments recorded*")
+        lines.append("*No completions yesterday.*")
     lines.append("")
 
     # Today
@@ -545,7 +545,7 @@ def format_as_text(result: StandupResult, tz_name: Optional[str] = None) -> str:
         for item in result.yesterday_accomplishments:
             lines.append(f"  * {item}")
     else:
-        lines.append("  (No accomplishments recorded)")
+        lines.append("  (No completions yesterday.)")
     lines.append("")
 
     # Today

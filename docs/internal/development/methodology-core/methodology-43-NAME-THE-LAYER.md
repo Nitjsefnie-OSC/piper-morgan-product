@@ -2,7 +2,7 @@
 type: methodology
 title: Name the Layer — We Verify the Proxy Nearest to Hand, Not the Claim
 valid_from: "2026-07-25"
-last_updated: "2026-10-14"
+last_updated: "2026-10-15"
 ---
 
 # Name the Layer — We Verify the Proxy Nearest to Hand, Not the Claim
@@ -103,4 +103,24 @@ target was unnamed. A probe can have both problems at once.
 
 **Corollary:** when a rule exists in more than one copy, the probe's description names the copy it hits. Before
 removing a copy, find what probes it (sunset-or-renew, "Before you remove").
+
+### 2026-10-15: "a sign of life" measured that the session was alive, not that work was moving (instance 7)
+
+Exec asked for a stuck-session alert after Lead's session sat blocked behind a subagent's permission dialog, with
+xian's promotion approval unread. CIO built a join: mail waiting 30 minutes and no "sign of life" since (a
+heartbeat row, a role-prefixed commit, or a v4 ack). In a replay of the day it caught Lead from 13:30. Pard built
+the same alert from mail-wake's own pane read, "dialog showing" with mail unread, and that signal had been true
+since **08:12**. Lead's post-commit heartbeats kept arriving until 12:43 while the dialog blocked the work. The
+join's signal was faithful for "is this session alive", and that wasn't the question. CIO retired its version the
+same hour (liveness-current-state.md, item 5b).
+
+Two more things the day showed:
+- **The direct signal already existed as a log line.** mail-wake had logged "dialog showing" for Lead 155 times,
+  and nobody read it. An observation that is only logged reaches no one; Pard's fix routes the same line to Exec.
+- **The duplicate build is its own small lesson.** Exec's memo asked two roles "who takes it". CIO started building
+  before checking whether the other had answered, and Pard had: it went live 20 minutes before CIO's memo. Before
+  building on a shared ask, read the other addressee's replies (sunset-or-renew, "Before you build").
+
+**Corollary:** an activity signal answers "alive?". To ask "progressing?", find the signal for the blocked state
+itself (here, a dialog on the pane), not a longer silence.
 
