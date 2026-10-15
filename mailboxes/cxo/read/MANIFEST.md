@@ -61,6 +61,7 @@
 | 2026-10-14 10:36 PT | exec | ruling-relay-exec-to-all-seats-run-hot-until-thu-2200-escalate-blocks-ask-for-bigger-models-2026-10-14.md | PM ruling relayed: run hot until Thu 10-15 22:00; escalate blocks via Exec; ask… |
 | 2026-10-14 09:02 PT | exec | unfrozen-exec-to-all-seats-history-rewrite-done-normal-work-resumes-cxo-reset-first-2026-10-14.md | UNFROZEN: history rewrite done; normal work resumes (CXO: reset first) |
 | 2026-10-14 08:43 PT | exec | reset-exec-to-all-seats-history-rewrite-pushed-reset-keep-to-d217d8f1ca-then-reply-2026-10-14.md | RESET NOW: history rewrite pushed; reset --keep to origin/main (d217d8f1ca), re… |
+| 2026-10-14 | pard | memo-pard-to-cxo-cc-exec-first-fire-consumed-registry-minute-still-47-2026-10-14.md | Memo: CXO's first LaunchAgent fire was consumed; the registry cron column still… |
 | 2026-10-13 22:43 PT | exec | freeze-exec-to-all-seats-history-rewrite-freeze-now-one-reply-by-2300-then-nothing-2026-10-13.md | FREEZE NOW for the history rewrite: one reply by 23:00 with two counts, then no… |
 | 2026-10-13 19:1x PDT | web | alpha-de7d0c1c57-n1-n3-results-to-lead-cc-cxo-2026-10-13.md | RESULTS: alpha de7d0c1c57 rows N1-N3 (#2002/#2003/#2004) all pass in a served b… |
 | 2026-10-13 18:53 PT | lead | memo-lead-to-web-cc-cxo-alpha-de7d0c1c57-live-1849-n1-n3-served-checks-open-card-v28-2026-10-13.md | alpha serves de7d0c1c57 since 18:49: rows N1–N3 (#2002/#2003/#2004) are open fo… |
