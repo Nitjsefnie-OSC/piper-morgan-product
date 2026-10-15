@@ -1,6 +1,6 @@
 # Docs Carry-Forward
 
-**Updated**: 2026-10-12 19:2x PDT (19:12 fire). DONE 10-12: 10-10 + 10-11 omnibuses, Weekly Audit #1994 closed, BRIEFING-CURRENT-STATE refreshed, How to Report edit pushed (xian approved), Ship #064 row set by Comms and view rebuilt. Known fault: bare `gh` hung on Amber after the 10-10 reboot (Pard); prefix `GODEBUG=netdns=go` until Pard confirms the fix. History in session logs (`dev/2026/10/{04..12}/*docs-code-log.md`), not here.
+**Updated**: 2026-10-15 04:3x PDT (04:12 fire; older DONE lines below are history). DONE 10-12: 10-10 + 10-11 omnibuses, Weekly Audit #1994 closed, BRIEFING-CURRENT-STATE refreshed, How to Report edit pushed (xian approved), Ship #064 row set by Comms and view rebuilt. Known fault: bare `gh` hung on Amber after the 10-10 reboot (Pard); prefix `GODEBUG=netdns=go` until Pard confirms the fix. History in session logs (`dev/2026/10/{04..12}/*docs-code-log.md`), not here.
 
 ## Done this fire (04:12)
 - 10-09 omnibus (`adba285845`, 540 lines, 15 logs, 1128 commits, 574 comparable) + 15 activity rows (`a0906091be`, 2865 to 2880). Nudged HOST (10-09 log lacks DAY-CLOSED, `8e927d29ef`).
@@ -20,7 +20,8 @@
 - **10-12 omnibus**: drafted by a Sonnet subagent 10-13, commit plus activity rows pending in the 04:12 fire log. Exec and CIO 10-12 logs unclosed (nudged).
 - **Ship #064**: PUBLISHED 10-14 (website `6bca437`). LinkedIn crosspost DONE 10-14 (row `distributed`).
 - **10-13 omnibus**: drafted by a Sonnet subagent 10-14, commit plus activity rows pending. Exec and Comms 10-13 logs unclosed (nudged).
-- **Thu 10-15 04:12 fire**: PUBLISH "The Overzealous Cleanup Routine" (`ready-for-docs`, Comms memo received, pre-flight and dry-run done 10-13). `--draft .../the-overzealous-cleanup-routine.md --image .../the-overzealous-cleanup-routine-waiter-carries-away-untouched-dinners.png --slug the-overzealous-cleanup-routine --category building --work-date 2026-08-14`. Re-fetch first. Then archive draft and png, row `published` with `draftPath` to `drafts/published/`, Medium-only reminder to Exec.
+- **Overzealous Cleanup Routine**: PUBLISHED 10-15 (website commit pushed, live 200). Medium-only crosspost owed from xian (Exec notified). On URL: set `mediumURL`, status and `canonicalSite` to `distributed`.
+- **10-14 omnibus**: DONE 10-15 (568 lines, 1068 commits, 11 rows). Addendum owed when Exec's log and the four prog-code logs close (Exec nudged).
 - **Mon 10-19**: next weekly audit. **~11-30**: glossary 60-day re-verify.
 
 ## Held on PM (via Exec)

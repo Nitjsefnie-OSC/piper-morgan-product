@@ -88,7 +88,9 @@ wake ──► fire runs ──► heartbeat ──► freeze check ──► wa
 
 6. **Live-layer checks** (is the machinery itself running?):
    - Pard's `verify-hooks-drumbeat` (07:05 and 19:05) checks a real `claude -p` commit is blocked by
-     `check-branch.sh`.
+     `check-branch.sh`. Since 10-14 19:15 it tests PM's project copy, carried from origin/main
+     (mediajunkie 9afa8c9). Before that it tested the user-level copy, removed at 10:43, which
+     turned the 19:05 run red.
    - `scripts/whats-armed.sh` reads that verdict and probes the rest (`whats-armed.md`).
    - `scripts/main-ci-status.sh` covers CI.
 
