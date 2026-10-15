@@ -1353,11 +1353,20 @@ async def handle_github_callback(
 
 @router.get("/github/oauth-status")
 async def github_oauth_status(current_user: JWTClaims = Depends(get_current_user)):
-    """Per-user GitHub OAuth-connector binding status (#1317 / ADR-070 C).
+    """Per-user GitHub OAuth-connector binding status (#1317 / ADR-070 C; #2029).
 
     Distinct from the legacy native-PAT status (`GET /github`, system-scoped) — this
     reflects the user's `connector_binding`, so the Settings page can show the OAuth
-    connection as connected. No token is read or returned (D3).
+    connection's real state. No token is read into or returned by the response (D3).
+
+    #2029: ``connected`` is True only for a BOUND binding; a binding GitHub has rejected
+    (a read or the Test got its 401, which marks the row STALE) reports ``stale: True``
+    and ``connected: False``, so the page offers Reconnect instead of "Connected".
+    ``serving`` names the leg that answers GitHub reads: ``"oauth"`` when BOUND;
+    ``"pat"`` when the binding is stale and the user's own personal token answered one
+    probe (``search_user_repositories``, limit 1, the #2012 Test's call) just now; else
+    ``None``. The probe runs only in the stale case, so a healthy page load makes no
+    GitHub call.
     """
     from services.connectors.binding_repository import ConnectorBindingRepository
     from services.database.session_factory import AsyncSessionFactory
@@ -1365,8 +1374,34 @@ async def github_oauth_status(current_user: JWTClaims = Depends(get_current_user
 
     async with AsyncSessionFactory.session_scope() as session:
         binding = await ConnectorBindingRepository(session).get(current_user.sub, "github")
-    connected = binding is not None and binding.status == ConnectorStatusState.BOUND.value
-    return {"connected": connected, "status": (binding.status if binding else None)}
+    status_value = binding.status if binding else None
+    connected = status_value == ConnectorStatusState.BOUND.value
+    stale = status_value == ConnectorStatusState.STALE.value
+    serving: Optional[str] = "oauth" if connected else None
+    if stale:
+        serving = await _github_pat_serving(current_user.sub)
+    return {"connected": connected, "stale": stale, "serving": serving, "status": status_value}
+
+
+async def _github_pat_serving(user_id: str) -> Optional[str]:
+    """#2029: ``"pat"`` when the resolver picks the user's own personal token AND one real
+    read on it succeeds; else ``None``. CXO's "Connected via your personal token" card is
+    shown only on that evidence, never on a token merely being on file."""
+    try:
+        from services.mcp.consumer.connector import DegradationResponse
+        from services.mcp.consumer.github_adapter import GitHubMCPSpatialAdapter
+
+        adapter = GitHubMCPSpatialAdapter()
+        credential = await adapter.resolve_credential(user_id)
+        if isinstance(credential, DegradationResponse) or getattr(credential, "leg", None) != (
+            "pat"
+        ):
+            return None
+        result = await adapter.search_user_repositories(user_id, limit=1)
+        return "pat" if result.degradation is None else None
+    except Exception:
+        logger.warning("github_pat_serving_probe_failed", user_id=user_id, exc_info=True)
+        return None
 
 
 @router.post("/calendar/disconnect")
