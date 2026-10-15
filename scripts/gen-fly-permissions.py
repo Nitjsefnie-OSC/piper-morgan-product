@@ -9,12 +9,14 @@ is emitted in 8 forms (fly, flyctl, */fly, */flyctl; bare and with " *").
     scripts/gen-fly-permissions.py --check    exit 1 if the installed flyctl's version or
                                               alias sets differ from the committed JSON
 
-Reads help only; nothing is sent to Fly. Hidden commands that --help doesn't list are
+Reads help only; nothing is sent to Fly. Runs flyctl with FLY_NO_UPDATE_CHECK=1, because flyctl
+self-updates when run, and this check's own calls once upgraded it (2026-10-14). Hidden commands that --help doesn't list are
 not covered and fall to the auto-mode reviewer (see prod-command-permissions.md).
 """
 
 import itertools
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -103,7 +105,13 @@ FLAG_FIRST_DENY = [f"Bash({f} -*)" for f in FORMS]
 
 
 def run(args):
-    return subprocess.run(["fly", *args], capture_output=True, text=True, timeout=30).stdout
+    # flyctl updates itself when run. This check's own `fly version` and --help calls upgraded it
+    # 0.4.117 -> 0.4.118 on 2026-10-14 20:55, which made the drift it then reported (Pard traced it).
+    # FLY_NO_UPDATE_CHECK=1 is meant to stop that; inferred from the name, not yet tested.
+    env = {**os.environ, "FLY_NO_UPDATE_CHECK": "1"}
+    return subprocess.run(
+        ["fly", *args], capture_output=True, text=True, timeout=30, env=env
+    ).stdout
 
 
 def aliases(path):
