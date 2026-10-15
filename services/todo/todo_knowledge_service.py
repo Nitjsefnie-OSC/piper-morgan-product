@@ -41,6 +41,13 @@ class TodoKnowledgeService:
         context: Optional[Dict[str, Any]] = None,
     ) -> Optional[KnowledgeNode]:
         """Create Knowledge Graph node for todo with semantic metadata"""
+        if not todo.owner_id:
+            # 2013: a graph node needs an owner; never default one (a session or user_id
+            # argument is not the todo's owner). Same swallow-and-return-None contract
+            # as the other failures below.
+            logger.warning("Skipping Knowledge Graph node for todo with no owner", todo_id=todo.id)
+            return None
+
         try:
             # Build semantic metadata for the todo
             metadata = {
@@ -73,6 +80,7 @@ class TodoKnowledgeService:
                 node_type=NodeType.CONCEPT,
                 metadata=metadata,
                 session_id=user_id,  # Use user_id as session for user-specific learning
+                owner_id=todo.owner_id,  # 2013: the todo's owner owns its graph node
             )
 
             # Update todo with Knowledge Graph reference
@@ -252,6 +260,9 @@ class TodoKnowledgeService:
         """Update relationships between todos in Knowledge Graph"""
         if not todo.knowledge_node_id:
             return
+        if not todo.owner_id:
+            logger.warning("Skipping todo relationships: todo has no owner", todo_id=todo.id)
+            return
 
         try:
             for related_id in related_todo_ids:
@@ -275,6 +286,7 @@ class TodoKnowledgeService:
                         target_node_id=related_node.id,
                         edge_type=relationship_type,
                         weight=0.8,  # Default relationship strength
+                        owner_id=todo.owner_id,  # 2013
                         metadata={
                             "relationship_type": relationship_type,
                             "created_by": "todo_system",

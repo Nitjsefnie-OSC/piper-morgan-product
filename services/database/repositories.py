@@ -1057,8 +1057,10 @@ class KnowledgeGraphRepository(BaseRepository):
         super().__init__(session)
 
     # Node operations
-    async def create_node(self, node: domain.KnowledgeNode) -> domain.KnowledgeNode:
+    async def create_node(self, node: domain.KnowledgeNode, owner_id: str) -> domain.KnowledgeNode:
         """Create a knowledge node (with #1089 repository safety-net check).
+
+        ``owner_id`` is the signed-in principal's user id (2013); required.
 
         See `_privacy_safety_check` for the defensive contract — raises
         PrivacyFilterRejectedError if a direct repo write attempts to
@@ -1066,8 +1068,14 @@ class KnowledgeGraphRepository(BaseRepository):
         the `is_filtered` flag from the service-layer write path.
         """
         self._privacy_safety_check(node)
-        db_node = KnowledgeNodeDB.from_domain(node)
-        return await self.create(**db_node.__dict__)
+        db_node = KnowledgeNodeDB.from_domain(node, owner_id)
+        # 2013: add the constructed row directly. The old ``self.create(**db_node.__dict__)``
+        # passed ``_sa_instance_state`` to the model constructor (TypeError on every call)
+        # and returned an ORM row where callers expect the domain object.
+        self.session.add(db_node)
+        await self.session.flush()
+        await self.session.refresh(db_node)
+        return db_node.to_domain()
 
     def _privacy_safety_check(self, node: domain.KnowledgeNode) -> None:
         """#1089 Phase 0 increment 4: repository-layer defensive check.
@@ -1170,10 +1178,13 @@ class KnowledgeGraphRepository(BaseRepository):
         return [db_node.to_domain() for db_node in db_nodes]
 
     # Edge operations
-    async def create_edge(self, edge: domain.KnowledgeEdge) -> domain.KnowledgeEdge:
-        """Create a knowledge edge"""
-        db_edge = KnowledgeEdgeDB.from_domain(edge)
-        return await self.create(**db_edge.__dict__)
+    async def create_edge(self, edge: domain.KnowledgeEdge, owner_id: str) -> domain.KnowledgeEdge:
+        """Create a knowledge edge owned by ``owner_id`` (2013; required)"""
+        db_edge = KnowledgeEdgeDB.from_domain(edge, owner_id)
+        self.session.add(db_edge)  # 2013: see create_node (the **__dict__ form raised TypeError)
+        await self.session.flush()
+        await self.session.refresh(db_edge)
+        return db_edge.to_domain()
 
     async def get_edge_by_id(
         self, edge_id: str, owner_id: Optional[str] = None
@@ -1349,10 +1360,10 @@ class KnowledgeGraphRepository(BaseRepository):
 
     # Bulk operations
     async def create_nodes_bulk(
-        self, nodes: List[domain.KnowledgeNode]
+        self, nodes: List[domain.KnowledgeNode], owner_id: str
     ) -> List[domain.KnowledgeNode]:
-        """Create multiple nodes efficiently"""
-        db_nodes = [KnowledgeNodeDB.from_domain(node) for node in nodes]
+        """Create multiple nodes efficiently, all owned by ``owner_id`` (2013)"""
+        db_nodes = [KnowledgeNodeDB.from_domain(node, owner_id) for node in nodes]
         self.session.add_all(db_nodes)
         await self.session.flush()
 
@@ -1363,10 +1374,10 @@ class KnowledgeGraphRepository(BaseRepository):
         return [db_node.to_domain() for db_node in db_nodes]
 
     async def create_edges_bulk(
-        self, edges: List[domain.KnowledgeEdge]
+        self, edges: List[domain.KnowledgeEdge], owner_id: str
     ) -> List[domain.KnowledgeEdge]:
-        """Create multiple edges efficiently"""
-        db_edges = [KnowledgeEdgeDB.from_domain(edge) for edge in edges]
+        """Create multiple edges efficiently, all owned by ``owner_id`` (2013)"""
+        db_edges = [KnowledgeEdgeDB.from_domain(edge, owner_id) for edge in edges]
         self.session.add_all(db_edges)
         await self.session.flush()
 

@@ -2073,7 +2073,7 @@ class KnowledgeNodeDB(Base):
     owner_id = Column(
         postgresql.UUID(as_uuid=False),
         ForeignKey("users.id", name="fk_knowledge_nodes_owner_id", ondelete="CASCADE"),
-        nullable=True,
+        nullable=False,
     )
     embedding_vector = Column(
         postgresql.ARRAY(Float)
@@ -2117,9 +2117,14 @@ class KnowledgeNodeDB(Base):
         )
 
     @classmethod
-    def from_domain(cls, node: domain.KnowledgeNode) -> "KnowledgeNodeDB":
+    def from_domain(cls, node: domain.KnowledgeNode, owner_id: str) -> "KnowledgeNodeDB":
+        # 2013: the domain object carries no owner, so the caller must supply one
+        # (a principal's user id, never a session id). No default, no fallback.
+        if not owner_id:
+            raise ValueError("KnowledgeNodeDB.from_domain requires an explicit owner_id")
         return cls(
             id=node.id,
+            owner_id=cast(Any, owner_id),  # str at runtime; the UUID column type confuses mypy
             name=node.name,
             node_type=(
                 node.node_type.value if isinstance(node.node_type, NodeType) else node.node_type
@@ -2150,7 +2155,7 @@ class KnowledgeEdgeDB(Base):
     owner_id = Column(
         postgresql.UUID(as_uuid=False),
         ForeignKey("users.id", name="fk_knowledge_edges_owner_id", ondelete="CASCADE"),
-        nullable=True,
+        nullable=False,
     )
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     updated_at = Column(
@@ -2190,9 +2195,13 @@ class KnowledgeEdgeDB(Base):
         )
 
     @classmethod
-    def from_domain(cls, edge: domain.KnowledgeEdge) -> "KnowledgeEdgeDB":
+    def from_domain(cls, edge: domain.KnowledgeEdge, owner_id: str) -> "KnowledgeEdgeDB":
+        # 2013: see KnowledgeNodeDB.from_domain; the owner is explicit, never derived.
+        if not owner_id:
+            raise ValueError("KnowledgeEdgeDB.from_domain requires an explicit owner_id")
         return cls(
             id=edge.id,
+            owner_id=cast(Any, owner_id),  # str at runtime; the UUID column type confuses mypy
             source_node_id=edge.source_node_id,
             target_node_id=edge.target_node_id,
             edge_type=(

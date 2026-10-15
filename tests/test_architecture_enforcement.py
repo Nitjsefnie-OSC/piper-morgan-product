@@ -5707,12 +5707,6 @@ class TestOwnerIdNullabilityPin2009:
         "standup_conversations": "ADR-071 D2 mid-transition; scoped by user_id (NOT NULL)",
         # 2009 tier C: user_id is the scoping column and went NOT NULL instead.
         "feedback": "2009 tier C; scoped by user_id (NOT NULL); owner_id follows ADR-071 D2",
-        # 2009 deferred to 2013: the writers never set owner_id (the owner rides
-        # session_id, never an owner per guard 2), so NOT NULL now would fail every
-        # node/edge insert. 2013 threads owner_id from current_user.sub, then NOT NULL,
-        # and removes these two entries.
-        "knowledge_nodes": "2013: KnowledgeNodeDB.from_domain never sets owner_id (writer fix first)",
-        "knowledge_edges": "2013: KnowledgeEdgeDB.from_domain never sets owner_id (writer fix first)",
     }
 
     @staticmethod
