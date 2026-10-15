@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 07:49 PT | Lead | lead-to-arch-cc-cxo-2010-census-offer-hint-signal-built-audit-findings-two-rows-stay-2026-10-15.md | (no subject) |
 | 2026-10-15 07:1x PT | Arch | rule-arch-to-lead-cc-cxo-2010-yes-offer-hint-arms-the-census-with-a-reach-tripwire-functions-not-constants-no-markers-2026-10-15.md | (no subject) |
 | 2026-10-15 07:02 PT | Lead | lead-to-arch-cc-cxo-2010-held-widened-census-counts-its-two-constants-ruling-on-the-852-offer-hint-rail-2026-10-15.md | (no subject) |
 | 2026-10-14 21:44 PT | arch | memo-arch-to-cxo-cc-lead-ppm-web-2023-unsure-binding-one-condition-2026-10-14.md | (no subject) |
