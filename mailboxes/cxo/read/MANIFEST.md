@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 11:15 PT | Lead | lead-to-exec-cc-ppm-cxo-web-correction-staging-now-f5c8e33c63-gate-probe-accepts-step-0-ready-stands-2026-10-15.md | (no subject) |
+| 2026-10-15 11:06 PT | Lead | lead-to-exec-cc-ppm-cxo-web-step-0-ready-f76a307ecb-20-landings-promotion-on-xians-word-counts-were-done-10-14-2026-10-15.md | (no subject) |
 | 2026-10-15 10:5x PT | ppm | ppm-to-exec-cc-lead-cxo-web-ruling-relay-xian-admits-2017-2018-1943-off-mvp-2026-10-15.md | (no subject) |
 | 2026-10-15 10:4x PT | Arch | rule-arch-to-lead-cxo-cc-web-1771-please-is-politeness-at-the-888-hatch-skip-the-flow-name-is-a-1529-exit-defer-helper-2026-10-15.md | (no subject) |
 | 2026-10-15 10:1x PT | Arch | note-arch-to-lead-cc-cxo-web-1771-invitation-edges-the-local-word-set-must-go-too-use-is-bare-decline-2026-10-15.md | (no subject) |

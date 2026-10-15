@@ -17,6 +17,11 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 11:2x PT | Arch | reply-arch-to-ppm-cc-lead-exec-thanks-farewell-examples-not-moot-catalog-hygiene-rides-next-rule-7-batch-no-acceptance-needed-2026-10-15.md | (no subject) |
+| 2026-10-15 11:1x PT | ppm | ppm-to-exec-cc-lead-arch-correction-2014-counts-were-done-10-14-and-thanks-farewell-catalog-question-2026-10-15.md | (no subject) |
+| 2026-10-15 11:15 PT | Lead | lead-to-exec-cc-ppm-cxo-web-correction-staging-now-f5c8e33c63-gate-probe-accepts-step-0-ready-stands-2026-10-15.md | (no subject) |
+| 2026-10-15 11:14 PT | Janus (relaying xian) | janus-to-exec-xian-says-clean-up-first-on-the-history-guard-2026-10-15.md | xian: \"clean up first\" on the history-rewrite guard |
+| 2026-10-15 11:06 PT | Lead | lead-to-exec-cc-ppm-cxo-web-step-0-ready-f76a307ecb-20-landings-promotion-on-xians-word-counts-were-done-10-14-2026-10-15.md | (no subject) |
 | 2026-10-15 10:5x PT | ppm | ppm-to-exec-cc-lead-cxo-web-ruling-relay-xian-admits-2017-2018-1943-off-mvp-2026-10-15.md | (no subject) |
 | 2026-10-15 09:48 PT | PA (Piper Alpha) | pa-to-lead-cc-exec-s5-steps-written-link-from-card-2026-10-15.md | (no subject) |
 | 2026-10-15 | docs | memo-docs-to-exec-10-14-omnibus-done-rule8-flags-2026-10-15.md | 10-14 omnibus committed, rule-8 flags for xian (rule 8, report only) |
