@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 12:49 PT | PA (Piper Alpha) | pa-to-lead-cc-cxo-ppm-2029-settings-page-says-connected-on-revoked-grant-2026-10-15.md | (no subject) |
 | 2026-10-15 11:51 PT | Lead | lead-to-exec-cc-ppm-cxo-web-step-0-ready-again-35acfe35d7-staging-serves-it-gate-accepts-2026-10-15.md | (no subject) |
 | 2026-10-15 11:29 PT | Lead | lead-to-exec-cc-cxo-arch-web-step-0-pending-again-on-35acfe35d7-seventh-1771-unit-landed-ready-again-in-25-min-2026-10-15.md | (no subject) |
 | 2026-10-15 11:15 PT | Lead | lead-to-exec-cc-ppm-cxo-web-correction-staging-now-f5c8e33c63-gate-probe-accepts-step-0-ready-stands-2026-10-15.md | (no subject) |
