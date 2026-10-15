@@ -51,7 +51,7 @@ from services.intent_service.conversation_context import get_or_create_context
 from services.shared_types import IntentCategory
 
 _USER = "3f7b8a52-2035-4b00-9e00-000000002035"
-EMPTY = "You don't have any active projects yet. Would you like to add one?"
+EMPTY = "You don't have any active projects yet. Would you like to add a project?"
 NAME_Q = "What would you like to call it?"
 DECLINE = "Okay, I'll leave it for now. Say 'add a project' any time."
 CONSENT = "Quick check before I act"
@@ -185,13 +185,13 @@ def _peek(service, sid):
 def _list_projects_rail(clf, db_projects=()):
     """IntentService._handle_projects_query (the served path)."""
     clf.next = _intent("list my projects", IntentCategory.QUERY, "list_projects")
-    return "list my projects", EMPTY, "Would you like to add one?"
+    return "list my projects", EMPTY, "Would you like to add a project?"
 
 
 def _manage_portfolio_list(clf, db_projects=()):
     """The manage_portfolio list branch (CanonicalHandlers.handle dispatch)."""
     clf.next = _intent("list my projects", IntentCategory.PORTFOLIO, "manage_portfolio")
-    return "list my projects", EMPTY, "Would you like to add one?"
+    return "list my projects", EMPTY, "Would you like to add a project?"
 
 
 @pytest.mark.asyncio

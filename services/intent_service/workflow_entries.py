@@ -3736,7 +3736,7 @@ def register_default_workflows() -> None:
         ),
         # #2035 (Arch's rule + CXO's shape B, 2026-10-15): offer-seam-only
         # ACCEPT landing for a yes/no add-project offer ("Would you like to
-        # add one?" and the two setup-guidance asks). A yes that leads to a
+        # add a project?" and the two setup-guidance asks). A yes that leads to a
         # write arms the #846 store with its own landing, never the #852
         # contextual hint. effect: READ — the landing writes nothing: it
         # asks "What would you like to call it?" and arms the add-project

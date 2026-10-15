@@ -5766,7 +5766,7 @@ The add-project offers (shape B, CXO's copy verbatim):
 
 | Builder (holder) | Question | Continuation it used to steer | Reaches | Rail now |
 |---|---|---|---|---|
-| `empty_projects_offer` (`files_consciousness`), armed by `IntentService._handle_projects_query` (directly) and the `manage_portfolio` list branch (`write_offer`) | "Would you like to add one?" | "add a new project" | `manage_portfolio` op `add` → `add_project` (WRITE) | #846 `offer_add_project` |
+| `empty_projects_offer` (`files_consciousness`), armed by `IntentService._handle_projects_query` (directly) and the `manage_portfolio` list branch (`write_offer`) | "Would you like to add a project?" (CXO four-calls item 3: self-contained, one source in `empty_projects_message`) | "add a new project" | `manage_portfolio` op `add` → `add_project` (WRITE) | #846 `offer_add_project` |
 | `CanonicalHandlers._format_project_setup_guidance` | "Are you ready to set up your first project?" | "add a new project" | `add_project` (WRITE) | #846 `offer_add_project` |
 | `CanonicalHandlers._handle_project_setup_request` (warm/balanced) | "Want to add another?" | "add another project" | `add_project` (WRITE) | #846 `offer_add_project` |
 | `CanonicalHandlers._format_integration_setup_guidance` | "Would you like guidance on setting up a specific integration?" | "provide guidance on setting up a specific integration" | `get_contextual_guidance` (READ) | #852, unchanged |

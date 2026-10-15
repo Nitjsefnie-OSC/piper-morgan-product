@@ -80,7 +80,7 @@ CLARIFY_ADD_PROJECT_CONFIRM_WORKFLOW = "clarify_add_project_confirm"
 
 
 # #2035 (Arch's rule + CXO's shape B, 2026-10-15): a yes/no OFFER to add a
-# project ("Would you like to add one?", "Are you ready to set up your first
+# project ("Would you like to add a project?", "Are you ready to set up your first
 # project?", "Want to add another?"). Its "yes" leads to a WRITE, so it arms
 # THIS one-slot #846 store with its own accept landing, never the #852
 # contextual hint (that rail steers "yes" into the classifier, which reaches
