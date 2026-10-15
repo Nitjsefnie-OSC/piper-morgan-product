@@ -308,6 +308,12 @@ graph LR
 12. `test.yml` - Test execution
 13. `weekly-docs-audit.yml` - Documentation health
 
+**Workflows not in the numbered list above** (added 2026-10-15; each line read from the workflow file):
+- `frontend-tests.yml` - Runs the jest + jsdom harness in `tests/frontend` (`npm ci`, `npm test`) on pushes and PRs to main that touch `web/static/js/**`, `web/assets/**` or `tests/frontend/**`. It covers JS behaviour that the Python and lint gates do not (the Dialog primitive, toast, api-error-parser and similar suites).
+- `security-tests.yml` - Runs `tests/security/` (`pytest --override-ini="addopts="`, against a real Postgres after `alembic upgrade head`) as its own job, so a failure elsewhere cannot mask it. Triggers on pushes and PRs to main and production touching `services/**`, `tests/security/**`, `config/**`, `alembic/**` or `requirements*.txt`, plus manual dispatch (issue 1304).
+- `e2e-aaxt.yml` - Three jobs: `e2e-conversations` (task lifecycle with a live LLM; nightly and on dispatch), `canonical-regression` (canonical routing and structure, on PRs touching conversation code) and `aaxt-nightly` (golden quality scenarios with an LLM judge, scheduled).
+- `windows-test.yml` - Windows clone and filename check ported from the retired `ci.yml`. Parked 2026-09-13 as dispatch-only (PM ruling) because checkout itself fails on Windows-invalid filenames; the clearing condition is in the workflow file's header comment.
+
 **Pipeline Performance**:
 - **Pre-commit**: <1 second
 - **Pre-push Smoke**: ~6 seconds
