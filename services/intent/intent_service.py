@@ -23,7 +23,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from services.consciousness.files_consciousness import (
     empty_projects_message,
-    empty_projects_offer_hint,
+    empty_projects_offer,
     format_projects_conscious,
 )
 from services.consciousness.learning_consciousness import format_patterns_learned_conscious
@@ -1748,6 +1748,28 @@ class IntentService:
                             intent_data=_apcq_turn["intent_data"],
                             requires_clarification=_apcq_turn.get("requires_clarification", False),
                         )
+                # #2035: a pending yes/no ADD-PROJECT OFFER ("Would you like
+                # to add one?" and the two setup-guidance asks). Only the
+                # principal check and CXO's "later" decline are handled here;
+                # None falls through to the generic seam, whose ACCEPT
+                # dispatches the registered offer_add_project landing (asks
+                # the name, arms the #1886 name question; nothing written).
+                elif _vi_payload.get("kind") == "add_project_offer_question":
+                    from services.intent_service import add_project_clarify as _apc3
+
+                    _apo_turn = await _apc3.handle_add_project_offer_turn(
+                        pending_offer,
+                        message,
+                        session_id=session_id,
+                        user_id=user_id,
+                    )
+                    if _apo_turn is not None:
+                        return IntentProcessingResult(
+                            success=True,
+                            message=_apo_turn["message"],
+                            intent_data=_apo_turn["intent_data"],
+                            requires_clarification=_apo_turn.get("requires_clarification", False),
+                        )
                 # #1650: CONFIRM kinds — every offer dispatching the #1190
                 # pending-action carrier (destructive close/reopen confirms,
                 # consent checks, reminder-clear delete confirms, and the
@@ -2198,6 +2220,9 @@ class IntentService:
                         # command, decline, bare exit) drops via the pop;
                         # nothing bound, nothing deleted.
                         "delete_todo_pick_question": "delete_todo_pick_question_released",
+                        # #2035: an ignored yes/no add-project offer is
+                        # dropped by the pop; nothing was created.
+                        "add_project_offer_question": "add_project_offer_abandoned",
                         # #1688: a released interview question (decline, bare
                         # exit, or claimed command) drops via the pop; nothing
                         # was bound, nothing is claimed.
@@ -3191,6 +3216,10 @@ class IntentService:
                         session_id, _add_project_offer, user_id=user_id
                     )
                     self.logger.info("add_project_name_question_armed", session_id=session_id)
+
+                # #2035: a yes/no offer whose "yes" leads to a WRITE arms the
+                # #846 store with its own landing (never the #852 hint below).
+                self._arm_write_offer(canonical_result, session_id, user_id)
 
                 # Issue #852: Track contextual offer for continuation detection
                 # Complements action_required (line 864) — different storage, same location.
@@ -5408,17 +5437,31 @@ class IntentService:
         project_dicts = [{"name": p.name, "active": not p.is_archived} for p in projects]
 
         # #2010: the empty state asks "Would you like to add one?" — rendered
-        # HERE and armed in the same turn with the same #852 offer_hint the
-        # manage_portfolio list branch sets, so a "yes" starts the add-project
-        # flow. The non-empty list ends plainly (format_projects_conscious).
+        # HERE and armed in the same turn, the same offer the manage_portfolio
+        # list branch arms. The non-empty list ends plainly
+        # (format_projects_conscious).
+        # #2035 (Arch's rule, CXO's shape B): its "yes" leads to a WRITE, so
+        # it arms the #846 one-slot store with the offer_add_project landing
+        # ("yes" asks the name; nothing is written until a name is given),
+        # never the #852 contextual hint. First-arm-wins (#1770): the store
+        # is popped at turn start, so an entry present now was armed or
+        # survival-re-armed THIS turn and is kept.
         if project_dicts:
             message = format_projects_conscious(project_dicts)
         else:
             message = empty_projects_message()
             if session_id:
-                self._track_offer_hint(
-                    {"offer_hint": empty_projects_offer_hint()}, session_id, user_id
-                )
+                _offers = self.workflow_offer_service
+                if _offers.peek_pending_offer(session_id, user_id=user_id) is None:
+                    _offers.set_pending_offer(
+                        session_id, empty_projects_offer(user_id), user_id=user_id
+                    )
+                else:
+                    self.logger.info(
+                        "write_offer_skipped_live_arm",
+                        session_id=session_id,
+                        skipped="empty_projects_offer",
+                    )
 
         return IntentProcessingResult(
             success=True,
@@ -15993,6 +16036,44 @@ Add any additional information here.
             return True
 
         return False
+
+    def _arm_write_offer(
+        self, canonical_result: dict, session_id: str, user_id: Optional[str] = None
+    ) -> None:
+        """#2035 (Arch's rule, 2026-10-15): a yes/no offer whose "yes" leads
+        to a WRITE arms the #846 one-slot store with its own accept landing,
+        never the #852 contextual hint. A ``CanonicalHandlers`` method has no
+        offer-store access, so it hands the record back under
+        ``"write_offer"`` (the #1886 ``add_project_name_offer`` /
+        #1688 ``ftux_interview_offer`` pattern) and THIS arms it. Called at
+        both seams a canonical dict reaches: the main canonical dispatch in
+        ``_process_intent_internal`` and the rail adapters'
+        ``_finalize_canonical_rail_result``.
+
+        First-arm-wins (#1770): the store is popped at turn start, so an
+        entry present now was armed (or survival-re-armed, #1739 §5a) THIS
+        turn; it is kept and the write offer is skipped, logged. The
+        principal is stamped when the builder had none (setup guidance)."""
+        offer = canonical_result.get("write_offer")
+        if not offer or not session_id:
+            return
+        if self.workflow_offer_service.peek_pending_offer(session_id, user_id=user_id):
+            self.logger.info(
+                "write_offer_skipped_live_arm",
+                session_id=session_id,
+                skipped=offer.get("workflow_type"),
+            )
+            return
+        payload = dict(offer.get("pending_action") or {})
+        if not payload.get("user_id") and user_id:
+            payload["user_id"] = str(user_id)
+        offer = {**offer, "pending_action": payload}
+        self.workflow_offer_service.set_pending_offer(session_id, offer, user_id=user_id)
+        self.logger.info(
+            "write_offer_armed",
+            session_id=session_id,
+            workflow_type=offer.get("workflow_type"),
+        )
 
     def _track_offer_hint(
         self, canonical_result: dict, session_id: str, user_id: Optional[str] = None

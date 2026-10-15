@@ -25,7 +25,6 @@ import pytest
 
 from services.consciousness.files_consciousness import (
     empty_projects_message,
-    empty_projects_offer_hint,
 )
 from services.domain.models import Intent
 from services.intent.intent_service import IntentService
@@ -44,14 +43,22 @@ MESSAGE = "what time is it and list my projects"
 
 # The real #2010 empty-projects reply and hint (one source).
 EMPTY_MSG = empty_projects_message()
-EMPTY_HINT = empty_projects_offer_hint()
+# Since #2035 the empty-projects offer rides the #846 one-slot store (a yes that
+# leads to a write never arms the contextual hint), so production no longer
+# builds this hint. The dict below is a FIXTURE for the carry mechanics these
+# pins cover (any hinted sibling); its shape is the #852 offer_hint contract.
+EMPTY_HINT = {"continuation_hint": "add a new project", "offer_text": "Would you like to add one?"}
 EMPTY_Q = EMPTY_HINT["offer_text"]
 
-# The real _format_project_setup_guidance reply and hint (#2024 copy).
+# The real _format_project_setup_guidance reply (#2024 copy). Since #2035 its
+# question is a #846 write offer (``write_offer``), not a contextual hint, so the
+# hint dict is rebuilt here as a FIXTURE around the real question text.
 _SETUP = CanonicalHandlers()._format_project_setup_guidance()
 SETUP_MSG = _SETUP["message"]
-SETUP_HINT = _SETUP["offer_hint"]
-SETUP_Q = SETUP_HINT["offer_text"]
+SETUP_Q = (_SETUP.get("write_offer") or {}).get("question") or (_SETUP.get("offer_hint") or {})[
+    "offer_text"
+]
+SETUP_HINT = {"continuation_hint": "add a new project", "offer_text": SETUP_Q}
 
 
 def _intent(category: IntentCategory, action: str) -> Intent:

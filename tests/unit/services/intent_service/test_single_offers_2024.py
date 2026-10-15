@@ -7,6 +7,10 @@
   is a statement with no offer attached.
 - The professional branch of ``_handle_project_setup_request`` renders a
   statement, so it arms nothing.
+- #2035 (Arch's rule, CXO's shape B): the two project-setup questions lead
+  to a WRITE, so they arm the #846 store (``write_offer``, the
+  offer_add_project landing), no longer an ``offer_hint``; the stored
+  question is the rendered one (the same #1665/#1739 (a) adequacy).
 - The archive / restore / search not-found replies keep their
   "Say 'list my ...'" directive and build no ``offer_hint`` (a directive is
   not an offer: nothing for a "yes" to bind).
@@ -57,7 +61,9 @@ def test_project_setup_guidance_asks_one_question_and_arms_it():
     out = CanonicalHandlers()._format_project_setup_guidance()
     msg = out["message"]
     assert _questions(msg) == ["Are you ready to set up your first project?"]
-    assert out["offer_hint"]["offer_text"] == "Are you ready to set up your first project?"
+    assert out["write_offer"]["question"] == "Are you ready to set up your first project?"
+    assert out["write_offer"]["workflow_type"] == "offer_add_project"
+    assert "offer_hint" not in out  # #2035: off the #852 rail
     assert "Ask me how project context works any time." in msg
     assert "explain more" not in msg
     assert msg.rstrip().endswith("Are you ready to set up your first project?")
@@ -87,7 +93,9 @@ async def test_setup_request_asks_one_question_and_arms_it(label):
     out = await _setup_request(label)
     msg = out["message"]
     assert _questions(msg) == ["Want to add another?"]
-    assert out["offer_hint"]["offer_text"] == "Want to add another?"
+    assert out["write_offer"]["question"] == "Want to add another?"
+    assert out["write_offer"]["workflow_type"] == "offer_add_project"
+    assert "offer_hint" not in out  # #2035: off the #852 rail
     assert "Say 'list my projects' to review what you have." in msg
     assert ", or " not in msg  # no either/or
 
@@ -98,6 +106,7 @@ async def test_setup_request_professional_branch_states_and_does_not_arm():
     assert _questions(out["message"]) == []
     assert "I can help you add a new project or review your existing portfolio." in out["message"]
     assert "offer_hint" not in out
+    assert "write_offer" not in out
 
 
 # ---------------------------------------------------------------------------

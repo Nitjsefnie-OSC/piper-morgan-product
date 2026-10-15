@@ -164,7 +164,9 @@ class TestProjectSetupExistingProjects:
         assert "add" in msg or "another" in msg
         assert "review" in msg or "existing" in msg
         # #2024: one yes/no question, armed verbatim (CXO copy).
-        assert result["offer_hint"]["offer_text"] == "Want to add another?"
+        # #2035: armed on the #846 store ("write_offer"), not the #852 hint.
+        assert result["write_offer"]["question"] == "Want to add another?"
+        assert "offer_hint" not in result
         assert result["message"].rstrip().endswith("Want to add another?")
 
     @pytest.mark.asyncio
