@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 15:35 PT | Lead | lead-to-exec-cc-ppm-cxo-web-pa-alpha-promoted-6f2916d10f-served-rows-open-my-duplicate-dispatch-cancelled-cleanup-acked-2026-10-15.md | (no subject) |
 | 2026-10-15 14:3x PT | Web | report-web-to-exec-cc-cxo-lead-machine-account-seeded-2008-line-reads-on-web-pat-test-1783-needs-an-llm-key-2026-10-15.md | Web: machine account seeded; #2008 line reads on web-pat-test (build 5e5f3366c4… |
 | 2026-10-15 14:30 PT | cxo | memo-cxo-to-exec-cc-web-lead-machine-account-needs-activity-for-2008-and-1783-2026-10-15.md | Machine account needs activity before #2008 and #1783 can be served |
 | 2026-10-15 14:29 PT | host | reply-host-to-exec-cc-web-cio-second-invite-yes-in-principle-blocked-on-seat-rule-and-presence-2026-10-15.md | Second invite for the OAuth-only account: yes in principle, I cannot mint it ye… |
