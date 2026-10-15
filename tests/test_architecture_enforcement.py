@@ -5031,8 +5031,11 @@ class TestUnarmedAskSiteRatchet:
             f"seam, then re-rule the scope (or call _track_offer_hint)."
         )
         # vacuity: Arch measured 7 builder holders 2026-10-15; #2024 dropped
-        # the archive/restore/search not-found hints -> 4, measured.
-        assert len(builders) >= 4, f"only {len(builders)} builders found — the scan broke"
+        # the archive/restore/search not-found hints -> 4, measured. #2035
+        # moved the two project-setup write offers to the #846 store
+        # ("write_offer") -> 2, measured (_format_integration_setup_guidance,
+        # _handle_portfolio_query's delete-not-found).
+        assert len(builders) >= 2, f"only {len(builders)} builders found — the scan broke"
 
         # (b) external referrers of every builder AND every in-class method
         # that transitively reaches one (#2024 hardening (b)).
@@ -5310,7 +5313,9 @@ class TestUnarmedAskSiteRatchet:
         # (_format_project_setup_guidance, _handle_project_setup_request,
         # _format_integration_setup_guidance, _handle_portfolio_query's
         # delete-not-found); a hint built by a call resolves to none.
-        assert checked >= 4, f"only {checked} offer_texts resolved — the scan broke"
+        # #2035: the two project-setup offers left the #852 rail for the #846
+        # store -> 2, measured.
+        assert checked >= 2, f"only {checked} offer_texts resolved — the scan broke"
 
     def test_2024_offer_text_check_fails_on_a_directive(self):
         """#2024 hardening (a), fed a fake: the directive offer_text the
@@ -5373,7 +5378,8 @@ class TestUnarmedAskSiteRatchet:
     _OFFER_HINT_CONSUMER_ARMED = frozenset(
         {
             ("services/consciousness/files_consciousness.py", "empty_projects_message"),
-            ("services/consciousness/files_consciousness.py", "empty_projects_offer_hint"),
+            # #2035: empty_projects_offer_hint deleted; its successor
+            # empty_projects_offer arms itself (question= kwarg, #846 record).
         }
     )
 
@@ -5392,11 +5398,16 @@ class TestUnarmedAskSiteRatchet:
         )
         from services.consciousness.files_consciousness import (
             empty_projects_message,
-            empty_projects_offer_hint,
+            empty_projects_offer,
         )
 
+        # #2035: the empty-projects question is now armed on the #846 store
+        # by both callers (empty_projects_offer's stored question), no longer
+        # as an offer_hint offer_text. _handle_portfolio_query still reaches
+        # this set through its OTHER (ii) builder (the delete-not-found
+        # hint), so the one-hop credit is audited against the #846 record.
         assert self._question_sentences(empty_projects_message()) == {
-            empty_projects_offer_hint()["offer_text"]
+            empty_projects_offer()["question"]
         }
 
     @staticmethod

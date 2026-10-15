@@ -17,6 +17,7 @@ from services.intent_service import workflow_dispatcher as _workflow_dispatcher
 from services.intent_service.add_project_clarify import (
     run_clarify_add_project_confirm_workflow,
     run_clarify_add_project_name_workflow,
+    run_offer_add_project_workflow,
 )
 from services.intent_service.delete_todo_pick import (
     DELETE_PICK_KIND,
@@ -1645,6 +1646,10 @@ async def _finalize_canonical_rail_result(
             trust_stage=trust_stage,
         )
 
+    # #2035: a write offer arms the #846 store (the setup-guidance asks
+    # reach here through the read_canonical adapter), same implementation
+    # as the main path.
+    intent_service._arm_write_offer(canonical_result, session_id, user_id)
     # #852: same side effect the main path runs on a non-generic canonical
     # result, factored out so there is one implementation.
     intent_service._track_offer_hint(canonical_result, session_id, user_id)
@@ -3727,6 +3732,21 @@ def register_default_workflows() -> None:
             entry_point=run_clarify_add_project_confirm_workflow,
             effect=EffectClass.READ,
             description="Re-ask the #1886(b) add-project confirm question on a bare affirmative",
+            requires_context=["pending_action", "intent_service"],
+        ),
+        # #2035 (Arch's rule + CXO's shape B, 2026-10-15): offer-seam-only
+        # ACCEPT landing for a yes/no add-project offer ("Would you like to
+        # add one?" and the two setup-guidance asks). A yes that leads to a
+        # write arms the #846 store with its own landing, never the #852
+        # contextual hint. effect: READ — the landing writes nothing: it
+        # asks "What would you like to call it?" and arms the add-project
+        # NAME question above; only an answered name writes.
+        # action_triggered=False: the classifier/rail can never emit it (the
+        # #1605/#1648/#1654/#1886 clarify precedent).
+        "offer_add_project": WorkflowEntry(
+            entry_point=run_offer_add_project_workflow,
+            effect=EffectClass.READ,
+            description="Accept a yes/no add-project offer: ask the name and arm the #1886 name question",
             requires_context=["pending_action", "intent_service"],
         ),
         "update_document": document_update_entry,

@@ -79,6 +79,160 @@ ADD_PROJECT_CONFIRM_KIND = "add_project_confirm_question"
 CLARIFY_ADD_PROJECT_CONFIRM_WORKFLOW = "clarify_add_project_confirm"
 
 
+# #2035 (Arch's rule + CXO's shape B, 2026-10-15): a yes/no OFFER to add a
+# project ("Would you like to add one?", "Are you ready to set up your first
+# project?", "Want to add another?"). Its "yes" leads to a WRITE, so it arms
+# THIS one-slot #846 store with its own accept landing, never the #852
+# contextual hint (that rail steers "yes" into the classifier, which reaches
+# the add_project write and its #1509 consent check: the served defect).
+# The accept landing is READ: it writes nothing, asks the name, and arms the
+# existing name question above; only an answered name writes.
+ADD_PROJECT_OFFER_KIND = "add_project_offer_question"
+OFFER_ADD_PROJECT_WORKFLOW = "offer_add_project"
+# CXO's decline line (shape B memo, verbatim): a statement, arms nothing.
+ADD_PROJECT_OFFER_DECLINE = "Okay, I'll leave it for now. Say 'add a project' any time."
+# The offer's decline phrasings beyond the shared vocabulary: CXO lists
+# "later", which evaluate_acceptance reads as PASS ("not now" and "no"
+# already DECLINE). Taught at this seam only (full-message, LOW tier).
+_ADD_PROJECT_OFFER_TAUGHT_DECLINES = ("later",)
+# CXO's accept landing copy (shape B memo, verbatim).
+ADD_PROJECT_ACCEPT_NAME_QUESTION = "What would you like to call it?"
+
+
+def build_add_project_offer(question: str, user_id=None) -> Dict[str, Any]:
+    """#2035 — the #846 pending-offer record for a yes/no add-project offer.
+    ``question`` (#1665): the ALREADY-RENDERED question the caller's reply
+    ends with, stored verbatim (the acceptance judge reads it as the held
+    ask). ``user_id`` may be None when the builder has none (the setup
+    guidance); the arming seam stamps the principal then."""
+    return {
+        "workflow_type": OFFER_ADD_PROJECT_WORKFLOW,
+        "question": question,
+        "pending_action": {
+            "kind": ADD_PROJECT_OFFER_KIND,
+            "action": "add_project",
+            "user_id": str(user_id) if user_id else None,
+            "summary": "offer to add a project",
+        },
+        "decline_message": ADD_PROJECT_OFFER_DECLINE,
+    }
+
+
+def _add_project_offer_declined() -> Dict[str, Any]:
+    return {
+        "message": ADD_PROJECT_OFFER_DECLINE,
+        "intent_data": {
+            "category": "soft_offer_declined",
+            "action": OFFER_ADD_PROJECT_WORKFLOW,
+        },
+        "requires_clarification": False,
+    }
+
+
+async def handle_add_project_offer_turn(
+    pending_offer: dict,
+    message: str,
+    *,
+    session_id: str,
+    user_id,
+) -> Optional[Dict[str, Any]]:
+    """#2035 — kind-specific turn handling for a pending yes/no add-project
+    offer, run at the offer seam BEFORE the generic accept/decline (the
+    sanctioned handler-internal seam). It owns only what the generic READ
+    branch would get wrong: the principal check, and CXO's "later" (the
+    shared vocabulary reads it as PASS). Everything else returns None to
+    the generic seam: an ACCEPT dispatches the registered
+    ``offer_add_project`` landing, "no"/"not now"/a bare exit decline via
+    ``decline_message``, a state question re-arms silently, and anything
+    else is dropped by the pop and routed normally."""
+    from services.intent_service.acceptance import (
+        AcceptanceVerdict,
+        declared_axes_for_workflow,
+        evaluate_acceptance,
+    )
+
+    payload = pending_offer.get("pending_action") or {}
+    text = (message or "").strip()
+    if not text:
+        return None
+
+    offer_user = payload.get("user_id")
+    if offer_user and user_id and str(user_id) != str(offer_user):
+        logger.warning(
+            "add_project_offer_principal_mismatch",
+            offer_user=offer_user,
+            turn_user=str(user_id),
+        )
+        return {
+            "message": "Let's hold off on that — nothing has been created.",
+            "intent_data": {
+                "category": IntentCategoryEnum.PORTFOLIO.value,
+                "action": "add_project",
+                "principal_mismatch": True,
+            },
+        }
+
+    _axes = declared_axes_for_workflow(OFFER_ADD_PROJECT_WORKFLOW)
+    verdict = evaluate_acceptance(
+        text,
+        effect=_axes[0] if _axes else None,
+        outwardness=_axes[1] if _axes else None,
+        armed_question=pending_offer.get("question"),  # #1665: from the record
+        taught_declines=_ADD_PROJECT_OFFER_TAUGHT_DECLINES,
+    )
+    if verdict is AcceptanceVerdict.DECLINE:
+        logger.info("add_project_offer_declined", session_id=session_id)
+        return _add_project_offer_declined()
+    return None
+
+
+async def run_offer_add_project_workflow(
+    session_id: str,
+    user_id=None,
+    context=None,
+):
+    """#2035 — the ACCEPT landing for a yes/no add-project offer (shape B).
+    effect: READ — nothing is written here and the router write path is
+    never reached (so no #1509 consent line): it asks CXO's "What would you
+    like to call it?" and arms the EXISTING add-project name question
+    (``build_add_project_name_offer``), whose answered turn
+    (``handle_add_project_name_turn``) is the only thing that writes."""
+    ctx = context or {}
+    payload = ctx.get("pending_action") or {}
+    intent_service = ctx.get("intent_service")
+    if payload.get("kind") != ADD_PROJECT_OFFER_KIND or intent_service is None:
+        logger.error(
+            "offer_add_project_missing_or_foreign_payload",
+            kind=payload.get("kind"),
+            has_intent_service=intent_service is not None,
+        )
+        return None
+    principal = user_id or payload.get("user_id")
+    offer = build_add_project_name_offer("", principal, question=ADD_PROJECT_ACCEPT_NAME_QUESTION)
+    armed = False
+    try:
+        intent_service.workflow_offer_service.set_pending_offer(
+            session_id, offer, user_id=str(principal) if principal else None
+        )
+        armed = True
+    except Exception as e:  # silent-ok: #2035 — a store failure must not crash the turn; logged ERROR, and the reply never asks a question nothing holds
+        logger.error("offer_add_project_name_question_arm_failed", error=str(e))
+    logger.info("offer_add_project_accepted", session_id=session_id, armed=armed)
+    if armed:
+        reply = offer["question"]
+    else:
+        reply = "I couldn't keep the question open — say 'add project [name]' " "and I'll add it."
+    return {
+        "message": reply,
+        "intent_data": {
+            "category": IntentCategoryEnum.PORTFOLIO.value,
+            "action": "add_project_needs_name",
+            "add_project_name_question_pending": armed,
+        },
+        "requires_clarification": True,
+    }
+
+
 def _add_project_confirm_question(name: str) -> str:
     return f'Add a project called "{name}"? (yes/no)'
 

@@ -2360,15 +2360,20 @@ To configure your project portfolio:
 - **Repository**: (Optional) GitHub repo for issue integration
 
 Ask me how project context works any time. Are you ready to set up your first project?"""
-        # Issue #852: Track contextual offer for continuation.
         # #2024 (Arch ruling + CXO copy, 2026-10-15): an armed offer is ONE
-        # yes/no question, and offer_text is that question as rendered. The
-        # old either/or ("explain more ..., or are you ready ...?") had no
-        # yes-answer; the explanation half is now a statement with no offer.
-        offer_hint = {
-            "continuation_hint": "add a new project",
-            "offer_text": "Are you ready to set up your first project?",
-        }
+        # yes/no question, stored as rendered. The old either/or ("explain
+        # more ..., or are you ready ...?") had no yes-answer; the
+        # explanation half is now a statement with no offer.
+        # #2035 (Arch's rule, CXO's shape B): its "yes" leads to a WRITE, so
+        # it arms the #846 store with the offer_add_project landing ("yes"
+        # asks the name), never the #852 contextual hint it was. This
+        # method has no offer-store access: the record rides the result as
+        # "write_offer" and IntentService._arm_write_offer arms it.
+        from services.intent_service.add_project_clarify import build_add_project_offer
+
+        write_offer = build_add_project_offer(
+            question="Are you ready to set up your first project?"
+        )
 
         return {
             "message": message,
@@ -2384,7 +2389,7 @@ Ask me how project context works any time. Are you ready to set up your first pr
             },
             "setup_type": "projects",
             "requires_clarification": False,
-            "offer_hint": offer_hint,  # Issue #852
+            "write_offer": write_offer,  # #2035: armed at the seam (#846)
         }
 
     async def _handle_project_setup_request(
@@ -2423,10 +2428,14 @@ Ask me how project context works any time. Are you ready to set up your first pr
         label = formality_label(DEFAULT_WARMTH)
 
         # #2024 (Arch ruling + CXO copy, 2026-10-15): an armed offer is ONE
-        # yes/no question whose offer_text is that question as rendered. The
-        # warm/balanced either/or outros became one question plus a review
-        # statement. The professional outro is a statement: it arms nothing,
-        # because a statement binds no "yes".
+        # yes/no question, stored as rendered. The warm/balanced either/or
+        # outros became one question plus a review statement. The
+        # professional outro is a statement: it arms nothing, because a
+        # statement binds no "yes".
+        # #2035 (Arch's rule, CXO's shape B): "yes" leads to a WRITE, so the
+        # question arms the #846 store with the offer_add_project landing
+        # (via "write_offer", armed by IntentService._arm_write_offer),
+        # never the #852 contextual hint it was.
         offer_text: Optional[str] = "Want to add another?"
         if label == "warm":
             intro = f"You've already got {project_count} project{'s' if project_count != 1 else ''} set up"
@@ -2468,10 +2477,9 @@ Ask me how project context works any time. Are you ready to set up your first pr
             "requires_clarification": False,
         }
         if offer_text is not None:
-            result["offer_hint"] = {
-                "continuation_hint": "add another project",
-                "offer_text": offer_text,
-            }
+            from services.intent_service.add_project_clarify import build_add_project_offer
+
+            result["write_offer"] = build_add_project_offer(question=offer_text, user_id=user_id)
         return result
 
     async def _format_integration_setup_guidance(self, user_id: Optional[str] = None) -> Dict:
@@ -4788,13 +4796,18 @@ What would you like to set up first?"""
                         },
                         "requires_clarification": False,
                     }
-                    # Issue #852: Track contextual offer when no projects exist
+                    # #2010 / #2035: the empty state's "Would you like to add
+                    # one?" leads to a WRITE, so it arms the #846 store with
+                    # the offer_add_project landing (never the #852 hint).
+                    # This method has no offer-store access: the record rides
+                    # the result as "write_offer", armed at the canonical
+                    # seam (IntentService._arm_write_offer).
                     if not projects:
                         from services.consciousness.files_consciousness import (
-                            empty_projects_offer_hint,
+                            empty_projects_offer,
                         )
 
-                        result_dict["offer_hint"] = empty_projects_offer_hint()
+                        result_dict["write_offer"] = empty_projects_offer(user_id)
                     return result_dict
 
                 # Handle delete operation — #1930 (CXO's 2026-10-04 ruling,

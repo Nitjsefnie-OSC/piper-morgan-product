@@ -1,9 +1,14 @@
 """#2010 -- "list my projects" made two offers nothing was armed to keep.
 
-Empty state: now the #852 manage_portfolio string + offer_hint, so a "yes"
-starts the add-project flow ("import an existing project" is gone: no chat
-path exists). Non-empty: the closing question is dropped (the list stands on
-its own).
+Empty state: now the #852 manage_portfolio string + an armed offer, so a
+"yes" starts the add-project flow ("import an existing project" is gone: no
+chat path exists). Non-empty: the closing question is dropped (the list
+stands on its own).
+
+#2035 (Arch's rule, CXO's shape B, 2026-10-15): the offer's "yes" leads to a
+WRITE, so it is armed on the #846 one-slot store with the offer_add_project
+landing, no longer the #852 contextual hint. The full yes / decline / name
+flow is pinned in tests/unit/services/intent_service/test_write_offers_846_2035.py.
 """
 
 import ast
@@ -16,7 +21,7 @@ import pytest
 from services.consciousness import files_consciousness as fc
 from services.consciousness.files_consciousness import (
     empty_projects_message,
-    empty_projects_offer_hint,
+    empty_projects_offer,
     format_projects_conscious,
 )
 from services.domain.models import Intent
@@ -91,16 +96,23 @@ class TestEmptyState:
         assert "?" not in format_projects_conscious([])
 
     def test_message_question_is_the_offer_text(self):
-        # The acceptance judge reads offer_text as the held question (#1739 a).
+        # The acceptance judge reads the stored question as the held ask
+        # (#1739 a / #1665).
         question = EXPECTED.split(". ", 1)[1]
-        assert question == empty_projects_offer_hint()["offer_text"]
-        assert empty_projects_message().endswith(empty_projects_offer_hint()["offer_text"])
+        assert question == empty_projects_offer()["question"]
+        assert empty_projects_message().endswith(empty_projects_offer()["question"])
 
-    def test_hint_has_the_852_keys_and_values(self):
-        assert empty_projects_offer_hint() == {
-            "continuation_hint": "add a new project",
-            "offer_text": "Would you like to add one?",
-        }
+    def test_offer_is_an_846_record_with_the_add_project_landing(self):
+        # #2035 (was the #852 hint's keys/values: ruled away).
+        offer = empty_projects_offer(_USER)
+        assert offer["workflow_type"] == "offer_add_project"
+        assert offer["question"] == "Would you like to add one?"
+        assert offer["pending_action"]["kind"] == "add_project_offer_question"
+        assert offer["pending_action"]["user_id"] == _USER
+        assert offer["decline_message"] == (
+            "Okay, I'll leave it for now. Say 'add a project' any time."
+        )
+        assert "continuation_hint" not in offer
 
     def test_import_clause_is_gone(self):
         src = Path("services/consciousness/files_consciousness.py").read_text()
@@ -110,12 +122,13 @@ class TestEmptyState:
     def test_both_renderers_read_the_one_source(self):
         canon = Path("services/intent_service/canonical_handlers.py").read_text()
         assert "response = empty_projects_message()" in canon
-        assert "empty_projects_offer_hint()" in canon
+        assert "empty_projects_offer(user_id)" in canon
         assert '"Would you like to add one?"' not in canon
         assert "Would you like to add one?" in Path(fc.__file__).read_text()
         svc = Path("services/intent/intent_service.py").read_text()
         assert "message = empty_projects_message()" in svc
-        assert "empty_projects_offer_hint()" in svc
+        assert "empty_projects_offer(user_id)" in svc
+        assert "empty_projects_offer_hint" not in canon + svc
 
     def test_strings_are_functions_not_module_constants(self):
         # Arch 2026-10-15: a module constant cannot be consumer-armed under
@@ -133,9 +146,10 @@ class TestEmptyState:
 
 @pytest.mark.asyncio
 class TestArmedOffer:
-    async def test_empty_list_arms_offer_and_yes_steers_add_project(
-        self, monkeypatch, live_service
-    ):
+    async def test_empty_list_arms_the_846_offer_not_the_852_hint(self, monkeypatch, live_service):
+        # #2035: was "yes steers the classifier with the add-project hint"
+        # (the #852 rail), the behaviour Arch ruled away. Now the offer holds
+        # the #846 slot and "yes" never reaches the classifier.
         from services.intent_service.conversation_context import get_or_create_context
 
         seen: list = []
@@ -147,19 +161,16 @@ class TestArmedOffer:
             message="list my projects", session_id=sid, user_id=_USER
         )
         assert result.message == EXPECTED
-        offer = get_or_create_context(sid, user_id=_USER).last_offer
+        assert get_or_create_context(sid, user_id=_USER).last_offer is None
+        offer = live_service.workflow_offer_service.peek_pending_offer(sid, user_id=_USER)
         assert offer is not None
-        assert offer.offer_type == "contextual"
-        assert offer.continuation_hint == "add a new project"
-        assert offer.offer_text == "Would you like to add one?"
+        assert offer["workflow_type"] == "offer_add_project"
+        assert offer["question"] == "Would you like to add one?"
 
-        # Turn 2: "yes" reaches the classifier carrying the add-project hint,
-        # exactly as after the manage_portfolio empty state (#852 seam).
-        try:
-            await live_service.process_intent(message="yes", session_id=sid, user_id=_USER)
-        except Exception:  # noqa: BLE001 -- downstream of classification is out of scope
-            pass  # (the stub reuses list_projects; only the classifier hand-off matters)
-        assert seen[-1] == {"contextual_continuation_hint": "add a new project"}
+        calls = len(seen)
+        result = await live_service.process_intent(message="yes", session_id=sid, user_id=_USER)
+        assert result.message == "What would you like to call it?"
+        assert len(seen) == calls  # the classifier never saw the "yes"
 
     async def test_non_empty_reply_arms_nothing_and_ends_plainly(self, monkeypatch, live_service):
         from services.intent_service.conversation_context import get_or_create_context
@@ -175,6 +186,7 @@ class TestArmedOffer:
         assert "Alpha" in result.message
         assert "?" not in result.message
         assert get_or_create_context(sid, user_id=_USER).last_offer is None
+        assert live_service.workflow_offer_service.peek_pending_offer(sid, user_id=_USER) is None
 
 
 class TestNonEmptyRenderer:
