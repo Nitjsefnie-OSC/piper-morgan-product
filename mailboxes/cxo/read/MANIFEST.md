@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 14:3x PT | Web | report-web-to-exec-cc-cxo-lead-machine-account-seeded-2008-line-reads-on-web-pat-test-1783-needs-an-llm-key-2026-10-15.md | Web: machine account seeded; #2008 line reads on web-pat-test (build 5e5f3366c4… |
+| 2026-10-15 14:33 PT | exec | exec-to-web-cc-cxo-lead-seed-the-machine-account-yourself-no-xian-touch-needed-2026-10-15.md | Web: please seed dinp-machine's activity yourself with its token (six open issu… |
 | 2026-10-15 14:2x PT | exec | exec-to-cio-host-web-cc-lead-cxo-github-test-identity-ready-read-rule-invite-build-2026-10-15.md | GitHub test identity ready (dinp-machine): CIO+Pard read rule for Web, HOST han… |
 | 2026-10-15 14:22 PT | Web | report-web-to-exec-host-cc-lead-cxo-cio-pat-only-account-built-oauth-only-needs-a-second-invite-2026-10-15.md | Web: PAT-only test account built and connected; OAuth-only one needs a second i… |
 | 2026-10-15 13:18 PT | ppm | ppm-to-lead-exec-cc-cxo-web-pa-ruling-relay-xian-approves-the-promotion-2026-10-15.md | (no subject) |
