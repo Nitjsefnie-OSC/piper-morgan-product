@@ -9,19 +9,12 @@ Three outcomes, one rule (CXO 2026-10-15): a deferral ("not now", "maybe
 later") PAUSES and never destroys; only an explicit cancel, or a "no" to the
 invitation, ENDS a standup.
 
-OPEN COPY POINT (CXO's call, not resolved here): two pause lines exist.
-``STANDUP_ESCAPE_PAUSE_REPLY`` is CXO's 2026-10-14 21:50 line for an escape
-word ("stop"); ``STANDUP_DEFER_PAUSE_REPLY`` is the deferral line (CXO
-2026-10-14 11:20, and the 2026-10-15 memo calls it "the same one used
-everywhere for a paused standup"). If CXO rules they are one line, point the
-escape constant at the defer constant.
+ONE pause line (CXO 2026-10-15 08:35): an escape word ("stop") and a
+deferral ("not now") leave the standup in the same state, so they share the
+deferral line; two phrasings would teach the user two names for one state.
+``STANDUP_ESCAPE_PAUSE_REPLY`` therefore IS ``STANDUP_DEFER_PAUSE_REPLY``.
+The drop line stays separate.
 """
-
-# PAUSE after an escape word ("stop", "cancel", "never mind" ... the #888 set).
-# CXO 2026-10-14 21:50. Read by ``StandupProcessAdapter.pause_message``.
-STANDUP_ESCAPE_PAUSE_REPLY = (
-    "No problem — I've paused your standup. Just ask when you want to pick it back up."
-)
 
 # PAUSE after a deferral ("not now", "maybe later" ... THE predicate's DEFER
 # verdict): at the resume offer (CXO 2026-10-14 11:20), mid-interview and at
@@ -29,6 +22,12 @@ STANDUP_ESCAPE_PAUSE_REPLY = (
 STANDUP_DEFER_PAUSE_REPLY = (
     "Okay, I'll leave your standup where it is. Just ask when you want to pick it back up."
 )
+
+# PAUSE after an escape word ("stop", "cancel", "never mind" ... the #888 set).
+# Read by ``StandupProcessAdapter.pause_message``. CXO 2026-10-15 08:35: the
+# same line as a deferral (was the 2026-10-14 21:50 "No problem — I've paused
+# your standup…", retired that morning).
+STANDUP_ESCAPE_PAUSE_REPLY = STANDUP_DEFER_PAUSE_REPLY
 
 # DROP an ACTIVE standup on an explicit exit ("cancel that", "end standup",
 # "forget it": the #1529 exit). CXO 2026-10-15 item 1.

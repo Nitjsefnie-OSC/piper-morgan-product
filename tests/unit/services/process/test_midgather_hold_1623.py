@@ -303,7 +303,10 @@ class TestDeliberateEscapesSurviveTheHold:
         conv = await _conversation(manager, StandupConversationState.GATHERING_TODAY, stale=True)
         result = await service.process_intent(message="cancel", session_id=_SESSION, user_id=_USER)
         assert conv.state == StandupConversationState.SUSPENDED
-        assert "paused" in result.message.lower()
+        # CXO 2026-10-15 08:35: one pause line for an escape word and a deferral.
+        from services.process.standup_copy import STANDUP_ESCAPE_PAUSE_REPLY
+
+        assert result.message == STANDUP_ESCAPE_PAUSE_REPLY
 
     async def test_1529_flow_exit_still_ends_the_flow(self, live_service):
         service, manager = live_service
