@@ -327,6 +327,35 @@ CONVERSATION/UNKNOWN turn with no `armed_offer_rail` stamp with the one-line
 mind, show my todos"; the unanchored "maybe later" row) still go to the floor; an armed turn's
 decline is answered by its seam before classification. No new literal: one decline vocabulary,
 armed or not. Regression: `test_bare_decline_nothing_open_2004.py`.
+**#2033 — nothing running, a cancel or a standup leave (2026-10-15, folds #2032; Arch's
+ruling, CXO's lines)**: on Web's served run (6f2916d10f), with no standup active or
+suspended, `cancel` drew "Got it — standup cancelled." plus an overdue-reminder tail, and
+`skip the standup` / `no, not now` drew "Got it, standup skipped. Heads up — …". Neither
+string is in `services/`: the floor narrated an action code never took (ADR-080). Measured:
+`pre_classify` claims none of these turns, so their category is the LLM's, and even on a
+CONVERSATION verdict the #2004 gate's `is_bare_decline` let `cancel`, `stop`, `skip the
+standup` and `no, not now` through to the floor. The nothing-open seam now has a
+pre-classification half, `IntentService._nothing_running_reply`, called in
+`_process_intent_internal` right after the #889 resume check and the #1762 list-remainder
+check (so every arm that could consume the turn wins first) and before the `/standup`
+check and classification. When no flow escaped this turn, no contextual offer bound, no
+offer rail is armed (`_armed_offer_signal`) and `check_suspended_processes(user_id)` finds
+nothing (user-scoped, so a standup paused in another chat counts), a whole-message turn gets
+a fixed line with nothing appended: a registry escape word read through
+the registry's own `_escape_word` / `ESCAPE_COMMANDS` (what `_is_escape_command` reads; please-stripped: `cancel`, `stop`, `never mind`, `quit`,
+`exit`), a generic #1529 exit (`forget it`, `nevermind`), or an exit naming another process
+→ `NOTHING_RUNNING_TO_CANCEL` ("There's nothing running to cancel."); a `detect_flow_exit`
+naming only the standup (`skip the standup`, `cancel the standup`, `end standup`) or a
+deferral made only of bare declines (`contains_deferral` and every comma-part
+`is_bare_decline`: `not now`, `no, not now`) → `standup_copy.STANDUP_NOT_RUNNING_REPLY`
+("There's no standup running right now. Say 'do a standup' whenever you want one."). A plain
+bare decline (`no thanks`, `skip`, `nope`) still classifies and gets the #2004 "Okay." at the
+floor gate; with a standup active (#888 registry) or suspended (#889/#1771 resume seam) the
+step never claims. Any lookup failure returns None (the pre-#2033 path), never an unchecked
+"nothing running" claim. No new vocabulary or regex. Regression:
+`test_nothing_running_2033.py` (through the real `process_intent` over an explosive LLM),
+including the cross-chat standup ask (suspended in chat A, `/standup` in chat B offers
+continue/restart, no new conversation row).
 **#1976 create_todo consumes the router's `text` arg (2026-10-13)**: 'add a
 todo to web test one' stored the title 'to web test one' (alpha 4bd1a236e9,
 Web) — the regex extractor kept the verb phrase's 'to'. The #1943 family's
@@ -756,6 +785,42 @@ mocked True — a configuration that cannot occur in production, so the tests
 measured the branch's plumbing and never the registry it dispatches against
 (m-43). Those cases now use categories canonical on BOTH sides (TEMPORAL,
 PORTFOLIO), and the new suite reads the REAL `CanonicalHandlers`.
+
+**#2030 the orchestrated branch carries `offer_hint`, arms ONE, and asks it LAST
+(2026-10-15, Arch's ruling issuecomment-6203827433).** `IntentOrchestrator.
+_execute_single` used to keep only `result["message"]`, so a canonical builder's
+yes/no question (`_format_project_setup_guidance`, `_handle_project_setup_request`,
+`_format_integration_setup_guidance`, the #2010 empty-projects reply) rendered
+mid-reply UNARMED on a multi-intent turn and a "yes" bound to nothing (the #1766
+shape). Now: (1) `IntentExecutionResult.offer_hint` carries the handler's hint;
+the orchestrator writes NO store. (2) `_pick_armed_offer` removes EVERY hinted
+sibling's `offer_text` from its response by EXACT match (`_remove_offer_text`:
+only the question and the whitespace at the cut; #2010 adequacy makes it
+verbatim, #2024 hardening (a) makes it a question) and picks the FIRST
+SUCCESSFUL sibling in plan order whose removal matched as
+`OrchestratedResponse.armed_offer_hint`. A sibling whose `offer_text` is not
+found verbatim (drift) arms nothing, gets nothing appended, and keeps its text
+exactly as rendered (logged `multi_intent_offer_text_drift`). (3)
+`_aggregate_messages` appends the armed `offer_text` once, as its own LAST
+paragraph (after any failure note). (4) The branch calls
+`_track_offer_hint({"offer_hint": orchestrated.armed_offer_hint}, …)` BEFORE
+`_apply_soft_offer`, so the #1770 guard sees the live `last_offer` and adds no
+second, soft ask. Worked example ("what time is it and list my projects", no
+projects): siblings render "It's 3:15 PM." and "You don't have any active
+projects yet. Would you like to add one?" (hint "add a new project"); the reply
+is "It's 3:15 PM. Regarding your portfolio, you don't have any active projects
+yet.\n\nWould you like to add one?" and `last_offer` carries "add a new
+project". With two hinted siblings only the first arms; the second's question
+is gone. The inversion multi-intent path (#1595) also calls
+`_aggregate_messages`, with unhinted parts, so it is unchanged. Reach
+tripwire check (d) (`test_2010_offer_hint_reach_tripwire`) now finds
+`CanonicalHandlers.handle(` dispatch sites by receiver BINDING, not name, and
+pins them by holder: `IntentService._process_intent_internal` (its dispatch
+result reaches `_track_offer_hint`) and `IntentOrchestrator._execute_single`
+(carries `offer_hint=` from its dispatch result; every `.execute_plan(` holder
+arms `armed_offer_hint` before its next `_apply_soft_offer`). Regression:
+`tests/unit/services/intent_service/test_multi_intent_offer_carry_2030.py`;
+fed-fake pin `test_2030_check_d_pins_dispatch_holders_fed_fakes`.
 
 **#1595 Phase 1 inversion shadow observer (2026-08-14) — an explicitly
 NON-dispatching fifth party that watches the chain, never joins it.** When

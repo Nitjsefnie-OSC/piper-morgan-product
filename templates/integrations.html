@@ -211,6 +211,16 @@
         color: #dc3545;
       }
 
+      .status-message.warning {
+        color: #b8860b;
+      }
+
+      .status-detail {
+        margin-top: 4px;
+        font-size: 13px;
+        color: #7f8c8d;
+      }
+
       .integration-actions {
         display: flex;
         gap: 12px;
@@ -513,7 +523,19 @@
       // Determine action buttons based on integration type
       let actionButtons = '';
 
-      if (isOAuth) {
+      if (integration.action === 'reconnect') {
+        // #2031: a grant the service no longer accepts. One Reconnect, to the
+        // integration's settings page (Settings → GitHub re-grants in one step).
+        actionButtons = `
+          <a
+            href="${integration.configure_url || '/settings/integrations/' + integration.name}"
+            class="action-btn connect-btn"
+            id="reconnect-btn-${integration.name}"
+          >
+            Reconnect
+          </a>
+        `;
+      } else if (isOAuth) {
         // OAuth integrations: Connect/Disconnect.
         // #1215: when NOT connected, route to the dedicated settings page
         // rather than firing the OAuth /connect directly. OAuth-app services
@@ -578,10 +600,16 @@
               <h3>${integration.display_name}</h3>
               <div class="integration-status">
                 <span class="status-dot ${integration.status}"></span>
+                ${integration.status_icon ? `<span class="status-icon-inline" id="status-icon-${integration.name}">${integration.status_icon}</span>` : ''}
                 <span class="status-message ${integration.error ? 'error' : ''}" id="status-${integration.name}">
                   ${integration.status_message}
                 </span>
               </div>
+              ${integration.status_detail ? `
+                <div class="status-detail" id="detail-${integration.name}">
+                  ${integration.status_detail}
+                </div>
+              ` : ''}
               ${integration.fix_suggestion ? `
                 <div class="fix-suggestion" id="fix-${integration.name}">
                   ${integration.fix_suggestion}
@@ -590,6 +618,7 @@
             </div>
           </div>
           <div class="integration-actions">
+            ${integration.show_test === false ? '' : `
             <button
               class="action-btn test-btn"
               id="test-btn-${integration.name}"
@@ -598,6 +627,7 @@
             >
               Test
             </button>
+            `}
             ${actionButtons}
           </div>
         </div>
@@ -612,6 +642,12 @@
     }
   }
 
+  // The stale-OAuth sentence the Test endpoint appends when a personal token is
+  // covering for a connection GitHub no longer accepts (#2012).
+  function isStaleOAuthMessage(message) {
+    return typeof message === 'string' && message.includes('needs re-authorizing');
+  }
+
   async function testConnection(integrationName) {
     const btn = document.getElementById(`test-btn-${integrationName}`);
     const statusEl = document.getElementById(`status-${integrationName}`);
@@ -623,6 +659,7 @@
     btn.textContent = 'Testing...';
     statusEl.textContent = 'Testing connection...';
     statusEl.classList.remove('error');
+    statusEl.classList.remove('warning');
 
     try {
       const response = await fetch(`/api/v1/integrations/test/${integrationName}`, {
@@ -632,16 +669,21 @@
 
       // Update status
       const dot = card.querySelector('.status-dot');
-      dot.className = `status-dot ${result.success ? 'healthy' : 'failed'}`;
+      // #2037: the backend's message is the user text, verbatim (it names the serving
+      // GitHub leg); no latency. The stale-OAuth line (working, but the connection
+      // needs re-authorizing) is a warning, not a plain success.
+      const stale = result.success && isStaleOAuthMessage(result.message);
+      dot.className = `status-dot ${result.success ? (stale ? 'degraded' : 'healthy') : 'failed'}`;
 
       if (result.success) {
-        statusEl.textContent = `Connected (${result.latency_ms}ms)`;
+        statusEl.textContent = result.message;
         statusEl.classList.remove('error');
+        statusEl.classList.toggle('warning', stale);
         // Remove any existing fix suggestion
         const fixEl = document.getElementById(`fix-${integrationName}`);
         if (fixEl) fixEl.remove();
 
-        showToast('success', `${integrationName} connection successful`, 'Test Passed');
+        showToast(stale ? 'warning' : 'success', result.message, 'Test Passed');
       } else {
         statusEl.textContent = result.message;
         statusEl.classList.add('error');
@@ -692,9 +734,7 @@
         const statusEl = document.getElementById(`status-${result.integration}`);
 
         dot.className = `status-dot ${result.success ? 'healthy' : 'failed'}`;
-        statusEl.textContent = result.success
-          ? `Connected (${result.latency_ms}ms)`
-          : result.message;
+        statusEl.textContent = result.message;
         statusEl.classList.toggle('error', !result.success);
       }
 

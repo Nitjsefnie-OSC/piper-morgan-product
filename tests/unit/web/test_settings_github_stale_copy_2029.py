@@ -101,3 +101,15 @@ def test_no_internal_vocabulary_on_the_page(body):
     assert "mcp connector" not in low
     assert "mcp-connector" not in low
     assert "via OAuth (MCP" not in body
+
+
+def test_stale_with_a_serving_token_is_amber_not_green(body):
+    """CXO 2026-10-15 16:30: the token-serving state keeps ⚠️ (half good: reads
+    work, the grant is still broken); ✅ is for a fully healthy connection only."""
+    fn = _status_fn(body)
+    stale = _branch(fn, "if (data.stale) {", "return;")
+    pat = stale[stale.index("if (data.serving === 'pat') {") : stale.index("} else {")]
+    assert "iconEl.textContent = '⚠️'" in pat
+    assert "iconEl.textContent = '✅'" not in pat
+    assert "status-icon disconnected" in pat
+    assert "titleEl.textContent = 'Connected via your personal token'" in pat

@@ -630,7 +630,9 @@
             if (btnEl) btnEl.textContent = 'Reconnect with GitHub';
             if (data.serving === 'pat') {
               // A working personal token is answering reads; the grant still needs fixing.
-              if (iconEl) { iconEl.className = 'status-icon connected'; iconEl.textContent = '✅'; }
+              // CXO 2026-10-15 16:30: amber, not green — the state is half good, and a tick
+              // would say nothing is wrong. ✅ is for a fully healthy connection only.
+              if (iconEl) { iconEl.className = 'status-icon disconnected'; iconEl.textContent = '⚠️'; }
               if (titleEl) titleEl.textContent = 'Connected via your personal token';
               if (subtitleEl) {
                 subtitleEl.textContent =
