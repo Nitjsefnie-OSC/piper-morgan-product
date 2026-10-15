@@ -15,6 +15,12 @@ from typing import Any, Dict, Optional
 import structlog
 
 from services.process.registry import GuidedProcess, ProcessCheckResult, ProcessType, SuspendedInfo
+from services.process.standup_copy import (
+    STANDUP_DEFER_PAUSE_REPLY,
+    STANDUP_DROP_REPLY,
+    STANDUP_ESCAPE_PAUSE_REPLY,
+    STANDUP_INVITATION_DECLINE_REPLY,
+)
 from services.shared_types import IntentCategory
 from services.utils.datetime_utils import ensure_utc
 
@@ -27,10 +33,9 @@ STANDUP_TIMEOUT_MINUTES = 15
 # #1771: the reply when an escape command ("stop") pauses an active standup.
 # CXO's string 2026-10-14 21:50 (was the registry's generic "No problem —
 # I've paused standup. We can pick it up anytime.", which read as an offer
-# with nothing armed). Same closing as the defer line: one state, one phrase.
-STANDUP_PAUSE_REPLY = (
-    "No problem — I've paused your standup. Just ask when you want to pick it back up."
-)
+# with nothing armed). The string lives in ``standup_copy`` with every other
+# leave-the-standup line; this name stays for its importers.
+STANDUP_PAUSE_REPLY = STANDUP_ESCAPE_PAUSE_REPLY
 
 
 class OnboardingProcessAdapter:
@@ -317,6 +322,39 @@ class StandupProcessAdapter:
         reads as one phrase. Read by ``registry.pause_message_for``.
         """
         return STANDUP_PAUSE_REPLY
+
+    async def exit_reply(
+        self,
+        user_id: Optional[str],
+        session_id: Optional[str],
+        message: str,
+    ) -> Optional[str]:
+        """#1771 (CXO 2026-10-15 items 1 and 2): this handler's pause-or-end
+        choice for a #1529 whole-message exit, read by
+        ``registry._handler_exit_reply``.
+
+        - A deferral ("not now"), read by THE predicate
+          (``standup_reads_as_deferral``: ``evaluate_acceptance`` with
+          ``distinguish_defer=True``), PAUSES: SUSPENDED, the defer line.
+        - Any other exit ("cancel that", "end standup", "forget it") ENDS:
+          ABANDONED, with the invitation line while the standup is still at
+          "ready to start?" (INITIATED) and the drop line once it is under way.
+
+        Returns None (the registry's generic close) when there is no
+        conversation to act on.
+        """
+        from services.shared_types import StandupConversationState
+        from services.standup.conversation_handler import standup_reads_as_deferral
+
+        conversation = await self._get_conversation(user_id, session_id)
+        if not conversation:
+            return None
+        if standup_reads_as_deferral(message):
+            await self.suspend(user_id, session_id)
+            return STANDUP_DEFER_PAUSE_REPLY
+        at_invitation = conversation.state == StandupConversationState.INITIATED
+        await self.close(user_id, session_id)
+        return STANDUP_INVITATION_DECLINE_REPLY if at_invitation else STANDUP_DROP_REPLY
 
     async def check_active(
         self,

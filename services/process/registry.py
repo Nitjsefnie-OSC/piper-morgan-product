@@ -413,6 +413,37 @@ class ProcessRegistry:
                 error=str(close_err),
             )
 
+    async def _handler_exit_reply(
+        self,
+        handler: GuidedProcess,
+        user_id: Optional[str],
+        session_id: Optional[str],
+        message: str,
+    ) -> Optional[str]:
+        """#1771: let the handler answer a #1529 whole-message exit itself.
+
+        Optional async hook ``exit_reply(user_id, session_id, message)``: the
+        handler performs its own transition (suspend or close) and returns
+        its line, or returns None to leave the exit to the generic close.
+        Duck-typed like ``close``/``release`` and ``pause_message`` (a new
+        protocol member would fail ``register``'s structural isinstance
+        check for every existing implementer). A hook that raises falls back
+        to the generic close, so an exit never traps the user in the flow.
+        """
+        hook = getattr(handler, "exit_reply", None)
+        if hook is None or not inspect.iscoroutinefunction(hook):
+            return None
+        try:
+            line = await hook(user_id, session_id, message)
+        except Exception as e:  # silent-ok: logged; the generic close still exits
+            logger.warning(
+                "exit_reply_hook_failed",
+                process_type=handler.process_type.value,
+                error=str(e),
+            )
+            return None
+        return line if isinstance(line, str) and line else None
+
     async def _in_completion_tail(
         self,
         handler: GuidedProcess,
@@ -516,10 +547,18 @@ class ProcessRegistry:
         )
 
         if signal.kind == "exit":
-            await self._close_process(handler, user_id, session_id)
+            # #1771 (CXO 10-15, Arch's constraint): the HANDLER chooses pause
+            # or end for a whole-message exit ("not now" pauses a standup,
+            # "cancel that" drops it). The registry holds no deferral words;
+            # without the hook (or when it declines) the exit closes, as #1529
+            # built it.
+            line = await self._handler_exit_reply(handler, user_id, session_id, message)
+            if line is None:
+                await self._close_process(handler, user_id, session_id)
+                line = format_exit_message(handler.process_type)
             return ProcessCheckResult.escaped_from(
                 process_type=handler.process_type,
-                response_message=format_exit_message(handler.process_type),
+                response_message=line,
             )
 
         if signal.kind == "refusal":

@@ -312,7 +312,9 @@ class TestDeliberateEscapesSurviveTheHold:
             message="end standup", session_id=_SESSION, user_id=_USER
         )
         assert conv.state == StandupConversationState.ABANDONED
-        assert "ended the standup" in result.message.lower()
+        # #1771 (CXO 2026-10-15 item 1): re-pinned from the "ended the
+        # standup ... '/standup'" copy, ruled away, to the drop line.
+        assert "dropped your standup" in result.message.lower()
 
     async def test_1529_off_intent_still_pauses_mid_gathering(self, live_service):
         """'remind me to …' is a cross-domain ACTION per the #1529 seam rules

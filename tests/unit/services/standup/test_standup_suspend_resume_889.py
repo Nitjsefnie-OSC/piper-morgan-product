@@ -173,6 +173,7 @@ class TestResumeAcceptanceWiring:
     async def test_resume_no_suspended_session_gives_fallback(self):
         """If no suspended session exists, a fallback message is returned."""
         from services.intent.intent_service import IntentService
+        from services.process.standup_copy import STANDUP_RESUME_NOT_FOUND_REPLY
 
         service = IntentService()
         manager = FakeStandupConversationManager()
@@ -184,8 +185,11 @@ class TestResumeAcceptanceWiring:
             result = await service._resume_suspended_standup("user-1", "new-sess")
 
         assert result.success is True
-        assert "couldn't find" in result.message
-        assert "/standup" in result.message
+        # #1771 item 3 (CXO 2026-10-15): re-pinned. This asserted the
+        # "/standup" question, the ruled-away copy; now a statement plus an
+        # instruction, no slash command.
+        assert result.message == STANDUP_RESUME_NOT_FOUND_REPLY
+        assert "/standup" not in result.message
 
 
 class TestResumeDeclineWiring:

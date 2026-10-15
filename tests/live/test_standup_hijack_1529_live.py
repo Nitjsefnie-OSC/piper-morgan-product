@@ -195,7 +195,8 @@ class TestStandupHijackReplayLive:
             f"#1529 FAILED LIVE (exit routing): 'end standup' misrouted to "
             f"todo-complete: {msg[:300]!r}"
         )
-        assert "ended the standup" in msg, (
+        # #1771 (CXO 2026-10-15): the exit copy is the drop line now.
+        assert "dropped your standup" in msg, (
             f"#1529 FAILED LIVE (exit routing): 'end standup' did not return "
             f"the honest exit copy: {msg[:300]!r}"
         )

@@ -59,6 +59,11 @@ from services.learning.learning_handler import LearningHandler
 from services.llm.request_key import LLMKeyRequiredError
 from services.personality.personality_profile import PersonalityProfile
 from services.process import ProcessCheckResult, ProcessType, get_process_registry
+from services.process.standup_copy import (
+    STANDUP_DEFER_PAUSE_REPLY,
+    STANDUP_DROP_PAUSED_REPLY,
+    STANDUP_RESUME_NOT_FOUND_REPLY,
+)
 from services.repositories.user_trust_profile_repository import UserTrustProfileRepository
 from services.shared_types import IntentCategory, TrustStage
 from services.slot_filling.slot_filling_adapter import SlotFillingProcessAdapter
@@ -227,17 +232,13 @@ _RESUME_TAUGHT_DECLINES = frozenset(
 )
 # Reply when the user defers the resume offer ("not now"); the suspended flow
 # stays SUSPENDED. CXO's string 2026-10-14 11:20; true via 2007.
-RESUME_DEFER_REPLY = (
-    "Okay, I'll leave your standup where it is. Just ask when you want to pick it back up."
-)
+RESUME_DEFER_REPLY = STANDUP_DEFER_PAUSE_REPLY  # the string: services/process/standup_copy.py
 # Reply when a suspended standup is ABANDONED: an explicit cancel ("cancel
 # that", "forget it", "start over", "end standup") or a decline at the resume
 # offer. Never reachable by a deferral (#1771 second seam). CXO's string
 # 2026-10-14 21:50; the old "/standup" slash form went (the chat never
 # taught it; the phrase to say is the one the user already used).
-RESUME_ABANDON_REPLY = (
-    "Okay, I've dropped your paused standup. Say 'do a standup' whenever you want a fresh one."
-)
+RESUME_ABANDON_REPLY = STANDUP_DROP_PAUSED_REPLY  # the string: services/process/standup_copy.py
 _RESUME_ARMED_ONLY_DECLINES = frozenset(
     {
         "restart",
@@ -4028,7 +4029,9 @@ class IntentService:
             # stays ignorant of "defer". Only an explicit cancel ("cancel
             # that", "forget it", "end standup", taught "start over")
             # abandons a suspended standup. An ACTIVE flow's "not now" is
-            # the registry's #1529 exit, a different seam, unchanged.
+            # the registry's #1529 exit, a different seam: there the standup
+            # adapter's exit_reply reads the same predicate and pauses
+            # (#1771 four seams, CXO 2026-10-15).
             if detect_flow_exit(message, suspended.process_type) and not deferred:
                 self.logger.info(
                     "Suspended process ended by flow-exit phrase",
@@ -4210,7 +4213,9 @@ class IntentService:
         if not conv or conv.state != StandupConversationState.SUSPENDED:
             return IntentProcessingResult(
                 success=True,
-                message="I couldn't find the paused standup. Want to start a fresh one with /standup?",
+                # CXO 2026-10-15 item 3: a statement plus an instruction,
+                # nothing armed (was a "/standup" question).
+                message=STANDUP_RESUME_NOT_FOUND_REPLY,
                 intent_data={
                     "category": "guidance",
                     "action": "suspended_session_resume_failed",
@@ -4288,7 +4293,7 @@ class IntentService:
         # asked. The 3-part resume prompt above and the not-found copy are
         # deliberately NOT armed: the former is the standup machine's own ask
         # (consumed on its adopted state rail, #1739 table row 1), the latter
-        # teaches the /standup command rather than offering a resume.
+        # is a statement plus an instruction, not an offer (#1771 item 3).
         self._arm_resume_offer(session_id, user_id, question=resume_msg)
 
         return IntentProcessingResult(

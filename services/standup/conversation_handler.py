@@ -36,6 +36,10 @@ from services.domain.models import (
     StandupItem,
     StandupPartialCapture,
 )
+from services.process.standup_copy import (
+    STANDUP_DEFER_PAUSE_REPLY,
+    STANDUP_INVITATION_DECLINE_REPLY,
+)
 from services.shared_types import StandupConversationState
 from services.standup.completion_detector import detect_completion
 from services.standup.conversation_manager import StandupConversationManager
@@ -89,6 +93,45 @@ _REFINING_TAUGHT_ACCEPTS = frozenset(
         "that's it",
     }
 )
+
+
+# #1771: the workflow whose declared axes the deferral reading uses. The same
+# lookup the resume-offer seam makes (intent_service ``_RESUME_AXES_WORKFLOW``):
+# resuming, pausing and starting all act on the one #585 interview row.
+_STANDUP_INTERVIEW_WORKFLOW = "standup_interview"
+
+
+def standup_reads_as_deferral(message: str) -> bool:
+    """#1771 (CXO 2026-10-15, Arch's mechanism): is this turn a deferral
+    ("not now", "maybe later") rather than a cancel or a "no"?
+
+    THE predicate, not a phrase list: ``evaluate_acceptance`` with
+    ``distinguish_defer=True`` over the interview's declared axes, the same
+    verdict the resume-offer seam keys on. Read at the two places a standup
+    can be left before it is done: a #1529 whole-message exit
+    (``StandupProcessAdapter.exit_reply``) and the "ready to start?"
+    invitation (``_handle_initiated``). A deferral pauses; anything else that
+    leaves, ends. Known miss, by Arch's ruling: bare "later" is not a DEFER
+    phrasing (no new row; a ``later`` search would catch "remind me later").
+    """
+    from services.intent_service.acceptance import (
+        AcceptanceVerdict,
+        declared_axes_for_workflow,
+        evaluate_acceptance,
+    )
+
+    axes = declared_axes_for_workflow(_STANDUP_INTERVIEW_WORKFLOW)
+    verdict = evaluate_acceptance(
+        message,
+        effect=axes[0] if axes else None,
+        outwardness=axes[1] if axes else None,
+        # No armed ask is being answered: the question is only "defer, or
+        # not?", and the DEFER tier never reads the armed ask (the resume
+        # seam passes None the same way when no offer is on screen).
+        armed_question=None,
+        distinguish_defer=True,  # #1771: deferral pauses, it never ends
+    )
+    return verdict is AcceptanceVerdict.DEFER
 
 
 def _is_skip_signal(message: str) -> bool:
@@ -421,11 +464,25 @@ class StandupConversationHandler:
             )
             return await self._generate_standup(conversation, context)
 
-        # Cancel
+        # #1771 (CXO 2026-10-15 item 2): a deferral to the invitation
+        # ("not right now", "maybe later") PAUSES, read by THE predicate; the
+        # standup stays SUSPENDED and the next standup ask offers it back.
+        if standup_reads_as_deferral(user_message):
+            await self.manager.transition_state(conversation.id, StandupConversationState.SUSPENDED)
+            return ConversationResponse(
+                message=STANDUP_DEFER_PAUSE_REPLY,
+                state=StandupConversationState.SUSPENDED,
+                requires_input=False,
+            )
+
+        # Decline: a bare "no" or a cancel ENDS (CXO 2026-10-15 item 2). The
+        # word set is the pre-existing one; deferrals were read above, so a
+        # "not now" never reaches it. Bare "later" still lands here (Arch's
+        # known miss: not a DEFER phrasing; a revisit is CXO's served read).
         if words & {"no", "nope", "cancel", "later"} or "not now" in message_lower:
             await self.manager.transition_state(conversation.id, StandupConversationState.ABANDONED)
             return ConversationResponse(
-                message="No problem! Just say 'standup' when you're ready.",
+                message=STANDUP_INVITATION_DECLINE_REPLY,
                 state=StandupConversationState.ABANDONED,
                 requires_input=False,
             )

@@ -191,19 +191,28 @@ class TestHandleTurnInitiated:
         assert response.state == StandupConversationState.GATHERING_YESTERDAY
 
     @pytest.mark.asyncio
-    async def test_cancel_abandons(self, handler, conversation):
-        """'Not now' abandons conversation."""
+    async def test_not_now_pauses(self, handler, conversation):
+        """#1771 (CXO 2026-10-15 item 2), re-pinned: 'not now' to the
+        invitation PAUSES (was: abandons, the ruled-away behaviour)."""
         response = await handler.handle_turn(conversation, "not now")
 
-        assert response.state == StandupConversationState.ABANDONED
+        assert response.state == StandupConversationState.SUSPENDED
         assert response.requires_input is False
 
     @pytest.mark.asyncio
-    async def test_later_abandons(self, handler, conversation):
-        """'Later' also abandons conversation."""
+    async def test_maybe_later_pauses(self, handler, conversation):
+        """#1771, re-pinned: 'maybe later' also PAUSES (was: abandons)."""
         response = await handler.handle_turn(conversation, "maybe later")
 
+        assert response.state == StandupConversationState.SUSPENDED
+
+    @pytest.mark.asyncio
+    async def test_no_abandons(self, handler, conversation):
+        """#1771: a bare 'no' to the invitation still ENDS it."""
+        response = await handler.handle_turn(conversation, "no")
+
         assert response.state == StandupConversationState.ABANDONED
+        assert response.requires_input is False
 
     @pytest.mark.asyncio
     async def test_yes_enters_3part_flow_at_yesterday(self, handler, conversation):
@@ -597,13 +606,14 @@ class TestFullConversationFlow:
 
     @pytest.mark.asyncio
     async def test_abandon_flow(self, handler):
-        """Abandon path: start -> not now."""
+        """Abandon path: start -> no. (#1771: was 'not now', which now
+        pauses; a bare 'no' is the invitation decline that ends.)"""
         # Start
         response = await handler.start_conversation("s1", "u1")
 
         # Abandon
         conv = await handler.manager.get_conversation_by_session("s1")
-        response = await handler.handle_turn(conv, "not now")
+        response = await handler.handle_turn(conv, "no")
 
         assert response.state == StandupConversationState.ABANDONED
         assert response.requires_input is False
@@ -849,7 +859,8 @@ class TestMonitoringIntegration:
         """Issue #556: Abandoned conversation logs metrics."""
         conv = await handler.manager.create_conversation("s1", "u1")
 
-        await handler.handle_turn(conv, "not now")
+        # #1771: "no" ends at the invitation; "not now" now pauses.
+        await handler.handle_turn(conv, "no")
         conv = await handler.manager.get_conversation(conv.id)
 
         # Should be abandoned

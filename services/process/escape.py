@@ -20,7 +20,11 @@ Three signal kinds, most-specific first:
    "end standup", "stop the standup", "cancel this", "quit", plus bare forms
    ("never mind", "not now", "forget it"). The flow is CLOSED (not suspended —
    a suspended flow re-offers itself, which is the nag loop #1529 documents)
-   and the turn is claimed with honest exit copy.
+   and the turn is claimed with honest exit copy. #1771 (CXO 2026-10-15): a
+   handler may answer the exit itself through the optional ``exit_reply``
+   hook (registry ``_handler_exit_reply``); the standup's pauses on a
+   deferral ("not now", read by the acceptance predicate) and closes on
+   anything else. This module still holds no deferral words.
 2. **refusal** — the message contains a refusal clause naming the flow:
    "i am not doing the standup right now", "i don't want to do the standup",
    "no standup". The flow is closed. If the message carries residual content
@@ -67,6 +71,7 @@ from typing import Dict, List, Optional, Pattern
 import structlog
 
 from services.process.registry import ProcessType
+from services.process.standup_copy import STANDUP_DROP_REPLY
 
 logger = structlog.get_logger(__name__)
 
@@ -330,9 +335,10 @@ def check_escape(
 # --- Honest exit copy ------------------------------------------------------
 
 _EXIT_COPY: Dict[ProcessType, str] = {
-    ProcessType.STANDUP: (
-        "Okay — I've ended the standup. Say '/standup' whenever you want to start a fresh one."
-    ),
+    # #1771: CXO 2026-10-15 item 1 (was "Okay — I've ended the standup. Say
+    # '/standup' ..."). The standup adapter's ``exit_reply`` normally answers
+    # first; this is the line when it cannot.
+    ProcessType.STANDUP: STANDUP_DROP_REPLY,
     ProcessType.ONBOARDING: "Okay — I've ended onboarding. You can restart it anytime.",
     ProcessType.SLOT_FILLING: "Okay — I've dropped what we were filling in.",
 }
