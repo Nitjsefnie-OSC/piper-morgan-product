@@ -199,6 +199,32 @@ try:
 except Exception as e:
     logger.error(f"⚠️ Failed to register HTTPException handler: {e}")
 
+# #2039: content-negotiated 404. An unmatched route raises Starlette's HTTPException
+# (not FastAPI's subclass, so the handler above never sees it). Browser requests
+# outside /api/ that accept text/html get the app-shell page; everything else keeps
+# the framework's default JSON {"detail": "Not Found"}.
+try:
+    from fastapi.exception_handlers import http_exception_handler as _default_http_handler
+    from starlette.exceptions import HTTPException as _StarletteHTTPException
+
+    @app.exception_handler(_StarletteHTTPException)
+    async def _not_found_negotiated(request: Request, exc: _StarletteHTTPException):
+        if (
+            exc.status_code == 404
+            and not request.url.path.startswith("/api/")
+            and "text/html" in request.headers.get("accept", "")
+        ):
+            from web.api.routes.ui import render_human_not_found
+
+            try:
+                return await render_human_not_found(request)
+            except Exception as render_error:  # never turn a 404 into a 500
+                logger.error(f"human 404 render failed, falling back to JSON: {render_error}")
+        return await _default_http_handler(request, exc)
+
+except Exception as e:
+    logger.error(f"⚠️ Failed to register negotiated 404 handler: {e}")
+
 # Issue #283: APIError exception handler for dependency-level errors
 # Dependencies execute BEFORE middleware, so exceptions raised in Depends() need
 # this handler to be caught and converted to friendly messages
