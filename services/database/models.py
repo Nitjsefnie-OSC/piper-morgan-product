@@ -12,6 +12,7 @@ from sqlalchemy import (
     CHAR,
     JSON,
     Boolean,
+    CheckConstraint,
     Column,
     DateTime,
     Enum,
@@ -628,8 +629,8 @@ class DocumentDB(Base, TimestampMixin):
     chromadb_base_id = Column(String(255), unique=True, nullable=False, index=True)
 
     # Provenance: who ingested/owns. FK → users.id (ADR-071 D2 canonical).
-    # Nullable: m-40 graceful (None = unknown/unauthenticated provenance).
-    owner_id = Column(CrossDialectUUID(), ForeignKey("users.id"), nullable=True, index=True)
+    # 2009: NOT NULL (tier A; owner_id is the scoping column, a NULL is an orphan).
+    owner_id = Column(CrossDialectUUID(), ForeignKey("users.id"), nullable=False, index=True)
 
     # D1 exemption marker — true => readable by any principal (global PM domain).
     is_global_pm_domain = Column(
@@ -1302,7 +1303,7 @@ class ProjectDB(Base):
     owner_id = Column(
         postgresql.UUID(as_uuid=False),
         ForeignKey("users.id", name="fk_projects_owner_id", ondelete="CASCADE"),
-        nullable=True,
+        nullable=False,  # 2009: NOT NULL (prod 0/4 null at migration time)
     )
     name = Column(String, nullable=False)  # Unique per owner via __table_args__
     description = Column(Text)
@@ -1405,9 +1406,11 @@ class ProjectIntegrationDB(Base):
     config = Column(JSON, nullable=False)
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
-    # Owner anchor (ADR-071 D2; #1252 D2 fold). Nullable for m-40 grace (legacy/unknown
-    # provenance). CrossDialectUUID = native UUID on PostgreSQL, CHAR(36) on SQLite tests.
-    owner_id = Column(CrossDialectUUID(), ForeignKey("users.id"), nullable=True, index=True)
+    # Owner anchor (ADR-071 D2; #1252 D2 fold). A denormalized copy of the parent
+    # project's owner (tier B, 2009): NOT NULL, backfilled from projects.owner_id, and
+    # always written from the parent (ProjectIntegrationRepository.create / from_domain).
+    # CrossDialectUUID = native UUID on PostgreSQL, CHAR(36) on SQLite tests.
+    owner_id = Column(CrossDialectUUID(), ForeignKey("users.id"), nullable=False, index=True)
 
     # Relationships
     project = relationship("ProjectDB", back_populates="integrations")
@@ -1424,11 +1427,19 @@ class ProjectIntegrationDB(Base):
 
     @classmethod
     def from_domain(
-        cls, integration: domain.ProjectIntegration, project_id: str
+        cls, integration: domain.ProjectIntegration, project_id: str, owner_id: Any
     ) -> "ProjectIntegrationDB":
+        """Build the row. ``owner_id`` is the parent project's owner (2009: the column
+        is NOT NULL, a denormalized copy of ``projects.owner_id``)."""
+        if owner_id is None:
+            raise ValueError(
+                "ProjectIntegrationDB.from_domain needs the parent project's owner_id "
+                "(project_integrations.owner_id is NOT NULL, 2009)"
+            )
         return cls(
             id=integration.id,
             project_id=project_id,
+            owner_id=owner_id,
             type=integration.type,
             name=integration.name,
             config=integration.config,
@@ -2063,7 +2074,7 @@ class KnowledgeNodeDB(Base):
     owner_id = Column(
         postgresql.UUID(as_uuid=False),
         ForeignKey("users.id", name="fk_knowledge_nodes_owner_id", ondelete="CASCADE"),
-        nullable=True,
+        nullable=False,
     )
     embedding_vector = Column(
         postgresql.ARRAY(Float)
@@ -2107,9 +2118,14 @@ class KnowledgeNodeDB(Base):
         )
 
     @classmethod
-    def from_domain(cls, node: domain.KnowledgeNode) -> "KnowledgeNodeDB":
+    def from_domain(cls, node: domain.KnowledgeNode, owner_id: str) -> "KnowledgeNodeDB":
+        # 2013: the domain object carries no owner, so the caller must supply one
+        # (a principal's user id, never a session id). No default, no fallback.
+        if not owner_id:
+            raise ValueError("KnowledgeNodeDB.from_domain requires an explicit owner_id")
         return cls(
             id=node.id,
+            owner_id=cast(Any, owner_id),  # str at runtime; the UUID column type confuses mypy
             name=node.name,
             node_type=(
                 node.node_type.value if isinstance(node.node_type, NodeType) else node.node_type
@@ -2140,7 +2156,7 @@ class KnowledgeEdgeDB(Base):
     owner_id = Column(
         postgresql.UUID(as_uuid=False),
         ForeignKey("users.id", name="fk_knowledge_edges_owner_id", ondelete="CASCADE"),
-        nullable=True,
+        nullable=False,
     )
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     updated_at = Column(
@@ -2180,9 +2196,13 @@ class KnowledgeEdgeDB(Base):
         )
 
     @classmethod
-    def from_domain(cls, edge: domain.KnowledgeEdge) -> "KnowledgeEdgeDB":
+    def from_domain(cls, edge: domain.KnowledgeEdge, owner_id: str) -> "KnowledgeEdgeDB":
+        # 2013: see KnowledgeNodeDB.from_domain; the owner is explicit, never derived.
+        if not owner_id:
+            raise ValueError("KnowledgeEdgeDB.from_domain requires an explicit owner_id")
         return cls(
             id=edge.id,
+            owner_id=cast(Any, owner_id),  # str at runtime; the UUID column type confuses mypy
             source_node_id=edge.source_node_id,
             target_node_id=edge.target_node_id,
             edge_type=(
@@ -2228,7 +2248,7 @@ class ListMembershipDB(Base):
     owner_id = Column(
         postgresql.UUID(as_uuid=False),
         ForeignKey("users.id", name="fk_list_memberships_owner_id", ondelete="CASCADE"),
-        nullable=True,
+        nullable=False,  # 2009: tier B, a copy of the parent list's owner
     )
 
     # Relationships: none. The list-side ORM relationship died with the orphan
@@ -2458,7 +2478,7 @@ class ListItemDB(Base):
     owner_id = Column(
         postgresql.UUID(as_uuid=False),
         ForeignKey("users.id", name="fk_list_items_owner_id", ondelete="CASCADE"),
-        nullable=True,
+        nullable=False,  # 2009: tier B, a copy of the parent list's owner
     )
 
     # Relationships
@@ -2532,8 +2552,8 @@ class FeedbackDB(Base, TimestampMixin):
 
     # User and session context
     user_id = Column(
-        postgresql.UUID(as_uuid=True), ForeignKey("users.id"), nullable=True
-    )  # index: idx_feedback_user_id (#1312)
+        postgresql.UUID(as_uuid=True), ForeignKey("users.id"), nullable=False
+    )  # index: idx_feedback_user_id (#1312). 2009: NOT NULL (tier C scoping column)
     # #1312: SEC-RBAC owner_id shipped DB-side (fk_feedback_owner_id, CASCADE);
     # model finally declares it — park-with-model, DB is truth.
     owner_id = Column(
@@ -2799,7 +2819,13 @@ class ItemDB(Base):
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
     text = Column(String, nullable=False)  # Universal property - all items have text
     position = Column(Integer, default=0, nullable=False)  # Order within list
-    list_id = Column(String, nullable=True)  # Which list contains this item
+    # Which list contains this item. 2014: real FK to lists.id; NULL is legal only for
+    # non-base item types (todos are owned via todo_items.owner_id), see the CHECK below.
+    list_id = Column(
+        String,
+        ForeignKey("lists.id", name="fk_items_list_id_lists", ondelete="SET NULL"),
+        nullable=True,
+    )
     item_type = Column(String(50), nullable=False, default="item")  # Discriminator
 
     # Timestamps
@@ -2821,6 +2847,9 @@ class ItemDB(Base):
 
     # Indexes for performance
     __table_args__ = (
+        CheckConstraint(
+            "item_type <> 'item' OR list_id IS NOT NULL", name="ck_items_base_item_has_list"
+        ),
         Index("idx_items_list_id", "list_id"),
         Index("idx_items_item_type", "item_type"),
         Index("idx_items_list_position", "list_id", "position"),

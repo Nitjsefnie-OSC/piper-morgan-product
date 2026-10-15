@@ -6324,3 +6324,107 @@ def f(intent, pre_intent, other):
             f"Ratchet drift: actual count {len(violations)}, target "
             f"{self.MAX_SINGLE_SURFACE_WRITES}; the direction is DOWN only."
         )
+
+
+class TestOwnerIdNullabilityPin2009:
+    """2009 (Arch step 3): every ``owner_id`` column is NOT NULL unless its table is
+    listed here with a reason.
+
+    A nullable ``owner_id`` on a table that has no other owner column is a second,
+    optional copy of who owns the row, and production showed what that costs:
+    ``project_integrations`` read 3 of 3 rows NULL because no writer ever set it.
+    The pin is on ``Base.metadata`` (the model), so a new user-data table cannot
+    ship a nullable owner without being named here. The allowlist only shrinks:
+    when a table's owner goes NOT NULL, remove its row (the second test fails
+    until you do).
+    """
+
+    NULLABLE_OWNER_ALLOWED = {
+        # ADR-071 D2 mid-transition tables: user_id (NOT NULL) scopes them.
+        "conversations": "ADR-071 D2 mid-transition; scoped by user_id (NOT NULL)",
+        "conversational_memory_entries": "ADR-071 D2 mid-transition; scoped by user_id",
+        "insights": "ADR-071 D2 mid-transition; scoped by user_id (NOT NULL)",
+        "personality_profiles": "ADR-071 D2 mid-transition; scoped by user_id (NOT NULL)",
+        "standup_conversations": "ADR-071 D2 mid-transition; scoped by user_id (NOT NULL)",
+        # 2009 tier C: user_id is the scoping column and went NOT NULL instead.
+        "feedback": "2009 tier C; scoped by user_id (NOT NULL); owner_id follows ADR-071 D2",
+    }
+
+    @staticmethod
+    def _nullable_owner_tables() -> set:
+        import services.database.models  # noqa: F401  (registers every model table)
+        from services.database.models import Base
+
+        tables = set()
+        for table in Base.metadata.tables.values():
+            col = table.columns.get("owner_id")
+            if col is not None and col.nullable:
+                tables.add(table.name)
+        return tables
+
+    def test_denominator_metadata_has_owner_columns(self):
+        """m-44: the scan must see the owner-bearing tables, or a pass means nothing."""
+        import services.database.models  # noqa: F401
+        from services.database.models import Base
+
+        with_owner = [t for t in Base.metadata.tables.values() if "owner_id" in t.columns]
+        assert len(with_owner) >= 20, (
+            f"only {len(with_owner)} tables with owner_id in Base.metadata; "
+            "the model import broke, not the schema got clean"
+        )
+
+    def test_no_nullable_owner_id_outside_the_allowlist(self):
+        unexpected = self._nullable_owner_tables() - set(self.NULLABLE_OWNER_ALLOWED)
+        assert not unexpected, (
+            f"owner_id is nullable on {sorted(unexpected)}. A user-data table's owner is "
+            "NOT NULL (2009): set nullable=False and ship the backfill + NOT NULL "
+            "migration with the writer fix, or, if it is a genuine transition case, add "
+            "it to NULLABLE_OWNER_ALLOWED with a one-line reason in review."
+        )
+
+    def test_allowlist_stays_tight(self):
+        stale = set(self.NULLABLE_OWNER_ALLOWED) - self._nullable_owner_tables()
+        assert not stale, (
+            f"NULLABLE_OWNER_ALLOWED lists tables whose owner_id is no longer nullable "
+            f"(or that no longer exist): {sorted(stale)}. Remove them; the list only shrinks."
+        )
+
+
+class TestItemServiceNotReachableFromWeb2014:
+    """2014: ``ItemService.get_item`` / ``update_item_text`` / ``delete_item`` select by id
+    alone, with no list-ownership check (the four list-item routes scope through
+    ``get_list_by_id(list_id, owner_id=...)`` instead). No route calls them today, so the
+    exposure is zero. This pin keeps it that way: a route that wants one of these must give
+    it an ownership check first, then be named here with a reason.
+    """
+
+    METHODS = ("get_item", "update_item_text", "delete_item")
+    # Route-handler functions that merely share a method's name (they do not call the service).
+    ALLOWED_DEFS = {"web/api/routes/lists.py": {"delete_item"}}
+
+    @staticmethod
+    def _web_files():
+        return sorted(Path("web").rglob("*.py"))
+
+    def test_denominator_web_files_scanned(self):
+        assert len(self._web_files()) >= 20, "web/ scan found too few files to mean anything"
+
+    def test_no_web_module_calls_unscoped_item_service_methods(self):
+        violations = []
+        for path in self._web_files():
+            tree = ast.parse(path.read_text(encoding="utf-8"))
+            for node in ast.walk(tree):
+                if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute):
+                    if node.func.attr in self.METHODS:
+                        violations.append(f"{path}:{node.lineno} calls .{node.func.attr}()")
+                elif isinstance(node, ast.ImportFrom) and node.module == "services.item_service":
+                    violations.append(f"{path}:{node.lineno} imports services.item_service")
+                elif isinstance(node, ast.Import):
+                    for alias in node.names:
+                        if alias.name == "services.item_service":
+                            violations.append(f"{path}:{node.lineno} imports services.item_service")
+        assert not violations, (
+            "2014: web/ must not call ItemService.get_item/update_item_text/delete_item "
+            "(they select by id alone, no list-ownership check). Add the "
+            "get_list_by_id(list_id, owner_id=...) check first. " + "; ".join(violations)
+        )

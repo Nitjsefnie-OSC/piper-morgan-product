@@ -236,34 +236,49 @@ class TestConnectionTestKeyCorrectness849:
             mock_keychain.get_api_key.assert_called_once_with("slack_bot", username="user-789")
 
     @pytest.mark.asyncio
-    async def test_github_connection_test_uses_github_token_key(self):
-        """_test_github must use github_token key, not github."""
+    async def test_github_connection_test_never_falls_back_to_a_global_key(self):
+        """#849 contract under #2012's shape: with no user there is no global keychain read
+        (the latent fallback is gone); the result is not_configured and nothing resolves."""
         from web.api.routes.integrations import _test_github
 
         mock_keychain = MagicMock()
         mock_keychain.get_api_key.return_value = None
-
-        with patch(
-            "services.infrastructure.keychain_service.KeychainService",
-            return_value=mock_keychain,
+        resolve = AsyncMock()
+        with (
+            patch(
+                "services.infrastructure.keychain_service.KeychainService",
+                return_value=mock_keychain,
+            ),
+            patch(
+                "services.mcp.consumer.github_adapter.GitHubMCPSpatialAdapter.resolve_credential",
+                new=resolve,
+            ),
         ):
             result = await _test_github()
-            mock_keychain.get_api_key.assert_called_once_with("github_token")
+        assert result["error_type"] == "not_configured"
+        mock_keychain.get_api_key.assert_not_called()
+        resolve.assert_not_awaited()
 
     @pytest.mark.asyncio
     async def test_github_connection_test_passes_user_id(self):
-        """_test_github must pass user_id as username parameter when provided."""
+        """#849 contract under #2012's shape: the user's id reaches the ONE resolver, which
+        owns the user-scoped keychain read (its own tests pin username=user_id there)."""
+        from services.mcp.consumer.github_adapter import GitHubReposResult
         from web.api.routes.integrations import _test_github
 
-        mock_keychain = MagicMock()
-        mock_keychain.get_api_key.return_value = None
-
-        with patch(
-            "services.infrastructure.keychain_service.KeychainService",
-            return_value=mock_keychain,
+        resolve = AsyncMock(return_value=MagicMock(reason=None, leg="pat"))
+        with (
+            patch(
+                "services.mcp.consumer.github_adapter.GitHubMCPSpatialAdapter.resolve_credential",
+                new=resolve,
+            ),
+            patch(
+                "services.mcp.consumer.github_adapter.GitHubMCPSpatialAdapter.search_user_repositories",
+                new=AsyncMock(return_value=GitHubReposResult(repositories=[])),
+            ),
         ):
-            result = await _test_github(user_id="user-789")
-            mock_keychain.get_api_key.assert_called_once_with("github_token", username="user-789")
+            await _test_github(user_id="user-789")
+        resolve.assert_awaited_once_with("user-789")
 
     @pytest.mark.asyncio
     async def test_notion_settings_uses_user_scoped_key(self):

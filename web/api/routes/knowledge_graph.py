@@ -81,9 +81,10 @@ async def create_node(
             node_type=node_type_enum,
             description=description or "",
             properties=properties or {},
-            # Owner rides session_id (the service/repo convention; the
-            # owner_id-column population gap is the tracked #1420 residual).
+            # 2013 (done): owner_id is the signed-in user, threaded down to the row's
+            # NOT NULL owner_id column. session_id stays the legacy scope tag only.
             session_id=current_user.sub,
+            owner_id=current_user.sub,
         )
 
         logger.info(

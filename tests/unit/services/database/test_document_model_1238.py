@@ -63,19 +63,29 @@ class TestDocumentModel1238:
         assert row.created_at is not None  # TimestampMixin
         assert row.id is not None  # UUID PK default
 
-    async def test_is_global_pm_domain_defaults_false_owner_nullable(self, session):
-        # Omitting both fields: marker defaults False (not global), owner None (m-40 graceful)
-        doc = DocumentDB(chromadb_base_id="pdf_local")
+    async def test_is_global_pm_domain_defaults_false(self, session):
+        # Omitting the marker: it defaults False (not global).
+        doc = DocumentDB(chromadb_base_id="pdf_local", owner_id=uuid.UUID(_OWNER))
         session.add(doc)
         await session.commit()
         row = (await session.execute(select(DocumentDB))).scalar_one()
         assert row.is_global_pm_domain is False
-        assert row.owner_id is None
+
+    async def test_owner_id_is_not_null(self, session):
+        # 2009: owner_id is the scoping column (tier A); a row without an owner is
+        # an orphan, so the insert fails rather than storing NULL (was m-40 nullable).
+        from sqlalchemy.exc import IntegrityError
+
+        session.add(DocumentDB(chromadb_base_id="pdf_no_owner"))
+        with pytest.raises(IntegrityError):
+            await session.commit()
+        await session.rollback()
 
     async def test_chromadb_base_id_unique(self, session):
-        session.add(DocumentDB(chromadb_base_id="dup"))
+        owner = uuid.UUID(_OWNER)
+        session.add(DocumentDB(chromadb_base_id="dup", owner_id=owner))
         await session.commit()
-        session.add(DocumentDB(chromadb_base_id="dup"))
+        session.add(DocumentDB(chromadb_base_id="dup", owner_id=owner))
         with pytest.raises(Exception):  # IntegrityError — unique constraint
             await session.commit()
         await session.rollback()

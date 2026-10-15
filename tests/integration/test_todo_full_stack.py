@@ -24,9 +24,23 @@ class TestTodoFullStack:
         return TodoService()
 
     @pytest.fixture
-    def list_id(self):
-        """Create test list."""
-        return uuid4()
+    async def list_id(self, todo_owner):
+        """Create a real list. 2014: items.list_id is a FK to lists.id, so a random
+        uuid4() no longer works as a list reference once the DB is at s2014items."""
+        from services.database.session_factory import AsyncSessionFactory
+        from services.domain import models as domain
+        from services.repositories.universal_list_repository import UniversalListRepository
+
+        async with AsyncSessionFactory.session_scope_fresh() as session:
+            created = await UniversalListRepository(session).create_list(
+                domain.List(name="todo-full-stack", owner_id=todo_owner, item_type="todo")
+            )
+            await session.commit()
+        yield UUID(created.id)
+
+        async with AsyncSessionFactory.session_scope_fresh() as session:
+            await UniversalListRepository(session).delete_list(created.id, owner_id=todo_owner)
+            await session.commit()
 
     @pytest.fixture(autouse=True)
     async def todo_owner(self, request):

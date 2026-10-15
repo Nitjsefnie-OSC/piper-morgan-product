@@ -83,6 +83,14 @@ class DocumentRepository:
         Caller owns the transaction (flush here; commit via session_scope()).
         """
         owner_uuid = _as_uuid_or_none(owner_id)
+        if owner_uuid is None:
+            # 2009: documents.owner_id is NOT NULL (tier A scoping column). Say so
+            # here rather than at flush; the ingest anchor logs it and leaves the
+            # doc unanchored (fail-safe, invisible to scoped reads).
+            raise ValueError(
+                f"documents.owner_id is NOT NULL (2009): no resolvable owner for "
+                f"{chromadb_base_id!r} (got {owner_id!r})"
+            )
         row = await self.get_by_base_id(chromadb_base_id)
         if row is None:
             row = DocumentDB(chromadb_base_id=chromadb_base_id)

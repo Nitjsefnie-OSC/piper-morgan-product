@@ -65,6 +65,8 @@ class KnowledgeGraphService:
         properties: Optional[Dict[str, Any]] = None,
         session_id: Optional[str] = None,
         privacy_level: PrivacyLevel = PrivacyLevel.STANDARD,
+        *,
+        owner_id: str,
     ) -> KnowledgeNode:
         """Create a new knowledge node with privacy-level-aware filtering.
 
@@ -97,8 +99,10 @@ class KnowledgeGraphService:
                 when STANDARD-level filtering applies)
             properties: domain-layer attributes (not content-checked at
                 Phase 0; future expansion if needed)
-            session_id: optional session-scope identifier
+            session_id: optional session-scope identifier (never an owner)
             privacy_level: gating level — defaults to STANDARD
+            owner_id: required; the signed-in user's id (2013). Written to the
+                row's owner_id column so the owner-filtered reads return it.
 
         Raises:
             PrivacyFilterRejectedError: STRICT level + content matched
@@ -158,7 +162,7 @@ class KnowledgeGraphService:
             properties=properties or {},
             session_id=session_id,
         )
-        created_node = await self.repo.create_node(node)
+        created_node = await self.repo.create_node(node, owner_id)
 
         self.logger.info(
             "Knowledge node created",
@@ -366,7 +370,8 @@ class KnowledgeGraphService:
         metadata: Optional[Dict[str, Any]] = None,
         properties: Optional[Dict[str, Any]] = None,
         session_id: Optional[str] = None,
-        owner_id: Optional[str] = None,
+        *,
+        owner_id: str,
         is_admin: bool = False,
     ) -> KnowledgeEdge:
         """
@@ -403,7 +408,7 @@ class KnowledgeGraphService:
             session_id=session_id or source_node.session_id,
         )
 
-        created_edge = await self.repo.create_edge(edge)
+        created_edge = await self.repo.create_edge(edge, owner_id)
 
         self.logger.info(
             "Knowledge edge created",
@@ -535,7 +540,11 @@ class KnowledgeGraphService:
 
     # Bulk Operations
     async def create_nodes_bulk(
-        self, nodes_data: List[Dict[str, Any]], session_id: Optional[str] = None
+        self,
+        nodes_data: List[Dict[str, Any]],
+        session_id: Optional[str] = None,
+        *,
+        owner_id: str,
     ) -> List[KnowledgeNode]:
         """
         Create multiple nodes efficiently
@@ -543,6 +552,7 @@ class KnowledgeGraphService:
         Args:
             nodes_data: List of node data dictionaries
             session_id: Session ID to apply to all nodes
+            owner_id: required; owner of every node created (2013)
         """
         nodes = []
         for data in nodes_data:
@@ -556,10 +566,14 @@ class KnowledgeGraphService:
             )
             nodes.append(node)
 
-        return await self.repo.create_nodes_bulk(nodes)
+        return await self.repo.create_nodes_bulk(nodes, owner_id)
 
     async def create_edges_bulk(
-        self, edges_data: List[Dict[str, Any]], session_id: Optional[str] = None
+        self,
+        edges_data: List[Dict[str, Any]],
+        session_id: Optional[str] = None,
+        *,
+        owner_id: str,
     ) -> List[KnowledgeEdge]:
         """
         Create multiple edges efficiently
@@ -567,6 +581,7 @@ class KnowledgeGraphService:
         Args:
             edges_data: List of edge data dictionaries
             session_id: Session ID to apply to all edges
+            owner_id: required; owner of every edge created (2013)
         """
         edges = []
         for data in edges_data:
@@ -581,7 +596,7 @@ class KnowledgeGraphService:
             )
             edges.append(edge)
 
-        return await self.repo.create_edges_bulk(edges)
+        return await self.repo.create_edges_bulk(edges, owner_id)
 
     # Analytics Operations
     async def get_node_degree(self, node_id: str, direction: str = "both") -> Dict[str, int]:

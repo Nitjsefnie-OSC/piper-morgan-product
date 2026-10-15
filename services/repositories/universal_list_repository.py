@@ -8,12 +8,12 @@ from typing import Any, Dict, List, Optional
 from uuid import UUID
 
 import structlog
-from sqlalchemy import and_, func, or_, select, update
+from sqlalchemy import and_, delete, func, or_, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 import services.domain.models as domain
-from services.database.models import ListDB, ListItemDB, TodoDB
+from services.database.models import ItemDB, ListDB, ListItemDB, TodoDB
 from services.database.repositories import BaseRepository
 from services.utils.datetime_utils import utc_now
 
@@ -283,6 +283,22 @@ class UniversalListRepository(BaseRepository):
         db_list = result.scalar_one_or_none()
 
         if db_list:
+            # 2014: a base item (items.item_type = 'item') has no owner path without its
+            # list, and ck_items_base_item_has_list refuses it listless, so remove them
+            # explicitly, in this same transaction and before the list. Todos
+            # (item_type = 'todo') are NOT touched here: the FK's ON DELETE SET NULL makes
+            # them listless, and they stay owned via todo_items.owner_id.
+            removed = await self.session.execute(
+                delete(ItemDB)
+                .where(ItemDB.list_id == list_id, ItemDB.item_type == "item")
+                .execution_options(synchronize_session=False)
+            )
+            logger.info(
+                "list_delete_removed_base_items",
+                list_id=list_id,
+                owner_id=owner_id,
+                base_items_removed=removed.rowcount,
+            )
             await self.session.delete(db_list)
             return True
         return False
@@ -518,8 +534,23 @@ class UniversalListItemRepository(BaseRepository):
         super().__init__(session)
 
     async def create_item(self, item: domain.ListItem) -> domain.ListItem:
-        """Create a list item relationship"""
+        """Create a list item relationship.
+
+        2009: ``list_items.owner_id`` is NOT NULL, a denormalized copy of the parent
+        list's owner (``lists.owner_id`` is NOT NULL). The domain ListItem carries no
+        owner, so it is derived from the parent list here.
+        """
         db_item = ListItemDB.from_domain(item)
+        owner_result = await self.session.execute(
+            select(ListDB.owner_id).where(ListDB.id == item.list_id)
+        )
+        list_owner = owner_result.scalar_one_or_none()
+        if list_owner is None:
+            raise ValueError(
+                f"Cannot add an item to list {item.list_id!r}: the list does not exist "
+                "(2009: list_items.owner_id is NOT NULL, derived from the list's owner)"
+            )
+        db_item.owner_id = list_owner
         self.session.add(db_item)
         await self.session.flush()
         await self.session.refresh(db_item)

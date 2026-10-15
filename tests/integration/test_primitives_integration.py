@@ -45,7 +45,7 @@ class TestItemPersistence:
     def test_item_domain_to_db_to_domain(self, in_memory_db):
         """Item can be saved and retrieved."""
         # Create domain object
-        item = Item(text="Test item", position=0)
+        item = Item(text="Test item", position=0, list_id="list-2014")
 
         # Convert to database model
         item_db = ItemDB.from_domain(item)
@@ -92,9 +92,9 @@ class TestItemPersistence:
 
     def test_multiple_items_persist(self, in_memory_db):
         """Multiple items can be saved independently."""
-        item1 = Item(text="First item", position=0)
-        item2 = Item(text="Second item", position=1)
-        item3 = Item(text="Third item", position=2)
+        item1 = Item(text="First item", position=0, list_id="list-2014")
+        item2 = Item(text="Second item", position=1, list_id="list-2014")
+        item3 = Item(text="Third item", position=2, list_id="list-2014")
 
         # Save all
         in_memory_db.add(ItemDB.from_domain(item1))
@@ -112,7 +112,7 @@ class TestItemPersistence:
 
     def test_item_update_persists(self, in_memory_db):
         """Item updates are saved to database."""
-        item = Item(text="Original text", position=0)
+        item = Item(text="Original text", position=0, list_id="list-2014")
 
         # Save initial
         item_db = ItemDB.from_domain(item)
@@ -236,7 +236,7 @@ class TestItemListRelationship:
 
     def test_item_type_discriminator(self, in_memory_db):
         """Items have type discriminator for polymorphism."""
-        item = Item(text="Generic item")
+        item = Item(text="Generic item", list_id="list-2014")
         item_db = ItemDB.from_domain(item)
 
         in_memory_db.add(item_db)
@@ -247,19 +247,16 @@ class TestItemListRelationship:
         # Base items have item_type="item"
         assert retrieved.item_type == "item"
 
-    def test_orphan_items_allowed(self, in_memory_db):
-        """Items can exist without belonging to a list."""
+    def test_orphan_base_items_refused(self, in_memory_db):
+        """2014: a base item without a list has no owner path; the DB refuses it."""
+        from sqlalchemy.exc import IntegrityError
+
         orphan_item = Item(text="Standalone item", list_id=None)
-        item_db = ItemDB.from_domain(orphan_item)
+        in_memory_db.add(ItemDB.from_domain(orphan_item))
 
-        in_memory_db.add(item_db)
-        in_memory_db.commit()
-
-        retrieved = in_memory_db.query(ItemDB).filter_by(id=orphan_item.id).first()
-
-        assert retrieved is not None
-        assert retrieved.list_id is None
-        assert retrieved.text == "Standalone item"
+        with pytest.raises(IntegrityError):
+            in_memory_db.commit()
+        in_memory_db.rollback()
 
 
 class TestDataIntegrity:
@@ -267,7 +264,7 @@ class TestDataIntegrity:
 
     def test_item_requires_text(self, in_memory_db):
         """Items must have text (can be empty string but not None)."""
-        item = Item(text="", position=0)  # Empty string is OK
+        item = Item(text="", position=0, list_id="list-2014")  # Empty string is OK
         item_db = ItemDB.from_domain(item)
 
         in_memory_db.add(item_db)
@@ -278,7 +275,7 @@ class TestDataIntegrity:
 
     def test_item_timestamps_persist(self, in_memory_db):
         """Item timestamps are saved and retrieved."""
-        item = Item(text="Timestamped item")
+        item = Item(text="Timestamped item", list_id="list-2014")
         item_db = ItemDB.from_domain(item)
 
         in_memory_db.add(item_db)
