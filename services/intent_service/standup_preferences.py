@@ -257,10 +257,19 @@ INVITE_EMPTY_LEAD = (
 
 # Property 3 made explicit at decline time: nothing changed, nothing stored,
 # and the door stays visibly open (PPM: trivially revisable + visible).
+# #2020 (CXO, 2026-10-14): the suppression is keyed by session_id, which is
+# one chat, so the word is "this chat"; and "your quick report stays exactly
+# as it is" is only true on the path where a report was rendered
+# (INVITE_AFTER_REPORT). The empty lead (INVITE_EMPTY_LEAD) said there was
+# nothing to build one from, so its decline must not claim a report exists.
 INVITE_DECLINE_MESSAGE = (
     "No problem — your quick report stays exactly as it is, and I won't ask "
-    "again this session. Say 'my standup interview' any time to try the "
+    "again in this chat. Say 'my standup interview' any time to try the "
     "guided version."
+)
+INVITE_DECLINE_MESSAGE_NO_REPORT = (
+    "No problem. I won't ask again in this chat. Say 'my standup interview' "
+    "any time to try the guided version."
 )
 
 
@@ -301,5 +310,11 @@ def build_interview_invitation(
             "action": STANDUP_INTERVIEW_WORKFLOW,
             "user_id": str(user_id),
         },
-        "decline_message": INVITE_DECLINE_MESSAGE,
+        # #2020: the decline copy follows the lead the caller rendered — the
+        # empty lead has no report to leave "exactly as it is".
+        "decline_message": (
+            INVITE_DECLINE_MESSAGE_NO_REPORT
+            if question == INVITE_EMPTY_LEAD
+            else INVITE_DECLINE_MESSAGE
+        ),
     }

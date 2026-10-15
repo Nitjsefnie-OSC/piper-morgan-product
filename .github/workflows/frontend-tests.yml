@@ -1,3 +1,4 @@
+# Concept: docs/operations/regression-prevention.md (added 2026-10-15, sunset-or-renew inventory; Lead)
 name: Frontend Tests
 
 # Frontend JS test harness (jest + jsdom) — fires on vanilla-JS source +

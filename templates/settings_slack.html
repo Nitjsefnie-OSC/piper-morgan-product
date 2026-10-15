@@ -985,17 +985,17 @@
       }
 
       async function disconnectSlack() {
-        Dialog.confirm({
+        const ok = await Dialog.confirm({
           title: 'Disconnect Slack?',
           message: "I'll disconnect your Slack workspace. You can set it up again anytime.",
-          confirmText: 'Disconnect',
-          onConfirm: async () => {
-            const disconnectBtnEl = document.getElementById('disconnect-btn');
-            disconnectBtnEl.disabled = true;
-            disconnectBtnEl.textContent = 'Disconnecting...';
-            await performSlackDisconnect();
-          }
+          confirmText: 'Disconnect'
         });
+        if (!ok) return;
+
+        const disconnectBtnEl = document.getElementById('disconnect-btn');
+        disconnectBtnEl.disabled = true;
+        disconnectBtnEl.textContent = 'Disconnecting...';
+        await performSlackDisconnect();
       }
 
       async function performSlackDisconnect() {
