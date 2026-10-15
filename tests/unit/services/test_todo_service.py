@@ -20,10 +20,20 @@ class TestTodoService:
         """Create service instance."""
         return TodoService()
 
-    @pytest.fixture
-    def list_id(self) -> UUID:
-        """Test list ID."""
-        return uuid4()
+    @pytest_asyncio.fixture
+    async def list_id(self, test_user_id) -> UUID:
+        """Create a real list owned by the test user. 2014 (s2014items): items.list_id
+        is a FK to lists.id, so an invented uuid4() is rejected once the DB is at
+        head — CI's smoke set caught this on the 10-15 landing (14 failures)."""
+        from services.domain import models as domain
+        from services.repositories.universal_list_repository import UniversalListRepository
+
+        async with AsyncSessionFactory.session_scope() as session:
+            created = await UniversalListRepository(session).create_list(
+                domain.List(name="todo-service-test", owner_id=test_user_id, item_type="todo")
+            )
+            await session.commit()
+        return UUID(created.id)
 
     @pytest_asyncio.fixture
     async def test_user_id(self) -> str:

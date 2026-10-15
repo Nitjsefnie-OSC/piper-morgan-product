@@ -3,6 +3,7 @@
 from uuid import UUID, uuid4
 
 import pytest
+import pytest_asyncio
 
 from services.domain.primitives import Item
 from services.item_service import ItemService
@@ -16,10 +17,52 @@ class TestItemService:
         """Create service instance."""
         return ItemService()
 
-    @pytest.fixture
-    def list_id(self) -> UUID:
-        """Create a test list ID."""
-        return uuid4()
+    @pytest_asyncio.fixture
+    async def test_owner_id(self) -> str:
+        """Create a test user (lists.owner_id is NOT NULL and a FK to users)."""
+        from datetime import datetime, timezone
+
+        from sqlalchemy import text
+
+        from services.database.session_factory import AsyncSessionFactory
+
+        user_id = str(uuid4())
+        async with AsyncSessionFactory.session_scope() as session:
+            await session.execute(
+                text(
+                    """
+                    INSERT INTO users (id, username, email, password_hash, is_active, is_verified,
+                                       created_at, updated_at, role, is_alpha)
+                    VALUES (:id, :username, :email, '', true, false, :created_at, :updated_at, 'user', true)
+                    ON CONFLICT (id) DO NOTHING
+                """
+                ),
+                {
+                    "id": user_id,
+                    "username": f"test_user_{user_id[:8]}",
+                    "email": f"test_{user_id[:8]}@example.com",
+                    "created_at": datetime.now(timezone.utc),
+                    "updated_at": datetime.now(timezone.utc),
+                },
+            )
+            await session.commit()
+        return user_id
+
+    @pytest_asyncio.fixture
+    async def list_id(self, test_owner_id) -> UUID:
+        """Create a real list. 2014 (s2014items): items.list_id is a FK to lists.id, so an
+        invented uuid4() is rejected once the DB is at head — CI's smoke set caught this
+        on the 10-15 landing (14 failures)."""
+        from services.database.session_factory import AsyncSessionFactory
+        from services.domain import models as domain
+        from services.repositories.universal_list_repository import UniversalListRepository
+
+        async with AsyncSessionFactory.session_scope() as session:
+            created = await UniversalListRepository(session).create_list(
+                domain.List(name="item-service-test", owner_id=test_owner_id, item_type="item")
+            )
+            await session.commit()
+        return UUID(created.id)
 
     @pytest.mark.smoke
     async def test_create_item(self, service, list_id):
