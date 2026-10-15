@@ -44,7 +44,7 @@ ESCAPE_END_WORDS: frozenset = frozenset({"cancel", "quit", "exit"})
 # reversible path (CXO 2026-10-15; Arch: uncertain meaning never destroys).
 # ``skip`` is NOT an escape word (Arch 2026-10-15, generic, every process): it
 # reaches the handler as ordinary text, which owns its meaning (the standup
-# reads it as "nothing for this part"; Piper offers it as a suggestion there).
+# reads it as "nothing for this part").
 ESCAPE_PAUSE_WORDS: frozenset = frozenset({"stop", "never mind"})
 # The union, for readers that only ask "is this an escape word?" (the
 # destructive-confirm decline set, the #1529 bare-exit comment, tests).

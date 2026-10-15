@@ -434,7 +434,6 @@ class StandupConversationHandler:
                 message="Great — let's do it. What did you work on yesterday?",
                 state=StandupConversationState.GATHERING_YESTERDAY,
                 requires_input=True,
-                suggestions=["nothing", "skip"],
             )
 
         # Generate initial greeting based on available context
@@ -513,7 +512,6 @@ class StandupConversationHandler:
             message="What did you work on yesterday?",
             state=StandupConversationState.GATHERING_YESTERDAY,
             requires_input=True,
-            suggestions=["nothing", "skip"],
         )
 
     async def _handle_gathering_yesterday(
@@ -550,7 +548,6 @@ class StandupConversationHandler:
             message="What's planned for today?",
             state=StandupConversationState.GATHERING_TODAY,
             requires_input=True,
-            suggestions=["nothing", "skip"],
         )
 
     async def _handle_gathering_today(
@@ -586,7 +583,6 @@ class StandupConversationHandler:
             message="Any blockers or things you need help with?",
             state=StandupConversationState.GATHERING_BLOCKERS,
             requires_input=True,
-            suggestions=["no blockers", "skip"],
         )
 
     async def _handle_gathering_blockers(
@@ -771,7 +767,6 @@ class StandupConversationHandler:
                     message="Great — let's do it. What did you work on yesterday?",
                     state=StandupConversationState.GATHERING_YESTERDAY,
                     requires_input=True,
-                    suggestions=["nothing", "skip"],
                 )
             # #1617 (PM live 2026-08-13): the final confirmation COMPLETES the
             # flow — no FINALIZING tail turn. The old tail ('share this or
@@ -814,7 +809,6 @@ class StandupConversationHandler:
                 message="Fresh start. What did you work on yesterday?",
                 state=StandupConversationState.GATHERING_YESTERDAY,
                 requires_input=True,
-                suggestions=["nothing", "skip"],
             )
 
         # Handle refinement request. DECLINE falls through here deliberately:
@@ -1009,7 +1003,6 @@ class StandupConversationHandler:
                     ),
                     state=StandupConversationState.GATHERING_YESTERDAY,
                     requires_input=True,
-                    suggestions=["nothing", "skip"],
                 )
 
             generation_time_ms = (time.perf_counter() - generation_start) * 1000

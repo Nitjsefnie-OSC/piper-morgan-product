@@ -20,7 +20,7 @@ Word map (CXO 2026-10-15 09:15, Arch 09:4x / 09:5x, the converged ruling):
 END = {cancel, quit, exit}; PAUSE = {stop, never mind} ("never mind" can mean
 "forget that answer", so it takes the reversible path); ``skip`` is not an
 escape word for any process. A bare "skip" reaches the handler: mid-interview
-it is "nothing for this part, advance" (the chip Piper itself suggests); at the
+it is "nothing for this part, advance"; at the
 invitation it is the shared predicate's DECLINE verdict and leaves with the
 invitation line (dropped from the quick-bypass set; ``quick`` keeps it).
 
@@ -410,9 +410,9 @@ class TestSkipAtTheInvitationLeaves:
 
     def test_skip_is_not_in_the_local_decline_set_or_the_bypass_set(self):
         """The verdict is the path: no word set in ``_handle_initiated``
-        (the quick-bypass set, the local decline set) holds "skip". The
-        first-question suggestion chip ``["nothing", "skip"]`` is a list and
-        stays: mid-interview "skip" advances."""
+        (the quick-bypass set, the local decline set) holds "skip".
+        Mid-interview a typed "skip" advances (#2028 deleted the unrendered
+        ``["nothing", "skip"]`` suggestion lists; typed input is the path)."""
         import ast
         import inspect
         import textwrap
