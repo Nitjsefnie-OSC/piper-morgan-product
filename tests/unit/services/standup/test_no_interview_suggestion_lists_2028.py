@@ -8,9 +8,17 @@ exist and made ``skip`` look offered and tested. CXO 2026-10-15: delete the
 lists, do not render chips. Typed "nothing" / "skip" keep working as built
 (pinned in ``tests/unit/services/intent_service/test_escape_end_vs_pause_888.py``).
 
+CXO 2026-10-15 10:10: the TEN other lists go too (the opening "Yes, let's do
+it" list, the REFINING "Looks good" lists, the error-path "Try again" lists),
+so no ``ConversationResponse`` in the handler sets ``suggestions`` at all. Where
+a list carried the only hint of the expected answer, the reply says it in
+words as a statement: the REFINING draft now ends "Say 'looks good' to
+finalize it." The generation-error reply already said "Say 'try again' and
+I'll rebuild it."
+
 The ``suggestions`` field itself stays on ``ConversationResponse``: it is read
 generically (``intent_service`` copies it into the ``standup_started``
-intent_data context), and the opening and REFINING responses still set it.
+intent_data context); it is always empty now.
 
 Layer: source (AST of the handler) plus one handler-driven turn per question.
 """
@@ -48,6 +56,17 @@ def _kw(call, name):
 
 
 class TestNoSuggestionListsOnInterviewQuestions:
+    def test_no_response_in_the_handler_sets_suggestions(self):
+        """#2027/#2028: zero ``suggestions=`` anywhere in the handler (was:
+        the seven GATHERING lists only, ten others kept)."""
+        assert _HANDLER_SRC.read_text().count("suggestions=") == 0
+        offenders = [
+            f"line {call.lineno}"
+            for call in _conversation_response_calls()
+            if _kw(call, "suggestions") is not None
+        ]
+        assert offenders == []
+
     def test_no_gathering_response_sets_suggestions(self):
         offenders = []
         for call in _conversation_response_calls():
@@ -91,3 +110,24 @@ class TestInterviewQuestionsDriven:
         blockers = await handler.handle_turn(conv, "nothing")
         assert blockers.state == S.GATHERING_BLOCKERS
         assert blockers.suggestions == []
+
+
+class TestRepliesSayTheAnswerInWords:
+    """CXO 10:10: where a deleted list carried the only hint of the expected
+    answer, the reply says it in words, as a statement (no new ask)."""
+
+    def test_the_refining_draft_names_looks_good(self):
+        from services.standup.conversation_handler import (
+            _REFINING_DEFAULT_ASK,
+            _REFINING_FINALIZE_HINT,
+        )
+
+        assert _REFINING_FINALIZE_HINT == "Say 'looks good' to finalize it."
+        assert "?" not in _REFINING_FINALIZE_HINT
+        src = _HANDLER_SRC.read_text()
+        # both "Here's your standup" arm sites carry the hint after the ask
+        assert src.count("{_REFINING_DEFAULT_ASK} {_REFINING_FINALIZE_HINT}") == 2
+        assert _REFINING_DEFAULT_ASK == "Would you like to make any changes?"
+
+    def test_the_generation_error_names_try_again(self):
+        assert "Say 'try again' and I'll rebuild it." in _HANDLER_SRC.read_text()

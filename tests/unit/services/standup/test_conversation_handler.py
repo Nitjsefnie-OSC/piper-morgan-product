@@ -135,15 +135,19 @@ class TestStartConversation:
         assert "morning" in response.message.lower() or "standup" in response.message.lower()
 
     @pytest.mark.asyncio
-    async def test_start_returns_suggestions(self, handler):
-        """Starting provides user suggestions."""
+    async def test_start_returns_no_suggestions(self, handler):
+        """#2027/#2028 (CXO 2026-10-15 10:10): the opening carries no
+        suggestion list (nothing renders it on web). Was
+        ``test_start_returns_suggestions``, asserting a list holding "quick".
+        The quick report is named in words by the intent service's teaching
+        line ("Say 'my standup report'")."""
         response = await handler.start_conversation(
             session_id="session1",
             user_id="user1",
         )
 
-        assert len(response.suggestions) > 0
-        assert any("quick" in s.lower() for s in response.suggestions)
+        assert response.suggestions == []
+        assert response.message == "Good morning! Ready for your standup?"
 
     @pytest.mark.asyncio
     async def test_start_with_context(self, handler):
@@ -186,8 +190,11 @@ class TestHandleTurnInitiated:
 
     @pytest.mark.asyncio
     async def test_fast_with_no_data_reenters_interview(self, handler, conversation):
-        """'Fast' takes the same honest path (#1837 amendment, as above)."""
-        response = await handler.handle_turn(conversation, "fast please")
+        """'Fast' takes the same honest path (#1837 amendment, as above).
+        Was "fast please": the bypass is whole-message now (CXO 2026-10-15
+        10:10), so "fast please" starts the interview instead (same state,
+        not the bypass this test names)."""
+        response = await handler.handle_turn(conversation, "fast")
 
         assert response.state == StandupConversationState.GATHERING_YESTERDAY
 

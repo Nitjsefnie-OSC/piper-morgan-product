@@ -456,10 +456,9 @@ process (Arch 2026-10-15, generic; no per-process claims): a bare "skip"
 reaches the handler as ordinary text. Mid-interview the standup reads it
 through `_is_skip_signal` as "nothing for this part, advance" (it is the
 `suggestions=[…, "skip"]` chip Piper offers at every question, which the
-hatch used to suspend on). At "ready to start?" `skip` left the quick-bypass
-set (`quick`, `fast`, "just the report" keep it), and the bare word is a
-DECLINE verdict of the shared predicate (`FULL_MESSAGE_DECLINE_RE`), so it
-leaves with the invitation line. Escape words are recognised by the registry
+hatch used to suspend on). At "ready to start?" `skip` is not a quick-bypass
+entry, and the bare word is a whole-message decline (`is_bare_decline`, the
+shared `FULL_MESSAGE_DECLINE_RE` row), so it leaves with the invitation line. Escape words are recognised by the registry
 first at every stage; the registry still decides before any handler runs. The registry
 picks the transition from the word alone, before any handler runs (PPM's
 #888 direction holds: the handler never interprets an escape word). The
@@ -487,11 +486,24 @@ process and the registry holds no deferral words). The standup adapter's
 SUSPENDED + the defer line (mid-interview); anything else → ABANDONED + the
 drop line; at INITIATED every exit, a deferral included, → ABANDONED + the
 invitation line. At the "ready to start?" invitation `_handle_initiated`
-reads the same predicate on every turn and a deferral or a decline verdict
-ENDS there (shape A; was SUSPENDED until 2026-10-15; the DECLINE verdict was
-added with the #888 word map so a bare "skip" leaves), as do its
-pre-existing decline words ("no", "nope", "cancel", "later", kept as the
-fallback). Mid-interview the predicate is consulted only
+reads every turn WHOLE-MESSAGE (1771 invitation edges, CXO 2026-10-15 09:55 /
+10:10, Arch 10:1x). First the quick bypass: exact entries only
+(`_QUICK_BYPASS_ENTRIES`: "quick", "fast", "just the report", "the quick
+one", "quick standup", "quick report", "the quick report", "skip the
+questions", "skip questions"; the turn is lowercased with trailing "."/"!"
+dropped), so "quick question before we start" starts the interview. Then the
+leave test, which ENDS with the invitation line (shape A; was SUSPENDED until
+2026-10-15): `is_bare_decline(message)` (the whole-message decline row plus
+the bare deferrals) OR the predicate's DEFER verdict ("maybe later", "not
+right now") OR a DECLINE verdict whose turn also carries a `DEFER_PATTERNS`
+row ("no, not now": the predicate orders decline first) OR the whole message
+"later" (Arch's known miss, anchored). The predicate's plain DECLINE verdict
+is NOT read there: its unanchored rows (`^(?:no|nah),?\s`, `\bi'?m good\b`)
+told "I'm good to go" and "no, let's start" "no standup for now". The old
+anywhere word set (`no`/`nope`/`cancel`/`later`) and the `"not now"`
+substring are gone; known miss: "please cancel" (not a hatch word, not a
+#1529 flow exit) now starts the interview, pinned for a ruling. Pins:
+`tests/unit/services/standup/test_invitation_edges_1771.py`. Mid-interview the predicate is consulted only
 on turns the #1529 exit already claims, so a clause like "not yet merged"
 inside an answer stays an answer. Bare #888 escape words are read before
 any handler sees them, split END/PAUSE as above; bare "later" is not a DEFER phrasing (Arch: known miss, no new
