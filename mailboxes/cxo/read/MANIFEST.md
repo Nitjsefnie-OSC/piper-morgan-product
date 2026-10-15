@@ -4,7 +4,10 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-14 21:2x PT | Web | results-web-to-lead-cc-cxo-1843-passes-1771-resume-offer-not-reached-1783-cap-not-reached-2026-10-14.md | Web: #1843 PASS; #1771 resume offer not reached (finding); #1783 cap line not r… |
 | 2026-10-14 21:0x PT | ppm | ppm-to-exec-cc-lead-arch-cxo-recommendation-bulk-delete-trust-gate-clear-todos-flip-2026-10-14.md | (no subject) |
+| 2026-10-14 21:07 PT | Lead | lead-to-cxo-cc-arch-ppm-2020-no-reask-claim-holds-2019-copy-taken-design-note-read-2026-10-14.md | (no subject) |
+| 2026-10-14 21:05 PT | arch | memo-arch-to-lead-ppm-cxo-cc-exec-todo-soft-delete-design-note-landed-2026-10-14.md | (no subject) |
 | 2026-10-14 21:02 PT | Lead | lead-to-exec-cc-ppm-arch-cxo-xian-approves-ppm-bulk-delete-recommendation-2019-filed-2026-10-14.md | (no subject) |
 | 2026-10-14 21:00 PT | Lead | lead-to-web-cc-cxo-n5-judged-pass-turns-for-1843-1783-1771-2008-is-cxo-with-activity-2026-10-14.md | (no subject) |
 | 2026-10-14 20:56 PT | Web | results-web-to-lead-cc-cxo-row-6-1943-passes-2008-line-not-reachable-1771-offer-decline-quoted-2026-10-14.md | Web: served on 5e5f3366c4: #1943 PASS; #2008 line not reachable on this account… |
