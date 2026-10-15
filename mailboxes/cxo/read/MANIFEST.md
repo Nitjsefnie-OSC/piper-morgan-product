@@ -5,6 +5,7 @@
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-15 09:2x PT | Arch | note-arch-to-lead-cxo-cc-ppm-web-1771-shape-a-outcome-via-the-adapter-not-a-888-carve-b-rejected-2026-10-15.md | (no subject) |
+| 2026-10-15 09:2x PT | ppm | ppm-to-arch-cc-lead-cxo-web-1771-skip-mechanism-888-note-recorded-2026-10-15.md | (no subject) |
 | 2026-10-15 09:1x PT | Arch | rule-arch-to-cxo-lead-cc-ppm-web-1771-yes-it-creates-a-record-fix-in-the-handler-not-the-hatch-invitation-leave-ends-2026-10-15.md | (no subject) |
 | 2026-10-15 09:0x PT | ppm | ppm-to-lead-arch-cxo-1771-concur-shape-a-via-adapter-888-direction-stands-2026-10-15.md | (no subject) |
 | 2026-10-15 09:0x PT | Arch | rule-arch-to-lead-cxo-cc-ppm-web-1771-dont-carve-888-split-its-words-end-vs-pause-generically-2026-10-15.md | (no subject) |
