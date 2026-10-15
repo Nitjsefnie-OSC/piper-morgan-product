@@ -327,6 +327,35 @@ CONVERSATION/UNKNOWN turn with no `armed_offer_rail` stamp with the one-line
 mind, show my todos"; the unanchored "maybe later" row) still go to the floor; an armed turn's
 decline is answered by its seam before classification. No new literal: one decline vocabulary,
 armed or not. Regression: `test_bare_decline_nothing_open_2004.py`.
+**#2033 — nothing running, a cancel or a standup leave (2026-10-15, folds #2032; Arch's
+ruling, CXO's lines)**: on Web's served run (6f2916d10f), with no standup active or
+suspended, `cancel` drew "Got it — standup cancelled." plus an overdue-reminder tail, and
+`skip the standup` / `no, not now` drew "Got it, standup skipped. Heads up — …". Neither
+string is in `services/`: the floor narrated an action code never took (ADR-080). Measured:
+`pre_classify` claims none of these turns, so their category is the LLM's, and even on a
+CONVERSATION verdict the #2004 gate's `is_bare_decline` let `cancel`, `stop`, `skip the
+standup` and `no, not now` through to the floor. The nothing-open seam now has a
+pre-classification half, `IntentService._nothing_running_reply`, called in
+`_process_intent_internal` right after the #889 resume check and the #1762 list-remainder
+check (so every arm that could consume the turn wins first) and before the `/standup`
+check and classification. When no flow escaped this turn, no contextual offer bound, no
+offer rail is armed (`_armed_offer_signal`) and `check_suspended_processes(user_id)` finds
+nothing (user-scoped, so a standup paused in another chat counts), a whole-message turn gets
+a fixed line with nothing appended: a registry escape word read through
+`registry._is_escape_command` (please-stripped: `cancel`, `stop`, `never mind`, `quit`,
+`exit`), a generic #1529 exit (`forget it`, `nevermind`), or an exit naming another process
+→ `NOTHING_RUNNING_TO_CANCEL` ("There's nothing running to cancel."); a `detect_flow_exit`
+naming only the standup (`skip the standup`, `cancel the standup`, `end standup`) or a
+deferral made only of bare declines (`contains_deferral` and every comma-part
+`is_bare_decline`: `not now`, `no, not now`) → `standup_copy.STANDUP_NOT_RUNNING_REPLY`
+("There's no standup running right now. Say 'do a standup' whenever you want one."). A plain
+bare decline (`no thanks`, `skip`, `nope`) still classifies and gets the #2004 "Okay." at the
+floor gate; with a standup active (#888 registry) or suspended (#889/#1771 resume seam) the
+step never claims. Any lookup failure returns None (the pre-#2033 path), never an unchecked
+"nothing running" claim. No new vocabulary or regex. Regression:
+`test_nothing_running_2033.py` (through the real `process_intent` over an explosive LLM),
+including the cross-chat standup ask (suspended in chat A, `/standup` in chat B offers
+continue/restart, no new conversation row).
 **#1976 create_todo consumes the router's `text` arg (2026-10-13)**: 'add a
 todo to web test one' stored the title 'to web test one' (alpha 4bd1a236e9,
 Web) — the regex extractor kept the verb phrase's 'to'. The #1943 family's
