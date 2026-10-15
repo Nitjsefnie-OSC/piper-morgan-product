@@ -56,6 +56,8 @@ running, and say how you last verified it"). xian was on board on 2026-10-13, vi
   `git hook commit-msg` ("source exists, not installed"). That's deliberate: it waits until the
   history rewrite settles (CIO standing item 8s, xian's paste). The old-history guard reads as
   armed while its sentinel file exists, which is through the rewrite's 24-hour watch.
+- **2026-10-15 13:2x:** 30 checks: **30 armed**, 0 NOT ARMED, 0 unmeasured (Exec's run, then CIO's). commit-msg was
+  installed by xian; the 30th check was added between 10-14 and 10-15.
 
 ## Adding a mechanism
 
