@@ -430,6 +430,10 @@
   // API key integrations with dedicated settings pages (Issue #540, #541)
   const API_KEY_INTEGRATIONS = ['notion', 'github'];
 
+  // #2053: the card whose Test result currently owns the re-authorize line (set only
+  // around the post-Test redraw; renderIntegrations omits that card's status_detail).
+  let resultOwnsLine = null;
+
   // Status icons for overall health
   const STATUS_ICONS = {
     healthy: '✅',
@@ -533,7 +537,7 @@
             class="action-btn connect-btn"
             id="reconnect-btn-${integration.name}"
           >
-            Reconnect
+            Reconnect with GitHub
           </a>
         `;
       } else if (isOAuth) {
@@ -606,7 +610,7 @@
                   ${statusLine(integration)}
                 </span>
               </div>
-              ${integration.status_detail ? `
+              ${integration.status_detail && integration.name !== resultOwnsLine ? `
                 <div class="status-detail" id="detail-${integration.name}">
                   ${integration.status_detail}
                 </div>
@@ -680,6 +684,7 @@
     btn.disabled = true;
     btn.classList.add('testing');
     btn.textContent = 'Testing...';
+    let testOwnsLine = null;
     statusEl.textContent = 'Testing connection...';
     statusEl.classList.remove('error');
     statusEl.classList.remove('warning');
@@ -697,6 +702,7 @@
       // (``stale_reason`` set) is a warning, not a plain success.
       const stale = Boolean(result.success && result.stale_reason);
       dot.className = `status-dot ${result.success ? (stale ? 'degraded' : 'healthy') : 'failed'}`;
+      if (stale) testOwnsLine = integrationName;
 
       if (result.success) {
         statusEl.textContent = result.message;
@@ -706,7 +712,8 @@
         const fixEl = document.getElementById(`fix-${integrationName}`);
         if (fixEl) fixEl.remove();
 
-        showToast(stale ? 'warning' : 'success', result.message, 'Test Passed');
+        // #2053 (CXO): a working Test that still needs attention is not a plain pass.
+        showToast(stale ? 'warning' : 'success', result.message, stale ? 'Works, needs attention' : 'Test Passed');
       } else {
         statusEl.textContent = result.message;
         statusEl.classList.add('error');
@@ -738,11 +745,15 @@
     // goes) and the page summary ("N of M healthy"); redraw both from the one source,
     // the health route, instead of patching the card by hand. A redraw failure is
     // not a Test failure, so it never reaches the toast.
+    // #2053: after a warning Test the result owns the re-authorize line (toast and
+    // status line), so this one redraw omits that card's status_detail.
+    resultOwnsLine = testOwnsLine;
     try {
       await loadIntegrationsHealth();
     } catch (error) {
       console.error('Failed to redraw integrations after Test:', error);
     }
+    resultOwnsLine = null;
   }
 
   async function testAllConnections() {
