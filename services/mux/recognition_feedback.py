@@ -19,6 +19,8 @@ from typing import List, Optional
 
 import structlog
 
+from services.utils.utterance_log import utterance_fields
+
 logger = structlog.get_logger(__name__)
 
 
@@ -85,7 +87,7 @@ def record_recognition_feedback(feedback: RecognitionFeedback) -> None:
     """
     logger.info(
         "recognition_feedback",
-        original_message=feedback.original_message,
+        **utterance_fields(feedback.original_message, key="original_message"),
         confidence_at_trigger=feedback.confidence_at_trigger,
         offered_options=feedback.offered_options,
         selected_option=feedback.selected_option,

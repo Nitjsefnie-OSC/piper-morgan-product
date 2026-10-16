@@ -38,6 +38,7 @@ from services.integrations.spatial_adapter import (
     SpatialContext,
     SpatialPosition,
 )
+from services.utils.utterance_log import utterance_preview
 
 from .connector import (
     Binding,
@@ -849,7 +850,9 @@ class NotionMCPAdapter(BaseSpatialAdapter):
                 input_data=str({"query": query, "filter": filter_type, "page_size": page_size}),
             )
 
-            logger.info(f"Search found {len(results)} results for query: {query}")
+            logger.info(
+                f"Search found {len(results)} results for query: {utterance_preview(query)}"
+            )
             return results
 
         except Exception as e:

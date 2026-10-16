@@ -42,6 +42,7 @@ from uuid import UUID
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from services.database.models import AuditLog
+from services.utils.utterance_log import utterance_preview
 
 logger = logging.getLogger(__name__)
 
@@ -167,7 +168,7 @@ class AuditLogger:
 
         # Log to application logs as well
         logger.info(
-            f"AUDIT: {event_type}.{action} | user={user_id} | status={status} | message={message}",
+            f"AUDIT: {event_type}.{action} | user={user_id} | status={status} | message={utterance_preview(message)}",
             extra={
                 "audit_log_id": log.id,
                 "event_type": event_type,

@@ -37,6 +37,7 @@ from services.conversation.reference_resolver import ReferenceResolver, Resolved
 from services.database.session_factory import AsyncSessionFactory
 from services.domain.models import ConversationTurn
 from services.health.integration_health_monitor import health_monitor
+from services.utils.utterance_log import utterance_fields
 
 logger = structlog.get_logger()
 
@@ -260,8 +261,8 @@ class ConversationManager:
             logger.info(
                 "References resolved",
                 conversation_id=conversation_id,
-                original_message=message,
-                resolved_message=resolved_message,
+                **utterance_fields(message, key="original_message"),
+                **utterance_fields(resolved_message, key="resolved_message"),
                 references_count=len(references),
                 latency_ms=resolution_time,
             )
