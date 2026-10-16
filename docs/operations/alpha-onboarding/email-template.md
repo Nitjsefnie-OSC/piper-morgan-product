@@ -62,12 +62,11 @@ None are needed for core chat, lists, files, or standups.
 This is ALPHA software (version 0.8.14.0). That means:
 - It will have bugs and rough edges
 - The alpha instance's data may be lost at any time — use test data only
-- Security is not fully audited (your API key is stored encrypted; content at rest
-  is not yet encrypted)
+- Security is not fully audited yet. Your API key and your conversations are stored encrypted.
 - You're responsible for your own API charges
 - Not for mission-critical work or sensitive information
 
-The full terms are in the attached Alpha Agreement — please read it before diving in.
+How Piper handles your data: pipermorgan.ai/privacy. There's no separate Terms page yet.
 
 **WHAT TO EXPECT**
 
@@ -112,7 +111,6 @@ Great — saw you're in! A few pointers for the first real session:
 - ALPHA_QUICKSTART.md — the 2-minute version of everything above
 - ALPHA_TESTING_GUIDE.md — test walks for this release
 - ALPHA_KNOWN_ISSUES.md — don't waste time on what we already know
-- ALPHA_AGREEMENT_v2.md — the terms you acknowledged
 
 Looking forward to your feedback — you're helping shape the future of AI-assisted PM
 work.
