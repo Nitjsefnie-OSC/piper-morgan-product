@@ -623,6 +623,19 @@ rather than papered over: contract axis (a) makes an interrogative REQUEST
 ("can I see the rest?") a STATE_QUESTION, not an accept — the arm survives and
 normal processing answers, but the CONTRACT is where that would change.
 Regression: `test_cashable_list_remainder_1762.py`.
+**#2040 part 1 — the empty open-issues line names its scope (2026-10-15, CXO's ruling)**:
+`_handle_list_issues_query`'s OAuth connector read is `assignee:@me` (user-wide) unless a repo is
+named, so "You don't have any open issues right now." was true only under a scope the user was
+never told (Web, 6f2916d10f: 7 open, none assigned). On that path the empty line is now "You have
+no open issues assigned to you."; then, one extra read only in the empty case
+(`IntentService._default_repo_open_issue_count`: `get_user_default_repo` + the same adapter's
+`list_open_issues(limit=1, repository=<default>)`, whose `total` is the search `total_count`; no
+new adapter method), a nonzero count adds the statement "There are N open issues in <repo>. Say
+'show open issues in <repo>' to see them." (singular at 1). No default repo, a degraded read or
+any failure → the scoped line only. A named repo is read repo-wide, so "No open issues in <repo>
+right now." is unchanged; the native-PAT fallback (repo-wide on the default repo) keeps its line.
+Regression: `test_issues_empty_scope_2040.py` (also pins the issues cap boundary: 7 and 8 render
+whole, 9 shows five, offers and arms four).
 
 **#1855 ask-only-when-armed, enforced at the FLOOR'S OUTPUT SEAM (2026-09-23,
 Lead design / Arch ruling; layer 1 of 2)** — surface 4's reply text now passes a

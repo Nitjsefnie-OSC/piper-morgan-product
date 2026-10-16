@@ -7706,7 +7706,13 @@ class IntentService:
             connector_result = await GitHubMCPSpatialAdapter().list_open_issues(
                 _user_id, limit=50, repository=_named_repo
             )
+            # #2040: which scope did the read take? The connector's default
+            # query is ``assignee:@me`` (user-wide); a named repo is repo-wide;
+            # the native-PAT fallback lists the resolved default repo. Only the
+            # first is "assigned to you", and only it can hide a repo's issues.
+            _assignee_scoped = False
             if connector_result.issues is not None:
+                _assignee_scoped = not _named_repo
                 issues = connector_result.issues
                 total_count = (
                     connector_result.total if connector_result.total is not None else len(issues)
@@ -7736,6 +7742,7 @@ class IntentService:
                     },
                 )
 
+            _repo_open: Optional[Tuple[str, int]] = None
             if issues:
                 # total_count is the TRUE match count (search_issues total_count); `issues` is
                 # only a page (e.g. 30 of 179) — count by total_count, show a few recent (#1322).
@@ -7767,11 +7774,34 @@ class IntentService:
                 message += _capped.body
                 _remainder = _capped.remainder
             else:
-                message = (
-                    f"No open issues in {_named_repo} right now."
-                    if _named_repo
-                    else "You don't have any open issues right now."
-                )
+                if _named_repo:
+                    # A named repo is read repo-wide, so this line already
+                    # names its whole scope.
+                    message = f"No open issues in {_named_repo} right now."
+                elif _assignee_scoped:
+                    # #2040 (CXO): the empty line names its scope, and when the
+                    # default repo has open issues the scope excluded, says so
+                    # as a statement pointing at them. One extra read, only here.
+                    message = "You have no open issues assigned to you."
+                    _repo_open = await self._default_repo_open_issue_count(_user_id)
+                    if _repo_open is not None and _repo_open[1] > 0:
+                        _repo, _n = _repo_open
+                        _there = (
+                            f"There is 1 open issue in {_repo}."
+                            if _n == 1
+                            else f"There are {_n} open issues in {_repo}."
+                        )
+                        message += f" {_there} Say 'show open issues in {_repo}' to see them."
+                else:
+                    message = "You don't have any open issues right now."
+
+            _ctx: Dict[str, Any] = {"issue_count": total_count if issues else 0}
+            if _assignee_scoped:
+                _ctx["scope"] = "assigned_to_you"
+            if _repo_open is not None:
+                # The OUTCOME for next-turn context (#1738), not just the string.
+                _ctx["default_repo"] = _repo_open[0]
+                _ctx["default_repo_open_issue_count"] = _repo_open[1]
 
             return IntentProcessingResult(
                 success=True,
@@ -7779,9 +7809,7 @@ class IntentService:
                 intent_data={
                     "category": "query",
                     "action": "list_issues_query",
-                    "context": {
-                        "issue_count": total_count if issues else 0,
-                    },
+                    "context": _ctx,
                     **self._arm_list_remainder(
                         session_id, _principal_from_intent(intent), _remainder
                     ),
@@ -7801,6 +7829,39 @@ class IntentService:
                 error=str(e),
                 error_type="list_issues_error",
             )
+
+    async def _default_repo_open_issue_count(
+        self, user_id: Optional[str]
+    ) -> Optional[Tuple[str, int]]:
+        """#2040: ``(default_repo, open issue count)`` for the empty
+        assigned-to-you line, or None when it can't be stated honestly.
+
+        The cheapest existing call that returns a count: the same adapter's
+        ``list_open_issues`` scoped to the user's default repo with a one-item
+        page; ``total`` is the search's own ``total_count``. No new adapter
+        method. The repo comes from ``get_user_default_repo`` (the user-scoped
+        store, no env fallback, no recovery write). Any miss or failure returns
+        None and the reply keeps only the scoped line: no count we couldn't read.
+        """
+        if not user_id:
+            return None
+        try:
+            from services.integrations.github.repo_resolver import get_user_default_repo
+            from services.mcp.consumer.github_adapter import GitHubMCPSpatialAdapter
+
+            repo = await get_user_default_repo(UUID(str(user_id)))
+            if not repo:
+                return None
+            result = await GitHubMCPSpatialAdapter().list_open_issues(
+                user_id, limit=1, repository=repo
+            )
+            if result.issues is None:
+                return None
+            total = result.total if result.total is not None else len(result.issues)
+            return repo, int(total)
+        except Exception as e:  # silent-ok: logged; the reply keeps only the scoped line
+            self.logger.warning("default_repo_open_issue_count_failed", error=str(e))
+            return None
 
     async def _handle_set_default_repo(
         self, intent: Intent, workflow_id: str
