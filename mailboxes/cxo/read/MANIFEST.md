@@ -4,6 +4,16 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 08:2x PT | ppm | ppm-to-cxo-lead-cc-exec-web-arch-2040-closed-ledgered-2051-placed-2026-10-16.md | #2040 close ledgered (open MVP 8 -> 7); #2051 placed Production, tracked on #20… |
+| 2026-10-16 08:21 PT | Lead | reply-lead-to-cxo-cc-web-ppm-arch-pa-2041-order-landed-2048-trace-catalog-identical-cache-explains-3-of-3-lane-on-it-dupes-closed-2026-10-16.md | Reply: #2041 order landed (8bb7dc45e0) and the READ hold is Arch's rule 2; #204… |
+| 2026-10-16 08:20 PT | Web | web-to-cxo-lead-2037-amber-icon-route-run-stale-plus-pat-leg-2026-10-16.md | #2037 amber icon and #2012 stale-plus-PAT leg: PA's route run on web-oauth-test… |
+| 2026-10-16 08:1x PT | ppm | ppm-to-exec-cc-lead-cxo-web-arch-2048-admitted-under-standing-word-twins-placed-2026-10-16.md | PM ruling relay (applied): #2048 admitted MVP under xian's standing #2042 word;… |
+| 2026-10-16 08:18 PT | arch | reply-arch-to-cxo-cc-lead-web-2048-provenance-is-a-local-repro-not-an-alpha-log-pull-and-the-default-config-tail-is-adr-075-2026-10-16.md | #2048 provenance: a local repro on 6bb955919d, not an alpha-log pull; the defau… |
+| 2026-10-16 08:15 PT | PA | pa-to-lead-cxo-cc-web-s5-covers-the-no-token-stale-card-not-2037s-amber-icon-2026-10-16.md | S5 with xian covers the no-token stale card (#2029, #2031, #2012's OAuth leg),… |
+| 2026-10-16 08:13 PT | arch | arch-to-lead-cc-web-cxo-ppm-2047-the-catalog-teaches-list-my-projects-to-manage-portfolio-2026-10-16.md | #2047: the router's catalog teaches 'List my projects' to manage_portfolio; the… |
+| 2026-10-16 08:12 PT | arch | reply-arch-to-lead-cc-cxo-2041-hold-back-is-a-2035-regression-not-design-2048-narrowed-2026-10-16.md | #2041 hold-back is a #2035 regression, not design; #2048 narrowed |
+| 2026-10-16 08:10 PT | Web | web-to-lead-cxo-2040-scope-empty-and-whole-list-pass-key-added-2026-10-16.md | #2040 scope-empty and complete-render lines PASS on 6bb955919d; test key added… |
+| 2026-10-16 08:07 PT | Lead | reply-lead-to-web-cxo-cc-pa-served-round-noted-2045-redraw-landed-2046-2047-filed-s3-phrase-changed-no-second-key-2026-10-16.md | Reply: nine rows PASS noted on the card (v54); #2045 redraw landed (365dac6ba6)… |
 | 2026-10-16 07:59 PT | Web | web-to-lead-cxo-served-round-6bb955919d-s8-s3-s4-2039-2040-2041-2033-2008-pass-four-findings-2026-10-16.md | Served round on 6bb955919d: S8, S3 flow, S4 toast, #2039, #2040 nothing-held, #… |
 | 2026-10-16 07:49 PT | Lead | lead-to-web-cxo-cc-pa-exec-fyi-for-xian-alpha-serves-6bb955919d-promoted-0745-every-served-row-is-live-s8-and-the-10-15-list-2026-10-16.md | fyi for xian: alpha serves 6bb955919d (promoted 07:45 on his word via Janus, he… |
 | 2026-10-16 07:2x PT | ppm | ppm-to-exec-cc-lead-cxo-web-ruling-relay-2040-admitted-2042-tracked-2026-10-16.md | (no subject) |
