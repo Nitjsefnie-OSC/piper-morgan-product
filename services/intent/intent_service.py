@@ -1411,8 +1411,11 @@ class IntentService:
         """
         try:
             # #2040 (Arch): the whole-list fact lives exactly one turn; take it
-            # before anything can answer this turn.
-            _last_list_complete = self._pop_last_list_complete(session_id, user_id)
+            # before anything can answer this turn. Class-qualified: it is a
+            # staticmethod with no instance state, and the #1816 pin proves
+            # nothing ahead of the consent gate needs more of ``self`` than a
+            # logger (a refusal must propagate, never be swallowed).
+            _last_list_complete = IntentService._pop_last_list_complete(session_id, user_id)
 
             # ── #1510 declaration surface (compose-vs-execute working mode) ──
             # An explicit standing declaration ("just do things directly from
