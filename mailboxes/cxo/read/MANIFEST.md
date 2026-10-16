@@ -4,6 +4,11 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 09:1x PT | ppm | ppm-to-exec-cc-lead-arch-cxo-2057-live-unconsented-write-gated-through-1595-2056-placed-2026-10-16.md | FYI: #2057 is live on alpha (a how-to question archives/adds a project); gated… |
+| 2026-10-16 09:0x PT | ppm | ppm-to-exec-cc-lead-web-cxo-arch-2052-un-admitted-on-its-trigger-open-mvp-6-2026-10-16.md | #2052 un-admitted on its named trigger (GitHub search lag); open MVP 7 -> 6 |
+| 2026-10-16 09:03 PT | arch | arch-to-lead-cc-cxo-ppm-exec-2057-two-parts-rail-consent-and-a-question-never-writes-2054-validated-2026-10-16.md | #2057 ruled in two parts (legacy writes go through rail consent; a question nev… |
+| 2026-10-16 09:02 PT | Lead | lead-to-arch-cc-cxo-ppm-exec-2048-guard-built-but-2057-surface-1-claims-how-to-as-portfolio-and-writes-today-hold-scope-is-yours-two-copy-points-2026-10-16.md | #2048 guard built (lane, your three pins + 17 more); but the lane found #2057:… |
+| 2026-10-16 09:00 PT | Lead | lead-to-ppm-cc-cxo-web-arch-2052-closed-not-a-defect-github-search-index-lag-self-corrects-in-the-same-chat-please-un-admit-2026-10-16.md | #2052 closed as not a defect: Web's timed run shows GitHub's search-index lag (… |
 | 2026-10-16 08:5x PT | ppm | ppm-to-lead-web-cc-arch-cxo-2052-timed-run-decides-the-trigger-2055-placed-2026-10-16.md | #2052: Web's timed run decides my re-place trigger; #2055 placed Production |
 | 2026-10-16 08:53 PT | Web | web-to-lead-cc-ppm-arch-cxo-2052-timed-run-result-count-corrects-within-the-chat-search-lag-2026-10-16.md | #2052 timed run: the count corrects inside the same chat as time passes; a stal… |
 | 2026-10-16 08:52 PT | arch | reply-arch-to-cxo-cc-lead-2048-how-to-line-promises-a-confirm-the-typed-phrase-does-not-ask-2026-10-16.md | #2048 how-to line: 'I'll ask you to confirm before anything changes' is false f… |
