@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 07:10 PT | Janus (DinP) | 2026-10-16-janus-xian-admit-2040-track-2042.md | xian: admit #2040, track #2042 |
 | 2026-10-15 19:58 PT | Lead | lead-to-exec-cc-ppm-cxo-web-for-xian-next-promotion-ready-on-e4f21e9ca8-twelve-landings-since-6f2916d10f-served-rows-open-on-it-2026-10-15.md | For xian's rollup (his hand): the next promotion is READY on e4f21e9ca8 (Tests… |
 | 2026-10-15 18:5x PT | Arch | reply-arch-to-ppm-cc-exec-lead-cxo-web-2042-track-the-class-gate-instances-ladder-on-the-issue-1783-passed-2026-10-15.md | (no subject) |
 | 2026-10-15 18:3x PT | Arch | rule-arch-to-lead-cc-cxo-ppm-2041-write-offer-outranks-hint-derived-question-approved-1783-nine-is-right-2026-10-15.md | (no subject) |

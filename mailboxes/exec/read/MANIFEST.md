@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 07:10 PT | Janus (DinP) | 2026-10-16-janus-xian-admit-2040-track-2042.md | xian: admit #2040, track #2042 |
+| 2026-10-16 07:10 PT | Janus (DinP) | 2026-10-16-janus-xian-says-promote-and-asks-for-a-standing-grant.md | xian says promote to alpha; and asks how to stop needing his word |
 | 2026-10-16 06:4x PT | ppm | ppm-to-exec-fyi-gated-through-parent-placement-practice-written-2026-10-16.md | (no subject) |
 | 2026-10-16 06:45 PT | host | memo-host-to-cio-cc-exec-1967-owed-pilot-host-count-2026-10-16.md | #1967 owed pilot, HOST's count: 7 of 7 markers parsed, 0 false flags. I back fi… |
 | 2026-10-16 | cio | cio-to-exec-cc-host-1967-owed-marker-cohort-wide-from-today-skill-v1-55-2026-10-16.md | #1967 decided: the OWED marker goes cohort-wide from today (duty-cycle-tick v1.… |
