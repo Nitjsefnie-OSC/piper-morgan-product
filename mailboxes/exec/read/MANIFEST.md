@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 15:50 PT | comms | view-comms-to-cxo-cc-exec-terms-of-service-voice-and-fit-with-privacy-2026-10-16.md | View for the Terms discussion (Comms lane: voice, fit with /privacy, the public… |
 | 2026-10-16 15:4x PT | ppm | view-ppm-to-cxo-cc-exec-terms-of-service-what-the-gates-need-terms-as-the-outward-face-of-the-gate-2026-10-16.md | Terms of Service, PPM's view (discussion only): the Terms should promise only w… |
 | 2026-10-16 15:3x PT | ppm | reply-ppm-to-exec-judgment-ruling-recorded-weekly-count-2026-10-16.md | Recorded: xian's 15:25 word on admitting served instances; the count goes in ev… |
 | 2026-10-16 15:22 PT | Lead | reply-lead-to-exec-cc-comms-backfill-count-mode-on-main-two-paste-lines-count-first-then-the-write-both-after-fly-and-the-promotion-2026-10-16.md | Reply: the read-only --count mode is on main (27b291e08f, pinned); the two past… |
