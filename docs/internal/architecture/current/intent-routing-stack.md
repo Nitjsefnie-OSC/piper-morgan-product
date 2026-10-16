@@ -5864,6 +5864,28 @@ before its next `_track_offer_hint` and `_apply_soft_offer`). The fed-fake test
 `test_2035_write_offer_reach_tripwire_fails_on_fakes` also feeds the REAL orchestrator source with
 the carry removed and expects check (d) to fail. See the #2030/#2041 paragraph for the precedence.
 
+## A PORTFOLIO canonical action takes PORTFOLIO whatever category came with it (2026-10-16, #2048)
+
+Served on alpha `6bb955919d`: `list my projects` on a no-projects account got the floor's "I don't have your
+projects list in front of me", with `manage_portfolio` in the reply body. Path: surface 1 has not claimed the
+phrase since the 2026-10-11 `PORTFOLIO_LIST_PATTERN` deletion; a router decision naming `manage_portfolio`
+cannot dispatch live (no rail key, so `not_live_*` / `not_rail_dispatchable`); the LLM classifier decides,
+and it emits category and action independently. Its own prompt teaches `"list all projects" → (query,
+manage_portfolio)` (`prompts.py`, since 2026-07-09). `QUERY` is not canonical, so the turn went
+`_handle_query_intent` → `_handle_generic_query` → `_handle_unknown_intent` (the floor), whose `intent_data`
+repeats the classifier's action. Every non-PORTFOLIO category missed the code line the same way (19 of 19,
+measured). `IntentCache` (message-text key, 1 h TTL) explains "3 of 3 across two fresh chats". Not a code
+regression: the same dispatch at `6f2916d10f` floors `(QUERY, manage_portfolio)` too.
+
+Fix (dispatch layer; no pattern, no catalog or prompt change): `IntentService._adopt_canonical_portfolio_category`,
+called right after classification in `_process_intent_internal`, sets PORTFOLIO when the action's only
+`ACTION_REGISTRY` CANONICAL rows are PORTFOLIO (`manage_portfolio`, `manage_repos`; read from the registry). The
+action is untouched, so `_handle_portfolio_query`'s operation sniff answers (list → `empty_projects_message()`,
+armed with `offer_add_project`). The CONVERSATION canonical keys keep their own message-level gate. Open for
+Arch: the prompt example's `query` category, and `manage_portfolio`'s catalog example "List my projects"
+beside `list_projects`'s bare "projects query" description. Pins:
+`tests/unit/services/intent_service/test_manage_portfolio_list_from_code_2048.py`.
+
 ## Pointers
 
 - Probe report + recalibration trace: `dev/2026/07/08/routing-probe-1283-run1.md`
