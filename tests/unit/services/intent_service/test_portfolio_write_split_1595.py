@@ -218,45 +218,47 @@ async def test_entry_point_without_context_returns_none_not_a_crash(runner):
 
 
 @pytest.mark.asyncio
-async def test_legacy_archive_branch_delegates_to_the_hoisted_method(monkeypatch):
+async def test_legacy_archive_branch_hands_off_to_the_archive_project_rail_op(monkeypatch):
+    """#2057 (Arch's ruling 2026-10-16): the legacy branch no longer calls
+    the hoisted method itself (that bypassed the consent gate); it names the
+    rail op, whose adapter calls the SAME hoisted method after the gate."""
+    from services.intent_service.adopted_category_reads_only import RAIL_DISPATCH_KEY
     from services.intent_service.canonical_handlers import CanonicalHandlers
 
     handler = CanonicalHandlers()
-    calls = {}
 
-    async def _fake_archive(intent, session_id, user_id=None):
-        calls["called"] = True
-        return {"message": "delegated", "intent": {"action": "archive_project"}}
+    async def _must_not_run(intent, session_id, user_id=None):
+        raise AssertionError("the legacy branch wrote without the consent gate")
 
-    monkeypatch.setattr(handler, "_handle_archive_project", _fake_archive)
+    monkeypatch.setattr(handler, "_handle_archive_project", _must_not_run)
 
     intent = SimpleNamespace(
         action="manage_portfolio", context={"original_message": "archive my project Foo"}
     )
     result = await handler._handle_portfolio_query(intent, "sess", user_id="u1")
-    assert calls.get("called") is True
-    assert result["message"] == "delegated"
+    assert result[RAIL_DISPATCH_KEY] == "archive_project"
 
 
 @pytest.mark.asyncio
-async def test_legacy_restore_branch_delegates_to_the_hoisted_method(monkeypatch):
+async def test_legacy_restore_branch_hands_off_to_the_restore_project_rail_op(monkeypatch):
+    """#2057 (Arch's ruling 2026-10-16): the legacy branch no longer calls
+    the hoisted method itself (that bypassed the consent gate); it names the
+    rail op, whose adapter calls the SAME hoisted method after the gate."""
+    from services.intent_service.adopted_category_reads_only import RAIL_DISPATCH_KEY
     from services.intent_service.canonical_handlers import CanonicalHandlers
 
     handler = CanonicalHandlers()
-    calls = {}
 
-    async def _fake_restore(intent, session_id, user_id=None):
-        calls["called"] = True
-        return {"message": "delegated", "intent": {"action": "restore_project"}}
+    async def _must_not_run(intent, session_id, user_id=None):
+        raise AssertionError("the legacy branch wrote without the consent gate")
 
-    monkeypatch.setattr(handler, "_handle_restore_project", _fake_restore)
+    monkeypatch.setattr(handler, "_handle_restore_project", _must_not_run)
 
     intent = SimpleNamespace(
         action="manage_portfolio", context={"original_message": "restore project Foo"}
     )
     result = await handler._handle_portfolio_query(intent, "sess", user_id="u1")
-    assert calls.get("called") is True
-    assert result["message"] == "delegated"
+    assert result[RAIL_DISPATCH_KEY] == "restore_project"
 
 
 @pytest.mark.asyncio

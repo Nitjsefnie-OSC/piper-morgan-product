@@ -18,16 +18,25 @@ not execute:
   ``restore_project``, ``add_project``) with the original Intent (case 2).
 
 Reads (list, list_archived, search, the help menu) run as before. When the
-classifier itself says PORTFOLIO nothing here applies (that legacy path is on
-the #1595 Phase 3 tail, Arch comment 6219115064).
+classifier itself says PORTFOLIO the adopted guard does not apply; since
+#2057 that path hands its writes to the rail ops instead (below).
 
-Copy: CXO's final ruling (2026-10-16), verbatim for the project ops.
-The repo lines are not CXO-ruled yet (flagged in the #2048 report).
+Copy: CXO's final ruling (2026-10-16), verbatim for the project ops; CXO's
+09:1x refinements (the add confirm uses the add flow's wording, the named add
+how-to echoes the name, the repo statements).
+
+#2057 (Arch's ruling 2026-10-16, comment 6219485412) reuses this copy: the
+classified legacy ``manage_portfolio`` / ``manage_repos`` write branches now
+dispatch to their rail ops (``LEGACY_WRITE_RAIL_ACTIONS``), and a
+question-framed turn on those rail ops gets :func:`question_how_to` (the same
+statements) instead of a write or an armed check. One copy source for the
+guard path and the #2057 paths.
 """
 
 from __future__ import annotations
 
 import dataclasses
+import re
 from typing import Any, Dict, Optional, Sequence
 
 from services.domain.models import Intent
@@ -56,8 +65,19 @@ _IMPERATIVE_VERBS = {
     "restore": frozenset({"restore", "unarchive", "bring"}),
 }
 
-# Placeholder when the message carried no name.
-_NO_NAME = "[project name]"
+# #2057: every sniffed legacy write operation and its rail op. A classified
+# PORTFOLIO turn whose sniff lands here is dispatched to the rail op (so the
+# #1509/#1510 consent gate decides), never written by the legacy branch.
+LEGACY_WRITE_RAIL_ACTIONS = {
+    **ADOPTED_WRITE_RAIL_ACTIONS,
+    "link": "link_repo",
+    "unlink": "unlink_repo",
+}
+_RAIL_ACTION_OPERATIONS = {rail: op for op, rail in LEGACY_WRITE_RAIL_ACTIONS.items()}
+
+# The handler's own owner/name capture (_handle_repo_management), reused for
+# the repo statements' echo. Copy choice only, never routing.
+_REPO_RE = re.compile(r"([\w.-]+/[\w.-]+)")
 
 # --- copy (CXO 2026-10-16, final; verbatim) ----------------------------
 # Case 1: a statement. No action, no question. Per operation: the line when
@@ -71,7 +91,7 @@ ADOPTED_WRITE_HOW_TO_LINES = {
         "To archive a project, say 'archive project {name}'. "
         "You can restore it any time with 'restore project {name}'."
     ),
-    "add": "To add a project, say 'add project' and a name.",
+    "add": "To add a project called {name}, say 'add project {name}'.",
     "restore": "To restore an archived project, say 'restore project {name}'.",
 }
 ADOPTED_WRITE_HOW_TO_LINES_NO_NAME = {
@@ -80,13 +100,20 @@ ADOPTED_WRITE_HOW_TO_LINES_NO_NAME = {
     "restore": "To restore an archived project, say 'restore project' and its name.",
 }
 # Case 2: the yes/no confirm, armed (see build_adopted_write_confirm_offer).
-ADOPTED_WRITE_CONFIRM_QUESTION = '{Verb} the project "{name}"? (yes/no)'
+# Add uses the existing add flow's wording (CXO 09:1x).
+ADOPTED_WRITE_CONFIRM_QUESTIONS = {
+    "archive": 'Archive the project "{name}"? (yes/no)',
+    "restore": 'Restore the project "{name}"? (yes/no)',
+    "add": 'Add a project called "{name}"? (yes/no)',
+}
 # Case 2, "no".
 ADOPTED_WRITE_DECLINE_LINE = 'Okay, I won\'t {verb} "{name}". Nothing has been changed.'
 
-# Repo writes (manage_repos link/unlink): a statement only. NOT CXO-ruled.
-ADOPTED_REPO_LINK_LINE = "To link a repository, say 'link repo {repo} to project {name}'."
-ADOPTED_REPO_UNLINK_LINE = "To unlink a repository, say 'unlink repo {repo} from project {name}'."
+# Repo writes (manage_repos link/unlink): a statement only, nothing armed
+# (CXO 09:1x). The repo is echoed when the message named one.
+ADOPTED_REPO_LINK_LINE = "To link a repo, say 'link repo {repo}'."
+ADOPTED_REPO_UNLINK_LINE = "To unlink a repo, say 'unlink repo {repo}'."
+_NO_REPO = "owner/name"
 
 
 # Words that make a captured "name" no name at all. The archive/restore
@@ -127,9 +154,44 @@ def adopted_write_how_to(operation: str, name: Optional[str]) -> str:
     return ADOPTED_WRITE_HOW_TO_LINES[operation].format(name=name)
 
 
-def adopted_repo_how_to(operation: str, repo: Optional[str], project: Optional[str]) -> str:
+def adopted_repo_how_to(operation: str, repo: Optional[str]) -> str:
     template = ADOPTED_REPO_LINK_LINE if operation == "link" else ADOPTED_REPO_UNLINK_LINE
-    return template.format(repo=repo or "owner/name", name=project or _NO_NAME)
+    return template.format(repo=repo or _NO_REPO)
+
+
+def display_name_for(operation: str, original_message: str) -> Optional[str]:
+    """The project name the user typed, case kept, for the copy only: add's
+    slot extractor, or the handler's own ARCHIVE/RESTORE pattern family run
+    on the original text. None when there is no usable name."""
+    from services.onboarding.portfolio_service import (
+        ARCHIVE_PATTERNS,
+        RESTORE_PATTERNS,
+        clean_project_name,
+        extract_add_project_slots,
+    )
+
+    if operation == "add":
+        return usable_name(extract_add_project_slots(original_message)["name"])
+    patterns = {"archive": ARCHIVE_PATTERNS, "restore": RESTORE_PATTERNS}.get(operation, ())
+    for pattern in patterns:
+        match = re.search(pattern, original_message, re.IGNORECASE)
+        if match and match.groups():
+            return usable_name(clean_project_name(match.group(1).strip()))
+    return None
+
+
+def question_how_to(rail_action: Optional[str], original_message: str) -> Optional[str]:
+    """#2057: the statement a question-framed turn gets for a portfolio rail
+    write (``archive_project``, ``restore_project``, ``add_project``,
+    ``link_repo``, ``unlink_repo``); None for any other action (the gate's
+    generic check answers those). Arms nothing."""
+    operation = _RAIL_ACTION_OPERATIONS.get(rail_action or "")
+    if operation is None:
+        return None
+    if operation in ("link", "unlink"):
+        match = _REPO_RE.search(original_message or "")
+        return adopted_repo_how_to(operation, match.group(1) if match else None)
+    return adopted_write_how_to(operation, display_name_for(operation, original_message or ""))
 
 
 def build_adopted_write_confirm_offer(operation: str, name: str, intent: Intent) -> Dict[str, Any]:
@@ -143,7 +205,7 @@ def build_adopted_write_confirm_offer(operation: str, name: str, intent: Intent)
     )
 
     rail_action = ADOPTED_WRITE_RAIL_ACTIONS[operation]
-    question = ADOPTED_WRITE_CONFIRM_QUESTION.format(Verb=operation.capitalize(), name=name)
+    question = ADOPTED_WRITE_CONFIRM_QUESTIONS[operation].format(name=name)
     held = dataclasses.replace(intent, action=rail_action, context=dict(intent.context or {}))
     return {
         "workflow_type": CONFIRM_PENDING_ACTION_WORKFLOW,
@@ -155,4 +217,33 @@ def build_adopted_write_confirm_offer(operation: str, name: str, intent: Intent)
             "summary": f'{operation} the project "{name}"',
         },
         "decline_message": ADOPTED_WRITE_DECLINE_LINE.format(verb=operation, name=name),
+    }
+
+
+# #2057: the record key the canonical seam reads to re-dispatch a legacy
+# write through its rail op.
+RAIL_DISPATCH_KEY = "rail_dispatch"
+
+
+def legacy_write_rail_dispatch(operation: str, original_message: str) -> Dict[str, Any]:
+    """#2057: what a legacy ``manage_portfolio`` / ``manage_repos`` write
+    branch returns instead of writing. ``rail_dispatch`` names the rail op;
+    ``IntentService._process_intent_internal`` dispatches it through
+    ``_dispatch_action_rail`` (consent gate, #1190 confirm). The message is
+    the operation's how-to statement, so a caller that cannot dispatch the
+    rail (the multi-intent orchestrator calls ``CanonicalHandlers.handle``
+    directly) shows a line that writes nothing."""
+    from services.shared_types import IntentCategory
+
+    rail_action = LEGACY_WRITE_RAIL_ACTIONS[operation]
+    return {
+        "message": question_how_to(rail_action, original_message),
+        "intent": {
+            "category": IntentCategory.PORTFOLIO.value,
+            "action": rail_action,
+            "confidence": 1.0,
+            "context": {"original_message": original_message, "legacy_operation": operation},
+        },
+        "requires_clarification": False,
+        RAIL_DISPATCH_KEY: rail_action,
     }

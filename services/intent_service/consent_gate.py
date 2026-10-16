@@ -166,6 +166,16 @@ def decide_consent(
     OUTWARD     DESTRUCTIVE ambiguous  CONFIRM      CONFIRM
     ==========  ==========  =========  ===========  ==============
 
+    #2057 (Arch's ruling 2026-10-16, issue comment 6219485412): a fourth
+    framing, ``question`` (``collaboration_gate.FRAMING_QUESTION``), adds 12
+    cells. READ -> PROCEED, DESTRUCTIVE -> CONFIRM (as every framing); WRITE
+    -> COLLABORATE in BOTH modes and both outwardness values. A question
+    never executes a write, and the declared execute mode never escalates
+    it (the AMBIGUOUS escalation does not apply). Mode-invariant. The rail
+    (``_dispatch_action_rail``) answers a question about an op that has a
+    how-to line with that statement instead of arming the check
+    (``adopted_category_reads_only.question_how_to``).
+
     The PRIVATE half IS the pre-axis 18-cell matrix, unchanged — PRIVATE is
     today's semantics, which is why the parameter may default to it (the
     default can never weaken a cell; see WorkflowEntry.outwardness).
@@ -222,6 +232,7 @@ def decide_consent(
     from services.intent_service.collaboration_gate import (
         FRAMING_COMPOSE,
         FRAMING_EXECUTE,
+        FRAMING_QUESTION,
         WorkingMode,
     )
 
@@ -230,7 +241,8 @@ def decide_consent(
     if effect == EffectClass.READ:
         return ConsentDecision.PROCEED
     # WRITE — explicit framing wins both ways; ambiguity goes to the mode.
-    if framing == FRAMING_COMPOSE:
+    # #2057: a question never writes and is never escalated by the mode.
+    if framing in (FRAMING_COMPOSE, FRAMING_QUESTION):
         return ConsentDecision.COLLABORATE
     if framing == FRAMING_EXECUTE:
         if outwardness == Outwardness.OUTWARD and mode is WorkingMode.EXECUTE:
@@ -275,7 +287,13 @@ def decide_consent(
 # hint said the user was asking for collaboration). Verified against the
 # matrix above, not guessed; asserted by TestFramingPermissivenessOrder in
 # tests/unit/services/intent_service/test_consent_framing_hint_1970.py.
+#
+# #2057: "question" ranks BELOW compose. decide_consent treats the two alike
+# on a WRITE (COLLABORATE in both modes), so the order above is unchanged;
+# ranking question strictly lowest means a regex QUESTION read always wins a
+# comparison (a question never writes, whatever a hint says).
 _FRAMING_PERMISSIVENESS = {
+    "question": -1,
     "compose": 0,
     "ambiguous": 1,
     "execute": 2,
@@ -393,6 +411,7 @@ async def evaluate_consent(
     from services.intent_service.collaboration_gate import (
         FRAMING_AMBIGUOUS,
         FRAMING_EXECUTE,
+        FRAMING_QUESTION,
         WorkingMode,
         classify_framing,
         get_working_mode,
@@ -403,7 +422,9 @@ async def evaluate_consent(
     valid_hint = framing_hint if is_valid_framing(framing_hint) else None
     log_framing_disagreement_if_any(action, valid_hint, regex_framing, outwardness)
 
-    if valid_hint is None:
+    if valid_hint is None or regex_framing == FRAMING_QUESTION:
+        # #2057: a question read beats any hint, PRIVATE included — a
+        # question never writes on the router's word.
         framing = regex_framing
     elif outwardness == Outwardness.OUTWARD:
         framing = less_permissive_framing(valid_hint, regex_framing)

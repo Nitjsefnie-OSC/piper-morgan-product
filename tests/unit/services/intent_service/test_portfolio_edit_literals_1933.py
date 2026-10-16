@@ -110,31 +110,21 @@ class TestEditUpdatePrecedence:
     async def test_plain_add_is_unaffected(self, handler):
         """No edit/update word at all -- must reach the add branch, not the
         edit_project_unavailable floor."""
-        with patch.object(
-            CanonicalHandlers,
-            "_handle_add_project",
-            AsyncMock(return_value={"intent": {"action": "_sentinel_add"}}),
-        ) as mocked:
-            result = await handler._handle_portfolio_query(
-                _intent("add a project called Foo"), "s1", user_id="u1"
-            )
-        mocked.assert_awaited_once()
-        assert result["intent"]["action"] == "_sentinel_add"
+        # #2057: the add sniff now hands off to the add_project rail op.
+        result = await handler._handle_portfolio_query(
+            _intent("add a project called Foo"), "s1", user_id="u1"
+        )
+        assert result["rail_dispatch"] == "add_project"
 
     @pytest.mark.asyncio
     async def test_plain_archive_is_unaffected(self, handler):
         """No edit/update word at all -- must reach the archive branch, not
         the edit_project_unavailable floor."""
-        with patch.object(
-            CanonicalHandlers,
-            "_handle_archive_project",
-            AsyncMock(return_value={"intent": {"action": "_sentinel_archive"}}),
-        ) as mocked:
-            result = await handler._handle_portfolio_query(
-                _intent("archive my project Foo"), "s1", user_id="u1"
-            )
-        mocked.assert_awaited_once()
-        assert result["intent"]["action"] == "_sentinel_archive"
+        # #2057: the archive sniff now hands off to the archive_project rail op.
+        result = await handler._handle_portfolio_query(
+            _intent("archive my project Foo"), "s1", user_id="u1"
+        )
+        assert result["rail_dispatch"] == "archive_project"
 
     @pytest.mark.asyncio
     async def test_add_mentioning_update_downstream_is_not_a_false_positive(self, handler):
@@ -142,16 +132,10 @@ class TestEditUpdatePrecedence:
         the LEADING verb -- "add" is. The leading-verb heuristic (not a
         bare substring check) must let this fall through to the add
         branch, not misclaim it as an edit/update ask."""
-        with patch.object(
-            CanonicalHandlers,
-            "_handle_add_project",
-            AsyncMock(return_value={"intent": {"action": "_sentinel_add"}}),
-        ) as mocked:
-            result = await handler._handle_portfolio_query(
-                _intent("add a project to update later"), "s1", user_id="u1"
-            )
-        mocked.assert_awaited_once()
-        assert result["intent"]["action"] == "_sentinel_add"
+        result = await handler._handle_portfolio_query(
+            _intent("add a project to update later"), "s1", user_id="u1"
+        )
+        assert result["rail_dispatch"] == "add_project"
 
 
 class TestPortfolioPatternsLiteralsSurvive:
@@ -208,12 +192,8 @@ async def test_intent_prefixed_edit_never_reaches_add(handler, message):
 @pytest.mark.asyncio
 async def test_add_with_intent_prefix_still_adds(handler):
     """'I want to add a project called Foo' still reaches add (no edit verb)."""
-    with patch.object(
-        CanonicalHandlers,
-        "_handle_add_project",
-        AsyncMock(return_value={"message": "ok", "intent": {"action": "ADD"}}),
-    ) as add:
-        await handler._handle_portfolio_query(
-            _intent("I want to add a project called Foo"), "s1", user_id="u1"
-        )
-    assert add.await_count == 1
+    # #2057: reaching add now means handing off to the add_project rail op.
+    result = await handler._handle_portfolio_query(
+        _intent("I want to add a project called Foo"), "s1", user_id="u1"
+    )
+    assert result["rail_dispatch"] == "add_project"

@@ -5922,10 +5922,51 @@ without a name, "say 'archive project' and its name"; a capture made only of det
 adopted link/unlink (repo copy not yet CXO-ruled). Reads (list, list_archived, search, the menu), delete's
 and edit's non-writing replies, and every classified-PORTFOLIO turn are unchanged (the legacy write
 branches' missing consent is the #1595 Phase 3 tail). Copy and builder:
-`services/intent_service/adopted_category_reads_only.py`. Scope note: surface 1 itself claims phrasings
-such as "how do I archive my project Foo?" as PORTFOLIO/`manage_portfolio`, so those reach the classified
-legacy path and still write; this guard covers only turns the classifier decides. Pins:
+`services/intent_service/adopted_category_reads_only.py`. Scope note: this guard covers only turns the
+classifier decides; surface 1's own PORTFOLIO claims are covered by #2057 (next section). CXO's 09:1x
+refinements: the add confirm reads `Add a project called "Foo"? (yes/no)` (no: `Okay, I won't add "Foo".
+Nothing has been changed.`), a named add how-to echoes the name (`To add a project called Foo, say 'add
+project Foo'.`), and the repo statements are `To link a repo, say 'link repo owner/name'.` / `To unlink a
+repo, say 'unlink repo owner/name'.` (the repo is echoed when the message named one). Pins:
 `tests/unit/services/intent_service/test_adopted_category_reads_only_2048.py`.
+
+## Every portfolio write passes the consent gate; a question never writes (2026-10-16, #2057)
+
+Live on alpha before this: surface 1 claims "how do I archive my project Foo?", "how do I restore project
+Foo?", "how would I add a project called Foo?" and "archive project Foo" as PORTFOLIO/`manage_portfolio`;
+`_handle_portfolio_query`'s operation sniff then ran archive/add/restore with no consent (and the
+`manage_repos` link/unlink branches likewise, unlink with no #1190 confirm). Arch's ruling (issue comment
+6219485412; ADR-080 D3/D4), two parts:
+
+1. **Writes go through the rail ops.** The legacy add/archive/restore and link/unlink branches no longer
+   write. They return `legacy_write_rail_dispatch(...)` (`adopted_category_reads_only.py`): a record whose
+   `rail_dispatch` key names the rail op (`add_project`, `archive_project`, `restore_project`,
+   `link_repo`, `unlink_repo`) and whose message is the op's how-to statement. The main canonical seam in
+   `IntentService._process_intent_internal` (right after `canonical_handlers.handle`) re-dispatches that
+   record through the existing `_dispatch_action_rail` with the rail key, so the #1509/#1510 consent gate
+   (WRITE) or the #1190 name-bound confirm (unlink, DESTRUCTIVE) decides, whichever surface claimed the
+   turn. No new `intent.action` dispatch site (`MAX_DISPATCH_SITES` stays 0). A caller that cannot reach
+   the rail (the multi-intent orchestrator calls `CanonicalHandlers.handle` directly) shows the statement,
+   which writes nothing; this narrows the orchestrator's known consent-skip gap toward not writing. The
+   list/search/list_archived/menu/delete/edit branches are unchanged. Consequence: an ambiguous legacy
+   write ("I would like to archive project Foo") now gets the generic consent check in collaborate mode
+   (it archived unasked before) and proceeds in declared execute mode.
+2. **A question never writes, in either mode.** `collaboration_gate.classify_framing` gains
+   `FRAMING_QUESTION`, evaluated after the anchored `_EXECUTE_RE` check (so "can you archive Foo?" stays
+   EXECUTE) and before the compose markers: an interrogative head (`_QUESTION_HEAD_RE`: how; what/why/
+   when/where/which followed by an auxiliary; should/can/could/do/would/may/might I; is there / is it
+   possible) or a trailing "?". `consent_gate.decide_consent`: WRITE x question = COLLABORATE in both
+   modes and both outwardness values (the AMBIGUOUS execute-mode escalation does not apply); READ and
+   DESTRUCTIVE cells unchanged. `evaluate_consent` lets a regex QUESTION read beat any router framing hint
+   (question ranks below compose in `_FRAMING_PERMISSIVENESS`). In `_dispatch_action_rail`, before the
+   consent branches, a question-framed turn on a rail op that has a how-to line
+   (`adopted_category_reads_only.question_how_to`: the five portfolio ops) returns that statement and
+   arms nothing, before the #1190 confirm too. Other WRITE ops' questions get the gate's generic consent
+   check. A permission rule, not a routing pattern: the regex lives in the gate, never in
+   `pre_classifier.py`.
+
+Copy is CXO's, one source (`adopted_category_reads_only.py`) for the #2048 guard and these paths. Pins
+(surface 1 live, both modes): `tests/unit/services/intent_service/test_portfolio_writes_consent_2057.py`.
 
 ## Pointers
 
