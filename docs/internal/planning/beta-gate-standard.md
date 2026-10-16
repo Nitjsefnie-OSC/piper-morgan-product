@@ -71,6 +71,16 @@ PM, verbatim, relayed by Exec 17:26 PDT: *"I am comfortable with any convention 
 
 A default is a fallback so that nothing is ownerless, not an assignment of attention: the owner named by the line, or the default, is who answers if someone asks "whose is this?". PPM revisits the table if a milestone's mix of work changes.
 
+## Child issues of an admitted gate item (PPM placement practice, written 2026-10-16; used four times on 10-15)
+
+When a new issue is a step or a blocker of an issue already admitted to MVP (the parent cannot close while the child is open, because the parent's done-when needs it), PPM places the child on **Production, "gated through #parent"**, and does not admit it separately. One blocker is counted once: admitting the child too would grow the open-MVP count and write a slip row for scope the parent already carries.
+
+- The child gets a placement comment naming the parent and why the parent waits on it; the parent gets a one-line comment naming the child.
+- **Re-place trigger:** if the work is split so the parent could close with the child still open, the child loses its cover. PPM then takes it to Exec for an MVP word like any other candidate.
+- This is placement, not admission: it never moves the gate list or the dates, and PM or Exec can overrule it per issue.
+
+First uses (10-15): #2029, #2031 and #2039 under #2018 (GitHub dead-connection recovery); #2037 under #2012 (CXO held #2012 open on it).
+
 ## Exits and freeze mechanics
 
 - A gate issue leaves only by closing or by explicit PM ruling.
