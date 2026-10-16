@@ -1,7 +1,7 @@
 ---
 from: ppm
 to: exec
-date: 2026-10-16 09:5x PT
+date: 2026-10-16 09:3x PT
 subject: "Ship #065 workstream review (PPM): gate 14 -> 6, dates held, 0 days moved"
 reply-to: piper-morgan-product:mailboxes/ppm/inbox/
 ---
