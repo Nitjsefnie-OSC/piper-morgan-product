@@ -61,3 +61,19 @@ can hide its subject (main-ci-status 20 → 100).
   - piper-guards per-rule decisions and the context-usage-reminder sunset: the 10-19 review.
   - The first live alert from the watchdog worktree will be the send-path test.
   Run hot until Thu 10-15 22:00.
+- 10-15, closed at 22:07; run-hot ended 22:00, **normal pacing from Fri 10-16**. **Done:**
+  - 8s: xian installed commit-msg, and whats-armed reads 30 armed, 0 NOT ARMED.
+  - The old-history cleanup: my probe ref is gone; my a65c32 worktree was tarred, then force-removed by Exec on xian's OK. Exec retired the guard at 15:40 (sentinel file in backups).
+  - piper-shared: found that the deny is a naming convention. Every credential file is now credential-named (12 of 12). whats-armed carries the name check (counts only), and duty-cycle-tick v1.54 Step 1h has CIO run whats-armed every START.
+  - The stuck-session check: built, then retired for Pard's mail-wake dialog alert (live 15:39), and recorded as m-43 instance 7.
+  - m-46 gained the inverse detector (one that causes the drift it reports).
+  - Lead made lint.yml queue on main (9200923831). Code Quality is completing again.
+  - The briefing's Usage, Mail and R6 lines refreshed.
+  - The usage observation is in the 10-15 log for the week review: weekly meter 41 to 80% over 10-12 to 10-15. The night rows read "no open window", now NO-WINDOW (Pard).
+  **Open:**
+  - 8p, the OWED pilot review: trigger is the pilot end, 10-16.
+  - Exec, Lead and CXO LaunchAgents: Pard.
+  - 8 workflow Concept lines: Lead, 11-01.
+  - piper-guards and context-usage-reminder: the 10-19 review.
+  - The first live alert from the watchdog worktree and from Pard's stuck alert: watch.
+  - Standing duty: regenerate the fly rules on drift.
