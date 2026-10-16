@@ -335,3 +335,5 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 - 12:31 tick 10-15: CI 12/12, alpha 5e5f3366c4 (promotion waits on xian), UX 12, inbox empty. Next fire ~15:31.
 - 15:31 tick 10-15: CI 12/12, alpha 5e5f3366c4 (approved 13:18, undispatched per Exec/PA), UX 12, inbox empty. #2008 prose passes (comment 6202784225), close after Web's other formats. Next fire ~18:31.
 - $NOW tick 10-15: Tests RED on main (Lead: #1816 pin, fix 279a595b5c; HOST filed), alpha 6f2916d10f, UX 13, inbox empty. Next fire ~21:31, then 10-15 day wrap (run-hot window ends 22:00).
+
+- 21:31 10-15: day closed (log DAY-CLOSED). CI 12/12, alpha 6f2916d10f, UX 14, inbox empty. Promotion to e4f21e9ca8 READY on xian's word; served rows listed in the log's Open at close. Next fire ~06:31 10-16: first entry needs Drift:; normal pacing from Friday.
