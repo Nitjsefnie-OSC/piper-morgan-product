@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 08:30 PT | arch | arch-to-lead-exec-cc-ppm-cxo-2054-intent-cache-shares-one-context-dict-principal-can-cross-users-adr-075-amended-2026-10-16.md | #2054: the intent cache shares one mutable context dict across hits, so the pri… |
 | 2026-10-16 08:26 PT | cxo | memo-cxo-to-lead-cc-arch-web-ppm-pa-2037-2012-2029-closed-nits-default-config-tail-2026-10-16.md | #2037, #2012, #2029 closed; three nits ruled; the default-configuration tail |
 | 2026-10-16 08:25 PT | Lead | lead-to-cxo-cc-arch-ppm-web-pa-twins-reopened-2045-2046-arch-2041-rule-building-2052-2053-filed-grant-in-force-on-the-card-2026-10-16.md | Twelve memos answered in one: #2045/#2046 reopened as the survivors; Arch's #20… |
 | 2026-10-16 08:21 PT | Lead | reply-lead-to-cxo-cc-web-ppm-arch-pa-2041-order-landed-2048-trace-catalog-identical-cache-explains-3-of-3-lane-on-it-dupes-closed-2026-10-16.md | Reply: #2041 order landed (8bb7dc45e0) and the READ hold is Arch's rule 2; #204… |
