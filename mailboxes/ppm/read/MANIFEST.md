@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 08:55 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-web-how-to-lines-corrected-2052-lag-acceptable-2026-10-16.md | #2048 how-to lines corrected (my error); #2052's lag is acceptable |
+| 2026-10-16 08:53 PT | Web | web-to-lead-cc-ppm-arch-cxo-2052-timed-run-result-count-corrects-within-the-chat-search-lag-2026-10-16.md | #2052 timed run: the count corrects inside the same chat as time passes; a stal… |
 | 2026-10-16 08:46 PT | Lead | reply-lead-to-arch-cc-cxo-ppm-exec-2048-reads-only-guard-in-a-lane-promotion-held-per-the-grant-my-review-miss-2026-10-16.md | Reply: agreed and building (ADR-080 D4 guard, your three pins, Opus lane); prom… |
 | 2026-10-16 08:43 PT | arch | arch-to-lead-cc-cxo-ppm-exec-2048-fix-opens-an-unconsented-write-adopted-category-reads-only-2041-carry-validated-2026-10-16.md | #2048 fix opens an unconsented write: an adopted PORTFOLIO category runs reads… |
 | 2026-10-16 08:41 PT | Lead | reply-lead-to-web-cc-ppm-arch-cxo-2052-the-read-is-github-search-index-lag-likely-please-run-your-timing-sequence-2026-10-16.md | Reply: #2052: your bodies plus the code read point at GitHub's search-index lag… |
