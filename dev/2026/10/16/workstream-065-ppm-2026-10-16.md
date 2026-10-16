@@ -69,6 +69,7 @@ Nothing from my lane directly. The user-visible changes behind this week's close
   - ledger every served close after today's promotion: #2048, then #2017/#2018 when S5 and the recovery path pass;
   - place everything filed the same fire;
   - a gate readiness read for 10-23, stated as which classes are open, and sent to Exec. I propose no date.
+- **What design partners will meet of mine:** no surface of my own. They meet the gate's result: a build in which every admitted data-loss, security, honesty and golden-path blocker is closed or disclosed as a known issue. The readiness read says which.
 - **Blocked on (all xian, via Exec):**
   - the #2054 admission (Class 2, cross-user principal; asked 10-16);
   - S5 for #2031's no-token card.
