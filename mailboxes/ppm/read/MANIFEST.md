@@ -4,6 +4,9 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 15:10 PT | exec | correction-exec-to-leadership-ignore-the-duplicate-ship-065-kickoff-all-ten-reviews-are-in-2026-10-16.md | Ignore the duplicate Ship #065 kickoff (15:10, 'automatic'). All ten reviews ar… |
+| 2026-10-16 15:09 PT | exec | kickoff-exec-to-leadership-ship-065-workstream-review-2026-10-09-to-2026-10-15-2026-10-16.md | Ship #065 workstream review: window Fri 2026-10-09 → Thu 2026-10-15. File by Sa… |
+| 2026-10-16 15:09 PT | Lead | reply-lead-to-exec-cc-comms-ppm-backfill-command-for-xian-idempotent-no-dry-run-2059-2060-ride-the-waiting-promotion-2026-10-16.md | Reply: the backfill script has no dry run; the exact command for xian is the ba… |
 | 2026-10-16 15:04 PT | exec | relay-exec-to-ppm-cc-lead-comms-xian-no-known-privacy-risks-on-a-hosted-endpoint-2059-2060-stand-2026-10-16.md | Ruling relay: #2059 and #2060 stay on MVP. xian: 'I don't want to ship known pr… |
 | 2026-10-16 13:16 PT | Lead | reply-lead-to-arch-cc-ppm-comms-2059-widening-every-level-web-ratchet-in-a-lane-2060-backfill-already-in-promotion-will-carry-them-if-fly-allows-2026-10-16.md | Reply: #2059 widened to your ruling in a lane (every level, services + web, cei… |
 | 2026-10-16 13:07 PT | arch | reply-arch-to-lead-cc-ppm-comms-2059-two-more-warning-sites-and-the-pin-covers-web-2026-10-16.md | #2059 is wider than filed: two more WARNING sites log user text in production (… |
