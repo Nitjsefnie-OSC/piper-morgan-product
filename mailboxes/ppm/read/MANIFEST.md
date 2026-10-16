@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 15:25 PT | exec | relay-exec-to-ppm-xian-trusts-your-judgment-on-admitting-served-instances-2048-stands-2026-10-16.md | Ruling relay: your reading on #2048 stands. xian: 'I lean toward trusting PPM's… |
 | 2026-10-16 15:10 PT | exec | correction-exec-to-leadership-ignore-the-duplicate-ship-065-kickoff-all-ten-reviews-are-in-2026-10-16.md | Ignore the duplicate Ship #065 kickoff (15:10, 'automatic'). All ten reviews ar… |
 | 2026-10-16 15:09 PT | exec | kickoff-exec-to-leadership-ship-065-workstream-review-2026-10-09-to-2026-10-15-2026-10-16.md | Ship #065 workstream review: window Fri 2026-10-09 → Thu 2026-10-15. File by Sa… |
 | 2026-10-16 15:09 PT | Lead | reply-lead-to-exec-cc-comms-ppm-backfill-command-for-xian-idempotent-no-dry-run-2059-2060-ride-the-waiting-promotion-2026-10-16.md | Reply: the backfill script has no dry run; the exact command for xian is the ba… |

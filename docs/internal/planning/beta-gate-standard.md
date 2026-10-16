@@ -34,6 +34,7 @@ Class 4 is an addition to the three PM endorsed. Without it, "tester cannot conn
 - **The LLM-narration class (#2042), 2026-10-16 07:10:** "For PPM: Yes, admit and track." Track the class; gate each served instance that is false on a golden path; no gate on the class itself.
 - **User data and privacy, 2026-10-16 12:52:** "Yes. I am ok with a beta having bugs but not being cavalier with user data or privacy."
 - **Known privacy risks on a hosted endpoint, 2026-10-16 15:04** (via Exec, answering whether #2059 and #2060 stand): "I don't want to ship known privacy risks on a hosted endpoint, even in beta." This is stronger than the 12:52 line. A known privacy risk on any hosted endpoint is a gate blocker, not just a defect class. It does not hold up a promotion that reduces exposure, but the fix must be live before design partners. A privacy claim the code doesn't back goes to Lead as a code fix first.
+- **PPM admits served instances of a tracked class on its own judgment, 2026-10-16 15:25** (via Exec, answering whether PPM read the 07:10 word right in admitting #2048 without asking first): "This is nuanced. I lean toward trusting PPM's judgment unless we have reasons to be concerned with the outcome of this over time." The #2048 admission stands. Each weekly review states the count: how many served instances PPM admitted this way that week, and how many later came out. So far: 2 admitted (#2048 on 10-16 08:1x, #2052 on 10-16 08:3x), and 1 came out (#2052, un-admitted the same day on its named trigger).
 
 ## Epic 0 clause
 
