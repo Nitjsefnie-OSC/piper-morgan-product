@@ -91,7 +91,7 @@ def front_date(text: str):
     if not text.startswith("---"):
         return None
     fm = text.split("---", 2)[1] if text.count("---") >= 2 else ""
-    m = re.search(r"^date:\s*(.+)$", fm, re.M)
+    m = re.search(r"^date:[ \t]*(\S.*)$", fm, re.M)
     return m.group(1).strip().strip("\"'") if m else None
 
 
