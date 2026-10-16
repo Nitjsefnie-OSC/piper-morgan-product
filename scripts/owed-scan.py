@@ -24,9 +24,12 @@ FLAGS (per open OWED, i.e. no later OWED-CLOSED with the same key by the same ow
   NO-ROW    the owner's dev/active/{role}-standing-items.md or -carry-forward.md has no line containing `key: <slug>`
   OVERDUE   `by:` is a date in the past
   BAD-BY    `by:` is neither a YYYY-MM-DD date nor `trigger: ...`
+  UNPARSED  an `OWED[` the pattern above can't read (most often no `]:` and no text after). One line per log,
+            with a count. Added 2026-10-16: Exec's pilot report found 85 of its 96 markers skipped in silence,
+            so the pilot's "0 flags" measured almost nothing on that seat.
 Free-text "owed" is ignored on purpose, and so is a marker inside inline code (`OWED[...]`, an example). Window: logs from the last --days (default 14).
 
-Always prints its denominator. Exit 0 = no flags; 1 = flags; 3 = nothing scanned (no logs in the window).
+Always prints its denominator. Exit 0 = no flags and nothing unparsed; 1 = either; 3 = nothing scanned (no logs in the window).
 Cost: one pass over ~14 days of logs. Benefit: none yet: measuring. Review: 2026-11-20. Owner: CIO (script), HOST (convention).
 """
 
@@ -36,7 +39,8 @@ import re
 import sys
 from pathlib import Path
 
-OWED = re.compile(r"(?<!`)OWED\[([^\]]*)\]:\s*(.*)")  # (?<!`): a quoted example is not a marker
+OWED = re.compile(r"(?<!`)OWED\[([^\]]*)\]:\s*(.*?)(?=\s*(?<!`)OWED(?:-CLOSED)?\[|$)")  # (?<!`): a quoted example is not a marker
+ANY = re.compile(r"(?<!`)OWED\[")  # every marker start, parsed or not
 CLOSED = re.compile(r"(?<!`)OWED-CLOSED\[([^\]]*)\]")
 LOGNAME = re.compile(r"^\d{4}-\d{2}-\d{2}-\d{4}-([a-z0-9]+)-code(?:-[a-z0-9-]+)?-log\.md$")
 
@@ -75,15 +79,20 @@ def main():
         print(f"owed-scan: NOT MEASURED — no session logs since {since}")
         return 3
 
-    opened, closed = {}, set()
+    opened, closed, unparsed = {}, set(), {}
     for day, f, role in logs:
         for ln in f.read_text(errors="ignore").splitlines():
             for c in CLOSED.finditer(ln):
                 k = fields(c.group(1)).get("key")
                 if k:
                     closed.add((role, k))
-            m = OWED.search(ln.replace("OWED-CLOSED[", "\0"))  # don't read a close as an open
-            if m:
+            ln = ln.replace("OWED-CLOSED[", "\0")  # don't read a close as an open
+            parsed = list(OWED.finditer(ln))  # finditer: a line can carry two markers
+            starts = {m.start() for m in parsed}
+            for s in ANY.finditer(ln):
+                if s.start() not in starts:
+                    unparsed.setdefault(str(f.relative_to(root)), []).append(ln[s.start() : s.start() + 60])
+            for m in parsed:
                 fd = fields(m.group(1))
                 key = fd.get("key") or f"(no key) {m.group(2)[:30]}"
                 opened[(role, key)] = dict(
@@ -111,13 +120,16 @@ def main():
 
     print(
         f"owed-scan · {len(logs)} session logs since {since} · {len(opened)} OWED markers, "
-        f"{len(opened) - open_n} closed, {open_n} open · {len(flags)} flags"
+        f"{len(opened) - open_n} closed, {open_n} open · {len(flags)} flags · "
+        f"{sum(map(len, unparsed.values()))} markers not parsed"
     )
     for kind, role, key, o in flags:
         print(
             f"  {kind:8} {role:<6} key={key}  to={o.get('to', '?')} by={o.get('by', '?')}  ({o['log']})  {o['what'][:70]}"
         )
-    return 1 if flags else 0
+    for log, hits in sorted(unparsed.items()):
+        print(f"  UNPARSED {len(hits)} in {log}  first: {hits[0]}")
+    return 1 if flags or unparsed else 0
 
 
 if __name__ == "__main__":
