@@ -30,7 +30,16 @@ logger = structlog.get_logger(__name__)
 # Module-level pending-state store (mirrors calendar; single-server alpha — Redis/DB later).
 _PENDING_STATES: Dict[str, Dict] = {}
 
-_DEFAULT_REDIRECT = "http://localhost:8001/api/v1/settings/integrations/github/callback"
+
+def _default_redirect() -> str:
+    """#2043 (#1324 class): the settings-flow callback derives from PIPER_BASE_URL, so a
+    deployed host needs no per-provider redirect secret; localhost only when the
+    variable is absent. Read at call time, not import time, so the deployed value wins."""
+    base = os.getenv("PIPER_BASE_URL", "http://localhost:8001").rstrip("/")
+    return f"{base}/api/v1/settings/integrations/github/callback"
+
+
+_DEFAULT_REDIRECT = _default_redirect()  # import-time value, kept for readers of the name
 _DEFAULT_SCOPES = ["repo"]  # repos/issues/PRs; confirm minimal set. Requested in-flow.
 # The self-hosted github-mcp-server URL the binding records + resolve() connects to
 # (ADR-070 C). Set GITHUB_MCP_SERVER_URL per-environment (Droplet → the deployed server).
@@ -60,7 +69,7 @@ class GitHubOAuthHandler:
 
     def __init__(self):
         self.client_id, self.client_secret = self._load_credentials()
-        self.redirect_uri = os.getenv("GITHUB_OAUTH_REDIRECT_URI", _DEFAULT_REDIRECT)
+        self.redirect_uri = os.getenv("GITHUB_OAUTH_REDIRECT_URI") or _default_redirect()  # #2043
         self.scopes = _DEFAULT_SCOPES
 
     def _load_credentials(self) -> Tuple[str, str]:

@@ -260,8 +260,18 @@ fly secrets set -a piper-morgan \
 ```
 (`GOOGLE_SETTINGS_REDIRECT_URI` is the one the Settings → Calendar "Connect" flow uses —
 `settings_integrations.py:1148`. **Set it explicitly.** If it's unset, the code falls back to `PIPER_BASE_URL`, which on alpha gives `https://piper-morgan.fly.dev/…`. On 10-15, Google refused that address with `redirect_uri_mismatch` (Web's step-C run). Better: set `PIPER_BASE_URL=https://alpha.pipermorgan.ai`. Every OAuth fallback builds on it (calendar, both Slack redirects, the Slack link URL), and nothing depends on the fly.dev form (Lead, 10-15). **But an explicit per-provider redirect secret overrides it.** On 10-15, alpha held explicit `GOOGLE_SETTINGS_REDIRECT_URI`, `SLACK_REDIRECT_URI`, `SLACK_SETTINGS_REDIRECT_URI` and `GITHUB_OAUTH_REDIRECT_URI` secrets, so setting `PIPER_BASE_URL` alone left calendar on fly.dev. Check `fly secrets list` and set the provider's own variable. An earlier note here said alpha already carried the value, and that was wrong. `GOOGLE_CALENDAR_REDIRECT_URI` is the
-older setup-wizard flow's and defaults to localhost — set it too if the wizard is in use.) The
+older setup-wizard flow's; since #2043 (10-16) its default derives from `PIPER_BASE_URL` with the router's real path,
+`{base}/api/v1/setup/calendar/oauth/callback` (the old default was localhost and lacked `/api/v1`), so it needs no secret;
+register that URL in Google Cloud only if the wizard is in use.) The
 callback URL must be listed under Authorized redirect URIs on the OAuth client in Google Cloud
-Console. After the restart,
+Console.
+
+**Which redirect secrets a hosted deployment still needs (Lead, 2026-10-16, after #2043):** none, provided `PIPER_BASE_URL` is the
+public host and each provider's console lists the base-derived callback (GitHub settings `…/api/v1/settings/integrations/github/callback`;
+Slack settings `…/api/v1/settings/integrations/slack/callback` and wizard `…/api/v1/setup/slack/oauth/callback`; calendar settings
+`…/api/v1/settings/integrations/calendar/callback` and wizard as above). Every default now derives from the base. An explicit per-provider
+secret (`GITHUB_OAUTH_REDIRECT_URI`, `SLACK_REDIRECT_URI`, `SLACK_SETTINGS_REDIRECT_URI`, `SLACK_SETUP_REDIRECT_URI`,
+`GOOGLE_SETTINGS_REDIRECT_URI`, `GOOGLE_CALENDAR_REDIRECT_URI`) overrides the base and is the one way a flow can still point at another
+host; the proposal to unset them on alpha, provider by provider, is on #1852 (xian's hand). After the restart,
 Settings → Calendar shows "Connect" for every user. The admin UI path remains as a fallback for self-hosters without
 env access.
