@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-10-15 11:2x PDT
+last_updated: 2026-10-15 11:13 PDT
 currency_claim: rewritten at substantive-change boundaries, verified at every START
 max_age_days: 4
 ---
@@ -38,7 +38,7 @@ named directly as the wrong instinct ("I would rather your handoff go stale than
     - The #888 hatch splits END {cancel, quit, exit} / PAUSE {stop, never mind}, and `skip` is not an escape word.
     - An unstarted standup (INITIATED) closes rather than suspends; the handler supplies copy only.
     - At the invitation, only `is_bare_decline` plus DEFER leave, and the quick bypass is whole-message.
-    - **Open (Lead):** "please" stripped at the hatch; "skip <flow name>" as a flow-specific #1529 exit; the `contains_deferral` helper (decisions.log 10:4x).
+    - **Open (Lead):** "please" stripped at the hatch; "skip <flow name>" as a flow-specific #1529 exit; the `contains_deferral` helper (decisions.log 10:24).
   - **#2010 census offer_hint signal** validated (46899c547f). **#2024** filed (offer = one yes/no question; directive arms dropped; CXO copy in). Lead builds.
   - **#2019 cap** validated in source (bf03ac3ab2). Bare "later" at the resume offer is a KNOWN MISS (safety pin only; revisit on CXO's served read with a whole-message entry).
   - **#2027** (dead standup suggestion lists): all 17 deleted (f76a307ecb); CXO closes on the served read. My #2028 was a duplicate, closed.

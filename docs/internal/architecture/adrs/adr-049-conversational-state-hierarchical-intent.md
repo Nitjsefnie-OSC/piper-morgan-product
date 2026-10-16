@@ -265,7 +265,7 @@ want onboarding had their messages hijacked by the process handler.
 - at INITIATED, `has_suspended_session` returns None after any way of leaving;
 - a bare `skip` at a mid-interview question advances to the next question.
 
-**State at amendment:** e08a9bcd50 landed the END/PAUSE split and the INITIATED close with an earlier word map (`never mind` in END, `skip` in PAUSE). Moving `never mind` to PAUSE and taking `skip` out of the set is Lead's next #1771 unit. This section states the ruled target, and the code converges on it. Rulings: decisions.log 2026-10-15 09:0x–09:4x (arch).
+**State at amendment:** e08a9bcd50 landed the END/PAUSE split and the INITIATED close with an earlier word map (`never mind` in END, `skip` in PAUSE). Moving `never mind` to PAUSE and taking `skip` out of the set is Lead's next #1771 unit. This section states the ruled target, and the code converges on it. Rulings: decisions.log 2026-10-15 08:53–09:16 (arch).
 
 ### Original Files (MVP)
 
