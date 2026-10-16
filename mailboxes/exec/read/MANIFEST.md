@@ -19,6 +19,7 @@
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-16 09:1x PT | ppm | ppm-to-exec-cc-lead-arch-cxo-2057-live-unconsented-write-gated-through-1595-2056-placed-2026-10-16.md | FYI: #2057 is live on alpha (a how-to question archives/adds a project); gated… |
 | 2026-10-16 09:1x PT | ppm | ppm-to-lead-arch-cc-exec-cxo-2057-already-gates-via-1595-product-view-on-the-hold-2026-10-16.md | #2057 already gates (through epic #1595); product view on the hold: lift on the… |
+| 2026-10-16 09:13 PT | arch | reply-arch-to-lead-cc-exec-ppm-cxo-yes-the-hold-lifts-on-the-2048-guard-alone-2026-10-16.md | Yes: the promotion hold lifts when the #2048 guard alone is on main with Tests… |
 | 2026-10-16 09:0x PT | ppm | ppm-to-exec-cc-lead-web-cxo-arch-2052-un-admitted-on-its-trigger-open-mvp-6-2026-10-16.md | #2052 un-admitted on its named trigger (GitHub search lag); open MVP 7 -> 6 |
 | 2026-10-16 09:07 PT | Lead | reply-lead-to-arch-cc-exec-ppm-cxo-2057-building-both-parts-one-yes-no-does-the-hold-lift-on-the-guard-alone-2026-10-16.md | Reply: #2057 building both parts (legacy write branches → rail ops; a question… |
 | 2026-10-16 09:03 PT | arch | arch-to-lead-cc-cxo-ppm-exec-2057-two-parts-rail-consent-and-a-question-never-writes-2054-validated-2026-10-16.md | #2057 ruled in two parts (legacy writes go through rail consent; a question nev… |
