@@ -105,13 +105,16 @@ other decisions are left in this section.*
 When you sign up for Piper and use it, here is what we keep, where it lives, and what you can delete.
 
 **What we store.**
-- Your account details: username, email address, your settings, and your answers during setup.
-  [`models.py:118-129`. No password is stored; sign-in is by invite and session token.]
+- Your account details: username, email address, your password (stored only as a one-way hash, never in readable form), your
+  settings, and your answers during setup. [`database/models.py:141` `password_hash`; `routes/setup.py:872` bcrypt at signup.
+  10-16: the earlier note "no password is stored" was wrong. Fix 1, xian OK 10-16, handed to Web.]
 - Your conversations with Piper: each message you send and each reply. These are **encrypted** when stored.
   [AES-256-GCM per field, `field_encryption.py`]
 - What you create or connect in Piper: reminders and to-dos, projects and linked repositories, files you upload,
   and what Piper learns from your documents and your work. Uploaded files are stored as-is, not encrypted.
   [Lead: uploads on a Fly volume, not encrypted at rest; learned patterns encrypted except one routing field]
+  ⚠ 10-16: WRONG per code. `file_context/storage.py` encrypts uploads (AES-256-GCM) when ENCRYPTION_MASTER_KEY is set;
+  legacy files plaintext until the #1306 backfill. Waiting on xian's two prod reads (key set? backfill remaining?) via Exec.
 - The AI provider key you add. It's stored **encrypted**, and it's never written to our logs.
   [`user_api_key_service.py:205-226`; `field_encryption.py:14-16`]
 
@@ -125,7 +128,8 @@ processing your conversations. [#1812, `provider_selection.py`]
 
 **Logs.** Our server logs don't keep the text of the messages you send to Piper. At most, they keep a scrambled
 fingerprint of a message. This doesn't affect your conversations, which you can still see in Piper.
-[PM 10-13: "keep only fingerprints of logs." Lead 10-13: knob default flipped to off in code at every text-logging
+[⚠ 10-16: false on one path until issue 2059 promotes (classifier WARNING logs a 50-char prefix); Lead's lane is fixing it,
+no copy change if it promotes before 10-23. PM 10-13: "keep only fingerprints of logs." Lead 10-13: knob default flipped to off in code at every text-logging
 site (`services/utils/utterance_log.py`, ec2cc9d44f, 27 pinning tests), live at the next promotion. Alpha measured
 today: 0 lines with message text (INFO is suppressed in production). Fly app-log search keeps 7 days. "At most"
 because in production even the fingerprint lines are below the log level. NOT claimed: a retention period (a log
@@ -142,10 +146,12 @@ those covered.]
 
 **No analytics or ad tracking in the app.** The Piper app doesn't use analytics, advertising or
 error-reporting services. [Lead: none found by a code-wide grep (GA, Mixpanel, Segment, Sentry). This covers
-the app only, not this website]
+the app only, not this website. ⚠ 10-16: the in-app Chroma client may send anonymized telemetry (posthog); Lead's lane
+is setting anonymized_telemetry=False]
 
-**How long we keep it.** As long as your account exists. Nothing is deleted automatically.
-[Lead: no expiry job found; "none found", not proven. Session tokens: 30 min, refresh 7 days]
+**How long we keep it.** As long as your account exists. We don't automatically delete your conversations, files or account.
+[10-16: two daily jobs delete expired sign-out records (`BlacklistCleanupJob`) and 90-day safety-audit rows
+(`EthicsAuditCleanupJob`), never user content (`web/startup.py:422, 515`). Fix 2, xian OK 10-16, handed to Web. Session tokens: 30 min, refresh 7 days]
 
 **Deleting your data.** In Piper you can delete files you uploaded, your AI provider key, what Piper has learned
 about you, your settings, and your to-dos, projects and linked repositories. Deleting removes them.
