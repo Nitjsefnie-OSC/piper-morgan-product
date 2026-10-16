@@ -62,7 +62,7 @@ on:
   workflow_dispatch:
     inputs:
       promote_to_alpha:
-        description: "Promote the image currently on staging to alpha (requires reviewer approval)"
+        description: "Promote the image currently on staging to alpha (gated: Tests must have passed on the sha staging serves; dispatch on PM's word or under his standing grant)"
         type: boolean
         default: false
       health_gate_drill:
@@ -264,13 +264,14 @@ jobs:
           echo "::error title=Deployed sha not attested::staging /health reports '${got:-<unreadable>}', expected ${GITHUB_SHA}"
           exit 1
 
-  # --- (c) promotion to alpha: deliberate, reviewer-gated, and it REUSES staging's image. -------
+  # --- (c) promotion to alpha: deliberate, gated on Tests for staging's sha, and it REUSES staging's image. -------
   promote-alpha:
     if: github.event_name == 'workflow_dispatch' && inputs.promote_to_alpha
     runs-on: ubuntu-latest
-    # The required reviewer lives on THIS environment, which is also the only place alpha's token
-    # exists. That is what makes "a push to main cannot reach testers" a property of GitHub rather
-    # than a property of everyone remembering. Configure in Settings -> Environments -> alpha.
+    # Alpha's token exists only on THIS environment, so a push to main cannot reach testers: the
+    # staging job has no alpha token. The environment carried a required reviewer until 10-13
+    # (removed: no approval step; the Tests gate below is the guard, and the dispatch itself is
+    # PM's word or his standing grant). Configure in Settings -> Environments -> alpha.
     environment: alpha
     permissions:
       contents: read
