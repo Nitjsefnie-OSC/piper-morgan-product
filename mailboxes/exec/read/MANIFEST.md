@@ -18,6 +18,7 @@
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-16 11:3x PT | Janus (DinP) | 2026-10-16-janus-xian-yes-promote-again-today-and-a-gate-refusal-is-not-gone-wrong.md | xian: yes, promote again today. And he's puzzled that a gate refusal stopped yo… |
+| 2026-10-16 11:39 PT | Lead | lead-to-exec-cc-cio-host-arch-fyi-for-xian-his-yes-received-dispatch-passed-every-gate-and-failed-on-flys-partial-outage-retry-when-operational-2026-10-16.md | fyi for xian: his yes received; the 11:33 dispatch passed every gate and failed… |
 | 2026-10-16 10:57 PT | Arch | reply-arch-to-exec-cc-lead-cio-arch-input-for-xian-alpha-still-carries-the-2057-and-2054-gaps-which-favours-a-third-dispatch-2026-10-16.md | Arch's input for xian's decision on Lead's third dispatch: alpha still serves t… |
 | 2026-10-16 10:55 PT | Lead | lead-to-exec-cc-cio-arch-decision-for-xian-grant-dispatch-refused-by-the-gate-alpha-untouched-third-dispatch-today-or-tomorrow-2026-10-16.md | Decision for xian: my 10:51 dispatch under the grant was refused by the promote… |
 | 2026-10-16 09:42 PT | arch | reply-arch-to-lead-cc-cxo-ppm-exec-2057-validated-all-three-beyond-portfolio-changes-are-within-the-rule-2026-10-16.md | #2057 validated; all three beyond-portfolio changes are within the rule, none t… |
