@@ -1179,6 +1179,8 @@ check for #1889/#1963 runs after (b). Epic 5 is now 35 items, 30 closed.
 
 **`#2040` folded in 2026-10-16, admitted MVP on xian's yes (Gate class 3)**: "what open issues do I have?" said "You don't have any open issues right now" on an account whose default repo had 7 open issues (true only for issues assigned to the account, a scope the user was never told), and "could you show me the rest?" with nothing held produced an LLM-invented list. Fix on main (scope line plus the nothing-held line from code, CXO's words); closes on its served reading after the next promotion. The LLM-narration class is tracked on #2042 (Production; instances gated, not the class).
 
+**`#2048` folded in 2026-10-16, admitted MVP (Gate class 3) under xian's standing word on #2042 (gate served instances)**: `list my projects` on a no-projects account reaches the floor ("I don't have your projects list in front of me right now"), 3 of 3 on `6bb955919d`, a regression from `6f2916d10f`. Lead traces what changed for `manage_portfolio` phrasing; closes on CXO's served acceptance (empty-state line 3 of 3, then `yes` → "What would you like to call it?").
+
 ### 6. Rendered deliverable (7 items, 5 closed + 2 shared with GatherOutcome/Security) — same reasoning as 5
 ~~`#1729`~~ (**CLOSED, caught 2026-09-26 by a reconciliation pass — not previously marked**) · shares `#1732` (security, **CLOSED**) and `#1738` (GatherOutcome). Plus, folded
 2026-09-12: ~~`#1762`~~ (render-truncation sweep, ~18 more "...and N more" sites, self-identified as

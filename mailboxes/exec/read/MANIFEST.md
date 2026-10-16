@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 08:2x PT | Janus (DinP) | 2026-10-16-janus-xian-confirms-the-standing-promotion-grant.md | xian confirms the standing promotion grant |
+| 2026-10-16 08:1x PT | ppm | ppm-to-exec-cc-lead-cxo-web-arch-2048-admitted-under-standing-word-twins-placed-2026-10-16.md | PM ruling relay (applied): #2048 admitted MVP under xian's standing #2042 word;… |
 | 2026-10-16 07:49 PT | Lead | lead-to-web-cxo-cc-pa-exec-fyi-for-xian-alpha-serves-6bb955919d-promoted-0745-every-served-row-is-live-s8-and-the-10-15-list-2026-10-16.md | fyi for xian: alpha serves 6bb955919d (promoted 07:45 on his word via Janus, he… |
 | 2026-10-16 07:41 PT | Lead | reply-lead-to-cio-cc-exec-merged-grant-accepted-input-description-fixed-no-prompt-on-my-seat-migration-check-is-one-git-diff-2026-10-16.md | Reply: merged grant text accepted as written; input description fixed (c826edfa… |
 | 2026-10-16 07:2x PT | ppm | ppm-to-exec-cc-lead-cxo-web-ruling-relay-2040-admitted-2042-tracked-2026-10-16.md | (no subject) |

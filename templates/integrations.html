@@ -708,6 +708,15 @@
       btn.classList.remove('testing');
       btn.textContent = 'Test';
     }
+    // #2045: a Test result changes this card's state (the #2044 "Not checked yet" line
+    // goes) and the page summary ("N of M healthy"); redraw both from the one source,
+    // the health route, instead of patching the card by hand. A redraw failure is
+    // not a Test failure, so it never reaches the toast.
+    try {
+      await loadIntegrationsHealth();
+    } catch (error) {
+      console.error('Failed to redraw integrations after Test:', error);
+    }
   }
 
   async function testAllConnections() {
