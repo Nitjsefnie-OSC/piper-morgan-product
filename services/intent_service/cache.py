@@ -8,6 +8,7 @@ Created: October 5, 2025
 Issue: #206 (CORE-GREAT-4B Phase 3)
 """
 
+import copy
 import hashlib
 import logging
 
@@ -31,6 +32,14 @@ logger = logging.getLogger(__name__)
 class IntentCache:
     """
     In-memory cache for intent classification results.
+
+    Holds CLASSIFICATION only (#2054, Arch 2026-10-16; ADR-080 D3): what the
+    classifier produced for the text (category, action, confidence, entities,
+    learning signals, and the classifier-built context). ``set`` stores a deep
+    copy and ``get`` returns a deep copy, so no two turns ever share a mutable
+    object and nothing a turn writes after classification (the principal, the
+    routing keys) can reach another turn through the cache. The principal is
+    stamped from the request on every turn by IntentService, never inherited.
 
     Uses text hash as key to handle case variations and whitespace.
     Implements TTL-based expiration for cache entries.
@@ -72,7 +81,12 @@ class IntentCache:
             if time.time() < entry["expires_at"]:
                 self.hits += 1
                 logger.debug("Cache HIT for: %s", _text_ref(text))
-                return entry["intent"]
+                # #2054 (Arch, 2026-10-16): every hit gets its OWN copy. The
+                # caller builds an Intent around this dict and IntentService
+                # then writes per-turn state (the principal, routing keys)
+                # into its context; handing out the stored object would
+                # share that state with every later hit, from any user.
+                return copy.deepcopy(entry["intent"])
             else:
                 # Expired - remove
                 del self.cache[key]
@@ -92,8 +106,13 @@ class IntentCache:
         """
         key = self._hash_text(text)
 
+        # #2054 (Arch, 2026-10-16): store a SNAPSHOT of the classification,
+        # never the caller's objects. On a miss the classifier caches the dict
+        # the returned Intent still holds as its context; storing it by
+        # reference let the turn's later writes (user_id, secondary_intents,
+        # armed_offer_rail, ...) land in the cache entry itself.
         self.cache[key] = {
-            "intent": intent,
+            "intent": copy.deepcopy(intent),
             "expires_at": time.time() + self.ttl,
             "cached_at": time.time(),
         }

@@ -190,7 +190,7 @@ def test_rendered_token_serving_card(client, body):
     assert "Your GitHub connection needs re-authorizing, so I'm not using it right now." in html
     assert 'class="status-dot degraded"' in html
     assert 'id="test-btn-github"' in html and "disabled" not in html
-    assert 'id="reconnect-btn-github"' not in html
+    assert 'id="reconnect-btn-github"' in html  # #2053 (CXO): Reconnect beside Test
 
 
 @needs_node
@@ -202,9 +202,9 @@ def test_rendered_needs_reconnecting_card(client, body):
     assert "Not configured" not in html
     assert 'id="test-btn-github"' not in html  # Test hidden, not just disabled
     assert 'href="/settings/integrations/github"' in html
-    assert 'id="reconnect-btn-github"' in html and ">Reconnect<" in html.replace(" <", "<").replace(
-        "> ", ">"
-    )
+    assert 'id="reconnect-btn-github"' in html and ">Reconnect with GitHub<" in html.replace(
+        " <", "<"
+    ).replace("> ", ">")
     assert 'id="disconnect-btn-github"' not in html and 'id="connect-btn-github"' not in html
 
 
