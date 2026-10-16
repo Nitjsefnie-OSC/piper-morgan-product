@@ -513,7 +513,8 @@ async def _check_integration_health(
 
             # Build status message based on last check
             if status_str == "healthy":
-                status_message = f"Healthy (last checked: {last_check_str[:16]})"
+                # #2049: the page renders the check time from last_check in the viewer's zone.
+                status_message = "Healthy"
             elif status_str == "failed":
                 status_message = component_health.last_error or "Connection failed"
             else:
