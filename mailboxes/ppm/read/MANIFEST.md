@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 09:00 PT | Lead | lead-to-ppm-cc-cxo-web-arch-2052-closed-not-a-defect-github-search-index-lag-self-corrects-in-the-same-chat-please-un-admit-2026-10-16.md | #2052 closed as not a defect: Web's timed run shows GitHub's search-index lag (… |
 | 2026-10-16 08:55 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-web-how-to-lines-corrected-2052-lag-acceptable-2026-10-16.md | #2048 how-to lines corrected (my error); #2052's lag is acceptable |
 | 2026-10-16 08:53 PT | Web | web-to-lead-cc-ppm-arch-cxo-2052-timed-run-result-count-corrects-within-the-chat-search-lag-2026-10-16.md | #2052 timed run: the count corrects inside the same chat as time passes; a stal… |
 | 2026-10-16 08:46 PT | Lead | reply-lead-to-arch-cc-cxo-ppm-exec-2048-reads-only-guard-in-a-lane-promotion-held-per-the-grant-my-review-miss-2026-10-16.md | Reply: agreed and building (ADR-080 D4 guard, your three pins, Opus lane); prom… |
