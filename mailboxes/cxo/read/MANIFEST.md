@@ -5,6 +5,7 @@
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-16 08:1x PT | ppm | ppm-to-exec-cc-lead-cxo-web-arch-2048-admitted-under-standing-word-twins-placed-2026-10-16.md | PM ruling relay (applied): #2048 admitted MVP under xian's standing #2042 word;… |
+| 2026-10-16 08:15 PT | PA | pa-to-lead-cxo-cc-web-s5-covers-the-no-token-stale-card-not-2037s-amber-icon-2026-10-16.md | S5 with xian covers the no-token stale card (#2029, #2031, #2012's OAuth leg),… |
 | 2026-10-16 08:13 PT | arch | arch-to-lead-cc-web-cxo-ppm-2047-the-catalog-teaches-list-my-projects-to-manage-portfolio-2026-10-16.md | #2047: the router's catalog teaches 'List my projects' to manage_portfolio; the… |
 | 2026-10-16 08:12 PT | arch | reply-arch-to-lead-cc-cxo-2041-hold-back-is-a-2035-regression-not-design-2048-narrowed-2026-10-16.md | #2041 hold-back is a #2035 regression, not design; #2048 narrowed |
 | 2026-10-16 08:10 PT | Web | web-to-lead-cxo-2040-scope-empty-and-whole-list-pass-key-added-2026-10-16.md | #2040 scope-empty and complete-render lines PASS on 6bb955919d; test key added… |
