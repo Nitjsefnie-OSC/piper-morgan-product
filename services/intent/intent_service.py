@@ -3254,7 +3254,7 @@ class IntentService:
                         "canonical_generic_detected_routing_to_floor",
                         category=intent.category.value,
                         action=intent.action,
-                        original_message=intent.original_message,
+                        **_utterance_fields(intent.original_message, key="original_message"),
                     )
                     result = await self._handle_unknown_intent(
                         intent,
@@ -17690,7 +17690,7 @@ Add any additional information here.
             "action_gate_routing_to_floor",
             category=category,
             action=intent.action,
-            original_message=intent.original_message,
+            **_utterance_fields(intent.original_message, key="original_message"),
         )
 
         from services.intent_service.context_assembler import ContextAssembler
@@ -17926,7 +17926,7 @@ Add any additional information here.
         self.logger.info(
             "guidance_routed_to_floor",
             action=intent.action,
-            original_message=intent.original_message,
+            **_utterance_fields(intent.original_message, key="original_message"),
         )
 
         from services.intent_service.conversational_floor import ConversationalFloor, FloorContext

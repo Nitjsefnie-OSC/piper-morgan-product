@@ -48,6 +48,7 @@ from services.intent_service.reminder_copy import (
 )
 from services.intent_service.temporal_utils import DURATION_NUMBER_SRC
 from services.todo.todo_management_service import TodoManagementService
+from services.utils.utterance_log import utterance_fields
 
 logger = structlog.get_logger()
 
@@ -1433,7 +1434,7 @@ class TodoIntentHandlers:
             logger.info(
                 "Todo created successfully",
                 todo_id=str(todo.id),
-                text=text,
+                **utterance_fields(text, key="text"),
                 priority=priority,
                 user_id=user_id,
             )
@@ -1621,7 +1622,7 @@ class TodoIntentHandlers:
             logger.info(
                 "Reminder created",
                 todo_id=str(todo.id),
-                text=text,
+                **utterance_fields(text, key="text"),
                 reminder_date=str(reminder_dt),
                 time_label=time_label,
                 user_id=user_id,
