@@ -1,7 +1,7 @@
 # S5: GitHub reads with the Alpha app revoked (#1965, #1889, plus #2012's Test)
 
 **Owner**: PA, run by xian. **Written** 2026-10-15 09:48 from the code on main (Lead's landing `4a39c01ce2`).
-**READY (15:34 10-15): alpha serves `6f2916d10f`, which carries #1965/#2012 (`4a39c01ce2`) and #2017 (`322681a4e2`).** PA checked both by ancestry.
+**PASSED 10-15 16:19 on `6f2916d10f`** (comment on #1965). **Re-run steps 3–4 on the next build** (`e4f21e9ca8`, READY 10-16, carries #2029 and #2031): the new Settings and Integrations cards and the one-step Reconnect. Do the reads (step 3.1) before looking at the cards: a grant is marked stale only when a read gets GitHub's 401.
 About 10 minutes.
 
 **Why**: on 10-14, with the Alpha app revoked, all four reads still said "no open issues" (4 of 4 FAIL). Lead's fix
@@ -17,12 +17,14 @@ GitHub → Settings → Applications → **Authorized OAuth Apps** → **Piper M
 ## 3. The four reads, plus the Test
 1. Run the read snippet again. **Pass**: `degraded` lists github with `stale_token`; `today`, `slack` and
    `markdown` say GitHub couldn't be read and to reconnect. **No** "no open issues" or ✅ for GitHub.
-2. Settings → Integration Health → GitHub → **Test**. **Pass**: it fails, and says to reconnect. (On 10-14 it
+2. Settings → Integration Health → GitHub → **Test** (on the next build, look at the card first: **Pass** = ⚠️
+   "Needs reconnecting", "GitHub no longer accepts your connection.", a **Reconnect** button, no Test button
+   (#2031). Never "Not configured" or "Connected"). On `6f2916d10f`: **Pass**: it fails, and says to reconnect. (On 10-14 it
    said "connection successful".) CXO judges the wording.
 3. Open Settings → GitHub and note what it says. **Depends on the build** (check alpha `/health`):
    - on `6f2916d10f` (today's): it still says ✅ Connected with no Connect button (#2029, a known gap, not an S5
      failure; a screenshot helps).
-   - on the next build (#2029 landed, `bee366050c`): **Pass** = ⚠️ "Needs reconnecting", "GitHub no longer
+   - on the next build (`e4f21e9ca8` or later; #2029 `bee366050c`, #2031 `af593e58e2`): **Pass** = ⚠️ "Needs reconnecting", "GitHub no longer
      accepts your connection, so I can't read your GitHub right now.", and a **Reconnect with GitHub** button.
      Never "Connected".
 
