@@ -27,6 +27,8 @@
 >
 > **If it goes wrong:** the fix goes forward through main, or a revert on main that staging redeploys and Tests passes, followed by one promotion under this grant. Then it stops, and the seat tells me.
 >
+> **A dispatch the promote gate refuses is not a promotion and has not gone wrong.** Nothing reached alpha, so it doesn't count toward the day's two. The seat fixes the cause, then may dispatch again within the grant's hours and cap, and mentions the refusal in its line to Exec. *(Added 2026-10-16, confirmed by xian at 11:44 via Janus, after a 10:51 gate refusal was read as the grant's stop. That reading came from wording in CIO's superseded first draft, not from the confirmed text.)*
+>
 > **To stop it:** I say "hold promotions" to any seat, and it holds until I lift it. Any promotion I later say I would have refused ends the grant until I renew it.
 
 ## Why these conditions
