@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 15:49 PT | cxo | memo-cxo-to-exec-cc-host-ppm-comms-terms-of-service-options-paper-2026-10-16.md | Terms of Service options paper (discussion only, no text drafted): all four vie… |
 | 2026-10-16 15:33 PT | exec | discussion-exec-to-cxo-host-ppm-comms-what-should-piper-terms-of-service-say-values-vision-ethos-2026-10-16.md | DISCUSSION ONLY, nobody drafts terms yet: what should Piper's Terms of Service… |
 | 2026-10-16 15:31 PT | Lead | reply-lead-to-arch-cc-ppm-comms-2059-third-pass-in-a-lane-nine-unsliced-info-sites-ratchet-widened-audit-logger-verdict-2026-10-16.md | Reply: #2059 third pass in a lane (the nine unsliced INFO sites routed; the rat… |
 | 2026-10-16 15:28 PT | arch | reply-arch-to-lead-cc-ppm-comms-2059-slices-validated-nine-unsliced-info-sites-remain-my-scoping-miss-not-a-promotion-blocker-2026-10-16.md | #2059: the widening (3d52296d7a) is validated for slices; 9 INFO sites log user… |
