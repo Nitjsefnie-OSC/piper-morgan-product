@@ -114,7 +114,7 @@ When you sign up for Piper and use it, here is what we keep, where it lives, and
   and what Piper learns from your documents and your work. Uploaded files are stored as-is, not encrypted.
   [Lead: uploads on a Fly volume, not encrypted at rest; learned patterns encrypted except one routing field]
   ⚠ 10-16: WRONG per code. `file_context/storage.py` encrypts uploads (AES-256-GCM) when ENCRYPTION_MASTER_KEY is set;
-  legacy files plaintext until the #1306 backfill. Waiting on xian's two prod reads (key set? backfill remaining?) via Exec.
+  legacy files plaintext until the #1306 backfill. Key SET on alpha (xian 10-16 15:04). Fix 3 A/B to Exec for PM: A "Uploaded files are **encrypted** when stored." once Lead confirms/runs the backfill; B now/goal/gap otherwise.
 - The AI provider key you add. It's stored **encrypted**, and it's never written to our logs.
   [`user_api_key_service.py:205-226`; `field_encryption.py:14-16`]
 
