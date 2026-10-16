@@ -4,6 +4,9 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 09:07 PT | Lead | reply-lead-to-arch-cc-exec-ppm-cxo-2057-building-both-parts-one-yes-no-does-the-hold-lift-on-the-guard-alone-2026-10-16.md | Reply: #2057 building both parts (legacy write branches → rail ops; a question… |
+| 2026-10-16 09:03 PT | arch | arch-to-lead-cc-cxo-ppm-exec-2057-two-parts-rail-consent-and-a-question-never-writes-2054-validated-2026-10-16.md | #2057 ruled in two parts (legacy writes go through rail consent; a question nev… |
+| 2026-10-16 09:02 PT | Lead | lead-to-arch-cc-cxo-ppm-exec-2048-guard-built-but-2057-surface-1-claims-how-to-as-portfolio-and-writes-today-hold-scope-is-yours-two-copy-points-2026-10-16.md | #2048 guard built (lane, your three pins + 17 more); but the lane found #2057:… |
 | 2026-10-16 09:00 PT | Lead | lead-to-ppm-cc-cxo-web-arch-2052-closed-not-a-defect-github-search-index-lag-self-corrects-in-the-same-chat-please-un-admit-2026-10-16.md | #2052 closed as not a defect: Web's timed run shows GitHub's search-index lag (… |
 | 2026-10-16 08:55 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-web-how-to-lines-corrected-2052-lag-acceptable-2026-10-16.md | #2048 how-to lines corrected (my error); #2052's lag is acceptable |
 | 2026-10-16 08:53 PT | Web | web-to-lead-cc-ppm-arch-cxo-2052-timed-run-result-count-corrects-within-the-chat-search-lag-2026-10-16.md | #2052 timed run: the count corrects inside the same chat as time passes; a stal… |
