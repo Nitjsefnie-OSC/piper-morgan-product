@@ -2903,6 +2903,19 @@ class IntentService:
                     intent.context["unclaimed_residue"] = multi_result.unclaimed_residue
                     intent.context["declined_claims"] = list(multi_result.declined_claims)
 
+            # #2048 (CXO's ruling; Arch on #2048, 2026-10-16): a claim whose
+            # action is a PORTFOLIO canonical registry key reaches its handler
+            # whatever category the classifier paired with it. The LLM
+            # classifier emits category and action independently, and its own
+            # prompt teaches "list all projects" -> (query, manage_portfolio),
+            # so "list my projects" (unclaimed at surface 1 since the
+            # 2026-10-11 PORTFOLIO_LIST_PATTERN deletion) could arrive as
+            # QUERY/manage_portfolio, fall through _handle_generic_query to
+            # the floor, and get "I don't have your projects list in front of
+            # me" instead of the code-rendered empty state. Code chooses the
+            # route from the registry (ADR-080), not from the LLM's category.
+            self._adopt_canonical_portfolio_category(intent)
+
             self.logger.info(f"Intent classified as: {intent.category} - {intent.action}")
 
             # Issue #490: Add user_id to intent context for downstream handlers
@@ -16254,6 +16267,38 @@ Add any additional information here.
             )
 
     # ---- Issue #911 Phase 2: Action Gate ----
+
+    def _adopt_canonical_portfolio_category(self, intent: Intent) -> None:
+        """#2048: when ``intent.action`` is registered in ``ACTION_REGISTRY``
+        ONLY as a PORTFOLIO CANONICAL key (``manage_portfolio``,
+        ``manage_repos`` today; read from the registry, never named here) and
+        the classifier paired it with another category, adopt PORTFOLIO so
+        the Action Gate sends it to ``_handle_portfolio_query`` instead of the
+        floor. Category only: the action, message and context are untouched,
+        so the handler's own operation sniff decides list/add/archive/etc.
+        Narrow on purpose: the other CANONICAL keys (CONVERSATION
+        pleasantries) keep their message-level gate and are not touched."""
+        from services.intent_service.action_registry import (
+            ACTION_REGISTRY,
+            ActionDisposition,
+        )
+
+        if intent.category is None or not intent.action:
+            return
+        registered = {
+            category
+            for (category, action), disposition in ACTION_REGISTRY.items()
+            if action == intent.action and disposition is ActionDisposition.CANONICAL
+        }
+        if registered != {"PORTFOLIO"} or intent.category == IntentCategory.PORTFOLIO:
+            return
+        self.logger.info(
+            "canonical_action_category_adopted",
+            action=intent.action,
+            classified_category=intent.category.value,
+            adopted_category=IntentCategory.PORTFOLIO.value,
+        )
+        intent.category = IntentCategory.PORTFOLIO
 
     def _requires_canonical_handler(self, intent: Intent) -> bool:
         """
