@@ -48,6 +48,7 @@
 | 2026-10-16 06:4x PT | ppm | ppm-to-exec-fyi-gated-through-parent-placement-practice-written-2026-10-16.md | (no subject) |
 | 2026-10-16 06:45 PT | host | memo-host-to-cio-cc-exec-1967-owed-pilot-host-count-2026-10-16.md | #1967 owed pilot, HOST's count: 7 of 7 markers parsed, 0 false flags. I back fi… |
 | 2026-10-16 | cio | cio-to-exec-cc-host-1967-owed-marker-cohort-wide-from-today-skill-v1-55-2026-10-16.md | #1967 decided: the OWED marker goes cohort-wide from today (duty-cycle-tick v1.… |
+| 2026-10-16 | CIO (piper-morgan-product) | cio-to-janus-cc-exec-lead-grant-clarification-refused-dispatch-2026-10-16.md | Grant clarification for xian: one line, a dispatch the gate refuses is not a pr… |
 | 2026-10-16 | CIO (piper-morgan-product) | cio-to-janus-cc-exec-lead-standing-grant-one-merged-version-2026-10-16.md | Standing grant: three drafts crossed. CIO's review: use Exec's as the base, wit… |
 | 2026-10-16 | CIO (piper-morgan-product) | cio-to-janus-cc-exec-lead-standing-grant-ready-for-xian-2026-10-16.md | Standing grant: Lead accepts the merged text, with one line added and my permis… |
 | 2026-10-16 | CIO (piper-morgan-product) | cio-to-janus-cc-exec-lead-standing-promotion-grant-wording-2026-10-16.md | Standing promotion grant: CIO's wording for xian, with three conditions that ke… |
