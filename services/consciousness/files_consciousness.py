@@ -54,23 +54,30 @@ def _fix_mvc_gaps(narrative: str, mvc_result, skip_invitation: bool = False) -> 
 # (tests/test_architecture_enforcement.py TestUnarmedAskSiteRatchet) credits a
 # module-level function through its callers (one hop) when every caller arms;
 # a constant holder cannot be credited that way. Call these ONLY from a holder
-# that arms the offer in the same turn. The question is written in both on
-# purpose (neither calls the other, so each keeps arming callers only);
-# tests/unit/services/intent/test_list_projects_offers_2010.py pins that the
-# message's question IS the offer's stored question.
+# that arms the offer in the same turn.
+# ONE source (CXO's four-calls memo item 3, 2026-10-15): the question is
+# written once, in empty_projects_message(); empty_projects_offer() takes its
+# stored question from that message, so the rendered and the stored question
+# cannot drift. It is self-contained ("add a project", not "add one") because
+# in a composed reply the armed question can sit apart from the sentence that
+# names projects. tests/unit/services/intent/test_list_projects_offers_2010.py
+# pins that the message's question IS the offer's stored question.
+_EMPTY_PROJECTS_LEAD = "You don't have any active projects yet. "
 
 
 def empty_projects_message() -> str:
     """The empty-projects reply; its question is armed by the caller (#2010)."""
-    return "You don't have any active projects yet. Would you like to add one?"
+    return _EMPTY_PROJECTS_LEAD + "Would you like to add a project?"
 
 
 def empty_projects_offer(user_id: Optional[str] = None) -> Dict[str, Any]:
     """Fresh #846 pending-offer record for the empty-projects question
-    (#2010 / #2035): "yes" lands on offer_add_project, which asks the name."""
+    (#2010 / #2035): "yes" lands on offer_add_project, which asks the name.
+    The stored question is the message's own question (one source)."""
     from services.intent_service.add_project_clarify import build_add_project_offer
 
-    return build_add_project_offer(question="Would you like to add one?", user_id=user_id)
+    question = empty_projects_message().removeprefix(_EMPTY_PROJECTS_LEAD)
+    return build_add_project_offer(question=question, user_id=user_id)
 
 
 def format_projects_conscious(projects: List[Dict[str, Any]]) -> str:

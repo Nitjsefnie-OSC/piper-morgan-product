@@ -30,7 +30,7 @@ from services.intent_service.classifier import IntentClassifier
 from services.shared_types import IntentCategory
 
 _USER = "3f7b8a52-1666-4b00-9e00-000000002010"
-EXPECTED = "You don't have any active projects yet. Would you like to add one?"
+EXPECTED = "You don't have any active projects yet. Would you like to add a project?"
 
 
 class _ExplosiveLLM:
@@ -106,7 +106,7 @@ class TestEmptyState:
         # #2035 (was the #852 hint's keys/values: ruled away).
         offer = empty_projects_offer(_USER)
         assert offer["workflow_type"] == "offer_add_project"
-        assert offer["question"] == "Would you like to add one?"
+        assert offer["question"] == "Would you like to add a project?"
         assert offer["pending_action"]["kind"] == "add_project_offer_question"
         assert offer["pending_action"]["user_id"] == _USER
         assert offer["decline_message"] == (
@@ -123,8 +123,8 @@ class TestEmptyState:
         canon = Path("services/intent_service/canonical_handlers.py").read_text()
         assert "response = empty_projects_message()" in canon
         assert "empty_projects_offer(user_id)" in canon
-        assert '"Would you like to add one?"' not in canon
-        assert "Would you like to add one?" in Path(fc.__file__).read_text()
+        assert '"Would you like to add a project?"' not in canon
+        assert "Would you like to add a project?" in Path(fc.__file__).read_text()
         svc = Path("services/intent/intent_service.py").read_text()
         assert "message = empty_projects_message()" in svc
         assert "empty_projects_offer(user_id)" in svc
@@ -165,7 +165,7 @@ class TestArmedOffer:
         offer = live_service.workflow_offer_service.peek_pending_offer(sid, user_id=_USER)
         assert offer is not None
         assert offer["workflow_type"] == "offer_add_project"
-        assert offer["question"] == "Would you like to add one?"
+        assert offer["question"] == "Would you like to add a project?"
 
         calls = len(seen)
         result = await live_service.process_intent(message="yes", session_id=sid, user_id=_USER)

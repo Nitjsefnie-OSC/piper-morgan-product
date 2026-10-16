@@ -5075,8 +5075,34 @@ class TestUnarmedAskSiteRatchet:
 
         # (c) each adapter returns the builder's result through the seam.
         index = dict(trees)
-        for rel, name in sorted(cls._OFFER_HINT_EXTERNAL_CALLERS):
-            target = cls._OFFER_HINT_TABLE_ADAPTERS.get((rel, name), name)
+        cls._assert_referrers_return_through_finalize(
+            index, cls._OFFER_HINT_EXTERNAL_CALLERS, cls._OFFER_HINT_TABLE_ADAPTERS, names, "#2010"
+        )
+        finalize = next(
+            n
+            for n in index["services/intent_service/workflow_entries.py"].body
+            if isinstance(n, ast.AsyncFunctionDef) and n.name == "_finalize_canonical_rail_result"
+        )
+        assert cls._holder_arms(
+            list(cls._own_nodes(finalize))
+        ), "_finalize_canonical_rail_result no longer calls _track_offer_hint"
+
+        # (d) the internal route: CanonicalHandlers.handle's dispatch sites,
+        # pinned by holder (#2030).
+        cls._assert_canonical_dispatch_reaches_seam(trees)
+
+    @classmethod
+    def _assert_referrers_return_through_finalize(
+        cls, index, pinned, table_adapters, names, label
+    ) -> None:
+        """#2010 check (c), shared with #2035's write_offer tripwire: each
+        pinned external referrer (a NAME TABLE checked at its getattr
+        adapter) binds the result of a reaching method and returns it only
+        through ``_finalize_canonical_rail_result``."""
+        import ast
+
+        for rel, name in sorted(pinned):
+            target = table_adapters.get((rel, name), name)
             fn = cls._find_def(index[rel], target)
             assert fn is not None, f"pinned referrer {rel}::{target} not found"
             produced = set()
@@ -5111,7 +5137,7 @@ class TestUnarmedAskSiteRatchet:
             for r in (n for n in ast.walk(fn) if isinstance(n, ast.Return)):
                 v = r.value
                 if v is None or (isinstance(v, ast.Constant) and v.value is None):
-                    continue  # missing-context exit: no result, no hint
+                    continue  # missing-context exit: no result, no offer
                 if (
                     isinstance(v, ast.Await)
                     and isinstance(v.value, ast.Call)
@@ -5123,22 +5149,10 @@ class TestUnarmedAskSiteRatchet:
                 else:
                     other.append(r)
             assert produced and through and not other, (
-                f"#2010 reach tripwire: {target} must return its builder result "
-                f"through _finalize_canonical_rail_result (the #852 seam); "
+                f"{label} reach tripwire: {target} must return its builder result "
+                f"through _finalize_canonical_rail_result (the arming seam); "
                 f"{len(other)} return(s) bypass it"
             )
-        finalize = next(
-            n
-            for n in index["services/intent_service/workflow_entries.py"].body
-            if isinstance(n, ast.AsyncFunctionDef) and n.name == "_finalize_canonical_rail_result"
-        )
-        assert cls._holder_arms(
-            list(cls._own_nodes(finalize))
-        ), "_finalize_canonical_rail_result no longer calls _track_offer_hint"
-
-        # (d) the internal route: CanonicalHandlers.handle's dispatch sites,
-        # pinned by holder (#2030).
-        cls._assert_canonical_dispatch_reaches_seam(trees)
 
     @staticmethod
     def _canonical_receivers(tree) -> set:
@@ -5391,11 +5405,24 @@ class TestUnarmedAskSiteRatchet:
             for qual, nodes in cls._collect_holders(tree):
                 if cls._builds_offer_hint(nodes) and not cls._holder_arms(nodes):
                     builders.add((rel, qual))
+        return cls._builder_reach(
+            trees, builders, cls._OFFER_HINT_BUILDER_MODULES, cls._OFFER_HINT_SEAM_METHODS
+        )
+
+    @classmethod
+    def _builder_reach(cls, trees, builders, builder_modules, seam_methods) -> dict:
+        """The reach closure shared by the #2010 offer_hint and #2035
+        write_offer tripwires (see ``_offer_hint_reach`` for the keys):
+        ``builders`` are (rel, qual) holders; ``reaching`` closes them
+        backwards over each builder-module class's in-class call graph;
+        ``entry_points`` are referrers OUTSIDE ``builder_modules``."""
+        import ast
+
         builder_names = {qual.rsplit(".", 1)[-1] for _rel, qual in builders}
         reaching = set(builder_names)
         universe = set(builder_names)
         for rel, tree in trees:
-            if rel not in cls._OFFER_HINT_BUILDER_MODULES:
+            if rel not in builder_modules:
                 continue
             for cls_node in (n for n in tree.body if isinstance(n, ast.ClassDef)):
                 graph = cls._class_call_graph(cls_node)
@@ -5414,12 +5441,12 @@ class TestUnarmedAskSiteRatchet:
                             closed.add(m)
                             grew = True
                 reaching |= closed
-        excluded = set(cls._OFFER_HINT_SEAM_METHODS)
+        excluded = set(seam_methods)
         reaching -= excluded
         universe = {n for n in universe - excluded if not n.startswith("__")}
         entry_points = {}
         for rel, tree in trees:
-            if rel in cls._OFFER_HINT_BUILDER_MODULES:
+            if rel in builder_modules:
                 continue
             for qual, nodes in cls._collect_holders(tree):
                 for sub in nodes:
@@ -5494,6 +5521,479 @@ class TestUnarmedAskSiteRatchet:
         quiet = cls._offer_hint_reach([(mod, fake_builder), ("services/y.py", unrelated)])
         assert quiet["external"] == set()
         assert set(quiet["entry_points"]) == {"_other"}
+
+    # ---- #2035 write_offer reach tripwire (Arch's rule item 2, 2026-10-15) ----
+    # A yes/no offer whose "yes" leads to a WRITE is a #846 one-slot record
+    # (Arch's #2035 rule), built by a FACTORY (add_project_clarify
+    # .build_add_project_offer, files_consciousness.empty_projects_offer). The
+    # census credits those holders by the #1665 stored-ask idiom (the
+    # factory's ``question=`` kwarg / ``"question"`` key), and credits
+    # empty_projects_message through its arming callers. That credit is true
+    # only if every record REACHES a #846 arming point: ``set_pending_offer``
+    # directly, or the ``"write_offer"`` result key that
+    # IntentService._arm_write_offer reads at the two seams a canonical dict
+    # reaches (the canonical dispatch in _process_intent_internal, and
+    # _finalize_canonical_rail_result). MEASURED 2026-10-15 on main
+    # 2cf001266f (c726ce5d35 + copy follow-ups).
+    _WRITE_OFFER_BUILDER_MODULES = frozenset({"services/intent_service/canonical_handlers.py"})
+    # The holders that put a factory's record on a result's "write_offer"
+    # (they have no offer-store access). A NEW builder fails until it is
+    # shown to reach an arming point and pinned here.
+    _WRITE_OFFER_BUILDERS = frozenset(
+        {
+            (
+                "services/intent_service/canonical_handlers.py",
+                "CanonicalHandlers._format_project_setup_guidance",
+            ),
+            (
+                "services/intent_service/canonical_handlers.py",
+                "CanonicalHandlers._handle_project_setup_request",
+            ),
+            (
+                "services/intent_service/canonical_handlers.py",
+                "CanonicalHandlers._handle_portfolio_query",
+            ),
+        }
+    )
+    # The EXTERNAL referrers of every builder and of every in-class method
+    # that transitively reaches one (the #2024 (b) closure), measured: the
+    # read_canonical name table, whose "_handle_guidance_query" reaches both
+    # setup-guidance builders; its adapter returns through
+    # _finalize_canonical_rail_result (check (c)). _handle_portfolio_query
+    # has no external referrer: it is reached only through the
+    # CanonicalHandlers.handle seam (check (d)).
+    _WRITE_OFFER_EXTERNAL_CALLERS = frozenset(
+        {
+            ("services/intent_service/workflow_entries.py", "_READ_CANONICAL_MEMBERS"),
+        }
+    )
+    _WRITE_OFFER_TABLE_ADAPTERS = {
+        (
+            "services/intent_service/workflow_entries.py",
+            "_READ_CANONICAL_MEMBERS",
+        ): "_make_read_canonical_entry_point.run_read_canonical_workflow",
+    }
+    # The #846 record factories whose result rides "write_offer", derived
+    # (callees in a "write_offer" value, closed over module-level functions
+    # that return a factory's call) and pinned.
+    _WRITE_OFFER_FACTORIES = frozenset(
+        {
+            ("services/intent_service/add_project_clarify.py", "build_add_project_offer"),
+            ("services/consciousness/files_consciousness.py", "empty_projects_offer"),
+        }
+    )
+    # Check (d): the CanonicalHandlers.handle dispatch holders (found by
+    # receiver binding, the #2030 helper) and what each does with the
+    # result's "write_offer". "arms": the dispatch result reaches
+    # _arm_write_offer. "drops": a KNOWN GAP, measured 2026-10-15 —
+    # IntentOrchestrator._execute_single keeps message/intent/offer_hint only,
+    # so a multi-intent sibling's write offer renders its question with
+    # nothing armed (the #2030 defect class, reopened for write offers by
+    # #2035; tracked as #2041). Pinned so it stays visible: when the orchestrator starts
+    # carrying "write_offer", this pin fails and must be re-ruled.
+    _WRITE_OFFER_DISPATCH_HOLDERS = {
+        ("services/intent/intent_service.py", "IntentService._process_intent_internal"): "arms",
+        ("services/intent_service/orchestrator.py", "IntentOrchestrator._execute_single"): "drops",
+    }
+
+    @staticmethod
+    def _callee_name(call):
+        import ast
+
+        f = call.func
+        if isinstance(f, ast.Attribute):
+            return f.attr
+        if isinstance(f, ast.Name):
+            return f.id
+        return None
+
+    @staticmethod
+    def _local_bindings(nodes) -> dict:
+        """local name -> value expressions assigned to it in the holder."""
+        import ast
+
+        out = {}
+        for sub in nodes:
+            if isinstance(sub, ast.Assign):
+                for t in sub.targets:
+                    if isinstance(t, ast.Name):
+                        out.setdefault(t.id, []).append(sub.value)
+            elif (
+                isinstance(sub, ast.AnnAssign)
+                and sub.value is not None
+                and isinstance(sub.target, ast.Name)
+            ):
+                out.setdefault(sub.target.id, []).append(sub.value)
+        return out
+
+    @classmethod
+    def _write_offer_reach(cls, trees, builder_modules=None) -> dict:
+        """#2035: the ``_builder_reach`` closure for holders that build a
+        ``"write_offer"`` key and do not arm it themselves
+        (``set_pending_offer``)."""
+        import ast
+
+        builders = set()
+        for rel, tree in trees:
+            for qual, nodes in cls._collect_holders(tree):
+                if cls._built_key_values(nodes, "write_offer") and not any(
+                    isinstance(n, ast.Call) and cls._callee_name(n) == "set_pending_offer"
+                    for n in nodes
+                ):
+                    builders.add((rel, qual))
+        return cls._builder_reach(
+            trees,
+            builders,
+            cls._WRITE_OFFER_BUILDER_MODULES if builder_modules is None else builder_modules,
+            cls._OFFER_HINT_SEAM_METHODS,
+        )
+
+    @classmethod
+    def _assert_write_offer_reach_pinned(
+        cls, reach, builders=None, external=None, modules=None
+    ) -> None:
+        """#2035 checks (a) and (b): the builders and the external referrers
+        of every method that reaches one are exactly the pinned sets."""
+        builders = cls._WRITE_OFFER_BUILDERS if builders is None else builders
+        external = cls._WRITE_OFFER_EXTERNAL_CALLERS if external is None else external
+        modules = cls._WRITE_OFFER_BUILDER_MODULES if modules is None else modules
+        found_modules = {rel for rel, _q in reach["builders"]}
+        assert found_modules <= set(modules), (
+            f"#2035 write_offer reach tripwire: write_offer builders now live in "
+            f"{sorted(found_modules)}; measured scope {sorted(modules)}. A builder's "
+            f"record arms only if its result reaches IntentService._arm_write_offer "
+            f"(or set_pending_offer): show the seam, then re-rule the scope."
+        )
+        assert reach["builders"] == set(builders), (
+            f"#2035 write_offer reach tripwire: write_offer builders are "
+            f"{sorted(reach['builders'])}; pinned {sorted(builders)}. A new builder "
+            f"must be shown to reach a #846 arming point, then pinned."
+        )
+        reaching_entries = sorted(n for n in reach["entry_points"] if n in reach["reaching"])
+        assert reach["external"] == set(external), (
+            f"#2035 write_offer reach tripwire: the write_offer builders and the "
+            f"in-class methods that reach them {sorted(reach['reaching'])} are "
+            f"referenced outside {sorted(modules)} by {sorted(reach['external'])} "
+            f"(via {reaching_entries}); pinned {sorted(external)}. Show the new "
+            f"caller hands the result to _arm_write_offer "
+            f"(_finalize_canonical_rail_result), then pin it."
+        )
+
+    @classmethod
+    def _write_offer_factories(cls, trees) -> set:
+        """#2035: (rel, qual) of every def whose call result rides a
+        ``"write_offer"`` value (directly or through a local name), closed
+        over defs that RETURN a factory's call."""
+        import ast
+
+        names = set()
+        for _rel, tree in trees:
+            for _qual, nodes in cls._collect_holders(tree):
+                bound = cls._local_bindings(nodes)
+                for v in cls._built_key_values(nodes, "write_offer"):
+                    for e in bound.get(v.id, []) if isinstance(v, ast.Name) else [v]:
+                        if isinstance(e, ast.Call) and cls._callee_name(e):
+                            names.add(cls._callee_name(e))
+        defs = [
+            (rel, qual, nodes)
+            for rel, tree in trees
+            for qual, nodes in cls._collect_holders(tree)
+            if any(isinstance(n, ast.Return) for n in nodes)
+        ]
+        grew = True
+        while grew:
+            grew = False
+            for _rel, qual, nodes in defs:
+                simple = qual.rsplit(".", 1)[-1]
+                if simple in names:
+                    continue
+                if any(
+                    isinstance(n, ast.Return)
+                    and isinstance(n.value, ast.Call)
+                    and cls._callee_name(n.value) in names
+                    for n in nodes
+                ):
+                    names.add(simple)
+                    grew = True
+        return {(rel, qual) for rel, qual, _n in defs if qual.rsplit(".", 1)[-1] in names}
+
+    @classmethod
+    def _write_offer_factory_violations(cls, trees, factories) -> list:
+        """#2035 check (e): (rel, holder, line) for every call of a factory
+        whose record reaches NO #846 arming point in the calling holder: it
+        must be an argument of ``set_pending_offer``, or a ``"write_offer"``
+        value (directly or through a local name bound to the call). A
+        factory's own call to another factory (it returns it) is exempt."""
+        import ast
+
+        names = {q.rsplit(".", 1)[-1] for _r, q in factories}
+        out = []
+        for rel, tree in trees:
+            for qual, nodes in cls._collect_holders(tree):
+                if (rel, qual) in factories:
+                    continue
+                calls = [
+                    n for n in nodes if isinstance(n, ast.Call) and cls._callee_name(n) in names
+                ]
+                if not calls:
+                    continue
+                sinks = list(cls._built_key_values(nodes, "write_offer"))
+                for n in nodes:
+                    if isinstance(n, ast.Call) and cls._callee_name(n) == "set_pending_offer":
+                        sinks += list(n.args) + [kw.value for kw in n.keywords]
+                sink_ids = {id(x) for s in sinks for x in ast.walk(s)}
+                sink_names = {x.id for s in sinks for x in ast.walk(s) if isinstance(x, ast.Name)}
+                for c in calls:
+                    if id(c) in sink_ids:
+                        continue
+                    bound = {
+                        t.id
+                        for a in nodes
+                        if isinstance(a, (ast.Assign, ast.AnnAssign)) and a.value is c
+                        for t in (a.targets if isinstance(a, ast.Assign) else [a.target])
+                        if isinstance(t, ast.Name)
+                    }
+                    if bound & sink_names:
+                        continue
+                    out.append((rel, qual, c.lineno))
+        return out
+
+    @classmethod
+    def _assert_write_offer_dispatch(cls, trees, pinned=None) -> None:
+        """#2035 check (d): the CanonicalHandlers.handle dispatch holders
+        are exactly the pinned set; an "arms" holder passes the dispatch
+        result to _arm_write_offer; a "drops" holder (the pinned known gap)
+        still does nothing with "write_offer", so closing the gap forces a
+        re-rule of the pin."""
+        import ast
+
+        pinned = cls._WRITE_OFFER_DISPATCH_HOLDERS if pinned is None else pinned
+        found = cls._canonical_dispatch_holders(trees)
+        assert set(found) == set(pinned), (
+            f"#2035 check (d): CanonicalHandlers.handle dispatch holders are "
+            f"{sorted(found)}; pinned {sorted(pinned)}. A new dispatch site must "
+            f"hand the result's write_offer to IntentService._arm_write_offer; "
+            f"show it, then pin it."
+        )
+        for key, mode in sorted(pinned.items()):
+            rel, qual = key
+            nodes, produced = found[key]
+            arms = any(
+                isinstance(n, ast.Call)
+                and cls._callee_name(n) == "_arm_write_offer"
+                and produced & {a.id for a in n.args if isinstance(a, ast.Name)}
+                for n in nodes
+            )
+            mentions = any(
+                (isinstance(n, ast.Constant) and n.value == "write_offer")
+                or (isinstance(n, ast.Attribute) and n.attr == "write_offer")
+                or (isinstance(n, ast.keyword) and n.arg == "write_offer")
+                for n in nodes
+            )
+            if mode == "arms":
+                assert produced and arms, (
+                    f"#2035 check (d): {rel}::{qual} dispatches CanonicalHandlers.handle "
+                    f"but its result no longer reaches _arm_write_offer"
+                )
+            else:
+                assert not arms and not mentions, (
+                    f"#2035 check (d): {rel}::{qual} now handles write_offer — the "
+                    f"pinned known gap changed; re-rule its pin (arms / carries)"
+                )
+
+    def test_2035_write_offer_reach_tripwire(self):
+        """#2035 (Arch's rule item 2, 2026-10-15), the write_offer sibling of
+        test_2010_offer_hint_reach_tripwire, measured over services/**,
+        web/** and main.py:
+        (a) the holders that build a "write_offer" key (without arming it)
+            are exactly _WRITE_OFFER_BUILDERS, in _WRITE_OFFER_BUILDER_MODULES;
+        (b) the EXTERNAL referrers of every builder and every in-class method
+            that transitively reaches one are exactly the pinned set;
+        (c) each pinned referrer returns the result through
+            _finalize_canonical_rail_result, which passes it to
+            _arm_write_offer, which reads "write_offer" and calls
+            set_pending_offer;
+        (d) the CanonicalHandlers.handle dispatch holders are pinned with
+            what each does with write_offer (one arms; the orchestrator's is
+            a pinned known gap);
+        (e) every call of a #846 write-offer factory reaches set_pending_offer
+            or a "write_offer" value in its own holder."""
+        import ast
+
+        cls = TestUnarmedAskSiteRatchet
+        trees = self._caller_trees()
+        index = dict(trees)
+        reach = cls._write_offer_reach(trees)
+
+        # (a) + (b)
+        cls._assert_write_offer_reach_pinned(reach)
+        # vacuity: the closure reaches the three builders plus the guidance
+        # router (measured 2026-10-15: 4 reaching names).
+        assert len(reach["reaching"]) >= 4, f"reach closure broke: {sorted(reach['reaching'])}"
+
+        # (c) the rail adapters and the seam they return through.
+        cls._assert_referrers_return_through_finalize(
+            index,
+            cls._WRITE_OFFER_EXTERNAL_CALLERS,
+            cls._WRITE_OFFER_TABLE_ADAPTERS,
+            reach["reaching"],
+            "#2035 write_offer",
+        )
+        finalize = cls._find_def(
+            index["services/intent_service/workflow_entries.py"], "_finalize_canonical_rail_result"
+        )
+        assert finalize is not None
+        params = {a.arg for a in finalize.args.args}
+        assert any(
+            isinstance(n, ast.Call)
+            and cls._callee_name(n) == "_arm_write_offer"
+            and {a.id for a in n.args if isinstance(a, ast.Name)} & params
+            for n in cls._own_nodes(finalize)
+        ), "_finalize_canonical_rail_result no longer passes its result to _arm_write_offer"
+        arm = cls._find_def(
+            index["services/intent/intent_service.py"], "IntentService._arm_write_offer"
+        )
+        assert arm is not None, "IntentService._arm_write_offer not found"
+        arm_nodes = list(cls._own_nodes(arm))
+        assert any(
+            isinstance(n, ast.Constant) and n.value == "write_offer" for n in arm_nodes
+        ) and any(
+            isinstance(n, ast.Call) and cls._callee_name(n) == "set_pending_offer"
+            for n in arm_nodes
+        ), "IntentService._arm_write_offer no longer reads write_offer and arms it"
+
+        # (d) the internal route, by holder.
+        cls._assert_write_offer_dispatch(trees)
+
+        # (e) the factories, and every call of one reaches an arming point.
+        factories = cls._write_offer_factories(trees)
+        assert factories == set(cls._WRITE_OFFER_FACTORIES), (
+            f"#2035 check (e): write-offer factories are {sorted(factories)}; "
+            f"pinned {sorted(cls._WRITE_OFFER_FACTORIES)}. Show the new one's "
+            f"callers arm its record, then pin it."
+        )
+        bad = cls._write_offer_factory_violations(trees, factories)
+        assert not bad, (
+            f"#2035 check (e): a write-offer record built here reaches no #846 "
+            f"arming point (set_pending_offer, or a 'write_offer' result key): {bad}"
+        )
+
+    def test_2035_write_offer_reach_tripwire_fails_on_fakes(self):
+        """#2035, fed fakes in memory: a new builder, a builder in a new
+        module, a new external caller, a dropped factory record and a new
+        dispatch holder each fail; the real shapes pass."""
+        import ast
+
+        cls = TestUnarmedAskSiteRatchet
+        mod = "services/intent_service/canonical_handlers.py"
+        handlers = ast.parse(
+            "class CanonicalHandlers:\n"
+            "    async def handle(self, intent):\n"
+            "        return await self._entry(intent)\n"
+            "    async def _builder(self):\n"
+            "        offer = build_add_project_offer(question='Want to add one?')\n"
+            '        return {"message": "m", "write_offer": offer}\n'
+            "    async def _entry(self, intent):\n"
+            "        return await self._builder()\n"
+            "    async def _plain(self):\n"
+            '        return {"message": "no offer"}\n'
+        )
+        factory = ast.parse(
+            "def build_add_project_offer(question, user_id=None):\n"
+            '    return {"question": question}\n'
+        )
+        pinned_builders = {(mod, "CanonicalHandlers._builder")}
+        base = [(mod, handlers), ("services/f.py", factory)]
+
+        # the fake shapes pass when pinned as measured
+        reach = cls._write_offer_reach(base, {mod})
+        assert {"_builder", "_entry"} <= reach["reaching"] and "_plain" not in reach["reaching"]
+        cls._assert_write_offer_reach_pinned(reach, pinned_builders, set(), {mod})
+
+        # (a) a NEW builder in the pinned module fails
+        extra = ast.parse(
+            "class CanonicalHandlers:\n"
+            "    async def _new_builder(self):\n"
+            '        return {"write_offer": build_add_project_offer(question="Q?")}\n'
+        )
+        reach = cls._write_offer_reach(base + [(mod, extra)], {mod})
+        with pytest.raises(AssertionError, match="_new_builder"):
+            cls._assert_write_offer_reach_pinned(reach, pinned_builders, set(), {mod})
+
+        # (a) a builder in a NEW module fails
+        elsewhere = ast.parse(
+            "def build(r):\n" '    r["write_offer"] = build_add_project_offer(question="Q?")\n'
+        )
+        reach = cls._write_offer_reach(base + [("services/new.py", elsewhere)], {mod})
+        with pytest.raises(AssertionError, match="services/new.py"):
+            cls._assert_write_offer_reach_pinned(reach, pinned_builders, set(), {mod})
+
+        # (b) a NEW external caller of a reaching method fails (through the
+        # in-class closure: _entry reaches _builder)
+        caller = ast.parse("async def caller(ch):\n    return await ch._entry(None)\n")
+        reach = cls._write_offer_reach(base + [("services/x.py", caller)], {mod})
+        assert reach["external"] == {("services/x.py", "caller")}
+        with pytest.raises(AssertionError, match="services/x.py"):
+            cls._assert_write_offer_reach_pinned(reach, pinned_builders, set(), {mod})
+
+        # (e) a factory record that reaches no arming point fails; one handed
+        # to set_pending_offer, or to a write_offer key via a local, passes
+        dropped = ast.parse(
+            "def render(svc, sid):\n"
+            "    offer = build_add_project_offer(question='Q?')\n"
+            "    return offer['question']\n"
+        )
+        armed = ast.parse(
+            "def arm(svc, sid):\n"
+            "    svc.set_pending_offer(sid, build_add_project_offer(question='Q?'))\n"
+        )
+        trees = base + [("services/d.py", dropped), ("services/a.py", armed)]
+        factories = cls._write_offer_factories(trees)
+        assert factories == {("services/f.py", "build_add_project_offer")}
+        assert cls._write_offer_factory_violations(trees, factories) == [
+            ("services/d.py", "render", 2)
+        ]
+
+        # (d) a third CanonicalHandlers.handle dispatch holder fails; an
+        # "arms" holder whose result skips _arm_write_offer fails
+        arms_ok = ast.parse(
+            "async def run(canonical_handlers, svc):\n"
+            "    result = await canonical_handlers.handle(None)\n"
+            "    svc._arm_write_offer(result, 's')\n"
+            "    return result\n"
+        )
+        arms_bad = ast.parse(
+            "async def run(canonical_handlers, svc):\n"
+            "    result = await canonical_handlers.handle(None)\n"
+            "    return result\n"
+        )
+        third = ast.parse(
+            "async def also(canonical_handlers):\n"
+            "    return await canonical_handlers.handle(None)\n"
+        )
+        cls._assert_write_offer_dispatch(
+            [("services/r.py", arms_ok)], {("services/r.py", "run"): "arms"}
+        )
+        with pytest.raises(AssertionError, match="no longer reaches _arm_write_offer"):
+            cls._assert_write_offer_dispatch(
+                [("services/r.py", arms_bad)], {("services/r.py", "run"): "arms"}
+            )
+        with pytest.raises(AssertionError, match="services/t.py"):
+            cls._assert_write_offer_dispatch(
+                [("services/r.py", arms_ok), ("services/t.py", third)],
+                {("services/r.py", "run"): "arms"},
+            )
+        # the pinned known gap: a "drops" holder that starts handling
+        # write_offer fails until its pin is re-ruled
+        carries = ast.parse(
+            "async def run(canonical_handlers):\n"
+            "    result = await canonical_handlers.handle(None)\n"
+            "    return Result(write_offer=result.get('write_offer'))\n"
+        )
+        with pytest.raises(AssertionError, match="re-rule"):
+            cls._assert_write_offer_dispatch(
+                [("services/r.py", carries)], {("services/r.py", "run"): "drops"}
+            )
 
     def test_2030_check_d_pins_dispatch_holders_fed_fakes(self):
         """#2030 (Arch's ruling item 5), check (d) fed fakes in memory: the
@@ -5773,11 +6273,18 @@ class TestUnarmedAskSiteRatchet:
         # #2010 signal (ii), reach-scoped by module (condition 1).
         return rel in cls._OFFER_HINT_BUILDER_MODULES and cls._builds_offer_hint(nodes)
 
-    @staticmethod
-    def _offer_hint_values(nodes):
+    @classmethod
+    def _offer_hint_values(cls, nodes):
         """The value expressions of every ``"offer_hint"`` key the holder
         builds: a dict-literal key, or a subscript assignment
         ``x["offer_hint"] = ...``."""
+        return cls._built_key_values(nodes, "offer_hint")
+
+    @staticmethod
+    def _built_key_values(nodes, key):
+        """The value expressions of every ``key`` the holder builds (a
+        dict-literal key, or ``x[key] = ...``); #2010 offer_hint, #2035
+        write_offer."""
         import ast
 
         out = []
@@ -5786,14 +6293,14 @@ class TestUnarmedAskSiteRatchet:
                 out.extend(
                     v
                     for k, v in zip(sub.keys, sub.values)
-                    if isinstance(k, ast.Constant) and k.value == "offer_hint"
+                    if isinstance(k, ast.Constant) and k.value == key
                 )
             elif isinstance(sub, (ast.Assign, ast.AnnAssign)) and sub.value is not None:
                 targets = sub.targets if isinstance(sub, ast.Assign) else [sub.target]
                 if any(
                     isinstance(t, ast.Subscript)
                     and isinstance(t.slice, ast.Constant)
-                    and t.slice.value == "offer_hint"
+                    and t.slice.value == key
                     for t in targets
                 ):
                     out.append(sub.value)
