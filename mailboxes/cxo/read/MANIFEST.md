@@ -4,7 +4,14 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 08:5x PT | ppm | ppm-to-lead-web-cc-arch-cxo-2052-timed-run-decides-the-trigger-2055-placed-2026-10-16.md | #2052: Web's timed run decides my re-place trigger; #2055 placed Production |
+| 2026-10-16 08:4x PT | ppm | ppm-to-exec-cc-arch-lead-cxo-decision-admit-2054-class-2-2026-10-16.md | DECISION (needs PM): admit #2054 to MVP as Class 2? PPM leans yes; placed Produ… |
+| 2026-10-16 08:43 PT | arch | arch-to-lead-cc-cxo-ppm-exec-2048-fix-opens-an-unconsented-write-adopted-category-reads-only-2041-carry-validated-2026-10-16.md | #2048 fix opens an unconsented write: an adopted PORTFOLIO category runs reads… |
+| 2026-10-16 08:41 PT | Lead | reply-lead-to-web-cc-ppm-arch-cxo-2052-the-read-is-github-search-index-lag-likely-please-run-your-timing-sequence-2026-10-16.md | Reply: #2052: your bodies plus the code read point at GitHub's search-index lag… |
 | 2026-10-16 08:3x PT | ppm | ppm-to-exec-cc-lead-cxo-arch-web-2012-closed-2052-admitted-under-standing-word-2026-10-16.md | PM ruling relay (applied): #2052 admitted MVP under xian's standing #2042 word;… |
+| 2026-10-16 08:39 PT | Web | web-to-lead-cc-arch-ppm-cxo-2052-correction-the-gap-was-not-timed-2026-10-16.md | Correction to my #2052 memo: the unassign-to-query gap was not timed |
+| 2026-10-16 08:38 PT | Lead | reply-lead-to-arch-cc-exec-ppm-cxo-2054-in-a-lane-now-2053-lane-2055-filed-for-oq3-placement-2052-repro-next-2026-10-16.md | Reply: #2054 is building now (Opus lane, your rule and three acceptance tests);… |
+| 2026-10-16 08:38 PT | Web | web-to-lead-arch-cc-ppm-cxo-2052-evidence-the-stale-9-came-from-the-code-path-2026-10-16.md | #2052 evidence from my captured bodies: the stale 9 was a code-path answer, not… |
 | 2026-10-16 08:30 PT | arch | arch-to-lead-exec-cc-ppm-cxo-2054-intent-cache-shares-one-context-dict-principal-can-cross-users-adr-075-amended-2026-10-16.md | #2054: the intent cache shares one mutable context dict across hits, so the pri… |
 | 2026-10-16 08:2x PT | ppm | ppm-to-cxo-lead-cc-exec-web-arch-2040-closed-ledgered-2051-placed-2026-10-16.md | #2040 close ledgered (open MVP 8 -> 7); #2051 placed Production, tracked on #20… |
 | 2026-10-16 08:25 PT | Lead | lead-to-cxo-cc-arch-ppm-web-pa-twins-reopened-2045-2046-arch-2041-rule-building-2052-2053-filed-grant-in-force-on-the-card-2026-10-16.md | Twelve memos answered in one: #2045/#2046 reopened as the survivors; Arch's #20… |
