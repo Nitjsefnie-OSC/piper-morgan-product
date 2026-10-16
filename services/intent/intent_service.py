@@ -83,6 +83,15 @@ class _RepoRouteKwargs(TypedDict, total=False):
     repo_name: str
 
 
+# #2055 / ADR-075 OQ-3: the only turn labels (``category:action``, lowercase, as
+# built by ``_resolve_turn_intent_label``) whose reply may carry the one-time
+# first-response personalization notice: a greeting, and the capability
+# ("what can you do?") reply. Data replies (lists, counts, results) never do.
+FIRST_RESPONSE_NOTICE_INTENT_LABELS = frozenset(
+    {"conversation:greeting", "discovery:get_capabilities"}
+)
+
+
 @dataclass
 class IntentProcessingResult:
     """
@@ -1164,14 +1173,25 @@ class IntentService:
             # AFTER the answer (capability first, metadata second), never
             # before, never per-response. Best-effort: a failure here must
             # never block a successful response from reaching the user.
+            #
+            # #2055 (CXO ruling + ADR-075 OQ-3 amendment, 2026-10-16): the
+            # notice belongs only on a greeting or a capability/help reply,
+            # never under a list or result. The gate sits BEFORE the consume
+            # call because consuming is what marks the record shown — a
+            # suppressed notice must not burn the once-per-principal flag; it
+            # waits for the next qualifying reply. Keyed on the turn's
+            # category:action label, never on reply text.
             try:
-                from services.configuration.personalization_service import (
-                    personalization_service,
-                )
+                if (turn_intent_for_db or "").lower() in FIRST_RESPONSE_NOTICE_INTENT_LABELS:
+                    from services.configuration.personalization_service import (
+                        personalization_service,
+                    )
 
-                notice = await personalization_service.maybe_consume_first_response_notice(
-                    effective_user_id
-                )
+                    notice = await personalization_service.maybe_consume_first_response_notice(
+                        effective_user_id
+                    )
+                else:
+                    notice = None
                 if notice:
                     result.message = f"{result.message}\n\n{notice}"
             except Exception:
