@@ -36,7 +36,6 @@ The beta gate went from 14 open MVP issues to 6 across the window. That came fro
 - **The dates.** They held; that is the intent, not a stall.
 - **#1913 and the epic #1595.** They are open on the gate. I have not verified a closing proof for either.
 - **Lead's Monday 10-12 reconfirm of main.** I owe a rule (c) ledger row against it, and it never arrived.
-- **OAuth-leg checks needing the machine account's GitHub login.** Blocked on xian.
 
 ## Progress toward milestone status, not activity
 
@@ -72,8 +71,9 @@ Nothing from my lane directly. The user-visible changes behind this week's close
   - a gate readiness read for 10-23, stated as which classes are open, and sent to Exec. I propose no date.
 - **Blocked on (all xian, via Exec):**
   - the #2054 admission (Class 2, cross-user principal; asked 10-16);
-  - S5 for #2031's no-token card;
-  - the machine account's GitHub login.
+  - S5 for #2031's no-token card.
+
+*Corrected 2026-10-16 09:5x (Exec): an earlier version listed the machine account's GitHub login as blocked. xian created it on 10-15, Web built both alpha test accounts that afternoon, and S5's OAuth leg passed on it. My carried deferral was stale.*
 
 **Verified how:**
 - **Method:** read the day arcs of my seven PPM logs (10-09 through 10-15); the slip-ledger rows and paragraphs in `beta-gate-standard.md` for the window; and `gh issue list --milestone MVP --state closed --search "closed:2026-10-09..2026-10-16"`, which gave 14 rows, 12 inside the window plus #2040 and #2012 on 10-16.
