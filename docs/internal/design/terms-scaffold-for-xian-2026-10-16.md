@@ -4,7 +4,7 @@
 
 **Decided (xian, 10-16):** Option 2. The plain layer goes in the design-partner invitation by 10-23, in his words. Counsel writes the legal layer for Production. No Terms page and no click-through for beta.
 
-**Facts state (Comms, 16:3x 10-16):** Arch's two facts (storage by category, confirmation by action type) arrived early (16:03) and are folded in. Every fact below cites its source. Still open, named in each area: "never train" (Arch); a rendered check for any chat-delete control (Web or xian); #2064 erasure path and support@ delivery (area 5). Areas 4 and 7 checked by HOST 16:19. Next: Comms sends this to Exec for xian. He answers in his own words; Comms checks each answer against the code.
+**Facts state (Comms, 16:3x 10-16):** Arch's two facts (storage by category, confirmation by action type) arrived early (16:03) and are folded in. Every fact below cites its source. Still open, named in each area: "never train" (Arch); #2064 erasure path (area 5); #2065 chat control and Settings privacy page (areas 1, 3, 5). Areas 4 and 7 checked by HOST 16:19. Next: Comms sends this to Exec for xian. He answers in his own words; Comms checks each answer against the code.
 
 **How to use it:** each area has prompts for xian, the facts the answer must stay true to, the gaps it has to name as goal and gap, and the checker.
 
@@ -19,7 +19,7 @@
   - Stored on Fly.io in San Jose (/privacy).
 - **Gaps to name (goal and gap):**
   - Uploads: encrypted since 07-08 when the key is set; files written while the key was unset are plaintext until the backfill runs (count mode on main, xian runs it after Fly recovers). Also #2061: a file written with no key is plaintext even in production (latent, unverified on alpha).
-  - Deleting a chat hides it; the rows are kept and nothing purges them later. Goal: a trash you can purge (/privacy). **But no screen control to delete a chat was found** (CXO, source reading 10-16: the API route `DELETE /api/v1/conversations/{id}` exists, and no UI calls it). Until a rendered check shows one, an answer must not say a person can delete a chat themselves.
+  - Deleting a chat hides it; the rows are kept and nothing purges them later. Goal: a trash you can purge (/privacy). **There is no screen control to hide or delete a chat** (Web's served check on alpha `6bb955919d`, 10-16; the API route exists and nothing calls it; #2065). An answer must not say a person can delete a chat themselves. If a control is built before a real purge, CXO has ruled its label "Hide this chat".
 - **Checker:** Comms, against /privacy and Arch's memo.
 
 ## 2. What Piper does and never does with it
@@ -46,7 +46,7 @@
 - **Gaps to name:**
   - Undo is not a promise yet: soft delete with an undo window is #2021, open, on Production. The invitation must not imply undo.
   - Alpha still has four project paths that write or unlink without asking. Main fixes them; they go live with the waiting promotion (#2057, #2048 are still open).
-  - Unverified: whether the UI's own delete buttons (todos, lists, files, projects) ask first. Arch didn't check. No chat-delete control exists in the UI source (CXO, 10-16: the route has no caller). A rendered check on alpha is asked of Web or xian.
+  - Unverified: whether the UI's own delete buttons (todos, lists, files, projects) ask first. Arch didn't check. No chat-delete control exists on alpha (Web's served check, #2065). Settings' "Export/delete data" page says "Coming Soon" and lists options with no buttons; #2065 fixes it.
 - **Checker:** Lead or Arch for action paths; PPM for the gate class.
 
 ## 4. Telling me when something's broken
@@ -60,7 +60,7 @@
 - **Prompts:** How does a person leave? What can they take with them, and in what form? How long until we have deleted it?
 - **Facts to stay true to:**
   - **Current state, ruled by xian 10-13 and live on /privacy (quote it as is; nobody re-asks, Exec 16:18):** no account deletion inside Piper yet; "email support@pipermorgan.ai and we'll delete your account and everything in it within 14 days"; deleted conversations aren't purged yet, and the goal is a trash with a real purge.
-  - **The promise isn't backed yet, on two counts:** (1) no erasure path exists in code. A user delete fails on 13 foreign keys, and 13 more tables (conversations and messages among them) would be orphaned (#2064, Arch, shape ruled, placement PPM). (2) Nobody has shown support@ receives mail (HOST, 10-16; a test send from xian's side answers it). The answer may restate the ruled promise, but Comms won't mark it backed until #2064 lands and support@ is shown to deliver.
+  - **The promise isn't backed yet:** no erasure path exists in code. A user delete fails on 13 foreign keys, and 13 more tables (conversations and messages among them) would be orphaned (#2064, Arch; admitted to MVP; Lead's lane builds `erase_user.py` for the next build). support@ delivery *was* shown: xian's test send landed 10-12 (HOST's 10-12 memo; HOST's 16:2x doubt withdrawn). Not shown: who reads support@ day to day. The answer may restate the ruled promise; Comms marks it backed once #2064 is live.
   - Export exists for uploaded files (single and zip) and for learned patterns and learning settings (`GET /controls/export`, `web/api/routes/learning.py:803`).
   - **No export** of conversations, todos or lists (Arch).
 - **Gaps to name:** "You can take your files and what Piper learned about you. Exporting your conversations and to-dos is the goal." (That's the fact, not the wording. xian words it.)

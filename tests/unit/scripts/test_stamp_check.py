@@ -45,3 +45,8 @@ def test_front_date_reads_only_front_matter():
         == "2026-10-16 16:20 PT"
     )
     assert sc.front_date("no front matter\ndate: 2026-10-16\n") is None
+
+
+def test_empty_date_does_not_read_the_next_line():
+    # Pard's 10-16 catch in the twin mail-wake regex: \s* crosses the newline.
+    assert sc.front_date("---\nfrom: x\ndate:\nsubject: y\n---\n") is None
