@@ -25,6 +25,7 @@ from typing import List, Optional, Tuple
 import structlog
 
 from services.process.registry import ProcessType
+from services.utils.utterance_log import utterance_preview
 
 logger = structlog.get_logger(__name__)
 
@@ -197,7 +198,7 @@ def detect_off_topic(
                 "off_topic_detected",
                 process_type=process_type.value,
                 pattern=pattern_name,
-                message_preview=stripped[:50],
+                message_preview=utterance_preview(stripped),
             )
             return OffTopicResult(
                 is_off_topic=True,

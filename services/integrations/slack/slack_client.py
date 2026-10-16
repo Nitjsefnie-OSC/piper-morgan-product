@@ -16,6 +16,8 @@ from typing import Any, Dict, List, Optional
 import aiohttp
 from aiohttp import ClientSession, ClientTimeout
 
+from services.utils.utterance_log import utterance_preview
+
 from .config_service import SlackConfig, SlackConfigService
 from .mrkdwn import markdown_to_mrkdwn
 
@@ -261,7 +263,7 @@ class SlackClient:
         )
         self.logger.info(
             f"SLACK_PIPELINE: Posting to Slack channel {channel}{thread_info} - "
-            f"Text preview: {text[:50]}{'...' if len(text) > 50 else ''}"
+            f"Text preview: {utterance_preview(text)}"
         )
 
         response = await self._make_request("POST", "chat.postMessage", data)

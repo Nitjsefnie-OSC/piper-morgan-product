@@ -15,6 +15,7 @@ from typing import Any, Optional
 import structlog
 
 from services.slot_filling.slot_template import SlotDefinition, SlotState, SlotTemplate
+from services.utils.utterance_log import utterance_preview
 
 logger = structlog.get_logger()
 
@@ -68,7 +69,7 @@ async def extract_slots(
             "slot_extraction_failed",
             error=str(e),
             template=template.name,
-            message_preview=message[:50],
+            message_preview=utterance_preview(message),
         )
         return {}
 

@@ -71,7 +71,11 @@ class DocumentIngester:
 
     def __init__(self, chroma_path: str = "./data/chromadb"):
         self.chroma_path = chroma_path
-        self.client = chromadb.PersistentClient(path=chroma_path)
+        # Chroma's default sends anonymized usage telemetry (posthog); the privacy
+        # copy promises nothing leaves the server that the user did not ask for.
+        self.client = chromadb.PersistentClient(
+            path=chroma_path, settings=chromadb.config.Settings(anonymized_telemetry=False)
+        )
         # #1452: embedding function + collection are LAZY. Eager construction
         # raised in keyless environments (OpenAIEmbeddingFunction requires a
         # key at __init__), and DocumentIngester sits in the dependency graph

@@ -23,6 +23,7 @@ from uuid import UUID, uuid4
 from services.domain.models import TrustEvent, UserTrustProfile
 from services.repositories.user_trust_profile_repository import UserTrustProfileRepository
 from services.shared_types import TrustStage
+from services.utils.utterance_log import utterance_preview
 
 logger = logging.getLogger(__name__)
 
@@ -341,7 +342,7 @@ class TrustComputationService:
             )
             logger.warning(
                 f"User {user_id} dropped from {old_stage.name} to BUILDING "
-                f"due to explicit complaint: {complaint[:50]}"
+                f"due to explicit complaint: {utterance_preview(complaint)}"
             )
 
         # Reset consecutive negative counter (fresh start at BUILDING)
