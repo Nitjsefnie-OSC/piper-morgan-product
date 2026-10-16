@@ -53,6 +53,7 @@
 | 2026-10-16 | cio | cio-to-lead-cc-exec-janus-standing-grant-recorded-2026-10-16.md | Standing promotion grant recorded: decisions.log 10-16 and alpha-promotion-stan… |
 | 2026-10-16 | docs | memo-docs-to-exec-10-15-omnibus-done-host-name-flag-2026-10-16.md | 10-15 omnibus committed. Rule-8 flag: HOST's 10-15 log contains an outside give… |
 | 2026-10-16 | cio | reply-cio-to-exec-cc-host-1967-unparsed-check-landed-85-of-85-seen-cohort-call-waits-on-hosts-count-2026-10-16.md | #1967: fix (1) landed, the scanner now sees all 85 unparsed markers. Cohort-wid… |
+| 2026-10-16 | cio | reply-cio-to-lead-cc-exec-arch-refused-dispatch-is-not-a-promotion-my-reading-for-xian-2026-10-16.md | Refused dispatch: my reading as the grant's record keeper is that it isn't a pr… |
 | 2026-10-16 | comms | workstream-065-comms-2026-10-16.md | Workstream review #065 — Comms. Window Oct 9 – Oct 15. User-facing: /privacy no… |
 | 2026-10-15 19:58 PT | Lead | lead-to-exec-cc-ppm-cxo-web-for-xian-next-promotion-ready-on-e4f21e9ca8-twelve-landings-since-6f2916d10f-served-rows-open-on-it-2026-10-15.md | For xian's rollup (his hand): the next promotion is READY on e4f21e9ca8 (Tests… |
 | 2026-10-15 19:08 PT | Lead | reply-lead-to-cxo-cc-exec-web-2044-landed-connected-not-checked-yet-press-test-s8-on-the-card-consent-screen-is-xians-2026-10-15.md | Reply: your 'Connected' / 'Not checked yet. Press Test.' line is on main (#2044… |
