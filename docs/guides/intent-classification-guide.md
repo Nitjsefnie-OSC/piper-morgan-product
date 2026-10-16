@@ -307,8 +307,9 @@ for the common shape.
 
 ### New NL endpoint not enforcing classification
 
-Run `python scripts/check_intent_bypasses.py` and make sure the endpoint
-is in `NL_ENDPOINTS`. The bypass scanner is your friend.
+Run `python scripts/check_intent_bypasses.py` (a manual textual scanner,
+not run by CI) and make sure the endpoint is in `NL_ENDPOINTS`. It flags
+NL-like routes whose own body never mentions intent.
 
 ### Floor and canonical disagree about who handles a category
 
