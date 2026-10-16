@@ -52,10 +52,10 @@ _USER = "7c4e3f50-2040-4b00-9e00-000000002041"
 _REPO = "dinp-machine/piper-test-activity"
 _FALLTHROUGH = "(fall-through answer)"
 
-CXO_NOTHING_HELD = "There's nothing more to show; that was the full list."
-# Arch's line, verbatim from his ruling (CXO owns the words).
+CXO_NOTHING_HELD = "That was the whole list. There's nothing more to show."
+# CXO's line (2026-10-15 17:16), verbatim; Arch's placeholder wording retired.
 ARCH_HOLD_ONLY = (
-    "I don't have more of that list held right now. Ask for the list again and I'll pull it fresh."
+    "I'm not holding any more of that list. Ask for it again and I'll pull a fresh one."
 )
 
 CASH_PHRASES = [

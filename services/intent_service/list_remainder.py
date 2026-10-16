@@ -294,14 +294,14 @@ LIST_REMAINDER_TAUGHT_ACCEPTS: tuple[str, ...] = (
 # #2040 (CXO's ruling, verbatim): a remainder ask with NOTHING held, right
 # after a list rendered whole (a ``ListComplete`` fact is present). A
 # statement, not an ask; nothing is appended and nothing is fetched.
-NOTHING_HELD_REPLY = "There's nothing more to show; that was the full list."
+# CXO 2026-10-15 17:16, verbatim.
+NOTHING_HELD_REPLY = "That was the whole list. There's nothing more to show."
 
-# #2040 (Arch's condition, line verbatim from his ruling; CXO owns the words):
-# a remainder ask with nothing held and NO whole-list fact. It claims only
-# what code holds, and nothing about the previous turn.
+# #2040 (Arch's condition; CXO's words 2026-10-15 17:16, verbatim): a remainder
+# ask with nothing held and NO whole-list fact. It claims only what code holds,
+# and nothing about the previous turn.
 HOLD_ONLY_REPLY = (
-    "I don't have more of that list held right now. "
-    "Ask for the list again and I'll pull it fresh."
+    "I'm not holding any more of that list. Ask for it again and I'll pull a fresh one."
 )
 
 

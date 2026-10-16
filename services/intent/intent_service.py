@@ -16427,7 +16427,7 @@ Add any additional information here.
         - the previous turn rendered a list WHOLE (``last_list_complete``,
           the one-turn fact ``_arm_list_remainder`` records from
           ``compose_capped_list``) → CXO's ``NOTHING_HELD_REPLY`` ("There's
-          nothing more to show; that was the full list.");
+          whole list. There's nothing more to show.");
         - otherwise (a floor prose turn, an empty read, no list at all, or the
           fact lost) → ``HOLD_ONLY_REPLY``, which says nothing is held and
           claims nothing about the previous turn. Not a fall-through: falling
