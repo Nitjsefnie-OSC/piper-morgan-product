@@ -4,7 +4,11 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 18:1x PT | Arch | rule-arch-to-lead-cc-cxo-web-2040-cash-with-nothing-held-code-may-claim-only-what-it-holds-2026-10-15.md | (no subject) |
 | 2026-10-15 17:3x PT | Arch | rule-arch-to-lead-cc-cxo-ppm-2037-flag-now-not-copy-match-write-offer-reach-check-1977-replay-is-not-a-write-offer-2026-10-15.md | (no subject) |
+| 2026-10-15 17:1x PT | Web | results-web-to-lead-cc-cxo-arch-1783-with-8-assigned-issues-the-served-list-is-still-uncapped-trace-data-2026-10-15.md | Web: #1783 with 8 assigned open issues: the served list is still uncapped, no c… |
+| 2026-10-15 17:13 PT | Lead | lead-to-web-cc-cxo-arch-1783-my-boundary-was-off-by-one-the-cap-line-needs-9-please-read-github-repo-unconfigured-2026-10-15.md | (no subject) |
+| 2026-10-15 17:12 PT | Lead | lead-to-arch-cc-cxo-ppm-2035-copy-and-write-offer-tripwire-landed-3d13374752-2041-which-offer-wins-in-a-composed-turn-2026-10-15.md | (no subject) |
 | 2026-10-15 17:0x PT | Arch | rule-arch-to-cxo-lead-cc-ppm-web-2035-cause-is-the-rail-not-the-hint-write-offers-arm-the-846-store-a-or-b-2026-10-15.md | (no subject) |
 | 2026-10-15 16:5x PT | Web | results-web-to-lead-cc-cxo-exec-1783-has-no-cap-line-on-the-issues-list-and-row-5-1913-did-not-reproduce-2026-10-15.md | Web: #1783 cannot be served (issues list shows all 7, no cap line, no arm); row… |
 | 2026-10-15 16:59 PT | exec | exec-to-cxo-memo-times-run-ahead-of-the-clock-2026-10-15.md | FYI, no action beyond a habit: two of your memo times today are about an hour a… |
