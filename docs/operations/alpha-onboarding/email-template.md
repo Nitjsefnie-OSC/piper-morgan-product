@@ -152,7 +152,7 @@ Before sending:
 upfront.
 
 **Documentation References**: always reference official docs by filename
-(`ALPHA_TESTING_GUIDE.md`, `ALPHA_AGREEMENT_v2.md`), and versions by number
+(`ALPHA_TESTING_GUIDE.md`), and versions by number
 (0.8.14.0, not "latest").
 
 **Support Commitment**: only promise what you can deliver. Small cohort is what makes
@@ -164,7 +164,6 @@ close support possible.
 
 - `../../ALPHA_QUICKSTART.md` — what the tester's first ten minutes look like
 - `../../ALPHA_TESTING_GUIDE.md` — what testers receive for depth
-- `../../ALPHA_AGREEMENT_v2.md` — legal terms testers acknowledge
 - `../../VERSION_NUMBERING.md` — version scheme documentation
 
 ---
