@@ -649,10 +649,10 @@ full-message `LIST_REMAINDER_TAUGHT_ACCEPTS` match) and never the shared accept 
 bare "yes" with nothing armed is not claimed. With no remainder held and no offer rail armed
 (`_armed_offer_signal`) it answers from code, action `list_remainder_nothing_held`, nothing
 appended, nothing fetched, and claims only what code holds (Arch's condition): when the PREVIOUS
-turn rendered a list whole, `list_remainder.NOTHING_HELD_REPLY` ("There's nothing more to show;
-that was the full list."); otherwise (a floor prose turn, an empty read, no list at all)
-`HOLD_ONLY_REPLY` ("I don't have more of that list held right now. Ask for the list again and
-I'll pull it fresh.", Arch's wording pending CXO). The whole-list fact is
+turn rendered a list whole, `list_remainder.NOTHING_HELD_REPLY` ("That was the whole list.
+There's nothing more to show."); otherwise (a floor prose turn, an empty read, no list at all)
+`HOLD_ONLY_REPLY` ("I'm not holding any more of that list. Ask for it again and I'll pull a
+fresh one.", CXO's words 2026-10-15 17:16). The whole-list fact is
 `ConversationContext.last_list_complete` (a `ListComplete`: kind, shown, recorded_at), a
 SEPARATE record from the remainder that no acceptance seam reads, so it cannot bind a "yes".
 `compose_capped_list` returns it as `CappedListRender.complete` only when every item the source
