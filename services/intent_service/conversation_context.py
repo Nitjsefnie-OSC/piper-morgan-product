@@ -57,7 +57,7 @@ from uuid import UUID, uuid4
 import structlog
 
 from services.domain.models import Intent
-from services.intent_service.list_remainder import ListRemainder
+from services.intent_service.list_remainder import ListComplete, ListRemainder
 
 logger = structlog.get_logger()
 
@@ -201,6 +201,14 @@ class ConversationContext:
     # (#953 hydration untouched); a lost remainder degrades to the honest
     # "that list has moved" turn, never a silent re-fetch.
     pending_list_remainder: Optional[ListRemainder] = None
+
+    # #2040 (Arch): "the last list rendered whole", a SEPARATE record from the
+    # remainder (never an armed offer; nothing binds to it). Session-scoped like
+    # the remainder, but ONE turn: popped at the top of every turn by
+    # ``IntentService._pop_last_list_complete``, because the line it licenses
+    # ("that was the full list") is about the reply just before. In-process
+    # only; a lost fact degrades to the hold-only line, never a false claim.
+    last_list_complete: Optional[ListComplete] = None
 
     # Issue #1030 R4: per-turn provenance sidecar for "why did you suggest that?"
     # citations. Keyed by ConversationTurn.id. Values are dicts of
