@@ -43,6 +43,17 @@ _UNSET = object()
 _warned_no_key = False
 
 
+def is_production_env() -> bool:
+    """The one signal for "hosted app": PIPER_ENVIRONMENT/ENVIRONMENT == "production".
+
+    Shared by the encrypted columns and the uploaded-file seam (#2061) so both
+    refuse plaintext under the same condition (fly.toml sets it on the app).
+    """
+    return (
+        os.getenv("PIPER_ENVIRONMENT") or os.getenv("ENVIRONMENT") or ""
+    ).lower() == "production"
+
+
 def _no_key_fallback_or_raise(type_name: str, backfill_note: str) -> None:
     """#1387: the plaintext-write fallback is DEV-ONLY, now enforced.
 
@@ -54,8 +65,7 @@ def _no_key_fallback_or_raise(type_name: str, backfill_note: str) -> None:
     #1382 credential store's fail-closed constructor. Dev/test keep the
     fallback (with the one-time warning) so keyless local runs still work.
     """
-    env = (os.getenv("PIPER_ENVIRONMENT") or os.getenv("ENVIRONMENT") or "").lower()
-    if env == "production":
+    if is_production_env():
         raise RuntimeError(
             f"{type_name}: ENCRYPTION_MASTER_KEY is unset in a production "
             "environment — refusing to write plaintext into an encrypted "
