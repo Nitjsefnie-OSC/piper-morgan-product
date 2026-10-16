@@ -109,10 +109,14 @@ ADOPTED_WRITE_CONFIRM_QUESTIONS = {
 # Case 2, "no".
 ADOPTED_WRITE_DECLINE_LINE = 'Okay, I won\'t {verb} "{name}". Nothing has been changed.'
 
-# Repo writes (manage_repos link/unlink): a statement only, nothing armed
+# Repo writes (manage_repos link/unlink): a statement only, nothing armed.
+# CXO 2026-10-16 09:3x: the phrase matches the repo handler's link/unlink patterns
+# ('link repo owner/name to <project>', 'unlink repo owner/name from <project>').
 # (CXO 09:1x). The repo is echoed when the message named one.
-ADOPTED_REPO_LINK_LINE = "To link a repo, say 'link repo {repo}'."
-ADOPTED_REPO_UNLINK_LINE = "To unlink a repo, say 'unlink repo {repo}'."
+ADOPTED_REPO_LINK_LINE = "To link a repo to a project, say 'link repo {repo} to <project name>'."
+ADOPTED_REPO_UNLINK_LINE = (
+    "To unlink a repo from a project, say 'unlink repo {repo} from <project name>'."
+)
 _NO_REPO = "owner/name"
 
 
