@@ -36,4 +36,8 @@
 - **No rollback by sha:** the promote job copies the image staging runs now, and `workflow_dispatch` has no sha input (`.github/workflows/fly-deploy.yml`). That is why "if it goes wrong" says forward or revert.
 - **No permission change:** Lead's seat already runs `gh workflow run` without a prompt (the 10-15 15:31 dispatch). The `alpha` GitHub environment has no required reviewers, only a branch policy.
 
+## Procedure notes (do not change the grant's text)
+
+- **"The sha staging serves" is read from staging's own `/health`**, never from the newest push in the fly-deploy run list. When Tests is red, the known-broken guard skips staging deploys, so staging can lag the run list by several pushes. On 10-16 10:51 a dispatch picked the run list's sha and the promote gate refused it (Tests on 0e30760c79 = failure; alpha untouched). Recipe corrected in `canonical-ops-recipes.md` (Lead, 6a91d56ec5).
+
 **Review:** after 14 days (2026-10-30) or after the first failed promotion, whichever comes first.
