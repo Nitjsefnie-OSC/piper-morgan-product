@@ -415,5 +415,5 @@ class TestBoundariesUnregressed:
         phrase = "delete my vendor reminder"
         _stub_classification(monkeypatch, live_service, phrase, "delete_todo")
         result = await live_service.process_intent(message=phrase, session_id=sid, user_id=_USER)
-        assert result.message == 'Delete todo: "Call the vendor"? (yes/no)'
+        assert result.message == 'Delete the reminder "Call the vendor"? (yes/no)'
         assert todo_boundary["deleted"] == []

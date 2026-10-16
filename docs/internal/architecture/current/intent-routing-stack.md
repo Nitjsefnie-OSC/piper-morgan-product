@@ -250,6 +250,35 @@ carrier armed before the cap deletes nothing. Unchanged: single deletes (the
 #1666 gate, the legacy handler, D1, variant 3 / explicit confirm at N=1), and
 mark done on any set. Regression: `test_delete_cap_2019.py` plus the updated
 pins in the 1696, 1605, 1653, 1753, 1943, router-targets and clear_todos suites.
+**Issue 2046 ordinals need a list, one noun (2026-10-16, CXO's lines)**: an
+ordinal/range target with NO numbered list bound on the session
+(`last_numbered_list is None`) used to answer "There's no number 1 in your
+active to-dos. You have 2: …" (numbers never shown; the tail rendered inside
+the last list item). It now answers CXO's line from ONE copy module
+(`services/intent_service/reminder_copy.py`, `no_list_reply`): "I haven't shown
+you a numbered list yet. Here are your reminders:" + the rows numbered and
+quoted (reminder-dated rows soonest first when the noun is "reminder", else
+the pool; blank lines around the list) + "I can delete one at a time for now.
+Tell me which one." when more than one was asked (the 2019 cap; counted from
+the router tokens, a range by its span) or "Tell me which one." for one.
+Nothing is armed or changed, and the shown rows are recorded as
+`last_numbered_list` (`TodoIntentHandlers._no_list_ordinal_reply`), so the
+next "delete reminder 1" binds to them. Sites: `handle_delete_todo_targets`,
+`handle_complete_todo_targets` (tail "Tell me which one, and I'll mark it
+done."), `clear_todos.run_clear_todos` (tail "Tell me which one.": the verb
+is still open). A bound list keeps the out-of-range "There's no number N"
+line (those numbers were shown). One noun: every one-item delete confirm
+(targets D1, the #1666 number leg, the #1527 named leg, the #1987 referent
+leg, the bound pick) is `reminder_copy.delete_confirm_question`, 'Delete the
+reminder "X"? (yes/no)', and 'Delete the to-do "X"? (yes/no)' only when the
+user said to-do (`copy_noun`, a word-set check; for the referent leg, the
+noun used at creation when the turn says none). The noun rides
+`delete_todo_resolved["noun"]`, and the #1666 confirmed yes now says the D4
+result line ("Deleted 1 reminder:\n• X"), the same as the targets leg. The
+earlier 'Delete todo N: "X"?' / 'Delete todo: "X"?' strings described below
+are superseded. Regression: `test_ordinals_need_a_list_2046.py` plus the
+updated pins in the 1527, 1595, 1605, 1606, 1666, 1696, 1943, 1987, 2019 and
+router-targets suites.
 **#1987 just-created referent leg (2026-10-12)**: 'delete that reminder' /
 'delete it' the turn after "Reminder saved: …" names nothing (that/it/this are
 `_STOPWORDS`, "reminder" is `_DELETE_COMMAND_NOISE`) and fell to the which-todo

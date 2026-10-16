@@ -78,6 +78,12 @@ from typing import Any, Dict, Optional
 import structlog
 
 from services.domain.models import Intent
+from services.intent_service.reminder_copy import (
+    copy_noun,
+    delete_confirm_question,
+    delete_summary_phrase,
+    said_noun,
+)
 
 logger = structlog.get_logger(__name__)
 
@@ -519,16 +525,24 @@ def _recent_created_referent(
 
 
 def _armed_todo_delete(
-    intent: Intent, todo: Any, position: int, question: str, summary: str
+    intent: Intent,
+    todo: Any,
+    position: int,
+    question: str,
+    summary: str,
+    noun: str = "reminder",
 ) -> TodoDeleteGate:
     """Bind the resolved row into the intent (list-shift protection: the
     confirmed yes deletes exactly this row by id, never a positional
-    re-resolve) and arm the #1190 confirm. Copy-on-write on the context."""
+    re-resolve) and arm the #1190 confirm. Copy-on-write on the context.
+    Issue 2046: the confirm's noun rides the binding so the result line
+    after the yes says the same noun."""
     intent.context = dict(intent.context or {})
     intent.context[RESOLVED_TODO_CONTEXT_KEY] = {
         "todo_id": todo.id,
         "text": todo.text,
         "number": str(position),
+        "noun": noun,
     }
     return TodoDeleteGate(
         offer=ConfirmationOffer(
@@ -593,7 +607,7 @@ async def build_todo_delete_confirmation(
     no-number delete that DOES name a target ("delete my hydrate reminder")
     resolves it against the owner's list with complete_todo's shared matcher
     (exact → fuzzy, same threshold). One match → the title-bound confirm
-    arms ('Delete todo: "hydrate"? (yes/no)', DESTRUCTIVE kind, resolved row
+    arms ('Delete the reminder "hydrate"? (yes/no)', issue 2046; DESTRUCTIVE kind, resolved row
     bound). Several → the clarification leg asks which, listing candidates
     by real list position. Zero → the clarification leg answers honestly in
     todo/reminder vocabulary — never a project lookup.
@@ -664,12 +678,15 @@ async def build_todo_delete_confirmation(
         # Bind WHAT, not just WHICH (#1666 AC): stash the row resolved AT
         # ASK TIME so the confirmed yes deletes exactly the todo named in
         # the ask, even if the list shifts between the ask and the yes.
+        # Issue 2046: the one confirm form, in the user's noun.
+        noun = copy_noun(message)
         return _armed_todo_delete(
             intent,
             todo,
             idx + 1,
-            question=f'Delete todo {todo_number}: "{todo.text}"? (yes/no)',
-            summary=f'delete todo {todo_number}: "{todo.text}"',
+            question=delete_confirm_question(todo.text, noun),
+            summary=delete_summary_phrase(todo.text, noun),
+            noun=noun,
         )
 
     # --- just-created referent leg (#1987) ----------------------------------
@@ -686,17 +703,17 @@ async def build_todo_delete_confirmation(
                 )
             )
         position = next(i + 1 for i, t in enumerate(todos) if t.id == row.id)
-        if referent.kind == "reminder":
-            # CXO's D1 (2026-10-06): the one-item delete confirm for a reminder.
-            from services.intent_service.todo_handlers import _delete_confirm_question
-
-            question = _delete_confirm_question([row.text], [])
-            summary = f'delete the reminder "{row.text}"'
-        else:
-            # The #1527 named leg's copy — the row is a plain todo.
-            question = f'Delete todo: "{row.text}"? (yes/no)'
-            summary = f'delete the todo "{row.text}"'
-        return _armed_todo_delete(intent, row, position, question=question, summary=summary)
+        # Issue 2046: one confirm form; the noun is the user's — said now,
+        # or else the one they used when they created the row.
+        noun = said_noun(message) or ("reminder" if referent.kind == "reminder" else "todo")
+        return _armed_todo_delete(
+            intent,
+            row,
+            position,
+            question=delete_confirm_question(row.text, noun),
+            summary=delete_summary_phrase(row.text, noun),
+            noun=noun,
+        )
 
     # --- named-target leg (#1527 remaining scope) ---------------------------
     # Lazy import (same circularity note as reminder_clear above).
@@ -726,13 +743,16 @@ async def build_todo_delete_confirmation(
     todo = matches[0]
     position = next(i + 1 for i, t in enumerate(todos) if t.id == todo.id)
     # Same WHAT-binding as the positional leg: the confirmed yes deletes the
-    # row named in the ask by id, immune to list shift.
+    # row named in the ask by id, immune to list shift. Issue 2046: the same
+    # confirm the numbered leg says, in the user's noun.
+    noun = copy_noun(message)
     return _armed_todo_delete(
         intent,
         todo,
         position,
-        question=f'Delete todo: "{todo.text}"? (yes/no)',
-        summary=f'delete the todo "{todo.text}"',
+        question=delete_confirm_question(todo.text, noun),
+        summary=delete_summary_phrase(todo.text, noun),
+        noun=noun,
     )
 
 

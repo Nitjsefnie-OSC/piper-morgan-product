@@ -360,6 +360,6 @@ class TestStructurallySinglePaths:
         )
         assert gate.offer is not None
         assert gate.offer.question == (
-            'Delete todo 2: "send the budget review to the board"? (yes/no)'
+            'Delete the to-do "send the budget review to the board"? (yes/no)'
         )
         todo_service.delete_todo.assert_not_awaited()

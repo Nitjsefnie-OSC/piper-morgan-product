@@ -153,7 +153,7 @@ class TestLiveEmissionReachesTheBuiltPath:
             message=_PM_PHRASE, session_id="e2e-live-emission", user_id=_USER
         )
         assert llm.classification_calls == 1  # the real path drew the LLM once
-        assert result.message == 'Delete todo: "hydrate"? (yes/no)'
+        assert result.message == 'Delete the reminder "hydrate"? (yes/no)'
         assert result.intent_data.get("destructive_confirmation_pending") is True
         assert todo_boundary["deleted"] == []
 
@@ -175,7 +175,7 @@ class TestLiveEmissionReachesTheBuiltPath:
         sid = "e2e-live-yes"
         hydrate_id = todo_boundary["todos"][0].id
         result = await service.process_intent(message=_PM_PHRASE, session_id=sid, user_id=_USER)
-        assert result.message == 'Delete todo: "hydrate"? (yes/no)'
+        assert result.message == 'Delete the reminder "hydrate"? (yes/no)'
         todo_boundary["allow_delete"] = True
         result = await service.process_intent(message="yes", session_id=sid, user_id=_USER)
         assert todo_boundary["deleted"] == [hydrate_id]
@@ -190,7 +190,7 @@ class TestLiveEmissionReachesTheBuiltPath:
         result = await service.process_intent(
             message=_PM_PHRASE, session_id="e2e-live-verbless", user_id=_USER
         )
-        assert result.message == 'Delete todo: "hydrate"? (yes/no)'
+        assert result.message == 'Delete the reminder "hydrate"? (yes/no)'
         assert result.intent_data.get("destructive_confirmation_pending") is True
         assert todo_boundary["deleted"] == []
 
@@ -262,7 +262,7 @@ class TestPmProbeRoundPhrasings:
         result = await service.process_intent(
             message=phrase, session_id=f"e2e-probe-{emission['action']}", user_id=_USER
         )
-        assert result.message == 'Delete todo: "hydrate"? (yes/no)'
+        assert result.message == 'Delete the reminder "hydrate"? (yes/no)'
         assert result.intent_data.get("destructive_confirmation_pending") is True
         assert "still on the way" not in result.message
         assert todo_boundary["deleted"] == []

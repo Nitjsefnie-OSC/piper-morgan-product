@@ -190,7 +190,7 @@ class TestReferentLeg:
         intent = _intent("delete that")
         gate = await build_todo_delete_confirmation(intent, handlers, _USER, session_id=_SESSION)
         assert gate.offer is not None
-        assert gate.offer.question == 'Delete todo: "send the invoice"? (yes/no)'
+        assert gate.offer.question == 'Delete the to-do "send the invoice"? (yes/no)'
         assert intent.context[RESOLVED_TODO_CONTEXT_KEY]["todo_id"] == created.id
 
     async def test_no_created_row_is_the_unchanged_passthrough(self, handlers, session_ctx):
@@ -265,7 +265,7 @@ class TestReferentLeg:
         intent = _intent("delete my review the pr reminder")
         gate = await build_todo_delete_confirmation(intent, handlers, _USER, session_id=_SESSION)
         assert gate.offer is not None
-        assert gate.offer.question == 'Delete todo: "review the pr"? (yes/no)'
+        assert gate.offer.question == 'Delete the reminder "review the pr"? (yes/no)'
         assert intent.context[RESOLVED_TODO_CONTEXT_KEY]["todo_id"] != created.id
 
     async def test_numbered_leg_unchanged(self, handlers, session_ctx, created):
@@ -273,7 +273,7 @@ class TestReferentLeg:
         intent = _intent("delete todo 1")
         gate = await build_todo_delete_confirmation(intent, handlers, _USER, session_id=_SESSION)
         assert gate.offer is not None
-        assert gate.offer.question == 'Delete todo 1: "review the pr"? (yes/no)'
+        assert gate.offer.question == 'Delete the to-do "review the pr"? (yes/no)'
 
 
 class TestPointerCheck:

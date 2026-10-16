@@ -652,9 +652,9 @@ class TestReadPlusDestructive:
         )
         assert todo_boundary["deleted"] == []
         assert result.intent_data.get("destructive_confirmation_pending") is True
-        assert 'Delete todo: "discussed yesterday"? (yes/no)' in result.message
+        assert 'Delete the reminder "discussed yesterday"? (yes/no)' in result.message
         # The read half is still in the reply, and it LEADS.
-        assert result.message.index("upstream check") < result.message.index("Delete todo")
+        assert result.message.index("upstream check") < result.message.index("Delete the reminder")
         assert "haven't touched" not in result.message  # nothing was deferred
 
     async def test_read_runs_first_even_when_the_write_is_first_in_the_message(
@@ -683,7 +683,7 @@ class TestReadPlusDestructive:
         )
         assert dispatched == ["list_todos_query", "delete_todo"]
         assert todo_boundary["deleted"] == []
-        assert 'Delete todo: "upstream check"? (yes/no)' in result.message
+        assert 'Delete the reminder "upstream check"? (yes/no)' in result.message
         assert "haven't touched" not in result.message
 
     async def test_the_confirmed_yes_deletes_exactly_the_named_row(
@@ -717,7 +717,7 @@ class TestPauseStopsTheTurn:
         "I haven't touched "
         '"what we discussed yesterday was helpful" yet; ask me again after this.\n'
         "\n"
-        'Delete todo: "upstream check"? (yes/no)'
+        'Delete the reminder "upstream check"? (yes/no)'
     )
 
     async def _run(self, monkeypatch, sid):
@@ -975,7 +975,7 @@ class TestArmedTurn:
             sid,
             {
                 "workflow_type": "confirm_pending_action",
-                "question": 'Delete todo: "hydrate"? (yes/no)',
+                "question": 'Delete the reminder "hydrate"? (yes/no)',
                 "pending_action": {
                     "kind": "destructive_action_confirmation",
                     "intent": {
@@ -1176,7 +1176,7 @@ class TestPlanOutcome:
         assert todo_boundary["deleted"] == []
         assert result.intent_data.get("destructive_confirmation_pending") is True
         assert result.intent_data.get("multi_intent_inversion") is True
-        assert 'Delete todo: "hydrate"? (yes/no)' in result.message
+        assert 'Delete the reminder "hydrate"? (yes/no)' in result.message
         assert "haven't touched" not in result.message  # nothing deferred
 
     async def test_the_confirmed_yes_deletes_exactly_the_named_row(
@@ -1241,7 +1241,7 @@ class TestPlanOutcome:
             message=PLAN_MESSAGE, session_id=_sid("plan-two-writes"), user_id=_USER
         )
         assert todo_boundary["deleted"] == []
-        assert 'Delete todo: "hydrate"? (yes/no)' in result.message
+        assert 'Delete the reminder "hydrate"? (yes/no)' in result.message
         assert "haven't touched" in result.message
         assert "delete open issues todo" in result.message
         pending = service.workflow_offer_service.peek_pending_offer(
@@ -1376,7 +1376,7 @@ class TestPlanFloorElement:
         # Condition 4 — execution order, rail text verbatim: the capability
         # answer first, then the delete's own confirm prompt.
         answer_at = result.message.index("set my default repo to owner/name")
-        confirm_at = result.message.index('Delete todo: "hydrate"? (yes/no)')
+        confirm_at = result.message.index('Delete the reminder "hydrate"? (yes/no)')
         assert answer_at < confirm_at
         # 5(a): nothing was deleted and nothing says it was.
         assert todo_boundary["deleted"] == []
@@ -1506,7 +1506,7 @@ class TestReadSiblingWriteOfferIsCarried:
         assert todo_boundary["deleted"] == []
         # The pause's question is the one asked, last; the offer's is gone.
         assert OFFER_QUESTION not in result.message
-        assert result.message.endswith('Delete todo: "hydrate"? (yes/no)')
+        assert result.message.endswith('Delete the reminder "hydrate"? (yes/no)')
         assert "don't have any active projects yet." in result.message
         # The deferred line names the sibling after the pause, and leads.
         assert result.message.startswith("I haven't touched")

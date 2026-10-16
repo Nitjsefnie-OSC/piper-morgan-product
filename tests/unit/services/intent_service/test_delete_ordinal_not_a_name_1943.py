@@ -216,6 +216,12 @@ class TestThenTheTargetsHookOwnsTheTurn:
         assert out is not None
         msg, armed = out
         assert armed is False
-        assert msg.startswith("There's no number 1-2 in your"), msg
-        assert "1. revise the pr" in msg and "Tell me which one, and I'll delete it." in msg
+        # Issue 2046 (CXO): the list, numbered and bound, never "no number 1-2";
+        # the 2019 cap sentence because two were asked.
+        assert msg.startswith(
+            "I haven't shown you a numbered list yet. Here are your reminders:\n\n"
+        ), msg
+        assert '\n1. "revise the pr"\n' in msg
+        assert msg.endswith("\n\nI can delete one at a time for now. Tell me which one.")
+        assert "no number" not in msg
         handlers.todo_service.delete_todo.assert_not_awaited()

@@ -436,7 +436,7 @@ class TestFlippedTurnReachesTheRail:
         # flipped turn must ARM, not execute.
         assert result.success is True
         assert result.intent_data.get("destructive_confirmation_pending") is True
-        assert result.message == 'Delete todo: "hydrate"? (yes/no)'
+        assert result.message == 'Delete the reminder "hydrate"? (yes/no)'
         assert todo_boundary["deleted"] == [], (
             "a flipped delete_todo turn deleted a row on the classifying "
             "turn — the #1190 confirm gate did not hold"
@@ -531,14 +531,14 @@ class TestConfirmProvenanceParity:
     must equal the literal title-bound confirm ``build_todo_delete_
     confirmation`` renders for "delete my hydrate reminder" against the
     shared ``todo_boundary`` fixture's list (the #1527 pin's own literal:
-    ``'Delete todo: "hydrate"? (yes/no)'``), proving the SAME slot-
+    ``'Delete the reminder "hydrate"? (yes/no)'``), proving the SAME slot-
     extraction path (``intent.original_message`` / ``intent.context[
     "original_message"]`` → ``_named_delete_target`` →
     ``resolve_named_todo_target`` against the owner-scoped list) runs
     regardless of which router produced the Intent.
     """
 
-    _EXPECTED_CONFIRM = 'Delete todo: "hydrate"? (yes/no)'
+    _EXPECTED_CONFIRM = 'Delete the reminder "hydrate"? (yes/no)'
 
     async def _run_flipped(self, monkeypatch, todo_boundary, session_suffix):
         monkeypatch.setenv("PIPER_INVERSION_LIVE_CATEGORIES", "delete_todo")

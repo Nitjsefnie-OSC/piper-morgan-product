@@ -12,7 +12,7 @@ with complete_todo's matching — the shared pure matcher extracted to
 ``todo_handlers`` module level (``fuzzy_todo_match_score`` /
 ``match_todos_by_text`` / ``resolve_named_todo_target``), same word-overlap
 score, same ``_FUZZY_MATCH_THRESHOLD``. Single match → the EXISTING #1666
-title-bound DESTRUCTIVE confirm arms ('Delete todo: "hydrate"? (yes/no)'),
+title-bound DESTRUCTIVE confirm arms ('Delete the reminder "hydrate"? (yes/no)'),
 resolved row bound into the intent (list-shift protection intact). Several
 matches → ask which, listing candidates by real list position. Zero → the
 honest didn't-find copy in todo/reminder vocabulary — NEVER a project.
@@ -180,7 +180,7 @@ class TestBuilderNamedTargetLeg:
         intent = _delete_intent(message)
         gate = await build_todo_delete_confirmation(intent, handlers, _USER)
         assert gate.offer is not None and not gate.passthrough
-        assert gate.offer.question == 'Delete todo: "hydrate"? (yes/no)'
+        assert gate.offer.question == 'Delete the reminder "hydrate"? (yes/no)'
         record = gate.offer.offer
         # #1665: the stored ask IS the said ask, byte-for-byte.
         assert record["question"] == gate.offer.question
@@ -188,7 +188,7 @@ class TestBuilderNamedTargetLeg:
         assert pa["kind"] == DESTRUCTIVE_CONFIRM_KIND
         assert pa["action"] == "delete_todo"
         assert pa["intent"] is intent
-        assert 'won\'t delete the todo "hydrate"' in record["decline_message"]
+        assert 'won\'t delete the reminder "hydrate"' in record["decline_message"]
         assert "Nothing has been changed" in record["decline_message"]
         # WHAT-binding (#1666 list-shift protection) rides the named leg too:
         resolved = intent.context[RESOLVED_TODO_CONTEXT_KEY]
@@ -203,7 +203,7 @@ class TestBuilderNamedTargetLeg:
             _delete_intent("delete my hydrate reminder"), handlers, _USER
         )
         assert gate.offer is not None
-        assert gate.offer.question == 'Delete todo: "hydrate"? (yes/no)'
+        assert gate.offer.question == 'Delete the reminder "hydrate"? (yes/no)'
 
     async def test_ambiguous_target_asks_which_with_real_positions(self):
         """Two fuzzy candidates, no exact — the gate asks which, numbering
@@ -241,7 +241,7 @@ class TestBuilderNamedTargetLeg:
             _delete_intent("delete todo 1"), handlers, _USER
         )
         assert gate.offer is not None
-        assert gate.offer.question == 'Delete todo 1: "hydrate"? (yes/no)'
+        assert gate.offer.question == 'Delete the to-do "hydrate"? (yes/no)'
 
     async def test_lookup_failure_on_named_path_is_honest_noop(self):
         """The named leg inherits the #1666 safe default: can't see the list
@@ -349,7 +349,7 @@ class TestEndToEndNamedDelete:
         result = await live_service.process_intent(
             message="delete my hydrate reminder", session_id=sid, user_id=_USER
         )
-        assert result.message == 'Delete todo: "hydrate"? (yes/no)'
+        assert result.message == 'Delete the reminder "hydrate"? (yes/no)'
         assert result.intent_data.get("destructive_confirmation_pending") is True
         assert todo_boundary["deleted"] == []
         todo_boundary["allow_delete"] = True
@@ -368,9 +368,9 @@ class TestEndToEndNamedDelete:
         result = await live_service.process_intent(
             message="delete the reminder to hydrate", session_id=sid, user_id=_USER
         )
-        assert result.message == 'Delete todo: "hydrate"? (yes/no)'
+        assert result.message == 'Delete the reminder "hydrate"? (yes/no)'
         result = await live_service.process_intent(message="no", session_id=sid, user_id=_USER)
-        assert 'won\'t delete the todo "hydrate"' in result.message
+        assert 'won\'t delete the reminder "hydrate"' in result.message
         assert "Nothing has been changed" in result.message
         assert todo_boundary["deleted"] == []
         assert _pending_offers(live_service).get(sid) is None
@@ -434,5 +434,5 @@ class TestEndToEndNamedDelete:
         result = await live_service.process_intent(
             message="delete todo 1", session_id=sid, user_id=_USER
         )
-        assert result.message == 'Delete todo 1: "hydrate"? (yes/no)'
+        assert result.message == 'Delete the to-do "hydrate"? (yes/no)'
         assert todo_boundary["deleted"] == []

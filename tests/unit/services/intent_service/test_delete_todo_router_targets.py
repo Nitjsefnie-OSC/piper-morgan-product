@@ -351,16 +351,19 @@ class TestHandleDeleteTodoTargets:
         offers.set_pending_offer.assert_not_called()
 
     @pytest.mark.asyncio
-    async def test_ordinal_without_a_numbered_list_is_unresolved_says_delete_it(
+    async def test_ordinal_without_a_numbered_list_shows_the_list_and_asks(
         self, handlers, offers, session_ctx, four
     ):
+        """Issue 2046 (CXO line 1): one ordinal, no list shown → the opening,
+        the numbered list, "Tell me which one." (no cap sentence: one asked)."""
         intent = _intent("delete the first one", ["1"])
         msg, armed = await handlers.handle_delete_todo_targets(intent, "s1", uuid4(), offers, "u")
         assert armed is False
-        lines = msg.splitlines()
-        assert lines[0] == "There's no number 1 in your due reminders. You have 4:"
-        assert lines[1:5] == [f"{i + 1}. {t.text}" for i, t in enumerate(four)]
-        assert lines[-1] == "Tell me which one, and I'll delete it."
+        assert msg == (
+            "I haven't shown you a numbered list yet. Here are your reminders:\n\n"
+            + "\n".join(f'{i + 1}. "{t.text}"' for i, t in enumerate(four))
+            + "\n\nTell me which one."
+        )
         assert "mark it done" not in msg
         handlers.todo_service.delete_todo.assert_not_awaited()
         offers.set_pending_offer.assert_not_called()

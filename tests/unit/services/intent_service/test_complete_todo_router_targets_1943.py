@@ -237,14 +237,17 @@ class TestHandleCompleteTodoTargets:
         self, handlers, offers, session_ctx, four
     ):
         """CXO's scope rule: no numbered list shown → the ordinal is NOT
-        guessed; the reply numbers the active list (grounding the next turn)."""
+        guessed; the reply numbers the active list (grounding the next turn).
+        Issue 2046: CXO's opening, never "There's no number 1-3"."""
         intent = _intent("Mark the first three complete and leave the fourth one pending.", ["1-3"])
         msg, armed = await handlers.handle_complete_todo_targets(intent, "s1", uuid4(), offers, "u")
         assert armed is False
-        lines = msg.splitlines()
-        assert lines[0] == "There's no number 1-3 in your due reminders. You have 4:"
-        assert lines[1:5] == [f"{i + 1}. {t.text}" for i, t in enumerate(four)]
-        assert lines[-1] == "Tell me which one, and I'll mark it done."
+        assert msg == (
+            "I haven't shown you a numbered list yet. Here are your reminders:\n\n"
+            + "\n".join(f'{i + 1}. "{t.text}"' for i, t in enumerate(four))
+            + "\n\nTell me which one, and I'll mark it done."
+        )
+        assert "no number" not in msg
         assert "?" not in msg
         handlers.todo_service.complete_todo.assert_not_awaited()
         offers.set_pending_offer.assert_not_called()

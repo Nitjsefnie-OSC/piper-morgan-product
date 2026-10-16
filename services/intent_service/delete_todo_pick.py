@@ -17,8 +17,8 @@ The shape is the #1906 pick-target carrier's, with one difference: a
 reminder-clear pick re-enters the clear flow's own act path, whereas this
 pick re-enters the #1666 title-bound DESTRUCTIVE confirm — delete ALWAYS
 confirms (Arch's ruling carried from #1666), so the bound pick arms CXO's
-D1 'Delete the reminder "X"? (yes/no)' (or the #1527 'Delete todo: "X"?'
-copy for a plain todo) with the row bound BY ID into the intent
+D1 'Delete the reminder "X"? (yes/no)' (issue 2046: the one form on every
+leg; "to-do" only when the user said it) with the row bound BY ID into the intent
 (``destructive_confirm._armed_todo_delete``), and the confirmed yes deletes
 exactly that row through the unchanged #1666 path. Two short questions, each
 armed, rather than one unarmed prompt that sends the user to another page.
@@ -550,13 +550,15 @@ async def _arm_bound_delete(
         confidence=1.0,
         context={"original_message": original_message},
     )
-    if noun == "reminder":
-        question = _delete_confirm_question([row.text], [])  # CXO's D1
-        summary = f'delete the reminder "{row.text}"'
-    else:
-        question = f'Delete todo: "{row.text}"? (yes/no)'  # the #1527 named-leg copy
-        summary = f'delete the todo "{row.text}"'
-    gate = _armed_todo_delete(intent, row, position, question=question, summary=summary)
+    # Issue 2046: one confirm form on every leg. ``noun`` here scopes the
+    # CANDIDATES ("todo" = every active row); the COPY noun is the user's
+    # own word — "reminder" unless they said "to-do".
+    from services.intent_service.reminder_copy import copy_noun, delete_summary_phrase
+
+    copy = "reminder" if noun == "reminder" else copy_noun(original_message)
+    question = _delete_confirm_question([row.text], [], copy)
+    summary = delete_summary_phrase(row.text, copy)
+    gate = _armed_todo_delete(intent, row, position, question=question, summary=summary, noun=copy)
     confirmation = gate.offer
     assert confirmation is not None  # _armed_todo_delete always arms (the offer leg)
     intent_service.workflow_offer_service.set_pending_offer(

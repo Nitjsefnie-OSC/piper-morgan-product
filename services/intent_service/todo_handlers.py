@@ -40,6 +40,12 @@ from services.consciousness.todo_consciousness import (
     format_todo_list_conscious,
 )
 from services.domain.models import Intent, Todo
+from services.intent_service.reminder_copy import (
+    copy_noun,
+    delete_confirm_question,
+    delete_no_list_tail,
+    noun_word,
+)
 from services.intent_service.temporal_utils import DURATION_NUMBER_SRC
 from services.todo.todo_management_service import TodoManagementService
 
@@ -320,6 +326,26 @@ def _is_positional(token: str) -> bool:
     return t == "last" or bool(_ORDINAL_TOKEN_RE.match(t)) or bool(_RANGE_TOKEN_RE.match(t))
 
 
+def _requested_count(tokens: List[str]) -> int:
+    """How many items the router's tokens ask for, before any resolution
+    (issue 2046: the 2019 cap sentence is said when more than one was
+    asked). A range counts its span; "all" counts as more than one; every
+    other token counts one. Reuses the resolver's own token patterns."""
+    total = 0
+    for raw in tokens:
+        tok = raw.strip().strip("\"'“”‘’").strip()
+        if not tok:
+            continue
+        m = _RANGE_TOKEN_RE.match(tok)
+        if m:
+            total += abs(int(m.group(2)) - int(m.group(1))) + 1
+        elif tok.lower() == "all":
+            total += 2
+        else:
+            total += 1
+    return total
+
+
 def _collapse_titles(texts: List[str]) -> List[Tuple[str, int]]:
     """Duplicate titles collapse with a count, order of first appearance kept
     (CXO: two identical quoted titles read as a rendering bug)."""
@@ -394,14 +420,17 @@ def _batch_confirm_question(targets: List[str], left: List[str]) -> str:
     return _confirm_question("Complete", targets, left)
 
 
-def _delete_confirm_question(targets: List[str], left: List[str]) -> str:
+def _delete_confirm_question(targets: List[str], left: List[str], noun: str = "reminder") -> str:
     """CXO string D1/D2/D3 (clear-family build plan piece 1, 2026-10-07):
     delete_todo's DESTRUCTIVE counterpart of ``_batch_confirm_question`` —
     delete ALWAYS confirms, even a single resolved target, so the n==1 case
-    (never reached by complete_todo) renders its own sentence."""
-    return _confirm_question(
-        "Delete", targets, left, one_item_template='Delete the reminder "{title}"?'
-    )
+    (never reached by complete_todo) renders its own sentence. Issue 2046:
+    that sentence is ``reminder_copy.delete_confirm_question``, the ONE
+    one-item confirm every delete leg says; ``noun`` is the user's
+    ("reminder" unless they said "to-do")."""
+    if len(targets) == 1:
+        return delete_confirm_question(targets[0], noun, _leaving_line(left))
+    return _confirm_question("Delete", targets, left)
 
 
 def _mutation_summary(
@@ -413,14 +442,16 @@ def _mutation_summary(
     done: List[str],
     failed: List[Tuple[str, str]],
     left: List[str],
+    noun: str = "reminder",
 ) -> str:
     """Shared body of the post-"yes" summary (CXO string 3 and its delete
     counterpart, D4): the count and bullets report only what actually
     happened; a target that was gone by the time "yes" landed is named
     separately with its own reason; the summary never restates the confirm."""
     n = len(done)
+    word = noun_word(noun)
     lines = (
-        [f"{verb_past} {n} reminder{'s' if n != 1 else ''}{header_suffix}:"] if n else [none_header]
+        [f"{verb_past} {n} {word}{'s' if n != 1 else ''}{header_suffix}:"] if n else [none_header]
     )
     lines += [f"• {t}" + (f" ({c} items)" if c > 1 else "") for t, c in _collapse_titles(done)]
     for text, why in failed:
@@ -439,12 +470,17 @@ def _batch_summary(done: List[str], failed: List[Tuple[str, str]], left: List[st
     )
 
 
-def _delete_summary(done: List[str], failed: List[Tuple[str, str]], left: List[str]) -> str:
+def _delete_summary(
+    done: List[str], failed: List[Tuple[str, str]], left: List[str], noun: str = "reminder"
+) -> str:
     """CXO string D4 (clear-family build plan piece 1): delete_todo's
     counterpart of ``_batch_summary`` — "Deleted" rather than "Marked …
     done", and a missing id reports "already gone" (delete's own ``why``,
-    parallel to complete's "no longer there")."""
-    return _mutation_summary("Deleted", "", "Deleted nothing:", "delete", "", done, failed, left)
+    parallel to complete's "no longer there"). Issue 2046: the one result
+    line every delete leg says after a yes, in the user's noun."""
+    return _mutation_summary(
+        "Deleted", "", "Deleted nothing:", "delete", "", done, failed, left, noun
+    )
 
 
 def _delete_decline_message(targets: List[str]) -> str:
@@ -857,6 +893,19 @@ class TodoIntentHandlers:
             else ([], [])
         )
         unresolved += unresolved_ex
+        if unresolved and numbered is None and any(_is_positional(t) for t in unresolved):
+            # Issue 2046: positions with no numbered list shown — never "no
+            # number 1"; show the list and bind it. Nothing changes.
+            return (
+                self._no_list_ordinal_reply(
+                    name_pool,
+                    copy_noun(intent.original_message or ctx.get("original_message")),
+                    "Tell me which one, and I'll mark it done.",
+                    session_id,
+                    principal or user_id,
+                ),
+                False,
+            )
         if unresolved:
             # CXO string 4: nothing changes; name the list actually searched;
             # show it numbered (which grounds the next ordinal), cap 10.
@@ -1011,6 +1060,8 @@ class TodoIntentHandlers:
         )
 
         ctx = dict(intent.context or {})
+        # Issue 2046: the user's noun for every line this path says.
+        noun = copy_noun(intent.original_message or ctx.get("original_message"))
         # #1975: a confirmed "yes" whose ask was armed by the #1666 rail gate
         # (build_todo_delete_confirmation's named-target leg) carries the row
         # it named under RESOLVED_TODO_CONTEXT_KEY, not BATCH_DELETE_IDS_KEY.
@@ -1059,7 +1110,7 @@ class TodoIntentHandlers:
                 left=len(left),
                 user_id=user_id,
             )
-            return _delete_summary(done_texts, failed, left), False
+            return _delete_summary(done_texts, failed, left, noun), False
 
         # ── candidate sets: what names/"all" index, and what ordinals may index ──
         due = await self._due_reminder_todos(user_id)
@@ -1087,6 +1138,21 @@ class TodoIntentHandlers:
             else ([], [])
         )
         unresolved += unresolved_ex
+        if unresolved and numbered is None and any(_is_positional(t) for t in unresolved):
+            # Issue 2046 (CXO line 1): positions with no numbered list shown
+            # get the list, numbered and bound, never "There's no number 1";
+            # the 2019 cap sentence when more than one was asked. Nothing
+            # changes, nothing is armed.
+            return (
+                self._no_list_ordinal_reply(
+                    name_pool,
+                    noun,
+                    delete_no_list_tail(_requested_count(targets)),
+                    session_id,
+                    principal or user_id,
+                ),
+                False,
+            )
         if unresolved:
             # Same unresolved reply as complete_todo's; nothing changes.
             listing_pool = (
@@ -1157,7 +1223,7 @@ class TodoIntentHandlers:
             return capped_delete_reply([t.text for t in picked]), False
 
         # ── DESTRUCTIVE: always confirm (issue 2019: one item at most) ──
-        question = _delete_confirm_question([t.text for t in picked], left)
+        question = _delete_confirm_question([t.text for t in picked], left, noun)
         bound_ctx = {
             **ctx,
             BATCH_DELETE_IDS_KEY: [t.id for t in picked],
@@ -1200,6 +1266,38 @@ class TodoIntentHandlers:
             session_id=session_id,
         )
         return question, True
+
+    def _no_list_ordinal_reply(
+        self,
+        name_pool: List[Todo],
+        noun: str,
+        tail: str,
+        session_id: Optional[str],
+        principal: Any,
+    ) -> str:
+        """Issue 2046 (CXO line 1): ordinals arrived and this session has shown
+        no numbered list. Show the user's rows numbered (reminders — rows with
+        a reminder date, soonest first — when the noun is "reminder" and any
+        exist; else the pool), then ``tail``; RECORD exactly the shown rows as
+        the session's numbered list, so the next "delete reminder 1" binds to
+        these numbers. Copy: ``reminder_copy.no_list_reply``."""
+        from services.intent_service.delete_todo_pick import _candidates
+        from services.intent_service.reminder_copy import (
+            NO_LIST_MAX_SHOWN,
+            no_list_reply,
+            noun_plural,
+        )
+
+        rows = (_candidates(name_pool, "reminder") if noun == "reminder" else []) or list(name_pool)
+        shown = rows[:NO_LIST_MAX_SHOWN]
+        self._remember_numbered_list(
+            session_id,
+            principal,
+            noun_plural(noun),
+            [t.id for t in shown],
+            [t.text for t in shown],
+        )
+        return no_list_reply([t.text for t in rows], noun, tail)
 
     @staticmethod
     def _remember_numbered_list(
@@ -1946,10 +2044,13 @@ class TodoIntentHandlers:
             except Exception as e:  # silent-ok: error-logged with exc_info; user gets honest failure copy, no silent default (#1666 gate path)
                 logger.error("Todo deletion failed", error=str(e), user_id=user_id, exc_info=True)
                 return "I had trouble removing that todo. You can try again with 'delete todo [number]', or say 'show my todos' to verify the list."
+            # Issue 2046: the same result line the numbered leg says (D4), in
+            # the noun the confirm used.
+            _noun = _resolved.get("noun") or "reminder"
             if deleted:
                 logger.info("Todo deleted", todo_id=str(_resolved["todo_id"]), user_id=user_id)
-                return format_todo_deleted_conscious(_resolved["text"])
-            return "I couldn't delete that todo. It might have already been removed."
+                return _delete_summary([_resolved["text"]], [], [], _noun)
+            return _delete_summary([], [(_resolved["text"], "already gone")], [], _noun)
 
         # Note: original_message may be in intent.original_message OR intent.context["original_message"]
         # depending on how the Intent was created (Issue #744)

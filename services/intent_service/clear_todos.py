@@ -362,6 +362,7 @@ async def run_clear_todos(
     )
     from services.intent_service.todo_handlers import (
         TodoIntentHandlers,
+        _is_positional,
         _router_target_tokens,
         resolve_router_targets,
     )
@@ -406,6 +407,28 @@ async def run_clear_todos(
     )
     unresolved += unresolved_ex
 
+    if unresolved and (
+        any(_is_positional(t) for t in unresolved)
+        and todo_handlers._recall_numbered_list(session_id, principal or todo_user_id) is None
+    ):
+        # Issue 2046 (CXO line 1): positions with no numbered list shown get
+        # the list, numbered and bound — never "There's no number 1". The
+        # verb is still open here, so the tail is the bare instruction (the
+        # 2019 cap is said where the delete leg resolves).
+        from services.intent_service.reminder_copy import TELL_ME_WHICH_ONE
+
+        return IntentProcessingResult(
+            success=True,
+            message=todo_handlers._no_list_ordinal_reply(
+                name_pool,
+                _CLEAR_NOUN_LITERAL,
+                TELL_ME_WHICH_ONE,
+                session_id,
+                principal or todo_user_id,
+            ),
+            intent_data={"category": category, "action": intent.action, "router_targets": True},
+            requires_clarification=False,
+        )
     if unresolved:
         msg, listing_kind, shown_ids, shown_texts = _render_unresolved_reply(
             name_pool, pool_kind, ordinal_pool, ordinal_kind, picked, unresolved

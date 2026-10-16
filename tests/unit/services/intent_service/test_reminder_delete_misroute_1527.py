@@ -283,7 +283,7 @@ class TestEndToEndRoutedDestination:
         assert "couldn't find a project" not in result.message.lower()
         assert "project" not in result.message.lower()
         # the #1666 title-bound confirm, resolved by name:
-        assert result.message == 'Delete todo: "hydrate"? (yes/no)'
+        assert result.message == 'Delete the reminder "hydrate"? (yes/no)'
         assert result.intent_data.get("destructive_confirmation_pending") is True
         stored = live_service.workflow_offer_service._pending_offers.get(
             f"e2e-1527-{hash(phrase) & 0xFFFF}"
@@ -326,7 +326,7 @@ class TestEndToEndRoutedDestination:
         result = await live_service.process_intent(
             message="delete todo 1", session_id=sid, user_id=_USER
         )
-        assert result.message == 'Delete todo 1: "hydrate"? (yes/no)'
+        assert result.message == 'Delete the to-do "hydrate"? (yes/no)'
         assert result.intent_data.get("destructive_confirmation_pending") is True
         stored = live_service.workflow_offer_service._pending_offers.get(sid)
         assert stored is not None
