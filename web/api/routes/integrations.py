@@ -28,7 +28,7 @@ class IntegrationStatus(BaseModel):
 
     name: str
     display_name: str
-    status: str  # healthy, degraded, failed, unknown, not_configured
+    status: str  # healthy, degraded, failed, connected (#2044: configured, never tested), unknown, not_configured
     status_message: str
     last_check: Optional[str] = None
     error: Optional[str] = None
@@ -162,6 +162,31 @@ INTEGRATION_REGISTRY = {
         },
     },
 }
+
+
+# #2044 (CXO, 2026-10-15): a card with a connection but no test result reads
+# "Connected" with the health line "Not checked yet. Press Test." (a statement plus
+# a plain instruction; nothing to arm). "unknown" is internal vocabulary and never
+# reaches a configured card. One source for every provider's card; the healthy
+# summary does not count an unchecked connection.
+UNCHECKED_STATUS = "connected"
+UNCHECKED_MESSAGE = "Connected"
+UNCHECKED_DETAIL = "Not checked yet. Press Test."
+
+
+def _unchecked_card(integration_id: str, metadata: Dict[str, Any]) -> "IntegrationStatus":
+    """The configured-but-never-tested card (#2044). The health monitor registers
+    every component as UNKNOWN with a real ``last_check`` at startup, so "never
+    tested" is the UNKNOWN status, not a missing record."""
+    return IntegrationStatus(
+        name=integration_id,
+        display_name=metadata["display_name"],
+        status=UNCHECKED_STATUS,
+        status_message=UNCHECKED_MESSAGE,
+        status_detail=UNCHECKED_DETAIL,
+        configure_url=metadata.get("configure_url"),
+        can_test=True,
+    )
 
 
 def _get_health_monitor() -> IntegrationHealthMonitor:
@@ -464,6 +489,12 @@ async def _check_integration_health(
         component_health = health_monitor.get_component_health(integration_id)
 
         if component_health and component_health.last_check > 0:
+            # #2044: UNKNOWN is the registered-at-startup (or reset) state, i.e. no
+            # test has ever recorded a result; that is the unchecked card, never
+            # "Status: unknown".
+            if component_health.status == ComponentStatus.UNKNOWN:
+                return _unchecked_card(integration_id, metadata)
+
             # Map ComponentStatus to our status strings
             status_map = {
                 ComponentStatus.HEALTHY: "healthy",
@@ -496,15 +527,8 @@ async def _check_integration_health(
                 can_test=True,
             )
 
-        # Fallback for configured but never-tested integrations
-        return IntegrationStatus(
-            name=integration_id,
-            display_name=metadata["display_name"],
-            status="unknown",
-            status_message="Click 'Test' to check connection",
-            configure_url=metadata.get("configure_url"),
-            can_test=True,
-        )
+        # Configured but never tested, and no component registered (#2044).
+        return _unchecked_card(integration_id, metadata)
 
     except Exception as e:
         logger.warning(f"Failed to check {integration_id} health", error=str(e))

@@ -87,6 +87,7 @@ class TestIntegrationHealthEndpoint:
                 "healthy",
                 "degraded",
                 "failed",
+                "connected",  # #2044: configured, never tested
                 "unknown",
                 "not_configured",
             ]
