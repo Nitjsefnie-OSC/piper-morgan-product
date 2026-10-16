@@ -5790,6 +5790,21 @@ unchanged). Not moved (outside the ruled scope, stated): the #1977 unanswered-ha
 (`_append_unanswered_half`) arms a #852 hint whose continuation is the user's own unanswered clause,
 which can be a write.
 
+**`write_offer` reach tripwire (Arch's #2035 rule item 2):**
+`TestUnarmedAskSiteRatchet.test_2035_write_offer_reach_tripwire`, the sibling of the #2010 offer_hint
+tripwire. (a) The holders that build a `"write_offer"` key are pinned (`_WRITE_OFFER_BUILDERS`: the
+two setup-guidance methods and `_handle_portfolio_query`). (b) The external referrers of every method
+that reaches one through the in-class call graph are pinned (the `_READ_CANONICAL_MEMBERS` table).
+(c) That adapter returns through `_finalize_canonical_rail_result`, which calls `_arm_write_offer`,
+which reads `"write_offer"` and calls `set_pending_offer`. (d) The `CanonicalHandlers.handle` dispatch
+holders are pinned with what each does with `write_offer`. (e) Every call of a #846 write-offer
+factory (`build_add_project_offer`, `empty_projects_offer`) reaches `set_pending_offer` or a
+`"write_offer"` value. Check (d) pins a KNOWN GAP: `IntentOrchestrator._execute_single` drops
+`write_offer`, so in a multi-intent turn a write-offer sibling's question renders unarmed (#2041). The
+#2030 worked example above (empty projects as a hinted sibling) predates #2035: that question is now a
+write offer, which this path drops, and its text is "Would you like to add a project?" (CXO
+four-calls item 3).
+
 ## Pointers
 
 - Probe report + recalibration trace: `dev/2026/07/08/routing-probe-1283-run1.md`
