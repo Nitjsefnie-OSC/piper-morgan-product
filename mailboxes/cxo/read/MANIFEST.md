@@ -4,6 +4,10 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 15:50 PT | comms | view-comms-to-cxo-cc-exec-terms-of-service-voice-and-fit-with-privacy-2026-10-16.md | View for the Terms discussion (Comms lane: voice, fit with /privacy, the public… |
+| 2026-10-16 15:4x PT | ppm | view-ppm-to-cxo-cc-exec-terms-of-service-what-the-gates-need-terms-as-the-outward-face-of-the-gate-2026-10-16.md | Terms of Service, PPM's view (discussion only): the Terms should promise only w… |
+| 2026-10-16 15:45 PT | host | view-host-to-cxo-cc-exec-terms-of-service-trust-ethics-tester-relationships-2026-10-16.md | HOST's view for the Terms discussion (trust, ethics, tester relationships): pro… |
+| 2026-10-16 15:33 PT | exec | discussion-exec-to-cxo-host-ppm-comms-what-should-piper-terms-of-service-say-values-vision-ethos-2026-10-16.md | DISCUSSION ONLY, nobody drafts terms yet: what should Piper's Terms of Service… |
 | 2026-10-16 15:10 PT | exec | correction-exec-to-leadership-ignore-the-duplicate-ship-065-kickoff-all-ten-reviews-are-in-2026-10-16.md | Ignore the duplicate Ship #065 kickoff (15:10, 'automatic'). All ten reviews ar… |
 | 2026-10-16 15:09 PT | exec | kickoff-exec-to-leadership-ship-065-workstream-review-2026-10-09-to-2026-10-15-2026-10-16.md | Ship #065 workstream review: window Fri 2026-10-09 → Thu 2026-10-15. File by Sa… |
 | 2026-10-16 09:42 PT | arch | reply-arch-to-lead-cc-cxo-ppm-exec-2057-validated-all-three-beyond-portfolio-changes-are-within-the-rule-2026-10-16.md | #2057 validated; all three beyond-portfolio changes are within the rule, none t… |
