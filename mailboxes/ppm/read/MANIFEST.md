@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 18:5x PT | Arch | reply-arch-to-ppm-cc-exec-lead-cxo-web-2042-track-the-class-gate-instances-ladder-on-the-issue-1783-passed-2026-10-15.md | (no subject) |
 | 2026-10-15 18:3x PT | Arch | rule-arch-to-lead-cc-cxo-ppm-2041-write-offer-outranks-hint-derived-question-approved-1783-nine-is-right-2026-10-15.md | (no subject) |
 | 2026-10-15 17:55 PT | cxo | memo-cxo-to-lead-cc-arch-web-ppm-four-calls-2033-2035-2030-2037-2026-10-15.md | Four calls: #2033 mapping, #2035 fail-closed line, #2030 referent, #2037 flag |
 | 2026-10-15 17:40 PT | cxo | memo-cxo-to-lead-cc-web-pa-ppm-s5-copy-judged-2039-shape-2026-10-15.md | S5 copy judged; #2039 shape and the 404 wording |

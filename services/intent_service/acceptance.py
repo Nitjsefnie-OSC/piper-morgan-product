@@ -238,6 +238,28 @@ def _normalize_taught(text: str) -> str:
     return _TRAILING_PUNCT_RE.sub("", text.strip().lower())
 
 
+def names_offered_remainder(message: str, *, taught_accepts: Iterable[str]) -> bool:
+    """#2040: does this turn ask for an offered remainder, read WITHOUT the
+    shared accept vocabulary?
+
+    Exactly the two remainder-specific arms of :func:`evaluate_acceptance` at
+    LOW_CEREMONY with ``accepts_request_questions=True``, in the same order:
+    prose → no; a question → only a request-question naming the remainder;
+    otherwise a full-message match on the seam's taught phrases. A bare "yes"
+    or "sure" is NOT read here: with nothing armed it answers nothing. No new
+    vocabulary; the caller passes the seam's own taught list.
+    """
+    from services.intent_service.soft_invocation import is_prose_reply
+
+    clean = (message or "").strip()
+    if not clean or is_prose_reply(clean):
+        return False
+    if is_state_question(clean):
+        return is_remainder_request_question(clean)
+    normalized = _normalize_taught(clean)
+    return bool(normalized) and normalized in {_normalize_taught(t) for t in taught_accepts}
+
+
 # --- THE predicate -----------------------------------------------------------
 
 

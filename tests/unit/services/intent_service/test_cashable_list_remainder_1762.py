@@ -711,25 +711,33 @@ class TestStaleRemainder:
             )
         assert result.intent_data["action"] == "list_remainder_moved"
 
-    async def test_with_no_remainder_at_all_the_seam_is_silent(self, live_service):
-        """A list we have NO record of cannot honestly be called "moved" — the
-        turn falls through to normal processing instead.
+    async def test_with_no_remainder_at_all_the_seam_claims_nothing(self, live_service):
+        """A list we have NO record of cannot honestly be called "moved", so
+        this seam neither cashes nor says "moved".
 
         NOT the restart case (#1784): a session that was NEVER armed reaches
         this branch exactly as it always has — ``get_or_create_context``
         hands back a context whose ``pending_list_remainder`` is plain
         ``None``, no tombstone involved. §5b-i's honest "that list has moved"
         turn is owed only when we once knew about a remainder and lost the
-        items; here we never knew anything, so silence is the honest turn.
-        The restart-crossing case — armed, then the in-process record is
+        items. The restart-crossing case — armed, then the in-process record is
         actually lost — is ``TestRestartCrossingTombstone`` below, and it
-        takes ``render_moved``, not this silent branch."""
+        takes ``render_moved``.
+
+        UPDATED by #2040 (CXO's ruling): this turn used to fall through to
+        classification, and on Web's served run the floor composed "the rest"
+        from history, a list code never returned. The next step,
+        ``_nothing_held_reply``, now answers it from code; with no whole-list
+        fact from the previous turn that is Arch's hold-only line, which
+        claims nothing about the previous turn. ``test_nothing_held_2040.py``
+        pins both lines."""
+        from services.intent_service.list_remainder import HOLD_ONLY_REPLY
+
         sid = "1762-e2e-no-remainder"
         _clear(sid)
         get_or_create_context(sid, user_id=_USER).last_offer = None
         p_registry, mock_registry = _inert_registry()
-        p_classify, p_floor, p_floor2 = _stub_fallthrough_routing(live_service, "show me the rest")
-        with p_registry as registry_fn, p_classify, p_floor, p_floor2:
+        with p_registry as registry_fn:
             registry_fn.return_value = mock_registry
             result = await live_service.process_intent(
                 message="show me the rest", session_id=sid, user_id=_USER
@@ -738,6 +746,7 @@ class TestStaleRemainder:
             "list_remainder_cash",
             "list_remainder_moved",
         )
+        assert result.message == HOLD_ONLY_REPLY
 
 
 # ---------------------------------------------------------------------------

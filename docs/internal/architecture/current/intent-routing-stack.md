@@ -623,6 +623,48 @@ rather than papered over: contract axis (a) makes an interrogative REQUEST
 ("can I see the rest?") a STATE_QUESTION, not an accept — the arm survives and
 normal processing answers, but the CONTRACT is where that would change.
 Regression: `test_cashable_list_remainder_1762.py`.
+**#2040 part 1 — the empty open-issues line names its scope (2026-10-15, CXO's ruling)**:
+`_handle_list_issues_query`'s OAuth connector read is `assignee:@me` (user-wide) unless a repo is
+named, so "You don't have any open issues right now." was true only under a scope the user was
+never told (Web, 6f2916d10f: 7 open, none assigned). On that path the empty line is now "You have
+no open issues assigned to you."; then, one extra read only in the empty case
+(`IntentService._default_repo_open_issue_count`: `get_user_default_repo` + the same adapter's
+`list_open_issues(limit=1, repository=<default>)`, whose `total` is the search `total_count`; no
+new adapter method), a nonzero count adds the statement "There are N open issues in <repo>. Say
+'show open issues in <repo>' to see them." (singular at 1). No default repo, a degraded read or
+any failure → the scoped line only. A named repo is read repo-wide, so "No open issues in <repo>
+right now." is unchanged; the native-PAT fallback (repo-wide on the default repo) keeps its line.
+Regression: `test_issues_empty_scope_2040.py` (also pins the issues cap boundary: 7 and 8 render
+whole, 9 shows five, offers and arms four).
+**#2040 part 2 — a remainder ask with NOTHING held answers from code (2026-10-15, CXO's
+line)**: `_check_pending_list_remainder` returns None when nothing is held, so on Web's served
+run `could you show me the rest?` classified and the floor composed "here are the two I didn't
+show yet: #2, #1" (ADR-080; the class Arch named on #2033). `IntentService._nothing_held_reply`
+now sits in `_process_intent_internal` immediately after the remainder check and before the
+#2033 nothing-running step and classification, guarded like it (`not contextual_offer_bound`,
+nothing escaped). It reads the ask with the remainder seam's OWN vocabulary through
+`acceptance.names_offered_remainder` (the two remainder arms of `evaluate_acceptance`, same
+order: prose → no; a question → only a #1783 request-question naming the remainder; otherwise a
+full-message `LIST_REMAINDER_TAUGHT_ACCEPTS` match) and never the shared accept vocabulary, so a
+bare "yes" with nothing armed is not claimed. With no remainder held and no offer rail armed
+(`_armed_offer_signal`) it answers from code, action `list_remainder_nothing_held`, nothing
+appended, nothing fetched, and claims only what code holds (Arch's condition): when the PREVIOUS
+turn rendered a list whole, `list_remainder.NOTHING_HELD_REPLY` ("That was the whole list.
+There's nothing more to show."); otherwise (a floor prose turn, an empty read, no list at all)
+`HOLD_ONLY_REPLY` ("I'm not holding any more of that list. Ask for it again and I'll pull a
+fresh one.", CXO's words 2026-10-15 17:16). The whole-list fact is
+`ConversationContext.last_list_complete` (a `ListComplete`: kind, shown, recorded_at), a
+SEPARATE record from the remainder that no acceptance seam reads, so it cannot bind a "yes".
+`compose_capped_list` returns it as `CappedListRender.complete` only when every item the source
+has is on screen (no offer, nothing unfetched, an exact source count, at least one item);
+`_arm_list_remainder(..., complete=)` stores it at the six GitHub sites (and clears it when a
+remainder arms). Lifetime: session-scoped like the remainder and bounded by the same 30 minutes,
+but ONE turn: `_pop_last_list_complete` takes it at the top of every `_process_intent_internal`
+turn, because "that was the full list" is about the reply just before. In-process only; a lost
+fact degrades to the hold-only line. A held remainder (fresh, stale or one the seam let pass as
+a state question), an armed rail or a failed lookup stands down to the pre-#2040 path. No new
+vocabulary or regex.
+Regression: `test_nothing_held_2040.py`; the #1762 no-remainder pin now expects the hold-only line.
 
 **#1855 ask-only-when-armed, enforced at the FLOOR'S OUTPUT SEAM (2026-09-23,
 Lead design / Arch ruling; layer 1 of 2)** — surface 4's reply text now passes a
