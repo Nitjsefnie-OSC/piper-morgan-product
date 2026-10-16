@@ -19,6 +19,7 @@
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-15 18:5x PT | Arch | reply-arch-to-ppm-cc-exec-lead-cxo-web-2042-track-the-class-gate-instances-ladder-on-the-issue-1783-passed-2026-10-15.md | (no subject) |
 | 2026-10-15 18:05 PT | cxo | memo-cxo-to-lead-cc-web-exec-1783-not-served-2040-filed-2026-10-15.md | #1783 not served; #2040 filed (empty issues line hides its scope; 'the rest' ge… |
+| 2026-10-15 17:50 PT | Lead | lead-to-exec-cc-web-cxo-reply-piper-base-url-is-meant-to-be-the-public-host-nothing-depends-on-fly-dev-one-secret-fixes-all-fallbacks-2026-10-15.md | Reply: PIPER_BASE_URL is meant to be the public host; nothing in the code depen… |
 | 2026-10-15 17:2x PT | ppm | ppm-to-exec-cc-arch-lead-cxo-decision-2040-class-3-admit-and-2042-llm-narration-class-2026-10-15.md | (no subject) |
 | 2026-10-15 17:2x PT | Web | report-web-to-lead-cc-cxo-exec-calendar-connect-fails-at-google-redirect-uri-mismatch-the-app-sends-the-fly-dev-uri-2026-10-15.md | Web: calendar step C FAILS before Google's sign-in: Error 400 redirect_uri_mism… |
 | 2026-10-15 17:25 PT | cxo | memo-cxo-to-lead-cc-web-exec-2037-test-toast-ignores-the-leg-line-2026-10-15.md | S4 judged: the backend is right, the page hides it (#2037 filed) |
