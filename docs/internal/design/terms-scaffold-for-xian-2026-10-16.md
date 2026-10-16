@@ -1,73 +1,86 @@
 # Scaffold for xian's own words: Piper's plain commitments
 
-**Status:** DRAFT scaffold by CXO, 2026-10-16, for Comms to complete with code-checked facts. It contains **prompts and facts only. No commitment text is drafted.** xian answers each prompt in his own words; Comms then checks each answer against the code, and PPM maps each answer to a mechanism or gate class (rule: a commitment the code doesn't back isn't made).
+**Status:** scaffold started by CXO, completed by Comms 2026-10-16 (facts folded in from Arch's 16:03 memo, PPM's gate reply and Comms' code checks). It contains **prompts and facts only. No commitment text is drafted.** xian answers each prompt in his own words; Comms then checks each answer against the code, and PPM maps each answer to a mechanism or gate class (rule: a commitment the code doesn't back isn't made).
 
 **Decided (xian, 10-16):** Option 2. The plain layer goes in the design-partner invitation by 10-23, in his words. Counsel writes the legal layer for Production. No Terms page and no click-through for beta.
 
-**Facts that must be filled in before a prompt is answerable:** Arch's two facts (what hosted alpha stores by category; confirmation by action type), due Tue 10-20. Until then, any line below marked *claimed* is a colleague's statement I have not checked.
+**Facts state (Comms, 16:3x 10-16):** Arch's two facts (storage by category, confirmation by action type) arrived early (16:03) and are folded in. Every fact below cites its source. Still open, named in each area: "never train" (Arch), UI delete buttons and the chat-delete surface (Lead/CXO), areas 4 and 7 (HOST checks). Next: Comms sends this to Exec for xian. He answers in his own words; Comms checks each answer against the code.
 
-**How to use it:** each area has (1) prompts for xian, (2) facts the answer must stay true to, (3) known gaps the answer has to name as a goal and a gap, and (4) the checker. Facts marked *claimed* come from the 10-16 views and are not verified by CXO.
+**How to use it:** each area has prompts for xian, the facts the answer must stay true to, the gaps it has to name as goal and gap, and the checker.
 
 ---
 
 ## 1. My work is mine
 - **Prompts:** What does a person keep ownership of? What do we use their content for, and what do we never use it for? What happens to their content if they leave?
-- **Facts to stay true to:** what hosted alpha stores and where (Arch, 10-20). /privacy's current claims (website `privacy/page.tsx`).
-- **Gaps to name:** deletion. *Claimed* (HOST 10-12, Comms): account deletion is by email within 14 days; conversations are hidden today, not erased; trash is the goal. Uploads: backfill state unverified.
-- **Checker:** Comms against /privacy and Arch's memo.
+- **Facts to stay true to:**
+  - Encrypted by the app when stored: messages, AI provider keys, connected-account tokens (Arch 10-16; /privacy "encrypted when stored").
+  - **Not** encrypted by the app: todos, projects, lists, account fields, topic summaries in conversational memory (Arch 10-16). An answer must not say "everything you put in Piper is encrypted".
+  - Encryption of Fly's disks and backups can't be seen from code. Don't claim it either way.
+  - Stored on Fly.io in San Jose (/privacy).
+- **Gaps to name (goal and gap):**
+  - Uploads: encrypted since 07-08 when the key is set; files written while the key was unset are plaintext until the backfill runs (count mode on main, xian runs it after Fly recovers). Also #2061: a file written with no key is plaintext even in production (latent, unverified on alpha).
+  - Deleting a chat hides it; the rows are kept and nothing purges them later. Goal: a trash you can purge (/privacy).
+- **Checker:** Comms, against /privacy and Arch's memo.
 
 ## 2. What Piper does and never does with it
 - **Prompts:** Who can read a person's conversations? Does anything go to a model provider, and whose key pays for it? Do we use their data to improve anything? What do we never do?
-- **Facts to stay true to:** Arch's storage facts; /privacy; how bring-your-own-key calls are handled (PPM raised the provider question, nobody has answered it).
-- **Gaps to name:** *claimed* #1982 (key re-encrypt) is open, so "your key is stored encrypted" waits for Lead's confirmation (HOST).
+- **Facts to stay true to:**
+  - Messages go to the provider the person connected (Anthropic or OpenAI) **with their own key**. There's no shared Piper key (/privacy; #1812, `provider_selection.py`).
+  - From then on the provider's own privacy terms apply (/privacy).
+  - Admin tools don't display conversations; the decryption key is a server secret, so "no one can read them" is **not** claimable (/privacy source notes).
+  - Server logs keep no message text once #2059 is live (/privacy; #2059 rides the waiting promotion).
+  - No analytics or ad tracking in the app once #2060 is live (/privacy; Chroma telemetry off).
+- **Gaps to name:**
+  - "We never train on your data": no training or fine-tuning code found (`git grep` over services/ and web/, Comms 10-16). But "never" is a promise about the future, and Arch hasn't stated it. If xian wants it, Arch confirms first.
+  - ~~#1982 key re-encrypt~~: struck. It finished on alpha 10-13 (legacy=0, `user_api_key_service.py:35-42`).
 - **Checker:** Comms and Arch.
 
 ## 3. Confirming before what can't be undone
 - **Prompts:** When Piper is about to do something a person can't take back, what does it do first? When Piper acts for the person and gets it wrong, whose problem is that, and what do we do?
-- **Facts to stay true to:** Arch's per-action table (10-20). #2057 and #2048 are on main and **not yet on alpha** (alpha served `6bb955919d` at 15:31 on 10-16).
-- **Gaps to name:** undo is not a promise yet: soft delete with a 7-day window is #2021, open. Bulk todo delete is capped at one item until then (#2019).
+- **Facts to stay true to (Arch 10-16, per action type):**
+  - Deletes always confirm, with a named yes/no.
+  - A drafted or ambiguous request gets a draft and a question.
+  - **An explicit request to create a GitHub issue or comment on one posts with no confirm, by design** (the explicit request is the consent, #1509), and so does "can you create an issue for X?".
+  - Bulk todo delete is capped at one item (#2019, closed).
+- **Must not say:** "Piper confirms before every action that can't be undone". The GitHub path makes that false.
+- **Gaps to name:**
+  - Undo is not a promise yet: soft delete with an undo window is #2021, open, on Production. The invitation must not imply undo.
+  - Alpha still has four project paths that write or unlink without asking. Main fixes them; they go live with the waiting promotion (#2057, #2048 are still open).
+  - Unverified: whether the UI's own delete buttons (todos, lists, files, projects) ask first. Arch didn't check. Comms found no chat-delete button in `templates/` (the sidebar shows "archived" only), so whatever "delete a chat" looks like on screen needs Lead or CXO to name the surface before an answer cites it.
 - **Checker:** Lead or Arch for action paths; PPM for the gate class.
 
 ## 4. Telling me when something's broken
 - **Prompts:** What does a person see when Piper can't do something? How do they tell us? Who reads it?
-- **Facts to stay true to:** the feedback inbox is one mailbox; HOST: "the project team", not a single reader. The "Known issues in this beta" list and its bar (PPM, `ppm-placement-and-disclosure-rules-2026-10-13.md` §2).
-- **Gaps to name:** none known; confirm the channel exists for hosted partners.
+- **Facts to stay true to:** the feedback inbox is one mailbox, read by "the project team", not a single reader (HOST). The "Known issues in this beta" list and its bar (PPM, `ppm-placement-and-disclosure-rules-2026-10-13.md` §2). For design partners, xian's 10-16 bar: privacy and security items closed, everything else disclosed as a known issue after xian and PPM review the list.
+- **Gaps to name:** none known; HOST confirms the channel exists for hosted partners.
 - **Checker:** HOST.
 
 ## 5. Leaving with my data
 - **Prompts:** How does a person leave? What can they take with them, and in what form? How long until we have deleted it?
-- **Facts to stay true to:** Arch's export/delete column. *Claimed:* no export exists today.
-- **Gaps to name:** if there is no export, the answer says so as a goal and a gap, not as a promise.
+- **Facts to stay true to:**
+  - No in-app account deletion. Deletion is by email to support@pipermorgan.ai, within 14 days (live on /privacy).
+  - Export exists for uploaded files (single and zip) and for learned patterns and learning settings (`GET /controls/export`, `web/api/routes/learning.py:803`).
+  - **No export** of conversations, todos or lists (Arch).
+- **Gaps to name:** "You can take your files and what Piper learned about you. Exporting your conversations and to-dos is the goal." (That's the fact, not the wording. xian words it.)
 - **Checker:** Arch, Comms.
 
 ## 6. Beta honesty (xian's three statements, kept separate)
-- **(a) Reliability.** Prompt: what do we tell a design partner about errors, and is real data OK? Beta form from xian: expect errors, proceed with caution, real data is OK, **only if** the gate supports it. PPM answers whether it does on 10-23; otherwise the partners get "use test data". *Note: the template today says "Data may be lost at any time; use test data only". That is the alpha form and sits oddly with the beta form; Comms flagged it.*
-- **(b) Privacy regime.** Prompt: what isn't built yet before Production? State it as goal and gap, never as a disclaimer.
+- **(a) Reliability.** Prompt: what do we tell a design partner about errors, and is real data OK?
+  - Alpha form: not reliable yet, use test data.
+  - Beta form: expect errors, proceed with caution, real data is OK.
+  - **Rule (PPM + Exec, 10-16):** the invitation carries the beta form only if four conditions hold on the morning it goes: #2054 closed on a served check; #2059 and #2060 closed on served checks (incl. #2059's third pass); uploads backfilled with zero plaintext; no Class 1 item open. PPM runs the check and sends Comms one line. Otherwise the alpha form. **Never both in one invitation.**
+  - xian answers both forms, so whichever the check picks is in his words.
+- **(b) Privacy regime.** Prompt: what isn't built yet before Production? State it as goal and gap, never as a disclaimer. Inputs: chat purge (trash), in-app account deletion, conversation export, undo window. Wording that fails: "use at your own risk". Shape that works: "Before Production we'll add X. Today Y is true."
 - **(c) Who it's for.** Prompt: who is this for right now, in a sentence a stranger understands?
 - **Checker:** PPM for (a), Comms for (b) and (c).
 
 ## 7. A code is yours (tester relationship)
 - **Prompts:** What does a person do with an invite code? What happens if it leaks? When do we quote someone, and what do we ask first?
-- **Facts to stay true to:** codes are bearer credentials, revocable; we do not publish who testers are (HOST's list).
+- **Facts to stay true to:** codes are bearer credentials, revocable; we do not publish who testers are (HOST's list). Counsel reviews before any outside user beyond the design partners (#2063, xian 10-16).
 - **Checker:** HOST.
 
 ---
 
 **Not in the scaffold on purpose:** acceptable use, liability, governing law, indemnification, changes to terms, and anything else that belongs to the legal layer underneath. Counsel writes those for Production. The boilerplate the four views refuse stays out: indemnification by the user, broad feedback licence, "revoked any time" without export, "the user is responsible for all assistant actions".
 
----
-
-## Facts update 16:11 (CXO, from Arch's 16:03 memo, Comms' 16:20 memo and PPM's 16:1x memo; Comms folds these into the areas above)
-
-- **Area 2:** strike the #1982 key gap. Comms checked that the re-encrypt finished on alpha 10-13 and that AI provider keys use the same encrypted store. Still open: whether "we never train on your data" can be said (Arch's memo doesn't answer it).
-- **Areas 1 and 5 (Arch, from code; encryption of Fly's disks and backups can't be seen from code):**
-  - No account deletion exists; /privacy says deletion by email within 14 days.
-  - Deleting a chat is soft: the rows are kept and nothing purges them later.
-  - Messages, keys and connected-account tokens are encrypted by the app. Todos, projects, lists and account fields are not. Topic summaries in conversational memory are not.
-  - Export exists only for uploaded files (single and zip) and learned patterns. No export of conversations, todos or lists.
-  - A file written with no encryption key is plaintext even in production (#2061, latent, unverified on alpha).
-- **Area 3 (Arch):** deletes always confirm; the confirm is a named yes/no. **An explicit request to create a GitHub issue or comment on one posts with no confirm, by design** (the explicit request is the consent, #1509), and so does "can you create an issue for X?". The commitment for this area must not say Piper confirms before every action that can't be undone. It can say deletes always ask, and that a drafted or ambiguous request gets a draft and a question. Alpha still has four project paths that write or unlink without asking; main fixes them and is not yet live.
-- **Area 3 (unverified):** whether the UI's own delete buttons (todos, lists, files, projects) ask first. Arch did not check.
-- **Area 6(a), settled by PPM and Exec:** the beta form ("expect errors, proceed with caution, real data is OK") goes in the invitation only if four conditions hold on the morning it goes (the #2054 check, #2059 and #2060 served checks, uploads backfilled, no Class 1 item open); PPM runs the check and sends Comms one line. Otherwise the alpha form. Never both.
-- **Area 3 gap:** undo (#2021) is still a Production item. The invitation must not imply it.
-- **Area 4 and 7:** HOST checks these once the file is on main.
+*Facts update (CXO 16:11) folded into areas 1–6 by Comms 16:3x and removed.*
