@@ -81,6 +81,7 @@ def _run(body: str, reply: dict) -> dict:
         "  createElement() { return {}; } };\n"
         "const fetch = async () => ({ json: async () => JSON.parse(process.argv[1]) });\n"
         "function showToast(type, message, title) { calls.push({type, message, title}); }\n"
+        "function loadIntegrationsHealth() {}\n"  # #2045: the page redraws after a Test
         + _handler(body)
         + "\n(async () => { await testConnection('github');\n"
         "process.stdout.write(JSON.stringify({toast: calls, status: status.text,\n"
