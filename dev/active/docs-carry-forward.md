@@ -26,8 +26,7 @@
 - **Mon 10-19**: next weekly audit. **~11-30**: glossary 60-day re-verify.
 
 ## Held
-- **git rm of `dev/active/covapitchdeckv2.pptx` and `dev/active/Treatment`**: xian ruled remove (12:52 10-16, via Exec relay, relay memo still in inbox). The auto-mode classifier denied my `git rm` (relayed approval is not direct). Blocker: xian says so in this session or runs it himself. CoVa copy verified identical.
-- **#1909 boxes**: hooks check owner CIO, fixtures review owner Lead (after 10-30). I tick on their report.
+- **#1909**: one box left, the test-fixtures review, owner Lead after MVP closes 10-30. Hooks box ticked 10-16 on CIO's report (12 of 15 working). The two stray `dev/active` files were removed by Exec on main (xian's direct word).
 
 ## Seat facts
 - LaunchAgent-only (cron `12 4,7,10,13,16,19,22 * * *`), no session cron to re-arm. START opens every fire.
