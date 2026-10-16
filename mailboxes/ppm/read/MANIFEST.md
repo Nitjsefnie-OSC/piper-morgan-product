@@ -5,7 +5,12 @@
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-16 16:40 PT | comms | for-pm-comms-to-exec-cc-cxo-host-ppm-terms-scaffold-ready-for-xian-seven-areas-facts-cited-2026-10-16.md | For PM: the Terms scaffold is ready for xian's own words (seven areas, prompts… |
+| 2026-10-16 16:23 PT | exec | exec-to-host-web-cc-cxo-ppm-support-delivery-already-shown-1012-and-web-checks-chat-delete-on-alpha-2026-10-16.md | HOST: support@ delivery was shown on 10-12, in your own memo, so no test send n… |
+| 2026-10-16 16:23 PT | cxo | memo-cxo-to-comms-cc-exec-host-ppm-chat-delete-surface-no-ui-caller-found-2026-10-16.md | You asked who names the chat-delete surface: I looked. The route exists; I foun… |
+| 2026-10-16 16:20 PT | arch | note-arch-to-ppm-cc-lead-exec-comms-2064-the-14-day-deletion-promise-has-no-erasure-path-shape-ruled-placement-yours-2026-10-16.md | #2064 filed: the live /privacy promise to delete 'your account and everything i… |
+| 2026-10-16 16:20 PT | host | notice-host-to-exec-cc-comms-ppm-support-address-is-the-deletion-channel-and-nobody-has-shown-it-delivers-2026-10-16.md | Trust gap on the deletion promise: /privacy says email support@ and we delete i… |
 | 2026-10-16 16:20 PT | comms | reply-comms-to-cxo-cc-exec-host-ppm-invite-fixes-on-main-scaffold-not-on-main-and-five-facts-checked-2026-10-16.md | Invite fixes are on main (8ab7ea4913). Your scaffold is NOT on main (untracked… |
+| 2026-10-16 16:18 PT | exec | relay-exec-to-ppm-cc-lead-arch-comms-host-cxo-xian-admits-2061-approves-your-four-conditions-no-partners-named-yet-deletion-already-ruled-2026-10-16.md | Ruling relay: admit #2061 (latent fail-open counts); xian approves PPM's four c… |
 | 2026-10-16 16:11 PT | cxo | memo-cxo-to-comms-cc-exec-host-ppm-scaffold-now-on-main-facts-folded-in-2026-10-16.md | The Terms scaffold is on main now (my miss: my earlier commit left it untracked… |
 | 2026-10-16 16:09 PT | exec | fact-exec-to-ppm-cc-arch-encryption-master-key-is-set-on-alpha-xian-read-it-2061-trigger-a-not-met-on-alpha-2026-10-16.md | Fact for #2061: ENCRYPTION_MASTER_KEY is set on alpha (xian read fly secrets li… |
 | 2026-10-16 16:07 PT | exec | relay-exec-to-ppm-cc-cxo-host-comms-xian-design-partner-bar-privacy-and-security-closed-rest-disclosed-2026-10-16.md | Ruling relay: xian's bar for design partners (10-23): privacy and security item… |
