@@ -116,16 +116,42 @@ class ListRemainder:
         return self.age_seconds > REMAINDER_MAX_AGE_MINUTES * 60
 
 
+@dataclass
+class ListComplete:
+    """#2040 (Arch): the fact that the last list was rendered WHOLE.
+
+    Recorded only when :func:`compose_capped_list` printed every item the
+    source said existed (no remainder offered, nothing unfetched), so "that
+    was the full list" is a claim code made true, not one it guesses. A
+    SEPARATE record from :class:`ListRemainder` on purpose: it is never an
+    armed offer, holds no lines, and no acceptance seam reads it, so it can
+    never bind a "yes". It lives one turn (popped at the top of every turn in
+    ``_process_intent_internal``): the line it licenses says "that", meaning
+    the reply just before, so any other turn in between voids it.
+    """
+
+    kind: str
+    shown: int
+    recorded_at: datetime = field(default_factory=datetime.now)
+
+    def is_stale(self) -> bool:
+        return (datetime.now() - self.recorded_at).total_seconds() > (
+            REMAINDER_MAX_AGE_MINUTES * 60
+        )
+
+
 class CappedListRender(NamedTuple):
     """What :func:`compose_capped_list` hands back to a handler.
 
     ``body`` is the list block (and, when earned, the offer clause) ready to
     append to the handler's own header. ``remainder`` is the thing to ARM, or
-    None when there is nothing cashable to offer.
+    None when there is nothing cashable to offer. ``complete`` (#2040) is the
+    whole-list fact to record, or None when the render left anything out.
     """
 
     body: str
     remainder: Optional[ListRemainder]
+    complete: Optional[ListComplete] = None
 
 
 GITHUB_LIST_PAGE_CAP = 100
@@ -208,7 +234,12 @@ def compose_capped_list(
             # fetched. No offer — there is nothing cashable — but say what is
             # in hand rather than let the header's total imply we showed it.
             body += f"\n\nThat's all {held} I have in front of me, out of {display}."
-        return CappedListRender(body, None)
+            return CappedListRender(body, None)
+        # #2040: every item the source has is on screen; record that fact.
+        # A source whose own count is not exact ("1000+") never vouches.
+        exact = display == str(total)
+        complete = ListComplete(kind=kind, shown=held) if held and exact else None
+        return CappedListRender(body, None, complete)
 
     if unheld == 0:
         offer = f"That's {cap} of {display} — say the word and I'll pull the rest."
@@ -257,6 +288,20 @@ LIST_REMAINDER_TAUGHT_ACCEPTS: tuple[str, ...] = (
     "show me the whole list",
     "say the word",
     "the word",
+)
+
+
+# #2040 (CXO's ruling, verbatim): a remainder ask with NOTHING held, right
+# after a list rendered whole (a ``ListComplete`` fact is present). A
+# statement, not an ask; nothing is appended and nothing is fetched.
+NOTHING_HELD_REPLY = "There's nothing more to show; that was the full list."
+
+# #2040 (Arch's condition, line verbatim from his ruling; CXO owns the words):
+# a remainder ask with nothing held and NO whole-list fact. It claims only
+# what code holds, and nothing about the previous turn.
+HOLD_ONLY_REPLY = (
+    "I don't have more of that list held right now. "
+    "Ask for the list again and I'll pull it fresh."
 )
 
 

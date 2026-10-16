@@ -1410,6 +1410,10 @@ class IntentService:
             IntentProcessingError: If processing fails
         """
         try:
+            # #2040 (Arch): the whole-list fact lives exactly one turn; take it
+            # before anything can answer this turn.
+            _last_list_complete = self._pop_last_list_complete(session_id, user_id)
+
             # ── #1510 declaration surface (compose-vs-execute working mode) ──
             # An explicit standing declaration ("just do things directly from
             # now on" / "ask me first from now on") is a meta-instruction about
@@ -2399,6 +2403,23 @@ class IntentService:
                 )
                 if list_remainder_result:
                     return list_remainder_result
+
+            # #2040 (CXO's line): "show me the rest" with NOTHING held is
+            # answered by code, ahead of classification, after the remainder
+            # check above (a held remainder, fresh or stale, always answers
+            # first). Before this the turn classified and the floor composed
+            # "the rest" from history: a list code never returned (ADR-080;
+            # the class Arch named on #2033). Same shape as #2033 below: an
+            # armed offer rail or a failed lookup stands down.
+            if session_id and not contextual_offer_bound and escaped_process_type is None:
+                nothing_held = self._nothing_held_reply(
+                    message,
+                    session_id=session_id,
+                    user_id=user_id,
+                    last_list_complete=_last_list_complete,
+                )
+                if nothing_held is not None:
+                    return nothing_held
 
             # #2033 (Arch 2026-10-15, CXO's lines): with NOTHING active or
             # suspended, a cancel/stop word, a flow exit, or a standup
@@ -3695,6 +3716,8 @@ class IntentService:
         session_id: Optional[str],
         user_id: Optional[str],
         remainder,  # Optional[ListRemainder]
+        *,
+        complete=None,  # Optional[ListComplete] (#2040)
     ) -> Dict[str, Any]:
         """#1762 (epic 6): store a capped list's unrendered tail so the offer
         it just made is CASHABLE, and hand back the intent_data flag that
@@ -3711,7 +3734,7 @@ class IntentService:
         newer capped list REPLACES the stored one, so the live offer always
         refers to what the user most recently saw.
         """
-        if remainder is None or not session_id:
+        if not session_id or (remainder is None and complete is None):
             return {}
         from services.intent_service.conversation_context import get_or_create_context
 
@@ -3722,6 +3745,13 @@ class IntentService:
             # this seam. Nothing armed, so nothing may be claimed: fall back
             # by reporting no arm rather than by pretending one exists.
             return {}
+        if remainder is None:
+            # #2040 (Arch): the list rendered whole. Record THAT fact, a
+            # separate one-turn record (never an armed offer), so the next
+            # turn's "show me the rest" may say "that was the full list".
+            ctx.last_list_complete = complete
+            return {}
+        ctx.last_list_complete = None
         ctx.pending_list_remainder = remainder
         self.logger.info(
             "list_remainder_armed",
@@ -7684,6 +7714,7 @@ class IntentService:
         # empty-list and honest-degrade returns leave it None, which is
         # correct: those turns make no claim to cash.
         _remainder = None
+        _complete = None  # #2040: the whole-list fact, when the render earns it
 
         try:
             _user_id = _principal_from_intent(intent)
@@ -7773,6 +7804,7 @@ class IntentService:
                 )
                 message += _capped.body
                 _remainder = _capped.remainder
+                _complete = _capped.complete
             else:
                 if _named_repo:
                     # A named repo is read repo-wide, so this line already
@@ -7811,7 +7843,7 @@ class IntentService:
                     "action": "list_issues_query",
                     "context": _ctx,
                     **self._arm_list_remainder(
-                        session_id, _principal_from_intent(intent), _remainder
+                        session_id, _principal_from_intent(intent), _remainder, complete=_complete
                     ),
                 },
             )
@@ -8285,6 +8317,7 @@ class IntentService:
         # empty-list and honest-degrade returns leave it None, which is
         # correct: those turns make no claim to cash.
         _remainder = None
+        _complete = None  # #2040: the whole-list fact, when the render earns it
         # #1782: True only on the native-PAT branch when its issues-page census
         # was full (pr_count is then a floor). The OAuth branch's total comes
         # from search (honest) and never sets this.
@@ -8371,6 +8404,7 @@ class IntentService:
                 )
                 message += _capped.body
                 _remainder = _capped.remainder
+                _complete = _capped.complete
             else:
                 message = "You don't have any open pull requests right now."
 
@@ -8384,7 +8418,7 @@ class IntentService:
                         "pr_count": pr_count,
                     },
                     **self._arm_list_remainder(
-                        session_id, _principal_from_intent(intent), _remainder
+                        session_id, _principal_from_intent(intent), _remainder, complete=_complete
                     ),
                 },
             )
@@ -8418,6 +8452,7 @@ class IntentService:
         # empty-list and honest-degrade returns leave it None, which is
         # correct: those turns make no claim to cash.
         _remainder = None
+        _complete = None  # #2040: the whole-list fact, when the render earns it
         try:
             from services.integrations.github.github_integration_router import (
                 GitHubIntegrationRouter,
@@ -8459,6 +8494,7 @@ class IntentService:
                     )
                     message += _capped.body
                     _remainder = _capped.remainder
+                    _complete = _capped.complete
             else:
                 message = "You don't have any open milestones right now."
 
@@ -8472,7 +8508,7 @@ class IntentService:
                         "milestone_count": len(milestones) if milestones else 0,
                     },
                     **self._arm_list_remainder(
-                        session_id, _principal_from_intent(intent), _remainder
+                        session_id, _principal_from_intent(intent), _remainder, complete=_complete
                     ),
                 },
             )
@@ -8510,6 +8546,7 @@ class IntentService:
         # empty-list and honest-degrade returns leave it None, which is
         # correct: those turns make no claim to cash.
         _remainder = None
+        _complete = None  # #2040: the whole-list fact, when the render earns it
         try:
             _user_id = _principal_from_intent(intent)
 
@@ -8586,6 +8623,7 @@ class IntentService:
                 )
                 message += _capped.body
                 _remainder = _capped.remainder
+                _complete = _capped.complete
             else:
                 message = "You don't have any releases yet."
 
@@ -8607,7 +8645,7 @@ class IntentService:
                         ),
                     },
                     **self._arm_list_remainder(
-                        session_id, _principal_from_intent(intent), _remainder
+                        session_id, _principal_from_intent(intent), _remainder, complete=_complete
                     ),
                 },
             )
@@ -8649,6 +8687,7 @@ class IntentService:
         # empty-list and honest-degrade returns leave it None, which is
         # correct: those turns make no claim to cash.
         _remainder = None
+        _complete = None  # #2040: the whole-list fact, when the render earns it
         try:
             from services.integrations.github.github_integration_router import (
                 GitHubIntegrationRouter,
@@ -8681,6 +8720,7 @@ class IntentService:
                 )
                 message += _capped.body
                 _remainder = _capped.remainder
+                _complete = _capped.complete
             else:
                 message = "I don't see any labels for this repository."
 
@@ -8694,7 +8734,7 @@ class IntentService:
                         "label_count": len(labels) if labels else 0,
                     },
                     **self._arm_list_remainder(
-                        session_id, _principal_from_intent(intent), _remainder
+                        session_id, _principal_from_intent(intent), _remainder, complete=_complete
                     ),
                 },
             )
@@ -8732,6 +8772,7 @@ class IntentService:
         # empty-list and honest-degrade returns leave it None, which is
         # correct: those turns make no claim to cash.
         _remainder = None
+        _complete = None  # #2040: the whole-list fact, when the render earns it
         try:
             _user_id = _principal_from_intent(intent)
 
@@ -8811,6 +8852,7 @@ class IntentService:
                 )
                 message += _capped.body
                 _remainder = _capped.remainder
+                _complete = _capped.complete
             else:
                 message = "I don't see any branches for this repository."
 
@@ -8825,7 +8867,7 @@ class IntentService:
                         "default_branch": default_branch or None,
                     },
                     **self._arm_list_remainder(
-                        session_id, _principal_from_intent(intent), _remainder
+                        session_id, _principal_from_intent(intent), _remainder, complete=_complete
                     ),
                 },
             )
@@ -16350,6 +16392,94 @@ Add any additional information here.
                 "category": category,
                 "action": intent.action,
                 "bare_decline_nothing_open": True,
+            },
+        )
+
+    @staticmethod
+    def _pop_last_list_complete(session_id: Optional[str], user_id: Optional[str]):
+        """#2040 (Arch): take this session's whole-list fact and clear it, so
+        it lives exactly one turn (``Optional[ListComplete]``). Any lookup
+        failure reports no fact, which only ever costs the stronger line."""
+        if not session_id:
+            return None
+        try:
+            from services.intent_service.conversation_context import get_or_create_context
+
+            ctx = get_or_create_context(session_id, user_id=user_id)
+            fact = ctx.last_list_complete
+            ctx.last_list_complete = None
+            return fact
+        except Exception:  # silent-ok: no fact means the hold-only line, never a false claim
+            return None
+
+    def _nothing_held_reply(
+        self,
+        message: str,
+        *,
+        session_id: Optional[str],
+        user_id: Optional[str],
+        last_list_complete=None,  # Optional[ListComplete]
+    ) -> Optional[IntentProcessingResult]:
+        """#2040 — a list-remainder ask with no remainder held is answered
+        from code, with nothing appended. Code claims only what it holds
+        (Arch's condition):
+
+        - the previous turn rendered a list WHOLE (``last_list_complete``,
+          the one-turn fact ``_arm_list_remainder`` records from
+          ``compose_capped_list``) → CXO's ``NOTHING_HELD_REPLY`` ("There's
+          nothing more to show; that was the full list.");
+        - otherwise (a floor prose turn, an empty read, no list at all, or the
+          fact lost) → ``HOLD_ONLY_REPLY``, which says nothing is held and
+          claims nothing about the previous turn. Not a fall-through: falling
+          through is what let the floor invent "the rest".
+
+        The ask is read with the remainder seam's OWN vocabulary
+        (``LIST_REMAINDER_TAUGHT_ACCEPTS`` full-message, plus the #1783
+        request-question shape) through ``names_offered_remainder``, and never
+        the shared accept vocabulary: a bare "yes" with nothing armed is not a
+        request for a remainder. Returns None (the pre-#2040 path) when a
+        remainder IS held (``_check_pending_list_remainder`` owns it, including
+        a state-question it let pass), when an offer rail is armed this turn
+        (``_armed_offer_signal``), or when any lookup fails.
+        """
+        from services.intent_service.acceptance import names_offered_remainder
+        from services.intent_service.list_remainder import (
+            HOLD_ONLY_REPLY,
+            LIST_REMAINDER_TAUGHT_ACCEPTS,
+            NOTHING_HELD_REPLY,
+        )
+
+        if not session_id:
+            return None
+        if not names_offered_remainder(message, taught_accepts=LIST_REMAINDER_TAUGHT_ACCEPTS):
+            return None
+        try:
+            from services.intent_service.conversation_context import get_or_create_context
+
+            ctx = get_or_create_context(session_id, user_id=user_id)
+            if ctx.pending_list_remainder is not None:
+                return None
+            if self._armed_offer_signal(session_id, user_id) is not None:
+                return None
+        except Exception as e:  # silent-ok: logged; the turn takes the pre-#2040 path
+            self.logger.warning("nothing_held_check_failed", error=str(e))
+            return None
+
+        complete = last_list_complete is not None and not last_list_complete.is_stale()
+        self.logger.info(
+            "list_remainder_nothing_held", session_id=session_id, last_list_complete=complete
+        )
+        return IntentProcessingResult(
+            success=True,
+            message=NOTHING_HELD_REPLY if complete else HOLD_ONLY_REPLY,
+            intent_data={
+                "category": "query",
+                "action": "list_remainder_nothing_held",
+                "context": {
+                    "held": False,
+                    "last_list_complete": complete,
+                    "refetched": False,
+                },
             },
         )
 
