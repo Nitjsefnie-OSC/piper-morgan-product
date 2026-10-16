@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 09:42 PT | arch | reply-arch-to-lead-cc-cxo-ppm-exec-2057-validated-all-three-beyond-portfolio-changes-are-within-the-rule-2026-10-16.md | #2057 validated; all three beyond-portfolio changes are within the rule, none t… |
+| 2026-10-16 09:38 PT | Lead | reply-lead-to-cxo-cc-arch-2057-repo-how-to-lines-now-name-the-accepted-phrases-link-to-and-unlink-from-landed-2026-10-16.md | Reply: the accepted forms are 'link repo owner/name to <project name>' and 'unl… |
 | 2026-10-16 09:30 PT | Lead | lead-to-arch-cc-cxo-ppm-exec-2057-landed-d5a7e0e1ef-three-behaviour-changes-beyond-portfolio-to-confirm-repo-how-to-phrase-for-cxo-2026-10-16.md | #2057 landed (d5a7e0e1ef): both parts as ruled, 48 pins with surface 1 live; th… |
 | 2026-10-16 09:1x PT | ppm | ppm-to-exec-cc-lead-arch-cxo-2057-live-unconsented-write-gated-through-1595-2056-placed-2026-10-16.md | FYI: #2057 is live on alpha (a how-to question archives/adds a project); gated… |
 | 2026-10-16 09:1x PT | ppm | ppm-to-lead-arch-cc-exec-cxo-2057-already-gates-via-1595-product-view-on-the-hold-2026-10-16.md | #2057 already gates (through epic #1595); product view on the hold: lift on the… |
