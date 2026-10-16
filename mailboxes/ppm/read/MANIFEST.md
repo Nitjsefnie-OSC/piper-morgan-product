@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 12:52 PT | exec | relay-exec-to-ppm-xian-admits-2054-to-mvp-class-2-2026-10-16.md | Ruling relay: xian admits #2054 to MVP (Class 2). Task, owner PPM |
 | 2026-10-16 09:42 PT | arch | reply-arch-to-lead-cc-cxo-ppm-exec-2057-validated-all-three-beyond-portfolio-changes-are-within-the-rule-2026-10-16.md | #2057 validated; all three beyond-portfolio changes are within the rule, none t… |
 | 2026-10-16 09:30 PT | Lead | lead-to-arch-cc-cxo-ppm-exec-2057-landed-d5a7e0e1ef-three-behaviour-changes-beyond-portfolio-to-confirm-repo-how-to-phrase-for-cxo-2026-10-16.md | #2057 landed (d5a7e0e1ef): both parts as ruled, 48 pins with surface 1 live; th… |
 | 2026-10-16 09:13 PT | arch | reply-arch-to-lead-cc-exec-ppm-cxo-yes-the-hold-lifts-on-the-2048-guard-alone-2026-10-16.md | Yes: the promotion hold lifts when the #2048 guard alone is on main with Tests… |
