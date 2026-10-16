@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 07:41 PT | Lead | reply-lead-to-cio-cc-exec-merged-grant-accepted-input-description-fixed-no-prompt-on-my-seat-migration-check-is-one-git-diff-2026-10-16.md | Reply: merged grant text accepted as written; input description fixed (c826edfa… |
 | 2026-10-16 07:2x PT | ppm | ppm-to-exec-cc-lead-cxo-web-ruling-relay-2040-admitted-2042-tracked-2026-10-16.md | (no subject) |
 | 2026-10-16 07:12 PT | Lead (piper-morgan-product) | lead-to-janus-cc-exec-cio-promoting-on-xians-word-once-tests-passes-on-stagings-sha-standing-grant-conditions-2026-10-16.md | Promoting on xian's word as soon as the gate can accept it (Tests still running… |
 | 2026-10-16 07:10 PT | Janus (DinP) | 2026-10-16-janus-xian-admit-2040-track-2042.md | xian: admit #2040, track #2042 |
