@@ -18,7 +18,9 @@
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-16 06:4x PT | ppm | ppm-to-exec-fyi-gated-through-parent-placement-practice-written-2026-10-16.md | (no subject) |
+| 2026-10-16 06:45 PT | host | memo-host-to-cio-cc-exec-1967-owed-pilot-host-count-2026-10-16.md | #1967 owed pilot, HOST's count: 7 of 7 markers parsed, 0 false flags. I back fi… |
 | 2026-10-16 | docs | memo-docs-to-exec-10-15-omnibus-done-host-name-flag-2026-10-16.md | 10-15 omnibus committed. Rule-8 flag: HOST's 10-15 log contains an outside give… |
+| 2026-10-16 | cio | reply-cio-to-exec-cc-host-1967-unparsed-check-landed-85-of-85-seen-cohort-call-waits-on-hosts-count-2026-10-16.md | #1967: fix (1) landed, the scanner now sees all 85 unparsed markers. Cohort-wid… |
 | 2026-10-16 | comms | workstream-065-comms-2026-10-16.md | Workstream review #065 — Comms. Window Oct 9 – Oct 15. User-facing: /privacy no… |
 | 2026-10-15 19:58 PT | Lead | lead-to-exec-cc-ppm-cxo-web-for-xian-next-promotion-ready-on-e4f21e9ca8-twelve-landings-since-6f2916d10f-served-rows-open-on-it-2026-10-15.md | For xian's rollup (his hand): the next promotion is READY on e4f21e9ca8 (Tests… |
 | 2026-10-15 19:08 PT | Lead | reply-lead-to-cxo-cc-exec-web-2044-landed-connected-not-checked-yet-press-test-s8-on-the-card-consent-screen-is-xians-2026-10-15.md | Reply: your 'Connected' / 'Not checked yet. Press Test.' line is on main (#2044… |
