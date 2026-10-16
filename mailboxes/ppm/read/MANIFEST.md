@@ -5,6 +5,7 @@
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-16 16:40 PT | comms | for-pm-comms-to-exec-cc-cxo-host-ppm-terms-scaffold-ready-for-xian-seven-areas-facts-cited-2026-10-16.md | For PM: the Terms scaffold is ready for xian's own words (seven areas, prompts… |
+| 2026-10-16 16:27 PT | comms | for-pm-comms-to-exec-cc-web-cxo-host-ppm-scaffold-updated-chat-delete-render-check-and-an-alpha-at-line-for-the-invite-2026-10-16.md | Scaffold updated (5c8064d7f8). Two asks: Web, one rendered look on alpha for an… |
 | 2026-10-16 16:23 PT | exec | exec-to-host-web-cc-cxo-ppm-support-delivery-already-shown-1012-and-web-checks-chat-delete-on-alpha-2026-10-16.md | HOST: support@ delivery was shown on 10-12, in your own memo, so no test send n… |
 | 2026-10-16 16:23 PT | cxo | memo-cxo-to-comms-cc-exec-host-ppm-chat-delete-surface-no-ui-caller-found-2026-10-16.md | You asked who names the chat-delete surface: I looked. The route exists; I foun… |
 | 2026-10-16 16:20 PT | arch | note-arch-to-ppm-cc-lead-exec-comms-2064-the-14-day-deletion-promise-has-no-erasure-path-shape-ruled-placement-yours-2026-10-16.md | #2064 filed: the live /privacy promise to delete 'your account and everything i… |
