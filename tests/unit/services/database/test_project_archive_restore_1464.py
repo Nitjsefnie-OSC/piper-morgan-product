@@ -204,10 +204,12 @@ async def test_service_delete_project_confirmed(owner_with_projects):
 async def test_chat_archive_handler_returns_success_message(owner_with_projects, monkeypatch):
     """ "Archive my project X" through _handle_portfolio_query with the REAL repo.
 
-    Before the fix this crashed in PortfolioService.archive_project and the
+    Before the #1464 fix this crashed in PortfolioService.archive_project and the
     handler's broad `except Exception` (#1423 shape) swallowed it into the
-    generic "I'm having trouble managing projects right now." — this asserts
-    the FIXED path returns the success message and actually archives the row.
+    generic "I'm having trouble managing projects right now." Since #2057 the
+    legacy branch writes nothing: it hands off to the ``archive_project`` rail
+    op (consent gate) and answers with the how-to line. This pins that hand-off
+    and that the generic error still does not appear.
     """
     from services.domain.models import Intent, IntentCategory
     from services.intent_service.canonical_handlers import CanonicalHandlers
@@ -225,10 +227,15 @@ async def test_chat_archive_handler_returns_success_message(owner_with_projects,
     )
     result = await handlers._handle_portfolio_query(intent, f"session-{user_id[:8]}", user_id)
 
+    # #2057 (Arch's ruling, 2026-10-16): the legacy write branch no longer
+    # archives. It hands the turn to the rail op, whose consent gate decides;
+    # the handler's own reply is the how-to statement and the row is untouched.
+    # (PortfolioService.archive_project's real-repo path is pinned above.)
     assert result["intent"]["action"] == "archive_project", result
-    assert result["intent"]["context"]["status"] == "success", result
-    assert "I've archived" in result["message"], result
+    assert result["rail_dispatch"] == "archive_project", result
+    assert result["intent"]["context"]["legacy_operation"] == "archive", result
+    assert "To archive a project, say 'archive project" in result["message"], result
     assert "having trouble managing projects" not in result["message"]
 
     _, archived = await _row_state(engine, active_id)
-    assert archived is True
+    assert archived is False  # nothing written by the legacy branch
