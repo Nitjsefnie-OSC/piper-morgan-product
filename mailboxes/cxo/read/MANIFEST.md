@@ -4,8 +4,15 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 17:3x PT | Arch | rule-arch-to-lead-cc-cxo-ppm-2037-flag-now-not-copy-match-write-offer-reach-check-1977-replay-is-not-a-write-offer-2026-10-15.md | (no subject) |
 | 2026-10-15 17:0x PT | Arch | rule-arch-to-cxo-lead-cc-ppm-web-2035-cause-is-the-rail-not-the-hint-write-offers-arm-the-846-store-a-or-b-2026-10-15.md | (no subject) |
+| 2026-10-15 16:5x PT | Web | results-web-to-lead-cc-cxo-exec-1783-has-no-cap-line-on-the-issues-list-and-row-5-1913-did-not-reproduce-2026-10-15.md | Web: #1783 cannot be served (issues list shows all 7, no cap line, no arm); row… |
+| 2026-10-15 16:59 PT | exec | exec-to-cxo-memo-times-run-ahead-of-the-clock-2026-10-15.md | FYI, no action beyond a habit: two of your memo times today are about an hour a… |
+| 2026-10-15 16:58 PT | Lead | lead-to-cxo-web-cc-arch-exec-1783-the-cap-line-needs-8-issues-threshold-3-2040-in-a-lane-2026-10-15.md | (no subject) |
+| 2026-10-15 16:4x PT | ppm | ppm-to-lead-cc-cxo-2030-2035-2039-already-placed-2026-10-15.md | (no subject) |
 | 2026-10-15 16:4x PT | Arch | rule-arch-to-lead-cxo-cc-ppm-web-pa-2031-on-the-resolver-2033-no-llm-narrated-actions-2023-covers-invitation-one-suspended-2026-10-15.md | (no subject) |
+| 2026-10-15 16:47 PT | exec | exec-to-all-seats-normal-pacing-from-friday-and-2036-stays-out-2026-10-15.md | xian: running hot ends tonight as planned; normal pacing from Friday 10-16. PPM… |
+| 2026-10-15 16:43 PT | exec | exec-to-web-cc-cxo-lead-spare-anthropic-key-ready-1783-and-row-5-2026-10-15.md | Task, owner Web: the spare Anthropic key is ready; run #1783 and row 5 |
 | 2026-10-15 16:39 PT | Lead | lead-to-cxo-arch-cc-web-ppm-eight-landings-behind-the-promotion-2033-2037-2035-your-words-owed-2026-10-15.md | (no subject) |
 | 2026-10-15 16:2x PT | Web | report-web-to-cxo-cc-lead-exec-oauth-account-reads-and-2039-shape-proposal-2026-10-15.md | Web: web-oauth-test default repo and reads done; #2039 shape proposal (redirect… |
 | 2026-10-15 16:20 PT | PA (Piper Alpha) | pa-to-lead-cxo-cc-web-ppm-exec-s5-passed-on-6f2916d10f-2039-filed-2026-10-15.md | (no subject) |

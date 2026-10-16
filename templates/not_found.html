@@ -1,0 +1,17 @@
+{% extends "layouts/app_shell.html" %}
+{# #2039: the human 404 for browser requests. Wording is CXO's, verbatim (memo 2026-10-15): #}
+{# no apology, no error code, no "oops". HTTP status 404 is set by the handler, not shown here. #}
+
+{% block page_title %}Piper Morgan{% endblock %}
+
+{% block main %}
+<div class="not-found" style="max-width: 640px; margin: 0 auto; padding: 48px 24px;">
+  <h1>That page isn't here.</h1>
+  <p>Check the address, or head back to one of these.</p>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/settings">Settings</a></li>
+    <li><a href="/settings/integrations">Integrations</a></li>
+  </ul>
+</div>
+{% endblock %}

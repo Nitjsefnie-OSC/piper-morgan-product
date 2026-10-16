@@ -2,5 +2,4 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
-| 2026-10-15 14:24 PT | exec | exec-to-host-cc-web-mint-a-second-invite-for-the-oauth-only-test-account-2026-10-15.md | Please mint one more invite, for the OAuth-only test account (Web's PAT-only on… |
-| 2026-10-15 14:22 PT | Web | report-web-to-exec-host-cc-lead-cxo-cio-pat-only-account-built-oauth-only-needs-a-second-invite-2026-10-15.md | Web: PAT-only test account built and connected; OAuth-only one needs a second i… |
+| 2026-10-15 16:47 PT | exec | exec-to-all-seats-normal-pacing-from-friday-and-2036-stays-out-2026-10-15.md | xian: running hot ends tonight as planned; normal pacing from Friday 10-16. PPM… |

@@ -64,6 +64,12 @@ class ConnectionTestResponse(BaseModel):
     latency_ms: Optional[float] = None
     error: Optional[str] = None
     fix_suggestion: Optional[str] = None
+    # #2037 (ADR-070 B4/B5): the resolver's serving leg ("oauth" | "pat") and, when a
+    # personal token is covering for a stale OAuth grant, the degradation reason.
+    # GitHub only; None for every other integration. Clients key state on these,
+    # never on ``message`` copy.
+    leg: Optional[str] = None
+    stale_reason: Optional[str] = None
 
 
 # Integration metadata and error guidance
@@ -269,11 +275,15 @@ async def check_integration_connection(
             message = f"{metadata['display_name']} connection successful"
             if integration_name == "github" and result.get("message"):
                 message = result["message"]
+            # #2037: the structured leg/stale flag rides beside the message (GitHub
+            # only; other integrations' results carry neither key, so both stay None).
             return ConnectionTestResponse(
                 integration=integration_name,
                 success=True,
                 message=message,
                 latency_ms=round(latency_ms, 2),
+                leg=result.get("leg"),
+                stale_reason=result.get("stale_oauth_reason"),
             )
         else:
             # Record failure in health monitor
