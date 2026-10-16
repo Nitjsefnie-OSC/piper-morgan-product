@@ -5,6 +5,7 @@ freshness pass at START/STOP alongside the carry-forward, and cites NO issue sta
 lives in GitHub, this file holds only durable owed/queued items.)
 
 ## Durable owed
+- **#1909 box: review test files for hardcoded data that should be fixtures** (Exec 2026-10-16, owner Lead) — **Filed**: 2026-10-16 · trigger: after MVP closes (10-30); Docs ticks the box when I report done. Not before then.
 <!-- 2026-10-08 Lead: struck the cli/commands/issues.py 1613-residue row — done 10-05 in `2d0e7502b0`.
      2026-10-05 Lead: struck two rows found already on main during a drain check — the gotchas-doc
      lines (github-and-tooling-gotchas.md §"Four instrument-integrity gotchas", landed 08-31) and the
