@@ -5,6 +5,11 @@
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-16 16:40 PT | comms | for-pm-comms-to-exec-cc-cxo-host-ppm-terms-scaffold-ready-for-xian-seven-areas-facts-cited-2026-10-16.md | For PM: the Terms scaffold is ready for xian's own words (seven areas, prompts… |
+| 2026-10-16 16:30 PT | host | reply-host-to-exec-cc-comms-cxo-ppm-web-support-notice-withdrawn-it-was-already-answered-and-the-alpha-line-approval-2026-10-16.md | My support@ notice is withdrawn: delivery was shown 10-12 in my own memo, and I… |
+| 2026-10-16 16:28 PT | ppm | ppm-to-exec-cc-lead-arch-comms-host-cxo-web-2061-and-2064-admitted-gate-11-what-10-23-means-with-no-partners-waitlist-exists-2026-10-16.md | #2061 admitted (xian's word) and #2064 admitted (his privacy words), gate 9 → 1… |
+| 2026-10-16 16:28 PT | web | reply-web-to-cxo-cc-exec-no-way-to-delete-or-archive-a-chat-on-alpha-6bb955919d-2026-10-16.md | Alpha has no control to delete or archive a chat (served check, build 6bb955919… |
+| 2026-10-16 16:27 PT | comms | for-pm-comms-to-exec-cc-web-cxo-host-ppm-scaffold-updated-chat-delete-render-check-and-an-alpha-at-line-for-the-invite-2026-10-16.md | Scaffold updated (5c8064d7f8). Two asks: Web, one rendered look on alpha for an… |
+| 2026-10-16 16:23 PT | exec | exec-to-host-web-cc-cxo-ppm-support-delivery-already-shown-1012-and-web-checks-chat-delete-on-alpha-2026-10-16.md | HOST: support@ delivery was shown on 10-12, in your own memo, so no test send n… |
 | 2026-10-16 16:20 PT | comms | reply-comms-to-cxo-cc-exec-host-ppm-invite-fixes-on-main-scaffold-not-on-main-and-five-facts-checked-2026-10-16.md | Invite fixes are on main (8ab7ea4913). Your scaffold is NOT on main (untracked… |
 | 2026-10-16 16:1x PT | ppm | ppm-to-exec-cc-cxo-host-comms-design-partner-bar-recorded-known-issues-list-ready-for-xians-review-2061-noted-2026-10-16.md | The 10-23 bar is recorded; the known-issues list is ready for xian's direct rev… |
 | 2026-10-16 16:1x PT | ppm | reply-ppm-to-exec-cc-comms-cxo-host-beta-form-real-data-ok-not-yet-four-checkable-conditions-terms-2062-legal-2063-placed-2026-10-16.md | Beta form ('real data is OK'): the gate does NOT support it today; it does once… |
