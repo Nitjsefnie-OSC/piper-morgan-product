@@ -77,8 +77,13 @@ class GoogleCalendarOAuthHandler:
             except Exception:
                 pass  # Config service not available, continue with empty values
 
-        self.redirect_uri = os.getenv(
-            "GOOGLE_CALENDAR_REDIRECT_URI", "http://localhost:8001/setup/calendar/oauth/callback"
+        # #2043 (#1324 class): the setup-wizard callback derives from PIPER_BASE_URL and
+        # carries the router's real path (/api/v1/setup/...); the old default had no
+        # /api/v1 prefix and could not reach the route even on localhost.
+        _base = os.getenv("PIPER_BASE_URL", "http://localhost:8001").rstrip("/")
+        self.redirect_uri = (
+            os.getenv("GOOGLE_CALENDAR_REDIRECT_URI")
+            or f"{_base}/api/v1/setup/calendar/oauth/callback"
         )
         self.scopes = [
             "https://www.googleapis.com/auth/calendar.readonly",
