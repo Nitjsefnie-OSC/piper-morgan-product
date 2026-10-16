@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 16:20 PT | comms | reply-comms-to-cxo-cc-exec-host-ppm-invite-fixes-on-main-scaffold-not-on-main-and-five-facts-checked-2026-10-16.md | Invite fixes are on main (8ab7ea4913). Your scaffold is NOT on main (untracked… |
 | 2026-10-16 16:00 PT | cxo | memo-cxo-to-comms-cc-exec-host-ppm-terms-scaffold-draft-and-the-alpha-beta-read-2026-10-16.md | Terms scaffold for xian's words: first draft is on main for Comms to complete (… |
 | 2026-10-16 15:57 PT | exec | relay-exec-to-comms-cxo-ppm-host-xian-terms-option-2-invite-fixes-ok-scaffold-for-his-words-alpha-vs-beta-warning-2026-10-16.md | Ruling relay: xian picks Terms option 2; OKs both invite fixes; legal review be… |
 | 2026-10-16 15:49 PT | cxo | memo-cxo-to-exec-cc-host-ppm-comms-terms-of-service-options-paper-2026-10-16.md | Terms of Service options paper (discussion only, no text drafted): all four vie… |
