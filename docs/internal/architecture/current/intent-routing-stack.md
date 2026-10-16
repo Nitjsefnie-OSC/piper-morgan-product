@@ -869,8 +869,27 @@ have any active projects yet.\n\nWould you like to add a project?", the #846
 store holds the `offer_add_project` record, `last_offer` stays empty, and a
 "yes" next turn answers "What would you like to call it?". The single-intent
 path is unchanged. Pins:
-`tests/unit/services/intent_service/test_write_offer_carry_2041.py`. The inversion multi-intent path (#1595) also calls
-`_aggregate_messages`, with unhinted parts, so it is unchanged. Reach
+`tests/unit/services/intent_service/test_write_offer_carry_2041.py`. **The
+inversion multi-intent path (#1595 unit 4) carries a READ sibling's write
+offer too (Arch's ruling issuecomment-6218486020, 2026-10-16; a regression
+from #2035, served on 6bb955919d as "list my projects and show my todos"
+deferring the todos).** Rule 2's store-change detector in
+`_maybe_dispatch_multi_intent_inversion` read the empty-projects arm as a
+pause. Now, after a READ (or floor) sibling's dispatch, a NEW #846 entry whose
+`pending_action.kind` is the #2035 `add_project_offer_question`
+(`_is_carried_write_offer`, keyed off the record, never its copy) is popped
+and carried on that part as `write_offer`; the loop continues. After the loop
+the orchestrator's `_pick_armed_write_offer` (the shared `_strip_and_pick`,
+same exact-match drift rule) strips every carried question and picks the
+first. With no pause, `_aggregate_messages` asks it as the LAST paragraph and
+the same record is re-armed with `set_pending_offer` before
+`_apply_soft_offer` (#1770 then keeps it). If a later sibling pauses, the
+pause's question is the one asked and armed, the carried offer is dropped
+(logged `multi_intent_offer_dropped reason=pause_wins`), and the deferred
+line names only the siblings after the pause. Rule 2 is unchanged for every
+other carrier. The unit-4 parts carry no #852 hint. Pins:
+`TestReadSiblingWriteOfferIsCarried` in
+`tests/unit/services/intent_service/test_inversion_multi_intent_unit4_1595.py`. Reach
 tripwire check (d) (`test_2010_offer_hint_reach_tripwire`) now finds
 `CanonicalHandlers.handle(` dispatch sites by receiver BINDING, not name, and
 pins them by holder: `IntentService._process_intent_internal` (its dispatch

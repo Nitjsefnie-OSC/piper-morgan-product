@@ -1396,3 +1396,163 @@ class TestPlanFloorElement:
 
         src = inspect.getsource(IntentService._maybe_dispatch_multi_intent_inversion)
         assert src.count("_handle_floor_with_context(") == 1
+
+
+# ---------------------------------------------------------------------------
+# #2041 — a READ sibling's #2035 write offer is CARRIED, not a pause
+# ---------------------------------------------------------------------------
+
+OFFER_MESSAGE = "list my projects and show my todos"
+OFFER_QUESTION = "Would you like to add a project?"
+
+
+class _TeeLogger:
+    """Records info/warning calls, forwards everything to the real logger."""
+
+    def __init__(self, real):
+        self._real = real
+        self.events = []
+
+    def __getattr__(self, name):
+        target = getattr(self._real, name)
+        if name not in ("info", "warning"):
+            return target
+
+        def _log(event, *a, **fields):
+            self.events.append((name, event, fields))
+            return target(event, *a, **fields)
+
+        return _log
+
+    def named(self, event):
+        return [f for _lvl, ev, f in self.events if ev == event]
+
+
+def _plan_op(operation, text):
+    return {"operation": operation, "args": {}, "confidence": 0.95, "rationale": text, "text": text}
+
+
+@pytest.fixture
+def no_projects(monkeypatch):
+    from services.onboarding.portfolio_service import PortfolioService
+
+    async def _none(self, user_id):
+        return []
+
+    monkeypatch.setattr(PortfolioService, "list_active_projects", _none)
+
+
+@pytest.mark.asyncio
+class TestReadSiblingWriteOfferIsCarried:
+    """Arch's ruling on #2041 (issuecomment-6218486020): a composed turn asks
+    ONE question (pause > write offer > hint). The empty-projects offer a READ
+    sibling arms on the #846 store (#2035) is carried: its question is
+    stripped from that sibling's text, every READ sibling runs, the question
+    is asked LAST and armed after the loop. A later pause wins and the offer
+    is dropped. Served regression: 6bb955919d deferred "show my todos"."""
+
+    async def test_todos_run_and_the_offer_is_asked_last_and_armed(
+        self, sm, mem_prefs, todo_boundary, no_projects, monkeypatch
+    ):
+        monkeypatch.setenv("PIPER_INVERSION_LIVE_CATEGORIES", "read_status")
+        _route_plan(
+            monkeypatch,
+            OFFER_MESSAGE,
+            [
+                _plan_op("list_projects", "list my projects"),
+                _plan_op("list_todos_query", "show my todos"),
+            ],
+        )
+        service = _service(monkeypatch)
+        sid = _sid("offer-carry")
+        result = await service.process_intent(message=OFFER_MESSAGE, session_id=sid, user_id=_USER)
+
+        assert result.intent_data.get("multi_intent_inversion") is True
+        assert "haven't touched" not in result.message  # nothing deferred
+        assert "upstream check" in result.message  # the todos ran
+        assert "don't have any active projects yet." in result.message
+        # ONE question, asked once, as the LAST paragraph.
+        assert result.message.count(OFFER_QUESTION) == 1
+        assert result.message.split("\n\n")[-1] == OFFER_QUESTION
+        assert result.message.index("upstream check") < result.message.index(OFFER_QUESTION)
+        # Armed after the loop: the #846 store holds the #2035 record.
+        pending = service.workflow_offer_service.peek_pending_offer(sid, user_id=_USER)
+        assert pending is not None
+        assert pending["workflow_type"] == "offer_add_project"
+        assert pending["question"] == OFFER_QUESTION
+        # And the #2035 accept landing answers the yes.
+        yes = await service.process_intent(message="yes", session_id=sid, user_id=_USER)
+        assert "What would you like to call it?" in yes.message
+
+    async def test_a_later_pause_wins_and_the_offer_is_dropped(
+        self, sm, mem_prefs, todo_boundary, no_projects, monkeypatch
+    ):
+        monkeypatch.setenv("PIPER_INVERSION_LIVE_CATEGORIES", "read_status,delete_todo")
+        _route_plan(
+            monkeypatch,
+            OFFER_MESSAGE,
+            [
+                _plan_op("list_projects", "list my projects"),
+                _plan_op("delete_todo", "delete hydrate reminder"),
+                _plan_op("delete_todo", "delete upstream check todo"),
+            ],
+        )
+        service = _service(monkeypatch)
+        tee = _TeeLogger(service.logger)
+        monkeypatch.setattr(service, "logger", tee)
+        sid = _sid("offer-pause-wins")
+        result = await service.process_intent(message=OFFER_MESSAGE, session_id=sid, user_id=_USER)
+
+        assert todo_boundary["deleted"] == []
+        # The pause's question is the one asked, last; the offer's is gone.
+        assert OFFER_QUESTION not in result.message
+        assert result.message.endswith('Delete todo: "hydrate"? (yes/no)')
+        assert "don't have any active projects yet." in result.message
+        # The deferred line names the sibling after the pause, and leads.
+        assert result.message.startswith("I haven't touched")
+        assert "delete upstream check todo" in result.message
+        # The pause is what is armed.
+        pending = service.workflow_offer_service.peek_pending_offer(sid, user_id=_USER)
+        assert pending is not None
+        assert pending.get("workflow_type") != "offer_add_project"
+        bound = pending["pending_action"]["intent"]
+        bound_context = bound["context"] if isinstance(bound, dict) else bound.context
+        assert bound_context["delete_todo_resolved"]["text"] == "hydrate"
+        dropped = tee.named("multi_intent_offer_dropped")
+        assert [d["reason"] for d in dropped] == ["pause_wins"]
+        assert dropped[0]["offer"] == "offer_add_project"
+
+    async def test_a_drifted_offer_question_arms_nothing(
+        self, sm, mem_prefs, todo_boundary, no_projects, monkeypatch
+    ):
+        import services.intent.intent_service as _module
+        from services.intent_service import orchestrator as _orch
+
+        def _drifted(user_id=None):
+            from services.intent_service.add_project_clarify import build_add_project_offer
+
+            return build_add_project_offer(question="Shall I start a project?", user_id=user_id)
+
+        monkeypatch.setattr(_module, "empty_projects_offer", _drifted)
+        tee = _TeeLogger(_orch.logger)
+        monkeypatch.setattr(_orch, "logger", tee)
+        monkeypatch.setenv("PIPER_INVERSION_LIVE_CATEGORIES", "read_status")
+        _route_plan(
+            monkeypatch,
+            OFFER_MESSAGE,
+            [
+                _plan_op("list_projects", "list my projects"),
+                _plan_op("list_todos_query", "show my todos"),
+            ],
+        )
+        service = _service(monkeypatch)
+        sid = _sid("offer-drift")
+        result = await service.process_intent(message=OFFER_MESSAGE, session_id=sid, user_id=_USER)
+
+        assert "upstream check" in result.message  # the todos still ran
+        assert "haven't touched" not in result.message
+        assert "Shall I start a project?" not in result.message
+        pending = service.workflow_offer_service.peek_pending_offer(sid, user_id=_USER)
+        assert pending is None or pending.get("workflow_type") != "offer_add_project"
+        drift = tee.named("multi_intent_offer_text_drift")
+        assert len(drift) == 1 and drift[0]["offer"] == "offer_add_project"
