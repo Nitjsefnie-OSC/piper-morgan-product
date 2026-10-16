@@ -172,3 +172,6 @@ real finding (the generator reading a stale registry), not something to silently
 | key: host-e2e-lookup | Post-deploy end-to-end check, once: `prod_user_lookup.py a; echo SHELL_RAN` expects a "refusing" line and no `SHELL_RAN`; to Arch | 2026-10-09 | A deploy carrying the payloads (`b4dbf72025`, `9e1fa372cb`) and file (A) installed; xian approves the command by sight |
 | key: host-roster-flip | Flip the roster lines for Janne and Savanna the day xian sends their codes or either is used; to Exec | 2026-10-09 | Exec telling me the send day (xian's hand) |
 | key: host-fielding-1b | Fielding memos ask for a dated row on receipt, plus a mid-window reminder; to Exec | 2026-10-09 | v0.6 being fielded (briefing line added 10-09) |
+| key: host-v30-tester-privacy-line | One line pointing to pipermorgan.ai/privacy in the next note the 09-21 tester gets (xian 10-16: no separate email); to Exec | 2026-10-16 | The reissue send (xian's hand) |
+| key: host-design-partner-list | Who xian counts as a design partner (#2063: no invite beyond them until counsel review); HOST mints/flips nobody else; to Exec | 2026-10-16 | xian naming the list |
+| key: host-scaffold-4-and-7 | Check Terms scaffold sections 4 and 7 (tell-me-when-broken; a code is yours); to Comms | 2026-10-16 | CXO pushing the scaffold to main |
