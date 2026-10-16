@@ -25,8 +25,9 @@
 - **Sat 10-17 04:12 fire**: PUBLISH "Convergent Claims Aren't Independent Evidence" (`ready-for-docs`, pre-flight and dry-run done 10-15). `--draft docs/public/comms/drafts/convergent-claims-arent-independent-evidence.md --image .../convergent-claims-arent-independent-evidence-four-telescopes-all-still-capped.jpg --slug convergent-claims-arent-independent-evidence --category insight --work-date 2026-09-20`. Re-fetch first. Then archive, row `published`, Medium+LinkedIn reminder to Exec.
 - **Mon 10-19**: next weekly audit. **~11-30**: glossary 60-day re-verify.
 
-## Held on PM (via Exec)
-- `git rm` of `dev/active/covapitchdeckv2.pptx` and `dev/active/Treatment`. #1909's two open boxes.
+## Held
+- **git rm of `dev/active/covapitchdeckv2.pptx` and `dev/active/Treatment`**: xian ruled remove (12:52 10-16, via Exec relay, relay memo still in inbox). The auto-mode classifier denied my `git rm` (relayed approval is not direct). Blocker: xian says so in this session or runs it himself. CoVa copy verified identical.
+- **#1909 boxes**: hooks check owner CIO, fixtures review owner Lead (after 10-30). I tick on their report.
 
 ## Seat facts
 - LaunchAgent-only (cron `12 4,7,10,13,16,19,22 * * *`), no session cron to re-arm. START opens every fire.
