@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-10-16 09:28 PDT
+last_updated: 2026-10-16 12:28 PDT
 currency_claim: rewritten at substantive-change boundaries, verified at every START
 max_age_days: 4
 ---
@@ -34,6 +34,7 @@ job shrinks to orientation once it ages. **Don't try to keep the handoff itself 
 named directly as the wrong instinct ("I would rather your handoff go stale than your seat idle").
 
 - **10-16** (normal pacing; alpha promoted 07:49 to 6bb955919d; promotion grant in force, Lead dispatches):
+  - **Promotion, as of the 12:27 fire:** alpha still serves 6bb955919d (/health). 10:51 dispatch refused by the gate (staging ran a red sha; CIO: a refusal is not a promotion). xian said yes to a third today; the 11:33 dispatch passed every gate and failed on Fly's partial outage (API 500). Lead retries when Fly is operational, before 21:00, else tomorrow. The waiting build carries #2057, the #2048 guard and #2054. #2024 is in 6bb955919d, awaiting CXO's served read.
   - **Closed by CXO on served reads:** #2008, #2044, #2039, #2033, #2035, #2040, #2037, #2012, #2029. #2052 closed as not a defect (GitHub search lag). The 10-15 served-read watches are done, except #2031's no-token card (S5 with xian).
   - **Ruled today** (all in decisions.log):
     - **#2041:** one question per composed turn, precedence pause > write offer > hint. A READ sibling's write offer is carried. Landed 051a06dd55, validated.
