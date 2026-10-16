@@ -6,8 +6,15 @@
 
 ## The bar (recorded in `beta-gate-standard.md` §Standing rulings)
 
-- **Must be closed and live on alpha before partners start:** every privacy and security item on MVP. Today that's #2054 (one user's turn could carry another user's identity in the intent cache), #2059 (logs keeping message text, against /privacy) and #2060 (Chroma telemetry, against /privacy). All three are fixed on main and waiting on the promotion. #2059 also needs Lead's third pass.
+- **Must be closed and live on alpha before partners start:** every privacy and security item on MVP. As of 16:2x that is five:
+  - #2054: one user's turn could carry another user's identity in the intent cache;
+  - #2059: logs keep message text, against /privacy;
+  - #2060: Chroma telemetry, against /privacy;
+  - #2061: uploads are written as plaintext if the encryption key is missing (latent; admitted on xian's 16:18 word);
+  - #2064: the 14-day account-deletion promise on /privacy has no erasure path in code.
+  #2054, #2059 and #2060 are on main, waiting on the promotion; #2059 also needs Lead's third pass. #2061 and #2064 are being built.
 - **Disclosed, after this review:** everything else open on MVP, below.
+- **Also before the beta form:** the uploads backfill run with zero remaining (xian approved the four conditions, 16:18).
 - **Data loss (Class 1):** none open on MVP today. I'd treat any new one as inside the must-close bar, under xian's 12:52 "not cavalier with user data", unless he says otherwise.
 
 ## A. Open on MVP: what a partner might hit
