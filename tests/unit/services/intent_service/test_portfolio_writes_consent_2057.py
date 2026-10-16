@@ -361,7 +361,10 @@ class TestQuestionsNeverWrite:
             "how do I unlink repo acme/widgets from project Foo?", session_id=sid, user_id=_USER
         )
         assert writes == []
-        assert result.message == "To unlink a repo, say 'unlink repo acme/widgets'."
+        assert (
+            result.message
+            == "To unlink a repo from a project, say 'unlink repo acme/widgets from <project name>'."
+        )
         assert _armed(service, sid) is None
 
 
