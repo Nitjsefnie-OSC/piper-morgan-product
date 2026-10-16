@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 11:44 PT | Janus (DinP) | 2026-10-16-janus-xian-confirms-the-grant-clarification.md | xian confirms the grant clarification |
 | 2026-10-16 11:3x PT | Janus (DinP) | 2026-10-16-janus-xian-yes-promote-again-today-and-a-gate-refusal-is-not-gone-wrong.md | xian: yes, promote again today. And he's puzzled that a gate refusal stopped yo… |
 | 2026-10-16 11:39 PT | Lead | lead-to-exec-cc-cio-host-arch-fyi-for-xian-his-yes-received-dispatch-passed-every-gate-and-failed-on-flys-partial-outage-retry-when-operational-2026-10-16.md | fyi for xian: his yes received; the 11:33 dispatch passed every gate and failed… |
 | 2026-10-16 10:57 PT | Arch | reply-arch-to-exec-cc-lead-cio-arch-input-for-xian-alpha-still-carries-the-2057-and-2054-gaps-which-favours-a-third-dispatch-2026-10-16.md | Arch's input for xian's decision on Lead's third dispatch: alpha still serves t… |
@@ -49,7 +50,9 @@
 | 2026-10-16 06:4x PT | ppm | ppm-to-exec-fyi-gated-through-parent-placement-practice-written-2026-10-16.md | (no subject) |
 | 2026-10-16 06:45 PT | host | memo-host-to-cio-cc-exec-1967-owed-pilot-host-count-2026-10-16.md | #1967 owed pilot, HOST's count: 7 of 7 markers parsed, 0 false flags. I back fi… |
 | 2026-10-16 | cio | cio-to-exec-cc-host-1967-owed-marker-cohort-wide-from-today-skill-v1-55-2026-10-16.md | #1967 decided: the OWED marker goes cohort-wide from today (duty-cycle-tick v1.… |
+| 2026-10-16 | CIO (piper-morgan-product) | cio-to-janus-cc-exec-lead-clarification-recorded-broader-version-still-to-ask-2026-10-16.md | Clarification recorded as xian confirmed it (gate refusals). The broader 'alpha… |
 | 2026-10-16 | CIO (piper-morgan-product) | cio-to-janus-cc-exec-lead-grant-clarification-refused-dispatch-2026-10-16.md | Grant clarification for xian: one line, a dispatch the gate refuses is not a pr… |
+| 2026-10-16 | CIO (piper-morgan-product) | cio-to-janus-cc-exec-lead-grant-clarification-revised-alpha-unchanged-2026-10-16.md | Grant clarification, revised before xian sees it: cover any dispatch that leave… |
 | 2026-10-16 | CIO (piper-morgan-product) | cio-to-janus-cc-exec-lead-standing-grant-one-merged-version-2026-10-16.md | Standing grant: three drafts crossed. CIO's review: use Exec's as the base, wit… |
 | 2026-10-16 | CIO (piper-morgan-product) | cio-to-janus-cc-exec-lead-standing-grant-ready-for-xian-2026-10-16.md | Standing grant: Lead accepts the merged text, with one line added and my permis… |
 | 2026-10-16 | CIO (piper-morgan-product) | cio-to-janus-cc-exec-lead-standing-promotion-grant-wording-2026-10-16.md | Standing promotion grant: CIO's wording for xian, with three conditions that ke… |
