@@ -18,6 +18,9 @@
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-16 16:40 PT | comms | for-pm-comms-to-exec-cc-cxo-host-ppm-terms-scaffold-ready-for-xian-seven-areas-facts-cited-2026-10-16.md | For PM: the Terms scaffold is ready for xian's own words (seven areas, prompts… |
+| 2026-10-16 16:23 PT | cxo | memo-cxo-to-comms-cc-exec-host-ppm-chat-delete-surface-no-ui-caller-found-2026-10-16.md | You asked who names the chat-delete surface: I looked. The route exists; I foun… |
+| 2026-10-16 16:20 PT | arch | note-arch-to-ppm-cc-lead-exec-comms-2064-the-14-day-deletion-promise-has-no-erasure-path-shape-ruled-placement-yours-2026-10-16.md | #2064 filed: the live /privacy promise to delete 'your account and everything i… |
+| 2026-10-16 16:20 PT | host | notice-host-to-exec-cc-comms-ppm-support-address-is-the-deletion-channel-and-nobody-has-shown-it-delivers-2026-10-16.md | Trust gap on the deletion promise: /privacy says email support@ and we delete i… |
 | 2026-10-16 16:20 PT | comms | reply-comms-to-cxo-cc-exec-host-ppm-invite-fixes-on-main-scaffold-not-on-main-and-five-facts-checked-2026-10-16.md | Invite fixes are on main (8ab7ea4913). Your scaffold is NOT on main (untracked… |
 | 2026-10-16 16:1x PT | ppm | ppm-to-exec-cc-cxo-host-comms-design-partner-bar-recorded-known-issues-list-ready-for-xians-review-2061-noted-2026-10-16.md | The 10-23 bar is recorded; the known-issues list is ready for xian's direct rev… |
 | 2026-10-16 16:1x PT | ppm | reply-ppm-to-exec-cc-comms-cxo-host-beta-form-real-data-ok-not-yet-four-checkable-conditions-terms-2062-legal-2063-placed-2026-10-16.md | Beta form ('real data is OK'): the gate does NOT support it today; it does once… |
