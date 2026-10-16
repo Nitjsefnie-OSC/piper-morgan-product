@@ -188,10 +188,12 @@ def test_proposed_commit_msg_hook_passes_a_safe_message():
     assert r.returncode == 0, (r.stdout, r.stderr)
 
 
-def test_proposed_commit_msg_hook_is_not_installed():
-    """Hard rule from the task: this is a candidate for CIO co-sign, not a
-    live hook. Assert it isn't wired into .claude/settings.json or copied
-    into any git-hooks directory this checkout can see."""
+def test_commit_msg_hook_is_a_git_hook_and_any_install_matches_source():
+    """The candidate was adopted: xian installed it in the shared .git on 2026-10-15
+    (docs/internal/operations/commit-message-guards.md, doorway 3). It stays a git hook,
+    never a Claude Code settings hook. Where installed (Amber; CI has none), the copy must
+    match scripts/git-hooks/commit-msg, the same drift check scripts/whats-armed.sh makes.
+    Until 2026-10-16 this pinned "not installed", which the adoption made false (Lead)."""
     settings = (REPO / ".claude" / "settings.json").read_text()
     assert "git-hooks/commit-msg" not in settings
     common_dir = subprocess.run(
@@ -199,7 +201,4 @@ def test_proposed_commit_msg_hook_is_not_installed():
     ).stdout.strip()
     installed = Path(REPO / common_dir / "hooks" / "commit-msg")
     if installed.exists():
-        # If something is installed, it must not be THIS proposal verbatim —
-        # i.e. installation is a deliberate separate act, not a side effect
-        # of this test suite or this task.
-        assert installed.read_text() != COMMIT_MSG_HOOK.read_text()
+        assert installed.read_text() == COMMIT_MSG_HOOK.read_text()
