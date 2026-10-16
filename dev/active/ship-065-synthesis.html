@@ -28,7 +28,7 @@ footer{margin-top:36px;color:var(--muted);font-size:.82rem;border-top:1px solid 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@400;600&family=Source+Serif+4:wght@600&display=swap">
 <div class="wrap">
 <h1>Ship #065: the week of Oct 9–15</h1>
-<p class="meta">Exec synthesis from all 10 workstream reviews, for our discussion. Draft 3, 16 Oct 16:23 PT (usage numbers and API tokens added). Where reviews disagreed, I checked GitHub and say so.</p>
+<p class="meta">Exec synthesis from all 10 workstream reviews, for our discussion. Draft 3, 16 Oct 16:23 PT (usage numbers, API tokens and cost added). Where reviews disagreed, I checked GitHub and say so.</p>
 
 <div class="bluf">
 <p><b>Bottom line.</b> The beta gate went from 14 open MVP items to 6, with no dates moved, and alpha was promoted 8 times. Most of the week&rsquo;s fixes were checked on the running alpha, not just in code.</p>
@@ -84,9 +84,9 @@ footer{margin-top:36px;color:var(--muted);font-size:.82rem;border-top:1px solid 
 <li><b>Daily shape:</b> the busiest days were 10-09 (4,295 calls) and 10-15 (3,659). The weekend ran at about 40&ndash;50% of those.</li>
 <li><b>Cost follows turns, not model tier</b> (CXO&rsquo;s finding, consistent with Pard&rsquo;s count: about 60 mail-wake turns on 10-15). Coalescing cc-only mail is with CIO.</li>
 <li><b>Waste to cut:</b> Lead re-ran overlapping test suites at each merge, and main was red 6 of 7 days, each fix a repeat test run. Your 10-15 promotion &ldquo;yes&rdquo; took 2h12m to arrive by mail (the grant fixes that).</li>
-<li><b>API tokens by workspace</b> (your Console screenshots, 10-09 to 10-15, UTC days): <b>30.6M in, 0.59M out</b> for the whole org, mostly Haiku 4.5. <b><code>lead-scoring</code> is 92% of input and 89% of output</b> (28.1M in, 0.53M out): Lead&rsquo;s router scoring runs, with peaks 10-11 and 10-13. The hosted alpha&rsquo;s workspace used <b>110K in, 3.2K out</b>, all on 10-15 (testers bring their own keys). <code>piper-cloud</code>: zero. The other ~2.4M in sits in workspaces you didn&rsquo;t filter. These are tokens, not dollars; the Cost page would give dollars if we need them, and the last reading (rollup, 10-13) was $15.95 for the month on lead-scoring. There is no cost-per-fire figure; Pard can compute calls per fire if useful.</li>
+<li><b>API tokens by workspace</b> (your Console screenshots, 10-09 to 10-15, UTC days): <b>30.6M in, 0.59M out</b> for the whole org, mostly Haiku 4.5. <b><code>lead-scoring</code> is 92% of input and 89% of output</b> (28.1M in, 0.53M out): Lead&rsquo;s router scoring runs, with peaks 10-11 and 10-13. The hosted alpha&rsquo;s workspace used <b>110K in, 3.2K out</b>, all on 10-15 (testers bring their own keys). <code>piper-cloud</code>: zero. The other ~2.4M in sits in workspaces you didn&rsquo;t filter. <b>In dollars (Cost page): $41.05 for the week</b>: <code>lead-scoring</code> $35.19 (86%; peaks $10.4 on 10-11 and $12.1 on 10-13); <code>Default</code> $5.56, mostly Sonnet and rising to $2.70 on 10-15, <b>source not yet known</b> (I&rsquo;ve asked Pard to attribute it); hosted alpha $0.30; <code>piper-cloud</code> $0. The four add up to the total. There is no cost-per-fire figure; Pard can compute calls per fire if useful.</li>
 </ul>
-<p><b>My read for planning:</b> the binding constraint is the plan&rsquo;s weekly limit, and Lead&rsquo;s seat is the lever. API spend is small and almost all scoring runs, so it isn&rsquo;t the constraint. The cheapest cuts are Lead&rsquo;s overlapping test re-runs and a cohort-wide cc drain, not model downgrades.</p>
+<p><b>My read for planning:</b> the binding constraint is the plan&rsquo;s weekly limit, and Lead&rsquo;s seat is the lever. API spend is about $41 a week, 86% of it scoring runs, so it isn&rsquo;t the constraint. The cheapest cuts are Lead&rsquo;s overlapping test re-runs and a cohort-wide cc drain, not model downgrades.</p>
 
 <h2>The week ahead (10-16 to 10-22)</h2>
 <ul>
