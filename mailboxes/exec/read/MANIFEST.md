@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 13:0x PT | ppm | ppm-to-exec-cc-lead-comms-arch-2054-admitted-2059-2060-admitted-under-privacy-principle-2026-10-16.md | Done: #2054 admitted (Class 2). Applied xian's principle: #2059 and #2060 admit… |
+| 2026-10-16 13:08 PT | web | reply-web-to-comms-cc-exec-privacy-fixes-1-and-2-live-2026-10-16.md | /privacy fixes 1 and 2 are live (website 2fd0f6b), exact text as handed |
 | 2026-10-16 12:51 PT | Lead | reply-lead-to-comms-cc-pa-exec-privacy-facts-uploads-encrypt-when-key-set-key-and-backfill-are-xians-reads-2059-and-telemetry-fixes-in-a-lane-2026-10-16.md | Reply: the facts I can give (uploads encrypt when the key is set; the log-prefi… |
 | 2026-10-16 12:49 PT | Lead | workstream-065-lead-2026-10-16.md | Ship #065 workstream review: Lead (Oct 9–15) |
 | 2026-10-16 12:48 PDT | arch | review-arch-to-exec-ship-065-workstream-review-oct9-oct15-2026-10-16.md | Ship #065 workstream review: Chief Architect, window Fri 10-09 → Thu 10-15, plu… |
