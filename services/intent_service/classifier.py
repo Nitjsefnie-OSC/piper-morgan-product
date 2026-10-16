@@ -381,7 +381,10 @@ class IntentClassifier:
                     message_preview=message[:50],
                     action=cached_result.get("action"),
                 )
-                # Reconstruct Intent object from cached dict
+                # Reconstruct Intent object from cached dict. #2054: the cache
+                # returns a fresh deep copy per hit, so this Intent's context,
+                # entities and learning_signals are this turn's own objects —
+                # no principal or routing key from another turn rides in.
                 intent_obj = Intent(
                     original_message=message,  # #1332/#1220: attribute was never set — see classify docstring note
                     category=IntentCategory(cached_result["category"]),

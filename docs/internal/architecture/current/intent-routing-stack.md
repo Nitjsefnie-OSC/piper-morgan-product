@@ -5905,6 +5905,22 @@ Arch: the prompt example's `query` category, and `manage_portfolio`'s catalog ex
 beside `list_projects`'s bare "projects query" description. Pins:
 `tests/unit/services/intent_service/test_manage_portfolio_list_from_code_2048.py`.
 
+## The classification cache holds classification only and hands out fresh objects (2026-10-16, #2054)
+
+`IntentClassifier.cache` (`services/intent_service/cache.py`, `IntentCache`) is one process-global cache keyed
+by message text (lowercased, stripped) with a 1 h TTL. A `classify()` call with no `context`, `session` or
+`spatial_context` is eligible, which is the production shape (`classify_multiple` and the
+`_process_intent_internal` fallbacks pass `context=None`). Both writers, the pre-classifier leg and the LLM leg,
+cache `{category, action, confidence, context, entities, learning_signals}` as the classifier produced them.
+Until #2054, `set` stored and `get` returned the same objects the returned `Intent` held, so the per-turn state
+`IntentService` writes into `intent.context` after classification (the principal `user_id`, `secondary_intents`,
+`multi_intent_greeting`, `armed_offer_rail`, `unclaimed_residue`, `declined_claims`, ...) was shared by every
+later hit of that text, from any user. Rule (Arch, decisions.log 2026-10-16 08:30; ADR-071 D5, ADR-080 D3):
+`IntentCache.set` stores a deep copy and `IntentCache.get` returns a deep copy, so every hit gets its own
+`Intent`, `context`, `entities` and `learning_signals`. The principal is stamped from the request on every turn
+(`if user_id:` in `_process_intent_internal`) and never comes from the cache. B3 referent resolution sits above
+the cache and is unaffected. Pins: `tests/unit/services/intent_service/test_intent_cache_fresh_objects_2054.py`.
+
 ## Pointers
 
 - Probe report + recalibration trace: `dev/2026/07/08/routing-probe-1283-run1.md`

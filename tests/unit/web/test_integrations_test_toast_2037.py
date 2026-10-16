@@ -135,7 +135,9 @@ def test_working_legs_show_the_message_verbatim(body, message, leg):
 @needs_node
 def test_stale_oauth_line_gets_the_warning_style(body):
     out = _run(body, _ok(STALE, leg="pat", stale_reason="stale_token"))
-    assert out["toast"] == [{"type": "warning", "message": STALE, "title": "Test Passed"}]
+    assert out["toast"] == [
+        {"type": "warning", "message": STALE, "title": "Works, needs attention"}
+    ]
     assert out["status"] == STALE
     assert "warning" in out["cls"] and "error" not in out["cls"]
     assert out["dot"] == "status-dot degraded"
@@ -165,7 +167,9 @@ def test_warning_keys_on_the_flag_not_the_sentence(body):
     # A CXO reword of the stale line must not turn a stale connection green.
     reworded = "GitHub works through your personal token; reconnect GitHub to use your account."
     out = _run(body, _ok(reworded, leg="pat", stale_reason="stale_token"))
-    assert out["toast"] == [{"type": "warning", "message": reworded, "title": "Test Passed"}]
+    assert out["toast"] == [
+        {"type": "warning", "message": reworded, "title": "Works, needs attention"}
+    ]
     assert out["status"] == reworded
     assert "warning" in out["cls"]
     assert out["dot"] == "status-dot degraded"
