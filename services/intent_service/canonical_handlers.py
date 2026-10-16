@@ -158,12 +158,12 @@ class CanonicalHandlers:
         sibling lands first in message order. Use THIS predicate for anything
         in the multi-intent orchestration path.
 
-        KNOWN COST (today's gap, not new): because the orchestrator calls
+        KNOWN COST (narrowed by #2057): because the orchestrator calls
         ``CanonicalHandlers.handle()`` directly rather than the rail, a
-        PORTFOLIO write (``archive_project``/``restore_project``/
-        ``add_project``/``link_repo``) named as a multi-intent sibling skips
-        the #1509 consent gate the rail would have enforced on the
-        single-intent path. This predicate does not create that gap — it is
+        PORTFOLIO write named as a multi-intent sibling cannot reach the
+        #1509 consent gate. Since #2057 the legacy write branches no longer
+        write: such a sibling gets the operation's how-to statement (the
+        ``rail_dispatch`` record's message), never an unconsented write. This predicate does not create that gap — it is
         the pre-2026-10-04 behavior, preserved rather than regressed. Tracked
         follow-up: give the orchestrator its own rail-aware dispatch (b) in
         the same ruling above.
@@ -4627,37 +4627,24 @@ What would you like to set up first?"""
             # say PORTFOLIO) runs READ operations only. A sniffed write does
             # not execute this turn: an imperative gets a yes/no confirm
             # armed on #846 with the rail op's landing; anything else gets
-            # the phrase to type. Classified PORTFOLIO is untouched (#1595
-            # Phase 3 tail).
+            # the phrase to type.
             from services.intent_service.adopted_category_reads_only import (
                 ADOPTED_WRITE_RAIL_ACTIONS,
                 adopted_from,
                 adopted_write_how_to,
                 build_adopted_write_confirm_offer,
+                display_name_for,
                 is_imperative,
-                usable_name,
+                legacy_write_rail_dispatch,
             )
 
             if operation in ADOPTED_WRITE_RAIL_ACTIONS and adopted_from(intent):
-                from services.onboarding.portfolio_service import extract_add_project_slots
-
-                display_name = None
-                if operation == "add":
-                    display_name = extract_add_project_slots(original_message)["name"]
-                elif project_name:
-                    # Same pattern family as the sniff, on the original text
-                    # so the name keeps the user's case.
-                    for pattern in ARCHIVE_PATTERNS if operation == "archive" else RESTORE_PATTERNS:
-                        match = re.search(pattern, original_message, re.IGNORECASE)
-                        if match and match.groups():
-                            display_name = clean_project_name(match.group(1).strip())
-                            break
                 adopted_context = {
                     "original_message": original_message,
                     "adopted_from": adopted_from(intent),
                     "held_operation": operation,
                 }
-                display_name = usable_name(display_name)
+                display_name = display_name_for(operation, original_message)
                 if display_name and is_imperative(operation, _leading_tokens):
                     write_offer = build_adopted_write_confirm_offer(operation, display_name, intent)
                     return {
@@ -4682,65 +4669,18 @@ What would you like to set up first?"""
                     "requires_clarification": False,
                 }
 
-            # Handle add operation (#490 originally; rewritten for #1856).
-            #
-            # #1856, PM live on alpha 2026-09-23: this branch used to ignore
-            # ``original_message`` entirely — it created a
-            # PortfolioOnboardingManager session and asked "What would you
-            # like to call it?" even when the utterance already carried the
-            # name AND the repo (PM sent the app's own suggested phrasing,
-            # ``add project One Job with repo Design-in-Product/one-job``).
-            # Then PM's correction re-entered this same branch (it contains
-            # the token "new project", which the operation sniff above reads
-            # as an add) and got the IDENTICAL line back.
-            #
-            # 🔴 The question could never have been answered. The onboarding
-            # adapter is NOT registered — services/process/adapters.py has
-            # ``# registry.register(OnboardingProcessAdapter())`` commented
-            # out (ADR-059, "onboarding on ice") and
-            # IntentService._check_active_onboarding has no production
-            # caller — so no follow-up turn reaches
-            # PortfolioOnboardingHandler.handle_turn. Asking an open question
-            # off a flow that cannot hear the answer IS the loop. So: consume
-            # what the utterance carries here, and when it carries no name,
-            # ask ONCE with an imperative the user can actually satisfy in a
-            # single line.
-            if operation == "add":
-                if user_id:
-                    return await self._handle_add_project(
-                        original_message=original_message,
-                        session_id=session_id,
-                        user_id=user_id,
-                    )
-                else:
-                    # No user_id - can't create session, fall back to prompt
-                    return {
-                        "message": (
-                            "I'd be happy to help you add a new project! "
-                            "Please sign in first so I can save it to your portfolio."
-                        ),
-                        "intent": {
-                            "category": IntentCategoryEnum.PORTFOLIO.value,
-                            "action": "add_project_no_user",
-                            "confidence": 1.0,
-                            "context": {},
-                        },
-                        "requires_clarification": False,
-                    }
-
-            # #1595 Phase 3 (Arch's 2026-10-04 ruling §2): archive/restore are
-            # hoisted into their own methods — the WRITE thirds of
-            # manage_portfolio's split, each now the ONLY place its response
-            # is built, for both this legacy canonical dispatch and the new
-            # archive_project/restore_project rail ops (workflow_entries.py).
-            # Early-returning here (before the session scope below opens)
-            # mirrors _handle_repo_management's LIST early-return and
-            # _handle_add_project's dispatch above — behaviour-preserving:
-            # neither hoisted method's own body changed, only its location.
-            if operation == "archive":
-                return await self._handle_archive_project(intent, session_id, user_id)
-            if operation == "restore":
-                return await self._handle_restore_project(intent, session_id, user_id)
+            # #2057 (Arch's ruling 2026-10-16, comment 6219485412; #1595
+            # Phase 3 tail): the legacy add/archive/restore branches no
+            # longer write. A classified PORTFOLIO turn whose sniff lands on
+            # a write is handed to its rail op (add_project /
+            # archive_project / restore_project) so the #1509/#1510 consent
+            # gate decides, whichever surface claimed the turn; the
+            # canonical seam (IntentService._process_intent_internal)
+            # re-dispatches it through _dispatch_action_rail. A caller that
+            # cannot dispatch the rail (the multi-intent orchestrator) shows
+            # the record's statement, which writes nothing.
+            if operation in ADOPTED_WRITE_RAIL_ACTIONS:
+                return legacy_write_rail_dispatch(operation, original_message)
 
             # #1933 (Arch's 2026-10-04 ruling §2, option (a) — CXO/PPM already
             # agree this copy is truthful): the update/edit literals stay
@@ -5017,6 +4957,9 @@ What would you like to set up first?"""
 
         Hoisted from the ARCHIVE branch of ``_handle_portfolio_query``
         (#675) — this is now the ONLY place the archive response is built.
+        #2057: the legacy branch no longer calls this; it hands the turn to
+        the ``archive_project`` rail op (consent gate first), whose adapter
+        does. The sentences below describe the pre-#2057 delegation.
         ``_handle_portfolio_query``'s own ARCHIVE case early-returns here
         unchanged, so the legacy canonical dispatch (``manage_portfolio``)
         produces byte-identical output to before this refactor. The new
@@ -5782,7 +5725,7 @@ What would you like to set up first?"""
 
             if operation in ("link", "unlink") and adopted_from(intent):
                 return {
-                    "message": adopted_repo_how_to(operation, repo_name, project_name),
+                    "message": adopted_repo_how_to(operation, repo_name),
                     "intent": {
                         "category": IntentCategoryEnum.PORTFOLIO.value,
                         "action": "adopted_write_how_to",
@@ -5796,32 +5739,18 @@ What would you like to set up first?"""
                     "requires_clarification": False,
                 }
 
-            # #1595 Phase 3 (Arch's 2026-10-03 ruling §2): LINK is hoisted
-            # out to _handle_link_repo — the SAME method the new WRITE rail
-            # entry (link_repo, workflow_entries.py, FLIP_WRITE_ALLOWLIST)
-            # calls directly. Mirrors the LIST early-return above: this is
-            # the ONLY place the link response is built, and the legacy
-            # canonical dispatch (manage_repos) produces byte-identical
-            # output to before this refactor (pinned in
-            # test_repo_management.py).
-            if operation == "link":
-                return await self._handle_link_repo(intent, session_id, user_id)
+            # #2057 (Arch's ruling 2026-10-16; #1595 Phase 3 tail): the
+            # legacy LINK / UNLINK branches no longer write. The turn is
+            # handed to its rail op (link_repo, WRITE: the #1509 consent
+            # gate; unlink_repo, DESTRUCTIVE: the #1190 name-bound confirm),
+            # re-dispatched by the canonical seam. _handle_link_repo /
+            # _handle_unlink_repo stay the only places those responses are
+            # built (the rail ops call them).
+            from services.intent_service.adopted_category_reads_only import (
+                legacy_write_rail_dispatch,
+            )
 
-            # #1926 / #1595 Phase 3 (CXO's 2026-10-03 ruling, Arch's
-            # 2026-10-03 ruling §2): UNLINK is hoisted out to
-            # _handle_unlink_repo — the SAME method the new DESTRUCTIVE rail
-            # entry (unlink_repo, workflow_entries.py, FLIP_WRITE_ALLOWLIST)
-            # reaches via the #1190 confirm gate's "yes" re-dispatch. Mirrors
-            # the LIST/LINK early-returns above: this is the ONLY place the
-            # unlink response is built, and the legacy canonical dispatch
-            # (manage_repos) produces byte-identical output to before this
-            # refactor (pinned in test_repo_management.py). By construction,
-            # `operation` can only be "unlink" here (list/link already
-            # returned above, and the "default to list" branch returned
-            # too) — so the dead `async with` block this replaced always ran
-            # the UNLINK sub-case only; nothing else moved.
-            if operation == "unlink":
-                return await self._handle_unlink_repo(intent, session_id, user_id)
+            return legacy_write_rail_dispatch(operation, original_message)
 
         except Exception as e:
             logger.error(f"Repo management handler error: {e}")

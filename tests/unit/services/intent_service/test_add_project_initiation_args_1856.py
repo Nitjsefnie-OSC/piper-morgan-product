@@ -272,8 +272,11 @@ async def _run(handler, message, recorder, session_id="s1", user_id="u1"):
     with contextlib.ExitStack() as stack:
         for p in recorder.install():
             stack.enter_context(p)
-        return await handler._handle_portfolio_query(
-            _portfolio_intent(message), session_id=session_id, user_id=user_id
+        # #2057: the legacy manage_portfolio add branch hands the turn to the
+        # add_project rail op, whose adapter calls _handle_add_project with
+        # the original message; this exercises that same method.
+        return await handler._handle_add_project(
+            original_message=message, session_id=session_id, user_id=user_id
         )
 
 

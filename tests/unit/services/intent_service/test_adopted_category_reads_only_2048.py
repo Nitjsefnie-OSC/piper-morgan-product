@@ -62,6 +62,8 @@ ARCHIVE_HOW_TO = (
     "You can restore it any time with 'restore project Foo'."
 )
 ADD_HOW_TO = "To add a project, say 'add project' and a name."
+# CXO 09:1x: a named add question echoes the name.
+ADD_HOW_TO_NAMED = "To add a project called Foo, say 'add project Foo'."
 RESTORE_HOW_TO = "To restore an archived project, say 'restore project Foo'."
 ARCHIVE_CONFIRM = 'Archive the project "Foo"? (yes/no)'
 ARCHIVE_DECLINE = 'Okay, I won\'t archive "Foo". Nothing has been changed.'
@@ -246,7 +248,7 @@ class TestHowToWritesNothing:
         sid = f"sess-2048b-add-{category.value}-{len(message)}"
         result = await service.process_intent(message, session_id=sid, user_id=_USER)
         assert writes == [], "an adopted how-to created a project"
-        assert result.message == ADD_HOW_TO, result.message
+        assert result.message == ADD_HOW_TO_NAMED, result.message
         assert _armed(service, sid) is None
 
     @pytest.mark.asyncio
@@ -345,10 +347,21 @@ class TestImperativeAsksTheArmedConfirm:
         sid = "sess-2048b-add-yes"
         first = await service.process_intent("add project Foo", session_id=sid, user_id=_USER)
         assert writes == []
-        assert first.message == 'Add the project "Foo"? (yes/no)', first.message
+        # CXO 09:1x: the add confirm uses the add flow's wording.
+        assert first.message == 'Add a project called "Foo"? (yes/no)', first.message
         assert _armed(service, sid)["pending_action"]["action"] == "add_project"
         await service.process_intent("yes", session_id=sid, user_id=_USER)
         assert writes == [("create", "Foo")]
+
+    @pytest.mark.asyncio
+    async def test_add_foo_no_declines_with_the_add_flow_wording(self, monkeypatch, sm, writes):
+        """CXO 09:1x: no -> "Okay, I won't add "Foo". Nothing has been changed."."""
+        service = _service(monkeypatch, category=IntentCategory.QUERY)
+        sid = "sess-2048b-add-no"
+        await service.process_intent("add project Foo", session_id=sid, user_id=_USER)
+        second = await service.process_intent("no", session_id=sid, user_id=_USER)
+        assert writes == []
+        assert second.message == 'Okay, I won\'t add "Foo". Nothing has been changed.'
 
 
 # ---------------------------------------------------------------------------
@@ -370,9 +383,13 @@ class TestReadsAndScope:
         assert writes == []
 
     @pytest.mark.asyncio
-    async def test_classified_portfolio_legacy_path_unchanged(self, monkeypatch, sm, writes):
-        """Arch put the classified-PORTFOLIO write on the #1595 Phase 3 tail;
-        this unit does not change it (it still archives, unconfirmed)."""
+    async def test_classified_portfolio_imperative_archives_via_the_rail(
+        self, monkeypatch, sm, writes
+    ):
+        """#2057: the classified-PORTFOLIO write now goes through the
+        archive_project rail op and its consent gate; an explicit imperative
+        is the consent, so it still archives (pins:
+        test_portfolio_writes_consent_2057.py)."""
         service = _service(monkeypatch, category=IntentCategory.PORTFOLIO)
         sid = "sess-2048b-classified"
         result = await service.process_intent("archive project Foo", session_id=sid, user_id=_USER)
@@ -385,11 +402,11 @@ class TestReadsAndScope:
         [
             (
                 "link repo acme/widgets to project Foo",
-                "To link a repository, say 'link repo acme/widgets to project foo'.",
+                "To link a repo, say 'link repo acme/widgets'.",
             ),
             (
                 "unlink repo acme/widgets from project Foo",
-                "To unlink a repository, say 'unlink repo acme/widgets from project foo'.",
+                "To unlink a repo, say 'unlink repo acme/widgets'.",
             ),
         ],
     )

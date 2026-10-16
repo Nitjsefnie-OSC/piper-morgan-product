@@ -350,8 +350,10 @@ class TestRepoManagementHandler:
     @pytest.mark.asyncio
     async def test_link_needs_clarification_no_repo(self, handler):
         """'link repo to project' without owner/repo → asks for repo name."""
+        # #2057: the legacy manage_repos branch hands this to its rail op,
+        # which calls the hoisted method directly; tested there.
         intent = _make_intent("link my repo to Piper Morgan")
-        result = await handler._handle_repo_management(intent, "sess", user_id="u1")
+        result = await handler._handle_link_repo(intent, "sess", user_id="u1")
 
         assert result["requires_clarification"] is True
         assert "owner/repo" in result["message"]
@@ -380,6 +382,8 @@ class TestRepoManagementHandler:
     @pytest.mark.asyncio
     async def test_link_success(self, handler):
         """Full link flow: project found, repo created, link established."""
+        # #2057: the legacy manage_repos branch hands this to its rail op,
+        # which calls the hoisted method directly; tested there.
         intent = _make_intent("link mediajunkie/piper-morgan to Piper Morgan")
 
         mock_project = _mock_project()
@@ -402,7 +406,7 @@ class TestRepoManagementHandler:
             mock_repo_repo.get_project_links.return_value = []  # not linked yet
             mock_repo_repo.link_to_project.return_value = MagicMock()
 
-            result = await handler._handle_repo_management(intent, "sess", user_id="u1")
+            result = await handler._handle_link_repo(intent, "sess", user_id="u1")
 
         assert "Done" in result["message"]
         assert "linked" in result["message"].lower()
@@ -412,6 +416,8 @@ class TestRepoManagementHandler:
     @pytest.mark.asyncio
     async def test_link_project_not_found(self, handler):
         """Link with nonexistent project → project not found message."""
+        # #2057: the legacy manage_repos branch hands this to its rail op,
+        # which calls the hoisted method directly; tested there.
         intent = _make_intent("link mediajunkie/piper-morgan to Nonexistent Project")
 
         mock_factory, _ = _mock_session_factory()
@@ -425,7 +431,7 @@ class TestRepoManagementHandler:
             MockProjRepo.return_value = mock_proj_repo
             mock_proj_repo.find_by_name.return_value = None  # not found
 
-            result = await handler._handle_repo_management(intent, "sess", user_id="u1")
+            result = await handler._handle_link_repo(intent, "sess", user_id="u1")
 
         assert "couldn't find" in result["message"].lower()
         assert result["intent"]["context"]["error"] == "project_not_found"
@@ -433,6 +439,8 @@ class TestRepoManagementHandler:
     @pytest.mark.asyncio
     async def test_link_already_linked(self, handler):
         """Linking a repo that's already linked → informative message."""
+        # #2057: the legacy manage_repos branch hands this to its rail op,
+        # which calls the hoisted method directly; tested there.
         intent = _make_intent("link mediajunkie/piper-morgan to Piper Morgan")
 
         mock_project = _mock_project()
@@ -454,7 +462,7 @@ class TestRepoManagementHandler:
             mock_repo_repo.get_by_full_name.return_value = mock_repo
             mock_repo_repo.get_project_links.return_value = [existing_link]
 
-            result = await handler._handle_repo_management(intent, "sess", user_id="u1")
+            result = await handler._handle_link_repo(intent, "sess", user_id="u1")
 
         assert "already linked" in result["message"].lower()
         assert result["intent"]["context"]["status"] == "already_linked"
@@ -464,6 +472,8 @@ class TestRepoManagementHandler:
     @pytest.mark.asyncio
     async def test_unlink_success(self, handler):
         """Unlink operation removes repo-project link."""
+        # #2057: the legacy manage_repos branch hands this to its rail op,
+        # which calls the hoisted method directly; tested there.
         intent = _make_intent("unlink mediajunkie/piper-morgan from Piper Morgan")
 
         mock_project = _mock_project()
@@ -484,7 +494,7 @@ class TestRepoManagementHandler:
             mock_repo_repo.get_by_full_name.return_value = mock_repo
             mock_repo_repo.unlink_from_project.return_value = True
 
-            result = await handler._handle_repo_management(intent, "sess", user_id="u1")
+            result = await handler._handle_unlink_repo(intent, "sess", user_id="u1")
 
         assert "unlinked" in result["message"].lower()
         assert result["intent"]["action"] == "unlink_repo"
@@ -492,6 +502,8 @@ class TestRepoManagementHandler:
     @pytest.mark.asyncio
     async def test_unlink_missing_entities(self, handler):
         """Unlink without specifying both repo and project → clarification."""
+        # #2057: the legacy manage_repos branch hands this to its rail op,
+        # which calls the hoisted method directly; tested there.
         intent = _make_intent("unlink the repo")
 
         mock_factory, _ = _mock_session_factory()
@@ -501,7 +513,7 @@ class TestRepoManagementHandler:
             patch(_PATCH_PROJECT_REPO),
             patch(_PATCH_REPO_REPO),
         ):
-            result = await handler._handle_repo_management(intent, "sess", user_id="u1")
+            result = await handler._handle_unlink_repo(intent, "sess", user_id="u1")
 
         assert result["requires_clarification"] is True
         assert "owner/repo" in result["message"]
@@ -772,3 +784,25 @@ class TestCleanTrailingWords:
 
     def test_handles_none(self):
         assert CanonicalHandlers._clean_trailing_words(None) is None
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "message,rail",
+    [
+        ("link mediajunkie/piper-morgan to Piper Morgan", "link_repo"),
+        ("unlink mediajunkie/piper-morgan from Piper Morgan", "unlink_repo"),
+    ],
+)
+async def test_legacy_link_unlink_hand_off_to_the_rail_2057(message, rail):
+    """#2057: the legacy branch writes nothing; it names the rail op (the
+    #1509 consent gate / #1190 confirm decide there)."""
+    from services.intent_service.adopted_category_reads_only import RAIL_DISPATCH_KEY
+
+    handler = CanonicalHandlers()
+    with (
+        patch.object(handler, "_handle_link_repo", AsyncMock(side_effect=AssertionError)),
+        patch.object(handler, "_handle_unlink_repo", AsyncMock(side_effect=AssertionError)),
+    ):
+        result = await handler._handle_repo_management(_make_intent(message), "sess", user_id="u1")
+    assert result[RAIL_DISPATCH_KEY] == rail

@@ -26,7 +26,9 @@ What lives here (the UNGATED half, per PPM's 2026-08-09 unblock memo):
    request for drafting HELP is the Jake failure again), and an explicit
    imperative ("create an issue…") executes even in collaborate mode. Only
    AMBIGUOUS framing consults the declared mode — that is the "tied to the
-   declared mode, not hardcoded per-verb" requirement.
+   declared mode, not hardcoded per-verb" requirement. A QUESTION (#2057:
+   "how do I archive Foo?") never executes a write and never consults the
+   mode (consent_gate.decide_consent).
 
 3. **The gate decision** (``gate_holds``) + the collaboration/confirmation
    copy the wired handler surfaces.
@@ -68,6 +70,12 @@ class WorkingMode(str, Enum):
 FRAMING_COMPOSE = "compose"
 FRAMING_EXECUTE = "execute"
 FRAMING_AMBIGUOUS = "ambiguous"
+# #2057 (Arch's ruling 2026-10-16, issue comment 6219485412; ADR-080 D4): a
+# QUESTION asks how, not for the act. On a WRITE it never executes, and the
+# declared mode never escalates it (consent_gate.decide_consent). Not one of
+# the router-hint values (_VALID_FRAMINGS below): a hint can never claim it,
+# and evaluate_consent lets the regex's QUESTION read beat any hint.
+FRAMING_QUESTION = "question"
 
 # #1970: the gate's three values ARE the vocabulary any untrusted framing
 # claim (the understanding-layer router's raw JSON "framing" key; the #1970
@@ -248,6 +256,36 @@ _EXECUTE_RE = re.compile(
 )
 
 
+# #2057 question framing. A permission rule that errs toward not writing, so
+# it is not a routing pattern (Arch: it lives HERE, in the gate, never in
+# pre_classifier.py). Evaluated only AFTER the anchored imperative check, so
+# "can you archive Foo?" stays an imperative. Triggered by an interrogative
+# head or a trailing "?". The one list of heads; keep it small.
+_QUESTION_HEAD_RE = re.compile(
+    r"^\s*(?:(?:please|hey|hi|ok(?:ay)?|piper|so|um|and)[,!\s]+)*"
+    r"(?:"
+    r"how\b"  # how do I / how would I / how can I / how to
+    # what/why/when/where/which only with an auxiliary after them: "what
+    # happens if I archive Foo", but not "when I get home remind me to ...".
+    r"|(?:what|why|when|where|which)(?:'s|\s+(?:do|does|did|is|are|was|would|will"
+    r"|can|could|should|happens?))\b"
+    r"|(?:should|can|could|do|would|may|might)\s+i\b"
+    r"|is\s+(?:there|it\s+possible)\b"  # is there a way to ...
+    r")",
+    re.IGNORECASE,
+)
+
+
+def is_question_framed(message: Optional[str]) -> bool:
+    """#2057: interrogative head or trailing "?" (the head list is
+    ``_QUESTION_HEAD_RE``). Says nothing about the anchored imperative;
+    :func:`classify_framing` checks that first."""
+    text = (message or "").strip()
+    if not text:
+        return False
+    return text.endswith("?") or bool(_QUESTION_HEAD_RE.search(text))
+
+
 def classify_framing(message: Optional[str]) -> str:
     """Deterministic compose/execute/ambiguous read of a request's phrasing.
 
@@ -260,12 +298,21 @@ def classify_framing(message: Optional[str]) -> str:
     anchored execute match and land on their compose markers exactly as
     before. Anything with neither marker is AMBIGUOUS — and ambiguity is
     exactly what the declared mode (default: collaborate) decides.
+
+    #2057: after the execute check, a question (``is_question_framed``) is
+    QUESTION, which no mode escalates to a write.
     """
     text = (message or "").strip()
     if not text:
         return FRAMING_AMBIGUOUS
     if _EXECUTE_RE.search(text):
         return FRAMING_EXECUTE
+    # #2057: a question (not an anchored imperative) is QUESTION, before the
+    # compose markers: "how can we archive Foo?" asks how. For a WRITE,
+    # QUESTION and COMPOSE both collaborate, so the order changes no
+    # draft-collaboration turn (decide_consent).
+    if is_question_framed(text):
+        return FRAMING_QUESTION
     if _COMPOSE_RE.search(text):
         return FRAMING_COMPOSE
     return FRAMING_AMBIGUOUS

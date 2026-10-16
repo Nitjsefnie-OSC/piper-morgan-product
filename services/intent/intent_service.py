@@ -3176,6 +3176,52 @@ class IntentService:
                 # Issue #582: Pass user_id to enable database project lookup
                 canonical_result = await self.canonical_handlers.handle(intent, session_id, user_id)
 
+                # #2057 (Arch's ruling 2026-10-16, comment 6219485412): a
+                # legacy manage_portfolio / manage_repos write branch no
+                # longer writes; it names its rail op, and THIS seam hands
+                # the turn to the one action rail (consent gate, #1190
+                # confirm), whichever surface claimed it. Not a new dispatch
+                # site: the rail is the existing one, run with the rail key.
+                from services.intent_service.adopted_category_reads_only import (
+                    RAIL_DISPATCH_KEY,
+                )
+
+                _legacy_rail_key = canonical_result.get(RAIL_DISPATCH_KEY)
+                if _legacy_rail_key:
+                    import dataclasses as _dc
+
+                    self.logger.info(
+                        "legacy_portfolio_write_to_rail",
+                        legacy_action=intent.action,
+                        rail_action=_legacy_rail_key,
+                    )
+                    _legacy_rail = await self._dispatch_action_rail(
+                        _dc.replace(intent, action=_legacy_rail_key),
+                        message=message,
+                        session_id=session_id,
+                        user_id=user_id,
+                        workflow_id=None,
+                        all_suggestions=all_suggestions,
+                        preferences=preferences,
+                    )
+                    if _legacy_rail.result is not None:
+                        if not _legacy_rail.apply_soft_offer:
+                            return _legacy_rail.result
+                        return self._apply_soft_offer(
+                            _legacy_rail.result,
+                            message,
+                            session_id,
+                            trust_stage=resolved_trust_stage,
+                            user_id=user_id,
+                            formality_baseline=formality_baseline,
+                            off_topic_prefix=off_topic_prefix,
+                            restate_suffix=_pending_ask_restate,
+                            unanswered_half_suffix=_unanswered_half,
+                            unanswered_half_clause=_unanswered_clause,
+                        )
+                    # Rail unavailable: the record's own statement answers
+                    # (it writes nothing).
+
                 # Issue #907: Safety net — detect generic template responses from canonical
                 # handlers and fall back to floor on generic response.
                 # Note: As of #925 (Apr 13), STATUS/PRIORITY/TEMPORAL are floor-routed.
@@ -17173,6 +17219,40 @@ Add any additional information here.
         # different failures, different protections), so #1190
         # behavior is unchanged; the decision just has one home.
         _rail_entry = _action_workflows[intent.action]
+        # ── #2057 a question never writes (Arch's ruling 2026-10-16) ──
+        # A question-framed turn ("how do I archive my project Foo?") on a
+        # portfolio write op gets the how-to statement and arms nothing, in
+        # either working mode and before the #1190 confirm (a question is not
+        # a request to confirm). Other WRITE ops' questions reach
+        # decide_consent, whose QUESTION cells collaborate in both modes.
+        if _rail_entry.needs_consent:
+            from services.intent_service import collaboration_gate as _q_gate
+            from services.intent_service.adopted_category_reads_only import (
+                question_how_to,
+            )
+
+            if _q_gate.classify_framing(message) == _q_gate.FRAMING_QUESTION:
+                _how_to = question_how_to(
+                    intent.action, (intent.context or {}).get("original_message") or message
+                )
+                if _how_to is not None:
+                    self.logger.info("question_never_writes", action=intent.action)
+                    return _RailOutcome(
+                        on_rail=True,
+                        result=IntentProcessingResult(
+                            success=True,
+                            message=_how_to,
+                            intent_data={
+                                "category": intent.category.value,
+                                "action": intent.action,
+                                "confidence": intent.confidence,
+                                "question_how_to": True,
+                            },
+                            requires_clarification=False,
+                            suggestions=all_suggestions,
+                            preferences=preferences,
+                        ),
+                    )
         if _rail_entry.needs_consent:
             from services.intent_service import consent_gate as _consent
             from services.intent_service.inversion_live import (
