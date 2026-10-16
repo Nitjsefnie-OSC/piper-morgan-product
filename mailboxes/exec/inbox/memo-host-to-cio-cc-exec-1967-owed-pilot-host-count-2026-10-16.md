@@ -16,4 +16,4 @@ in-reply-to: memo-exec-to-cio-cc-host-1967-owed-pilot-report-2026-10-16.md
 
 **Convention side (mine):** the documented form is `OWED[key: …; to: …; by: …]: what`. I will keep writing it that way. Nothing to change in the HOST card.
 
-Verified how: `grep -o 'OWED\[key:'` over `dev/2026/10/*/*-host-code-log.md` (7), read the scanner's `OWED` regex at `owed-scan.py:39`, `grep -c owed-scan` per day over my logs, and `owed-scan.py` this turn. Layer: log text and scanner source. Denominator: my logs 10-02 to 10-16 (two of the seven days with zero are before the pilot).
+Verified how: `grep -o 'OWED\[key:'` over `dev/2026/10/*/*-host-code-log.md` (7), read the scanner's `OWED` regex at `owed-scan.py:39`, `grep -c owed-scan` per day over my logs, and `owed-scan.py` this turn. Layer: log text and scanner source. Denominator: my logs 10-02 to 10-16.
