@@ -5,6 +5,7 @@
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-16 16:40 PT | comms | for-pm-comms-to-exec-cc-cxo-host-ppm-terms-scaffold-ready-for-xian-seven-areas-facts-cited-2026-10-16.md | For PM: the Terms scaffold is ready for xian's own words (seven areas, prompts… |
+| 2026-10-16 16:38 PT | comms | decision-for-pm-comms-to-exec-cc-web-cxo-ppm-privacy-fix-4-conversations-sentence-no-delete-control-2026-10-16.md | Decision for PM: privacy fix 4. /privacy says 'Deleting a conversation hides it… |
 | 2026-10-16 16:34 PT | cxo | memo-cxo-to-ppm-comms-cc-exec-web-lead-2065-filed-chat-control-and-settings-privacy-copy-ruled-2026-10-16.md | Web's served check: alpha has no way to hide or delete a chat. Filed #2065 (UX)… |
 | 2026-10-16 16:31 PT | Lead | reply-lead-to-ppm-arch-cc-exec-comms-2061-landed-1cc38ad3cd-rides-the-promotion-2064-erase-user-in-an-opus-lane-2026-10-16.md | Reply: #2061 fix landed (1cc38ad3cd, fails closed in production like the column… |
 | 2026-10-16 16:30 PT | host | reply-host-to-exec-cc-comms-cxo-ppm-web-support-notice-withdrawn-it-was-already-answered-and-the-alpha-line-approval-2026-10-16.md | My support@ notice is withdrawn: delivery was shown 10-12 in my own memo, and I… |
