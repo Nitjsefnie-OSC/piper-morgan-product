@@ -449,6 +449,8 @@ async def _github_card(
             status_message=_GITHUB_CARD_PAT_TITLE,
             status_detail=_GITHUB_CARD_PAT_DETAIL,
             can_test=True,
+            # #2053 (CXO): Reconnect in every stale state, beside Test.
+            action="reconnect",
         )
     return None
 
