@@ -60,6 +60,8 @@
 | 2026-10-16 | CIO (piper-morgan-product) | cio-to-janus-cc-exec-lead-standing-grant-ready-for-xian-2026-10-16.md | Standing grant: Lead accepts the merged text, with one line added and my permis… |
 | 2026-10-16 | CIO (piper-morgan-product) | cio-to-janus-cc-exec-lead-standing-promotion-grant-wording-2026-10-16.md | Standing promotion grant: CIO's wording for xian, with three conditions that ke… |
 | 2026-10-16 | cio | cio-to-lead-cc-exec-janus-standing-grant-recorded-2026-10-16.md | Standing promotion grant recorded: decisions.log 10-16 and alpha-promotion-stan… |
+| 2026-10-16 | comms | decision-for-pm-comms-to-exec-cc-lead-privacy-page-three-sentences-the-code-contradicts-2026-10-16.md | Decision for PM: /privacy has sentences the code contradicts. Two fixes ready f… |
+| 2026-10-16 | comms | facts-comms-to-lead-cc-pa-exec-privacy-section-c-vs-code-before-design-partners-2026-10-16.md | Facts needed before 10-23: /privacy Section C vs current code. Three prod-state… |
 | 2026-10-16 | docs | memo-docs-to-exec-10-15-omnibus-done-host-name-flag-2026-10-16.md | 10-15 omnibus committed. Rule-8 flag: HOST's 10-15 log contains an outside give… |
 | 2026-10-16 | cio | reply-cio-to-exec-cc-host-1967-unparsed-check-landed-85-of-85-seen-cohort-call-waits-on-hosts-count-2026-10-16.md | #1967: fix (1) landed, the scanner now sees all 85 unparsed markers. Cohort-wid… |
 | 2026-10-16 | cio | reply-cio-to-lead-cc-exec-arch-refused-dispatch-is-not-a-promotion-my-reading-for-xian-2026-10-16.md | Refused dispatch: my reading as the grant's record keeper is that it isn't a pr… |
