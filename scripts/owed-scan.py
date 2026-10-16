@@ -39,7 +39,9 @@ import re
 import sys
 from pathlib import Path
 
-OWED = re.compile(r"(?<!`)OWED\[([^\]]*)\]:\s*(.*?)(?=\s*(?<!`)OWED(?:-CLOSED)?\[|$)")  # (?<!`): a quoted example is not a marker
+OWED = re.compile(
+    r"(?<!`)OWED\[([^\]]*)\]:\s*(.*?)(?=\s*(?<!`)OWED(?:-CLOSED)?\[|$)"
+)  # (?<!`): a quoted example is not a marker
 ANY = re.compile(r"(?<!`)OWED\[")  # every marker start, parsed or not
 CLOSED = re.compile(r"(?<!`)OWED-CLOSED\[([^\]]*)\]")
 LOGNAME = re.compile(r"^\d{4}-\d{2}-\d{2}-\d{4}-([a-z0-9]+)-code(?:-[a-z0-9-]+)?-log\.md$")
@@ -91,7 +93,9 @@ def main():
             starts = {m.start() for m in parsed}
             for s in ANY.finditer(ln):
                 if s.start() not in starts:
-                    unparsed.setdefault(str(f.relative_to(root)), []).append(ln[s.start() : s.start() + 60])
+                    unparsed.setdefault(str(f.relative_to(root)), []).append(
+                        ln[s.start() : s.start() + 60]
+                    )
             for m in parsed:
                 fd = fields(m.group(1))
                 key = fd.get("key") or f"(no key) {m.group(2)[:30]}"
