@@ -1,0 +1,119 @@
+<title>Ship 065 Week Review</title>
+<style>
+/* Layout: a single reading column, bottom line first, each section a short scannable list; tables scroll inside their own box. */
+:root{
+  --bg:#f6f7f9; --fg:#1d232b; --muted:#5b6673; --rule:#d9dee5; --accent:#2b5d8a; --warn:#9a5a00; --ok:#2f6b3f; --card:#ffffff;
+  --display:"Source Serif 4",Georgia,serif; --body:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14181d;--fg:#e4e8ee;--muted:#9aa5b2;--rule:#2c333c;--accent:#7fb1dc;--warn:#e0a54a;--ok:#7cc48e;--card:#1b2027;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#14181d;--fg:#e4e8ee;--muted:#9aa5b2;--rule:#2c333c;--accent:#7fb1dc;--warn:#e0a54a;--ok:#7cc48e;--card:#1b2027;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:15px/1.6 var(--body)}
+.wrap{max-width:720px;margin:0 auto;padding-inline:16px;padding-block:28px 48px}
+h1{font:600 1.9rem/1.2 var(--display);margin:0 0 4px;text-wrap:balance}
+h2{font:600 1.25rem/1.3 var(--display);margin:32px 0 8px;padding-top:12px;border-top:1px solid var(--rule);text-wrap:balance}
+.meta{color:var(--muted);font-size:.85rem;margin:0 0 20px}
+.bluf{background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--accent);padding:14px 16px;border-radius:4px}
+.bluf p{margin:.3em 0}
+ul{padding-left:1.2em;margin:.4em 0}
+li{margin:.3em 0}
+code{font:0.88em var(--mono)}
+.tag{font:600 .72rem var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:1px 6px;border-radius:3px;border:1px solid currentColor;margin-right:4px;white-space:nowrap}
+.ok{color:var(--ok)} .warn{color:var(--warn)}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{color:var(--muted);font-weight:600}
+footer{margin-top:36px;color:var(--muted);font-size:.82rem;border-top:1px solid var(--rule);padding-top:10px}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@400;600&family=Source+Serif+4:wght@600&display=swap">
+<div class="wrap">
+<h1>Ship #065: the week of Oct 9–15</h1>
+<p class="meta">Exec synthesis from all 10 workstream reviews, for our discussion. Draft 1, 16 Oct 15:2x PT. Where reviews disagreed, I checked GitHub and say so.</p>
+
+<div class="bluf">
+<p><b>Bottom line.</b> The beta gate went from 14 open MVP items to 6, with no dates moved, and alpha was promoted 8 times. Most of the week&rsquo;s fixes were checked on the running alpha, not just in code.</p>
+<p>Two things went the wrong way. Main was red on 6 of 7 days from our own pushes (none reached alpha). And 7 of 10 roles wrote clock times they had guessed.</p>
+<p>Today, applying your privacy principle took open MVP back to 9. Design partners start in a week (10-23); the hard stop is 10-30.</p>
+</div>
+
+<h2>What a user can do now that they couldn&rsquo;t on 10-08</h2>
+<p>All of this is on alpha now (<code>6bb955919d</code> carries everything checked on <code>6f2916d10f</code>).</p>
+<ul>
+<li><span class="tag ok">served</span><b>Leave the standup in their own words.</b> &ldquo;Stop&rdquo;, &ldquo;never mind&rdquo; and &ldquo;not now&rdquo; pause it and keep the answers so far; &ldquo;cancel&rdquo; ends it; &ldquo;skip&rdquo; skips a question (#1771, #888). Web&rsquo;s rows all passed.</li>
+<li><span class="tag ok">served</span><b>Delete without fear.</b> &ldquo;Delete that reminder&rdquo; deletes exactly one (#1987). Any request to delete more than one gets a capped reply that lists them and ends &ldquo;Nothing has been changed.&rdquo; (#2019, your 10-14 ruling).</li>
+<li><span class="tag ok">served</span><b>Hear the truth about a broken GitHub connection</b> in chat, standup and exports, and reconnect in one step (#1965, #1889; S5 with PA, on your account). Long lists are capped and offer the rest (#1783).</li>
+<li><span class="tag ok">served</span><b>Get honest &ldquo;today&rdquo; answers:</b> overdue counts and ages, &ldquo;1 day overdue&rdquo;, and a real &ldquo;Today:&rdquo; list (#1985, #1996, #1997, #2001).</li>
+<li><span class="tag ok">served</span><b>Ask Claude Desktop about their GitHub issues through the Piper connector and get the true count</b> (#1982, #2005), which you checked yourself.</li>
+<li><span class="tag warn">partial</span><b>Disconnect an integration</b> (#2017). Lead lists it as working, but it&rsquo;s still open on the gate: the served check passed on 2 of 5 pages.</li>
+<li><span class="tag warn">code only</span><b>A current-format Anthropic key in Settings</b> (#1978). It&rsquo;s closed, but nobody has run it on alpha.</li>
+<li><b>On the public site:</b> &ldquo;Your Piper account&rdquo; on /privacy and &ldquo;Access ends right away&rdquo; on /support, plus keyboard focus rings, a skip link and contrast fixes. Five posts went out.</li>
+</ul>
+<p>Six roles (CIO, Docs, HOST, PPM, Comms in the product, Web inside alpha) say plainly that their week changed nothing a user sees. That&rsquo;s the honest answer for support roles, not a gap.</p>
+
+<h2>What went wrong, and the patterns in it</h2>
+<ul>
+<li><b>Guessed timestamps: 7 of 10 roles</b> (Lead, Arch, CXO, Docs, HOST, CIO, Web), some off by up to 4 hours. Each corrected it, and it keeps recurring. The rule (&ldquo;run <code>date</code> first&rdquo;) is written down, but nothing enforces it. It&rsquo;s the same lesson as the Friday kickoff: a rule in prose doesn&rsquo;t hold, and a check in a script would.</li>
+<li><b>Main red on 6 of 7 days</b>, all from Lead&rsquo;s pushes running tests outside the pre-push selection (longest about 100 min, on 10-13). None reached alpha, because the promotion gate held. CIO found 91 of 100 Code Quality runs on main had been cancelled before Lead&rsquo;s queue fix, so &ldquo;green&rdquo; meant little until 10-14.</li>
+<li><b>Overclaims caught before they spread:</b>
+  <ul>
+  <li>Arch&rsquo;s &ldquo;0 of 11&rdquo; entry points were really 21.</li>
+  <li>PA made three wrong guesses about your GitHub sign-in, which cost you about an hour.</li>
+  <li>HOST called a live invite a &ldquo;dry run&rdquo;.</li>
+  <li>Docs called an omnibus complete when it covered 15 of 17 logs.</li>
+  </ul>
+  Each was caught by another role or by the role itself.</li>
+<li><b>Rule 8 (outside people&rsquo;s names):</b> HOST slipped twice. Comms counted about <b>588 files on main</b> that still carry three alpha testers&rsquo; given names, from before the rule. Rewriting history for them is your call; it&rsquo;s on the rollup.</li>
+<li><b>Mine:</b> the Friday kickoff was missed twice. The fix you just approved is a script, and the first real run is Fri 10-23.</li>
+</ul>
+
+<h2>Where reviews disagreed (checked)</h2>
+<div class="tbl"><table>
+<tr><th>Point</th><th>Claims</th><th>Checked</th></tr>
+<tr><td>Promotions in the window</td><td>Lead 8; Arch 2</td><td><b>8</b> successful promote dispatches (GitHub run list). Arch counted only the last two.</td></tr>
+<tr><td>#1889</td><td>CXO: waiting on a test identity; Lead, PA, PPM: closed</td><td><b>Closed</b> 10-15 on served S5. CXO&rsquo;s line is stale.</td></tr>
+<tr><td>#2017 Disconnect</td><td>Lead: works; gate: open</td><td><b>Open</b> on MVP; 2 of 5 pages checked.</td></tr>
+<tr><td>Intent-floor ceiling</td><td>Lead, Arch 155 &rarr; 90; PPM 127 &rarr; 90</td><td>Arch read the enforcement test at both ends of the window: <b>155 &rarr; 90</b>. PPM&rsquo;s 127 is its own recount method.</td></tr>
+<tr><td>My &ldquo;55 closed, 75 filed&rdquo;</td><td>No role quotes it</td><td>A rough GitHub search shape only; I won&rsquo;t put it in the Ship.</td></tr>
+</table></div>
+
+<h2>Usage patterns, for next sprint&rsquo;s planning</h2>
+<ul>
+<li><b>Cost follows turns, not model tier</b> (CXO&rsquo;s finding). CXO had about 60 mail-wake turns on 10-15, mostly triage of cc copies. A cc that needs no action still costs a full wake. Proposal on the table: coalesce a fire&rsquo;s mail into one drain.</li>
+<li><b>Lead is the heavy seat:</b> about 15 parallel lanes on 10-15 (12 Opus, 3 Sonnet) for 22 code units. The waste was re-running overlapping test suites at each merge, not the model. Lead&rsquo;s scoring runs hit the Anthropic workspace limit on 10-10, until you raised it.</li>
+<li><b>Relays are slow when time matters:</b> your 10-15 promotion &ldquo;yes&rdquo; took 2h12m to reach Lead through mail wakes. The standing grant removes most of that.</li>
+<li><b>Measured spend is thin.</b> Only PA reported dollars ($7.47 and $9.67 for two evals). No role reports per-seat token or dollar totals, so a real usage review needs the console numbers from you or Pard. That would make a good first item for the week review.</li>
+<li><b>Fires that didn&rsquo;t run:</b> PPM missed two (10-10, 10-11), and Web missed one START (10-14). Causes weren&rsquo;t investigated, so this is small but worth one owner.</li>
+</ul>
+
+<h2>The week ahead (10-16 to 10-22)</h2>
+<ul>
+<li><b>Gate: 9 open MVP:</b> #2060, #2059, #2054 (privacy and security, added today under your principle), #2048, #2018, #2017, #1913, epic #1595, gate #1386. All three new ones are fixed in code and close once they&rsquo;re live on alpha, which means the promotion that&rsquo;s waiting on Fly.</li>
+<li><b>Lead:</b> promote the waiting build, then #2056, #2058, and one batched catalog change (#2047, #2051) with a full served run.</li>
+<li><b>CXO and Web:</b> judge the new build&rsquo;s rows (#2048 first, then #2057, #2045, #2053, #2041, #2055, #2046, #2051).</li>
+<li><b>PA:</b> re-run S5 with you; it now decides only #2031&rsquo;s card.</li>
+<li><b>Comms:</b> Sat &ldquo;Convergent Claims&rdquo;, Sun &ldquo;Measure the Start&rdquo; (your rewrite), Tue, Wed (Ship #065), Thu. Comms will re-check /privacy and /support against the code before 10-23.</li>
+<li><b>CIO:</b> the guards review on 10-19 and the mail v4 review on 10-22.</li>
+<li><b>HOST:</b> flips the roster the day any held invite goes out.</li>
+</ul>
+<p><b>What design partners meet on 10-23</b>, put together from the reviews:
+<ul>
+<li>a Piper that asks before acting when it&rsquo;s unsure, and never changes data on a question;</li>
+<li>yes/no offers;</li>
+<li>exits in their own words;</li>
+<li>capped deletes;</li>
+<li>honest GitHub status with one-step reconnect;</li>
+<li>a privacy page the code backs.</li>
+</ul>
+They won&rsquo;t meet the MCP connector or the plugin unless you choose to offer them.</p>
+
+<h2>For our discussion</h2>
+<ul>
+<li><b>Timestamps:</b> should CIO build a <code>date</code> check into mail-send and the log append, as with the kickoff? Lean: yes.</li>
+<li><b>Usage review:</b> can you or Pard pull this week&rsquo;s per-workspace spend, so the planning review has real numbers?</li>
+<li><b>cc cost:</b> should the cohort coalesce cc-only mail into one drain per fire (CXO&rsquo;s proposal)? Lean: yes; CIO owns the change.</li>
+<li><b>Partners on 10-23:</b> what&rsquo;s your bar? Every one of the 9 closed, or the privacy and security ones closed and the rest disclosed as known issues?</li>
+<li><b>The 588 files with testers&rsquo; names:</b> rewrite, or leave the history and keep new work clean?</li>
+</ul>
+
+<footer><b>Verified how:</b> I read all 10 reviews plus Comms&rsquo; addendum (a Sonnet helper extracted them, and I re-read the disputed passages myself). The promotion count is from <code>gh run list --workflow=fly-deploy.yml --event workflow_dispatch</code> (8 successes, 10-09 to 10-15 PT). Issue states are from <code>gh issue view</code> on #1889, #2017, #1978 and #2031. The ceiling figure is from Arch&rsquo;s own <code>git show</code>. Everything else is as each role reported it and wasn&rsquo;t re-run by me. Denominator: 10 of 10 roles.</footer>
+</div>
