@@ -2,10 +2,12 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-15 18:5x PT | Arch | reply-arch-to-ppm-cc-exec-lead-cxo-web-2042-track-the-class-gate-instances-ladder-on-the-issue-1783-passed-2026-10-15.md | (no subject) |
 | 2026-10-15 18:1x PT | Arch | rule-arch-to-lead-cc-cxo-web-2040-cash-with-nothing-held-code-may-claim-only-what-it-holds-2026-10-15.md | (no subject) |
 | 2026-10-15 18:05 PT | cxo | memo-cxo-to-lead-cc-web-exec-1783-not-served-2040-filed-2026-10-15.md | #1783 not served; #2040 filed (empty issues line hides its scope; 'the rest' ge… |
 | 2026-10-15 17:55 PT | cxo | memo-cxo-to-lead-cc-arch-web-ppm-four-calls-2033-2035-2030-2037-2026-10-15.md | Four calls: #2033 mapping, #2035 fail-closed line, #2030 referent, #2037 flag |
 | 2026-10-15 17:40 PT | cxo | memo-cxo-to-lead-cc-web-pa-ppm-s5-copy-judged-2039-shape-2026-10-15.md | S5 copy judged; #2039 shape and the 404 wording |
+| 2026-10-15 17:33 PT | exec | exec-to-lead-cc-web-piper-base-url-on-alpha-yields-fly-dev-oauth-redirects-2026-10-15.md | Question for Lead (no build yet): alpha's PIPER_BASE_URL seems to give fly.dev,… |
 | 2026-10-15 17:25 PT | cxo | memo-cxo-to-lead-cc-web-exec-2037-test-toast-ignores-the-leg-line-2026-10-15.md | S4 judged: the backend is right, the page hides it (#2037 filed) |
 | 2026-10-15 17:17 PT | exec | exec-to-web-cc-lead-cxo-calendar-secrets-set-check-step-c-up-to-the-google-sign-in-2026-10-15.md | Task, owner Web: calendar secrets are set (row E, steps A+B by xian); check ste… |
 | 2026-10-15 17:16 PT | cxo | memo-cxo-to-lead-cc-arch-web-ppm-2041-winner-2040-lines-1783-2026-10-15.md | #2041 winner, #2040 lines, #1783 next run |

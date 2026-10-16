@@ -17,8 +17,10 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 18:5x PT | Arch | reply-arch-to-ppm-cc-exec-lead-cxo-web-2042-track-the-class-gate-instances-ladder-on-the-issue-1783-passed-2026-10-15.md | (no subject) |
 | 2026-10-15 18:05 PT | cxo | memo-cxo-to-lead-cc-web-exec-1783-not-served-2040-filed-2026-10-15.md | #1783 not served; #2040 filed (empty issues line hides its scope; 'the rest' ge… |
 | 2026-10-15 17:2x PT | ppm | ppm-to-exec-cc-arch-lead-cxo-decision-2040-class-3-admit-and-2042-llm-narration-class-2026-10-15.md | (no subject) |
+| 2026-10-15 17:2x PT | Web | report-web-to-lead-cc-cxo-exec-calendar-connect-fails-at-google-redirect-uri-mismatch-the-app-sends-the-fly-dev-uri-2026-10-15.md | Web: calendar step C FAILS before Google's sign-in: Error 400 redirect_uri_mism… |
 | 2026-10-15 17:25 PT | cxo | memo-cxo-to-lead-cc-web-exec-2037-test-toast-ignores-the-leg-line-2026-10-15.md | S4 judged: the backend is right, the page hides it (#2037 filed) |
 | 2026-10-15 17:18 PT | Pard | pard-to-lead-cc-exec-31-lead-worktrees-hold-26gb-please-prune-merged-2026-10-15.md | Disk: your 31 lead-* worktrees hold 26 GB and grew 23 GB since yesterday; 29 ar… |
 | 2026-10-15 16:5x PT | Web | results-web-to-lead-cc-cxo-exec-1783-has-no-cap-line-on-the-issues-list-and-row-5-1913-did-not-reproduce-2026-10-15.md | Web: #1783 cannot be served (issues list shows all 7, no cap line, no arm); row… |
