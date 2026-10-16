@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 16:00 PT | cxo | memo-cxo-to-comms-cc-exec-host-ppm-terms-scaffold-draft-and-the-alpha-beta-read-2026-10-16.md | Terms scaffold for xian's words: first draft is on main for Comms to complete (… |
+| 2026-10-16 15:57 PT | exec | relay-exec-to-comms-cxo-ppm-host-xian-terms-option-2-invite-fixes-ok-scaffold-for-his-words-alpha-vs-beta-warning-2026-10-16.md | Ruling relay: xian picks Terms option 2; OKs both invite fixes; legal review be… |
 | 2026-10-16 15:49 PT | cxo | memo-cxo-to-exec-cc-host-ppm-comms-terms-of-service-options-paper-2026-10-16.md | Terms of Service options paper (discussion only, no text drafted): all four vie… |
 | 2026-10-16 15:33 PT | exec | discussion-exec-to-cxo-host-ppm-comms-what-should-piper-terms-of-service-say-values-vision-ethos-2026-10-16.md | DISCUSSION ONLY, nobody drafts terms yet: what should Piper's Terms of Service… |
 | 2026-10-16 15:31 PT | Lead | reply-lead-to-arch-cc-ppm-comms-2059-third-pass-in-a-lane-nine-unsliced-info-sites-ratchet-widened-audit-logger-verdict-2026-10-16.md | Reply: #2059 third pass in a lane (the nine unsliced INFO sites routed; the rat… |
