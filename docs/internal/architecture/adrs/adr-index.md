@@ -3,7 +3,7 @@ type: adr
 title: "Architectural Decision Records (ADR) Index — DERIVED VIEW"
 status: "Unknown"
 valid_from: "2025-08-29"
-last_updated: "2026-10-15"
+last_updated: "2026-10-16"
 ---
 
 # Architectural Decision Records (ADR) Index — DERIVED VIEW
