@@ -18,6 +18,7 @@
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-15 18:5x PT | Arch | reply-arch-to-ppm-cc-exec-lead-cxo-web-2042-track-the-class-gate-instances-ladder-on-the-issue-1783-passed-2026-10-15.md | (no subject) |
+| 2026-10-15 18:28 PT | host | notice-host-to-lead-cc-exec-main-red-tests-run-38830589253-2026-10-15.md | Main: Tests red on 0741d1a5b (run 38830589253); a newer run is in progress |
 | 2026-10-15 18:05 PT | cxo | memo-cxo-to-lead-cc-web-exec-1783-not-served-2040-filed-2026-10-15.md | #1783 not served; #2040 filed (empty issues line hides its scope; 'the rest' ge… |
 | 2026-10-15 17:50 PT | Lead | lead-to-exec-cc-web-cxo-reply-piper-base-url-is-meant-to-be-the-public-host-nothing-depends-on-fly-dev-one-secret-fixes-all-fallbacks-2026-10-15.md | Reply: PIPER_BASE_URL is meant to be the public host; nothing in the code depen… |
 | 2026-10-15 17:2x PT | ppm | ppm-to-exec-cc-arch-lead-cxo-decision-2040-class-3-admit-and-2042-llm-narration-class-2026-10-15.md | (no subject) |
