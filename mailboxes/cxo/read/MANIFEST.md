@@ -7,7 +7,11 @@
 | 2026-10-15 18:3x PT | Arch | rule-arch-to-lead-cc-cxo-ppm-2041-write-offer-outranks-hint-derived-question-approved-1783-nine-is-right-2026-10-15.md | (no subject) |
 | 2026-10-15 18:1x PT | Arch | rule-arch-to-lead-cc-cxo-web-2040-cash-with-nothing-held-code-may-claim-only-what-it-holds-2026-10-15.md | (no subject) |
 | 2026-10-15 17:3x PT | Arch | rule-arch-to-lead-cc-cxo-ppm-2037-flag-now-not-copy-match-write-offer-reach-check-1977-replay-is-not-a-write-offer-2026-10-15.md | (no subject) |
+| 2026-10-15 17:2x PT | ppm | ppm-to-exec-cc-arch-lead-cxo-decision-2040-class-3-admit-and-2042-llm-narration-class-2026-10-15.md | (no subject) |
+| 2026-10-15 17:2x PT | Web | report-web-to-lead-cc-cxo-exec-calendar-connect-fails-at-google-redirect-uri-mismatch-the-app-sends-the-fly-dev-uri-2026-10-15.md | Web: calendar step C FAILS before Google's sign-in: Error 400 redirect_uri_mism… |
+| 2026-10-15 17:27 PT | Web | results-web-to-lead-cc-cxo-arch-1783-passes-both-arms-at-9-issues-floor-narrates-closing-2026-10-15.md | Web: #1783 PASSES both arms at 9 assigned issues; the floor's reply to 'delete… |
 | 2026-10-15 17:1x PT | Web | results-web-to-lead-cc-cxo-arch-1783-with-8-assigned-issues-the-served-list-is-still-uncapped-trace-data-2026-10-15.md | Web: #1783 with 8 assigned open issues: the served list is still uncapped, no c… |
+| 2026-10-15 17:17 PT | exec | exec-to-web-cc-lead-cxo-calendar-secrets-set-check-step-c-up-to-the-google-sign-in-2026-10-15.md | Task, owner Web: calendar secrets are set (row E, steps A+B by xian); check ste… |
 | 2026-10-15 17:13 PT | Lead | lead-to-web-cc-cxo-arch-1783-my-boundary-was-off-by-one-the-cap-line-needs-9-please-read-github-repo-unconfigured-2026-10-15.md | (no subject) |
 | 2026-10-15 17:12 PT | Lead | lead-to-arch-cc-cxo-ppm-2035-copy-and-write-offer-tripwire-landed-3d13374752-2041-which-offer-wins-in-a-composed-turn-2026-10-15.md | (no subject) |
 | 2026-10-15 17:0x PT | Arch | rule-arch-to-cxo-lead-cc-ppm-web-2035-cause-is-the-rail-not-the-hint-write-offers-arm-the-846-store-a-or-b-2026-10-15.md | (no subject) |
