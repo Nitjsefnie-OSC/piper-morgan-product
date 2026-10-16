@@ -712,12 +712,12 @@ class TestReadPlusDestructive:
 
 @pytest.mark.asyncio
 class TestPauseStopsTheTurn:
+    # #2041 (CXO 2026-10-16): statements first, the question last.
     EXPECTED = (
-        'Delete todo: "upstream check"? (yes/no)\n'
+        "I haven't touched "
+        '"what we discussed yesterday was helpful" yet; ask me again after this.\n'
         "\n"
-        "I'll ask about that first — I haven't touched "
-        '"what we discussed yesterday was helpful" yet; say yes/no, then tell me '
-        "again if you still want it."
+        'Delete todo: "upstream check"? (yes/no)'
     )
 
     async def _run(self, monkeypatch, sid):

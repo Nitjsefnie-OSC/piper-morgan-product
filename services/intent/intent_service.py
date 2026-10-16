@@ -308,13 +308,12 @@ def _compose_deferred_sibling_line(deferred: List[Tuple[Intent, str]]) -> str:
     prevent). So it is named instead, in the user's own words: the deferred
     sibling's SEGMENT, quoted, is the text they wrote.
 
-    Copy ratified as written by CXO 2026-10-05 (no change).
+    Copy ratified by CXO 2026-10-05; re-ruled by CXO 2026-10-16 (#2041 served
+    read): statements first, the question last, so this line now precedes the
+    armed question and no longer says "I'll ask about that first".
     """
     quoted = " and ".join(f'"{segment}"' for _intent, segment in deferred)
-    return (
-        f"I'll ask about that first — I haven't touched {quoted} yet; "
-        "say yes/no, then tell me again if you still want it."
-    )
+    return f"I haven't touched {quoted} yet; ask me again after this."
 
 
 def _principal_from_intent(intent) -> Optional[str]:
@@ -16938,8 +16937,11 @@ Add any additional information here.
         if armed_result is not None and armed_result.message:
             body = f"{body}\n\n{armed_result.message}" if body else armed_result.message
         if deferred:
+            # #2041 (CXO 2026-10-16): statements first, the question last. The
+            # deferred-sibling statement opens the reply; the armed question
+            # (the tail of ``armed_result.message``) stays the last thing read.
             deferred_line = _compose_deferred_sibling_line(deferred)
-            body = f"{body}\n\n{deferred_line}" if body else deferred_line
+            body = f"{deferred_line}\n\n{body}" if body else deferred_line
 
         intent_data: Dict[str, Any] = dict(
             (armed_result.intent_data if armed_result is not None else None)
