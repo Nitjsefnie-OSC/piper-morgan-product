@@ -176,7 +176,7 @@ misread until 2026-10-01.*
 | 131 | **Arch: two facts for the Terms decision (what hosted alpha stores; confirmation per action). Relay to xian and CXO.** `key: arch-tos-facts` | 2026-10-16 | DONE 16:4x: facts in, on rollup v367 |
 | 132 | **Comms' invite and agreement fixes (scope banner on ALPHA_AGREEMENT_v2; invite template lines 66, 70, 115): relay xian's OK to Comms, cc HOST.** `key: invite-fixes` | 2026-10-16 | DONE 10-16: xian OK, relayed to Comms cc HOST |
 | 133 | **Terms scaffold (prompts for xian's own words, from Comms and CXO): bring it to xian by 10-21, for the design-partner invitation by 10-23.** `key: terms-scaffold` | 2026-10-16 | Comms building |
-| 134 | **CIO: date check in mail-send/log append (xian yes) and the cc-coalescing decision; close on xian's board.** `key: cio-date-check` | 2026-10-16 | Asked 16:3x |
+| 134 | **CIO: date check in mail-send/log append (xian yes) and the cc-coalescing decision; close on xian's board.** `key: cio-date-check` | 2026-10-16 | DONE 16:25: date check live; cc-hold approved |
 | 135 | **PPM: known-issues list (open MVP that isn't privacy or security) for xian's direct review before 10-23.** `key: known-issues-review` | 2026-10-16 | Asked 16:3x |
 | 136 | **Pard: week usage numbers (spend by workspace, seat usage) for the planning review.** `key: pard-usage` | 2026-10-16 | Asked 16:3x |
 | 137 | **Attribute the Anthropic Default workspace spend ($5.56 in the week, Sonnet, $2.70 on 10-15); asked Pard.** `key: default-workspace` | 2026-10-16 | Asked Pard |
