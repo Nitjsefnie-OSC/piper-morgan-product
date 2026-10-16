@@ -5227,15 +5227,16 @@ class TestUnarmedAskSiteRatchet:
         return found
 
     @staticmethod
-    def _carries_offer_hint(nodes, produced) -> bool:
+    def _carries_offer_hint(nodes, produced, kwarg="offer_hint") -> bool:
         """#2030: the holder puts ``offer_hint=`` on a result it builds, its
-        value read from the dispatch's result (a name in ``produced``)."""
+        value read from the dispatch's result (a name in ``produced``).
+        #2041: the same for ``write_offer=`` (``kwarg``)."""
         import ast
 
         return any(
             isinstance(n, ast.Call)
             and any(
-                kw.arg == "offer_hint"
+                kw.arg == kwarg
                 and any(isinstance(v, ast.Name) and v.id in produced for v in ast.walk(kw.value))
                 for kw in n.keywords
             )
@@ -5243,12 +5244,17 @@ class TestUnarmedAskSiteRatchet:
         )
 
     @classmethod
-    def _plan_arm_holders(cls, trees) -> list:
+    def _plan_arm_holders(
+        cls, trees, arm="_track_offer_hint", attr="armed_offer_hint", before=()
+    ) -> list:
         """#2030: (rel, holder, problem) for every holder that runs a plan
         (``.execute_plan(``). ``problem`` is None when the holder passes the
         picked ``<x>.armed_offer_hint`` to ``_track_offer_hint`` after the
         plan runs and before its next ``_apply_soft_offer`` call (#1770: the
-        live arm then suppresses a second, soft ask)."""
+        live arm then suppresses a second, soft ask). #2041: the same for
+        ``<x>.armed_write_offer`` -> ``_arm_write_offer`` (``arm``/``attr``),
+        which must ALSO come before the next call of each name in ``before``
+        (``_track_offer_hint``: a write offer outranks a hint)."""
         import ast
 
         out = []
@@ -5265,23 +5271,29 @@ class TestUnarmedAskSiteRatchet:
                 arms = [
                     c.lineno
                     for c in calls
-                    if c.func.attr == "_track_offer_hint"
+                    if c.func.attr == arm
                     and any(
-                        isinstance(a, ast.Attribute) and a.attr == "armed_offer_hint"
+                        isinstance(a, ast.Attribute) and a.attr == attr
                         for arg in c.args
                         for a in ast.walk(arg)
                     )
                 ]
-                softs = [c.lineno for c in calls if c.func.attr == "_apply_soft_offer"]
                 plan = min(plans)
-                arm = min((a for a in arms if a > plan), default=None)
-                soft = min((x for x in softs if x > plan), default=None)
-                if arm is None:
-                    problem = "never passes armed_offer_hint to _track_offer_hint"
-                elif soft is not None and soft < arm:
-                    problem = "arms armed_offer_hint AFTER _apply_soft_offer (#1770)"
+                first = min((a for a in arms if a > plan), default=None)
+                problem = None
+                if first is None:
+                    problem = f"never passes {attr} to {arm}"
                 else:
-                    problem = None
+                    for later in ("_apply_soft_offer", *before):
+                        nxt = min(
+                            (c.lineno for c in calls if c.func.attr == later and c.lineno > plan),
+                            default=None,
+                        )
+                        if nxt is not None and nxt < first:
+                            problem = f"arms {attr} AFTER {later}" + (
+                                " (#1770)" if later == "_apply_soft_offer" else ""
+                            )
+                            break
                 out.append((rel, qual, problem))
         return out
 
@@ -5585,15 +5597,18 @@ class TestUnarmedAskSiteRatchet:
     # Check (d): the CanonicalHandlers.handle dispatch holders (found by
     # receiver binding, the #2030 helper) and what each does with the
     # result's "write_offer". "arms": the dispatch result reaches
-    # _arm_write_offer. "drops": a KNOWN GAP, measured 2026-10-15 —
-    # IntentOrchestrator._execute_single keeps message/intent/offer_hint only,
-    # so a multi-intent sibling's write offer renders its question with
-    # nothing armed (the #2030 defect class, reopened for write offers by
-    # #2035; tracked as #2041). Pinned so it stays visible: when the orchestrator starts
-    # carrying "write_offer", this pin fails and must be re-ruled.
+    # _arm_write_offer. "carries" (#2041, Arch's ruling 2026-10-15; was the
+    # pinned "drops" gap measured 2026-10-15): the holder puts
+    # ``write_offer=`` on its result, and every holder that runs a plan
+    # passes the picked ``armed_write_offer`` to _arm_write_offer after the
+    # plan and before both _track_offer_hint and _apply_soft_offer (a write
+    # offer outranks a hint; #1770 first-arm-wins then holds the slot).
     _WRITE_OFFER_DISPATCH_HOLDERS = {
         ("services/intent/intent_service.py", "IntentService._process_intent_internal"): "arms",
-        ("services/intent_service/orchestrator.py", "IntentOrchestrator._execute_single"): "drops",
+        (
+            "services/intent_service/orchestrator.py",
+            "IntentOrchestrator._execute_single",
+        ): "carries",
     }
 
     @staticmethod
@@ -5762,9 +5777,11 @@ class TestUnarmedAskSiteRatchet:
     def _assert_write_offer_dispatch(cls, trees, pinned=None) -> None:
         """#2035 check (d): the CanonicalHandlers.handle dispatch holders
         are exactly the pinned set; an "arms" holder passes the dispatch
-        result to _arm_write_offer; a "drops" holder (the pinned known gap)
-        still does nothing with "write_offer", so closing the gap forces a
-        re-rule of the pin."""
+        result to _arm_write_offer; a "carries" holder (#2041) puts
+        ``write_offer=`` on its result, read from the dispatch result, AND
+        every plan-running holder passes the picked ``armed_write_offer``
+        to _arm_write_offer after the plan and before _track_offer_hint and
+        _apply_soft_offer."""
         import ast
 
         pinned = cls._WRITE_OFFER_DISPATCH_HOLDERS if pinned is None else pinned
@@ -5784,22 +5801,29 @@ class TestUnarmedAskSiteRatchet:
                 and produced & {a.id for a in n.args if isinstance(a, ast.Name)}
                 for n in nodes
             )
-            mentions = any(
-                (isinstance(n, ast.Constant) and n.value == "write_offer")
-                or (isinstance(n, ast.Attribute) and n.attr == "write_offer")
-                or (isinstance(n, ast.keyword) and n.arg == "write_offer")
-                for n in nodes
-            )
             if mode == "arms":
                 assert produced and arms, (
                     f"#2035 check (d): {rel}::{qual} dispatches CanonicalHandlers.handle "
                     f"but its result no longer reaches _arm_write_offer"
                 )
-            else:
-                assert not arms and not mentions, (
-                    f"#2035 check (d): {rel}::{qual} now handles write_offer — the "
-                    f"pinned known gap changed; re-rule its pin (arms / carries)"
-                )
+                continue
+            assert mode == "carries", f"#2035 check (d): unknown pin mode {mode!r}"
+            assert cls._carries_offer_hint(nodes, produced, "write_offer"), (
+                f"#2041 check (d): {rel}::{qual} dispatches CanonicalHandlers.handle "
+                f"but its result no longer carries write_offer"
+            )
+            plan_arms = cls._plan_arm_holders(
+                trees, "_arm_write_offer", "armed_write_offer", ("_track_offer_hint",)
+            )
+            assert plan_arms, (
+                f"#2041 check (d): {rel}::{qual} carries write_offer but no holder "
+                f"runs a plan (.execute_plan) and arms it"
+            )
+            bad = [(r, q, p) for r, q, p in plan_arms if p is not None]
+            assert not bad, (
+                f"#2041 check (d): the carried write_offer does not reach "
+                f"_arm_write_offer: {bad}"
+            )
 
     def test_2035_write_offer_reach_tripwire(self):
         """#2035 (Arch's rule item 2, 2026-10-15), the write_offer sibling of
@@ -5814,8 +5838,9 @@ class TestUnarmedAskSiteRatchet:
             _arm_write_offer, which reads "write_offer" and calls
             set_pending_offer;
         (d) the CanonicalHandlers.handle dispatch holders are pinned with
-            what each does with write_offer (one arms; the orchestrator's is
-            a pinned known gap);
+            what each does with write_offer (the single path arms; #2041:
+            the orchestrator carries it to the plan-running holder, which
+            arms the picked one before the hint and the soft offer);
         (e) every call of a #846 write-offer factory reaches set_pending_offer
             or a "write_offer" value in its own holder."""
         import ast
@@ -5983,17 +6008,69 @@ class TestUnarmedAskSiteRatchet:
                 [("services/r.py", arms_ok), ("services/t.py", third)],
                 {("services/r.py", "run"): "arms"},
             )
-        # the pinned known gap: a "drops" holder that starts handling
-        # write_offer fails until its pin is re-ruled
+        # #2041: a "carries" holder passes when it carries write_offer AND
+        # the plan-running holder arms the picked one before the hint and
+        # the soft offer; it fails when it drops write_offer, when no holder
+        # arms the picked one, or when the arm comes after the hint or the
+        # soft offer.
         carries = ast.parse(
             "async def run(canonical_handlers):\n"
             "    result = await canonical_handlers.handle(None)\n"
-            "    return Result(write_offer=result.get('write_offer'))\n"
+            "    return Result(offer_hint=result.get('offer_hint'),\n"
+            "                  write_offer=result.get('write_offer'))\n"
         )
-        with pytest.raises(AssertionError, match="re-rule"):
-            cls._assert_write_offer_dispatch(
-                [("services/r.py", carries)], {("services/r.py", "run"): "drops"}
-            )
+        drops = ast.parse(
+            "async def run(canonical_handlers):\n"
+            "    result = await canonical_handlers.handle(None)\n"
+            "    return Result(offer_hint=result.get('offer_hint'))\n"
+        )
+        plan_ok = (
+            "async def go(self, plan):\n"
+            "    o = await self.intent_orchestrator.execute_plan(plan)\n"
+            "    self._arm_write_offer({'write_offer': o.armed_write_offer}, 's')\n"
+            "    self._track_offer_hint({'offer_hint': o.armed_offer_hint}, 's')\n"
+            "    return self._apply_soft_offer(o)\n"
+        )
+        carry_pin = {("services/r.py", "run"): "carries"}
+
+        def _run(holder, plan_src):
+            trees = [("services/r.py", holder)]
+            if plan_src is not None:
+                trees.append(("services/p.py", ast.parse(plan_src)))
+            cls._assert_write_offer_dispatch(trees, carry_pin)
+
+        _run(carries, plan_ok)  # the shape as built
+        with pytest.raises(AssertionError, match="no longer carries write_offer"):
+            _run(drops, plan_ok)
+        with pytest.raises(AssertionError, match="no holder runs a plan"):
+            _run(carries, None)
+        no_arm = plan_ok.replace(
+            "    self._arm_write_offer({'write_offer': o.armed_write_offer}, 's')\n", ""
+        )
+        with pytest.raises(AssertionError, match="never passes armed_write_offer"):
+            _run(carries, no_arm)
+        arm_line = "    self._arm_write_offer({'write_offer': o.armed_write_offer}, 's')\n"
+        hint_line = "    self._track_offer_hint({'offer_hint': o.armed_offer_hint}, 's')\n"
+        after_hint = plan_ok.replace(arm_line + hint_line, hint_line + arm_line)
+        with pytest.raises(AssertionError, match="AFTER _track_offer_hint"):
+            _run(carries, after_hint)
+        after_soft = plan_ok.replace(arm_line, "").replace(
+            "    return self._apply_soft_offer(o)\n",
+            "    r = self._apply_soft_offer(o)\n" + arm_line + "    return r\n",
+        )
+        with pytest.raises(AssertionError, match="AFTER _apply_soft_offer"):
+            _run(carries, after_soft)
+        # the real orchestrator source with its write_offer carry removed fails
+        orch_rel = "services/intent_service/orchestrator.py"
+        index = dict(self._caller_trees())
+        real = ast.unparse(index[orch_rel])
+        carry = "write_offer=result.get('write_offer') or None"
+        assert carry in real, "the orchestrator's write_offer carry moved; update this fake"
+        dropped_real = ast.parse(real.replace(carry, "error=None"))
+        real_trees = [(r, t) for r, t in index.items() if r != orch_rel]
+        cls._assert_write_offer_dispatch(list(index.items()))
+        with pytest.raises(AssertionError, match="no longer carries write_offer"):
+            cls._assert_write_offer_dispatch(real_trees + [(orch_rel, dropped_real)])
 
     def test_2030_check_d_pins_dispatch_holders_fed_fakes(self):
         """#2030 (Arch's ruling item 5), check (d) fed fakes in memory: the

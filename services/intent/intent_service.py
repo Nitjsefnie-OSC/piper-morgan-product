@@ -2698,6 +2698,15 @@ class IntentService:
                                 for r in orchestrated.results[1:]
                             ],
                         )
+                        # #2041 (Arch's ruling, 2026-10-15): a write offer
+                        # OUTRANKS a hint, so the orchestrator picks at most
+                        # one of the two. Arm the picked write offer on the
+                        # #846 store through the single path's own
+                        # _arm_write_offer, before the hint and the soft
+                        # offer (#1770 first-arm-wins then holds the slot).
+                        self._arm_write_offer(
+                            {"write_offer": orchestrated.armed_write_offer}, session_id, user_id
+                        )
                         # #2030 (Arch's ruling, issuecomment-6203827433): arm
                         # the ONE hint the orchestrator picked (its question is
                         # the reply's last sentence) BEFORE the soft offer, so
