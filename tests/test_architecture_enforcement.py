@@ -7956,3 +7956,204 @@ class TestItemServiceNotReachableFromWeb2014:
             "(they select by id alone, no list-ownership check). Add the "
             "get_list_by_id(list_id, owner_id=...) check first. " + "; ".join(violations)
         )
+
+
+class TestLogNeverSlicesUserText2059:
+    """#2059 — the privacy page says server logs keep at most a fingerprint of
+    user text. Arch's ruling (2026-10-16, issue comment 6223725838, ADR-080 D3:
+    code holds the guarantee, the log LEVEL does not): every site that logs user
+    text, or text derived from it, goes through ``utterance_fields`` /
+    ``utterance_preview`` (``services/utils/utterance_log.py``) at EVERY level.
+
+    THE CENSUS PREDICATE (mechanical, over ``services/`` and ``web/`` ``*.py``):
+    a LOG CALL is ``<recv>.<level>(...)`` with level in debug/info/warning/warn/
+    error/exception/critical and a receiver whose terminal name contains "log"
+    (``logger``, ``self.logger``, ``logging``, ``log``) or is
+    ``structlog.get_logger()``. A log call is an OFFENDER when, outside any
+    ``utterance_preview(...)``/``utterance_fields(...)`` call, it contains
+
+    - a SLICE of a user-text name (terminal identifier ``message``,
+      ``original_message``, ``user_message``, ``text``, ``utterance``,
+      ``ctx_str``, ``raw``, ``response_message``, ``markdown_text``, e.g.
+      ``message[:50]``, ``self.original_message[:80]``), or
+    - a bare name that the SAME function assigned from such a slice
+      (``preview = text[:120]`` then ``logger.warning(..., preview)``).
+
+    CEILING 0, never raised. Not offenders by construction: slices that are
+    not inside a log call (stored context, display titles), and unsliced
+    interpolation (Arch's second scan found 0 real WARNING+ hits; a new
+    unsliced field belongs through ``utterance_fields`` all the same).
+
+    ALLOW-LIST (each entry needs a reason; empty of sites, the helper module
+    is the only exempt FILE because it implements the slice for the knob).
+    """
+
+    LEVELS = {"debug", "info", "warning", "warn", "error", "exception", "critical"}
+    USER_NAMES = {
+        "message",
+        "original_message",
+        "user_message",
+        "text",
+        "utterance",
+        "ctx_str",
+        "raw",
+        "response_message",
+        "markdown_text",
+    }
+    SAFE_CALLS = {"utterance_preview", "utterance_fields"}
+    ALLOW_FILES = {
+        "services/utils/utterance_log.py": "the helper: implements the knob-gated slice itself",
+    }
+    ALLOW_SITES: dict = {}  # "path:line" -> reason; must stay empty unless a reason is written
+
+    @staticmethod
+    def _term(node):
+        if isinstance(node, ast.Name):
+            return node.id
+        if isinstance(node, ast.Attribute):
+            return node.attr
+        return None
+
+    @classmethod
+    def _is_log_call(cls, node) -> bool:
+        if not (isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)):
+            return False
+        if node.func.attr not in cls.LEVELS:
+            return False
+        recv = node.func.value
+        if isinstance(recv, ast.Call):  # structlog.get_logger().info(...)
+            return cls._term(recv.func) == "get_logger"
+        return "log" in (cls._term(recv) or "").lower()
+
+    @classmethod
+    def _unsafe_walk(cls, node):
+        """Yield nodes under ``node``, not descending into the safe helpers."""
+        stack = [node]
+        while stack:
+            cur = stack.pop()
+            yield cur
+            if isinstance(cur, ast.Call) and cls._term(cur.func) in cls.SAFE_CALLS:
+                continue
+            stack.extend(ast.iter_child_nodes(cur))
+
+    # Calls that pass a string through (the result is still the user's text).
+    PASS_THROUGH = {"str", "repr", "strip", "lstrip", "rstrip", "lower", "upper", "join"}
+
+    @classmethod
+    def _has_user_slice(cls, node, direct_only: bool = False) -> bool:
+        """True when a user-text slice sits under ``node``. With ``direct_only``
+        (assignments) the walk stops at calls other than pass-through string
+        calls: ``pattern_id = await handler(context={"m": message[:100]})`` is a
+        stored context, not a text-valued variable."""
+        stack = [node]
+        while stack:
+            cur = stack.pop()
+            if (
+                isinstance(cur, ast.Subscript)
+                and isinstance(cur.slice, ast.Slice)
+                and cls._term(cur.value) in cls.USER_NAMES
+            ):
+                return True
+            if isinstance(cur, ast.Call):
+                name = cls._term(cur.func)
+                if name in cls.SAFE_CALLS:
+                    continue
+                if direct_only and name not in cls.PASS_THROUGH:
+                    continue
+            stack.extend(ast.iter_child_nodes(cur))
+        return False
+
+    @classmethod
+    def scan_source(cls, src: str):
+        """Return (log_calls_seen, [(lineno, why)]) for one module's source."""
+        tree = ast.parse(src)
+        scopes = [tree] + [
+            n for n in ast.walk(tree) if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
+        ]
+        seen_calls, hits = set(), {}
+        for scope in scopes:
+            sliced_vars = set()
+            for n in ast.walk(scope):
+                targets = []
+                if isinstance(n, ast.Assign):
+                    targets, value = n.targets, n.value
+                elif isinstance(n, ast.AnnAssign) and n.value is not None:
+                    targets, value = [n.target], n.value
+                else:
+                    continue
+                if cls._has_user_slice(value, direct_only=True):
+                    sliced_vars.update(t.id for t in targets if isinstance(t, ast.Name))
+            for n in ast.walk(scope):
+                if not cls._is_log_call(n):
+                    continue
+                seen_calls.add(n.lineno)
+                if cls._has_user_slice(n):
+                    hits[n.lineno] = "slices user text inside a log call"
+                    continue
+                for m in cls._unsafe_walk(n):
+                    if isinstance(m, ast.Name) and m.id in sliced_vars:
+                        hits.setdefault(n.lineno, f"logs {m.id!r}, assigned from a user-text slice")
+        return len(seen_calls), sorted(hits.items())
+
+    @staticmethod
+    def _files():
+        root = Path(__file__).resolve().parents[1]
+        return root, sorted(p for base in ("services", "web") for p in (root / base).rglob("*.py"))
+
+    # --- the scanner itself is pinned on synthetic sources (so zero means zero) ---
+    @pytest.mark.parametrize(
+        "src",
+        [
+            "logger.info('x', message_preview=message[:50])",
+            "self.logger.debug(f'p {message[:50]}')",
+            "logger.warning('x', head=self.original_message[:80])",
+            "logger.warning('x', extra={'raw_preview': text[:200]})",
+            "structlog.get_logger().info('x', p=message[:9])",
+            "def f(text):\n    preview = text[:120]\n    logger.warning('x', p=preview)",
+        ],
+    )
+    def test_scanner_catches_known_shapes(self, src):
+        _, hits = self.scan_source(src)
+        assert hits, src
+
+    @pytest.mark.parametrize(
+        "src",
+        [
+            "logger.info('x', message_preview=utterance_preview(message))",
+            "logger.info('x', **utterance_fields(message))",
+            "logger.info('x', n=len(message))",
+            "title = text[:80]\nitems.append(title)",
+            "logger.info('x', ids=issues[:3])",
+        ],
+    )
+    def test_scanner_passes_safe_shapes(self, src):
+        _, hits = self.scan_source(src)
+        assert not hits, src
+
+    def test_denominator_log_calls_scanned(self):
+        root, files = self._files()
+        assert len(files) > 500, "services/ + web/ scan found too few files to mean anything"
+        total = sum(self.scan_source(p.read_text(encoding="utf-8"))[0] for p in files)
+        assert total > 2000, f"only {total} log calls scanned; the log-call predicate has drifted"
+
+    def test_no_log_call_slices_user_text_ceiling_zero(self):
+        root, files = self._files()
+        offenders = []
+        for p in files:
+            rel = p.relative_to(root).as_posix()
+            if rel in self.ALLOW_FILES:
+                continue
+            for lineno, why in self.scan_source(p.read_text(encoding="utf-8"))[1]:
+                if f"{rel}:{lineno}" not in self.ALLOW_SITES:
+                    offenders.append(f"{rel}:{lineno} {why}")
+        assert not offenders, (
+            "2059: a log call carries a slice of user text. The privacy page promises "
+            "fingerprints only, at EVERY log level. Route it through "
+            "services.utils.utterance_log.utterance_fields(text) (structlog kwargs) or "
+            "utterance_preview(text, limit) (one string). Ceiling 0, never raised. "
+            + "; ".join(offenders)
+        )
+
+    def test_allow_list_is_only_the_helper(self):
+        assert set(self.ALLOW_FILES) == {"services/utils/utterance_log.py"}
+        assert not self.ALLOW_SITES

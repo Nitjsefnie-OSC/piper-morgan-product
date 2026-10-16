@@ -46,6 +46,7 @@ from services.llm.request_key import (
     request_api_key,
 )
 from services.ui_messages.user_friendly_errors import make_error_user_friendly
+from services.utils.utterance_log import utterance_preview
 from web.utils.error_responses import internal_error, validation_error
 from web.utils.llm_key import resolve_user_llm_binding  # #1823 any-provider gate
 
@@ -541,7 +542,7 @@ async def process_intent(
             user_id=user_id,
             session_id=session_id,
             has_request_context=ctx is not None,
-            message_preview=message[:50] if message else None,
+            message_preview=utterance_preview(message) if message else None,
             has_auth_cookie="auth_token" in request.cookies,
         )
 

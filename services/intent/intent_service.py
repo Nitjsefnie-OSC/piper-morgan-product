@@ -16234,7 +16234,7 @@ Add any additional information here.
         if any(sig in response_message for sig in self._GENERIC_CANONICAL_SIGNATURES):
             self.logger.info(
                 "generic_response_signature_fallback",
-                message_prefix=response_message[:80],
+                message_prefix=utterance_preview(response_message, 80),
                 note="Handler should set is_generic_response=True instead",
             )
             return True

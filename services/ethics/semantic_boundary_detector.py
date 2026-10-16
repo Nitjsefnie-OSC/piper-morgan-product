@@ -32,6 +32,8 @@ from typing import Any, Dict, Literal, Optional
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
+from services.utils.utterance_log import utterance_preview
+
 logger = logging.getLogger(__name__)
 
 
@@ -591,7 +593,7 @@ class SemanticBoundaryDetector:
         except json.JSONDecodeError as exc:
             logger.warning(
                 "semantic_detector_json_parse_failure",
-                extra={"error": str(exc), "raw_preview": text[:200]},
+                extra={"error": str(exc), "raw_preview": utterance_preview(text, 200)},
             )
             return REFUSAL_FALLBACK
 

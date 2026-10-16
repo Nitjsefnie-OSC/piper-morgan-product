@@ -7,6 +7,8 @@ import logging
 import re
 from typing import List
 
+from services.utils.utterance_log import utterance_preview
+
 logger = logging.getLogger(__name__)
 
 
@@ -195,7 +197,9 @@ class MarkdownFormatter:
         Returns:
             Tuple of (cleaned_text, list_of_issues)
         """
-        logger.info(f"MARKDOWN DEBUG - Input text (first 500 chars): {markdown_text[:500]}")
+        logger.info(
+            f"MARKDOWN DEBUG - Input text (first 500 chars): {utterance_preview(markdown_text, 500)}"
+        )
 
         issues = MarkdownFormatter.validate_markdown_syntax(markdown_text)
         cleaned = MarkdownFormatter.ensure_standard_format(markdown_text)

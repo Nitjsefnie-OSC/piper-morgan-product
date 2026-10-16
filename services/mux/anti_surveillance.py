@@ -30,6 +30,8 @@ import logging
 import re
 from typing import List, Optional
 
+from services.utils.utterance_log import utterance_preview
+
 logger = logging.getLogger(__name__)
 
 
@@ -92,8 +94,8 @@ def assert_no_surveillance_phrasing(text: str) -> None:
     """
     matched = detect_surveillance_phrasing(text)
     if matched:
-        # Truncate text in log to avoid leaking long content; keep first 120 chars
-        preview = (text[:120] + "...") if len(text) > 120 else text
+        # #2059: the reply text can quote the user; log a fingerprint, not a prefix
+        preview = utterance_preview(text, 120)
         logger.warning(
             "anti_surveillance_violation",
             extra={

@@ -56,6 +56,7 @@ from services.shared_types import (
     WorkflowStatus,
     WorkflowType,
 )
+from services.utils.utterance_log import utterance_preview
 
 logger = structlog.get_logger(__name__)
 
@@ -589,8 +590,8 @@ class Intent:
                 logger.warning(
                     "intent_original_message_diverged",
                     action=self.action,
-                    attribute_head=self.original_message[:80],
-                    context_head=ctx_str[:80],
+                    attribute_head=utterance_preview(self.original_message, 80),
+                    context_head=utterance_preview(ctx_str, 80),
                     repair="normalized_to_attribute",
                 )
             self.bind_original_message(self.original_message)
