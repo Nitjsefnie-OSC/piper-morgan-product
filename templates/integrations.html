@@ -603,7 +603,7 @@
                 <span class="status-dot ${integration.status}"></span>
                 ${integration.status_icon ? `<span class="status-icon-inline" id="status-icon-${integration.name}">${integration.status_icon}</span>` : ''}
                 <span class="status-message ${integration.error ? 'error' : ''}" id="status-${integration.name}">
-                  ${integration.status_message}
+                  ${statusLine(integration)}
                 </span>
               </div>
               ${integration.status_detail ? `
@@ -645,6 +645,27 @@
 
   // #2037: a Test result is stale when the API sets its structured ``stale_reason``
   // (the resolver's stale OAuth grant, ADR-070 B4), never by matching message copy.
+  // #2049: a tested-healthy card says when it was checked, in the viewer's own zone.
+  // `now` is a parameter so tests can fix the clock.
+  function formatCheckedAt(iso, now) {
+    const t = new Date(iso);
+    if (isNaN(t.getTime())) return '';
+    const ref = now instanceof Date ? now : new Date();
+    if (Math.abs(ref.getTime() - t.getTime()) < 60000) return 'just now';
+    const time = t.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    if (t.toDateString() === ref.toDateString()) return time;
+    const day = t.toLocaleDateString([], { month: 'short', day: 'numeric' });
+    return `${day}, ${time}`;
+  }
+
+  function statusLine(integration) {
+    if (integration.status === 'healthy' && integration.last_check) {
+      const when = formatCheckedAt(integration.last_check, new Date());
+      if (when) return `Healthy (checked ${when})`;
+    }
+    return integration.status_message;
+  }
+
   async function testConnection(integrationName) {
     const btn = document.getElementById(`test-btn-${integrationName}`);
     const statusEl = document.getElementById(`status-${integrationName}`);
