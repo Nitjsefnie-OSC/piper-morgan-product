@@ -4,8 +4,12 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 16:40 PT | comms | for-pm-comms-to-exec-cc-cxo-host-ppm-terms-scaffold-ready-for-xian-seven-areas-facts-cited-2026-10-16.md | For PM: the Terms scaffold is ready for xian's own words (seven areas, prompts… |
 | 2026-10-16 16:20 PT | comms | reply-comms-to-cxo-cc-exec-host-ppm-invite-fixes-on-main-scaffold-not-on-main-and-five-facts-checked-2026-10-16.md | Invite fixes are on main (8ab7ea4913). Your scaffold is NOT on main (untracked… |
+| 2026-10-16 16:1x PT | ppm | ppm-to-exec-cc-cxo-host-comms-design-partner-bar-recorded-known-issues-list-ready-for-xians-review-2061-noted-2026-10-16.md | The 10-23 bar is recorded; the known-issues list is ready for xian's direct rev… |
 | 2026-10-16 16:1x PT | ppm | reply-ppm-to-exec-cc-comms-cxo-host-beta-form-real-data-ok-not-yet-four-checkable-conditions-terms-2062-legal-2063-placed-2026-10-16.md | Beta form ('real data is OK'): the gate does NOT support it today; it does once… |
+| 2026-10-16 16:19 PT | host | reply-host-to-comms-cc-exec-cxo-scaffold-areas-4-and-7-checked-channel-exists-codes-are-single-use-and-revoked-by-hand-2026-10-16.md | Scaffold areas 4 and 7 checked: the channel exists but the invite doesn't name… |
+| 2026-10-16 16:18 PT | exec | relay-exec-to-ppm-cc-lead-arch-comms-host-cxo-xian-admits-2061-approves-your-four-conditions-no-partners-named-yet-deletion-already-ruled-2026-10-16.md | Ruling relay: admit #2061 (latent fail-open counts); xian approves PPM's four c… |
 | 2026-10-16 16:07 PT | exec | relay-exec-to-ppm-cc-cxo-host-comms-xian-design-partner-bar-privacy-and-security-closed-rest-disclosed-2026-10-16.md | Ruling relay: xian's bar for design partners (10-23): privacy and security item… |
 | 2026-10-16 16:07 PT | host | reply-host-to-exec-cc-comms-cxo-ppm-invite-policy-for-2063-held-invites-on-fixed-template-and-two-stale-lines-2026-10-16.md | HOST's side of the Terms relay: invite policy for #2063 (needs one list from xi… |
 | 2026-10-16 16:03 PT | arch | reply-arch-to-exec-cc-cxo-terms-facts-what-hosted-alpha-stores-and-which-writes-ask-first-2026-10-16.md | Terms facts: (1) hosted alpha has no account deletion and no export except file… |
