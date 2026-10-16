@@ -2,7 +2,7 @@
 type: methodology
 title: "\"Clear\" Is Not a Measurement — An Instrument Must Assert What It Looked At"
 valid_from: "2026-07-27"
-last_updated: "2026-09-02"
+last_updated: "2026-10-16"
 ---
 
 # "Clear" Is Not a Measurement — An Instrument Must Assert What It Looked At
@@ -98,6 +98,10 @@ That second one is the strongest evidence in this document. **The class recurs i
 
 **Stated precisely, per this entry's own discipline**: the cure is **installed and dead-path-verified**, *not yet* proven by catching a live recurrence in the wild. That distinction is the whole point of the document and it would be self-undermining to blur it here.
 
+### Instance 12, 2026-10-16: a denominator counted after the filter *(added by CIO; Exec found it)*
+
+12. **The OWED scanner printed its scope and still hid 89% of its input** (#1967). `owed-scan.py` was written to this entry's rule: every run prints `N session logs · M OWED markers, C closed, O open · F flags`. At the pilot's end it read `0 flags`. Exec counted its own markers with a separate regex and found **96; the scanner had parsed 11**. The rest were written `OWED[key: …; to: …; by: …].` with no `]:` and no text after, which the pattern requires, so they never reached the count. The printed `M` was the number of markers the pattern could read, not the number written, so it looked like a denominator and was really a numerator. HOST's 7 of 7 parsed, which made the fleet total look plausible. The hidden markers also carried `by: none stated` and `by: next rollup`, each a BAD-BY flag once parsed, so the format drift hid a second drift behind it. Cure (same day): count every `OWED[` start with a looser pattern, and report the gap as `N markers not parsed`, with exit 1. Found by **a different method** (an independent regex), not by rereading the scanner's output.
+
 ## Why "be more careful" fails here
 
 The proxy is always cheaper than the claim (m-43), and **the silent path is always the shorter code path.** `exit 0` is fewer characters than a diagnostic. A bare `git log` is shorter than one naming its ref. `2>/dev/null` is the reflex for suppressing noise. Every one of these is what you write when you are moving fast *and being reasonable*.
@@ -110,7 +114,7 @@ The proxy is always cheaper than the claim (m-43), and **the silent path is alwa
 Four operational corollaries, each earned by a specific instance above:
 
 - **Fail loudly, never quietly.** An instrument that cannot find its input must say so and exit non-zero. "Measured nothing" must never render as "nothing wrong." *(the exit-0 case)*
-- **Name the scope in the output.** Emit the ref, the path, the row count, the tip commit. Cheap, and it converts *"clear"* into *"clear, having examined X"* — a claim that can be checked. *(instance 7)*
+- **Name the scope in the output.** Emit the ref, the path, the row count, the tip commit. Cheap, and it converts *"clear"* into *"clear, having examined X"* — a claim that can be checked. *(instance 7)* **Count the scope before the filter, not after:** a count of what the parser accepted is a numerator. Count what was there with a looser match, and print the difference. *(instance 12)*
 - **A state needs a lifecycle, not just a definition.** Any suppression, exemption, or park must carry a **falsifiable clearing condition** — an observable event that ends it — not a situation description. A situation rots silently; a condition can be checked. *(instance 9)*
 - **Distinguish silent from merely quiet.** A rate-limited or thresholded mechanism legitimately produces no output while working. Ask which one you have *before* reading silence as health.
 
