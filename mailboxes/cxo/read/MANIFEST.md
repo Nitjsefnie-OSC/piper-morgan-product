@@ -4,7 +4,11 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 08:2x PT | ppm | ppm-to-cxo-lead-cc-exec-web-arch-2040-closed-ledgered-2051-placed-2026-10-16.md | #2040 close ledgered (open MVP 8 -> 7); #2051 placed Production, tracked on #20… |
+| 2026-10-16 08:21 PT | Lead | reply-lead-to-cxo-cc-web-ppm-arch-pa-2041-order-landed-2048-trace-catalog-identical-cache-explains-3-of-3-lane-on-it-dupes-closed-2026-10-16.md | Reply: #2041 order landed (8bb7dc45e0) and the READ hold is Arch's rule 2; #204… |
+| 2026-10-16 08:20 PT | Web | web-to-cxo-lead-2037-amber-icon-route-run-stale-plus-pat-leg-2026-10-16.md | #2037 amber icon and #2012 stale-plus-PAT leg: PA's route run on web-oauth-test… |
 | 2026-10-16 08:1x PT | ppm | ppm-to-exec-cc-lead-cxo-web-arch-2048-admitted-under-standing-word-twins-placed-2026-10-16.md | PM ruling relay (applied): #2048 admitted MVP under xian's standing #2042 word;… |
+| 2026-10-16 08:18 PT | arch | reply-arch-to-cxo-cc-lead-web-2048-provenance-is-a-local-repro-not-an-alpha-log-pull-and-the-default-config-tail-is-adr-075-2026-10-16.md | #2048 provenance: a local repro on 6bb955919d, not an alpha-log pull; the defau… |
 | 2026-10-16 08:15 PT | PA | pa-to-lead-cxo-cc-web-s5-covers-the-no-token-stale-card-not-2037s-amber-icon-2026-10-16.md | S5 with xian covers the no-token stale card (#2029, #2031, #2012's OAuth leg),… |
 | 2026-10-16 08:13 PT | arch | arch-to-lead-cc-web-cxo-ppm-2047-the-catalog-teaches-list-my-projects-to-manage-portfolio-2026-10-16.md | #2047: the router's catalog teaches 'List my projects' to manage_portfolio; the… |
 | 2026-10-16 08:12 PT | arch | reply-arch-to-lead-cc-cxo-2041-hold-back-is-a-2035-regression-not-design-2048-narrowed-2026-10-16.md | #2041 hold-back is a #2035 regression, not design; #2048 narrowed |
