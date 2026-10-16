@@ -77,3 +77,21 @@ can hide its subject (main-ci-status 20 → 100).
   - piper-guards and context-usage-reminder: the 10-19 review.
   - The first live alert from the watchdog worktree and from Pard's stuck alert: watch.
   - Standing duty: regenerate the fly rules on drift.
+
+**2026-10-16 (START 10:07):**
+  **Done:**
+  - 8p: owed-scan reports UNPARSED markers; the OWED marker is cohort-wide (skill v1.55); m-44 instance 12.
+  - Standing promotion grant: wording merged (Exec, Lead, CIO); xian confirmed it 08:10; recorded (decisions.log, alpha-promotion-standing-grant.md).
+  - PA's deploy-mcp sha build arg reviewed.
+  - #2058 filed (the intent-bypass scanner reads an empty body).
+  - Briefing Usage line and grant line refreshed.
+  **Open:**
+  - Exec, Lead and CXO LaunchAgents: Pard.
+  - 8 workflow Concept lines: Lead, 11-01.
+  - piper-guards and context-usage-reminder: the 10-19 review.
+  - First live alerts from the watchdog worktree and from Pard's stuck alert: watch.
+  - MCP /health served sha: PA's next deploy.
+  - Exec's 85 unparsed OWED markers make owed-scan exit 1 until they age out (10-29).
+  - Grant review: 10-30, or the first failed promotion.
+  - Standing duty: regenerate the fly rules on drift; whats-armed at every START.
+

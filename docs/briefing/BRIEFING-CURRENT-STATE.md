@@ -31,7 +31,8 @@ log, never here. Bump `last_updated` to the newest line's date, or CI fails. Ski
   (promoted 10-16 07:45 by Lead on xian's word via Janus, run 38918341961; before it 6f2916d10f since 10-15 15:35). Carries the 10-15 landings
   (#2024, #2029, #2008 formats, #2031, #2030, #2033, #2037, #2035, #2039, #2040, #2041, #2044) and #2043; no migration in the range. No next
   promotion pending. Served checks: PM test card v53 (`dev/active/pm-test-card.md`, mirror `claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi`).
-  A standing promotion grant is drafted (Exec/CIO/Lead via Janus) and takes effect only when xian confirms it. `origin/main` builds; the droplet
+  *(CIO, 10-16 10:1x:)* the **standing promotion grant is in force** since xian confirmed it 10-16 08:10 (decisions.log 10-16;
+  `docs/internal/operations/alpha-promotion-standing-grant.md`): Lead promotes when Step 0 is READY, no new migration, 07:00-21:00 PT, two a day. `origin/main` builds; the droplet
   and `origin/production` are gone (09-29).
 - **Version** *(CIO, 2026-10-08, `git tag`)*: latest tag **v0.8.14.0** ("On Your Clock", 09-23). 0.9.0 is
   reserved for beta.
@@ -49,9 +50,9 @@ log, never here. Bump `last_updated` to the newest line's date, or CI fails. Ski
   (#2021 lifts), #2023 corpus rows first. Pacing: normal from 10-16 (run-hot ended 10-15 22:00).
 - **PM's open asks** *(Exec, 2026-10-09 06:4x PDT)*: on Exec's attention rollup at
   `claude.ai/artifact/719UZ4h1NELjEwWZbDCceT` (its own header line carries the current version; do not pin one here, it was v90 at 04:2x and v95 by 06:4x). Do not copy the list here: it goes stale within hours.
-- **Usage** *(CIO, 2026-10-15 10:1x PDT, last row of `dev/heartbeats/usage-per-account.tsv`, read 09:23)*: the pipermorgan.ai
-  weekly meter is at **77%** and resets **10-15 22:00 PDT** (05:00Z). The stop line is **95%** of the weekly meter (PM-approved 10-06).
-  xian's run-hot window also ends Thu 22:00.
+- **Usage** *(CIO, 2026-10-16 10:1x PDT, last row of `dev/heartbeats/usage-per-account.tsv`, read 09:23)*: the pipermorgan.ai
+  weekly meter is at **5%** after the 10-15 22:00 reset; the next reset is **10-22 22:00 PDT** (10-23 05:00Z). The stop line is **95%**
+  of the weekly meter (PM-approved 10-06). Normal pacing since 10-16.
 - **Mail** *(CIO, 2026-10-15)*: v3 (`scripts/mail-send.sh`) for everyone. **Mail v4 pilot** (exec, cio and lead)
   runs through `scripts/mail4.py` in the private `piper-morgan-mail` repo; see
   `docs/internal/operations/mail-v4-pilot.md`. HOST and the other seats aren't in v4, and a v4 send to them is refused. No mail to PM:
