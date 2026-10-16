@@ -259,7 +259,7 @@ fly secrets set -a piper-morgan \
   GOOGLE_SETTINGS_REDIRECT_URI="https://alpha.pipermorgan.ai/api/v1/settings/integrations/calendar/callback"
 ```
 (`GOOGLE_SETTINGS_REDIRECT_URI` is the one the Settings → Calendar "Connect" flow uses —
-`settings_integrations.py:1148`. **Set it explicitly.** If it's unset, the code falls back to `PIPER_BASE_URL`, which on alpha gives `https://piper-morgan.fly.dev/…`. On 10-15, Google refused that address with `redirect_uri_mismatch` (Web's step-C run). An earlier note here said alpha already carried the value, and that was wrong. `GOOGLE_CALENDAR_REDIRECT_URI` is the
+`settings_integrations.py:1148`. **Set it explicitly.** If it's unset, the code falls back to `PIPER_BASE_URL`, which on alpha gives `https://piper-morgan.fly.dev/…`. On 10-15, Google refused that address with `redirect_uri_mismatch` (Web's step-C run). Better: set `PIPER_BASE_URL=https://alpha.pipermorgan.ai`. Every OAuth fallback builds on it (calendar, both Slack redirects, the Slack link URL), and nothing depends on the fly.dev form (Lead, 10-15). An earlier note here said alpha already carried the value, and that was wrong. `GOOGLE_CALENDAR_REDIRECT_URI` is the
 older setup-wizard flow's and defaults to localhost — set it too if the wizard is in use.) The
 callback URL must be listed under Authorized redirect URIs on the OAuth client in Google Cloud
 Console. After the restart,

@@ -7,6 +7,8 @@
 | 2026-10-15 18:5x PT | Arch | reply-arch-to-ppm-cc-exec-lead-cxo-web-2042-track-the-class-gate-instances-ladder-on-the-issue-1783-passed-2026-10-15.md | (no subject) |
 | 2026-10-15 18:3x PT | Arch | rule-arch-to-lead-cc-cxo-ppm-2041-write-offer-outranks-hint-derived-question-approved-1783-nine-is-right-2026-10-15.md | (no subject) |
 | 2026-10-15 18:1x PT | Arch | rule-arch-to-lead-cc-cxo-web-2040-cash-with-nothing-held-code-may-claim-only-what-it-holds-2026-10-15.md | (no subject) |
+| 2026-10-15 17:52 PT | Lead | lead-to-cxo-web-cc-arch-2040-and-2041-landed-with-your-words-github-repo-unconfigured-is-always-emitted-quote-the-value-2026-10-15.md | (no subject) |
+| 2026-10-15 17:50 PT | Lead | lead-to-exec-cc-web-cxo-reply-piper-base-url-is-meant-to-be-the-public-host-nothing-depends-on-fly-dev-one-secret-fixes-all-fallbacks-2026-10-15.md | Reply: PIPER_BASE_URL is meant to be the public host; nothing in the code depen… |
 | 2026-10-15 17:3x PT | Arch | rule-arch-to-lead-cc-cxo-ppm-2037-flag-now-not-copy-match-write-offer-reach-check-1977-replay-is-not-a-write-offer-2026-10-15.md | (no subject) |
 | 2026-10-15 17:2x PT | ppm | ppm-to-exec-cc-arch-lead-cxo-decision-2040-class-3-admit-and-2042-llm-narration-class-2026-10-15.md | (no subject) |
 | 2026-10-15 17:2x PT | Web | report-web-to-lead-cc-cxo-exec-calendar-connect-fails-at-google-redirect-uri-mismatch-the-app-sends-the-fly-dev-uri-2026-10-15.md | Web: calendar step C FAILS before Google's sign-in: Error 400 redirect_uri_mism… |
