@@ -14,8 +14,9 @@
 #   1. Alpha PROMOTES staging's exact image and never rebuilds from a tag, so the sha that was
 #      smoke-driven is the sha testers get.
 #   2. TWO tokens, one per app -- never one scoped to both. Alpha's lives only in a GitHub
-#      environment with a required reviewer, so a push to main cannot reach testers even through a
-#      workflow edit. The guarantee is enforced by GitHub, not by anyone's care.
+#      environment (reviewer step removed 10-13; the Tests gate on the dispatch is the guard), so a
+#      push to main cannot reach testers even through a workflow edit: the staging job holds no
+#      alpha token. The guarantee is enforced by GitHub, not by anyone's care.
 #   3. Staging Redis gates the PROMOTION, not the staging deploy. A smoke drive against a staging
 #      that lacks alpha's Redis measures a different system.
 #
