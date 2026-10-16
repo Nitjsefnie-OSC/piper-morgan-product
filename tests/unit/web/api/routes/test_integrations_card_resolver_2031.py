@@ -136,14 +136,17 @@ async def test_a_stale_binding_never_renders_not_configured(credential):
 async def test_own_token_without_a_stale_grant_keeps_the_configured_path(credential):
     """Outside the four states: the user's own token with no stale grant (including
     after Disconnect, whose UNBOUND row maps to CONNECT_REQUIRED) is configured, and the
-    cached Test result / "Click 'Test'" path governs as before. No re-authorize line."""
+    cached Test result / unchecked-card path governs as before. No re-authorize line."""
     with patch.object(integrations, "_get_health_monitor") as monitor:
         monitor.return_value.get_component_health.return_value = None
         status, probe = await _card(credential)
-    assert status.status == "unknown"
-    assert status.status_message == "Click 'Test' to check connection"
+    # #2044 (CXO): the configured-but-unchecked card reads "Connected" with the
+    # "Not checked yet. Press Test." line; "unknown" never reaches a configured card.
+    assert status.status == "connected"
+    assert status.status_message == "Connected"
+    assert status.status_detail == "Not checked yet. Press Test."
     assert status.can_test is True and status.show_test is True
-    assert status.status_detail is None and status.action is None
+    assert status.status_icon is None and status.action is None  # no re-authorize glyph/action
     probe.assert_not_awaited()
 
 
