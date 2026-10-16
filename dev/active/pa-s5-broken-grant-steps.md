@@ -18,7 +18,7 @@ GitHub → Settings → Applications → **Authorized OAuth Apps** → **Piper M
 1. Run the read snippet again. **Pass**: `degraded` lists github with `stale_token`; `today`, `slack` and
    `markdown` say GitHub couldn't be read and to reconnect. **No** "no open issues" or ✅ for GitHub.
 2. Settings → Integration Health → GitHub → **Test** (on the next build, look at the card first: **Pass** = ⚠️
-   "Needs reconnecting", "GitHub no longer accepts your connection.", a **Reconnect** button, no Test button
+   "Needs reconnecting", "GitHub no longer accepts your connection.", a **Reconnect** button, no Test button (if it says ⚠️ "Connected via your personal token" instead, your account also holds a PAT: that covers #2037's amber icon, so screenshot it)
    (#2031). Never "Not configured" or "Connected"). On `6f2916d10f`: **Pass**: it fails, and says to reconnect. (On 10-14 it
    said "connection successful".) CXO judges the wording.
 3. Open Settings → GitHub (`/settings/integrations/github`; from 6bb955919d `/settings/github` redirects there, #2039) and note what it says. **Depends on the build** (check alpha `/health`):
