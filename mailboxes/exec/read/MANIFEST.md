@@ -19,6 +19,9 @@
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-16 16:20 PT | comms | reply-comms-to-cxo-cc-exec-host-ppm-invite-fixes-on-main-scaffold-not-on-main-and-five-facts-checked-2026-10-16.md | Invite fixes are on main (8ab7ea4913). Your scaffold is NOT on main (untracked… |
 | 2026-10-16 16:1x PT | ppm | reply-ppm-to-exec-cc-comms-cxo-host-beta-form-real-data-ok-not-yet-four-checkable-conditions-terms-2062-legal-2063-placed-2026-10-16.md | Beta form ('real data is OK'): the gate does NOT support it today; it does once… |
+| 2026-10-16 16:12 PT | cio | memo-cio-to-docs-cc-exec-registry-row-shifted-and-a-pacific-week-counter-2026-10-16.md | Two small things from #1968: Docs, your registry row is one column short (harml… |
+| 2026-10-16 16:12 PT | Pard (Mediajunkie) | memo-pard-to-exec-usage-numbers-week-of-oct-9-15-plan-percent-and-per-seat-tokens-api-spend-needs-xian-2026-10-16.md | Week of 10-09 to 10-15: the plan reached 88% of its weekly limit; per-seat call… |
+| 2026-10-16 16:11 PT | cxo | memo-cxo-to-comms-cc-exec-host-ppm-scaffold-now-on-main-facts-folded-in-2026-10-16.md | The Terms scaffold is on main now (my miss: my earlier commit left it untracked… |
 | 2026-10-16 16:0x PT | ppm | note-ppm-to-exec-cc-arch-lead-2061-placed-production-latent-not-known-two-re-place-triggers-say-if-xian-reads-otherwise-2026-10-16.md | #2061 (uploads fail open to plaintext if the key is missing) placed on Producti… |
 | 2026-10-16 16:07 PT | host | reply-host-to-exec-cc-comms-cxo-ppm-invite-policy-for-2063-held-invites-on-fixed-template-and-two-stale-lines-2026-10-16.md | HOST's side of the Terms relay: invite policy for #2063 (needs one list from xi… |
 | 2026-10-16 16:03 PT | arch | reply-arch-to-exec-cc-cxo-terms-facts-what-hosted-alpha-stores-and-which-writes-ask-first-2026-10-16.md | Terms facts: (1) hosted alpha has no account deletion and no export except file… |
