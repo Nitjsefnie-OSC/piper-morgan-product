@@ -13,7 +13,7 @@
   - Italic aside paragraphs are a PM device; leave them (xian 10-12).
   - Wed 10-14 Ship #064 "Code Decides Permission": PUBLISHED and live-checked 10-14 (title, 0 semicolons, 5 links 200, hero loads). Web also fixed Ship #040–#042 image links (checked against sources 10-14).
 - **Waiting on PM** (all on Exec's rollup):
-  - **/privacy Section C vs code (10-16)**: 4 contradicted sentences + 1 telemetry question. Auto-delete + password-hash wording sent to Exec for PM's OK; uploads, logs (issue 2059) and telemetry wait on Lead's facts. Target: right before design partners 10-23. Table in the 10-16 log.
+  - **/privacy Section C vs code (10-16)**: 4 contradicted sentences + 1 telemetry question. Auto-delete + password-hash wording sent to Exec for PM's OK; uploads, logs (2059) and telemetry (2060) are MVP privacy items in Lead's lane; if not live on alpha by 10-23, propose now/goal/gap wording. Uploads wait on xian's two prod reads. Target: right before design partners 10-23. Table in the 10-16 log.
   - privacy Section C: LIVE 10-13 ~19:0x (website f4f0d53). Comms fact-checked the rendered page: Section C text identical to the PM-approved memo (390 words), 13 bold runs as marked, opening sentence widened, mailto present. Closed.
   - the 12-beat slate (Sep 7 – Oct 13), `docs/internal/planning/comms/narrative-slate-2026-09-07-to-10-13.md`: keep 12 or merge to 8, and which to drop. Ledger 37/37 in the 10-14 log.
   - Sat 10-17 "Convergent Claims": PUBLISH-READY to Docs 10-15 (PM-approved fixes, audit clean). Sun 10-18 "Measure the Start": fact findings given 10-14, waiting on PM's rewrite. Next: Sat live check.
