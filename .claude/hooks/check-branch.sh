@@ -21,6 +21,11 @@ if [ -z "$CURRENT_BRANCH" ]; then
     exit 0
 fi
 
+# Stamp check on today's session-log headings (xian 2026-10-16 via Exec; warn only, never blocks):
+# flags an HH:Mx form or a heading time ahead of the clock. scripts/stamp_check.py has the rules.
+TOP=$(git rev-parse --show-toplevel 2>/dev/null)
+[ -f "$TOP/scripts/stamp_check.py" ] && (cd "$TOP" && python3 scripts/stamp_check.py --log-staged 2>/dev/null)
+
 if [ "$CURRENT_BRANCH" = "main" ]; then
     exit 0
 fi

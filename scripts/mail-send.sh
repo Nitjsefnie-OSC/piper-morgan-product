@@ -107,6 +107,17 @@ then
     exit 1
 fi
 
+# --- STAMP GUARD at the doorway (xian 2026-10-16, "Yes, date-check seems sound", via Exec): a memo's
+# `date:` must be a reading of the clock. 7 of 10 roles wrote guessed times in the week of 10-09; the
+# prose rule (duty-cycle-tick v1.50) didn't hold. Blocks a time >5 min ahead of now or an HH:Mx form
+# >10 min from now; warns on a near HH:Mx, a time >30 min behind, or a past date-only stamp. Only NEW
+# memos are checked: a file whose content is already on origin/main (a move to read/) is skipped.
+# MAIL_STAMP_CHECK=warn turns blocks into warnings for a memo deliberately stamped another time.
+if ! (cd "$REPO" && python3 "$REPO/scripts/stamp_check.py" --mail "$@"); then
+    echo "mail-send: ⛔ REFUSING — a memo's date: above isn't a clock reading. Run TZ=America/Los_Angeles date, fix the date: line, re-run. Nothing was sent." >&2
+    exit 1
+fi
+
 # Gravestoned-recipient guard: mailboxes/pard/ was ruled an orphan by PM 2026-09-12 (only PM team
 # members have mailboxes in this repo) — Pard's real inbox is ~/Development/mediajunkie/docs/mail/,
 # an external repo this script does not and should not reach into (see
