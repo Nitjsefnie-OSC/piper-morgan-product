@@ -298,6 +298,16 @@ class _RailOutcome:
     armed: bool = False
 
 
+def _is_carried_write_offer(record: Dict[str, Any]) -> bool:
+    """#2041: the #846 record is a #2035 yes/no write offer (keyed off the
+    record's kind, never its copy), which a READ sibling on the unit-4 path
+    carries instead of pausing on."""
+    from services.intent_service.add_project_clarify import ADD_PROJECT_OFFER_KIND
+
+    pending = record.get("pending_action")
+    return isinstance(pending, dict) and pending.get("kind") == ADD_PROJECT_OFFER_KIND
+
+
 def _compose_deferred_sibling_line(deferred: List[Tuple[Intent, str]]) -> str:
     """The one sentence rule 2 owes the user: what was NOT run, said out loud.
 
@@ -16912,6 +16922,24 @@ Add any additional information here.
             # the dispatch. The #846 store is one-slot, so continuing past an
             # arm would CLOBBER it — stopping here is what makes the reply's
             # promise true.
+            # #2041 (Arch's ruling, issuecomment-6218486020): a #2035 write
+            # offer armed by a READ sibling is NOT a pause. It is popped here
+            # and carried on the part (as the orchestrator carries it), so
+            # every READ sibling runs; it is asked last and re-armed after the
+            # loop, unless a later sibling pauses (pause wins). Keyed off the
+            # record's own kind, never its copy.
+            carried_offer = None
+            if (
+                not outcome.armed
+                and after is not None
+                and after is not before
+                and _is_carried_write_offer(after)
+                and (_is_floor_final(intent) or rail[intent.action].effect == EffectClass.READ)
+            ):
+                carried_offer = self.workflow_offer_service.get_and_clear_pending_offer(
+                    session_id, user_id=user_id
+                )
+                after = None
             if outcome.armed or (after is not None and after is not before):
                 armed_result = outcome.result
                 deferred = [(i, s) for i, s in run_order[position + 1 :]] + deferred
@@ -16922,8 +16950,22 @@ Add any additional information here.
                     response=outcome.result.message or "",
                     intent_data=outcome.result.intent_data or {},
                     success=True,
+                    write_offer=carried_offer,
                 )
             )
+
+        # #2041: strip every carried question from its sibling's text (exact
+        # match; a drifted one arms nothing, logged by the shared helper) and
+        # pick the first. A pause wins: the carried offer is dropped.
+        carried_write_offer = self.intent_orchestrator._pick_armed_write_offer(parts)
+        if carried_write_offer is not None and armed_result is not None:
+            self.logger.info(
+                "multi_intent_offer_dropped",
+                session_id=session_id,
+                offer=carried_write_offer.get("workflow_type"),
+                reason="pause_wins",
+            )
+            carried_write_offer = None
 
         # ── Reply composition. The read parts are joined by the orchestrator's
         # OWN aggregator (reused directly — it takes IntentExecutionResults and
@@ -16932,7 +16974,11 @@ Add any additional information here.
         body = ""
         if parts:
             body = self.intent_orchestrator._aggregate_messages(
-                OrchestratedResponse(results=parts, greeting_prefix=multi_result.has_greeting)
+                OrchestratedResponse(
+                    results=parts,
+                    greeting_prefix=multi_result.has_greeting,
+                    armed_write_offer=carried_write_offer,
+                )
             )
         if armed_result is not None and armed_result.message:
             body = f"{body}\n\n{armed_result.message}" if body else armed_result.message
@@ -16988,6 +17034,12 @@ Add any additional information here.
             # An armed turn returns DIRECTLY — _apply_soft_offer would
             # overwrite the pending action in the same one-slot store.
             return result
+        if carried_write_offer is not None:
+            # #2041: armed AFTER the loop, the same record; no pause armed the
+            # slot, and #1770's guard in _apply_soft_offer now keeps it.
+            self.workflow_offer_service.set_pending_offer(
+                session_id, carried_write_offer, user_id=user_id
+            )
         return self._apply_soft_offer(
             result,
             message,
