@@ -77,6 +77,7 @@ Week 4+: quick weekly check-ins if you're up for them
 One thing we care about more than anything: **if Piper ever tells you something that
 turns out not to be true — about your data, your tools, or what it just did — that's
 our top-priority bug class.** Polite lies count double. Please report those first.
+Reply to this email or write to alpha@pipermorgan.ai.
 
 **STILL INTERESTED?**
 
