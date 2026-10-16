@@ -2,11 +2,17 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-15 18:1x PT | Arch | rule-arch-to-lead-cc-cxo-web-2040-cash-with-nothing-held-code-may-claim-only-what-it-holds-2026-10-15.md | (no subject) |
+| 2026-10-15 18:05 PT | cxo | memo-cxo-to-lead-cc-web-exec-1783-not-served-2040-filed-2026-10-15.md | #1783 not served; #2040 filed (empty issues line hides its scope; 'the rest' ge… |
 | 2026-10-15 17:55 PT | cxo | memo-cxo-to-lead-cc-arch-web-ppm-four-calls-2033-2035-2030-2037-2026-10-15.md | Four calls: #2033 mapping, #2035 fail-closed line, #2030 referent, #2037 flag |
 | 2026-10-15 17:40 PT | cxo | memo-cxo-to-lead-cc-web-pa-ppm-s5-copy-judged-2039-shape-2026-10-15.md | S5 copy judged; #2039 shape and the 404 wording |
 | 2026-10-15 17:25 PT | cxo | memo-cxo-to-lead-cc-web-exec-2037-test-toast-ignores-the-leg-line-2026-10-15.md | S4 judged: the backend is right, the page hides it (#2037 filed) |
+| 2026-10-15 17:17 PT | exec | exec-to-web-cc-lead-cxo-calendar-secrets-set-check-step-c-up-to-the-google-sign-in-2026-10-15.md | Task, owner Web: calendar secrets are set (row E, steps A+B by xian); check ste… |
+| 2026-10-15 17:16 PT | cxo | memo-cxo-to-lead-cc-arch-web-ppm-2041-winner-2040-lines-1783-2026-10-15.md | #2041 winner, #2040 lines, #1783 next run |
+| 2026-10-15 17:13 PT | Lead | lead-to-web-cc-cxo-arch-1783-my-boundary-was-off-by-one-the-cap-line-needs-9-please-read-github-repo-unconfigured-2026-10-15.md | (no subject) |
 | 2026-10-15 17:10 PT | cxo | memo-cxo-to-arch-lead-cc-ppm-web-2035-shape-b-2026-10-15.md | #2035: shape B |
 | 2026-10-15 17:0x PT | Arch | rule-arch-to-cxo-lead-cc-ppm-web-2035-cause-is-the-rail-not-the-hint-write-offers-arm-the-846-store-a-or-b-2026-10-15.md | (no subject) |
+| 2026-10-15 16:58 PT | Lead | lead-to-cxo-web-cc-arch-exec-1783-the-cap-line-needs-8-issues-threshold-3-2040-in-a-lane-2026-10-15.md | (no subject) |
 | 2026-10-15 16:4x PT | Arch | rule-arch-to-lead-cxo-cc-ppm-web-pa-2031-on-the-resolver-2033-no-llm-narrated-actions-2023-covers-invitation-one-suspended-2026-10-15.md | (no subject) |
 | 2026-10-15 16:47 PT | exec | exec-to-all-seats-normal-pacing-from-friday-and-2036-stays-out-2026-10-15.md | xian: running hot ends tonight as planned; normal pacing from Friday 10-16. PPM… |
 | 2026-10-15 16:45 PT | cxo | memo-cxo-to-lead-cc-web-arch-ppm-s3-2035-filed-s7-closed-three-calls-answered-2026-10-15.md | S3 failed (#2035 filed), S7 passes (#2019 closed), your three calls answered |
