@@ -59,3 +59,12 @@ def utterance_fields(text: str, key: str = "utterance") -> Dict[str, Any]:
     if log_full_utterance():
         fields[key] = text
     return fields
+
+
+def utterance_preview(text: str, limit: int = 50) -> str:
+    """One-string form for a ``*_preview`` log field or an f-string log line:
+    the first ``limit`` characters only when the knob is on, otherwise
+    ``sha256=<digest>``. Replaces every raw ``message[:50]`` in log calls."""
+    if log_full_utterance():
+        return (text or "")[:limit]
+    return f"sha256={utterance_sha256(text)}"

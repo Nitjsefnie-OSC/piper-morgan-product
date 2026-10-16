@@ -72,6 +72,7 @@ from services.trust.trust_computation_service import TrustComputationService
 from services.ui_messages.user_friendly_errors import UserFriendlyErrorService
 from services.utils.text_sanitation import display_title
 from services.utils.utterance_log import utterance_fields as _utterance_fields
+from services.utils.utterance_log import utterance_preview
 
 
 class _RepoRouteKwargs(TypedDict, total=False):
@@ -930,7 +931,7 @@ class IntentService:
             self.logger.debug(
                 "Conversation turn saved",
                 session_id=session_id,
-                message_preview=user_message[:50] if user_message else None,
+                message_preview=utterance_preview(user_message) if user_message else None,
             )
         except Exception as e:  # silent-ok: #1423 — response delivery must not fail on persistence loss, but the loss is an ERROR (resumed sessions lose this turn's history), logged with traceback
             self.logger.error(

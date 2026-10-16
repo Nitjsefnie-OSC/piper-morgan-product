@@ -20,6 +20,7 @@ import re
 from typing import List, Optional, Tuple
 
 from services.standup.preference_models import ExtractedPreference, PreferenceSource, PreferenceType
+from services.utils.utterance_log import utterance_preview
 
 logger = logging.getLogger(__name__)
 
@@ -141,7 +142,9 @@ class PreferenceExtractor:
         preferences.extend(self._extract_notifications(message_lower, is_temporary))
 
         if preferences:
-            logger.info(f"Extracted {len(preferences)} preferences from: '{message[:50]}...'")
+            logger.info(
+                f"Extracted {len(preferences)} preferences from: '{utterance_preview(message)}'"
+            )
             for pref in preferences:
                 logger.debug(f"  - {pref.preference_type.value}: {pref.key}={pref.value}")
 

@@ -5,6 +5,7 @@ from typing import List, Optional, Tuple
 
 from services.domain.models import Intent
 from services.shared_types import IntentCategory
+from services.utils.utterance_log import utterance_preview
 
 
 @dataclass
@@ -1583,7 +1584,7 @@ class PreClassifier:
 
             structlog.get_logger().info(
                 "preclassify_residue_declined",
-                message_preview=message[:50],
+                message_preview=utterance_preview(message),
                 dropped=intent.action,
                 pattern_list=list_name,
                 residue=residue_clause,
@@ -2803,7 +2804,7 @@ class PreClassifier:
         ):
             logger.info(
                 "multi_intent_pleasantry_with_residue_declined",
-                message_preview=message[:50],
+                message_preview=utterance_preview(message),
                 dropped=[i.action for i in intents],
             )
             intents = []
@@ -2823,7 +2824,7 @@ class PreClassifier:
                 residue_clause, _claim_clause_texts = _residue_detail
                 logger.info(
                     "multi_intent_residue_declined",
-                    message_preview=message[:50],
+                    message_preview=utterance_preview(message),
                     dropped=[i.action for i in intents],
                     residue=residue_clause,
                 )
@@ -2851,7 +2852,7 @@ class PreClassifier:
 
         logger.info(
             "multi_intent_detection_complete",
-            message_preview=message[:50],
+            message_preview=utterance_preview(message),
             intent_count=len(intents),
             is_multi_intent=result.is_multi_intent,
             has_greeting=result.has_greeting,

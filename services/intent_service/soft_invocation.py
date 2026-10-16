@@ -27,6 +27,7 @@ import structlog
 from services.domain.models import Intent
 from services.personality.formality import formality_label
 from services.trust.proactivity_gate import ProactivityGate, TrustStage
+from services.utils.utterance_log import utterance_preview
 
 logger = structlog.get_logger(__name__)
 
@@ -484,7 +485,7 @@ class SoftInvocationDetector:
                             pattern=pattern.pattern,
                             reason="no_registered_entry_point",
                             registered_types=list(registered.keys()),
-                            message_preview=message[:50],
+                            message_preview=utterance_preview(message),
                         )
                         continue
 
@@ -503,7 +504,7 @@ class SoftInvocationDetector:
                         pattern=pattern.pattern,
                         confidence=confidence,
                         formality_tier=tier,
-                        message_preview=message[:50],
+                        message_preview=utterance_preview(message),
                     )
                     return SoftInvocationResult(
                         has_offer=True,

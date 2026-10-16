@@ -37,7 +37,9 @@ def _base_id(chunk_id: str) -> str:
 
 
 async def main() -> None:
-    client = chromadb.PersistentClient(path=CHROMA_PATH)
+    client = chromadb.PersistentClient(
+        path=CHROMA_PATH, settings=chromadb.config.Settings(anonymized_telemetry=False)
+    )
     col = client.get_or_create_collection(name=COLLECTION)
     n = col.count()
     if not n:

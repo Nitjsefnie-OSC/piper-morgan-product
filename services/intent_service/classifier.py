@@ -40,6 +40,7 @@ from services.intent_service.prompts import INTENT_CLASSIFICATION_PROMPT
 # context comes from KnowledgeGraphService.get_relevant_context (its own node store,
 # no ChromaDB/OpenAI embeddings).
 from services.llm.request_key import LLMKeyRequiredError
+from services.utils.utterance_log import utterance_preview
 from shared.events import EventBus
 
 # #1768 (2026-09-12): classify_conscious — the grammar-conscious classification
@@ -364,7 +365,7 @@ class IntentClassifier:
                 "intent_classification",
                 source="B3_REFERENT_RESOLUTION",
                 action=b3_intent.action,
-                message_preview=message[:50],
+                message_preview=utterance_preview(message),
             )
             return b3_intent
 
@@ -378,7 +379,7 @@ class IntentClassifier:
             if cached_result is not None:
                 logger.info(
                     "intent_from_cache",
-                    message_preview=message[:50],
+                    message_preview=utterance_preview(message),
                     action=cached_result.get("action"),
                 )
                 # Reconstruct Intent object from cached dict. #2054: the cache
@@ -435,7 +436,7 @@ class IntentClassifier:
                 source="PRE_CLASSIFIER",
                 action=pre_intent.action,
                 message_length=len(message),
-                message_preview=message[:50],
+                message_preview=utterance_preview(message),
             )  # First 50 chars for debugging
 
             # GREAT-4B Phase 3: Cache pre-classifier results too
@@ -449,7 +450,9 @@ class IntentClassifier:
                     "learning_signals": getattr(pre_intent, "learning_signals", []),
                 }
                 self.cache.set(message, cache_data)
-                logger.debug("intent_cached_preclassifier", message_preview=message[:50])
+                logger.debug(
+                    "intent_cached_preclassifier", message_preview=utterance_preview(message)
+                )
 
             # Pre-claim shadow probe (2026-09-02): on a sampled surface-1
             # claim, fire-and-forget ONE constrained-router consult and log
@@ -484,7 +487,7 @@ class IntentClassifier:
             "intent_classification_attempt",
             source="LLM",
             message_length=len(message),
-            message_preview=message[:50],
+            message_preview=utterance_preview(message),
         )
 
         # Issue #278: Get graph context for improved classification
@@ -599,7 +602,7 @@ class IntentClassifier:
                     "learning_signals": getattr(intent, "learning_signals", []),
                 }
                 self.cache.set(message, cache_data)
-                logger.debug("intent_cached", message_preview=message[:50])
+                logger.debug("intent_cached", message_preview=utterance_preview(message))
 
             # Issue #248: Run preference detection hooks (async, non-blocking)
             user_id = (context or {}).get("user_id")
@@ -682,7 +685,7 @@ class IntentClassifier:
                 "intent_classification",
                 source="B3_REFERENT_RESOLUTION",
                 action=b3_intent.action,
-                message_preview=message[:50],
+                message_preview=utterance_preview(message),
             )
             return MultiIntentResult(
                 intents=[b3_intent],
@@ -696,7 +699,7 @@ class IntentClassifier:
         if multi_result.intents:
             logger.info(
                 "multi_intent_preclassified",
-                message_preview=message[:50],
+                message_preview=utterance_preview(message),
                 intent_count=len(multi_result.intents),
                 is_multi_intent=multi_result.is_multi_intent,
             )
@@ -1427,7 +1430,7 @@ class IntentClassifier:
             logger.warning(
                 "Failed to get graph context",
                 error=str(e),
-                message_preview=message[:50],
+                message_preview=utterance_preview(message),
             )
             return {}
 
