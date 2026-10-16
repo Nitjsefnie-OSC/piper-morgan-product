@@ -172,6 +172,9 @@ INTEGRATION_REGISTRY = {
 UNCHECKED_STATUS = "connected"
 UNCHECKED_MESSAGE = "Connected"
 UNCHECKED_DETAIL = "Not checked yet. Press Test."
+# #2044 (CXO, 19:01): when the health CHECK itself throws, the card says so in plain
+# words and offers the retry; the raw error goes to the log, never the card.
+CHECK_FAILED_MESSAGE = "Couldn't check this just now. Press Test to try again."
 
 
 def _unchecked_card(integration_id: str, metadata: Dict[str, Any]) -> "IntegrationStatus":
@@ -531,13 +534,15 @@ async def _check_integration_health(
         return _unchecked_card(integration_id, metadata)
 
     except Exception as e:
+        # #2044: the raw error is logged here; the card carries CXO's line only
+        # (``error`` unset, so the page does not redden a line that is not a failure
+        # of the integration itself).
         logger.warning(f"Failed to check {integration_id} health", error=str(e))
         return IntegrationStatus(
             name=integration_id,
             display_name=metadata["display_name"],
             status="unknown",
-            status_message="Status unknown",
-            error=str(e),
+            status_message=CHECK_FAILED_MESSAGE,
             configure_url=metadata.get("configure_url"),
             can_test=True,
         )

@@ -98,9 +98,28 @@ async def test_a_recorded_healthy_check_still_reads_healthy():
     assert status.status_message.startswith("Healthy")
 
 
+@pytest.mark.asyncio
+async def test_a_health_check_that_throws_says_so_and_keeps_the_error_off_the_card():
+    """CXO 19:01: "Couldn't check this just now. Press Test to try again."; the raw
+    error goes to the log, not the card (``error`` unset so the page does not redden)."""
+    meta = integrations.INTEGRATION_REGISTRY["calendar"]
+    with patch.object(
+        integrations,
+        "_get_integration_config_status",
+        new=AsyncMock(side_effect=RuntimeError("keychain exploded: secret-ish detail")),
+    ):
+        status = await integrations._check_integration_health("calendar", meta, user_id="u1")
+    assert status.status_message == "Couldn't check this just now. Press Test to try again."
+    assert status.error is None
+    assert status.can_test is True
+    assert "exploded" not in json.dumps(status.model_dump())
+    assert "Status unknown" not in json.dumps(status.model_dump())
+
+
 def test_the_route_module_has_no_status_unknown_line_for_a_configured_card():
     src = (REPO / "web/api/routes/integrations.py").read_text()
     assert "Click 'Test' to check connection" not in src
+    assert '"Status unknown"' not in src
     assert 'status="unknown",\n            status_message="Status: ' not in src
     assert src.count("UNCHECKED_DETAIL") >= 2  # the constant and its one use
 
