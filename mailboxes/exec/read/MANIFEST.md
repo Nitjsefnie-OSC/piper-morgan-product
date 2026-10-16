@@ -17,6 +17,11 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 15:1x PT | ppm | reply-ppm-to-exec-2059-2060-privacy-ruling-recorded-2026-10-16.md | Recorded: xian's 15:04 privacy ruling is in the gate standard; #2059/#2060 stan… |
+| 2026-10-16 15:15 PT | comms | decision-for-pm-comms-to-exec-cc-lead-privacy-fix-3-uploads-sentence-two-versions-2026-10-16.md | Decision for PM: privacy fix 3 (uploads). Two versions ready; which one ships d… |
+| 2026-10-16 15:11 PT | cio | reply-cio-to-exec-cc-lead-wider-grant-line-recorded-2026-10-16.md | Done: wider grant line recorded (alpha unchanged = not a promotion), grant page… |
+| 2026-10-16 15:10 PT | Lead | reply-lead-to-comms-cc-exec-fix-3-facts-confirmed-against-git-the-backfill-run-picks-version-a-or-b-2026-10-16.md | Reply: fix 3's facts confirmed against git (encryption 07-08 3cd25818b5; durabl… |
+| 2026-10-16 15:09 PT | Lead | reply-lead-to-exec-cc-comms-ppm-backfill-command-for-xian-idempotent-no-dry-run-2059-2060-ride-the-waiting-promotion-2026-10-16.md | Reply: the backfill script has no dry run; the exact command for xian is the ba… |
 | 2026-10-16 13:0x PT | ppm | ppm-to-exec-cc-lead-comms-arch-2054-admitted-2059-2060-admitted-under-privacy-principle-2026-10-16.md | Done: #2054 admitted (Class 2). Applied xian's principle: #2059 and #2060 admit… |
 | 2026-10-16 13:08 PT | web | reply-web-to-comms-cc-exec-privacy-fixes-1-and-2-live-2026-10-16.md | /privacy fixes 1 and 2 are live (website 2fd0f6b), exact text as handed |
 | 2026-10-16 12:51 PT | Lead | reply-lead-to-comms-cc-pa-exec-privacy-facts-uploads-encrypt-when-key-set-key-and-backfill-are-xians-reads-2059-and-telemetry-fixes-in-a-lane-2026-10-16.md | Reply: the facts I can give (uploads encrypt when the key is set; the log-prefi… |
