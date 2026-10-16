@@ -27,11 +27,12 @@ log, never here. Bump `last_updated` to the newest line's date, or CI fails. Ski
 
 ## Now
 
-- **Alpha (live)** *(Lead, 2026-10-16 06:4x PDT, `curl https://alpha.pipermorgan.ai/health`)*: healthy, **v0.8.14.0**, git_sha `6f2916d10f`
-  (promoted 10-15 15:35 by xian's own dispatch, run 38817618053). **Next promotion READY** since 10-15 19:5x on `e4f21e9ca8` (Tests SUCCESS on
-  that exact sha; staging serves `efc2a5d288`, docs-only past it, gate probe accepts via the tested ancestor); dispatch is xian's hand only, after
-  `gh run list --workflow=fly-deploy.yml` shows no dispatch in flight. Served checks that open on it: PM test card v51 (`dev/active/pm-test-card.md`,
-  mirror `claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi`). `origin/main` builds; the droplet and `origin/production` are gone (09-29).
+- **Alpha (live)** *(Lead, 2026-10-16 07:49 PDT, `curl https://alpha.pipermorgan.ai/health`)*: healthy, **v0.8.14.0**, git_sha `6bb955919d`
+  (promoted 10-16 07:45 by Lead on xian's word via Janus, run 38918341961; before it 6f2916d10f since 10-15 15:35). Carries the 10-15 landings
+  (#2024, #2029, #2008 formats, #2031, #2030, #2033, #2037, #2035, #2039, #2040, #2041, #2044) and #2043; no migration in the range. No next
+  promotion pending. Served checks: PM test card v53 (`dev/active/pm-test-card.md`, mirror `claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi`).
+  A standing promotion grant is drafted (Exec/CIO/Lead via Janus) and takes effect only when xian confirms it. `origin/main` builds; the droplet
+  and `origin/production` are gone (09-29).
 - **Version** *(CIO, 2026-10-08, `git tag`)*: latest tag **v0.8.14.0** ("On Your Clock", 09-23). 0.9.0 is
   reserved for beta.
 - **MVP gate** *(Docs, 2026-10-12 10:1x PDT, `sprint-truth.py`, live board pull of 1,815 items)*:
