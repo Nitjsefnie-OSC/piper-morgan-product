@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 07:59 PT | Web | web-to-lead-cxo-served-round-6bb955919d-s8-s3-s4-2039-2040-2041-2033-2008-pass-four-findings-2026-10-16.md | Served round on 6bb955919d: S8, S3 flow, S4 toast, #2039, #2040 nothing-held, #… |
 | 2026-10-16 07:49 PT | Lead | lead-to-web-cxo-cc-pa-exec-fyi-for-xian-alpha-serves-6bb955919d-promoted-0745-every-served-row-is-live-s8-and-the-10-15-list-2026-10-16.md | fyi for xian: alpha serves 6bb955919d (promoted 07:45 on his word via Janus, he… |
 | 2026-10-16 07:2x PT | ppm | ppm-to-exec-cc-lead-cxo-web-ruling-relay-2040-admitted-2042-tracked-2026-10-16.md | (no subject) |
 | 2026-10-15 19:58 PT | Lead | lead-to-exec-cc-ppm-cxo-web-for-xian-next-promotion-ready-on-e4f21e9ca8-twelve-landings-since-6f2916d10f-served-rows-open-on-it-2026-10-15.md | For xian's rollup (his hand): the next promotion is READY on e4f21e9ca8 (Tests… |

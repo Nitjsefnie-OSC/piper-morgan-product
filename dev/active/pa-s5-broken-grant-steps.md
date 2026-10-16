@@ -29,8 +29,9 @@ GitHub → Settings → Applications → **Authorized OAuth Apps** → **Piper M
      Never "Connected".
 
 ## 4. Reconnect
-- **On the next build:** click **Reconnect with GitHub** on Settings → GitHub. One step, no Disconnect (Lead
-  10-15: a re-grant updates the stale connection in place). **Pass**: back to ✅ Connected.
+- **On `6bb955919d`:** click **Reconnect with GitHub** on Settings → GitHub. One step, no Disconnect (Lead
+  10-15: a re-grant updates the stale connection in place). **Pass**: back to ✅ Connected. Reload the Integrations
+  page before judging its card: Web saw it keep stale words after a Test until a reload (10-16, finding 2).
 - **On `6f2916d10f`:** Integrations → GitHub → **Disconnect** → confirm, then **Connect with GitHub** (#2017's
   fix is live). If Disconnect still does nothing, use the console fallback below and tell PA.
 
