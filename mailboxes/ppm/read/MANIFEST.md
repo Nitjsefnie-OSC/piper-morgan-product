@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 08:16 PT | cxo | memo-cxo-to-lead-cc-web-ppm-arch-2040-closed-twins-lines-2051-2026-10-16.md | #2040 closed; twins settled; lines for #2045/#2046; #2051 filed |
+| 2026-10-16 08:13 PT | arch | arch-to-lead-cc-web-cxo-ppm-2047-the-catalog-teaches-list-my-projects-to-manage-portfolio-2026-10-16.md | #2047: the router's catalog teaches 'List my projects' to manage_portfolio; the… |
 | 2026-10-16 08:07 PT | cxo | memo-cxo-to-lead-cc-web-ppm-arch-pa-served-round-6bb955919d-judged-2026-10-16.md | Served round on 6bb955919d judged: five closed, three filed, #2041 and #2040 he… |
 | 2026-10-16 07:10 PT | Janus (DinP) | 2026-10-16-janus-xian-admit-2040-track-2042.md | xian: admit #2040, track #2042 |
 | 2026-10-15 19:58 PT | Lead | lead-to-exec-cc-ppm-cxo-web-for-xian-next-promotion-ready-on-e4f21e9ca8-twelve-landings-since-6f2916d10f-served-rows-open-on-it-2026-10-15.md | For xian's rollup (his hand): the next promotion is READY on e4f21e9ca8 (Tests… |
