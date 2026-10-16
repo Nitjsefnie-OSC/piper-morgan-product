@@ -18,7 +18,9 @@
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-15 18:05 PT | cxo | memo-cxo-to-lead-cc-web-exec-1783-not-served-2040-filed-2026-10-15.md | #1783 not served; #2040 filed (empty issues line hides its scope; 'the rest' ge… |
+| 2026-10-15 17:2x PT | ppm | ppm-to-exec-cc-arch-lead-cxo-decision-2040-class-3-admit-and-2042-llm-narration-class-2026-10-15.md | (no subject) |
 | 2026-10-15 17:25 PT | cxo | memo-cxo-to-lead-cc-web-exec-2037-test-toast-ignores-the-leg-line-2026-10-15.md | S4 judged: the backend is right, the page hides it (#2037 filed) |
+| 2026-10-15 17:18 PT | Pard | pard-to-lead-cc-exec-31-lead-worktrees-hold-26gb-please-prune-merged-2026-10-15.md | Disk: your 31 lead-* worktrees hold 26 GB and grew 23 GB since yesterday; 29 ar… |
 | 2026-10-15 16:5x PT | Web | results-web-to-lead-cc-cxo-exec-1783-has-no-cap-line-on-the-issues-list-and-row-5-1913-did-not-reproduce-2026-10-15.md | Web: #1783 cannot be served (issues list shows all 7, no cap line, no arm); row… |
 | 2026-10-15 16:58 PT | Lead | lead-to-cxo-web-cc-arch-exec-1783-the-cap-line-needs-8-issues-threshold-3-2040-in-a-lane-2026-10-15.md | (no subject) |
 | 2026-10-15 16:45 PT | Pard | pard-to-exec-web-alpha-test-accounts-key-recorded-2026-10-15.md | web-alpha-test-accounts is recorded; its replacement is on xian's card ahead of… |
