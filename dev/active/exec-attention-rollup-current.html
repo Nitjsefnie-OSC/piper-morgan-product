@@ -32,7 +32,7 @@
 </style>
 <div class="wrap">
 <h1>Attention rollup — Friday 16 October</h1>
-<p class="meta">Exec · v362, rebuilt 15:53 PDT Fri 10-16 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). Full rebuild: done and stale items removed, the rest re-sorted into before testing, during testing and after. If the version number here differs from the one in my reply, you are reading a stale copy.</p>
+<p class="meta">Exec · v363, rebuilt 15:53 PDT Fri 10-16 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). Full rebuild: done and stale items removed, the rest re-sorted into before testing, during testing and after. If the version number here differs from the one in my reply, you are reading a stale copy.</p>
 
 <div class="card win"><b>Bottom line.</b> One thing before the test card: the Vercel token (10 min), because your Sunday rewrite and Wednesday&rsquo;s Ship #065 go through the admin composer. Everything else waits until after testing, or happens during it. Alpha is still on this morning&rsquo;s build; the next one (with #2057, #2054, #2048, #2059, #2060) is waiting on Fly&rsquo;s outage.</div>
 
@@ -46,6 +46,7 @@
 <li><b>Avoid &ldquo;how do I archive / restore / add a project&rdquo;</b> on this build: those questions make the change (#2057). This lifts when alpha moves.</li>
 <li><b>Reconnect Calendar once in Settings.</b> It checks your Google redirect cleanup. A <code>redirect_uri_mismatch</code> means Lead puts the setting back.</li>
 <li><b>#1913 (a keyless chat vanished after adding a key):</b> try it once, or say &ldquo;close&rdquo; on Web&rsquo;s evidence (it didn&rsquo;t reproduce on 10-15).</li>
+<li><b>Before any invite goes out: OK Comms&rsquo; two fixes?</b> Comms found the current hosted invite template <i>attaches</i> the old Alpha Agreement (&ldquo;please read it before diving in&rdquo;), which tells testers no data reaches our servers. It also says &ldquo;content at rest is not yet encrypted&rdquo;, now false for conversations. (1) Put a scope banner on the agreement: &ldquo;written for the self-install alpha; it does not describe hosted Piper&hellip; see pipermorgan.ai/privacy&rdquo;, and stop bumping it each release. (2) Invite template: &ldquo;Your API key and your conversations are stored encrypted.&rdquo; and &ldquo;How Piper handles your data: pipermorgan.ai/privacy. There&rsquo;s no separate Terms page yet.&rdquo; Drop the agreement line. No new promises; holds under any Terms option. <b>Lean: OK both.</b> Also for your eye: &ldquo;Data may be lost at any time, use test data only&rdquo; reads oddly beside &ldquo;data and privacy are not part of the beta&rdquo;. Say &ldquo;OK invite fixes&rdquo;.</li>
 <li><b>The held invites</b> (the Friday requester&rsquo;s code, masked WVZM&hellip;75M7, and HOST&rsquo;s two reissues) follow from what testing shows (your word). One tester&rsquo;s address bounced, so check its spelling before sending. The early requester wrote again (07:49Z, to you, cc alpha@).</li>
 </ol></div>
 
@@ -79,6 +80,7 @@
 <h2>✅ Removed this rebuild (done or recorded)</h2>
 <div class="card">Google branding (done); Google redirect unset (done, check during testing); the clones (you deleted them); #2054 admit; privacy fixes 1 and 2 (live); the encryption key read; the stray files; both grant questions; PPM&rsquo;s admit judgment; Ship #065 reviews (10 of 10, synthesis published); Web&rsquo;s row F asks (moot); the Wednesday floor check (passed, 90); older 10-13 and 10-14 &ldquo;in motion&rdquo; entries; the Janus block, last updated 10-09 and stale (I&rsquo;ve asked Janus whether it still uses it).</div>
 
+<footer><b>Verified how</b> (v363, 15:53): Comms 16:00 (git grep over onboarding docs: 7 hits; template lines 60&ndash;75). I didn't re-run that.</footer>
 <footer><b>Verified how</b> (v362, 15:53): CXO's options paper and HOST's view read in full; Arch's fact ask landed (ls-tree).</footer>
 <footer><b>Verified how</b> (v361, 15:38): full rebuild, each row re-checked against source this turn. <code>gh issue list --milestone MVP --state open</code> = 9; <code>scripts/main-ci-status.sh</code> 12 of 12 green; alpha /health 6bb955919d healthy; Fly status page: partial outage; the clones are gone (<code>ls</code> 0 of 3). Your words this session for the branding, unset, PPM, Comms and invite items. Google&rsquo;s 7-day rule is from my knowledge, not checked in the console.</footer>
 </div>
