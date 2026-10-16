@@ -245,6 +245,18 @@ holds the exact steps. It sets the diff aside with the tagged, apply-by-SHA stas
 push -u -m <tag>` → `git stash apply <sha>` → drop by tag), never a bare `git stash` / `stash pop`. Reach for it before you touch
 code to "fix" a failure you have not attributed.
 
+## Promotion checklist: read staging's sha from staging, not from the deploy-run list (Lead, 2026-10-16)
+
+**Why:** the 10:51 dispatch under the standing grant was refused by the promote gate. The gate reads the sha staging's
+machines are RUNNING (`fly-deploy.yml`, "Read the image AND the sha currently running on staging"); Lead's pre-dispatch
+checklist had read "staging's sha" from the newest fly-deploy push run's head. Those were different: while Tests was red on
+main, the known-broken guard skipped the deploy step of each push (the run still concludes success), so staging kept
+serving the last sha deployed before the red (0e30760c79), whose Tests had failed.
+
+**Recipe:** before any dispatch, `curl -s https://piper-morgan-staging.fly.dev/health` and use its `git_sha` as the sha to
+probe (`SHA=<that full sha> GITHUB_REPOSITORY=mediajunkie/piper-morgan-product bash <gate probe>`); never the run list.
+After a red→green on main, remember that staging does not redeploy until a push touching deployable paths lands.
+
 ## Google Calendar for a hosted deployment (PM ruling 2026-10-01)
 
 The Google OAuth **app** (client ID/secret) is deployment plumbing, set once by the operator as
