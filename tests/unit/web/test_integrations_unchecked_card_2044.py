@@ -163,6 +163,20 @@ def test_served_json_unchecked_calendar_is_not_counted_healthy(client):
     assert "unknown" not in json.dumps(body["integrations"]).lower()
 
 
+def test_a_test_result_redraws_the_page_from_the_health_route(client):
+    """#2045: after a Test (pass, fail or error) ``testConnection`` re-fetches the health
+    route once, after the button reset, so the unchecked line goes and the summary
+    recounts; a redraw failure never reaches the toast (it is guarded, not in the try)."""
+    body = client.get(PAGE).text
+    start = body.index("async function testConnection(integrationName)")
+    end = body.index("async function testAllConnections()")
+    fn = body[start:end]
+    assert fn.count("await loadIntegrationsHealth();") == 1, fn
+    tail = fn[fn.index("'Test Error'") :]
+    assert "await loadIntegrationsHealth();" in tail  # after the result handling
+    assert "Failed to redraw integrations after Test" in tail  # its own catch
+
+
 needs_node = pytest.mark.skipif(shutil.which("node") is None, reason="node not on PATH")
 
 
