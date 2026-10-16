@@ -1183,6 +1183,10 @@ check for #1889/#1963 runs after (b). Epic 5 is now 35 items, 30 closed.
 
 **`#2052` folded in 2026-10-16, admitted MVP (Gate class 3) under xian's standing word on #2042**: a repeat `show my open issues` in one chat answered "9 open issues" after five were unassigned (a fresh chat said 4); composed from history, not a fresh read (Arch). Lead reproduces with a stubbed read; closes on Web's served unassign/repeat re-run. (`#2012` closed 2026-10-16 08:25 on its served four-state run.) **Un-admitted 2026-10-16 09:0x** to Production: Web's timed run showed GitHub search-index lag that self-corrects in one chat (about 43 s); CXO: acceptable for beta.
 
+**`#2054` folded in 2026-10-16, admitted MVP (Gate class 2) on xian's 12:52 word**: the intent cache shared one mutable context dict across hits, so the principal could cross users. Fix on main 88dada46f8 (Arch validated); closes on its tests plus the fix live on alpha.
+
+**`#2059` and `#2060` folded in 2026-10-16, admitted MVP (Gate class 3, privacy) under xian's 12:52 principle ("not cavalier with user data or privacy")**: /privacy claims a logs fingerprint only (a WARNING site logs a 50-char prefix) and no analytics (the in-app Chroma client has default telemetry on). Small code fixes in Lead's lanes; close live on alpha.
+
 ### 6. Rendered deliverable (7 items, 5 closed + 2 shared with GatherOutcome/Security) — same reasoning as 5
 ~~`#1729`~~ (**CLOSED, caught 2026-09-26 by a reconciliation pass — not previously marked**) · shares `#1732` (security, **CLOSED**) and `#1738` (GatherOutcome). Plus, folded
 2026-09-12: ~~`#1762`~~ (render-truncation sweep, ~18 more "...and N more" sites, self-identified as
