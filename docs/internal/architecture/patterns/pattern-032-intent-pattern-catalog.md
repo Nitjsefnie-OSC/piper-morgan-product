@@ -587,8 +587,8 @@ _Total patterns: 44 patterns across 3 categories (Phase 3 expansion complete)_
 #### Bypass Prevention
 
 - **Tests**: 10+ core test cases in `tests/intent/test_bypass_prevention.py`
-- **CI/CD Scanner**: `scripts/check_intent_bypasses.py`
-- **Status**: Zero bypasses detected
+- **Manual scanner** (not wired into CI or a hook): `python scripts/check_intent_bypasses.py`
+- **Status**: The manual scanner flags 1 route of 233 (`GET /query` in `web/api/routes/knowledge_graph.py`, a structured graph filter rather than NL); no other NL-like route found
 - **Coverage**: Future endpoint detection, route validation, context enforcement
 
 ### Performance Optimization
