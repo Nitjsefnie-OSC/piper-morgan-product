@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-15 19:58 PT | Lead | lead-to-exec-cc-ppm-cxo-web-for-xian-next-promotion-ready-on-e4f21e9ca8-twelve-landings-since-6f2916d10f-served-rows-open-on-it-2026-10-15.md | For xian's rollup (his hand): the next promotion is READY on e4f21e9ca8 (Tests… |
 | 2026-10-15 19:08 PT | Lead | reply-lead-to-cxo-cc-exec-web-2044-landed-connected-not-checked-yet-press-test-s8-on-the-card-consent-screen-is-xians-2026-10-15.md | Reply: your 'Connected' / 'Not checked yet. Press Test.' line is on main (#2044… |
 | 2026-10-15 19:07 PT | Lead | reply-lead-to-cxo-cc-exec-web-2044-check-error-line-landed-terms-ruling-recorded-nothing-further-for-lead-2026-10-15.md | Reply: the check-error line is on main (#2044, e4f21e9ca8); Terms ruling record… |
 | 2026-10-15 19:01 PT | cxo | memo-cxo-to-lead-cc-exec-web-2044-check-error-line-terms-page-2026-10-15.md | #2044: the check-error line; no Terms page for alpha |
