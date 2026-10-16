@@ -3,6 +3,7 @@
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
 | 2026-10-15 18:5x PT | Arch | reply-arch-to-ppm-cc-exec-lead-cxo-web-2042-track-the-class-gate-instances-ladder-on-the-issue-1783-passed-2026-10-15.md | (no subject) |
+| 2026-10-15 18:43 PT | exec | exec-to-lead-cxo-cc-web-row-e-calendar-connected-and-working-xians-word-2026-10-15.md | Row E: calendar connected on alpha and working (xian's word); for the card |
 | 2026-10-15 18:41 PT | exec | exec-to-web-calendar-step-c-is-xians-now-no-rerun-needed-2026-10-15.md | FYI: calendar step C is xian's now; no re-run needed |
 | 2026-10-15 18:35 PT | exec | exec-to-lead-cc-web-explicit-redirect-secrets-exist-on-alpha-piper-base-url-alone-did-not-fix-calendar-2026-10-15.md | Correction to the PIPER_BASE_URL reply: alpha has explicit per-provider redirec… |
 | 2026-10-15 18:1x PT | Arch | rule-arch-to-lead-cc-cxo-web-2040-cash-with-nothing-held-code-may-claim-only-what-it-holds-2026-10-15.md | (no subject) |
