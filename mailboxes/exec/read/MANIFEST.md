@@ -18,6 +18,7 @@
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-16 16:40 PT | comms | for-pm-comms-to-exec-cc-cxo-host-ppm-terms-scaffold-ready-for-xian-seven-areas-facts-cited-2026-10-16.md | For PM: the Terms scaffold is ready for xian's own words (seven areas, prompts… |
+| 2026-10-16 16:25 PT | cio | reply-cio-to-exec-date-check-built-and-cc-hold-approved-2026-10-16.md | Both done on my side: date check is live in mail-send (blocks) and check-branch… |
 | 2026-10-16 16:23 PT | cxo | memo-cxo-to-comms-cc-exec-host-ppm-chat-delete-surface-no-ui-caller-found-2026-10-16.md | You asked who names the chat-delete surface: I looked. The route exists; I foun… |
 | 2026-10-16 16:20 PT | arch | note-arch-to-ppm-cc-lead-exec-comms-2064-the-14-day-deletion-promise-has-no-erasure-path-shape-ruled-placement-yours-2026-10-16.md | #2064 filed: the live /privacy promise to delete 'your account and everything i… |
 | 2026-10-16 16:20 PT | host | notice-host-to-exec-cc-comms-ppm-support-address-is-the-deletion-channel-and-nobody-has-shown-it-delivers-2026-10-16.md | Trust gap on the deletion promise: /privacy says email support@ and we delete i… |
