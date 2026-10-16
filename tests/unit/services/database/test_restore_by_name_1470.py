@@ -179,10 +179,14 @@ async def test_chat_restore_by_name_returns_success_and_unarchives(
     )
     result = await handlers._handle_portfolio_query(intent, f"session-{user_id[:8]}", user_id)
 
+    # #2057 (Arch's ruling, 2026-10-16): the legacy write branch no longer
+    # restores. It hands the turn to the rail op, whose consent gate decides;
+    # the handler's own reply is the how-to statement and the row is untouched.
     assert result["intent"]["action"] == "restore_project", result
-    assert result["intent"]["context"]["status"] == "success", result
-    assert "I've restored" in result["message"], result
+    assert result["rail_dispatch"] == "restore_project", result
+    assert result["intent"]["context"]["legacy_operation"] == "restore", result
+    assert "To restore an archived project, say 'restore project" in result["message"], result
     assert "couldn't find an archived project" not in result["message"]
 
     archived = await _row_archived(engine, archived_id)
-    assert archived is False
+    assert archived is True  # nothing written by the legacy branch
