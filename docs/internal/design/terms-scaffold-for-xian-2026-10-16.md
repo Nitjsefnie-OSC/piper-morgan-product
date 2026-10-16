@@ -4,7 +4,7 @@
 
 **Decided (xian, 10-16):** Option 2. The plain layer goes in the design-partner invitation by 10-23, in his words. Counsel writes the legal layer for Production. No Terms page and no click-through for beta.
 
-**Facts state (Comms, 16:3x 10-16):** Arch's two facts (storage by category, confirmation by action type) arrived early (16:03) and are folded in. Every fact below cites its source. Still open, named in each area: "never train" (Arch), UI delete buttons and the chat-delete surface (Lead/CXO), areas 4 and 7 (HOST checks). Next: Comms sends this to Exec for xian. He answers in his own words; Comms checks each answer against the code.
+**Facts state (Comms, 16:3x 10-16):** Arch's two facts (storage by category, confirmation by action type) arrived early (16:03) and are folded in. Every fact below cites its source. Still open, named in each area: "never train" (Arch); a rendered check for any chat-delete control (Web or xian); #2064 erasure path and support@ delivery (area 5). Areas 4 and 7 checked by HOST 16:19. Next: Comms sends this to Exec for xian. He answers in his own words; Comms checks each answer against the code.
 
 **How to use it:** each area has prompts for xian, the facts the answer must stay true to, the gaps it has to name as goal and gap, and the checker.
 
@@ -19,7 +19,7 @@
   - Stored on Fly.io in San Jose (/privacy).
 - **Gaps to name (goal and gap):**
   - Uploads: encrypted since 07-08 when the key is set; files written while the key was unset are plaintext until the backfill runs (count mode on main, xian runs it after Fly recovers). Also #2061: a file written with no key is plaintext even in production (latent, unverified on alpha).
-  - Deleting a chat hides it; the rows are kept and nothing purges them later. Goal: a trash you can purge (/privacy).
+  - Deleting a chat hides it; the rows are kept and nothing purges them later. Goal: a trash you can purge (/privacy). **But no screen control to delete a chat was found** (CXO, source reading 10-16: the API route `DELETE /api/v1/conversations/{id}` exists, and no UI calls it). Until a rendered check shows one, an answer must not say a person can delete a chat themselves.
 - **Checker:** Comms, against /privacy and Arch's memo.
 
 ## 2. What Piper does and never does with it
@@ -46,19 +46,21 @@
 - **Gaps to name:**
   - Undo is not a promise yet: soft delete with an undo window is #2021, open, on Production. The invitation must not imply undo.
   - Alpha still has four project paths that write or unlink without asking. Main fixes them; they go live with the waiting promotion (#2057, #2048 are still open).
-  - Unverified: whether the UI's own delete buttons (todos, lists, files, projects) ask first. Arch didn't check. Comms found no chat-delete button in `templates/` (the sidebar shows "archived" only), so whatever "delete a chat" looks like on screen needs Lead or CXO to name the surface before an answer cites it.
+  - Unverified: whether the UI's own delete buttons (todos, lists, files, projects) ask first. Arch didn't check. No chat-delete control exists in the UI source (CXO, 10-16: the route has no caller). A rendered check on alpha is asked of Web or xian.
 - **Checker:** Lead or Arch for action paths; PPM for the gate class.
 
 ## 4. Telling me when something's broken
 - **Prompts:** What does a person see when Piper can't do something? How do they tell us? Who reads it?
 - **Facts to stay true to:** the feedback inbox is one mailbox, read by "the project team", not a single reader (HOST). The "Known issues in this beta" list and its bar (PPM, `ppm-placement-and-disclosure-rules-2026-10-13.md` §2). For design partners, xian's 10-16 bar: privacy and security items closed, everything else disclosed as a known issue after xian and PPM review the list.
-- **Gaps to name:** none known; HOST confirms the channel exists for hosted partners.
+- **Facts (HOST, 10-16):** the channel exists: alpha@pipermorgan.ai reaches the alpha team (xian reads, HOST watches), per `docs/ALPHA_KNOWN_ISSUES.md:143`, plus a public GitHub issue (line 144).
+- **Gaps to name:** the invite template doesn't name alpha@ or any way to report (its only prompt, line 79, has no address). The answer and the invitation should both name alpha@. Don't name support@ for reports: its delivery is unverified (HOST).
 - **Checker:** HOST.
 
 ## 5. Leaving with my data
 - **Prompts:** How does a person leave? What can they take with them, and in what form? How long until we have deleted it?
 - **Facts to stay true to:**
-  - No in-app account deletion. Deletion is by email to support@pipermorgan.ai, within 14 days (live on /privacy).
+  - **Current state, ruled by xian 10-13 and live on /privacy (quote it as is; nobody re-asks, Exec 16:18):** no account deletion inside Piper yet; "email support@pipermorgan.ai and we'll delete your account and everything in it within 14 days"; deleted conversations aren't purged yet, and the goal is a trash with a real purge.
+  - **The promise isn't backed yet, on two counts:** (1) no erasure path exists in code. A user delete fails on 13 foreign keys, and 13 more tables (conversations and messages among them) would be orphaned (#2064, Arch, shape ruled, placement PPM). (2) Nobody has shown support@ receives mail (HOST, 10-16; a test send from xian's side answers it). The answer may restate the ruled promise, but Comms won't mark it backed until #2064 lands and support@ is shown to deliver.
   - Export exists for uploaded files (single and zip) and for learned patterns and learning settings (`GET /controls/export`, `web/api/routes/learning.py:803`).
   - **No export** of conversations, todos or lists (Arch).
 - **Gaps to name:** "You can take your files and what Piper learned about you. Exporting your conversations and to-dos is the goal." (That's the fact, not the wording. xian words it.)
@@ -76,7 +78,12 @@
 
 ## 7. A code is yours (tester relationship)
 - **Prompts:** What does a person do with an invite code? What happens if it leaks? When do we quote someone, and what do we ask first?
-- **Facts to stay true to:** codes are bearer credentials, revocable; we do not publish who testers are (HOST's list). Counsel reviews before any outside user beyond the design partners (#2063, xian 10-16).
+- **Facts to stay true to (HOST, from code, 10-16):**
+  - A code works **once**: redemption is atomic, and the first person to redeem gets the account (`invite_token_service.py:61-64`).
+  - **No expiry and no revoke flag.** An unused code stays valid until used or deleted. "Revoke" means an operator deletes the unused row on prod by hand. Don't write "revocable" unqualified, and don't promise a time limit.
+  - Once used, a code can't be taken back: the account exists.
+  - We don't publish who testers are, **from now on** (rule 8). Older files still carry some given names, and xian ruled no history rewrite (10-16), so an answer mustn't deny that.
+  - Quoting a tester needs their say-so. That's a practice with no mechanism behind it; say it as a practice. Counsel reviews before any outside user beyond the design partners (#2063, xian 10-16).
 - **Checker:** HOST.
 
 ---
