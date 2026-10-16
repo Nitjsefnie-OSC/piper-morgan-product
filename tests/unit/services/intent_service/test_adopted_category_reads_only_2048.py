@@ -402,11 +402,11 @@ class TestReadsAndScope:
         [
             (
                 "link repo acme/widgets to project Foo",
-                "To link a repo, say 'link repo acme/widgets'.",
+                "To link a repo to a project, say 'link repo acme/widgets to <project name>'.",
             ),
             (
                 "unlink repo acme/widgets from project Foo",
-                "To unlink a repo, say 'unlink repo acme/widgets'.",
+                "To unlink a repo from a project, say 'unlink repo acme/widgets from <project name>'.",
             ),
         ],
     )

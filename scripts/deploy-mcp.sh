@@ -39,7 +39,9 @@ git diff --cached --quiet origin/main -- || die "staged changes differ from orig
 stray="$(git ls-files --others --exclude-standard | head -5)"
 [ -z "$stray" ] || die "untracked files would be uploaded to the build: $(echo "$stray" | tr '\n' ' ')"
 
-cmd=(fly deploy -c "$CONFIG" -a "$APP" --remote-only)
+# The sha goes in as a build arg so the MCP /health names the deployed commit, as alpha's does (PA,
+# 2026-10-16: it read "unknown" because nothing passed it). It is origin/main, checked above, not an input.
+cmd=(fly deploy -c "$CONFIG" -a "$APP" --remote-only --build-arg "PIPER_GIT_SHA=$main_sha")
 echo "deploy-mcp: content = origin/main ${main_sha:0:10}; command: ${cmd[*]}"
 if [ "$dry" -eq 1 ]; then
   echo "deploy-mcp: dry run, nothing deployed"

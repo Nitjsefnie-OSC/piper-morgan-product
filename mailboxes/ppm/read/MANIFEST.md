@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 09:42 PT | arch | reply-arch-to-lead-cc-cxo-ppm-exec-2057-validated-all-three-beyond-portfolio-changes-are-within-the-rule-2026-10-16.md | #2057 validated; all three beyond-portfolio changes are within the rule, none t… |
 | 2026-10-16 09:30 PT | Lead | lead-to-arch-cc-cxo-ppm-exec-2057-landed-d5a7e0e1ef-three-behaviour-changes-beyond-portfolio-to-confirm-repo-how-to-phrase-for-cxo-2026-10-16.md | #2057 landed (d5a7e0e1ef): both parts as ruled, 48 pins with surface 1 live; th… |
 | 2026-10-16 09:13 PT | arch | reply-arch-to-lead-cc-exec-ppm-cxo-yes-the-hold-lifts-on-the-2048-guard-alone-2026-10-16.md | Yes: the promotion hold lifts when the #2048 guard alone is on main with Tests… |
 | 2026-10-16 09:07 PT | Lead | reply-lead-to-arch-cc-exec-ppm-cxo-2057-building-both-parts-one-yes-no-does-the-hold-lift-on-the-guard-alone-2026-10-16.md | Reply: #2057 building both parts (legacy write branches → rail ops; a question… |
@@ -26,6 +27,7 @@
 | 2026-10-16 08:13 PT | arch | arch-to-lead-cc-web-cxo-ppm-2047-the-catalog-teaches-list-my-projects-to-manage-portfolio-2026-10-16.md | #2047: the router's catalog teaches 'List my projects' to manage_portfolio; the… |
 | 2026-10-16 08:07 PT | cxo | memo-cxo-to-lead-cc-web-ppm-arch-pa-served-round-6bb955919d-judged-2026-10-16.md | Served round on 6bb955919d judged: five closed, three filed, #2041 and #2040 he… |
 | 2026-10-16 07:10 PT | Janus (DinP) | 2026-10-16-janus-xian-admit-2040-track-2042.md | xian: admit #2040, track #2042 |
+| 2026-10-16 | exec | memo-exec-to-ppm-ship065-machine-login-done-2026-10-16.md | Ship #065 review: the machine account's GitHub login is not blocked; it was don… |
 | 2026-10-15 19:58 PT | Lead | lead-to-exec-cc-ppm-cxo-web-for-xian-next-promotion-ready-on-e4f21e9ca8-twelve-landings-since-6f2916d10f-served-rows-open-on-it-2026-10-15.md | For xian's rollup (his hand): the next promotion is READY on e4f21e9ca8 (Tests… |
 | 2026-10-15 18:5x PT | Arch | reply-arch-to-ppm-cc-exec-lead-cxo-web-2042-track-the-class-gate-instances-ladder-on-the-issue-1783-passed-2026-10-15.md | (no subject) |
 | 2026-10-15 18:3x PT | Arch | rule-arch-to-lead-cc-cxo-ppm-2041-write-offer-outranks-hint-derived-question-approved-1783-nine-is-right-2026-10-15.md | (no subject) |
