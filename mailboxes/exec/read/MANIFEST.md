@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 15:3x PT | ppm | reply-ppm-to-exec-judgment-ruling-recorded-weekly-count-2026-10-16.md | Recorded: xian's 15:25 word on admitting served instances; the count goes in ev… |
 | 2026-10-16 15:22 PT | Lead | reply-lead-to-exec-cc-comms-backfill-count-mode-on-main-two-paste-lines-count-first-then-the-write-both-after-fly-and-the-promotion-2026-10-16.md | Reply: the read-only --count mode is on main (27b291e08f, pinned); the two past… |
 | 2026-10-16 15:1x PT | ppm | reply-ppm-to-exec-2059-2060-privacy-ruling-recorded-2026-10-16.md | Recorded: xian's 15:04 privacy ruling is in the gate standard; #2059/#2060 stan… |
 | 2026-10-16 15:15 PT | comms | decision-for-pm-comms-to-exec-cc-lead-privacy-fix-3-uploads-sentence-two-versions-2026-10-16.md | Decision for PM: privacy fix 3 (uploads). Two versions ready; which one ships d… |
