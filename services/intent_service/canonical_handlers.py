@@ -4797,7 +4797,7 @@ What would you like to set up first?"""
                         "requires_clarification": False,
                     }
                     # #2010 / #2035: the empty state's "Would you like to add
-                    # one?" leads to a WRITE, so it arms the #846 store with
+                    # a project?" leads to a WRITE, so it arms the #846 store with
                     # the offer_add_project landing (never the #852 hint).
                     # This method has no offer-store access: the record rides
                     # the result as "write_offer", armed at the canonical

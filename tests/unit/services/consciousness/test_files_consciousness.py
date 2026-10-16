@@ -45,7 +45,7 @@ class TestProjectsConsciousness:
         # rendered by callers that arm it; the formatter itself never asks.
         assert (
             empty_projects_message()
-            == "You don't have any active projects yet. Would you like to add one?"
+            == "You don't have any active projects yet. Would you like to add a project?"
         )
         assert "?" not in format_projects_conscious([])
 

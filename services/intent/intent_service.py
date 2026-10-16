@@ -1753,7 +1753,7 @@ class IntentService:
                             requires_clarification=_apcq_turn.get("requires_clarification", False),
                         )
                 # #2035: a pending yes/no ADD-PROJECT OFFER ("Would you like
-                # to add one?" and the two setup-guidance asks). Only the
+                # to add a project?" and the two setup-guidance asks). Only the
                 # principal check and CXO's "later" decline are handled here;
                 # None falls through to the generic seam, whose ACCEPT
                 # dispatches the registered offer_add_project landing (asks
@@ -5466,7 +5466,7 @@ class IntentService:
         # Transform domain Project objects → dicts for format_projects_conscious.
         project_dicts = [{"name": p.name, "active": not p.is_archived} for p in projects]
 
-        # #2010: the empty state asks "Would you like to add one?" — rendered
+        # #2010: the empty state asks "Would you like to add a project?" — rendered
         # HERE and armed in the same turn, the same offer the manage_portfolio
         # list branch arms. The non-empty list ends plainly
         # (format_projects_conscious).

@@ -80,7 +80,7 @@ CLARIFY_ADD_PROJECT_CONFIRM_WORKFLOW = "clarify_add_project_confirm"
 
 
 # #2035 (Arch's rule + CXO's shape B, 2026-10-15): a yes/no OFFER to add a
-# project ("Would you like to add one?", "Are you ready to set up your first
+# project ("Would you like to add a project?", "Are you ready to set up your first
 # project?", "Want to add another?"). Its "yes" leads to a WRITE, so it arms
 # THIS one-slot #846 store with its own accept landing, never the #852
 # contextual hint (that rail steers "yes" into the classifier, which reaches
@@ -97,6 +97,13 @@ ADD_PROJECT_OFFER_DECLINE = "Okay, I'll leave it for now. Say 'add a project' an
 _ADD_PROJECT_OFFER_TAUGHT_DECLINES = ("later",)
 # CXO's accept landing copy (shape B memo, verbatim).
 ADD_PROJECT_ACCEPT_NAME_QUESTION = "What would you like to call it?"
+# CXO's fail-closed line (four-calls memo item 2, 2026-10-15, verbatim): the
+# accept landing could not arm the name question, so it asks nothing and
+# names the one working phrase with an example.
+ADD_PROJECT_OFFER_ARM_FAILED = (
+    "I lost track of that. Say 'add project' and a name, like 'add project Launch', "
+    "and I'll add it."
+)
 
 
 def build_add_project_offer(question: str, user_id=None) -> Dict[str, Any]:
@@ -221,7 +228,7 @@ async def run_offer_add_project_workflow(
     if armed:
         reply = offer["question"]
     else:
-        reply = "I couldn't keep the question open — say 'add project [name]' " "and I'll add it."
+        reply = ADD_PROJECT_OFFER_ARM_FAILED
     return {
         "message": reply,
         "intent_data": {

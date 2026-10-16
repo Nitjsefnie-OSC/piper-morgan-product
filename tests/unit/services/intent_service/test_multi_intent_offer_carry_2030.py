@@ -25,6 +25,7 @@ import pytest
 
 from services.consciousness.files_consciousness import (
     empty_projects_message,
+    empty_projects_offer,
 )
 from services.domain.models import Intent
 from services.intent.intent_service import IntentService
@@ -47,7 +48,12 @@ EMPTY_MSG = empty_projects_message()
 # leads to a write never arms the contextual hint), so production no longer
 # builds this hint. The dict below is a FIXTURE for the carry mechanics these
 # pins cover (any hinted sibling); its shape is the #852 offer_hint contract.
-EMPTY_HINT = {"continuation_hint": "add a new project", "offer_text": "Would you like to add one?"}
+# Its offer_text is the real empty-projects question (one source, CXO's
+# four-calls memo item 3: "Would you like to add a project?").
+EMPTY_HINT = {
+    "continuation_hint": "add a new project",
+    "offer_text": empty_projects_offer()["question"],
+}
 EMPTY_Q = EMPTY_HINT["offer_text"]
 
 # The real _format_project_setup_guidance reply (#2024 copy). Since #2035 its
