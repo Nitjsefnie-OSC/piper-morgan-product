@@ -170,3 +170,4 @@ misread until 2026-10-01.*
 | 125 | **Alpha moved: post "alpha moved to X at T" after Lead's second promotion today (xian said yes 11:2x), and drop the #2057 avoid-line once alpha serves it.** `key: alpha-moved-2` | 2026-10-16 | Waiting on Lead's dispatch |
 | 126 | **Every Friday START: send the Ship workstream-review kickoff (window Fri→Thu just closed) before anything else. Missed two weeks running (064, 065).** `key: friday-kickoff` | 2026-10-16 | Recurring; next due Fri 10-23 START |
 | 127 | **Ship #065 synthesis: draft from the reviews in hand by Sat 10-17 afternoon; full version when the last review lands.** `key: ship065-synthesis` | 2026-10-16 | 7 of 10 in (Comms, PPM, CIO, Docs, HOST, PA, Web); Arch, CXO, Lead to come |
+| 128 | **Privacy page fixes 1 and 2 (Comms): relay xian's OK to Comms, who hands Web the text. Fixes 3 and 4 follow Lead's facts.** `key: privacy-ok` | 2026-10-16 | Waiting on xian (rollup v353) |
