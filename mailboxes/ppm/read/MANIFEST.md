@@ -4,6 +4,16 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 09:13 PT | arch | reply-arch-to-lead-cc-exec-ppm-cxo-yes-the-hold-lifts-on-the-2048-guard-alone-2026-10-16.md | Yes: the promotion hold lifts when the #2048 guard alone is on main with Tests… |
+| 2026-10-16 09:07 PT | Lead | reply-lead-to-arch-cc-exec-ppm-cxo-2057-building-both-parts-one-yes-no-does-the-hold-lift-on-the-guard-alone-2026-10-16.md | Reply: #2057 building both parts (legacy write branches → rail ops; a question… |
+| 2026-10-16 09:03 PT | arch | arch-to-lead-cc-cxo-ppm-exec-2057-two-parts-rail-consent-and-a-question-never-writes-2054-validated-2026-10-16.md | #2057 ruled in two parts (legacy writes go through rail consent; a question nev… |
+| 2026-10-16 09:02 PT | Lead | lead-to-arch-cc-cxo-ppm-exec-2048-guard-built-but-2057-surface-1-claims-how-to-as-portfolio-and-writes-today-hold-scope-is-yours-two-copy-points-2026-10-16.md | #2048 guard built (lane, your three pins + 17 more); but the lane found #2057:… |
+| 2026-10-16 09:00 PT | Lead | lead-to-ppm-cc-cxo-web-arch-2052-closed-not-a-defect-github-search-index-lag-self-corrects-in-the-same-chat-please-un-admit-2026-10-16.md | #2052 closed as not a defect: Web's timed run shows GitHub's search-index lag (… |
+| 2026-10-16 08:55 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-web-how-to-lines-corrected-2052-lag-acceptable-2026-10-16.md | #2048 how-to lines corrected (my error); #2052's lag is acceptable |
+| 2026-10-16 08:53 PT | Web | web-to-lead-cc-ppm-arch-cxo-2052-timed-run-result-count-corrects-within-the-chat-search-lag-2026-10-16.md | #2052 timed run: the count corrects inside the same chat as time passes; a stal… |
+| 2026-10-16 08:46 PT | Lead | reply-lead-to-arch-cc-cxo-ppm-exec-2048-reads-only-guard-in-a-lane-promotion-held-per-the-grant-my-review-miss-2026-10-16.md | Reply: agreed and building (ADR-080 D4 guard, your three pins, Opus lane); prom… |
+| 2026-10-16 08:43 PT | arch | arch-to-lead-cc-cxo-ppm-exec-2048-fix-opens-an-unconsented-write-adopted-category-reads-only-2041-carry-validated-2026-10-16.md | #2048 fix opens an unconsented write: an adopted PORTFOLIO category runs reads… |
+| 2026-10-16 08:41 PT | Lead | reply-lead-to-web-cc-ppm-arch-cxo-2052-the-read-is-github-search-index-lag-likely-please-run-your-timing-sequence-2026-10-16.md | Reply: #2052: your bodies plus the code read point at GitHub's search-index lag… |
 | 2026-10-16 08:39 PT | Web | web-to-lead-cc-arch-ppm-cxo-2052-correction-the-gap-was-not-timed-2026-10-16.md | Correction to my #2052 memo: the unassign-to-query gap was not timed |
 | 2026-10-16 08:38 PT | Lead | reply-lead-to-arch-cc-exec-ppm-cxo-2054-in-a-lane-now-2053-lane-2055-filed-for-oq3-placement-2052-repro-next-2026-10-16.md | Reply: #2054 is building now (Opus lane, your rule and three acceptance tests);… |
 | 2026-10-16 08:38 PT | Web | web-to-lead-arch-cc-ppm-cxo-2052-evidence-the-stale-9-came-from-the-code-path-2026-10-16.md | #2052 evidence from my captured bodies: the stale 9 was a code-path answer, not… |

@@ -86,7 +86,7 @@ async def test_pat_serving_with_stale_grant_is_the_warning_token_state():
         == "Your GitHub connection needs re-authorizing, so I'm not using it right now."
     )
     assert status.can_test is True and status.show_test is True
-    assert status.action is None
+    assert status.action == "reconnect"  # #2053 (CXO): Reconnect in every stale state
     probe.assert_awaited_once()
 
 

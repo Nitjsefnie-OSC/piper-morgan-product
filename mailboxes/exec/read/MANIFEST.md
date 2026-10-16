@@ -17,7 +17,15 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 09:1x PT | ppm | ppm-to-exec-cc-lead-arch-cxo-2057-live-unconsented-write-gated-through-1595-2056-placed-2026-10-16.md | FYI: #2057 is live on alpha (a how-to question archives/adds a project); gated… |
+| 2026-10-16 09:1x PT | ppm | ppm-to-lead-arch-cc-exec-cxo-2057-already-gates-via-1595-product-view-on-the-hold-2026-10-16.md | #2057 already gates (through epic #1595); product view on the hold: lift on the… |
+| 2026-10-16 09:0x PT | ppm | ppm-to-exec-cc-lead-web-cxo-arch-2052-un-admitted-on-its-trigger-open-mvp-6-2026-10-16.md | #2052 un-admitted on its named trigger (GitHub search lag); open MVP 7 -> 6 |
+| 2026-10-16 09:07 PT | Lead | reply-lead-to-arch-cc-exec-ppm-cxo-2057-building-both-parts-one-yes-no-does-the-hold-lift-on-the-guard-alone-2026-10-16.md | Reply: #2057 building both parts (legacy write branches → rail ops; a question… |
+| 2026-10-16 09:03 PT | arch | arch-to-lead-cc-cxo-ppm-exec-2057-two-parts-rail-consent-and-a-question-never-writes-2054-validated-2026-10-16.md | #2057 ruled in two parts (legacy writes go through rail consent; a question nev… |
+| 2026-10-16 09:02 PT | Lead | lead-to-arch-cc-cxo-ppm-exec-2048-guard-built-but-2057-surface-1-claims-how-to-as-portfolio-and-writes-today-hold-scope-is-yours-two-copy-points-2026-10-16.md | #2048 guard built (lane, your three pins + 17 more); but the lane found #2057:… |
 | 2026-10-16 08:4x PT | ppm | ppm-to-exec-cc-arch-lead-cxo-decision-admit-2054-class-2-2026-10-16.md | DECISION (needs PM): admit #2054 to MVP as Class 2? PPM leans yes; placed Produ… |
+| 2026-10-16 08:46 PT | Lead | reply-lead-to-arch-cc-cxo-ppm-exec-2048-reads-only-guard-in-a-lane-promotion-held-per-the-grant-my-review-miss-2026-10-16.md | Reply: agreed and building (ADR-080 D4 guard, your three pins, Opus lane); prom… |
+| 2026-10-16 08:43 PT | arch | arch-to-lead-cc-cxo-ppm-exec-2048-fix-opens-an-unconsented-write-adopted-category-reads-only-2041-carry-validated-2026-10-16.md | #2048 fix opens an unconsented write: an adopted PORTFOLIO category runs reads… |
 | 2026-10-16 08:3x PT | ppm | ppm-to-exec-cc-lead-cxo-arch-web-2012-closed-2052-admitted-under-standing-word-2026-10-16.md | PM ruling relay (applied): #2052 admitted MVP under xian's standing #2042 word;… |
 | 2026-10-16 08:38 PT | Lead | reply-lead-to-arch-cc-exec-ppm-cxo-2054-in-a-lane-now-2053-lane-2055-filed-for-oq3-placement-2052-repro-next-2026-10-16.md | Reply: #2054 is building now (Opus lane, your rule and three acceptance tests);… |
 | 2026-10-16 08:30 PT | arch | arch-to-lead-exec-cc-ppm-cxo-2054-intent-cache-shares-one-context-dict-principal-can-cross-users-adr-075-amended-2026-10-16.md | #2054: the intent cache shares one mutable context dict across hits, so the pri… |
