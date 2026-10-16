@@ -8157,3 +8157,66 @@ class TestLogNeverSlicesUserText2059:
     def test_allow_list_is_only_the_helper(self):
         assert set(self.ALLOW_FILES) == {"services/utils/utterance_log.py"}
         assert not self.ALLOW_SITES
+
+
+class TestEraseUserCensus2064:
+    """2064 (Arch-ruled shape, 2026-10-16): the /privacy page promises "we'll
+    delete your account and everything in it within 14 days", and
+    ``scripts/erase_user.py`` is the one path that keeps it. This census keeps
+    a new table from escaping that path.
+
+    Walks ``Base.metadata``. A table is user-owned when it has an owner-named
+    column (``user_id``, ``owner_id``, ``created_by``, ``added_by``,
+    ``linked_by``, ``principal``/``principal_id``, any ``*_user_id``), an FK to
+    ``users``, or an FK to another user-owned table (children of user data are
+    user data; run to a fixed point). Every user-owned table must be in
+    ``erase_user.PLAN`` or in ``erase_user.ALLOW_LIST`` with a written reason.
+    Ceiling 0 unplanned, never raised: a new user table ships with its plan
+    step (in FK dependency order; tests/unit/scripts/test_erase_user_2064.py
+    pins the order) or an allow-list line saying why its rows outlive the user.
+    """
+
+    @staticmethod
+    def _census():
+        import importlib
+
+        import services.database.models  # noqa: F401  (registers every model table)
+        from services.database.models import Base
+
+        erase_user = importlib.import_module("scripts.erase_user")
+        return erase_user, Base.metadata, erase_user.user_owned_tables(Base.metadata)
+
+    def test_denominator_census_sees_the_user_tables(self):
+        """m-44: a pass means nothing if the walk found nothing."""
+        _, md, owned = self._census()
+        assert len(md.tables) >= 45, f"only {len(md.tables)} tables in Base.metadata"
+        assert len(owned) >= 40, (
+            f"only {len(owned)} user-owned tables found; the model import or the "
+            "owner predicate broke, not the schema got smaller"
+        )
+
+    def test_every_user_owned_table_is_planned_or_allow_listed_ceiling_zero(self):
+        erase_user, _, owned = self._census()
+        missing = erase_user.unplanned(owned)
+        assert not missing, (
+            "2064: user-owned tables that scripts/erase_user.py would leave behind: "
+            + "; ".join(f"{t} ({owned[t]})" for t in missing)
+            + ". Add a Step to erase_user.PLAN in FK dependency order (children before "
+            "parents), or an ALLOW_LIST entry with the reason its rows outlive the user. "
+            "Ceiling 0, never raised."
+        )
+
+    def test_allow_list_entries_are_live_and_reasoned(self):
+        erase_user, md, owned = self._census()
+        for table, reason in erase_user.ALLOW_LIST.items():
+            assert table in md.tables, f"ALLOW_LIST names {table}, which no longer exists"
+            assert table in owned, f"ALLOW_LIST names {table}, which holds no user data"
+            assert (
+                table not in erase_user.plan_tables()
+            ), f"{table} is both planned and allow-listed"
+            assert len(reason.split()) >= 4, f"ALLOW_LIST[{table!r}] needs a written reason"
+
+    def test_plan_names_only_real_tables(self):
+        erase_user, md, _ = self._census()
+        stale = [t for t in erase_user.plan_tables() if t not in md.tables]
+        assert not stale, f"erase_user.PLAN names tables that no longer exist: {stale}"
