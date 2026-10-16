@@ -32,7 +32,7 @@
 </style>
 <div class="wrap">
 <h1>Attention rollup — Friday 16 October</h1>
-<p class="meta">Exec · v370, rebuilt 16:19 PDT Fri 10-16 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). Full rebuild: done and stale items removed, the rest re-sorted into before testing, during testing and after. If the version number here differs from the one in my reply, you are reading a stale copy.</p>
+<p class="meta">Exec · v371, rebuilt 16:23 PDT Fri 10-16 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). Full rebuild: done and stale items removed, the rest re-sorted into before testing, during testing and after. If the version number here differs from the one in my reply, you are reading a stale copy.</p>
 
 <div class="card win"><b>Bottom line.</b> You&rsquo;re testing with Lead now. The token is done (compose saves), and the week review is answered. The bar for design partners is set: privacy and security closed, the rest disclosed after you and PPM review them. Alpha is still on this morning&rsquo;s build; the next one (with #2057, #2054, #2048, #2059, #2060) waits on Lead&rsquo;s call: Fly&rsquo;s incident is rolling host reboots, not an API outage, and your deploy just worked.</div>
 
@@ -48,7 +48,6 @@
 <div class="card"><p><b>Soon (this weekend, or before 10-23)</b></p><ol style="margin:.2rem 0 .2rem 1.2rem;padding:0">
 <li><b>A real conversation with Comms about the coming beats</b> (your words): the slate (keep 12 or merge to 8) and the <b>Sun 10-18 &ldquo;Measure the Start&rdquo; rewrite</b>. That one publishes in two days, so it should be tomorrow at the latest.</li>
 <li><b>Two documents ready for you, both early:</b> (1) <b>Your Terms scaffold</b>: seven areas, prompts for your own words, with cited facts and no drafted commitments (<code>docs/internal/design/terms-scaffold-for-xian-2026-10-16.md</code>; it already follows your 10-13 deletion ruling). (2) <b>The known-issues review with PPM</b>: 6 open MVP rows and 3 candidates from outside MVP; for each you decide list it, don&rsquo;t list it, or fix it first (<code>docs/internal/planning/design-partner-known-issues-review-2026-10-16.md</code>). No partners are named yet; PPM says what the 10-23 milestone means now. Ask me to make either one a readable page.</li>
-<li><b>Usage numbers: Pard&rsquo;s are in</b> (synthesis page, draft 2). The plan hit 88% of its weekly limit two weeks running; Lead is 37.5% of all output. <b>One piece needs your login (about 3 min):</b> Anthropic Console, &ldquo;xian&rsquo;s Individual Org&rdquo; &rarr; <b>Usage</b> and <b>Cost</b>, range 10-09 to 10-15, grouped by day, split by workspace (beta-testing, lead-scoring). Paste or screenshot it to me.</li>
 <li><b>Google, for design partners:</b> the app is in Testing (your 10-15 <code>access_denied</code> until you were a test user). Each partner&rsquo;s Google address goes under Audience &rarr; Test users before 10-23, and as I understand Google&rsquo;s rules their Calendar connection lapses every 7 days. Lean: stay in Testing for partners; plan verification later.</li>
 <li><b>Privacy fix 3: two pastes, once Fly is healthy and alpha is promoted</b> (I&rsquo;ll tell you when). (1) Read-only count: <code>fly ssh console -a piper-morgan -C "python -m scripts.backfill_encrypt_files_1306 --count"</code>. At &ldquo;0 plaintext&rdquo;, stop. (2) Only if it&rsquo;s above 0: the same command without <code>--count</code>. Paste me the last line of each.</li>
 </ol>
@@ -75,6 +74,7 @@
 <h2>✅ Removed this rebuild (done or recorded)</h2>
 <div class="card">Google branding (done); Google redirect unset (done, check during testing); the clones (you deleted them); #2054 admit; privacy fixes 1 and 2 (live); the encryption key read; the stray files; both grant questions; PPM&rsquo;s admit judgment; Ship #065 reviews (10 of 10, synthesis published); Web&rsquo;s row F asks (moot); the Wednesday floor check (passed, 90); older 10-13 and 10-14 &ldquo;in motion&rdquo; entries; the Janus block, last updated 10-09 and stale (I&rsquo;ve asked Janus whether it still uses it).</div>
 
+<footer><b>Verified how</b> (v371, 16:23): your Console screenshots (4 workspace views), added to the synthesis, draft 3.</footer>
 <footer><b>Verified how</b> (v370, 16:19): Comms' scaffold on main 28a9408f33 (its line 61 quotes support@ and 14 days); PPM's known-issues file on main.</footer>
 <footer><b>Verified how</b> (v369, 16:19): your answers relayed (#2061 admit; PPM's four conditions; no partners yet; deletion already ruled 10-13, now in decisions.log). Live /privacy text read (support@, 14 days). Fly summary.json: rolling host reboots, about 85% done.</footer>
 <footer><b>Verified how</b> (v368, 16:15): Pard's usage memo (plan tsv plus transcripts, no credentials); CIO's week counter (78 opened, 56 closed).</footer>
