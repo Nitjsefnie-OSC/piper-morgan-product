@@ -32,7 +32,7 @@
 </style>
 <div class="wrap">
 <h1>Attention rollup — Friday 16 October</h1>
-<p class="meta">Exec · v371, rebuilt 16:23 PDT Fri 10-16 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). Full rebuild: done and stale items removed, the rest re-sorted into before testing, during testing and after. If the version number here differs from the one in my reply, you are reading a stale copy.</p>
+<p class="meta">Exec · v372, rebuilt 16:24 PDT Fri 10-16 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). Full rebuild: done and stale items removed, the rest re-sorted into before testing, during testing and after. If the version number here differs from the one in my reply, you are reading a stale copy.</p>
 
 <div class="card win"><b>Bottom line.</b> You&rsquo;re testing with Lead now. The token is done (compose saves), and the week review is answered. The bar for design partners is set: privacy and security closed, the rest disclosed after you and PPM review them. Alpha is still on this morning&rsquo;s build; the next one (with #2057, #2054, #2048, #2059, #2060) waits on Lead&rsquo;s call: Fly&rsquo;s incident is rolling host reboots, not an API outage, and your deploy just worked.</div>
 
@@ -63,6 +63,7 @@
 <div class="card">
 <p><b>Next promotion:</b> waiting on Fly&rsquo;s outage, on your yes from this morning. Tests are green on <code>063a99f523</code>, which carries #2057 (questions never write), the #2048 guard, #2054 (cross-user cache), #2059 and #2060 (privacy), and Lead&rsquo;s backfill count mode. Lead retries when Fly is healthy, before 21:00, or else tomorrow&rsquo;s first slot. I post &ldquo;alpha moved to X at T&rdquo; here.</p>
 <p><b>Terms (option 2, your pick):</b> Comms applies both invite fixes; Comms and CXO build a scaffold of prompts for your own words, to you by Wed 10-21; PPM places Terms and legal review (before anyone beyond design partners) on the Production gate; your alpha-vs-beta warning distinction is relayed. Arch&rsquo;s facts come 10-20.</p>
+<p><b>The 14-day deletion promise needs a way to keep it:</b> Arch found that nothing in the code can erase an account today (a user delete fails on 13 links between tables). Filed as #2064, with the shape ruled: one erase script under the existing prod rule, which counts by default and erases only on a flag. PPM places it under your privacy rule; Lead builds it. Support@ delivery was already shown on 10-12 (HOST&rsquo;s test). Web is checking whether alpha has any delete button for a chat.</p>
 <p><b>Week review answers, relayed:</b> CIO builds a date check into mail-send (and decides on coalescing cc-only mail); PPM records the partner bar; HOST adds one line for the 09-21 tester; history stays as it is; Web closes the token item.</p>
 <p><b>Friday kickoff:</b> now automatic. The first real run is Fri 10-23, and we review it after.</p>
 <p><b>Grant:</b> your wider line is recorded (any dispatch that leaves alpha unchanged isn&rsquo;t a promotion). <b>PPM:</b> keeps admitting served instances on its own judgment, with a weekly count for you.</p>
@@ -74,6 +75,7 @@
 <h2>✅ Removed this rebuild (done or recorded)</h2>
 <div class="card">Google branding (done); Google redirect unset (done, check during testing); the clones (you deleted them); #2054 admit; privacy fixes 1 and 2 (live); the encryption key read; the stray files; both grant questions; PPM&rsquo;s admit judgment; Ship #065 reviews (10 of 10, synthesis published); Web&rsquo;s row F asks (moot); the Wednesday floor check (passed, 90); older 10-13 and 10-14 &ldquo;in motion&rdquo; entries; the Janus block, last updated 10-09 and stale (I&rsquo;ve asked Janus whether it still uses it).</div>
 
+<footer><b>Verified how</b> (v372, 16:24): Arch's #2064 note; HOST's own 10-12 memo (support@ test arrived); CXO's source read on chat delete.</footer>
 <footer><b>Verified how</b> (v371, 16:23): your Console screenshots (4 workspace views), added to the synthesis, draft 3.</footer>
 <footer><b>Verified how</b> (v370, 16:19): Comms' scaffold on main 28a9408f33 (its line 61 quotes support@ and 14 days); PPM's known-issues file on main.</footer>
 <footer><b>Verified how</b> (v369, 16:19): your answers relayed (#2061 admit; PPM's four conditions; no partners yet; deletion already ruled 10-13, now in decisions.log). Live /privacy text read (support@, 14 days). Fly summary.json: rolling host reboots, about 85% done.</footer>
