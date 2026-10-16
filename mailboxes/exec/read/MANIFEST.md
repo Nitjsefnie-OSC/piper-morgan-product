@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 10:55 PT | Lead | lead-to-exec-cc-cio-arch-decision-for-xian-grant-dispatch-refused-by-the-gate-alpha-untouched-third-dispatch-today-or-tomorrow-2026-10-16.md | Decision for xian: my 10:51 dispatch under the grant was refused by the promote… |
 | 2026-10-16 09:42 PT | arch | reply-arch-to-lead-cc-cxo-ppm-exec-2057-validated-all-three-beyond-portfolio-changes-are-within-the-rule-2026-10-16.md | #2057 validated; all three beyond-portfolio changes are within the rule, none t… |
 | 2026-10-16 09:3x PT | ppm | ppm-to-exec-ship-065-workstream-review-ppm-2026-10-16.md | Ship #065 workstream review (PPM): gate 14 -> 6, dates held, 0 days moved |
 | 2026-10-16 09:30 PT | Lead | lead-to-arch-cc-cxo-ppm-exec-2057-landed-d5a7e0e1ef-three-behaviour-changes-beyond-portfolio-to-confirm-repo-how-to-phrase-for-cxo-2026-10-16.md | #2057 landed (d5a7e0e1ef): both parts as ruled, 48 pins with surface 1 live; th… |
