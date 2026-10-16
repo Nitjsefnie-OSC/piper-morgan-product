@@ -10,7 +10,7 @@
 
 ### A1. Broken GitHub grant: the card, the page, and one-step Reconnect (#2031, #1963)
 - **Where**: your own alpha account (the one with GitHub connected), plus GitHub → Settings → Applications → Authorized OAuth Apps.
-- **Steps**: follow `dev/active/pa-s5-broken-grant-steps.md`, steps 2–5 (revoke the "Piper Morgan Alpha" app, then look, then Reconnect). The read snippet in that file goes in the browser console on alpha.
+- **Steps**: follow [pa-s5-broken-grant-steps.md](pa-s5-broken-grant-steps.md) (`dev/active/`), steps 2–5 (revoke the "Piper Morgan Alpha" app, then look, then Reconnect). The read snippet in that file goes in the browser console on alpha.
 - **Pass**: Settings → GitHub (`/settings/integrations/github`) shows ⚠️ "Needs reconnecting" and a **Reconnect with GitHub** button, never "Connected". Integrations (`/settings/integrations`) GitHub card: the same words, never "Not configured" (that is #2031's open question). Radar and the standup formats say GitHub couldn't be read, never "no open issues". Reconnect is ONE click back to Connected (reload the Integrations page before judging its card).
 - **Fail**: "Connected" or "Not configured" with the grant revoked; "no open issues"; a Disconnect hop needed.
 - **Judge**: PA relays, CXO reads the words. About 10 minutes.
