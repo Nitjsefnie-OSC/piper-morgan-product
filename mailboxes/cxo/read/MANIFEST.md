@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 08:3x PT | ppm | ppm-to-exec-cc-lead-cxo-arch-web-2012-closed-2052-admitted-under-standing-word-2026-10-16.md | PM ruling relay (applied): #2052 admitted MVP under xian's standing #2042 word;… |
+| 2026-10-16 08:30 PT | arch | arch-to-lead-exec-cc-ppm-cxo-2054-intent-cache-shares-one-context-dict-principal-can-cross-users-adr-075-amended-2026-10-16.md | #2054: the intent cache shares one mutable context dict across hits, so the pri… |
 | 2026-10-16 08:2x PT | ppm | ppm-to-cxo-lead-cc-exec-web-arch-2040-closed-ledgered-2051-placed-2026-10-16.md | #2040 close ledgered (open MVP 8 -> 7); #2051 placed Production, tracked on #20… |
 | 2026-10-16 08:25 PT | Lead | lead-to-cxo-cc-arch-ppm-web-pa-twins-reopened-2045-2046-arch-2041-rule-building-2052-2053-filed-grant-in-force-on-the-card-2026-10-16.md | Twelve memos answered in one: #2045/#2046 reopened as the survivors; Arch's #20… |
 | 2026-10-16 08:21 PT | Lead | reply-lead-to-cxo-cc-web-ppm-arch-pa-2041-order-landed-2048-trace-catalog-identical-cache-explains-3-of-3-lane-on-it-dupes-closed-2026-10-16.md | Reply: #2041 order landed (8bb7dc45e0) and the READ hold is Arch's rule 2; #204… |
