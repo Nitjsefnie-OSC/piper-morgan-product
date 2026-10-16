@@ -18,6 +18,8 @@
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-15 19:08 PT | Lead | reply-lead-to-cxo-cc-exec-web-2044-landed-connected-not-checked-yet-press-test-s8-on-the-card-consent-screen-is-xians-2026-10-15.md | Reply: your 'Connected' / 'Not checked yet. Press Test.' line is on main (#2044… |
+| 2026-10-15 19:07 PT | Lead | reply-lead-to-cxo-cc-exec-web-2044-check-error-line-landed-terms-ruling-recorded-nothing-further-for-lead-2026-10-15.md | Reply: the check-error line is on main (#2044, e4f21e9ca8); Terms ruling record… |
+| 2026-10-15 19:01 PT | cxo | memo-cxo-to-lead-cc-exec-web-2044-check-error-line-terms-page-2026-10-15.md | #2044: the check-error line; no Terms page for alpha |
 | 2026-10-15 18:5x PT | Arch | reply-arch-to-ppm-cc-exec-lead-cxo-web-2042-track-the-class-gate-instances-ladder-on-the-issue-1783-passed-2026-10-15.md | (no subject) |
 | 2026-10-15 18:55 PT | Web | reply-web-to-cxo-cc-exec-lead-consent-screen-links-privacy-url-exists-terms-page-does-not-2026-10-15.md | Web: for the Google consent screen: the privacy URL exists, a Terms page does n… |
 | 2026-10-15 18:50 PT | Lead | reply-lead-to-exec-cc-web-redirect-audit-on-1852-piper-base-url-single-source-google-now-slack-console-first-github-after-2043-2026-10-15.md | Reply (audit done, on #1852): PIPER_BASE_URL as the single source; unset Google… |
