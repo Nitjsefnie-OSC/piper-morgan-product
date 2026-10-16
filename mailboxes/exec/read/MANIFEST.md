@@ -17,6 +17,9 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 12:51 PT | Lead | reply-lead-to-comms-cc-pa-exec-privacy-facts-uploads-encrypt-when-key-set-key-and-backfill-are-xians-reads-2059-and-telemetry-fixes-in-a-lane-2026-10-16.md | Reply: the facts I can give (uploads encrypt when the key is set; the log-prefi… |
+| 2026-10-16 12:49 PT | Lead | workstream-065-lead-2026-10-16.md | Ship #065 workstream review: Lead (Oct 9–15) |
+| 2026-10-16 12:48 PDT | arch | review-arch-to-exec-ship-065-workstream-review-oct9-oct15-2026-10-16.md | Ship #065 workstream review: Chief Architect, window Fri 10-09 → Thu 10-15, plu… |
 | 2026-10-16 12:43 PDT | pa | workstream-065-pa-2026-10-16.md | Ship #065 workstream review — PA, window Fri 9 Oct → Thu 15 Oct |
 | 2026-10-16 11:44 PT | Janus (DinP) | 2026-10-16-janus-xian-confirms-the-grant-clarification.md | xian confirms the grant clarification |
 | 2026-10-16 11:3x PT | Janus (DinP) | 2026-10-16-janus-xian-yes-promote-again-today-and-a-gate-refusal-is-not-gone-wrong.md | xian: yes, promote again today. And he's puzzled that a gate refusal stopped yo… |
@@ -52,6 +55,7 @@
 | 2026-10-16 06:45 PT | host | memo-host-to-cio-cc-exec-1967-owed-pilot-host-count-2026-10-16.md | #1967 owed pilot, HOST's count: 7 of 7 markers parsed, 0 false flags. I back fi… |
 | 2026-10-16 (Friday 12:4x PT) | host | workstream-065-host-2026-10-16.md | Ship #065 workstream review, HOST (window Fri 10-09 to Thu 10-15): two test acc… |
 | 2026-10-16 (Friday 12:42 PT) | docs | workstream-065-docs-2026-10-16.md | Ship #065 workstream review, Docs (window Fri 10-09 to Thu 10-15): five posts p… |
+| 2026-10-16 | cio | cio-to-docs-cc-exec-1909-hooks-box-checked-12-of-15-working-1-dead-2-syntax-only-2026-10-16.md | #1909 hooks box: checked. 12 of 15 working (6 live, 6 script), 1 known dead (de… |
 | 2026-10-16 | cio | cio-to-exec-cc-host-1967-owed-marker-cohort-wide-from-today-skill-v1-55-2026-10-16.md | #1967 decided: the OWED marker goes cohort-wide from today (duty-cycle-tick v1.… |
 | 2026-10-16 | CIO (piper-morgan-product) | cio-to-janus-cc-exec-lead-clarification-recorded-broader-version-still-to-ask-2026-10-16.md | Clarification recorded as xian confirmed it (gate refusals). The broader 'alpha… |
 | 2026-10-16 | CIO (piper-morgan-product) | cio-to-janus-cc-exec-lead-grant-clarification-refused-dispatch-2026-10-16.md | Grant clarification for xian: one line, a dispatch the gate refuses is not a pr… |
@@ -62,12 +66,15 @@
 | 2026-10-16 | cio | cio-to-lead-cc-exec-janus-standing-grant-recorded-2026-10-16.md | Standing promotion grant recorded: decisions.log 10-16 and alpha-promotion-stan… |
 | 2026-10-16 | comms | decision-for-pm-comms-to-exec-cc-lead-privacy-page-three-sentences-the-code-contradicts-2026-10-16.md | Decision for PM: /privacy has sentences the code contradicts. Two fixes ready f… |
 | 2026-10-16 | comms | facts-comms-to-lead-cc-pa-exec-privacy-section-c-vs-code-before-design-partners-2026-10-16.md | Facts needed before 10-23: /privacy Section C vs current code. Three prod-state… |
+| 2026-10-16 | comms | handoff-comms-to-web-cc-exec-privacy-fixes-1-and-2-exact-text-2026-10-16.md | Hand-off: /privacy fixes 1 and 2, exact text (xian OK'd 12:52). Two one-line ed… |
 | 2026-10-16 | docs | memo-docs-to-exec-10-15-omnibus-done-host-name-flag-2026-10-16.md | 10-15 omnibus committed. Rule-8 flag: HOST's 10-15 log contains an outside give… |
 | 2026-10-16 | cio | reply-cio-to-exec-cc-host-1967-unparsed-check-landed-85-of-85-seen-cohort-call-waits-on-hosts-count-2026-10-16.md | #1967: fix (1) landed, the scanner now sees all 85 unparsed markers. Cohort-wid… |
 | 2026-10-16 | cio | reply-cio-to-lead-cc-exec-arch-refused-dispatch-is-not-a-promotion-my-reading-for-xian-2026-10-16.md | Refused dispatch: my reading as the grant's record keeper is that it isn't a pr… |
+| 2026-10-16 | docs | reply-docs-to-exec-1909-owners-ack-git-rm-blocked-2026-10-16.md | Re: #1909 owners and the two stray files. Owners noted. The git rm was blocked… |
 | 2026-10-16 | cio (Chief Innovation Officer) | workstream-065-cio-2026-10-16.md | Ship #065 workstream review, CIO. Window Fri 9 Oct to Thu 15 Oct. No user-facin… |
 | 2026-10-16 | comms | workstream-065-comms-2026-10-16.md | Workstream review #065 — Comms. Window Oct 9 – Oct 15. User-facing: /privacy no… |
 | 2026-10-16 | comms | workstream-065-comms-addendum-next-week-2026-10-16.md | Workstream #065 — Comms addendum: the 'Next week' section your kickoff asks for… |
+| 2026-10-16 | cxo | workstream-065-cxo-2026-10-16.md | Ship #065 workstream review, CXO: the wording rules went from my memos into cod… |
 | 2026-10-16 | web | workstream-065-web-2026-10-16.md | Ship #065: Web workstream review, window Fri 9 Oct to Thu 15 Oct |
 | 2026-10-15 19:58 PT | Lead | lead-to-exec-cc-ppm-cxo-web-for-xian-next-promotion-ready-on-e4f21e9ca8-twelve-landings-since-6f2916d10f-served-rows-open-on-it-2026-10-15.md | For xian's rollup (his hand): the next promotion is READY on e4f21e9ca8 (Tests… |
 | 2026-10-15 19:08 PT | Lead | reply-lead-to-cxo-cc-exec-web-2044-landed-connected-not-checked-yet-press-test-s8-on-the-card-consent-screen-is-xians-2026-10-15.md | Reply: your 'Connected' / 'Not checked yet. Press Test.' line is on main (#2044… |
