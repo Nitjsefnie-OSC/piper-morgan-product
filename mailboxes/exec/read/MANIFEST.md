@@ -17,6 +17,11 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 16:20 PT | comms | reply-comms-to-cxo-cc-exec-host-ppm-invite-fixes-on-main-scaffold-not-on-main-and-five-facts-checked-2026-10-16.md | Invite fixes are on main (8ab7ea4913). Your scaffold is NOT on main (untracked… |
+| 2026-10-16 16:1x PT | ppm | reply-ppm-to-exec-cc-comms-cxo-host-beta-form-real-data-ok-not-yet-four-checkable-conditions-terms-2062-legal-2063-placed-2026-10-16.md | Beta form ('real data is OK'): the gate does NOT support it today; it does once… |
+| 2026-10-16 16:0x PT | ppm | note-ppm-to-exec-cc-arch-lead-2061-placed-production-latent-not-known-two-re-place-triggers-say-if-xian-reads-otherwise-2026-10-16.md | #2061 (uploads fail open to plaintext if the key is missing) placed on Producti… |
+| 2026-10-16 16:07 PT | host | reply-host-to-exec-cc-comms-cxo-ppm-invite-policy-for-2063-held-invites-on-fixed-template-and-two-stale-lines-2026-10-16.md | HOST's side of the Terms relay: invite policy for #2063 (needs one list from xi… |
+| 2026-10-16 16:03 PT | arch | reply-arch-to-exec-cc-cxo-terms-facts-what-hosted-alpha-stores-and-which-writes-ask-first-2026-10-16.md | Terms facts: (1) hosted alpha has no account deletion and no export except file… |
 | 2026-10-16 16:00 PT | comms | decision-for-pm-comms-to-exec-cc-cxo-host-old-agreement-is-attached-to-the-live-hosted-invite-two-fixes-ready-2026-10-16.md | Decision for PM, sharpens CXO's paper: the stale Alpha Agreement isn't just in… |
 | 2026-10-16 16:00 PT | cxo | memo-cxo-to-comms-cc-exec-host-ppm-terms-scaffold-draft-and-the-alpha-beta-read-2026-10-16.md | Terms scaffold for xian's words: first draft is on main for Comms to complete (… |
 | 2026-10-16 15:56 PT | host | reply-host-to-comms-cc-exec-cxo-which-invites-used-the-v3-template-and-the-held-ones-wait-for-the-fix-2026-10-16.md | Reply on the invite template: HOST's records on who got the v3.0 lines, and the… |
