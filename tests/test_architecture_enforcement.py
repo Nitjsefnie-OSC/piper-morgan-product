@@ -5592,6 +5592,15 @@ class TestUnarmedAskSiteRatchet:
         {
             ("services/intent_service/add_project_clarify.py", "build_add_project_offer"),
             ("services/consciousness/files_consciousness.py", "empty_projects_offer"),
+            # #2048 follow-up (Arch's D4 ruling, 2026-10-16): the adopted-write
+            # confirm. Its one caller, CanonicalHandlers._handle_portfolio_query
+            # (a pinned builder above), puts it on "write_offer", which the
+            # canonical dispatch seam arms (_arm_write_offer). Pinned by
+            # test_adopted_category_reads_only_2048.py (armed + yes executes).
+            (
+                "services/intent_service/adopted_category_reads_only.py",
+                "build_adopted_write_confirm_offer",
+            ),
         }
     )
     # Check (d): the CanonicalHandlers.handle dispatch holders (found by

@@ -16284,8 +16284,10 @@ Add any additional information here.
         ``manage_repos`` today; read from the registry, never named here) and
         the classifier paired it with another category, adopt PORTFOLIO so
         the Action Gate sends it to ``_handle_portfolio_query`` instead of the
-        floor. Category only: the action, message and context are untouched,
-        so the handler's own operation sniff decides list/add/archive/etc.
+        floor. The action and message are untouched, so the handler's own
+        operation sniff decides list/add/archive/etc.; the one context write is ``category_adopted_from`` (the classifier's
+        category), which holds that handler to READ operations (Arch's D4
+        ruling: an adopted category never writes on that turn).
         Narrow on purpose: the other CANONICAL keys (CONVERSATION
         pleasantries) keep their message-level gate and are not touched."""
         from services.intent_service.action_registry import (
@@ -16308,6 +16310,16 @@ Add any additional information here.
             classified_category=intent.category.value,
             adopted_category=IntentCategory.PORTFOLIO.value,
         )
+        # #2048 follow-up (Arch, ADR-080 D4, comment 6219111038): record the
+        # adoption so _handle_portfolio_query runs READ operations only on
+        # this turn (a sniffed write asks a confirm or gives the phrase).
+        from services.intent_service.adopted_category_reads_only import (
+            ADOPTED_FROM_CONTEXT_KEY,
+        )
+
+        if intent.context is None:
+            intent.context = {}
+        intent.context[ADOPTED_FROM_CONTEXT_KEY] = intent.category.value
         intent.category = IntentCategory.PORTFOLIO
 
     def _requires_canonical_handler(self, intent: Intent) -> bool:

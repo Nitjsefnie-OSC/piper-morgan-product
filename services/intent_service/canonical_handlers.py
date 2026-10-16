@@ -4622,6 +4622,66 @@ What would you like to set up first?"""
                     "requires_clarification": False,
                 }
 
+            # #2048 follow-up (Arch, ADR-080 D4, comment 6219111038; CXO's
+            # copy 2026-10-16): an ADOPTED category (the classifier did not
+            # say PORTFOLIO) runs READ operations only. A sniffed write does
+            # not execute this turn: an imperative gets a yes/no confirm
+            # armed on #846 with the rail op's landing; anything else gets
+            # the phrase to type. Classified PORTFOLIO is untouched (#1595
+            # Phase 3 tail).
+            from services.intent_service.adopted_category_reads_only import (
+                ADOPTED_WRITE_RAIL_ACTIONS,
+                adopted_from,
+                adopted_write_how_to,
+                build_adopted_write_confirm_offer,
+                is_imperative,
+                usable_name,
+            )
+
+            if operation in ADOPTED_WRITE_RAIL_ACTIONS and adopted_from(intent):
+                from services.onboarding.portfolio_service import extract_add_project_slots
+
+                display_name = None
+                if operation == "add":
+                    display_name = extract_add_project_slots(original_message)["name"]
+                elif project_name:
+                    # Same pattern family as the sniff, on the original text
+                    # so the name keeps the user's case.
+                    for pattern in ARCHIVE_PATTERNS if operation == "archive" else RESTORE_PATTERNS:
+                        match = re.search(pattern, original_message, re.IGNORECASE)
+                        if match and match.groups():
+                            display_name = clean_project_name(match.group(1).strip())
+                            break
+                adopted_context = {
+                    "original_message": original_message,
+                    "adopted_from": adopted_from(intent),
+                    "held_operation": operation,
+                }
+                display_name = usable_name(display_name)
+                if display_name and is_imperative(operation, _leading_tokens):
+                    write_offer = build_adopted_write_confirm_offer(operation, display_name, intent)
+                    return {
+                        "message": write_offer["question"],
+                        "intent": {
+                            "category": IntentCategoryEnum.PORTFOLIO.value,
+                            "action": "adopted_write_confirm",
+                            "confidence": 1.0,
+                            "context": adopted_context,
+                        },
+                        "requires_clarification": True,
+                        "write_offer": write_offer,
+                    }
+                return {
+                    "message": adopted_write_how_to(operation, display_name),
+                    "intent": {
+                        "category": IntentCategoryEnum.PORTFOLIO.value,
+                        "action": "adopted_write_how_to",
+                        "confidence": 1.0,
+                        "context": adopted_context,
+                    },
+                    "requires_clarification": False,
+                }
+
             # Handle add operation (#490 originally; rewritten for #1856).
             #
             # #1856, PM live on alpha 2026-09-23: this branch used to ignore
@@ -5710,6 +5770,31 @@ What would you like to set up first?"""
             # the only variable not shared with link/unlink).
             if operation == "list":
                 return await self._handle_list_repos(intent, session_id, user_id)
+
+            # #2048 follow-up (Arch, ADR-080 D4): an ADOPTED category runs
+            # READ operations only, so a sniffed link/unlink does not execute
+            # this turn; the reply names the phrase to type (a statement,
+            # arms nothing). Classified PORTFOLIO is untouched.
+            from services.intent_service.adopted_category_reads_only import (
+                adopted_from,
+                adopted_repo_how_to,
+            )
+
+            if operation in ("link", "unlink") and adopted_from(intent):
+                return {
+                    "message": adopted_repo_how_to(operation, repo_name, project_name),
+                    "intent": {
+                        "category": IntentCategoryEnum.PORTFOLIO.value,
+                        "action": "adopted_write_how_to",
+                        "confidence": 1.0,
+                        "context": {
+                            "original_message": original_message,
+                            "adopted_from": adopted_from(intent),
+                            "held_operation": operation,
+                        },
+                    },
+                    "requires_clarification": False,
+                }
 
             # #1595 Phase 3 (Arch's 2026-10-03 ruling §2): LINK is hoisted
             # out to _handle_link_repo — the SAME method the new WRITE rail

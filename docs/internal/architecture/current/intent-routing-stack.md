@@ -5905,6 +5905,28 @@ Arch: the prompt example's `query` category, and `manage_portfolio`'s catalog ex
 beside `list_projects`'s bare "projects query" description. Pins:
 `tests/unit/services/intent_service/test_manage_portfolio_list_from_code_2048.py`.
 
+**An adopted category runs READ operations only** (Arch, ADR-080 D4, #2048 comment 6219111038; CXO's copy
+2026-10-16). `_adopt_canonical_portfolio_category` stamps `intent.context["category_adopted_from"]` (the
+classifier's category). With that flag present, `_handle_portfolio_query` does not run a sniffed add,
+archive or restore: if the request leads with the write verb (after the handler's courtesy and
+intent-prefix strip) and names the project, it answers `Archive the project "Foo"? (yes/no)` and returns
+the record as `write_offer` (the #1190 `confirm_pending_action` carrier, kind
+`destructive_action_confirmation`, `action` = the rail key `archive_project` / `restore_project` /
+`add_project`, holding a copy of the Intent), which the canonical seam arms (`_arm_write_offer`); "yes"
+re-dispatches the rail op, "no" gets `Okay, I won't archive "Foo". Nothing has been changed.` Anything else
+(a how-to, or no usable name) gets CXO's statement and arms nothing: `To archive a project, say 'archive
+project Foo'. You can restore it any time with 'restore project Foo'.`, `To add a project, say 'add project'
+and a name.`, `To restore an archived project, say 'restore project Foo'.` (archive and restore have a form
+without a name, "say 'archive project' and its name"; a capture made only of determiners, such as "a" from
+"archive a project", counts as no name). `_handle_repo_management` gives a statement for an
+adopted link/unlink (repo copy not yet CXO-ruled). Reads (list, list_archived, search, the menu), delete's
+and edit's non-writing replies, and every classified-PORTFOLIO turn are unchanged (the legacy write
+branches' missing consent is the #1595 Phase 3 tail). Copy and builder:
+`services/intent_service/adopted_category_reads_only.py`. Scope note: surface 1 itself claims phrasings
+such as "how do I archive my project Foo?" as PORTFOLIO/`manage_portfolio`, so those reach the classified
+legacy path and still write; this guard covers only turns the classifier decides. Pins:
+`tests/unit/services/intent_service/test_adopted_category_reads_only_2048.py`.
+
 ## The classification cache holds classification only and hands out fresh objects (2026-10-16, #2054)
 
 `IntentClassifier.cache` (`services/intent_service/cache.py`, `IntentCache`) is one process-global cache keyed
