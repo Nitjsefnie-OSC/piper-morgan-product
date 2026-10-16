@@ -35,6 +35,10 @@ set -uo pipefail
 #   0 = clear (or cannot-discriminate, which says so on stderr)
 #   1 = COHORT-FREEZE detected
 #   3 = could not measure -- registry unreadable, internal error, anything unexpected
+#   COHORT-FREEZE(?) (zero emissions BUT commits landed: likelier a busy cohort) also exits 1 by default,
+#   so existing callers keep working. Set COHORT_FREEZE_SUSPECT_RC=2 to tell it apart by rc alone (#1968,
+#   PPM 10.4). Pard's freeze-watchdog-amber.sh treats any rc other than 0/1 as FREEZE-DETECTOR-UNAVAILABLE,
+#   so the default stays 1 until that wrapper handles 2.
 # The first version of this script crashed on an empty bash array under `set -u` and exited 1, which a
 # caller would have read as a detected freeze. Caught only because the known-negative test was run as
 # well as the known-positive. Hence the trap: any unhandled error is 3, never 1.
@@ -200,6 +204,7 @@ if [ "$emitted" -eq 0 ]; then
   # measured and lists the causes as alternatives, per m-44.
   if [ "$commits_in_window" -gt 0 ]; then
     echo "COHORT-FREEZE(?) $sched scheduled fires across $roles watched roles in the last ${WINDOW_H}h, ZERO heartbeat emissions, BUT $commits_in_window commit(s) landed on origin/main in the same window — the likelier explanation is busy-cohort heartbeat suppression (duty-cycle-heartbeat.sh --if-quiet), NOT a freeze. Verify with 'git log' before standing the cohort down; account-limit/host-outage are less likely than commit activity suggests. Still worth a human glance — this surface alone cannot rule out a freeze that happens to coincide with a few stray commits — but do not treat this as equivalent to a genuine zero-activity blackout."
+    exit "${COHORT_FREEZE_SUSPECT_RC:-1}"
   else
     echo "COHORT-FREEZE $sched scheduled fires across $roles watched roles in the last ${WINDOW_H}h, ZERO emissions REACHED origin/main, and ZERO commits landed in the same window either. Something cohort-wide, not N separate stalls — stand the cohort down and notify PM. ⚠️ CAUSE NOT DETERMINED: this measures DELIVERY, so an account limit, a host outage, AND a cohort that is working-but-not-pushing all look identical here. Check whether work exists un-pushed on the seats before concluding the cohort is idle."
   fi

@@ -98,6 +98,8 @@ Ask for columns `Title · URL · Sprint · Status · Milestone · Created · Clo
 dates are needed on the CLOSED file too** — an issue opened and closed inside the window appears only
 there, so without them the "opened" figure systematically undercounts fast-turnaround work.
 
+**Quickest: `scripts/gh-week-counts.py <Friday date>`** (2026-10-16, #1968) prints opened and closed for the Pacific Fri→Thu week and the exact queries, from the search API's `total_count`, so the 30-result default can't truncate it. It computes the UTC offset per date, so the DST change on 1 Nov needs no edit. Anything after `--` (milestone, sprint) is added to both queries. The notes below explain why it's built that way.
+
 ⚠️ **GitHub's `created:`/`closed:` ranges are UTC calendar dates. Our week is Pacific. Those are
 different windows by 7 hours at each end** — and the difference is real work, since 17:00–24:00
 Pacific is prime time here.
