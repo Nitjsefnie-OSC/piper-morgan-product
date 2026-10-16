@@ -56,11 +56,13 @@ _USER = "3f7b8a52-2048-4b00-9e00-00000000204b"
 FLOOR = "FLOOR-SENTINEL"
 
 # CXO 2026-10-16 08:47, verbatim.
-# Case 1's second sentence awaits CXO's re-ruling (withdrawn as false, Arch
-# 2026-10-16); the first sentence only, for now.
-ARCHIVE_HOW_TO = "To archive a project, say 'archive project Foo'."
-ADD_HOW_TO = "To add a project, say 'add project Foo'."
-RESTORE_HOW_TO = "To restore a project, say 'restore project Foo'."
+# CXO's final case-1 lines (2026-10-16), verbatim.
+ARCHIVE_HOW_TO = (
+    "To archive a project, say 'archive project Foo'. "
+    "You can restore it any time with 'restore project Foo'."
+)
+ADD_HOW_TO = "To add a project, say 'add project' and a name."
+RESTORE_HOW_TO = "To restore an archived project, say 'restore project Foo'."
 ARCHIVE_CONFIRM = 'Archive the project "Foo"? (yes/no)'
 ARCHIVE_DECLINE = 'Okay, I won\'t archive "Foo". Nothing has been changed.'
 EMPTY_LINE = "You don't have any active projects yet. Would you like to add a project?"
@@ -259,12 +261,40 @@ class TestHowToWritesNothing:
 
     @pytest.mark.asyncio
     async def test_a_nameless_imperative_gets_the_phrase_not_a_write(self, monkeypatch, sm, writes):
-        """No name to confirm: the statement, with a placeholder."""
+        """No name to confirm: CXO's add line (it never carries a name)."""
         service = _service(monkeypatch, category=IntentCategory.QUERY)
         sid = "sess-2048b-noname"
         result = await service.process_intent("add a project", session_id=sid, user_id=_USER)
         assert writes == []
-        assert result.message == "To add a project, say 'add project [project name]'."
+        assert result.message == ADD_HOW_TO
+        assert _armed(service, sid) is None
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        "message,expected",
+        [
+            (
+                "how do I archive a project?",
+                "To archive a project, say 'archive project' and its name.",
+            ),
+            (
+                "how do I archive one of my projects?",
+                "To archive a project, say 'archive project' and its name.",
+            ),
+            (
+                "how do I restore an archived project?",
+                "To restore an archived project, say 'restore project' and its name.",
+            ),
+        ],
+    )
+    async def test_no_name_archive_restore_use_the_generic_form(
+        self, monkeypatch, sm, writes, message, expected
+    ):
+        service = _service(monkeypatch, category=IntentCategory.GUIDANCE)
+        sid = f"sess-2048b-generic-{len(message)}"
+        result = await service.process_intent(message, session_id=sid, user_id=_USER)
+        assert writes == []
+        assert result.message == expected, result.message
         assert _armed(service, sid) is None
 
 

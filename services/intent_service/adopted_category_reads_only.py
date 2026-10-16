@@ -21,8 +21,7 @@ Reads (list, list_archived, search, the help menu) run as before. When the
 classifier itself says PORTFOLIO nothing here applies (that legacy path is on
 the #1595 Phase 3 tail, Arch comment 6219115064).
 
-Copy: CXO's ruling (memo 2026-10-16 08:47), verbatim for the project ops, except
-case 1's second sentence, withdrawn as false and awaiting CXO's re-ruling.
+Copy: CXO's final ruling (2026-10-16), verbatim for the project ops.
 The repo lines are not CXO-ruled yet (flagged in the #2048 report).
 """
 
@@ -60,15 +59,26 @@ _IMPERATIVE_VERBS = {
 # Placeholder when the message carried no name.
 _NO_NAME = "[project name]"
 
-# --- copy (CXO 2026-10-16 08:47, verbatim) ------------------------------
-# Case 1: a statement. No action, no question. CXO's second sentence ("I'll
-# ask you to confirm before anything changes.") was withdrawn as false (Arch,
-# 2026-10-16: add/archive/restore are WRITE rail ops; the #1190 confirm covers
-# DESTRUCTIVE only and an explicit imperative runs directly), and is being
-# re-ruled. When CXO rules it, set ADOPTED_WRITE_HOW_TO_TAIL (per verb if
-# needed); nothing else changes.
-ADOPTED_WRITE_HOW_TO_TAIL: Dict[str, str] = {}
-ADOPTED_WRITE_HOW_TO_LINE = "To {verb} a project, say '{verb} project {name}'."
+# --- copy (CXO 2026-10-16, final; verbatim) ----------------------------
+# Case 1: a statement. No action, no question. Per operation: the line when
+# the user named the project, and the form without a name. ("I'll ask you to
+# confirm before anything changes." was withdrawn as false: add/archive/
+# restore are WRITE rail ops and an explicit imperative runs directly.)
+# The no-name archive/restore forms follow CXO's "say 'archive project' and
+# its name" example.
+ADOPTED_WRITE_HOW_TO_LINES = {
+    "archive": (
+        "To archive a project, say 'archive project {name}'. "
+        "You can restore it any time with 'restore project {name}'."
+    ),
+    "add": "To add a project, say 'add project' and a name.",
+    "restore": "To restore an archived project, say 'restore project {name}'.",
+}
+ADOPTED_WRITE_HOW_TO_LINES_NO_NAME = {
+    "archive": "To archive a project, say 'archive project' and its name.",
+    "add": "To add a project, say 'add project' and a name.",
+    "restore": "To restore an archived project, say 'restore project' and its name.",
+}
 # Case 2: the yes/no confirm, armed (see build_adopted_write_confirm_offer).
 ADOPTED_WRITE_CONFIRM_QUESTION = '{Verb} the project "{name}"? (yes/no)'
 # Case 2, "no".
@@ -77,6 +87,26 @@ ADOPTED_WRITE_DECLINE_LINE = 'Okay, I won\'t {verb} "{name}". Nothing has been c
 # Repo writes (manage_repos link/unlink): a statement only. NOT CXO-ruled.
 ADOPTED_REPO_LINK_LINE = "To link a repository, say 'link repo {repo} to project {name}'."
 ADOPTED_REPO_UNLINK_LINE = "To unlink a repository, say 'unlink repo {repo} from project {name}'."
+
+
+# Words that make a captured "name" no name at all. The archive/restore
+# capture takes whatever follows the verb, so "how do I archive a project?"
+# yields "a" and "...one of my projects?" yields "one of my". Used only to
+# choose the copy (named line vs. the form without a name), never to route.
+_NOT_A_NAME_WORDS = frozenset(
+    {"a", "an", "the", "my", "your", "one", "of", "some", "any", "this", "that", "it"}
+    | {"archived", "project", "projects"}
+)
+
+
+def usable_name(name: Optional[str]) -> Optional[str]:
+    """``name`` unless every word in it is a determiner or the noun itself."""
+    if not name:
+        return None
+    words = [w.strip(".,!?'\"").lower() for w in name.split()]
+    if all(w in _NOT_A_NAME_WORDS for w in words if w):
+        return None
+    return name
 
 
 def adopted_from(intent: Intent) -> Optional[str]:
@@ -92,9 +122,9 @@ def is_imperative(operation: str, leading_tokens: Sequence[str]) -> bool:
 
 
 def adopted_write_how_to(operation: str, name: Optional[str]) -> str:
-    line = ADOPTED_WRITE_HOW_TO_LINE.format(verb=operation, name=name or _NO_NAME)
-    tail = ADOPTED_WRITE_HOW_TO_TAIL.get(operation)
-    return f"{line} {tail}" if tail else line
+    if not name:
+        return ADOPTED_WRITE_HOW_TO_LINES_NO_NAME[operation]
+    return ADOPTED_WRITE_HOW_TO_LINES[operation].format(name=name)
 
 
 def adopted_repo_how_to(operation: str, repo: Optional[str], project: Optional[str]) -> str:

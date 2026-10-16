@@ -4635,6 +4635,7 @@ What would you like to set up first?"""
                 adopted_write_how_to,
                 build_adopted_write_confirm_offer,
                 is_imperative,
+                usable_name,
             )
 
             if operation in ADOPTED_WRITE_RAIL_ACTIONS and adopted_from(intent):
@@ -4656,6 +4657,7 @@ What would you like to set up first?"""
                     "adopted_from": adopted_from(intent),
                     "held_operation": operation,
                 }
+                display_name = usable_name(display_name)
                 if display_name and is_imperative(operation, _leading_tokens):
                     write_offer = build_adopted_write_confirm_offer(operation, display_name, intent)
                     return {

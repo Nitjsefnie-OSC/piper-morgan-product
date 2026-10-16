@@ -5914,10 +5914,11 @@ the record as `write_offer` (the #1190 `confirm_pending_action` carrier, kind
 `destructive_action_confirmation`, `action` = the rail key `archive_project` / `restore_project` /
 `add_project`, holding a copy of the Intent), which the canonical seam arms (`_arm_write_offer`); "yes"
 re-dispatches the rail op, "no" gets `Okay, I won't archive "Foo". Nothing has been changed.` Anything else
-(a how-to, or no name) gets the statement `To archive a project, say 'archive project Foo'.` and arms
-nothing (CXO's proposed second sentence, "I'll ask you to confirm before anything changes.", was withdrawn
-as false: these are WRITE rail ops and an explicit imperative runs directly; its replacement awaits CXO and
-goes in `ADOPTED_WRITE_HOW_TO_TAIL`). `_handle_repo_management` gives a statement for an
+(a how-to, or no usable name) gets CXO's statement and arms nothing: `To archive a project, say 'archive
+project Foo'. You can restore it any time with 'restore project Foo'.`, `To add a project, say 'add project'
+and a name.`, `To restore an archived project, say 'restore project Foo'.` (archive and restore have a form
+without a name, "say 'archive project' and its name"; a capture made only of determiners, such as "a" from
+"archive a project", counts as no name). `_handle_repo_management` gives a statement for an
 adopted link/unlink (repo copy not yet CXO-ruled). Reads (list, list_archived, search, the menu), delete's
 and edit's non-writing replies, and every classified-PORTFOLIO turn are unchanged (the legacy write
 branches' missing consent is the #1595 Phase 3 tail). Copy and builder:
