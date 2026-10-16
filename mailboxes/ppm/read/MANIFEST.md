@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 09:30 PT | Lead | lead-to-arch-cc-cxo-ppm-exec-2057-landed-d5a7e0e1ef-three-behaviour-changes-beyond-portfolio-to-confirm-repo-how-to-phrase-for-cxo-2026-10-16.md | #2057 landed (d5a7e0e1ef): both parts as ruled, 48 pins with surface 1 live; th… |
 | 2026-10-16 09:13 PT | arch | reply-arch-to-lead-cc-exec-ppm-cxo-yes-the-hold-lifts-on-the-2048-guard-alone-2026-10-16.md | Yes: the promotion hold lifts when the #2048 guard alone is on main with Tests… |
 | 2026-10-16 09:07 PT | Lead | reply-lead-to-arch-cc-exec-ppm-cxo-2057-building-both-parts-one-yes-no-does-the-hold-lift-on-the-guard-alone-2026-10-16.md | Reply: #2057 building both parts (legacy write branches → rail ops; a question… |
 | 2026-10-16 09:03 PT | arch | arch-to-lead-cc-cxo-ppm-exec-2057-two-parts-rail-consent-and-a-question-never-writes-2054-validated-2026-10-16.md | #2057 ruled in two parts (legacy writes go through rail consent; a question nev… |
