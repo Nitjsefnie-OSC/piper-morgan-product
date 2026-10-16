@@ -28,7 +28,7 @@ footer{margin-top:36px;color:var(--muted);font-size:.82rem;border-top:1px solid 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@400;600&family=Source+Serif+4:wght@600&display=swap">
 <div class="wrap">
 <h1>Ship #065: the week of Oct 9–15</h1>
-<p class="meta">Exec synthesis from all 10 workstream reviews, for our discussion. Draft 1, 16 Oct 15:2x PT. Where reviews disagreed, I checked GitHub and say so.</p>
+<p class="meta">Exec synthesis from all 10 workstream reviews, for our discussion. Draft 2, 16 Oct 16:5x PT (usage numbers added). Where reviews disagreed, I checked GitHub and say so.</p>
 
 <div class="bluf">
 <p><b>Bottom line.</b> The beta gate went from 14 open MVP items to 6, with no dates moved, and alpha was promoted 8 times. Most of the week&rsquo;s fixes were checked on the running alpha, not just in code.</p>
@@ -73,17 +73,20 @@ footer{margin-top:36px;color:var(--muted);font-size:.82rem;border-top:1px solid 
 <tr><td>#1889</td><td>CXO: waiting on a test identity; Lead, PA, PPM: closed</td><td><b>Closed</b> 10-15 on served S5. CXO&rsquo;s line is stale.</td></tr>
 <tr><td>#2017 Disconnect</td><td>Lead: works; gate: open</td><td><b>Open</b> on MVP; 2 of 5 pages checked.</td></tr>
 <tr><td>Intent-floor ceiling</td><td>Lead, Arch 155 &rarr; 90; PPM 127 &rarr; 90</td><td>Arch read the enforcement test at both ends of the window: <b>155 &rarr; 90</b>. PPM&rsquo;s 127 is its own recount method.</td></tr>
-<tr><td>My &ldquo;55 closed, 75 filed&rdquo;</td><td>No role quotes it</td><td>A rough GitHub search shape only; I won&rsquo;t put it in the Ship.</td></tr>
+<tr><td>Issues opened and closed</td><td>My rough search: 75 filed, 55 closed</td><td>CIO&rsquo;s new Pacific-week counter (<code>scripts/gh-week-counts.py 2026-10-09</code>): <b>78 opened, 56 closed</b>. The opened figure matches a full list count.</td></tr>
 </table></div>
 
 <h2>Usage patterns, for next sprint&rsquo;s planning</h2>
+<p><b>Added 16:5x from Pard&rsquo;s numbers</b>, read on Amber with no credentials. Plan readings come from <code>dev/heartbeats/usage-per-account.tsv</code>; per-seat counts from the CLI transcripts, 10-09 00:00 to 10-16 00:00 PT.</p>
 <ul>
-<li><b>Cost follows turns, not model tier</b> (CXO&rsquo;s finding). CXO had about 60 mail-wake turns on 10-15, mostly triage of cc copies. A cc that needs no action still costs a full wake. Proposal on the table: coalesce a fire&rsquo;s mail into one drain.</li>
-<li><b>Lead is the heavy seat:</b> about 15 parallel lanes on 10-15 (12 Opus, 3 Sonnet) for 22 code units. The waste was re-running overlapping test suites at each merge, not the model. Lead&rsquo;s scoring runs hit the Anthropic workspace limit on 10-10, until you raised it.</li>
-<li><b>Relays are slow when time matters:</b> your 10-15 promotion &ldquo;yes&rdquo; took 2h12m to reach Lead through mail wakes. The standing grant removes most of that.</li>
-<li><b>Measured spend is thin.</b> Only PA reported dollars ($7.47 and $9.67 for two evals). No role reports per-seat token or dollar totals, so a real usage review needs the console numbers from you or Pard. That would make a good first item for the week review.</li>
-<li><b>Fires that didn&rsquo;t run:</b> PPM missed two (10-10, 10-11), and Web missed one START (10-14). Causes weren&rsquo;t investigated, so this is small but worth one owner.</li>
+<li><b>The plan reached 88% of its weekly limit, two weeks running.</b> It climbed 9 to 16 points a day, faster late in the week (14% Friday, 72% Wednesday, 88% Thursday night, 37 minutes before the reset). The Fable-scoped share hit 86% without binding. About 12% headroom at week&rsquo;s end leaves little room for a hot week.</li>
+<li><b>Lead is 37.5% of all output</b> (4.47M of 11.93M output tokens; 7,588 of 20,438 calls). Lead&rsquo;s mix: Fable 2,945, Opus 2,357 and Sonnet 1,533 calls. Then CIO 12.0% (about 1,290 of its calls were harness runs), Exec 11.2%, Arch 8.8%, PPM 7.0%; the other six are 3&ndash;5% each.</li>
+<li><b>Daily shape:</b> the busiest days were 10-09 (4,295 calls) and 10-15 (3,659). The weekend ran at about 40&ndash;50% of those.</li>
+<li><b>Cost follows turns, not model tier</b> (CXO&rsquo;s finding, consistent with Pard&rsquo;s count: about 60 mail-wake turns on 10-15). Coalescing cc-only mail is with CIO.</li>
+<li><b>Waste to cut:</b> Lead re-ran overlapping test suites at each merge, and main was red 6 of 7 days, each fix a repeat test run. Your 10-15 promotion &ldquo;yes&rdquo; took 2h12m to arrive by mail (the grant fixes that).</li>
+<li><b>Not yet measured:</b> API spend by workspace. That needs your Anthropic Console login (Usage and Cost pages, 10-09 to 10-15, by day and by workspace). There is no cost-per-fire figure; Pard can compute calls per fire if useful.</li>
 </ul>
+<p><b>My read for planning:</b> the binding constraint is the plan&rsquo;s weekly limit, and Lead&rsquo;s seat is the lever. The cheapest cuts are Lead&rsquo;s overlapping test re-runs and a cohort-wide cc drain, not model downgrades.</p>
 
 <h2>The week ahead (10-16 to 10-22)</h2>
 <ul>
