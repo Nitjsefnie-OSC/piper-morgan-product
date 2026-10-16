@@ -29,6 +29,12 @@ An issue enters the MVP milestone only if its body carries a one-line `Gate clas
 
 Class 4 is an addition to the three PM endorsed. Without it, "tester cannot connect Slack" (e.g. #1852) meets none of 1-3 and the standard would eject a true blocker. PM may strike it; if so, those issues need an explicit ruling each.
 
+### Standing rulings on admission (PM, recorded by PPM)
+
+- **The LLM-narration class (#2042), 2026-10-16 07:10:** "For PPM: Yes, admit and track." Track the class; gate each served instance that is false on a golden path; no gate on the class itself.
+- **User data and privacy, 2026-10-16 12:52:** "Yes. I am ok with a beta having bugs but not being cavalier with user data or privacy."
+- **Known privacy risks on a hosted endpoint, 2026-10-16 15:04** (via Exec, answering whether #2059 and #2060 stand): "I don't want to ship known privacy risks on a hosted endpoint, even in beta." This is stronger than the 12:52 line. A known privacy risk on any hosted endpoint is a gate blocker, not just a defect class. It does not hold up a promotion that reduces exposure, but the fix must be live before design partners. A privacy claim the code doesn't back goes to Lead as a code fix first.
+
 ## Epic 0 clause
 
 Interpretation-layer failures (routing, classification, pattern-phrasing misses) do not enter the gate as standalone issues. They become corpus rows or evidence under #1595, per the supersession gate (PM 2026-08-29). Two boundaries:
