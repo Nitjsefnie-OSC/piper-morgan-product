@@ -603,7 +603,7 @@
                 <span class="status-dot ${integration.status}"></span>
                 ${integration.status_icon ? `<span class="status-icon-inline" id="status-icon-${integration.name}">${integration.status_icon}</span>` : ''}
                 <span class="status-message ${integration.error ? 'error' : ''}" id="status-${integration.name}">
-                  ${integration.status_message}
+                  ${statusLine(integration)}
                 </span>
               </div>
               ${integration.status_detail ? `
@@ -645,6 +645,32 @@
 
   // #2037: a Test result is stale when the API sets its structured ``stale_reason``
   // (the resolver's stale OAuth grant, ADR-070 B4), never by matching message copy.
+  // #2045 (CXO ruling): the "when" fragment on a checked card, in the viewer's own zone.
+  // `now` is a parameter so tests can fix the clock. Returns '' when there is no usable time.
+  function formatCheckedAt(iso, now) {
+    const t = new Date(iso);
+    if (isNaN(t.getTime())) return '';
+    const ref = now instanceof Date ? now : new Date();
+    const diff = ref.getTime() - t.getTime();
+    if (diff < 60000) return 'Checked just now.';
+    if (diff < 3600000) {
+      const n = Math.floor(diff / 60000);
+      return `Last checked ${n} ${n === 1 ? 'minute' : 'minutes'} ago.`;
+    }
+    if (t.toDateString() === ref.toDateString()) {
+      return `Last checked at ${t.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}.`;
+    }
+    return `Last checked ${t.toLocaleDateString([], { month: 'short', day: 'numeric' })}.`;
+  }
+
+  function statusLine(integration) {
+    const checked = ['healthy', 'failed', 'degraded'].includes(integration.status) && integration.last_check
+      ? formatCheckedAt(integration.last_check, new Date()) : '';
+    if (!checked) return integration.status_message;
+    const base = integration.status === 'healthy' ? 'Healthy.' : integration.status_message;
+    return /[.!?]$/.test(base) ? `${base} ${checked}` : `${base}. ${checked}`;
+  }
+
   async function testConnection(integrationName) {
     const btn = document.getElementById(`test-btn-${integrationName}`);
     const statusEl = document.getElementById(`status-${integrationName}`);
