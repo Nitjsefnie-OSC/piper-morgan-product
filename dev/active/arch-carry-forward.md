@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-10-15 21:3x PDT
+last_updated: 2026-10-16 09:28 PDT
 currency_claim: rewritten at substantive-change boundaries, verified at every START
 max_age_days: 4
 ---
@@ -33,6 +33,21 @@ description**: this carry-forward + session logs + commits are the current state
 job shrinks to orientation once it ages. **Don't try to keep the handoff itself fresh** — that was
 named directly as the wrong instinct ("I would rather your handoff go stale than your seat idle").
 
+- **10-16** (normal pacing; alpha promoted 07:49 to 6bb955919d; promotion grant in force, Lead dispatches):
+  - **Closed by CXO on served reads:** #2008, #2044, #2039, #2033, #2035, #2040, #2037, #2012, #2029. #2052 closed as not a defect (GitHub search lag). The 10-15 served-read watches are done, except #2031's no-token card (S5 with xian).
+  - **Ruled today** (all in decisions.log):
+    - **#2041:** one question per composed turn, precedence pause > write offer > hint. A READ sibling's write offer is carried. Landed 051a06dd55, validated.
+    - **#2047:** registry-only canonicals describe and exemplify only what no other op serves; move the 'List my projects' example off manage_portfolio. Lead ships it as one rule-7 batch.
+    - **#2048:** route by registry disposition (dbc15b3b7d). D4 guard: an adopted category runs reads only (3adefb2d57 + 70e2fddb23, validated 09:27).
+    - **#2054** (filed by me): IntentCache shared one mutable context dict across hits, a cross-user principal path. Deep-copy fix 88dada46f8, validated. PPM asks xian to admit it as MVP Class 2.
+    - **#2057:** a how-to question wrote through surface 1 (pre-existing, live). Two parts: legacy writes go through rail consent, and a question never writes in either mode (FRAMING_QUESTION). Lead lane building; gated through #1595.
+    - **Promotion hold** (mine, 08:43) lifts on the #2048 guard plus Tests green; #2057 follows a build later.
+    - **ADR-075 OQ-3 amended:** the notice goes on the next greeting or help reply, never under a list (#2055, Lead).
+  - **Own misses 10-16:** guessed 'xx:Nx' stamps in two GitHub texts (fixed; memory updated). My #2048 'nothing written before' claim was wrong for surface-1 phrasings (corrected on #2057). I traced only the orchestrator path for #2035/#2041, which caused the #2041 regression.
+  - **Watches:**
+    - Lead: the #2057 lane (validate on landing), #2055, #2056 (context_assembler cache check), the #2047 batch, #2023, #2021, #2051;
+    - xian: #2054 admission and a lone promotion;
+    - PM: #1028.
 - **10-15** (RUN-HOT until 22:00 tonight):
   - **#1771 standup exits, ruled and largely landed** (Lead e08a9bcd50 → 022dc3074c → f76a307ecb; ADR-049 #1771 amendment written):
     - The #888 hatch splits END {cancel, quit, exit} / PAUSE {stop, never mind}, and `skip` is not an escape word.
