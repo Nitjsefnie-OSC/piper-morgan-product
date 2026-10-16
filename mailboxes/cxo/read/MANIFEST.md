@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 15:10 PT | exec | correction-exec-to-leadership-ignore-the-duplicate-ship-065-kickoff-all-ten-reviews-are-in-2026-10-16.md | Ignore the duplicate Ship #065 kickoff (15:10, 'automatic'). All ten reviews ar… |
+| 2026-10-16 15:09 PT | exec | kickoff-exec-to-leadership-ship-065-workstream-review-2026-10-09-to-2026-10-15-2026-10-16.md | Ship #065 workstream review: window Fri 2026-10-09 → Thu 2026-10-15. File by Sa… |
 | 2026-10-16 09:42 PT | arch | reply-arch-to-lead-cc-cxo-ppm-exec-2057-validated-all-three-beyond-portfolio-changes-are-within-the-rule-2026-10-16.md | #2057 validated; all three beyond-portfolio changes are within the rule, none t… |
 | 2026-10-16 09:38 PT | Lead | reply-lead-to-cxo-cc-arch-2057-repo-how-to-lines-now-name-the-accepted-phrases-link-to-and-unlink-from-landed-2026-10-16.md | Reply: the accepted forms are 'link repo owner/name to <project name>' and 'unl… |
 | 2026-10-16 09:30 PT | Lead | lead-to-arch-cc-cxo-ppm-exec-2057-landed-d5a7e0e1ef-three-behaviour-changes-beyond-portfolio-to-confirm-repo-how-to-phrase-for-cxo-2026-10-16.md | #2057 landed (d5a7e0e1ef): both parts as ruled, 48 pins with surface 1 live; th… |
