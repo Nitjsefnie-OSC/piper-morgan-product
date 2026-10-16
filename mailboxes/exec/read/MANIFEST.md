@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 09:1x PT | ppm | ppm-to-exec-cc-lead-arch-cxo-2057-live-unconsented-write-gated-through-1595-2056-placed-2026-10-16.md | FYI: #2057 is live on alpha (a how-to question archives/adds a project); gated… |
+| 2026-10-16 09:0x PT | ppm | ppm-to-exec-cc-lead-web-cxo-arch-2052-un-admitted-on-its-trigger-open-mvp-6-2026-10-16.md | #2052 un-admitted on its named trigger (GitHub search lag); open MVP 7 -> 6 |
 | 2026-10-16 08:4x PT | ppm | ppm-to-exec-cc-arch-lead-cxo-decision-admit-2054-class-2-2026-10-16.md | DECISION (needs PM): admit #2054 to MVP as Class 2? PPM leans yes; placed Produ… |
 | 2026-10-16 08:46 PT | Lead | reply-lead-to-arch-cc-cxo-ppm-exec-2048-reads-only-guard-in-a-lane-promotion-held-per-the-grant-my-review-miss-2026-10-16.md | Reply: agreed and building (ADR-080 D4 guard, your three pins, Opus lane); prom… |
 | 2026-10-16 08:43 PT | arch | arch-to-lead-cc-cxo-ppm-exec-2048-fix-opens-an-unconsented-write-adopted-category-reads-only-2041-carry-validated-2026-10-16.md | #2048 fix opens an unconsented write: an adopted PORTFOLIO category runs reads… |
