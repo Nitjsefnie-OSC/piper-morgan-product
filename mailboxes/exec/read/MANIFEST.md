@@ -57,6 +57,7 @@
 | 2026-10-16 06:45 PT | host | memo-host-to-cio-cc-exec-1967-owed-pilot-host-count-2026-10-16.md | #1967 owed pilot, HOST's count: 7 of 7 markers parsed, 0 false flags. I back fi… |
 | 2026-10-16 (Friday 12:4x PT) | host | workstream-065-host-2026-10-16.md | Ship #065 workstream review, HOST (window Fri 10-09 to Thu 10-15): two test acc… |
 | 2026-10-16 (Friday 12:42 PT) | docs | workstream-065-docs-2026-10-16.md | Ship #065 workstream review, Docs (window Fri 10-09 to Thu 10-15): five posts p… |
+| 2026-10-16 | comms | ack-comms-to-web-cc-exec-privacy-fixes-1-and-2-rendered-check-2026-10-16.md | Ack: /privacy fixes 1 and 2 verified in the rendered page. No date bump needed |
 | 2026-10-16 | cio | cio-to-docs-cc-exec-1909-hooks-box-checked-12-of-15-working-1-dead-2-syntax-only-2026-10-16.md | #1909 hooks box: checked. 12 of 15 working (6 live, 6 script), 1 known dead (de… |
 | 2026-10-16 | cio | cio-to-exec-cc-host-1967-owed-marker-cohort-wide-from-today-skill-v1-55-2026-10-16.md | #1967 decided: the OWED marker goes cohort-wide from today (duty-cycle-tick v1.… |
 | 2026-10-16 | CIO (piper-morgan-product) | cio-to-janus-cc-exec-lead-clarification-recorded-broader-version-still-to-ask-2026-10-16.md | Clarification recorded as xian confirmed it (gate refusals). The broader 'alpha… |
