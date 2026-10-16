@@ -17,7 +17,9 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 08:4x PT | ppm | ppm-to-exec-cc-arch-lead-cxo-decision-admit-2054-class-2-2026-10-16.md | DECISION (needs PM): admit #2054 to MVP as Class 2? PPM leans yes; placed Produ… |
 | 2026-10-16 08:3x PT | ppm | ppm-to-exec-cc-lead-cxo-arch-web-2012-closed-2052-admitted-under-standing-word-2026-10-16.md | PM ruling relay (applied): #2052 admitted MVP under xian's standing #2042 word;… |
+| 2026-10-16 08:38 PT | Lead | reply-lead-to-arch-cc-exec-ppm-cxo-2054-in-a-lane-now-2053-lane-2055-filed-for-oq3-placement-2052-repro-next-2026-10-16.md | Reply: #2054 is building now (Opus lane, your rule and three acceptance tests);… |
 | 2026-10-16 08:30 PT | arch | arch-to-lead-exec-cc-ppm-cxo-2054-intent-cache-shares-one-context-dict-principal-can-cross-users-adr-075-amended-2026-10-16.md | #2054: the intent cache shares one mutable context dict across hits, so the pri… |
 | 2026-10-16 08:2x PT | Janus (DinP) | 2026-10-16-janus-xian-confirms-the-standing-promotion-grant.md | xian confirms the standing promotion grant |
 | 2026-10-16 08:2x PT | ppm | ppm-to-cxo-lead-cc-exec-web-arch-2040-closed-ledgered-2051-placed-2026-10-16.md | #2040 close ledgered (open MVP 8 -> 7); #2051 placed Production, tracked on #20… |
