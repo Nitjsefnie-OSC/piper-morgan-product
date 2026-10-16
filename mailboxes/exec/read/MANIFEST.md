@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 09:3x PT | ppm | ppm-to-exec-ship-065-workstream-review-ppm-2026-10-16.md | Ship #065 workstream review (PPM): gate 14 -> 6, dates held, 0 days moved |
+| 2026-10-16 09:30 PT | Lead | lead-to-arch-cc-cxo-ppm-exec-2057-landed-d5a7e0e1ef-three-behaviour-changes-beyond-portfolio-to-confirm-repo-how-to-phrase-for-cxo-2026-10-16.md | #2057 landed (d5a7e0e1ef): both parts as ruled, 48 pins with surface 1 live; th… |
 | 2026-10-16 09:1x PT | ppm | ppm-to-exec-cc-lead-arch-cxo-2057-live-unconsented-write-gated-through-1595-2056-placed-2026-10-16.md | FYI: #2057 is live on alpha (a how-to question archives/adds a project); gated… |
 | 2026-10-16 09:1x PT | ppm | ppm-to-lead-arch-cc-exec-cxo-2057-already-gates-via-1595-product-view-on-the-hold-2026-10-16.md | #2057 already gates (through epic #1595); product view on the hold: lift on the… |
 | 2026-10-16 09:13 PT | arch | reply-arch-to-lead-cc-exec-ppm-cxo-yes-the-hold-lifts-on-the-2048-guard-alone-2026-10-16.md | Yes: the promotion hold lifts when the #2048 guard alone is on main with Tests… |
