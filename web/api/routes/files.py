@@ -25,6 +25,7 @@ from services.database.connection import db
 from services.database.models import UploadedFileDB
 from services.database.session_factory import AsyncSessionFactory
 from services.file_context.storage import (  # #1306: the single byte seam
+    StorageEncryptionUnavailable,
     get_upload_base,
     read_file_from_storage,
     save_file_to_storage,
@@ -169,6 +170,13 @@ async def upload_file(
                 filename=file.filename,
                 path=str(safe_file_path),
                 size=file_size,
+            )
+        except StorageEncryptionUnavailable as e:
+            # #2061: fail closed — never store plaintext on a hosted app.
+            logger.error("file_save_refused_no_key", user_id=current_user.sub, error=str(e))
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="Piper can't store files right now.",
             )
         except OSError as e:
             logger.error(

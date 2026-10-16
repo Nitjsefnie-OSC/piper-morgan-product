@@ -28,7 +28,7 @@ from typing import Optional, Union
 
 from fastapi import UploadFile
 
-from services.security.encrypted_types import MARKER
+from services.security.encrypted_types import MARKER, is_production_env
 from services.security.field_encryption import DecryptionError, FieldEncryptionService
 
 logger = logging.getLogger(__name__)
@@ -77,15 +77,34 @@ def check_upload_base_writable() -> tuple[bool, str]:
         )
 
 
+class StorageEncryptionUnavailable(RuntimeError):
+    """Raised (#2061) when an upload cannot be encrypted at rest on a hosted app.
+
+    Same class of error the encrypted columns raise (``RuntimeError``) for the
+    same condition: ``ENCRYPTION_MASTER_KEY`` unset in production.
+    """
+
+
 def write_file_to_storage(file_path: Union[str, Path], content: bytes) -> None:
     """THE uploaded-file byte-write seam (#1306): encrypt-then-write.
 
     Every writer of uploaded-file bytes routes here (``save_file_to_storage``
     below + the upload route) — never a raw ``open(..., 'wb')`` elsewhere.
+
+    Fail closed (#2061), mirroring ``encrypted_types._no_key_fallback_or_raise``:
+    with no ``ENCRYPTION_MASTER_KEY`` and ``is_production_env()`` (PIPER_ENVIRONMENT
+    or ENVIRONMENT == "production", the signal the columns use) this raises
+    ``StorageEncryptionUnavailable`` and writes nothing. Dev/test (not production)
+    keep the warn-once plaintext fallback so keyless local runs work.
     """
     global _warned_no_key_files
     svc = FieldEncryptionService.from_env()
     if svc is None:
+        if is_production_env():
+            raise StorageEncryptionUnavailable(
+                "ENCRYPTION_MASTER_KEY is unset in a production environment — "
+                "refusing to store an uploaded file as plaintext (#2061)."
+            )
         if not _warned_no_key_files:
             logger.warning(
                 "ENCRYPTION_MASTER_KEY unset — uploaded files stored as plaintext "

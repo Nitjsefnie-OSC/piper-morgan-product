@@ -137,8 +137,9 @@ class TestRecognitionFeedback:
 class TestRecordRecognitionFeedback:
     """Tests for the logging function."""
 
-    def test_logs_feedback_info(self, feedback_context, offered_options):
-        """Should log feedback with structured data."""
+    def test_logs_feedback_info(self, feedback_context, offered_options, monkeypatch):
+        """Should log feedback with structured data (#2059: the message as a fingerprint)."""
+        monkeypatch.delenv("PIPER_INVERSION_LOG_UTTERANCE", raising=False)
         feedback = RecognitionFeedback(
             original_message="check things",
             confidence_at_trigger=0.55,
@@ -159,7 +160,10 @@ class TestRecordRecognitionFeedback:
 
             # Check kwargs
             kwargs = call_args[1]
-            assert kwargs["original_message"] == "check things"
+            from services.utils.utterance_log import utterance_sha256
+
+            assert kwargs["original_message_sha256"] == utterance_sha256("check things")
+            assert "original_message" not in kwargs
             assert kwargs["confidence_at_trigger"] == 0.55
             assert kwargs["offered_options"] == offered_options
             assert kwargs["selected_option"] == "prepare_standup"

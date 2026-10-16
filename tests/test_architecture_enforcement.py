@@ -7979,10 +7979,16 @@ class TestLogNeverSlicesUserText2059:
     - a bare name that the SAME function assigned from such a slice
       (``preview = text[:120]`` then ``logger.warning(..., preview)``).
 
+    - (Arch's third ruling, issue comment 6225894664) a user-text name passed
+      WHOLE, UNSLICED: a bare/attribute name in ``UNSLICED_NAMES`` (the
+      ``USER_NAMES`` plus ``query`` and ``resolved_message``) as a logger kwarg
+      value, a positional argument or an f-string interpolation, at any level,
+      outside ``utterance_preview``/``utterance_fields`` and outside
+      length-style wrappers (``len`` ...). EXEMPT: a log call inside an
+      ``if log_full_utterance():`` body, CIO's deliberate opt-in.
+
     CEILING 0, never raised. Not offenders by construction: slices that are
-    not inside a log call (stored context, display titles), and unsliced
-    interpolation (Arch's second scan found 0 real WARNING+ hits; a new
-    unsliced field belongs through ``utterance_fields`` all the same).
+    not inside a log call (stored context, display titles).
 
     ALLOW-LIST (each entry needs a reason; empty of sites, the helper module
     is the only exempt FILE because it implements the slice for the knob).
@@ -8000,11 +8006,44 @@ class TestLogNeverSlicesUserText2059:
         "response_message",
         "markdown_text",
     }
-    SAFE_CALLS = {"utterance_preview", "utterance_fields"}
+    UNSLICED_NAMES = USER_NAMES | {"query", "resolved_message"}
+    # Attribute reads (``x.name``) count only for these: ``e.message``,
+    # ``resp.error.message``, ``exc.user_message`` are exception/response text,
+    # while ``intent.original_message`` is the user's words. A BARE name counts
+    # for every UNSLICED_NAMES entry.
+    UNSLICED_ATTRS = {
+        "original_message",
+        "resolved_message",
+        "utterance",
+        "ctx_str",
+        "markdown_text",
+    }
+    SAFE_CALLS = {
+        "utterance_preview",
+        "utterance_fields",
+        # import aliases / the cache's stdlib-logger twin of utterance_preview
+        "_utterance_preview",
+        "_utterance_fields",
+        "_text_ref",
+    }
+    # Wrappers whose result carries no user text (a count, a flag, a type name).
+    NON_TEXT_CALLS = {"len", "bool", "type", "id", "hash", "isinstance"}
     ALLOW_FILES = {
         "services/utils/utterance_log.py": "the helper: implements the knob-gated slice itself",
     }
-    ALLOW_SITES: dict = {}  # "path:line" -> reason; must stay empty unless a reason is written
+    # "path:line" -> reason. Every entry is a name that LOOKS like user text but is
+    # system text (verified by reading the call and its callers, 2026-10-16).
+    ALLOW_SITES: dict = {
+        "services/infrastructure/keychain_service.py:127": "`raw` is an environment-variable value (the keychain timeout), not user text",
+        "web/startup.py:114": "`message` is the upload-dir probe's own status string",
+        "web/startup.py:117": "`message` is the upload-dir probe's own status string",
+        "web/utils/error_responses.py:124": "`message` is the server's HTTP error summary (system copy)",
+        "web/utils/error_responses.py:156": "`message` is the server's HTTP error summary (system copy)",
+        "web/utils/error_responses.py:188": "`message` is the server's HTTP error summary (system copy)",
+        "web/utils/error_responses.py:227": "`message` is the server's HTTP error summary (system copy)",
+        "web/api/routes/intent.py:503": "#1332 blank-payload diagnostic: only reached when `not message or not message.strip()`, so repr() is '', None or whitespace, never content",
+        "services/process/registry.py:827": "`_escape_word(message)` is only reached after `_is_escape_command(message)`, a closed vocabulary of escape words",
+    }
 
     @staticmethod
     def _term(node):
@@ -8035,6 +8074,50 @@ class TestLogNeverSlicesUserText2059:
             if isinstance(cur, ast.Call) and cls._term(cur.func) in cls.SAFE_CALLS:
                 continue
             stack.extend(ast.iter_child_nodes(cur))
+
+    @classmethod
+    def _gated_ranges(cls, tree):
+        """Line spans of ``if log_full_utterance():`` bodies (the knob opt-in)."""
+        spans = []
+        for n in ast.walk(tree):
+            if (
+                isinstance(n, ast.If)
+                and isinstance(n.test, ast.Call)
+                and cls._term(n.test.func) == "log_full_utterance"
+            ):
+                spans.append((n.body[0].lineno, max(b.end_lineno for b in n.body)))
+        return spans
+
+    @classmethod
+    def _unsliced_name(cls, call):
+        """The first whole user-text name under a log call, else None."""
+        stack = [call]
+        while stack:
+            cur = stack.pop()
+            if isinstance(cur, ast.Call) and cur is not call:
+                name = cls._term(cur.func)
+                if name in cls.SAFE_CALLS or name in cls.NON_TEXT_CALLS:
+                    continue
+            if isinstance(cur, ast.IfExp):  # `x if x else None`: the test is not logged
+                stack.extend([cur.body, cur.orelse])
+                continue
+            if isinstance(cur, ast.Subscript):  # slices are the other predicate
+                stack.append(cur.slice)
+                if not isinstance(cur.slice, ast.Slice):
+                    stack.append(cur.value)
+                continue
+            if isinstance(cur, (ast.Name, ast.Attribute)) and isinstance(
+                getattr(cur, "ctx", None), ast.Load
+            ):
+                if isinstance(cur, ast.Name) and cur.id in cls.UNSLICED_NAMES:
+                    return cur.id
+                if isinstance(cur, ast.Attribute) and cur.attr in cls.UNSLICED_ATTRS:
+                    return cur.attr
+                if isinstance(cur, ast.Attribute):
+                    stack.append(cur.value)
+                continue
+            stack.extend(ast.iter_child_nodes(cur))
+        return None
 
     # Calls that pass a string through (the result is still the user's text).
     PASS_THROUGH = {"str", "repr", "strip", "lstrip", "rstrip", "lower", "upper", "join"}
@@ -8071,6 +8154,7 @@ class TestLogNeverSlicesUserText2059:
             n for n in ast.walk(tree) if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
         ]
         seen_calls, hits = set(), {}
+        gated = cls._gated_ranges(tree)
         for scope in scopes:
             sliced_vars = set()
             for n in ast.walk(scope):
@@ -8093,6 +8177,11 @@ class TestLogNeverSlicesUserText2059:
                 for m in cls._unsafe_walk(n):
                     if isinstance(m, ast.Name) and m.id in sliced_vars:
                         hits.setdefault(n.lineno, f"logs {m.id!r}, assigned from a user-text slice")
+                if n.lineno in hits or any(a <= n.lineno <= b for a, b in gated):
+                    continue
+                whole = cls._unsliced_name(n)
+                if whole:
+                    hits[n.lineno] = f"passes user-text name {whole!r} UNSLICED to a log call"
         return len(seen_calls), sorted(hits.items())
 
     @staticmethod
@@ -8110,6 +8199,15 @@ class TestLogNeverSlicesUserText2059:
             "logger.warning('x', extra={'raw_preview': text[:200]})",
             "structlog.get_logger().info('x', p=message[:9])",
             "def f(text):\n    preview = text[:120]\n    logger.warning('x', p=preview)",
+            # the 9 unsliced sites of Arch's third ruling, as shapes
+            "logger.info('x', original_message=message, resolved_message=resolved_message)",
+            "self.logger.info('x', original_message=intent.original_message)",
+            "logger.info('x', text=text, priority=p)",
+            "logger.info(f'Search found {n} results for query: {query}')",
+            "logger.info(f'Searching files, query: {query}')",
+            "logger.warning('x %s', message)",
+            "if other():\n    logger.info('x', text=text)",
+            "if log_full_utterance():\n    pass\nelse:\n    logger.info('x', text=text)",
         ],
     )
     def test_scanner_catches_known_shapes(self, src):
@@ -8124,6 +8222,12 @@ class TestLogNeverSlicesUserText2059:
             "logger.info('x', n=len(message))",
             "title = text[:80]\nitems.append(title)",
             "logger.info('x', ids=issues[:3])",
+            "logger.info('x', **_utterance_fields(intent.original_message, key='original_message'))",
+            "logger.info(f'q: {utterance_preview(query)}')",
+            "logger.info('x', n=len(text), m=bool(query))",
+            "logger.info('x', p=utterance_preview(m) if m else None)",
+            "logger.warning('x', error=response.error.message, e=exc.user_message)",
+            "if log_full_utterance():\n    logger.info('x', text=text)",
         ],
     )
     def test_scanner_passes_safe_shapes(self, src):
@@ -8154,6 +8258,24 @@ class TestLogNeverSlicesUserText2059:
             + "; ".join(offenders)
         )
 
-    def test_allow_list_is_only_the_helper(self):
+    def test_allow_list_is_only_the_helper_and_commented_system_text(self):
         assert set(self.ALLOW_FILES) == {"services/utils/utterance_log.py"}
-        assert not self.ALLOW_SITES
+        assert len(self.ALLOW_SITES) == 9, "ALLOW_SITES grew: it is for system text only"
+        assert all(len(reason) > 20 for reason in self.ALLOW_SITES.values())
+
+    def test_census_unsliced_names_ceiling_zero_and_allow_list_not_stale(self):
+        """The census: UNSLICED hits over services/ + web/ (before the #2059 third
+        pass: 20 = the 9 of Arch's ruling + recognition_feedback + audit_logger
+        + 9 system-text sites; after: only the 9 allow-listed system-text sites)."""
+        root, files = self._files()
+        found = set()
+        for p in files:
+            rel = p.relative_to(root).as_posix()
+            for lineno, why in self.scan_source(p.read_text(encoding="utf-8"))[1]:
+                if "UNSLICED" in why:
+                    found.add(f"{rel}:{lineno}")
+        assert found - set(self.ALLOW_SITES) == set(), sorted(found - set(self.ALLOW_SITES))
+        assert set(self.ALLOW_SITES) - found == set(), (
+            "stale ALLOW_SITES entries (line moved or call fixed): "
+            + str(sorted(set(self.ALLOW_SITES) - found))
+        )

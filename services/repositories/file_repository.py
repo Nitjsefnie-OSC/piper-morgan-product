@@ -21,6 +21,7 @@ from services.infrastructure.config.file_configuration import (
     get_file_config_service,
 )
 from services.utils.datetime_utils import utc_now
+from services.utils.utterance_log import utterance_preview
 
 logger = logging.getLogger(__name__)
 
@@ -184,7 +185,9 @@ class FileRepository(BaseRepository):
         Enhanced search combining filename and content search.
         Falls back to filename-only search if MCP is disabled.
         """
-        logger.info(f"Searching files with content for owner {owner_id}, query: {query}")
+        logger.info(
+            f"Searching files with content for owner {owner_id}, query: {utterance_preview(query)}"
+        )
 
         # Get files matching by filename first (always available)
         filename_matches = await self.search_files_by_name(owner_id, query)
@@ -216,7 +219,9 @@ class FileRepository(BaseRepository):
         Enhanced search for an owner combining filename and content search.
         Falls back to filename-only search if MCP is disabled.
         """
-        logger.info(f"Searching files with content for owner {owner_id}, query: {query}")
+        logger.info(
+            f"Searching files with content for owner {owner_id}, query: {utterance_preview(query)}"
+        )
 
         # Get files matching by filename first (always available)
         filename_matches = await self.search_files_by_name_all_sessions(query, owner_id, days)
