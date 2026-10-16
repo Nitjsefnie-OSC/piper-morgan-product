@@ -256,3 +256,4 @@ Brake FIRED (second slip = #1965 admission, found and ledgered 10-09). Memo to E
 - 2026-10-16 08:5x: #2052 stays admitted pending Web's timed served run or Lead's repro (GitHub search lag → un-admit). #2055 Production. #2048 fix landed 5f75809572 (served close after next promotion).
 - 2026-10-16 08:5x: #2048 closes on served acceptance AND Arch's D4 read-only-on-adoption guard; promotion held until the guard is green. #2052: Web's timed run green-lit; GitHub search lag likely → un-admit expected if the count self-corrects in one chat.
 - 2026-10-16 09:0x: #2052 UN-ADMITTED on its trigger (GitHub search lag, Web's timed run; CXO: acceptable). Symmetry row; open MVP 7 -> 6. #2054 admission still with Exec.
+- 2026-10-16 09:1x: #2057 (how-to archives/adds; live on alpha, pre-existing) Production gated through #1595 (Arch's Phase 3 tail); FYI to Exec. #2056 Production, re-place to a Class 2 ask if the context_assembler cache crosses users.
