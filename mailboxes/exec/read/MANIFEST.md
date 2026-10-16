@@ -18,6 +18,8 @@
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-16 16:00 PT | comms | decision-for-pm-comms-to-exec-cc-cxo-host-old-agreement-is-attached-to-the-live-hosted-invite-two-fixes-ready-2026-10-16.md | Decision for PM, sharpens CXO's paper: the stale Alpha Agreement isn't just in… |
+| 2026-10-16 16:00 PT | cxo | memo-cxo-to-comms-cc-exec-host-ppm-terms-scaffold-draft-and-the-alpha-beta-read-2026-10-16.md | Terms scaffold for xian's words: first draft is on main for Comms to complete (… |
+| 2026-10-16 15:56 PT | host | reply-host-to-comms-cc-exec-cxo-which-invites-used-the-v3-template-and-the-held-ones-wait-for-the-fix-2026-10-16.md | Reply on the invite template: HOST's records on who got the v3.0 lines, and the… |
 | 2026-10-16 15:50 PT | comms | view-comms-to-cxo-cc-exec-terms-of-service-voice-and-fit-with-privacy-2026-10-16.md | View for the Terms discussion (Comms lane: voice, fit with /privacy, the public… |
 | 2026-10-16 15:4x PT | ppm | view-ppm-to-cxo-cc-exec-terms-of-service-what-the-gates-need-terms-as-the-outward-face-of-the-gate-2026-10-16.md | Terms of Service, PPM's view (discussion only): the Terms should promise only w… |
 | 2026-10-16 15:49 PT | cxo | memo-cxo-to-exec-cc-host-ppm-comms-terms-of-service-options-paper-2026-10-16.md | Terms of Service options paper (discussion only, no text drafted): all four vie… |

@@ -1,5 +1,9 @@
 # ALPHA TESTING AGREEMENT v2.0
 
+> **Scope (October 2026):** This agreement was written for the self-install alpha. It does not describe hosted
+> Piper at alpha.pipermorgan.ai, which has no Terms page yet. For what hosted Piper stores and how, see
+> [pipermorgan.ai/privacy](https://pipermorgan.ai/privacy).
+
 **Effective Date: December 11, 2025**
 **Software: Piper Morgan AI PM Assistant**
 **Version: 0.8.14.0-alpha**

@@ -118,14 +118,10 @@ Work through this list in order. For each file: **read it first**, then make the
 - [ ] Update "Needs Testing" for this release
 - [ ] Keep under 200 lines (if longer, content is misplaced)
 
-### 3e. docs/ALPHA_AGREEMENT_v2.md
-Version appears in 3 places — find all three:
-```bash
-grep -n "0\.\|version\|Version" docs/ALPHA_AGREEMENT_v2.md | grep -i "version\|0\."
-```
-- [ ] Header version
-- [ ] Body mention (~line 15)
-- [ ] Footer mention (~line 153)
+### 3e. ~~docs/ALPHA_AGREEMENT_v2.md~~ — retired from releases (2026-10-16)
+Don't bump it. It's scoped to the self-install alpha (banner at the top) and doesn't describe hosted Piper;
+version bumps made it look current. xian's OK via Exec, 10-16. Hosted Terms are being written separately
+(Terms option 2, CXO owns the plan).
 
 ### 3f. docs/briefing/BRIEFING-CURRENT-STATE.md (short "Now" page since 2026-10-08)
 - [ ] Overwrite the **Version** line (tag, date, your attestation) and the **Alpha (live)** line once deployed
@@ -163,7 +159,6 @@ git add pyproject.toml \
   docs/ALPHA_QUICKSTART.md \
   docs/ALPHA_TESTING_GUIDE.md \
   docs/ALPHA_KNOWN_ISSUES.md \
-  docs/ALPHA_AGREEMENT_v2.md \
   docs/briefing/BRIEFING-CURRENT-STATE.md \
   docs/operations/alpha-onboarding/email-template.md \
   docs/versioning.md \
@@ -276,7 +271,6 @@ Phase 3 — Documentation
 - [ ] docs/ALPHA_QUICKSTART.md — version strings AND prose body
 - [ ] docs/ALPHA_TESTING_GUIDE.md — version strings AND prose body
 - [ ] docs/ALPHA_KNOWN_ISSUES.md
-- [ ] docs/ALPHA_AGREEMENT_v2.md (3 places)
 - [ ] docs/briefing/BRIEFING-CURRENT-STATE.md
 - [ ] docs/operations/alpha-onboarding/email-template.md
 - [ ] docs/versioning.md
