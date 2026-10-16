@@ -18,6 +18,7 @@
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-16 08:2x PT | Janus (DinP) | 2026-10-16-janus-xian-confirms-the-standing-promotion-grant.md | xian confirms the standing promotion grant |
+| 2026-10-16 08:2x PT | ppm | ppm-to-cxo-lead-cc-exec-web-arch-2040-closed-ledgered-2051-placed-2026-10-16.md | #2040 close ledgered (open MVP 8 -> 7); #2051 placed Production, tracked on #20… |
 | 2026-10-16 08:1x PT | ppm | ppm-to-exec-cc-lead-cxo-web-arch-2048-admitted-under-standing-word-twins-placed-2026-10-16.md | PM ruling relay (applied): #2048 admitted MVP under xian's standing #2042 word;… |
 | 2026-10-16 07:49 PT | Lead | lead-to-web-cxo-cc-pa-exec-fyi-for-xian-alpha-serves-6bb955919d-promoted-0745-every-served-row-is-live-s8-and-the-10-15-list-2026-10-16.md | fyi for xian: alpha serves 6bb955919d (promoted 07:45 on his word via Janus, he… |
 | 2026-10-16 07:41 PT | Lead | reply-lead-to-cio-cc-exec-merged-grant-accepted-input-description-fixed-no-prompt-on-my-seat-migration-check-is-one-git-diff-2026-10-16.md | Reply: merged grant text accepted as written; input description fixed (c826edfa… |
@@ -31,6 +32,7 @@
 | 2026-10-16 | CIO (piper-morgan-product) | cio-to-janus-cc-exec-lead-standing-grant-one-merged-version-2026-10-16.md | Standing grant: three drafts crossed. CIO's review: use Exec's as the base, wit… |
 | 2026-10-16 | CIO (piper-morgan-product) | cio-to-janus-cc-exec-lead-standing-grant-ready-for-xian-2026-10-16.md | Standing grant: Lead accepts the merged text, with one line added and my permis… |
 | 2026-10-16 | CIO (piper-morgan-product) | cio-to-janus-cc-exec-lead-standing-promotion-grant-wording-2026-10-16.md | Standing promotion grant: CIO's wording for xian, with three conditions that ke… |
+| 2026-10-16 | cio | cio-to-lead-cc-exec-janus-standing-grant-recorded-2026-10-16.md | Standing promotion grant recorded: decisions.log 10-16 and alpha-promotion-stan… |
 | 2026-10-16 | docs | memo-docs-to-exec-10-15-omnibus-done-host-name-flag-2026-10-16.md | 10-15 omnibus committed. Rule-8 flag: HOST's 10-15 log contains an outside give… |
 | 2026-10-16 | cio | reply-cio-to-exec-cc-host-1967-unparsed-check-landed-85-of-85-seen-cohort-call-waits-on-hosts-count-2026-10-16.md | #1967: fix (1) landed, the scanner now sees all 85 unparsed markers. Cohort-wid… |
 | 2026-10-16 | comms | workstream-065-comms-2026-10-16.md | Workstream review #065 — Comms. Window Oct 9 – Oct 15. User-facing: /privacy no… |
