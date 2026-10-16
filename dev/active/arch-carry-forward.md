@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-10-15 11:13 PDT
+last_updated: 2026-10-15 21:3x PDT
 currency_claim: rewritten at substantive-change boundaries, verified at every START
 max_age_days: 4
 ---
@@ -43,9 +43,18 @@ named directly as the wrong instinct ("I would rather your handoff go stale than
   - **#2019 cap** validated in source (bf03ac3ab2). Bare "later" at the resume offer is a KNOWN MISS (safety pin only; revisit on CXO's served read with a whole-message entry).
   - **#2027** (dead standup suggestion lists): all 17 deleted (f76a307ecb); CXO closes on the served read. My #2028 was a duplicate, closed.
   - **Thanks/farewell compound registry examples:** NOT moot after #1986 (the examples are compound, the op is pure-only), but hygiene. They ride the next catalog batch's rule-7 run; no standalone run.
-  - **Watches:**
-    - xian's promotion word, then CXO's and Web's served reads (#1771, #1783, #2012 per leg, #2010, #2019, #2017, #2026, #2027);
-    - Lead's builds: the #1771 polite/skip-flow unit, #2024, #2023, then #2021 after #2019.
+  - **Afternoon/evening rulings** (all in decisions.log 15:45–17:27, stamps corrected to commit times):
+    - #2024 validated; **#2030** composed turn = one question, armed, asked last; **#2041** write offer outranks hint.
+    - **#2035 rule:** an offer whose yes leads to a WRITE arms the #846 store with its own landing, never the #852 hint. CXO shape B. The #1977 replay is outside the rule.
+    - **#2031:** the card derives from resolve_credential (B4). Landed; `github_oauth_bound` gone from integrations.py.
+    - **#2037:** stale detection must be a response field, not a copy substring. Lead's flag is owed; #2037 doesn't close on the substring.
+    - **#2033** (the floor narrated "standup cancelled"): fixed line from code ahead of the floor. **#2040:** "whole list" only on a recorded one-turn ListComplete fact.
+    - **#2042 class:** track, gate instances. Ladder: code-first answers; a log-only `#N` unsourced-reference metric; floor eval rows.
+  - **Own misses 10-15:** the #2028 duplicate; "11 entry points" (by-name grep, real 21); timestamps drifted all day (fixed 18:28; memory updated).
+  - **Watches** (normal pacing from Fri 10-16):
+    - xian's promotion word (alpha still 6f2916d10f), then the served reads for #2010/#2035 S3, #2030/#2041, #2037, #2031, #2040, #2033, #2008 and the #1783 close;
+    - Lead: #2023 (now also covers the standup INITIATED stage), #2021, the #2037 flag, the #2042 metric if PPM places it;
+    - xian: #2040 MVP admission; PM: #1028.
 - **10-14** (history rewrite overnight; RUN-HOT window until Thu 10-15 22:00):
   - **Option 3 = none.** STANDING CONDITION: no referent-dependent write (update_issue) enters FLIP_WRITE_ALLOWLIST until the live consult stands down on a Stage-0 referent.
   - **Acceptance contract landed** (#1843 CLOSED by CXO on served; #1771/#2007, #1783 await served reads). #1783's cap is GitHub lists only (needs a GitHub account with >5 issues); #1771's resume check needs `stop` as the leave word until #2023 lands.
