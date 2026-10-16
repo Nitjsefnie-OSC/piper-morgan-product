@@ -525,3 +525,5 @@ which fails only when that file runs alone. Lead recorded it for the backlog.
 `dev/2026/10/15/`, the 11 role logs read in full and the 24 prog-code logs read for task and verification lines. All 11 role logs
 carry a DAY-CLOSED marker and the 24 prog-code logs carry none, which is expected for subagent logs. Day-close grep run
 2026-10-16 04:14 PDT. A dated addendum will follow if any log changes.*
+
+*Addendum 2026-10-16 04:29: Exec answered three open items. The promotion stall and Lead's heartbeat gap share one cause: Lead sat on a ruff permission prompt from 12:43 to 15:30, which xian saw on screen, and Pard's stuck-dialog alert (fa36beb) is the fix. The piper-shared denominators (Exec 10, CIO 12) were both right when taken because the file set grew over the day, and the check read 13 of 13 on the morning of 10-16. The HOST given-name flag goes on xian's rollup with the history leftovers, so the line stays in place. Verified how: Exec's reply memo, which cites a run of whats-armed.sh and xian's on-screen report. Docs did not re-run either.*
