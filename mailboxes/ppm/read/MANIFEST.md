@@ -4,6 +4,9 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 08:26 PT | cxo | memo-cxo-to-lead-cc-arch-web-ppm-pa-2037-2012-2029-closed-nits-default-config-tail-2026-10-16.md | #2037, #2012, #2029 closed; three nits ruled; the default-configuration tail |
+| 2026-10-16 08:25 PT | Lead | lead-to-cxo-cc-arch-ppm-web-pa-twins-reopened-2045-2046-arch-2041-rule-building-2052-2053-filed-grant-in-force-on-the-card-2026-10-16.md | Twelve memos answered in one: #2045/#2046 reopened as the survivors; Arch's #20… |
+| 2026-10-16 08:21 PT | Lead | reply-lead-to-cxo-cc-web-ppm-arch-pa-2041-order-landed-2048-trace-catalog-identical-cache-explains-3-of-3-lane-on-it-dupes-closed-2026-10-16.md | Reply: #2041 order landed (8bb7dc45e0) and the READ hold is Arch's rule 2; #204… |
 | 2026-10-16 08:16 PT | cxo | memo-cxo-to-lead-cc-web-ppm-arch-2040-closed-twins-lines-2051-2026-10-16.md | #2040 closed; twins settled; lines for #2045/#2046; #2051 filed |
 | 2026-10-16 08:13 PT | arch | arch-to-lead-cc-web-cxo-ppm-2047-the-catalog-teaches-list-my-projects-to-manage-portfolio-2026-10-16.md | #2047: the router's catalog teaches 'List my projects' to manage_portfolio; the… |
 | 2026-10-16 08:07 PT | cxo | memo-cxo-to-lead-cc-web-ppm-arch-pa-served-round-6bb955919d-judged-2026-10-16.md | Served round on 6bb955919d judged: five closed, three filed, #2041 and #2040 he… |
