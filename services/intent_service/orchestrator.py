@@ -61,6 +61,10 @@ class IntentExecutionResult:
     # ``offer_hint``, carried — never armed here. The orchestrator does no
     # session-store writes; IntentService arms the ONE picked hint.
     offer_hint: Optional[Dict[str, Any]] = None
+    # #2041 (Arch's ruling, 2026-10-15): the handler's #2035 ``write_offer``
+    # (the #846 pending-offer record a yes/no offer whose "yes" leads to a
+    # WRITE hands back), carried the same way — never armed here.
+    write_offer: Optional[Dict[str, Any]] = None
 
 
 @dataclass
@@ -77,6 +81,13 @@ class OrchestratedResponse:
     # Its offer_text is the composed reply's LAST sentence. IntentService
     # hands it to ``_track_offer_hint`` before ``_apply_soft_offer``.
     armed_offer_hint: Optional[Dict[str, Any]] = None
+    # #2041: the one write offer this turn arms (first successful sub-result,
+    # in plan order, whose record's ``question`` was removed verbatim). A
+    # write offer OUTRANKS a hint: when this is set, ``armed_offer_hint`` is
+    # None and the question asked last is this record's ``question``.
+    # IntentService hands it to ``_arm_write_offer`` before
+    # ``_track_offer_hint`` and ``_apply_soft_offer``.
+    armed_write_offer: Optional[Dict[str, Any]] = None
 
     @property
     def successful_results(self) -> List[IntentExecutionResult]:
@@ -180,8 +191,19 @@ class IntentOrchestrator:
         )
 
         # #2030: pick the one armed hint and take every hinted question out
-        # of its sibling's text, BEFORE aggregation.
-        response.armed_offer_hint = self._pick_armed_offer(response.results)
+        # of its sibling's text, BEFORE aggregation. #2041 (Arch's ruling):
+        # the same for write offers, and a write offer OUTRANKS a hint, so
+        # one question is armed and asked per composed turn.
+        response.armed_write_offer = self._pick_armed_write_offer(response.results)
+        armed_hint = self._pick_armed_offer(response.results)
+        if response.armed_write_offer is not None and armed_hint is not None:
+            logger.info(
+                "multi_intent_offer_dropped",
+                continuation_hint=armed_hint.get("continuation_hint"),
+                reason="outranked_by_write_offer",
+            )
+            armed_hint = None
+        response.armed_offer_hint = armed_hint
 
         # Aggregate the messages
         response.aggregated_message = self._aggregate_messages(response)
@@ -247,6 +269,11 @@ class IntentOrchestrator:
                 # _process_intent_internal; this path's holder arms it
                 # through OrchestratedResponse.armed_offer_hint).
                 offer_hint=result.get("offer_hint") or None,
+                # #2041: carry the write offer the same way (the single path
+                # arms it at _process_intent_internal's _arm_write_offer;
+                # this path's holder arms it through
+                # OrchestratedResponse.armed_write_offer).
+                write_offer=result.get("write_offer") or None,
             )
 
         except Exception as e:
@@ -280,38 +307,19 @@ class IntentOrchestrator:
         stripped) and the drift is logged. Rewrites the hinted results'
         ``response`` in place; returns the armed hint or None. No store writes.
         """
-        armed: Optional[Dict[str, Any]] = None
-        for r in results:
-            hint = r.offer_hint
-            if not hint:
-                continue
-            offer_text = hint.get("offer_text") or ""
-            stripped = _remove_offer_text(r.response, offer_text) if offer_text else None
-            if stripped is None:
-                logger.warning(
-                    "multi_intent_offer_text_drift",
-                    action=r.intent.action,
-                    continuation_hint=hint.get("continuation_hint"),
-                    offer_text=offer_text,
-                    note="offer_text not found verbatim in the response; not armed",
-                )
-                continue
-            r.response = stripped
-            if armed is None and r.success:
-                armed = hint
-                logger.info(
-                    "multi_intent_offer_armed",
-                    action=r.intent.action,
-                    continuation_hint=hint.get("continuation_hint"),
-                )
-            else:
-                logger.info(
-                    "multi_intent_offer_dropped",
-                    action=r.intent.action,
-                    continuation_hint=hint.get("continuation_hint"),
-                    reason="already_armed" if armed is not None else "sub_result_failed",
-                )
-        return armed
+        return _strip_and_pick(results, "offer_hint", "offer_text")
+
+    def _pick_armed_write_offer(
+        self, results: List[IntentExecutionResult]
+    ) -> Optional[Dict[str, Any]]:
+        """#2041 (Arch's ruling, 2026-10-15): ``_pick_armed_offer`` for the
+        #2035 ``write_offer`` records. The question is the record's
+        ``question`` (#1665: stored as rendered), stripped from EVERY
+        sub-result that carries one by exact match; the first SUCCESSFUL
+        sub-result in plan order whose removal matched is the armed one. A
+        drifted question arms nothing and gets nothing appended. Precedence
+        over a hint is applied by ``execute_plan``. No store writes."""
+        return _strip_and_pick(results, "write_offer", "question")
 
     def _aggregate_messages(self, response: OrchestratedResponse) -> str:
         """
@@ -321,13 +329,15 @@ class IntentOrchestrator:
         by noting what couldn't be processed. #2030: the armed offer's
         ``offer_text`` (``response.armed_offer_hint``, set by
         ``_pick_armed_offer``) is appended once as the LAST paragraph.
+        #2041: when a write offer won (``response.armed_write_offer``), its
+        record's ``question`` is the one appended instead.
         """
         body = self._aggregate_bodies(response)
-        armed = response.armed_offer_hint
-        if armed and armed.get("offer_text") and response.successful_results:
+        question = _armed_question(response)
+        if question and response.successful_results:
             # Its own paragraph, like the failure note (#1431): a space-join
             # after a bullet list would read as part of the last item.
-            body = f"{body}\n\n{armed['offer_text']}" if body else armed["offer_text"]
+            body = f"{body}\n\n{question}" if body else question
         return body
 
     def _aggregate_bodies(self, response: OrchestratedResponse) -> str:
@@ -416,6 +426,59 @@ class IntentOrchestrator:
             body = f"{body}\n\n{failure_note}" if body else failure_note
 
         return body
+
+
+def _armed_question(response: OrchestratedResponse) -> str:
+    """#2041: the one question the composed reply asks last: the armed write
+    offer's ``question`` (it outranks a hint), else the armed hint's
+    ``offer_text``, else none."""
+    if response.armed_write_offer:
+        return response.armed_write_offer.get("question") or ""
+    if response.armed_offer_hint:
+        return response.armed_offer_hint.get("offer_text") or ""
+    return ""
+
+
+def _strip_and_pick(
+    results: List[IntentExecutionResult], attr: str, question_key: str
+) -> Optional[Dict[str, Any]]:
+    """#2030 / #2041: for every sub-result carrying an offer record under
+    ``attr`` (``offer_hint`` or ``write_offer``), remove the record's
+    question (``record[question_key]``) from its response by exact match;
+    return the record of the first SUCCESSFUL sub-result in plan order whose
+    removal matched, or None. A drifted question (not verbatim in the
+    response) leaves that response as rendered, arms nothing, and is logged."""
+    armed: Optional[Dict[str, Any]] = None
+    for r in results:
+        record = getattr(r, attr)
+        if not record:
+            continue
+        question = record.get(question_key) or ""
+        label = record.get("continuation_hint") or record.get("workflow_type")
+        stripped = _remove_offer_text(r.response, question) if question else None
+        if stripped is None:
+            logger.warning(
+                "multi_intent_offer_text_drift",
+                action=r.intent.action,
+                kind=attr,
+                offer=label,
+                offer_text=question,
+                note="offer question not found verbatim in the response; not armed",
+            )
+            continue
+        r.response = stripped
+        if armed is None and r.success:
+            armed = record
+            logger.info("multi_intent_offer_armed", action=r.intent.action, kind=attr, offer=label)
+        else:
+            logger.info(
+                "multi_intent_offer_dropped",
+                action=r.intent.action,
+                kind=attr,
+                offer=label,
+                reason="already_armed" if armed is not None else "sub_result_failed",
+            )
+    return armed
 
 
 def _remove_offer_text(response: str, offer_text: str) -> Optional[str]:

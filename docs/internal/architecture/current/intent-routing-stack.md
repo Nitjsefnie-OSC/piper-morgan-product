@@ -847,13 +847,29 @@ exactly as rendered (logged `multi_intent_offer_text_drift`). (3)
 paragraph (after any failure note). (4) The branch calls
 `_track_offer_hint({"offer_hint": orchestrated.armed_offer_hint}, …)` BEFORE
 `_apply_soft_offer`, so the #1770 guard sees the live `last_offer` and adds no
-second, soft ask. Worked example ("what time is it and list my projects", no
-projects): siblings render "It's 3:15 PM." and "You don't have any active
-projects yet. Would you like to add one?" (hint "add a new project"); the reply
-is "It's 3:15 PM. Regarding your portfolio, you don't have any active projects
-yet.\n\nWould you like to add one?" and `last_offer` carries "add a new
-project". With two hinted siblings only the first arms; the second's question
-is gone. The inversion multi-intent path (#1595) also calls
+second, soft ask. With two hinted siblings only the first arms; the second's
+question is gone. **#2041 (Arch's ruling on the issue, 2026-10-15; CXO concurs):
+the same carry for the #2035 `write_offer`, and a write offer OUTRANKS a hint.**
+`IntentExecutionResult.write_offer` carries the #846 record; `_pick_armed_write_offer`
+strips EVERY write-offer sibling's record `question` by exact match (the shared
+`_strip_and_pick`, same drift rule) and picks the first successful one in plan
+order as `OrchestratedResponse.armed_write_offer`. When a write offer is picked,
+`execute_plan` drops the picked hint (`armed_offer_hint` = None, logged
+`multi_intent_offer_dropped reason=outranked_by_write_offer`); every hinted
+sibling's question is still stripped, so the turn asks ONE question, the
+winner's, last (`_armed_question`). The branch calls
+`_arm_write_offer({"write_offer": orchestrated.armed_write_offer}, …)` BEFORE
+`_track_offer_hint` and `_apply_soft_offer`, so #1770 first-arm-wins holds the
+#846 slot. A drifted write offer is not a winner, so a hinted sibling can win.
+Worked example ("what time is it and list my projects", no projects): siblings
+render "It's 3:15 PM." and "You don't have any active projects yet. Would you
+like to add a project?" (`write_offer` question "Would you like to add a
+project?"); the reply is "It's 3:15 PM. Regarding your portfolio, you don't
+have any active projects yet.\n\nWould you like to add a project?", the #846
+store holds the `offer_add_project` record, `last_offer` stays empty, and a
+"yes" next turn answers "What would you like to call it?". The single-intent
+path is unchanged. Pins:
+`tests/unit/services/intent_service/test_write_offer_carry_2041.py`. The inversion multi-intent path (#1595) also calls
 `_aggregate_messages`, with unhinted parts, so it is unchanged. Reach
 tripwire check (d) (`test_2010_offer_hint_reach_tripwire`) now finds
 `CanonicalHandlers.handle(` dispatch sites by receiver BINDING, not name, and
@@ -5841,11 +5857,12 @@ that reaches one through the in-class call graph are pinned (the `_READ_CANONICA
 which reads `"write_offer"` and calls `set_pending_offer`. (d) The `CanonicalHandlers.handle` dispatch
 holders are pinned with what each does with `write_offer`. (e) Every call of a #846 write-offer
 factory (`build_add_project_offer`, `empty_projects_offer`) reaches `set_pending_offer` or a
-`"write_offer"` value. Check (d) pins a KNOWN GAP: `IntentOrchestrator._execute_single` drops
-`write_offer`, so in a multi-intent turn a write-offer sibling's question renders unarmed (#2041). The
-#2030 worked example above (empty projects as a hinted sibling) predates #2035: that question is now a
-write offer, which this path drops, and its text is "Would you like to add a project?" (CXO
-four-calls item 3).
+`"write_offer"` value. Check (d) pinned `IntentOrchestrator._execute_single` as a KNOWN GAP ("drops")
+until #2041 closed it: it is now pinned "carries" (it puts `write_offer=` on its result, read from the
+dispatch result, and every `.execute_plan(` holder passes `armed_write_offer` to `_arm_write_offer`
+before its next `_track_offer_hint` and `_apply_soft_offer`). The fed-fake test
+`test_2035_write_offer_reach_tripwire_fails_on_fakes` also feeds the REAL orchestrator source with
+the carry removed and expects check (d) to fail. See the #2030/#2041 paragraph for the precedence.
 
 ## Pointers
 
