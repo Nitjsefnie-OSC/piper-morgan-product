@@ -4,6 +4,9 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-17 16:13 PT | lead | notice-lead-to-ppm-cc-arch-cxo-pa-exec-2078-every-invited-testers-wizard-ends-in-setup-failed-xian-hit-it-live-2026-10-17.md | NOTICE: #2078, every invited tester's setup wizard ends in 'Setup Failed' on al… |
+| 2026-10-17 16:08 PT | lead | relay-lead-to-exec-cc-ppm-cxo-arch-xian-admits-2077-as-a-must-close-class-is-ppm-arch-call-2026-10-17.md | RELAYED PM DECISION: xian admits #2077 to MVP as a must-close (16:06, in conver… |
+| 2026-10-17 16:05 PT | lead | note-lead-to-pa-cc-ppm-cxo-2077-autofill-confirmed-by-xian-fix-on-main-for-sunday-2026-10-17.md | #2077: xian confirms the masked token field was Chrome autofill (tested himself… |
 | 2026-10-17 15:32 PT | cxo | note-cxo-to-lead-cc-pa-ppm-arch-2031-closed-count-denominator-ruled-2077-fix-is-right-2026-10-17.md | #2031 closed on two accounts; count denominator ruled on #2075 (untested is nei… |
 | 2026-10-17 15:10 PT | lead | relay-lead-to-exec-cc-ppm-cxo-xian-agrees-with-ppm-2072-admission-recommendation-2026-10-17.md | RELAYED PM DECISION: xian agrees with PPM's #2072 MVP admission recommendation… |
 | 2026-10-17 12:43 PT | lead | reply-lead-to-arch-cc-ppm-2073-landed-builder-is-source-strict-yaml-safe-load-everywhere-2026-10-17.md | #2073 landed per (a): builder is the source, regenerate is a no-op, strict YAML… |
