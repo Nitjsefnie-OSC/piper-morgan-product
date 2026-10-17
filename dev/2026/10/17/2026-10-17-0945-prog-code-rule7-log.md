@@ -49,3 +49,11 @@
 - Detached main worktree `/private/tmp/claude-501/rule7-main` removed at wrap.
 
 ## Outcome: DROP the #2069 description (screen), stop and report to Lead. Nothing pushed, no mail.
+
+## 10:1x Lead's decision: land with main's add_project description (commit a4d429e246, merge of origin/main 50c6fd8475 docs/mail only)
+- Reverted the add_project description to main's text byte for byte (and its #2069 comment). `git diff origin/main -- services/intent_service/workflow_entries.py`: the `list_assigned_issues` alias (+ comment) and the #2069 handler threading in `run_add_project_workflow` (`router_args = …inversion_args` + `router_args=` kwarg + comment). The description lines no longer differ. The threading is the #2069 handler that lands, so it stays.
+- Prompt identity: scratch `dump_prompt.py` (`_SYSTEM_PROMPT` + `build_routing_prompt("X", derive_routing_grammar())`) on a detached worktree of origin/main 0b52b1b873 vs this branch; `diff <(grep -v '^ALIASES' main) <(grep -v '^ALIASES' cand)` → **PROMPT_IDENTICAL** (91 lines each); alias map diff: `+ ('list_assigned_issues', 'list_issues')` only. Worktree removed. No LLM calls.
+- Pin flipped: `test_rail_description_is_unchanged_from_main` (quotes main's text, no "args") + `test_handler_consumes_router_args_without_the_description_sentence`; honesty-guard and resolver pins unchanged.
+- Routing-stack #2069 paragraph rewritten to the #1976 shape (description UNCHANGED, three wordings DROPPED, attributed row, controls/attribution paths, Baz 3/3 under main's wording) + #2051 alias note; my earlier batch paragraph folded into it.
+- Tiers: intent_service 6561; intent 64; llm 126; enforcement 137 (+1 skipped); phase3 deletion 76; web 1093; integrations 460 (+3 skipped); database 168; consciousness 66; 1976 corpus pin 20. 0 failures. mypy gate 1096. ruff check + format clean.
+- Not done (out of scope, listed): the Baz corpus row's notes (YAML + builder) still say "UNMEASURED at deposit: the rail-description change … owes rule 7's served run" — now stale.
