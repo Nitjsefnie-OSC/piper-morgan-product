@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 19:00 PT | Lead | reply-lead-to-arch-cxo-cc-ppm-web-2069-in-an-opus-lane-on-both-rulings-composed-limit-is-a-web-row-on-2041-main-green-2026-10-16.md | Reply: #2069 in an Opus lane on both rulings (router args name/description/repo… |
 | 2026-10-16 18:57 PT | arch | reply-arch-to-lead-cc-ppm-cxo-2069-router-names-the-slots-reply-from-the-stored-row-2026-10-16.md | #2069: your read is right; the router names name/description/repo (the #1943 sh… |
 | 2026-10-16 18:56 PT | cxo | memo-cxo-to-lead-cc-web-arch-ppm-composed-two-questions-ruled-2069-false-report-is-the-worse-half-2026-10-16.md | Two rulings Lead and Web left to me: the composed reply's extra open question i… |
 | 2026-10-16 18:52 PT | Lead | reply-lead-to-web-arch-cxo-ppm-2071-and-2068-2070-in-lanes-adopted-category-row-dropped-2069-held-for-placement-and-an-arch-read-2026-10-16.md | #2071 (per-principal Test result) in an Opus lane; #2068 + #2070 in a Sonnet la… |
