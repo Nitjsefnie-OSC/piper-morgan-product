@@ -1,20 +1,31 @@
 # PM test card
 
-**Owner**: Lead. **v69 (08:1x 10-17: alpha `118241587e`, slot 2 of 2; every card live, A1 and C2 included), v68 (07:1x: slot 1), v67 (A1 gap #2072 noted 19:3x), v66 (B3 gap 17:5x), v65 17:09 10-16: alpha promoted to the new build, every card is live.** v64 (16:4x) for xian's live session**: one card per test, only the tests that need xian's hand or that nobody has passed yet. Closed rows, Web's rows and the history are gone from this page; `git log -p` of this file keeps every earlier version. Mirror: https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi (this file wins between republishes).
+**Owner**: Lead. **v70 (15:12 10-17: your order at the top; A1 cut to what is left for your hand), v69 (08:1x 10-17: alpha `118241587e`, slot 2 of 2; every card live, A1 and C2 included), v68 (07:1x: slot 1), v67 (A1 gap #2072 noted 19:3x), v66 (B3 gap 17:5x), v65 17:09 10-16: alpha promoted to the new build, every card is live.** v64 (16:4x) for xian's live session**: one card per test, only the tests that need xian's hand or that nobody has passed yet. Closed rows, Web's rows and the history are gone from this page; `git log -p` of this file keeps every earlier version. Mirror: https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi (this file wins between republishes).
 
 **Alpha**: https://alpha.pipermorgan.ai serves **`118241587e`** (promotion 2 of 2 under your standing grant, 08:05 10-17, run 39043475359; /health healthy at 08:08; `curl -s https://alpha.pipermorgan.ai/health` shows `git_sha`). No more promotions today. This build carries everything landed since last night: user erasure (#2064), the Privacy & data page (#2065, served PASS), the GitHub card's checked-time line (#2066, closed), the Integrations headline counting only connected integrations (#2068), the consent line naming the project (#2070, PASS), per-person Test results (#2071, closed), both halves of #2072 (the radar/standup disclose a revoked grant again; Settings, chat and setup guidance say "needs reconnecting", never "connected"), and the #1306 count fix for C2.
 
 **How to report**: paste the reply or a screenshot in chat; say the card number. Lead relays to the judge named on the card and updates this page.
 
+## Your order (15:09 10-17)
+
+1. **A1** (in progress since 15:09): only the four steps left in the card below, about 5 minutes.
+2. **C2, then C1**: your hand only, one terminal command each. C2 closes #1306.
+3. **A5, then A4**: A5 gates MVP; A4 is the fresh-account PAT path behind the #1982 dual write you held.
+4. **B1**: gates MVP (#2048), one short row.
+5. **A3, A2, A6, A7, B2, B3**: any order; none gates anything.
+
 ## A. Your cards (all live on `118241587e`)
 
 ### A1. Broken GitHub grant: the card, the page, and one-step Reconnect (#2031, #1963)
-- **Where**: your own alpha account (the one with GitHub connected), plus GitHub → Settings → Applications → Authorized OAuth Apps.
-- **Steps**: follow [pa-s5-broken-grant-steps.md](pa-s5-broken-grant-steps.md) (`dev/active/`), steps 2–5 (revoke the "Piper Morgan Alpha" app, then look, then Reconnect). The read snippet in that file goes in the browser console on alpha.
-- **Pass**: Settings → GitHub (`/settings/integrations/github`) shows ⚠️ "Needs reconnecting" and a **Reconnect with GitHub** button, never "Connected". Integrations (`/settings/integrations`) GitHub card: the same words, never "Not configured" (that is #2031's open question). Radar and the standup formats say GitHub couldn't be read, never "no open issues". Reconnect is ONE click back to Connected (reload the Integrations page before judging its card).
-- **Fail**: "Connected" or "Not configured" with the grant revoked; "no open issues"; a Disconnect hop needed.
-- **Live now (slot 2 landed 08:08).** Tell me when you start and I mail PA so PA is there while you're on it. One sitting covers the snippet's disclosure (the FAIL from your 18:55 run, now fixed), the card, the Settings page, the Reconnect, and two chat asks CXO added to the steps (`what's connected?` and a work-focus question with the grant revoked: neither may say GitHub is connected).
-- **Judge**: PA relays, CXO reads the words. About 10 minutes.
+- **Why your hand at all**: Web ran this whole scenario this morning on the cohort's test account on `118241587e`, and every surface passed (snippet discloses, card and Settings page say "Needs reconnecting", `what's connected?` honest, Reconnect one click). What Web cannot run is **your** account: it is the binding that failed on 10-16 (`degraded []` and an all-clear standup with the grant revoked), and the fix should be seen gone on the account that showed it. That is the whole remaining ask; CXO reads the words from your screenshots.
+- **Already done (10-16, your run)**: steps 1 and 2 (snippet before, revoke) and the FAIL at 3.1. Nothing from that run needs repeating except the reads below.
+- **What is left (about 5 minutes)**, on alpha signed in as yourself, from [pa-s5-broken-grant-steps.md](pa-s5-broken-grant-steps.md):
+  1. Run the read snippet in the browser console. If `degraded` lists `github` with `stale_token`, your grant is still revoked from 10-16: go to step 3. If it shows `degraded []` and your issues, revoke the "Piper Morgan Alpha" app on GitHub (steps file, step 2) and run the snippet again. **Pass**: `degraded` names github `stale_token`; `today`, `slack`, `markdown` say GitHub couldn't be read. **Fail**: `degraded []` or "no open issues".
+  2. Screenshot Settings → GitHub (`/settings/integrations/github`). **Pass**: ⚠️ "Needs reconnecting", a **Reconnect with GitHub** button, never "Connected" or "Not configured".
+  3. Click **Reconnect with GitHub**. **Pass**: one step, back to ✅ Connected, no Disconnect hop. Reload `/settings/integrations` before judging the card.
+  4. Run the snippet once more. **Pass**: `degraded []` and your issues are back.
+- **Skip today**: the Integrations **Test** button and the chat asks (`what's connected?`, a work-focus question with the grant revoked). Web served the first two; the focus and standup replies only say GitHub can't be read from tomorrow's build (#2076).
+- **Judge**: PA relays, CXO reads the words. Paste the four outputs here, say "A1".
 
 ### A2. Calendar answers in chat (connected 10-15)
 - **Where**: alpha chat, your account.
