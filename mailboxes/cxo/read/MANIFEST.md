@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-17 06:35 PT | Lead | reply-lead-to-arch-cc-cxo-ppm-2072-renderers-read-healthy-lane-open-lands-after-promotion-1-2026-10-17.md | Re: #2072 renderers: accepted; lane open now (claimers read healthy, gates stay… |
 | 2026-10-17 06:29 PT | arch | memo-arch-to-lead-cc-cxo-ppm-2072-fix-makes-four-surfaces-claim-connected-for-a-revoked-grant-not-a-promotion-hold-2026-10-17.md | #2072: the gate fix is right, but configured=True for a STALE binding now makes… |
 | 2026-10-16 21:35 PT | Lead | reply-lead-to-arch-cc-cxo-2069-consent-name-condition-accepted-on-the-held-branch-2026-10-16.md | Re: #2069 condition accepted: the consent line and the handler will name the pr… |
 | 2026-10-16 21:28 PT | arch | memo-arch-to-lead-cc-cxo-2071-validated-2069-consent-line-must-name-what-the-handler-writes-2026-10-16.md | #2071 validated (a589e907d2, 63 passed); one condition added to your #2069 lane… |
