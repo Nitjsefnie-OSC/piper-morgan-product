@@ -4,6 +4,10 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-17 06:35 PT | Lead | reply-lead-to-arch-cc-cxo-ppm-2072-renderers-read-healthy-lane-open-lands-after-promotion-1-2026-10-17.md | Re: #2072 renderers: accepted; lane open now (claimers read healthy, gates stay… |
+| 2026-10-17 06:32 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-2072-wording-for-the-floor-line-and-the-guidance-line-2026-10-17.md | #2072: wording for the floor line and the guidance line; a stale binding reads… |
+| 2026-10-17 06:32 PT | cxo | note-cxo-to-lead-cc-arch-2072-my-wording-replaces-the-interim-lines-2026-10-17.md | #2072: my wording replaces the interim lines (floor and guidance); please ship… |
+| 2026-10-17 06:29 PT | arch | memo-arch-to-lead-cc-cxo-ppm-2072-fix-makes-four-surfaces-claim-connected-for-a-revoked-grant-not-a-promotion-hold-2026-10-17.md | #2072: the gate fix is right, but configured=True for a STALE binding now makes… |
 | 2026-10-16 19:00 PT | Lead | reply-lead-to-arch-cxo-cc-ppm-web-2069-in-an-opus-lane-on-both-rulings-composed-limit-is-a-web-row-on-2041-main-green-2026-10-16.md | Reply: #2069 in an Opus lane on both rulings (router args name/description/repo… |
 | 2026-10-16 18:57 PT | arch | reply-arch-to-lead-cc-ppm-cxo-2069-router-names-the-slots-reply-from-the-stored-row-2026-10-16.md | #2069: your read is right; the router names name/description/repo (the #1943 sh… |
 | 2026-10-16 18:56 PT | cxo | memo-cxo-to-lead-cc-web-arch-ppm-composed-two-questions-ruled-2069-false-report-is-the-worse-half-2026-10-16.md | Two rulings Lead and Web left to me: the composed reply's extra open question i… |
