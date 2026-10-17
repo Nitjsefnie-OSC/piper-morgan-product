@@ -93,6 +93,16 @@ async def _disconnect_github(user_id: str) -> None:
             await ConnectorGrantStore().delete(session, user_id, "github")
     except Exception as e:
         logger.warning("github_oauth_binding_clear_failed", error=str(e))
+    # #1982: the at-rest PAT row (the dual write's second copy) goes too, so a
+    # revoke leaves no row the MCP app's GitHub subkey could still read.
+    try:
+        from services.connectors.github_pat_store import delete_user_pat_at_rest
+        from services.database.session_factory import AsyncSessionFactory
+
+        async with AsyncSessionFactory.session_scope() as session:
+            await delete_user_pat_at_rest(session, user_id)
+    except Exception as e:
+        logger.warning("github_pat_at_rest_clear_failed", error=str(e))
 
 
 async def _disconnect_slack(user_id: str) -> None:

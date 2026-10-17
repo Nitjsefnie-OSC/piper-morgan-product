@@ -2099,6 +2099,23 @@ async def save_github_token(
         # a cache.
         keychain = KeychainService()
         keychain.store_api_key("github_token", token, username=current_user.sub)
+        # #1982: dual write. The keychain copy above serves alpha's sync readers;
+        # the at-rest row (user_api_keys, provider "github", GitHub-only HKDF
+        # context) is the one the MCP app's scoped subkey can decrypt. Not
+        # validated again: verify_github_token already checked this exact token.
+        from services.connectors.github_pat_store import store_user_pat_at_rest
+
+        try:
+            await store_user_pat_at_rest(current_user.sub, token)
+        except Exception:
+            # Arch #1982 condition 2: a truthful 500. The keychain copy already
+            # landed; remove it so a failed save leaves nothing Settings would
+            # report as connected, and the user's retry starts clean.
+            try:
+                keychain.delete_api_key("github_token", username=current_user.sub)
+            except Exception:
+                logger.warning("github_token_keychain_rollback_failed", exc_info=True)
+            raise
         GitHubConfigService().clear_cache()
 
         username = test_result.get("username") or "GitHub User"

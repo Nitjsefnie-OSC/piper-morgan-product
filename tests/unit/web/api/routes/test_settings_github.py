@@ -214,6 +214,11 @@ class TestSaveGitHubToken:
                 "services.infrastructure.keychain_service.KeychainService",
                 return_value=mock_keychain,
             ),
+            # #1982: the dual write's at-rest copy (user_api_keys, GitHub context).
+            patch(
+                "services.connectors.github_pat_store.store_user_pat_at_rest",
+                new=AsyncMock(),
+            ) as at_rest,
         ):
             result = await save_github_token("ghp_valid_token", current_user=mock_user)
 
@@ -224,6 +229,8 @@ class TestSaveGitHubToken:
             mock_keychain.store_api_key.assert_called_once_with(
                 "github_token", "ghp_valid_token", username="test-user-123"
             )
+            # #1982: and the at-rest copy, same user, same token
+            at_rest.assert_awaited_once_with("test-user-123", "ghp_valid_token")
             # #1507: the save must NOT mutate the process environment — the old
             # assertion here pinned the cross-tenant env write as expected
             # behavior. Per-user resolution goes through the keychain.
@@ -483,3 +490,48 @@ class TestGitHubConfigServiceKeychainFallback:
 
             # Should gracefully return None, not raise
             assert token is None
+
+
+class TestSaveGitHubTokenRollback1982:
+    @pytest.mark.asyncio
+    async def test_at_rest_failure_rolls_back_the_keychain_copy_and_500s(self):
+        """Arch #1982 condition 2: a truthful 500. If the at-rest write fails after the
+        keychain write, the keychain copy is removed before the error surfaces, so a
+        failed save leaves nothing Settings would report as connected."""
+        from fastapi import HTTPException
+
+        mock_config_service = MagicMock()
+        mock_keychain = MagicMock()
+        mock_user = MagicMock()
+        mock_user.sub = "test-user-123"
+        with (
+            patch.dict("os.environ", {}, clear=True),
+            patch(
+                "services.integrations.github.config_service.GitHubConfigService",
+                return_value=mock_config_service,
+            ),
+            patch(
+                _VALIDATOR,
+                new=AsyncMock(
+                    return_value={"authenticated": True, "username": "testuser", "error": None}
+                ),
+            ),
+            patch(
+                "services.infrastructure.keychain_service.KeychainService",
+                return_value=mock_keychain,
+            ),
+            patch(
+                "services.connectors.github_pat_store.store_user_pat_at_rest",
+                new=AsyncMock(side_effect=RuntimeError("db down")),
+            ),
+        ):
+            with pytest.raises(HTTPException) as exc_info:
+                await save_github_token("ghp_valid_token", current_user=mock_user)
+        assert exc_info.value.status_code == 500
+        mock_keychain.store_api_key.assert_called_once_with(
+            "github_token", "ghp_valid_token", username="test-user-123"
+        )
+        mock_keychain.delete_api_key.assert_called_once_with(
+            "github_token", username="test-user-123"
+        )
+        mock_config_service.clear_cache.assert_not_called()

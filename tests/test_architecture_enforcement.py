@@ -8564,3 +8564,66 @@ class TestStaleBindingRendererRatchet2072:
             "GitHub binding would read as connected (2072 follow-up). Consult "
             "needs_reconnecting(status) / healthy / via:\n  " + "\n  ".join(violations)
         )
+class TestSecurityCheckBypassCallers1982:
+    """Arch's #1982 condition 1 (2026-10-11): ``UserAPIKeyService.store_user_key``
+    gained a keyword-only ``security_check`` that skips the #268 format/strength/
+    leak validator. That is a bypass parameter on a security API, so the callers
+    allowed to pass ``False`` are a CLOSED LIST, not a docstring: a token verified
+    live with its provider by the caller in the same request (the GitHub PAT dual
+    write) and the one-off backfill of PATs that were accepted the same way.
+
+    Adding a caller means adding it here, deliberately, with a reason.
+
+    LAYER (m-43): a source sweep of the non-test trees that ship (services/, web/,
+    scripts/, the entrypoints), so a new caller anywhere in the product fails the
+    build; tests may pass False to exercise the service. Vacuity guard: the two
+    allowed files must still contain the call, so a refactor that moves the
+    bypass elsewhere is caught rather than silently un-swept.
+    """
+
+    ALLOWED = {
+        "services/connectors/github_pat_store.py",
+        "scripts/backfill_github_pat_rows_1982.py",
+    }
+    NEEDLE = "security_check=False"
+
+    def _hits(self, repo_root: Path) -> set[str]:
+        hits: set[str] = set()
+        roots = ["services", "web", "scripts"]
+        files = [p for r in roots for p in (repo_root / r).rglob("*.py")] + list(
+            repo_root.glob("main*.py")
+        )
+        for path in files:
+            if "archive" in path.parts or "__pycache__" in path.parts:
+                continue
+            try:
+                text = path.read_text(encoding="utf-8")
+            except (UnicodeDecodeError, OSError):
+                continue
+            if self.NEEDLE in text:
+                hits.add(path.relative_to(repo_root).as_posix())
+        return hits
+
+    def test_security_check_bypass_callers_are_a_closed_list(self):
+        repo_root = Path(__file__).resolve().parent.parent
+        hits = self._hits(repo_root)
+        extra = hits - self.ALLOWED
+        assert not extra, (
+            f"security_check=False passed outside the #1982 closed list: {sorted(extra)}. "
+            "A caller may skip the #268 validator only for a token it verified live with "
+            "its provider in the same request; add it to ALLOWED with the reason, or don't."
+        )
+        missing = self.ALLOWED - hits
+        assert not missing, (
+            f"vacuity guard: expected the bypass in {sorted(missing)} and found none; "
+            "the sweep is not seeing what it must see"
+        )
+
+    def test_security_check_is_keyword_only(self):
+        import inspect
+
+        from services.security.user_api_key_service import UserAPIKeyService
+
+        param = inspect.signature(UserAPIKeyService.store_user_key).parameters["security_check"]
+        assert param.kind is inspect.Parameter.KEYWORD_ONLY
+        assert param.default is True

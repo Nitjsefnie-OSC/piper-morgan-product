@@ -15,27 +15,21 @@ Traced from `main_mcp.py` → `services/mcp/server/app.py` and its imports:
 | resources / tools (`resources.py`) | `users` (id, preferences) | none | plain read |
 | GitHub OAuth grant (`github_adapter.py` → `ConnectorGrantStore`) | `user_api_keys` provider `github_mcp_oauth` | `user_api_keys.secret.github` | **subkey** |
 | GitHub PAT, at-rest row (`github_adapter._user_pat_at_rest`) | `user_api_keys` provider `github` | `user_api_keys.secret.github` | **subkey** |
-| GitHub PAT, keychain row (`github_adapter._user_pat` → `GitHubConfigService`) | `secure_credentials` name `<uid>_github_token_api_key` | `secure_credentials.<name>` (per user) | **not readable; fails closed to None** |
+| GitHub PAT, keychain row (`github_adapter._user_pat` → `GitHubConfigService`) | `secure_credentials` name `<uid>_github_token_api_key` | `secure_credentials.<name>` (per user) | **not readable; fails closed to None** (the at-rest row above is read first, so this path is only reached when no row exists) |
 | `mcp_oauth_clients.client_secret` | — | `mcp_oauth_clients.client_secret` | **never read**: the OAuth authorization server lives in alpha (`web/routers/mcp_oauth.py`); `connections.py` is alpha's settings page. MCP only verifies bearer tokens. |
 
 So the MCP app needs **one** context, `user_api_keys.secret.github`. Nothing else.
 
-**Open gap (routed to Arch 2026-10-11):** Settings → GitHub saves the PAT with
-`KeychainService.store_api_key("github_token", token, username=<uid>)`, i.e. only the
-hosted keychain table under a per-user context. No fixed subkey list can name that
-context, so a **PAT-only** user gets `CONNECT_REQUIRED` on the MCP app (alpha is
-unaffected: it holds the master key). Lead's recommendation: have the save route also
-write the PAT through `UserAPIKeyService.store_user_key(provider="github")` (and the
-clear route delete it), so the row lands under the GitHub context the MCP app holds;
-`_user_pat_at_rest` already reads it first. Not built pending Arch's word.
-
-## 0. Deploy alpha with this build FIRST (PM's hand; PA addition 2026-10-11)
-
-Steps 1 and 2 run `scripts/derive_subkey.py` and `scripts/reencrypt_github_secrets_1982.py` **inside
-alpha's image** (`fly ssh console -a piper-morgan`). As of 2026-10-11 15:5x PT, alpha runs `4bd1a236e9`
-(`/health` git_sha), which does NOT contain `079477fb15` (ancestor check failed), so neither script
-exists there yet. Alpha must also be writing new GitHub rows under the new context before the
-re-encrypt. Check `/health` git_sha against `079477fb15` before step 1.
+**PAT-only users (Arch's ruling, 2026-10-11 15:5x):** Settings → GitHub used to save the PAT only
+with `KeychainService.store_api_key("github_token", token, username=<uid>)`, i.e. the hosted keychain
+table under a per-user context no fixed subkey list can name, so a PAT-only user was
+`CONNECT_REQUIRED` on the MCP app. Resolution: a **dual write**. The save route also stores the PAT
+through `UserAPIKeyService.store_user_key(provider="github", validate=False)`
+(`services/connectors/github_pat_store.py`), landing the row under the GitHub context;
+`_user_pat_at_rest` reads it first. Disconnect deletes both copies. PATs saved before this landed
+are copied by `scripts/backfill_github_pat_rows_1982.py` (step 2b below). The keychain copy stays
+for alpha's sync readers. Landing trigger (Arch): after PM's PAT-only test on alpha, and before the
+MCP live check if PM's own account is PAT-only (PA confirms which).
 
 ## 1. Set the secret (PM's hand; no agent sees the value)
 
@@ -88,6 +82,20 @@ apply `total=2 rewritten=2 verified_new=2 legacy=0 failed=0`. The manual snapsho
 taken (the placeholder failed in zsh and the apply then accepted the literal placeholder,
 the gap the shape check above now closes); Fly's automatic daily snapshot from six hours
 before the apply holds the pre-state of both rows (5-day retention).
+
+## 2b. Backfill PATs saved before the dual write (gated the same way)
+
+Runs in alpha's image (holds the master key); only adds `user_api_keys` rows, the snapshot from
+step 2a covers it.
+
+```bash
+fly ssh console -a piper-morgan -C "python scripts/backfill_github_pat_rows_1982.py"
+fly ssh console -a piper-morgan -C "python scripts/backfill_github_pat_rows_1982.py --apply --snapshot <snapshot-id>"
+```
+
+Dry run prints `source / unparseable / no_user / already_present / to_write / undecryptable`
+counts; `--apply` writes each missing row, reads it back and checks it equals the keychain value
+(never printed). Non-zero exit: stop and read the ids.
 
 ## 3. Drop the legacy fallback
 

@@ -54,6 +54,7 @@ async def test_github_clears_credential_binding_and_grant_1330():
             "services.mcp.consumer.connector_grant_store.ConnectorGrantStore",
             return_value=grant_store,
         ),
+        patch("services.connectors.github_pat_store.delete_user_pat_at_rest", AsyncMock()),  # #1982
     ):
         await disconnect_connector(_U, "github")
 

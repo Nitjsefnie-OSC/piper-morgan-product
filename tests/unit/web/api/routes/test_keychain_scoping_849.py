@@ -92,11 +92,18 @@ class TestGitHubTokenLifecycle849:
                 "services.infrastructure.keychain_service.KeychainService",
                 return_value=mock_keychain,
             ),
+            # #1982: the dual write's at-rest copy; pinned here as the route's
+            # second collaborator, its own behaviour is tested with the helper.
+            patch(
+                "services.connectors.github_pat_store.store_user_pat_at_rest",
+                new=AsyncMock(),
+            ) as at_rest,
         ):
             await save_github_token("ghp_test", current_user=mock_user)
             mock_keychain.store_api_key.assert_called_once_with(
                 "github_token", "ghp_test", username="user-123"
             )
+            at_rest.assert_awaited_once_with("user-123", "ghp_test")
 
     @pytest.mark.asyncio
     async def test_disconnect_github_uses_user_scoped_key(self):

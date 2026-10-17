@@ -78,6 +78,8 @@ class UserAPIKeyService:
         validate: bool = True,
         store: bool = True,
         audit_context: Optional[Dict[str, Any]] = None,
+        *,
+        security_check: bool = True,
     ) -> Optional[UserAPIKey]:
         """
         Store API key for user in keychain with database metadata.
@@ -90,6 +92,14 @@ class UserAPIKeyService:
             validate: Whether to validate key with provider API
             store: Whether to actually store the key (False for validation-only)
             audit_context: Optional request context for audit logging
+            security_check: (keyword-only) Run the #268 format/strength/leak
+                validator first (default). #1982: False ONLY for a key the caller has just
+                verified live with its provider (the GitHub PAT dual write,
+                and the backfill of PATs that were accepted that way): a live
+                acceptance outranks a regex, and a rejection here would land
+                AFTER the keychain write, as a half-save. The callers allowed to
+                pass False are a CLOSED LIST enforced by
+                tests/test_architecture_enforcement.py::TestSecurityCheckBypassCallers1982.
 
         Returns:
             UserAPIKey database record, or None if store=False. When
@@ -118,74 +128,79 @@ class UserAPIKeyService:
         # didn't actually perform. Format + strength still gate; the leak
         # quick-checks (known test keys, weak patterns, obvious fakes)
         # also gate when they fire with high confidence.
-        try:
-            validation_report = await self._validator.validate_api_key(provider, api_key)
-            if not validation_report.overall_valid:
-                # Build detailed error message from validation report
-                error_messages = []
+        if security_check:  # #1982: see the docstring before passing False
+            try:
+                validation_report = await self._validator.validate_api_key(provider, api_key)
+                if not validation_report.overall_valid:
+                    # Build detailed error message from validation report
+                    error_messages = []
 
-                if not validation_report.format_valid:
-                    error_messages.append(
-                        f"Key format invalid for {provider}: {validation_report.format_result.message}"
-                    )
-                if not validation_report.strength_acceptable:
-                    entropy_score = validation_report.strength_result.entropy_score
-                    entropy_pct = int(entropy_score * 100)
-                    error_messages.append(f"Key too weak: entropy {entropy_pct}% (required: 70%)")
-                if not validation_report.leak_safe:
-                    source = validation_report.leak_result.source or "known_leak_database"
-                    error_messages.append(f"Key found in breach database: {source}")
-
-                error_detail = (
-                    " | ".join(error_messages) if error_messages else "Security validation failed"
-                )
-                logger.warning(f"API key validation failed for {provider}: {error_detail}")
-
-                # #1071: Audit-log validation failures. Security-relevant event
-                # (someone attempted to store a key that failed format/strength/leak
-                # checks). Captures provider, key_preview (first 8 chars), failure
-                # reason, and the failed check categories. NEVER logs the full key.
-                # Non-blocking: any error here should not prevent the ValueError.
-                try:
-                    key_preview = f"{api_key[:8]}..." if len(api_key) > 8 else "<too_short>"
-                    failed_checks = []
                     if not validation_report.format_valid:
-                        failed_checks.append("format")
+                        error_messages.append(
+                            f"Key format invalid for {provider}: {validation_report.format_result.message}"
+                        )
                     if not validation_report.strength_acceptable:
-                        failed_checks.append("strength")
+                        entropy_score = validation_report.strength_result.entropy_score
+                        entropy_pct = int(entropy_score * 100)
+                        error_messages.append(
+                            f"Key too weak: entropy {entropy_pct}% (required: 70%)"
+                        )
                     if not validation_report.leak_safe:
-                        failed_checks.append("leak")
+                        source = validation_report.leak_result.source or "known_leak_database"
+                        error_messages.append(f"Key found in breach database: {source}")
 
-                    await audit_logger.log_api_key_event(
-                        action=Action.KEY_VALIDATION_FAILED,
-                        provider=provider,
-                        status="failed",
-                        message=f"API key validation rejected for {provider}",
-                        session=session,
-                        user_id=user_id,
-                        details={
-                            "key_preview": key_preview,
-                            "failure_reason": error_detail,
-                            "failed_checks": failed_checks,
-                        },
-                        audit_context=audit_context,
+                    error_detail = (
+                        " | ".join(error_messages)
+                        if error_messages
+                        else "Security validation failed"
                     )
-                except Exception as audit_err:
-                    # Non-blocking — don't let audit-log failure prevent the
-                    # primary ValueError signal to the caller.
-                    logger.error(f"Failed to write validation-failure audit log: {audit_err}")
+                    logger.warning(f"API key validation failed for {provider}: {error_detail}")
 
-                raise ValueError(f"API key validation failed: {error_detail}")
+                    # #1071: Audit-log validation failures. Security-relevant event
+                    # (someone attempted to store a key that failed format/strength/leak
+                    # checks). Captures provider, key_preview (first 8 chars), failure
+                    # reason, and the failed check categories. NEVER logs the full key.
+                    # Non-blocking: any error here should not prevent the ValueError.
+                    try:
+                        key_preview = f"{api_key[:8]}..." if len(api_key) > 8 else "<too_short>"
+                        failed_checks = []
+                        if not validation_report.format_valid:
+                            failed_checks.append("format")
+                        if not validation_report.strength_acceptable:
+                            failed_checks.append("strength")
+                        if not validation_report.leak_safe:
+                            failed_checks.append("leak")
 
-            logger.info(
-                f"API key security validation passed for {provider} (security level: {validation_report.security_level})"
-            )
-        except ValueError:
-            # Re-raise validation errors as-is
-            raise
-        except Exception as e:
-            logger.error(f"Unexpected error during key validation: {e}")
-            raise ValueError(f"Failed to validate API key: {e}")
+                        await audit_logger.log_api_key_event(
+                            action=Action.KEY_VALIDATION_FAILED,
+                            provider=provider,
+                            status="failed",
+                            message=f"API key validation rejected for {provider}",
+                            session=session,
+                            user_id=user_id,
+                            details={
+                                "key_preview": key_preview,
+                                "failure_reason": error_detail,
+                                "failed_checks": failed_checks,
+                            },
+                            audit_context=audit_context,
+                        )
+                    except Exception as audit_err:
+                        # Non-blocking — don't let audit-log failure prevent the
+                        # primary ValueError signal to the caller.
+                        logger.error(f"Failed to write validation-failure audit log: {audit_err}")
+
+                    raise ValueError(f"API key validation failed: {error_detail}")
+
+                logger.info(
+                    f"API key security validation passed for {provider} (security level: {validation_report.security_level})"
+                )
+            except ValueError:
+                # Re-raise validation errors as-is
+                raise
+            except Exception as e:
+                logger.error(f"Unexpected error during key validation: {e}")
+                raise ValueError(f"Failed to validate API key: {e}")
 
         # Validate key with provider API if requested (existing validation)
         is_valid = False
