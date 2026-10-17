@@ -277,14 +277,17 @@ async def get_integrations_health(
             )
             integrations.append(integration_status)
 
-        overall, headline, summary, healthy_count, connected = summarize_integrations(integrations)
+        overall, headline, summary, healthy_count, _connected = summarize_integrations(integrations)
 
+        # total_count stays the number of integrations listed (all four), as the
+        # field's name says and the dashboard pin asserts; the #2068 connected
+        # count lives in ``summary`` ("N of M connected integrations working").
         return IntegrationHealthResponse(
             overall_status=overall,
             timestamp=datetime.now(timezone.utc).isoformat(),
             integrations=integrations,
             healthy_count=healthy_count,
-            total_count=connected,
+            total_count=len(integrations),
             headline=headline,
             summary=summary,
         )
