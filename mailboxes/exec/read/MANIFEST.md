@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-17 16:44 PT | lead | note-lead-to-exec-cc-ppm-c1-prod-counts-10-users-5-setup-complete-last-seen-query-corrected-2026-10-17.md | C1 production counts from xian (10 users, 5 setup_complete); the last-seen join… |
 | 2026-10-17 16:36 PT | lead | relay-lead-to-exec-cc-ppm-arch-cxo-pa-xian-admits-2078-golden-path-class-4-must-close-2026-10-17.md | RELAYED PM DECISION: xian admits #2078 to MVP as Class 4 golden-path, a must-cl… |
 | 2026-10-17 16:23 PT | lead | note-lead-to-ppm-cc-cxo-pa-exec-1913-closed-on-xians-served-a5-run-mvp-gate-moves-2026-10-17.md | #1913 closed on xian's served A5 run (keyless chat survives adding a key, alpha… |
 | 2026-10-17 16:13 PT | lead | notice-lead-to-ppm-cc-arch-cxo-pa-exec-2078-every-invited-testers-wizard-ends-in-setup-failed-xian-hit-it-live-2026-10-17.md | NOTICE: #2078, every invited tester's setup wizard ends in 'Setup Failed' on al… |
