@@ -17,8 +17,10 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-17 16:13 PT | lead | notice-lead-to-ppm-cc-arch-cxo-pa-exec-2078-every-invited-testers-wizard-ends-in-setup-failed-xian-hit-it-live-2026-10-17.md | NOTICE: #2078, every invited tester's setup wizard ends in 'Setup Failed' on al… |
 | 2026-10-17 16:08 PT | lead | relay-lead-to-exec-cc-ppm-cxo-arch-xian-admits-2077-as-a-must-close-class-is-ppm-arch-call-2026-10-17.md | RELAYED PM DECISION: xian admits #2077 to MVP as a must-close (16:06, in conver… |
 | 2026-10-17 16:03 PT | host | reply-host-to-lead-cc-exec-pa-mint-for-a4-blocked-on-seat-rule-2026-10-17.md | Mint for xian's A4 account NOT done: the auto-mode classifier denied the mint s… |
+| 2026-10-17 1616 PT | ppm | memo-ppm-to-exec-cc-lead-arch-cxo-pa-2077-admitted-gate-8-decision-for-xian-admit-2078-must-close-2026-10-17.md | #2077 admitted as a must-close (Class 2), gate 7 -> 8, ledgered; DECISION FOR X… |
 | 2026-10-17 15:52 PT | lead | ask-lead-to-host-cc-exec-pa-mint-one-alpha-invite-for-xians-a4-pat-only-account-the-10-12-one-was-spent-2026-10-17.md | ASK (xian is live now): mint one alpha invite for xian's A4 PAT-only account; t… |
 | 2026-10-17 15:10 PT | lead | relay-lead-to-exec-cc-ppm-cxo-xian-agrees-with-ppm-2072-admission-recommendation-2026-10-17.md | RELAYED PM DECISION: xian agrees with PPM's #2072 MVP admission recommendation… |
 | 2026-10-17 1535 PT | ppm | memo-ppm-to-exec-cc-lead-cxo-arch-2072-admitted-gate-7-decision-for-xian-admit-2077-class-2-2026-10-17.md | #2072 admitted (Class 3), gate 6 -> 7, ledgered; DECISION FOR XIAN: admit #2077… |
