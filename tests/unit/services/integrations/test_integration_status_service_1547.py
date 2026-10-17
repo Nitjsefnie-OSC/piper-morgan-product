@@ -175,20 +175,16 @@ class TestNonGitHubVias:
 class TestHealthComposition:
     @pytest.mark.asyncio
     async def test_configured_with_cached_healthy_check(self, service, monkeypatch):
-        """IntegrationHealthMonitor cached results ride along (hoisted from /health)."""
+        """This user's own cached Test result rides along (#2071: keyed by principal)."""
         _clear_integration_env(monkeypatch)
         monkeypatch.setenv("SLACK_BOT_TOKEN", "xoxb-env")
 
-        from services.health.integration_health_monitor import (
-            ComponentStatus,
-            IntegrationHealthMonitor,
-        )
+        from services.integrations.principal_test_results import PrincipalTestResultStore
 
-        monitor = IntegrationHealthMonitor()
-        monitor.register_component("slack", ComponentStatus.UNKNOWN)
-        monitor.record_success("slack", 12.0)
+        store = PrincipalTestResultStore()
+        store.record_test_result("u1", "slack", ok=True, latency_ms=12.0)
 
-        with patch.object(iss_mod, "get_health_monitor", return_value=monitor):
+        with patch.object(iss_mod, "get_test_result_store", return_value=store):
             status = await service.get_status("u1", "slack")
         assert status["configured"] is True
         assert status["healthy"] is True
@@ -199,15 +195,12 @@ class TestHealthComposition:
         _clear_integration_env(monkeypatch)
         monkeypatch.setenv("SLACK_BOT_TOKEN", "xoxb-env")
 
-        from services.health.integration_health_monitor import (
-            ComponentStatus,
-            IntegrationHealthMonitor,
-        )
+        from services.integrations.principal_test_results import PrincipalTestResultStore
 
-        monitor = IntegrationHealthMonitor()
-        monitor.register_component("slack", ComponentStatus.UNKNOWN)
+        store = PrincipalTestResultStore()
+        store.record_test_result("someone-else", "slack", ok=False, error="theirs")
 
-        with patch.object(iss_mod, "get_health_monitor", return_value=monitor):
+        with patch.object(iss_mod, "get_test_result_store", return_value=store):
             status = await service.get_status("u1", "slack")
         assert status["configured"] is True
         assert status["healthy"] is None

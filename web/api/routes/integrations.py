@@ -15,7 +15,10 @@ from pydantic import BaseModel
 
 from services.auth.auth_middleware import get_current_user
 from services.auth.jwt_service import JWTClaims
-from services.health.integration_health_monitor import ComponentStatus, IntegrationHealthMonitor
+from services.integrations.principal_test_results import (
+    PrincipalTestResultStore,
+    get_test_result_store,
+)
 
 logger = structlog.get_logger()
 
@@ -178,9 +181,8 @@ CHECK_FAILED_MESSAGE = "Couldn't check this just now. Press Test to try again."
 
 
 def _unchecked_card(integration_id: str, metadata: Dict[str, Any]) -> "IntegrationStatus":
-    """The configured-but-never-tested card (#2044). The health monitor registers
-    every component as UNKNOWN with a real ``last_check`` at startup, so "never
-    tested" is the UNKNOWN status, not a missing record."""
+    """The configured-but-never-tested card (#2044): this principal has no Test result
+    on record (#2071; another account's result never counts)."""
     return IntegrationStatus(
         name=integration_id,
         display_name=metadata["display_name"],
@@ -192,17 +194,15 @@ def _unchecked_card(integration_id: str, metadata: Dict[str, Any]) -> "Integrati
     )
 
 
-def _get_health_monitor() -> IntegrationHealthMonitor:
-    """The shared health monitor singleton.
+def _get_test_result_store() -> PrincipalTestResultStore:
+    """The per-principal Test result store (#2071).
 
-    #1547: the singleton moved to services/integrations/integration_status_service.py
-    (the canonical status source) so chat/floor/standup surfaces see the same cached
-    active-test results the /test/* routes record. This delegate keeps the route's
-    historical import surface working.
+    A Test result is keyed by ``(principal, integration)``: the Test route writes under
+    the caller's principal and every card reader passes the viewer's principal. Before
+    #2071 this was the host-wide ``IntegrationHealthMonitor`` singleton keyed by
+    integration name alone, so one account's Test showed on every account's card.
     """
-    from services.integrations.integration_status_service import get_health_monitor
-
-    return get_health_monitor()
+    return get_test_result_store()
 
 
 def _get_error_guidance(integration: str, error_type: str) -> tuple[str, Optional[str]]:
@@ -289,15 +289,16 @@ async def check_integration_connection(
 
     metadata = INTEGRATION_REGISTRY[integration_name]
     start_time = time.time()
-    health_monitor = _get_health_monitor()
+    # #2071: the result is recorded under THIS caller's principal only.
+    principal = current_user.sub
+    results = _get_test_result_store()
 
     try:
         result = await _test_integration(integration_name, user_id=current_user.sub)
         latency_ms = (time.time() - start_time) * 1000
 
         if result["success"]:
-            # Record success in health monitor
-            health_monitor.record_success(integration_name, latency_ms)
+            results.record_test_result(principal, integration_name, ok=True, latency_ms=latency_ms)
             # #2012: the GitHub Test names its serving leg (CXO's lines); other
             # integrations keep the generic line.
             message = f"{metadata['display_name']} connection successful"
@@ -314,9 +315,10 @@ async def check_integration_connection(
                 stale_reason=result.get("stale_oauth_reason"),
             )
         else:
-            # Record failure in health monitor
             error_msg = result.get("error", result.get("error_type", "Unknown error"))
-            health_monitor.record_failure(integration_name, error_msg)
+            results.record_test_result(
+                principal, integration_name, ok=False, error=error_msg, latency_ms=latency_ms
+            )
             message, fix = _get_error_guidance(
                 integration_name, result.get("error_type", "unknown")
             )
@@ -331,8 +333,9 @@ async def check_integration_connection(
 
     except Exception as e:
         latency_ms = (time.time() - start_time) * 1000
-        # Record failure in health monitor
-        health_monitor.record_failure(integration_name, str(e))
+        results.record_test_result(
+            principal, integration_name, ok=False, error=str(e), latency_ms=latency_ms
+        )
         logger.error(f"Integration test failed: {integration_name}", error=str(e))
         return ConnectionTestResponse(
             integration=integration_name,
@@ -383,19 +386,15 @@ _GITHUB_CARD_NOT_CONFIGURED = "Not configured"
 _WARNING_ICON = "⚠️"
 
 
-def _recorded_check_iso(integration_id: str) -> Optional[str]:
-    """ISO timestamp of the last REAL health check for ``integration_id``, else None (#2066).
+def _recorded_check_iso(principal: Optional[str], integration_id: str) -> Optional[str]:
+    """ISO timestamp of THIS principal's last Test of ``integration_id``, else None.
 
-    ``register_component`` stamps ``last_check`` at startup with status UNKNOWN, so a
-    timestamp alone is not evidence that a check ran; only a non-UNKNOWN status with a
-    positive ``last_check`` counts (#2044, m-44).
+    #2066 added the time line; #2071 keys it by principal, so another account's Test
+    never stamps this account's card. No record for this principal is None (never
+    checked, #2044, m-44); there is no host-wide entry to fall back to.
     """
-    component_health = _get_health_monitor().get_component_health(integration_id)
-    if not component_health or component_health.last_check <= 0:
-        return None
-    if component_health.status == ComponentStatus.UNKNOWN:
-        return None
-    return datetime.fromtimestamp(component_health.last_check, tz=timezone.utc).isoformat()
+    result = _get_test_result_store().get_test_result(principal, integration_id)
+    return result.checked_at_iso if result is not None else None
 
 
 async def _github_card(
@@ -455,13 +454,12 @@ async def _github_card(
     if getattr(credential, "leg", None) == "oauth":
         # #2066: the OAuth-leg card carries the last recorded check like the generic
         # path below does, so the #2045 time line ("Healthy. Checked just now." /
-        # "Last checked at …") can render. A real check only: UNKNOWN is the
-        # registered-at-startup state (#2044), never a measurement.
+        # "Last checked at …") can render. This account's own Test only (#2071).
         return card(
             status="healthy",
             status_message=_GITHUB_CARD_CONNECTED,
             can_test=True,
-            last_check=_recorded_check_iso("github"),
+            last_check=_recorded_check_iso(user_id, "github"),
         )
     if getattr(credential, "stale_oauth_reason", None) == DegradationReason.STALE_TOKEN:
         probe = await adapter.search_user_repositories(user_id, limit=1)
@@ -513,51 +511,27 @@ async def _check_integration_health(
                 can_test=False,
             )
 
-        # Get cached health status from IntegrationHealthMonitor
-        health_monitor = _get_health_monitor()
-        component_health = health_monitor.get_component_health(integration_id)
-
-        if component_health and component_health.last_check > 0:
-            # #2044: UNKNOWN is the registered-at-startup (or reset) state, i.e. no
-            # test has ever recorded a result; that is the unchecked card, never
-            # "Status: unknown".
-            if component_health.status == ComponentStatus.UNKNOWN:
-                return _unchecked_card(integration_id, metadata)
-
-            # Map ComponentStatus to our status strings
-            status_map = {
-                ComponentStatus.HEALTHY: "healthy",
-                ComponentStatus.DEGRADED: "degraded",
-                ComponentStatus.FAILED: "failed",
-                ComponentStatus.UNKNOWN: "unknown",
-            }
-            status_str = status_map.get(component_health.status, "unknown")
-
-            # Convert timestamp to ISO string
-            last_check_dt = datetime.fromtimestamp(component_health.last_check, tz=timezone.utc)
-            last_check_str = last_check_dt.isoformat()
-
-            # Build status message based on last check
-            if status_str == "healthy":
+        # #2071: THIS user's own Test result. No record for this principal is the
+        # unchecked card (#2044); another account's result never reaches this card.
+        result = _get_test_result_store().get_test_result(user_id, integration_id)
+        if result is not None:
+            if result.ok:
                 # #2049: the page renders the check time from last_check in the viewer's zone.
-                status_message = "Healthy"
-            elif status_str == "failed":
-                status_message = component_health.last_error or "Connection failed"
+                status_str, status_message = "healthy", "Healthy"
             else:
-                status_message = f"Status: {status_str}"
-
+                status_str, status_message = "failed", result.error or "Connection failed"
             return IntegrationStatus(
                 name=integration_id,
                 display_name=metadata["display_name"],
                 status=status_str,
                 status_message=status_message,
-                last_check=last_check_str,
-                error=component_health.last_error,
+                last_check=result.checked_at_iso,
+                error=result.error,
                 configure_url=metadata.get("configure_url"),
                 can_test=True,
             )
 
-        # Configured but never tested, and no component registered (#2044).
+        # Configured but never tested by this principal (#2044, #2071).
         return _unchecked_card(integration_id, metadata)
 
     except Exception as e:

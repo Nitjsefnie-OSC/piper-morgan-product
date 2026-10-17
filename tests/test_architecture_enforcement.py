@@ -8342,3 +8342,112 @@ class TestEraseUserCensus2064:
         erase_user, md, _ = self._census()
         stale = [t for t in erase_user.plan_tables() if t not in md.tables]
         assert not stale, f"erase_user.PLAN names tables that no longer exist: {stale}"
+
+
+class TestPerPrincipalTestResultRatchet2071:
+    """2071 (Arch-ruled shape, 2026-10-16): the Integrations Test result is keyed by
+    ``(principal, integration)`` in ``services/integrations/principal_test_results.py``.
+    Before 2071 it lived on the host ``IntegrationHealthMonitor`` keyed by integration
+    name alone, so one account's Test set the status, error text and check time every
+    other account saw on the card and in chat.
+
+    Ceiling 0, never raised: no ``get_component_health(...)`` call in ``services/`` or
+    ``web/`` whose argument is a user-facing integration id (derived from the route's
+    ``INTEGRATION_REGISTRY``) or is not a string literal at all (a variable could carry
+    one, and is not provably host-level). Host-level components (``redis_connection``,
+    ``conversation_cache``, ...) are named by literal and stay on the host monitor. The
+    same rule covers the host monitor's writers (``record_success`` /
+    ``record_failure`` with a component argument), so no Test result is written
+    host-wide again. A per-person result goes through
+    ``record_test_result(principal, ...)`` / ``get_test_result(principal, ...)``.
+    """
+
+    READERS = ("get_component_health",)
+    WRITERS = ("record_success", "record_failure")
+    ACCESSOR = Path("services/integrations/principal_test_results.py")
+    MONITOR = Path("services/health/integration_health_monitor.py")
+
+    @staticmethod
+    def _user_facing_ids():
+        from services.integrations.integration_status_service import KNOWN_INTEGRATIONS
+        from web.api.routes.integrations import INTEGRATION_REGISTRY
+
+        return set(INTEGRATION_REGISTRY) | set(KNOWN_INTEGRATIONS)
+
+    @staticmethod
+    def _files():
+        return sorted(p for root in ("services", "web") for p in Path(root).rglob("*.py"))
+
+    @classmethod
+    def _scan(cls, src: str, user_facing):
+        """Return (offending, host_level) call descriptions in ``src``."""
+        offending, host_level = [], []
+        for node in ast.walk(ast.parse(src)):
+            if not (isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)):
+                continue
+            name = node.func.attr
+            if name not in cls.READERS + cls.WRITERS:
+                continue
+            if not node.args:
+                continue  # e.g. a circuit breaker's record_success(): not a component
+            arg = node.args[0]
+            where = f"{node.lineno} .{name}({ast.unparse(arg)})"
+            if isinstance(arg, ast.Constant) and isinstance(arg.value, str):
+                (offending if arg.value in user_facing else host_level).append(where)
+            elif name in cls.READERS or len(node.args) >= 2:
+                offending.append(where)  # non-literal component: not provably host-level
+        return offending, host_level
+
+    def test_user_facing_ids_derive_from_the_registry(self):
+        ids = self._user_facing_ids()
+        assert {"github", "notion", "slack", "calendar"} <= ids, ids
+
+    def test_scanner_flags_the_pre_2071_shapes(self):
+        ids = self._user_facing_ids()
+        for src in (
+            'm.get_component_health("calendar")',
+            "m.get_component_health(integration_id)",
+            "m.record_failure(integration_name, error_msg)",
+            'm.record_success("slack", 12.0)',
+        ):
+            assert self._scan(src, ids)[0], src
+        for src in (
+            'm.get_component_health("redis_connection")',
+            'health_monitor.record_failure("conversation_cache", str(e))',
+            "self.circuit_breaker.record_success()",
+            "s.get_test_result(principal, integration_id)",
+        ):
+            assert not self._scan(src, ids)[0], src
+
+    def test_denominator_host_level_callers_are_seen(self):
+        """m-44: the scan must see the host-level writers it lets through."""
+        ids = self._user_facing_ids()
+        seen = []
+        for path in self._files():
+            seen += self._scan(path.read_text(encoding="utf-8"), ids)[1]
+        assert len(seen) >= 5, f"only {len(seen)} host-level monitor calls seen: {seen}"
+
+    def test_no_host_keyed_user_facing_test_result_ceiling_zero(self):
+        ids = self._user_facing_ids()
+        violations = []
+        for path in self._files():
+            if path == self.MONITOR:
+                continue  # the monitor's own definitions
+            offending, _ = self._scan(path.read_text(encoding="utf-8"), ids)
+            violations += [f"{path}:{o}" for o in offending]
+        assert not violations, (
+            "2071: a user-facing integration's Test result must be keyed by principal "
+            "(principal_test_results.record_test_result / get_test_result), never read "
+            "or written on the host IntegrationHealthMonitor by integration name. "
+            "Ceiling 0, never raised. " + "; ".join(violations)
+        )
+
+    def test_the_accessor_is_principal_keyed(self):
+        import inspect
+
+        from services.integrations.principal_test_results import PrincipalTestResultStore
+
+        for method in ("record_test_result", "get_test_result"):
+            params = list(inspect.signature(getattr(PrincipalTestResultStore, method)).parameters)
+            assert params[1:3] == ["principal", "integration"], (method, params)
+        assert self.ACCESSOR.exists()

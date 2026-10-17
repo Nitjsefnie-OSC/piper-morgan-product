@@ -20,7 +20,9 @@ The composition below is hoisted EXACTLY from the already-correct
   user-scoped keychain PAT (#1513), slack keychain bot token (ADR-058), notion
   #358 user-secret store (#1337), calendar user-scoped keychain key (#839),
   each behind its env-var fast path.
-- ``IntegrationHealthMonitor`` cached results — ``healthy`` / ``last_check``.
+- The caller's own Test result (``healthy`` / ``last_check``), keyed by
+  ``(principal, integration)`` in ``principal_test_results`` (#2071; before
+  that it was one host-wide entry per integration).
 
 The web route now delegates its decision primitives here (thin consumer); chat /
 floor / standup / Radar surfaces read this service instead of the registry.
@@ -30,15 +32,11 @@ and asking for anything else raises — no downstream filtering required.
 """
 
 import os
-from datetime import datetime, timezone
 from typing import Any, Dict, Optional, Tuple
 
 import structlog
 
-from services.health.integration_health_monitor import (
-    ComponentStatus,
-    IntegrationHealthMonitor,
-)
+from services.integrations.principal_test_results import get_test_result_store
 
 logger = structlog.get_logger()
 
@@ -54,21 +52,6 @@ DISPLAY_NAMES: Dict[str, str] = {
     "calendar": "Google Calendar",
     "notion": "Notion",
 }
-
-# Module-level health monitor singleton — moved here from
-# web/api/routes/integrations.py so service consumers and the /test/* routes
-# share ONE cache of active-test results.
-_health_monitor: Optional[IntegrationHealthMonitor] = None
-
-
-def get_health_monitor() -> IntegrationHealthMonitor:
-    """Get or create the shared health monitor singleton."""
-    global _health_monitor
-    if _health_monitor is None:
-        _health_monitor = IntegrationHealthMonitor()
-        for integration_id in KNOWN_INTEGRATIONS:
-            _health_monitor.register_component(integration_id, ComponentStatus.UNKNOWN)
-    return _health_monitor
 
 
 async def github_oauth_bound(user_id: Optional[str]) -> bool:
@@ -213,24 +196,13 @@ class IntegrationStatusService:
             # (the chat reads go through it).
             healthy = True
         elif configured:
-            component_health = get_health_monitor().get_component_health(integration_id)
-            if component_health and component_health.last_check > 0:
-                if component_health.status == ComponentStatus.HEALTHY:
-                    healthy = True
-                elif component_health.status in (
-                    ComponentStatus.DEGRADED,
-                    ComponentStatus.FAILED,
-                ):
-                    healthy = False
-                # UNKNOWN keeps healthy=None AND last_check=None:
-                # register_component stamps last_check at registration time, so
-                # for a never-tested component the timestamp is registration
-                # noise, not a check (m-44 — don't report a measurement that
-                # never ran).
-                if healthy is not None:
-                    last_check = datetime.fromtimestamp(
-                        component_health.last_check, tz=timezone.utc
-                    ).isoformat()
+            # #2071: THIS user's own Test result only. No record for this principal
+            # keeps healthy=None and last_check=None (never checked); there is no
+            # host-wide entry to fall back to (m-44: absence of a check is not a clear).
+            result = get_test_result_store().get_test_result(user_id, integration_id)
+            if result is not None:
+                healthy = result.ok
+                last_check = result.checked_at_iso
 
         return {
             "configured": configured,
