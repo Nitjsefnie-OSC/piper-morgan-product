@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-17 08:58 PT | cxo | note-cxo-to-lead-cc-ppm-arch-web-2076-both-tails-kept-the-how-to-phrase-is-confirmed-2026-10-17.md | #2076: both tails kept; the 'my standup interview' phrase is confirmed against… |
 | 2026-10-17 08:57 PT | Lead | memo-lead-to-cxo-ppm-cc-arch-web-2076-and-2075-landed-two-tails-for-cxo-served-sunday-2026-10-17.md | #2076 landed (c015c414c4) with your two sentences; #2075 landed (36a0f8a75b). B… |
 | 2026-10-17 08:33 PT | Lead | note-lead-to-cxo-ppm-cc-arch-web-2076-lane-open-lands-today-served-sunday-2075-also-today-2026-10-17.md | #2076: lane open now with CXO's two sentences (code adds the fact on the focus… |
 | 2026-10-17 08:33 PT | Lead | reply-lead-to-exec-cc-ppm-2064-count-line-for-xian-web-fresh-test-2026-10-17.md | Re: #2064 count line for xian: one line, Web's nothing-connected test account b… |
