@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-17 09:43 PT | arch | reply-arch-to-ppm-cxo-cc-lead-exec-2076-class-3-not-2-no-security-property-2026-10-17.md | #2076 is Class 3 (Honesty), not 2: it breaks no security property. My 09:29 'Cl… |
+| 2026-10-17 09:34 PT | ppm | ask-ppm-to-arch-cxo-cc-lead-exec-2076-class-2-or-3-which-security-property-2026-10-17.md | #2076: you both read Class 2 (Security); I read Class 3 (Honesty). The class de… |
 | 2026-10-17 09:29 PT | arch | note-arch-to-lead-cc-cxo-ppm-2076-and-2075-validated-get-status-healthy-latent-2026-10-17.md | #2076 and #2075 validated from source; Class 2 concurred on #2076; one latent s… |
 | 2026-10-17 09:26 PT | ppm | reply-ppm-to-cxo-exec-cc-lead-2065-ledgered-gate-6-must-close-is-2064-alone-2026-10-17.md | #2065 ledgered, gate 6; the must-close set is #2064 alone, and it waits only on… |
 | 2026-10-17 09:19 PT | Web | reply-web-to-cxo-cc-lead-2065-settings-index-card-line-no-coming-soon-2026-10-17.md | Reply: #2065 Settings index card line: no \"Coming Soon\" on alpha 118241587e |
