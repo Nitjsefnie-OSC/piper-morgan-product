@@ -59,6 +59,22 @@ DISPLAY_NAMES: Dict[str, str] = {
 }
 
 
+#: ``via`` for a GitHub binding GitHub has rejected (#2072): configured, and broken.
+VIA_OAUTH_BINDING_STALE = "oauth_binding_stale"
+
+
+def needs_reconnecting(status: Dict[str, Any]) -> bool:
+    """True when a ``get_status`` dict is a connection that exists but GitHub rejected.
+
+    #2072 follow-up (Arch's ruling, issuecomment-6234453553): ``configured`` means a
+    connection EXISTS, not that it works. Gates read ``configured`` (the read runs and
+    discloses STALE_TOKEN). A surface that CLAIMS a working connection ("connected",
+    "active", ``valid: True``) must also ask this, and render a True here as #2029's
+    "Needs reconnecting", never as connected.
+    """
+    return bool(status.get("configured")) and status.get("via") == VIA_OAUTH_BINDING_STALE
+
+
 async def github_oauth_binding_state(user_id: Optional[str]) -> Optional[str]:
     """The user's github OAuth-connector binding state (``ConnectorStatusState`` value),
     or None when there is no binding or the check itself failed (#2072).
@@ -211,7 +227,7 @@ class IntegrationStatusService:
         if github_state == _BOUND:
             configured, via = True, "oauth_binding"
         elif github_state in _BROKEN_BINDING_STATES:
-            configured, via = True, "oauth_binding_stale"
+            configured, via = True, VIA_OAUTH_BINDING_STALE
         else:
             status, via = await get_config_status(integration_id, user_id=user_id)
             configured = status == "configured"
@@ -222,7 +238,7 @@ class IntegrationStatusService:
             # Mirrors /health's short-circuit: a BOUND connector reports healthy
             # (the chat reads go through it).
             healthy = True
-        elif via == "oauth_binding_stale":
+        elif via == VIA_OAUTH_BINDING_STALE:
             # #2072: GitHub has rejected this grant; the connection is known broken.
             healthy = False
         elif configured:

@@ -2502,6 +2502,7 @@ Ask me how project context works any time. Are you ready to set up your first pr
             from services.integrations.integration_status_service import (
                 DISPLAY_NAMES,
                 IntegrationStatusService,
+                needs_reconnecting,
             )
 
             statuses = await IntegrationStatusService().get_all(user_id)
@@ -2510,6 +2511,9 @@ Ask me how project context works any time. Are you ready to set up your first pr
                     {
                         "name": name,
                         "configured": bool(status.get("configured")),
+                        # #2072 follow-up (Arch's ruling): a grant GitHub has rejected
+                        # is listed apart, never under Connected.
+                        "needs_reconnecting": needs_reconnecting(status),
                     }
                 )
         except Exception as e:  # silent-ok: #1423 — guidance still renders without live status, but the failure is now WARN-logged with traceback (was debug) AND the message honestly says the status check failed instead of silently omitting connection state
@@ -2517,7 +2521,12 @@ Ask me how project context works any time. Are you ready to set up your first pr
             DISPLAY_NAMES = {}
             logger.warning(f"Could not check integration status: {e}", exc_info=True)
 
-        configured = [i["name"] for i in integrations_status if i.get("configured")]
+        needs_reconnect = [i["name"] for i in integrations_status if i.get("needs_reconnecting")]
+        configured = [
+            i["name"]
+            for i in integrations_status
+            if i.get("configured") and not i.get("needs_reconnecting")
+        ]
         not_configured = [i["name"] for i in integrations_status if not i.get("configured")]
 
         def _display(name: str) -> str:
@@ -2537,6 +2546,14 @@ Ask me how project context works any time. Are you ready to set up your first pr
             message += "\n✅ **Connected:**\n"
             for name in configured[:5]:
                 message += f"  - {_display(name)}\n"
+
+        # #2072 follow-up (CXO's words, 2026-10-17): its own group between Connected
+        # and Not connected, only when it has members.
+        if needs_reconnect:
+            message += "\n🟡 **Needs reconnecting:**\n"
+            for name in needs_reconnect[:5]:
+                message += f"  - {_display(name)}\n"
+            message += "Reconnect it in Settings → Integrations → GitHub.\n"
 
         if not_configured:
             message += "\n⚪ **Not connected:**\n"
@@ -2566,6 +2583,7 @@ Once you've connected an integration, let me know and I'll help test the connect
                 "context": {
                     "setup_topic": "integrations",
                     "configured_integrations": configured,
+                    "needs_reconnecting_integrations": needs_reconnect,
                     "available_integrations": not_configured,
                     "settings_link": "/settings",
                 },
