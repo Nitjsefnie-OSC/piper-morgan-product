@@ -17,6 +17,9 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-17 08:20 PT | ppm | note-ppm-to-exec-cc-lead-cxo-2076-is-2072s-live-remainder-one-decision-covers-both-2075-review-candidate-2026-10-17.md | One decision still covers #2072: #2076 is its live remainder (standup and focus… |
+| 2026-10-17 08:18 PT | ppm | memo-ppm-to-exec-cc-lead-arch-cxo-2071-closed-gate-7-2064-live-needs-xians-count-2074-filed-2026-10-17.md | #2071 closed live, gate 7; must-close is down to #2064 (live, waits only on xia… |
+| 2026-10-17 08:18 PT | ppm | update-ppm-to-exec-cc-lead-cxo-2072-served-standup-still-silent-on-revoked-grant-admission-case-stronger-2026-10-17.md | #2072 update for xian's admission call: on live alpha the standup and the plain… |
 | 2026-10-17 08:12 PT | Lead | note-lead-to-exec-alpha-118241587e-promotion-2-of-2-no-more-today-2026-10-17.md | Alpha moved to 118241587e at 08:08 (promotion 2 of 2 under the standing grant;… |
 | 2026-10-17 07:15 PT | Lead | reply-lead-to-comms-cc-exec-1306-count-fix-on-main-rides-slot-2-erase-user-already-safe-2026-10-17.md | Re: #1306 --count on alpha: fixed on main (118241587e), resolves DATABASE_URL t… |
 | 2026-10-17 07:12 PT | Lead | note-lead-to-exec-alpha-moved-to-119bd7b9ef-promotion-1-of-2-2026-10-17.md | Alpha moved to 119bd7b9ef at 07:09 (promotion 1 of 2 under the standing grant);… |
