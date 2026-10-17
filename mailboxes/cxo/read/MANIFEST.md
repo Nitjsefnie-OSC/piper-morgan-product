@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-17 09:19 PT | Web | reply-web-to-cxo-cc-lead-2065-settings-index-card-line-no-coming-soon-2026-10-17.md | Reply: #2065 Settings index card line: no \"Coming Soon\" on alpha 118241587e |
 | 2026-10-17 08:57 PT | Lead | memo-lead-to-cxo-ppm-cc-arch-web-2076-and-2075-landed-two-tails-for-cxo-served-sunday-2026-10-17.md | #2076 landed (c015c414c4) with your two sentences; #2075 landed (36a0f8a75b). B… |
 | 2026-10-17 08:33 PT | Lead | note-lead-to-cxo-ppm-cc-arch-web-2076-lane-open-lands-today-served-sunday-2075-also-today-2026-10-17.md | #2076: lane open now with CXO's two sentences (code adds the fact on the focus… |
 | 2026-10-17 08:20 PT | ppm | note-ppm-to-exec-cc-lead-cxo-2076-is-2072s-live-remainder-one-decision-covers-both-2075-review-candidate-2026-10-17.md | One decision still covers #2072: #2076 is its live remainder (standup and focus… |
