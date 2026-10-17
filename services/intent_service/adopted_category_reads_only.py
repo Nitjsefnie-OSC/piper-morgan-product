@@ -163,19 +163,24 @@ def adopted_repo_how_to(operation: str, repo: Optional[str]) -> str:
     return template.format(repo=repo or _NO_REPO)
 
 
-def display_name_for(operation: str, original_message: str) -> Optional[str]:
-    """The project name the user typed, case kept, for the copy only: add's
-    slot extractor, or the handler's own ARCHIVE/RESTORE pattern family run
-    on the original text. None when there is no usable name."""
+def display_name_for(
+    operation: str, original_message: str, router_args: Optional[object] = None
+) -> Optional[str]:
+    """The project name the user typed, case kept, for the copy only: for
+    add, the SAME resolver the add handler writes from
+    (``resolve_add_project_slots``: the router's honesty-guarded ``name``
+    first, the #1856 extractor as the fallback — #2069, Arch's condition);
+    for archive/restore, the handler's own pattern family run on the
+    original text. None when there is no usable name."""
     from services.onboarding.portfolio_service import (
         ARCHIVE_PATTERNS,
         RESTORE_PATTERNS,
         clean_project_name,
-        extract_add_project_slots,
+        resolve_add_project_slots,
     )
 
     if operation == "add":
-        return usable_name(extract_add_project_slots(original_message)["name"])
+        return usable_name(resolve_add_project_slots(original_message, router_args)["name"])
     patterns = {"archive": ARCHIVE_PATTERNS, "restore": RESTORE_PATTERNS}.get(operation, ())
     for pattern in patterns:
         match = re.search(pattern, original_message, re.IGNORECASE)
@@ -184,7 +189,9 @@ def display_name_for(operation: str, original_message: str) -> Optional[str]:
     return None
 
 
-def question_how_to(rail_action: Optional[str], original_message: str) -> Optional[str]:
+def question_how_to(
+    rail_action: Optional[str], original_message: str, router_args: Optional[object] = None
+) -> Optional[str]:
     """#2057: the statement a question-framed turn gets for a portfolio rail
     write (``archive_project``, ``restore_project``, ``add_project``,
     ``link_repo``, ``unlink_repo``); None for any other action (the gate's
@@ -195,7 +202,9 @@ def question_how_to(rail_action: Optional[str], original_message: str) -> Option
     if operation in ("link", "unlink"):
         match = _REPO_RE.search(original_message or "")
         return adopted_repo_how_to(operation, match.group(1) if match else None)
-    return adopted_write_how_to(operation, display_name_for(operation, original_message or ""))
+    return adopted_write_how_to(
+        operation, display_name_for(operation, original_message or "", router_args)
+    )
 
 
 def build_adopted_write_confirm_offer(operation: str, name: str, intent: Intent) -> Dict[str, Any]:

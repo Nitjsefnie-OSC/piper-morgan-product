@@ -1433,7 +1433,14 @@ _READ_QUERY_COHORT: dict[str, list[str]] = {
         "get_issue",
         "review_issue_query",
     ],
-    "_handle_list_issues_query": ["list_issues", "list_issues_query"],
+    # #2051 (Web's served run of 6bb955919d, 10-16): the classifier emits
+    # list_assigned_issues on its own ("what issues are assigned to me?");
+    # with no rail key the turn fell to the floor ("Let me pull that up…").
+    # An alias on this entry runs the read, whose #2040 scope line answers
+    # the 0-assigned case. Aliases are not rendered in the router's catalog
+    # (build_routing_prompt prints the canonical name only), so the prompt
+    # text is unchanged; the router's alias map gains the name.
+    "_handle_list_issues_query": ["list_issues", "list_issues_query", "list_assigned_issues"],
     "_handle_list_prs_query": ["list_prs", "list_prs_query", "list_pull_requests"],
     "_handle_list_milestones_query": ["list_milestones", "list_milestones_query"],
     "_handle_list_releases_query": ["list_releases", "list_releases_query"],

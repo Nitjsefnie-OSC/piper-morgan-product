@@ -485,7 +485,12 @@ def _summary_for(intent) -> str:
     operation = _RAIL_ACTION_OPERATIONS.get(action)
     if operation in ("archive", "restore", "add"):
         message = (intent.context or {}).get("original_message", "") or intent.original_message
-        name = display_name_for(operation, message or "")
+        # #2069 (Arch's condition): add names its target from the SAME
+        # resolver the handler writes from — the router's honesty-guarded
+        # name first, the regex as the fallback — so the check never asks
+        # about "Baz with description …" while "Baz" is stored.
+        router_args = (intent.context or {}).get("inversion_args")
+        name = display_name_for(operation, message or "", router_args)
         if name:
             summary += f" {name}"
     return summary

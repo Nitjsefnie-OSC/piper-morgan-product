@@ -17283,7 +17283,9 @@ Add any additional information here.
 
             if _q_gate.classify_framing(message) == _q_gate.FRAMING_QUESTION:
                 _how_to = question_how_to(
-                    intent.action, (intent.context or {}).get("original_message") or message
+                    intent.action,
+                    (intent.context or {}).get("original_message") or message,
+                    (intent.context or {}).get("inversion_args"),
                 )
                 if _how_to is not None:
                     self.logger.info("question_never_writes", action=intent.action)

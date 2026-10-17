@@ -14,6 +14,7 @@ Permanent delete requires explicit confirmation.
 """
 
 import re
+import string
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
@@ -580,6 +581,89 @@ def is_plausible_project_name(text: Optional[str]) -> bool:
     if stripped.lower().strip(" .") in ("project", "a project", "new project", "a new project"):
         return False
     return True
+
+
+def router_add_project_args(router_args: object, message: Optional[str]) -> dict:
+    """#2069: the router's ``name`` / ``description`` / ``repo`` args
+    (``context["inversion_args"]``, the #1943/#1976 family: consume the
+    router's args, add no binder). Honesty guard, the #1976 one: every word
+    of a ``name`` or ``description`` must occur in the user's message (a
+    word-SET check, no regex), so an LLM-written arg never stores words the
+    user did not say; a ``repo`` must occur in the message verbatim
+    (case-insensitive) and look like ``owner/repo``. A rejected or absent arg
+    is None. ``description_asked`` is True when the router sent a non-empty
+    description, whether or not it passed, so the reply can say honestly
+    that none was stored."""
+    out: dict = {
+        "name": None,
+        "description": None,
+        "repo": None,
+        "description_asked": False,
+    }
+    if not isinstance(router_args, dict):
+        return out
+    said = {w.strip(string.punctuation).lower() for w in (message or "").split()}
+
+    def _said(raw: object) -> Optional[str]:
+        if not isinstance(raw, str) or not raw.strip():
+            return None
+        text = " ".join(raw.split())
+        wanted = {w.strip(string.punctuation).lower() for w in text.split()}
+        wanted.discard("")
+        if not wanted or not wanted <= said:
+            return None
+        return text
+
+    name = _said(router_args.get("name"))
+    if name is not None and is_plausible_project_name(name):
+        out["name"] = name
+    raw_desc = router_args.get("description")
+    out["description_asked"] = isinstance(raw_desc, str) and bool(raw_desc.strip())
+    out["description"] = _said(raw_desc)
+    raw_repo = router_args.get("repo")
+    if isinstance(raw_repo, str):
+        repo = raw_repo.strip()
+        if (
+            repo
+            and "/" in repo
+            and not any(c.isspace() for c in repo)
+            and repo.lower() in (message or "").lower()
+        ):
+            out["repo"] = repo
+    return out
+
+
+def resolve_add_project_slots(message: Optional[str], router_args: object = None) -> dict:
+    """The ONE source for an add-project turn's name / repo / description
+    (Arch 2026-10-16, the #2069 condition): the handler writes from it and
+    the consent line names the target from it, so the check can never ask
+    about one name while another is stored.
+
+    Order: the router's ``name`` first when it passes the honesty guard
+    (``router_add_project_args``), with its ``description`` and its ``repo``
+    (else the utterance's repo clause); otherwise the #1856 extractor,
+    unchanged and not widened. A description comes ONLY from the router.
+
+    Returns ``{"name", "repo", "description", "description_asked",
+    "source"}``; ``source`` is ``"router"`` or ``"extractor"``.
+    """
+    slots = extract_add_project_slots(message)
+    routed = router_add_project_args(router_args, message)
+    if routed["name"]:
+        return {
+            "name": routed["name"],
+            "repo": routed["repo"] or slots.get("repo"),
+            "description": routed["description"],
+            "description_asked": bool(routed["description_asked"]),
+            "source": "router",
+        }
+    return {
+        "name": slots.get("name"),
+        "repo": slots.get("repo"),
+        "description": None,
+        "description_asked": bool(routed["description_asked"]),
+        "source": "extractor",
+    }
 
 
 # Patterns for archive-instead response

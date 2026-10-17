@@ -4663,7 +4663,11 @@ What would you like to set up first?"""
                     "adopted_from": adopted_from(intent),
                     "held_operation": operation,
                 }
-                display_name = display_name_for(operation, original_message)
+                display_name = display_name_for(
+                    operation,
+                    original_message,
+                    (intent.context or {}).get("inversion_args"),
+                )
                 if display_name and is_imperative(operation, _leading_tokens):
                     write_offer = build_adopted_write_confirm_offer(operation, display_name, intent)
                     return {
@@ -5348,55 +5352,12 @@ What would you like to set up first?"""
 
     @staticmethod
     def _router_add_project_args(router_args: Any, message: str) -> Dict[str, Optional[str]]:
-        """#2069: the router's ``name`` / ``description`` / ``repo`` args
-        (``context["inversion_args"]``, the #1943/#1976 family: consume the
-        router's args, add no binder). Honesty guard, the #1976 one: every
-        word of a ``name`` or ``description`` must occur in the user's
-        message (a word-SET check, no regex), so an LLM-written arg never
-        stores words the user did not say; a ``repo`` must occur in the
-        message verbatim (case-insensitive) and look like ``owner/repo``.
-        A rejected or absent arg is None. ``description_asked`` is True when
-        the router sent a non-empty description, whether or not it passed,
-        so the reply can say honestly that none was stored."""
-        out: Dict[str, Any] = {
-            "name": None,
-            "description": None,
-            "repo": None,
-            "description_asked": False,
-        }
-        if not isinstance(router_args, dict):
-            return out
-        said = {w.strip(string.punctuation).lower() for w in (message or "").split()}
+        """#2069: the router's args through the honesty guard. Delegates to
+        ``portfolio_service.router_add_project_args`` (the one implementation
+        the shared resolver uses; kept here for existing callers)."""
+        from services.onboarding.portfolio_service import router_add_project_args
 
-        def _said(raw: Any) -> Optional[str]:
-            if not isinstance(raw, str) or not raw.strip():
-                return None
-            text = " ".join(raw.split())
-            wanted = {w.strip(string.punctuation).lower() for w in text.split()}
-            wanted.discard("")
-            if not wanted or not wanted <= said:
-                return None
-            return text
-
-        from services.onboarding.portfolio_service import is_plausible_project_name
-
-        name = _said(router_args.get("name"))
-        if name is not None and is_plausible_project_name(name):
-            out["name"] = name
-        raw_desc = router_args.get("description")
-        out["description_asked"] = isinstance(raw_desc, str) and bool(raw_desc.strip())
-        out["description"] = _said(raw_desc)
-        raw_repo = router_args.get("repo")
-        if isinstance(raw_repo, str):
-            repo = raw_repo.strip()
-            if (
-                repo
-                and "/" in repo
-                and not any(c.isspace() for c in repo)
-                and repo.lower() in (message or "").lower()
-            ):
-                out["repo"] = repo
-        return out
+        return router_add_project_args(router_args, message)
 
     async def _handle_add_project(
         self,
@@ -5475,21 +5436,17 @@ What would you like to set up first?"""
                 "requires_clarification": False,
             }
 
-        from services.onboarding.portfolio_service import extract_add_project_slots
+        from services.onboarding.portfolio_service import resolve_add_project_slots
 
-        slots = extract_add_project_slots(original_message)
-        name = slots.get("name")
-        repo_name = slots.get("repo")
-        description: Optional[str] = None
-        description_asked = False
-        routed = self._router_add_project_args(router_args, original_message)
-        if routed["name"]:
-            # The router named the slots (#2069): its name and description,
-            # its repo when it named one (else the existing repo clause).
-            name = routed["name"]
-            description = routed["description"]
-            repo_name = routed["repo"] or repo_name
-        description_asked = bool(routed["description_asked"])
+        # #2069 (Arch's condition, 2026-10-16): ONE resolver — the router's
+        # honesty-guarded name first, the #1856 extractor as the fallback —
+        # shared with the consent line (consent_gate._summary_for via
+        # display_name_for), so the check names what this writes.
+        slots = resolve_add_project_slots(original_message, router_args)
+        name = slots["name"]
+        repo_name = slots["repo"]
+        description: Optional[str] = slots["description"]
+        description_asked = bool(slots["description_asked"])
 
         # ---- (2): nothing to create — ask once, arm the carrier --------
         if not name:

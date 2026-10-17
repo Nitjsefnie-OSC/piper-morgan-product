@@ -1550,6 +1550,11 @@ corpus:
     category: QUERY
     expected: action:list_issues_query
     source: "phase3-conversion/GITHUB_QUERY_PATTERNS literal r"\bissues.*assigned\b""
+  - phrase: "what issues are assigned to me?"
+    category: QUERY
+    expected: action:list_issues_query
+    source: "issue-2051 (Web's served run of 6bb955919d, 2026-10-16 08:10, web-oauth-test, 0 assigned: the classifier emitted list_assigned_issues, which had no rail key; the floor said 'Let me pull that up')"
+    notes: "list_assigned_issues is registered as an alias of the list_issues entry (#2051); the read answers 0-assigned with the #2040 scope line. Aliases are not rendered in the router catalog, so this row measures the router's existing choice for the phrasing."
   - phrase: "show my pull requests"
     category: QUERY
     expected: action:list_prs_query
