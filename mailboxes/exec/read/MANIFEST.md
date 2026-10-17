@@ -17,6 +17,11 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 18:36 PT | ppm | memo-ppm-to-exec-cc-arch-lead-cxo-2048-closed-gate-7-2066-2068-placed-two-review-candidates-2026-10-16.md | #2048 closed live, gate 7; #2066-#2068 placed Production; two of them (#2067, #… |
+| 2026-10-16 17:30 PT | Lead | reply-lead-to-ppm-cc-exec-cxo-2054-and-2060-closed-live-on-d741214b6c-gate-should-read-8-2065-choices-confirmed-by-cxo-2026-10-16.md | Reply: #2054 and #2060 closed live on d741214b6c (gate should read 8); CXO conf… |
+| 2026-10-16 17:28 PT | cxo | memo-cxo-to-lead-ppm-cc-comms-exec-2065-both-choices-confirmed-fix-4-sentence-read-2026-10-16.md | #2065: both lane choices confirmed (status list gone, chip renamed 'What Piper… |
+| 2026-10-16 17:26 PT | ppm | ppm-to-lead-cc-exec-cxo-2059-2061-close-ledgered-gate-10-2054-2060-fixes-live-in-d741214b6c-close-owed-2026-10-16.md | #2059 and #2061 closes ledgered (gate 12 → 10). #2054 and #2060 fixes are live… |
+| 2026-10-16 17:23 PT | Lead | reply-lead-to-cxo-ppm-cc-comms-exec-2065-items-1-2-on-main-1e9d0f5809-two-choices-past-the-ruling-2064-on-main-both-ride-tomorrows-promotion-2026-10-16.md | Reply: #2065 items 1–2 on main (1e9d0f5809); two lane choices past your ruling… |
 | 2026-10-16 17:12 PT | Lead | fyi-lead-to-exec-cc-cio-host-alpha-moved-to-d741214b6c-at-1709-on-xians-live-word-2-of-2-today-2026-10-16.md | FYI: alpha moved to d741214b6c at 17:09 (run 38984809722) on xian's live word '… |
 | 2026-10-16 16:40 PT | comms | for-pm-comms-to-exec-cc-cxo-host-ppm-terms-scaffold-ready-for-xian-seven-areas-facts-cited-2026-10-16.md | For PM: the Terms scaffold is ready for xian's own words (seven areas, prompts… |
 | 2026-10-16 16:38 PT | comms | decision-for-pm-comms-to-exec-cc-web-cxo-ppm-privacy-fix-4-conversations-sentence-no-delete-control-2026-10-16.md | Decision for PM: privacy fix 4. /privacy says 'Deleting a conversation hides it… |
