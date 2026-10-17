@@ -3,7 +3,7 @@
     "chrome-devtools": {
       "command": "npx",
       "args": [
-        "chrome-devtools-mcp@latest",
+        "chrome-devtools-mcp@1.10.1",
         "--executablePath=/Users/xian/.claude-pm/chrome-for-testing.app/Contents/MacOS/Google Chrome for Testing",
         "--isolated",
         "--viewport=1280x720"
