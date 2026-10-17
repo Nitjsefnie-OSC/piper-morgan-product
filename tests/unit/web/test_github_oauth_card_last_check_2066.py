@@ -72,7 +72,7 @@ async def test_oauth_card_has_no_last_check_before_any_real_check():
     ):
         card = await integrations_routes._github_card(METADATA, "user-1")
     assert card is not None
-    assert card.status == "healthy"
+    assert card.status == "connected"  # #2075: no recorded check, no health claim
     assert card.last_check is None
 
 

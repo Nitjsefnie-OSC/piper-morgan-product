@@ -144,7 +144,7 @@ def test_no_internal_vocabulary_on_the_page(body):
 def test_health_json_per_state(client):
     oauth = _github_json(client, "oauth")
     assert (oauth["status"], oauth["status_message"]) == (
-        "healthy",
+        "connected",  # #2075: a bound grant with no recorded check claims no health
         "Connected with your GitHub account.",
     )
     pat = _github_json(client, "pat_stale")
@@ -190,6 +190,9 @@ def test_rendered_connected_card_with_a_recorded_check_keeps_the_leg_sentence(cl
     from datetime import datetime, timezone
 
     github = _github_json(client, "oauth")
+    # #2075: a recorded passing check is what makes the OAuth card "healthy"; the
+    # unchecked card is "connected" and carries no time line.
+    github["status"] = "healthy"
     github["last_check"] = datetime.now(timezone.utc).isoformat()
     html = _render(body, github)
     assert "Connected with your GitHub account." in html

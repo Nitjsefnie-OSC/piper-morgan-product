@@ -30,7 +30,9 @@ async def test_github_health_healthy_when_oauth_leg_serves():
     credential = GitHubCredential(owner_id="u1", mcp_server_ref="github", token=None, leg="oauth")
     with patch(_RESOLVE, new=AsyncMock(return_value=credential)):
         status = await integrations._check_integration_health("github", _META, user_id="u1")
-    assert status.status == "healthy"
+    assert (
+        status.status == "connected"
+    )  # #2075: a bound grant with no recorded check claims no health
     assert status.status_message == "Connected with your GitHub account."
 
 

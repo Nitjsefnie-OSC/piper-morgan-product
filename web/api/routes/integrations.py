@@ -248,7 +248,10 @@ def summarize_integrations(integrations: List["IntegrationStatus"]) -> tuple:
         return "degraded", "Needs attention", summary, working, n
     if working == n:
         return "healthy", "All Systems Healthy", summary, working, n
-    return "unknown", "Connected, not yet tested", summary, working, n
+    # #2075 (CXO): nothing wrong, but not every connected one has a recorded
+    # check; the count line counts checks, not health ("0 of 1 checked").
+    checked = sum(1 for i in connected if i.status != "connected")
+    return "unknown", "Connected, not yet tested", f"{checked} of {n} checked", working, n
 
 
 @router.get("/health", response_model=IntegrationHealthResponse)
@@ -484,11 +487,23 @@ async def _github_card(
         # #2066: the OAuth-leg card carries the last recorded check like the generic
         # path below does, so the #2045 time line ("Healthy. Checked just now." /
         # "Last checked at …") can render. This account's own Test only (#2071).
+        # #2075 (CXO): health is claimed only on a recorded check. A bound grant
+        # nobody has tested is "connected" (the #2044 unchecked status), so the
+        # headline reads "Connected, not yet tested", never "All Systems Healthy".
+        # The card line stays "Connected with your GitHub account." either way.
+        oauth_result = _get_test_result_store().get_test_result(user_id, "github")
+        if oauth_result is None:
+            oauth_status, oauth_error = "connected", None
+        elif oauth_result.ok:
+            oauth_status, oauth_error = "healthy", None
+        else:
+            oauth_status, oauth_error = "failed", oauth_result.error or "Connection failed"
         return card(
-            status="healthy",
+            status=oauth_status,
             status_message=_GITHUB_CARD_CONNECTED,
             can_test=True,
-            last_check=_recorded_check_iso(user_id, "github"),
+            last_check=oauth_result.checked_at_iso if oauth_result is not None else None,
+            error=oauth_error,
         )
     if getattr(credential, "stale_oauth_reason", None) == DegradationReason.STALE_TOKEN:
         probe = await adapter.search_user_repositories(user_id, limit=1)

@@ -67,7 +67,9 @@ async def _card(credential, probe=PROBE_OK):
 @pytest.mark.asyncio
 async def test_oauth_serving_is_connected():
     status, probe = await _card(OAUTH)
-    assert status.status == "healthy"
+    assert (
+        status.status == "connected"
+    )  # #2075: a bound grant with no recorded check claims no health
     assert status.status_message == "Connected with your GitHub account."
     assert status.status_icon is None and status.status_detail is None
     assert status.can_test is True and status.show_test is True
