@@ -53,6 +53,10 @@ class IntegrationHealthResponse(BaseModel):
     integrations: List[IntegrationStatus]
     healthy_count: int
     total_count: int
+    # #2068 (CXO ruling): the headline and the count line are computed here, once,
+    # over the CONNECTED integrations only; the page renders them as given.
+    headline: str = ""
+    summary: str = ""
 
 
 class ConnectionTestResponse(BaseModel):
@@ -217,6 +221,36 @@ def _get_error_guidance(integration: str, error_type: str) -> tuple[str, Optiona
     return message, fix
 
 
+def summarize_integrations(integrations: List["IntegrationStatus"]) -> tuple:
+    """#2068 (CXO's ruling): the Integrations headline counts only integrations the
+    person has connected (card status other than ``not_configured``); an
+    unconnected integration is never an issue.
+
+    Returns ``(overall_status, headline, summary, working_count, connected_count)``.
+    - none connected: "Nothing connected yet"
+    - two or more failing (``failed``): "Multiple Issues"
+    - one failing, or any connected one in a warning state (degraded / unknown):
+      "Needs attention"
+    - every connected one healthy: "All Systems Healthy"
+    - otherwise (connected, none tested yet, nothing wrong): "Connected, not yet tested"
+    """
+    connected = [i for i in integrations if i.status != "not_configured"]
+    working = sum(1 for i in connected if i.status == "healthy")
+    failing = sum(1 for i in connected if i.status in ("failed", "unhealthy"))
+    warning = sum(1 for i in connected if i.status in ("degraded", "unknown"))
+    n = len(connected)
+    if n == 0:
+        return "none", "Nothing connected yet", "", 0, 0
+    summary = f"{working} of {n} connected integrations working"
+    if failing >= 2:
+        return "unhealthy", "Multiple Issues", summary, working, n
+    if failing or warning:
+        return "degraded", "Needs attention", summary, working, n
+    if working == n:
+        return "healthy", "All Systems Healthy", summary, working, n
+    return "unknown", "Connected, not yet tested", summary, working, n
+
+
 @router.get("/health", response_model=IntegrationHealthResponse)
 async def get_integrations_health(
     current_user: JWTClaims = Depends(get_current_user),
@@ -235,7 +269,6 @@ async def get_integrations_health(
     """
     try:
         integrations = []
-        healthy_count = 0
 
         # Check each integration
         for integration_id, metadata in INTEGRATION_REGISTRY.items():
@@ -243,24 +276,17 @@ async def get_integrations_health(
                 integration_id, metadata, user_id=current_user.sub
             )
             integrations.append(integration_status)
-            if integration_status.status == "healthy":
-                healthy_count += 1
 
-        # Determine overall status
-        total = len(integrations)
-        if healthy_count == total:
-            overall = "healthy"
-        elif healthy_count > 0:
-            overall = "degraded"
-        else:
-            overall = "unhealthy"
+        overall, headline, summary, healthy_count, connected = summarize_integrations(integrations)
 
         return IntegrationHealthResponse(
             overall_status=overall,
             timestamp=datetime.now(timezone.utc).isoformat(),
             integrations=integrations,
             healthy_count=healthy_count,
-            total_count=total,
+            total_count=connected,
+            headline=headline,
+            summary=summary,
         )
 
     except Exception as e:

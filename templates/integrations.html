@@ -70,6 +70,7 @@
       .status-icon.degraded { background: #fff3cd; }
       .status-icon.unhealthy { background: #f8d7da; }
       .status-icon.unknown { background: #e9ecef; }
+      .status-icon.none { background: #e9ecef; }
 
       .status-text h2 {
         margin: 0 0 4px 0;
@@ -439,7 +440,8 @@
     healthy: '✅',
     degraded: '⚠️',
     unhealthy: '❌',
-    unknown: '❓'
+    unknown: '❓',
+    none: '➖'
   };
 
   // Load health status on page load
@@ -501,15 +503,10 @@
     icon.className = `status-icon ${data.overall_status}`;
     icon.textContent = STATUS_ICONS[data.overall_status] || '❓';
 
-    // Update text
-    const statusText = {
-      healthy: 'All Systems Healthy',
-      degraded: 'Some Issues Detected',
-      unhealthy: 'Multiple Issues',
-      unknown: 'Status Unknown'
-    };
-    title.textContent = statusText[data.overall_status] || 'Unknown Status';
-    subtitle.textContent = `${data.healthy_count} of ${data.total_count} integrations healthy`;
+    // #2068: the headline and count line are computed server-side over the
+    // connected integrations only (summarize_integrations); render them as given.
+    title.textContent = data.headline || 'Unknown Status';
+    subtitle.textContent = data.summary || '';
   }
 
   function renderIntegrations(integrations) {

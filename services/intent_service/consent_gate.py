@@ -474,6 +474,20 @@ def _summary_for(intent) -> str:
         match = re.search(r"#?(\d+)", message)
         if match:
             summary += f" #{match.group(1)}"
+    # #2070: the portfolio writes name their target ("archive project Bar").
+    # Reuse the adopted-category copy extractor (the handler's own pattern
+    # family; no new regex) so the line is not left saying "archive project".
+    from services.intent_service.adopted_category_reads_only import (
+        _RAIL_ACTION_OPERATIONS,
+        display_name_for,
+    )
+
+    operation = _RAIL_ACTION_OPERATIONS.get(action)
+    if operation in ("archive", "restore", "add"):
+        message = (intent.context or {}).get("original_message", "") or intent.original_message
+        name = display_name_for(operation, message or "")
+        if name:
+            summary += f" {name}"
     return summary
 
 
