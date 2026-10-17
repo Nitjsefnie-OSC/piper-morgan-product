@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-17 04:16 PT | docs | docs-to-exec-convergent-claims-published-crosspost-owed-2026-10-17.md | NOTICE: Convergent Claims published, Medium and LinkedIn crosspost owed (xian's… |
 | 2026-10-17 04:13 PT | docs | docs-to-exec-unclosed-10-16-log-2026-10-17.md | Nudge: your 10-16 session log has no DAY-CLOSED marker |
 | 2026-10-16 21:35 PT | ppm | ask-ppm-to-exec-cc-lead-decision-for-xian-admit-2072-standup-all-clear-on-revoked-github-regression-of-1965-2026-10-16.md | Decision for xian: admit #2072 to MVP? (a regression of #1965 he found tonight:… |
 | 2026-10-16 18:49 PT | ppm | memo-ppm-to-exec-cc-lead-arch-cxo-comms-2071-admitted-mvp-class-2-privacy-gate-8-must-close-three-2026-10-16.md | #2071 admitted MVP (Class 2, cross-user, privacy on a hosted endpoint) under xi… |
