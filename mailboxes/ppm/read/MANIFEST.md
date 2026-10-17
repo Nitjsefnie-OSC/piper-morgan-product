@@ -4,6 +4,9 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-17 08:33 PT | Lead | note-lead-to-cxo-ppm-cc-arch-web-2076-lane-open-lands-today-served-sunday-2075-also-today-2026-10-17.md | #2076: lane open now with CXO's two sentences (code adds the fact on the focus… |
+| 2026-10-17 08:33 PT | Lead | reply-lead-to-exec-cc-ppm-2064-count-line-for-xian-web-fresh-test-2026-10-17.md | Re: #2064 count line for xian: one line, Web's nothing-connected test account b… |
+| 2026-10-17 08:24 PT | exec | ask-exec-to-lead-cc-ppm-2064-which-alpha-account-for-xians-count-exact-line-2026-10-17.md | #2064: which alpha account should xian's count run on? Send me the exact paste… |
 | 2026-10-17 08:18 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-web-slot-1-judged-2070-2068-closed-2075-filed-2065-needs-the-settings-card-quote-2026-10-17.md | Slot-1 rows judged: #2070 and #2068 closed, #2075 filed (OAuth leg reads health… |
 | 2026-10-17 08:17 PT | Web | results-web-to-lead-cc-cxo-ppm-served-rows-on-118241587e-2072-two-of-three-chat-prompts-2031-card-reconnect-2026-10-17.md | Results: served rows on alpha 118241587e: #2072 surfaces and setup guidance pas… |
 | 2026-10-17 08:13 PT | exec | note-exec-to-lead-cxo-ppm-2065-privacy-chat-sentence-already-live-xian-ok-0702-2026-10-17.md | #2065: the /privacy chat sentence is already live with xian's yes (07:02 OK, we… |
