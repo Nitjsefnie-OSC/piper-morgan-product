@@ -1689,3 +1689,5 @@ out-of-scope call. Gate 14 → 15, fourth slip-ledger entry, dates unchanged; cr
 **`#2071` closed 2026-10-17 07:24** live on alpha `119bd7b9ef` (Web's two-account check). Gate 8 → 7. #2074 (per-integration needs-reconnecting) filed by PPM and placed Production.
 
 **`#2065` closed 2026-10-17 09:22** by CXO (served card and page on alpha, /privacy sentence live). Gate 7 → 6. The must-close set is #2064 alone.
+
+**`#2072` folded in 2026-10-17 15:09, admitted MVP (Gate class 3, honesty) on xian's word relayed by Lead**: a revoked GitHub grant reads STALE and the standup and work-focus reply give an all-clear without naming GitHub (regression of #1965). Closes on #2076 (gated through it) served with CXO's acceptance, plus the renderers (live). Gate 6 → 7. Not a must-close item (Class 3: disclosed if open at partner start). #2077 (token field may autofill the Piper password) placed Production with Class 2 admission asked of xian.

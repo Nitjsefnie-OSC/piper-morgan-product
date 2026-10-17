@@ -17,6 +17,7 @@
   #2064 (176d66a53c) and #2065 items 1 and 2 (1e9d0f5809) are on main and ride tomorrow's first promotion. #2064 also needs xian's live count; #2065 also needs Comms' /privacy fix 4 (xian's OK).
 - **Disclosed, after this review:** everything else open on MVP, below.
 - **Also before the beta form:** the uploads backfill run with zero remaining (xian approved the four conditions, 16:18).
+- **Asked, not admitted (10-17 15:3x):** #2077, the Settings GitHub token field may be filled by the browser with the saved Piper password and sent to GitHub on Reconnect (latent, Class 2 if admitted). Admission asked of xian via Exec.
 - **Data loss (Class 1):** none open on MVP today. I'd treat any new one as inside the must-close bar, under xian's 12:52 "not cavalier with user data", unless he says otherwise.
 
 ## A. Open on MVP: what a partner might hit
@@ -25,9 +26,10 @@
 |---|---|---|---|---|
 | #2048 | On an account with no projects, "list my projects" gets "I don't have your projects list in front of me right now", which reads as a fault, not "you have no projects yet". | Likely on day one: a new account has no projects, and the phrase is on the onboarding card. | "show my projects" or "what projects do I have?" answers correctly. | **Closed 2026-10-16 18:32 PT** on CXO's served acceptance (alpha `d741214b6c`, 3 of 3 fresh chats plus a control). Drops off the list. |
 | #2017 | The GitHub card's Disconnect button did nothing on 10-14. On 10-15 it worked for xian; whether it asks to confirm wasn't observed. | Only partners who try to disconnect GitHub. | Reload and retry; it worked on 10-15. | Partial served reading; Web's run of the confirm and the four settings pages is owed. |
-| #2018 | If a partner's GitHub connection dies (they revoke Piper on GitHub, or the token dies), Settings may not show it, and recovering isn't obvious. | Low: only after a revoke or expiry on GitHub's side. | Disconnect, then Connect with GitHub (worked on 10-15). | Steps 1 and 5 passed (S5, 10-15). #2029 and #2039 closed. #2031 (the card says "Not configured" for a stale binding) is waiting on xian's S5. |
+| #2018 | If a partner's GitHub connection dies (they revoke Piper on GitHub, or the token dies), Settings may not show it, and recovering isn't obvious. | Low: only after a revoke or expiry on GitHub's side. | Disconnect, then Connect with GitHub (worked on 10-15). | Steps 1 and 5 passed (S5, 10-15). #2029 and #2039 closed. #2031 (the card says "Not configured" for a stale binding) **closed 10-17** by CXO (Web's card rows on two accounts, xian's A1 readings). |
 | #1913 | A chat started before adding an AI key can disappear from the sidebar once the key is added. The server keeps it (Lead, 10-02); the vanish is in the page. | Low if partners follow the invitation (key first). | Reload; per Lead's probe the chat is still listed. Unverified on alpha since. | Open; cause not yet found client-side. |
 | #1595 | Piper sometimes misreads a phrasing: it answers a different question or gives a generic reply. Rephrasing usually works. | Likely, now and then. This is the understanding-layer epic. | Rephrase. | The epic's planned wave. Its tail: legacy project-write paths that acted without asking (#2057, fixed on main, waiting on the promotion; archive is reversible). |
+| #2072 (admitted 10-17 15:09, Class 3) | With a revoked GitHub grant, the standup and "what should I focus on today?" give an all-clear without mentioning GitHub. | Every morning for a partner whose grant lapses. | Check Settings → Integrations; the card shows the grant needs reconnecting. | Renderers live on `118241587e`; #2076 (the standup and focus replies) on main, served tomorrow. Closes on CXO's served acceptance. |
 | #1386 | Not a user-facing issue: the close-out sign-off itself (the canonical suite and three scenarios, re-run at MVP close). | n/a | n/a | Fires last. |
 
 ## B. Outside MVP, meeting the disclosure bar: xian decides whether to list them
@@ -43,7 +45,7 @@ The bar (`ppm-placement-and-disclosure-rules-2026-10-13.md` §2): a partner can 
 | #2068 (added 18:35) | The Integrations headline reads "Multiple Issues" and "0 of 4 integrations healthy" when GitHub works and the rest are simply not connected. | Certain for any partner with fewer than four connected. A false headline; CXO has ruled the words, so the fix is small. **Closed 10-17** by CXO on Web's served quotes (alpha `119bd7b9ef`). Drops off the list. |
 | #2069 (added 18:38) | "Add a project called Baz with description …" saves the whole phrase as the name and replies as if it kept a description. | Plausible for a partner's first project. Correctable by rename. A false reply, not privacy or security. CXO (18:56): the false success report is the worse half. Arch ruled the fix shape at 18:57 (the reply is built from the stored row). **Fix landed 10-17** on main (4e7996a871, Lead; Arch validated from source); not yet served on alpha `118241587e`, served read Sunday. |
 | #2075 (added 10-17) | The Integrations headline says "All Systems Healthy" for an OAuth integration nobody has tested, including a revoked grant until something reads it. | Likely for any partner who connects GitHub by OAuth. A false headline; CXO has ruled the words. |
-| #2076 (added 10-17; gated through #2072 if admitted) | With a revoked GitHub grant, the standup and "what should I focus on today?" give an all-clear without mentioning GitHub. | Every morning for a partner whose grant lapses. Follows xian's #2072 decision. |
+| #2076 | Moved to A under #2072 (admitted 10-17 15:09), which it is gated through. | — |
 
 ## C. What the review should produce
 
