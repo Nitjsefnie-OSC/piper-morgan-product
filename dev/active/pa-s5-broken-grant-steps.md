@@ -1,7 +1,7 @@
 # S5: GitHub reads with the Alpha app revoked (#1965, #1889, plus #2012's Test)
 
 **Owner**: PA, run by xian. **Written** 2026-10-15 09:48 from the code on main (Lead's landing `4a39c01ce2`).
-**PASSED 10-15 16:19 on `6f2916d10f`** (comment on #1965). **Re-run steps 3–4 now: alpha serves `d741214b6c`** (promoted 10-16 17:06; carries #2029 and #2031 by way of `6bb955919d`; verified with `git merge-base --is-ancestor`). **What it still decides (10-16 08:26):** #2031's no-token Integrations card. #2029, #2037 and #2012 closed on Web's stale-plus-PAT run; your Settings card and Reconnect are a second look at the no-token case. Do the reads (step 3.1) before looking at the cards: a grant is marked stale only when a read gets GitHub's 401.
+**PASSED 10-15 16:19 on `6f2916d10f`** (comment on #1965). **Re-run steps 3–4 now: alpha serves `d741214b6c`** (promoted 10-16 17:06; carries #2029 and #2031 by way of `6bb955919d`; verified with `git merge-base --is-ancestor`). **What it still decides:** #2031's no-token Integrations card (10-16 08:26), and #2072's served check: step 3.1 on a build containing `b1fbfa3da1` (10-16 21:5x). #2029, #2037 and #2012 closed on Web's stale-plus-PAT run; your Settings card and Reconnect are a second look at the no-token case. Do the reads (step 3.1) before looking at the cards: a grant is marked stale only when a read gets GitHub's 401.
 **#2071 (open, 10-16):** the Integrations Test result and its check time are kept once for the whole host, not per account. S5's deciding card isn't affected: "Needs reconnecting" comes from your own resolver (`_github_card`, `integrations.py` ~445–469). What is shared is the check time on the healthy card after Reconnect ("Checked just now" / "Last checked at…"). It may be another account's, so don't judge S5 by it.
 About 10 minutes.
 
@@ -18,6 +18,7 @@ GitHub → Settings → Applications → **Authorized OAuth Apps** → **Piper M
 ## 3. The four reads, plus the Test
 1. Run the read snippet again. **Pass**: `degraded` lists github with `stale_token`; `today`, `slack` and
    `markdown` say GitHub couldn't be read and to reconnect. **No** "no open issues" or ✅ for GitHub.
+   **#2072 (10-16 18:55, your run on `d741214b6c`): FAILED here**: `degraded []` and all-clear standups. #2029 marks the grant STALE, and the radar/standup gate then read STALE as "not configured" and skipped GitHub. Fixed on main `b1fbfa3da1`, not on `d741214b6c`. **Re-run step 3.1 on the first promotion whose `/health` sha contains `b1fbfa3da1`**: that run is #2072's served check. Until then, judge only 3.2, 3.3 and 4.
 2. Settings → Integration Health → GitHub → **Test** (on the next build, look at the card first: **Pass** = ⚠️
    "Needs reconnecting", "GitHub no longer accepts your connection.", a **Reconnect** button, no Test button (if it says ⚠️ "Connected via your personal token" instead, your account also holds a PAT: that covers #2037's amber icon, so screenshot it)
    (#2031). Never "Not configured" or "Connected"). On `6f2916d10f`: **Pass**: it fails, and says to reconnect. (On 10-14 it
