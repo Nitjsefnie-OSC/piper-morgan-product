@@ -5,6 +5,8 @@ freshness pass at START/STOP alongside the carry-forward, and cites NO issue sta
 lives in GitHub, this file holds only durable owed/queued items.)
 
 ## Durable owed
+- **#2073 corpus builder drift** (Lead found via the #2069 lane, 2026-10-16) — **Filed**: 2026-10-16 · blocked on Arch's call (fix the builder with a regenerate-is-a-no-op pin, or retire it); until then insert corpus rows by hand in BOTH `scripts/build_inversion_corpus_phase0.py` and the YAML.
+- **Re-run set addition (2026-10-16 21:2x):** `tests/integration/test_integrations_dashboard.py` whenever `web/api/routes/integrations.py` changes (1s, no DB; it pinned `total_count` and caught the #2068 lane after the fact).
 - **#1909 box: review test files for hardcoded data that should be fixtures** (Exec 2026-10-16, owner Lead) — **Filed**: 2026-10-16 · trigger: after MVP closes (10-30); Docs ticks the box when I report done. Not before then.
 <!-- 2026-10-08 Lead: struck the cli/commands/issues.py 1613-residue row — done 10-05 in `2d0e7502b0`.
      2026-10-05 Lead: struck two rows found already on main during a drain check — the gotchas-doc
