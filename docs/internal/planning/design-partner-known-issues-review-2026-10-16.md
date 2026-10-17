@@ -6,14 +6,14 @@
 
 ## The bar (recorded in `beta-gate-standard.md` §Standing rulings)
 
-- **Must be closed and live on alpha before partners start:** every privacy and security item on MVP. As of 16:3x that was six; at 17:2x, four remain open (#2059 and #2061 closed live on `d741214b6c`, 17:14):
+- **Must be closed and live on alpha before partners start:** every privacy and security item on MVP. As of 16:3x that was six; at 17:3x, two remain open (#2059 and #2061 closed live on `d741214b6c` at 17:14, #2054 and #2060 at 17:30):
   - #2054: one user's turn could carry another user's identity in the intent cache;
   - #2059: logs keep message text, against /privacy;
   - #2060: Chroma telemetry, against /privacy;
   - #2061: uploads are written as plaintext if the encryption key is missing (latent; admitted on xian's 16:18 word);
   - #2064: the 14-day account-deletion promise on /privacy has no erasure path in code;
   - #2065: Settings' "Export/delete data" page lists actions that don't exist, and /privacy says deleting a chat hides it, but no control does (admitted 16:3x).
-  #2054 and #2060: their fixes are live in `d741214b6c`, and only the close is owed. #2064 (176d66a53c) and #2065 items 1 and 2 (1e9d0f5809) are on main and ride tomorrow's first promotion. #2064 also needs xian's live count; #2065 also needs Comms' /privacy fix 4 (xian's OK).
+  #2064 (176d66a53c) and #2065 items 1 and 2 (1e9d0f5809) are on main and ride tomorrow's first promotion. #2064 also needs xian's live count; #2065 also needs Comms' /privacy fix 4 (xian's OK).
 - **Disclosed, after this review:** everything else open on MVP, below.
 - **Also before the beta form:** the uploads backfill run with zero remaining (xian approved the four conditions, 16:18).
 - **Data loss (Class 1):** none open on MVP today. I'd treat any new one as inside the must-close bar, under xian's 12:52 "not cavalier with user data", unless he says otherwise.
