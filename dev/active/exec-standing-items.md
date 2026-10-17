@@ -183,3 +183,4 @@ misread until 2026-10-01.*
 | 138 | ~~**xian: admit #2072 to MVP?**~~ `key: xian-2072` | 2026-10-16 | CLOSED 10-17 15:09: yes (relayed by Lead to PPM, CXO, Exec) |
 | 139 | ~~**xian: Medium + LinkedIn crosspost of "Convergent Claims"**~~ `key: crosspost-convergent` | 2026-10-17 | CLOSED 10-17: Docs set distributed (544447cdc9) |
 | 140 | ~~**Lead: exact #2064 count line for xian card.**~~ `key: 2064-count-line` | 2026-10-17 | CLOSED 08:35: on rollup v388 |
+| 141 | **xian: admit #2077 (token field may autofill Piper password, sent to GitHub) as Class 2? Also offered: delegate security admissions to PPM like privacy. Relay to PPM.** `key: xian-2077` | 2026-10-17 | On rollup v392, lean yes |
