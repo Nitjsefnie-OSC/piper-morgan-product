@@ -42,13 +42,31 @@ def require_encryptor() -> FieldEncryptionService:
     return enc
 
 
-def _database_url() -> str:
-    user = os.getenv("POSTGRES_USER", "piper")
-    password = os.getenv("POSTGRES_PASSWORD", "dev_changeme_in_production")
-    host = os.getenv("POSTGRES_HOST", "localhost")
-    port = os.getenv("POSTGRES_PORT", "5433")
-    database = os.getenv("POSTGRES_DB", "piper_morgan")
-    return f"postgresql+asyncpg://{user}:{password}@{host}:{port}/{database}"
+def _database_url() -> tuple[str, str]:
+    """Resolve the DB URL the way the APP does: ``DATABASE_URL`` first (#1278, how
+    alpha gets its database), then ``POSTGRES_*``. Returns ``(url, source)``.
+
+    The old POSTGRES_*-only construction defaulted to localhost:5433, the dev
+    database, so on alpha the count refused the connection before reading
+    anything (Comms, 2026-10-17). The fallback is loud, never silent: a count
+    against the wrong database looks identical to success.
+    """
+    try:
+        from services.database.connection import db  # noqa: PLC0415
+
+        return db._build_database_url(), "app config (services.database.connection)"
+    except Exception as exc:  # noqa: BLE001 — fall back LOUDLY
+        print(
+            f"WARNING: app database config unavailable ({exc!r}); "
+            "falling back to POSTGRES_* (dev defaults, localhost:5433)",
+            file=sys.stderr,
+        )
+        user = os.getenv("POSTGRES_USER", "piper")
+        password = os.getenv("POSTGRES_PASSWORD", "dev_changeme_in_production")
+        host = os.getenv("POSTGRES_HOST", "localhost")
+        port = os.getenv("POSTGRES_PORT", "5433")
+        database = os.getenv("POSTGRES_DB", "piper_morgan")
+        return f"postgresql+asyncpg://{user}:{password}@{host}:{port}/{database}", "POSTGRES_* env"
 
 
 def classify_file(path: Path) -> str:
@@ -97,7 +115,9 @@ def format_counts(counts: dict, *, count_only: bool) -> str:
 
 
 async def _fetch_storage_paths() -> list:
-    engine = create_async_engine(_database_url(), pool_size=1, max_overflow=0)
+    url, source = _database_url()
+    print(f"database: {source}", file=sys.stderr)
+    engine = create_async_engine(url, pool_size=1, max_overflow=0)
     try:
         async with engine.connect() as conn:
             rows = (

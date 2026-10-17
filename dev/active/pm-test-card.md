@@ -1,19 +1,19 @@
 # PM test card
 
-**Owner**: Lead. **v67 (A1 gap #2072 noted 19:3x), v66 (B3 gap 17:5x), v65 17:09 10-16: alpha promoted to the new build, every card is live.** v64 (16:4x) for xian's live session**: one card per test, only the tests that need xian's hand or that nobody has passed yet. Closed rows, Web's rows and the history are gone from this page; `git log -p` of this file keeps every earlier version. Mirror: https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi (this file wins between republishes).
+**Owner**: Lead. **v68 (07:1x 10-17: alpha promoted to `119bd7b9ef`, slot 1 of 2; A1 and C2 wait for slot 2), v67 (A1 gap #2072 noted 19:3x), v66 (B3 gap 17:5x), v65 17:09 10-16: alpha promoted to the new build, every card is live.** v64 (16:4x) for xian's live session**: one card per test, only the tests that need xian's hand or that nobody has passed yet. Closed rows, Web's rows and the history are gone from this page; `git log -p` of this file keeps every earlier version. Mirror: https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi (this file wins between republishes).
 
-**Alpha**: https://alpha.pipermorgan.ai serves **`d741214b6c`** (promoted by Lead at 17:06 on xian's word, run 38984809722; /health healthy at 17:09; `curl -s https://alpha.pipermorgan.ai/health` shows `git_sha`). This build carries every fix landed today: #2048 (`list my projects`), #2057, #2046, #2053/#2045 (card after Test), #2055, #2054, #2059, #2060, #2061, and the #1306 `--count` script. Second promotion of the day; no more today under the grant.
+**Alpha**: https://alpha.pipermorgan.ai serves **`119bd7b9ef`** (promotion 1 of 2 under your standing grant, 07:06 10-17, run 39039333728; /health healthy at 07:09; `curl -s https://alpha.pipermorgan.ai/health` shows `git_sha`). New in this build: user erasure (#2064, your C2-style count is under the ask), the Privacy & data settings page (#2065), the GitHub card's checked-time line (#2066), the Integrations headline counting only connected integrations (#2068), the consent line naming the project (#2070), per-person Test results (#2071), and the radar/standup disclosing a revoked GitHub grant again (#2072, first half). **Slot 2 today** carries the second half of #2072 (Settings, chat and setup guidance say "needs reconnecting", never "connected") and the #1306 count fix; A1 and C2 run after it.
 
 **How to report**: paste the reply or a screenshot in chat; say the card number. Lead relays to the judge named on the card and updates this page.
 
-## A. Your cards (all live on `d741214b6c`)
+## A. Your cards (A2–A7 live on `119bd7b9ef`; A1 after slot 2)
 
 ### A1. Broken GitHub grant: the card, the page, and one-step Reconnect (#2031, #1963)
 - **Where**: your own alpha account (the one with GitHub connected), plus GitHub → Settings → Applications → Authorized OAuth Apps.
 - **Steps**: follow [pa-s5-broken-grant-steps.md](pa-s5-broken-grant-steps.md) (`dev/active/`), steps 2–5 (revoke the "Piper Morgan Alpha" app, then look, then Reconnect). The read snippet in that file goes in the browser console on alpha.
 - **Pass**: Settings → GitHub (`/settings/integrations/github`) shows ⚠️ "Needs reconnecting" and a **Reconnect with GitHub** button, never "Connected". Integrations (`/settings/integrations`) GitHub card: the same words, never "Not configured" (that is #2031's open question). Radar and the standup formats say GitHub couldn't be read, never "no open issues". Reconnect is ONE click back to Connected (reload the Integrations page before judging its card).
 - **Fail**: "Connected" or "Not configured" with the grant revoked; "no open issues"; a Disconnect hop needed.
-- **Known gap (your 18:55 run, #2072)**: once the grant is marked stale, the radar and standup reads skip GitHub silently (`degraded []`, all-clear standups) instead of disclosing it. Fix on main tonight, live tomorrow. Judge the card and the Settings page (step 3.2, 3.3) and the Reconnect (step 4); the snippet's disclosure is a FAIL already recorded.
+- **Run after today's second promotion.** PA pointed the steps at it: slot 2 carries the second half of #2072 (c9d0294250), so one sitting covers the snippet's disclosure, the card, the Settings page and the Reconnect. Tell me when you start and I mail PA so PA is there while you're on it. Your 18:55 run on the old build already recorded the snippet's silent all-clear as the FAIL that became #2072.
 - **Judge**: PA relays, CXO reads the words. About 10 minutes.
 
 ### A2. Calendar answers in chat (connected 10-15)
@@ -56,7 +56,7 @@
 - **P4**: `What open issues do I have?` → `add a todo to review the roadmap` → `What have I created this session?` Pass: the list matches GitHub; the recall names the todo and nothing you didn't make.
 - **Judge**: Lead; CXO reads any copy that surprises you.
 
-## B. New in this build (live since 17:09)
+## B. New on the 10-16 build (live since 17:09 10-16; still live)
 
 ### B1. `list my projects` with no projects (#2048, MVP)
 - **Where**: the A4 account, or any account with no projects, three fresh chats.
@@ -88,7 +88,8 @@ SELECT (SELECT count(*) FROM users) AS users, (SELECT count(*) FROM users WHERE 
 SELECT u.username, max(s.created_at) FROM users u LEFT JOIN session_activity s ON s.owner_id=u.id::text GROUP BY u.username ORDER BY 2 DESC NULLS LAST;
 ```
 
-### C2. Uploaded-file encryption census (#1306 backfill), live now
+### C2. Uploaded-file encryption census (#1306 backfill), after slot 2
+- **Your 07:0x run failed before reading anything** (`ConnectionRefusedError … 127.0.0.1:5433`): the script built its database URL from `POSTGRES_*` and ignored `DATABASE_URL`, which is how alpha reaches its database. Nothing was written. Fixed on main this morning; it rides today's second promotion. Run the same two lines after it (they also print which database they resolved).
 Count first (writes nothing); run the second line only if the count shows plaintext files above 0:
 ```
 fly ssh console -a piper-morgan -C "python -m scripts.backfill_encrypt_files_1306 --count"
