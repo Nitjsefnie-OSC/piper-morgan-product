@@ -22,6 +22,7 @@ from uuid import UUID
 
 import jwt
 import structlog
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from services.security.audit_logger import Action, audit_logger
@@ -492,12 +493,42 @@ class JWTService:
             New access token string if refresh token is valid, None otherwise
 
         Issue #249: Added audit logging
+
+        #2064 (Arch, 2026-10-16): when a session is given (the refresh route
+        always gives one), the user row must still exist and be active, or the
+        refresh is refused (None, which the route turns into its 401 with the
+        auth cookies cleared). Without this an erased or deactivated user's
+        open tab renews its rotating refresh token for ever, and its writes
+        land in the owner columns that have no FK to users. One select of
+        ``users.is_active`` by id; token formats and lifetimes are unchanged.
         """
         try:
             claims = await self.validate_token(refresh_token)
             if not claims or claims.token_type != TokenType.REFRESH.value:
                 logger.warning("Invalid refresh token provided")
                 return None
+
+            if session is not None:
+                from services.database.models import User
+
+                try:
+                    # The decoded claim is the JSON string; the column is a UUID.
+                    claim_uid = UUID(str(claims.user_id))
+                except ValueError:
+                    logger.warning("Refresh refused: user_id claim is not a UUID")
+                    return None
+                is_active = (
+                    await session.execute(select(User.is_active).where(User.id == claim_uid))
+                ).scalar_one_or_none()
+                if is_active is None or not is_active:
+                    # No audit row: writing one keyed to an erased user would
+                    # put that user's id back into audit_logs.
+                    logger.warning(
+                        "Refresh refused: user absent or inactive",
+                        user_id=str(claims.user_id),
+                        reason="absent" if is_active is None else "inactive",
+                    )
+                    return None
 
             # Generate new access token with same user info
             # Note: Scopes would typically be fetched from user service
