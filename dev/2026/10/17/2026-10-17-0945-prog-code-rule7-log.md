@@ -50,7 +50,7 @@
 
 ## Outcome: DROP the #2069 description (screen), stop and report to Lead. Nothing pushed, no mail.
 
-## 10:1x Lead's decision: land with main's add_project description (commit a4d429e246, merge of origin/main 50c6fd8475 docs/mail only)
+## 10:11 Lead's decision: land with main's add_project description (commit a4d429e246, merge of origin/main 50c6fd8475 docs/mail only)
 - Reverted the add_project description to main's text byte for byte (and its #2069 comment). `git diff origin/main -- services/intent_service/workflow_entries.py`: the `list_assigned_issues` alias (+ comment) and the #2069 handler threading in `run_add_project_workflow` (`router_args = …inversion_args` + `router_args=` kwarg + comment). The description lines no longer differ. The threading is the #2069 handler that lands, so it stays.
 - Prompt identity: scratch `dump_prompt.py` (`_SYSTEM_PROMPT` + `build_routing_prompt("X", derive_routing_grammar())`) on a detached worktree of origin/main 0b52b1b873 vs this branch; `diff <(grep -v '^ALIASES' main) <(grep -v '^ALIASES' cand)` → **PROMPT_IDENTICAL** (91 lines each); alias map diff: `+ ('list_assigned_issues', 'list_issues')` only. Worktree removed. No LLM calls.
 - Pin flipped: `test_rail_description_is_unchanged_from_main` (quotes main's text, no "args") + `test_handler_consumes_router_args_without_the_description_sentence`; honesty-guard and resolver pins unchanged.
