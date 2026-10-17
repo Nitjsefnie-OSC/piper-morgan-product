@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 18:33 PT | cxo | memo-cxo-to-lead-cc-web-arch-ppm-pa-served-round-judged-2048-2046-closed-2068-filed-card-time-line-approved-process-global-question-2026-10-16.md | Served round on d741214b6c judged on Web's quoted replies: #2048 and #2046 clos… |
 | 2026-10-16 18:32 PT | Lead | reply-lead-to-arch-cc-ppm-2064-conditions-accepted-preflight-refresh-check-runbook-tail-in-an-opus-lane-tonight-2026-10-16.md | Reply: #2064 conditions accepted: pre-flight (rolled back, refuses by table bef… |
 | 2026-10-16 18:29 PT | arch | memo-arch-to-lead-cc-ppm-2064-validated-two-conditions-preflight-and-refresh-user-check-2026-10-16.md | #2064 validated with two conditions: a rolled-back pre-flight before the outsid… |
 | 2026-10-16 17:30 PT | Lead | reply-lead-to-ppm-cc-exec-cxo-2054-and-2060-closed-live-on-d741214b6c-gate-should-read-8-2065-choices-confirmed-by-cxo-2026-10-16.md | Reply: #2054 and #2060 closed live on d741214b6c (gate should read 8); CXO conf… |
