@@ -245,6 +245,29 @@ holds the exact steps. It sets the diff aside with the tagged, apply-by-SHA stas
 push -u -m <tag>` → `git stash apply <sha>` → drop by tag), never a bare `git stash` / `stash pop`. Reach for it before you touch
 code to "fix" a failure you have not attributed.
 
+## 7. Erasing a user's account on request: `scripts/erase_user.py` (#2064, 2026-10-16)
+
+**The promise:** /privacy says "email support@pipermorgan.ai and we'll delete your account and everything in it within
+14 days". **The clock:** day 0 is the date the request email arrived; erase by day 14. **Who runs it:** xian, by hand, in
+an attended session (it goes through `fly ssh console`, which asks). Agents never run the `--erase` line. Count first, then
+erase with the id the count printed (`--confirm` must repeat it exactly):
+
+```bash
+fly ssh console -a piper-morgan -C "python /app/scripts/erase_user.py <email-or-username>"
+fly ssh console -a piper-morgan -C "python /app/scripts/erase_user.py <email-or-username> --erase --confirm <user-id-from-the-count>"
+```
+
+All flags go inside the quotes; the prod-exec deny refuses any flag after them. The count writes nothing. It lists every
+planned table, upload files, ChromaDB chunks, Redis keys, the connectors to revoke, and a live-schema census. The erase
+revokes provider grants (best effort), deletes upload files through the storage seam, then ChromaDB chunks, then the
+database rows in one transaction, then Redis keys, and prints the same counts after. Every count after should be 0. If
+any isn't, rerun by id (it's idempotent) and tell Lead. If the census says `UNPLANNED`, the erase refuses: file it for Lead.
+
+**What to record:** a private request record (designinproduct `docs/mail/`, with `-private-` in the filename, never this
+repo). It holds the date received, the due date (received + 14 days), the user id, both pasted outputs, the date erased and
+who ran it. The output carries only the id and sha256 fingerprints, never the email. Logs that Fly keeps hold fingerprints
+only and are out of scope (#2064).
+
 ## Promotion checklist: read staging's sha from staging, not from the deploy-run list (Lead, 2026-10-16)
 
 **Why:** the 10:51 dispatch under the standing grant was refused by the promote gate. The gate reads the sha staging's
