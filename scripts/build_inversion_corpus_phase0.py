@@ -683,9 +683,12 @@ HAND_ROWS = [
             "args row (Arch's 2026-10-16 ruling, the #1943 shape): the router names name and "
             "description apart. The handler stores a description ONLY from "
             "inversion_args.description; the #1856 extractor is the fallback, not widened (no "
-            "'with description' regex), and alone stores the whole tail as the name. UNMEASURED "
-            "at deposit: the rail-description change that names these args owes rule 7's "
-            "served run."
+            "'with description' regex), and alone stores the whole tail as the name. MEASURED "
+            "2026-10-17 (rule-7 lane): action AND args right 3/3 through the scorer under MAIN's "
+            "wording; the rail description is UNCHANGED — three wordings naming the args were "
+            "screened ×6 and DROPPED on the attributed row 'add octocat/hello-world to the "
+            "project' (link_repo ×6 → CLARIFY ×6; controls dev/2026/10/17/controls/). The handler "
+            "consumes the router's args behind the #1976 honesty guard."
         ),
     },
     {
