@@ -32,8 +32,9 @@
 </style>
 <div class="wrap">
 <h1>Attention rollup — Friday 16 October</h1>
-<p class="meta">Exec · v379, rebuilt 18:54 PDT Fri 10-16 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). Full rebuild: done and stale items removed, the rest re-sorted into before testing, during testing and after. If the version number here differs from the one in my reply, you are reading a stale copy.</p>
+<p class="meta">Exec · v380, rebuilt 21:38 PDT Fri 10-16 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). Full rebuild: done and stale items removed, the rest re-sorted into before testing, during testing and after. If the version number here differs from the one in my reply, you are reading a stale copy.</p>
 
+<div class="card"><b>One quick decision (yes/no): add #2072 to the gate?</b> It is the bug you found in tonight&rsquo;s A1 run: with GitHub revoked, the standup says &ldquo;No completions yesterday&rdquo; and names no failed source. It undoes #1965, which you admitted 10-08 and which passed on 10-15 (cause: #2029&rsquo;s STALE marking reads as &ldquo;not configured&rdquo;). Lead has already fixed it on main (<code>b1fbfa3da1</code>), so it rides the next promotion either way. <b>Yes</b>: it must pass a served revoked-grant run before invites (gate reads 9 until then). <b>No</b>: it stays on Production and goes on the known-issues list only if the fix isn&rsquo;t live by 10-23. It isn&rsquo;t privacy or security, so PPM can&rsquo;t admit it alone. <b>Lean: yes</b> (PPM agrees): no build cost, and a false all-clear every morning is the exact honesty failure #1965 was admitted for.</div>
 <div class="card"><b>FYI, no action needed:</b> a new cross-account privacy bug (#2071: one person&rsquo;s integration Test result shows on everyone&rsquo;s card) was admitted to the gate tonight. Invites now wait on three fixes: #2071, #2064, #2065. Details under &ldquo;In motion&rdquo;; say so if you&rsquo;d rather not hold invites for it.</div>
 <div class="card win"><b>Alpha moved to <code>d741214b6c</code> at 17:09</b> (Lead, under your grant; second promotion today). It carries #2057 (a question never makes a change), the #2048 guard, #2054 (cross-user cache), #2059 and #2060 (privacy), #2061 (uploads fail safe), #2053/#2045, #2055, #2046 and the backfill count script. Your test card is now one card per test (v65): claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi.</div>
 
@@ -75,11 +76,12 @@
 </div>
 
 <h2>📊 Where things stand</h2>
-<div class="card">MVP gate: <b>8 open</b>: #2071, #2065, #2064, #2018, #2017, #1913, epic #1595, gate #1386. Design partners Fri 10-23, hard stop Fri 10-30. Main CI 12 of 12 green (18:53, after Lead&rsquo;s Tests fix). Alpha <code>d741214b6c</code>, healthy.</div>
+<div class="card">MVP gate: <b>8 open</b>: #2071, #2065, #2064, #2018, #2017, #1913, epic #1595, gate #1386. Design partners Fri 10-23, hard stop Fri 10-30. Main Tests red again on <code>71573f6be5</code> (19:36); newer run on <code>5df75e37a3</code> in progress; Lead is on it. Alpha <code>d741214b6c</code>, healthy.</div>
 
 <h2>✅ Removed this rebuild (done or recorded)</h2>
 <div class="card">Google branding (done); Google redirect unset (done, check during testing); the clones (you deleted them); #2054 admit; privacy fixes 1 and 2 (live); the encryption key read; the stray files; both grant questions; PPM&rsquo;s admit judgment; Ship #065 reviews (10 of 10, synthesis published); Web&rsquo;s row F asks (moot); the Wednesday floor check (passed, 90); older 10-13 and 10-14 &ldquo;in motion&rdquo; entries; the Janus block, last updated 10-09 and stale (I&rsquo;ve asked Janus whether it still uses it).</div>
 
+<footer><b>Verified how</b> (v380, 21:38): PPM 21:35 ask; my own <code>gh issue view 2072</code> (OPEN, Production) and 1965 (CLOSED); decisions.log has no prior ruling on 2072; <code>main-ci-status.sh</code> 11 green 1 red.</footer>
 <footer><b>Verified how</b> (v379, 18:54): <code>scripts/main-ci-status.sh</code> 12 green; MVP open list 8 rows.</footer>
 <footer><b>Verified how</b> (v378, 18:54): Arch 18:46 (#2071, source read), PPM 18:49 (admitted, ledger row 16); my own <code>gh issue view 2071</code> = OPEN, MVP.</footer>
 <footer><b>Verified how</b> (v377, 18:40): PPM 18:36 and Lead 17:30 memos; my own <code>gh issue list --milestone MVP --state open</code> = 7 rows; <code>gh run list --workflow Tests</code> on main; curl alpha /health = d741214b6c healthy.</footer>
