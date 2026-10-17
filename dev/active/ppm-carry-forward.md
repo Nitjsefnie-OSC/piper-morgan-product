@@ -264,3 +264,26 @@ Brake FIRED (second slip = #1965 admission, found and ledgered 10-09). Memo to E
 - 2026-10-16 16:0x OWED: the beta-form read for the design-partner invitation, on the morning it goes. Check four conditions: #2054 served; #2059 (third pass) and #2060 served; the uploads backfill run with zero remaining; no Class 1 open on MVP. Then one line to Comms: beta form or alpha form, never both. #2062 and #2063 placed on Production (#2063 re-place trigger: an invitation beyond the design partners before Production). #2056 item 2 watch retired (checked, no fix).
 - 2026-10-16 16:1x The 10-23 bar is recorded (xian 16:07): privacy and security closed and live, the rest disclosed. The known-issues review page is at docs/internal/planning/design-partner-known-issues-review-2026-10-16.md; it waits on xian's review with me (via Exec). Update its rows as items close (#2048 is likely first). Ledger each review outcome. #2061 waits on xian (Exec leans admit).
 - 2026-10-16 16:1x OWED: map each of xian's Terms and invitation commitments to a mechanism (test, gate class or served check) once his scaffold answers come back via Comms (docs/internal/design/terms-scaffold-for-xian-2026-10-16.md). Goes into the design-partner invitation.
+
+## 2026-10-16 21:3x STOP: day-close (carry into 10-17)
+- **Gate: 8 open MVP.** #1386, #1595, #1913, #2017, #2018, #2064, #2065, #2071. Slips: 0 days moved on every row. Dates 10-23 and 10-30 unchanged.
+- **Must-close before partners** (16:07 bar): #2064, #2065, #2071. All ride tomorrow's first promotion slot.
+  - #2064 needs xian's live count.
+  - #2065 needs Comms' fix 4 (xian's OK) and CXO's served page.
+  - #2071 needs a served two-account check (Web), with the unchecked card line quoted per CXO.
+  - Ledger each close and update the review page's must-close list.
+- **Waiting on xian, via Exec:**
+  - admit #2072 (asked 21:35; recommend yes);
+  - the known-issues review: section B now has #2042, GitHub create, #2019/#2021, #2067, #2068, #2069;
+  - what 10-23 means with no partners named;
+  - the backfill zero-count;
+  - S5 for #2031;
+  - Comms' fix 4;
+  - the alpha@ invite line.
+- **Lead's lanes tonight:** #2064b, #2071, #2068 with #2070, and #2069. If #2068 and #2069 land live, drop their rows from section B.
+- **#2066:** placed Production; its trigger fired on #2071 and is now spent.
+- **Owed:**
+  - the weekly count of PPM-judged admissions (Ship #066 review): 2 admitted, 1 came out (#2052), and #2048 closed;
+  - the beta-form read on the morning an invitation goes, with #2071 now in the conditions;
+  - the Terms commitment-to-mechanism map once xian's scaffold answers return.
+
