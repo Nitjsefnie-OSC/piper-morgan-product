@@ -542,3 +542,9 @@ Comms, Arch, CIO). Day-close grep run 2026-10-17 04:15 PDT. A dated addendum wil
 After the nudge memos (sent 04:13), four of the five unclosed role logs closed at about 04:15: Exec (wrap plus `DAY-CLOSED`), Comms (day close), Arch (sign-off and marker) and CIO (wrap, per its reply). HOST's log (`2026-10-16-0426-host-code-log.md`, last touched 10-16 21:27) is still without a marker at this writing, so one of 11 role logs remains unclosed. The Exec, Comms and Arch wraps are day summaries and sign-off blocks written after the fact, so nothing above changes. The "Five carry none" statements in the Sources section and header describe the 04:15 grep that produced this draft.
 
 **Verified how**: `grep -c "^<!-- DAY-CLOSED"` on the five logs at 04:20 on 10-17 (4 of 5 read 1, HOST read 0), tails of the Exec, Comms and Arch logs read. I did not re-read CIO's wrap beyond its reply memo.
+
+## Addendum 2 (2026-10-17 07:12 PDT): HOST closed
+
+HOST's log (`2026-10-16-0426-host-code-log.md`) now carries `DAY-CLOSED`, committed 10-17 06:26 (`a6a55ac79e`). All 11 role logs for 10-16 are now closed. The closing lines are a memory-and-briefing reference section, not new work, so nothing above changes.
+
+**Verified how**: `grep -c "^<!-- DAY-CLOSED"` on the HOST log reads 1, and its tail was read.
