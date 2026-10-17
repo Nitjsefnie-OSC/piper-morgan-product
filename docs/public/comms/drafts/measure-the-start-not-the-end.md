@@ -14,15 +14,15 @@ The question was what "late" meant. Every agent records a small heartbeat at the
 
 # Several seats, one kind of evidence
 
-My assistant agent (Piper Alpha) and my documentation agent (Docs) each saw the same thirty-minute pattern in their own logs. My chief of staff agent (Exec) pulled the same pattern from a third agent's heartbeats. The agent who runs our infrastructure host (Pard) was assembling the case. Several agents reporting one pattern sounds like strong evidence (something discussed in yesterday's post).
+My assistant agent (Piper Alpha) and my documentation agent (Docs) each saw the same thirty-minute pattern in their own logs. My chief of staff agent (Exec) pulled the same pattern from a third agent's heartbeats. The agent who runs our infrastructure host (Pard) was assembling the case. Several agents reporting one pattern sounds like strong evidence.
 
-Exec declined to treat it that way. Passing the raw numbers along, Exec explicitly refused to say what they meant: agreement across seats that share one unexamined assumption is the very failure mode the team had already named. Every one of those readings came from an end-of-fire marker, so every one carried the same ambiguity, and agreeing with each other made them louder without making them more informative. Pard had already built and thrown out a month of pooled heartbeat data for a different flaw, mixing readings from different schedules. More of the same kind of measurement wasn't going to settle anything.
+Passing the raw numbers along to me, Exec explicitly refused to assess what they meant, given what we've learned about [convergent claims](https://pipermorgan.ai/blog/convergent-claims-arent-independent-evidence/). Every one of those readings came from an end-of-fire marker, so every one carried the same ambiguity. Pard had already once built and thrown out a month of pooled heartbeat data for a different flaw, mixing readings from different schedules. More of the same kind of measurement wasn't going to settle anything.
 
 # A different instrument
 
-What settled it was a habit of my communications agent (Comms), one that hadn't been built for this question at all. Comms runs a clock check as the very first command of every fire, before reading mail or touching anything else, and writes that time into their log.
+What settled it was a habit of my communications agent (Comms) that hadn't been built to answer this question at all. Comms runs a clock check as the very first command of every fire, before reading mail or touching anything else, and writes that time into their log. (I've required my chat agents to write dated session logs from almost the start of this project and i used to start each new prompt with the timestamp to reinforce that discipline. Still, I've had to frequently remind them that all of our computers have clocks in them and to *please not guess what time it is*).
 
-That's a start time, measured directly. Across eleven fires, Comms' first command ran at 39 to 42 minutes past the hour for slots scheduled at 12 past. And those fires were short. Most finished under a minute or two after that first reading. So the half hour was elapsing before the fire began. It couldn't be work, because nothing had started yet.
+So Comms has a directly measured start time. Across eleven fires, Comms' first command ran at 39 to 42 minutes past the hour for slots scheduled at 12 past. And those fires were short. Most finished under a minute or two after that first reading. So the half hour was elapsing before the fire began. It couldn't be work, because these were often token wakeups with no work involved, just to check for updates.
 
 The scheduler's own documentation says recurring jobs can run late by up to a tenth of their period, capped at fifteen minutes. On a three-hour schedule, that's a fifteen-minute ceiling. These fires were consistently running at about twice that.
 
