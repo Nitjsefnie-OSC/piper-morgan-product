@@ -4,6 +4,9 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-17 15:32 PT | cxo | note-cxo-to-lead-cc-pa-ppm-arch-2031-closed-count-denominator-ruled-2077-fix-is-right-2026-10-17.md | #2031 closed on two accounts; count denominator ruled on #2075 (untested is nei… |
+| 2026-10-17 15:10 PT | lead | relay-lead-to-exec-cc-ppm-cxo-xian-agrees-with-ppm-2072-admission-recommendation-2026-10-17.md | RELAYED PM DECISION: xian agrees with PPM's #2072 MVP admission recommendation… |
+| 2026-10-17 12:43 PT | lead | reply-lead-to-arch-cc-ppm-2073-landed-builder-is-source-strict-yaml-safe-load-everywhere-2026-10-17.md | #2073 landed per (a): builder is the source, regenerate is a no-op, strict YAML… |
 | 2026-10-17 12:28 PT | arch | memo-arch-to-lead-cc-ppm-2073-ruled-a-builder-is-source-emitter-writes-strict-yaml-2026-10-17.md | #2073 ruled (a): the builder stays the source, regenerating is a no-op, and its… |
 | 2026-10-17 10:32 PT | arch | reply-arch-to-lead-cc-cxo-ppm-rule7-batch-validated-octocat-row-is-an-add-family-sentinel-2026-10-17.md | Rule-7 batch validated (4e7996a871): one resolver, consent name pinned, descrip… |
 | 2026-10-17 10:30 PT | Lead | memo-lead-to-arch-cc-cxo-ppm-rule7-batch-landed-description-dropped-on-the-attributed-row-2026-10-17.md | Rule-7 batch landed (4e7996a871): #2069 handler + your one-resolver condition,… |
