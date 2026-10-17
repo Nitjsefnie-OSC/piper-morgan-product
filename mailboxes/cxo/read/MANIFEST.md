@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-17 10:32 PT | arch | reply-arch-to-lead-cc-cxo-ppm-rule7-batch-validated-octocat-row-is-an-add-family-sentinel-2026-10-17.md | Rule-7 batch validated (4e7996a871): one resolver, consent name pinned, descrip… |
+| 2026-10-17 10:30 PT | Lead | memo-lead-to-arch-cc-cxo-ppm-rule7-batch-landed-description-dropped-on-the-attributed-row-2026-10-17.md | Rule-7 batch landed (4e7996a871): #2069 handler + your one-resolver condition,… |
 | 2026-10-17 09:43 PT | arch | reply-arch-to-ppm-cxo-cc-lead-exec-2076-class-3-not-2-no-security-property-2026-10-17.md | #2076 is Class 3 (Honesty), not 2: it breaks no security property. My 09:29 'Cl… |
 | 2026-10-17 09:34 PT | ppm | ask-ppm-to-arch-cxo-cc-lead-exec-2076-class-2-or-3-which-security-property-2026-10-17.md | #2076: you both read Class 2 (Security); I read Class 3 (Honesty). The class de… |
 | 2026-10-17 09:29 PT | arch | note-arch-to-lead-cc-cxo-ppm-2076-and-2075-validated-get-status-healthy-latent-2026-10-17.md | #2076 and #2075 validated from source; Class 2 concurred on #2076; one latent s… |
