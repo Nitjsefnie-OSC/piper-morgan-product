@@ -1,11 +1,12 @@
 # Docs Carry-Forward
 
-**Updated**: 2026-10-16 (04:12 fire; older DONE lines below are history). DONE 10-12: 10-10 + 10-11 omnibuses, Weekly Audit #1994 closed, BRIEFING-CURRENT-STATE refreshed, How to Report edit pushed (xian approved), Ship #064 row set by Comms and view rebuilt. Known fault: bare `gh` hung on Amber after the 10-10 reboot (Pard); prefix `GODEBUG=netdns=go` until Pard confirms the fix. History in session logs (`dev/2026/10/{04..12}/*docs-code-log.md`), not here.
+**Updated**: 2026-10-17 (04:12 fire, see NOW below; older DONE lines below are history). DONE 10-12: 10-10 + 10-11 omnibuses, Weekly Audit #1994 closed, BRIEFING-CURRENT-STATE refreshed, How to Report edit pushed (xian approved), Ship #064 row set by Comms and view rebuilt. Known fault: bare `gh` hung on Amber after the 10-10 reboot (Pard); prefix `GODEBUG=netdns=go` until Pard confirms the fix. History in session logs (`dev/2026/10/{04..12}/*docs-code-log.md`), not here.
 
-## Done this fire (04:12)
-- 10-09 omnibus (`adba285845`, 540 lines, 15 logs, 1128 commits, 574 comparable) + 15 activity rows (`a0906091be`, 2865 to 2880). Nudged HOST (10-09 log lacks DAY-CLOSED, `8e927d29ef`).
-- **"No Undo" PUBLISHED** (insight): website `d3246f3`, live at https://pipermorgan.ai/blog/no-undo/ (body phrase "sprint options" + image 200, verified after the deploy lag). Calendar row `published`, blogURL/blogPath set, `canonicalSite` empty, draft + jpg archived, validator 0 errors, 0 of 470 draftPaths unresolvable.
-- Notice to Exec that the crosspost is owed (`afdcc5345`).
+## NOW (10-17 04:12 fire)
+- **Convergent Claims PUBLISHED** 10-17 (live 200). Crosspost (Medium + LinkedIn) owed by xian, notice sent to Exec. On the URLs: set row `distributed` and `canonicalSite` `distributed`.
+- **10-16 omnibus DONE** (536 lines, 1020 commits, 11 rows, addendum for late closes). HOST's 10-16 log still unclosed (nudged 04:13). Re-check at the next START and add an addendum if it closes.
+- **Sun 10-18**: "Measure the Start, Not the End" is `drafted`, publish only if Comms sets `ready-for-docs`.
+- Every START: prior-day omnibus plus nudges (10-17 omnibus next).
 
 ## OWED (PM's hand)
 - Nothing for "It Doesn't Count if You Skip It": FULLY DISTRIBUTED 10-11 (LinkedIn + Medium URLs from PM, row `distributed`, `canonicalSite` `distributed`).
@@ -22,7 +23,7 @@
 - **10-13 omnibus**: drafted by a Sonnet subagent 10-14, commit plus activity rows pending. Exec and Comms 10-13 logs unclosed (nudged).
 - **Overzealous Cleanup Routine**: PUBLISHED 10-15 (website commit pushed, live 200). Medium crosspost DONE 10-15 (row `distributed`).
 - **10-14 and 10-15 omnibuses**: DONE (10-15: 527 lines, 35 logs, 1091 commits, 11 rows). No addendum owed. All role logs closed. **Timestamps**: take every log heading time from a `date` call (10-15 estimates were corrected).
-- **Sat 10-17 04:12 fire**: PUBLISH "Convergent Claims Aren't Independent Evidence" (`ready-for-docs`, pre-flight and dry-run done 10-15). `--draft docs/public/comms/drafts/convergent-claims-arent-independent-evidence.md --image .../convergent-claims-arent-independent-evidence-four-telescopes-all-still-capped.jpg --slug convergent-claims-arent-independent-evidence --category insight --work-date 2026-09-20`. Re-fetch first. Then archive, row `published`, Medium+LinkedIn reminder to Exec.
+- ~~Sat 10-17 04:12 fire: PUBLISH~~ DONE. "Convergent Claims Aren't Independent Evidence" (`ready-for-docs`, pre-flight and dry-run done 10-15). `--draft docs/public/comms/drafts/convergent-claims-arent-independent-evidence.md --image .../convergent-claims-arent-independent-evidence-four-telescopes-all-still-capped.jpg --slug convergent-claims-arent-independent-evidence --category insight --work-date 2026-09-20`. Re-fetch first. Then archive, row `published`, Medium+LinkedIn reminder to Exec.
 - **Mon 10-19**: next weekly audit. **~11-30**: glossary 60-day re-verify.
 
 ## Held
