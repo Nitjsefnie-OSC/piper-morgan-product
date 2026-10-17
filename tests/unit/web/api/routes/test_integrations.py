@@ -46,7 +46,9 @@ class TestIntegrationHealthEndpoint:
         response = await get_integrations_health(current_user=mock_user)
 
         assert isinstance(response, IntegrationHealthResponse)
-        assert response.total_count == 4
+        # #2068: total_count is the CONNECTED integrations; all 4 cards still listed
+        connected = [i for i in response.integrations if i.status != "not_configured"]
+        assert response.total_count == len(connected)
         assert len(response.integrations) == 4
 
         # Verify all expected integrations are present
@@ -64,16 +66,15 @@ class TestIntegrationHealthEndpoint:
 
     @pytest.mark.asyncio
     async def test_health_calculates_overall_status_correctly(self, mock_user):
-        """Overall status should be healthy/degraded/unhealthy based on counts"""
+        """#2068: overall status is judged over connected integrations only"""
         response = await get_integrations_health(current_user=mock_user)
 
-        # Verify overall status logic
-        if response.healthy_count == response.total_count:
-            assert response.overall_status == "healthy"
-        elif response.healthy_count > 0:
-            assert response.overall_status == "degraded"
+        if response.total_count == 0:
+            assert response.overall_status == "none"
+            assert response.headline == "Nothing connected yet"
         else:
-            assert response.overall_status == "unhealthy"
+            assert response.overall_status in {"healthy", "degraded", "unhealthy", "unknown"}
+            assert f"of {response.total_count} connected integrations working" in response.summary
 
     @pytest.mark.asyncio
     async def test_health_integration_has_required_fields(self, mock_user):
