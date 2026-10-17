@@ -1020,13 +1020,31 @@ class StandupConversationHandler:
                 )
                 # ⚠️ COPY SEAM: Lead-drafted mechanism copy; CXO owns the voice
                 # of this surface — adjust wording here, not at call sites.
-                return ConversationResponse(
-                    message=(
+                # #2076 (CXO): when GitHub needs reconnecting, "no observed
+                # activity" is a source that cannot be read shown as an empty
+                # one; the ruled sentence replaces it, the one ask stays last.
+                # This path assembles no summary, so the status service answers.
+                from services.integrations.integration_status_service import (
+                    github_needs_reconnecting,
+                )
+                from services.intent_service.standup_preferences import (
+                    GITHUB_NEEDS_RECONNECTING_NO_ACTIVITY,
+                )
+
+                if await github_needs_reconnecting(conversation.user_id):
+                    reentry_message = (
+                        f"{GITHUB_NEEDS_RECONNECTING_NO_ACTIVITY} Let's capture it: "
+                        "what did you work on yesterday?"
+                    )
+                else:
+                    reentry_message = (
                         "I don't have anything to build your standup from — no "
                         "observed activity and nothing captured yet, and I won't "
                         "invent one. Let's capture it: what did you work on "
                         "yesterday?"
-                    ),
+                    )
+                return ConversationResponse(
+                    message=reentry_message,
                     state=StandupConversationState.GATHERING_YESTERDAY,
                     requires_input=True,
                 )

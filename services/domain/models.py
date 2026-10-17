@@ -2296,6 +2296,16 @@ class StandupSummary:
             "degraded_details": [dict(d) for d in self.degraded_details],
         }
 
+    def github_needs_reconnecting(self) -> bool:
+        """True when this assemble's GitHub read failed with ``stale_token`` (#2076):
+        the read already recorded that the grant needs reconnecting, so the caller
+        needs no second lookup. False is not "healthy" (the read may have succeeded,
+        failed another way, or not run): the caller then asks the status service."""
+        return any(
+            d.get("connector") == "GitHub" and d.get("reason") == "stale_token"
+            for d in self.degraded_details
+        )
+
     # --- prose rendering (#1269 P3, CXO experience design) ---
 
     # verb by the derived item's coarse lifecycle label (yesterday slot).

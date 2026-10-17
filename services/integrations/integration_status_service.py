@@ -97,6 +97,19 @@ async def github_oauth_binding_state(user_id: Optional[str]) -> Optional[str]:
         return None
 
 
+async def github_needs_reconnecting(user_id: Optional[str]) -> bool:
+    """``needs_reconnecting(await IntegrationStatusService().get_status(user_id, "github"))``
+    without the credential-path reads (#2076).
+
+    ``get_status`` sets ``via == VIA_OAUTH_BINDING_STALE`` (always with ``configured``)
+    exactly when the binding state is in ``_BROKEN_BINDING_STATES``, and on no other
+    branch, so this binding-state read is the same answer with no env/keychain probe.
+    False when there is no user, no binding, or the check itself failed (the reply then
+    stays as it was: never claim a broken connection the read could not see).
+    """
+    return (await github_oauth_binding_state(user_id)) in _BROKEN_BINDING_STATES
+
+
 async def github_oauth_bound(user_id: Optional[str]) -> bool:
     """True if the user has a BOUND github OAuth-connector binding (#1329 / ADR-070 C).
 

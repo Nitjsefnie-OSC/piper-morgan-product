@@ -4353,7 +4353,9 @@ class TestUnarmedAskSiteRatchet:
     #      `pending_offer["question"] = _NAME_REASK_TAIL` in _name_reask),
     #      standup_preferences._TEACHING_LINE and INVITE_EMPTY_LEAD (both
     #      reach the user only through build_interview_invitation, which
-    #      stores `"question": question`), conversational_floor
+    #      stores `"question": question`; #2076 moved INVITE_EMPTY_LEAD's
+    #      marker to _EMPTY_OFFER_ASK, the question both empty leads
+    #      interpolate, so the count is unchanged), conversational_floor
     #      .FLOOR_FALLBACK_TRANSIENT ("Could you try again in a moment?" is
     #      error copy asking for a retry; it binds no answer).
     #   7–10. #2011 call 1 (Arch 2026-10-14; CXO's deliberate list

@@ -246,14 +246,52 @@ INVITE_AFTER_REPORT = (
     "if not, the quick report stays exactly as it is."
 )
 
+# The empty-case offer question, shared by both empty leads below (#2076) so
+# the question the user is asked is one string wherever it is rendered.
+# ask-census: armed at the consumer — build_interview_invitation stores the lead that carries it as "question" (#2000)
+_EMPTY_OFFER_ASK = "Want to do a quick guided standup interview instead?"
+
 # PPM's empty case: fail honestly, then the invitation IS the first move.
 INVITE_EMPTY_LEAD = (
-    # ask-census: armed at the consumer — build_interview_invitation stores it as "question" (#2000)
     "I don't have anything to build your standup from yet — no observed "
-    "activity in your connected tools. Want to do a quick guided standup "
-    "interview instead? You tell me what happened and what's ahead, and I'll "
-    "put it together. (yes/no)"
+    f"activity in your connected tools. {_EMPTY_OFFER_ASK} You tell me "
+    "what happened and what's ahead, and I'll put it together. (yes/no)"
 )
+
+# #2076 (CXO's ruling, ADR-080 / #2033: code adds the fact, never the model):
+# when GitHub needs reconnecting, the empty standup is not "no activity in your
+# connected tools" — a source that cannot be read is not an empty one. The
+# sentence names GitHub as unreadable; the offer stays last and is ONE yes/no
+# question. No reconnect pointer here (CXO: only when asked or beside a count).
+GITHUB_NEEDS_RECONNECTING_NO_ACTIVITY = (
+    "I can't read your GitHub right now (it needs reconnecting), so I have no activity from it."
+)
+INVITE_EMPTY_LEAD_GITHUB_STALE = (
+    f"{GITHUB_NEEDS_RECONNECTING_NO_ACTIVITY} {_EMPTY_OFFER_ASK} (yes/no)"
+)
+
+# The empty leads (no report was rendered): each takes the no-report decline copy.
+_EMPTY_LEADS = frozenset({INVITE_EMPTY_LEAD, INVITE_EMPTY_LEAD_GITHUB_STALE})
+
+# The standalone empty statement (no armed offer: sessionless, a stored mode, or
+# an in-session decline), bound and GitHub-needs-reconnecting variants (#2076).
+EMPTY_STANDALONE = (
+    "I don't have anything to build your standup from yet — no observed "
+    "activity in your connected tools. Say 'my standup interview' any time to "
+    "capture one interactively."
+)
+EMPTY_STANDALONE_GITHUB_STALE = (
+    f"{GITHUB_NEEDS_RECONNECTING_NO_ACTIVITY} Say 'my standup interview' any time "
+    "to capture one interactively."
+)
+
+
+def empty_standup_copy(github_stale: bool) -> Tuple[str, str]:
+    """(invitation lead, standalone statement) for the empty standup (#2076)."""
+    if github_stale:
+        return INVITE_EMPTY_LEAD_GITHUB_STALE, EMPTY_STANDALONE_GITHUB_STALE
+    return INVITE_EMPTY_LEAD, EMPTY_STANDALONE
+
 
 # Property 3 made explicit at decline time: nothing changed, nothing stored,
 # and the door stays visibly open (PPM: trivially revisable + visible).
@@ -291,7 +329,7 @@ def build_interview_invitation(
       consults it for read-backs).
 
     ``question`` (#1665): the ALREADY-RENDERED invitation copy the caller is
-    about to surface (INVITE_EMPTY_LEAD or INVITE_AFTER_REPORT — the caller
+    about to surface (an empty lead or INVITE_AFTER_REPORT — the caller
     knows which lead it renders; this builder doesn't). Stored verbatim on
     the record so the SessionSnapshot's pending_offer_question matches what
     the user saw.
@@ -313,8 +351,6 @@ def build_interview_invitation(
         # #2020: the decline copy follows the lead the caller rendered — the
         # empty lead has no report to leave "exactly as it is".
         "decline_message": (
-            INVITE_DECLINE_MESSAGE_NO_REPORT
-            if question == INVITE_EMPTY_LEAD
-            else INVITE_DECLINE_MESSAGE
+            INVITE_DECLINE_MESSAGE_NO_REPORT if question in _EMPTY_LEADS else INVITE_DECLINE_MESSAGE
         ),
     }
