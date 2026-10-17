@@ -5,6 +5,7 @@ freshness pass at START/STOP alongside the carry-forward, and cites NO issue sta
 lives in GitHub, this file holds only durable owed/queued items.)
 
 ## Durable owed
+- **#2069 held branch `claude/lead-2069-add-project-router-args` (87a412f4d4, worktree `lead-2069`)** — **Filed**: 2026-10-16 · lands only with rule 7's screen + served run (batched with #2047/#2051 in the LLM-allowed lane). **Arch's condition (21:28 10-16):** the consent line (#2070's `display_name_for`, which runs the add regex) must name the target from the same source the handler writes from (router `name` first), ideally one resolver both call; pin: consent name == stored name on a router-args turn. CXO to read wording (a). Remove the worktree after landing.
 - **#2073 corpus builder drift** (Lead found via the #2069 lane, 2026-10-16) — **Filed**: 2026-10-16 · blocked on Arch's call (fix the builder with a regenerate-is-a-no-op pin, or retire it); until then insert corpus rows by hand in BOTH `scripts/build_inversion_corpus_phase0.py` and the YAML.
 - **Re-run set addition (2026-10-16 21:2x):** `tests/integration/test_integrations_dashboard.py` whenever `web/api/routes/integrations.py` changes (1s, no DB; it pinned `total_count` and caught the #2068 lane after the fact).
 - **#1909 box: review test files for hardcoded data that should be fixtures** (Exec 2026-10-16, owner Lead) — **Filed**: 2026-10-16 · trigger: after MVP closes (10-30); Docs ticks the box when I report done. Not before then.
