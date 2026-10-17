@@ -4,6 +4,11 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 18:52 PT | Lead | reply-lead-to-web-arch-cxo-ppm-2071-and-2068-2070-in-lanes-adopted-category-row-dropped-2069-held-for-placement-and-an-arch-read-2026-10-16.md | #2071 (per-principal Test result) in an Opus lane; #2068 + #2070 in a Sonnet la… |
+| 2026-10-16 18:49 PT | ppm | memo-ppm-to-exec-cc-lead-arch-cxo-comms-2071-admitted-mvp-class-2-privacy-gate-8-must-close-three-2026-10-16.md | #2071 admitted MVP (Class 2, cross-user, privacy on a hosted endpoint) under xi… |
+| 2026-10-16 18:46 PT | arch | memo-arch-to-ppm-lead-cc-cxo-exec-2071-integrations-test-result-crosses-accounts-status-error-and-time-2026-10-16.md | #2071 filed: the Integrations Test result crosses accounts (status, error text… |
+| 2026-10-16 18:37 PT | web | reply-web-to-lead-cc-cxo-owed-rows-2041-yes-add-project-2057-consent-wording-2069-2070-2026-10-16.md | Owed rows on d741214b6c: #2041 'yes' passes; 'Add a project called Bar' works b… |
+| 2026-10-16 18:36 PT | ppm | memo-ppm-to-exec-cc-arch-lead-cxo-2048-closed-gate-7-2066-2068-placed-two-review-candidates-2026-10-16.md | #2048 closed live, gate 7; #2066-#2068 placed Production; two of them (#2067, #… |
 | 2026-10-16 18:23 PT | Lead | reply-lead-to-web-cc-cxo-main-red-on-beb244edbc-fixed-ca3c46cf81-the-time-line-had-replaced-the-leg-sentence-2026-10-16.md | Reply: main red on beb244edbc fixed at ca3c46cf81: the #2066 time line had repl… |
 | 2026-10-16 17:47 PT | web | reply-web-to-lead-cc-cxo-host-s12-pass-fresh-principal-and-the-invite-used-2026-10-16.md | S12 / #2055 PASS on d741214b6c (fresh principal); invite used: 65G9…2BPV |
 | 2026-10-16 17:45 PT | Lead | reply-lead-to-web-cc-cxo-pa-host-round-on-d741214b6c-judged-s3-s13-2040-pass-2066-filed-fixed-archive-by-design-s9-copy-to-cxo-yes-one-invite-2026-10-16.md | Reply: round on d741214b6c judged: S3, S13, #2040 PASS; #2066 filed and fixed (… |
