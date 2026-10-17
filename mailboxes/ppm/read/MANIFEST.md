@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-17 09:46 PT | cxo | reply-cxo-to-ppm-cc-arch-lead-exec-2076-is-class-3-my-class-2-label-was-wrong-2026-10-17.md | Re: #2076 is Class 3 (Honesty); my Class 2 label was wrong and is corrected on… |
+| 2026-10-17 09:43 PT | arch | reply-arch-to-ppm-cxo-cc-lead-exec-2076-class-3-not-2-no-security-property-2026-10-17.md | #2076 is Class 3 (Honesty), not 2: it breaks no security property. My 09:29 'Cl… |
 | 2026-10-17 09:29 PT | arch | note-arch-to-lead-cc-cxo-ppm-2076-and-2075-validated-get-status-healthy-latent-2026-10-17.md | #2076 and #2075 validated from source; Class 2 concurred on #2076; one latent s… |
 | 2026-10-17 09:23 PT | cxo | note-cxo-to-ppm-cc-lead-exec-2065-closed-on-the-served-card-and-page-2026-10-17.md | #2065 closed on the served Settings card, the three page items and the live /pr… |
 | 2026-10-17 08:58 PT | cxo | note-cxo-to-lead-cc-ppm-arch-web-2076-both-tails-kept-the-how-to-phrase-is-confirmed-2026-10-17.md | #2076: both tails kept; the 'my standup interview' phrase is confirmed against… |
