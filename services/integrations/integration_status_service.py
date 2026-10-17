@@ -38,6 +38,11 @@ import structlog
 
 from services.integrations.principal_test_results import get_test_result_store
 
+# #2072: binding states, by value, so this module does not import the connector enum at
+# module import time (it is imported lazily inside the DB-touching helpers).
+_BOUND = "bound"
+_BROKEN_BINDING_STATES = frozenset({"stale", "unreachable"})
+
 logger = structlog.get_logger()
 
 #: The user-facing integration set. Demo (a loadable plugin, not a user-facing
@@ -54,6 +59,28 @@ DISPLAY_NAMES: Dict[str, str] = {
 }
 
 
+async def github_oauth_binding_state(user_id: Optional[str]) -> Optional[str]:
+    """The user's github OAuth-connector binding state (``ConnectorStatusState`` value),
+    or None when there is no binding or the check itself failed (#2072).
+
+    ``bound`` is connected and healthy. ``stale`` is a binding GitHub has rejected
+    (#2029 writes it on a 401): the connection EXISTS and is BROKEN, which the status
+    surfaces must say, never "not configured". ``unreachable`` likewise.
+    """
+    if not user_id:
+        return None
+    try:
+        from services.connectors.binding_repository import ConnectorBindingRepository
+        from services.database.session_factory import AsyncSessionFactory
+
+        async with AsyncSessionFactory.session_scope() as session:
+            binding = await ConnectorBindingRepository(session).get(user_id, "github")
+        return None if binding is None else str(binding.status)
+    except Exception as e:
+        logger.warning("github oauth-binding status check failed", error=str(e))
+        return None
+
+
 async def github_oauth_bound(user_id: Optional[str]) -> bool:
     """True if the user has a BOUND github OAuth-connector binding (#1329 / ADR-070 C).
 
@@ -62,19 +89,9 @@ async def github_oauth_bound(user_id: Optional[str]) -> bool:
     connector is bound and the chat reads work through it. Mirrors the binding check in
     ``GET /github/oauth-status``. (Hoisted verbatim from web/api/routes/integrations.py.)
     """
-    if not user_id:
-        return False
-    try:
-        from services.connectors.binding_repository import ConnectorBindingRepository
-        from services.database.session_factory import AsyncSessionFactory
-        from services.mcp.consumer.connector import ConnectorStatusState
+    from services.mcp.consumer.connector import ConnectorStatusState
 
-        async with AsyncSessionFactory.session_scope() as session:
-            binding = await ConnectorBindingRepository(session).get(user_id, "github")
-        return binding is not None and binding.status == ConnectorStatusState.BOUND.value
-    except Exception as e:
-        logger.warning("github oauth-binding status check failed", error=str(e))
-        return False
+    return (await github_oauth_binding_state(user_id)) == ConnectorStatusState.BOUND.value
 
 
 async def get_config_status(
@@ -183,8 +200,18 @@ class IntegrationStatusService:
 
         # RECONNECT (#1329): GitHub follows the OAuth connector binding FIRST —
         # a BOUND connector is connected even if the legacy PAT is dead/absent.
-        if integration_id == "github" and await github_oauth_bound(user_id):
+        # #2072: a STALE (or UNREACHABLE) binding is a connection that EXISTS and is
+        # BROKEN: configured, via "oauth_binding_stale", healthy False. Reading it as
+        # "not configured" made the radar/standup gate skip the read silently, so a
+        # revoked grant was never disclosed once #2029 had marked the binding STALE
+        # (xian's A1 run on d741214b6c, 2026-10-16: ``degraded []``).
+        github_state: Optional[str] = None
+        if integration_id == "github":
+            github_state = await github_oauth_binding_state(user_id)
+        if github_state == _BOUND:
             configured, via = True, "oauth_binding"
+        elif github_state in _BROKEN_BINDING_STATES:
+            configured, via = True, "oauth_binding_stale"
         else:
             status, via = await get_config_status(integration_id, user_id=user_id)
             configured = status == "configured"
@@ -195,6 +222,9 @@ class IntegrationStatusService:
             # Mirrors /health's short-circuit: a BOUND connector reports healthy
             # (the chat reads go through it).
             healthy = True
+        elif via == "oauth_binding_stale":
+            # #2072: GitHub has rejected this grant; the connection is known broken.
+            healthy = False
         elif configured:
             # #2071: THIS user's own Test result only. No record for this principal
             # keeps healthy=None and last_check=None (never checked); there is no

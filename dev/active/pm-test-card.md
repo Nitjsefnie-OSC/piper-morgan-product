@@ -1,6 +1,6 @@
 # PM test card
 
-**Owner**: Lead. **v66 (B3 gap noted 17:5x), v65 17:09 10-16: alpha promoted to the new build, every card is live.** v64 (16:4x) for xian's live session**: one card per test, only the tests that need xian's hand or that nobody has passed yet. Closed rows, Web's rows and the history are gone from this page; `git log -p` of this file keeps every earlier version. Mirror: https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi (this file wins between republishes).
+**Owner**: Lead. **v67 (A1 gap #2072 noted 19:3x), v66 (B3 gap 17:5x), v65 17:09 10-16: alpha promoted to the new build, every card is live.** v64 (16:4x) for xian's live session**: one card per test, only the tests that need xian's hand or that nobody has passed yet. Closed rows, Web's rows and the history are gone from this page; `git log -p` of this file keeps every earlier version. Mirror: https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi (this file wins between republishes).
 
 **Alpha**: https://alpha.pipermorgan.ai serves **`d741214b6c`** (promoted by Lead at 17:06 on xian's word, run 38984809722; /health healthy at 17:09; `curl -s https://alpha.pipermorgan.ai/health` shows `git_sha`). This build carries every fix landed today: #2048 (`list my projects`), #2057, #2046, #2053/#2045 (card after Test), #2055, #2054, #2059, #2060, #2061, and the #1306 `--count` script. Second promotion of the day; no more today under the grant.
 
@@ -13,6 +13,7 @@
 - **Steps**: follow [pa-s5-broken-grant-steps.md](pa-s5-broken-grant-steps.md) (`dev/active/`), steps 2–5 (revoke the "Piper Morgan Alpha" app, then look, then Reconnect). The read snippet in that file goes in the browser console on alpha.
 - **Pass**: Settings → GitHub (`/settings/integrations/github`) shows ⚠️ "Needs reconnecting" and a **Reconnect with GitHub** button, never "Connected". Integrations (`/settings/integrations`) GitHub card: the same words, never "Not configured" (that is #2031's open question). Radar and the standup formats say GitHub couldn't be read, never "no open issues". Reconnect is ONE click back to Connected (reload the Integrations page before judging its card).
 - **Fail**: "Connected" or "Not configured" with the grant revoked; "no open issues"; a Disconnect hop needed.
+- **Known gap (your 18:55 run, #2072)**: once the grant is marked stale, the radar and standup reads skip GitHub silently (`degraded []`, all-clear standups) instead of disclosing it. Fix on main tonight, live tomorrow. Judge the card and the Settings page (step 3.2, 3.3) and the Reconnect (step 4); the snippet's disclosure is a FAIL already recorded.
 - **Judge**: PA relays, CXO reads the words. About 10 minutes.
 
 ### A2. Calendar answers in chat (connected 10-15)
