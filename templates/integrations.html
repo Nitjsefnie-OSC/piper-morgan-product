@@ -671,7 +671,11 @@
     const checked = ['healthy', 'failed', 'degraded'].includes(integration.status) && integration.last_check
       ? formatCheckedAt(integration.last_check, new Date()) : '';
     if (!checked) return integration.status_message;
-    const base = integration.status === 'healthy' ? 'Healthy.' : integration.status_message;
+    // #2066: a card whose message names its leg ("Connected with your GitHub account.",
+    // #2031) keeps that sentence and gets the check time after it; only the generic
+    // "Healthy" message (#2049) becomes "Healthy." so the #2045 line reads as ruled.
+    const base = integration.status === 'healthy' && integration.status_message === 'Healthy'
+      ? 'Healthy.' : integration.status_message;
     return /[.!?]$/.test(base) ? `${base} ${checked}` : `${base}. ${checked}`;
   }
 

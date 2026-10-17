@@ -183,6 +183,22 @@ def test_rendered_connected_card(client, body):
 
 
 @needs_node
+def test_rendered_connected_card_with_a_recorded_check_keeps_the_leg_sentence(client, body):
+    """#2066: once a check is recorded the OAuth card carries last_check (CI's full suite
+    records one before this file runs); the page appends the time to the leg sentence
+    instead of replacing it with "Healthy." (the main-red on beb244edbc)."""
+    from datetime import datetime, timezone
+
+    github = _github_json(client, "oauth")
+    github["last_check"] = datetime.now(timezone.utc).isoformat()
+    html = _render(body, github)
+    assert "Connected with your GitHub account." in html
+    assert "Checked just now." in html
+    assert "Healthy." not in html
+    assert 'id="reconnect-btn-github"' not in html and "⚠️" not in html
+
+
+@needs_node
 def test_rendered_token_serving_card(client, body):
     html = _render(body, _github_json(client, "pat_stale"))
     assert "⚠️" in html
