@@ -405,6 +405,25 @@ falling back to the unchanged regex extractor otherwise. The scorer's
 `args_match` gains a `text` key (normalised, verbatim); corpus row 'add a todo
 to web test one' carries `expected_args: {text: 'web test one'}` (a measured
 args row, 3/3 on main's wording); census pin 596. Regression: `test_create_todo_router_text_1976.py`.
+**#2069 add_project consumes the router's `name` / `description` / `repo` args (2026-10-16, Arch's
+ruling, the #1943 shape)**: 'Add a project called Baz with description testing the description'
+stored the name 'Baz with description testing the description' (alpha, Web): the #1856
+`extract_add_project_slots` splits off only a repo clause. The `add_project` rail entry's
+description now names the three args ("Put the parts in args: name = …; description = …; repo = …");
+`run_add_project_workflow` passes `intent.context["inversion_args"]` to `_handle_add_project(router_args=)`,
+which consumes them through `_router_add_project_args` (the #1976 honesty guard: every word of `name`
+/ `description` must occur in the message; `repo` must occur verbatim and look like owner/repo). A
+usable router `name` selects the router path; otherwise the #1856 extractor is the fallback,
+unchanged and NOT widened (no "with description" regex). A description is stored ONLY from the
+router's `description` arg. `_create_or_report_project` builds the reply from the CREATED ROW
+(ADR-080: reports are code's): the stored name, the description only if one was stored, the repo
+how-to under the stored name; a router description that was not stored gets CXO's interim line
+"Added Baz. I can't set a description yet." The scorer's `args_match` gains `name` /
+`description` / `repo` keys; corpus row 'Add a project called Baz with description testing the
+description' carries `expected_args: {name: Baz, description: testing the description}`, census
+pin 597. **The rail-description change owes rule 7's served run (UNMEASURED at landing; no LLM
+calls in the lane).** Until it is measured, the router path is unproven; the fallback reply is honest
+regardless. Regression: `test_add_project_router_args_2069.py`.
 **meeting_time registry example: the day-less 'when' question (2026-10-13, Arch's
 rule-10 licence-row ruling)**: 'when am i in a meeting' (yaml:1350) licenses the
 deleted TEMPORAL literal `\bwhen am i.{0,10}meeting\b` and flipped meeting_time →

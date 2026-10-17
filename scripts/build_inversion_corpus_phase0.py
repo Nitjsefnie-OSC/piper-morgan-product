@@ -674,6 +674,21 @@ HAND_ROWS = [
         ),
     },
     {
+        "phrase": "Add a project called Baz with description testing the description",
+        "category": "PORTFOLIO",
+        "expected": "action:add_project",
+        "expected_args": {"name": "Baz", "description": "testing the description"},
+        "source": "phase3-args/add_project name+description — #2069 (Web, alpha 2026-10-16: the stored name was 'Baz with description testing the description', description empty)",
+        "notes": (
+            "args row (Arch's 2026-10-16 ruling, the #1943 shape): the router names name and "
+            "description apart. The handler stores a description ONLY from "
+            "inversion_args.description; the #1856 extractor is the fallback, not widened (no "
+            "'with description' regex), and alone stores the whole tail as the name. UNMEASURED "
+            "at deposit: the rail-description change that names these args owes rule 7's "
+            "served run."
+        ),
+    },
+    {
         "phrase": "add todo buy oat milk",
         "category": "EXECUTION",
         "expected": "action:create_todo",

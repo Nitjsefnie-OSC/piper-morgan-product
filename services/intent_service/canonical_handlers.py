@@ -14,6 +14,7 @@ Issue #963: Removed dead handlers for IDENTITY, DISCOVERY, TRUST, MEMORY
 """
 
 import logging
+import string
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -5322,12 +5323,70 @@ What would you like to set up first?"""
         + " (the repo part is optional). Or say cancel to drop it."
     )
 
+    # #2069 (Arch 2026-10-16, the #1943 shape): the router names the slots.
+    # The CXO interim line for a description the router asked for but this
+    # turn did not store (CXO 2026-10-16 18:56, verbatim after the name).
+    _ADD_PROJECT_NO_DESCRIPTION = "I can't set a description yet."
+
+    @staticmethod
+    def _router_add_project_args(router_args: Any, message: str) -> Dict[str, Optional[str]]:
+        """#2069: the router's ``name`` / ``description`` / ``repo`` args
+        (``context["inversion_args"]``, the #1943/#1976 family: consume the
+        router's args, add no binder). Honesty guard, the #1976 one: every
+        word of a ``name`` or ``description`` must occur in the user's
+        message (a word-SET check, no regex), so an LLM-written arg never
+        stores words the user did not say; a ``repo`` must occur in the
+        message verbatim (case-insensitive) and look like ``owner/repo``.
+        A rejected or absent arg is None. ``description_asked`` is True when
+        the router sent a non-empty description, whether or not it passed,
+        so the reply can say honestly that none was stored."""
+        out: Dict[str, Any] = {
+            "name": None,
+            "description": None,
+            "repo": None,
+            "description_asked": False,
+        }
+        if not isinstance(router_args, dict):
+            return out
+        said = {w.strip(string.punctuation).lower() for w in (message or "").split()}
+
+        def _said(raw: Any) -> Optional[str]:
+            if not isinstance(raw, str) or not raw.strip():
+                return None
+            text = " ".join(raw.split())
+            wanted = {w.strip(string.punctuation).lower() for w in text.split()}
+            wanted.discard("")
+            if not wanted or not wanted <= said:
+                return None
+            return text
+
+        from services.onboarding.portfolio_service import is_plausible_project_name
+
+        name = _said(router_args.get("name"))
+        if name is not None and is_plausible_project_name(name):
+            out["name"] = name
+        raw_desc = router_args.get("description")
+        out["description_asked"] = isinstance(raw_desc, str) and bool(raw_desc.strip())
+        out["description"] = _said(raw_desc)
+        raw_repo = router_args.get("repo")
+        if isinstance(raw_repo, str):
+            repo = raw_repo.strip()
+            if (
+                repo
+                and "/" in repo
+                and not any(c.isspace() for c in repo)
+                and repo.lower() in (message or "").lower()
+            ):
+                out["repo"] = repo
+        return out
+
     async def _handle_add_project(
         self,
         original_message: str,
         session_id: str,
         user_id: Optional[str] = None,
         intent_service=None,
+        router_args: Optional[Dict[str, Any]] = None,
     ) -> Dict:
         """Add a project, consuming whatever the initiating utterance carried.
 
@@ -5375,6 +5434,13 @@ What would you like to set up first?"""
         intent_service canonical seam (services/intent/intent_service.py,
         beside the existing ``ftux_interview_offer`` arming block) arms it
         from there.
+
+        ``router_args`` (#2069, Arch 2026-10-16): the router's
+        ``inversion_args`` on the rail path. A ``name`` arg that passes the
+        honesty guard is the name; a ``description`` is stored ONLY from the
+        router's ``description`` arg, never parsed from the utterance. With
+        no usable router ``name`` the #1856 extractor is the fallback,
+        unchanged and not widened (a new phrasing is a corpus row).
         """
         if not user_id:
             return {
@@ -5396,6 +5462,16 @@ What would you like to set up first?"""
         slots = extract_add_project_slots(original_message)
         name = slots.get("name")
         repo_name = slots.get("repo")
+        description: Optional[str] = None
+        description_asked = False
+        routed = self._router_add_project_args(router_args, original_message)
+        if routed["name"]:
+            # The router named the slots (#2069): its name and description,
+            # its repo when it named one (else the existing repo clause).
+            name = routed["name"]
+            description = routed["description"]
+            repo_name = routed["repo"] or repo_name
+        description_asked = bool(routed["description_asked"])
 
         # ---- (2): nothing to create — ask once, arm the carrier --------
         if not name:
@@ -5444,6 +5520,8 @@ What would you like to set up first?"""
             repo_name=repo_name,
             session_id=session_id,
             user_id=user_id,
+            description=description,
+            description_asked=description_asked,
         )
 
     async def _create_or_report_project(
@@ -5452,12 +5530,20 @@ What would you like to set up first?"""
         repo_name: Optional[str],
         session_id: str,
         user_id: str,
+        description: Optional[str] = None,
+        description_asked: bool = False,
     ) -> Dict:
         """The actual write #1856's branch (1) always did — now its own
         method (#1886) so both ``_handle_add_project`` (the utterance
         already named a project) and the add-project name-clarify carrier's
         ANSWER turn (``add_project_clarify.handle_add_project_name_turn``)
-        share ONE creation path instead of two."""
+        share ONE creation path instead of two.
+
+        #2069 (Arch 2026-10-16, ADR-080: reports are code's): the reply is
+        built from the CREATED ROW, not the utterance. It names the stored
+        name, mentions a description only if one was stored, and the repo
+        how-to uses the stored name. ``description_asked`` (the router sent
+        a description that was not stored) gets CXO's interim line."""
         from services.database.repositories import ProjectRepository, RepositoryRepository
         from services.database.session_factory import AsyncSessionFactory
 
@@ -5486,8 +5572,23 @@ What would you like to set up first?"""
 
             created = await project_repo.create(
                 name=name,
-                description="",
+                description=description or "",
                 owner_id=user_id,
+            )
+            # #2069: report what the row holds (a non-string column value,
+            # e.g. NULL, is "nothing stored").
+            row_name = getattr(created, "name", None)
+            row_desc = getattr(created, "description", None)
+            stored_name = row_name if isinstance(row_name, str) and row_name else name
+            stored_desc = row_desc.strip() if isinstance(row_desc, str) else ""
+            if stored_desc:
+                desc_note = f' with the description "{stored_desc}"'
+            else:
+                desc_note = ""
+            no_desc_line = (
+                f"Added {stored_name}. {self._ADD_PROJECT_NO_DESCRIPTION} "
+                if description_asked and not stored_desc
+                else ""
             )
 
             repo_note = ""
@@ -5501,21 +5602,36 @@ What would you like to set up first?"""
                     user_id=user_id,
                 )
 
-            if repo_linked:
+            if no_desc_line:
+                # CXO's interim wording, verbatim, then the repo outcome.
+                if repo_linked:
+                    message = f"{no_desc_line}I linked {repo_name} to it.{repo_note}"
+                elif repo_name:
+                    message = (
+                        f"{no_desc_line}I could not link {repo_name} just now"
+                        f"{repo_note} — say 'link {repo_name} to {stored_name}' to retry."
+                    )
+                else:
+                    message = (
+                        f"{no_desc_line}If you want a GitHub repo on it, say: "
+                        f"link [owner/repo] to {stored_name}."
+                    )
+            elif repo_linked:
                 message = (
-                    f"Added {name} to your portfolio and linked " f"{repo_name} to it.{repo_note}"
+                    f"Added {stored_name} to your portfolio{desc_note} and linked "
+                    f"{repo_name} to it.{repo_note}"
                 )
             elif repo_name:
                 message = (
-                    f"Added {name} to your portfolio. I could not link "
+                    f"Added {stored_name} to your portfolio{desc_note}. I could not link "
                     f"{repo_name} just now{repo_note} — say "
-                    f"'link {repo_name} to {name}' to retry."
+                    f"'link {repo_name} to {stored_name}' to retry."
                 )
             else:
                 # Ask ONLY for what is missing, and make it optional.
                 message = (
-                    f"Added {name} to your portfolio. If you want a GitHub repo "
-                    f"on it, say: link [owner/repo] to {name}."
+                    f"Added {stored_name} to your portfolio{desc_note}. If you want a "
+                    f"GitHub repo on it, say: link [owner/repo] to {stored_name}."
                 )
 
             logger.info(
@@ -5533,8 +5649,9 @@ What would you like to set up first?"""
                     "action": "add_project",
                     "confidence": 1.0,
                     "context": {
-                        "project_name": name,
+                        "project_name": stored_name,
                         "project_id": created.id,
+                        "project_description": stored_desc,
                         "repo_name": repo_name,
                         "repo_linked": repo_linked,
                     },

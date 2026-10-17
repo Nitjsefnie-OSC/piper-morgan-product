@@ -167,7 +167,11 @@ async def test_restore_entry_point_calls_the_existing_handler_directly():
 async def test_add_project_entry_point_calls_the_existing_handler_directly():
     calls = {}
 
-    async def _add(original_message, session_id, user_id=None, intent_service=None):
+    async def _add(
+        original_message, session_id, user_id=None, intent_service=None, router_args=None
+    ):
+        # #2069: router_args (the router's inversion_args) is threaded too;
+        # its consumption is pinned in test_add_project_router_args_2069.py.
         # #1886: run_add_project_workflow now threads intent_service through
         # so a no-name ask can arm the add-project name-clarify carrier
         # directly — accepted here, not asserted (that's this test's own
