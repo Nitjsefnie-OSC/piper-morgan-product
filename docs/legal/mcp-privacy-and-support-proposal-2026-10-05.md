@@ -128,8 +128,8 @@ processing your conversations. [#1812, `provider_selection.py`]
 
 **Logs.** Our server logs don't keep the text of the messages you send to Piper. At most, they keep a scrambled
 fingerprint of a message. This doesn't affect your conversations, which you can still see in Piper.
-[⚠ 10-16: false on one path until issue 2059 promotes (classifier WARNING logs a 50-char prefix); Lead's lane is fixing it,
-no copy change if it promotes before 10-23. PM 10-13: "keep only fingerprints of logs." Lead 10-13: knob default flipped to off in code at every text-logging
+[✅ 10-16 18:2x: issue 2059 is live (alpha `d741214b6c`, promoted 17:09; issue closed as live), so the sentence is backed again. No copy change.
+Was: false on one path (classifier WARNING logged a 50-char prefix). PM 10-13: "keep only fingerprints of logs." Lead 10-13: knob default flipped to off in code at every text-logging
 site (`services/utils/utterance_log.py`, ec2cc9d44f, 27 pinning tests), live at the next promotion. Alpha measured
 today: 0 lines with message text (INFO is suppressed in production). Fly app-log search keeps 7 days. "At most"
 because in production even the fingerprint lines are below the log level. NOT claimed: a retention period (a log
@@ -146,8 +146,8 @@ those covered.]
 
 **No analytics or ad tracking in the app.** The Piper app doesn't use analytics, advertising or
 error-reporting services. [Lead: none found by a code-wide grep (GA, Mixpanel, Segment, Sentry). This covers
-the app only, not this website. ⚠ 10-16: the in-app Chroma client may send anonymized telemetry (posthog); Lead's lane
-is setting anonymized_telemetry=False]
+the app only, not this website. ✅ 10-16: the in-app Chroma client sets anonymized_telemetry=False on alpha `d741214b6c`
+(`services/knowledge_graph/ingestion.py:77`), so no posthog telemetry.]
 
 **How long we keep it.** As long as your account exists. We don't automatically delete your conversations, files or account.
 [10-16: two daily jobs delete expired sign-out records (`BlacklistCleanupJob`) and 90-day safety-audit rows
