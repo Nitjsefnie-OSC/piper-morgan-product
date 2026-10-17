@@ -6,7 +6,7 @@
 
 ## The bar (recorded in `beta-gate-standard.md` §Standing rulings)
 
-- **Must be closed and live on alpha before partners start:** every privacy and security item on MVP. As of 16:3x that was six; at 17:3x, two remain open; at 18:49, three (#2071 admitted); 10-17 08:17, two (#2071 closed live); at 09:26, one: #2064, which waits only on xian's count run (#2059 and #2061 closed live on `d741214b6c` at 17:14, #2054 and #2060 at 17:30):
+- **Must be closed and live on alpha before partners start:** every privacy and security item on MVP. As of 16:3x that was six; at 17:3x, two remain open; at 18:49, three (#2071 admitted); 10-17 08:17, two (#2071 closed live); at 09:26, one: #2064, which waits only on xian's count run; at 16:06, two (#2077 admitted) (#2059 and #2061 closed live on `d741214b6c` at 17:14, #2054 and #2060 at 17:30):
   - #2054: one user's turn could carry another user's identity in the intent cache;
   - #2059: logs keep message text, against /privacy;
   - #2060: Chroma telemetry, against /privacy;
@@ -14,10 +14,11 @@
   - #2064: the 14-day account-deletion promise on /privacy has no erasure path in code;
   - #2065: Settings' "Export/delete data" page lists actions that don't exist, and /privacy says deleting a chat hides it, but no control does (admitted 16:3x). **Closed live 10-17 09:22** (CXO; served card and page, live /privacy sentence).
   - #2071: one account's Integrations Test result (status, error text, check time) shows on every other account's card and in chat (admitted 18:49; source reading by Arch, not served). **Closed live 10-17 07:24** on alpha `119bd7b9ef` (Web's two-account check, one direction isolated).
+  - #2077: the Settings GitHub token field is filled by Chrome with the saved Piper password, which Reconnect would send to GitHub (latent; admitted as a must-close 10-17 16:06, Class 2). Fix 6c3206dd35 on main, rides Sunday's first promotion.
   #2064 (176d66a53c) and #2065 items 1 and 2 (1e9d0f5809) are on main and ride tomorrow's first promotion. #2064 also needs xian's live count; #2065 also needs Comms' /privacy fix 4 (xian's OK).
 - **Disclosed, after this review:** everything else open on MVP, below.
 - **Also before the beta form:** the uploads backfill run with zero remaining (xian approved the four conditions, 16:18).
-- **Asked, not admitted (10-17 15:3x):** #2077, the Settings GitHub token field may be filled by the browser with the saved Piper password and sent to GitHub on Reconnect (latent, Class 2 if admitted). Admission asked of xian via Exec.
+- **Asked, not admitted (10-17 16:1x):** #2078, every invited tester's setup wizard ends in "Setup Failed" (the account is created, the key not stored). Class 4; I recommended xian name it a must-close, since disclosure is no workaround for a failed first step.
 - **Data loss (Class 1):** none open on MVP today. I'd treat any new one as inside the must-close bar, under xian's 12:52 "not cavalier with user data", unless he says otherwise.
 
 ## A. Open on MVP: what a partner might hit
