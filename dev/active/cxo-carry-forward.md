@@ -338,3 +338,4 @@ staleness flag. Check that file directly rather than assuming this note stays cu
 
 - 21:31 10-15: day closed (log DAY-CLOSED). CI 12/12, alpha 6f2916d10f, UX 14, inbox empty. Promotion to e4f21e9ca8 READY on xian's word; served rows listed in the log's Open at close. Next fire ~06:31 10-16: first entry needs Drift:; normal pacing from Friday.
 - 06:31 10-16: new log dev/2026/10/16/2026-10-16-0631-cxo-code-log.md (Drift: done). CI 12/12, alpha 6f2916d10f, UX 14, inbox empty. Normal pacing. Next fire ~09:31.
+- 21:32 10-16: day closed (log DAY-CLOSED). CI 11/12 (Tests red 02:36Z, Lead's lane), alpha d741214b6c, UX 17, inbox empty. Terms convener thread: xian answers from scaffold, Comms checks, PPM maps; #2065/#2068 filed. Owed after first promotion: #2065, #2066/#2045/#2053, #2068, #2069-#2071, #2041 served judgements. Next fire ~06:31 10-17: first entry needs Drift:.
