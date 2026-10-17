@@ -149,66 +149,60 @@ class TestIntegrationsAPIWithMocks:
 
 
 class TestIntegrationHealthMonitorIntegration:
-    """Tests for IntegrationHealthMonitor integration"""
+    """The Test route records its result per principal (#2071; was the host monitor)."""
 
     @pytest.mark.asyncio
-    async def test_health_monitor_initialization(self):
-        """Health monitor should be properly initialized"""
-        from web.api.routes.integrations import _get_health_monitor
+    async def test_test_result_store_starts_without_a_host_wide_entry(self):
+        """No principal has a result until it presses Test (no startup registration)."""
+        from services.integrations.principal_test_results import PrincipalTestResultStore
 
-        monitor = _get_health_monitor()
-        assert monitor is not None
-
-        # Should have all integrations registered
+        store = PrincipalTestResultStore()
         for integration in ["notion", "slack", "github", "calendar"]:
-            health = monitor.get_component_health(integration)
-            assert health is not None
+            assert store.get_test_result(_fake_claims().sub, integration) is None
 
     @pytest.mark.asyncio
     async def test_health_monitor_records_success_on_test(self):
-        """Health monitor should record success when test passes"""
-        from services.health.integration_health_monitor import ComponentStatus
-        from web.api.routes.integrations import _get_health_monitor, check_integration_connection
+        """The caller's result records success when the test passes"""
+        from services.integrations.principal_test_results import PrincipalTestResultStore
+        from web.api.routes.integrations import check_integration_connection
 
-        with patch("web.api.routes.integrations._test_notion", new_callable=AsyncMock) as mock:
+        store = PrincipalTestResultStore()
+        with (
+            patch("web.api.routes.integrations._test_notion", new_callable=AsyncMock) as mock,
+            patch("web.api.routes.integrations._get_test_result_store", return_value=store),
+        ):
             mock.return_value = {"success": True}
+            claims = _fake_claims()
+            await check_integration_connection("notion", current_user=claims)
 
-            monitor = _get_health_monitor()
-
-            await check_integration_connection("notion", current_user=_fake_claims())
-
-            # Verify health was recorded
-            health = monitor.get_component_health("notion")
-            assert health is not None
-            assert health.status == ComponentStatus.HEALTHY
+            result = store.get_test_result(claims.sub, "notion")
+            assert result is not None
+            assert result.ok is True
 
     @pytest.mark.asyncio
     async def test_health_monitor_records_failure_on_test(self):
-        """Health monitor should record failure when test fails"""
-        from web.api.routes.integrations import _get_health_monitor, check_integration_connection
+        """The caller's result records the failure and its error when the test fails"""
+        from services.integrations.principal_test_results import PrincipalTestResultStore
+        from web.api.routes.integrations import check_integration_connection
 
-        with patch("web.api.routes.integrations._test_notion", new_callable=AsyncMock) as mock:
+        store = PrincipalTestResultStore()
+        with (
+            patch("web.api.routes.integrations._test_notion", new_callable=AsyncMock) as mock,
+            patch("web.api.routes.integrations._get_test_result_store", return_value=store),
+        ):
             mock.return_value = {
                 "success": False,
                 "error_type": "api_key_invalid",
                 "error": "Invalid API key",
             }
+            claims = _fake_claims()
+            await check_integration_connection("notion", current_user=claims)
 
-            monitor = _get_health_monitor()
-
-            # Reset component to ensure clean state
-            monitor.reset_component_health("notion")
-            initial_error_count = monitor.get_component_health("notion").error_count
-
-            await check_integration_connection("notion", current_user=_fake_claims())
-
-            # Verify failure was recorded
-            health = monitor.get_component_health("notion")
-            assert health is not None
-            # Error count should have increased
-            assert health.error_count > initial_error_count
-            # Last error should be recorded
-            assert health.last_error == "Invalid API key"
+            result = store.get_test_result(claims.sub, "notion")
+            assert result is not None
+            assert result.ok is False
+            assert result.error_count == 1
+            assert result.error == "Invalid API key"
 
 
 class TestIntegrationErrorHandling:

@@ -11,14 +11,13 @@ import json
 import os
 import shutil
 import subprocess
-import time
 from datetime import datetime
 from pathlib import Path
 from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from services.health.integration_health_monitor import ComponentHealth, ComponentStatus
+from services.integrations.principal_test_results import PrincipalTestResultStore
 from web.api.routes import integrations
 
 REPO = Path(__file__).resolve().parents[3]
@@ -26,32 +25,16 @@ PAGE_SRC = (REPO / "templates/integrations.html").read_text()
 needs_node = pytest.mark.skipif(shutil.which("node") is None, reason="node not on PATH")
 
 
-class _Monitor:
-    def __init__(self, component):
-        self._component = component
-
-    def get_component_health(self, name):
-        return self._component
-
-
 @pytest.mark.asyncio
 async def test_route_healthy_card_is_plain_healthy_with_iso_last_check():
-    comp = ComponentHealth(
-        name="calendar",
-        status=ComponentStatus.HEALTHY,
-        last_check=time.time(),
-        error_count=0,
-        last_error=None,
-        success_rate=1.0,
-        average_latency_ms=0.0,
-        metadata={},
-    )
+    store = PrincipalTestResultStore()
+    store.record_test_result("u1", "calendar", ok=True, latency_ms=12.0)
     meta = integrations.INTEGRATION_REGISTRY["calendar"]
     with (
         patch.object(
             integrations, "_get_integration_config_status", new=AsyncMock(return_value="configured")
         ),
-        patch.object(integrations, "_get_health_monitor", return_value=_Monitor(comp)),
+        patch.object(integrations, "_get_test_result_store", return_value=store),
     ):
         st = await integrations._check_integration_health("calendar", meta, user_id="u1")
     assert st.status == "healthy"

@@ -3,12 +3,14 @@
 provider; "unknown" never reaches a configured card; the healthy summary does not count
 an unchecked connection.
 
-Cause pinned: the health monitor registers every component as UNKNOWN with a real
+Cause pinned: the health monitor registered every component as UNKNOWN with a real
 ``last_check`` at startup, so a just-connected integration took the "tested" branch and
-rendered "Status: unknown" (xian, row E, 2026-10-15 18:43).
+rendered "Status: unknown" (xian, row E, 2026-10-15 18:43). Since #2071 the card reads
+the viewer's own Test result from the per-principal store, so "never tested" is "no
+record for this principal", including when another account has tested.
 
-Layers: the route function per provider (monitor UNKNOWN-with-timestamp, and no
-component at all); the served JSON through the app's TestClient; the page's own
+Layers: the route function per provider (another account's record only, and an empty
+store); the served JSON through the app's TestClient; the page's own
 ``renderIntegrations`` under Node (skipped without ``node``). Not a browser.
 """
 
@@ -17,7 +19,6 @@ from __future__ import annotations
 import json
 import shutil
 import subprocess
-import time
 import uuid
 from pathlib import Path
 from unittest.mock import AsyncMock, patch
@@ -26,7 +27,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from services.auth.container import AuthContainer
-from services.health.integration_health_monitor import ComponentHealth, ComponentStatus
+from services.integrations.principal_test_results import PrincipalTestResultStore
 from web.api.routes import integrations
 from web.app import app
 
@@ -36,34 +37,19 @@ HEALTH = "/api/v1/integrations/health"
 PROVIDERS = [k for k in integrations.INTEGRATION_REGISTRY if k != "github"]
 
 
-def _unknown_component(name: str) -> ComponentHealth:
-    return ComponentHealth(
-        name=name,
-        status=ComponentStatus.UNKNOWN,
-        last_check=time.time(),
-        error_count=0,
-        last_error=None,
-        success_rate=1.0,
-        average_latency_ms=0.0,
-        metadata={},
-    )
+def _store_tested_by(principal: str, provider: str, ok: bool = True) -> PrincipalTestResultStore:
+    store = PrincipalTestResultStore()
+    store.record_test_result(principal, provider, ok=ok, error=None if ok else "boom")
+    return store
 
 
-class _Monitor:
-    def __init__(self, component):
-        self._component = component
-
-    def get_component_health(self, name):
-        return self._component
-
-
-async def _card(provider: str, component):
+async def _card(provider: str, store: PrincipalTestResultStore):
     meta = integrations.INTEGRATION_REGISTRY[provider]
     with (
         patch.object(
             integrations, "_get_integration_config_status", new=AsyncMock(return_value="configured")
         ),
-        patch.object(integrations, "_get_health_monitor", return_value=_Monitor(component)),
+        patch.object(integrations, "_get_test_result_store", return_value=store),
     ):
         return await integrations._check_integration_health(provider, meta, user_id="u1")
 
@@ -78,22 +64,23 @@ def _assert_unchecked(status, provider: str):
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize("provider", PROVIDERS)
-async def test_registered_but_never_tested_is_the_unchecked_card(provider):
-    """The startup registration (UNKNOWN with a real timestamp) is 'never tested'."""
-    _assert_unchecked(await _card(provider, _unknown_component(provider)), provider)
+async def test_another_accounts_test_is_still_the_unchecked_card(provider):
+    """#2071: another account's Test result (pass or fail) is 'never tested' for u1."""
+    for ok in (True, False):
+        _assert_unchecked(
+            await _card(provider, _store_tested_by("u-other", provider, ok)), provider
+        )
 
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize("provider", PROVIDERS)
-async def test_no_component_at_all_is_the_unchecked_card(provider):
-    _assert_unchecked(await _card(provider, None), provider)
+async def test_no_record_at_all_is_the_unchecked_card(provider):
+    _assert_unchecked(await _card(provider, PrincipalTestResultStore()), provider)
 
 
 @pytest.mark.asyncio
 async def test_a_recorded_healthy_check_still_reads_healthy():
-    comp = _unknown_component("calendar")
-    comp.status = ComponentStatus.HEALTHY
-    status = await _card("calendar", comp)
+    status = await _card("calendar", _store_tested_by("u1", "calendar"))
     assert status.status == "healthy"
     assert status.status_message.startswith("Healthy")
 
@@ -139,16 +126,15 @@ def client():
 
 
 def test_served_json_unchecked_calendar_is_not_counted_healthy(client):
-    """Through the real route: every provider configured, every component UNKNOWN."""
+    """Through the real route: every provider configured, only another account tested."""
+    store = PrincipalTestResultStore()
+    for name in integrations.INTEGRATION_REGISTRY:
+        store.record_test_result("u-other", name, ok=True)
     with (
         patch.object(
             integrations, "_get_integration_config_status", new=AsyncMock(return_value="configured")
         ),
-        patch.object(
-            integrations,
-            "_get_health_monitor",
-            return_value=_Monitor(_unknown_component("any")),
-        ),
+        patch.object(integrations, "_get_test_result_store", return_value=store),
         patch.object(integrations, "_github_card", new=AsyncMock(return_value=None)),
     ):
         r = client.get(HEALTH)

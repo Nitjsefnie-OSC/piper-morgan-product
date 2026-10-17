@@ -9,12 +9,13 @@ path does, and never the startup UNKNOWN stamp (#2044).
 from __future__ import annotations
 
 import time
+from datetime import datetime
 from types import SimpleNamespace
 from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from services.health.integration_health_monitor import ComponentStatus
+from services.integrations.principal_test_results import PrincipalTestResultStore
 from web.api.routes import integrations as integrations_routes
 
 
@@ -22,9 +23,12 @@ def _oauth_credential():
     return SimpleNamespace(leg="oauth", stale_oauth_reason=None)
 
 
-def _monitor(status, last_check):
-    health = SimpleNamespace(status=status, last_check=last_check, last_error=None)
-    return SimpleNamespace(get_component_health=lambda _id: health)
+def _store(*principals):
+    """#2071: the Test result is per principal; record a GitHub pass for each one named."""
+    store = PrincipalTestResultStore()
+    for principal in principals:
+        store.record_test_result(principal, "github", ok=True)
+    return store
 
 
 METADATA = {"display_name": "GitHub", "configure_url": "/settings/integrations/github"}
@@ -32,7 +36,7 @@ METADATA = {"display_name": "GitHub", "configure_url": "/settings/integrations/g
 
 @pytest.mark.asyncio
 async def test_oauth_card_carries_last_check_after_a_recorded_check():
-    checked_at = time.time() - 30
+    started = time.time()
     with (
         patch.object(
             _adapter_cls(),
@@ -41,8 +45,8 @@ async def test_oauth_card_carries_last_check_after_a_recorded_check():
         ),
         patch.object(
             integrations_routes,
-            "_get_health_monitor",
-            lambda: _monitor(ComponentStatus.HEALTHY, checked_at),
+            "_get_test_result_store",
+            lambda: _store("user-1"),
         ),
     ):
         card = await integrations_routes._github_card(METADATA, "user-1")
@@ -51,6 +55,7 @@ async def test_oauth_card_carries_last_check_after_a_recorded_check():
     assert card.status_message == "Connected with your GitHub account."
     assert card.last_check is not None
     assert card.last_check.startswith("20")  # ISO 8601, UTC
+    assert datetime.fromisoformat(card.last_check).timestamp() >= started - 1
 
 
 @pytest.mark.asyncio
@@ -61,8 +66,8 @@ async def test_oauth_card_has_no_last_check_before_any_real_check():
         ),
         patch.object(
             integrations_routes,
-            "_get_health_monitor",
-            lambda: _monitor(ComponentStatus.UNKNOWN, time.time()),
+            "_get_test_result_store",
+            lambda: _store("someone-else"),  # #2071: another account's Test is not a check
         ),
     ):
         card = await integrations_routes._github_card(METADATA, "user-1")

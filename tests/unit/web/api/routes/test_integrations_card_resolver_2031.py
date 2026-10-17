@@ -137,8 +137,8 @@ async def test_own_token_without_a_stale_grant_keeps_the_configured_path(credent
     """Outside the four states: the user's own token with no stale grant (including
     after Disconnect, whose UNBOUND row maps to CONNECT_REQUIRED) is configured, and the
     cached Test result / unchecked-card path governs as before. No re-authorize line."""
-    with patch.object(integrations, "_get_health_monitor") as monitor:
-        monitor.return_value.get_component_health.return_value = None
+    with patch.object(integrations, "_get_test_result_store") as store:
+        store.return_value.get_test_result.return_value = None
         status, probe = await _card(credential)
     # #2044 (CXO): the configured-but-unchecked card reads "Connected" with the
     # "Not checked yet. Press Test." line; "unknown" never reaches a configured card.
