@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import List
 
 import pytest
+import yaml
 
 from services.process.registry import ProcessType
 
@@ -2522,45 +2523,21 @@ class TestExecuteVocabCoverage:
         return list_literals
 
     def _corpus_rows(self):
-        """Parse ``tests/fixtures/inversion_corpus_phase0.yaml`` with the
-        SAME regex-based line parser every existing consumer of this file
-        uses (e.g. ``scripts/inversion_phase0_baseline.py:load_corpus``) —
-        the file's embedded regex-literal citations break a real YAML
-        parser (unescaped quotes inside quoted strings), so no consumer in
-        this codebase loads it with ``yaml.safe_load``. Duplicated here
-        rather than importing a ``scripts/`` module into ``tests/`` (no
-        existing shared import boundary for it — same precedent as the
-        other 4 in-repo copies). Extended with an optional ``framing:``
-        field (not emitted by the builder today) for the question/compose
-        exemption this unit's own ask names.
+        """Rows of ``tests/fixtures/inversion_corpus_phase0.yaml`` via
+        ``yaml.safe_load``. #2073 (Arch, 2026-10-17): the builder emits
+        strict YAML (every string scalar JSON-quoted) and every loader reads
+        it with ``safe_load``; the regex line parser this replaced only
+        unescaped ``\\"`` in the phrase. Still duplicated rather than importing
+        ``scripts/`` into ``tests/`` (no shared import boundary for it).
+        ``framing:`` rides the row when the builder emits it.
         """
         root = os.path.dirname(os.path.abspath(__file__))
         corpus_path = Path(root) / "fixtures" / "inversion_corpus_phase0.yaml"
-        rows: list = []
-        cur = None
-        for raw in corpus_path.read_text(encoding="utf-8").splitlines():
-            m = re.match(r'  - phrase: "(.*)"$', raw)
-            if m:
-                if cur:
-                    rows.append(cur)
-                cur = {"phrase": m.group(1).replace('\\"', '"')}
-                continue
-            if cur is None:
-                continue
-            for key in ("category", "expected", "framing"):
-                m = re.match(rf"    {key}: (\S+)$", raw)
-                if m:
-                    cur[key] = m.group(1)
-            m = re.match(r'    (source|surface1_claim|probe_verdict|notes): "(.*)"$', raw)
-            if m:
-                cur[m.group(1)] = m.group(2)
-        if cur:
-            rows.append(cur)
+        rows = yaml.safe_load(corpus_path.read_text(encoding="utf-8"))["corpus"]
         assert len(rows) >= 400, (
             f"corpus parse found only {len(rows)} rows (expected >= 400) — "
-            f"the line-based parser likely broke against a format change in "
-            f"inversion_corpus_phase0.yaml; fix the parser, don't trust a "
-            f"collapsed count."
+            f"the fixture collapsed or the builder's `corpus:` shape changed; "
+            f"fix the builder, don't trust a collapsed count."
         )
         return rows
 

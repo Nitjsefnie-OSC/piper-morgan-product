@@ -993,7 +993,15 @@ router WOULD have done. Zero latency cost (post-turn task), sampled
 ⚠️ **Since #1668 (2026-08-21) this observer has TWO modes** — the description
 above is the LEGACY-ROUTED one, unchanged. On a turn the live inversion routed,
 it runs the legacy counterfactual instead; see the #1668 block below.
-Corpus-side instrument: `scripts/inversion_phase1_shadow_score.py` scores the
+**The corpus fixture is generated, never hand-edited** (#2073, Arch ruling (a),
+2026-10-17): `scripts/build_inversion_corpus_phase0.py` is the source of truth; a
+new row goes in its `HAND_ROWS`, a ruling on a structured-source row goes in its
+`RULED_EXPECTATIONS`, then regenerate. Every string scalar is JSON-quoted so the
+file is strict YAML, every loader reads it with `yaml.safe_load`, and
+`tests/unit/scripts/test_inversion_corpus_builder_2073.py` rebuilds into a temp
+path and fails on any byte the builder did not write (before this, a regenerate
+would have erased the 10-04 `list my projects` ruling and the #1984 known-miss
+record). Corpus-side instrument: `scripts/inversion_phase1_shadow_score.py` scores the
 router against `tests/fixtures/inversion_corpus_phase0.yaml` per category vs
 the Phase-0 full-chain baseline (first run:
 `inversion-phase1-shadow-score-2026-08-14.md`). The Phase-2 flip (per-category,

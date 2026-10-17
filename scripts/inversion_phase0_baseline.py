@@ -34,6 +34,8 @@ from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 
+import yaml
+
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
@@ -41,32 +43,17 @@ CORPUS = ROOT / "tests" / "fixtures" / "inversion_corpus_phase0.yaml"
 
 
 def load_corpus() -> list:
-    rows, cur = [], None
-    for raw in CORPUS.read_text().splitlines():
-        m = re.match(r'  - phrase: "(.*)"$', raw)
-        if m:
-            if cur:
-                rows.append(cur)
-            cur = {"phrase": m.group(1).replace('\\"', '"')}
-            continue
-        if cur is None:
-            continue
-        # `framing` (2026-10-09): TestExecuteVocabCoverage reads `framing: question`
-        # — documented there, but this loader never parsed it until a row needed it.
-        for key in ("category", "expected", "framing"):
-            m = re.match(rf"    {key}: (\S+)$", raw)
-            if m:
-                cur[key] = m.group(1)
-        m = re.match(r'    (source|surface1_claim|probe_verdict|notes): "(.*)"$', raw)
-        if m:
-            cur[m.group(1)] = m.group(2)
-        # Arch's (a), 2026-10-06: an asserted TARGET SET rides the row as a
-        # JSON flow mapping (valid YAML flow syntax, emitted by the builder).
-        m = re.match(r"    expected_args: (\{.*\})$", raw)
-        if m:
-            cur["expected_args"] = json.loads(m.group(1))
-    if cur:
-        rows.append(cur)
+    """Rows of the Phase-0 corpus, read with ``yaml.safe_load``.
+
+    #2073 (Arch, 2026-10-17): the builder emits every string scalar as a JSON
+    string, so the fixture is strict YAML and every loader reads it the same
+    way (this one is shared by the Phase-1 scorer, the Phase-3 gate and the
+    census pin). The regex line parser this replaced unescaped ``\\"`` in the
+    phrase only and silently read every other field raw.
+    """
+    data = yaml.safe_load(CORPUS.read_text(encoding="utf-8"))
+    rows = data["corpus"]
+    assert isinstance(rows, list) and rows, "inversion_corpus_phase0.yaml: no `corpus:` list"
     return rows
 
 

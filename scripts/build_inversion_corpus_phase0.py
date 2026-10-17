@@ -15,6 +15,17 @@ only genuinely unstructured sources (PM transcript verbatims already pinned in
 tests, corpus-tagged issue phrasings) are inlined by hand WITH their citation.
 
 Output: tests/fixtures/inversion_corpus_phase0.yaml
+
+#2073 (Arch, 2026-10-17, ruling (a)): THIS BUILDER IS THE SOURCE OF TRUTH AND
+NOBODY HAND-EDITS THE FIXTURE. A new row goes in HAND_ROWS; a ruling on a
+structured-source row goes in RULED_EXPECTATIONS; then regenerate. The pin
+tests/unit/scripts/test_inversion_corpus_builder_2073.py rebuilds into a temp
+path and fails on any byte that differs from the committed fixture, so a hand
+edit is caught at the next test run. Every string scalar is emitted with
+json.dumps (a JSON string is a valid YAML double-quoted scalar), so the file
+parses under yaml.safe_load and every loader reads it that way.
+
+Usage: python scripts/build_inversion_corpus_phase0.py [--out PATH]
 """
 
 import json
@@ -4131,7 +4142,7 @@ HAND_ROWS = [
         "category": "STATUS",
         "expected": "plan",
         "source": "phase3-1977/request-statement second ask (CXO + Arch 2026-10-11)",
-        "notes": "RULED 2026-10-11 (Arch): the declarative second ask named as the first cut's trade; with the widened ask cue surface 1 declines it (STATUS claim + unclaimed 'I need the archived list too'). Ordered ops session_activity_query -> list_archived_projects. Served 2026-10-11: PLAN[session_activity_query->list_archived_projects] 6/6 (Haiku 4.5)",
+        "notes": "RULED 2026-10-11 (Arch): the declarative second ask named as the first cut's trade; with the widened ask cue surface 1 declines it (STATUS claim + unclaimed 'I need the archived list too'). Served 2026-10-11 12:xx: PLAN[session_activity_query->list_archived_projects] 6/6 (Haiku 4.5). RE-EXPECTED 2026-10-11 19:5x (Arch, #1984 half 2): the ruled ordered ops are get_project_status -> list_archived_projects (a FLOOR read is a legal plan element, #1606; 'my current work' is a status read as in the #1884 row), NOT session activity. Scored N=5 cold on the served model (controls/ctl-1979-cold-twotopic-2026-10-11.md, Haiku 4.5): PLAN[session_activity_query->list_archived_projects] 5/5 = plan shape 5/5, ruled ops 0/5. get_project_status has no rail adapter, so the router has no operation to name for that half and reaches for the nearest read; the fix is a description/adapter change (router input -> full run owed), never a literal or a sniff. Tracked #1984. KNOWN MISS (Arch's lever (c), ruling 2026-10-12 07:3x, applied 07:2x): the router's cold reading is PLAN[session_activity_query->list_archived_projects] (main x6 6/6, 2026-10-12 controls/ctl-1984-main-arm-2026-10-12.md); the expected stays the ruled ops so every full run scores this row MISMATCH on purpose. Every lever was measured and failed condition (4): get_project_status description W1 (full run 13 improved / 8 worsened, x6 = 4 attributed), W2/W3 (screens, 3 attributed each), and the session_activity_query rail-example edit (b) (screen: the row reached the ruled plan 6/6 but 'let's analyze the risk here' went analyze_blockers 6/6 -> CLARIFY 6/6 and 'what did we make earlier' session_activity 6/6 -> 2/6 then 1/6 on re-check; controls/attribution-1984-wordings-2026-10-12.md, ctl-1984-b-arm-*.md). No more wordings (Arch). The served reply stays honest as quoted in controls/served-1984-2026-10-11.md (no summary claimed; the archived half answered). #1984 stays OPEN, retitled to this miss (CXO).",
     },
     {
         "phrase": "Where did you get that from?",
@@ -4525,6 +4536,11 @@ def bucket(expected: str, fallback: str = "QUERY") -> str:
 # fixture file is shared with its own tests). Applied in main() after the merge,
 # with the ruling cited; the original source citation is kept on the row.
 RULED_EXPECTATIONS: dict = {
+    # 2026-10-04 (Arch) — carried by hand in the fixture until #2073 moved it here (2026-10-17).
+    "list my projects": (
+        "action:list_projects",
+        "RULED 2026-10-04 (Arch): list_projects is the post-split read (the live QUERY entry in read_status); was action:manage_portfolio, the pre-split half. Re-pointed 2026-10-14 (Lead) in the ANALYSIS margin-fix commit, where the row surfaced as a named regression (x6: main manage_portfolio 5/1, candidate 3/3; not attributable). Day-one path P8: quoted once on the next promotion's served read (active projects shown; CXO judges).",
+    ),
     "threats to our timeline this week": (
         "action:analyze_blockers",
         "RULED 2026-10-03 (CXO reversing C1 after the router's 3/3): a PROJECT-level risk question is analyze_blockers; attention_query is the PERSONAL aggregate",
@@ -4875,7 +4891,9 @@ RULED_EXPECTATIONS: dict = {
 }
 
 
-def main() -> None:
+def main(out: Path | None = None) -> None:
+    """Build the corpus; ``out`` defaults to the committed fixture path."""
+    out = OUT if out is None else Path(out)
     seen = {}
     out_rows = []
 
@@ -4930,8 +4948,10 @@ def main() -> None:
 
     lines = [
         "# Inversion Phase-0 corpus (#1595) — GENERATED by scripts/build_inversion_corpus_phase0.py",
-        "# Do not hand-edit rows that carry a structured source (corpus-1283 / probe-row-N);",
-        "# edit the source or the builder. Hand rows live in the builder's HAND_ROWS with citations.",
+        "# DO NOT HAND-EDIT THIS FILE (#2073, Arch 2026-10-17): the builder is the source of truth and",
+        "# tests/unit/scripts/test_inversion_corpus_builder_2073.py fails on any byte it did not write.",
+        "# Hand rows live in the builder's HAND_ROWS with citations; rulings on structured-source rows",
+        "# (corpus-1283 / probe-row-N) live in RULED_EXPECTATIONS. Every string scalar is JSON-quoted.",
         "#",
         "# expected:  action:<registry-canonical> | category:<NAME> | REVIEW",
         "#   REVIEW = the row is a QUESTION the Inversion answers, not an assertion —",
@@ -4946,12 +4966,18 @@ def main() -> None:
             r["expected"] = ruled[0]
             r["category"] = bucket(ruled[0], r.get("category", "REVIEW"))
             r["notes"] = (r.get("notes") + " | " if r.get("notes") else "") + ruled[1]
+
+    # #2073: every string scalar is a JSON string, which YAML's double-quoted
+    # scalar accepts verbatim, so the file parses under yaml.safe_load. The
+    # bare fields (category / expected / framing) are registry tokens.
+    def q(value: str) -> str:
+        return json.dumps(value, ensure_ascii=False)
+
     for r in out_rows:
-        phrase = r["phrase"].replace('"', '\\"')
-        lines.append(f'  - phrase: "{phrase}"')
+        lines.append(f"  - phrase: {q(r['phrase'])}")
         lines.append(f"    category: {r['category']}")
         lines.append(f"    expected: {r['expected']}")
-        lines.append(f"    source: \"{r['source']}\"")
+        lines.append(f"    source: {q(r['source'])}")
         if r.get("expected_args"):
             # Arch's (a), 2026-10-06: the asserted TARGET SET for a row whose
             # action alone is not the test. JSON is valid YAML flow syntax.
@@ -4962,19 +4988,24 @@ def main() -> None:
             lines.append(f"    framing: {r['framing']}")
         for k in ("surface1_claim", "probe_verdict", "notes"):
             if r.get(k):
-                lines.append(f'    {k}: "{r[k]}"')
-    OUT.write_text("\n".join(lines) + "\n")
+                lines.append(f"    {k}: {q(r[k])}")
+    out.write_text("\n".join(lines) + "\n")
 
     cats = {}
     for r in out_rows:
         cats[r["category"]] = cats.get(r["category"], 0) + 1
     total = len(out_rows)
     review = sum(1 for r in out_rows if r["expected"] == "REVIEW")
-    print(f"wrote {OUT.relative_to(ROOT)}: {total} rows ({review} REVIEW)")
+    shown = out.relative_to(ROOT) if out.is_relative_to(ROOT) else out
+    print(f"wrote {shown}: {total} rows ({review} REVIEW)")
     print("per-category denominators (m-44):")
     for c, n in sorted(cats.items(), key=lambda kv: -kv[1]):
         print(f"  {c:14s} {n}")
 
 
 if __name__ == "__main__":
-    main()
+    import argparse  # noqa: PLC0415
+
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("--out", type=Path, default=None, help="write here instead of the fixture")
+    main(out=parser.parse_args().out)
