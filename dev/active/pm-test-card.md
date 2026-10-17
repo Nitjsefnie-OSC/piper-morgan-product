@@ -1,6 +1,6 @@
 # PM test card
 
-**Owner**: Lead. **v77 (16:21 10-17: A5 PASS, #1913 closed), v76 (15:52 10-17: A4 invite pointer corrected), v75 (15:49 10-17: A5 path corrected), v74 (15:43 10-17: C1 done), v73 (15:28 10-17: C1 query corrected), v72 (15:24 10-17: C2 PASS; jump list links to the cards), v71 (15:21 10-17: A1 PASS), v70 (15:12 10-17, snippet added 15:15: your order at the top; A1 cut to what is left for your hand, read snippet inline), v69 (08:1x 10-17: alpha `118241587e`, slot 2 of 2; every card live, A1 and C2 included), v68 (07:1x: slot 1), v67 (A1 gap #2072 noted 19:3x), v66 (B3 gap 17:5x), v65 17:09 10-16: alpha promoted to the new build, every card is live.** v64 (16:4x) for xian's live session**: one card per test, only the tests that need xian's hand or that nobody has passed yet. Closed rows, Web's rows and the history are gone from this page; `git log -p` of this file keeps every earlier version. Mirror: https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi (this file wins between republishes).
+**Owner**: Lead. **v78 (16:39 10-17: A4 PASS, B1 create FAIL #2080), v77 (16:21 10-17: A5 PASS, #1913 closed), v76 (15:52 10-17: A4 invite pointer corrected), v75 (15:49 10-17: A5 path corrected), v74 (15:43 10-17: C1 done), v73 (15:28 10-17: C1 query corrected), v72 (15:24 10-17: C2 PASS; jump list links to the cards), v71 (15:21 10-17: A1 PASS), v70 (15:12 10-17, snippet added 15:15: your order at the top; A1 cut to what is left for your hand, read snippet inline), v69 (08:1x 10-17: alpha `118241587e`, slot 2 of 2; every card live, A1 and C2 included), v68 (07:1x: slot 1), v67 (A1 gap #2072 noted 19:3x), v66 (B3 gap 17:5x), v65 17:09 10-16: alpha promoted to the new build, every card is live.** v64 (16:4x) for xian's live session**: one card per test, only the tests that need xian's hand or that nobody has passed yet. Closed rows, Web's rows and the history are gone from this page; `git log -p` of this file keeps every earlier version. Mirror: https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi (this file wins between republishes).
 
 **Alpha**: https://alpha.pipermorgan.ai serves **`118241587e`** (promotion 2 of 2 under your standing grant, 08:05 10-17, run 39043475359; /health healthy at 08:08; `curl -s https://alpha.pipermorgan.ai/health` shows `git_sha`). No more promotions today. This build carries everything landed since last night: user erasure (#2064), the Privacy & data page (#2065, served PASS), the GitHub card's checked-time line (#2066, closed), the Integrations headline counting only connected integrations (#2068), the consent line naming the project (#2070, PASS), per-person Test results (#2071, closed), both halves of #2072 (the radar/standup disclose a revoked grant again; Settings, chat and setup guidance say "needs reconnecting", never "connected"), and the #1306 count fix for C2.
 
@@ -10,8 +10,8 @@
 
 1. ~~[A1](#a1)~~ **PASS 15:19.**
 2. ~~[C2](#c2)~~ **PASS, reported 15:22** (ran from your own machine; fine), then [C1](#c1): your hand only, one terminal command.
-3. ~~[A5](#a5)~~ **PASS 16:18**, then [A4](#a4): the fresh-account PAT path behind the #1982 dual write you held. **Clear the token field before pasting** (this build still autofills it, #2077).
-4. [B1](#b1): gates MVP (#2048), one short row.
+3. ~~[A5](#a5)~~ **PASS 16:18**, ~~[A4](#a4)~~ **PASS 16:33 (4 of 4; #1982 dual write landed for Sunday).**
+4. ~~[B1](#b1)~~ **offer PASS, create FAIL 16:31 → #2080.**
 5. [A3](#a3), [A2](#a2), [A6](#a6), [A7](#a7), [B2](#b2), [B3](#b3): any order; none gates anything.
 
 ## A. Your cards (all live on `118241587e`)
@@ -50,6 +50,7 @@
 - **Judge**: Lead closes #2017 on your pass.
 
 ### A4. Fresh account, PAT-only GitHub (#1982 dual write, #1983)
+- **PASS 16:33 10-17, your fresh PAT-only account on `118241587e`, 4 of 4:** 274 open issues and the count through the token (capped list disclosed), standup's GitHub line populated with no failed source, "know about me" lists GitHub as linked and reads your work from the issues. No OAuth prompt. The held #1982 PAT dual write landed (`15dba249c8`) for Sunday's slot; #1983's hint copy follows. Side finding: the standup opens "Good morning!" at 4:29 PM → #2079.
 - **Where**: an incognito window → https://alpha.pipermorgan.ai → sign up with a fresh alpha invite from HOST (the 10-12 one, `0877…VXB9`, was spent by Web on 10-15 for `web-pat-test`; HOST asked 15:52 to mint another; Lead relays the file name) and your Anthropic key.
 - **Steps**: Settings → Integrations → GitHub → paste a personal access token with repo read on `mediajunkie/piper-morgan-product`; do NOT click OAuth connect. Then in chat: `what open issues do I have?` → `what's the issue count` → `give me a standup` → `What does Piper know about me?`
 - **Pass**: real issues and a count via the token; the standup's GitHub line populated with no "source failed"; "know about me" lists GitHub issues.
@@ -80,6 +81,7 @@
 ## B. New on the 10-16 build (live since 17:09 10-16; still live)
 
 ### B1. `list my projects` with no projects (#2048, MVP)
+- **16:31 10-17, your fresh account: steps 1–2 PASS (3 of 3 chats; #2048 closed by CXO on them), the rest of the chain FAIL:** `Piper Morgan` → "Got it — want me to create a project called Piper Morgan?" → `Yes` → "I don't have a confirmation that the project was created…"; My Projects empty. Filed **#2080** (the name reply fell to the floor, which improvised the consent line). Nothing more to run here until #2080 lands.
 - **Where**: the A4 account, or any account with no projects, three fresh chats.
 - **Steps**: `list my projects` in each fresh chat, then `yes` to the offer once.
 - **Pass**: 3 of 3 → "You don't have any active projects yet. Would you like to add a project?" → `yes` → "What would you like to call it?" (On `6bb955919d` this phrase fell to the floor 3 of 3.)
