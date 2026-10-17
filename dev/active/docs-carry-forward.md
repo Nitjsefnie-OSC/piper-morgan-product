@@ -3,9 +3,9 @@
 **Updated**: 2026-10-17 (04:12 fire, see NOW below; older DONE lines below are history). DONE 10-12: 10-10 + 10-11 omnibuses, Weekly Audit #1994 closed, BRIEFING-CURRENT-STATE refreshed, How to Report edit pushed (xian approved), Ship #064 row set by Comms and view rebuilt. Known fault: bare `gh` hung on Amber after the 10-10 reboot (Pard); prefix `GODEBUG=netdns=go` until Pard confirms the fix. History in session logs (`dev/2026/10/{04..12}/*docs-code-log.md`), not here.
 
 ## NOW (10-17 04:12 fire)
-- **Convergent Claims PUBLISHED** 10-17 (live 200). Crosspost (Medium + LinkedIn) owed by xian, notice sent to Exec. On the URLs: set row `distributed` and `canonicalSite` `distributed`.
+- **Convergent Claims PUBLISHED and DISTRIBUTED** 10-17 (xian's URLs set).
 - **10-16 omnibus DONE** (536 lines, 1020 commits, 11 rows, addendum for late closes). HOST's 10-16 log still unclosed (nudged 04:13). Re-check at the next START and add an addendum if it closes.
-- **Sun 10-18**: "Measure the Start, Not the End" is `drafted`, publish only if Comms sets `ready-for-docs`.
+- **Sun 10-18 04:12**: PUBLISH "Measure the Start, Not the End" (`ready-for-docs`, pre-flight and dry-run done 10-17 07:0x). `--draft docs/public/comms/drafts/measure-the-start-not-the-end.md --image .../measure-the-start-not-the-end-waiting-runner-distracted-starter.jpg --slug measure-the-start-not-the-end --category insight --work-date 2026-09-29`. Re-fetch and re-diff first (Comms commit 119bd7b9ef). Then archive, row `published`, crosspost reminder to Exec (Medium + LinkedIn).
 - Every START: prior-day omnibus plus nudges (10-17 omnibus next).
 
 ## OWED (PM's hand)

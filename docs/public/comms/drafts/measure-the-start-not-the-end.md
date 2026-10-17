@@ -1,7 +1,7 @@
 ---
-image: ''
-alt: ''
-caption: ''
+image: 'measure-the-start-not-the-end-waiting-runner-distracted-starter.jpg'
+alt: 'A runner waits behind the starting line as an AI starter studies a clipboard. At the finish, two AI officials compare stopwatches while a human coach gestures toward the distracted starter.'
+caption: '"What''s taking so long?"'
 ---
 
 # Measure the Start, Not the End
