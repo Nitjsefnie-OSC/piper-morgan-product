@@ -1,6 +1,6 @@
 ---
 image: ''
-alt: 'tbd'
+alt: ''
 caption: ''
 ---
 
