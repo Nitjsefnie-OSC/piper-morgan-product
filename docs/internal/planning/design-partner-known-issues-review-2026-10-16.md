@@ -42,6 +42,8 @@ The bar (`ppm-placement-and-disclosure-rules-2026-10-13.md` §2): a partner can 
 | #2067 (added 18:35) | After the 30-minute sign-in lapses, Test on the GitHub card prints "Token has expired" under GitHub, which reads as a broken connection. The words are Piper's session expiry, not GitHub's. | Likely: any partner who leaves Settings open half an hour. A false card statement, not privacy or security. Small fix (route a 401 to "sign in again"). |
 | #2068 (added 18:35) | The Integrations headline reads "Multiple Issues" and "0 of 4 integrations healthy" when GitHub works and the rest are simply not connected. | Certain for any partner with fewer than four connected. A false headline; CXO has ruled the words, so the fix is small. |
 | #2069 (added 18:38) | "Add a project called Baz with description …" saves the whole phrase as the name and replies as if it kept a description. | Plausible for a partner's first project. Correctable by rename. A false reply, not privacy or security. CXO (18:56): the false success report is the worse half. Arch ruled the fix shape at 18:57 (the reply is built from the stored row). |
+| #2075 (added 10-17) | The Integrations headline says "All Systems Healthy" for an OAuth integration nobody has tested, including a revoked grant until something reads it. | Likely for any partner who connects GitHub by OAuth. A false headline; CXO has ruled the words. |
+| #2076 (added 10-17; gated through #2072 if admitted) | With a revoked GitHub grant, the standup and "what should I focus on today?" give an all-clear without mentioning GitHub. | Every morning for a partner whose grant lapses. Follows xian's #2072 decision. |
 
 ## C. What the review should produce
 
