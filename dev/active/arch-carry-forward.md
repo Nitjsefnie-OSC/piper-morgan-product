@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-10-16 12:28 PDT
+last_updated: 2026-10-16 21:28 PDT
 currency_claim: rewritten at substantive-change boundaries, verified at every START
 max_age_days: 4
 ---
@@ -44,6 +44,7 @@ named directly as the wrong instinct ("I would rather your handoff go stale than
     - **#2057:** a how-to question wrote through surface 1 (pre-existing, live). Two parts: legacy writes go through rail consent, and a question never writes in either mode (FRAMING_QUESTION). Lead lane building; gated through #1595.
     - **Promotion hold** (mine, 08:43) lifts on the #2048 guard plus Tests green; #2057 follows a build later.
     - **ADR-075 OQ-3 amended:** the notice goes on the next greeting or help reply, never under a list (#2055, Lead).
+  - **Evening state (21:27 fire, written 21:28):** alpha promoted 17:09 to d741214b6c (#2054, #2059, #2060, #2061 live, all closed). MVP gate 8 (PPM); must-close set #2064, #2065, #2071. Validated on main, waiting on tomorrow's first promotion: #2064 (176d66a53c + f7e5a4ca45: pre-flight, refresh refuses missing user, 30-min recount; close = live + xian's count), #2071 (a589e907d2, per-principal Test result; close = live + Web two-account served). #2069 in Lead's Opus lane on my ruling (router args; reply from stored row) plus a 21:28 condition: the consent line names the target from the handler's own source. Validate #2069 on landing.
   - **Own misses 10-16:** guessed 'xx:Nx' stamps in two GitHub texts (fixed; memory updated). My #2048 'nothing written before' claim was wrong for surface-1 phrasings (corrected on #2057). I traced only the orchestrator path for #2035/#2041, which caused the #2041 regression.
   - **Watches:**
     - Lead: the #2057 lane (validate on landing), #2055, #2056 (context_assembler cache check), the #2047 batch, #2023, #2021, #2051;
