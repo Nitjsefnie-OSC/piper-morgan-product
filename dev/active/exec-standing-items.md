@@ -180,6 +180,6 @@ misread until 2026-10-01.*
 | 135 | **PPM: known-issues list (open MVP that isn't privacy or security) for xian's direct review before 10-23.** `key: known-issues-review` | 2026-10-16 | Asked 16:3x |
 | 136 | **Pard: week usage numbers (spend by workspace, seat usage) for the planning review.** `key: pard-usage` | 2026-10-16 | Asked 16:3x |
 | 137 | **Attribute the Anthropic Default workspace spend ($5.56 in the week, Sonnet, $2.70 on 10-15); asked Pard.** `key: default-workspace` | 2026-10-16 | Asked Pard |
-| 138 | **xian: admit #2072 (standup all-clear on revoked GitHub, regression of 1965) to MVP? Relay answer to PPM.** `key: xian-2072` | 2026-10-16 | On rollup v380, lean yes |
+| 138 | ~~**xian: admit #2072 to MVP?**~~ `key: xian-2072` | 2026-10-16 | CLOSED 10-17 15:09: yes (relayed by Lead to PPM, CXO, Exec) |
 | 139 | ~~**xian: Medium + LinkedIn crosspost of "Convergent Claims"**~~ `key: crosspost-convergent` | 2026-10-17 | CLOSED 10-17: Docs set distributed (544447cdc9) |
 | 140 | ~~**Lead: exact #2064 count line for xian card.**~~ `key: 2064-count-line` | 2026-10-17 | CLOSED 08:35: on rollup v388 |
