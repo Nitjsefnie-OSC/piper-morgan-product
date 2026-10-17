@@ -94,4 +94,7 @@ can hide its subject (main-ci-status 20 → 100).
   - Exec's 85 unparsed OWED markers make owed-scan exit 1 until they age out (10-29).
   - Grant review: 10-30, or the first failed promotion.
   - Standing duty: regenerate the fly rules on drift; whats-armed at every START.
+  **Closed 22:07 (wrapped 10-17 04:14 on Docs' nudge):**
+  - Done later in the day: grant widened (alpha unchanged = not a promotion); #1968 items 1-6 (registry-set.py, gh-week-counts.py, freeze rc 2 default); stamp_check in mail-send and check-branch; cc-hold landed by Pard, 52 of 52 holds correct; alpha promoted twice (07:45, 17:09).
+  - Still open: #1968 item 7 (Pard's Exec and Lead LaunchAgents); first real-commit stamp warning (watch).
 
