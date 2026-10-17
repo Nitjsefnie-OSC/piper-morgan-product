@@ -1687,3 +1687,5 @@ out-of-scope call. Gate 14 → 15, fourth slip-ledger entry, dates unchanged; cr
 **`#2071` folded in 2026-10-16 18:49, admitted MVP (Gate class 2, cross-user principal and privacy on a hosted endpoint) under xian's 15:04 and 16:18 words**: the Integrations Test result is host-global, so one account's status, error text and check time show on every other account's card and in chat (Arch, source). It closes on Arch's ruled shape, keyed by (principal, integration), live on alpha. Gate 7 → 8. #2066's re-place trigger fired here.
 
 **`#2071` closed 2026-10-17 07:24** live on alpha `119bd7b9ef` (Web's two-account check). Gate 8 → 7. #2074 (per-integration needs-reconnecting) filed by PPM and placed Production.
+
+**`#2065` closed 2026-10-17 09:22** by CXO (served card and page on alpha, /privacy sentence live). Gate 7 → 6. The must-close set is #2064 alone.
