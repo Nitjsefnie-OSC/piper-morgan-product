@@ -1,6 +1,6 @@
 # PM test card
 
-**Owner**: Lead. **v74 (15:43 10-17: C1 done), v73 (15:28 10-17: C1 query corrected), v72 (15:24 10-17: C2 PASS; jump list links to the cards), v71 (15:21 10-17: A1 PASS), v70 (15:12 10-17, snippet added 15:15: your order at the top; A1 cut to what is left for your hand, read snippet inline), v69 (08:1x 10-17: alpha `118241587e`, slot 2 of 2; every card live, A1 and C2 included), v68 (07:1x: slot 1), v67 (A1 gap #2072 noted 19:3x), v66 (B3 gap 17:5x), v65 17:09 10-16: alpha promoted to the new build, every card is live.** v64 (16:4x) for xian's live session**: one card per test, only the tests that need xian's hand or that nobody has passed yet. Closed rows, Web's rows and the history are gone from this page; `git log -p` of this file keeps every earlier version. Mirror: https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi (this file wins between republishes).
+**Owner**: Lead. **v75 (15:50 10-17: A5 path corrected), v74 (15:43 10-17: C1 done), v73 (15:28 10-17: C1 query corrected), v72 (15:24 10-17: C2 PASS; jump list links to the cards), v71 (15:21 10-17: A1 PASS), v70 (15:12 10-17, snippet added 15:15: your order at the top; A1 cut to what is left for your hand, read snippet inline), v69 (08:1x 10-17: alpha `118241587e`, slot 2 of 2; every card live, A1 and C2 included), v68 (07:1x: slot 1), v67 (A1 gap #2072 noted 19:3x), v66 (B3 gap 17:5x), v65 17:09 10-16: alpha promoted to the new build, every card is live.** v64 (16:4x) for xian's live session**: one card per test, only the tests that need xian's hand or that nobody has passed yet. Closed rows, Web's rows and the history are gone from this page; `git log -p` of this file keeps every earlier version. Mirror: https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi (this file wins between republishes).
 
 **Alpha**: https://alpha.pipermorgan.ai serves **`118241587e`** (promotion 2 of 2 under your standing grant, 08:05 10-17, run 39043475359; /health healthy at 08:08; `curl -s https://alpha.pipermorgan.ai/health` shows `git_sha`). No more promotions today. This build carries everything landed since last night: user erasure (#2064), the Privacy & data page (#2065, served PASS), the GitHub card's checked-time line (#2066, closed), the Integrations headline counting only connected integrations (#2068), the consent line naming the project (#2070, PASS), per-person Test results (#2071, closed), both halves of #2072 (the radar/standup disclose a revoked grant again; Settings, chat and setup guidance say "needs reconnecting", never "connected"), and the #1306 count fix for C2.
 
@@ -57,10 +57,11 @@
 - **Judge**: Lead. On pass Lead lands the held PAT dual write (`claude/lead-1982-pat-dual-write`) and #1983's hint copy follows. Keep this account for A5–A7 and B1.
 
 ### A5. Keyless conversation survives adding a key (#1913, MVP)
-- **Where**: the A4 account, BEFORE you add the Anthropic key (sign up, skip the key).
-- **Steps**: send `hello, what can you do?`; note the conversation title in the left rail; add the key in Settings; reload.
-- **Pass**: the first conversation is still in the rail with its title.
-- **Fail**: it is gone. Write which page you were on when you added the key.
+- **Corrected 15:50 10-17:** the setup wizard's step 2 will not Continue without a validated LLM key, so "sign up and skip the key" is not a path. The equivalent, signed in the whole time, is to remove the key afterwards.
+- **Where**: the A4 account, after sign-up (wizard: step 2 your Anthropic key, step 3 HOST's invite + account, step 4 skip projects).
+- **Steps**: Settings → LLM API Keys → **Remove** the key (confirm the delete). Open a new chat and send `hello, what can you do?` (expect the key-required reply). Note the conversation title in the left rail. Settings → LLM API Keys → add the key back. Reload.
+- **Pass**: the keyless conversation is still in the rail with its title.
+- **Fail**: it is gone. Write which page you were on when you added the key back.
 - **Judge**: Lead (the fix needs your repro path).
 
 ### A6. Find your way: todos, projects, feedback (P5)
