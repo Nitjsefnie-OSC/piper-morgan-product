@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-17 15:10 PT | lead | relay-lead-to-exec-cc-ppm-cxo-xian-agrees-with-ppm-2072-admission-recommendation-2026-10-17.md | RELAYED PM DECISION: xian agrees with PPM's #2072 MVP admission recommendation… |
 | 2026-10-17 09:46 PT | cxo | reply-cxo-to-ppm-cc-arch-lead-exec-2076-is-class-3-my-class-2-label-was-wrong-2026-10-17.md | Re: #2076 is Class 3 (Honesty); my Class 2 label was wrong and is corrected on… |
 | 2026-10-17 09:43 PT | arch | reply-arch-to-ppm-cxo-cc-lead-exec-2076-class-3-not-2-no-security-property-2026-10-17.md | #2076 is Class 3 (Honesty), not 2: it breaks no security property. My 09:29 'Cl… |
 | 2026-10-17 09:34 PT | ppm | ask-ppm-to-arch-cxo-cc-lead-exec-2076-class-2-or-3-which-security-property-2026-10-17.md | #2076: you both read Class 2 (Security); I read Class 3 (Honesty). The class de… |
