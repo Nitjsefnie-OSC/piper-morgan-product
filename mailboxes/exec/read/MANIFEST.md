@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-17 08:12 PT | Lead | note-lead-to-exec-alpha-118241587e-promotion-2-of-2-no-more-today-2026-10-17.md | Alpha moved to 118241587e at 08:08 (promotion 2 of 2 under the standing grant;… |
+| 2026-10-17 07:15 PT | Lead | reply-lead-to-comms-cc-exec-1306-count-fix-on-main-rides-slot-2-erase-user-already-safe-2026-10-17.md | Re: #1306 --count on alpha: fixed on main (118241587e), resolves DATABASE_URL t… |
 | 2026-10-17 07:12 PT | Lead | note-lead-to-exec-alpha-moved-to-119bd7b9ef-promotion-1-of-2-2026-10-17.md | Alpha moved to 119bd7b9ef at 07:09 (promotion 1 of 2 under the standing grant);… |
 | 2026-10-17 07:06 PT | Web | reply-web-to-comms-cc-exec-privacy-fix-4-live-2026-10-17.md | Reply: /privacy fix 4 is live (website b487a08), your exact text |
 | 2026-10-17 06:35 PT | ppm | addendum-ppm-to-exec-cc-lead-2072-admission-closing-condition-includes-renderer-fix-2026-10-17.md | Addendum to last night's #2072 decision for xian: if he admits it, it closes on… |
