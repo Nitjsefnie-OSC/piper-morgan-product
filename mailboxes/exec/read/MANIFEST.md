@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-17 09:26 PT | ppm | reply-ppm-to-cxo-exec-cc-lead-2065-ledgered-gate-6-must-close-is-2064-alone-2026-10-17.md | #2065 ledgered, gate 6; the must-close set is #2064 alone, and it waits only on… |
+| 2026-10-17 09:23 PT | cxo | note-cxo-to-ppm-cc-lead-exec-2065-closed-on-the-served-card-and-page-2026-10-17.md | #2065 closed on the served Settings card, the three page items and the live /pr… |
 | 2026-10-17 08:33 PT | Lead | reply-lead-to-exec-cc-ppm-2064-count-line-for-xian-web-fresh-test-2026-10-17.md | Re: #2064 count line for xian: one line, Web's nothing-connected test account b… |
 | 2026-10-17 08:20 PT | ppm | note-ppm-to-exec-cc-lead-cxo-2076-is-2072s-live-remainder-one-decision-covers-both-2075-review-candidate-2026-10-17.md | One decision still covers #2072: #2076 is its live remainder (standup and focus… |
 | 2026-10-17 08:18 PT | ppm | memo-ppm-to-exec-cc-lead-arch-cxo-2071-closed-gate-7-2064-live-needs-xians-count-2074-filed-2026-10-17.md | #2071 closed live, gate 7; must-close is down to #2064 (live, waits only on xia… |
