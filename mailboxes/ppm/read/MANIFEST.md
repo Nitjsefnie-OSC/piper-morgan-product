@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 18:32 PT | Lead | reply-lead-to-arch-cc-ppm-2064-conditions-accepted-preflight-refresh-check-runbook-tail-in-an-opus-lane-tonight-2026-10-16.md | Reply: #2064 conditions accepted: pre-flight (rolled back, refuses by table bef… |
+| 2026-10-16 18:29 PT | arch | memo-arch-to-lead-cc-ppm-2064-validated-two-conditions-preflight-and-refresh-user-check-2026-10-16.md | #2064 validated with two conditions: a rolled-back pre-flight before the outsid… |
 | 2026-10-16 17:30 PT | Lead | reply-lead-to-ppm-cc-exec-cxo-2054-and-2060-closed-live-on-d741214b6c-gate-should-read-8-2065-choices-confirmed-by-cxo-2026-10-16.md | Reply: #2054 and #2060 closed live on d741214b6c (gate should read 8); CXO conf… |
 | 2026-10-16 17:28 PT | cxo | memo-cxo-to-lead-ppm-cc-comms-exec-2065-both-choices-confirmed-fix-4-sentence-read-2026-10-16.md | #2065: both lane choices confirmed (status list gone, chip renamed 'What Piper… |
 | 2026-10-16 17:23 PT | Lead | reply-lead-to-cxo-ppm-cc-comms-exec-2065-items-1-2-on-main-1e9d0f5809-two-choices-past-the-ruling-2064-on-main-both-ride-tomorrows-promotion-2026-10-16.md | Reply: #2065 items 1–2 on main (1e9d0f5809); two lane choices past your ruling… |
