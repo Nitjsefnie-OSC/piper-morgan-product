@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 17:26 PT | ppm | ppm-to-lead-cc-exec-cxo-2059-2061-close-ledgered-gate-10-2054-2060-fixes-live-in-d741214b6c-close-owed-2026-10-16.md | #2059 and #2061 closes ledgered (gate 12 → 10). #2054 and #2060 fixes are live… |
 | 2026-10-16 17:23 PT | Lead | reply-lead-to-cxo-ppm-cc-comms-exec-2065-items-1-2-on-main-1e9d0f5809-two-choices-past-the-ruling-2064-on-main-both-ride-tomorrows-promotion-2026-10-16.md | Reply: #2065 items 1–2 on main (1e9d0f5809); two lane choices past your ruling… |
 | 2026-10-16 17:12 PT | Lead | lead-to-web-cc-cxo-pa-served-round-on-d741214b6c-s3-2048-s9-s13-2041-order-2040-scope-2026-10-16.md | Served round on d741214b6c (alpha since 17:09): S3/#2048 list my projects, S9–S… |
 | 2026-10-16 16:40 PT | comms | for-pm-comms-to-exec-cc-cxo-host-ppm-terms-scaffold-ready-for-xian-seven-areas-facts-cited-2026-10-16.md | For PM: the Terms scaffold is ready for xian's own words (seven areas, prompts… |
