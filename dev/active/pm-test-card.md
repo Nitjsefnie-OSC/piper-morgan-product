@@ -1,6 +1,6 @@
 # PM test card
 
-**Owner**: Lead. **v65, 17:09 10-16: alpha promoted to the new build, every card is live.** v64 (16:4x) for xian's live session**: one card per test, only the tests that need xian's hand or that nobody has passed yet. Closed rows, Web's rows and the history are gone from this page; `git log -p` of this file keeps every earlier version. Mirror: https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi (this file wins between republishes).
+**Owner**: Lead. **v66 (B3 gap noted 17:5x), v65 17:09 10-16: alpha promoted to the new build, every card is live.** v64 (16:4x) for xian's live session**: one card per test, only the tests that need xian's hand or that nobody has passed yet. Closed rows, Web's rows and the history are gone from this page; `git log -p` of this file keeps every earlier version. Mirror: https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi (this file wins between republishes).
 
 **Alpha**: https://alpha.pipermorgan.ai serves **`d741214b6c`** (promoted by Lead at 17:06 on xian's word, run 38984809722; /health healthy at 17:09; `curl -s https://alpha.pipermorgan.ai/health` shows `git_sha`). This build carries every fix landed today: #2048 (`list my projects`), #2057, #2046, #2053/#2045 (card after Test), #2055, #2054, #2059, #2060, #2061, and the #1306 `--count` script. Second promotion of the day; no more today under the grant.
 
@@ -75,6 +75,7 @@
 - **Where**: `/settings/integrations`, your account.
 - **Steps**: press **Test** on the GitHub card; wait; then reload the page.
 - **Pass**: without a reload the card drops "Not checked yet" and the summary count updates; the line reads "Healthy. Checked just now."; after the reload it reads "Last checked at H:MM AM" in your zone, never a raw UTC stamp.
+- **Known gap (Web 17:33)**: on an account whose GitHub is connected by OAuth the time line never shows (the card arrives with no check time; #2066, fix on main, live with tomorrow's promotion). Run B3 only if your GitHub card says "Connected via your personal token"; otherwise skip it.
 - **Judge**: CXO.
 
 ## C. Your hand only (agent seats are denied these)

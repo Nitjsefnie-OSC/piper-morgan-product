@@ -383,6 +383,21 @@ _GITHUB_CARD_NOT_CONFIGURED = "Not configured"
 _WARNING_ICON = "⚠️"
 
 
+def _recorded_check_iso(integration_id: str) -> Optional[str]:
+    """ISO timestamp of the last REAL health check for ``integration_id``, else None (#2066).
+
+    ``register_component`` stamps ``last_check`` at startup with status UNKNOWN, so a
+    timestamp alone is not evidence that a check ran; only a non-UNKNOWN status with a
+    positive ``last_check`` counts (#2044, m-44).
+    """
+    component_health = _get_health_monitor().get_component_health(integration_id)
+    if not component_health or component_health.last_check <= 0:
+        return None
+    if component_health.status == ComponentStatus.UNKNOWN:
+        return None
+    return datetime.fromtimestamp(component_health.last_check, tz=timezone.utc).isoformat()
+
+
 async def _github_card(
     metadata: Dict[str, Any], user_id: Optional[str]
 ) -> Optional[IntegrationStatus]:
@@ -438,7 +453,16 @@ async def _github_card(
             return not_configured
         return None
     if getattr(credential, "leg", None) == "oauth":
-        return card(status="healthy", status_message=_GITHUB_CARD_CONNECTED, can_test=True)
+        # #2066: the OAuth-leg card carries the last recorded check like the generic
+        # path below does, so the #2045 time line ("Healthy. Checked just now." /
+        # "Last checked at …") can render. A real check only: UNKNOWN is the
+        # registered-at-startup state (#2044), never a measurement.
+        return card(
+            status="healthy",
+            status_message=_GITHUB_CARD_CONNECTED,
+            can_test=True,
+            last_check=_recorded_check_iso("github"),
+        )
     if getattr(credential, "stale_oauth_reason", None) == DegradationReason.STALE_TOKEN:
         probe = await adapter.search_user_repositories(user_id, limit=1)
         if probe.degradation is not None:
