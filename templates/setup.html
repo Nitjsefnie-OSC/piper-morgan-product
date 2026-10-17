@@ -401,7 +401,7 @@
         <div class="form-group" id="llm-key-group" style="display: none;">
           <label for="llm-key" id="llm-key-label">API Key</label>
           <div class="key-validation">
-            <input type="password" id="llm-key" placeholder="" />
+            <input type="password" id="llm-key" autocomplete="new-password" placeholder="" />
             <button
               type="button"
               id="validate-llm-btn"
@@ -436,7 +436,7 @@
         <div class="form-group">
           <label for="notion-key">Notion API Key (optional)</label>
           <div class="key-validation">
-            <input type="password" id="notion-key" placeholder="ntn_..." />
+            <input type="password" id="notion-key" autocomplete="new-password" placeholder="ntn_..." />
             <button
               type="button"
               class="validate-key-btn"
@@ -487,7 +487,7 @@
               />
               <input
                 type="password"
-                id="slack-client-secret"
+                id="slack-client-secret" autocomplete="new-password"
                 class="config-input"
                 placeholder="Client Secret"
               />
@@ -573,7 +573,7 @@
               />
               <input
                 type="password"
-                id="calendar-client-secret"
+                id="calendar-client-secret" autocomplete="new-password"
                 class="config-input"
                 placeholder="Client Secret (GOCSPX-...)"
               />

@@ -526,7 +526,7 @@
 
           <div class="config-form-group">
             <label for="slack-client-secret">Client Secret</label>
-            <input type="password" id="slack-client-secret" placeholder="Your client secret" />
+            <input type="password" id="slack-client-secret" autocomplete="new-password" placeholder="Your client secret" />
             <p class="help-text">Keep this secret! It authenticates your app with Slack.</p>
           </div>
 
@@ -607,7 +607,7 @@
 
         <div class="config-form-group">
           <label for="slack-app-token">App-level token (<code>xapp-…</code>)</label>
-          <input type="password" id="slack-app-token" placeholder="xapp-1-..." />
+          <input type="password" id="slack-app-token" autocomplete="new-password" placeholder="xapp-1-..." />
           <p class="help-text">This token lets Piper open a persistent connection to Slack. It's stored securely and never shared.</p>
         </div>
         <div class="config-button-group">
