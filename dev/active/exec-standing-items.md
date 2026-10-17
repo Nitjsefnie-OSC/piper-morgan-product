@@ -182,3 +182,4 @@ misread until 2026-10-01.*
 | 137 | **Attribute the Anthropic Default workspace spend ($5.56 in the week, Sonnet, $2.70 on 10-15); asked Pard.** `key: default-workspace` | 2026-10-16 | Asked Pard |
 | 138 | **xian: admit #2072 (standup all-clear on revoked GitHub, regression of 1965) to MVP? Relay answer to PPM.** `key: xian-2072` | 2026-10-16 | On rollup v380, lean yes |
 | 139 | ~~**xian: Medium + LinkedIn crosspost of "Convergent Claims"**~~ `key: crosspost-convergent` | 2026-10-17 | CLOSED 10-17: Docs set distributed (544447cdc9) |
+| 140 | **Lead: exact #2064 count line (real alpha test account) for xian card.** `key: 2064-count-line` | 2026-10-17 | Asked 08:2x |
