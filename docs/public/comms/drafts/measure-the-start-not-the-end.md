@@ -16,13 +16,13 @@ The question was what "late" meant. Every agent records a small heartbeat at the
 
 My assistant agent (Piper Alpha) and my documentation agent (Docs) each saw the same thirty-minute pattern in their own logs. My chief of staff agent (Exec) pulled the same pattern from a third agent's heartbeats. The agent who runs our infrastructure host (Pard) was assembling the case. Several agents reporting one pattern sounds like strong evidence.
 
-Passing the raw numbers along to me, Exec explicitly refused to assess what they meant, given what we've learned about [convergent claims](https://pipermorgan.ai/blog/convergent-claims-arent-independent-evidence/). Every one of those readings came from an end-of-fire marker, so every one carried the same ambiguity. Pard had already once built and thrown out a month of pooled heartbeat data for a different flaw, mixing readings from different schedules. More of the same kind of measurement wasn't going to settle anything.
+Passing the raw numbers along to Pard, Exec explicitly refused to assess what they meant, given what we've learned about [convergent claims](https://pipermorgan.ai/blog/convergent-claims-arent-independent-evidence/). Every one of those readings came from an end-of-fire marker, so every one carried the same ambiguity. Pard had already once built and thrown out a month of pooled heartbeat data for a different flaw, mixing readings from different schedules. More of the same kind of measurement wasn't going to settle anything.
 
 # A different instrument
 
-What settled it was a habit of my communications agent (Comms) that hadn't been built to answer this question at all. Comms runs a clock check as the very first command of every fire, before reading mail or touching anything else, and writes that time into their log. (I've required my chat agents to write dated session logs from almost the start of this project and i used to start each new prompt with the timestamp to reinforce that discipline. Still, I've had to frequently remind them that all of our computers have clocks in them and to *please not guess what time it is*).
+What settled it was a habit of my communications agent (Comms) that hadn't been built to answer this question at all. Comms runs a clock check as the very first command of every fire, before reading mail or touching anything else, and writes that time into their log. (I've required my chat agents to write dated session logs from almost the start of this project and I used to start each new prompt with the timestamp to reinforce that discipline. Still, I've had to frequently remind them that all of our computers have clocks in them and to *please not guess what time it is*.)
 
-So Comms has a directly measured start time. Across eleven fires, Comms' first command ran at 39 to 42 minutes past the hour for slots scheduled at 12 past. And those fires were short. Most finished under a minute or two after that first reading. So the half hour was elapsing before the fire began. It couldn't be work, because these were often token wakeups with no work involved, just to check for updates.
+So Comms has a directly measured start time. Across eleven fires, Comms' first command ran at 39 to 42 minutes past the hour for slots scheduled at 12 past. And those fires were short. Most finished under a minute or two after that first reading. So the half hour was elapsing before the fire began. It couldn't be work, because the clock check comes before any work starts. Many of these were token wakeups anyway, just checking for updates.
 
 The scheduler's own documentation says recurring jobs can run late by up to a tenth of their period, capped at fifteen minutes. On a three-hour schedule, that's a fifteen-minute ceiling. These fires were consistently running at about twice that.
 
@@ -32,7 +32,7 @@ The same week, Comms moved onto a different scheduler, one that lives in the ope
 
 An end-of-fire heartbeat answers the question it was built for: did this agent finish their duty-cycle turn, and when? It's not set up to answer the question of when the fire began, as there is no way to distinguish lateness from duration.
 
-Pard's summary noted that Comms supplied a different measurement, aimed at the actual question, where another reading of the end time would only have added a fifth version of the same non-answer.
+Pard's summary noted that Comms supplied a different measurement, aimed at the actual question, where another reading of the end time would only have added another version of the same non-answer.
 
 # The habit worth keeping
 
