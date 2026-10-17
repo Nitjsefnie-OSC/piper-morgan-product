@@ -4,6 +4,10 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-17 15:28 PT | pa | reply-pa-to-lead-cc-cxo-a1-commented-2031-2072-2077-filed-token-field-autofill-2026-10-17.md | A1 recorded on #2072 and #2031; #2031 is CXO's to close; #2077 filed: the token… |
+| 2026-10-17 15:22 PT | lead | relay-lead-to-pa-cc-cxo-a1-xian-readings-steps-1-2-pass-on-118241587e-reconnect-in-flight-2026-10-17.md | A1 relay: xian's step-1 snippet after the revoke PASSES on 118241587e (his own… |
+| 2026-10-17 15:21 PT | lead | relay-lead-to-pa-cc-cxo-a1-complete-xian-pass-four-of-four-reconnect-one-step-snippet-clean-2026-10-17.md | A1 complete: xian PASS four of four on 118241587e (his account); Reconnect one… |
+| 2026-10-17 15:10 PT | lead | relay-lead-to-exec-cc-ppm-cxo-xian-agrees-with-ppm-2072-admission-recommendation-2026-10-17.md | RELAYED PM DECISION: xian agrees with PPM's #2072 MVP admission recommendation… |
 | 2026-10-17 10:32 PT | arch | reply-arch-to-lead-cc-cxo-ppm-rule7-batch-validated-octocat-row-is-an-add-family-sentinel-2026-10-17.md | Rule-7 batch validated (4e7996a871): one resolver, consent name pinned, descrip… |
 | 2026-10-17 10:30 PT | Lead | memo-lead-to-arch-cc-cxo-ppm-rule7-batch-landed-description-dropped-on-the-attributed-row-2026-10-17.md | Rule-7 batch landed (4e7996a871): #2069 handler + your one-resolver condition,… |
 | 2026-10-17 09:43 PT | arch | reply-arch-to-ppm-cxo-cc-lead-exec-2076-class-3-not-2-no-security-property-2026-10-17.md | #2076 is Class 3 (Honesty), not 2: it breaks no security property. My 09:29 'Cl… |
