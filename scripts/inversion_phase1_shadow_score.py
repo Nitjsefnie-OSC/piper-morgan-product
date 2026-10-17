@@ -305,14 +305,17 @@ def args_match(expected_args: dict, got_args: dict) -> tuple[bool, str]:
     if "scope" in expected_args:
         if str(got_args.get("scope") or "").strip().lower() != str(expected_args["scope"]).lower():
             return False, f"scope: {expected_args['scope']}≠{got_args.get('scope')}"
-    if "text" in expected_args:
-        # #1976: a free-text arg (create_todo's task) — compared after
-        # whitespace/case normalisation and with trailing punctuation shed,
-        # verbatim otherwise (the handler stores it as the title).
-        want = _norm_text(expected_args["text"])
-        got = _norm_text(got_args.get("text"))
+    # #1976: a free-text arg (create_todo's task) — compared after
+    # whitespace/case normalisation and with trailing punctuation shed,
+    # verbatim otherwise (the handler stores it as the title). #2069 adds
+    # add_project's name / description / repo, compared the same way.
+    for key in ("text", "name", "description", "repo"):
+        if key not in expected_args:
+            continue
+        want = _norm_text(expected_args[key])
+        got = _norm_text(got_args.get(key))
         if want != got:
-            return False, f"text: {expected_args['text']!r}≠{got_args.get('text')!r}"
+            return False, f"{key}: {expected_args[key]!r}≠{got_args.get(key)!r}"
     return True, ""
 
 
