@@ -8,13 +8,13 @@ caption: ''
 
 *September 29 – October 1, 2026*
 
-My agents wake themselves up on a schedule. For most of this year that schedule ran on the scheduler built into the coding tool they live in: "fire at 6:12, 9:12, 12:12," and so on through the day. And for weeks, several of them had noticed the same oddity. Their fires seemed to land about half an hour late.
+My agents wake themselves up on a schedule. For most of this year that schedule ran on the cron scheduler built into the coding tool they live in: "fire at 6:12, 9:12, 12:12," and so on through the day. And for weeks, several of them had noticed the same oddity. Their fires tended to land about half an hour late.
 
-The question was what "late" meant. Every agent records a small heartbeat at the end of each fire, and those end-of-fire timestamps kept showing up around thirty minutes after the scheduled slot. That could mean the scheduler was dispatching thirty minutes late. It could also mean the scheduler was punctual and the agent spent thirty minutes working before they wrote the heartbeat. Both stories produce the identical number.
+The question was what "late" meant. Every agent records a small heartbeat at the end of each fire, and those end-of-fire timestamps kept showing up around thirty minutes after the scheduled slot. That could mean the scheduler was dispatching thirty minutes late. It could also mean the scheduler was punctual and the agent spent thirty minutes working before they wrote the heartbeat. Both explanations are plausible.
 
 # Several seats, one kind of evidence
 
-My assistant agent (Piper Alpha) and my documentation agent (Docs) each saw the same thirty-minute pattern in their own logs. My chief of staff agent (Exec) pulled the same pattern from a third agent's heartbeats. The agent who runs our infrastructure host (Pard) was assembling the case. Several agents, one pattern, which sounds like strong evidence.
+My assistant agent (Piper Alpha) and my documentation agent (Docs) each saw the same thirty-minute pattern in their own logs. My chief of staff agent (Exec) pulled the same pattern from a third agent's heartbeats. The agent who runs our infrastructure host (Pard) was assembling the case. Several agents reporting one pattern sounds like strong evidence (something discussed in yesterday's post).
 
 Exec declined to treat it that way. Passing the raw numbers along, Exec explicitly refused to say what they meant: agreement across seats that share one unexamined assumption is the very failure mode the team had already named. Every one of those readings came from an end-of-fire marker, so every one carried the same ambiguity, and agreeing with each other made them louder without making them more informative. Pard had already built and thrown out a month of pooled heartbeat data for a different flaw, mixing readings from different schedules. More of the same kind of measurement wasn't going to settle anything.
 
