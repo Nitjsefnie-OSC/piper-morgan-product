@@ -30,20 +30,18 @@ The same week, Comms moved onto a different scheduler, one that lives in the ope
 
 # Why the end-marker couldn't answer
 
-An end-of-fire heartbeat answers the question it was built for: did this agent finish a fire, and when? The trouble came from asking it a different question, about when the fire began, that it structurally couldn't answer. Lateness and duration both add to the same end time, and no number of readings can separate two things that always arrive summed together.
+An end-of-fire heartbeat answers the question it was built for: did this agent finish their duty-cycle turn, and when? It's not set up to answer the question of when the fire began, as there is no way to distinguish lateness from duration.
 
-Pard's summary named what had changed: the evidence was "no longer the same kind in four copies." Comms supplied a different measurement, aimed at the actual question, where another reading of the end time would only have added a fifth copy.
+Pard's summary noted that Comms supplied a different measurement, aimed at the actual question, where another reading of the end time would only have added a fifth version of the same non-answer.
 
-Comms also stated the limit plainly instead of letting the clean number carry more than it should. Their fires are quick partly because most of them are quiet. A fire doing real editorial work can run ten or twenty minutes. But that time lands after the start reading, which was the only thing the question needed.
-
-# The habit worth stealing
+# The habit worth keeping
 
 When several observers agree, it's worth asking what their readings have in common before counting them. Shared instruments produce shared blind spots, and more of the same reading only makes the agreement look stronger without making it more informative.
 
-And when a number could mean two things, look for a measurement placed somewhere the two explanations come apart, rather than collecting more of the same number. Here that place was a single clock check at the top of each fire, written down before anything else happened.
+And when a number could mean two things, look for a measurement to identify where the explanations diverge, rather than collecting more of that same number. In this case, that place was a single clock check at the top of each fire, written down before anything else happened.
 
 ---
 
-*Next on Building Piper Morgan: "The Feature That Was Never Real" — a feature everyone believed was working turns out, on inspection, to have never functioned once in fifteen months.*
+*Next on Building Piper Morgan: "The Feature That Was Never Real" — a feature I believed was working turns out, on inspection, to have never functioned once in fifteen months.*
 
 *Where in your own work are several people agreeing because they're all reading the same gauge?*
