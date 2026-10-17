@@ -8564,6 +8564,8 @@ class TestStaleBindingRendererRatchet2072:
             "GitHub binding would read as connected (2072 follow-up). Consult "
             "needs_reconnecting(status) / healthy / via:\n  " + "\n  ".join(violations)
         )
+
+
 class TestSecurityCheckBypassCallers1982:
     """Arch's #1982 condition 1 (2026-10-11): ``UserAPIKeyService.store_user_key``
     gained a keyword-only ``security_check`` that skips the #268 format/strength/
