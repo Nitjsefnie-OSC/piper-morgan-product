@@ -359,6 +359,14 @@ def _principal_from_intent(intent) -> Optional[str]:
     return context.get("user_id")
 
 
+# #2076 (CXO): the focus ("**Today:**") reply's opening sentence when GitHub
+# needs reconnecting. No reconnect pointer (only when asked or beside a count).
+FOCUS_GITHUB_NEEDS_RECONNECTING_LEAD = (
+    "I can't read your GitHub right now (it needs reconnecting), so this leaves out "
+    "your issues and pull requests."
+)
+
+
 def _overdue_age_label(days: int) -> str:
     """#2001 (CXO, alpha 6e48d9ebb2 2026-10-13): the overdue age in words —
     "1 day overdue", otherwise "N days overdue" — one source for BOTH the
@@ -5250,15 +5258,28 @@ class IntentService:
                 # empty statement stands alone with the teaching line.
                 # Symmetric anti-nag (see the non-empty branch): a declined
                 # mode read-back quiets the empty-lead invitation too.
+                #
+                # #2076 (CXO): when GitHub needs reconnecting, "no observed
+                # activity in your connected tools" presents a source that
+                # cannot be read as an empty one. Code names it instead. The
+                # summary's own degraded record (the read failed STALE_TOKEN,
+                # b1fbfa3da1) answers first with no second lookup; otherwise
+                # the status service's needs_reconnecting is asked.
+                github_stale = summary.github_needs_reconnecting() is True
+                if not github_stale:
+                    from services.integrations.integration_status_service import (
+                        github_needs_reconnecting,
+                    )
+
+                    github_stale = await github_needs_reconnecting(user_id)
+                empty_lead, empty_standalone = sp.empty_standup_copy(github_stale)
                 invite = (
-                    # #1665: the empty branch renders INVITE_EMPTY_LEAD — the
+                    # #1665: the empty branch renders the empty lead — the
                     # builder stores that exact copy as the offer's question.
                     # session_id required: an offer armed without a session
                     # would key to nobody (#1532 class) — sessionless takes
                     # the honest standalone empty statement below.
-                    sp.build_interview_invitation(
-                        user_id, session_id, question=sp.INVITE_EMPTY_LEAD
-                    )
+                    sp.build_interview_invitation(user_id, session_id, question=empty_lead)
                     if session_id
                     and stored_mode is None
                     and not vi.was_declined(session_id, sp.STANDUP_MODE_KEY)
@@ -5269,14 +5290,10 @@ class IntentService:
                     self.workflow_offer_service.set_pending_offer(
                         session_id, invite, user_id=user_id
                     )
-                    empty_message = sp.INVITE_EMPTY_LEAD
+                    empty_message = empty_lead
                     _empty_invite_armed = True
                 else:
-                    empty_message = (
-                        "I don't have anything to build your standup from yet — no "
-                        "observed activity in your connected tools. Say 'my standup "
-                        "interview' any time to capture one interactively."
-                    )
+                    empty_message = empty_standalone
                 _empty_intent_data: Dict[str, Any] = {
                     "category": intent.category.value,
                     "action": intent.action,
@@ -10235,6 +10252,18 @@ class IntentService:
                     "Nothing from your flagged todos, upcoming meetings or stale projects either."
                 )
             message = "\n".join(lines)
+            # #2076 (CXO, ADR-080 / #2033: code adds the fact, never the
+            # model): when GitHub needs reconnecting the reply OPENS by saying
+            # so, then the reply above byte-for-byte. This path reads no GitHub
+            # itself (todos, calendar, projects); CXO reads a focus reply as
+            # built over GitHub-fed sources, so without the sentence a revoked
+            # grant reads as "nothing to do".
+            from services.integrations.integration_status_service import (
+                github_needs_reconnecting,
+            )
+
+            if await github_needs_reconnecting(_principal_from_intent(intent) or user_id):
+                message = f"{FOCUS_GITHUB_NEEDS_RECONNECTING_LEAD}\n\n{message}"
 
             return IntentProcessingResult(
                 success=True,
