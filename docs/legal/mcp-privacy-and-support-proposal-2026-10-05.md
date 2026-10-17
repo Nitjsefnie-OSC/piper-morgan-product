@@ -158,6 +158,9 @@ about you, your settings, and your to-dos, projects and linked repositories. Del
 - **Conversations.** Deleting a conversation hides it from you, but the encrypted copy stays on our servers.
   Our goal is for deleted conversations to go to a trash, where you can purge them from your data for good.
   [`conversations.py` sets `lifecycle_state="deleted"`.]
+  ✅ 10-17: fix 4 LIVE (xian OK 07:02; website b487a08; rendered check by Comms). Now reads: "There's no way to delete a conversation
+  inside Piper yet, so your conversations stay on our servers, encrypted. Our goal is a trash, where you can purge a conversation
+  from your data for good." (No UI delete/hide control, #2065.)
 - **Your whole account.** There's no way to delete your account inside Piper yet. We plan to add one.
   Until then, email support@pipermorgan.ai and we'll delete your account and everything in it within 14 days.
   [Lead: promise "on request" only if someone will act on requests. support@ is PM's address (live on /support).
