@@ -253,3 +253,80 @@ def test_count_then_erase_round_trip(seeded):
         out=lines.append,
     )
     assert again.total_rows() == 0
+
+
+def test_cross_user_reference_refuses_before_any_outside_store(seeded):
+    """Arch's 10-16 pre-flight condition on a real schema: user B's todo sits in
+    user A's project (todo_items.project_id -> projects, no ondelete), so the
+    erase transaction would roll back at ``projects``. The pre-flight must refuse
+    BEFORE the grants, files or Chroma are touched: A's file stays on disk and
+    every one of A's rows still counts."""
+    engine, upload_base, a, b = seeded
+    todo = mod_metadata().tables["todo_items"]
+    with engine.begin() as conn:
+        conn.execute(
+            todo.update()
+            .where(todo.c.id == b["rows"]["todo_items"]["id"])
+            .values(project_id=a["rows"]["projects"]["id"])
+        )
+    try:
+        a_before = _counts(engine, a["uid"], upload_base)
+        lines: list = []
+        mod.run(
+            a["uid"],
+            erase=False,
+            confirm=None,
+            engine=engine,
+            upload_base=upload_base,
+            out=lines.append,
+        )
+        verdict = [ln for ln in lines if ln.startswith("pre-flight:")]
+        assert verdict and verdict[0].startswith(
+            "pre-flight: would refuse at projects (IntegrityError/ForeignKeyViolation"
+        ), verdict
+
+        revoked: list = []
+
+        async def fake_disconnect(uid, connector):
+            revoked.append((uid, connector))
+
+        class Chroma:
+            calls: list = []
+
+            def get(self, include):
+                self.calls.append("get")
+                return {"ids": []}
+
+            def delete(self, ids):
+                self.calls.append("delete")
+
+        chroma = Chroma()
+        with pytest.raises(SystemExit) as exc:
+            mod.run(
+                a["uid"],
+                erase=True,
+                confirm=a["uid"],
+                engine=engine,
+                upload_base=upload_base,
+                chroma=chroma,
+                disconnect=fake_disconnect,
+                out=lines.append,
+            )
+        msg = str(exc.value.code)
+        assert msg.startswith(
+            "refusing: pre-flight failed at projects (IntegrityError/ForeignKeyViolation"
+        ), msg
+        assert "todo_items" in msg and "nothing erased anywhere" in msg
+        assert revoked == []  # step 1 never ran
+        assert a["file"].exists() and (upload_base / a["uid"]).is_dir()  # step 2 never ran
+        assert "delete" not in Chroma.calls  # step 3 never ran
+        assert _counts(engine, a["uid"], upload_base).rows == a_before.rows  # step 4 never ran
+        assert a_before.total_rows() > 0
+    finally:
+        # Put B's todo back in B's own project so the fixture teardown can erase both.
+        with engine.begin() as conn:
+            conn.execute(
+                todo.update()
+                .where(todo.c.id == b["rows"]["todo_items"]["id"])
+                .values(project_id=b["rows"]["projects"]["id"])
+            )
