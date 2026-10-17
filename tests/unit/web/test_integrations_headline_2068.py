@@ -64,9 +64,9 @@ def test_rule(case):
 
 def test_count_line_uses_connected_only():
     _, _, summary, working, connected = summarize_integrations(_cards(github="degraded"))
-    assert summary == "0 of 1 connected integrations working"
+    assert summary == "0 of 1 checked integrations working"
     _, _, summary, _, _ = summarize_integrations(_cards(github="healthy", slack="degraded"))
-    assert summary == "1 of 2 connected integrations working"
+    assert summary == "1 of 2 checked integrations working"
 
 
 def test_untested_connected_is_not_an_alarm():
@@ -139,4 +139,4 @@ def test_page_renders_the_served_headline(client, case):
     if case == "none":
         assert subtitle == ""
     if case == "github_degraded":
-        assert subtitle == "0 of 1 connected integrations working"
+        assert subtitle == "0 of 1 checked integrations working"

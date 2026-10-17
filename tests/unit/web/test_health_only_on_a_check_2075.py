@@ -110,3 +110,41 @@ def test_count_line_with_one_checked_and_one_not():
     _, headline, summary, *_ = summarize_integrations(cards)
     assert headline == "Connected, not yet tested"
     assert summary == "1 of 2 checked"
+
+
+def _named(name: str, status: str) -> IntegrationStatus:
+    return IntegrationStatus(
+        name=name, display_name=name.title(), status=status, status_message="", can_test=True
+    )
+
+
+def test_failure_branch_counts_checked_only_and_names_the_untested():
+    # CXO ruling 2026-10-17 (xian's A1 sitting): GitHub needs reconnecting, Calendar
+    # connected and untested. Never "0 of 2 connected integrations working".
+    cards = [_named("github", "failed"), _named("calendar", "connected")]
+    overall, headline, summary, working, connected = summarize_integrations(cards)
+    assert (overall, headline) == ("degraded", "Needs attention")
+    assert summary == "0 of 1 checked integrations working, 1 not yet tested"
+    assert (working, connected) == (0, 2)
+
+
+def test_failure_branch_with_nothing_untested_has_no_tail():
+    cards = [_named("github", "failed"), _named("calendar", "healthy")]
+    _, headline, summary, *_ = summarize_integrations(cards)
+    assert headline == "Needs attention"
+    assert summary == "1 of 2 checked integrations working"
+
+
+def test_after_reconnect_with_both_untested_counts_zero_checked():
+    # The second half of CXO's acceptance: never "1 of 2 ... working" with both untested.
+    cards = [_named("github", "connected"), _named("calendar", "connected")]
+    overall, headline, summary, *_ = summarize_integrations(cards)
+    assert (overall, headline) == ("unknown", "Connected, not yet tested")
+    assert summary == "0 of 2 checked"
+
+
+def test_multiple_issues_branch_uses_the_same_count_shape():
+    cards = [_named("github", "failed"), _named("slack", "failed"), _named("calendar", "connected")]
+    overall, headline, summary, *_ = summarize_integrations(cards)
+    assert (overall, headline) == ("unhealthy", "Multiple Issues")
+    assert summary == "0 of 2 checked integrations working, 1 not yet tested"

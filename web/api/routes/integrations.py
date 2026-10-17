@@ -230,7 +230,8 @@ def summarize_integrations(integrations: List["IntegrationStatus"]) -> tuple:
     - none connected: "Nothing connected yet"
     - two or more failing (``failed``): "Multiple Issues"
     - one failing, or any connected one in a warning state (degraded / unknown):
-      "Needs attention"
+      "Needs attention"; the count line counts CHECKED integrations only and names
+      the untested ones ("0 of 1 checked integrations working, 1 not yet tested")
     - every connected one healthy: "All Systems Healthy"
     - otherwise (connected, none tested yet, nothing wrong): "Connected, not yet tested"
     """
@@ -241,16 +242,29 @@ def summarize_integrations(integrations: List["IntegrationStatus"]) -> tuple:
     n = len(connected)
     if n == 0:
         return "none", "Nothing connected yet", "", 0, 0
-    summary = f"{working} of {n} connected integrations working"
-    if failing >= 2:
-        return "unhealthy", "Multiple Issues", summary, working, n
+    # #2075 (CXO, 2026-10-17): an untested integration (card status "connected",
+    # no recorded check and no recorded fault) is neither working nor failing in
+    # ANY branch. The failure branches count only checked integrations in the
+    # denominator and name the untested ones separately.
+    untested = sum(1 for i in connected if i.status == "connected")
+    checked = n - untested
     if failing or warning:
+        summary = f"{working} of {checked} checked integrations working"
+        if untested:
+            summary += f", {untested} not yet tested"
+        if failing >= 2:
+            return "unhealthy", "Multiple Issues", summary, working, n
         return "degraded", "Needs attention", summary, working, n
     if working == n:
-        return "healthy", "All Systems Healthy", summary, working, n
-    # #2075 (CXO): nothing wrong, but not every connected one has a recorded
-    # check; the count line counts checks, not health ("0 of 1 checked").
-    checked = sum(1 for i in connected if i.status != "connected")
+        return (
+            "healthy",
+            "All Systems Healthy",
+            f"{working} of {n} connected integrations working",
+            working,
+            n,
+        )
+    # Nothing wrong, but not every connected one has a recorded check; the
+    # count line counts checks, not health ("0 of 1 checked").
     return "unknown", "Connected, not yet tested", f"{checked} of {n} checked", working, n
 
 

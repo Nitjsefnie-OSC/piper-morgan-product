@@ -74,9 +74,9 @@ class TestIntegrationHealthEndpoint:
         else:
             assert response.overall_status in {"healthy", "degraded", "unhealthy", "unknown"}
             # #2075: the count line counts checks while something connected is unchecked
-            assert (
-                "connected integrations working" in response.summary
-            ) or response.summary.endswith(f"of {len(connected)} checked")
+            assert ("integrations working" in response.summary) or response.summary.endswith(
+                f"of {len(connected)} checked"
+            )
 
     @pytest.mark.asyncio
     async def test_health_integration_has_required_fields(self, mock_user):
