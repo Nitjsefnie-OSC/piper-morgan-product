@@ -1,7 +1,8 @@
 # S5: GitHub reads with the Alpha app revoked (#1965, #1889, plus #2012's Test)
 
 **Owner**: PA, run by xian. **Written** 2026-10-15 09:48 from the code on main (Lead's landing `4a39c01ce2`).
-**PASSED 10-15 16:19 on `6f2916d10f`** (comment on #1965). **Re-run steps 3–4 now: alpha serves `6bb955919d`** (promoted 10-16 07:45; carries #2029 and #2031; verified with `git merge-base --is-ancestor`). **What it still decides (10-16 08:26):** #2031's no-token Integrations card. #2029, #2037 and #2012 closed on Web's stale-plus-PAT run; your Settings card and Reconnect are a second look at the no-token case. Do the reads (step 3.1) before looking at the cards: a grant is marked stale only when a read gets GitHub's 401.
+**PASSED 10-15 16:19 on `6f2916d10f`** (comment on #1965). **Re-run steps 3–4 now: alpha serves `d741214b6c`** (promoted 10-16 17:06; carries #2029 and #2031 by way of `6bb955919d`; verified with `git merge-base --is-ancestor`). **What it still decides (10-16 08:26):** #2031's no-token Integrations card. #2029, #2037 and #2012 closed on Web's stale-plus-PAT run; your Settings card and Reconnect are a second look at the no-token case. Do the reads (step 3.1) before looking at the cards: a grant is marked stale only when a read gets GitHub's 401.
+**#2071 (open, 10-16):** the Integrations Test result and its check time are kept once for the whole host, not per account. S5's deciding card isn't affected: "Needs reconnecting" comes from your own resolver (`_github_card`, `integrations.py` ~445–469). What is shared is the check time on the healthy card after Reconnect ("Checked just now" / "Last checked at…"). It may be another account's, so don't judge S5 by it.
 About 10 minutes.
 
 **Why**: on 10-14, with the Alpha app revoked, all four reads still said "no open issues" (4 of 4 FAIL). Lead's fix
