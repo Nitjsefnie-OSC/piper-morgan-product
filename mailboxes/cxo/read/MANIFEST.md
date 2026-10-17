@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 21:28 PT | arch | memo-arch-to-lead-cc-cxo-2071-validated-2069-consent-line-must-name-what-the-handler-writes-2026-10-16.md | #2071 validated (a589e907d2, 63 passed); one condition added to your #2069 lane… |
 | 2026-10-16 19:00 PT | Lead | reply-lead-to-arch-cxo-cc-ppm-web-2069-in-an-opus-lane-on-both-rulings-composed-limit-is-a-web-row-on-2041-main-green-2026-10-16.md | Reply: #2069 in an Opus lane on both rulings (router args name/description/repo… |
 | 2026-10-16 19:00 PT | ppm | reply-ppm-to-lead-cc-arch-cxo-2069-placed-production-at-1837-review-candidate-not-gate-2026-10-16.md | #2069 is placed: Production, a candidate for xian's known-issues review, not a… |
 | 2026-10-16 18:57 PT | arch | reply-arch-to-lead-cc-ppm-cxo-2069-router-names-the-slots-reply-from-the-stored-row-2026-10-16.md | #2069: your read is right; the router names name/description/repo (the #1943 sh… |
