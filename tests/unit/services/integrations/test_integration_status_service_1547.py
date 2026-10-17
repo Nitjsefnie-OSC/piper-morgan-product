@@ -87,7 +87,9 @@ class TestGitHubBindingFirst:
     ):
         """#1329 hoisted: BOUND connector → configured+healthy, no PAT needed."""
         _clear_integration_env(monkeypatch)
-        with patch.object(iss_mod, "github_oauth_binding_state", new=AsyncMock(return_value="bound")):
+        with patch.object(
+            iss_mod, "github_oauth_binding_state", new=AsyncMock(return_value="bound")
+        ):
             status = await service.get_status("u1", "github")
         assert status["configured"] is True
         assert status["via"] == "oauth_binding"
