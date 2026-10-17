@@ -24,6 +24,15 @@ Usage:
       Rerunning by id after the account row is gone counts (and erases) any
       leftovers keyed by that id, so a partial run can always be finished.
 
+Before anything else, both modes run the PRE-FLIGHT (Arch's condition,
+2026-10-16): every statement of the plan, in order, inside a transaction that
+is always rolled back. A statement that raises (another user's row still
+references this user's data, an FK the plan missed) means the real erase would
+roll back at step 4 AFTER steps 1-3 had already destroyed the outside stores.
+So count mode prints the verdict ("would erase cleanly" / "would refuse at
+<table>"), and erase mode refuses on a failed pre-flight with nothing erased
+anywhere, naming the table and the error class, and exits non-zero.
+
 What erase does, in this order (each pointer-holding store outside Postgres
 is cleared BEFORE the rows that hold its pointer, so a rerun after any failure
 still finds what is left; the whole thing is idempotent):
@@ -459,6 +468,78 @@ def erase_rows(conn, params: Dict[str, Any], present: set) -> Dict[str, int]:
     return out
 
 
+@dataclass(frozen=True)
+class Preflight:
+    """The pre-flight verdict. ``table`` is the plan step whose statement raised;
+    ``error`` is the error class (SQLAlchemy's, then the driver's); ``detail``
+    names the constraint and the referencing table when the driver reports
+    them (schema identifiers only, never row content)."""
+
+    ok: bool
+    table: Optional[str] = None
+    error: Optional[str] = None
+    detail: Optional[str] = None
+
+    def line(self) -> str:
+        if self.ok:
+            return (
+                "pre-flight: would erase cleanly (every planned statement ran and was rolled back)"
+            )
+        extra = f"; {self.detail}" if self.detail else ""
+        return f"pre-flight: would refuse at {self.table} ({self.error}{extra})"
+
+
+def _error_class(exc: BaseException) -> Tuple[str, Optional[str]]:
+    orig = getattr(exc, "orig", None)
+    name = type(exc).__name__
+    if orig is not None and type(orig).__name__ != name:
+        name = f"{name}/{type(orig).__name__}"
+    diag = getattr(orig, "diag", None)
+    constraint = getattr(diag, "constraint_name", None)
+    ref_table = getattr(diag, "table_name", None)
+    detail = None
+    if constraint or ref_table:
+        detail = f"constraint {constraint or '?'} on table {ref_table or '?'}"
+    return name, detail
+
+
+def preflight(conn, params: Dict[str, Any], present: set) -> Preflight:
+    """Run the plan's statements on ``conn`` and ROLL BACK, always.
+
+    ``conn`` must not be inside a transaction the caller means to keep: this
+    function ends whatever transaction is open on it with a rollback, in a
+    ``finally``, whatever happens. It never commits. If the process dies while
+    this runs, no COMMIT was ever sent, so Postgres aborts the transaction when
+    the connection drops; ``idle_in_transaction_session_timeout`` bounds the
+    case where the client hangs without the socket closing.
+
+    ``SET CONSTRAINTS ALL IMMEDIATE`` makes any DEFERRABLE INITIALLY DEFERRED
+    constraint fire per statement here, since a rollback never reaches the
+    commit-time check where the real erase would meet it.
+    """
+    from sqlalchemy import text
+
+    try:
+        conn.rollback()  # start from a clean transaction (reads before this are kept by nobody)
+        conn.execute(text("SET LOCAL idle_in_transaction_session_timeout = '60s'"))
+        conn.execute(text("SET CONSTRAINTS ALL IMMEDIATE"))
+        for step in PLAN:
+            if step.table not in present:
+                continue
+            if step.action == "detach":
+                sql = f"UPDATE {step.table} SET {step.detach_column} = NULL WHERE {step.where}"
+            else:
+                sql = f"DELETE FROM {step.table} WHERE {step.where}"
+            try:
+                conn.execute(text(sql), params)
+            except Exception as exc:  # noqa: BLE001 — the verdict names it
+                error, detail = _error_class(exc)
+                return Preflight(ok=False, table=step.table, error=error, detail=detail)
+        return Preflight(ok=True)
+    finally:
+        conn.rollback()
+
+
 def live_unplanned(conn) -> List[str]:
     """The census on the LIVE schema: tables with an owner-named column or an FK
     to users that the plan does not cover (the model can drift from what a
@@ -750,7 +831,9 @@ def run(
         )
         before, ctx = take_census(conn, uid, upload_base, chroma, redis_client)
         conn.rollback()
+        verdict = preflight(conn, ctx["params"], ctx["present"])
     out(format_census(before, "COUNT ONLY, nothing written" if not erase else "before erase"))
+    out(verdict.line())
     if not erase:
         return before
 
@@ -760,6 +843,13 @@ def run(
         raise SystemExit(
             f"refusing: the live schema has user tables the plan does not cover "
             f"{before.unplanned_live}; extend scripts/erase_user.py PLAN first; nothing erased"
+        )
+    if not verdict.ok:
+        extra = f"; {verdict.detail}" if verdict.detail else ""
+        raise SystemExit(
+            f"refusing: pre-flight failed at {verdict.table} ({verdict.error}{extra}); "
+            f"nothing erased anywhere (another user's row still references this user's "
+            f"data, or the plan misses an FK: resolve it, count again, then erase)"
         )
 
     # 1. provider grants (reads the stored tokens, so before the rows go)

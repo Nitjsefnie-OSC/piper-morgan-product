@@ -258,14 +258,34 @@ fly ssh console -a piper-morgan -C "python /app/scripts/erase_user.py <email-or-
 ```
 
 All flags go inside the quotes; the prod-exec deny refuses any flag after them. The count writes nothing. It lists every
-planned table, upload files, ChromaDB chunks, Redis keys, the connectors to revoke, and a live-schema census. The erase
-revokes provider grants (best effort), deletes upload files through the storage seam, then ChromaDB chunks, then the
-database rows in one transaction, then Redis keys, and prints the same counts after. Every count after should be 0. If
-any isn't, rerun by id (it's idempotent) and tell Lead. If the census says `UNPLANNED`, the erase refuses: file it for Lead.
+planned table, upload files, ChromaDB chunks, Redis keys, the connectors to revoke, and a live-schema census, then a
+pre-flight line: `pre-flight: would erase cleanly`, or `pre-flight: would refuse at <table> (<error class>; …)`. The
+pre-flight runs every database delete of the plan inside a transaction and rolls it back. If it says `would refuse`, the
+erase will refuse too, with `refusing: pre-flight failed at <table> …; nothing erased anywhere`, before it touches
+anything. That usually means another user's row still points at this user's data (for example their to-do in this user's
+project): file it for Lead, don't work around it. The erase revokes provider grants (best effort), deletes upload files
+through the storage seam, then ChromaDB chunks, then the database rows in one transaction, then Redis keys, and prints the
+same counts after. Every count after should be 0. If any isn't, rerun by id (it's idempotent) and tell Lead. If the census
+says `UNPLANNED`, the erase refuses: file it for Lead.
+
+**Count again, 30 minutes later.** An access token the user already holds stays valid for up to 30 minutes after the
+erase (a refresh is refused once the account row is gone, so it cannot renew), and an open tab can write rows in that
+window. At least 30 minutes after the erase, run the count line again **by the user id** (the email and username no longer
+resolve) and expect every count to be 0:
+
+```bash
+fly ssh console -a piper-morgan -C "python /app/scripts/erase_user.py <user-id>"
+```
+
+If any count is not 0, run `--erase --confirm <user-id>` by id again and paste both outputs into the record.
+
+**No allow line, for either form.** Both lines stay under the ask on `fly ssh console`, by xian's hand. A prefix allow on
+the count line would also match the erase line, because `--erase --confirm …` rides after the same prefix as argv (Arch,
+2026-10-16).
 
 **What to record:** a private request record (designinproduct `docs/mail/`, with `-private-` in the filename, never this
 repo). It holds the date received, the due date (received + 14 days), the user id, both pasted outputs, the date erased and
-who ran it. The output carries only the id and sha256 fingerprints, never the email. Logs that Fly keeps hold fingerprints
+who ran it, and the second count's output and time. The output carries only the id and sha256 fingerprints, never the email. Logs that Fly keeps hold fingerprints
 only and are out of scope (#2064).
 
 ## Promotion checklist: read staging's sha from staging, not from the deploy-run list (Lead, 2026-10-16)

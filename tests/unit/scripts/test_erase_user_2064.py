@@ -283,3 +283,199 @@ def test_format_census_shape():
     assert "  users: 0" in text and "  total: 0" in text
     assert "chromadb chunks: store absent" in text
     assert "UNPLANNED user tables ['x']" in text
+
+
+# --- the pre-flight (Arch's 10-16 condition) ---------------------------------------
+
+
+class _Diag:
+    constraint_name = "todo_items_project_id_fkey"
+    table_name = "todo_items"
+
+
+class ForeignKeyViolation(Exception):
+    diag = _Diag()
+
+
+class _FakeConn:
+    """Records every statement; raises an IntegrityError on ``DELETE FROM <fail_on>``."""
+
+    def __init__(self, fail_on=None):
+        self.fail_on = fail_on
+        self.statements: list = []
+        self.rollbacks = 0
+        self.commits = 0
+
+    def execute(self, clause, params=None):
+        sql = str(clause)
+        self.statements.append(sql)
+        if self.fail_on and sql.startswith(f"DELETE FROM {self.fail_on} "):
+            raise sa.exc.IntegrityError(sql, params, ForeignKeyViolation("fk"))
+        return None
+
+    def rollback(self):
+        self.rollbacks += 1
+
+    def commit(self):  # pragma: no cover - must never be called
+        self.commits += 1
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
+
+
+def test_preflight_runs_every_planned_statement_and_rolls_back():
+    conn = _FakeConn()
+    verdict = mod.preflight(conn, {"uid": UID}, set(mod.plan_tables()))
+    assert verdict.ok and verdict.line().startswith("pre-flight: would erase cleanly")
+    writes = [s for s in conn.statements if s.startswith(("DELETE", "UPDATE"))]
+    assert len(writes) == len(mod.PLAN)
+    assert writes[-1].startswith("DELETE FROM users ")
+    assert "SET CONSTRAINTS ALL IMMEDIATE" in conn.statements
+    assert conn.commits == 0 and conn.rollbacks >= 1
+
+
+def test_preflight_names_the_table_and_error_class_and_stops():
+    conn = _FakeConn(fail_on="projects")
+    verdict = mod.preflight(conn, {"uid": UID}, set(mod.plan_tables()))
+    assert not verdict.ok
+    assert verdict.table == "projects"
+    assert verdict.error == "IntegrityError/ForeignKeyViolation"
+    assert verdict.detail == "constraint todo_items_project_id_fkey on table todo_items"
+    assert verdict.line() == (
+        "pre-flight: would refuse at projects (IntegrityError/ForeignKeyViolation; "
+        "constraint todo_items_project_id_fkey on table todo_items)"
+    )
+    # Stopped at the failing step; nothing after it ran; rolled back, never committed.
+    assert not any(s.startswith("DELETE FROM users ") for s in conn.statements)
+    assert conn.commits == 0 and conn.rollbacks >= 1
+
+
+def test_preflight_rolls_back_even_when_something_unexpected_escapes():
+    class Boom(_FakeConn):
+        def execute(self, clause, params=None):
+            if str(clause).startswith("SET CONSTRAINTS"):
+                raise KeyboardInterrupt
+            return super().execute(clause, params)
+
+    conn = Boom()
+    with pytest.raises(KeyboardInterrupt):
+        mod.preflight(conn, {"uid": UID}, set(mod.plan_tables()))
+    assert conn.rollbacks >= 2 and conn.commits == 0  # the opening one and the finally
+
+
+def _empty_census():
+    return mod.Census(
+        rows={s.table: 1 for s in mod.PLAN},
+        files={
+            "db_known_on_disk": 1,
+            "db_known_missing": 0,
+            "untracked_in_user_dir": 0,
+            "user_dir_exists": 1,
+        },
+        chroma=1,
+        redis=0,
+        connectors=["github"],
+        unplanned_live=[],
+    )
+
+
+@pytest.fixture
+def run_with_cross_user_reference(monkeypatch):
+    """run() with resolution and census stubbed, the REAL pre-flight on a fake
+    connection whose DELETE FROM projects raises (another user's todo is in this
+    user's project), and every outside-store step recording calls."""
+    conn = _FakeConn(fail_on="projects")
+    calls: list = []
+
+    class Engine:
+        def connect(self):
+            calls.append("connect")
+            return conn
+
+        def begin(self):  # the step-4 transaction
+            calls.append("begin")
+            return conn
+
+    present = set(mod.plan_tables())
+    monkeypatch.setattr(mod, "resolve_user", lambda c, i: (UID, "u", "e@x"))
+    monkeypatch.setattr(
+        mod,
+        "take_census",
+        lambda c, uid, ub, ch, rc: (
+            _empty_census(),
+            {"present": present, "params": {"uid": UID}, "paths": []},
+        ),
+    )
+    monkeypatch.setattr(mod, "erase_files", lambda *a: calls.append("erase_files"))
+    monkeypatch.setattr(mod, "upload_paths", lambda *a: calls.append("upload_paths") or [])
+
+    class Chroma:
+        def get(self, include):
+            calls.append("chroma.get")
+            return {"ids": []}
+
+        def delete(self, ids):
+            calls.append("chroma.delete")
+
+    async def disconnect(uid, connector):
+        calls.append(("disconnect", connector))
+
+    return conn, calls, Engine(), Chroma(), disconnect
+
+
+def test_erase_refuses_on_failed_preflight_before_any_outside_store(run_with_cross_user_reference):
+    conn, calls, engine, chroma, disconnect = run_with_cross_user_reference
+    lines: list = []
+    with pytest.raises(SystemExit) as exc:
+        mod.run(
+            UID,
+            erase=True,
+            confirm=UID,
+            engine=engine,
+            chroma=chroma,
+            disconnect=disconnect,
+            out=lines.append,
+        )
+    msg = str(exc.value.code)
+    assert msg.startswith(
+        "refusing: pre-flight failed at projects (IntegrityError/ForeignKeyViolation"
+    )
+    assert "nothing erased anywhere" in msg
+    # Never reached step 1, 2, 3 or 4.
+    assert not [c for c in calls if isinstance(c, tuple)], calls
+    assert "erase_files" not in calls and "upload_paths" not in calls
+    assert "chroma.get" not in calls and "chroma.delete" not in calls
+    assert "begin" not in calls
+    assert conn.commits == 0
+    assert "pre-flight: would refuse at projects" in "\n".join(lines)
+
+
+def test_main_exits_non_zero_on_failed_preflight(run_with_cross_user_reference, monkeypatch):
+    _, calls, engine, _, _ = run_with_cross_user_reference
+    monkeypatch.setattr(mod, "_engine", lambda: engine)
+    monkeypatch.setattr(mod, "_redis_client", lambda: None)
+    monkeypatch.setattr(mod, "_chroma_collection", lambda: None)
+    with pytest.raises(SystemExit) as exc:
+        mod.main(["someone", "--erase", "--confirm", UID])
+    assert exc.value.code not in (0, None)
+    assert "begin" not in calls
+
+
+def test_count_mode_prints_the_verdict_and_touches_nothing(run_with_cross_user_reference):
+    conn, calls, engine, chroma, disconnect = run_with_cross_user_reference
+    lines: list = []
+    mod.run(
+        UID,
+        erase=False,
+        confirm=None,
+        engine=engine,
+        chroma=chroma,
+        disconnect=disconnect,
+        out=lines.append,
+    )
+    text_out = "\n".join(lines)
+    assert "pre-flight: would refuse at projects (IntegrityError/ForeignKeyViolation" in text_out
+    assert calls == ["connect"] and conn.commits == 0
