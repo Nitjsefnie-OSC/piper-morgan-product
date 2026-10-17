@@ -4,7 +4,7 @@
 {# The inline <style> below is kept verbatim — its hardcoded hex is the #}
 {# per-page CSS-tokenization follow-on (CXO), out of scope for this migration. #}
 
-{% block page_title %}Privacy & Data Settings - Piper Morgan{% endblock %}
+{% block page_title %}Privacy & data - Piper Morgan{% endblock %}
 
 {% block head_extra %}
 <style>
@@ -123,42 +123,23 @@
 {% block main %}
 {% set breadcrumbs = [
   {"label": "Settings", "url": "/settings"},
-  {"label": "Privacy & Data", "url": None}
+  {"label": "Privacy & data", "url": None}
 ] %}
 {% include 'components/breadcrumbs.html' %}
 
 <div class="coming-soon-container">
   <div class="coming-soon-icon">🔒</div>
-  <h1>Privacy & Data Settings</h1>
+  <h1>Privacy & data</h1>
 
   <div class="privacy-status">
-    <h2>Current Privacy Status</h2>
     <ul class="privacy-list">
-      <li>✅ Your data is private and isolated to your user account</li>
-      <li>✅ All resources (Lists, Todos, Projects, Files) use owner-based access control</li>
-      <li>✅ Shared resources require explicit permission grants</li>
-      <li>✅ Your conversations and uploaded files are stored securely</li>
-      <li>✅ Admin users can access system-wide data for support purposes</li>
-    </ul>
-  </div>
-
-  <div class="privacy-coming-soon">
-    <h2>Advanced Privacy Controls Coming Soon</h2>
-    <p class="coming-soon-description">
-      We're building granular privacy controls that will allow you to:
-    </p>
-    <ul class="privacy-list">
-      <li>Export your data in standard formats</li>
-      <li>Request complete data deletion</li>
-      <li>Configure sharing defaults and restrictions</li>
-      <li>Manage third-party integration permissions</li>
-      <li>Control conversation history retention</li>
+      <li><strong>What Piper stores and where.</strong> <a href="/privacy">Read how Piper handles your data</a>.</li>
+      <li><strong>Export.</strong> You can export the files you uploaded from the <a href="/files">Files page</a> and what Piper has learned about you from the <a href="/learning">learning dashboard</a>. Conversations and to-dos can't be exported yet.</li>
+      <li><strong>Deleting your account.</strong> There's no way to delete your account inside Piper yet. We plan to add one. Until then, email support@pipermorgan.ai and we'll delete your account and everything in it within 14 days. More in our <a href="/privacy">privacy page</a>.</li>
     </ul>
   </div>
 
   <div class="privacy-links">
-    <h2>Privacy Resources</h2>
-    <p>For more information about how we handle your data:</p>
     {# #1499: a "Privacy Policy" link to /privacy-policy shipped here with its own #}
     {# unresolved placeholder text — "(if exists, or link to external)". No route #}
     {# serves that path and no privacy-policy template exists, so it was a dead link #}

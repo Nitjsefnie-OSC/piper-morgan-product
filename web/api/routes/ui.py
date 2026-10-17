@@ -660,7 +660,7 @@ async def work_items_ui(request: Request):
 
 @router.get("/settings/privacy", response_class=HTMLResponse)
 async def privacy_settings_ui(request: Request):
-    """Serve the privacy & data settings page (Coming Soon)"""
+    """Serve the privacy & data settings page (#2065 copy)"""
     templates = _get_templates(request)
     user_context = _extract_user_context(request)
     return templates.TemplateResponse(
