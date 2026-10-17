@@ -1,11 +1,11 @@
 # Lead carry-forward — Fable 5.1 seat; Model A worktree ~/Development/piper-morgan-worktrees/lead
 
-## STATE @ 2026-10-17 07:1x PT — alpha 119bd7b9ef (promotion 1 of 2 at 07:06, run 39039333728); main holds the #2072 renderer fix (c9d0294250) for slot 2; NO lane open; xian's A1 sitting is after slot 2
-- **Slot 2 (any time 07:00–21:00, grant checklist; read staging's sha from /health; probe `$SP/gate.sh`; alembic diff from 119bd7b9ef; no deploy in flight; no hold; not during xian's announced sitting):** carries c9d0294250 (four surfaces read `needs_reconnecting`) and whatever lands before it. After it: mail Web (CXO's two-prompt acceptance for #2072; the slot-1 rows if not yet run), mail `pa` (A1/S5 sitting), tell Exec.
-- **Served on 119bd7b9ef (Web's rows, slot 1):** two-account #2071 quote with B's card line; #2068 pages a–c (CXO to confirm "Connected, not yet tested"); #2070 consent line names the project; #2066 OAuth card time line; #2065 Privacy & data page; #2064 live erase count is xian's (C2, under the ask).
+## STATE @ 2026-10-17 08:1x PT — alpha 118241587e (promotion 2 of 2 at 08:05, run 39043475359; NO MORE TODAY); main == alpha for code; NO lane open; xian's A1/S5 sitting and C2 count unblocked
+- **Both slots used (07:06 → 119bd7b9ef; 08:05 → 118241587e).** Anything landing now waits for Sun 10-18 07:00+. Served now: Web's #2072 acceptance (CXO's two prompts) + #2031 no-token card; xian's A1/S5 sitting with PA (mail `pa` when he starts); xian's C2 count re-run (#1306 fix live); xian's #2064 erase count (§7 recipe, under the ask).
+- **Slot-1 rows done (Web 07:15–07:26):** #2071 PASS → CLOSED; #2066 PASS → CLOSED; #2070 PASS (CXO closes); #2065 three lines PASS (gate still needs /privacy's chat sentence, Comms); #2068 (a)(b)(c) quoted; CXO's call: OAuth-bound reads "All Systems Healthy" before any Test (healthy by binding) vs PAT's "Connected, not yet tested".
 - **Open calls:** Arch: widen `needs_reconnecting` to `healthy is False` for every integration, or leave at the stale binding (memo 07:12); #2073 builder fix/retire; #2056(1). CXO: the lane's identity floor line; "Connected, not yet tested"; #2067 words; #2069 wording (a). PPM/Exec: #2072 admission is xian's. xian: A1 readings never arrived (PA asked him); his three held items after testing.
 - **Held:** `lead-2069` 87a412f4d4 (rule 7 batch with #2047/#2051; Arch's consent-name condition on the standing-items row); `lead-1943c`; #1982 PAT dual write; #1909 box after 10-30.
-- **Card:** v68 at 07:1x (alpha 119bd7b9ef; A1 after slot 2); mirror republished with it.
+- **Card:** v69 at 08:1x (alpha 118241587e; every card live); mirror version 63.
 - **Cron:** session job 46638333 (`17 6,9,12,15,18,21`), fires arriving ~25 min late; expires ~10-21, rotate at the 10-19 START.
 
 ### Earlier @ 2026-10-16 21:3x (DAY CLOSED)
