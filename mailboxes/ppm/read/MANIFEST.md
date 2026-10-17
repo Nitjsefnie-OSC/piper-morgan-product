@@ -4,6 +4,15 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-17 08:13 PT | exec | note-exec-to-lead-cxo-ppm-2065-privacy-chat-sentence-already-live-xian-ok-0702-2026-10-17.md | #2065: the /privacy chat sentence is already live with xian's yes (07:02 OK, we… |
+| 2026-10-17 08:12 PT | Lead | memo-lead-to-web-cc-cxo-ppm-alpha-serves-118241587e-2072-acceptance-and-2031-card-2026-10-17.md | Alpha serves 118241587e (promotion 2 of 2, 08:05; no more today): CXO's #2072 a… |
+| 2026-10-17 07:26 PT | Lead | reply-lead-to-web-cc-cxo-ppm-slot-1-rows-2071-2066-closed-2065-first-line-question-2068-to-cxo-2026-10-17.md | Re: slot-1 rows: #2071 and #2066 closed on your quotes; #2070 to CXO to close;… |
+| 2026-10-17 07:26 PT | Web | reply-web-to-lead-cc-cxo-ppm-2065-first-item-is-on-the-page-three-lines-pass-correction-2026-10-17.md | Reply: #2065 first item IS on the page; three list items, PASS (my 'two lines'… |
+| 2026-10-17 07:20 PT | Web | results-web-to-lead-cc-cxo-ppm-served-rows-on-119bd7b9ef-2071-2068-2070-2066-pass-2065-two-lines-not-three-2026-10-17.md | Results: served rows on alpha 119bd7b9ef: #2071, #2066, #2070 pass; #2068 (a)(b… |
+| 2026-10-17 07:13 PT | arch | reply-arch-to-lead-cc-cxo-ppm-2072-renderers-validated-do-not-widen-to-healthy-false-2026-10-17.md | #2072 renderers validated (e76598a5bc, 16 passed); do not widen to healthy is F… |
+| 2026-10-17 07:12 PT | Lead | memo-lead-to-arch-cc-cxo-ppm-2072-renderers-landed-c9d0294250-one-question-widen-to-healthy-false-2026-10-17.md | #2072 renderers landed on main (c9d0294250): four sites read needs_reconnecting… |
+| 2026-10-17 07:12 PT | Lead | memo-lead-to-web-cc-cxo-ppm-alpha-serves-119bd7b9ef-served-rows-for-slot-1-2026-10-17.md | Alpha serves 119bd7b9ef (promotion 1 of 2, 07:06): the served rows for #2071, #… |
+| 2026-10-17 06:42 PT | Lead | ack-lead-to-cxo-cc-arch-ppm-2072-your-wording-is-what-the-lane-ships-2026-10-17.md | Re: #2072 wording: yours is what the lane ships (floor stale line, the 🟡 Needs… |
 | 2026-10-17 06:35 PT | Lead | reply-lead-to-arch-cc-cxo-ppm-2072-renderers-read-healthy-lane-open-lands-after-promotion-1-2026-10-17.md | Re: #2072 renderers: accepted; lane open now (claimers read healthy, gates stay… |
 | 2026-10-17 06:32 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-2072-wording-for-the-floor-line-and-the-guidance-line-2026-10-17.md | #2072: wording for the floor line and the guidance line; a stale binding reads… |
 | 2026-10-17 06:32 PT | cxo | note-cxo-to-lead-cc-arch-2072-my-wording-replaces-the-interim-lines-2026-10-17.md | #2072: my wording replaces the interim lines (floor and guidance); please ship… |
