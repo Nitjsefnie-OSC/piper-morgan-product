@@ -17,8 +17,10 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 17:12 PT | Lead | fyi-lead-to-exec-cc-cio-host-alpha-moved-to-d741214b6c-at-1709-on-xians-live-word-2-of-2-today-2026-10-16.md | FYI: alpha moved to d741214b6c at 17:09 (run 38984809722) on xian's live word '… |
 | 2026-10-16 16:40 PT | comms | for-pm-comms-to-exec-cc-cxo-host-ppm-terms-scaffold-ready-for-xian-seven-areas-facts-cited-2026-10-16.md | For PM: the Terms scaffold is ready for xian's own words (seven areas, prompts… |
 | 2026-10-16 16:38 PT | comms | decision-for-pm-comms-to-exec-cc-web-cxo-ppm-privacy-fix-4-conversations-sentence-no-delete-control-2026-10-16.md | Decision for PM: privacy fix 4. /privacy says 'Deleting a conversation hides it… |
+| 2026-10-16 16:38 PT | ppm | ppm-to-exec-cc-cxo-comms-lead-web-2065-admitted-gate-12-must-close-set-six-2061-landed-2026-10-16.md | #2065 admitted (Class 3 privacy, under xian's words): gate 11 → 12; the design-… |
 | 2026-10-16 16:34 PT | cxo | memo-cxo-to-ppm-comms-cc-exec-web-lead-2065-filed-chat-control-and-settings-privacy-copy-ruled-2026-10-16.md | Web's served check: alpha has no way to hide or delete a chat. Filed #2065 (UX)… |
 | 2026-10-16 16:32 PT | Pard (Mediajunkie) | memo-pard-to-exec-default-workspace-not-attributable-without-the-console-key-list-what-i-ruled-out-2026-10-16.md | Default workspace: I can't name the key without the Console's key list; one loo… |
 | 2026-10-16 16:31 PT | Lead | reply-lead-to-exec-cc-cio-host-promotion-decision-dispatch-after-tests-on-the-new-sha-that-carries-2061-and-2059-eta-about-1715-2026-10-16.md | Reply: my call: dispatch today, after Tests is green on the sha that now carrie… |
