@@ -424,6 +424,34 @@ description' carries `expected_args: {name: Baz, description: testing the descri
 pin 597. **The rail-description change owes rule 7's served run (UNMEASURED at landing; no LLM
 calls in the lane).** Until it is measured, the router path is unproven; the fallback reply is honest
 regardless. Regression: `test_add_project_router_args_2069.py`.
+**Rule-7 batch: #2051 alias + #2069 description (2026-10-17, prog lane for Lead; DESCRIPTION
+DROPPED)**: the two router-catalog changes were screened in ONE batch (Arch 10-08). (1) **#2051**:
+`list_assigned_issues` (the classifier's own name for "what issues are assigned to me?", which had no
+rail key and fell to the floor's "Let me pull that up…") is an ALIAS on the `list_issues` entry; the
+read runs and answers 0-assigned with the #2040 scope line (`test_list_assigned_issues_alias_2051.py`,
+through `dispatch_workflow`). **Aliases are not rendered in the router catalog** (`build_routing_prompt`
+prints canonical names only): the prompt is byte-identical with the alias, so it is not router-facing
+text. Corpus row 'what issues are assigned to me?' → `action:list_issues_query` (census 598); the
+served router answers it NONE ×6 on main and candidate alike, so the row is a router miss the alias
+does not touch (a `list_issues` description change would be its own candidate). (2) **#2069
+condition (Arch 10-16)**: one resolver, `portfolio_service.resolve_add_project_slots` (router `name`
+first through the honesty guard, the #1856 extractor as the fallback, a description only from the
+router), called by `_handle_add_project` AND by `display_name_for` → `consent_gate._summary_for`,
+`question_how_to` and the adopted-category confirm, so the consent line names the stored name
+(`test_add_project_consent_name_2069.py`). (3) **The `add_project` description's args sentence
+was DROPPED by the screen**: ×6 against same-minute main 7fe8bfc1ee on 25 phrases (moved rows,
+PORTFOLIO neighbours, the 10-13 sentinels, the clear family, the declarative and question rows, the
+standing member), three wordings (as merged; "the new project" + repo scoped to it; repo arg
+dropped): every wording put 'add octocat/hello-world to the project' link_repo ×6 → CLARIFY ×6 @0.40
+(candidate-attributed; main link_repo ×6 in each same-minute run). Standing member analyze_blockers
+×6 on all six runs; 'list my projects' wobbles on main itself (4/2, 5/1, 1/5) and is not attributed.
+And, as with #1976, **the sentence is not needed**: under main's wording the scorer's args row
+'Add a project called Baz with description testing the description' is action AND args right 3/3
+(and 3/3 under wording 1). No full run spent (the candidate does not land). Controls and the
+attribution table: `dev/2026/10/17/controls/rule7-*-x6.md`,
+`dev/2026/10/17/controls/rule7-attribution-2051-2069-wordings-2026-10-17.md`. Landing the alias,
+the resolver and the #2069 handler with the description at main's text (prompt byte-identical to
+main) is Lead's and Arch's call; the #2069 description pin changes with it.
 **meeting_time registry example: the day-less 'when' question (2026-10-13, Arch's
 rule-10 licence-row ruling)**: 'when am i in a meeting' (yaml:1350) licenses the
 deleted TEMPORAL literal `\bwhen am i.{0,10}meeting\b` and flipped meeting_time →
