@@ -50,3 +50,10 @@ def test_front_date_reads_only_front_matter():
 def test_empty_date_does_not_read_the_next_line():
     # Pard's 10-16 catch in the twin mail-wake regex: \s* crosses the newline.
     assert sc.front_date("---\nfrom: x\ndate:\nsubject: y\n---\n") is None
+
+
+def test_briefing_stamps_reads_only_todays_attributions():
+    line = "- **Usage** *(CIO, 2026-10-16 16:1x PDT, last row)*: ... *(Docs, 2026-10-12 10:1x PDT)* *(Lead, 2026-10-16 15:00 PT)*"
+    assert sc.briefing_stamps(line, DAY) == ["2026-10-16 16:1x", "2026-10-16 15:00"]
+    assert sc.judge("2026-10-16 16:1x", NOW, DAY)[0] == "WARN"
+    assert sc.briefing_stamps("*(Exec, 2026-10-09 06:4x PDT)*", DAY) == []

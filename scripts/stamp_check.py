@@ -16,7 +16,9 @@ to read/, a triage of someone else's memo) is skipped. For each new memo's front
 `MAIL_STAMP_CHECK=warn` turns every BLOCK into a WARN, for a memo deliberately stamped another time.
 Log mode only warns. It looks at added lines in staged `dev/YYYY/MM/DD/*-log.md` files that are `#`
 headings carrying a time, and only for today's log: it flags an estimated form or a time ahead of now, not
-one behind (a heading can fairly carry the time a wake began).
+one behind (a heading can fairly carry the time a wake began). It also reads today's `*(Role, date time`
+attributions on added lines of BRIEFING-CURRENT-STATE.md (10-17: the briefing held 7 `HH:Mx` stamps, two
+of them CIO's, because it passed through neither mail-send nor a log heading).
 Exit 0 = nothing blocking; 1 = a BLOCK (mail mode only). Owner: CIO. Review: 2026-12-08.
 """
 
@@ -34,6 +36,8 @@ MX = re.compile(r"\b(\d{1,2}):(\d)[xX]\b")
 NEAR = timedelta(minutes=10)
 CLOCK = re.compile(r"\b(\d{1,2}):(\d{2})\b")
 DAY = re.compile(r"\b(\d{4}-\d{2}-\d{2})\b")
+BRIEFING = "docs/briefing/BRIEFING-CURRENT-STATE.md"
+BRIEF_STAMP = re.compile(r"\(\w[\w ]*, (\d{4}-\d{2}-\d{2}) (~?\d{1,2}:\d[\dxX])")
 
 
 def git(*a):
@@ -135,7 +139,20 @@ def log_staged(now) -> int:
             v = judge(line[1:], now, today)
             if v and "behind" not in v[1] and "dated" not in v[1]:
                 print(f"stamp-check WARN: {f}: heading '{line[1:].strip()[:70]}': {v[1]}")
+    if BRIEFING in files:
+        for line in git("diff", "--cached", "-U0", "--", BRIEFING).stdout.splitlines():
+            if not line.startswith("+") or line.startswith("+++"):
+                continue
+            for stamp in briefing_stamps(line[1:], today):
+                v = judge(stamp, now, today)
+                if v and "behind" not in v[1] and "dated" not in v[1]:
+                    print(f"stamp-check WARN: {BRIEFING}: '{stamp}': {v[1]}")
     return 0
+
+
+def briefing_stamps(line: str, today: str):
+    """Today's `*(Role, YYYY-MM-DD HH:MM ...` attributions on one briefing line; older ones are left alone."""
+    return [f"{d} {t}" for d, t in BRIEF_STAMP.findall(line) if d == today]
 
 
 def main(argv) -> int:

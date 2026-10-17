@@ -2,7 +2,7 @@
 type: methodology
 title: Chokepoint vs. Bolt-On — Attach the Obligation to Something That Can't Be Skipped
 valid_from: "2026-09-08"
-last_updated: "2026-10-14"
+last_updated: "2026-10-17"
 ---
 
 # Chokepoint vs. Bolt-On — Attach the Obligation to Something That Can't Be Skipped
@@ -168,3 +168,9 @@ Operational corollaries:
   It's an application of this entry: deliver into the path the consumer already runs, not into a
   bolt-on channel nobody drains. **Not armed** (dispatch only) until #1687 is resolved. The arming
   checklist is in the workflow header.
+- **The date check** (`scripts/stamp_check.py`, CIO, 10-16; xian's yes via Exec). The written rule (duty-cycle-tick
+  v1.50) was a bolt-on: 7 of 10 roles wrote guessed times in the week of 10-09. The check now rides two steps
+  nobody skips: `scripts/mail-send.sh` (blocks) and the commit hook `check-branch.sh` (warns). **The corollary it
+  taught, 10-17:** a chokepoint only covers what passes through it. The briefing went through neither path, and on
+  10-17 it still held 7 `HH:Mx` stamps, two of them CIO's own. The fix was to widen what the existing commit-hook
+  step reads, not to add a reminder. When you attach to a chokepoint, list the surfaces that bypass it.
