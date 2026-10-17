@@ -641,6 +641,15 @@ class FloorResponse:
         }
 
 
+# #2072 follow-up (CXO's copy, 2026-10-17, verbatim): the domain-context line for a
+# GitHub binding GitHub has rejected. It deliberately does not contain "connected".
+GITHUB_NEEDS_RECONNECTING_FLOOR_LINE = (
+    "- GitHub: needs reconnecting (the grant was revoked or expired; issue/PR data is "
+    "unavailable until it is reconnected: say so and point to Settings → Integrations → "
+    "GitHub; do not imply there are no open issues)"
+)
+
+
 # ---- Graceful Fallbacks (Issue #940: differentiated by failure type) ----
 
 # #1824 (Arch's split criterion, CXO's copy 2026-09-15, verbatim): the old "auth"
@@ -1523,12 +1532,16 @@ class ConversationalFloor:
 
         # #1547 (audit F2): github_connected was computed by the STATUS/PRIORITY
         # gatherer and then DROPPED here (comment-only) — render it, both ways.
+        # #2072 follow-up (Arch's ruling; CXO's words, 2026-10-17): a connection GitHub
+        # has rejected needs reconnecting, and the line deliberately never says
+        # "connected", so the floor cannot answer "what's connected?" with GitHub.
         if "github_connected" in domain_context:
-            lines.append(
-                "- GitHub: connected"
-                if domain_context["github_connected"]
-                else "- GitHub: not connected (issue/PR data unavailable until connected)"
-            )
+            if not domain_context["github_connected"]:
+                lines.append("- GitHub: not connected (issue/PR data unavailable until connected)")
+            elif domain_context.get("github_needs_reconnecting"):
+                lines.append(GITHUB_NEEDS_RECONNECTING_FLOOR_LINE)
+            else:
+                lines.append("- GitHub: connected")
 
         # #1155: high-priority open issues — the "what should I focus on"
         # candidates. Surfaced so the PRIORITY floor reasons over real issues
@@ -1612,14 +1625,28 @@ class ConversationalFloor:
                     for i in integrations
                     if isinstance(i, dict) and i.get("status") == "active"
                 ]
+                # #2072 follow-up: a connection GitHub has rejected is neither
+                # connected nor absent; it gets its own line.
+                needs_reconnect = [
+                    _disp(i.get("name"))
+                    for i in integrations
+                    if isinstance(i, dict) and i.get("status") == "needs_reconnecting"
+                ]
                 not_connected = [
                     _disp(i.get("name"))
                     for i in integrations
-                    if isinstance(i, dict) and i.get("status") != "active"
+                    if isinstance(i, dict)
+                    and i.get("status") not in ("active", "needs_reconnecting")
                 ]
                 lines.append(
                     "- Connected integrations: " + (", ".join(connected) if connected else "none")
                 )
+                if needs_reconnect:
+                    # Never says "connected" (CXO, 2026-10-17): see the GitHub line above.
+                    lines.append(
+                        "- Needs reconnecting (the grant was revoked or expired; reconnect "
+                        "in Settings → Integrations): " + ", ".join(needs_reconnect)
+                    )
                 if not_connected:
                     lines.append(
                         "- Not connected (available in Settings): " + ", ".join(not_connected)

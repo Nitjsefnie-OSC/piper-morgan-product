@@ -578,14 +578,20 @@ class ContextAssembler:
         try:
             from services.integrations.integration_status_service import (
                 IntegrationStatusService,
+                needs_reconnecting,
             )
+
+            # #2072 follow-up (Arch's ruling): "active" is a claim that the connection
+            # works, so a binding GitHub has rejected reads "needs_reconnecting" (#2029's
+            # "Needs reconnecting"), never "active". The floor renders the three apart.
+            def _identity_status(status: Dict[str, Any]) -> str:
+                if needs_reconnecting(status):
+                    return "needs_reconnecting"
+                return "active" if status.get("configured") else "inactive"
 
             statuses = await IntegrationStatusService().get_all(user_id)
             context["integrations"] = [
-                {
-                    "name": name,
-                    "status": "active" if status.get("configured") else "inactive",
-                }
+                {"name": name, "status": _identity_status(status)}
                 for name, status in statuses.items()
             ]
         except Exception as e:
@@ -1047,13 +1053,19 @@ class ContextAssembler:
         try:
             from services.integrations.integration_status_service import (
                 IntegrationStatusService,
+                needs_reconnecting,
             )
 
             gh_status = await IntegrationStatusService().get_status(user_id, "github")
             context["github_connected"] = bool(gh_status.get("configured"))
+            # #2072 follow-up (Arch's ruling): ``github_connected`` stays ``configured``
+            # (a connection exists), and this flag says whether it works, so the floor
+            # never renders a grant GitHub has rejected as plain "connected".
+            context["github_needs_reconnecting"] = needs_reconnecting(gh_status)
         except Exception as e:
             logger.warning("context_assembler_status_github_error", error=str(e))
             context["github_connected"] = False
+            context["github_needs_reconnecting"] = False
 
         # #983: Blocked items (open issues labeled `status: blocked`). Surfaced
         # for STATUS / PRIORITY / UNKNOWN-fallback. Cached (5min TTL).

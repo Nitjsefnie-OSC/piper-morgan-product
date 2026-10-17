@@ -8451,3 +8451,137 @@ class TestPerPrincipalTestResultRatchet2071:
             params = list(inspect.signature(getattr(PrincipalTestResultStore, method)).parameters)
             assert params[1:3] == ["principal", "integration"], (method, params)
         assert self.ACCESSOR.exists()
+
+
+class TestStaleBindingRendererRatchet2072:
+    """2072 follow-up (Arch's ruling, issuecomment-6234453553): ``configured`` means a
+    connection EXISTS, not that it works. Since b1fbfa3da1 a GitHub binding GitHub has
+    rejected reads ``configured=True, via="oauth_binding_stale", healthy=False``. Gates
+    (radar, repo resolver, first contact, the canonical metadata gates) stay on
+    ``configured``: the read runs and discloses STALE_TOKEN. A surface that RENDERS a
+    working-connection claim ("connected", "active", ``valid: True``) must also consult
+    the broken-binding signal (``needs_reconnecting(...)``, ``healthy`` or ``via``).
+
+    Denominator: the four renderer sites Arch named, five functions (site 2 is a feed and
+    its renderer):
+
+    1. Settings GitHub status: ``web/api/routes/settings_integrations.py``
+       ``get_github_settings`` (``"valid": True``).
+    2. Chat floor: ``services/intent_service/context_assembler.py``
+       ``_gather_status_priority_context`` (``github_connected``), rendered by
+       ``services/intent_service/conversational_floor.py`` ``_format_domain_context``
+       ("- GitHub: connected", which must read ``github_needs_reconnecting``).
+    3. Setup guidance: ``services/intent_service/canonical_handlers.py``
+       ``_format_integration_setup_guidance`` ("**Connected:**").
+    4. Identity context: ``context_assembler.py`` ``_gather_identity_context``
+       (``"active"``).
+
+    Ceiling 0, never raised. The scan reads each function's code (AST, docstring
+    dropped, comments gone), so a comment naming the signal does not satisfy it.
+    """
+
+    # (path, function, claim marker, markers of which one must appear)
+    _STATUS_SIGNAL = ("needs_reconnecting(", "'healthy'", "'via'")
+    SITES = (
+        (
+            "web/api/routes/settings_integrations.py",
+            "get_github_settings",
+            "'valid': True",
+            _STATUS_SIGNAL,
+        ),
+        (
+            "services/intent_service/context_assembler.py",
+            "_gather_status_priority_context",
+            "context['github_connected']",
+            _STATUS_SIGNAL,
+        ),
+        (
+            "services/intent_service/conversational_floor.py",
+            "_format_domain_context",
+            "- GitHub: connected",
+            ("github_needs_reconnecting",),
+        ),
+        (
+            "services/intent_service/canonical_handlers.py",
+            "_format_integration_setup_guidance",
+            "**Connected:**",
+            _STATUS_SIGNAL,
+        ),
+        (
+            "services/intent_service/context_assembler.py",
+            "_gather_identity_context",
+            "'active'",
+            _STATUS_SIGNAL,
+        ),
+    )
+
+    @staticmethod
+    def _function_code(src: str, name: str):
+        """``ast.unparse`` of the named (async) function, docstring dropped; else None."""
+        for node in ast.walk(ast.parse(src)):
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and node.name == name:
+                body = node.body
+                if (
+                    body
+                    and isinstance(body[0], ast.Expr)
+                    and isinstance(body[0].value, ast.Constant)
+                    and isinstance(body[0].value.value, str)
+                ):
+                    body = body[1:]
+                return "\n".join(ast.unparse(stmt) for stmt in body)
+        return None
+
+    @classmethod
+    def _violation(cls, code: str, claim: str, signals) -> bool:
+        return claim in code and not any(s in code for s in signals)
+
+    def test_scanner_flags_the_pre_fix_shapes(self):
+        pre_fix = (
+            (
+                "async def f(s):\n    if s.get('configured'):\n"
+                "        return {'configured': True, 'valid': True}",
+                "'valid': True",
+            ),
+            (
+                "def f(statuses):\n    return [{'status': 'active' if s.get('configured') "
+                "else 'inactive'} for s in statuses]",
+                "'active'",
+            ),
+        )
+        for src, claim in pre_fix:
+            code = self._function_code(src, "f")
+            assert self._violation(code, claim, self._STATUS_SIGNAL), src
+        fixed = (
+            "def f(statuses):\n    return [{'status': 'needs_reconnecting' if "
+            "needs_reconnecting(s) else 'active'} for s in statuses]"
+        )
+        assert not self._violation(self._function_code(fixed, "f"), "'active'", self._STATUS_SIGNAL)
+        commented = (
+            "def f(s):\n    '''needs_reconnecting( is named only here'''\n"
+            "    # needs_reconnecting(\n    return {'valid': True}"
+        )
+        assert self._violation(
+            self._function_code(commented, "f"), "'valid': True", self._STATUS_SIGNAL
+        )
+
+    def test_denominator_every_site_found_and_still_renders_its_claim(self):
+        """m-44: the scan is not vacuous: all five functions exist and carry the claim."""
+        seen = []
+        for path, func, claim, _ in self.SITES:
+            code = self._function_code(Path(path).read_text(encoding="utf-8"), func)
+            assert code is not None, f"{path}::{func} not found (renamed? update SITES)"
+            assert claim in code, f"{path}::{func} no longer renders {claim!r}; update SITES"
+            seen.append(func)
+        assert len(seen) == 5, seen
+
+    def test_no_connection_claim_from_configured_alone_ceiling_zero(self):
+        violations = []
+        for path, func, claim, signals in self.SITES:
+            code = self._function_code(Path(path).read_text(encoding="utf-8"), func)
+            if code is not None and self._violation(code, claim, signals):
+                violations.append(f"{path}::{func} renders {claim!r} without {signals}")
+        assert len(violations) <= 0, (
+            "Renderer claims a working connection from `configured` alone; a STALE "
+            "GitHub binding would read as connected (2072 follow-up). Consult "
+            "needs_reconnecting(status) / healthy / via:\n  " + "\n  ".join(violations)
+        )

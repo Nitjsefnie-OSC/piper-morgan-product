@@ -1979,14 +1979,16 @@ async def get_github_settings(current_user: JWTClaims = Depends(get_current_user
         from services.integrations.github.config_service import GitHubConfigService
         from services.integrations.integration_status_service import (
             IntegrationStatusService,
+            needs_reconnecting,
         )
 
         uid = str(current_user.sub)
         status_info = await IntegrationStatusService().get_status(uid, "github")
         if status_info.get("configured"):
             # Connected per the binding-first authority. Validity: resolve a
-            # token AS THE CALLER where one exists; an OAuth binding with no
-            # PAT still counts as valid-connected (the binding IS the auth).
+            # token AS THE CALLER where one exists; a BOUND OAuth binding with no
+            # PAT still counts as valid-connected (the binding IS the auth). A
+            # STALE binding with no PAT does not (#2072 follow-up).
             config_service = GitHubConfigService()
             token = config_service.get_authentication_token(user_id=uid)
             if token:
@@ -2001,6 +2003,18 @@ async def get_github_settings(current_user: JWTClaims = Depends(get_current_user
                     "valid": is_valid,
                     "username": test_result.get("username") if is_valid else None,
                     "error": test_result.get("error") if not is_valid else None,
+                }
+            if needs_reconnecting(status_info):
+                # #2072 follow-up (Arch's ruling): a binding GitHub has rejected, and no
+                # personal token to fall back on. The connection exists and does not
+                # work: valid False with #2029's reason, never valid-connected.
+                from web.api.routes.integrations import _GITHUB_CARD_RECONNECT_DETAIL
+
+                return {
+                    "configured": True,
+                    "valid": False,
+                    "username": None,
+                    "error": _GITHUB_CARD_RECONNECT_DETAIL,
                 }
             return {
                 "configured": True,
