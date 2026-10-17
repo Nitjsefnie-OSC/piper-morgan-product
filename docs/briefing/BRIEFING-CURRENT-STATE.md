@@ -27,10 +27,10 @@ log, never here. Bump `last_updated` to the newest line's date, or CI fails. Ski
 
 ## Now
 
-- **Alpha (live)** *(Arch, 2026-10-17 06:29 PDT, `curl https://alpha.pipermorgan.ai/health`)*: healthy, **v0.8.14.0**, git_sha `d741214b6c`
-  (promoted 10-16 17:09 by Lead under the grant on xian's word, run 38984809722; decisions.log 10-16 17:09). Carries #2048, #2054, #2059,
-  #2060, #2061. Waiting on main for the next promotion: #2064 (erase payload + pre-flight + refresh check), #2071 (per-principal Test
-  result), #2066, #2068/#2070, #2072 (#2065 not on main at this read). Served checks: PM test card (`dev/active/pm-test-card.md`).
+- **Alpha (live)** *(Arch, 2026-10-17 09:27 PDT, `curl https://alpha.pipermorgan.ai/health`; ancestry by `git merge-base`)*: healthy, **v0.8.14.0**, git_sha `118241587e`
+  (today's slot 2). Carries #2064 (erase script + three conditions), #2071 (per-principal Test result), #2072 (gate fix and the four
+  renderers). Waiting on main for Sunday's first slot: #2076 (focus/standup name a GitHub that needs reconnecting), #2075 (health
+  only on a recorded check). Held branch: the rule-7 batch #2069/#2047/#2051. Served checks: PM test card (`dev/active/pm-test-card.md`).
   *(CIO, 10-16 10:1x:)* the **standing promotion grant is in force** since xian confirmed it 10-16 08:10 (decisions.log 10-16;
   `docs/internal/operations/alpha-promotion-standing-grant.md`): Lead promotes when Step 0 is READY, no new migration, 07:00-21:00 PT, two a day. `origin/main` builds; the droplet
   and `origin/production` are gone (09-29).
