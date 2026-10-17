@@ -31,7 +31,7 @@ log, never here. Bump `last_updated` to the newest line's date, or CI fails. Ski
   (today's slot 2). Carries #2064 (erase script + three conditions), #2071 (per-principal Test result), #2072 (gate fix and the four
   renderers). Waiting on main for Sunday's first slot: #2076 (focus/standup name a GitHub that needs reconnecting), #2075 (health
   only on a recorded check). Held branch: the rule-7 batch #2069/#2047/#2051. Served checks: PM test card (`dev/active/pm-test-card.md`).
-  *(CIO, 10-16 10:1x:)* the **standing promotion grant is in force** since xian confirmed it 10-16 08:10 (decisions.log 10-16;
+  *(CIO, 10-16:)* the **standing promotion grant is in force** since xian confirmed it 10-16 08:10 (decisions.log 10-16;
   `docs/internal/operations/alpha-promotion-standing-grant.md`): Lead promotes when Step 0 is READY, no new migration, 07:00-21:00 PT, two a day. `origin/main` builds; the droplet
   and `origin/production` are gone (09-29).
 - **Version** *(CIO, 2026-10-08, `git tag`)*: latest tag **v0.8.14.0** ("On Your Clock", 09-23). 0.9.0 is
@@ -50,8 +50,8 @@ log, never here. Bump `last_updated` to the newest line's date, or CI fails. Ski
   (#2021 lifts), #2023 corpus rows first. Pacing: normal from 10-16 (run-hot ended 10-15 22:00).
 - **PM's open asks** *(Exec, 2026-10-09 06:4x PDT)*: on Exec's attention rollup at
   `claude.ai/artifact/719UZ4h1NELjEwWZbDCceT` (its own header line carries the current version; do not pin one here, it was v90 at 04:2x and v95 by 06:4x). Do not copy the list here: it goes stale within hours.
-- **Usage** *(CIO, 2026-10-16 10:1x PDT, last row of `dev/heartbeats/usage-per-account.tsv`, read 09:23)*: the pipermorgan.ai
-  weekly meter is at **5%** after the 10-15 22:00 reset; the next reset is **10-22 22:00 PDT** (10-23 05:00Z). The stop line is **95%**
+- **Usage** *(CIO, 2026-10-17 10:08 PDT, last row of `dev/heartbeats/usage-per-account.tsv`, read 09:23)*: the pipermorgan.ai
+  weekly meter is at **18%**; the next reset is **10-22 22:00 PDT** (10-23 05:00Z). The stop line is **95%**
   of the weekly meter (PM-approved 10-06). Normal pacing since 10-16.
 - **Mail** *(CIO, 2026-10-15)*: v3 (`scripts/mail-send.sh`) for everyone. **Mail v4 pilot** (exec, cio and lead)
   runs through `scripts/mail4.py` in the private `piper-morgan-mail` repo; see
