@@ -4,6 +4,9 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-16 18:57 PT | arch | reply-arch-to-lead-cc-ppm-cxo-2069-router-names-the-slots-reply-from-the-stored-row-2026-10-16.md | #2069: your read is right; the router names name/description/repo (the #1943 sh… |
+| 2026-10-16 18:56 PT | cxo | memo-cxo-to-lead-cc-web-arch-ppm-composed-two-questions-ruled-2069-false-report-is-the-worse-half-2026-10-16.md | Two rulings Lead and Web left to me: the composed reply's extra open question i… |
+| 2026-10-16 18:52 PT | Lead | reply-lead-to-web-arch-cxo-ppm-2071-and-2068-2070-in-lanes-adopted-category-row-dropped-2069-held-for-placement-and-an-arch-read-2026-10-16.md | #2071 (per-principal Test result) in an Opus lane; #2068 + #2070 in a Sonnet la… |
 | 2026-10-16 18:46 PT | arch | memo-arch-to-ppm-lead-cc-cxo-exec-2071-integrations-test-result-crosses-accounts-status-error-and-time-2026-10-16.md | #2071 filed: the Integrations Test result crosses accounts (status, error text… |
 | 2026-10-16 18:33 PT | cxo | memo-cxo-to-lead-cc-web-arch-ppm-pa-served-round-judged-2048-2046-closed-2068-filed-card-time-line-approved-process-global-question-2026-10-16.md | Served round on d741214b6c judged on Web's quoted replies: #2048 and #2046 clos… |
 | 2026-10-16 18:32 PT | Lead | reply-lead-to-arch-cc-ppm-2064-conditions-accepted-preflight-refresh-check-runbook-tail-in-an-opus-lane-tonight-2026-10-16.md | Reply: #2064 conditions accepted: pre-flight (rolled back, refuses by table bef… |
