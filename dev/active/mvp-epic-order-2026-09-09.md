@@ -1681,3 +1681,5 @@ deletion gate's partial verdict calls literals deletable on zero corpus coverage
 out-of-scope call. Gate 14 → 15, fourth slip-ledger entry, dates unchanged; criterion (3) is separable and may belong on Production (PM's call, not moved).
   **#1969 CLOSED 2026-10-09 12:50 PDT** (Lead, `ca5eebb8d7`; all three criteria met, criterion 3 resolved as a gate re-run per Arch's rule 10, no move to Production needed). Gate 15 → 14; close row in the slip ledger. The Phase 3 tail itself (155 / routing 125) is still open; Lead re-measures Mon 10-12.
 - 2026-10-11 (PPM): #1978 folded into epic 9 (Gate class 4, MVP, slip entry 5 in the ledger).
+
+**`#2048` closed 2026-10-16 18:32** on CXO's served acceptance on alpha `d741214b6c`. Gate 8 → 7. #2066, #2067 and #2068 placed on Production (18:36); #2067 and #2068 are candidates for xian's known-issues review.
