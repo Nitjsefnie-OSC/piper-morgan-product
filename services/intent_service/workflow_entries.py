@@ -2514,9 +2514,11 @@ async def run_add_project_workflow(
         return None
     canonical_handlers = intent_service.canonical_handlers
     original_message = (intent.context or {}).get("original_message", "")
-    # #2069 (Arch 2026-10-16, the #1943 shape): the router names the slots
-    # (name / description / repo, this entry's description); the handler
-    # consumes them, the #1856 extractor is the fallback when none came.
+    # #2069 (Arch 2026-10-16, the #1943 shape): the handler consumes the
+    # router's name / description / repo args; the #1856 extractor is the
+    # fallback when none came. The rail description is UNCHANGED (rule 7,
+    # 2026-10-17: the args sentence was DROPPED; the served router names the
+    # args under this wording anyway, the #1976 precedent).
     router_args = (intent.context or {}).get("inversion_args")
     # #1886: intent_service is threaded through so a no-name ask arms the
     # add-project name-clarify carrier DIRECTLY (this path always has
@@ -2537,15 +2539,10 @@ add_project_entry = WorkflowEntry(
     entry_point=run_add_project_workflow,
     effect=EffectClass.WRITE,
     outwardness=Outwardness.PRIVATE,
-    # #2069 (Arch 2026-10-16): router-facing, names the args the handler
-    # consumes (the complete_todo/delete_todo "Put ... in args" shape).
     description=(
         "Create a new project in the user's portfolio, optionally linking a "
         "named GitHub repo in the same utterance; asks once for a name if "
-        "the utterance didn't carry one. "
-        "Put the parts in args: name = the project's name only; description = "
-        "the description the user gave, if any; repo = an owner/repo the user "
-        "named, if any (#1595 Phase 3, #2069)"
+        "the utterance didn't carry one (#1595 Phase 3)"
     ),
     requires_context=["intent", "intent_service"],
     action_triggered=True,

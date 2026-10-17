@@ -278,8 +278,32 @@ def test_scorer_compares_name_description_repo():
     assert not mod.args_match({"repo": "octo/baz"}, {"repo": "octo/bar"})[0]
 
 
-def test_rail_description_names_the_three_args():
+# Rule 7 (2026-10-17): the args sentence ("Put the parts in args: name = …;
+# description = …; repo = …") was screened ×6 in three wordings and DROPPED —
+# each put 'add octocat/hello-world to the project' link_repo ×6 → CLARIFY ×6
+# (dev/2026/10/17/controls/rule7-attribution-2051-2069-wordings-2026-10-17.md).
+# Under main's wording the served router already names name/description on
+# the Baz row (action AND args right 3/3) — the #1976 shape: the description
+# is unchanged and the handler consumes the router's args anyway.
+MAIN_ADD_PROJECT_DESCRIPTION = (
+    "Create a new project in the user's portfolio, optionally linking a "
+    "named GitHub repo in the same utterance; asks once for a name if "
+    "the utterance didn't carry one (#1595 Phase 3)"
+)
+
+
+def test_rail_description_is_unchanged_from_main():
     desc = we.add_project_entry.description
-    assert "args: name = " in desc
-    assert "description = " in desc
-    assert "repo = " in desc
+    assert desc == MAIN_ADD_PROJECT_DESCRIPTION
+    assert "args" not in desc
+
+
+@pytest.mark.asyncio
+async def test_handler_consumes_router_args_without_the_description_sentence():
+    msg, store = await _run_rail(
+        "add project Baz with repo octo/baz described as testing the description",
+        {"name": "Baz", "description": "testing the description", "repo": "octo/baz"},
+    )
+    (row,) = store.rows
+    assert (row.name, row.description) == ("Baz", "testing the description")
+    assert store.linked == ["octo/baz"]
