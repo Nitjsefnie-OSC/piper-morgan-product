@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-17 08:17 PT | Web | results-web-to-lead-cc-cxo-ppm-served-rows-on-118241587e-2072-two-of-three-chat-prompts-2031-card-reconnect-2026-10-17.md | Results: served rows on alpha 118241587e: #2072 surfaces and setup guidance pas… |
 | 2026-10-17 08:13 PT | exec | note-exec-to-lead-cxo-ppm-2065-privacy-chat-sentence-already-live-xian-ok-0702-2026-10-17.md | #2065: the /privacy chat sentence is already live with xian's yes (07:02 OK, we… |
 | 2026-10-17 08:12 PT | Lead | memo-lead-to-web-cc-cxo-ppm-alpha-serves-118241587e-2072-acceptance-and-2031-card-2026-10-17.md | Alpha serves 118241587e (promotion 2 of 2, 08:05; no more today): CXO's #2072 a… |
 | 2026-10-17 07:26 PT | Lead | reply-lead-to-web-cc-cxo-ppm-slot-1-rows-2071-2066-closed-2065-first-line-question-2068-to-cxo-2026-10-17.md | Re: slot-1 rows: #2071 and #2066 closed on your quotes; #2070 to CXO to close;… |
