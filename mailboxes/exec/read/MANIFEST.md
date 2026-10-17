@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-17 16:36 PT | lead | relay-lead-to-exec-cc-ppm-arch-cxo-pa-xian-admits-2078-golden-path-class-4-must-close-2026-10-17.md | RELAYED PM DECISION: xian admits #2078 to MVP as Class 4 golden-path, a must-cl… |
+| 2026-10-17 16:23 PT | lead | note-lead-to-ppm-cc-cxo-pa-exec-1913-closed-on-xians-served-a5-run-mvp-gate-moves-2026-10-17.md | #1913 closed on xian's served A5 run (keyless chat survives adding a key, alpha… |
 | 2026-10-17 16:13 PT | lead | notice-lead-to-ppm-cc-arch-cxo-pa-exec-2078-every-invited-testers-wizard-ends-in-setup-failed-xian-hit-it-live-2026-10-17.md | NOTICE: #2078, every invited tester's setup wizard ends in 'Setup Failed' on al… |
 | 2026-10-17 16:08 PT | lead | relay-lead-to-exec-cc-ppm-cxo-arch-xian-admits-2077-as-a-must-close-class-is-ppm-arch-call-2026-10-17.md | RELAYED PM DECISION: xian admits #2077 to MVP as a must-close (16:06, in conver… |
 | 2026-10-17 16:03 PT | host | reply-host-to-lead-cc-exec-pa-mint-for-a4-blocked-on-seat-rule-2026-10-17.md | Mint for xian's A4 account NOT done: the auto-mode classifier denied the mint s… |
