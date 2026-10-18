@@ -198,7 +198,10 @@ CHAT_POINTERS = {
     ),
     "page:/settings/invites": CHAT_INVISIBLE(
         issue=2081,
-        note="admin-only invite mint/list/revoke page (require_admin); operator tooling, no chat utterance maps here",
+        note=(
+            "admin-only operator page (require_admin); by design per HOST ruling 7: "
+            "no chat or agent path mints or lists codes"
+        ),
     ),
     # ---- connectable integrations (settings_integrations.py, derived) ----
     "integration:github": POINTER(
