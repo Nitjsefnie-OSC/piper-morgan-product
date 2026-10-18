@@ -2,7 +2,7 @@
 type: briefing
 title: BRIEFING-CURRENT-STATE.md - Where We Are Right Now
 valid_from: "2025-09-30"
-last_updated: "2026-10-17"
+last_updated: "2026-10-18"
 last_verified: "2026-10-16"
 size_cap_bytes: 12000
 ---
@@ -27,10 +27,10 @@ log, never here. Bump `last_updated` to the newest line's date, or CI fails. Ski
 
 ## Now
 
-- **Alpha (live)** *(Arch, 2026-10-17 09:27 PDT, `curl https://alpha.pipermorgan.ai/health`; ancestry by `git merge-base`)*: healthy, **v0.8.14.0**, git_sha `118241587e`
-  (today's slot 2). Carries #2064 (erase script + three conditions), #2071 (per-principal Test result), #2072 (gate fix and the four
-  renderers). Waiting on main for Sunday's first slot: #2076 (focus/standup name a GitHub that needs reconnecting), #2075 (health
-  only on a recorded check). Held branch: the rule-7 batch #2069/#2047/#2051. Served checks: PM test card (`dev/active/pm-test-card.md`).
+- **Alpha (live)** *(Arch, 2026-10-18 09:29 PDT, `curl https://alpha.pipermorgan.ai/health`; ancestry by `git merge-base`)*: healthy, **v0.8.14.0**, git_sha `83a2f4e40c`
+  (Sunday's promotions). Carries #2080 (bare-read confirm, floor guard, per-arm decline), #2078 (setup on the session principal), #2077
+  (credential inputs `new-password`), #2076, #2075, #2073, the rule-7 batch. Env flip 10-18 08:18 (xian): `add_project` live (#2069, Arch-ruled).
+  Open MVP 7 (`gh issue list --milestone MVP`): #2080, #2078, #2077, #2018, #2017, #1595, #1386; must-close #2077, #2078. Served checks: `dev/active/pm-test-card.md`.
   *(CIO, 10-16:)* the **standing promotion grant is in force** since xian confirmed it 10-16 08:10 (decisions.log 10-16;
   `docs/internal/operations/alpha-promotion-standing-grant.md`): Lead promotes when Step 0 is READY, no new migration, 07:00-21:00 PT, two a day. `origin/main` builds; the droplet
   and `origin/production` are gone (09-29).
