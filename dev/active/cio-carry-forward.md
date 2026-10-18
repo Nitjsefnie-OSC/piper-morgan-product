@@ -98,3 +98,18 @@ can hide its subject (main-ci-status 20 → 100).
   - Done later in the day: grant widened (alpha unchanged = not a promotion); #1968 items 1-6 (registry-set.py, gh-week-counts.py, freeze rc 2 default); stamp_check in mail-send and check-branch; cc-hold landed by Pard, 52 of 52 holds correct; alpha promoted twice (07:45, 17:09).
   - Still open: #1968 item 7 (Pard's Exec and Lead LaunchAgents); first real-commit stamp warning (watch).
 
+**2026-10-17 (START 10:07, STOP 22:07):**
+  **Done:**
+  - Briefing stamps: my two estimated stamps fixed; stamp_check --log-staged now reads today's briefing attributions (16 tests); m-53 corollary (a chokepoint covers only what passes through it).
+  - Chrome DevTools MCP: already standard via repo .mcp.json; pinned @1.10.1; HOST: --isolated is the scope, no allowlist; Web adds console/network reads Sunday.
+  - m-51 second-seat instance (Lead's re-run set misses, 10-15/#2066/#2079); git-grep-the-pin check offered to Lead.
+  - 10-16 log closed on Docs' nudge.
+  **Open:**
+  - #1968 item 7: Pard's Exec and Lead LaunchAgents.
+  - 7v (#1834 item 2): Exec's decision.
+  - chrome-devtools-mcp bump past 1.10.1: after 10-29 (two-week rule for 1.11.0).
+  - First real-commit stamp warning: watch.
+  - ~/.piper-shared: 1 of 15 file names outside the read denies (whats-armed NOT ARMED at 22:08); notice to HOST cc Exec; confirm 15 of 15 at START.
+  - A4 invite mint (HOST, Lead seats classifier-denied): xian's, via Exec; not mine to work around.
+  - Reviews: 10-19 piper-guards/context-usage-reminder; 10-22 v4 pilot; 10-27 staleness; 10-30 grant; 11-01 sunset inventory; 12-09 methodology audit.
+

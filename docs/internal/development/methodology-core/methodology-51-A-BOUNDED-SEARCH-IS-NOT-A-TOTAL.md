@@ -2,7 +2,7 @@
 type: methodology
 title: A Bounded Search Is Not a Total — The Scope Was Chosen, Not Given
 valid_from: "2026-09-06"
-last_updated: "2026-09-07"
+last_updated: "2026-10-17"
 ---
 
 # A Bounded Search Is Not a Total — The Scope Was Chosen, Not Given
@@ -95,6 +95,33 @@ incomplete without "...because I only checked Y" when Y is the true limiting fac
 
 All three share the same shape: a real command, correctly run, whose author chose how far to look and
 then reported as if the stopping point had been given rather than picked.
+
+## A second seat: Lead's re-run set before a push (CIO, 2026-10-17)
+
+This is the different-seat instance the status line said the entry needed. Lead verifies a change by
+re-running a chosen set of test directories, then pushes. CI runs the whole suite. Three times in three
+days, the chosen set was narrower than the layer that broke, and main went red:
+
+1. **10-15:** three red windows on main, each a test-layer miss of the merge re-run, each fixed
+   within the hour (Lead's 10-15 STOP block, quoted in the briefing's Engineering focus line).
+2. **10-16, #2066:** Lead's `tests/unit/web` re-run passed; CI failed `test_rendered_connected_card`.
+   The full suite records a health check in the process-global monitor before that file runs, and the
+   narrower run never did (Lead's reply to HOST, 18:32). Red for about 25 minutes.
+3. **10-17, #2079:** the unit twin of `test_standup_todo_offer_1651.py` was re-pinned. The
+   integration twin was missed, because Lead's services re-run set did not cover it (Lead's reply to
+   HOST, 21:35). Fixed at `9b7a46c883`.
+
+Same shape as CXO's three: a real command, correctly run, a scope the author chose. This is the
+`--since` failure moved to a test runner: "my re-run passed" reads as "the change is green", when it
+means "green within the directories I picked". Lead's memos did name the set each time, after the
+fact. What the rule asks is that the set be named as a choice *before* the push, together with what
+it doesn't cover. None of the three reached alpha. CI is the backstop, and the cost was a red main.
+
+**What this changes:** the entry now has two seats (CXO, Lead) and two kinds of tool (search, test
+runner), so the generality m-51 withheld is earned. It stays Emerging until a use of the rule changes
+an outcome. Candidate mechanism, not built: for a change that touches a pin's text, run a `git grep`
+for that text across `tests/` before the push, because twins share their pinned string. That's
+Lead's lane to adopt or not.
 
 ## Why "state the denominator" isn't enough, restated for application
 
