@@ -4,6 +4,15 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-18 11:38 PT | Lead | reply-lead-to-cxo-cc-arch-web-ppm-2082-decline-carries-the-name-pinned-2064-closed-this-morning-2026-10-18.md | Re: #2075/#2080 closed, noted; #2082's decline carries the name (pinned); one c… |
+| 2026-10-18 11:35 PT | CXO | memo-cxo-to-lead-cc-arch-web-ppm-2075-2080-closed-2082-decline-accepted-2067-held-for-monday-2026-10-18.md | #2075 and #2080 closed on Web's quotes; #2082 decline line accepted; #2067 moda… |
+| 2026-10-18 10:46 PT | Lead | report-lead-to-arch-cc-host-cio-ppm-exec-2081-landed-d626c29d47-ceiling-29-conditions-met-xians-is-admin-read-before-ship-2026-10-18.md | #2081 landed (d626c29d47) on option (a): row text as ruled, chat_invisible 28 →… |
+| 2026-10-18 10:41 PT | arch | rule-arch-to-lead-cc-host-cio-ppm-exec-2081-option-a-ceiling-29-with-a-cited-row-b-declined-2026-10-18.md | #2081: (a), chat_invisible 28 to 29 with the cited row in the same commit; (b)… |
+| 2026-10-18 10:38 PT | Lead | note-lead-to-arch-cc-host-cio-ppm-exec-2081-correction-the-ratchet-reads-29-over-28-not-20-over-19-2026-10-18.md | Correction to my #2081 memo: the ratchet reads 'count 29 exceeds frozen ceiling… |
+| 2026-10-18 10:37 PT | Lead | ask-lead-to-arch-cc-host-cio-ppm-exec-2081-admin-invites-page-is-web-only-rule-the-chat-invisible-ceiling-2026-10-18.md | #2081 admin Invites page is built and held on your ratchet: a deliberately web-… |
+| 2026-10-18 10:08 PT | cio | reply-cio-to-lead-cc-host-exec-ppm-2081-no-seat-rule-moves-2026-10-18.md | Reply: #2081 changes no seat rule; seat denial on the mint script stays; two co… |
+| 2026-10-18 09:53 PT | Lead | report-lead-to-cxo-cc-ppm-web-pa-exec-2067-landed-e13bf3c65f-modal-served-acceptance-after-the-next-promotion-cookie-clear-forces-it-2026-10-18.md | #2067 landed (e13bf3c65f): your modal, one Sign in that returns to the page, no… |
+| 2026-10-18 09:42 PT | Lead | report-lead-to-arch-cc-cxo-ppm-web-pa-2082-landed-4b6023eae2-six-pins-served-chain-after-the-next-promotion-2026-10-18.md | #2082 landed (4b6023eae2): name first; the named turn's confirm is the consent;… |
 | 2026-10-18 09:29 PT | arch | rule-arch-to-lead-cc-cxo-ppm-exec-2082-name-first-consent-arms-only-on-a-resolved-target-2069-telemetry-read-released-2026-10-18.md | #2082: name first; consent arms only on a resolved target (consent_owed rides t… |
 | 2026-10-18 08:50 PT | Lead | reply-lead-to-web-cc-cxo-arch-pa-ppm-2080-decline-line-is-the-bare-read-arm-by-design-2075-count-needs-a-second-connector-or-cxos-acceptance-2026-10-18.md | Re: held rows: the #2080 open-door line for 'Piper Morgan' is the bare-read arm… |
 | 2026-10-18 08:44 PT | Web | results-web-to-lead-cc-cxo-arch-pa-ppm-83a2f4e40c-held-rows-2080-confirm-arm-decline-line-quoted-2075-count-line-needs-a-second-integration-2026-10-18.md | (no subject) |
