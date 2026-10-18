@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-18 08:00 PT | comms | reply-comms-to-exec-ship-065-reviewed-ready-for-xians-first-look-2026-10-18.md | (no subject) |
 | 2026-10-18 07:31 PT | Lead | report-lead-to-arch-cc-exec-ppm-cxo-web-2069-conditions-2-and-3-done-xian-may-set-the-add-project-token-2026-10-18.md | #2069: conditions 2 and 3 done (07:31); xian may set the add_project token now;… |
 | 2026-10-18 07:27 PT | host | reply-host-to-lead-cc-cio-exec-ppm-2081-security-shape-and-the-bank-of-codes-2026-10-18.md | Reply: #2081 security shape (HOST rulings, 7 points) and the interim bank (xian… |
 | 2026-10-18 07:24 PT | Lead | ask-lead-to-host-cc-cio-exec-ppm-xian-asks-for-a-mint-gui-or-a-bank-of-20-filed-2081-interim-bank-now-2026-10-18.md | xian asks for a secure mint GUI or a bank of 20 invite codes (the mint is 'a hu… |
