@@ -17527,9 +17527,73 @@ Add any additional information here.
             # since every complete_todo alias (finish_todo/mark_complete/
             # mark_done) shares the one registered entry object.
             _is_complete_todo_turn = _rail_entry is _action_workflows.get("complete_todo")
+            # #2082 (Arch's ruling 2026-10-18, agreeing with CXO 08:27): a
+            # consent check asks the person to approve a SPECIFIC write. A
+            # held add_project turn with no name ("I'd like to start a new
+            # project") has no write to approve — the served "yes" consented
+            # to nothing and the turn after it was a dead end. So, like the
+            # delete-todo and unlink builders (resolve before arming), the
+            # rail asks for the NAME first, in the #2080 carrier's words, and
+            # writes ``consent_owed`` into the carrier's payload from this
+            # verdict; the named turn then arms the one confirm (the consent)
+            # instead of writing. PROCEED (an imperative, or direct mode)
+            # and name-bearing turns are unchanged. Entry identity, never a
+            # bare action-string allowlist (the complete_todo precedent).
+            _is_add_project_turn = _rail_entry is _action_workflows.get("add_project")
+            _add_project_unnamed = False
+            if _is_add_project_turn:
+                from services.onboarding.portfolio_service import (
+                    resolve_add_project_slots as _resolve_add_slots,
+                )
+
+                _add_slots = _resolve_add_slots(
+                    (intent.context or {}).get("original_message") or message,
+                    (intent.context or {}).get("inversion_args"),
+                )
+                _add_project_unnamed = not _add_slots.get("name")
             if _is_complete_todo_turn and is_clear_family_passthrough(message):
                 pass  # fall through to dispatch_workflow; run_complete_todo_workflow's
                 # own maybe_handle_clear_family seam (candidate effect WRITE) claims it.
+            elif _add_project_unnamed:
+                from services.intent_service.add_project_clarify import (
+                    ADD_PROJECT_ACCEPT_NAME_QUESTION as _add_name_q,
+                )
+                from services.intent_service.add_project_clarify import (
+                    build_add_project_name_offer as _build_add_name_offer,
+                )
+
+                _name_offer = _build_add_name_offer(
+                    (intent.context or {}).get("original_message") or message,
+                    user_id,
+                    question=_add_name_q,
+                    consent_owed=True,
+                )
+                self.workflow_offer_service.set_pending_offer(
+                    session_id, _name_offer, user_id=user_id
+                )
+                self.logger.info(
+                    "add_project_name_asked_before_consent",
+                    action=intent.action,
+                    session_id=session_id,
+                )
+                return _RailOutcome(
+                    on_rail=True,
+                    armed=True,
+                    result=IntentProcessingResult(
+                        success=True,
+                        message=_add_name_q,
+                        intent_data={
+                            "category": intent.category.value,
+                            "action": "add_project_needs_name",
+                            "confidence": intent.confidence,
+                            "add_project_name_question_pending": True,
+                            "consent_owed": True,
+                        },
+                        requires_clarification=True,
+                        suggestions=all_suggestions,
+                        preferences=preferences,
+                    ),
+                )
             elif not _collab_gate.is_draft_collaboration_action(intent.action):
                 _check = _consent.build_consent_check_offer(intent, _rail_entry.effect)
                 self.workflow_offer_service.set_pending_offer(

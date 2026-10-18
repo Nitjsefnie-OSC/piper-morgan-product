@@ -298,13 +298,23 @@ def build_add_project_confirm_offer(
     }
 
 
-def build_add_project_name_offer(original_message: str, user_id, question=None) -> Dict[str, Any]:
+def build_add_project_name_offer(
+    original_message: str, user_id, question=None, *, consent_owed: bool = False
+) -> Dict[str, Any]:
     """The #846 pending-offer record arming the add-project name question
     (#1886). Mirrors ``todo_handlers.build_reminder_task_offer`` exactly —
     carries the ORIGINAL message (strings only, so the payload snapshots
     cleanly) so a restatement's own repo clause can still be recovered at
     answer time. ``question`` (#1665): the ALREADY-RENDERED ask the caller
-    returns this turn — stored verbatim, never re-rendered."""
+    returns this turn — stored verbatim, never re-rendered.
+
+    ``consent_owed`` (#2082, Arch 2026-10-18): True when the rail's consent
+    gate HELD this add (a collaborate-mode declarative with no name) and
+    chose to ask for the name first instead of asking consent for a write
+    with no target. Written by code from the gate's verdict, never
+    re-derived from text; it rides the payload so the named turn arms the
+    one confirm (``build_add_project_confirm_offer``) instead of writing.
+    A re-ask re-stores this same record, so the flag survives it."""
     return {
         "workflow_type": CLARIFY_ADD_PROJECT_NAME_WORKFLOW,
         "question": question,
@@ -314,6 +324,7 @@ def build_add_project_name_offer(original_message: str, user_id, question=None) 
             "original_message": original_message,
             "user_id": str(user_id) if user_id else None,
             "summary": "add a project",
+            "consent_owed": bool(consent_owed),
         },
         "decline_message": "Okay — I haven't added a project. Nothing was created.",
     }
@@ -611,6 +622,40 @@ async def handle_add_project_name_turn(
 
     original_message = (payload.get("original_message") or "").strip()
     repo_name = extract_add_project_slots(original_message).get("repo")
+
+    if payload.get("consent_owed"):
+        # #2082 (Arch 2026-10-18): the rail's consent gate held the original
+        # declarative and asked for the name first; now the target exists,
+        # the ONE confirm is the consent. Its yes writes
+        # (handle_add_project_confirm_turn); its no gets the #1886(b) naming
+        # decline (Arch's default; CXO picks). Nothing is written here.
+        offer = build_add_project_confirm_offer(
+            text, repo_name, user_id or offer_user, original_message, bare_read=False
+        )
+        armed = False
+        try:
+            intent_service.workflow_offer_service.set_pending_offer(
+                session_id, offer, user_id=str(user_id) if user_id else None
+            )
+            armed = True
+        except Exception as e:  # silent-ok: #2082 — arming is additive; the honest question must go out regardless; logged ERROR
+            logger.error("add_project_consent_confirm_arm_failed", error=str(e))
+        logger.info(
+            "add_project_name_bound_consent_confirm_armed",
+            session_id=session_id,
+            armed=armed,
+        )
+        return {
+            "message": offer["question"],
+            "intent_data": {
+                "category": IntentCategoryEnum.PORTFOLIO.value,
+                "action": "add_project_needs_confirmation",
+                "add_project_confirm_question_pending": armed,
+                "consent_owed": True,
+            },
+            "requires_clarification": True,
+        }
+
     canonical_handlers = intent_service.canonical_handlers
     canonical_result = await canonical_handlers._create_or_report_project(
         name=text,

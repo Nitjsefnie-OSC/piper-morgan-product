@@ -650,6 +650,23 @@ Served acceptance after the flip (Arch): wording (a) stores name 'Baz' and the d
 start a new project" gets a name ask and no row; telemetry `live_match=operation`. Lesson: before building
 a handler-side args fix, check which surface dispatches the op on alpha (`resolve_live_match`, one call).
 
+**#2082 name first; consent arms only on a resolved target (Arch 2026-10-18 09:28, agreeing with CXO
+08:27; built the same morning)**: with `add_project` live, a collaborate-mode declarative with no name
+("I'd like to start a new project") reached the rail's consent block as a held WRITE and got the generic
+consent check ("…asking me to add project… Should I go ahead? (yes/no)"); the yes consented to nothing
+and the turn after it was the one-line name ask, a dead end. Rule, the rail's existing "resolve before
+arming" (the delete-todo and unlink builders): in the held branch, when the entry is `add_project`
+(entry identity) and `resolve_add_project_slots` yields no name, the rail does not build the consent
+check; it arms the #1886 name carrier with the #2080 carrier's words ("What would you like to call
+it?", `ADD_PROJECT_ACCEPT_NAME_QUESTION`) and writes `consent_owed: True` into the payload from the
+verdict. On the named turn, `handle_add_project_name_turn`'s BIND landing with `consent_owed` arms
+`build_add_project_confirm_offer` (`Add a project called "X"? (yes/no)`) instead of writing; that one
+question is the consent; its yes writes, its no gets the #1886(b) naming decline (Arch's default, CXO
+picks). PROCEED (an imperative, or direct mode) and name-bearing turns are unchanged; a re-ask
+re-stores the same record, so the flag survives it. Pins: `test_add_project_name_first_consent_2082.py`
+(six). Served acceptance: all three turns of the declarative chain and the projects list after each,
+on a collaborate-mode account.
+
 **#1762 capped-list remainder seam (2026-09-13, epic 6 first build) — a NEW
 pre-classification deterministic seam, and the chain's first PERSISTING arm.**
 Sits immediately after the #889 resume check and before classification, guarded
