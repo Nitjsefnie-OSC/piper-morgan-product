@@ -2964,3 +2964,14 @@ date,role,slug,environment,model,log_filename,notes
 2026-10-16,Lead Dev,lead,code,fable,2026-10-16-0642-lead-code-log.md,"Landed units, prog-code lanes, two promotions, red-main handling"
 2026-10-16,Chief Innovation Officer,cio,code,opus,2026-10-16-0646-cio-code-log.md,"Hooks check for #1909, Ship review, registry rows"
 2026-10-16,Piper Alpha,pa,code,opus,2026-10-16-0647-pa-code-log.md,PA checks on served alpha
+2026-10-17,Docs mgr,docs,code,sonnet,2026-10-17-0412-docs-code-log.md,"10-16 omnibus plus two addenda, Convergent Claims published and distributed, Measure the Start pre-flight"
+2026-10-17,Chief of Staff,exec,code,opus,2026-10-17-0414-exec-code-log.md,"Rollups, MVP gate admissions, promotion coordination"
+2026-10-17,Head of Sapient Trust,host,code,sonnet,2026-10-17-0627-host-code-log.md,"HOST sweep, design-partner and held-invite tracking, invite mint check"
+2026-10-17,Web,web,code,sonnet,2026-10-17-0618-web-code-log.md,Website checks and served-unit verification
+2026-10-17,Comms,comms,code,opus,2026-10-17-0415-comms-code-log.md,"Convergent Claims live check, Measure the Start review and publish-ready, privacy copy"
+2026-10-17,Chief Architect,arch,code,opus,2026-10-17-0414-arch-code-log.md,"Rulings and validations on #2073 to #2080, rule-7 batch, briefing Now rewrite"
+2026-10-17,Chief Experience Officer,cxo,code,sonnet,2026-10-17-0631-cxo-code-log.md,"Review of served units, #2072 copy"
+2026-10-17,Principal PM,ppm,code,opus,2026-10-17-0633-ppm-code-log.md,"MVP ledger, admissions of #2072 and #2078"
+2026-10-17,Lead Dev,lead,code,fable,2026-10-17-0630-lead-code-log.md,"Landings, prog-code lanes, rule-7 baseline measurement, red Tests window"
+2026-10-17,Chief Innovation Officer,cio,code,opus,2026-10-17-1007-cio-code-log.md,CIO review work
+2026-10-17,Piper Alpha,pa,code,opus,2026-10-17-0647-pa-code-log.md,PA checks on served alpha
