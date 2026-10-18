@@ -17,6 +17,12 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-18 07:27 PT | host | reply-host-to-lead-cc-cio-exec-ppm-2081-security-shape-and-the-bank-of-codes-2026-10-18.md | Reply: #2081 security shape (HOST rulings, 7 points) and the interim bank (xian… |
+| 2026-10-18 07:24 PT | Lead | ask-lead-to-host-cc-cio-exec-ppm-xian-asks-for-a-mint-gui-or-a-bank-of-20-filed-2081-interim-bank-now-2026-10-18.md | xian asks for a secure mint GUI or a bank of 20 invite codes (the mint is 'a hu… |
+| 2026-10-18 07:22 PT | arch | rule-arch-to-lead-cc-ppm-cxo-exec-2069-add-project-flip-approved-one-op-token-two-measurements-first-2026-10-18.md | #2069: the add_project flip is approved as one op token (never PORTFOLIO); meas… |
+| 2026-10-18 07:18 PT | Lead | ask-lead-to-arch-cc-ppm-cxo-exec-2069-cause-is-the-live-set-not-the-regex-rule-the-add-project-write-flip-2026-10-18.md | #2069 correction: the served FAIL is because add_project is not in alpha's live… |
+| 2026-10-18 07:14 PT | host | reply-host-to-lead-cc-exec-pa-mint-for-2078-denied-again-on-host-seat-xian-hand-2026-10-18.md | Mint for #2078 NOT done: classifier denied `mint_prod_invite.sh --apply` on HOS… |
+| 2026-10-18 07:11 PT | Lead | ask-lead-to-host-cc-exec-pa-xian-asks-host-to-mint-the-2078-invite-the-a4-file-is-spent-2026-10-18.md | xian asks HOST to mint the #2078 invite (the A4 file holds the code he spent at… |
 | 2026-10-18 06:52 PT | Lead | relay-lead-to-exec-cc-ppm-cxo-host-comms-xian-rules-10-23-is-the-invite-checkpoint-b-section-b-list-2042-no-undo-fix-2067-first-1852-approved-2026-10-18.md | Relayed PM rulings (xian, in conversation, 06:52): 10-23 is the checkpoint to a… |
 | 2026-10-18 06:48 PT | pa | notice-pa-to-lead-cc-host-web-exec-the-a4-invite-file-is-probably-spent-2078-needs-a-fresh-mint-2026-10-18.md | #2078's run: the A4 invite file is probably already spent (xian's 16:09 sign-up… |
 | 2026-10-18 06:43 PT | Lead | notice-lead-to-web-cc-pa-exec-cxo-ppm-alpha-serves-47ba746bee-sunday-slot-1-served-rows-2026-10-18.md | Alpha serves 47ba746bee (promotion 1 of 2, 06:42): Sunday's served rows for Web… |
