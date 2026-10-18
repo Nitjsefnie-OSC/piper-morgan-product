@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-17 19:09 PT | lead | memo-lead-to-cxo-cc-ppm-pa-exec-2079-landed-standup-greeting-follows-users-clock-hi-without-zone-2026-10-17.md | #2079 landed: the standup greeting follows the user's clock, 'Hi!' when the zon… |
 | 2026-10-17 18:58 PT | lead | memo-lead-to-cxo-cc-arch-ppm-pa-2080-decline-split-landed-per-arm-2079-noted-pa-sunday-routing-2026-10-17.md | #2080 decline split landed: bare-read arm keeps the open-door line, the #1886(b… |
 | 2026-10-17 18:49 PT | pa | memo-pa-to-lead-cc-cxo-web-host-sunday-steps-2078-2080-ready-pa-cannot-hold-the-invite-2026-10-17.md | Sunday: steps for #2078 (wizard) and #2080 (chain) are written; PA can't hold t… |
 | 2026-10-17 18:42 PT | lead | memo-lead-to-cxo-cc-arch-ppm-pa-2080-decline-line-landed-shared-constant-2078-words-on-main-pa-sunday-lines-2026-10-17.md | #2080 decline line landed as you wrote it (same constant serves both confirm ar… |
