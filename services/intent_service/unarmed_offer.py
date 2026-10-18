@@ -390,6 +390,27 @@ def build_floor_bound_offer_record(*, command: str, question: str, action: str) 
     }
 
 
+def _bound_name_was_said(family: "CommandFamily", command: str, user_text: Optional[str]) -> bool:
+    """#2080 (Arch's pre-landing condition, 2026-10-17): a name bound from the
+    FLOOR'S OWN sentence is model output. Before it is armed (and, on a yes,
+    written), every word of it must occur in the user's text, the same #1976
+    guard the router's args pass (``user_said_every_word``, factored, not
+    copied). No user text available means no arm: fail closed to the rewrite."""
+    if family.name != "add_project":
+        return True
+    try:
+        from services.onboarding.portfolio_service import (
+            extract_add_project_slots,
+            user_said_every_word,
+        )
+    except ImportError:  # pragma: no cover - degrade to the rewrite
+        return False
+    name = (extract_add_project_slots(command) or {}).get("name")
+    if not name:
+        return False
+    return user_said_every_word(name, user_text) is not None
+
+
 def _try_arm(
     text: str,
     offer: OfferSentence,
@@ -399,18 +420,28 @@ def _try_arm(
     user_id: Optional[str] = None,
     intent_category: Optional[str] = None,
     intent_action: Optional[str] = None,
+    user_text: Optional[str] = None,
 ) -> Optional[str]:
     """Arm this offer and return the text to render, or None to fall through.
 
     None means "not armable" and the caller rewrites — the fail-safe direction
     in every failure mode there is: no bind, a callback that refuses, a
-    callback that raises. An offer we could not arm must never be left standing
-    as a question, because that is precisely the defect #1855 closes.
+    callback that raises, a bound name the user never said (#2080). An offer
+    we could not arm must never be left standing as a question, because that
+    is precisely the defect #1855 closes.
     """
     bound = bind_catalogued_command(offer.predicate)
     if bound is None:
         return None
     family, command = bound
+    if not _bound_name_was_said(family, command, user_text):
+        logger.info(
+            "floor_offer_name_not_said_by_user",
+            command=command,
+            session_id=session_id,
+            user_id=user_id,
+        )
+        return None
 
     sentence = offer.sentence
     out = text
@@ -487,8 +518,13 @@ def enforce_armed_offers(
     intent_category: Optional[str] = None,
     intent_action: Optional[str] = None,
     arm_offer: Optional[Callable[[Dict[str, Any]], bool]] = None,
+    user_text: Optional[str] = None,
 ) -> Tuple[str, int]:
     """Enforce ask-only-when-armed in ``text``; return (text, rewrites).
+
+    ``user_text`` (#2080): the user's own words this turn (the caller may join
+    recent user turns), which a floor-bound add-project NAME must be drawn from
+    before it can be armed. None fails closed: the offer is rewritten.
 
     ``armed_offer`` is the NAME of the rail that armed an offer for this turn
     (``"workflow_offer"`` / ``"last_offer"`` / ``"interview_offer"``), or None
@@ -542,6 +578,7 @@ def enforce_armed_offers(
             user_id=user_id,
             intent_category=intent_category,
             intent_action=intent_action,
+            user_text=user_text,
         )
         if armed_text is not None:
             return armed_text, 0

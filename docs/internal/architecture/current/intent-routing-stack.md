@@ -855,7 +855,14 @@ family opener (one to three words, then a dash, colon or comma: "Got it — want
 me to …?"), and the binder reads "called/named X" off the floor's own sentence,
 so that exact reply now binds to `add project Piper Morgan` and is armed or
 rewritten, never left standing unarmed. A genuinely mid-sentence mention still
-does not match. Regression: `tests/unit/services/intent_service/test_bare_read_confirms_2080.py`;
+does not match. **Arch's condition on the widening:** the floor's sentence is
+model output, so a name bound from it must pass the #1976 user-said guard
+(`portfolio_service.user_said_every_word`, factored out of
+`router_add_project_args`, not copied) against the user's own words (this turn
+joined with the recent user turns the floor already holds) before `_try_arm`
+arms it; a name the user never typed takes the rewrite path and nothing is
+armed (no user text at all fails closed). xian's case passes: he typed the
+name. Regression: `tests/unit/services/intent_service/test_bare_read_confirms_2080.py`;
 control: `dev/2026/10/17/controls/ctl-2080-armed-name-2026-10-17.md`.
 
 **#1763 the multi-intent branch orchestrates only an ALL-CANONICAL plan

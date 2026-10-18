@@ -583,6 +583,29 @@ def is_plausible_project_name(text: Optional[str]) -> bool:
     return True
 
 
+def user_said_every_word(candidate: object, *user_texts: Optional[str]) -> Optional[str]:
+    """The #1976 honesty guard, factored (#2080, Arch 2026-10-17): return the
+    whitespace-normalised ``candidate`` when EVERY word of it occurs in the
+    user's own text (a word-SET check over all the given user texts, no
+    regex), else None. Used by ``router_add_project_args`` for the router's
+    args and by the floor's offer seam for a name read off the floor's own
+    sentence, so neither an LLM-written arg nor an LLM-composed offer can
+    store words the user did not say."""
+    if not isinstance(candidate, str) or not candidate.strip():
+        return None
+    said: set = set()
+    for text in user_texts:
+        if text:
+            said |= {w.strip(string.punctuation).lower() for w in text.split()}
+    said.discard("")
+    normalised = " ".join(candidate.split())
+    wanted = {w.strip(string.punctuation).lower() for w in normalised.split()}
+    wanted.discard("")
+    if not wanted or not wanted <= said:
+        return None
+    return normalised
+
+
 def router_add_project_args(router_args: object, message: Optional[str]) -> dict:
     """#2069: the router's ``name`` / ``description`` / ``repo`` args
     (``context["inversion_args"]``, the #1943/#1976 family: consume the
@@ -602,17 +625,9 @@ def router_add_project_args(router_args: object, message: Optional[str]) -> dict
     }
     if not isinstance(router_args, dict):
         return out
-    said = {w.strip(string.punctuation).lower() for w in (message or "").split()}
 
     def _said(raw: object) -> Optional[str]:
-        if not isinstance(raw, str) or not raw.strip():
-            return None
-        text = " ".join(raw.split())
-        wanted = {w.strip(string.punctuation).lower() for w in text.split()}
-        wanted.discard("")
-        if not wanted or not wanted <= said:
-            return None
-        return text
+        return user_said_every_word(raw, message)
 
     name = _said(router_args.get("name"))
     if name is not None and is_plausible_project_name(name):

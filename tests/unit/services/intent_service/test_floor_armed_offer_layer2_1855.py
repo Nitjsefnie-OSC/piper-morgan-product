@@ -211,7 +211,12 @@ def _reset_db_calls():
 class TestArmOutcome:
     def test_pm_fixture_arms_and_the_question_stands(self):
         armer = _Armer()
-        out, rewrites = enforce_armed_offers(PM_REPLY, armed_offer=None, arm_offer=armer)
+        out, rewrites = enforce_armed_offers(
+            PM_REPLY,
+            armed_offer=None,
+            arm_offer=armer,
+            user_text="add One Job with repo Design-in-Product/one-job",
+        )
 
         # A question still stands (not a suggestion) — in the house form (CXO
         # 2026-09-24), naming the exact command the user is confirming.
@@ -227,7 +232,12 @@ class TestArmOutcome:
     def test_the_armed_record_shape_is_the_carrier_shape(self):
         """Quoted in full: what the accept seam and the predicate actually read."""
         armer = _Armer()
-        enforce_armed_offers(PM_REPLY, armed_offer=None, arm_offer=armer)
+        enforce_armed_offers(
+            PM_REPLY,
+            armed_offer=None,
+            arm_offer=armer,
+            user_text="add One Job with repo Design-in-Product/one-job",
+        )
         record = armer.peek()
 
         assert record["workflow_type"] == CONFIRM_PENDING_ACTION_WORKFLOW
@@ -250,7 +260,13 @@ class TestArmOutcome:
     def test_arming_is_logged_with_the_command(self):
         armer = _Armer()
         with capture_logs() as events:
-            enforce_armed_offers(PM_REPLY, armed_offer=None, arm_offer=armer, session_id="s1855-l2")
+            enforce_armed_offers(
+                PM_REPLY,
+                armed_offer=None,
+                arm_offer=armer,
+                session_id="s1855-l2",
+                user_text="add One Job with repo Design-in-Product/one-job",
+            )
         armed = [e for e in events if e.get("event") == "floor_offer_armed"]
         assert len(armed) == 1
         assert armed[0]["command"] == PM_EXPECTED_COMMAND
@@ -301,7 +317,12 @@ class TestArmOutcome:
     def test_a_failed_arm_falls_back_to_the_rewrite(self, kwargs):
         """Fail-safe in every direction: an offer we could not arm never stands."""
         armer = _Armer(**kwargs)
-        out, rewrites = enforce_armed_offers(PM_REPLY, armed_offer=None, arm_offer=armer)
+        out, rewrites = enforce_armed_offers(
+            PM_REPLY,
+            armed_offer=None,
+            arm_offer=armer,
+            user_text="add One Job with repo Design-in-Product/one-job",
+        )
         assert rewrites == 1
         assert PM_OFFER not in out
         assert armer.peek() is None
@@ -319,7 +340,12 @@ class TestArmOutcome:
         and an ARMED question is ALLOWED to match: that is the point. What must
         not happen is the seam chewing its own armed output."""
         armer = _Armer()
-        out, rewrites = enforce_armed_offers(PM_REPLY, armed_offer=None, arm_offer=armer)
+        out, rewrites = enforce_armed_offers(
+            PM_REPLY,
+            armed_offer=None,
+            arm_offer=armer,
+            user_text="add One Job with repo Design-in-Product/one-job",
+        )
         assert rewrites == 0
         found = detect_offer_questions(out)
         # The detector scans sentences: it sees the ask, not the trailing guidance.
@@ -522,7 +548,12 @@ class TestArmedQuestionForm:
         reconstruct what they are confirming."""
         assert uo.ARMED_QUESTION_FORM is not None
         armer = _Armer()
-        out, _ = enforce_armed_offers(PM_REPLY, armed_offer=None, arm_offer=armer)
+        out, _ = enforce_armed_offers(
+            PM_REPLY,
+            armed_offer=None,
+            arm_offer=armer,
+            user_text="add One Job with repo Design-in-Product/one-job",
+        )
         rec = armer.peek()
         assert rec["pending_action"]["command"] in rec["question"]
         assert rec["question"] in out
@@ -531,7 +562,12 @@ class TestArmedQuestionForm:
     def test_none_restores_the_models_own_wording(self, monkeypatch):
         monkeypatch.setattr(uo, "ARMED_QUESTION_FORM", None)
         armer = _Armer()
-        out, _ = enforce_armed_offers(PM_REPLY, armed_offer=None, arm_offer=armer)
+        out, _ = enforce_armed_offers(
+            PM_REPLY,
+            armed_offer=None,
+            arm_offer=armer,
+            user_text="add One Job with repo Design-in-Product/one-job",
+        )
         assert out == PM_REPLY
         assert armer.peek()["question"] == PM_OFFER
 
@@ -539,7 +575,12 @@ class TestArmedQuestionForm:
         form = "Want me to {command}? Say yes, or tell me otherwise."
         monkeypatch.setattr(uo, "ARMED_QUESTION_FORM", form)
         armer = _Armer()
-        out, rewrites = enforce_armed_offers(PM_REPLY, armed_offer=None, arm_offer=armer)
+        out, rewrites = enforce_armed_offers(
+            PM_REPLY,
+            armed_offer=None,
+            arm_offer=armer,
+            user_text="add One Job with repo Design-in-Product/one-job",
+        )
 
         expected = form.format(command=PM_EXPECTED_COMMAND)
         assert rewrites == 0
@@ -586,7 +627,9 @@ class TestCatalogueDenominator:
         for family in COMMAND_FAMILIES:
             sentence, command = FAMILY_ROUND_TRIPS[family.name]
             armer = _Armer(session_id=f"s-{family.name}")
-            enforce_armed_offers(sentence, armed_offer=None, arm_offer=armer)
+            # #2080: a floor-bound name must be the user's own words; the command
+            # text carries them here.
+            enforce_armed_offers(sentence, armed_offer=None, arm_offer=armer, user_text=command)
             record = armer.peek()
             assert record["pending_action"]["action"] == family.name
             assert record["pending_action"]["command"] == command

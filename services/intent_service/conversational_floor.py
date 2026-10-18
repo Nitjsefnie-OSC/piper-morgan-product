@@ -1817,6 +1817,14 @@ class ConversationalFloor:
             # question whose command TIER-1 BINDS is ARMED here instead of
             # rewritten — the floor may ask what it has armed. Without the
             # callback this is layer 1, byte for byte.
+            # #2080: a floor-bound add-project NAME must be drawn from the user's
+            # own words (this turn or a recent user turn, e.g. the armed name
+            # answer) before the seam may arm it: the #1976 guard, factored.
+            recent_user_turns = " ".join(
+                str(t.get("content", ""))
+                for t in (ctx.conversation_history or [])[-6:]
+                if t.get("role") == "user"
+            )
             message, unarmed_offers = enforce_armed_offers(
                 message,
                 armed_offer=ctx.armed_offer,
@@ -1825,6 +1833,7 @@ class ConversationalFloor:
                 intent_category=ctx.intent_category,
                 intent_action=ctx.intent_action,
                 arm_offer=ctx.arm_offer,
+                user_text=f"{ctx.user_message or ''} {recent_user_turns}".strip(),
             )
             if unarmed_offers:
                 logger.warning(

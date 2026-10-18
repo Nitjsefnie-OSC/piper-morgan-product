@@ -273,10 +273,70 @@ class TestSeamCatchesTheImprovisedOffer:
             armed.append(record)
             return True
 
-        text, rewrites = enforce_armed_offers(SERVED_SENTENCE, arm_offer=arm, session_id="s")
+        text, rewrites = enforce_armed_offers(
+            SERVED_SENTENCE, arm_offer=arm, session_id="s", user_text="Piper Morgan"
+        )
         assert rewrites == 0
         assert len(armed) == 1
         assert armed[0]["pending_action"]["command"] == "add project Piper Morgan"
         assert "add project Piper Morgan" in text and text.endswith(
             "Say yes, or tell me otherwise."
         )
+
+
+class TestFloorBoundNameMustBeTheUsersWords:
+    """Arch's pre-landing condition (2026-10-17): the floor's sentence is model
+    output, so a name read off it passes the #1976 user-said guard or is not
+    armed. xian's case passes (he typed "Piper Morgan"); an invented name
+    takes the rewrite path and nothing is armed."""
+
+    def _arm(self):
+        armed = []
+
+        def arm(record):
+            armed.append(record)
+            return True
+
+        return armed, arm
+
+    def test_invented_name_is_not_armed(self):
+        armed, arm = self._arm()
+        text, rewrites = enforce_armed_offers(
+            "Want me to create a project called Atlas?",
+            arm_offer=arm,
+            session_id="s",
+            user_text="Piper Morgan",
+        )
+        assert armed == []
+        assert rewrites == 1
+        assert "?" not in text
+
+    def test_no_user_text_fails_closed(self):
+        armed, arm = self._arm()
+        text, rewrites = enforce_armed_offers(SERVED_SENTENCE, arm_offer=arm, session_id="s")
+        assert armed == []
+        assert rewrites == 1
+
+    def test_name_from_a_recent_user_turn_passes(self):
+        armed, arm = self._arm()
+        _, rewrites = enforce_armed_offers(
+            SERVED_SENTENCE,
+            arm_offer=arm,
+            session_id="s",
+            user_text="yes Piper Morgan",  # the floor joins this turn with recent user turns
+        )
+        assert rewrites == 0 and len(armed) == 1
+
+    def test_guard_is_the_factored_1976_one(self):
+        from services.onboarding.portfolio_service import (
+            router_add_project_args,
+            user_said_every_word,
+        )
+
+        assert user_said_every_word("Piper Morgan", "piper morgan!") == "Piper Morgan"
+        assert user_said_every_word("Atlas", "Piper Morgan") is None
+        assert user_said_every_word("  ", "anything") is None
+        out = router_add_project_args({"name": "Atlas"}, "add a project called Piper Morgan")
+        assert out["name"] is None
+        out = router_add_project_args({"name": "Piper Morgan"}, "add a project called Piper Morgan")
+        assert out["name"] == "Piper Morgan"
