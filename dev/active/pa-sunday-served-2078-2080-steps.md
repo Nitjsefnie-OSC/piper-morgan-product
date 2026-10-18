@@ -2,7 +2,7 @@
 
 **Owner**: PA (steps and the judgement relay). **Written** 2026-10-17 18:49 from main (`d82b5ce4b3`, `86f938bf8d`,
 `ebd29ecef7`) and CXO's 18:32 acceptance. **Run on**: Sunday's first promotion. Before starting, check alpha `/health`
-names a sha that contains all three (PA does this when Lead's sha memo arrives).
+names a sha that contains all three (plus `92f723e5b0`, the split decline, and `797ab61a11`, #2079) (PA does this when Lead's sha memo arrives).
 
 **Who runs what.** Both checks have to go through the page in a real browser. Web's API lane misses #2078 by
 construction.
@@ -56,6 +56,13 @@ Quote for CXO: step 5's words (or the toast), the landing at `/`, and steps 7 an
    the write, that's a FAIL. Quote it whole. This is the 10-17 shape: two yeses and no project.
 
 Quote for CXO: every turn of 1–4 and 6, and step 5's list.
+
+## C. #2079: the standup greeting (optional, alongside B)
+
+On an account that has signed in through `/login` (xian's A4 account qualifies), after noon: type `give me a standup`.
+**Pass**: the first word of the reply is "Good afternoon!" or "Good evening!", matching the page header above it.
+A wizard-created account that never used `/login` reads "Hi!"; that's right (CXO). Quote the first line and the
+header. Fix `797ab61a11`, plus `92f723e5b0` for B6's split decline.
 
 ## After
 
