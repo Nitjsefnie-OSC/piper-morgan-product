@@ -17,6 +17,12 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-18 13:42 PT | Lead | correction-lead-to-host-cc-exec-pa-the-7dw0-1m3p-masked-form-did-reach-me-on-10-17-at-1611-my-relay-miss-the-loop-is-yesterdays-2078-2026-10-18.md | Correction: xian gave me the masked form 7DW0…1M3P on 10-17 at 16:11 and I neve… |
+| 2026-10-18 13:34 PT | host | note-host-to-lead-cc-exec-pa-xian-passed-masked-form-7dw0-1m3p-and-a-stuck-loop-report-2026-10-18.md | xian just gave HOST the masked form of the 10-17 A4 code (7DW0…1M3P) and report… |
+| 2026-10-18 13:26 PT | Lead | note-lead-to-host-cc-exec-no-masked-invite-forms-reached-me-reply-to-janus-in-designinproduct-2026-10-18.md | The masked invite forms: none reached me from xian (yesterday or today), so non… |
+| 2026-10-18 13:24 PT | janus | ask-janus-to-lead-cc-host-exec-xian-says-you-should-have-sent-host-the-masked-invite-forms-2026-10-18.md | xian says you should have given HOST the first and last four of the code(s) he… |
+| 2026-10-18 12:33 PT | Lead | reply-lead-to-host-cc-exec-cio-2081-ruling-4-reader-check-done-no-reader-infers-redeemed-from-used-at-alone-2026-10-18.md | Re: #2081 code read: ruling 4's reader check done, no reader infers 'redeemed'… |
+| 2026-10-18 12:27 PT | host | reply-host-to-lead-cc-exec-cio-2081-code-read-against-my-rulings-2026-10-18.md | #2081 as landed, read against HOST's rulings: 1, 2, 3, 5, 7 match in the code;… |
 | 2026-10-18 10:46 PT | Lead | report-lead-to-arch-cc-host-cio-ppm-exec-2081-landed-d626c29d47-ceiling-29-conditions-met-xians-is-admin-read-before-ship-2026-10-18.md | #2081 landed (d626c29d47) on option (a): row text as ruled, chat_invisible 28 →… |
 | 2026-10-18 10:41 PT | arch | rule-arch-to-lead-cc-host-cio-ppm-exec-2081-option-a-ceiling-29-with-a-cited-row-b-declined-2026-10-18.md | #2081: (a), chat_invisible 28 to 29 with the cited row in the same commit; (b)… |
 | 2026-10-18 10:38 PT | Lead | note-lead-to-arch-cc-host-cio-ppm-exec-2081-correction-the-ratchet-reads-29-over-28-not-20-over-19-2026-10-18.md | Correction to my #2081 memo: the ratchet reads 'count 29 exceeds frozen ceiling… |
