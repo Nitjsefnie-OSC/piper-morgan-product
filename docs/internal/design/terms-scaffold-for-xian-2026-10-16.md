@@ -55,6 +55,7 @@
 ## 4. Telling me when something's broken
 - **Prompts:** What does a person see when Piper can't do something? How do they tell us? Who reads it?
 - **Facts to stay true to:** the feedback inbox is one mailbox, read by "the project team", not a single reader (HOST). The "Known issues in this beta" list and its bar (PPM, `ppm-placement-and-disclosure-rules-2026-10-13.md` §2). For design partners, xian's 10-16 bar: privacy and security items closed, everything else disclosed as a known issue after xian and PPM review the list.
+- **Known-issues list, section B (xian 10-18, PPM's 09:35 memo):** listed for partners: #2042 (a reply can state something about your data that the code didn't produce) and the no-undo on todo deletes (#2019/#2021). GitHub "create an issue" with no confirm goes in the invitation wording (CXO writes it), not the list. #2067 is fixed first, not listed. Section A (#2017, #2018, #1595, #2080) is disclosed by default, but xian hasn't seen its row wording yet.
 - **Facts (HOST, 10-16):** the channel exists: alpha@pipermorgan.ai reaches the alpha team (xian reads, HOST watches), per `docs/ALPHA_KNOWN_ISSUES.md:143`, plus a public GitHub issue (line 144).
 - **Gaps to name:** the invite template doesn't name alpha@ or any way to report (its only prompt, line 79, has no address). The answer and the invitation should both name alpha@. Don't name support@ for reports: its delivery is unverified (HOST).
 - **Checker:** HOST.
@@ -73,7 +74,7 @@
 - **(a) Reliability.** Prompt: what do we tell a design partner about errors, and is real data OK?
   - Alpha form: not reliable yet, use test data.
   - Beta form: expect errors, proceed with caution, real data is OK.
-  - **Condition state 10-18 (Comms, from gh):** #2054 closed; #2059 and #2060 closed; uploads backfill zero (xian's count). PPM's 10-17 read added gate items #2077 and #2078, both OPEN, and was still alpha. PPM's one line decides.
+  - **Condition state 10-18 (Comms, from gh):** #2054 closed; #2059 and #2060 closed; uploads backfill zero (xian's count). PPM's 10-17 read added gate items #2077 and #2078, both OPEN, and was still alpha. PPM's one line decides. **PPM 09:35:** the must-close set is #2067, #2077 and #2078. The beta-form read stays alpha until #2077 closes live.
   - **Rule (PPM + Exec, 10-16):** the invitation carries the beta form only if four conditions hold on the morning it goes: #2054 closed on a served check; #2059 and #2060 closed on served checks (incl. #2059's third pass); uploads backfilled with zero plaintext; no Class 1 item open. PPM runs the check and sends Comms one line. Otherwise the alpha form. **Never both in one invitation.**
   - xian answers both forms, so whichever the check picks is in his words.
 - **(b) Privacy regime.** Prompt: what isn't built yet before Production? State it as goal and gap, never as a disclaimer. Inputs: chat purge (trash), in-app account deletion, conversation export, undo window. Wording that fails: "use at your own risk". Shape that works: "Before Production we'll add X. Today Y is true."
