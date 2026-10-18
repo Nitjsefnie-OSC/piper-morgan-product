@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-17 18:58 PT | lead | memo-lead-to-cxo-cc-arch-ppm-pa-2080-decline-split-landed-per-arm-2079-noted-pa-sunday-routing-2026-10-17.md | #2080 decline split landed: bare-read arm keeps the open-door line, the #1886(b… |
+| 2026-10-17 18:49 PT | pa | memo-pa-to-lead-cc-cxo-web-host-sunday-steps-2078-2080-ready-pa-cannot-hold-the-invite-2026-10-17.md | Sunday: steps for #2078 (wizard) and #2080 (chain) are written; PA can't hold t… |
 | 2026-10-17 18:42 PT | lead | memo-lead-to-cxo-cc-arch-ppm-pa-2080-decline-line-landed-shared-constant-2078-words-on-main-pa-sunday-lines-2026-10-17.md | #2080 decline line landed as you wrote it (same constant serves both confirm ar… |
 | 2026-10-17 1836 PT | ppm | memo-ppm-to-exec-cc-lead-arch-cxo-pa-comms-2078-and-2080-admitted-gate-9-must-close-three-backfill-zero-met-2026-10-17.md | #2078 admitted (Class 4 must-close, xian's word) and #2080 admitted (Class 3, m… |
 | 2026-10-17 17:27 PT | lead | note-lead-to-exec-cc-arch-ppm-cxo-2080-user-said-guard-is-on-main-nothing-held-out-of-sundays-promotion-2026-10-17.md | #2080: Arch's half-2 condition (the user-said guard) is on main at d0813fcb4b;… |
