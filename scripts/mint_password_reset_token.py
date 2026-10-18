@@ -17,13 +17,19 @@ Usage (run from the repo root; needs PYTHONPATH=. for the services.* imports):
 """
 
 import argparse
-import os
 
-from dotenv import load_dotenv
-
-load_dotenv("/Users/xian/Development/piper-morgan/piper-morgan-product/.env")
-os.environ.setdefault("POSTGRES_PORT", "5433")
-from sqlalchemy import create_engine, text  # noqa: E402
+# 2026-10-18 (#1261 follow-up, xian's run on alpha): this script used to build
+# its DSN from POSTGRES_* defaults (localhost:5433, the DEV database) behind a
+# hard-coded dotenv path, so inside the prod container it refused with
+# "connection to server at localhost, port 5433 failed". It now resolves the
+# URL the way every other ops payload does (prod_db: the app's own config,
+# loud fallback, refuses localhost in production).
+from prod_db import (  # noqa: F401 — shared, side-effect free
+    _database_url,
+    _redacted,
+    _to_sync_url,
+)
+from sqlalchemy import create_engine, text
 
 from services.auth.password_reset_service import generate_reset_token  # noqa: E402
 
@@ -37,12 +43,9 @@ _INSERT = text(
 
 
 def _engine():
-    u = os.getenv("POSTGRES_USER", "piper")
-    p = os.getenv("POSTGRES_PASSWORD", "dev_changeme_in_production")
-    h = os.getenv("POSTGRES_HOST", "localhost")
-    port = os.getenv("POSTGRES_PORT", "5433")
-    db = os.getenv("POSTGRES_DB", "piper_morgan")
-    return create_engine(f"postgresql+psycopg2://{u}:{p}@{h}:{port}/{db}")
+    url, source = _database_url()
+    print(f"--- target: {_redacted(url)}  (resolved via {source})")
+    return create_engine(url)
 
 
 def main():
