@@ -526,6 +526,11 @@ async def handle_add_project_name_turn(
         user_id or offer_user,
         session_id=session_id,
         intent_service=intent_service,
+        # #2080 (Arch, 2026-10-17): on THIS carrier an argument-less READ
+        # verdict ("Piper Morgan" → get_identity ×6) CONFIRMs instead of
+        # releasing, so the chain survives a name the router reads as a
+        # question. Only the name carrier passes this.
+        confirm_bare_reads=True,
     )
     if consult.outcome is ArmedReplyOutcome.RELEASE:
         logger.info(

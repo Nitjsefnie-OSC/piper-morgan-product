@@ -837,6 +837,27 @@ Regression: `tests/unit/services/intent_service/test_floor_armed_offer_layer2_18
 LLM; the add-project handler patched only at its DB seam) and a catalogue
 denominator pin asserting the catalogue is exactly the round-trip-tested set.
 
+**#2080 a bare name the router reads as a question (2026-10-17, Arch ruled, Lead
+built).** Served: "What would you like to call it?" → "Piper Morgan" routed
+`get_identity` ×6 @0.95, the #1886 name carrier RELEASED it as a competing
+command, the offer died, the floor improvised "Got it — want me to create a
+project called Piper Morgan?" with nothing armed, and "Yes" created nothing.
+Two halves. (1) `armed_turn_consult.classify_armed_reply` gains
+`confirm_bare_reads` (default False, byte-identical for the clear-family and todo
+carriers); only `add_project_clarify` passes True. When set, an at-threshold
+operation whose registered `WorkflowEntry.effect` is READ and whose decision
+carries no args CONFIRMs instead of releasing (`Add a project called "X"?
+(yes/no)`, CXO's #1886 copy). Derived from the rail registry through the
+grammar's alias map, never a hand list; a READ with args, any WRITE,
+sub-threshold and CLARIFY are unchanged. No router-prompt change, so no rule-7
+run. (2) The #1855 seam's detector accepts a bounded acknowledging lead before a
+family opener (one to three words, then a dash, colon or comma: "Got it — want
+me to …?"), and the binder reads "called/named X" off the floor's own sentence,
+so that exact reply now binds to `add project Piper Morgan` and is armed or
+rewritten, never left standing unarmed. A genuinely mid-sentence mention still
+does not match. Regression: `tests/unit/services/intent_service/test_bare_read_confirms_2080.py`;
+control: `dev/2026/10/17/controls/ctl-2080-armed-name-2026-10-17.md`.
+
 **#1763 the multi-intent branch orchestrates only an ALL-CANONICAL plan
 (2026-09-24, Lead design) — a gate on surface 3's sibling of the chain, not a
 new surface.** `process_intent`'s #764 multi-substantive branch dispatched every

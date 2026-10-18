@@ -157,9 +157,23 @@ async def classify_armed_reply(
     session_id: Optional[str],
     intent_service: Any,
     answering_operations: FrozenSet[str] = frozenset(),
+    confirm_bare_reads: bool = False,
 ) -> ArmedReplyDecision:
     """The stateless armed-turn router consult. See the module docstring for
     the three outcomes and why no live-categories gate applies here.
+
+    ``confirm_bare_reads`` (#2080, Arch 2026-10-17, carrier-local): when True,
+    a router verdict that names an operation at/above threshold whose
+    registered ``WorkflowEntry.effect`` is ``EffectClass.READ`` and that
+    carries NO args CONFIRMs instead of RELEASEing. The consult is stateless
+    by design (ADR-078 D4), so a bare reply like "Piper Morgan" to "What
+    would you like to call it?" reads as the identity question it would be
+    on a fresh turn; only the carrier knows the open question. A read with
+    nothing to read is uncertain between "a name" and "a question", and
+    uncertain meaning confirms (ADR-080 D4). The default False keeps every
+    other caller byte-identical; only the add-project name carrier passes
+    True. A READ with args, any WRITE, sub-threshold and CLARIFY are
+    unchanged either way. Derived from the registry, never a hand list.
 
     ``text`` is the ANSWER-turn message (the pending offer was already
     popped this turn by the caller). An empty/whitespace-only ``text`` binds
@@ -240,6 +254,25 @@ async def classify_armed_reply(
 
     threshold = live_min_confidence()
     if decision.confidence is not None and decision.confidence >= threshold:
+        if confirm_bare_reads and _is_bare_read(decision, grammar):
+            # #2080: an argument-less READ on a name carrier is uncertain
+            # meaning, not a competing command. CONFIRM writes nothing until
+            # the yes; RELEASE would drop the user's own armed chain.
+            logger.info(
+                "armed_turn_consult_confirm",
+                session_id=session_id,
+                operation=decision.operation,
+                confidence=decision.confidence,
+                threshold=threshold,
+                reason="bare_read",
+            )
+            return ArmedReplyDecision(
+                outcome=ArmedReplyOutcome.CONFIRM,
+                operation=decision.operation,
+                confidence=decision.confidence,
+                rationale=decision.rationale,
+                reason="bare_read",
+            )
         if decision.operation in answering_operations:
             # Point 3's generalization: for THIS carrier, this named
             # operation IS the answer to the open question, not a new
@@ -289,3 +322,26 @@ async def classify_armed_reply(
         rationale=decision.rationale,
         reason="sub_threshold",
     )
+
+
+def _is_bare_read(decision: Any, grammar: Any) -> bool:
+    """#2080: the router named an operation whose registered entry is
+    ``EffectClass.READ`` and returned no args. Resolved from the rail
+    registry (aliases through the grammar's canonical map), the same way
+    ``inversion_live`` resolves an operation to its entry; an operation the
+    rail does not know is NOT a bare read (nothing to derive from), so the
+    caller's existing RELEASE path stands."""
+    from services.intent_service.workflow_dispatcher import get_action_workflows
+    from services.shared_types import EffectClass
+
+    if decision.args:
+        return False
+    op = decision.operation
+    if not op:
+        return False
+    rail = get_action_workflows()
+    alias_map = getattr(grammar, "alias_to_canonical", {}) or {}
+    entry = rail.get(op) or rail.get(alias_map.get(op, op))
+    if entry is None:
+        return False
+    return getattr(entry, "effect", None) == EffectClass.READ

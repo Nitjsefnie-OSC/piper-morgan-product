@@ -70,8 +70,17 @@ _OFFER_OPENERS: Tuple[str, ...] = (
     r"shall\s+i",
 )
 
+# #2080 (2026-10-17): a short acknowledging lead before the opener ("Got it —
+# want me to …?", "Sure, want me to …?", "Okay: want me to …?") is the same
+# offer with a preamble. Served instance: the floor's "Got it — want me to
+# create a project called Piper Morgan?" with nothing armed passed the seam
+# because the opener was not sentence-initial. The lead is bounded (one to
+# three words, then a dash, colon or comma) so a genuinely mid-sentence
+# mention ("I can do that if you want me to…") still does not match.
+_OFFER_LEAD = r"(?:[\w'’]+(?:\s+[\w'’]+){0,2}\s*[—–:,-]\s*)?"
+
 _OFFER_SENTENCE_RE = re.compile(
-    r"^(?:" + "|".join(_OFFER_OPENERS) + r")\s+(?P<predicate>\S.*?)\s*\?$",
+    r"^" + _OFFER_LEAD + r"(?:" + "|".join(_OFFER_OPENERS) + r")\s+(?P<predicate>\S.*?)\s*\?$",
     re.IGNORECASE | re.DOTALL,
 )
 
@@ -166,6 +175,13 @@ _REPO_TOKEN_RE = re.compile(r"\b(?P<repo>[\w.-]+/[\w.-]+)\b")
 # model did not quote the name, no name is bound and the rewrite degrades to the
 # bracket template rather than guessing which words were the name.
 _QUOTED_NAME_RE = re.compile(r"['\"‘“](?P<name>[^'\"’”\n]{1,80})['\"’”]")
+# #2080: the floor also names the project without quotes, "a project called
+# Piper Morgan" / "named Atlas"; the name runs to the end of the predicate or
+# to a clause break. Read over the FLOOR'S OWN sentence only (see the binder).
+_CALLED_NAME_RE = re.compile(
+    r"\b(?:called|named)\s+(?P<name>[^,;:?\n]{1,80}?)(?=\s+(?:with|using|and|for|now|in)\b|\s*$)",
+    re.IGNORECASE,
+)
 
 # Vocabulary that marks the predicate as an add-a-project offer.
 _ADD_VERB_RE = re.compile(r"\b(?:add|create|set\s+up|start)\b", re.IGNORECASE)
@@ -190,7 +206,7 @@ def _bind_add_project_command(predicate: str) -> Optional[str]:
     if not (_ADD_VERB_RE.search(predicate) and _PROJECT_NOUN_RE.search(predicate)):
         return None
 
-    name_match = _QUOTED_NAME_RE.search(predicate)
+    name_match = _QUOTED_NAME_RE.search(predicate) or _CALLED_NAME_RE.search(predicate)
     if not name_match:
         return None
     name = name_match.group("name").strip()
