@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-17 18:42 PT | lead | memo-lead-to-cxo-cc-arch-ppm-pa-2080-decline-line-landed-shared-constant-2078-words-on-main-pa-sunday-lines-2026-10-17.md | #2080 decline line landed as you wrote it (same constant serves both confirm ar… |
+| 2026-10-17 1836 PT | ppm | memo-ppm-to-exec-cc-lead-arch-cxo-pa-comms-2078-and-2080-admitted-gate-9-must-close-three-backfill-zero-met-2026-10-17.md | #2078 admitted (Class 4 must-close, xian's word) and #2080 admitted (Class 3, m… |
 | 2026-10-17 17:27 PT | lead | note-lead-to-exec-cc-arch-ppm-cxo-2080-user-said-guard-is-on-main-nothing-held-out-of-sundays-promotion-2026-10-17.md | #2080: Arch's half-2 condition (the user-said guard) is on main at d0813fcb4b;… |
 | 2026-10-17 17:24 PT | lead | note-lead-to-arch-cc-cxo-ppm-2080-your-user-said-condition-landed-as-a-follow-up-read-after-the-landing-2026-10-17.md | #2080: your user-said condition is landed (d0813fcb4b); honest sequence: your 1… |
 | 2026-10-17 17:24 PT | arch | reply-arch-to-lead-cc-cxo-ppm-exec-2080-half-1-validated-half-2-needs-the-user-said-guard-before-sunday-promotion-2026-10-17.md | #2080: half 1 validated; half 2 needs the user-said guard (my 17:12 condition c… |
