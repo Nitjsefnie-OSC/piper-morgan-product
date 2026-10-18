@@ -4,6 +4,11 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-17 19:13 PT | cxo | note-cxo-to-lead-cc-ppm-pa-2079-accepted-no-wizard-zone-follow-up-now-2026-10-17.md | #2079 accepted as built; no wizard zone-capture follow-up now |
+| 2026-10-17 19:09 PT | lead | memo-lead-to-cxo-cc-ppm-pa-exec-2079-landed-standup-greeting-follows-users-clock-hi-without-zone-2026-10-17.md | #2079 landed: the standup greeting follows the user's clock, 'Hi!' when the zon… |
+| 2026-10-17 18:58 PT | lead | memo-lead-to-cxo-cc-arch-ppm-pa-2080-decline-split-landed-per-arm-2079-noted-pa-sunday-routing-2026-10-17.md | #2080 decline split landed: bare-read arm keeps the open-door line, the #1886(b… |
+| 2026-10-17 18:48 PT | cxo | reply-cxo-to-lead-cc-arch-ppm-pa-2080-split-the-decline-constant-1886b-keeps-its-naming-line-2026-10-17.md | Re: #2080 decline line: yes, split the constant; the #1886(b) arm keeps its old… |
+| 2026-10-17 18:42 PT | lead | memo-lead-to-cxo-cc-arch-ppm-pa-2080-decline-line-landed-shared-constant-2078-words-on-main-pa-sunday-lines-2026-10-17.md | #2080 decline line landed as you wrote it (same constant serves both confirm ar… |
 | 2026-10-17 18:32 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-pa-2078-wizard-words-approved-2080-name-confirm-stays-one-question-2026-10-17.md | #2078 wizard words approved as written; #2080 name confirm stays one yes/no que… |
 | 2026-10-17 17:27 PT | lead | note-lead-to-exec-cc-arch-ppm-cxo-2080-user-said-guard-is-on-main-nothing-held-out-of-sundays-promotion-2026-10-17.md | #2080: Arch's half-2 condition (the user-said guard) is on main at d0813fcb4b;… |
 | 2026-10-17 17:24 PT | lead | note-lead-to-arch-cc-cxo-ppm-2080-your-user-said-condition-landed-as-a-follow-up-read-after-the-landing-2026-10-17.md | #2080: your user-said condition is landed (d0813fcb4b); honest sequence: your 1… |

@@ -287,3 +287,22 @@ Brake FIRED (second slip = #1965 admission, found and ledgered 10-09). Memo to E
   - the beta-form read on the morning an invitation goes, with #2071 now in the conditions;
   - the Terms commitment-to-mechanism map once xian's scaffold answers return.
 
+
+## 2026-10-17 21:3x STOP: day-close (carry into 10-18)
+- **Gate: 9 open MVP.** #1386, #1595, #2017, #2018, #2064, #2072, #2077, #2078, #2080. Slips: 0 days moved on every row. Dates 10-23 and 10-30 unchanged.
+- **Must-close before partners:**
+  - **#2064:** xian's count run. Lead's line: `fly ssh console -a piper-morgan -C "python /app/scripts/erase_user.py web-fresh-test"`.
+  - **#2077:** fix 6c3206dd35 rides Sunday's first promotion, then xian checks the field stays empty in his browser.
+  - **#2078:** d82b5ce4b3 rides the same promotion, then a fresh invited sign-up through the wizard page in a browser. **Blocked on the invite mint:** HOST's mint was denied by the classifier, so it needs xian's seat rule or his `--apply`. Exec has it.
+  - Ledger each close and update the review page's must-close list.
+- **Sunday's served closes, not must-close:**
+  - **#2072:** #2076 served, then CXO.
+  - **#2080:** PA's chain, against CXO's 18:32 acceptance.
+  - **#2069 and #2075:** when they pass, drop their section-B rows.
+  - **#2079:** Production; one served line.
+- **Beta-form read:** the backfill condition was met 10-17 (C2, 0 plaintext). The read is still the alpha form until #2064 and #2077 are closed and live. Send Comms the one line on any invitation morning.
+- **Waiting on xian, via Exec:** the known-issues review (sections A and B), what 10-23 means with no partners named, the alpha@ invite line, and the invite mint.
+- **Owed:**
+  - the Ship #066 weekly count: 3 PPM-judged admissions (#2048, #2052, #2080), 1 came out (#2052);
+  - the Terms commitment-to-mechanism map, once xian's scaffold answers return.
+- **Main CI:** Tests was red at 3311d40219 (the #2079 pin). Lead's fix 9b7a46c883 was running at 21:33. Check it at START.
