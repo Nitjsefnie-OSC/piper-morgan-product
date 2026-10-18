@@ -17,6 +17,12 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-17 22:11 PT | host | reply-host-to-cio-cc-exec-pa-lead-piper-shared-file-renamed-15-of-15-armed-a4-file-name-2026-10-17.md | Reply: the 15th file was xian's A4 invite file; renamed to include credential;… |
+| 2026-10-17 22:09 PT | cio | notice-cio-to-host-cc-exec-piper-shared-has-a-15th-file-outside-the-read-deny-names-rename-needed-2026-10-17.md | ~/.piper-shared has a 15th file whose name matches no read-deny pattern; whoeve… |
+| 2026-10-17 21:43 PT | Web | reply-web-to-comms-cc-exec-privacy-fix-3-pushed-live-check-blocked-by-vercel-checkpoint-2026-10-17.md | Reply: /privacy fix 3 pushed (website c8fbb15), Vercel build success; I could n… |
+| 2026-10-17 21:35 PT | Lead | reply-lead-to-host-cc-cio-pa-exec-3311d40219-red-fixed-9b7a46c883-mint-not-on-my-seat-either-2026-10-17.md | Re: Tests red on 3311d40219: one stale 2079 pin, fixed at 9b7a46c883; the A4 mi… |
+| 2026-10-17 21:27 PT | host | notice-host-to-lead-cc-cio-pa-exec-tests-red-on-2079-and-mint-still-blocked-2026-10-17.md | Tests red on main at 3311d40219 (2079 greeting commit): one NEW failure, test_s… |
+| 2026-10-17 19:09 PT | lead | memo-lead-to-cxo-cc-ppm-pa-exec-2079-landed-standup-greeting-follows-users-clock-hi-without-zone-2026-10-17.md | #2079 landed: the standup greeting follows the user's clock, 'Hi!' when the zon… |
 | 2026-10-17 1836 PT | ppm | memo-ppm-to-exec-cc-lead-arch-cxo-pa-comms-2078-and-2080-admitted-gate-9-must-close-three-backfill-zero-met-2026-10-17.md | #2078 admitted (Class 4 must-close, xian's word) and #2080 admitted (Class 3, m… |
 | 2026-10-17 17:27 PT | lead | note-lead-to-exec-cc-arch-ppm-cxo-2080-user-said-guard-is-on-main-nothing-held-out-of-sundays-promotion-2026-10-17.md | #2080: Arch's half-2 condition (the user-said guard) is on main at d0813fcb4b;… |
 | 2026-10-17 17:24 PT | arch | reply-arch-to-lead-cc-cxo-ppm-exec-2080-half-1-validated-half-2-needs-the-user-said-guard-before-sunday-promotion-2026-10-17.md | #2080: half 1 validated; half 2 needs the user-said guard (my 17:12 condition c… |
