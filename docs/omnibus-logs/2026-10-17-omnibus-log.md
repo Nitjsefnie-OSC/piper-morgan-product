@@ -450,3 +450,13 @@ directory, and I do not know whether subagents ran for them.
 logs, 9 controls files), all log files read in full and the controls files described from their heads. Eight of the 12 role log files
 carry a DAY-CLOSED marker and four do not (Exec, Comms, HOST, Arch's 0415 file). Day-close grep run 2026-10-18 04:14 PDT. A dated
 addendum will follow if any log changes.*
+
+---
+
+## Addendum (2026-10-18 07:12 PDT): late closes and the Arch split
+
+After the nudge memos, all four unclosed logs closed at about 04:17 on 10-18: Exec, Comms, HOST and Arch's 0415 file. All 12 role log files for 10-17 now carry `DAY-CLOSED`. The Exec, Comms and HOST additions are sign-off and day-summary lines written after the fact, so nothing above changes.
+
+**Arch's two files, resolved by Arch**: their wrap says the 0414 and 0415 files are one Arch session split by accident at the 04:14/04:15 wake, with all work from the 06:27 START through the 21:29 sign-off in the 0414 file. The Sources note that called the split unexplained, and the count of 11 role sessions in 12 files, stand as written. Read the two files as one session.
+
+**Verified how**: `grep -c "^<!-- DAY-CLOSED"` on the five logs at 07:12 on 10-18 (all read 1), tails of all five read.
