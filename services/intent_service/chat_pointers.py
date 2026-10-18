@@ -196,6 +196,10 @@ CHAT_POINTERS = {
     "page:/settings/connected-apps": CHAT_INVISIBLE(
         issue=1918, note="settings-only MCP-connection revoke surface; no chat utterance maps here"
     ),
+    "page:/settings/invites": CHAT_INVISIBLE(
+        issue=2081,
+        note="admin-only invite mint/list/revoke page (require_admin); operator tooling, no chat utterance maps here",
+    ),
     # ---- connectable integrations (settings_integrations.py, derived) ----
     "integration:github": POINTER(
         "connect my github", expects=("guidance", "get_contextual_guidance")

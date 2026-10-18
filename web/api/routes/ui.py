@@ -29,8 +29,10 @@ Now: Extracted to separate router module
 from pathlib import Path
 
 import structlog
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
+
+from services.auth.auth_middleware import JWTClaims, require_admin
 
 logger = structlog.get_logger()
 
@@ -425,6 +427,21 @@ async def settings_index_ui(request: Request):
     user_context = _extract_user_context(request)
     return templates.TemplateResponse(
         "settings-index.html", {"request": request, "user": user_context}
+    )
+
+
+@router.get("/settings/invites", response_class=HTMLResponse)
+async def invites_admin_page(request: Request, admin: JWTClaims = Depends(require_admin)):
+    """Admin Invites page (#2081): mint, list (masked) and revoke alpha invite
+    codes from the signed-in admin's own browser. Admin only (users.is_admin,
+    live read, fail closed): a non-admin gets the same 403 the global
+    credential writes give. HOST's security shape is on the issue; the API is
+    web/api/routes/admin_invites.py.
+    """
+    templates = _get_templates(request)
+    user_context = _extract_user_context(request)
+    return templates.TemplateResponse(
+        "settings_invites.html", {"request": request, "user": user_context}
     )
 
 

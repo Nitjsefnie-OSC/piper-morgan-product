@@ -292,6 +292,21 @@
       </div>
     </a>
 
+    {% if user and user.is_admin %}
+    <!-- #2081 Invites (admin only: users.is_admin, resolved live per request) -->
+    <a href="/settings/invites" class="settings-card">
+      <div class="card-icon">🎟️</div>
+      <h3 class="card-title">Invites</h3>
+      <p class="card-description">
+        Mint alpha invite codes, see which were used, revoke the rest
+      </p>
+      <div class="card-meta">
+        <span class="meta-item">Admin only</span>
+        <span class="meta-item">Codes shown once</span>
+      </div>
+    </a>
+    {% endif %}
+
     <!-- Advanced Settings Card -->
     <a href="/settings/advanced" class="settings-card">
       <div class="card-icon">⚙️</div>

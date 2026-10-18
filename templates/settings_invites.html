@@ -1,0 +1,226 @@
+{% extends "layouts/app_shell.html" %}
+{# #2081 — Admin Invites page: mint, list (masked) and revoke alpha invite codes #}
+{# from the signed-in admin's own browser. HOST's security shape is on the issue. #}
+{# The route is admin-only (require_admin); the API is /api/v1/admin/invites. #}
+
+{% block page_title %}Invites - Piper Morgan{% endblock %}
+
+{% block head_extra %}
+<style>
+  .settings-container {
+    font-family: var(--font-family);
+    max-width: 760px;
+    margin: 0 auto;
+    padding: var(--space-3xl) var(--space-lg);
+  }
+  .page-header { margin-bottom: var(--space-xl); }
+  .page-header h1 {
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin: 0 0 var(--space-sm) 0;
+  }
+  .page-description { color: var(--color-text-secondary); margin: 0; line-height: 1.5; }
+  .invites-section {
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    margin-bottom: var(--space-lg);
+  }
+  .invites-section h2 { font-size: var(--font-size-lg); margin: 0 0 var(--space-sm) 0; }
+  .section-note { color: var(--color-text-secondary); font-size: var(--font-size-sm); margin: 0 0 var(--space-md) 0; line-height: 1.5; }
+  .mint-row { display: flex; gap: var(--space-sm); align-items: center; flex-wrap: wrap; }
+  .mint-row input[type="number"] { width: 5rem; padding: var(--space-xs) var(--space-sm); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--font-size-base); }
+  .btn { border: 0; border-radius: var(--radius-md); padding: var(--space-sm) var(--space-md); font-size: var(--font-size-base); cursor: pointer; }
+  .btn-primary { background: var(--color-primary); color: #fff; }
+  .btn-primary:disabled { opacity: 0.6; cursor: default; }
+  .btn-secondary { background: var(--color-bg-secondary); color: var(--color-text-primary); border: 1px solid var(--color-border); }
+  .btn-danger { background: transparent; color: var(--color-danger, #b91c1c); border: 1px solid var(--color-danger, #b91c1c); }
+  .mint-result { margin-top: var(--space-md); padding: var(--space-md); border: 1px dashed var(--color-border); border-radius: var(--radius-md); background: var(--color-bg-secondary); }
+  .mint-result[hidden] { display: none; }
+  .mint-result p { margin: 0 0 var(--space-sm) 0; }
+  .mint-codes { font-family: var(--font-family-mono, ui-monospace, monospace); font-size: var(--font-size-base); line-height: 1.8; margin: 0; padding: 0; list-style: none; user-select: all; }
+  .invites-table { width: 100%; border-collapse: collapse; font-size: var(--font-size-sm); }
+  .invites-table th, .invites-table td { text-align: left; padding: var(--space-xs) var(--space-sm); border-bottom: 1px solid var(--color-border); vertical-align: top; }
+  .invites-table th { color: var(--color-text-secondary); font-weight: var(--font-weight-medium); }
+  .mono { font-family: var(--font-family-mono, ui-monospace, monospace); }
+  .status-pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: var(--font-size-xs); }
+  .status-unused { background: #ecfdf5; color: #065f46; }
+  .status-redeemed { background: #eff6ff; color: #1e40af; }
+  .status-revoked { background: #f3f4f6; color: #374151; }
+  .empty-state, .loading-state { color: var(--color-text-secondary); padding: var(--space-md) 0; }
+</style>
+{% endblock %}
+
+{% block main %}
+  {% set breadcrumbs = [
+    {"label": "Settings", "url": "/settings"},
+    {"label": "Invites", "url": None}
+  ] %}
+  {% include 'components/breadcrumbs.html' %}
+
+  <div class="settings-container" id="invites-page">
+    <div class="page-header">
+      <h1>Invites</h1>
+      <p class="page-description">
+        Mint alpha invite codes, see which have been used, and revoke any that haven't.
+        Codes are shown once, right after minting, and never again. This page sends nothing:
+        handing a code to a tester is still your hand.
+      </p>
+    </div>
+
+    <section class="invites-section" aria-labelledby="mint-heading">
+      <h2 id="mint-heading">Mint codes</h2>
+      <p class="section-note" id="mint-note">Up to 20 at a time and 20 a day. Each code creates one account.</p>
+      <form class="mint-row" id="mint-form">
+        <label for="mint-count">How many</label>
+        <input type="number" id="mint-count" name="count" min="1" max="20" value="1" required>
+        <button type="submit" class="btn btn-primary" id="mint-btn">Mint</button>
+      </form>
+      <div class="mint-result" id="mint-result" hidden>
+        <p><strong>Copy these now.</strong> They will not be shown again.</p>
+        <ul class="mint-codes" id="mint-codes"></ul>
+        <button type="button" class="btn btn-secondary" id="copy-codes-btn">Copy all</button>
+      </div>
+    </section>
+
+    <section class="invites-section" aria-labelledby="list-heading">
+      <h2 id="list-heading">All codes</h2>
+      <p class="section-note">Masked: the first four and last four characters. Revoking an unused code means it can no longer create an account.</p>
+      <div class="loading-state" id="invites-loading">Loading…</div>
+      <div class="empty-state" id="invites-empty" hidden>No invite codes yet.</div>
+      <table class="invites-table" id="invites-table" hidden>
+        <thead>
+          <tr><th>Code</th><th>Minted</th><th>Status</th><th>Used by</th><th></th></tr>
+        </thead>
+        <tbody id="invites-body"></tbody>
+      </table>
+    </section>
+  </div>
+
+  {% include 'components/toast.html' %}
+  {% include 'components/signed_out_modal.html' %}
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    (function () {
+      const API = '/api/v1/admin/invites';
+
+      function fmt(ts) {
+        if (!ts) return '';
+        try { return new Date(ts).toLocaleString(); } catch (e) { return ts; }
+      }
+
+      async function readError(response, fallback) {
+        try { const body = await response.json(); return body.detail || fallback; } catch (e) { return fallback; }
+      }
+
+      async function loadInvites() {
+        const loading = document.getElementById('invites-loading');
+        const empty = document.getElementById('invites-empty');
+        const table = document.getElementById('invites-table');
+        const body = document.getElementById('invites-body');
+        try {
+          const response = await fetch(API);
+          if (response.status === 401) return; // #2067: the signed-out modal is up
+          if (!response.ok) throw new Error(await readError(response, 'Could not load invite codes'));
+          const data = await response.json();
+          loading.hidden = true;
+          document.getElementById('mint-note').textContent =
+            `Up to ${data.per_request_limit} at a time and ${data.daily_limit} a day (${data.minted_today} minted today). Each code creates one account.`;
+          if (!data.invites.length) { empty.hidden = false; table.hidden = true; return; }
+          empty.hidden = true;
+          table.hidden = false;
+          body.innerHTML = '';
+          for (const row of data.invites) {
+            const tr = document.createElement('tr');
+            const code = document.createElement('td'); code.className = 'mono'; code.textContent = row.masked;
+            const minted = document.createElement('td'); minted.textContent = fmt(row.created_at);
+            const status = document.createElement('td');
+            const pill = document.createElement('span');
+            pill.className = `status-pill status-${row.status}`;
+            pill.textContent = row.status === 'unused' ? 'Unused' : row.status === 'redeemed' ? `Redeemed ${fmt(row.used_at)}` : `Revoked ${fmt(row.used_at)}`;
+            status.appendChild(pill);
+            const usedBy = document.createElement('td'); usedBy.textContent = row.used_by || '';
+            const actions = document.createElement('td');
+            if (row.status === 'unused') {
+              const btn = document.createElement('button');
+              btn.type = 'button'; btn.className = 'btn btn-danger'; btn.textContent = 'Revoke';
+              btn.addEventListener('click', () => revokeInvite(row.masked, btn));
+              actions.appendChild(btn);
+            }
+            tr.append(code, minted, status, usedBy, actions);
+            body.appendChild(tr);
+          }
+        } catch (error) {
+          loading.textContent = error.message || 'Could not load invite codes';
+        }
+      }
+
+      async function mintCodes(event) {
+        event.preventDefault();
+        const input = document.getElementById('mint-count');
+        const btn = document.getElementById('mint-btn');
+        const count = parseInt(input.value, 10);
+        if (!(count >= 1 && count <= 20)) { showToast('error', 'Mint between 1 and 20 codes at a time.', 'Nothing minted'); return; }
+        btn.disabled = true; btn.textContent = 'Minting…';
+        try {
+          const response = await fetch(API, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ count }),
+          });
+          if (response.status === 401) return; // #2067
+          if (!response.ok) throw new Error(await readError(response, 'Minting failed'));
+          const data = await response.json();
+          const list = document.getElementById('mint-codes');
+          list.innerHTML = '';
+          for (const code of data.codes) {
+            const li = document.createElement('li'); li.textContent = code; list.appendChild(li);
+          }
+          document.getElementById('mint-result').hidden = false;
+          showToast('success', `${data.codes.length} code${data.codes.length === 1 ? '' : 's'} minted. Copy them now; they will not be shown again.`, 'Minted');
+          await loadInvites();
+        } catch (error) {
+          showToast('error', error.message || 'Minting failed', 'Nothing minted');
+        } finally {
+          btn.disabled = false; btn.textContent = 'Mint';
+        }
+      }
+
+      async function revokeInvite(masked, btn) {
+        const ok = await Dialog.confirm({
+          title: 'Revoke this invite code?',
+          message: `${masked} will no longer create an account. This cannot be undone.`,
+          confirmText: 'Revoke',
+          cancelText: 'Keep it',
+          destructive: true,
+        });
+        if (!ok) return;
+        btn.disabled = true;
+        try {
+          const response = await fetch(`${API}/${encodeURIComponent(masked)}/revoke`, { method: 'POST' });
+          if (response.status === 401) return; // #2067
+          if (!response.ok) throw new Error(await readError(response, 'Revoke failed'));
+          const data = await response.json();
+          showToast('success', data.message, 'Revoked');
+          await loadInvites();
+        } catch (error) {
+          btn.disabled = false;
+          showToast('error', error.message || 'Revoke failed', 'Nothing revoked');
+        }
+      }
+
+      document.getElementById('mint-form').addEventListener('submit', mintCodes);
+      document.getElementById('copy-codes-btn').addEventListener('click', async () => {
+        const text = Array.from(document.querySelectorAll('#mint-codes li')).map((li) => li.textContent).join('\n');
+        try { await navigator.clipboard.writeText(text); showToast('success', 'Codes copied.', 'Copied'); }
+        catch (e) { showToast('error', 'Select the codes and copy them by hand.', 'Copy failed'); }
+      });
+      document.addEventListener('DOMContentLoaded', loadInvites);
+      if (document.readyState !== 'loading') loadInvites();
+    })();
+  </script>
+{% endblock %}
