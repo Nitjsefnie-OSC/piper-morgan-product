@@ -115,7 +115,7 @@ When you sign up for Piper and use it, here is what we keep, where it lives, and
   [Lead: uploads on a Fly volume, not encrypted at rest; learned patterns encrypted except one routing field]
   ⚠ 10-16: WRONG per code. `file_context/storage.py` encrypts uploads (AES-256-GCM) when ENCRYPTION_MASTER_KEY is set;
   legacy files plaintext until the #1306 backfill. Key SET on alpha (xian 10-16 15:04). Fix 3 A/B to Exec for PM: A "Uploaded files are **encrypted** when stored." once Lead confirms/runs the backfill; B now/goal/gap otherwise.
-  ✅ 10-17: xian's prod count 0 plaintext / 0 missing (#1306, 15:2x). Version A handed to Web 21:19 (xian OK 07:03).
+  ✅ 10-17: xian's prod count 0 plaintext / 0 missing (#1306, 15:2x). Version A handed to Web 21:19 (xian OK 07:03). ✅ 10-18 04:17: LIVE, website c8fbb15; served HTML of /privacy carries "Uploaded files are <strong>encrypted</strong> when stored", "not encrypted" count 0 (curl, HTML layer, not a browser render).
 - The AI provider key you add. It's stored **encrypted**, and it's never written to our logs.
   [`user_api_key_service.py:205-226`; `field_encryption.py:14-16`]
 
