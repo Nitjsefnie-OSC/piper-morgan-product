@@ -33,6 +33,14 @@ from services.database.session_factory import AsyncSessionFactory
 from services.infrastructure.keychain_service import KeychainService
 from web.api.routes.setup import SetupCompleteRequest, complete_setup
 
+
+def _claims(user_id: str):
+    """#2078: /complete takes its principal from the session (JWTClaims.sub)."""
+    from types import SimpleNamespace
+
+    return SimpleNamespace(sub=user_id)
+
+
 pytestmark = pytest.mark.unit
 
 # Same value used by tests/security/test_secure_credential_store_1382.py — a
@@ -141,7 +149,7 @@ class TestNoGlobalKeyWriteOnSetupComplete:
                 openai_key=openai_key,
                 anthropic_key=anthropic_key,
             )
-            response = await complete_setup(req)
+            response = await complete_setup(req, _claims(user_id))
             assert response.success is True
 
             # Per-user entries: present and correct — #1810's scope keeps
@@ -181,8 +189,12 @@ class TestNoGlobalKeyWriteOnSetupComplete:
         keychain = KeychainService()
 
         try:
-            await complete_setup(SetupCompleteRequest(user_id=uid_a, openai_key=key_a))
-            await complete_setup(SetupCompleteRequest(user_id=uid_b, openai_key=key_b))
+            await complete_setup(
+                SetupCompleteRequest(user_id=uid_a, openai_key=key_a), _claims(uid_a)
+            )
+            await complete_setup(
+                SetupCompleteRequest(user_id=uid_b, openai_key=key_b), _claims(uid_b)
+            )
 
             # Both users retain their OWN key — the second completion did
             # not touch the first user's per-user entry.

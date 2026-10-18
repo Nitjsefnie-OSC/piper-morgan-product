@@ -487,8 +487,20 @@
 
             if (data.success) {
                 userId = data.user_id;
-                // Complete setup
-                await completeSetup();
+                // #2078: create-user signed the new account in (cookie), so the
+                // next steps carry a principal. If completing still fails, the
+                // account EXISTS and the key was NOT saved: say so, and never
+                // leave the button stuck on "Creating..." (CXO owns the words).
+                const completed = await completeSetup();
+                if (!completed) {
+                    showError(
+                        'Your account was created and you are signed in, but your key was not saved. ' +
+                        'Open Settings → LLM API Keys to add it, then come back to Projects any time.',
+                        'Account created, setup did not finish'
+                    );
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Create Account';
+                }
             } else {
                 // Handle both success=false responses and HTTPException responses
                 // HTTPException returns {detail: "..."}, success responses return {message: "..."}
@@ -528,15 +540,16 @@
 
             if (data.success) {
                 showStep(4);  // Step 4: Projects (Issue #860)
-            } else {
-                showError(data.message || 'Unable to complete setup.', 'Setup Failed');
+                return true;
             }
+            // #2078: the caller shows the account-exists copy; log the server's reason.
+            console.warn('setup/complete refused:', data.detail || data.message || response.status);
+            return false;
         } catch (err) {
             if (!navigator.onLine) {
                 showError('Check your internet connection and try again.', 'No Connection');
-            } else {
-                showError('Unable to complete setup. Please try again.', 'Setup Failed');
             }
+            return false;
         }
     }
 

@@ -25,6 +25,7 @@ from services.auth.models import (
 )
 from services.auth.password_service import PasswordService
 from services.auth.password_validator import PasswordValidator
+from services.auth.session_cookies import set_session_cookies
 from services.database.connection import db
 from services.database.models import User
 from services.database.session_factory import AsyncSessionFactory
@@ -253,33 +254,9 @@ async def login(
             workspace_id=None,
         )
 
-        # Set cookie for web clients
-        # Detect if request is HTTPS to set secure flag appropriately
-        # This allows HTTP development while enforcing HTTPS cookies in production
-        is_https = (
-            request.headers.get("x-forwarded-proto", request.url.scheme).lower() == "https"
-        )  # behind fly-proxy the internal hop is http; trust the edge proto so the
-        # auth cookie carries Secure on the real HTTPS site (2026-07-12)
-        response.set_cookie(
-            key="auth_token",
-            value=token,
-            httponly=True,
-            secure=is_https,  # Only set secure flag for HTTPS requests
-            samesite="lax",
-            max_age=86400,  # 24 hours for alpha testing UX
-        )
-
-        # Issue #857: refresh-token cookie. 7-day max-age matches JWTService's
-        # refresh_token_expire_days default. Httponly + same security flags as
-        # auth_token. The /api/v1/auth/refresh endpoint reads this cookie.
-        response.set_cookie(
-            key="refresh_token",
-            value=refresh_token,
-            httponly=True,
-            secure=is_https,
-            samesite="lax",
-            max_age=7 * 86400,  # 7 days
-        )
+        # Set the session cookies for web clients (#857 refresh cookie, #2078
+        # shared helper: the same pair create-user issues on sign-up).
+        set_session_cookies(response, request, access_token=token, refresh_token=refresh_token)
 
         logger.info(
             "login_successful",
@@ -404,26 +381,9 @@ async def refresh_token(
         workspace_id=new_claims.workspace_id,
     )
 
-    # Set both cookies (same flags as login)
-    is_https = (
-        request.headers.get("x-forwarded-proto", request.url.scheme).lower() == "https"
-    )  # behind fly-proxy the internal hop is http; trust the edge proto so the
-    # auth cookie carries Secure on the real HTTPS site (2026-07-12)
-    response.set_cookie(
-        key="auth_token",
-        value=new_access_token,
-        httponly=True,
-        secure=is_https,
-        samesite="lax",
-        max_age=86400,
-    )
-    response.set_cookie(
-        key="refresh_token",
-        value=new_refresh_token,
-        httponly=True,
-        secure=is_https,
-        samesite="lax",
-        max_age=7 * 86400,
+    # Set both cookies (same flags as login, #2078 shared helper)
+    set_session_cookies(
+        response, request, access_token=new_access_token, refresh_token=new_refresh_token
     )
 
     logger.info(

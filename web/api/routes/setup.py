@@ -16,7 +16,7 @@ from datetime import datetime, timezone
 from typing import Dict, Optional
 
 import structlog
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from pydantic import BaseModel, Field, field_validator
 from sqlalchemy import select, text
 
@@ -24,6 +24,7 @@ from services.auth.auth_middleware import get_current_user
 from services.auth.invite_token_service import consume_invite_token
 from services.auth.jwt_service import JWTClaims
 from services.auth.password_service import PasswordService
+from services.auth.session_cookies import set_session_cookies
 from services.database.models import User
 from services.database.session_factory import AsyncSessionFactory
 from services.security.user_api_key_service import UserAPIKeyService
@@ -148,7 +149,11 @@ class KeychainUseResponse(BaseModel):
 class SetupCompleteRequest(BaseModel):
     """Request model for completing setup"""
 
-    user_id: str = Field(description="User ID (UUID) to mark as setup complete")
+    # #2078: the principal is the signed-in session; a body user_id is accepted
+    # only when it matches it (a stale client fails loudly with 403).
+    user_id: Optional[str] = Field(
+        default=None, description="Must match the signed-in user, if sent (#2078)"
+    )
     default_llm_provider: Optional[str] = Field(
         default=None, description="User's chosen LLM provider (openai or anthropic)"
     )
@@ -315,6 +320,24 @@ async def require_setup_incomplete() -> None:
                 "credentials and projects from Settings → Integrations instead."
             ),
         )
+
+
+def _setup_principal(current_user: JWTClaims, body_user_id: Optional[str]) -> str:
+    """#2078: a per-user wizard write takes its principal from the SESSION, never
+    from the request body (Arch's rule, 2026-10-17; ADR-080 D3: code decides
+    permission). create-user signs the new account in, so on a fresh instance
+    and an initialized one alike the wizard's own calls carry the cookie. A body
+    ``user_id`` is tolerated only when it equals the principal: a stale client
+    fails with 403 rather than being silently redirected onto another account.
+    This replaces the #1504 lockout on ``/complete`` and ``/projects``: the
+    principal check is what stops F1 (anyone writing anyone's keys)."""
+    principal = str(current_user.sub)
+    if body_user_id is not None and str(body_user_id) != principal:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="This setup step applies to the signed-in account only.",
+        )
+    return principal
 
 
 @router.get("/status", response_model=SetupStatusResponse)
@@ -848,13 +871,57 @@ async def save_slack_credentials_setup(credentials: SlackCredentialsRequest):
         )
 
 
+def _sign_in_new_user(request: Request, response: Response, user: User) -> None:
+    """#2078: set the session cookies for the account create-user just made.
+    Same tokens and cookie flags as login (one helper, services/auth/session_cookies)."""
+    from services.auth.container import AuthContainer  # noqa: PLC0415
+
+    jwt_service = AuthContainer.get_jwt_service()
+    user_uuid = uuid.UUID(str(user.id))
+    email = str(user.email)
+    access = jwt_service.generate_access_token(
+        user_id=user_uuid,
+        user_email=email,
+        scopes=["user"],
+        username=str(user.username),
+    )
+    refresh = jwt_service.generate_refresh_token(
+        user_id=user_uuid,
+        user_email=email,
+        session_id=None,
+        workspace_id=None,
+    )
+    set_session_cookies(response, request, access_token=access, refresh_token=refresh)
+    logger.info("setup_user_signed_in", user_id=str(user_uuid), username=str(user.username))
+
+
 @router.post("/create-user", response_model=CreateUserResponse)
-async def create_user(req: CreateUserRequest):
+async def create_user_route(
+    req: CreateUserRequest, request: Request, response: Response
+) -> "CreateUserResponse":
+    """The HTTP entry: FastAPI injects the request and response so the new
+    account can be signed in (#2078). The logic lives in ``create_user``, which
+    direct callers (tests, scripts) invoke without a request."""
+    return await create_user(req, request, response)
+
+
+async def create_user(
+    req: CreateUserRequest,
+    request: Optional[Request] = None,
+    response: Optional[Response] = None,
+) -> "CreateUserResponse":
     """
     Create a new user account with secure password.
 
     Validates username uniqueness and a valid, unused invite token (#1344),
     hashes password with bcrypt, and creates user in database with alpha flag.
+
+    #2078: once the row is committed, the new account is SIGNED IN here (the
+    same cookie pair login sets), so the wizard's next steps (``/complete``,
+    ``/projects``) carry a principal. The atomically consumed invite is what
+    authorized the account; the session belongs to that account only, and is
+    exactly what the person would get by signing in with the password they
+    just typed. Direct (non-HTTP) callers get no cookies and no session.
 
     Args:
         req: CreateUserRequest with username, email, password, invite_token
@@ -903,6 +970,9 @@ async def create_user(req: CreateUserRequest):
             await session.commit()
 
         logger.info("user_created", user_id=str(user.id), username=user.username)
+
+        if request is not None and response is not None:
+            _sign_in_new_user(request, response, user)
 
         return CreateUserResponse(
             success=True,
@@ -953,14 +1023,19 @@ async def create_user(req: CreateUserRequest):
             )
 
 
-@router.post(
-    "/complete",
-    response_model=SetupCompleteResponse,
-    dependencies=[Depends(require_setup_incomplete)],
-)
-async def complete_setup(req: SetupCompleteRequest):
+@router.post("/complete", response_model=SetupCompleteResponse)
+async def complete_setup(
+    req: SetupCompleteRequest,
+    current_user: JWTClaims = Depends(get_current_user),
+):
     """
     Finalize setup by storing API keys and marking user as setup complete.
+
+    #2078: the principal is the signed-in user (create-user signs the new
+    account in); every write below is for that user only. The #1504 lockout
+    came off this route because the principal check is what stops F1 now;
+    before, every invited tester on an initialized instance was refused here
+    and the wizard ended in "Setup Failed" with the account already created.
 
     This endpoint:
     1. Stores provided API keys (OpenAI, Anthropic, Notion) in keychain
@@ -975,6 +1050,7 @@ async def complete_setup(req: SetupCompleteRequest):
 
     Issue #527: Added Notion key storage support
     """
+    user_id = _setup_principal(current_user, req.user_id)
     try:
         # Store API keys if provided
         service = UserAPIKeyService()
@@ -985,42 +1061,40 @@ async def complete_setup(req: SetupCompleteRequest):
             if req.openai_key:
                 try:
                     await service.store_user_key(
-                        user_id=req.user_id,
+                        user_id=user_id,
                         provider="openai",
                         api_key=req.openai_key,
                         session=session,
                         validate=False,  # Already validated in previous step
                     )
                 except Exception as e:
-                    logger.warning("openai_key_storage_failed", user_id=req.user_id, error=str(e))
+                    logger.warning("openai_key_storage_failed", user_id=user_id, error=str(e))
 
             # Store Anthropic key
             if req.anthropic_key:
                 try:
                     await service.store_user_key(
-                        user_id=req.user_id,
+                        user_id=user_id,
                         provider="anthropic",
                         api_key=req.anthropic_key,
                         session=session,
                         validate=False,  # Already validated in previous step
                     )
                 except Exception as e:
-                    logger.warning(
-                        "anthropic_key_storage_failed", user_id=req.user_id, error=str(e)
-                    )
+                    logger.warning("anthropic_key_storage_failed", user_id=user_id, error=str(e))
 
             # Store Notion key (Issue #527: ALPHA-SETUP-NOTION)
             if req.notion_key:
                 try:
                     await service.store_user_key(
-                        user_id=req.user_id,
+                        user_id=user_id,
                         provider="notion",
                         api_key=req.notion_key,
                         session=session,
                         validate=False,  # Already validated in previous step
                     )
                 except Exception as e:
-                    logger.warning("notion_key_storage_failed", user_id=req.user_id, error=str(e))
+                    logger.warning("notion_key_storage_failed", user_id=user_id, error=str(e))
 
             # #1810: Issue #724 used to ALSO store GLOBAL, unprefixed copies of
             # the LLM keys here ("openai_api_key" / "anthropic_api_key", no
@@ -1061,7 +1135,7 @@ async def complete_setup(req: SetupCompleteRequest):
                     keychain.store_api_key(
                         "authorized_llm_providers",
                         ",".join(authorized_providers),
-                        username=req.user_id,
+                        username=user_id,
                     )
                     logger.info(
                         "authorized_llm_providers_stored",
@@ -1077,7 +1151,7 @@ async def complete_setup(req: SetupCompleteRequest):
                     keychain.store_api_key(
                         "default_llm_provider",
                         req.default_llm_provider,
-                        username=req.user_id,
+                        username=user_id,
                     )
                     logger.info(
                         "default_llm_provider_stored",
@@ -1096,7 +1170,7 @@ async def complete_setup(req: SetupCompleteRequest):
                     "UPDATE users SET setup_complete = true, "
                     "setup_completed_at = :now WHERE id = :user_id"
                 ),
-                {"user_id": req.user_id, "now": utc_now()},
+                {"user_id": user_id, "now": utc_now()},
             )
             await session.commit()
 
@@ -1111,28 +1185,26 @@ async def complete_setup(req: SetupCompleteRequest):
             # Get user email for CLI token
             # Use fresh session to avoid event loop mismatch (#442)
             async with AsyncSessionFactory.session_scope_fresh() as session:
-                result = await session.execute(
-                    select(User).where(User.id == uuid.UUID(req.user_id))
-                )
+                result = await session.execute(select(User).where(User.id == uuid.UUID(user_id)))
                 user = result.scalar_one_or_none()
                 user_email = user.email if user else ""
 
-            cli_token = jwt_service.generate_cli_token(user_id=req.user_id, user_email=user_email)
-            keychain.store_cli_token(req.user_id, cli_token)
-            logger.info("cli_auth_configured", user_id=req.user_id)
+            cli_token = jwt_service.generate_cli_token(user_id=user_id, user_email=user_email)
+            keychain.store_cli_token(user_id, cli_token)
+            logger.info("cli_auth_configured", user_id=user_id)
         except Exception as e:
-            logger.warning("cli_auth_setup_failed", user_id=req.user_id, error=str(e))
+            logger.warning("cli_auth_setup_failed", user_id=user_id, error=str(e))
 
-        logger.info("setup_completed", user_id=req.user_id)
+        logger.info("setup_completed", user_id=user_id)
 
         return SetupCompleteResponse(
             success=True,
-            message="Setup complete! Redirecting to login...",
-            redirect_url="/login",
+            message="Setup complete! You're signed in.",
+            redirect_url="/",  # #2078: the session was issued at create-user
         )
 
     except Exception as e:
-        logger.error("setup_completion_failed", user_id=req.user_id, error=str(e), exc_info=True)
+        logger.error("setup_completion_failed", user_id=user_id, error=str(e), exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Setup completion failed: {str(e)}",
@@ -1147,7 +1219,9 @@ async def complete_setup(req: SetupCompleteRequest):
 class SetupProjectRequest(BaseModel):
     """Request model for creating a project during setup."""
 
-    user_id: str = Field(description="User ID (UUID) who owns this project")
+    user_id: Optional[str] = Field(
+        default=None, description="Must match the signed-in user, if sent (#2078)"
+    )
     project_name: str = Field(description="Project name")
     project_description: str = Field(default="", description="Optional project description")
     github_repo: Optional[str] = Field(
@@ -1163,17 +1237,17 @@ class SetupProjectResponse(BaseModel):
     message: str = ""
 
 
-@router.post(
-    "/projects",
-    response_model=SetupProjectResponse,
-    dependencies=[Depends(require_setup_incomplete)],
-)
-async def create_setup_project(req: SetupProjectRequest):
+@router.post("/projects", response_model=SetupProjectResponse)
+async def create_setup_project(
+    req: SetupProjectRequest,
+    current_user: JWTClaims = Depends(get_current_user),
+):
     """
     Create a project (and optionally link a GitHub repo) during setup wizard.
 
-    This endpoint does NOT require JWT auth — it uses user_id from the
-    account creation step. Called between account creation and setup completion.
+    #2078: the owner is the signed-in user (create-user signs the new account
+    in); a body user_id must match it. The #1504 lockout came off for the same
+    reason as ``/complete``.
 
     Issue #860: Setup wizard project-repo linking step.
     Issue #866 introduced a dual-write (Repository entity + a "legacy" GitHub
@@ -1184,6 +1258,7 @@ async def create_setup_project(req: SetupProjectRequest):
     from services.database.repositories import ProjectRepository, RepositoryRepository
     from services.domain import models as domain
 
+    user_id = _setup_principal(current_user, req.user_id)
     try:
         if not req.project_name or not req.project_name.strip():
             raise HTTPException(
@@ -1198,7 +1273,7 @@ async def create_setup_project(req: SetupProjectRequest):
             created_project = await project_repo.create(
                 name=req.project_name.strip(),
                 description=req.project_description,
-                owner_id=req.user_id,
+                owner_id=user_id,
             )
 
             project_id = created_project.id
@@ -1230,7 +1305,7 @@ async def create_setup_project(req: SetupProjectRequest):
                 # Create Repository entity (#866)
                 repo_repo = RepositoryRepository(session)
                 repo_domain = domain.Repository(
-                    owner_id=req.user_id,
+                    owner_id=user_id,
                     provider="github",
                     full_name=repo_name,
                     display_name=repo_name.split("/")[-1],
@@ -1243,7 +1318,7 @@ async def create_setup_project(req: SetupProjectRequest):
                 await repo_repo.link_to_project(
                     repository_id=repo_entity.id,
                     project_id=project_id,
-                    linked_by=req.user_id,
+                    linked_by=user_id,
                     is_primary=True,
                 )
 
@@ -1251,7 +1326,7 @@ async def create_setup_project(req: SetupProjectRequest):
 
         logger.info(
             "setup_project_created",
-            user_id=req.user_id,
+            user_id=user_id,
             project_id=project_id,
             has_github_repo=bool(req.github_repo),
         )
@@ -1267,7 +1342,7 @@ async def create_setup_project(req: SetupProjectRequest):
     except Exception as e:
         logger.error(
             "setup_project_creation_failed",
-            user_id=req.user_id,
+            user_id=user_id,
             error=str(e),
             exc_info=True,
         )
