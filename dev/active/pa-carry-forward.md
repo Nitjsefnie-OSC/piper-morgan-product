@@ -150,3 +150,10 @@ half unrelated).
 - **10-17 15:2x, A1 done:** xian PASSED 4 of 4 on `118241587e`. I commented on #2072 (it stays open for #2076's served acceptance, Sunday) and #2031 (CXO closes). **#2077** filed: the PAT field may get password autofill; the fix is Lead's, plus xian's one-line length check. Still owed: the MCP served-sha check on the next MCP deploy. Chrome DevTools MCP is standard (CIO): use a console and network read on the next served row, in an isolated context.
 - **10-17 15:47:** #2031 closed (CXO). #2072 admitted to MVP as Class 3. #2077 fixed on main `6c3206dd35`; served Sunday. After Sunday's promotion, check alpha `/health` includes `6c3206dd35` and `c015c414c4` (#2076), and watch for Web's quotes so #2072 can close.
 - **10-17 18:47:** Sunday owed: #2078 wizard run (runner xian or Web, needs HOST's invite) and #2080 chain, both per `dev/active/pa-sunday-served-2078-2080-steps.md`; check alpha /health contains d82b5ce4b3, 86f938bf8d, ebd29ecef7, 6c3206dd35, c015c414c4.
+
+### 10-17 STOP (21:4x)
+- **Sunday (first promotion):** check alpha `/health` contains `d82b5ce4b3` (#2078), `86f938bf8d` and `92f723e5b0` (#2080), `797ab61a11` (#2079), `6c3206dd35` (#2077) and `c015c414c4` (#2076). Then run `dev/active/pa-sunday-served-2078-2080-steps.md` with the runners (#2078: xian or Web with HOST's invite; #2080 and #2079: xian's A4 account or Web). Relay quotes to CXO and comment on the issues.
+- **The A4/#2078 invite isn't minted.** HOST's and Lead's seats are both classifier-denied; it's xian's hand (a seat rule or his own `--apply`). Exec has it.
+- **Closes waiting on Sunday:** #2072 (#2076's served quotes, Web), #2077 (attribute live plus xian's ten-second check).
+- **Main Tests red** on `3311d40219`; Lead's fix `9b7a46c883` was running at STOP. Recheck at START.
+- **MCP served-sha check:** on the next MCP deploy.
