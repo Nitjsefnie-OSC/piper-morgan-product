@@ -847,7 +847,9 @@ Two halves. (1) `armed_turn_consult.classify_armed_reply` gains
 carriers); only `add_project_clarify` passes True. When set, an at-threshold
 operation whose registered `WorkflowEntry.effect` is READ and whose decision
 carries no args CONFIRMs instead of releasing (`Add a project called "X"?
-(yes/no)`, CXO's #1886 copy). Derived from the rail registry through the
+(yes/no)`, CXO's #1886 copy; CXO 10-17 kept it one yes/no question, and a "no"
+on either confirm arm now answers `Okay, I won't add that project. If you meant
+to ask me something, go ahead.`). Derived from the rail registry through the
 grammar's alias map, never a hand list; a READ with args, any WRITE,
 sub-threshold and CLARIFY are unchanged. No router-prompt change, so no rule-7
 run. (2) The #1855 seam's detector accepts a bounded acknowledging lead before a

@@ -515,7 +515,7 @@ class TestArmedTurnConsultWiring:
         assert result is None
         assert fake.workflow_offer_service.peek_pending_offer("s-1886-confirm-no") is None
         assert confirm_offer["decline_message"] == (
-            'Okay — I won\'t add a project called "Klatch". Nothing has been changed.'
+            "Okay, I won't add that project. If you meant to ask me something, go ahead."
         )
 
     async def test_helper_never_calls_dispatch_workflow(self, monkeypatch):

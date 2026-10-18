@@ -202,6 +202,12 @@ class TestNameCarrierPassesTheFlag:
         assert (
             fake.workflow_offer_service.stored["pending_action"]["kind"] == ADD_PROJECT_CONFIRM_KIND
         )
+        # CXO 2026-10-17 18:32: the confirm stays ONE yes/no question (no "or did
+        # you mean to ask me something?"); a "no" answers with a statement that
+        # leaves the door open instead.
+        assert fake.workflow_offer_service.stored["decline_message"] == (
+            "Okay, I won't add that project. If you meant to ask me something, go ahead."
+        )
 
     async def test_a_real_competing_command_still_releases(self, monkeypatch):
         _stub_route(monkeypatch, operation="show_my_todos", confidence=0.95, args={"scope": "all"})

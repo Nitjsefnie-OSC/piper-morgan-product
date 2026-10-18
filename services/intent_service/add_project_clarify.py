@@ -245,7 +245,13 @@ def _add_project_confirm_question(name: str) -> str:
 
 
 def _add_project_confirm_decline(name: str) -> str:
-    return f'Okay — I won\'t add a project called "{name}". Nothing has been changed.'
+    # CXO 2026-10-17 18:32 (#2080): the confirm is one yes/no question, so a
+    # "no" answers with a statement that leaves the door open for the turn the
+    # user may have meant as a question or command. Same line for both confirm
+    # arms (#1886(b) ambiguous answer, #2080 bare read). ``name`` is kept in the
+    # signature so the two carriers stay call-compatible.
+    del name
+    return "Okay, I won't add that project. If you meant to ask me something, go ahead."
 
 
 def build_add_project_confirm_offer(
