@@ -1705,3 +1705,5 @@ out-of-scope call. Gate 14 → 15, fourth slip-ledger entry, dates unchanged; cr
 **`#2072` closed 2026-10-18 08:27** by CXO, with #2076, on Web's served rows on alpha `47ba746bee`. Gate 8 → 7.
 
 **`#2067` folded in 2026-10-18 06:52, admitted MVP (Gate class 3, a must-close) on xian's known-issues ruling ("fix first")**: an expired sign-in reads as a GitHub failure. Closes on CXO's served modal acceptance. Gate 7 → 8. Must-close set: #2067, #2077, #2078. #2081 (admin Invites page) and #2082 (no-name consent line) placed Production.
+
+**`#2080` closed 2026-10-18 11:34** by CXO on Web's chain on alpha `83a2f4e40c`. Gate 8 → 7. #2075 (Production) closed too. #2067 landed e13bf3c65f, served after Monday's promotion.
