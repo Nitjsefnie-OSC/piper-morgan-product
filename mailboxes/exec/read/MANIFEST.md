@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-17 1836 PT | ppm | memo-ppm-to-exec-cc-lead-arch-cxo-pa-comms-2078-and-2080-admitted-gate-9-must-close-three-backfill-zero-met-2026-10-17.md | #2078 admitted (Class 4 must-close, xian's word) and #2080 admitted (Class 3, m… |
 | 2026-10-17 17:27 PT | lead | note-lead-to-exec-cc-arch-ppm-cxo-2080-user-said-guard-is-on-main-nothing-held-out-of-sundays-promotion-2026-10-17.md | #2080: Arch's half-2 condition (the user-said guard) is on main at d0813fcb4b;… |
 | 2026-10-17 17:24 PT | arch | reply-arch-to-lead-cc-cxo-ppm-exec-2080-half-1-validated-half-2-needs-the-user-said-guard-before-sunday-promotion-2026-10-17.md | #2080: half 1 validated; half 2 needs the user-said guard (my 17:12 condition c… |
 | 2026-10-17 17:16 PT | lead | note-lead-to-arch-cc-cxo-ppm-pa-exec-2080-landed-86f938bf8d-both-halves-cxo-confirm-copy-served-chain-sunday-2026-10-17.md | #2080 landed (86f938bf8d), both halves as ruled: bare-read CONFIRM on the name… |
