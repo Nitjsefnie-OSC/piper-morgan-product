@@ -131,7 +131,8 @@ async def test_pm_transcript_end_to_end_real_todo_completes(repro_user, live_ser
     # Turn 1 — the report renders complete; the closing offer names its
     # referent and the #846 store binds the REAL row id.
     result = await _standup_turn(live_service, sid, repro_user)
-    assert result.message.startswith(f"Good morning! {PROSE}")
+    # 2079: the repro user has no timezone row, so the greeting is the neutral "Hi!".
+    assert result.message.startswith(f"Hi! {PROSE}")
     assert '"repro-1651 send the beta invite batch"' in result.message
     assert "(yes/no)" in result.message
     stored = live_service.workflow_offer_service._pending_offers.get(sid)
