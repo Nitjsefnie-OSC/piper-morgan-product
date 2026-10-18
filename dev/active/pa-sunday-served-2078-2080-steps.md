@@ -1,4 +1,4 @@
-# Sunday served checks: the wizard sign-up (#2078) and the add-project chain (#2080)
+# Sunday served checks: the wizard sign-up (#2078), the add-project chain (#2080), the greeting (#2079), the MCP PAT read (#1982)
 
 **Owner**: PA (steps and the judgement relay). **Written** 2026-10-17 18:49 from main (`d82b5ce4b3`, `86f938bf8d`,
 `ebd29ecef7`) and CXO's 18:32 acceptance. **Run on**: Sunday's first promotion. Before starting, check alpha `/health`
@@ -15,8 +15,12 @@ About 10 minutes for both.
 
 ## A. #2078: a fresh invited sign-up through the wizard (must-close)
 
-Before: the run builds on `d82b5ce4b3`. HOST has minted one invite; the runner has it from the
-`~/.piper-shared/` file HOST names (masked form only in mail).
+Before: the build is `47ba746bee` (served 06:42 10-18, contains `d82b5ce4b3`; PA checked). **The invite:** HOST's file
+`~/.piper-shared/xian-a4-pat-test-credential-invite-20261017.txt` is **probably spent**. xian's 10-17 16:09 sign-up
+(the A4 account, the one #2078 stranded) used it; the file is timestamped 16:10. That's an inference, not
+redeemed. If step 3 says "invalid or already used invite token", that's not a #2078 fail: mint one more
+(`scripts/mint_prod_invite.sh --apply` on Amber, saved under a `-credential-` name), then redo step 3. Best to
+mint first and save the retry.
 
 1. Open `https://alpha.pipermorgan.ai/setup` in a browser that **isn't** signed in to alpha (a private window works).
 2. Step 1 (System), then step 2 (Connect Your AI): enter a real LLM key and Continue.
@@ -63,6 +67,30 @@ On an account that has signed in through `/login` (xian's A4 account qualifies),
 **Pass**: the first word of the reply is "Good afternoon!" or "Good evening!", matching the page header above it.
 A wizard-created account that never used `/login` reads "Hi!"; that's right (CXO). Quote the first line and the
 header. Fix `797ab61a11`, plus `92f723e5b0` for B6's split decline.
+
+## D. #1982: the MCP app reads a PAT-only account's GitHub (PA's lane; xian's hand)
+
+**Why:** the PAT dual write (`15dba249c8`, on `47ba746bee`) stores a PAT saved in Settings under the GitHub
+context too, so the MCP app can read it. Before this, a PAT-only user got `CONNECT_REQUIRED` from the MCP app.
+PM's own account is OAuth-only (A1, 10-17: no PAT), so the account to use is **xian's A4 PAT-only account**.
+
+1. **Re-save the PAT on this build.** A4's PAT was saved on `118241587e`, before the dual write, so the MCP app
+   can't see it yet. On alpha, signed in as the A4 account: Settings → GitHub → paste the same PAT → **Update**.
+   **Pass**: it still reads "Connected". (The alternative is runbook step 2b's backfill script, which is xian's hand
+   on alpha. Re-saving is simpler for one account.)
+2. **Connect the MCP connector as the A4 account.** In Claude Desktop (or claude.ai), add or reconnect the Piper
+   Alpha connector, and sign in **as the A4 account** on the alpha login page it opens. Your usual connector is
+   bound to your main account, which is OAuth and doesn't test this.
+3. Ask: **"What are my open GitHub issues in Piper?"** **Pass**: real issue titles that match GitHub, with the
+   total stated (A4's PAT saw 274 on 10-17). **Fail**: "connect GitHub", `CONNECT_REQUIRED`, or an empty list.
+   Screenshot it.
+4. PA reads the MCP app's logs for that call (`fly logs -a piper-morgan-mcp`, a read): `EncryptedDBCredentialStore`,
+   no decrypt error, no degrade.
+5. Afterwards, switch the connector back to your main account if you use it day to day.
+
+Not covered: other PAT-only accounts saved before the dual write (Web's `web-pat-test`, any tester's). They need the
+2b backfill (dry run, then `--apply` with a snapshot), which is xian's hand. Until then the MCP app reads them as
+not connected.
 
 ## After
 
