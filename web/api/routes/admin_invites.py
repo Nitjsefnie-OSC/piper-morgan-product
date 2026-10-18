@@ -111,11 +111,14 @@ async def mint_invite_codes(
     )
 
 
-@router.post("/{masked}/revoke")
-async def revoke_invite_code(masked: str, admin: JWTClaims = Depends(require_admin)) -> dict:
+# The path parameter is the code's MASKED form (ABCD…WXYZ). It is named ``code``
+# rather than ``masked`` because tests/intent/test_future_nl_endpoints.py reads
+# any route path containing "ask" as a chat endpoint (the letters of "m-ask-ed").
+@router.post("/{code}/revoke")
+async def revoke_invite_code(code: str, admin: JWTClaims = Depends(require_admin)) -> dict:
     try:
         async with AsyncSessionFactory.session_scope() as session:
-            done = await revoke_invite(session, masked=masked, actor_user_id=admin.user_id)
+            done = await revoke_invite(session, masked=code, actor_user_id=admin.user_id)
     except InviteAdminError as exc:
         raise _refuse(exc)
     return {"revoked": done, "message": f"Revoked {done}. It can no longer create an account."}
