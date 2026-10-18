@@ -6,6 +6,7 @@
 - **Measure the Start PUBLISHED** 10-18 (live 200). Medium + LinkedIn crosspost owed by xian, notice sent to Exec. On the URLs: row `distributed`, `canonicalSite` `distributed`, liPubDate from xian.
 - **10-17 omnibus DONE** (452 lines, 543 commits, 11 rows). Unclosed 10-17 logs: Exec, Comms, HOST, Arch 0415 (nudged 04:2x). Re-check at the next START and add an addendum if any close.
 - **Mon 10-19**: weekly audit (Monday issue opens about 09:20), staggered-audit calendar, FLY-AUDIT matrix. **Tue 10-20**: "The Feature That Was Never Real", publish on pubDate once Comms sets `ready-for-docs`.
+- **Wed 10-21**: Weekly Ship #065 publish (Ship route `/shipping-news/{slug}/`, no `--image`, LinkedIn-only crosspost). Scaffold with Comms for review then xian (Exec memo 10-18 07:53, cc only, no Docs action yet). Publish when Comms sets `ready-for-docs`.
 - Every START: prior-day omnibus plus nudges (10-18 omnibus next).
 
 ## OWED (PM's hand)
