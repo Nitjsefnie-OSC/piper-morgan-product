@@ -121,7 +121,9 @@ it doesn't cover. None of the three reached alpha. CI is the backstop, and the c
 runner), so the generality m-51 withheld is earned. It stays Emerging until a use of the rule changes
 an outcome. Candidate mechanism, not built: for a change that touches a pin's text, run a `git grep`
 for that text across `tests/` before the push, because twins share their pinned string. That's
-Lead's lane to adopt or not.
+Lead's lane to adopt or not. **Adopted by Lead 10-17 22:11**: every hit is re-pinned in the same commit
+or named in the log. The order-dependent #2066 shape stays covered by Lead's suite rule (run the layer
+that owns the behaviour, not the suites near the diff), not by the grep.
 
 ## Why "state the denominator" isn't enough, restated for application
 

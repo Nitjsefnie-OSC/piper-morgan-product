@@ -109,7 +109,6 @@ can hide its subject (main-ci-status 20 → 100).
   - 7v (#1834 item 2): Exec's decision.
   - chrome-devtools-mcp bump past 1.10.1: after 10-29 (two-week rule for 1.11.0).
   - First real-commit stamp warning: watch.
-  - ~/.piper-shared: 1 of 15 file names outside the read denies (whats-armed NOT ARMED at 22:08); notice to HOST cc Exec; confirm 15 of 15 at START.
   - A4 invite mint (HOST, Lead seats classifier-denied): xian's, via Exec; not mine to work around.
   - Reviews: 10-19 piper-guards/context-usage-reminder; 10-22 v4 pilot; 10-27 staleness; 10-30 grant; 11-01 sunset inventory; 12-09 methodology audit.
 
