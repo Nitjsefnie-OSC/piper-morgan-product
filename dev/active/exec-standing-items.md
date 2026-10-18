@@ -186,3 +186,5 @@ misread until 2026-10-01.*
 | 141 | ~~**xian: admit #2077?**~~ `key: xian-2077` | 2026-10-17 | CLOSED 16:06: yes, must-close (relayed by Lead to PPM, CXO, Arch) |
 | 142 | ~~**xian: #2078 admit?**~~ `key: xian-2078` | 2026-10-17 | CLOSED 16:34: yes, Class 4 must-close (relayed by Lead to PPM, Arch, CXO, PA) |
 | 143 | **xian: Medium + LinkedIn crosspost of "Measure the Start, Not the End"** `key: crosspost-measure` | 2026-10-18 | relay URLs to Docs |
+| 144 | **Ship #065: tell xian draft ready for first look** `key: ship065-first-look` | 2026-10-18 | waits on Comms review |
+| 145 | **Ship #066: draft weekly goals from reviews Next-week sections by Sat 10-24 afternoon** `key: goals-066` | 2026-10-18 | xian ratifies |
