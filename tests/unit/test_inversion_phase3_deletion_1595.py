@@ -2240,7 +2240,15 @@ def test_plan_row_fallback_acknowledged_after_the_served_flip_licenses_portfolio
     a = gate.assess_list("PORTFOLIO_PATTERNS", by_list["PORTFOLIO_PATTERNS"])
     assert not [c for c in a.reabsorbed if c[0].phrase == _TWO_TOPIC]
     report = gate.render_list_report("PORTFOLIO_PATTERNS", by_list, counts, len(records))
-    assert "deleting 1" not in report, report  # nothing left to delete: survivors only
+    # 2026-10-11 .. 2026-10-18: "nothing left to delete: survivors only". Since
+    # the add_project flip (#2069, Arch 2026-10-18 07:22; ADD_PROJECT in
+    # CURRENT_LIVE_CATEGORIES) the row "I'd like to start a new project" is a
+    # MATCH on a LIVE op, so the `\bnew project\b` literal is deletable again:
+    # GO (partial), deleting 1. The deletion is a separate unit (the live
+    # router runs before surface 1, so served behaviour does not wait on it);
+    # this pin records the gate's reading so the next change is visible.
+    assert "GO (partial)" in report, report
+    assert "deleting 1" in report, report
 
 
 def test_plan_row_fallback_partial_names_the_dropping_list(monkeypatch):

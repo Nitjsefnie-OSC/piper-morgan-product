@@ -630,6 +630,26 @@ row). Every leave-the-standup line is one constant in
 `test_second_seam_1771.py`, `test_four_seams_1771.py`,
 `test_escape_end_vs_pause_888.py`.
 
+**#2069 served FAIL with the fix in the build; the op was not live (2026-10-18)**: on alpha `47ba746bee`
+Web's 'Add a project called Baz with description Quarterly planning notes' still stored the whole tail as
+the name. Cause: `add_project` is an allowlisted WRITE rail entry but was **not in
+`PIPER_INVERSION_LIVE_CATEGORIES`** (no `flip_group`; PORTFOLIO not a live category), so the live consult
+stood down and the turn fell to surface 1 (the `add/create project` literal) or surface 2's
+manage_portfolio draw; both reach the #2057 hand-off `legacy_write_rail_dispatch("add_project")` into
+`_handle_add_project` with **no `inversion_args`**. The handler-side #2069 code was correct and
+unreachable. A regex deletion was tried and the deletion gate refused it ("MATCH on a NON-LIVE op"),
+correctly: moving the turn from surface 1 to surface 2 lands in the same place. **Ruling (Arch, 07:22):
+flip the single op token `add_project`** (never PORTFOLIO), after a near-miss screen ("create a project
+plan for the launch", "add a task to the Piper Morgan project", "what would it take to start a new
+project?" ×3 each: `get_contextual_guidance` ×6, `CLARIFY` ×2, `create_todo` ×1, none `add_project`,
+`dev/2026/10/18/controls/2069-near-miss-x3.md`), with the gate's `CURRENT_LIVE_CATEGORIES` mirror
+committed first (this commit) and xian setting the token on `piper-morgan`. Live tokens after the flip:
+ADD_PROJECT, COMPLETE_TODO, CREATE_REMINDER, CREATE_TODO, DELETE_TODO, READ_CANONICAL, READ_FLOOR,
+READ_FLOOR_2, READ_PORTFOLIO, READ_REFERENT, READ_STATUS, READ_STRATEGIC, READ_SYNTHESIS, READ_TEMPORAL.
+Served acceptance after the flip (Arch): wording (a) stores name 'Baz' and the description; "I'd like to
+start a new project" gets a name ask and no row; telemetry `live_match=operation`. Lesson: before building
+a handler-side args fix, check which surface dispatches the op on alpha (`resolve_live_match`, one call).
+
 **#1762 capped-list remainder seam (2026-09-13, epic 6 first build) — a NEW
 pre-classification deterministic seam, and the chain's first PERSISTING arm.**
 Sits immediately after the #889 resume check and before classification, guarded

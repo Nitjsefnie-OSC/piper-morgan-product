@@ -594,6 +594,12 @@ CURRENT_LIVE_CATEGORIES: frozenset = frozenset(
         # token on 2026-10-07 — re-read the flag whenever a wave flips and
         # change this line in the same commit (same discipline as the
         # DELETE_TODO/READ_FLOOR update above).
+        # + ADD_PROJECT (2026-10-18, Lead; Arch's #2069 ruling 07:22, one op
+        # token, never PORTFOLIO): the add-project turn fell to the legacy
+        # path with no router args because the op was not live. Mirror
+        # commit lands BEFORE xian sets the token on piper-morgan (Arch's
+        # condition 3); near-miss screen 9/9 clean (condition 2).
+        "ADD_PROJECT",
         "COMPLETE_TODO",
         "CREATE_REMINDER",
         "CREATE_TODO",
