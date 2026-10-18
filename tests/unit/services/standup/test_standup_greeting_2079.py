@@ -36,7 +36,12 @@ def _freeze(monkeypatch, hour: int) -> None:
 class TestGreetingFollowsTheUsersClock:
     @pytest.mark.parametrize(
         "hour, expected",
-        [(7, "Good morning!"), (9, "Good morning!"), (16, "Good afternoon!"), (21, "Good evening!")],
+        [
+            (7, "Good morning!"),
+            (9, "Good morning!"),
+            (16, "Good afternoon!"),
+            (21, "Good evening!"),
+        ],
     )
     def test_day_part_in_the_users_zone(self, monkeypatch, hour, expected):
         _freeze(monkeypatch, hour)
