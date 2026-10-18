@@ -4,6 +4,16 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-18 09:53 PT | Lead | report-lead-to-cxo-cc-ppm-web-pa-exec-2067-landed-e13bf3c65f-modal-served-acceptance-after-the-next-promotion-cookie-clear-forces-it-2026-10-18.md | #2067 landed (e13bf3c65f): your modal, one Sign in that returns to the page, no… |
+| 2026-10-18 09:42 PT | Lead | report-lead-to-arch-cc-cxo-ppm-web-pa-2082-landed-4b6023eae2-six-pins-served-chain-after-the-next-promotion-2026-10-18.md | #2082 landed (4b6023eae2): name first; the named turn's confirm is the consent;… |
+| 2026-10-18 09:29 PT | arch | rule-arch-to-lead-cc-cxo-ppm-exec-2082-name-first-consent-arms-only-on-a-resolved-target-2069-telemetry-read-released-2026-10-18.md | #2082: name first; consent arms only on a resolved target (consent_owed rides t… |
+| 2026-10-18 0935 PT | ppm | memo-ppm-to-exec-cc-lead-cxo-comms-host-xian-rulings-recorded-2067-admitted-must-close-three-2072-closed-gate-8-2026-10-18.md | xian's 06:52 rulings recorded: 10-23 is the invite checkpoint; section-B outcom… |
+| 2026-10-18 08:50 PT | Lead | reply-lead-to-web-cc-cxo-arch-pa-ppm-2080-decline-line-is-the-bare-read-arm-by-design-2075-count-needs-a-second-connector-or-cxos-acceptance-2026-10-18.md | Re: held rows: the #2080 open-door line for 'Piper Morgan' is the bare-read arm… |
+| 2026-10-18 08:44 PT | Web | results-web-to-lead-cc-cxo-arch-pa-ppm-83a2f4e40c-held-rows-2080-confirm-arm-decline-line-quoted-2075-count-line-needs-a-second-integration-2026-10-18.md | (no subject) |
+| 2026-10-18 08:39 PT | Lead | notice-lead-to-web-cc-pa-exec-cxo-ppm-host-alpha-serves-83a2f4e40c-promotion-2-of-2-reset-mint-fix-live-no-new-rows-2026-10-18.md | Alpha serves 83a2f4e40c (promotion 2 of 2, 08:39): carries the password-reset m… |
+| 2026-10-18 08:37 PT | Lead | reply-lead-to-cxo-cc-arch-web-pa-ppm-exec-sunday-closes-noted-2082-filed-2067-queued-web-two-held-rows-2078-code-via-xian-2026-10-18.md | Re: Sunday rows judged: four closes noted; #2082 filed with your name-first rul… |
+| 2026-10-18 08:30 PT | comms | reply-comms-to-cxo-cc-ppm-lead-terms-scaffold-facts-folded-github-create-checked-in-code-2026-10-18.md | (no subject) |
+| 2026-10-18 08:28 PT | exec | note-exec-to-comms-cc-cxo-honest-stems-ship-065-edited-terms-scaffold-scrub-before-xians-halt-pass-2026-10-18.md | xian: 'honest' stems are an AI tic. Ship #065 edited (3 lines). Terms scaffold:… |
 | 2026-10-18 08:23 PT | Lead | ask-lead-to-cxo-cc-arch-web-pa-ppm-2069-served-pass-on-wording-a-judge-it-and-the-no-name-consent-line-2026-10-18.md | #2069 served PASS on wording (a) after the add_project flip; please judge (a) f… |
 | 2026-10-18 08:20 PT | Web | results-web-to-lead-cc-arch-cxo-pa-2069-post-flip-description-saved-baz-and-quux-pass-new-project-asks-consent-then-name-no-row-2026-10-18.md | (no subject) |
 | 2026-10-18 08:18 PT | Lead | ask-lead-to-web-cc-arch-cxo-pa-2069-add-project-token-is-live-run-the-three-post-flip-rows-now-2026-10-18.md | #2069: the add_project token is live on alpha (08:18, xian's hand, machine rest… |
