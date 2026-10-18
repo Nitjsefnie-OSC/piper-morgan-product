@@ -6,12 +6,12 @@
 
 ## The bar (recorded in `beta-gate-standard.md` §Standing rulings)
 
-- **Must be closed and live on alpha before partners start:** every privacy and security item on MVP. As of 16:3x that was six; at 17:3x, two remain open; at 18:49, three (#2071 admitted); 10-17 08:17, two (#2071 closed live); at 09:26, one: #2064, which waits only on xian's count run; at 16:06, two (#2077 admitted); at 16:34, three (#2078 admitted, the first non-privacy must-close, on xian's word) (#2059 and #2061 closed live on `d741214b6c` at 17:14, #2054 and #2060 at 17:30):
+- **Must be closed and live on alpha before partners start:** every privacy and security item on MVP. As of 16:3x that was six; at 17:3x, two remain open; at 18:49, three (#2071 admitted); 10-17 08:17, two (#2071 closed live); at 09:26, one: #2064, which waits only on xian's count run; at 16:06, two (#2077 admitted); at 16:34, three (#2078 admitted, the first non-privacy must-close, on xian's word); 10-18 06:09, two: #2077 and #2078, both riding today's slot-1 promotion (#2059 and #2061 closed live on `d741214b6c` at 17:14, #2054 and #2060 at 17:30):
   - #2054: one user's turn could carry another user's identity in the intent cache;
   - #2059: logs keep message text, against /privacy;
   - #2060: Chroma telemetry, against /privacy;
   - #2061: uploads are written as plaintext if the encryption key is missing (latent; admitted on xian's 16:18 word);
-  - #2064: the 14-day account-deletion promise on /privacy has no erasure path in code;
+  - #2064: the 14-day account-deletion promise on /privacy has no erasure path in code; **Closed live 10-18 06:09** (Lead, on xian's production count: "pre-flight: would erase cleanly").
   - #2065: Settings' "Export/delete data" page lists actions that don't exist, and /privacy says deleting a chat hides it, but no control does (admitted 16:3x). **Closed live 10-17 09:22** (CXO; served card and page, live /privacy sentence).
   - #2071: one account's Integrations Test result (status, error text, check time) shows on every other account's card and in chat (admitted 18:49; source reading by Arch, not served). **Closed live 10-17 07:24** on alpha `119bd7b9ef` (Web's two-account check, one direction isolated).
   - #2077: the Settings GitHub token field is filled by Chrome with the saved Piper password, which Reconnect would send to GitHub (latent; admitted as a must-close 10-17 16:06, Class 2). Fix 6c3206dd35 on main, rides Sunday's first promotion.

@@ -1699,3 +1699,5 @@ out-of-scope call. Gate 14 → 15, fourth slip-ledger entry, dates unchanged; cr
 **`#2078` folded in 2026-10-17 16:34, admitted MVP (Gate class 4, golden path, a must-close) on xian's word relayed by Lead**: every invited tester's wizard ends in 'Setup Failed'. Fix d82b5ce4b3 on main, for Sunday's first promotion; closes on the wizard page served end to end in a browser. Gate 7 → 8. Must-close set: #2064, #2077, #2078.
 
 **`#2080` folded in 2026-10-17 18:3x, admitted MVP (Gate class 3) by PPM under xian's 15:25 ruling**: a served instance of the #2042 class. The floor offered to create a project it could not create, and after two yeses nothing existed (the rest of #2048's chain). Both halves are on main for Sunday. Gate 8 → 9. #2079 (the standup's hardcoded 'Good morning!') placed Production.
+
+**`#2064` closed 2026-10-18 06:09** by Lead on xian's production count (pre-flight: would erase cleanly). Gate 9 → 8. Must-close set: #2077, #2078.
