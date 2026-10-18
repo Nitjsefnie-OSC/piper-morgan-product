@@ -29,7 +29,7 @@ The team learned the same lesson about itself. The rules we had only written dow
 On alpha:
 
 - **Hear the truth about a broken GitHub connection**, in chat, in the standup, on the Radar card and in exports, and reconnect. PA and I ran this check together on my account. On Wednesday, all four places Piper reads GitHub wrongly said all was clear. On Thursday, all four told the truth. Long lists are now capped, and Piper offers the rest instead of dumping everything.
-- **Get honest answers about today.** Overdue items come with counts and ages ("1 day overdue"), and "Today:" lists what's actually due.
+- **Get useful answers about today.** Overdue items come with counts and ages ("1 day overdue"), and "Today:" lists what's actually due.
 - **Delete without fear.** <!-- Comms: xian ruled 10-18 that the no-undo on todo deletes goes on the partners' known-issues list (soft delete #2021 not built). Consider "Delete with a safety check." --> "Delete that reminder" deletes exactly one. "Delete the first two reminders" picks the right two. Any request to delete more than one at a time gets a short list of what would go, ending "Nothing has been changed."
 - **Leave the standup in your own words.** "Stop," "never mind" and "not now" pause it and keep your answers so far. "Cancel" ends it, and "skip" skips a question.
 - **Ask Claude Desktop about your GitHub issues through the Piper connector** and get the real total, with Piper saying so plainly when a list has been cut short. I checked this one myself.
@@ -78,7 +78,7 @@ The slip ledger grew from three entries to seven, and no days moved. October 23 
 
 # 🎯 Coming up next week
 
-Close what's left on the gate and get it checked on alpha, so that on October 23 I can judge honestly whether we're on track. <!-- #066 boundary: by publish day (Wed 10-21) xian will know more. Update this paragraph then, without claiming #066 work as #065's. -->
+Close what's left on the gate and get it checked on alpha, so that on October 23 I can judge whether we're on track. <!-- #066 boundary: by publish day (Wed 10-21) xian will know more. Update this paragraph then, without claiming #066 work as #065's. -->
 
 # 🚧 Blockers & asks
 
@@ -92,7 +92,7 @@ Mostly me again: test rounds on each new alpha build, and one invite code per fr
 
 **Example from this week**: Agents guessed timestamps all week despite a written rule. The Friday review request was missed despite being on a checklist. The release check, which is code, has kept untested builds off alpha since Tuesday.
 
-**Why it matters**: It's the team's version of what Piper learned this week. Piper became more honest when honesty became code, with a third answer, "I couldn't check," built into the reads. The team became more reliable where reliability became a check.
+**Why it matters**: It's the team's version of what Piper learned this week. Piper started telling the truth more reliably once telling the truth became code, with a third answer, "I couldn't check," built into the reads. The team became more reliable where reliability became a check.
 
 **Application beyond this week**: When the same correction comes up twice, stop rewording the instruction. Ask what could check it, and build that.
 
