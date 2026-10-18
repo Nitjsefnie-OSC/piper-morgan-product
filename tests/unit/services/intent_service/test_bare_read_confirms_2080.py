@@ -208,6 +208,26 @@ class TestNameCarrierPassesTheFlag:
         assert fake.workflow_offer_service.stored["decline_message"] == (
             "Okay, I won't add that project. If you meant to ask me something, go ahead."
         )
+        assert fake.workflow_offer_service.stored["pending_action"]["bare_read"] is True
+
+    async def test_an_ambiguous_reply_keeps_the_naming_decline(self, monkeypatch):
+        """CXO 18:48: the #1886(b) arm (sub-threshold, no question implied)
+        keeps the line that names the project; only the bare-read arm gets
+        the open-door line."""
+        _stub_route(monkeypatch, operation="get_identity", confidence=0.4, args={})
+        _stub_rail(monkeypatch, get_identity=EffectClass.READ)
+        fake = _fake_service()
+        offer = build_add_project_name_offer("add a project", _USER)
+        result = await handle_add_project_name_turn(
+            offer, "Klatch", session_id="s-1886b", user_id=_USER, intent_service=fake
+        )
+        assert result is not None
+        assert result["message"] == 'Add a project called "Klatch"? (yes/no)'
+        stored = fake.workflow_offer_service.stored
+        assert stored["pending_action"]["bare_read"] is False
+        assert stored["decline_message"] == (
+            'Okay — I won\'t add a project called "Klatch". Nothing has been changed.'
+        )
 
     async def test_a_real_competing_command_still_releases(self, monkeypatch):
         _stub_route(monkeypatch, operation="show_my_todos", confidence=0.95, args={"scope": "all"})

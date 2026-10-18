@@ -379,7 +379,7 @@ class TestAddProjectCarrierUsesTheSharedHelper:
         # generic flow); the exact copy lives on the offer record itself.
         assert result is None
         assert offer["decline_message"] == (
-            "Okay, I won't add that project. If you meant to ask me something, go ahead."
+            'Okay — I won\'t add a project called "Klatch". Nothing has been changed.'
         )
         assert fake.workflow_offer_service.peek_pending_offer("s-confirm-no") is None
 

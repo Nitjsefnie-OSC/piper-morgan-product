@@ -244,18 +244,27 @@ def _add_project_confirm_question(name: str) -> str:
     return f'Add a project called "{name}"? (yes/no)'
 
 
-def _add_project_confirm_decline(name: str) -> str:
-    # CXO 2026-10-17 18:32 (#2080): the confirm is one yes/no question, so a
-    # "no" answers with a statement that leaves the door open for the turn the
-    # user may have meant as a question or command. Same line for both confirm
-    # arms (#1886(b) ambiguous answer, #2080 bare read). ``name`` is kept in the
-    # signature so the two carriers stay call-compatible.
-    del name
-    return "Okay, I won't add that project. If you meant to ask me something, go ahead."
+def _add_project_confirm_decline(name: str, *, bare_read: bool = False) -> str:
+    """CXO's two decline lines, one per confirm arm (18:32 + 18:48, 2026-10-17).
+
+    The #2080 bare-read arm (the reply read as an argument-free READ, e.g. a
+    name that looks like a question) answers with a statement that leaves the
+    door open, because the name may have been a question. The #1886(b) arm
+    (an ambiguous reply, no question implied) keeps the line that names the
+    project and says the true thing.
+    """
+    if bare_read:
+        return "Okay, I won't add that project. If you meant to ask me something, go ahead."
+    return f'Okay — I won\'t add a project called "{name}". Nothing has been changed.'
 
 
 def build_add_project_confirm_offer(
-    name: str, repo_name: Optional[str], user_id, original_message: str
+    name: str,
+    repo_name: Optional[str],
+    user_id,
+    original_message: str,
+    *,
+    bare_read: bool = False,
 ) -> Dict[str, Any]:
     """#1886(b) — the CONFIRM-fallback pending offer, armed when the armed-
     turn consult can't confidently classify the answer turn as either an
@@ -266,6 +275,10 @@ def build_add_project_confirm_offer(
     question — CXO: "a re-arm is a promise of a prompt the state doesn't
     hold unless it is armed (#1766), and the user said no. Declining ends
     the flow; the user starts over if they want."
+
+    ``bare_read`` (#2080): True when the consult CONFIRMed because the reply
+    read as an argument-free READ; it selects CXO's open-door decline line and
+    rides in the payload so a re-arm renders the same line.
     """
     question = _add_project_confirm_question(name)
     return {
@@ -279,8 +292,9 @@ def build_add_project_confirm_offer(
             "original_message": original_message,
             "user_id": str(user_id) if user_id else None,
             "summary": f'add a project called "{name}"',
+            "bare_read": bare_read,
         },
-        "decline_message": _add_project_confirm_decline(name),
+        "decline_message": _add_project_confirm_decline(name, bare_read=bare_read),
     }
 
 
@@ -555,7 +569,11 @@ async def handle_add_project_name_turn(
         original_message = (payload.get("original_message") or "").strip()
         repo_name = extract_add_project_slots(original_message).get("repo")
         offer = build_add_project_confirm_offer(
-            text, repo_name, user_id or offer_user, original_message
+            text,
+            repo_name,
+            user_id or offer_user,
+            original_message,
+            bare_read=consult.reason == "bare_read",
         )
         armed = False
         try:
@@ -757,7 +775,9 @@ async def run_clarify_add_project_confirm_workflow(
         "workflow_type": CLARIFY_ADD_PROJECT_CONFIRM_WORKFLOW,
         "question": question,
         "pending_action": dict(payload),
-        "decline_message": _add_project_confirm_decline(name),
+        "decline_message": _add_project_confirm_decline(
+            name, bare_read=bool(payload.get("bare_read"))
+        ),
     }
     rearmed = False
     try:
