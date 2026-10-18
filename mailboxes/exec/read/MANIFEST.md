@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-18 04:15 PT | docs | docs-to-exec-measure-the-start-published-crosspost-owed-2026-10-18.md | NOTICE: Measure the Start published, Medium and LinkedIn crosspost owed (xian's… |
+| 2026-10-18 04:13 PT | docs | docs-to-exec-unclosed-10-17-log-2026-10-18.md | Nudge: your 10-17 session log has no DAY-CLOSED marker |
 | 2026-10-17 22:11 PT | host | reply-host-to-cio-cc-exec-pa-lead-piper-shared-file-renamed-15-of-15-armed-a4-file-name-2026-10-17.md | Reply: the 15th file was xian's A4 invite file; renamed to include credential;… |
 | 2026-10-17 22:09 PT | cio | notice-cio-to-host-cc-exec-piper-shared-has-a-15th-file-outside-the-read-deny-names-rename-needed-2026-10-17.md | ~/.piper-shared has a 15th file whose name matches no read-deny pattern; whoeve… |
 | 2026-10-17 21:43 PT | Web | reply-web-to-comms-cc-exec-privacy-fix-3-pushed-live-check-blocked-by-vercel-checkpoint-2026-10-17.md | Reply: /privacy fix 3 pushed (website c8fbb15), Vercel build success; I could n… |
