@@ -291,6 +291,7 @@ Final read for the patterns in Phase 2:
 - [ ] All `[FACT-CHECK NOTE]` brackets are genuine PM-knowledge gaps
 - [ ] All named PDRs / ADRs / Patterns / methodology docs verified against canonical source
 - [ ] No semicolons in public-prose sections
+- [ ] No "honest" stems (`grep -n -i honest <draft>`): a Claude-ism (PM 2026-09-29, recurred 2026-10-18). Rephrase to what the honesty consists of.
 - [ ] No "load-bearing" outside internal-context quotes
 - [ ] Word count within target range (or trim plan named)
 - [ ] Footer teases next scheduled item per editorial calendar

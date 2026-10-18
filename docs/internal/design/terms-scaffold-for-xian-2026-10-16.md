@@ -1,10 +1,10 @@
 # Scaffold for xian's own words: Piper's plain commitments
 
-**Status:** scaffold started by CXO, completed by Comms 2026-10-16 (facts folded in from Arch's 16:03 memo, PPM's gate reply and Comms' code checks). It contains **prompts and facts only. No commitment text is drafted.** xian answers each prompt in his own words; Comms then checks each answer against the code, and PPM maps each answer to a mechanism or gate class (rule: a commitment the code doesn't back isn't made).
+**Status:** scaffold started by CXO, completed by Comms 2026-10-16 (facts added from Arch's 16:03 memo, PPM's gate reply and Comms' code checks). It contains **prompts and facts only. No commitment text is drafted.** xian answers each prompt in his own words; Comms then checks each answer against the code, and PPM maps each answer to a mechanism or gate class (rule: a commitment the code doesn't back isn't made).
 
 **Decided (xian, 10-16):** Option 2. The plain layer goes in the design-partner invitation by 10-23, in his words. Counsel writes the legal layer for Production. No Terms page and no click-through for beta.
 
-**Facts state (Comms, 16:3x 10-16):** Arch's two facts (storage by category, confirmation by action type) arrived early (16:03) and are folded in. Every fact below cites its source. Still open, named in each area: "never train" (Arch); #2064 erasure path (area 5); #2065 chat control and Settings privacy page (areas 1, 3, 5). Areas 4 and 7 checked by HOST 16:19. Next: Comms sends this to Exec for xian. He answers in his own words; Comms checks each answer against the code.
+**Facts state (Comms, 16:3x 10-16):** Arch's two facts (storage by category, confirmation by action type) arrived early (16:03) and are included. Every fact below cites its source. Still open, named in each area: "never train" (Arch); #2064 erasure path (area 5); #2065 chat control and Settings privacy page (areas 1, 3, 5). Areas 4 and 7 checked by HOST 16:19. Next: Comms sends this to Exec for xian. He answers in his own words; Comms checks each answer against the code.
 
 **Facts refresh (Comms, 10-18 08:30):** #2059, #2060, #2061, #2064 and #2065 are closed. Areas 1, 2, 3, 5 and 6 are updated below, each change marked "10-18". Still open: "never train" (Arch); #2057 (area 3); #2021 undo (area 3). **Dates (xian 10-18, Lead's relay):** 10-23 is the checkpoint where xian assesses the alpha and decides whether to approve inviting. 10-30 stays the target date for the first design partner's beta access, "unless we end up postponing". Outreach goes to the interest list first, then newsletters, and very few at first. **The invitation must not promise a date** (CXO 10-18).
 
@@ -21,7 +21,7 @@
   - Stored on Fly.io in San Jose (/privacy).
 - **Gaps to name (goal and gap):**
   - ~~Uploads gap~~ **closed 10-18:** uploads are encrypted when stored. #2061 is live, so a write with no key is refused rather than stored as plaintext. xian's production count (#1306, 10-17) found 0 plaintext files, and /privacy now says "Uploaded files are **encrypted** when stored" (website c8fbb15, served check 10-18). This is a fact to stay true to now, not a gap.
-  - Deleting a chat hides it; the rows are kept and nothing purges them later. Goal: a trash you can purge (/privacy). **There is no screen control to hide or delete a chat.** #2065 closed 10-17 by making the copy true, not by adding a control: Settings → Privacy & data now says what exists, and /privacy says "There's no way to delete a conversation inside Piper yet" (CXO's acceptance on Web's served rows). An answer must not say a person can delete a chat themselves. If a control is built before a real purge, CXO has ruled its label "Hide this chat".
+  - Deleting a chat hides it; the rows are kept and nothing purges them later. Goal: a trash you can purge (/privacy). **There is no screen control to hide or delete a chat.** #2065 closed 10-17 with copy changes and no new control: Settings → Privacy & data now says what exists, and /privacy says "There's no way to delete a conversation inside Piper yet" (CXO's acceptance on Web's served rows). An answer must not say a person can delete a chat themselves. If a control is built before a real purge, CXO has ruled its label "Hide this chat".
 - **Checker:** Comms, against /privacy and Arch's memo.
 
 ## 2. What Piper does and never does with it
@@ -69,7 +69,7 @@
 - **Gaps to name:** "You can take your files and what Piper learned about you. Exporting your conversations and to-dos is the goal." (That's the fact, not the wording. xian words it.)
 - **Checker:** Arch, Comms.
 
-## 6. Beta honesty (xian's three statements, kept separate)
+## 6. What beta means today (xian's three statements, kept separate)
 - **(a) Reliability.** Prompt: what do we tell a design partner about errors, and is real data OK?
   - Alpha form: not reliable yet, use test data.
   - Beta form: expect errors, proceed with caution, real data is OK.
@@ -94,4 +94,4 @@
 
 **Not in the scaffold on purpose:** acceptable use, liability, governing law, indemnification, changes to terms, and anything else that belongs to the legal layer underneath. Counsel writes those for Production. The boilerplate the four views refuse stays out: indemnification by the user, broad feedback licence, "revoked any time" without export, "the user is responsible for all assistant actions".
 
-*Facts update (CXO 16:11) folded into areas 1–6 by Comms 16:3x and removed.*
+*Facts update (CXO 16:11) merged into areas 1–6 by Comms 16:3x and removed.*

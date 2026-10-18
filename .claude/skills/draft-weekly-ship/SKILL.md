@@ -252,6 +252,7 @@ Verify before declaring done:
 - [ ] Phase tag at bottom matches current project phase
 - [ ] Learning pattern has all 5 components (Discovery / Example / Why it matters / Application / Related)
 - [ ] **No semicolons** in published prose (search the draft; should be zero)
+- [ ] **No "honest" stems** (honest/honestly/honesty): `grep -n -i honest <draft>` outside HTML comments, 0 or a stated verdict per match. A Claude-ism (PM 2026-09-29). Recurred in Ship #065's scaffold and in Comms' review of it on 2026-10-18, and xian caught it. Rephrase to what the honesty consists of.
 - [ ] **No "load-bearing"** in public-prose sections (internal docbase keeps it; Ships tilt to "critical" / "central")
 - [ ] **No "CoS"** anywhere (use "Exec" or "the Chief")
 - [ ] **No "cohort"** in prose — internal jargon; use "team" (added 2026-08-19 after Docs caught a
