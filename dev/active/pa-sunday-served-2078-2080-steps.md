@@ -13,6 +13,18 @@ construction.
 
 About 10 minutes for both.
 
+
+## Status, 10-18 09:48 (alpha `83a2f4e40c`, promotion 2 of 2; no more today)
+
+| Row | State |
+|---|---|
+| B: #2080 chain | **Run by Web**: happy path 06:51 (`47ba746bee`), confirm-arm decline 08:44 (`83a2f4e40c`), both quoted on #2080. Waiting on CXO's judgement. Step 6 as I wrote it (a question-shaped name reaching the confirm) **can't be reached by design**: such names get answered at the name stage. The open-door line is keyed on the `bare_read` reason, and "Piper Morgan" is that case (Lead). Step 7 (floor offer): none seen. |
+| C: #2079 greeting | Morning quote PASS (Web 06:50). The afternoon quote with the header beside it is Web's, after 12:00. |
+| A: #2078 wizard | Not run. **xian minted ten codes** into `~/.piper-shared/xian-invite-bank-credential-20261018.txt` (HOST's shape). The 10-17 A4 file is spent (HOST's roster). The runner is xian (card D2), or Web if he hands one code over. Steps below stand. |
+| D: #1982 MCP PAT read | Not run; xian's hand (A4 account, re-save the PAT, then the connector signed in as A4). |
+| #2077 | Web read the attribute live (`new-password`, length 0). The real autofill check is xian's. |
+| #2072, #2076, #2069, #2051 | Closed by CXO on Web's rows. |
+
 ## A. #2078: a fresh invited sign-up through the wizard (must-close)
 
 Before: the build is `47ba746bee` (served 06:42 10-18, contains `d82b5ce4b3`; PA checked). **The invite:** HOST's file
