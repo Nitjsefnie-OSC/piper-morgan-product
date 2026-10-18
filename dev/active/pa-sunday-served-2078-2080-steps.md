@@ -51,7 +51,7 @@ Quote for CXO: step 5's words (or the toast), the landing at `/`, and steps 7 an
 5. Open My Projects. **Pass**: "Piper Morgan" is listed.
 6. **The decline.** In another fresh chat, repeat steps 1–3 with a different name that reads as a question (for
    example `What's next`), then reply `no`. **Pass**: "Okay, I won't add that project. If you meant to ask me
-   something, go ahead." Quote it. Then check that no such project exists.
+   something, go ahead." Quote it. Then check that no such project exists. (CXO 10-17 evening: split the constant. If Lead's split is on the build, the other confirm arm, for an ambiguous reply, says `Okay — I won't add a project called "X". Nothing has been changed.` instead. Either line is right for its own arm; quote whichever appears and say which arm it was.)
 7. **The floor offer (CXO).** If any turn in the chain says "want me to create…" (or similar) when it can't perform
    the write, that's a FAIL. Quote it whole. This is the 10-17 shape: two yeses and no project.
 
