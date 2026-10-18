@@ -175,3 +175,5 @@ real finding (the generator reading a stale registry), not something to silently
 | key: host-v30-tester-privacy-line | One line pointing to pipermorgan.ai/privacy in the next note the 09-21 tester gets (xian 10-16: no separate email); to Exec | 2026-10-16 | The reissue send (xian's hand) |
 | key: host-design-partner-list | Who xian counts as a design partner (#2063: no invite beyond them until counsel review); HOST mints/flips nobody else; to Exec | 2026-10-16 | xian naming the list |
 | key: host-scaffold-4-and-7 | Check Terms scaffold sections 4 and 7 (tell-me-when-broken; a code is yours); to Comms | 2026-10-16 | DONE-1016 (checked, reply sent) |
+
+**10-18 07:1x**: xian ruled (via Lead relay) 10-23 = checkpoint to approve inviting partners, 10-30 stays target; outreach order: interest list first, then newsletters, very few at first. Partners still not named. A4 fresh mint for #2078 denied again on HOST's seat; xian's hand.
