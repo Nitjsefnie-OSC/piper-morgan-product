@@ -696,6 +696,7 @@
     </div>
 
     {% include 'components/toast.html' %}
+{% include 'components/signed_out_modal.html' %}
 {% endblock %}
 
 {% block scripts %}
@@ -1240,8 +1241,8 @@
           const response = await fetch('/api/v1/settings/integrations/slack/app-credentials/status', {
             credentials: 'include'
           });
+          if (response.status === 401) return; // #2067: signed out; the modal is up, change nothing
           if (!response.ok) {
-            // If 401, user not logged in - show not configured
             updateAppConfigUI(false);
             return;
           }

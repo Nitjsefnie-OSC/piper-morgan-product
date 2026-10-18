@@ -412,6 +412,7 @@
 </div>
 
 {% include 'components/toast.html' %}
+{% include 'components/signed_out_modal.html' %}
 {% endblock %}
 
 {% block scripts %}
@@ -479,9 +480,16 @@
     }
   }
 
+  // #2067 (CXO): the health load failing for any reason OTHER than a lapsed
+  // sign-in says so on each card and offers Test; never a bare unknown status line.
+  const HEALTH_LOAD_FAILED_LINE = "Couldn't check just now. Press Test to try again.";
+
   async function loadIntegrationsHealth() {
     try {
       const response = await fetch('/api/v1/integrations/health');
+      // #2067: a 401 is the sign-in lapsing, not an integration state. The
+      // shared signed-out modal is already up; render nothing, change no card.
+      if (response.status === 401) return;
       if (!response.ok) throw new Error('Failed to load health status');
 
       const data = await response.json();
@@ -490,8 +498,24 @@
       updateLastUpdated(data.timestamp);
     } catch (error) {
       console.error('Failed to load integrations health:', error);
-      showError('Failed to load integration status');
+      showHealthLoadFailure();
     }
+  }
+
+  // #2067: when cards are already on the page, each one keeps its place and
+  // says the check did not happen; before any card exists, the list area
+  // says it with a Retry.
+  function showHealthLoadFailure() {
+    const statusLines = document.querySelectorAll('[id^="status-"]');
+    if (statusLines.length === 0) {
+      showError(HEALTH_LOAD_FAILED_LINE);
+      return;
+    }
+    statusLines.forEach((el) => {
+      el.textContent = HEALTH_LOAD_FAILED_LINE;
+      el.classList.remove('error');
+      el.classList.remove('warning');
+    });
   }
 
   function renderOverallStatus(data) {
@@ -686,6 +710,10 @@
     btn.classList.add('testing');
     btn.textContent = 'Testing...';
     let testOwnsLine = null;
+    // #2067: remembered so a lapsed sign-in puts the card back exactly as it was
+    // (the class string, not classList reads: the Node harness pins stub the list).
+    const lineBefore = statusEl.textContent;
+    const classesBefore = statusEl.className;
     statusEl.textContent = 'Testing connection...';
     statusEl.classList.remove('error');
     statusEl.classList.remove('warning');
@@ -694,6 +722,13 @@
       const response = await fetch(`/api/v1/integrations/test/${integrationName}`, {
         method: 'POST'
       });
+      if (response.status === 401) {
+        // #2067: Piper's own session expiry is NOT an integration result. The
+        // signed-out modal is up; the card keeps its last-known words.
+        statusEl.textContent = lineBefore;
+        statusEl.className = classesBefore;
+        return;
+      }
       const result = await response.json();
 
       // Update status
@@ -767,6 +802,7 @@
       const response = await fetch('/api/v1/integrations/test-all', {
         method: 'POST'
       });
+      if (response.status === 401) return; // #2067: modal is up; no card changes state
       const results = await response.json();
 
       // Update each integration
@@ -819,6 +855,11 @@
 
     try {
       const response = await fetch(`/api/v1/settings/integrations/${integrationName}/connect`);
+      if (response.status === 401) {
+        // #2067: signed out; the modal is up. Put the button back, change nothing.
+        if (btn) { btn.disabled = false; btn.textContent = 'Connect'; }
+        return;
+      }
       if (!response.ok) {
         const error = await response.json();
         throw new Error(parseApiDetail(error.detail, 'Connection failed'));
@@ -866,6 +907,11 @@
       const response = await fetch(`/api/v1/settings/integrations/${integrationName}/disconnect`, {
         method: 'POST'
       });
+      if (response.status === 401) {
+        // #2067: signed out; the modal is up. Put the button back, change nothing.
+        if (btn) { btn.disabled = false; btn.textContent = 'Disconnect'; }
+        return;
+      }
 
       if (!response.ok) {
         const error = await response.json();
@@ -912,6 +958,11 @@
       const response = await fetch(`/api/v1/settings/integrations/${integrationName}/disconnect`, {
         method: 'POST'
       });
+      if (response.status === 401) {
+        // #2067: signed out; the modal is up. Put the button back, change nothing.
+        if (btn) { btn.disabled = false; btn.textContent = 'Disconnect'; }
+        return;
+      }
 
       if (!response.ok) {
         const error = await response.json();
@@ -986,6 +1037,7 @@
         const response = await fetch(`/api/v1/settings/integrations/${integration.name}/disconnect`, {
           method: 'POST'
         });
+        if (response.status === 401) break; // #2067: signed out; stop, change nothing more
 
         if (response.ok) {
           const data = await response.json();

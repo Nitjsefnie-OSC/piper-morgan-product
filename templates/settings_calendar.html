@@ -641,6 +641,7 @@
     </div>
 
     {% include 'components/toast.html' %}
+{% include 'components/signed_out_modal.html' %}
 {% endblock %}
 
 {% block scripts %}
@@ -815,8 +816,8 @@
           const response = await fetch('/api/v1/settings/integrations/calendar/app-credentials/status', {
             credentials: 'include'
           });
+          if (response.status === 401) return; // #2067: signed out; the modal is up, change nothing
           if (!response.ok) {
-            // If 401, user not logged in - show not configured
             updateAppConfigUI(false);
             return;
           }
@@ -965,7 +966,8 @@
           });
           if (!response.ok) {
             if (response.status === 401) {
-              calendarListEl.innerHTML = '<div class="calendar-list-empty">Please connect your Google Calendar first.</div>';
+              // #2067: a 401 is the sign-in lapsing, not "Calendar not connected".
+              // The shared signed-out modal is up; change nothing on the page.
               return;
             }
             throw new Error('Failed to load calendars');

@@ -1,0 +1,72 @@
+{# #2067 — the "You've been signed out" modal (CXO's words, 2026-10-18).
+   Included by the settings pages that fetch the API from the page. Installs a
+   same-origin fetch wrapper: any /api/ response with status 401 raises this ONE
+   modal over the page (idempotent). The page behind it cannot be trusted until
+   the person signs in again, so there is no close button and no Cancel. The
+   single "Sign in" button goes to /login?next=<this page>, which #1480's
+   sanitized `next` honours, so the person lands back here. Pages that render
+   from a fetch check `response.status === 401` and return without touching a
+   card (CXO: no card changes state). #}
+<style>
+  .signed-out-backdrop {
+    position: fixed; inset: 0; z-index: 1100;
+    background: rgba(17, 24, 39, 0.55);
+    display: flex; align-items: center; justify-content: center;
+    padding: 16px;
+  }
+  .signed-out-backdrop[hidden] { display: none; }
+  .signed-out-modal {
+    background: #fff; color: #1f2937; border-radius: 12px;
+    max-width: 420px; width: 100%; padding: 24px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  }
+  .signed-out-modal h2 { margin: 0 0 8px; font-size: 1.2rem; }
+  .signed-out-modal p { margin: 0 0 20px; line-height: 1.5; }
+  .signed-out-modal .signed-out-sign-in {
+    display: inline-block; background: #5b21b6; color: #fff; border: 0;
+    border-radius: 8px; padding: 10px 18px; font-size: 1rem; cursor: pointer;
+  }
+  .signed-out-modal .signed-out-sign-in:focus { outline: 3px solid #c4b5fd; outline-offset: 2px; }
+</style>
+<div class="signed-out-backdrop" id="signed-out-modal" hidden role="dialog" aria-modal="true"
+     aria-labelledby="signed-out-title" aria-describedby="signed-out-body">
+  <div class="signed-out-modal">
+    <h2 id="signed-out-title">You've been signed out</h2>
+    <p id="signed-out-body">Your sign-in expired while you were away. Nothing about your integrations has changed. Sign in again and you'll come back to this page.</p>
+    <button type="button" class="signed-out-sign-in" id="signed-out-sign-in">Sign in</button>
+  </div>
+</div>
+<script>
+  (function () {
+    const modal = document.getElementById('signed-out-modal');
+    const button = document.getElementById('signed-out-sign-in');
+    const PiperSession = {
+      signedOut: false,
+      show() {
+        if (this.signedOut) return;
+        this.signedOut = true;
+        modal.hidden = false;
+        button.focus();
+      },
+      signInUrl() {
+        return '/login?next=' + encodeURIComponent(window.location.pathname + window.location.search);
+      },
+    };
+    button.addEventListener('click', function () {
+      window.location.href = PiperSession.signInUrl();
+    });
+    // The one place every fetch on this page passes through: a 401 from our
+    // own API means the sign-in lapsed, whatever the page was asking for.
+    const nativeFetch = window.fetch.bind(window);
+    window.fetch = async function (input, init) {
+      const response = await nativeFetch(input, init);
+      try {
+        const url = typeof input === 'string' ? input : (input && input.url) || '';
+        const sameOriginApi = url.startsWith('/api/') || url.startsWith(window.location.origin + '/api/');
+        if (response.status === 401 && sameOriginApi) PiperSession.show();
+      } catch (e) { /* never let the guard break the page */ }
+      return response;
+    };
+    window.PiperSession = PiperSession;
+  })();
+</script>
