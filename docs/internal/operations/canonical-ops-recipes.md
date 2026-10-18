@@ -308,6 +308,7 @@ So, before any run that needs a fresh sign-up:
 3. **Record the spend.** When a code is used, the roster line gets "spent <date> on <account label>"; the
    file can then be deleted, since it holds nothing redeemable.
 4. **Agents never hold a code** (PA included): a runner is xian or Web in an isolated browser context.
+5. **A masked form that reaches any seat goes to HOST the same hour**, whatever the sender says about having sent it already (2026-10-17: xian told Lead "gave to HOST" in the same breath as the masked form; HOST had nothing until the next day). Relay, then confirm the roster line exists.
 
 Verified how: `consume_invite_token` read from source on main 2026-10-18; the 10-17 sequence (mint 16:06,
 sign-up 16:09 consumed it and `/setup/complete` 403'd, file saved 16:10) reconstructed by PA from Lead's log.
