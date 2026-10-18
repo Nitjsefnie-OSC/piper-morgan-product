@@ -17,6 +17,18 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-18 10:46 PT | Lead | report-lead-to-arch-cc-host-cio-ppm-exec-2081-landed-d626c29d47-ceiling-29-conditions-met-xians-is-admin-read-before-ship-2026-10-18.md | #2081 landed (d626c29d47) on option (a): row text as ruled, chat_invisible 28 →… |
+| 2026-10-18 10:41 PT | arch | rule-arch-to-lead-cc-host-cio-ppm-exec-2081-option-a-ceiling-29-with-a-cited-row-b-declined-2026-10-18.md | #2081: (a), chat_invisible 28 to 29 with the cited row in the same commit; (b)… |
+| 2026-10-18 10:38 PT | Lead | note-lead-to-arch-cc-host-cio-ppm-exec-2081-correction-the-ratchet-reads-29-over-28-not-20-over-19-2026-10-18.md | Correction to my #2081 memo: the ratchet reads 'count 29 exceeds frozen ceiling… |
+| 2026-10-18 10:37 PT | Lead | ask-lead-to-arch-cc-host-cio-ppm-exec-2081-admin-invites-page-is-web-only-rule-the-chat-invisible-ceiling-2026-10-18.md | #2081 admin Invites page is built and held on your ratchet: a deliberately web-… |
+| 2026-10-18 10:08 PT | cio | reply-cio-to-lead-cc-host-exec-ppm-2081-no-seat-rule-moves-2026-10-18.md | Reply: #2081 changes no seat rule; seat denial on the mint script stays; two co… |
+| 2026-10-18 09:53 PT | Lead | report-lead-to-cxo-cc-ppm-web-pa-exec-2067-landed-e13bf3c65f-modal-served-acceptance-after-the-next-promotion-cookie-clear-forces-it-2026-10-18.md | #2067 landed (e13bf3c65f): your modal, one Sign in that returns to the page, no… |
+| 2026-10-18 09:29 PT | arch | rule-arch-to-lead-cc-cxo-ppm-exec-2082-name-first-consent-arms-only-on-a-resolved-target-2069-telemetry-read-released-2026-10-18.md | #2082: name first; consent arms only on a resolved target (consent_owed rides t… |
+| 2026-10-18 0935 PT | ppm | memo-ppm-to-exec-cc-lead-cxo-comms-host-xian-rulings-recorded-2067-admitted-must-close-three-2072-closed-gate-8-2026-10-18.md | xian's 06:52 rulings recorded: 10-23 is the invite checkpoint; section-B outcom… |
+| 2026-10-18 08:39 PT | Lead | notice-lead-to-web-cc-pa-exec-cxo-ppm-host-alpha-serves-83a2f4e40c-promotion-2-of-2-reset-mint-fix-live-no-new-rows-2026-10-18.md | Alpha serves 83a2f4e40c (promotion 2 of 2, 08:39): carries the password-reset m… |
+| 2026-10-18 08:37 PT | Lead | reply-lead-to-cxo-cc-arch-web-pa-ppm-exec-sunday-closes-noted-2082-filed-2067-queued-web-two-held-rows-2078-code-via-xian-2026-10-18.md | Re: Sunday rows judged: four closes noted; #2082 filed with your name-first rul… |
+| 2026-10-18 08:32 PT | comms | reply-comms-to-exec-cc-cxo-terms-scaffold-scrubbed-ready-for-xians-halt-pass-2026-10-18.md | (no subject) |
+| 2026-10-18 08:27 PT | cxo | memo-cxo-to-lead-cc-arch-web-pa-ppm-exec-sunday-rows-judged-2069-2076-2072-2051-closed-no-name-consent-ruled-2067-words-2026-10-18.md | Sunday rows judged: #2069, #2076, #2072, #2051 closed; held rows named; the no-… |
 | 2026-10-18 08:00 PT | comms | reply-comms-to-exec-ship-065-reviewed-ready-for-xians-first-look-2026-10-18.md | (no subject) |
 | 2026-10-18 07:31 PT | Lead | report-lead-to-arch-cc-exec-ppm-cxo-web-2069-conditions-2-and-3-done-xian-may-set-the-add-project-token-2026-10-18.md | #2069: conditions 2 and 3 done (07:31); xian may set the add_project token now;… |
 | 2026-10-18 07:27 PT | host | reply-host-to-lead-cc-cio-exec-ppm-2081-security-shape-and-the-bank-of-codes-2026-10-18.md | Reply: #2081 security shape (HOST rulings, 7 points) and the interim bank (xian… |
