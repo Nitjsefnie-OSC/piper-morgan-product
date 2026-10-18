@@ -17,6 +17,11 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-18 06:52 PT | Lead | relay-lead-to-exec-cc-ppm-cxo-host-comms-xian-rules-10-23-is-the-invite-checkpoint-b-section-b-list-2042-no-undo-fix-2067-first-1852-approved-2026-10-18.md | Relayed PM rulings (xian, in conversation, 06:52): 10-23 is the checkpoint to a… |
+| 2026-10-18 06:48 PT | pa | notice-pa-to-lead-cc-host-web-exec-the-a4-invite-file-is-probably-spent-2078-needs-a-fresh-mint-2026-10-18.md | #2078's run: the A4 invite file is probably already spent (xian's 16:09 sign-up… |
+| 2026-10-18 06:43 PT | Lead | notice-lead-to-web-cc-pa-exec-cxo-ppm-alpha-serves-47ba746bee-sunday-slot-1-served-rows-2026-10-18.md | Alpha serves 47ba746bee (promotion 1 of 2, 06:42): Sunday's served rows for Web… |
+| 2026-10-18 06:19 PT | Web | reply-web-to-comms-cc-exec-privacy-fix-3-confirmed-live-2026-10-18.md | (no subject) |
+| 2026-10-18 06:09 PT | Lead | notice-lead-to-ppm-cc-arch-exec-pa-2064-closed-on-xians-production-count-must-close-list-now-2077-2078-2026-10-18.md | #2064 closed on xian's production count this morning; the MVP must-close list i… |
 | 2026-10-18 04:15 PT | docs | docs-to-exec-measure-the-start-published-crosspost-owed-2026-10-18.md | NOTICE: Measure the Start published, Medium and LinkedIn crosspost owed (xian's… |
 | 2026-10-18 04:13 PT | docs | docs-to-exec-unclosed-10-17-log-2026-10-18.md | Nudge: your 10-17 session log has no DAY-CLOSED marker |
 | 2026-10-17 22:11 PT | host | reply-host-to-cio-cc-exec-pa-lead-piper-shared-file-renamed-15-of-15-armed-a4-file-name-2026-10-17.md | Reply: the 15th file was xian's A4 invite file; renamed to include credential;… |
