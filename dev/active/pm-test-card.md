@@ -1,8 +1,8 @@
 # PM test card
 
-**Owner**: Lead. **v80 (06:45 10-18: alpha serves 47ba746bee; #2064 closed on your count; Sunday order + section D)**, **v79 (17:16 10-17: #2080 and #2078 landed for Sunday), v78 (16:39 10-17: A4 PASS, B1 create FAIL #2080), v77 (16:21 10-17: A5 PASS, #1913 closed), v76 (15:52 10-17: A4 invite pointer corrected), v75 (15:49 10-17: A5 path corrected), v74 (15:43 10-17: C1 done), v73 (15:28 10-17: C1 query corrected), v72 (15:24 10-17: C2 PASS; jump list links to the cards), v71 (15:21 10-17: A1 PASS), v70 (15:12 10-17, snippet added 15:15: your order at the top; A1 cut to what is left for your hand, read snippet inline), v69 (08:1x 10-17: alpha `118241587e`, slot 2 of 2; every card live, A1 and C2 included), v68 (07:1x: slot 1), v67 (A1 gap #2072 noted 19:3x), v66 (B3 gap 17:5x), v65 17:09 10-16: alpha promoted to the new build, every card is live.** v64 (16:4x) for xian's live session**: one card per test, only the tests that need xian's hand or that nobody has passed yet. Closed rows, Web's rows and the history are gone from this page; `git log -p` of this file keeps every earlier version. Mirror: https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi (this file wins between republishes).
+**Owner**: Lead. **v81 (08:40 10-18: alpha 83a2f4e40c, promotion 2 of 2; #2064/#2069/#2076/#2072/#2051 closed; D2 with your bank; reset script live)**, **v80 (06:45 10-18: alpha serves 47ba746bee; #2064 closed on your count; Sunday order + section D)**, **v79 (17:16 10-17: #2080 and #2078 landed for Sunday), v78 (16:39 10-17: A4 PASS, B1 create FAIL #2080), v77 (16:21 10-17: A5 PASS, #1913 closed), v76 (15:52 10-17: A4 invite pointer corrected), v75 (15:49 10-17: A5 path corrected), v74 (15:43 10-17: C1 done), v73 (15:28 10-17: C1 query corrected), v72 (15:24 10-17: C2 PASS; jump list links to the cards), v71 (15:21 10-17: A1 PASS), v70 (15:12 10-17, snippet added 15:15: your order at the top; A1 cut to what is left for your hand, read snippet inline), v69 (08:1x 10-17: alpha `118241587e`, slot 2 of 2; every card live, A1 and C2 included), v68 (07:1x: slot 1), v67 (A1 gap #2072 noted 19:3x), v66 (B3 gap 17:5x), v65 17:09 10-16: alpha promoted to the new build, every card is live.** v64 (16:4x) for xian's live session**: one card per test, only the tests that need xian's hand or that nobody has passed yet. Closed rows, Web's rows and the history are gone from this page; `git log -p` of this file keeps every earlier version. Mirror: https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi (this file wins between republishes).
 
-**Alpha**: https://alpha.pipermorgan.ai serves **`47ba746bee`** (promotion 1 of 2, dispatched 06:39 10-18 on your word, run 39132506958; /health healthy at 06:42; `curl -s https://alpha.pipermorgan.ai/health` shows `git_sha`). One more promotion is possible today if something lands. This build carries everything since yesterday's: the #2077 token-field fix, the #2078 wizard fix with CXO's words, both halves of #2080 (your B1 chain) with the per-arm decline, the #2079 greeting by your clock, #2075 ("Connected, not yet tested" on an untested OAuth integration), #2076 (focus and standup say GitHub needs reconnecting), #2069 (project name saved as named, reply from the stored row), #2051, the #1982 PAT dual write, #2073. No migrations between `118241587e` and it.
+**Alpha**: https://alpha.pipermorgan.ai serves **`83a2f4e40c`** (promotion 2 of 2, 08:35 10-18, run 39141164349; /health healthy 08:39). **No more promotions today.** Since the morning build it adds only the password-reset mint fix (the `dinp` reset now works from `fly ssh console`), the add_project live-set mirror and a test pin; every row below is unchanged by it. Live since the morning: #2077 token-field fix, #2078 wizard fix, #2080 both halves, #2079 greeting, #2075, #2076, #2069, #2051, #1982, #2073. Also live by your hand: `add_project` in the router's live set (#2069 closed on it).
 
 **How to report**: paste the reply or a screenshot in chat; say the card number. Lead relays to the judge named on the card and updates this page.
 
@@ -10,8 +10,9 @@
 
 1. ~~[C3](#c3) #2064 count line~~ **DONE 06:05, #2064 CLOSED 06:09.**
 2. [D1](#d1): the #2077 ten-second check (must-close; your browser, your saved password).
+   Before it, your own order this morning: `dinp` password reset (the fixed mint is live), Slack Connect as `dinp` (#1852 step 2.3), remove the fly.dev Redirect URL (2.4), Calendar Connect once.
 3. [B1](#b1) again on a fresh chat: the full chain to a project on My Projects (#2080).
-4. [D2](#d2): the #2078 wizard run, only if you want to see it yourself (Web runs it otherwise; must-close either way).
+4. [D2](#d2): the #2078 wizard run with one code from your bank of ten (must-close; you are the simplest runner now that you hold the codes).
 5. [A3](#a3), [A2](#a2), [A6](#a6), [A7](#a7), [B2](#b2), [B3](#b3): any order; none gates anything.
 
 Yesterday's: ~~A1~~ PASS 15:19 · ~~C2~~ PASS 15:22 · ~~A5~~ PASS 16:18 · ~~A4~~ PASS 16:33 · ~~B1~~ offer PASS, create FAIL 16:31 → #2080 (fixed, re-run above) · ~~C1~~ DONE 15:40.
@@ -125,7 +126,7 @@ fly ssh console -a piper-morgan -C "python -m scripts.backfill_encrypt_files_130
 fly ssh console -a piper-morgan -C "python -m scripts.backfill_encrypt_files_1306"
 ```
 
-## D. New on the Sunday build (live on `47ba746bee` since 06:42)
+## D. New on the Sunday build (live since `47ba746bee` 06:42, still on `83a2f4e40c`)
 
 ### D1. Token field stays empty (#2077, must-close, your hand)
 - **Why you:** Chrome fills a saved Piper password into password inputs; your browser has one, the test browsers do not. The fix is `autocomplete="new-password"` on ten credential inputs.
@@ -134,7 +135,7 @@ fly ssh console -a piper-morgan -C "python -m scripts.backfill_encrypt_files_130
 - **Judge**: Lead closes #2077 on your `0` (PPM gates it; Class 2).
 
 ### D2. Fresh invited sign-up through the wizard (#2078, must-close; you or Web)
-- **Where**: a private window, signed out; the invite is the file HOST named in `~/.piper-shared/` (your mint of 10-17); PA's steps are `dev/active/pa-sunday-served-2078-2080-steps.md` §A.
+- **Where**: a private window, signed out; one unused code from `~/.piper-shared/xian-invite-bank-credential-20261018.txt` (mark its line with the account label afterwards); PA's steps are `dev/active/pa-sunday-served-2078-2080-steps.md` §A.
 - **Steps**: `/setup`, enter the invite code, a username, an email and a password, Create Account, then through to step 5.
 - **Pass**: step 5 reads "Setup Complete", "You're all set. You're signed in, and Piper is ready to help." with an **Open Piper** button that lands on `/`, signed in. **Also acceptable**: a toast "Account created, setup did not finish" with the Settings → LLM API Keys pointer, signed in; quote it.
 - **Fail**: "Setup Failed", a button stuck on "Creating…", or landing signed out.
