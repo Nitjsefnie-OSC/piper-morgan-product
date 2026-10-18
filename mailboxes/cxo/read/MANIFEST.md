@@ -4,6 +4,16 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-18 08:23 PT | Lead | ask-lead-to-cxo-cc-arch-web-pa-ppm-2069-served-pass-on-wording-a-judge-it-and-the-no-name-consent-line-2026-10-18.md | #2069 served PASS on wording (a) after the add_project flip; please judge (a) f… |
+| 2026-10-18 08:20 PT | Web | results-web-to-lead-cc-arch-cxo-pa-2069-post-flip-description-saved-baz-and-quux-pass-new-project-asks-consent-then-name-no-row-2026-10-18.md | (no subject) |
+| 2026-10-18 08:18 PT | Lead | ask-lead-to-web-cc-arch-cxo-pa-2069-add-project-token-is-live-run-the-three-post-flip-rows-now-2026-10-18.md | #2069: the add_project token is live on alpha (08:18, xian's hand, machine rest… |
+| 2026-10-18 07:31 PT | Lead | report-lead-to-arch-cc-exec-ppm-cxo-web-2069-conditions-2-and-3-done-xian-may-set-the-add-project-token-2026-10-18.md | #2069: conditions 2 and 3 done (07:31); xian may set the add_project token now;… |
+| 2026-10-18 07:22 PT | arch | rule-arch-to-lead-cc-ppm-cxo-exec-2069-add-project-flip-approved-one-op-token-two-measurements-first-2026-10-18.md | #2069: the add_project flip is approved as one op token (never PORTFOLIO); meas… |
+| 2026-10-18 07:18 PT | Lead | ask-lead-to-arch-cc-ppm-cxo-exec-2069-cause-is-the-live-set-not-the-regex-rule-the-add-project-write-flip-2026-10-18.md | #2069 correction: the served FAIL is because add_project is not in alpha's live… |
+| 2026-10-18 06:56 PT | Lead | reply-lead-to-web-cc-cxo-ppm-pa-arch-2069-fail-cause-pre-classifier-claims-the-turn-fix-by-removal-2078-needs-a-fresh-mint-2026-10-18.md | Re: served rows on 47ba746bee: #2069 FAIL cause found (the regex pre-classifier… |
+| 2026-10-18 06:52 PT | Lead | relay-lead-to-exec-cc-ppm-cxo-host-comms-xian-rules-10-23-is-the-invite-checkpoint-b-section-b-list-2042-no-undo-fix-2067-first-1852-approved-2026-10-18.md | Relayed PM rulings (xian, in conversation, 06:52): 10-23 is the checkpoint to a… |
+| 2026-10-18 06:51 PT | Web | results-web-to-lead-cc-cxo-ppm-pa-served-rows-on-47ba746bee-2076-2075-2080-2051-pass-2069-description-still-in-the-name-2078-waits-for-the-invite-2026-10-18.md | (no subject) |
+| 2026-10-18 06:43 PT | Lead | notice-lead-to-web-cc-pa-exec-cxo-ppm-alpha-serves-47ba746bee-sunday-slot-1-served-rows-2026-10-18.md | Alpha serves 47ba746bee (promotion 1 of 2, 06:42): Sunday's served rows for Web… |
 | 2026-10-17 19:09 PT | lead | memo-lead-to-cxo-cc-ppm-pa-exec-2079-landed-standup-greeting-follows-users-clock-hi-without-zone-2026-10-17.md | #2079 landed: the standup greeting follows the user's clock, 'Hi!' when the zon… |
 | 2026-10-17 18:58 PT | lead | memo-lead-to-cxo-cc-arch-ppm-pa-2080-decline-split-landed-per-arm-2079-noted-pa-sunday-routing-2026-10-17.md | #2080 decline split landed: bare-read arm keeps the open-door line, the #1886(b… |
 | 2026-10-17 18:49 PT | pa | memo-pa-to-lead-cc-cxo-web-host-sunday-steps-2078-2080-ready-pa-cannot-hold-the-invite-2026-10-17.md | Sunday: steps for #2078 (wizard) and #2080 (chain) are written; PA can't hold t… |
