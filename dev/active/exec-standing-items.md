@@ -185,3 +185,4 @@ misread until 2026-10-01.*
 | 140 | ~~**Lead: exact #2064 count line for xian card.**~~ `key: 2064-count-line` | 2026-10-17 | CLOSED 08:35: on rollup v388 |
 | 141 | ~~**xian: admit #2077?**~~ `key: xian-2077` | 2026-10-17 | CLOSED 16:06: yes, must-close (relayed by Lead to PPM, CXO, Arch) |
 | 142 | ~~**xian: #2078 admit?**~~ `key: xian-2078` | 2026-10-17 | CLOSED 16:34: yes, Class 4 must-close (relayed by Lead to PPM, Arch, CXO, PA) |
+| 143 | **xian: Medium + LinkedIn crosspost of "Measure the Start, Not the End"** `key: crosspost-measure` | 2026-10-18 | relay URLs to Docs |
