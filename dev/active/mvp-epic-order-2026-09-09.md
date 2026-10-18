@@ -1695,3 +1695,7 @@ out-of-scope call. Gate 14 → 15, fourth slip-ledger entry, dates unchanged; cr
 **`#2077` folded in 2026-10-17 16:06, admitted MVP as a must-close (Gate class 2, credential exposure, latent) on xian's word relayed by Lead**: Chrome fills the saved Piper password into the GitHub token field. Fix 6c3206dd35 on main rides Sunday's first promotion; closes on it live plus the field empty in xian's browser. Gate 7 → 8. Must-close set: #2064, #2077. #2078 (every invited tester's setup wizard ends in 'Setup Failed') placed Production with Class 4 admission asked of xian.
 
 **`#1913` closed 2026-10-17 16:22** by Lead on xian's served card A5 (alpha `118241587e`; a keyless chat survives adding a key). Gate 8 → 7.
+
+**`#2078` folded in 2026-10-17 16:34, admitted MVP (Gate class 4, golden path, a must-close) on xian's word relayed by Lead**: every invited tester's wizard ends in 'Setup Failed'. Fix d82b5ce4b3 on main, for Sunday's first promotion; closes on the wizard page served end to end in a browser. Gate 7 → 8. Must-close set: #2064, #2077, #2078.
+
+**`#2080` folded in 2026-10-17 18:3x, admitted MVP (Gate class 3) by PPM under xian's 15:25 ruling**: a served instance of the #2042 class. The floor offered to create a project it could not create, and after two yeses nothing existed (the rest of #2048's chain). Both halves are on main for Sunday. Gate 8 → 9. #2079 (the standup's hardcoded 'Good morning!') placed Production.

@@ -6,7 +6,7 @@
 
 ## The bar (recorded in `beta-gate-standard.md` §Standing rulings)
 
-- **Must be closed and live on alpha before partners start:** every privacy and security item on MVP. As of 16:3x that was six; at 17:3x, two remain open; at 18:49, three (#2071 admitted); 10-17 08:17, two (#2071 closed live); at 09:26, one: #2064, which waits only on xian's count run; at 16:06, two (#2077 admitted) (#2059 and #2061 closed live on `d741214b6c` at 17:14, #2054 and #2060 at 17:30):
+- **Must be closed and live on alpha before partners start:** every privacy and security item on MVP. As of 16:3x that was six; at 17:3x, two remain open; at 18:49, three (#2071 admitted); 10-17 08:17, two (#2071 closed live); at 09:26, one: #2064, which waits only on xian's count run; at 16:06, two (#2077 admitted); at 16:34, three (#2078 admitted, the first non-privacy must-close, on xian's word) (#2059 and #2061 closed live on `d741214b6c` at 17:14, #2054 and #2060 at 17:30):
   - #2054: one user's turn could carry another user's identity in the intent cache;
   - #2059: logs keep message text, against /privacy;
   - #2060: Chroma telemetry, against /privacy;
@@ -15,10 +15,11 @@
   - #2065: Settings' "Export/delete data" page lists actions that don't exist, and /privacy says deleting a chat hides it, but no control does (admitted 16:3x). **Closed live 10-17 09:22** (CXO; served card and page, live /privacy sentence).
   - #2071: one account's Integrations Test result (status, error text, check time) shows on every other account's card and in chat (admitted 18:49; source reading by Arch, not served). **Closed live 10-17 07:24** on alpha `119bd7b9ef` (Web's two-account check, one direction isolated).
   - #2077: the Settings GitHub token field is filled by Chrome with the saved Piper password, which Reconnect would send to GitHub (latent; admitted as a must-close 10-17 16:06, Class 2). Fix 6c3206dd35 on main, rides Sunday's first promotion.
+  - #2078: every invited tester's setup wizard ends in "Setup Failed". The account is created but the key is not stored (Class 4, admitted as a must-close 10-17 16:34 on xian's word). Fix d82b5ce4b3 is on main for Sunday; it closes on the wizard page served end to end in a browser.
   #2064 (176d66a53c) and #2065 items 1 and 2 (1e9d0f5809) are on main and ride tomorrow's first promotion. #2064 also needs xian's live count; #2065 also needs Comms' /privacy fix 4 (xian's OK).
 - **Disclosed, after this review:** everything else open on MVP, below.
-- **Also before the beta form:** the uploads backfill run with zero remaining (xian approved the four conditions, 16:18).
-- **Asked, not admitted (10-17 16:1x):** #2078, every invited tester's setup wizard ends in "Setup Failed" (the account is created, the key not stored). Class 4; I recommended xian name it a must-close, since disclosure is no workaround for a failed first step.
+- **Also before the beta form:** the uploads backfill run with zero remaining (xian approved the four conditions, 16:18). **Met 10-17 15:2x:** xian's C2 run on production reported 0 plaintext, 0 missing (quoted on #1306; not rerun by me).
+
 - **Data loss (Class 1):** none open on MVP today. I'd treat any new one as inside the must-close bar, under xian's 12:52 "not cavalier with user data", unless he says otherwise.
 
 ## A. Open on MVP: what a partner might hit
@@ -31,6 +32,7 @@
 | #1913 | A chat started before adding an AI key can disappear from the sidebar once the key is added. The server keeps it (Lead, 10-02); the vanish is in the page. | Low if partners follow the invitation (key first). | Reload; per Lead's probe the chat is still listed. Unverified on alpha since. | **Closed 10-17 16:22** on xian's served card A5 (alpha `118241587e`). Drops off the list. |
 | #1595 | Piper sometimes misreads a phrasing: it answers a different question or gives a generic reply. Rephrasing usually works. | Likely, now and then. This is the understanding-layer epic. | Rephrase. | The epic's planned wave. Its tail: legacy project-write paths that acted without asking (#2057, fixed on main, waiting on the promotion; archive is reversible). |
 | #2072 (admitted 10-17 15:09, Class 3) | With a revoked GitHub grant, the standup and "what should I focus on today?" give an all-clear without mentioning GitHub. | Every morning for a partner whose grant lapses. | Check Settings → Integrations; the card shows the grant needs reconnecting. | Renderers live on `118241587e`; #2076 (the standup and focus replies) on main, served tomorrow. Closes on CXO's served acceptance. |
+| #2080 (admitted 10-17 18:3x, Class 3) | On a new account, "list my projects" offers to add one. After the partner gives a name and says yes twice, no project exists, and Piper says the request didn't go through. | Likely on day one for a name that is also a question word or Piper's own name ("Piper Morgan"); other names ("Atlas") bound in Lead's probe. | Type "create a project called X" in one line. | Both halves on main, served tomorrow (PA's chain). |
 | #1386 | Not a user-facing issue: the close-out sign-off itself (the canonical suite and three scenarios, re-run at MVP close). | n/a | n/a | Fires last. |
 
 ## B. Outside MVP, meeting the disclosure bar: xian decides whether to list them
