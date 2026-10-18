@@ -288,6 +288,30 @@ repo). It holds the date received, the due date (received + 14 days), the user i
 who ran it, and the second count's output and time. The output carries only the id and sha256 fingerprints, never the email. Logs that Fly keeps hold fingerprints
 only and are out of scope (#2064).
 
+## 8. Invite codes: one code, one account, spent at "Create Account" (Lead, 2026-10-18)
+
+**The lesson (xian, 2026-10-18, after three seats spent memos on a spent code):** an invite code is consumed
+the moment `create-user` succeeds, by one conditional `UPDATE … WHERE used_at IS NULL`
+(`services/auth/invite_token_service.py`, `consume_invite_token`). It is spent **even when the wizard then
+fails** (the #2078 shape: the account exists, the code is gone, step 5 shows "Setup Failed"). A code that was
+used to create any account cannot be redeemed again; the wizard says "invalid or already used invite token"
+at step 3.
+
+So, before any run that needs a fresh sign-up:
+
+1. **Assume every saved code is spent unless its owner says otherwise.** A file in `~/.piper-shared/` with a
+   mint date is not evidence the code is unused; a sign-up on or after that date with no second mint means it
+   is spent.
+2. **One fresh mint per fresh account.** `scripts/mint_prod_invite.sh --apply` (xian's hand, or HOST's seat
+   when its rule allows); the raw value prints once; save it under a `-credential-` name so the read-deny
+   covers it; HOST records the masked form (first four and last four) on the roster.
+3. **Record the spend.** When a code is used, the roster line gets "spent <date> on <account label>"; the
+   file can then be deleted, since it holds nothing redeemable.
+4. **Agents never hold a code** (PA included): a runner is xian or Web in an isolated browser context.
+
+Verified how: `consume_invite_token` read from source on main 2026-10-18; the 10-17 sequence (mint 16:06,
+sign-up 16:09 consumed it and `/setup/complete` 403'd, file saved 16:10) reconstructed by PA from Lead's log.
+
 ## Promotion checklist: read staging's sha from staging, not from the deploy-run list (Lead, 2026-10-16)
 
 **Why:** the 10:51 dispatch under the standing grant was refused by the promote gate. The gate reads the sha staging's
