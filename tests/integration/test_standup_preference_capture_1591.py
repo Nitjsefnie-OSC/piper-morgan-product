@@ -155,7 +155,7 @@ async def test_capture_loop_persists_and_second_run_reads_the_real_store(service
     # Second run: honored from the real store — no ask of any kind is armed,
     # and the report renders with the plain discoverability line.
     after = await _report_turn(service, sid, seeded_user_id)
-    assert after.message.startswith(f"Good morning! {PROSE}")
+    assert after.message.startswith(f"Hi! {PROSE}")
     assert service.workflow_offer_service._pending_offers.get(sid) is None
     assert "Say 'my standup interview'" in after.message
 

@@ -99,7 +99,7 @@ LEAK_09_15_IDX2 = (
 )
 
 LEAK_09_15_IDX3 = (
-    "Good morning! I wasn't able to pull up your reminders just now, so I "
+    "Hi! I wasn't able to pull up your reminders just now, so I "
     "can't give you a full picture on that front — worth a retry if you're "
     "expecting anything time-sensitive.\n\n"
     "For the rest of your status — I don't have your todos, calendar, or "
@@ -110,7 +110,7 @@ LEAK_09_15_IDX3 = (
 )
 
 LEAK_09_15_IDX7 = (
-    "Good morning! I wasn't able to pull up your reminders just now, so I "
+    "Hi! I wasn't able to pull up your reminders just now, so I "
     "can't give you a full picture on that front — worth restating that ask "
     "if anything time-sensitive is on your mind.\n\n"
     "For the rest of your status — I don't have your todos, calendar, or "
@@ -121,7 +121,7 @@ LEAK_09_15_IDX7 = (
 )
 
 LEAK_09_15_IDX8 = (
-    "Good morning! I wasn't able to pull up your reminders just now, so I "
+    "Hi! I wasn't able to pull up your reminders just now, so I "
     "can't give you a full picture on that front — worth a retry if you're "
     "expecting anything time-sensitive there.\n\n"
     "For the rest of your status — I don't have your todos, calendar, or "
@@ -133,7 +133,7 @@ LEAK_09_15_IDX8 = (
 # 09-24 candidate-measurement doc, anthropic verbatim-directive re-baseline,
 # idx 5/6 (2 leaks).
 LEAK_09_24_IDX5 = (
-    "Good morning! I wasn't able to pull up your reminders just now — worth "
+    "Hi! I wasn't able to pull up your reminders just now — worth "
     "trying again if you're expecting anything time-sensitive there.\n\n"
     "For the rest of your status, I don't have your projects or todos in "
     "front of me this turn. Want me to pull up your open issues, todo list, "
@@ -153,7 +153,7 @@ LEAK_09_24_IDX6 = (
 
 # 09-25 landed-string-measurement doc, anthropic, idx 6 (1 leak).
 LEAK_09_25_IDX6 = (
-    "Good morning! I wasn't able to pull up your reminders just now, so "
+    "Hi! I wasn't able to pull up your reminders just now, so "
     "that piece of your status is missing from this picture.\n\n"
     "For the rest — I don't have your todos, project board, or calendar in "
     "front of me this turn either. Want me to run a proper status check? If "

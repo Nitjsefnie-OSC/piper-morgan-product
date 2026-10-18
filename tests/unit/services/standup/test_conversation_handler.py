@@ -147,7 +147,7 @@ class TestStartConversation:
         )
 
         assert response.suggestions == []
-        assert response.message == "Good morning! Ready for your standup?"
+        assert response.message == "Hi! Ready for your standup?"
 
     @pytest.mark.asyncio
     async def test_start_with_context(self, handler):

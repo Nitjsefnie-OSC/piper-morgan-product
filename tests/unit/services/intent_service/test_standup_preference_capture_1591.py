@@ -153,7 +153,7 @@ class TestCxoPropertyOneReportFirst:
         any ask, and the full standup_data payload rides the result."""
         result = await _report_turn(service, "sess-p1")
         assert result.success is True
-        assert result.message.startswith(f"Good morning! {PROSE}")
+        assert result.message.startswith(f"Hi! {PROSE}")
         assert result.intent_data["context"]["standup_data"] == {"sections": []}
 
     async def test_invitation_comes_after_the_complete_report(self, service):
@@ -218,7 +218,7 @@ class TestCxoPropertyThreeDecliningChangesNothing:
         # The report itself: unconditional, byte-identical prose.
         report_before = before.message.split("\n\n")[0]
         report_after = after.message.split("\n\n")[0]
-        assert report_before == report_after == f"Good morning! {PROSE}"
+        assert report_before == report_after == f"Hi! {PROSE}"
         assert after.intent_data["context"]["standup_data"] == {"sections": []}
         # Not re-asked: no armed offer; discoverability line only.
         assert _pending(service, sid) is None
@@ -369,7 +369,7 @@ class TestLowConfidenceReadBack:
         assert pa["confidence"] == pytest.approx(0.55)
         # The question rides AFTER the complete report (property 1 holds for
         # the read-back exactly as for the invitation).
-        assert result.message.startswith(f"Good morning! {PROSE}")
+        assert result.message.startswith(f"Hi! {PROSE}")
         assert sp.MODE_DESCRIPTIONS[sp.MODE_REPORT] in result.message
         assert result.message.index(PROSE) < result.message.index("Did I get that right?")
 
@@ -471,7 +471,7 @@ class TestStoredPreferenceHonored:
         )
         sid = "sess-stored-rep"
         result = await _report_turn(service, sid)
-        assert result.message.startswith(f"Good morning! {PROSE}")
+        assert result.message.startswith(f"Hi! {PROSE}")
         assert _pending(service, sid) is None
         assert TEACHING_LINE in result.message
         assert sp.INVITE_AFTER_REPORT not in result.message
@@ -486,7 +486,7 @@ class TestStoredPreferenceHonored:
         service._start_standup_conversation = AsyncMock()
         result = await _report_turn(service, "sess-escape", message="my standup report")
         service._start_standup_conversation.assert_not_called()
-        assert result.message.startswith(f"Good morning! {PROSE}")
+        assert result.message.startswith(f"Hi! {PROSE}")
 
     @pytest.mark.asyncio
     async def test_taught_escape_phrase_is_deterministically_claimed(self):
@@ -507,7 +507,7 @@ class TestStoredPreferenceHonored:
         service._start_standup_conversation = AsyncMock()
         result = await _report_turn(service, None)
         service._start_standup_conversation.assert_not_called()
-        assert result.message.startswith(f"Good morning! {PROSE}")
+        assert result.message.startswith(f"Hi! {PROSE}")
 
 
 # ---------------------------------------------------------------------------

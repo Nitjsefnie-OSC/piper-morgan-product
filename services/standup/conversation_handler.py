@@ -1216,8 +1216,11 @@ class StandupConversationHandler:
         context: Dict[str, Any],
     ) -> str:
         """Generate context-aware greeting."""
-        # Basic greeting - can be enhanced with calendar/GitHub context
-        return "Good morning! Ready for your standup?"
+        # #2079: the day-part follows the user's clock ("Hi!" when the zone is
+        # unknown); calendar/GitHub context could still be added here.
+        from services.standup.greeting import standup_greeting_for
+
+        return f"{await standup_greeting_for(conversation.user_id)} Ready for your standup?"
 
     def _extract_preferences(self, message: str) -> Dict[str, Any]:
         """Extract preferences from user message."""

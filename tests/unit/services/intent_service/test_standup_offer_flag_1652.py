@@ -239,7 +239,7 @@ class TestArmFlagsSurviveTheSoftOfferFunnel:
         sid = "e2e-1652-invite"
         _open_soft_offer_conditions(service)
         result = await _rail_standup_turn(monkeypatch, service, sid)
-        assert result.message.startswith(f"Good morning! {PROSE}")
+        assert result.message.startswith(f"Hi! {PROSE}")
         assert sp.INVITE_AFTER_REPORT in result.message
         assert result.intent_data.get("standup_interview_invitation_pending") is True
         stored = _pending(service, sid)

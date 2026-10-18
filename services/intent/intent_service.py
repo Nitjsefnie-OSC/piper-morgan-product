@@ -68,6 +68,7 @@ from services.repositories.user_trust_profile_repository import UserTrustProfile
 from services.shared_types import IntentCategory, TrustStage
 from services.slot_filling.slot_filling_adapter import SlotFillingProcessAdapter
 from services.slot_filling.slot_template import MEETING_TEMPLATE
+from services.standup.greeting import standup_greeting_for
 from services.trust.trust_computation_service import TrustComputationService
 from services.ui_messages.user_friendly_errors import UserFriendlyErrorService
 from services.utils.text_sanitation import display_title
@@ -5479,13 +5480,16 @@ class IntentService:
                 _intent_data["verify_inference_read_back_pending"] = True
             if standup_invitation_armed:
                 _intent_data["standup_interview_invitation_pending"] = True
+            # #2079: the greeting follows the user's clock ("Hi!" when the
+            # zone is unknown), never the server's.
+            greeting = await standup_greeting_for(user_id)
             return IntentProcessingResult(
                 success=True,
                 # CXO property 1 pinned in the string shape itself: the
                 # complete report prose renders first; the single trailing
                 # ask (teaching line / invitation / read-back / the #1651
                 # bound offer) comes after.
-                message=f"Good morning! {summary.to_prose()}\n\n{trailing}",
+                message=f"{greeting} {summary.to_prose()}\n\n{trailing}",
                 intent_data=_intent_data,
                 workflow_id=workflow_id,
                 requires_clarification=False,

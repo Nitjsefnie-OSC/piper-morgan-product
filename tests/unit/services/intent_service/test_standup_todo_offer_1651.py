@@ -278,7 +278,7 @@ class TestEndToEndStandupOfferTurns:
         _wire_todos(live_service, [todo])
         sid = "e2e-1651-arm"
         result = await _standup_turn(live_service, sid)
-        assert result.message.startswith(f"Good morning! {PROSE}")
+        assert result.message.startswith(f"Hi! {PROSE}")
         assert '"pay the invoice"' in result.message
         assert "(yes/no)" in result.message
         assert result.intent_data.get("standup_todo_offer_pending") is True
@@ -374,7 +374,7 @@ class TestEndToEndStandupOfferTurns:
         sid = "e2e-1651-isolated"
         result = await _standup_turn(live_service, sid)
         assert result.success is True
-        assert result.message.startswith(f"Good morning! {PROSE}")
+        assert result.message.startswith(f"Hi! {PROSE}")
         assert result.intent_data.get("standup_todo_offer_pending") is None
 
     async def test_state_question_answers_and_rearms_pm_live_0911(self, live_service):

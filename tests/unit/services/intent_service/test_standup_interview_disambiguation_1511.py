@@ -189,7 +189,7 @@ class TestInterviewTokenBranch:
             )
         intent_service._start_standup_conversation.assert_not_called()
         assert result.success is True
-        assert "Good morning!" in result.message
+        assert "Hi!" in result.message
 
 
 # ---------------------------------------------------------------------------
@@ -214,7 +214,7 @@ class TestReportCanary:
         assembler.assert_awaited_once_with("user-5")
         intent_service._start_standup_conversation.assert_not_called()
         assert result.success is True
-        assert result.message.startswith("Good morning!")
+        assert result.message.startswith("Hi!")
         assert "Here's your derived standup." in result.message
         assert result.intent_data["context"]["standup_data"] == {"sections": []}
 
