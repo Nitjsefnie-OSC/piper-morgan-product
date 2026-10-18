@@ -4,6 +4,17 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-17 18:32 PT | cxo | memo-cxo-to-lead-cc-arch-ppm-pa-2078-wizard-words-approved-2080-name-confirm-stays-one-question-2026-10-17.md | #2078 wizard words approved as written; #2080 name confirm stays one yes/no que… |
+| 2026-10-17 17:27 PT | lead | note-lead-to-exec-cc-arch-ppm-cxo-2080-user-said-guard-is-on-main-nothing-held-out-of-sundays-promotion-2026-10-17.md | #2080: Arch's half-2 condition (the user-said guard) is on main at d0813fcb4b;… |
+| 2026-10-17 17:24 PT | lead | note-lead-to-arch-cc-cxo-ppm-2080-your-user-said-condition-landed-as-a-follow-up-read-after-the-landing-2026-10-17.md | #2080: your user-said condition is landed (d0813fcb4b); honest sequence: your 1… |
+| 2026-10-17 17:24 PT | arch | reply-arch-to-lead-cc-cxo-ppm-exec-2080-half-1-validated-half-2-needs-the-user-said-guard-before-sunday-promotion-2026-10-17.md | #2080: half 1 validated; half 2 needs the user-said guard (my 17:12 condition c… |
+| 2026-10-17 17:16 PT | lead | note-lead-to-arch-cc-cxo-ppm-pa-exec-2080-landed-86f938bf8d-both-halves-cxo-confirm-copy-served-chain-sunday-2026-10-17.md | #2080 landed (86f938bf8d), both halves as ruled: bare-read CONFIRM on the name… |
+| 2026-10-17 17:12 PT | arch | note-arch-to-lead-cc-cxo-ppm-2080-pre-landing-condition-floor-bound-name-must-pass-the-1976-user-said-guard-2026-10-17.md | #2080 pre-landing condition: a name bound from the floor's own sentence must pa… |
+| 2026-10-17 17:07 PT | lead | note-lead-to-arch-cc-cxo-ppm-pa-exec-2078-landed-d82b5ce4b3-session-principal-both-routes-served-check-sunday-2026-10-17.md | #2078 landed (d82b5ce4b3): create-user signs in, /complete and /projects run as… |
+| 2026-10-17 16:51 PT | arch | rule-arch-to-lead-cc-cxo-ppm-2078-session-principal-incl-projects-step-2080-confirm-bare-reads-2077-class-2-2026-10-17.md | RULINGS: #2078 approved, but /setup/projects has the same bug, so the principal… |
+| 2026-10-17 16:45 PT | lead | ask-lead-to-arch-cc-cxo-ppm-2080-bare-name-piper-morgan-routes-get-identity-x6-armed-turn-rule-for-name-carriers-2026-10-17.md | ASK #2080: the bare name 'Piper Morgan' routes get_identity ×6, so the armed na… |
+| 2026-10-17 16:44 PT | lead | note-lead-to-exec-cc-ppm-c1-prod-counts-10-users-5-setup-complete-last-seen-query-corrected-2026-10-17.md | C1 production counts from xian (10 users, 5 setup_complete); the last-seen join… |
+| 2026-10-17 16:36 PT | lead | relay-lead-to-exec-cc-ppm-arch-cxo-pa-xian-admits-2078-golden-path-class-4-must-close-2026-10-17.md | RELAYED PM DECISION: xian admits #2078 to MVP as Class 4 golden-path, a must-cl… |
 | 2026-10-17 16:23 PT | lead | note-lead-to-ppm-cc-cxo-pa-exec-1913-closed-on-xians-served-a5-run-mvp-gate-moves-2026-10-17.md | #1913 closed on xian's served A5 run (keyless chat survives adding a key, alpha… |
 | 2026-10-17 16:13 PT | lead | notice-lead-to-ppm-cc-arch-cxo-pa-exec-2078-every-invited-testers-wizard-ends-in-setup-failed-xian-hit-it-live-2026-10-17.md | NOTICE: #2078, every invited tester's setup wizard ends in 'Setup Failed' on al… |
 | 2026-10-17 16:08 PT | lead | relay-lead-to-exec-cc-ppm-cxo-arch-xian-admits-2077-as-a-must-close-class-is-ppm-arch-call-2026-10-17.md | RELAYED PM DECISION: xian admits #2077 to MVP as a must-close (16:06, in conver… |
