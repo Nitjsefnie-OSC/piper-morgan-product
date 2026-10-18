@@ -188,3 +188,4 @@ misread until 2026-10-01.*
 | 143 | **xian: Medium + LinkedIn crosspost of "Measure the Start, Not the End"** `key: crosspost-measure` | 2026-10-18 | relay URLs to Docs |
 | 144 | ~~**Ship #065: tell xian draft ready for first look**~~ `key: ship065-first-look` | 2026-10-18 | CLOSED 08:04: told xian, rollup v404 |
 | 145 | **Ship #066: draft weekly goals from reviews Next-week sections by Sat 10-24 afternoon** `key: goals-066` | 2026-10-18 | xian ratifies |
+| 146 | **xian away from 11:3x, a few hours: hold his asks on the rollup; he finishes with Lead on return; check seats for wedges at the 14:38 fire** `key: xian-away-1018` | 2026-10-18 | close when xian is back |
