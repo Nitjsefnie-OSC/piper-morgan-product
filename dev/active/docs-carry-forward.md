@@ -2,11 +2,11 @@
 
 **Updated**: 2026-10-17 (04:12 fire, see NOW below; older DONE lines below are history). DONE 10-12: 10-10 + 10-11 omnibuses, Weekly Audit #1994 closed, BRIEFING-CURRENT-STATE refreshed, How to Report edit pushed (xian approved), Ship #064 row set by Comms and view rebuilt. Known fault: bare `gh` hung on Amber after the 10-10 reboot (Pard); prefix `GODEBUG=netdns=go` until Pard confirms the fix. History in session logs (`dev/2026/10/{04..12}/*docs-code-log.md`), not here.
 
-## NOW (10-17 04:12 fire)
-- **Convergent Claims PUBLISHED and DISTRIBUTED** 10-17 (xian's URLs set).
-- **10-16 omnibus DONE** (536 lines, 1020 commits, 11 rows, addendum for late closes). HOST's 10-16 log still unclosed (nudged 04:13). Re-check at the next START and add an addendum if it closes.
-- **Sun 10-18 04:12**: PUBLISH "Measure the Start, Not the End" (`ready-for-docs`, pre-flight and dry-run done 10-17 07:0x). `--draft docs/public/comms/drafts/measure-the-start-not-the-end.md --image .../measure-the-start-not-the-end-waiting-runner-distracted-starter.jpg --slug measure-the-start-not-the-end --category insight --work-date 2026-09-29`. Re-fetch and re-diff first (Comms commit 119bd7b9ef). Then archive, row `published`, crosspost reminder to Exec (Medium + LinkedIn).
-- Every START: prior-day omnibus plus nudges (10-17 omnibus next).
+## NOW (10-18 04:12 fire)
+- **Measure the Start PUBLISHED** 10-18 (live 200). Medium + LinkedIn crosspost owed by xian, notice sent to Exec. On the URLs: row `distributed`, `canonicalSite` `distributed`, liPubDate from xian.
+- **10-17 omnibus DONE** (452 lines, 543 commits, 11 rows). Unclosed 10-17 logs: Exec, Comms, HOST, Arch 0415 (nudged 04:2x). Re-check at the next START and add an addendum if any close.
+- **Mon 10-19**: weekly audit (Monday issue opens about 09:20), staggered-audit calendar, FLY-AUDIT matrix. **Tue 10-20**: "The Feature That Was Never Real", publish on pubDate once Comms sets `ready-for-docs`.
+- Every START: prior-day omnibus plus nudges (10-18 omnibus next).
 
 ## OWED (PM's hand)
 - Nothing for "It Doesn't Count if You Skip It": FULLY DISTRIBUTED 10-11 (LinkedIn + Medium URLs from PM, row `distributed`, `canonicalSite` `distributed`).
