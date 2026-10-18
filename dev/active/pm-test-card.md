@@ -81,7 +81,7 @@
 ## B. New on the 10-16 build (live since 17:09 10-16; still live)
 
 ### B1. `list my projects` with no projects (#2048, MVP)
-- **16:31 10-17, your fresh account: steps 1–2 PASS (3 of 3 chats; #2048 closed by CXO on them), the rest of the chain FAIL:** `Piper Morgan` → "Got it — want me to create a project called Piper Morgan?" → `Yes` → "I don't have a confirmation that the project was created…"; My Projects empty. Filed **#2080**: the router read "Piper Morgan" as "who are you?" ×6, the name turn released it and the chain died; **fix landed 17:14 for Sunday** (a name that reads as a question now gets ). Re-run this exact chain on Sunday's build.
+- **16:31 10-17, your fresh account: steps 1–2 PASS (3 of 3 chats; #2048 closed by CXO on them), the rest of the chain FAIL:** `Piper Morgan` → "Got it — want me to create a project called Piper Morgan?" → `Yes` → "I don't have a confirmation that the project was created…"; My Projects empty. Filed **#2080**: the router read "Piper Morgan" as "who are you?" ×6, the name turn released it and the chain died; **fix landed 17:14 for Sunday** (a name that reads as a question now gets the yes/no confirm, `Add a project called "Piper Morgan"? (yes/no)`). Re-run this exact chain on Sunday's build.
 - **Where**: the A4 account, or any account with no projects, three fresh chats.
 - **Steps**: `list my projects` in each fresh chat, then `yes` to the offer once.
 - **Pass**: 3 of 3 → "You don't have any active projects yet. Would you like to add a project?" → `yes` → "What would you like to call it?" (On `6bb955919d` this phrase fell to the floor 3 of 3.)
