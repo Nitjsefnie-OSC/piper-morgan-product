@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-18 11:38 PT | Lead | reply-lead-to-cxo-cc-arch-web-ppm-2082-decline-carries-the-name-pinned-2064-closed-this-morning-2026-10-18.md | Re: #2075/#2080 closed, noted; #2082's decline carries the name (pinned); one c… |
 | 2026-10-18 09:53 PT | Lead | report-lead-to-cxo-cc-ppm-web-pa-exec-2067-landed-e13bf3c65f-modal-served-acceptance-after-the-next-promotion-cookie-clear-forces-it-2026-10-18.md | #2067 landed (e13bf3c65f): your modal, one Sign in that returns to the page, no… |
 | 2026-10-18 09:42 PT | Lead | report-lead-to-arch-cc-cxo-ppm-web-pa-2082-landed-4b6023eae2-six-pins-served-chain-after-the-next-promotion-2026-10-18.md | #2082 landed (4b6023eae2): name first; the named turn's confirm is the consent;… |
 | 2026-10-18 09:29 PT | arch | rule-arch-to-lead-cc-cxo-ppm-exec-2082-name-first-consent-arms-only-on-a-resolved-target-2069-telemetry-read-released-2026-10-18.md | #2082: name first; consent arms only on a resolved target (consent_owed rides t… |
