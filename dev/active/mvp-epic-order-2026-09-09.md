@@ -1701,3 +1701,7 @@ out-of-scope call. Gate 14 → 15, fourth slip-ledger entry, dates unchanged; cr
 **`#2080` folded in 2026-10-17 18:3x, admitted MVP (Gate class 3) by PPM under xian's 15:25 ruling**: a served instance of the #2042 class. The floor offered to create a project it could not create, and after two yeses nothing existed (the rest of #2048's chain). Both halves are on main for Sunday. Gate 8 → 9. #2079 (the standup's hardcoded 'Good morning!') placed Production.
 
 **`#2064` closed 2026-10-18 06:09** by Lead on xian's production count (pre-flight: would erase cleanly). Gate 9 → 8. Must-close set: #2077, #2078.
+
+**`#2072` closed 2026-10-18 08:27** by CXO, with #2076, on Web's served rows on alpha `47ba746bee`. Gate 8 → 7.
+
+**`#2067` folded in 2026-10-18 06:52, admitted MVP (Gate class 3, a must-close) on xian's known-issues ruling ("fix first")**: an expired sign-in reads as a GitHub failure. Closes on CXO's served modal acceptance. Gate 7 → 8. Must-close set: #2067, #2077, #2078. #2081 (admin Invites page) and #2082 (no-name consent line) placed Production.
