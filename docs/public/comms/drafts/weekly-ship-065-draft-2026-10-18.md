@@ -28,21 +28,21 @@ The team learned the same lesson about itself. The rules we had only written dow
 
 On alpha:
 
-- **Hear the truth about a broken GitHub connection**, in chat, in the standup, on the Radar card and in exports, and reconnect in one step. PA and I ran this check together on my account. It failed four out of four times on Wednesday, and passed on Thursday. Long lists are now capped, and Piper offers the rest instead of dumping everything.
+- **Hear the truth about a broken GitHub connection**, in chat, in the standup, on the Radar card and in exports, and reconnect. PA and I ran this check together on my account. On Wednesday, all four places Piper reads GitHub wrongly said all was clear. On Thursday, all four told the truth. Long lists are now capped, and Piper offers the rest instead of dumping everything.
 - **Get honest answers about today.** Overdue items come with counts and ages ("1 day overdue"), and "Today:" lists what's actually due.
-- **Delete without fear.** "Delete that reminder" deletes exactly one. "Delete the first two reminders" picks the right two. Any request to delete more than one at a time gets a short list of what would go, ending "Nothing has been changed."
+- **Delete without fear.** <!-- Comms: xian ruled 10-18 that the no-undo on todo deletes goes on the partners' known-issues list (soft delete #2021 not built). Consider "Delete with a safety check." --> "Delete that reminder" deletes exactly one. "Delete the first two reminders" picks the right two. Any request to delete more than one at a time gets a short list of what would go, ending "Nothing has been changed."
 - **Leave the standup in your own words.** "Stop," "never mind" and "not now" pause it and keep your answers so far. "Cancel" ends it, and "skip" skips a question.
 - **Ask Claude Desktop about your GitHub issues through the Piper connector** and get the real total, with Piper saying so plainly when a list has been cut short. I checked this one myself.
 
-On pipermorgan.ai, the privacy policy has a new section on your Piper account, and the site picked up keyboard focus rings, a skip link and contrast fixes.
+On pipermorgan.ai, the privacy policy has a new section on your Piper account, and the site picked up stronger keyboard focus rings, a fixed skip link in dark mode, and contrast fixes.
 
-Not yet: disconnecting an integration passed on two of the five pages that had one, so it stays open. A fix for current-format Anthropic keys in Settings is closed in code, but nobody has tried it on alpha yet.
+Not yet: disconnecting an integration passed on the two pages we could test. The other three need a connection we don't have yet, so it stays open. A fix for current-format Anthropic keys in Settings is closed in code, but nobody has tried it on alpha yet.
 
 ## ⚙️ Below the line: engineering & architecture
 
-- **Hand-written phrase-matching rules: 155 → 90.** That's most of last week's unfinished tail, each deletion approved by Arch. Twenty-nine of the remaining ninety are a permanent floor. The other sixty-one wait on the language model's routing getting good enough to replace them.
-- **Two real test accounts.** HOST set up one account connected to GitHub by signing in and one by personal token, so the agents can check both kinds of connection on alpha instead of reasoning about them.
-- **Red builds that never shipped.** Lead's pushes turned our main branch red on six of seven days, each time from tests that the pre-push check didn't select. None of it reached alpha, because the release check held. CIO also found that 91 of the last 100 code-quality runs had been cancelled before finishing, so "green" had meant very little until mid-week. That's fixed.
+- **Hand-written phrase-matching rules: 155 → 90.** That's most of last week's unfinished tail, with Arch ruling which ones were safe to delete. Twenty-nine of the remaining ninety are a permanent floor. The other sixty-one wait on the language model's routing getting good enough to replace them.
+- **Two real test accounts.** With invites and custody rules from HOST, Web set up one account connected to GitHub by signing in and one by personal token, so the agents can check both kinds of connection on alpha instead of reasoning about them.
+- **Red builds that never shipped.** Lead's pushes turned our main branch red on six of seven days, each time from tests that the pre-push check didn't select. None of it reached alpha. Each was fixed the same day, and from Tuesday the release check refused any build whose tests hadn't passed. CIO also found that 91 of the last 100 code-quality runs had been cancelled before finishing, so "green" had meant very little until Thursday. That's fixed.
 - **Checked before ruling.** Arch's "0 of 11 entry points" turned out to be 21 when counted. Every review this week named mistakes like that one, caught either by the agent who made it or by another.
 
 ## 🔬 Methodology & process innovation
@@ -60,7 +60,7 @@ Not yet: disconnecting an integration passed on two of the five pages that had o
 - Oct 14: "[Weekly Ship #064: Code Decides Permission](https://pipermorgan.ai/shipping-news/weekly-ship-064-code-decides-permission/)" — shipping news
 - Oct 15: "[The Overzealous Cleanup Routine](https://pipermorgan.ai/blog/the-overzealous-cleanup-routine)" — building
 
-[![A smiling AI waiter carries two untouched, steaming dinners away as one diner reaches after her meal and the other stares at the bare table.](https://pipermorgan.ai/assets/blog-images/the-overzealous-cleanup-routine.webp)](https://pipermorgan.ai/blog/the-overzealous-cleanup-routine)
+[![A smiling AI waiter carries two untouched, steaming dinners away as one diner reaches after her meal and the other stares at the bare table, utensils poised.](https://pipermorgan.ai/assets/blog-images/the-overzealous-cleanup-routine.webp)](https://pipermorgan.ai/blog/the-overzealous-cleanup-routine)
 
 *"Are you forgetting something?"*
 
@@ -72,7 +72,7 @@ Not yet: disconnecting an integration passed on two of the five pages that had o
 - **Updates to alpha:** 8
 - **Hand-written routing rules left (goal is reduction):** 155 → 90
 
-The slip ledger grew from three entries to seven, and no days moved. Design partners are still set for Friday, October 23, and the hard stop for Friday, October 30.
+The slip ledger grew from three entries to seven, and no days moved. October 23 is when I decide whether we're on track to invite design partners, and October 30 is still the target for the first one to get access.
 
 <!-- Exec: the plan's weekly usage peaked at 88% two weeks running, and API spend was about $41 for the week, mostly Lead's router scoring. Include, or keep it internal? -->
 
@@ -90,7 +90,7 @@ Mostly me again: test rounds on each new alpha build, and one invite code per fr
 
 **Discovery**: A rule that exists only as written instructions gets followed until the moment of pressure, and then it doesn't. A rule that a script checks keeps working on the busiest day.
 
-**Example from this week**: Agents guessed timestamps all week despite a written rule. The Friday review request was missed despite being on a checklist. The release check, which is code, held through six days of red builds and kept every one of them off alpha.
+**Example from this week**: Agents guessed timestamps all week despite a written rule. The Friday review request was missed despite being on a checklist. The release check, which is code, has kept untested builds off alpha since Tuesday.
 
 **Why it matters**: It's the team's version of what Piper learned this week. Piper became more honest when honesty became code, with a third answer, "I couldn't check," built into the reads. The team became more reliable where reliability became a check.
 
