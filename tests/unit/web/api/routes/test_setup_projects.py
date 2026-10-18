@@ -8,6 +8,14 @@ from uuid import uuid4
 
 import pytest
 
+
+def _claims(user_id: str):
+    """#2078: /projects takes its owner from the session (JWTClaims.sub)."""
+    from types import SimpleNamespace
+
+    return SimpleNamespace(sub=user_id)
+
+
 pytestmark = pytest.mark.unit
 
 
@@ -42,7 +50,7 @@ class TestSetupProjectCreation:
                     project_name="My App",
                 )
 
-                result = await create_setup_project(req)
+                result = await create_setup_project(req, _claims(req.user_id))
 
         assert result.success is True
         assert result.project_id == project_id
@@ -105,7 +113,7 @@ class TestSetupProjectCreation:
                     github_repo="owner/backend-api",
                 )
 
-                result = await create_setup_project(req)
+                result = await create_setup_project(req, _claims(req.user_id))
 
         assert result.success is True
 
@@ -141,7 +149,7 @@ class TestSetupProjectCreation:
         )
 
         with pytest.raises(HTTPException) as exc_info:
-            await create_setup_project(req)
+            await create_setup_project(req, _claims(req.user_id))
         assert exc_info.value.status_code == 400
         assert "name is required" in exc_info.value.detail
 
@@ -177,7 +185,7 @@ class TestSetupProjectCreation:
                 )
 
                 with pytest.raises(HTTPException) as exc_info:
-                    await create_setup_project(req)
+                    await create_setup_project(req, _claims(req.user_id))
                 assert exc_info.value.status_code == 400
                 assert "owner/repo" in exc_info.value.detail
 
@@ -215,7 +223,7 @@ class TestSetupProjectCreation:
                     project_name="No Repo Project",
                 )
 
-                result = await create_setup_project(req)
+                result = await create_setup_project(req, _claims(req.user_id))
 
         assert result.success is True
         # Integration repo should NOT have been called

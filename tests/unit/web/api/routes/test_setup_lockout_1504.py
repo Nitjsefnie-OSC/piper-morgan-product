@@ -2,7 +2,8 @@
 lockout — unauthenticated global LLM-key overwrite (F1), global Slack creds
 (F2), project rows with attacker-chosen owner_id (F3), and an alembic-upgrade
 trigger (F4), all callable forever on a live server. Lockout: once any user has
-setup_complete=true, the four write routes refuse 403 with honest copy.
+setup_complete=true, the instance-wide write route refuses 403 with honest copy
+(#2078 moved the two per-user writes onto the session principal instead).
 
 Pins are router-derived (the dependency must be WIRED, not merely defined) plus
 behavioral checks of the dependency itself. First-run is protected in both
@@ -15,11 +16,19 @@ from unittest.mock import AsyncMock, patch
 import pytest
 from fastapi import HTTPException
 
+from services.auth.auth_middleware import get_current_user
 from web.api.routes import setup as setup_routes
 from web.api.routes.setup import require_setup_incomplete
 
 GATED = {
     "/api/v1/setup/slack-credentials",
+}
+
+# #2078 (Arch, 2026-10-17): the two PER-USER wizard writes take their principal
+# from the session instead (create-user signs the new account in). The #1504
+# lockout came off them because the principal check is what stops F1 now; on an
+# initialized instance the lockout had refused every invited tester's wizard.
+PRINCIPAL_GATED = {
     "/api/v1/setup/complete",
     "/api/v1/setup/projects",
 }
@@ -53,12 +62,23 @@ def _route_dependency_map():
 
 
 class TestLockoutWiring:
-    def test_all_three_write_routes_carry_the_lockout(self):
+    def test_instance_wide_write_route_carries_the_lockout(self):
         deps = _route_dependency_map()
         missing = GATED - set(deps)
         assert not missing, f"expected setup routes not found: {missing}"
         unwired = {p for p in GATED if require_setup_incomplete not in deps[p]}
         assert not unwired, f"write routes WITHOUT the #1504 lockout: {unwired}"
+
+    def test_per_user_write_routes_carry_the_session_principal_not_the_lockout(self):
+        """#2078: /complete and /projects require the signed-in user and must NOT
+        carry the instance lockout (which stranded every invited tester)."""
+        deps = _route_dependency_map()
+        missing = PRINCIPAL_GATED - set(deps)
+        assert not missing, f"expected setup routes not found: {missing}"
+        no_principal = {p for p in PRINCIPAL_GATED if get_current_user not in deps[p]}
+        assert not no_principal, f"per-user writes WITHOUT get_current_user: {no_principal}"
+        still_locked = {p for p in PRINCIPAL_GATED if require_setup_incomplete in deps[p]}
+        assert not still_locked, f"per-user writes still behind the #1504 lockout: {still_locked}"
 
     def test_first_run_routes_stay_open(self):
         """The wizard must still work on a fresh server — reads, validators,
@@ -70,7 +90,7 @@ class TestLockoutWiring:
     def test_denominator_every_route_classified(self):
         """m-44: any setup route outside both sets is unexamined surface."""
         deps = _route_dependency_map()
-        uncovered = set(deps) - GATED - UNGATED_OK
+        uncovered = set(deps) - GATED - PRINCIPAL_GATED - UNGATED_OK
         assert not uncovered, f"setup routes needing classification: {uncovered}"
 
 
