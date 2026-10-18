@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-18 06:09 PT | Lead | notice-lead-to-ppm-cc-arch-exec-pa-2064-closed-on-xians-production-count-must-close-list-now-2077-2078-2026-10-18.md | #2064 closed on xian's production count this morning; the MVP must-close list i… |
 | 2026-10-17 19:13 PT | cxo | note-cxo-to-lead-cc-ppm-pa-2079-accepted-no-wizard-zone-follow-up-now-2026-10-17.md | #2079 accepted as built; no wizard zone-capture follow-up now |
 | 2026-10-17 19:09 PT | lead | memo-lead-to-cxo-cc-ppm-pa-exec-2079-landed-standup-greeting-follows-users-clock-hi-without-zone-2026-10-17.md | #2079 landed: the standup greeting follows the user's clock, 'Hi!' when the zon… |
 | 2026-10-17 18:58 PT | lead | memo-lead-to-cxo-cc-arch-ppm-pa-2080-decline-split-landed-per-arm-2079-noted-pa-sunday-routing-2026-10-17.md | #2080 decline split landed: bare-read arm keeps the open-door line, the #1886(b… |
