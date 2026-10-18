@@ -1,20 +1,22 @@
 # PM test card
 
-**Owner**: Lead. **v79 (17:16 10-17: #2080 and #2078 landed for Sunday), v78 (16:39 10-17: A4 PASS, B1 create FAIL #2080), v77 (16:21 10-17: A5 PASS, #1913 closed), v76 (15:52 10-17: A4 invite pointer corrected), v75 (15:49 10-17: A5 path corrected), v74 (15:43 10-17: C1 done), v73 (15:28 10-17: C1 query corrected), v72 (15:24 10-17: C2 PASS; jump list links to the cards), v71 (15:21 10-17: A1 PASS), v70 (15:12 10-17, snippet added 15:15: your order at the top; A1 cut to what is left for your hand, read snippet inline), v69 (08:1x 10-17: alpha `118241587e`, slot 2 of 2; every card live, A1 and C2 included), v68 (07:1x: slot 1), v67 (A1 gap #2072 noted 19:3x), v66 (B3 gap 17:5x), v65 17:09 10-16: alpha promoted to the new build, every card is live.** v64 (16:4x) for xian's live session**: one card per test, only the tests that need xian's hand or that nobody has passed yet. Closed rows, Web's rows and the history are gone from this page; `git log -p` of this file keeps every earlier version. Mirror: https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi (this file wins between republishes).
+**Owner**: Lead. **v80 (06:45 10-18: alpha serves 47ba746bee; #2064 closed on your count; Sunday order + section D)**, **v79 (17:16 10-17: #2080 and #2078 landed for Sunday), v78 (16:39 10-17: A4 PASS, B1 create FAIL #2080), v77 (16:21 10-17: A5 PASS, #1913 closed), v76 (15:52 10-17: A4 invite pointer corrected), v75 (15:49 10-17: A5 path corrected), v74 (15:43 10-17: C1 done), v73 (15:28 10-17: C1 query corrected), v72 (15:24 10-17: C2 PASS; jump list links to the cards), v71 (15:21 10-17: A1 PASS), v70 (15:12 10-17, snippet added 15:15: your order at the top; A1 cut to what is left for your hand, read snippet inline), v69 (08:1x 10-17: alpha `118241587e`, slot 2 of 2; every card live, A1 and C2 included), v68 (07:1x: slot 1), v67 (A1 gap #2072 noted 19:3x), v66 (B3 gap 17:5x), v65 17:09 10-16: alpha promoted to the new build, every card is live.** v64 (16:4x) for xian's live session**: one card per test, only the tests that need xian's hand or that nobody has passed yet. Closed rows, Web's rows and the history are gone from this page; `git log -p` of this file keeps every earlier version. Mirror: https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi (this file wins between republishes).
 
-**Alpha**: https://alpha.pipermorgan.ai serves **`118241587e`** (promotion 2 of 2 under your standing grant, 08:05 10-17, run 39043475359; /health healthy at 08:08; `curl -s https://alpha.pipermorgan.ai/health` shows `git_sha`). No more promotions today. This build carries everything landed since last night: user erasure (#2064), the Privacy & data page (#2065, served PASS), the GitHub card's checked-time line (#2066, closed), the Integrations headline counting only connected integrations (#2068), the consent line naming the project (#2070, PASS), per-person Test results (#2071, closed), both halves of #2072 (the radar/standup disclose a revoked grant again; Settings, chat and setup guidance say "needs reconnecting", never "connected"), and the #1306 count fix for C2.
+**Alpha**: https://alpha.pipermorgan.ai serves **`47ba746bee`** (promotion 1 of 2, dispatched 06:39 10-18 on your word, run 39132506958; /health healthy at 06:42; `curl -s https://alpha.pipermorgan.ai/health` shows `git_sha`). One more promotion is possible today if something lands. This build carries everything since yesterday's: the #2077 token-field fix, the #2078 wizard fix with CXO's words, both halves of #2080 (your B1 chain) with the per-arm decline, the #2079 greeting by your clock, #2075 ("Connected, not yet tested" on an untested OAuth integration), #2076 (focus and standup say GitHub needs reconnecting), #2069 (project name saved as named, reply from the stored row), #2051, the #1982 PAT dual write, #2073. No migrations between `118241587e` and it.
 
 **How to report**: paste the reply or a screenshot in chat; say the card number. Lead relays to the judge named on the card and updates this page.
 
-## Your order (15:09 10-17; each item links to its card)
+## Your order (Sunday 06:45 10-18; each item links to its card)
 
-1. ~~[A1](#a1)~~ **PASS 15:19.**
-2. ~~[C2](#c2)~~ **PASS, reported 15:22** (ran from your own machine; fine), then [C1](#c1): your hand only, one terminal command.
-3. ~~[A5](#a5)~~ **PASS 16:18**, ~~[A4](#a4)~~ **PASS 16:33 (4 of 4; #1982 dual write landed for Sunday).**
-4. ~~[B1](#b1)~~ **offer PASS, create FAIL 16:31 → #2080.**
+1. ~~[C3](#c3) #2064 count line~~ **DONE 06:05, #2064 CLOSED 06:09.**
+2. [D1](#d1): the #2077 ten-second check (must-close; your browser, your saved password).
+3. [B1](#b1) again on a fresh chat: the full chain to a project on My Projects (#2080).
+4. [D2](#d2): the #2078 wizard run, only if you want to see it yourself (Web runs it otherwise; must-close either way).
 5. [A3](#a3), [A2](#a2), [A6](#a6), [A7](#a7), [B2](#b2), [B3](#b3): any order; none gates anything.
 
-## A. Your cards (all live on `118241587e`)
+Yesterday's: ~~A1~~ PASS 15:19 · ~~C2~~ PASS 15:22 · ~~A5~~ PASS 16:18 · ~~A4~~ PASS 16:33 · ~~B1~~ offer PASS, create FAIL 16:31 → #2080 (fixed, re-run above) · ~~C1~~ DONE 15:40.
+
+## A. Your cards (live since `118241587e`, still live on `47ba746bee`)
 
 ### A1. Broken GitHub grant: the card, the page, and one-step Reconnect (#2031, #1963)
 - **PASS 15:19 10-17, your account, four of four steps** (readings: `dev/2026/10/17/controls/served-a1-xian-broken-grant-118241587e-2026-10-17.md`). PA writes the #2031/#2072 comments; CXO reads the words. Nothing left on this card.
@@ -82,6 +84,7 @@
 
 ### B1. `list my projects` with no projects (#2048, MVP)
 - **16:31 10-17, your fresh account: steps 1–2 PASS (3 of 3 chats; #2048 closed by CXO on them), the rest of the chain FAIL:** `Piper Morgan` → "Got it — want me to create a project called Piper Morgan?" → `Yes` → "I don't have a confirmation that the project was created…"; My Projects empty. Filed **#2080**: the router read "Piper Morgan" as "who are you?" ×6, the name turn released it and the chain died; **fix landed 17:14 for Sunday** (a name that reads as a question now gets the yes/no confirm, `Add a project called "Piper Morgan"? (yes/no)`). Re-run this exact chain on Sunday's build.
+- **Re-run on `47ba746bee` (Sunday):** fresh chat, `list my projects` → `yes` → `Piper Morgan` → expect `Add a project called "Piper Morgan"? (yes/no)` → `yes` → the project appears on My Projects. A `no` at that confirm should say "Okay, I won't add that project. If you meant to ask me something, go ahead." Paste the four replies. PA judges against CXO's acceptance; closes #2080.
 - **Where**: the A4 account, or any account with no projects, three fresh chats.
 - **Steps**: `list my projects` in each fresh chat, then `yes` to the offer once.
 - **Pass**: 3 of 3 → "You don't have any active projects yet. Would you like to add a project?" → `yes` → "What would you like to call it?" (On `6bb955919d` this phrase fell to the floor 3 of 3.)
@@ -121,6 +124,24 @@ Count first (writes nothing); run the second line only if the count shows plaint
 fly ssh console -a piper-morgan -C "python -m scripts.backfill_encrypt_files_1306 --count"
 fly ssh console -a piper-morgan -C "python -m scripts.backfill_encrypt_files_1306"
 ```
+
+## D. New on the Sunday build (live on `47ba746bee` since 06:42)
+
+### D1. Token field stays empty (#2077, must-close, your hand)
+- **Why you:** Chrome fills a saved Piper password into password inputs; your browser has one, the test browsers do not. The fix is `autocomplete="new-password"` on ten credential inputs.
+- **Steps**: sign in on alpha in your usual browser; open Settings → Integrations → GitHub; do not type in the token field; in the console run `document.getElementById('token').value.length`.
+- **Pass**: `0`, and the field looks empty. **Fail**: any number above 0, or a masked value showing.
+- **Judge**: Lead closes #2077 on your `0` (PPM gates it; Class 2).
+
+### D2. Fresh invited sign-up through the wizard (#2078, must-close; you or Web)
+- **Where**: a private window, signed out; the invite is the file HOST named in `~/.piper-shared/` (your mint of 10-17); PA's steps are `dev/active/pa-sunday-served-2078-2080-steps.md` §A.
+- **Steps**: `/setup`, enter the invite code, a username, an email and a password, Create Account, then through to step 5.
+- **Pass**: step 5 reads "Setup Complete", "You're all set. You're signed in, and Piper is ready to help." with an **Open Piper** button that lands on `/`, signed in. **Also acceptable**: a toast "Account created, setup did not finish" with the Settings → LLM API Keys pointer, signed in; quote it.
+- **Fail**: "Setup Failed", a button stuck on "Creating…", or landing signed out.
+- **Judge**: PA relays to CXO; closes #2078.
+
+### D3. The greeting follows your clock (#2079, Production, anyone)
+- On an account that signed in through `/login`, say `give me a standup` after noon: it opens **Good afternoon!** (after 17:00, **Good evening!**), matching the home page header. Before noon, **Good morning!**. A wizard-created account that never used `/login` opens **Hi!** (no zone known; CXO: fine). CXO judges the quote.
 
 ## Not on your list
 Web runs S9–S13 (#2057 phrasings, #2053 card, #2055 notice placement, #2046 ordinals) on this build; CXO judges; Lead posts the results on the issues. Parked, try-and-tell only: #1943 ("mark the first one complete and leave the second one pending"). #2061, #2059, #2060 and #2054 have nothing observable to test by hand; they close on being live.
