@@ -164,6 +164,7 @@ about you, your settings, and your to-dos, projects and linked repositories. Del
   from your data for good." (No UI delete/hide control, #2065.)
 - **Your whole account.** There's no way to delete your account inside Piper yet. We plan to add one.
   Until then, email support@pipermorgan.ai and we'll delete your account and everything in it within 14 days.
+  ✅ 10-18 06:19: BACKED. #2064 closed 13:09Z: `scripts/erase_user.py` live on alpha 118241587e (43 tables + upload files, ChromaDB, Redis), xian's prod count ran clean (pre-flight "would erase cleanly", 0 unplanned tables). Erase is operator-run per runbook §7 on a request, which is what the copy promises (email, then within 14 days). Note: it reports provider grants (e.g. GitHub) rather than revoking them on the provider's side.
   [Lead: promise "on request" only if someone will act on requests. support@ is PM's address (live on /support).
   The person who carries out a deletion is PM's call, and it isn't written into the policy.]
 
