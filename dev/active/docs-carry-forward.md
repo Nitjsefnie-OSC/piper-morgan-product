@@ -2,12 +2,11 @@
 
 **Updated**: 2026-10-17 (04:12 fire, see NOW below; older DONE lines below are history). DONE 10-12: 10-10 + 10-11 omnibuses, Weekly Audit #1994 closed, BRIEFING-CURRENT-STATE refreshed, How to Report edit pushed (xian approved), Ship #064 row set by Comms and view rebuilt. Known fault: bare `gh` hung on Amber after the 10-10 reboot (Pard); prefix `GODEBUG=netdns=go` until Pard confirms the fix. History in session logs (`dev/2026/10/{04..12}/*docs-code-log.md`), not here.
 
-## NOW (10-18 04:12 fire)
-- **Measure the Start PUBLISHED** 10-18 (live 200). Medium + LinkedIn crosspost owed by xian, notice sent to Exec. On the URLs: row `distributed`, `canonicalSite` `distributed`, liPubDate from xian.
-- **10-17 omnibus DONE** (452 lines, 543 commits, 11 rows). Unclosed 10-17 logs: Exec, Comms, HOST, Arch 0415 (nudged 04:2x). Re-check at the next START and add an addendum if any close.
-- **Mon 10-19**: weekly audit (Monday issue opens about 09:20), staggered-audit calendar, FLY-AUDIT matrix. **Tue 10-20**: "The Feature That Was Never Real", publish on pubDate once Comms sets `ready-for-docs`.
-- **Wed 10-21**: Weekly Ship #065 publish (Ship route `/shipping-news/{slug}/`, no `--image`, LinkedIn-only crosspost). Scaffold with Comms for review then xian (Exec memo 10-18 07:53, cc only, no Docs action yet). Publish when Comms sets `ready-for-docs`.
-- Every START: prior-day omnibus plus nudges (10-18 omnibus next).
+## NOW (10-19 10:12 fire)
+- **Weekly audit #2084 DONE and closed 10-19** (calendar row set, next due 10-26). Measure the Start is distributed (both crossposts in). 10-18 omnibus has Web and HOST addenda, all 11 role logs closed.
+- **Tue 10-20**: 04:12 START does the 10-19 omnibus plus nudges. The post is now titled "The Phantom Feature" (row `drafted`, pubDate 10-20): publish on its pubDate once Comms sets `ready-for-docs` (re-fetch, re-diff, image vs alt, dry-run, `--work-date` from dateline).
+- **Wed 10-21**: Weekly Ship #065 ("The Truth About State", row `drafted`). Ship route `/shipping-news/{slug}/`, no `--image`, LinkedIn-only. Publish when Comms sets `ready-for-docs`.
+- Held: #1909 fixtures box (Lead after 10-30), glossary re-verify about 11-30, CIO concept-link inventory by 11-01.
 
 ## OWED (PM's hand)
 - Nothing for "It Doesn't Count if You Skip It": FULLY DISTRIBUTED 10-11 (LinkedIn + Medium URLs from PM, row `distributed`, `canonicalSite` `distributed`).
