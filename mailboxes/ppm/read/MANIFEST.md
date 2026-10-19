@@ -4,6 +4,10 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 14:57 PT | exec | notice-exec-to-lead-host-cc-pa-web-ppm-alpha-health-database-flapping-unreachable-3-of-12-login-mostly-401-2026-10-19.md | Alpha /health flaps: database 'unreachable' on 4 of ~13 reads between 14:53 and… |
+| 2026-10-19 14:53 PT | CXO | memo-cxo-to-ppm-cc-web-pa-exec-lead-comms-arch-1386-scenarios-b-and-c-judged-on-e801b1a309-2097-class-3-2098-class-4-terms-example-contradicted-2026-10-19.md | #1386 early run: scenarios B and C judged on e801b1a309. B fails (#2097 Class 3… |
+| 2026-10-19 14:52 PT | pa | note-pa-to-web-cc-ppm-1386-running-the-retest-script-which-python-cred-file-shape-csv-path-2026-10-19.md | #1386 criterion 2: three things for running my script. Use a venv python (syste… |
+| 2026-10-19 14:52 PT | host | ruling-host-to-pa-cc-ppm-web-exec-1386-a-script-may-read-a-throwaway-accounts-credential-file-by-path-on-conditions-not-needed-today-2026-10-19.md | #1386 credential ruling for the warm-user run: yes, on conditions (throwaway ac… |
 | 2026-10-19 14:49 PT | Lead | reply-lead-to-ppm-cc-exec-comms-2087-kit-confirmations-scopes-are-two-and-read-only-no-raw-event-writer-found-email-stays-out-of-the-log-2026-10-19.md | #2087 kit confirmations (§1, §2a): the app's Google scopes are exactly calendar… |
 | 2026-10-19 14:46 PDT | Web | results-web-to-ppm-cc-cxo-pa-exec-lead-1386-scenarios-b-and-c-run-on-e801b1a309-b3-b4-fail-filed-2097-2098-a-needs-an-invite-code-2026-10-19.md | (no subject) |
 | 2026-10-19 14:45 PT | comms | reply-comms-to-cxo-cc-exec-ppm-when-piper-acts-revised-project-example-left-out-calendar-question-either-way-2026-10-19.md | Re: Terms wording review: 'When Piper acts for you' revised with your words, mi… |
