@@ -1,7 +1,7 @@
 # Design-partner known issues: for xian's direct review with PPM
 
 **Prepared:** 2026-10-16 16:1x PDT by PPM, per xian's 16:07 bar (relayed by Exec): "privacy and security, the rest disclosed as known issues (pending our direct review of them)".
-**Status:** section B reviewed by xian 2026-10-18 06:52 (relayed by Lead); outcomes are marked on each row and in section D. Section A has not been ruled on yet. Before that review this was a draft: Nothing here is partner-facing copy. Comms writes the wording after xian's review; the lines below are what a partner might hit, in plain terms, for deciding.
+**Status:** section B reviewed by xian 2026-10-18 06:52 (relayed by Lead), and section A on 2026-10-19 ~15:2x (relayed by Exec: list #2018 and #1595). Outcomes are marked on each row and in section D. The review is complete; the list changes only when an issue closes (delist) or xian adds one. Before that review this was a draft: Nothing here is partner-facing copy. Comms writes the wording after xian's review; the lines below are what a partner might hit, in plain terms, for deciding.
 **Alpha served at drafting:** `6bb955919d`. Several items have fixes on main that ride the waiting promotion, and an item that closes on a served check before 10-23 drops off this list.
 
 ## The bar (recorded in `beta-gate-standard.md` §Standing rulings)
@@ -61,7 +61,8 @@ For each row: **list it** (Comms writes the line), **don't list it** (with the r
 - **In the invitation wording, not the list:** GitHub "create an issue" posts with no confirm (CXO).
 - **Fix first:** #2067, admitted to MVP as a Class 3 must-close.
 - **Dropped as closed or live:** #2068, #2069 and #2075.
-- **Still open for xian:** section A (#2017, #2018, #1595 (#2080 closed 10-18), and #1386, which is not user-facing). It's disclosed by default under the 16:07 bar, but he hasn't reviewed the wording of each row. PPM brings it to the 10-23 readiness assessment.
+- **Section A ruled 2026-10-19 ~15:2x (xian, relayed by Exec 15:17):** "list both. if we fix then we can delist." **#2018** (recovering a dead GitHub connection in Settings) and **#1595** (Piper sometimes misreads a phrasing; rephrasing works) are **LISTED**, and Comms writes the two lines. #2017 closed 10-19, so it drops off. #1386 isn't user-facing. PPM strikes a line at send time if its issue has closed (#1386 criterion 6). The bullet below is kept for the record.
+- **(Superseded 10-19.) Still open for xian:** section A (#2017, #2018, #1595 (#2080 closed 10-18), and #1386, which is not user-facing). It's disclosed by default under the 16:07 bar, but he hasn't reviewed the wording of each row. PPM brings it to the 10-23 readiness assessment.
 - **Added 10-19 13:20 (xian, relayed by Lead):** #2089, the hosted wizard's system check with its always-failing Temporal line, was first **listed** ("tell folks it's a known issue and not to be concerned about it"), not fixed before partners. #2088's interim goes in the invitation wording (the code is asked at step 3). #2085 (the silent database outage) is **not on the gate**; it's investigated early in the first Production sprint. All three are rows in `beta-formalities-checklist.md` or on Production. **Superseded at 14:13:** xian accepted CXO's ruling that #2089 is fixed before partners. It's admitted to MVP as a Class 3 must-close, and the known-issue line isn't needed once it lands.
 - **Dates (same sitting):** 10-23 is the checkpoint where xian assesses the alpha and approves inviting. 10-30 stays the target date for the first design partner's access.
 
