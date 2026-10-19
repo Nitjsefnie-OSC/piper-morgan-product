@@ -412,7 +412,7 @@ async def probe_calendar_read(access_token: str) -> Optional[str]:
     from google.oauth2.credentials import Credentials
     from googleapiclient.discovery import build
 
-    from services.mcp.consumer.google_calendar_adapter import classify_calendar_read_error
+    from services.integrations.calendar.read_errors import classify_calendar_read_error
 
     def _read() -> None:
         service = build("calendar", "v3", credentials=Credentials(token=access_token))
