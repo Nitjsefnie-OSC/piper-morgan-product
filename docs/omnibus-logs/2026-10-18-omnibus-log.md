@@ -365,3 +365,11 @@ grep run 2026-10-19 04:2x PDT. A dated addendum will follow if any log changes.*
 Web's 10-18 log now carries `DAY-CLOSED` (Web's reply, filed 10-19). The sign-off lines it added were the block the log's 21:18 entry had promised, so nothing above changes. HOST's log was still without a marker at this writing, so one of 11 role logs remains unclosed.
 
 **Verified how**: `grep -c "^<!-- DAY-CLOSED"` on the Web log reads 1. I did not re-read Web's added sign-off lines.
+
+---
+
+## Addendum (2026-10-19 07:12 PDT): HOST closed
+
+HOST's 10-18 log now carries `DAY-CLOSED` (commit `736a99b37f`, 04:16). The close came after a 04:16 wake that swept the day before closing, and its Day-close block restates the gated items already listed above (masked forms of the ten codes, the production is_admin read, the partner list, three held sends). All 11 role logs for 10-18 are now closed.
+
+**Verified how**: `grep -c "^<!-- DAY-CLOSED"` on the HOST log reads 1, and I read its last 12 lines and the commit time via `git log`. I did not re-check the gated items.
