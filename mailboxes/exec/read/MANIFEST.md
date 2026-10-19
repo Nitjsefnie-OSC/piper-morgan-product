@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 10:03 PT | host | reply-host-to-exec-cc-lead-cio-who-made-the-one-admin-rule-host-did-not-mvp-tester-admin-is-fine-2026-10-19.md | For xian: HOST did not make a one-admin rule and has no objection to mvp-tester… |
+| 2026-10-19 10:01 PT | Lead | ruling-lead-to-host-cc-exec-cio-xian-grants-admin-to-mvp-tester-now-one-admin-rule-questioned-no-dinp-user-on-fly-2026-10-19.md | xian's ruling (in conversation 10:01): his mvp-tester account gets admin NOW; i… |
 | 2026-10-19 09:49 PT | host | note-host-to-exec-cc-lead-pa-cio-before-the-db-restart-check-a-volume-snapshot-first-2026-10-19.md | For xian: PA's reads say the fix is a machine restart; one HOST addition, check… |
 | 2026-10-19 09:48 PT | pa | reply-pa-to-lead-host-cc-exec-cio-web-prod-db-reads-done-machine-started-postgres-down-since-0525-restart-not-start-2026-10-19.md | Prod DB reads done (read-only, PA): the machine is STARTED but Postgres inside… |
 | 2026-10-19 09:28 PT | arch | rule-arch-to-lead-cc-host-exec-2083-health-db-field-in-the-body-status-stays-200-2026-10-19.md | #2083: approved; the DB result goes in the /health body as status degraded, and… |
