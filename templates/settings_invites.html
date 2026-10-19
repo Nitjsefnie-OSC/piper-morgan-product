@@ -123,7 +123,8 @@
         const table = document.getElementById('invites-table');
         const body = document.getElementById('invites-body');
         try {
-          const response = await fetch(API);
+          // cache: 'no-store' — the list must never come from the browser cache (xian's D5 read, 2026-10-19).
+          const response = await fetch(API, { cache: 'no-store' });
           if (response.status === 401) return; // #2067: the signed-out modal is up
           if (!response.ok) throw new Error(await readError(response, 'Could not load invite codes'));
           const data = await response.json();
@@ -205,6 +206,13 @@
           if (response.status === 401) return; // #2067
           if (!response.ok) throw new Error(await readError(response, 'Revoke failed'));
           const data = await response.json();
+          // Show the result on the row at once, then re-read the list for the server's words.
+          const tr = btn.closest('tr');
+          if (tr) {
+            const pill = tr.querySelector('.status-pill');
+            if (pill) { pill.className = 'status-pill status-revoked'; pill.textContent = `Revoked ${fmt(new Date().toISOString())}`; }
+            btn.remove();
+          }
           showToast('success', data.message, 'Revoked');
           await loadInvites();
         } catch (error) {

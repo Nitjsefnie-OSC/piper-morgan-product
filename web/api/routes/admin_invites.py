@@ -67,10 +67,16 @@ def _refuse(exc: InviteAdminError) -> HTTPException:
 
 
 @router.get("", response_model=InviteListResponse)
-async def list_invite_codes(admin: JWTClaims = Depends(require_admin)) -> InviteListResponse:
+async def list_invite_codes(
+    response: Response, admin: JWTClaims = Depends(require_admin)
+) -> InviteListResponse:
     async with AsyncSessionFactory.session_scope() as session:
         rows = await list_invites(session)
         today = await minted_today(session)
+    # xian's D5 read (2026-10-19): after a mint or a revoke the page re-fetched this
+    # list and still showed the old rows until a manual reload. Nothing here may be
+    # served from any cache: the list is the admin's only view of what a code can do.
+    response.headers["Cache-Control"] = "no-store"
     return InviteListResponse(
         invites=[
             InviteRowOut(

@@ -55,6 +55,10 @@ def test_admin_sees_the_invites_page(client):
     assert "/api/v1/admin/invites" in html
     assert "signed-out-modal" in html  # #2067 shared handler
     assert "Dialog.confirm(" in html  # revoke behind the #1190-style confirm
+    # xian's D5 read (2026-10-19): the list re-read must bypass the browser cache, and the
+    # revoked row changes at once rather than waiting on the re-read.
+    assert "fetch(API, { cache: 'no-store' })" in html
+    assert "status-pill status-revoked" in html and "btn.remove();" in html
 
 
 def test_non_admin_is_refused(client):

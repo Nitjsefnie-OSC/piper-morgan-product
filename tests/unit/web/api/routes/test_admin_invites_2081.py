@@ -130,7 +130,7 @@ async def test_mint_returns_raw_codes_once_with_no_store_and_audits_masked_only(
     for code in out.codes:
         assert code not in str(audit)
     # No later read returns a raw code.
-    listing = await api.list_invite_codes(ADMIN)
+    listing = await api.list_invite_codes(Response(), ADMIN)
     assert listing.minted_today == 3
     for code in out.codes:
         assert code not in listing.model_dump_json()
@@ -172,7 +172,7 @@ async def test_list_shows_masked_forms_and_distinguishes_redeemed_from_revoked(d
         InviteToken(token="BBBB1111111111111111YYYY", used_at=now, used_by_user_id=tester_id),
         InviteToken(token="CCCC2222222222222222XXXX", used_at=now, used_by_user_id=None),
     )
-    body = await api.list_invite_codes(ADMIN)
+    body = await api.list_invite_codes(Response(), ADMIN)
     by_mask = {row.masked: row for row in body.invites}
     assert set(by_mask) == {"AAAA…ZZZZ", "BBBB…YYYY", "CCCC…XXXX"}
     assert by_mask["AAAA…ZZZZ"].status == "unused" and by_mask["AAAA…ZZZZ"].used_by is None
@@ -193,7 +193,7 @@ async def test_revoke_marks_an_unused_code_as_revoked_not_redeemed(db, audit):
     rows = await _rows(db)
     assert rows[0].used_at is not None and rows[0].used_by_user_id is None
     assert audit[-1] == {"actor": str(ADMIN_ID), "action": "invite_revoke", "masked": ["DDDD…WWWW"]}
-    listing = await api.list_invite_codes(ADMIN)
+    listing = await api.list_invite_codes(Response(), ADMIN)
     assert listing.invites[0].status == "revoked"
 
 
@@ -226,3 +226,13 @@ async def test_revoke_refusals_not_found_ambiguous_already_used(db, audit):
 def test_mask_shape():
     assert svc.mask("ABCD0123456789ABCDEFWXYZ") == "ABCD…WXYZ"
     assert svc.mask("short") == "…"
+
+
+@pytest.mark.asyncio
+async def test_list_is_no_store_so_a_refetch_after_mint_or_revoke_is_never_stale(db, audit):
+    """xian's D5 read (2026-10-19): the page re-fetched the list after a mint and after
+    a revoke and still showed the old rows until a manual reload. The list carries
+    no-store, the same as the mint response."""
+    response = Response()
+    await api.list_invite_codes(response, ADMIN)
+    assert response.headers["cache-control"] == "no-store"
