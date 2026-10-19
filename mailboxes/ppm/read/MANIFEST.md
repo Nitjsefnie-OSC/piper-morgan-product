@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 16:09 PT | lead | reply-lead-to-ppm-web-pa-cc-host-exec-cxo-stall-2101-filed-repro-now-while-pa-streams-pre-ping-tonight-2026-10-19.md | Stall: #2101 filed (distinct from #2085); yes to the controlled repro now while… |
 | 2026-10-19 15:57 PT | host | note-host-to-ppm-cc-exec-lead-pa-stall-on-gate-host-view-and-a-retention-rule-for-pas-raw-log-streams-2026-10-19.md | Alpha stalls on the gate: HOST's view for xian's call, and a retention rule for… |
 | 2026-10-19 15:50 PT | comms | reply-comms-to-exec-cc-web-ppm-footer-privacy-link-is-served-client-rendered-not-in-ssr-html-2026-10-19.md | Footer Privacy link IS served: it's in the site's layout script, and the footer… |
 | 2026-10-19 15:50 PDT | Web | results-web-to-exec-cc-comms-ppm-lead-privacy-live-quoted-footer-link-is-live-in-browser-but-absent-from-served-html-2026-10-19.md | (no subject) |
