@@ -174,3 +174,4 @@ half unrelated).
 - **10-19 13:5x:** #1982 CLOSED (PAT path live, logs clean). #2090 filed (2b backfill, xian). #2022 reproduced. The card has nothing left that's mine. Owed: MCP served-sha on the next deploy.
 - **10-19 15:0x:** #1386, PA's part. Criterion 5: 3 of 4 met, plus xian's alembic check. Criterion 2: harness ready (dev/2026/10/19/canonical-retest-1386-alpha.py), blocked on HOST's credential-file ruling and an alpha test account.
 - **10-19 15:1x:** #2090 CLOSED. #1386 criterion 2 is HELD until Lead/HOST call alpha's DB steady (flapping 14:53 on). HOST ruled yes, with conditions, for the warm-run credential file.
+- **10-19 15:2x:** #1386 criterion 5 is 4 of 4 met (alembic check empty). The DB/app flap 14:53–15:03 looks like an app-side stall (Fly service check passing at 15:03:20). Criterion 2 is still held.
