@@ -28,8 +28,7 @@ through `UserAPIKeyService.store_user_key(provider="github", validate=False)`
 (`services/connectors/github_pat_store.py`), landing the row under the GitHub context;
 `_user_pat_at_rest` reads it first. Disconnect deletes both copies. PATs saved before this landed
 are copied by `scripts/backfill_github_pat_rows_1982.py` (step 2b below). The keychain copy stays
-for alpha's sync readers. Landing trigger (Arch): after PM's PAT-only test on alpha, and before the
-MCP live check if PM's own account is PAT-only (PA confirms which).
+for alpha's sync readers. Landing trigger (Arch): met 2026-10-19. The PAT-only path is served: xian, signed in as a PAT-only test account through a freshly added hosted connector, got real open issues with no `CONNECT_REQUIRED`, and PA's read of the MCP app's log showed the at-rest read (`EncryptedDBCredentialStore`), all 200s and no decrypt error (#1982 comment 6276888481; #1982 closed). Accounts whose PAT was saved before the dual write still have no at-rest row until step 2b's backfill runs: #2090.
 
 ## 1. Set the secret (PM's hand; no agent sees the value)
 
