@@ -1422,8 +1422,10 @@ class TodoIntentHandlers:
         created = []
         try:
             for title in items:
+                # Arch (#2094 validation): a router title is the user's words as
+                # the router read them; only the regex fallback strips a leading "to".
                 todo = await self.todo_service.create_todo(
-                    user_id=user_id, text=self._strip_leading_to(title), priority=priority
+                    user_id=user_id, text=title, priority=priority
                 )
                 created.append(todo)
                 self._remember_created_todo(session_id, user_id, todo, "todo")
@@ -1485,12 +1487,10 @@ class TodoIntentHandlers:
         # #1976: the router's extracted text first ('add a todo to X' → X), the
         # regex extractor as the fallback for every other path. #2094/#2095: a
         # single router title wins over the regex; a leading "to " is dropped.
-        text = (
-            (items[0] if items else "")
-            or self._router_todo_text(intent, original_message)
-            or self._extract_todo_text(original_message)
-        )
-        text = self._strip_leading_to(text)
+        text = (items[0] if items else "") or self._router_todo_text(intent, original_message)
+        if not text:
+            # The regex fallback only: a router title is never stripped (Arch, #2094).
+            text = self._strip_leading_to(self._extract_todo_text(original_message))
         if not text:
             return "I didn't catch what you'd like me to add. Could you try: 'add todo: [description]'?"
 

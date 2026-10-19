@@ -75,7 +75,11 @@ async def submit_feedback(
         # page and time are attached by code, never asked of the person. Only a
         # path on this site is kept (never an outside URL).
         _path = (page_path or "").strip()[:255]
-        _ctx = {"page_path": _path} if _path.startswith("/") else None
+        # Arch (#2096 validation): "//evil.example/x" starts with "/" and is a
+        # protocol-relative outside URL; only a single leading slash is a path here.
+        _ctx = (
+            {"page_path": _path} if _path.startswith("/") and not _path.startswith("//") else None
+        )
         feedback_id = await feedback_service.capture_feedback(
             session_id=f"api-{current_user.sub}",
             feedback_type=feedback_type or "general",

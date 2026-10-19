@@ -128,22 +128,41 @@ class TestEveryRoutedCreateDeclares:
     """Arch's completeness pin. LAYER: source read of each create path; it proves the
     declaration exists, not that the row lands (the two tests above prove the write)."""
 
-    def test_create_paths_declare_or_park(self):
-        from services.intent_service import canonical_handlers, todo_handlers
+    # Arch (#2095 validation): the create set is DERIVED from the registry's verb
+    # bridge, and a create action with no handler row here fails the build (the
+    # old hasattr(...) else "created_activity" passed on a rename).
+    HANDLER_FOR_CREATE_ACTION = {
+        "create_todo": (
+            "services.intent_service.todo_handlers",
+            "TodoIntentHandlers.handle_create_todo",
+        ),
+        "create_reminder": (
+            "services.intent_service.todo_handlers",
+            "TodoIntentHandlers.handle_create_reminder",
+        ),
+        "add_project": (
+            "services.intent_service.canonical_handlers",
+            "CanonicalHandlers._create_or_report_project",
+        ),
+        "create_issue": ("services.intent.intent_service", "IntentService._handle_create_issue"),
+    }
 
-        paths = {
-            "create_todo": inspect.getsource(todo_handlers.TodoIntentHandlers.handle_create_todo),
-            "create_reminder": inspect.getsource(
-                todo_handlers.TodoIntentHandlers.handle_create_reminder
-            ),
-            "add_project": inspect.getsource(
-                canonical_handlers.CanonicalHandlers._create_or_report_project
-            ),
-            "create_issue": inspect.getsource(IntentService._handle_create_issue)
-            if hasattr(IntentService, "_handle_create_issue")
-            else "created_activity",
-        }
-        for action, src in paths.items():
+    def test_create_paths_declare_or_park(self):
+        import importlib
+
+        from services.intent_service.action_registry import ACTION_TO_VERB, Verb
+
+        create_actions = sorted(a for a, v in ACTION_TO_VERB.items() if v is Verb.CREATE)
+        assert create_actions, "the verb bridge names no create action"
+        missing = [a for a in create_actions if a not in self.HANDLER_FOR_CREATE_ACTION]
+        assert not missing, f"create actions with no handler row in this pin: {missing}"
+        for action in create_actions:
+            module_name, dotted = self.HANDLER_FOR_CREATE_ACTION[action]
+            obj = importlib.import_module(module_name)
+            for part in dotted.split("."):
+                assert hasattr(obj, part), f"{action}: {module_name}.{dotted} no longer exists"
+                obj = getattr(obj, part)
+            src = inspect.getsource(obj)
             assert (
                 "created_activity" in src or "_remember_created_todo" in src
             ), f"{action} creates a record without declaring it to the ledger"

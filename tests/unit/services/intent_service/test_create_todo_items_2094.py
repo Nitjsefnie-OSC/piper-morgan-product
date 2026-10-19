@@ -106,13 +106,24 @@ class TestHandlerCreatesOnePerTitle:
         assert all(r["action_type"] == "todo_created" for r in parked)
 
     @pytest.mark.asyncio
-    async def test_single_router_title_wins_and_drops_a_leading_to(self):
+    async def test_single_router_title_wins_and_keeps_its_words(self):
+        # Arch (#2094 validation): a router title is never stripped; only the
+        # regex fallback drops a leading "to".
         h = _handlers()
         msg = "add todo to review the roadmap"
         await h.handle_create_todo(
             _intent(msg, {"text": "to review the roadmap"}), "sess-2094b", USER
         )
-        assert [t.text for t in h._created] == ["review the roadmap"]
+        assert [t.text for t in h._created] == ["to review the roadmap"]
+
+    @pytest.mark.asyncio
+    async def test_router_items_keep_their_words_too(self):
+        h = _handlers()
+        msg = "Create two todos: to review the roadmap, and email the team"
+        await h.handle_create_todo(
+            _intent(msg, {"items": ["to review the roadmap", "email the team"]}), "sess-2094e", USER
+        )
+        assert [t.text for t in h._created] == ["to review the roadmap", "email the team"]
 
     @pytest.mark.asyncio
     async def test_regex_path_also_drops_a_leading_to(self):

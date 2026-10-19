@@ -76,6 +76,16 @@ class TestSubmitFromThePage:
         kw = svc.capture_feedback.await_args.kwargs
         assert kw["context"] is None and kw["source"] == "api"
 
+    def test_a_protocol_relative_url_is_not_attached(self):
+        # Arch, #2096 validation: "//evil.example/x" passes startswith("/").
+        svc = _service()
+        r = _client(svc).post(
+            "/api/v1/feedback", json={"content": "Hi", "page_path": "//evil.example/x"}
+        )
+        assert r.status_code == 200
+        kw = svc.capture_feedback.await_args.kwargs
+        assert kw["context"] is None and kw["source"] == "api"
+
     def test_empty_content_is_refused_without_a_write(self):
         svc = _service()
         r = _client(svc).post("/api/v1/feedback", json={"content": "   "})
