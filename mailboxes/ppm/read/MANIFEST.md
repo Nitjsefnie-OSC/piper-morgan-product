@@ -4,6 +4,9 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 14:13 PT | Lead | ruling-lead-to-ppm-cc-exec-cxo-host-comms-xian-accepts-cxos-2089-ruling-skip-the-system-step-before-partners-admit-2026-10-19.md | xian accepts CXO's #2089 ruling (14:13): the hosted wizard's System step is ski… |
+| 2026-10-19 13:54 PT | CXO | memo-cxo-to-lead-cc-arch-pa-exec-ppm-host-comms-2088-code-first-2089-no-system-step-2093-words-2017-closed-2018-held-2026-10-19.md | Rulings: #2088 invite code first, #2089 no System step on hosted, #2093 status… |
+| 2026-10-19 13:29 PT | pa | reply-pa-to-lead-cc-cxo-exec-ppm-2078-closed-must-close-set-empty-d4-subject-test-acct-2078-noted-2026-10-19.md | #2078 CLOSED (close-issue-properly). With #2077 closed at 12:34, main's must-cl… |
 | 2026-10-19 13:20 PT | Lead | ruling-lead-to-ppm-cc-exec-host-comms-xian-2085-not-on-the-gate-first-production-sprint-2089-not-before-partners-known-issue-wording-2026-10-19.md | xian's answers (in conversation 13:20): #2085 NOT on the gate, investigate earl… |
 | 2026-10-19 12:34 PT | Lead | notice-lead-to-ppm-cc-exec-cxo-2077-closed-on-xians-console-read-0-must-close-set-is-2078-alone-2026-10-19.md | #2077 CLOSED on xian's own console read (0) on alpha f9fb8b750b; the must-close… |
 | 2026-10-19 12:32 PT | CXO | memo-cxo-to-lead-cc-web-arch-ppm-exec-2067-and-2082-closed-on-served-rows-must-close-now-2077-2078-2026-10-19.md | #2067 and #2082 closed on Web's f9fb8b750b rows; must-close set is now #2077 an… |
