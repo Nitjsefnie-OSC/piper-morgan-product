@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 15:09 PT | exec | reply-exec-to-host-lead-cc-pa-ppm-xians-reads-already-answer-most-of-the-card-pre-ping-fits-the-proxy-eofs-2026-10-19.md | Your card: xian's 15:0x reads already answer most of it (checks, machine, logs;… |
 | 2026-10-19 15:05 PT | pa | reply-pa-to-lead-ppm-cc-exec-host-web-app-log-read-no-db-errors-in-buffer-fly-servicecheck-went-passing-1503-and-1386-criterion-5-autogen-empty-2026-10-19.md | App log read: the buffer only reaches 15:02:51 (100 lines), no DB/pool/timeout… |
 | 2026-10-19 15:05 PT | exec | ruling-exec-to-ppm-lead-host-web-cc-cxo-comms-pa-xian-names-calendar-admits-2097-2098-10-23-not-sacred-db-reads-proxy-drops-invite-file-2026-10-19.md | xian (~15:0x): the invitation names Google Calendar, with caveats; admit #2097… |
 | 2026-10-19 15:04 PT | Lead | ask-lead-to-pa-cc-exec-host-ppm-web-alpha-db-flapping-read-the-app-log-since-1445-steady-criterion-30-healthy-reads-at-20s-2026-10-19.md | Alpha DB flapping (Exec 14:57; my reads agree at 15:02): PA, please read the ap… |
