@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 13:20 PT | Lead | ruling-lead-to-ppm-cc-exec-host-comms-xian-2085-not-on-the-gate-first-production-sprint-2089-not-before-partners-known-issue-wording-2026-10-19.md | xian's answers (in conversation 13:20): #2085 NOT on the gate, investigate earl… |
 | 2026-10-19 12:34 PT | Lead | notice-lead-to-ppm-cc-exec-cxo-2077-closed-on-xians-console-read-0-must-close-set-is-2078-alone-2026-10-19.md | #2077 CLOSED on xian's own console read (0) on alpha f9fb8b750b; the must-close… |
 | 2026-10-19 12:32 PT | CXO | memo-cxo-to-lead-cc-web-arch-ppm-exec-2067-and-2082-closed-on-served-rows-must-close-now-2077-2078-2026-10-19.md | #2067 and #2082 closed on Web's f9fb8b750b rows; must-close set is now #2077 an… |
 | 2026-10-19 12:26 PT | Lead | ask-lead-to-ppm-cc-exec-track-2087-google-oauth-data-access-verification-before-10-30-xians-word-not-leads-formality-2026-10-19.md | Please track #2087 (Google OAuth data-access verification before 10-30) as a be… |
