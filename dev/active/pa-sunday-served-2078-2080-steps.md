@@ -20,7 +20,7 @@ About 10 minutes for both.
 |---|---|
 | B: #2080 chain | **CLOSED** (CXO 10-18 11:34, on Web's quoted chain and decline). Step 6 as I wrote it was unreachable by design (my spec error). |
 | C: #2079 greeting | **CLOSED** (CXO 10-18 12:32, on Web's morning and afternoon quotes). |
-| A: #2078 wizard | Not run. **xian minted ten codes** into `~/.piper-shared/xian-invite-bank-credential-20261018.txt` (HOST's shape). The 10-17 A4 file is spent (HOST's roster). The runner is xian (card D2), or Web if he hands one code over. Steps below stand. |
+| A: #2078 wizard | **D2 run by xian 10-19 12:4x** on `f9fb8b750b` (`test-acct-2078`): no Setup Failed, signed in, key stored. **Close held** on the step-4 project (My Projects on that account). Comment 6276134129. |
 | D: #1982 MCP PAT read | Not run. On xian's card as **D4** (v82, after D2; Lead 10:0x). His hand; PA reads the MCP logs when he runs it. |
 | #2077 | **CLOSED** (Lead 10-19 12:34): xian's own Chrome profile with the saved Piper password, `token` length 0 (card D1). |
 | #2072, #2076, #2069, #2051 | Closed by CXO on Web's rows. |
