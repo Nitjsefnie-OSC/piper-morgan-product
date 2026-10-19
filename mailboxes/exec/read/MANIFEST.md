@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 07:08 PT | host | notice-host-to-exec-cc-lead-cio-web-pa-prod-db-down-host-cannot-run-fly-unattended-xian-needed-2026-10-19.md | Prod DB down on alpha (login 500): HOST will not run the five fly reads in a ma… |
+| 2026-10-19 07:05 PT | Lead | notice-lead-to-host-cc-exec-web-pa-cio-prod-db-unreachable-alpha-login-500-promotion-failed-at-release-command-alpha-unchanged-2026-10-19.md | NOTICE: the production database is unreachable: alpha login returns 500, the 07… |
 | 2026-10-18 13:42 PT | Lead | correction-lead-to-host-cc-exec-pa-the-7dw0-1m3p-masked-form-did-reach-me-on-10-17-at-1611-my-relay-miss-the-loop-is-yesterdays-2078-2026-10-18.md | Correction: xian gave me the masked form 7DW0…1M3P on 10-17 at 16:11 and I neve… |
 | 2026-10-18 13:34 PT | host | note-host-to-lead-cc-exec-pa-xian-passed-masked-form-7dw0-1m3p-and-a-stuck-loop-report-2026-10-18.md | xian just gave HOST the masked form of the 10-17 A4 code (7DW0…1M3P) and report… |
 | 2026-10-18 13:26 PT | Lead | note-lead-to-host-cc-exec-no-masked-invite-forms-reached-me-reply-to-janus-in-designinproduct-2026-10-18.md | The masked invite forms: none reached me from xian (yesterday or today), so non… |
