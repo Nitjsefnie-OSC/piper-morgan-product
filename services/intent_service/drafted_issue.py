@@ -693,6 +693,126 @@ def _bind_body_prose(
     }
 
 
+# #2098 (#1386 scenario B3): "Actually, change the title to '…'" on a pending draft
+# must retitle it, not land in the body. A closed phrase set read word by word
+# (Arch's binder rule: no new regex); the quoted value, when present, comes from
+# extract_title_answer's existing quoted-answer read.
+_TITLE_CHANGE_MARKERS = (
+    "change the title to",
+    "change title to",
+    "set the title to",
+    "make the title",
+    "rename it to",
+    "rename the issue to",
+    "retitle it to",
+    "retitle to",
+    "the title should be",
+    "title should be",
+    "call it",
+    "name it",
+)
+
+
+def extract_title_change(message: Optional[str]) -> Optional[str]:
+    """The new title a pending-draft turn dictates, or None.
+
+    Matches when the turn carries one of ``_TITLE_CHANGE_MARKERS``; the value is
+    the quoted string after the marker when there is one (``extract_title_answer``'s
+    quoted read), else the words after the marker to the end of the sentence,
+    trimmed of quotes and closing punctuation and capped at the title width.
+    Empty values and markers inside a question return None (a question is a
+    state query, never a write to the draft).
+    """
+    text = (message or "").strip()
+    if not text or text.endswith("?"):
+        return None
+    lowered = text.lower()
+    hit = None
+    pos = -1
+    for marker in _TITLE_CHANGE_MARKERS:
+        idx = lowered.find(marker)
+        if idx != -1 and (pos == -1 or idx < pos):
+            hit, pos = marker, idx
+    if hit is None:
+        return None
+    after = text[pos + len(hit) :].strip()
+    if not after:
+        return None
+    # a quoted value wins and ends at its closing quote
+    for open_q, close_q in (('"', '"'), ("'", "'"), ("‘", "’"), ("“", "”")):
+        if after.startswith(open_q):
+            end = after.find(close_q, 1)
+            if end > 1:
+                value = after[1:end].strip()
+                return value or None
+    # otherwise the rest of the sentence
+    for stop in (". ", "\n"):
+        cut = after.find(stop)
+        if cut != -1:
+            after = after[:cut]
+    value = after.strip().strip("\"'‘’“”").rstrip(" .!?,;:").strip()
+    if not value:
+        return None
+    if len(value) > _TITLE_MAX_CHARS:
+        value = value[:_TITLE_MAX_CHARS].rsplit(" ", 1)[0].rstrip(" ,;:—-") + "…"
+    return value
+
+
+def _retitle_draft(
+    pending_offer: Dict[str, Any],
+    pending_action: Dict[str, Any],
+    new_title: str,
+    *,
+    session_id: str,
+    user_id: Optional[str],
+    intent_service: Any,
+) -> Dict[str, Any]:
+    """#2098 — replace the pending draft's title, keep its body, re-arm the SAME
+    offer, and show the draft with the new title (CXO's words: "Updated the
+    title. Here's the draft: …")."""
+    draft = pending_action.setdefault("draft", {})
+    old_title = draft.get("title") or ""
+    draft["title"] = new_title
+    body = draft.get("body") or ""
+    pending_offer["pending_action"] = pending_action
+    pending_offer["question"] = _POST_BIND_ASK
+    rearmed = True
+    try:
+        intent_service.workflow_offer_service.set_pending_offer(
+            session_id, pending_offer, user_id=user_id
+        )
+    except Exception as e:  # silent-ok: #2098 — a store failure must not crash the turn; logged ERROR, and the copy below never claims a bound draft
+        logger.error("drafted_issue_retitle_rearm_failed", error=str(e))
+        rearmed = False
+    logger.info(
+        "drafted_issue_retitled",
+        session_id=session_id,
+        old_title_chars=len(old_title),
+        new_title_chars=len(new_title),
+        rearmed=rearmed,
+    )
+    if not rearmed:
+        return {
+            "message": (
+                "I've got the new title, but I couldn't keep the draft bound — nothing was "
+                "filed. Ask me to draft the issue again and we'll rebuild it with that title."
+            ),
+            "intent_data": _retained_intent_data(pending_action),
+        }
+    intent_data = _retained_intent_data(pending_action)
+    intent_data["drafted_issue_retitled"] = True
+    return {
+        "message": (
+            "Updated the title. Nothing is filed yet. Here's the draft:\n\n"
+            f"**Title**: {new_title}\n\n"
+            f"**Body**:\n{body or '(no body yet)'}\n\n"
+            f"{_POST_BIND_ASK}"
+        ),
+        "intent_data": intent_data,
+        "requires_clarification": True,
+    }
+
+
 async def handle_drafted_issue_turn(
     pending_offer: Dict[str, Any],
     message: str,
@@ -766,6 +886,22 @@ async def handle_drafted_issue_turn(
             # was the live thief) ever sees body prose. Deliberate exits
             # and explicit commands fall through exactly as before — the
             # hold is not a turn lock.
+            # #2098: a title change on an already-titled draft retitles it (never
+            # body text). An untitled draft keeps the #1649 title-answer path below.
+            new_title = (
+                extract_title_change(message)
+                if (pending_action.get("draft") or {}).get("title")
+                else None
+            )
+            if new_title:
+                return _retitle_draft(
+                    pending_offer,
+                    pending_action,
+                    new_title,
+                    session_id=session_id,
+                    user_id=user_id,
+                    intent_service=intent_service,
+                )
             if is_body_prose_answer(message):
                 return _bind_body_prose(
                     pending_offer,
