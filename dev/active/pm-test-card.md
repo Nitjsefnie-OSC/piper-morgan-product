@@ -93,7 +93,7 @@ Done and gone from this page (git log -p keeps them): A1, A4, A5, B1, C1, C2, C3
 
 ## Not on your list
 
-Web ran #2082 and #2067 on this build (both PASS 11:24; CXO accepts, #2067 must-close). Web also runs S9–S13 (#2057 phrasings, #2053 card, #2055 notice placement, #2046 ordinals); CXO judges; Lead posts results on the issues. Parked, try-and-tell only: #1943. #2061, #2059, #2060 and #2054 have nothing observable to test by hand; they close on being live.
+Web ran #2082 and #2067 on this build (both PASS 11:24; CXO CLOSED both 12:32). The must-close set is now #2077 (D1) and #2078 (D2), both yours. Web also runs S9–S13 (#2057 phrasings, #2053 card, #2055 notice placement, #2046 ordinals); CXO judges; Lead posts results on the issues. Parked, try-and-tell only: #1943. #2061, #2059, #2060 and #2054 have nothing observable to test by hand; they close on being live.
 
 ## Version history
 
