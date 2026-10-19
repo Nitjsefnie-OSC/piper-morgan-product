@@ -9,6 +9,7 @@ Phase 2B (Issue #197): Ethics enforcement integration at universal entry point
 """
 
 import asyncio
+import copy
 import json
 import os
 import re
@@ -11194,7 +11195,7 @@ class IntentService:
                     out["body"] = _b
         return out
 
-    def _unverified_write_result(self, e, intent, workflow_id):
+    def _unverified_write_result(self, e, intent, workflow_id, repository=None):
         """#1220/#1322: a fired-but-unverified connector write raises with the
         "may or may not have landed" phrasing. Surface that honest uncertainty
         verbatim — never let it fall into a generic error (which would imply
@@ -11225,6 +11226,26 @@ class IntentService:
             )
         if "may or may not have landed" not in str(e):
             return None
+        if intent.action in ("create_issue", "create_ticket"):
+            # #2097 (CXO's words): the request was sent and GitHub did not
+            # confirm it. Say where to look; never invite a retry (the invited
+            # retry made the duplicate on alpha e801b1a309).
+            where = f" in {repository}" if repository else ""
+            return IntentProcessingResult(
+                success=True,
+                message=(
+                    f"I sent the request to create it{where}, but GitHub didn't confirm it. "
+                    "Check there before trying again."
+                ),
+                intent_data={
+                    "category": intent.category.value,
+                    "action": intent.action,
+                    "confidence": intent.confidence,
+                    "write_unconfirmed": True,
+                },
+                workflow_id=workflow_id,
+                requires_clarification=False,
+            )
         return IntentProcessingResult(
             success=True,
             message=(
@@ -11648,6 +11669,51 @@ class IntentService:
             # this replaces bypassed the guard entirely (the miss the
             # 2026-07-09 first-real-write attempt exposed).
             _owner, _repo = repository.split("/", 1)
+            # #2097: before a SECOND create of a title already open in the repo,
+            # ask (armed through the drafted-issue carrier; "yes" re-dispatches
+            # this intent with the allow marker, "no" sets it aside). A failed
+            # check never blocks the write.
+            from services.intent_service import drafted_issue as _di_dup
+
+            if session_id and not (intent.context or {}).get(_di_dup.ALLOW_DUPLICATE_CONTEXT_KEY):
+                _existing = await github_router.find_open_issue_by_title(
+                    title, owner=_owner, repo_name=_repo
+                )
+                if _existing and _existing.get("number"):
+                    _dup_intent = copy.copy(intent)
+                    _dup_intent.context = dict(intent.context or {})
+                    _dup_intent.context[_di_dup.ALLOW_DUPLICATE_CONTEXT_KEY] = True
+                    _dup_intent.context["title"] = title
+                    _dup_intent.context["description"] = description
+                    _dup_question = _di_dup.duplicate_issue_question(
+                        title, repository, int(_existing["number"])
+                    )
+                    _dup_offer = _di_dup.build_drafted_issue_offer(
+                        _dup_intent,
+                        subject=title,
+                        repository=repository,
+                        body=description,
+                        question=_dup_question,
+                    )
+                    _dup_offer["decline_message"] = (
+                        f"Okay — nothing new was filed. #{int(_existing['number'])} stays as it is."
+                    )
+                    self.workflow_offer_service.set_pending_offer(
+                        session_id, _dup_offer, user_id=user_id
+                    )
+                    return IntentProcessingResult(
+                        success=True,
+                        message=_dup_question,
+                        intent_data={
+                            "category": intent.category.value,
+                            "action": intent.action,
+                            "confidence": intent.confidence,
+                            "duplicate_issue_number": int(_existing["number"]),
+                            "drafted_issue_pending": True,
+                        },
+                        workflow_id=workflow_id,
+                        requires_clarification=True,
+                    )
             issue = await github_router.create_issue(
                 title=title,
                 body=description,
@@ -11657,12 +11723,15 @@ class IntentService:
                 repo_name=_repo,
             )
 
-            # Issue #494: Include repository info in success message
-            repo_short = repository.split("/")[-1] if "/" in repository else repository
+            # #2097 (CXO's words): the number, the title and the full repo —
+            # the reply a user can check against GitHub without guessing.
             _issue_number = issue.get("number")
             return IntentProcessingResult(
                 success=True,
-                message=f"Created issue #{_issue_number} in {repo_short}: {issue.get('title')}",
+                message=(
+                    f'Created issue #{_issue_number}, "{issue.get("title") or title}", '
+                    f"in {repository}."
+                ),
                 intent_data={
                     "category": intent.category.value,
                     "action": intent.action,
@@ -11692,7 +11761,9 @@ class IntentService:
             self.logger.error(f"Failed to create issue: {e}")
             error_str = str(e).lower()
             # #943: Detect configuration issues and give actionable message
-            unverified = self._unverified_write_result(e, intent, workflow_id)
+            unverified = self._unverified_write_result(
+                e, intent, workflow_id, repository=locals().get("repository")
+            )
             if unverified is not None:
                 return unverified
             if any(

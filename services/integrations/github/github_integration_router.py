@@ -344,6 +344,24 @@ class GitHubIntegrationRouter:
             "assume success."
         )
 
+    async def find_open_issue_by_title(
+        self, title: str, *, owner: str, repo_name: str
+    ) -> Optional[Dict[str, Any]]:
+        """#2097: an OPEN issue in ``owner/repo_name`` titled exactly ``title``,
+        read over the user's OAuth connector; None when there is none, when no
+        connector is bound for this request, or when the read fails. The
+        duplicate check before a second create; it never blocks the write."""
+        if not self.mcp_adapter or not self._user_id or not title:
+            return None
+        finder = getattr(self.mcp_adapter, "find_open_issue_by_title_connector", None)
+        if finder is None:
+            return None
+        try:
+            return await finder(self._user_id, owner=owner, repo=repo_name, title=title)
+        except Exception:  # silent-ok: #2097 — a failed duplicate check must never block a create; logged at WARNING, the create proceeds
+            logger.warning("github_duplicate_title_check_failed", exc_info=True)
+            return None
+
     async def create_issue(
         self,
         title: str,

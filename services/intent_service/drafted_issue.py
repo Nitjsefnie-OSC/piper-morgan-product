@@ -480,6 +480,17 @@ def build_drafted_issue_offer(
     }
 
 
+# #2097: the ask before a SECOND create of a title that is already open in the
+# repo (CXO's words). Emitted only through the armed drafted-issue carrier.
+def duplicate_issue_question(title: str, repository: str, number: int) -> str:
+    return (
+        f'There\'s already an issue called "{title}" in {repository} (#{number}). '
+        "Do you want a second one? (yes/no)"
+    )
+
+
+ALLOW_DUPLICATE_CONTEXT_KEY = "allow_duplicate_issue"
+
 _DRAFT_RETAINED_LINE = (
     'Your draft is still here — say "file it" to try again, ' 'or "no" to drop it.'
 )
@@ -1038,6 +1049,19 @@ async def handle_drafted_issue_turn(
         }
 
     intent_data = result.get("intent_data") or {}
+    if intent_data.get("issue_number") is None and intent_data.get("write_unconfirmed"):
+        # #2097: the write was sent and GitHub did not confirm it. The draft is
+        # RELEASED, not re-armed: a retained "say file it to try again" made the
+        # duplicate on alpha (#10 then #11). The rail's own line tells the user
+        # to check the repo before trying again.
+        logger.info(
+            "drafted_issue_create_unconfirmed_draft_released",
+            session_id=session_id,
+            rail_action=pending_action.get("action"),
+        )
+        released = dict(intent_data)
+        released["drafted_issue_released"] = True
+        return {"message": result.get("message", ""), "intent_data": released}
     if intent_data.get("issue_number") is None:
         # The rail answered but did NOT verifiably create (degraded-connector
         # copy, clarification ask, honest failure). Pass its honest message

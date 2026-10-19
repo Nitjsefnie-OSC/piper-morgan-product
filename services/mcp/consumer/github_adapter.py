@@ -634,6 +634,111 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
 
         return {k: (_html.unescape(v) if isinstance(v, str) else v) for k, v in data.items()}
 
+    # #2097: a create whose response or read-back cannot be tied to a number is
+    # confirmed by the one read GitHub always answers — the repo's issues
+    # searched by the exact title, newest first. The write landed on alpha
+    # e801b1a309 (#10 then a duplicate #11) while the reply said "couldn't
+    # verify"; the outcome was knowable.
+    _CREATE_CONFIRM_WINDOW_SECONDS = 600
+
+    @staticmethod
+    def _title_norm(value: Any) -> str:
+        import html as _html
+
+        return " ".join(_html.unescape(str(value or "")).split()).casefold()
+
+    async def _confirm_create_by_title(
+        self, client: Any, *, owner: str, repo: str, title: str
+    ) -> Optional[Dict[str, Any]]:
+        """The newest issue in ``owner/repo`` whose title equals ``title``
+        exactly (entity- and whitespace-normalized) and was created inside
+        the confirm window, else None. Never raises: a failed confirming read
+        leaves the write honest-uncertain."""
+        if not title:
+            return None
+        query = f'repo:{owner}/{repo} is:issue in:title "{title}"'
+        try:
+            result = await client.call_tool(
+                _ISSUES_TOOL,
+                {"query": query, "sort": "created", "order": "desc", "perPage": 5},
+            )
+            items, _total = self._parse_issue_search(self._tool_text(result), limit=5)
+        except Exception as exc:  # silent-ok: #2097 — the confirming read is a belt; its failure keeps the write unverified (logged), never a crash of the write turn
+            _slog.warning("github_create_confirm_search_failed", error=str(exc)[:200])
+            return None
+        want = self._title_norm(title)
+        matches = [
+            it
+            for it in items
+            if isinstance(it, dict)
+            and it.get("number")
+            and self._title_norm(it.get("title")) == want
+        ]
+        if not matches:
+            return None
+        from datetime import datetime, timezone
+
+        def _created(it: Dict[str, Any]) -> Optional[datetime]:
+            raw = it.get("created_at")
+            if not isinstance(raw, str):
+                return None
+            try:
+                return datetime.fromisoformat(raw.replace("Z", "+00:00"))
+            except ValueError:
+                return None
+
+        now = datetime.now(timezone.utc)
+        recent = []
+        for it in matches:
+            when = _created(it)
+            if when is None or (now - when).total_seconds() <= self._CREATE_CONFIRM_WINDOW_SECONDS:
+                recent.append(it)
+        if not recent:
+            _slog.warning("github_create_confirm_only_old_matches", count=len(matches))
+            return None
+        recent.sort(key=lambda it: int(it.get("number") or 0), reverse=True)
+        _slog.info("github_create_confirmed_by_title_search", number=recent[0].get("number"))
+        return recent[0]
+
+    async def _confirm_create_by_title_after(
+        self, binding: Any, *, owner: str, repo: str, title: str
+    ) -> Optional[Dict[str, Any]]:
+        """``_confirm_create_by_title`` on a fresh client (the write's client
+        context is closed once the read-back leg returns)."""
+        try:
+            async with self._mcp_client_ctx(binding) as client:
+                return await self._confirm_create_by_title(
+                    client, owner=owner, repo=repo, title=title
+                )
+        except Exception as exc:  # silent-ok: #2097 — same belt as above; a failed confirming read leaves the write unverified, logged
+            _slog.warning("github_create_confirm_search_failed", error=str(exc)[:200], leg="after")
+            return None
+
+    async def find_open_issue_by_title_connector(
+        self, user_id: str, *, owner: str, repo: str, title: str
+    ) -> Optional[Dict[str, Any]]:
+        """#2097: an OPEN issue in ``owner/repo`` titled exactly ``title`` (the
+        duplicate check before a second create), else None. A degraded or
+        failed read answers None: the check never blocks a create."""
+        if not title:
+            return None
+        query = f'repo:{owner}/{repo} is:issue is:open in:title "{title}"'
+        found = await self._search_via_connector(user_id, tool=_ISSUES_TOOL, query=query, limit=10)
+        if found.degradation is not None or not found.issues:
+            return None
+        want = self._title_norm(title)
+        matches = [
+            it
+            for it in found.issues
+            if isinstance(it, dict)
+            and it.get("number")
+            and self._title_norm(it.get("title")) == want
+        ]
+        if not matches:
+            return None
+        matches.sort(key=lambda it: int(it.get("number") or 0), reverse=True)
+        return matches[0]
+
     async def _verified_write(
         self,
         user_id: str,
@@ -682,6 +787,18 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
                     logger.warning("github_write_unverifiable_no_artifact_id tool=%s", tool)
                     return GitHubWriteResult(verified=False, raw=written)
                 number = (written or {}).get("number") or args.get("issue_number")
+                if not number and args.get("method") == "create":
+                    # #2097: the create's response carried no number — ask the
+                    # repo for the newest issue with this exact title.
+                    confirmed = await self._confirm_create_by_title(
+                        client,
+                        owner=args["owner"],
+                        repo=args["repo"],
+                        title=args.get("title") or "",
+                    )
+                    if confirmed is not None:
+                        number = confirmed.get("number")
+                        written = confirmed
                 if not number:
                     # Write response didn't yield an artifact to verify — honest-uncertain.
                     logger.warning("github_write_unverifiable_no_artifact tool=%s", tool)
@@ -751,6 +868,22 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
                 degradation=await self._degrade_for_exc(binding_or_degrade, exc),
             )
         if not readback or readback.get("number") != int(number):
+            if args.get("method") == "create":
+                # #2097: the read-back could not find the number the write
+                # returned — the exact-title search is the second read.
+                confirmed = await self._confirm_create_by_title_after(
+                    binding_or_degrade,
+                    owner=args["owner"],
+                    repo=args["repo"],
+                    title=args.get("title") or "",
+                )
+                if confirmed is not None and confirmed.get("number") == int(number):
+                    return GitHubWriteResult(
+                        verified=True,
+                        issue_number=int(number),
+                        url=confirmed.get("html_url"),
+                        raw=confirmed,
+                    )
             return GitHubWriteResult(verified=False, issue_number=int(number), raw=written)
 
         def _norm(v):
