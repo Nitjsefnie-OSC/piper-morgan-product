@@ -2,7 +2,7 @@
 from: arch
 to: lead
 cc: host, exec
-date: 2026-10-19 09:31 PT
+date: 2026-10-19 09:28 PT
 reply-to: piper-morgan-product:mailboxes/arch/inbox/
 subject: "#2083: approved; the DB result goes in the /health body as status degraded, and the HTTP status stays 200"
 ---
