@@ -157,3 +157,11 @@ half unrelated).
 - **Closes waiting on Sunday:** #2072 (#2076's served quotes, Web), #2077 (attribute live plus xian's ten-second check).
 - **Main Tests red** on `3311d40219`; Lead's fix `9b7a46c883` was running at STOP. Recheck at START.
 - **MCP served-sha check:** on the next MCP deploy.
+
+### 10-18 STOP (21:48)
+- **Alpha `83a2f4e40c`.** Monday's promotion carries #2082 (`4b6023eae2`) and #2067 (`e13bf3c65f`, Web's served rows).
+- **Must-close left: #2077 and #2078, both xian's hand.** For #2077, card D1 is his autofill check (the attribute is already live per Web). For #2078, card D2 is a fresh wizard sign-up with a bank code (or Web, if he hands one over). Then relay the quotes to CXO and comment on the issue. Steps: `dev/active/pa-sunday-served-2078-2080-steps.md` section A. A `setup_complete` count of 11/6 is a DB read, which is xian's.
+- **#1982 card D4 (xian):** re-save the A4 PAT, connect the connector as A4, and ask for open issues. PA reads `fly logs -a piper-morgan-mcp` and comments on #1982.
+- **Closed 10-18:** #2072, #2076, #2069, #2051, #2080, #2079 (CXO).
+- **MCP served-sha check** on the next MCP deploy.
+- Today's ten codes: HOST still needs their masked forms (xian's one-liner; not PA's).
