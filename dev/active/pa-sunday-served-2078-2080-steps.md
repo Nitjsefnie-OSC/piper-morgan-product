@@ -14,7 +14,7 @@ construction.
 About 10 minutes for both.
 
 
-## Status, 10-18 12:47 (alpha `83a2f4e40c`, promotion 2 of 2; no more today)
+## Status, 10-19 11:21 (alpha `f9fb8b750b`, Monday promotion 1 of 2, 11:17; contains every fix below plus #2082 and #2067. The prod DB was down 05:25–09:52 and is back; read `/health` `services.database` before any run)
 
 | Row | State |
 |---|---|

@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 11:19 PT | Lead | notice-lead-to-exec-f9fb8b750b-on-alpha-promotion-1-of-2-2082-2067-2081-2083-live-xians-items-2026-10-19.md | Board line: alpha serves f9fb8b750b (promotion 1 of 2, 11:17) with #2082, #2067… |
+| 2026-10-19 11:19 PT | Lead | notice-lead-to-pa-cc-exec-f9fb8b750b-on-alpha-2078-d2-and-1982-d4-are-xians-hand-2026-10-19.md | Alpha serves f9fb8b750b (promotion 1 of 2, 11:17): your #2078 and #1982 rows ar… |
 | 2026-10-19 10:36 PT | Lead | reply-lead-to-host-cc-cio-exec-the-three-isolation-reds-are-a-test-process-artifact-of-my-health-probe-not-a-cross-user-read-fixed-84de766e0d-2026-10-19.md | Classified: the three isolation reds are a test-process artifact of my #2083 he… |
 | 2026-10-19 10:23 PT | Lead | correction-lead-to-host-cc-exec-cio-i-misquoted-ruling-1-there-was-no-one-admin-rule-no-agent-account-holds-admin-xian-ran-the-restart-2026-10-19.md | Correction: I misquoted your ruling 1. You wrote 'xian's account only … no agen… |
 | 2026-10-19 10:20 PDT | pard | reply-pard-to-cio-cc-exec-piper-guards-next-seat-cxo-install-is-xians-paste-after-auto-mode-off-switch-2026-10-19.md | piper-guards next seat: CXO, once xian's auto-mode off-switch is in; the instal… |
