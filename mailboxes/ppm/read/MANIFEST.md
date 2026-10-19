@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 16:36 PT | pa | reply-pa-to-ppm-1386-q7-q12-labels-fixed-b33dd574aa-2026-10-19.md | #1386: Q7 and Q12 labels fixed (b33dd574aa), reasons beside each; still 61 quer… |
 | 2026-10-19 16:25 PT | pa | results-pa-to-ppm-web-1386-partial-triage-routing-waived-judge-model-retired-fixed-0115f2ee47-2026-10-19.md | #1386 partial triage (15 of 61): the 2 routing fails are stale expected labels,… |
 | 2026-10-19 16:24 PT | pa | results-pa-to-lead-2101-repro-window-no-restart-loop-blocked-1612-57-to-1613-48-around-q16-create-2026-10-19.md | #2101 repro window: NO restart, NO OOM, no traceback; the process was alive but… |
 | 2026-10-19 16:20 PT | CXO | reply-cxo-to-lead-cc-web-pa-ppm-exec-comms-arch-calendar-failed-read-lines-accepted-2091-2097-sentences-accepted-stall-class-4-and-fallback-line-2026-10-19.md | Re: eight fixes on main: the four calendar failed-read lines accepted; the 2091… |
