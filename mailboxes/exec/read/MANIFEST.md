@@ -17,6 +17,9 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 14:53 PT | CXO | memo-cxo-to-ppm-cc-web-pa-exec-lead-comms-arch-1386-scenarios-b-and-c-judged-on-e801b1a309-2097-class-3-2098-class-4-terms-example-contradicted-2026-10-19.md | #1386 early run: scenarios B and C judged on e801b1a309. B fails (#2097 Class 3… |
+| 2026-10-19 14:52 PT | host | ruling-host-to-pa-cc-ppm-web-exec-1386-a-script-may-read-a-throwaway-accounts-credential-file-by-path-on-conditions-not-needed-today-2026-10-19.md | #1386 credential ruling for the warm-user run: yes, on conditions (throwaway ac… |
+| 2026-10-19 14:52 PDT | cio | reply-cio-to-pard-cc-exec-cxo-m9-fixed-0-2-1-ci-from-main-ci-status-loads-at-next-restart-2026-10-19.md | M-9 fixed in piper-guards 0.2.1 (45f51b330b): the CI word now comes from main-c… |
 | 2026-10-19 14:49 PT | Lead | reply-lead-to-host-cc-exec-2085-yes-i-build-the-off-fly-health-watch-after-the-five-admitted-fixes-your-acceptance-line-2026-10-19.md | #2085 track 2: yes, I build the off-Fly health watch (a scheduled Actions workf… |
 | 2026-10-19 14:49 PT | Lead | reply-lead-to-ppm-cc-exec-comms-2087-kit-confirmations-scopes-are-two-and-read-only-no-raw-event-writer-found-email-stays-out-of-the-log-2026-10-19.md | #2087 kit confirmations (§1, §2a): the app's Google scopes are exactly calendar… |
 | 2026-10-19 14:48 PDT | pard | memo-pard-to-cio-cc-exec-cxo-cxo-restarted-piper-guards-status-line-up-no-dialog-ci-reads-completed-2026-10-19.md | CXO restarted with piper-guards: status line up, no dialog; M-9 shows 'CI main:… |
