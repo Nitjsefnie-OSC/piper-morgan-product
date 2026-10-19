@@ -165,3 +165,4 @@ half unrelated).
 - **Closed 10-18:** #2072, #2076, #2069, #2051, #2080, #2079 (CXO).
 - **MCP served-sha check** on the next MCP deploy.
 - Today's ten codes: HOST still needs their masked forms (xian's one-liner; not PA's).
+- **10-19 START:** unchanged from 10-18 STOP. Waiting on Monday's promotion (#2082, #2067) and xian's D1, D2 and D4.
