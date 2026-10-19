@@ -21,7 +21,12 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
 from services.feedback.feedback_service import FeedbackService
-from web.api.routes.feedback import get_feedback, list_feedback, submit_feedback
+from web.api.routes.feedback import (
+    FeedbackSubmission,
+    get_feedback,
+    list_feedback,
+    submit_feedback,
+)
 
 _DB_URL = "postgresql+asyncpg://piper:dev_changeme_in_production@localhost:5433/piper_morgan"
 
@@ -70,9 +75,9 @@ async def test_submit_get_list_round_trip(db_users):
     engine, factory, a_id, _b = db_users
     async with factory() as s:
         svc = FeedbackService(s)
+        # #2096: the text travels in a bounded JSON body (Arch, 2026-10-19).
         created = await submit_feedback(
-            content="The picker works now — nice.",
-            feedback_type="general",
+            FeedbackSubmission(content="The picker works now — nice.", feedback_type="general"),
             current_user=_claims(a_id),
             feedback_service=svc,
         )
@@ -95,8 +100,7 @@ async def test_other_user_cannot_read_it(db_users):
     engine, factory, a_id, b_id = db_users
     async with factory() as s:
         created = await submit_feedback(
-            content="private note",
-            feedback_type="general",
+            FeedbackSubmission(content="private note", feedback_type="general"),
             current_user=_claims(a_id),
             feedback_service=FeedbackService(s),
         )
