@@ -75,6 +75,34 @@ from services.utils.text_sanitation import display_title
 from services.utils.utterance_log import utterance_fields as _utterance_fields
 from services.utils.utterance_log import utterance_preview
 
+CALENDAR_READ_FAILED_LINES = {
+    # #2092 (Lead's draft on CXO's #2093 pattern; CXO reviews): a failed read is
+    # said as a failed read, never as "no meetings".
+    "insufficient_scope": (
+        "I couldn't read your calendar: Google refused the request because the connection "
+        "doesn't include calendar access. Disconnect and connect Google Calendar again in "
+        "Settings → Integrations, and approve calendar access on Google's page."
+    ),
+    "unauthorized": (
+        "I couldn't read your calendar: Google no longer accepts the connection. "
+        "Reconnect it in Settings → Integrations → Google Calendar."
+    ),
+    "not_found": (
+        "I couldn't read your calendar: Google says the calendar isn't there for this account. "
+        "Check which calendar is connected in Settings → Integrations → Google Calendar."
+    ),
+    "error": (
+        "I couldn't read your calendar just now. Press Test in Settings → Integrations → "
+        "Google Calendar to see what Google says, then try again."
+    ),
+}
+
+
+def calendar_read_failed_line(error_class: Optional[str]) -> str:
+    return CALENDAR_READ_FAILED_LINES.get(
+        error_class or "error", CALENDAR_READ_FAILED_LINES["error"]
+    )
+
 
 class _RepoRouteKwargs(TypedDict, total=False):
     """#1567/#1641: explicit owner/repo_name kwargs when the user NAMED a
@@ -9191,6 +9219,22 @@ class IntentService:
             # Get events for the requested date range
             events = await calendar_router.get_events_in_range(start_date, end_date)
 
+            # #2092: an empty list from a FAILED read is not "no meetings".
+            if not events and getattr(calendar_router, "last_read_error", None):
+                return IntentProcessingResult(
+                    success=True,
+                    message=calendar_read_failed_line(calendar_router.last_read_error),
+                    intent_data={
+                        "category": intent.category.value,
+                        "action": intent.action,
+                        "confidence": intent.confidence,
+                        "calendar_read_error": calendar_router.last_read_error,
+                    },
+                    workflow_id=workflow_id,
+                    requires_clarification=False,
+                    implemented=False,
+                )
+
             # Filter to meetings only (exclude all-day events)
             meetings = [e for e in events if not e.get("is_all_day", False)]
 
@@ -9405,6 +9449,22 @@ class IntentService:
             now = datetime.now(timezone.utc)
             end_date = now + timedelta(days=7)
             events = await calendar_router.get_events_in_range(now, end_date)
+
+            # #2092: an empty list from a FAILED read is not "no events this week".
+            if not events and getattr(calendar_router, "last_read_error", None):
+                return IntentProcessingResult(
+                    success=True,
+                    message=calendar_read_failed_line(calendar_router.last_read_error),
+                    intent_data={
+                        "category": intent.category.value,
+                        "action": intent.action,
+                        "confidence": intent.confidence,
+                        "calendar_read_error": calendar_router.last_read_error,
+                    },
+                    workflow_id=workflow_id,
+                    requires_clarification=False,
+                    implemented=False,
+                )
 
             # Process and group events by day
             events_by_day = {}

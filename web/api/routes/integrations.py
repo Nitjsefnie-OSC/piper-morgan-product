@@ -822,14 +822,34 @@ async def _test_calendar(user_id: Optional[str] = None) -> Dict[str, Any]:
         handler = GoogleCalendarOAuthHandler()
         tokens = await handler.refresh_access_token(refresh_token)
 
-        if tokens:
-            return {"success": True}
-        else:
+        if not tokens:
             return {
                 "success": False,
                 "error": "Token expired or revoked. Please reconnect.",
                 "error_type": "token_invalid",
             }
+
+        # #2092: a refresh succeeds with ANY scope; only a real read shows the grant
+        # can see the calendar (xian's 10-19 grant was email-only and read "Healthy").
+        from services.integrations.calendar.oauth_handler import probe_calendar_read
+
+        read_error = await probe_calendar_read(tokens.access_token)
+        if read_error == "insufficient_scope":
+            return {
+                "success": False,
+                "error": (
+                    "Google refused the calendar read: the connection doesn't include "
+                    "calendar access. Disconnect, connect again, and approve calendar access."
+                ),
+                "error_type": "insufficient_scope",
+            }
+        if read_error is not None:
+            return {
+                "success": False,
+                "error": f"Google refused the calendar read ({read_error}). Reconnect and try again.",
+                "error_type": read_error,
+            }
+        return {"success": True}
 
     except ImportError:
         return {"success": False, "error": "Calendar integration not available"}

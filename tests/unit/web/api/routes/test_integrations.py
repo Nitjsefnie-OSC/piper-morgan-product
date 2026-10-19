@@ -575,6 +575,10 @@ class TestCalendarIntegration:
 
         with (
             patch(
+                "services.integrations.calendar.oauth_handler.probe_calendar_read",
+                new=AsyncMock(return_value=None),  # #2092: the real read is a seam here
+            ),
+            patch(
                 "services.infrastructure.keychain_service.KeychainService",
                 return_value=mock_keychain,
             ),
