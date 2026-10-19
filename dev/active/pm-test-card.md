@@ -15,25 +15,11 @@
 2. ~~[D2](#d2) #2078~~ **PASS 12:4x** (account `test-acct-2078`, landed signed in; My Projects shows the step-4 project "One Job" with its repo linked; PA closes). Your two wizard notes filed: #2088 (invite code at step 3, should be first) and #2089 (hosted wizard still shows the local system check; Temporal always fails).
 3. ~~[D5](#d5) #2081~~ **PASS 13:03, CLOSED 13:2x** on HOST's word (the list-refresh gap is fixed on main and rides the next promotion).
 4. ~~[D4](#d4) #1982~~ **PASS 13:3x** (fresh Piper Alpha MCP connector as `test-acct-2078`, PAT-only: 273 open issues, 50 shown, your project named; PA reads the logs and judges).
-5. None of these gates anything; any order, any day: [A3](#a3) Disconnect dialog on three pages · [A2](#a2) Calendar answers in chat · [A6](#a6) find your way · [A7](#a7) three spec checks · [B2](#b2) a question never changes a project · [B3](#b3) the Integrations card after Test.
+5. None of these gates anything; any order, any day: ~~[A3](#a3)~~ **PASS 13:4x** (connect and disconnect on all three pages; CXO's #2017 read) · ~~[A2](#a2)~~ **FAIL 13:45**: three defects filed, #2091 (weekday target ignored), #2092 (no events from a healthy calendar; your answer on whether that week has events settles it), #2093 (status answer mixed with setup boilerplate) · [A6](#a6) find your way · [A7](#a7) three spec checks · [B2](#b2) a question never changes a project · [B3](#b3) the Integrations card after Test.
 
 Done and gone from this page (git log -p keeps them): A1, A4, A5, B1, C1, C2, C3, D3; Web's E1 (#2067 modal) and E2 (#2082 name-first) both passed 11:24 on this build. Your hand items this morning: dinp (no such account; mvp-tester is admin), #1852 closed, Calendar Connect PASS, the ten masked forms relayed to HOST 12:0x.
 
 ## A. Your cards, remaining (live since `118241587e`, still live on `f9fb8b750b`)
-
-### A2. Calendar answers in chat (connected 10-15)
-- **Where**: alpha chat, your account.
-- **Steps**: `what time is it for me?` → `what's my agenda today?` → `what's my week like?`
-- **Pass**: times labeled with your zone, never "TBD"; the agenda names today's events; the week view spans days.
-- **Fail**: "calendar isn't connected", a TBD time, or a one-day answer for the week.
-- **Judge**: Lead (CXO reads the copy if anything is off). Nobody has read these replies verbatim yet.
-
-### A3. Disconnect dialog on the three pages Web could not cover (#2017)
-- **Where**: `/settings/integrations/calendar`, `/settings/integrations/slack`, `/settings/integrations/notion`.
-- **Steps**: on each page that shows a connected card, click **Disconnect**, then **Cancel** in the dialog.
-- **Pass**: a confirm dialog appears on the click; Cancel leaves it connected. (Web passed GitHub and the Integrations page; these three had no connection on the test accounts.)
-- **Fail**: the click does nothing, or Cancel disconnects.
-- **Judge**: Lead closes #2017 on your pass.
 
 ### A6. Find your way: todos, projects, feedback (P5)
 - **Where**: the A4 account, from first login.
