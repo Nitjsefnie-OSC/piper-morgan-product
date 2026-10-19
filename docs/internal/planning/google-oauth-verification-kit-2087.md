@@ -103,6 +103,8 @@ Notes:
   - **No writer of raw events at rest:** the standup assembler builds display items in memory, and nothing assigns `context["calendar_events"]`. Event text reaches the user's own AI provider inside the turn, and the conversation keeps the rendered reply. So §2's "stores" sentences stand.
   - **The email scope stays** (to label the connection later). Lane 2092 stops logging the address (`has_email=True/False`). The privacy line: the address is "read to confirm which account connected" until Settings shows it.
 
+- **15:43 (Exec's curl):** the /privacy Google paragraph is live. **The homepage has no Privacy link yet**, although `4f3582d` added one. Google checks that the homepage links to the policy, so **don't submit until Web confirms the footer link is served.**
+
 ## Whose part is whose
 
 | Step | Owner |
