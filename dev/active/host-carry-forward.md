@@ -177,3 +177,7 @@ real finding (the generator reading a stale registry), not something to silently
 | key: host-scaffold-4-and-7 | Check Terms scaffold sections 4 and 7 (tell-me-when-broken; a code is yours); to Comms | 2026-10-16 | DONE-1016 (checked, reply sent) |
 
 **10-18 07:1x**: xian ruled (via Lead relay) 10-23 = checkpoint to approve inviting partners, 10-30 stays target; outreach order: interest list first, then newsletters, very few at first. Partners still not named. A4 fresh mint for #2078 denied again on HOST's seat; xian's hand.
+
+### 10-19 13:1x
+- host-2088-interim: invites and tester instructions say the wizard asks for the code at step 3 of 5 (PPM #2088; clears when Lead moves the field). Goes in the held-send template. PPM reads today as the beta form; PPM sends Comms the line the morning of any invite. #2089 (hosted system check, Temporal line fails) is PPM's question to xian.
+- host-2081-close: my word given (pass); Lead's refresh fix in flight.
