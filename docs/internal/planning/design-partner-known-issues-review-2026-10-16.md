@@ -62,5 +62,6 @@ For each row: **list it** (Comms writes the line), **don't list it** (with the r
 - **Fix first:** #2067, admitted to MVP as a Class 3 must-close.
 - **Dropped as closed or live:** #2068, #2069 and #2075.
 - **Still open for xian:** section A (#2017, #2018, #1595 (#2080 closed 10-18), and #1386, which is not user-facing). It's disclosed by default under the 16:07 bar, but he hasn't reviewed the wording of each row. PPM brings it to the 10-23 readiness assessment.
+- **Added 10-19 13:20 (xian, relayed by Lead):** #2089, the hosted wizard's system check with its always-failing Temporal line, is **listed** ("tell folks it's a known issue and not to be concerned about it"), not fixed before partners. #2088's interim goes in the invitation wording (the code is asked at step 3). #2085 (the silent database outage) is **not on the gate**; it's investigated early in the first Production sprint. All three are rows in `beta-formalities-checklist.md` or on Production.
 - **Dates (same sitting):** 10-23 is the checkpoint where xian assesses the alpha and approves inviting. 10-30 stays the target date for the first design partner's access.
 
