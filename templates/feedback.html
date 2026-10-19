@@ -52,11 +52,16 @@
       if (!box.value.trim()) { status.textContent = 'Write a line first.'; status.classList.add('err'); return; }
       btn.disabled = true;
       try {
-        // The existing feedback API (PM-005, mounted at /api/v1/feedback) takes its
-        // fields as query parameters; the page passes its origin path by code.
-        const params = new URLSearchParams({ content: box.value, feedback_type: 'tester' });
-        if (fromPath) params.set('page_path', fromPath);
-        const response = await fetch('/api/v1/feedback?' + params.toString(), { method: 'POST' });
+        // The existing feedback API (PM-005, mounted at /api/v1/feedback) takes a
+        // JSON body (never the query string: that would land in logs); the page
+        // passes its origin path by code.
+        const payload = { content: box.value, feedback_type: 'tester' };
+        if (fromPath) payload.page_path = fromPath;
+        const response = await fetch('/api/v1/feedback', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
         if (response.status === 401) return; // #2067: the signed-out modal is up
         const data = await response.json().catch(() => ({}));
         if (response.ok && data.id) {

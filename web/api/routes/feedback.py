@@ -11,6 +11,7 @@ from typing import Any, Optional
 
 import structlog
 from fastapi import APIRouter, Depends, HTTPException, status
+from pydantic import BaseModel, Field
 
 from services.auth.auth_middleware import get_current_user, require_admin
 from services.auth.jwt_service import JWTClaims
@@ -19,12 +20,20 @@ from web.api.dependencies import get_feedback_service
 router = APIRouter(prefix="/api/v1/feedback", tags=["feedback"])
 logger = structlog.get_logger(__name__)
 
+# #2096 (Arch, 2026-10-19): the text travels in a bounded JSON body, never the
+# query string (a query string lands in access logs; a tester's words must not).
+FEEDBACK_MAX_CHARS = 4000
+
+
+class FeedbackSubmission(BaseModel):
+    content: str = Field(..., max_length=FEEDBACK_MAX_CHARS)
+    feedback_type: Optional[str] = "general"
+    page_path: Optional[str] = Field(default=None, max_length=255)
+
 
 @router.post("")
 async def submit_feedback(
-    content: str,
-    feedback_type: Optional[str] = "general",
-    page_path: Optional[str] = None,
+    submission: FeedbackSubmission,
     current_user: JWTClaims = Depends(get_current_user),
     feedback_service=Depends(get_feedback_service),
 ) -> dict:
@@ -32,8 +41,8 @@ async def submit_feedback(
     Submit feedback with ownership validation (SEC-RBAC).
 
     Args:
-        content: Feedback content
-        feedback_type: Type of feedback (general, bug, feature_request, etc.)
+        submission: JSON body — content (bounded), feedback_type (general, bug,
+            feature_request, tester, …), page_path (#2096, the page it was sent from)
         current_user: Current authenticated user
         feedback_service: Feedback service (injected)
 
@@ -46,6 +55,9 @@ async def submit_feedback(
 
     Issue #357: SEC-RBAC Phase 1.3 Endpoint Protection
     """
+    content = submission.content
+    feedback_type = submission.feedback_type
+    page_path = submission.page_path
     try:
         if not content or not content.strip():
             raise HTTPException(

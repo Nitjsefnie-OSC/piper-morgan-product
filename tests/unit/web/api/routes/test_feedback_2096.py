@@ -10,6 +10,7 @@ DENOMINATOR: submit with a page, submit with an outside URL, refuse-empty, the a
 its 403, the page's words, the rail link.
 """
 
+from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import AsyncMock, MagicMock
 
@@ -59,7 +60,7 @@ class TestSubmitFromThePage:
         svc = _service()
         r = _client(svc).post(
             "/api/v1/feedback",
-            params={"content": "Hi", "feedback_type": "tester", "page_path": "/todos"},
+            json={"content": "Hi", "feedback_type": "tester", "page_path": "/todos"},
         )
         assert r.status_code == 200 and r.json()["id"] == "fb-1"
         kw = svc.capture_feedback.await_args.kwargs
@@ -70,14 +71,14 @@ class TestSubmitFromThePage:
     def test_an_outside_url_is_not_attached(self):
         svc = _service()
         _client(svc).post(
-            "/api/v1/feedback", params={"content": "Hi", "page_path": "https://evil.example/x"}
+            "/api/v1/feedback", json={"content": "Hi", "page_path": "https://evil.example/x"}
         )
         kw = svc.capture_feedback.await_args.kwargs
         assert kw["context"] is None and kw["source"] == "api"
 
     def test_empty_content_is_refused_without_a_write(self):
         svc = _service()
-        r = _client(svc).post("/api/v1/feedback", params={"content": "   "})
+        r = _client(svc).post("/api/v1/feedback", json={"content": "   "})
         assert r.status_code == 400
         svc.capture_feedback.assert_not_awaited()
 
@@ -123,3 +124,24 @@ class TestPageAndRail:
     def test_rail_has_the_link_on_every_shell_page(self):
         rail = open("templates/components/nav_rail.html").read()
         assert 'href="/feedback"' in rail and ">Send feedback</a>" in rail
+
+
+class TestBodyNotQueryString:
+    """Arch, #2096: the text travels in a bounded JSON body, never the query string."""
+
+    def test_query_string_content_is_refused(self):
+        svc = _service()
+        r = _client(svc).post("/api/v1/feedback", params={"content": "Hi"})
+        assert r.status_code == 422
+        svc.capture_feedback.assert_not_called()
+
+    def test_over_long_content_is_refused_without_a_write(self):
+        svc = _service()
+        r = _client(svc).post("/api/v1/feedback", json={"content": "x" * 4001})
+        assert r.status_code == 422
+        svc.capture_feedback.assert_not_called()
+
+    def test_page_script_posts_a_json_body(self):
+        page = Path("templates/feedback.html").read_text()
+        assert "JSON.stringify(payload)" in page
+        assert "URLSearchParams" not in page
