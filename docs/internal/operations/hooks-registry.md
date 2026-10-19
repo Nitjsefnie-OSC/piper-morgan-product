@@ -112,7 +112,7 @@ Keep `precompact-signoff-warning.sh` at user level, since it has no project copy
 
 ## Still open
 
-- **Pard:** piper-guards on one quiet PM seat, then the rest (asked 10-19).
+- **piper-guards on CXO next** (Pard, 10-19 10:20). Order: (1) xian pastes the auto-mode off-switch into `~/.claude-pm/settings.json`, because a restart before it risks the setup dialog that froze CXO and Exec on 10-10 and 10-18; (2) xian runs the local-scope install (another seat's settings, so it's xian's hand); (3) Pard restarts CXO on his go and checks `claude plugin list`. Then a quiet week on CXO, then the rest.
 
 **Verified how:**
 - Read `.claude/settings.json`, `~/.claude-pm/settings.json` and CIO's `settings.local.json` with a JSON
