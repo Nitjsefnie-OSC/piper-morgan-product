@@ -269,7 +269,8 @@ class GoogleCalendarOAuthHandler:
         logger.info(
             "calendar_oauth_callback_success",
             user_id=user_id,
-            email=user_info.get("email", "unknown"),
+            # #2087/#2092 (Comms' read): the address itself stays out of the log.
+            has_email=bool(user_info.get("email")),
             has_refresh_token=bool(tokens.refresh_token),
         )
 
@@ -396,3 +397,29 @@ class GoogleCalendarOAuthHandler:
                     token_type=data.get("token_type", "Bearer"),
                     scope=data.get("scope", ""),
                 )
+
+
+async def probe_calendar_read(access_token: str) -> Optional[str]:
+    """#2092: one real, minimal calendar read with a fresh access token.
+
+    Returns None when Google answers, else the class from
+    ``classify_calendar_read_error`` ("insufficient_scope" when the grant lacks
+    calendar access, the 2026-10-19 alpha shape that a token refresh alone can
+    never see). Used by the Settings Test so "Healthy" means readable.
+    """
+    import asyncio
+
+    from google.oauth2.credentials import Credentials
+    from googleapiclient.discovery import build
+
+    from services.mcp.consumer.google_calendar_adapter import classify_calendar_read_error
+
+    def _read() -> None:
+        service = build("calendar", "v3", credentials=Credentials(token=access_token))
+        service.events().list(calendarId="primary", maxResults=1, singleEvents=True).execute()
+
+    try:
+        await asyncio.wait_for(asyncio.to_thread(_read), timeout=10.0)
+    except Exception as exc:  # noqa: BLE001 — the class is the whole answer here
+        return classify_calendar_read_error(exc)
+    return None

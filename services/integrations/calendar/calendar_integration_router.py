@@ -290,6 +290,13 @@ class CalendarIntegrationRouter:
         else:
             raise RuntimeError("No calendar integration available for health_check")
 
+    @property
+    def last_read_error(self) -> Optional[str]:
+        """#2092: the adapter's class for the last failed read, or None (see
+        ``classify_calendar_read_error``); None too when no adapter is present."""
+        adapter = getattr(self, "spatial_calendar", None)
+        return getattr(adapter, "last_read_error", None) if adapter is not None else None
+
     async def get_events_in_range(self, start_date, end_date) -> List[Dict[str, Any]]:
         """
         Get calendar events within a date range.

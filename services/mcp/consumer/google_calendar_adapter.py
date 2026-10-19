@@ -166,6 +166,25 @@ class TemporalSummaryResult:
         }
 
 
+def classify_calendar_read_error(exc: BaseException) -> str:
+    """#2092: a short, user-safe class for a failed Google Calendar read.
+
+    "insufficient_scope" when Google refused for missing permission (the 2026-10-19
+    alpha shape: HTTP 403 "Request had insufficient authentication scopes");
+    "unauthorized" for a rejected or expired token (401 / invalid_grant);
+    "not_found" for a calendar id the account cannot see (404); else "error".
+    Never carries the exception text (it can hold URLs and ids).
+    """
+    text = str(exc).lower()
+    if "insufficient" in text and ("scope" in text or "permission" in text):
+        return "insufficient_scope"
+    if "401" in text or "invalid_grant" in text or "unauthorized" in text:
+        return "unauthorized"
+    if "404" in text or "not found" in text:
+        return "not_found"
+    return "error"
+
+
 class GoogleCalendarMCPAdapter(BaseSpatialAdapter):
     """
     Google Calendar MCP adapter implementation.
@@ -220,6 +239,9 @@ class GoogleCalendarMCPAdapter(BaseSpatialAdapter):
         self._last_error_time: Optional[datetime] = None
         self._error_count = 0
         self._circuit_open = False
+        # #2092: why the LAST read failed, or None. Callers that must tell "no
+        # events" from "could not read" check this after a read that returned [].
+        self.last_read_error: Optional[str] = None
         self._circuit_timeout = config.circuit_timeout
 
         # Token counting for MCP operations (Issue #369)
@@ -640,6 +662,7 @@ class GoogleCalendarMCPAdapter(BaseSpatialAdapter):
 
         except Exception as e:
             logger.error(f"Failed to retrieve calendar events: {e}")
+            self.last_read_error = classify_calendar_read_error(e)
             self._handle_error()
             return [], False
 
@@ -1051,6 +1074,7 @@ class GoogleCalendarMCPAdapter(BaseSpatialAdapter):
 
         except Exception as e:
             logger.error(f"Failed to retrieve calendar events in range: {e}")
+            self.last_read_error = classify_calendar_read_error(e)
             self._handle_error()
             return []
 
@@ -1198,6 +1222,7 @@ class GoogleCalendarMCPAdapter(BaseSpatialAdapter):
             logger.warning("Google Calendar circuit breaker opened due to repeated errors")
 
     def _reset_circuit_breaker(self):
+        self.last_read_error = None  # #2092: a successful read clears the failure signal
         """Reset circuit breaker on successful operation"""
         if self._circuit_open and self._last_error_time:
             time_since_error = datetime.now() - self._last_error_time

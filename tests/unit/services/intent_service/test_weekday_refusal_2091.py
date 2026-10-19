@@ -81,6 +81,7 @@ def _router(events=None):
     router = MagicMock()
     router.authenticate = AsyncMock(return_value=True)
     router.get_events_in_range = AsyncMock(return_value=events or [])
+    router.last_read_error = None  # #2092: a MagicMock attribute would read as a failed read
     return router
 
 
