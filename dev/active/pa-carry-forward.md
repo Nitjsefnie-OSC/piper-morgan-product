@@ -169,3 +169,4 @@ half unrelated).
 - **10-19 09:5x:** prod DB down since ~05:25 (Postgres process down in a started machine). The restart is xian's or HOST's hand. All served checks wait on the login probe reading 401.
 - **10-19 11:2x:** the DB is back (restart 09:52), alpha `f9fb8b750b` (#2082, #2067 in). Served checks are unblocked; D1, D2 and D4 are still xian's.
 - **10-19 12:47:** #2077 CLOSED (xian's D1). Must-close left: #2078 (D2). D4/#1982 is still xian's.
+- **10-19 13:1x:** #2078 D2 run; the close is held on My Projects for `test-acct-2078` (the step-4 project). Once it's shown, close with close-issue-properly.
