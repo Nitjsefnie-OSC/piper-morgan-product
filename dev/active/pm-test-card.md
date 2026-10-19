@@ -8,7 +8,7 @@
 
 ## Your order (Monday 11:17 10-19; each item links to its card)
 
-1. ~~The `dinp` reset~~ (no such account; your `mvp-tester` is the admin since 10:13) · ~~Slack Connect, fly.dev URL removed~~ (#1852 CLOSED 11:10) · still yours: **Calendar Connect once** and **the bank's masked forms to HOST** (the awk line).
+1. ~~The `dinp` reset~~ (no such account; your `mvp-tester` is the admin since 10:13) · ~~Slack Connect, fly.dev URL removed~~ (#1852 CLOSED 11:10) · ~~Calendar Connect~~ (PASS 11:37) · the masked forms for HOST come from D5's two new codes (the Sunday ten were never saved; revoke them in D5).
 2. [D1](#d1): the #2077 ten-second check (must-close; your browser, your saved password).
 3. [D2](#d2): the #2078 wizard run with one code from your bank of ten (must-close).
 4. [D5](#d5): the admin Invites page as `mvp-tester` (new this morning; about three minutes).
@@ -154,7 +154,7 @@ fly ssh console -a piper-morgan -C "python -m scripts.backfill_encrypt_files_130
 
 ### D5. The admin Invites page: mint, see masked, revoke (#2081, Production, your hand)
 - **Before it**: nothing; `mvp-tester` is the only admin (your psql UPDATE 10:13). The page refuses anyone else with 403.
-- **Steps**: signed in as `mvp-tester` on alpha, open Settings: an **Invites** card shows (admins only). Open `/settings/invites`. Mint **2** codes: they show once, in full, on that response only (copy them into your bank file with labels, then leave the page: they are not shown again). The list below shows every code masked (`ABCD…WXYZ`) with status unused/redeemed/revoked and the mint time. Revoke one of the two you just minted: its status reads revoked, and a sign-up with it at `/setup` is refused.
+- **Steps**: signed in as `mvp-tester` on alpha, open Settings: an **Invites** card shows (admins only). Open `/settings/invites`. First, in the list, **revoke the ten unused codes minted Sunday 08:1x** (never saved: the bank file was not created; nobody holds them). Then mint **2** codes: they show once, in full, on that response only. Save them before leaving the page, on Amber: `umask 077 && cat > ~/.piper-shared/xian-invite-bank-credential-20261019.txt` then paste one code per line, a space, a label (e.g. `d2-wizard`), Ctrl-D. They are not shown again. The list below shows every code masked (`ABCD…WXYZ`) with status unused/redeemed/revoked and the mint time. Revoke one of the two you just minted: its status reads revoked, and a sign-up with it at `/setup` is refused.
 - **Pass**: the card shows only to `mvp-tester`; a mint shows raw codes once and the list never does; revoke flips the status and the code no longer redeems. **Fail**: a raw code anywhere but the mint response, a non-admin reaching the page, a revoked code still redeeming.
 - **Judge**: HOST (the page was built to HOST's seven rulings); Lead closes #2081 on your screenshot of the masked list plus HOST's word. Masked forms only in anything you paste.
 
