@@ -195,3 +195,4 @@ misread until 2026-10-01.*
 | 150 | ~~**xian: does the invitation name Google Calendar?**~~ `key: xian-calendar-in-invite` | 2026-10-19 | CLOSED 15:05: yes with caveats, relayed |
 | 151 | ~~**xian: admit #2097, #2098?**~~ `key: xian-2097-2098` | 2026-10-19 | CLOSED 15:05: yes, relayed |
 | 152 | **xian: admit #2100?** `key: xian-2100` | 2026-10-19 | relay to PPM |
+| 153 | **xian: alpha stalls under light load: on the gate?** `key: xian-stall-gate` | 2026-10-19 | relay to PPM |
