@@ -306,3 +306,18 @@ Brake FIRED (second slip = #1965 admission, found and ledgered 10-09). Memo to E
   - the Ship #066 weekly count: 3 PPM-judged admissions (#2048, #2052, #2080), 1 came out (#2052);
   - the Terms commitment-to-mechanism map, once xian's scaffold answers return.
 - **Main CI:** Tests was red at 3311d40219 (the #2079 pin). Lead's fix 9b7a46c883 was running at 21:33. Check it at START.
+
+## 2026-10-18 21:3x STOP: day-close (carry into 10-19)
+- **Gate: 7 open MVP.** #1386, #1595, #2017, #2018, #2067, #2077, #2078. Slips: 0 days moved on every row. 10-23 is the invite checkpoint (xian assesses the alpha and approves inviting); 10-30 is the target for the first partner's access.
+- **Must-close before partners (three):**
+  - **#2077:** fix 6c3206dd35 is live on alpha. It closes on xian's field-empty check in his browser.
+  - **#2078:** fix d82b5ce4b3 is live. It closes on a fresh invited sign-up through the wizard page, using a code from xian's bank (`~/.piper-shared/xian-invite-bank-credential-20261018.txt`; never quote a code in full).
+  - **#2067:** landed e13bf3c65f. Monday's promotion, then CXO's served modal check.
+  - Ledger each close and update the review page's must-close list.
+- **Beta-form read:** the alpha form until #2077 closes live (backfill met; no Class 1 open). After that, send Comms the one line on any invitation morning.
+- **Waiting on xian:** section A of the known-issues review (#2017, #2018, #1595), at the 10-23 assessment.
+- **Owed:**
+  - the readiness read for Exec: write it at the 10-22 START;
+  - the Ship #066 weekly count (3 PPM-judged admissions so far; #2052 came out; #2048 and #2080 closed);
+  - the Terms commitment-to-mechanism map, once xian's scaffold answers return.
+- **Main CI:** 12 of 12 green at 21:33. Alpha `83a2f4e40c`.
