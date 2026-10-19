@@ -67,7 +67,7 @@ Done and gone from this page (git log -p keeps them): A1, A4, A5, B1, C1, C2, C3
 
 ### D1. Token field stays empty (#2077, must-close, your hand)
 - **Why you:** Chrome fills a saved Piper password into password inputs; your browser has one, the test browsers do not. The fix is `autocomplete="new-password"` on ten credential inputs.
-- **Steps**: sign in on alpha in your usual browser; open Settings → Integrations → GitHub; do not type in the token field; in the console run `document.getElementById('token').value.length`.
+- **Steps**: sign in on alpha in your usual browser; open **https://alpha.pipermorgan.ai/settings/integrations/github** (the GitHub card's **Settings** button on the Integration Health page; the Health page itself has no token field, so the console line returns null there); scroll to "Or connect with a personal access token"; do not type in the field; in the console run `document.getElementById('token').value.length`.
 - **Pass**: `0`, and the field looks empty. **Fail**: any number above 0, or a masked value showing.
 - **Judge**: Lead closes #2077 on your `0` (PPM gates it; Class 2).
 
