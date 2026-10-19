@@ -27,10 +27,10 @@ log, never here. Bump `last_updated` to the newest line's date, or CI fails. Ski
 
 ## Now
 
-- **Alpha (live)** *(Arch, 2026-10-19 12:27 PDT, `curl https://alpha.pipermorgan.ai/health`; ancestry by `git merge-base`)*: healthy, **v0.8.14.0**, git_sha `f9fb8b750b`
-  (Lead's 11:17 promotion; after the morning prod Postgres outage, #2085). New since `83a2f4e40c`: #2082 (name-first add) and #2067 (signed-out modal), both passed
-  by Web on the served page; #2081 (admin Invites, xian's browser); #2083 (`/health` now carries `services.database`, `status` degraded when the DB is down, HTTP 200 always).
-  Open MVP 7 (`gh issue list --milestone MVP`): #2078, #2077, #2067, #2018, #2017, #1595, #1386; must-close #2077, #2078. Served checks: `dev/active/pm-test-card.md`.
+- **Alpha (live)** *(Arch, 2026-10-19 15:27 PDT, `curl https://alpha.pipermorgan.ai/health`; first-parent log `f9fb8b750b..e801b1a309`)*: healthy, **v0.8.14.0**, git_sha `e801b1a309`
+  (Lead's promotion 2 of 2 today). Code since `f9fb8b750b`: the #2081 Invites list refresh (`d556565121`; #2099 is xian's read that minting still doesn't refresh). Earlier today
+  `f9fb8b750b` brought #2082, #2067 (both closed on Web's served rows), #2081 and #2083 (`/health` carries `services.database`; HTTP 200 always).
+  Open MVP 11 (`gh issue list --milestone MVP`): #2098, #2097, #2096, #2095, #2094, #2092, #2091, #2089, #2018, #1595, #1386; must-close set per PPM's ledger. Served checks: `dev/active/pm-test-card.md`.
   *(CIO, 10-16:)* the **standing promotion grant is in force** since xian confirmed it 10-16 08:10 (decisions.log 10-16;
   `docs/internal/operations/alpha-promotion-standing-grant.md`): Lead promotes when Step 0 is READY, no new migration, 07:00-21:00 PT, two a day. `origin/main` builds; the droplet
   and `origin/production` are gone (09-29).
