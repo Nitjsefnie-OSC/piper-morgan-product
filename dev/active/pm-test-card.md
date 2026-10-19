@@ -11,7 +11,7 @@
 
 ## Your order (Monday, updated 12:0x 10-19; only what is left; each item links to its card)
 
-1. [D1](#d1): the #2077 ten-second check (must-close; your browser, your saved password).
+1. ~~[D1](#d1) #2077~~ **PASS 12:3x, CLOSED** (your `0`).
 2. [D2](#d2): the #2078 wizard run with one code from your bank (must-close).
 3. [D5](#d5): the admin Invites page as `mvp-tester`: mint two, revoke one (about three minutes).
 4. [D4](#d4): the MCP app reads your A4 PAT-only account's GitHub (#1982, about five minutes; PA reads the logs).
@@ -65,12 +65,6 @@ Done and gone from this page (git log -p keeps them): A1, A4, A5, B1, C1, C2, C3
 
 ## D. New on the Sunday build (live since `47ba746bee` 06:42 10-18, still on `f9fb8b750b`)
 
-### D1. Token field stays empty (#2077, must-close, your hand)
-- **Why you:** Chrome fills a saved Piper password into password inputs; your browser has one, the test browsers do not. The fix is `autocomplete="new-password"` on ten credential inputs.
-- **Steps**: sign in on alpha in your usual browser; open **https://alpha.pipermorgan.ai/settings/integrations/github** (the GitHub card's **Settings** button on the Integration Health page; the Health page itself has no token field, so the console line returns null there); scroll to "Or connect with a personal access token"; do not type in the field; in the console run `document.getElementById('token').value.length`.
-- **Pass**: `0`, and the field looks empty. **Fail**: any number above 0, or a masked value showing.
-- **Judge**: Lead closes #2077 on your `0` (PPM gates it; Class 2).
-
 ### D2. Fresh invited sign-up through the wizard (#2078, must-close; you or Web)
 - **Where**: a private window, signed out; one unused code from `~/.piper-shared/xian-invite-bank-credential-20261018.txt` (mark its line with the account label afterwards); PA's steps are `dev/active/pa-sunday-served-2078-2080-steps.md` §A.
 - **Steps**: `/setup`, enter the invite code, a username, an email and a password, Create Account, then through to step 5.
@@ -93,7 +87,7 @@ Done and gone from this page (git log -p keeps them): A1, A4, A5, B1, C1, C2, C3
 
 ## Not on your list
 
-Web ran #2082 and #2067 on this build (both PASS 11:24; CXO CLOSED both 12:32). The must-close set is now #2077 (D1) and #2078 (D2), both yours. Web also runs S9–S13 (#2057 phrasings, #2053 card, #2055 notice placement, #2046 ordinals); CXO judges; Lead posts results on the issues. Parked, try-and-tell only: #1943. #2061, #2059, #2060 and #2054 have nothing observable to test by hand; they close on being live.
+Web ran #2082 and #2067 on this build (both PASS 11:24; CXO CLOSED both 12:32). The must-close set is now #2078 (D2) alone; #2077 closed 12:4x on your `0`. Web also runs S9–S13 (#2057 phrasings, #2053 card, #2055 notice placement, #2046 ordinals); CXO judges; Lead posts results on the issues. Parked, try-and-tell only: #1943. #2061, #2059, #2060 and #2054 have nothing observable to test by hand; they close on being live.
 
 ## Version history
 
