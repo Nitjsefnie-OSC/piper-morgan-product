@@ -20,7 +20,7 @@ About 10 minutes for both.
 |---|---|
 | B: #2080 chain | **CLOSED** (CXO 10-18 11:34, on Web's quoted chain and decline). Step 6 as I wrote it was unreachable by design (my spec error). |
 | C: #2079 greeting | **CLOSED** (CXO 10-18 12:32, on Web's morning and afternoon quotes). |
-| A: #2078 wizard | **D2 run by xian 10-19 12:4x** on `f9fb8b750b` (`test-acct-2078`): no Setup Failed, signed in, key stored. **Close held** on the step-4 project (My Projects on that account). Comment 6276134129. |
+| A: #2078 wizard | **CLOSED** (PA 10-19 13:3x): xian's D2 on `f9fb8b750b`, `test-acct-2078`, signed in, key stored, step-4 project "One Job" with its repo. |
 | D: #1982 MCP PAT read | **First run 10-19 13:1x hit the local plugin**, not the connector (MCP logs: list-only session, no call). Retry steps updated (1b, 3). On xian's card as **D4** (v82, after D2; Lead 10:0x). His hand; PA reads the MCP logs when he runs it. |
 | #2077 | **CLOSED** (Lead 10-19 12:34): xian's own Chrome profile with the saved Piper password, `token` length 0 (card D1). |
 | #2072, #2076, #2069, #2051 | Closed by CXO on Web's rows. |
@@ -81,6 +81,8 @@ A wizard-created account that never used `/login` reads "Hi!"; that's right (CXO
 header. Fix `797ab61a11`, plus `92f723e5b0` for B6's split decline.
 
 ## D. #1982: the MCP app reads a PAT-only account's GitHub (PA's lane; xian's hand)
+
+**Subject changed 10-19 (xian, via Lead 13:20):** the 10-17 A4 account (`mvp-tester`) has an OAuth grant now, so it no longer tests the PAT-only path. Use **`test-acct-2078`**: save a PAT there in step 1 (Save, not Update; it has none yet), and read "A4" below as that account. 274 is A4's count; the pass is real titles plus a total that matches what that PAT can see.
 
 **Why:** the PAT dual write (`15dba249c8`, on `47ba746bee`) stores a PAT saved in Settings under the GitHub
 context too, so the MCP app can read it. Before this, a PAT-only user got `CONNECT_REQUIRED` from the MCP app.
