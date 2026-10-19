@@ -73,6 +73,24 @@ This guide captures the distinctive writing style of Christian Crumlish (xian/me
 - **Section headings as noun phrases, not verb phrases.** "Inchworm as ratchet" beats "When the inchworm speeds up." Same logic as piece-level titles: a heading that names an idea sits better than one that sets up a moment.
 <!-- /PROPOSED -->
 
+### Titles that sound like xian, not like Claude (xian, 2026-10-19)
+
+xian, after approving several titles on autopilot: titles "tend to sound more like AI than me." His own retitles:
+
+| Claude's title | xian's title |
+|---|---|
+| The Feature That Was Never Real | The Phantom Feature |
+| The Board That Stopped Matching Reality | The Tracker That Lost Track |
+| A Bounded Search Reported as a Total | Mistaking the Inset for the Map |
+| A Clean Result Has a Version Number | Things Don't Stay Clean (still being workshopped) |
+
+What the left column has in common: the title states the piece's thesis as a literal sentence or explains itself with a relative clause, and it uses abstract nouns (result, search, total, reality). The right column names a single image ("phantom", "inset", "map"), plays on words ("lost track"), or uses an everyday idiom ("don't stay clean"). It's shorter, and it leaves the explaining to the post. The grammar isn't the problem: "The Tracker That Lost Track" keeps "The X That Y" and works because of the pun.
+
+How to apply:
+- A drafted title is a **placeholder** until xian picks the final one. Offer 2-3 options in the image, wordplay or idiom shapes alongside the literal working title, and don't present the literal one as finished.
+- **Deadline: the title is final before the preceding post goes live**, because that post's footer teases it. Comms asks for the next post's final title before sending the preceding post's publish-ready memo to Docs (template-audit check 6). Changing a title after its tease is live means asking Docs to edit a published footer.
+- "Never", "every", "always" and "nobody" in a title or tease are claims. Check them against the full record, not a bounded search (see "Mistaking the Inset for the Map").
+
 
 ## Writing Patterns
 

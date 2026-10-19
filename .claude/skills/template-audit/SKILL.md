@@ -172,6 +172,8 @@ Any match = FAIL. All brackets must be filled or removed before publish.
 
 ### 6. Footer tease — present and matches editorial calendar
 
+⚠️ **Title lock (xian, 2026-10-19).** The title this tease names must be the **final** title, confirmed by xian, before this post goes to Docs. Once the tease is live, a retitle means editing a published footer, which happened to Sun 10-18's tease when Tue 10-20 became "The Phantom Feature". If the next post's calendar title is still a working title, ask xian for the final one (offer 2-3 options per the voice guide's "Titles that sound like xian" section) and hold the publish-ready memo until he answers. Also check the tease's one-line description against the next post's facts as they now stand.
+
 ```bash
 grep -n "Next on Building Piper Morgan" <draft>
 ```
