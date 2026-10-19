@@ -25,6 +25,10 @@ BANNED = [
     "I'll remember that you prefer",
     "I'll remember this for next time",
     "You're absolutely right",
+    # xian 2026-10-19 via CXO: "honest" stems are an AI tic (#1386 B2 replies opened "Honestly,").
+    "Honestly,",
+    "To be honest",
+    "In all honesty",
     "took a look at looking",
 ]
 

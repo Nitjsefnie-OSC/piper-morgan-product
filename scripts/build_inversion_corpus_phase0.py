@@ -685,6 +685,19 @@ HAND_ROWS = [
         ),
     },
     {
+        "phrase": "Add three todos for the launch: draft brief, book venue, send invites",
+        "category": "EXECUTION",
+        "expected": "action:create_todo",
+        "expected_args": {"items": ["draft brief", "book venue", "send invites"]},
+        "source": "phase3-args/create_todo items — #2094 alpha e801b1a309 2026-10-19 (xian's A7 P2: the handler refused the list)",
+        "notes": (
+            "args row (Arch's #2094 shape): a list of todo titles in ONE message; the router names "
+            "each title as its own element (measured 3/3 on 2026-10-19 with no prompt change, plus "
+            "context='launch' which the handler ignores); the handler makes one todo per element "
+            "and never splits a string."
+        ),
+    },
+    {
         "phrase": "Add a project called Baz with description testing the description",
         "category": "PORTFOLIO",
         "expected": "action:add_project",

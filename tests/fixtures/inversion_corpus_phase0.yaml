@@ -731,6 +731,12 @@ corpus:
     source: "phase3-args/create_todo text — #1976 alpha 4bd1a236e9 2026-10-11 (Web's served run: the stored title was 'to web test one')"
     expected_args: {"text": "web test one"}
     notes: "args row (Arch's (a) shape): the router must name the todo's own words WITHOUT the command lead-in — 'add a todo to X' is a todo ABOUT X. The handler consumes inversion_args.text (#1976) with the regex extractor as the fallback; the regex alone stores 'to web test one'."
+  - phrase: "Add three todos for the launch: draft brief, book venue, send invites"
+    category: EXECUTION
+    expected: action:create_todo
+    source: "phase3-args/create_todo items — #2094 alpha e801b1a309 2026-10-19 (xian's A7 P2: the handler refused the list)"
+    expected_args: {"items": ["draft brief", "book venue", "send invites"]}
+    notes: "args row (Arch's #2094 shape): a list of todo titles in ONE message; the router names each title as its own element (measured 3/3 on 2026-10-19 with no prompt change, plus context='launch' which the handler ignores); the handler makes one todo per element and never splits a string."
   - phrase: "Add a project called Baz with description testing the description"
     category: PORTFOLIO
     expected: action:add_project

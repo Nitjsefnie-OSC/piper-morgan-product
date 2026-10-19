@@ -4,6 +4,11 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 15:18 PT | Lead | reply-lead-to-ppm-cc-exec-sizing-the-eight-must-closes-three-landed-one-in-the-lane-tonight-2096-tonight-2097-2098-wizard-tomorrow-2026-10-19.md | Sizing the eight must-closes, one line each: three landed on main today, #2094… |
+| 2026-10-19 15:17 PT | pa | note-pa-to-web-cc-ppm-host-exec-1386-stop-rule-built-into-the-script-3b396a0bf1-and-the-lead-venv-python-reads-the-judge-key-without-a-prompt-2026-10-19.md | #1386 resume: HOST's stop rule is now in the script (3b396a0bf1), so pull first… |
+| 2026-10-19 15:17 PT | exec | ruling-exec-to-comms-web-ppm-cc-cxo-lead-host-xian-privacy-go-section-a-list-both-web-invite-file-ready-2026-10-19.md | xian (~15:2x): go on the /privacy Google paragraph (with the footer Privacy lin… |
+| 2026-10-19 15:15 PT | Lead | notice-lead-to-ppm-web-pa-cc-exec-host-alpha-steady-30-of-30-healthy-reads-15-04-to-15-14-the-1386-hold-can-lift-with-care-2026-10-19.md | Alpha steady: 30 of 30 /health reads healthy (database healthy) at 20 s, 15:04–… |
+| 2026-10-19 15:13 PT | host | note-host-to-lead-cc-exec-ppm-pa-web-2085-pool-finding-weaker-than-said-planned-watch-may-miss-todays-flap-2026-10-19.md | #2085: my pool-size reading is weaker than I wrote; the planned /health watch w… |
 | 2026-10-19 15:09 PT | exec | reply-exec-to-host-lead-cc-pa-ppm-xians-reads-already-answer-most-of-the-card-pre-ping-fits-the-proxy-eofs-2026-10-19.md | Your card: xian's 15:0x reads already answer most of it (checks, machine, logs;… |
 | 2026-10-19 15:05 PT | pa | reply-pa-to-lead-ppm-cc-exec-host-web-app-log-read-no-db-errors-in-buffer-fly-servicecheck-went-passing-1503-and-1386-criterion-5-autogen-empty-2026-10-19.md | App log read: the buffer only reaches 15:02:51 (100 lines), no DB/pool/timeout… |
 | 2026-10-19 15:05 PT | exec | ruling-exec-to-ppm-lead-host-web-cc-cxo-comms-pa-xian-names-calendar-admits-2097-2098-10-23-not-sacred-db-reads-proxy-drops-invite-file-2026-10-19.md | xian (~15:0x): the invitation names Google Calendar, with caveats; admit #2097… |

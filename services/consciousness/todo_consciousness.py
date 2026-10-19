@@ -286,3 +286,20 @@ def _fix_mvc_gaps(narrative: str, mvc_result) -> str:
         fixed = "Looking at your todo list, " + fixed
 
     return fixed
+
+
+def format_todos_created_conscious(todos: list) -> str:
+    """#2094: several todos from one message, every one named.
+
+    "I've added 3 todos to your list: 'draft brief', 'book venue' and 'send invites'.
+    Let me know if you want to adjust anything."
+    """
+    names = [f"'{t.text}'" for t in todos]
+    if len(names) == 1:
+        joined = names[0]
+    else:
+        joined = ", ".join(names[:-1]) + " and " + names[-1]
+    return (
+        f"I've added {len(todos)} todos to your list: {joined}. "
+        "Let me know if you want to adjust anything."
+    )
