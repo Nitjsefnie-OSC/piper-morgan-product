@@ -189,5 +189,5 @@ misread until 2026-10-01.*
 | 144 | ~~**Ship #065: tell xian draft ready for first look**~~ `key: ship065-first-look` | 2026-10-18 | CLOSED 08:04: told xian, rollup v404 |
 | 145 | **Ship #066: draft weekly goals from reviews Next-week sections by Sat 10-24 afternoon** `key: goals-066` | 2026-10-18 | xian ratifies |
 | 146 | **xian away from 11:3x, a few hours: hold his asks on the rollup; he finishes with Lead on return; check seats for wedges at the 14:38 fire** `key: xian-away-1018` | 2026-10-18 | close when xian is back (Janus 13:24: away until tomorrow); 14:53 seat check clean |
-| 147 | **xian: #2085 on the gate?** `key: xian-2085` | 2026-10-19 | relay to PPM |
-| 148 | **xian: #2089 before partners?** `key: xian-2089` | 2026-10-19 | relay to PPM |
+| 147 | ~~**xian: #2085 on the gate?**~~ `key: xian-2085` | 2026-10-19 | CLOSED 13:20: no (first Production sprint); Lead relayed to PPM |
+| 148 | ~~**xian: #2089 before partners?**~~ `key: xian-2089` | 2026-10-19 | CLOSED 13:20: no, known-issue line; Lead relayed to PPM |
