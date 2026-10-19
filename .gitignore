@@ -192,6 +192,8 @@ dev/active/duty-cycle-watchdog-nudge-state.tsv
 # tracking cost ~111 commits/week and kept HOST/Web permanently dirty for Pard's restart gate. A missing
 # marker degrades visibly to a labelled 24h window, then re-chains on the next --record.
 dev/state/*-last-pm-scan
+# draft_births.py ledger: when each unsent mailbox file first appeared, per worktree (10-19)
+dev/state/draft-births.tsv
 
 # Agent mailboxes — fully tracked for cross-machine sync
 # (Previously ignored read/ but this prevented syncing mail state across devices)

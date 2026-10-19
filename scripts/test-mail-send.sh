@@ -27,7 +27,7 @@ printf 'manifest\n' > "$SEED/mailboxes/lead/read/MANIFEST.md"
 git -C "$SEED" add -A; git -C "$SEED" commit -qm "seed"; git -C "$SEED" push -q origin HEAD:main
 SRC_SCRIPTS="$(cd "$(dirname "$0")" && pwd)"
 # mail-send.sh runs the #1691 / #1845 / #1616 guards out of $REPO/scripts, so each clone needs them (untracked)
-clone(){ git clone -q "$ORIGIN" "$T/$1"; mkdir -p "$T/$1/scripts"; cp "$SRC_SCRIPTS"/check_autoclose_keywords.py "$SRC_SCRIPTS"/mailbox_bearer_lint.py "$SRC_SCRIPTS"/mailbox_filename_lint.py "$T/$1/scripts/"; }   # a fresh worktree-clone = one agent
+clone(){ git clone -q "$ORIGIN" "$T/$1"; mkdir -p "$T/$1/scripts"; cp "$SRC_SCRIPTS"/check_autoclose_keywords.py "$SRC_SCRIPTS"/mailbox_bearer_lint.py "$SRC_SCRIPTS"/mailbox_filename_lint.py "$SRC_SCRIPTS"/stamp_check.py "$SRC_SCRIPTS"/draft_births.py "$T/$1/scripts/"; }   # a fresh worktree-clone = one agent
 
 echo "── T1: happy-path add (memo lands on origin/main) ──"
 clone wtA
@@ -429,5 +429,17 @@ git -C "$T/wtU" fetch -q origin
 gone "$T/wtU" "mailboxes/xian (ceo)/inbox/memo-old2.md" && onmain "$T/wtU" "mailboxes/xian (ceo)/read/memo-old2.md" && ok "inbox->read move of an old file passes" || no "move of an old file blocked"
 
 echo ""
+echo "── T-draft-age (10-19): a memo first written 2h ago warns at send, and the warning repeats last ──"
+clone wtDA
+printf 'board line, drafted early\n' > "$T/wtDA/mailboxes/cxo/inbox/memo-da.md"
+mkdir -p "$T/wtDA/dev/state"
+printf 'mailboxes/cxo/inbox/memo-da.md\t%s\n' "$(( $(date +%s) - 7200 ))" > "$T/wtDA/dev/state/draft-births.tsv"
+DA_OUT=$(PIPER_REPO="$T/wtDA" bash "$V3" "mail(da): draft age" mailboxes/cxo/inbox/memo-da.md 2>&1)
+git -C "$T/wtDA" fetch -q origin
+onmain "$T/wtDA" mailboxes/cxo/inbox/memo-da.md && ok "stale draft still sends (advisory)" || no "stale draft NOT sent"
+printf '%s' "$DA_OUT" | grep -q "draft-age WARN: mailboxes/cxo/inbox/memo-da.md was first written" && ok "draft-age WARN printed" || no "no draft-age WARN"
+[ "$(printf '%s\n' "$DA_OUT" | tail -1 | grep -c 'first written over an hour ago')" = "1" ] && ok "summary is the last line (survives | tail -1)" || no "summary not last"
+[ ! -s "$T/wtDA/dev/state/draft-births.tsv" ] && ok "ledger row dropped after send" || no "ledger row kept"
+
 echo "════════ RESULT: $PASS passed, $FAIL failed ════════"
 [ "$FAIL" = 0 ] && exit 0 || exit 1
