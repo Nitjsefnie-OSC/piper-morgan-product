@@ -545,8 +545,9 @@ async def _create_github_issue(self, task: Task, context: dict):
 ### 2.6 Query Service (`services/queries/query_service.py`)
 
 > ⚠️ **Dated note (2026-08-30)**: HISTORICAL. `services/queries/` was disposed in the Batch-2
-> census-dead-family disposal — the CQRS-lite query layer was never wired to any entrypoint
-> (its QueryRouter predeceased it; the 2026-08-29 leg-B census + fresh delete-time sweep found
+> census-dead-family disposal — the CQRS-lite query layer had no entrypoint by 2026-08
+> (it HAD been wired: the 2025 `main.py` built `QueryRouter` from 2025-07 until 2025-10-01, and `web/app.py`
+> from 2025-09-23, #186; Arch correction 2026-10-19, `audits/lost-working-code-2025-08-to-10.md`. Its QueryRouter predeceased it; the 2026-08-29 leg-B census + fresh delete-time sweep found
 > zero production callers). Live query traffic rides the intent-service canonical handlers.
 > Retrievable by commit hash via the 2026-08-30 disposal record in decisions.log.
 
