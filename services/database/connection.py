@@ -42,8 +42,15 @@ class DatabaseConnection:
             echo=os.getenv("APP_DEBUG", "false").lower() == "true",
             pool_size=10,  # PM-058: Increased for better concurrent test handling
             max_overflow=20,  # PM-058: Increased buffer for batch test execution
-            pool_pre_ping=False,  # Disable ping to avoid event loop conflicts
-            pool_recycle=3600,  # Recycle connections every hour to prevent stale connections
+            # #2085 / #2101 (2026-10-19): Fly's proxy closes idle DB connections
+            # without the pool knowing (client->server EOFs in the 14:53 flap);
+            # a checkout then hands a request a dead socket. Pre-ping tests the
+            # connection on checkout (SQLAlchemy 2.x runs it through the async
+            # adapter; the old "event loop conflicts" note predates that) and a
+            # shorter recycle keeps pooled connections younger than the proxy's
+            # idle window.
+            pool_pre_ping=True,
+            pool_recycle=600,
             pool_timeout=30,  # PM-058: Add timeout to prevent hanging on pool exhaustion
         )
 
