@@ -9,7 +9,7 @@ Comms, 2026-10-19 09:28 PT, at xian's request. The research was done by an Opus 
   - `68055f3e04` (06-25) "DocumentAnalyzer with LLM integration". `d9378c43e8` (07-09) adds summarize routing and prompts.
   - Mid-July (`8b2997849b`): chat → ANALYZE_FILE workflow → `DocumentAnalyzer` → a real LLM call. `main.py:525-533` returns "Here's my summary of {filename}:" plus the summary.
   - It ran: the 07-06 post says "The feature had even worked in previous sessions". The 07-07 omnibus says "Summary generated and stored in database". The 07-08 post says summaries looked "like markdown had a fight with Unicode", so they reached the screen with bad formatting. The 07-09 log calls it "unusable" because of the formatting, and a JSON-mode fix followed. The 07-12 post: "the UI could find the summary".
-  - `aad66d9d1` (2025-10-01), labelled "docs:", cut `main.py` from 1184 lines to about 109 and removed that chat path. After that, the REST handler (#290, 2025-11-01) shipped with no chat dispatch.
+  - **Corrected per Arch 10-19:** the chat path broke on **2025-08-22**. `2ad8d639dd` ("feat: add comprehensive multi-agent system and morning standup MVP") replaced `engine.py` (1,326 lines) with a 345-line engine that had no handler for file analysis, summarize and six other task types, and dropped `create_workflow_from_intent`. On 09-17 and 09-23 (#172, #186) the browser stopped talking to `main.py`. **`effa5fe2a6`** (2025-10-01, "docs:", the on-main sha; `aad66d9d1` is the same commit off main) then cut `main.py` from 1184 lines to about 109. Three days later `a47eaf9ea8` ("docs:") deleted `main.py.backup`. The REST handler (#290, 2025-11-01) shipped with no chat dispatch.
 
 ## Draft claims
 | Claim | Verdict |
@@ -18,7 +18,7 @@ Comms, 2026-10-19 09:28 PT, at xian's request. The research was done by an Opus 
 | "Fifteen months old and had never functioned end to end" | **WRONG**, same reason. |
 | About five months of "I'll help you create that" over a placeholder | **OVERSTATED.** The string ran about 4 months (06-03 to 10-01) as a fallback for requests that created no workflow. Uploaded-file summarizing went down the workflow path. |
 | Handler shipped dark, chat dispatch only in a guidance doc | SUPPORTED (#290, `2452ba9ae`) |
-| A docs-labelled commit gutted the wiring | SUPPORTED. It removed the July path that had worked. |
+| A docs-labelled commit gutted the wiring | **PARTLY (Arch 10-19).** The 10-01 docs commit removed the old chat wiring, but that path had already been broken since 2025-08-22, by an engine swap inside a feat commit. |
 | Working REST endpoint "the whole time" | **OVERSTATED.** It has existed since 2025-11-01. Non-PDF uploads also failed (#1659). |
 | Two decisions chose the floor, the branch was deferred, the issue closed with no successor | SUPPORTED (#1158, #1187) |
 | A cleanup a couple of weeks earlier dropped "document" | SUPPORTED (08-02), but it re-landed a prompt and deleted an orphaned file, not records |
@@ -32,7 +32,7 @@ Comms, 2026-10-19 09:28 PT, at xian's request. The research was done by an Opus 
 ## Not verified
 - What the 0.1 POC did with an upload: its code isn't preserved in either repo.
 - Whether any July 2025 summary displayed cleanly after the JSON fix.
-- How long the July path kept working before 10-01.
+- ~~How long the July path kept working~~: until 2025-08-22 (Arch's static reading, no 2025 build run).
 - Whether chat summarization works today: #1624 is open, though #1729 (closed 09-08) shows summaries rendering.
 
 ## Also wrong in the 08-15 forensics doc (internal record)
@@ -46,4 +46,7 @@ Comms, 2026-10-19 09:28 PT, at xian's request. The research was done by an Opus 
 - **What the archived POC does with a document:** `chat_interface.py` (at 88ce2f7bc6) has a sidebar `st.file_uploader("Upload Document", type=pdf/docx/txt/md)` → "Add to Knowledge Base" with a context level → Chroma. Chat ("How can I help you with a GitHub issue?") draws on that knowledge base through RAG. There's no dedicated summarize command (grep "summar" = 0 across all archived .py). In the archived 0.1.1, only .txt/.md content is stored, and PDF/DOCX store just "Document: {name}".
 - **Your own account at the time:** `superseded/pre-convention-2025/working-prototype.md:57`: "I asked the system a question about an uploaded doc and, it did OK." `rag-revelation.md:81`: "PMs could upload their actual documents".
 - **Still not found:** the POC's own pre-05-29 commit history (the GitHub poc repo has only 2 README commits). The 0.1.1 log asks to "rebuild file upload … from earlier versions (0.1)", so 0.1's own repo may be on xian's Mac.
-- **Net for the post:** the prototype answered questions about uploaded documents with an LLM. This codebase then had chat summarization working, roughly, in July 2025, and lost it on 2025-10-01. "Never" is the bounded-search-reported-as-a-total pattern (xian, 10-19).
+- **Net for the post:** the prototype answered questions about uploaded documents with an LLM. This codebase then had chat summarization working, roughly, in July 2025. It broke on 2025-08-22 in a commit about something else, and the evidence was deleted under "docs" labels on 10-01 and 10-04 (Arch). "Never" is the bounded-search-reported-as-a-total pattern (xian, 10-19).
+
+## Correction 10:13 (Arch's audit, `docs/internal/architecture/audits/lost-working-code-2025-08-to-10.md`)
+The loss date was 2025-08-22 (`2ad8d639dd`), not the 10-01 docs commit. The 10-01 commit (`effa5fe2a6` on main) removed a `main.py` the UI no longer reached. Arch's sweep of 36,177 commits found no other unexplained loss of live behaviour. In every real loss, one commit did two things under one label.
