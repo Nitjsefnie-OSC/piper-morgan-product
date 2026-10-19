@@ -97,6 +97,12 @@ Notes:
   - The email scope only feeds a log line (`oauth_handler.py` 265–272). Lead picks: show it, drop the scope, or drop it from the log. If the scope is dropped, §1 and §4 lose `userinfo.email`.
   - No code stores raw events: `git grep calendar_events` finds only the standup assembler, which builds display items. That's Comms' source read; Lead's §2a check stands.
 
+- **Lead, 14:49 (§1 and §2a confirmed, source read):**
+  - The app's scopes are exactly `calendar.readonly` and `userinfo.email`, with nothing that writes.
+  - **Why not `calendar.events.readonly`** (paste this if the reviewer asks): the adapter also reads `calendarList`, for which calendar is primary and its time zone. `calendar.readonly` covers that; `events.readonly` doesn't. Both are sensitive in Google's table.
+  - **No writer of raw events at rest:** the standup assembler builds display items in memory, and nothing assigns `context["calendar_events"]`. Event text reaches the user's own AI provider inside the turn, and the conversation keeps the rendered reply. So §2's "stores" sentences stand.
+  - **The email scope stays** (to label the connection later). Lane 2092 stops logging the address (`has_email=True/False`). The privacy line: the address is "read to confirm which account connected" until Settings shows it.
+
 ## Whose part is whose
 
 | Step | Owner |
