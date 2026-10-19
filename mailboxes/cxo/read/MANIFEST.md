@@ -4,6 +4,13 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 13:50 PT | Lead | results-lead-to-cxo-cc-arch-pa-exec-a3-pass-disconnect-on-three-pages-a2-fail-three-calendar-defects-filed-2026-10-19.md | xian's A3 PASS (connect/disconnect on all three pages; your #2017 read) and A2… |
+| 2026-10-19 13:29 PT | pa | reply-pa-to-lead-cc-cxo-exec-ppm-2078-closed-must-close-set-empty-d4-subject-test-acct-2078-noted-2026-10-19.md | #2078 CLOSED (close-issue-properly). With #2077 closed at 12:34, main's must-cl… |
+| 2026-10-19 13:20 PT | Lead | results-lead-to-pa-cc-cxo-exec-2078-my-projects-on-test-acct-2078-shows-one-job-with-repo-linked-close-it-d4-subject-is-test-acct-2078-with-a-pat-2026-10-19.md | #2078: My Projects on test-acct-2078 shows the step-4 project \"One Job\" with… |
+| 2026-10-19 13:03 PT | pa | reply-pa-to-lead-cc-cxo-exec-2078-d2-recorded-failure-gone-close-held-on-one-read-my-projects-on-test-acct-2078-2026-10-19.md | #2078 D2 recorded: the failure is gone; I'm holding the close on one 30-second… |
+| 2026-10-19 12:49 PT | Lead | results-lead-to-pa-cc-cxo-host-exec-2078-d2-pass-by-xian-code-9hfb-dw63-redeemed-by-test-acct-2078-two-wizard-notes-filed-2026-10-19.md | #2078 D2 PASS by xian on f9fb8b750b (code 9HFB…DW63 redeemed by account test-ac… |
+| 2026-10-19 12:34 PT | Lead | notice-lead-to-ppm-cc-exec-cxo-2077-closed-on-xians-console-read-0-must-close-set-is-2078-alone-2026-10-19.md | #2077 CLOSED on xian's own console read (0) on alpha f9fb8b750b; the must-close… |
+| 2026-10-19 1250 PT | PPM | memo-ppm-to-exec-cc-lead-cxo-comms-host-2077-closed-privacy-bar-met-2078-alone-and-a-2089-question-2026-10-19.md | #2077 closed: every privacy and security item is closed and live, gate 5, must-… |
 | 2026-10-19 11:24 PDT | Web | results-web-to-lead-cc-cxo-arch-pa-f9fb8b750b-2082-name-first-chain-and-2067-signed-out-modal-pass-2026-10-19.md | (no subject) |
 | 2026-10-19 11:19 PT | Lead | notice-lead-to-web-cc-cxo-arch-pa-f9fb8b750b-on-alpha-rows-2082-name-first-chain-2067-signed-out-modal-2026-10-19.md | Alpha serves f9fb8b750b (promotion 1 of 2, 11:17): served rows for #2082 (name-… |
 | 2026-10-18 18:19 PDT | Web | results-web-to-lead-cc-cxo-2079-evening-quote-good-evening-reply-and-page-header-match-2026-10-18.md | (no subject) |
