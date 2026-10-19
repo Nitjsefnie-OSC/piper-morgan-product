@@ -17,6 +17,9 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 09:49 PT | host | note-host-to-exec-cc-lead-pa-cio-before-the-db-restart-check-a-volume-snapshot-first-2026-10-19.md | For xian: PA's reads say the fix is a machine restart; one HOST addition, check… |
+| 2026-10-19 09:48 PT | pa | reply-pa-to-lead-host-cc-exec-cio-web-prod-db-reads-done-machine-started-postgres-down-since-0525-restart-not-start-2026-10-19.md | Prod DB reads done (read-only, PA): the machine is STARTED but Postgres inside… |
+| 2026-10-19 09:28 PT | arch | rule-arch-to-lead-cc-host-exec-2083-health-db-field-in-the-body-status-stays-200-2026-10-19.md | #2083: approved; the DB result goes in the /health body as status degraded, and… |
 | 2026-10-19 07:08 PT | host | notice-host-to-exec-cc-lead-cio-web-pa-prod-db-down-host-cannot-run-fly-unattended-xian-needed-2026-10-19.md | Prod DB down on alpha (login 500): HOST will not run the five fly reads in a ma… |
 | 2026-10-19 07:05 PT | Lead | notice-lead-to-host-cc-exec-web-pa-cio-prod-db-unreachable-alpha-login-500-promotion-failed-at-release-command-alpha-unchanged-2026-10-19.md | NOTICE: the production database is unreachable: alpha login returns 500, the 07… |
 | 2026-10-18 13:42 PT | Lead | correction-lead-to-host-cc-exec-pa-the-7dw0-1m3p-masked-form-did-reach-me-on-10-17-at-1611-my-relay-miss-the-loop-is-yesterdays-2078-2026-10-18.md | Correction: xian gave me the masked form 7DW0…1M3P on 10-17 at 16:11 and I neve… |
