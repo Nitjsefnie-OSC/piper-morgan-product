@@ -1,0 +1,79 @@
+{% extends "layouts/app_shell.html" %}
+{# #2096 — Send feedback (CXO's shape and words, 2026-10-19). One box, one button.
+   Success is shown only after the API says the row is stored; a failure always
+   shows the failure line with the email fallback; never a silent success. #}
+
+{% block page_title %}Send feedback - Piper Morgan{% endblock %}
+
+{% block head_extra %}
+<style>
+  .feedback-page { max-width: 640px; }
+  .feedback-page textarea { width: 100%; min-height: 160px; font: inherit; padding: 0.75rem; border: 1px solid var(--border, #d0d7de); border-radius: 8px; resize: vertical; }
+  .feedback-actions { display: flex; gap: 0.75rem; align-items: center; margin-top: 0.75rem; }
+  .feedback-status { margin-top: 1rem; min-height: 1.5rem; }
+  .feedback-status.ok { color: var(--success, #1a7f37); }
+  .feedback-status.err { color: var(--danger, #b42318); }
+  .feedback-footer { margin-top: 2rem; color: var(--text-muted, #656d76); }
+</style>
+{% endblock %}
+
+{% block main %}
+<section class="feedback-page">
+  {% include "components/breadcrumbs.html" ignore missing %}
+  <div class="page-header">
+    <h1>Send feedback</h1>
+  </div>
+  <form id="feedback-form" novalidate>
+    <label for="feedback-body" class="sr-only">Your feedback</label>
+    <textarea id="feedback-body" name="body" placeholder="What happened, or what would help?" maxlength="4000" required></textarea>
+    <div class="feedback-actions">
+      <button type="submit" class="btn btn-primary" id="feedback-send">Send</button>
+    </div>
+    <p class="feedback-status" id="feedback-status" role="status" aria-live="polite"></p>
+  </form>
+  <p class="feedback-footer">Prefer email? support@pipermorgan.ai</p>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  (function () {
+    const form = document.getElementById('feedback-form');
+    const box = document.getElementById('feedback-body');
+    const btn = document.getElementById('feedback-send');
+    const status = document.getElementById('feedback-status');
+    // The page the person came from, attached by code (never asked of them).
+    const fromPath = {{ from_path | tojson }} || (document.referrer ? new URL(document.referrer).pathname : '');
+    const FAIL = "That didn't send. You can email support@pipermorgan.ai instead.";
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      status.textContent = '';
+      status.className = 'feedback-status';
+      if (!box.value.trim()) { status.textContent = 'Write a line first.'; status.classList.add('err'); return; }
+      btn.disabled = true;
+      try {
+        // The existing feedback API (PM-005, mounted at /api/v1/feedback) takes its
+        // fields as query parameters; the page passes its origin path by code.
+        const params = new URLSearchParams({ content: box.value, feedback_type: 'tester' });
+        if (fromPath) params.set('page_path', fromPath);
+        const response = await fetch('/api/v1/feedback?' + params.toString(), { method: 'POST' });
+        if (response.status === 401) return; // #2067: the signed-out modal is up
+        const data = await response.json().catch(() => ({}));
+        if (response.ok && data.id) {
+          status.textContent = 'Thanks, we got it.';
+          status.classList.add('ok');
+          box.value = '';
+        } else {
+          status.textContent = FAIL;
+          status.classList.add('err');
+        }
+      } catch (error) {
+        status.textContent = FAIL;
+        status.classList.add('err');
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  })();
+</script>
+{% endblock %}

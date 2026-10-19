@@ -196,6 +196,14 @@ CHAT_POINTERS = {
     "page:/settings/connected-apps": CHAT_INVISIBLE(
         issue=1918, note="settings-only MCP-connection revoke surface; no chat utterance maps here"
     ),
+    "page:/feedback": CHAT_INVISIBLE(
+        issue=2096,
+        note=(
+            "the Send feedback page (CXO's shape 2026-10-19): no chat command yet by "
+            "CXO's ruling; a later 'give feedback' phrase should open this page, not take "
+            "free text blindly. Ceiling move 29 -> 30 on Arch's word."
+        ),
+    ),
     "page:/settings/invites": CHAT_INVISIBLE(
         issue=2081,
         note=(

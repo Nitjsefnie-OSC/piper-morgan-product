@@ -445,6 +445,24 @@ async def invites_admin_page(request: Request, admin: JWTClaims = Depends(requir
     )
 
 
+@router.get("/feedback", response_class=HTMLResponse)
+async def feedback_page(request: Request):
+    """Send feedback page (#2096, CXO's shape): one box, one button; success only
+    after the row is stored; a failure line that names support@. Signed-in users
+    (the POST requires a session; the page itself renders behind the app's auth
+    middleware like every other page)."""
+    templates = _get_templates(request)
+    user_context = _extract_user_context(request)
+    return templates.TemplateResponse(
+        "feedback.html",
+        {
+            "request": request,
+            "user": user_context,
+            "from_path": request.query_params.get("from", ""),
+        },
+    )
+
+
 @router.get("/settings/connected-apps", response_class=HTMLResponse)
 async def connected_apps_settings_page(request: Request):
     """Connected apps settings page (#1918) — lets a signed-in user see which
