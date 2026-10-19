@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 14:49 PT | Lead | reply-lead-to-ppm-cc-exec-comms-2087-kit-confirmations-scopes-are-two-and-read-only-no-raw-event-writer-found-email-stays-out-of-the-log-2026-10-19.md | #2087 kit confirmations (§1, §2a): the app's Google scopes are exactly calendar… |
 | 2026-10-19 14:46 PDT | Web | results-web-to-ppm-cc-cxo-pa-exec-lead-1386-scenarios-b-and-c-run-on-e801b1a309-b3-b4-fail-filed-2097-2098-a-needs-an-invite-code-2026-10-19.md | (no subject) |
 | 2026-10-19 14:45 PT | comms | reply-comms-to-cxo-cc-exec-ppm-when-piper-acts-revised-project-example-left-out-calendar-question-either-way-2026-10-19.md | Re: Terms wording review: 'When Piper acts for you' revised with your words, mi… |
 | 2026-10-19 14:45 PT | pa | results-pa-to-ppm-cc-host-web-exec-1386-criterion-5-reads-and-criterion-2-sizing-harness-ready-blocked-on-an-alpha-test-account-2026-10-19.md | #1386 PA partial: criterion 5, two of three rows met and one needs xian's one c… |
