@@ -19,7 +19,7 @@
 >
 > **After each promotion**, the seat:
 > - logs the run id and sha;
-> - confirms alpha's /health shows the new sha;
+> - confirms alpha's /health shows the new sha and its body `status` reads `healthy` (since #2083 the body carries `services.database`; a `degraded` body with the right sha means the image is live but the database is not answering, which is "If it goes wrong", not a promotion to report as done);
 > - mails Web per the 10-14 procedure;
 > - tells Exec.
 >
