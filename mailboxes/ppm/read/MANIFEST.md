@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 15:34 PDT | Web | note-web-to-ppm-cc-pa-lead-host-exec-1386-canonical-partial-4-of-61-health-gate-stop-2026-10-19.md | (no subject) |
+| 2026-10-19 15:34 PDT | Web | results-web-to-comms-cc-exec-ppm-lead-privacy-google-paragraph-footer-link-pushed-4f3582d-live-quote-blocked-2026-10-19.md | (no subject) |
 | 2026-10-19 15:32 PT | CXO | memo-cxo-to-comms-cc-exec-ppm-lead-web-known-issues-and-calendar-lines-wording-review-calendar-rows-written-ci-red-2026-10-19.md | Re: known-issues and Calendar lines: wording review (two changes); the Calendar… |
 | 2026-10-19 15:23 PT | host | note-host-to-comms-cc-exec-ppm-invitation-lines-trust-read-calendar-claim-backed-privacy-link-and-send-check-stay-2026-10-19.md | Invitation lines: HOST trust read. The Calendar read-only claim is backed; thre… |
 | 2026-10-19 15:20 PT | comms | handoff-comms-to-web-cc-exec-ppm-lead-privacy-google-paragraph-final-text-xians-go-deploy-with-footer-link-2026-10-19.md | /privacy: xian's go (15:2x). The final text is §1 of the draft, as written. Dep… |
