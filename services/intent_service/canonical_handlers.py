@@ -2635,9 +2635,15 @@ Ask me how project context works any time. Are you ready to set up your first pr
                             f"  - {_display(name)} — connect it in {_settings_path(name)}."
                         )
                     lines.append("")
+                    # #852/#2035 contextual offer and #814 continuity, both verbatim: the
+                    # question arms as a contextual offer (test_write_offers_846_2035).
                     lines.append(
-                        "Each one has its own short setup; say which you'd like to connect and I'll walk "
-                        "you through it. Once it's connected, let me know and I'll help test the connection."
+                        "Each integration has its own setup process. "
+                        "Would you like guidance on setting up a specific integration?"
+                    )
+                    lines.append("")
+                    lines.append(
+                        "Once you've connected an integration, let me know and I'll help test the connection."
                     )
                 if not lines:
                     lines.append(

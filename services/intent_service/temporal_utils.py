@@ -469,9 +469,13 @@ MONTH_WORDS = (
     "december",
 )  # "may" is left out on purpose: it is a verb far more often than a month in chat.
 
+# A statement, not a question: the #1730 Gap-2 ratchet forbids an unarmed ask, and
+# arming this one would need a pending offer whose accept re-runs the agenda for the
+# chosen day (the router-``when`` fix makes that moot). CXO's words, question form
+# dropped; flagged on #2091 for CXO.
 UNRESOLVED_DAY_REFUSAL = (
-    "I can show today, tomorrow or this week, but I can't look up a particular weekday. "
-    "Want one of those?"
+    "I can show today, tomorrow or this week, but I can't look up a particular weekday yet. "
+    "Ask me for one of those."
 )
 
 
