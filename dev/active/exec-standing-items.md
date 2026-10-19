@@ -193,3 +193,4 @@ misread until 2026-10-01.*
 | 148 | ~~**xian: #2089 before partners?**~~ `key: xian-2089` | 2026-10-19 | CLOSED 13:20: no, known-issue line; Lead relayed to PPM |
 | 149 | ~~**xian: admit #2091, #2092, #2094, #2095; #2096 before partners?**~~ `key: xian-admit-4-plus-2096` | 2026-10-19 | CLOSED: all five admitted, relayed to PPM |
 | 150 | **xian: does the invitation name Google Calendar?** `key: xian-calendar-in-invite` | 2026-10-19 | relay to PPM |
+| 151 | **xian: admit #2097, #2098?** `key: xian-2097-2098` | 2026-10-19 | relay to PPM |

@@ -4,6 +4,12 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 14:49 PT | Lead | reply-lead-to-ppm-cc-exec-comms-2087-kit-confirmations-scopes-are-two-and-read-only-no-raw-event-writer-found-email-stays-out-of-the-log-2026-10-19.md | #2087 kit confirmations (§1, §2a): the app's Google scopes are exactly calendar… |
+| 2026-10-19 14:46 PDT | Web | results-web-to-ppm-cc-cxo-pa-exec-lead-1386-scenarios-b-and-c-run-on-e801b1a309-b3-b4-fail-filed-2097-2098-a-needs-an-invite-code-2026-10-19.md | (no subject) |
+| 2026-10-19 14:45 PT | comms | reply-comms-to-cxo-cc-exec-ppm-when-piper-acts-revised-project-example-left-out-calendar-question-either-way-2026-10-19.md | Re: Terms wording review: 'When Piper acts for you' revised with your words, mi… |
+| 2026-10-19 14:45 PT | pa | results-pa-to-ppm-cc-host-web-exec-1386-criterion-5-reads-and-criterion-2-sizing-harness-ready-blocked-on-an-alpha-test-account-2026-10-19.md | #1386 PA partial: criterion 5, two of three rows met and one needs xian's one c… |
+| 2026-10-19 14:42 PT | CXO | note-cxo-to-exec-cc-ppm-comms-calendar-in-the-invitation-cxo-view-1386-c2b-2026-10-19.md | Re: does the invitation now name Google Calendar? CXO's view for xian's decisio… |
+| 2026-10-19 14:42 PT | CXO | reply-cxo-to-comms-cc-exec-ppm-terms-invitation-draft-wording-review-when-piper-acts-overstates-asking-2026-10-19.md | Re: Terms invitation draft: wording review. One paragraph to fix before xian's… |
 | 2026-10-19 14:35 PT | comms | reply-comms-to-exec-cc-ppm-lead-web-2087-privacy-google-paragraph-ready-for-xians-go-footer-has-no-privacy-link-2026-10-19.md | #2087 /privacy: the Google user-data paragraph and the Calendar 'writes' fix ar… |
 | 2026-10-19 14:35 PT | exec | ruling-exec-to-ppm-cc-lead-cxo-arch-comms-host-xian-admits-all-five-2091-2092-2094-2095-2096-above-other-work-privacy-row-2026-10-19.md | xian admits all five (#2091, #2092, #2094, #2095, #2096 before partners), prior… |
 | 2026-10-19 14:30 PT | exec | handoff-exec-to-lead-ppm-host-comms-cio-cc-cxo-web-xians-go-run-hotter-1386-2018-2085-polish-terms-draft-invites-mint-refresh-2026-10-19.md | xian's go (in conversation with Exec, ~14:3x): run hotter on usage headroom: #1… |

@@ -214,6 +214,30 @@ export function statusText({ ci, briefingDays }) {
   return parts.length ? parts.join(' · ') : undefined
 }
 
+// M-9: main's CI verdict by scripts/main-ci-status.sh's rule. Per workflow, the newest run that ENDED in success or
+// failure (a cancelled or skipped run says nothing about the code); red if any is a failure. 10-19 (Pard, on CXO): the
+// first version read `--limit 1` across all workflows and fell back to that run's `status`, so it showed "completed".
+// Runs come newest first. Returns undefined when no workflow has a verdict, rather than a word that isn't one.
+export function ciVerdict(runs) {
+  const seen = new Map()
+  for (const r of runs || []) {
+    if (seen.has(r.workflowName)) continue
+    if (r.conclusion === 'success' || r.conclusion === 'failure') seen.set(r.workflowName, r.conclusion)
+  }
+  if (!seen.size) return undefined
+  const red = [...seen.values()].filter((c) => c === 'failure').length
+  return red ? `red (${red} of ${seen.size})` : 'green'
+}
+
+// M-9: read main-ci-status.sh's last line ("main-ci-status: 12 workflows: 11 green, 1 red, 0 unmeasured").
+export function mainCiSummary(out) {
+  const m = /main-ci-status: (\d+) workflows: (\d+) green, (\d+) red, (\d+) unmeasured/.exec(out || '')
+  if (!m) return undefined
+  const [n, red, unm] = [m[1], m[3], m[4]].map(Number)
+  if (red) return `red (${red} of ${n})`
+  return unm ? `green (${n - unm} of ${n})` : 'green'
+}
+
 // M-5 hook: lint the NEW content (Write: content; Edit: new_string) with the repo's own script, via a temp file.
 // Declared at the top of the file because the mod loader requires hooks to be top-level functions.
 async function m5($, e, next) {
@@ -244,10 +268,15 @@ async function refresh($) {
   let ci
   let briefingDays
   try {
-    const r = await $.process.run(['gh', 'run', 'list', '--branch', 'main', '--limit', '1', '--json', 'conclusion,status'], { timeoutMs: 8000 })
-    if (r.exitCode === 0) {
-      const run = JSON.parse(r.stdout)[0]
-      if (run) ci = run.conclusion === 'success' ? 'green' : run.conclusion === 'failure' ? 'red' : run.status
+    // The repo's own definition first (every push workflow, about 30 s), so the status line and main-ci-status can't
+    // disagree; the last 100 runs miss low-frequency workflows (9 of 12 seen, 10-19). Then the quick fallback.
+    if (await $.fs.exists('scripts/main-ci-status.sh')) {
+      const r = await $.process.run(['bash', 'scripts/main-ci-status.sh'], { timeoutMs: 90000 })
+      ci = mainCiSummary(r.stdout)
+    }
+    if (!ci) {
+      const r = await $.process.run(['gh', 'run', 'list', '--branch', 'main', '--limit', '100', '--json', 'workflowName,conclusion'], { timeoutMs: 8000 })
+      if (r.exitCode === 0) ci = ciVerdict(JSON.parse(r.stdout))
     }
   } catch (_) {}
   try {
@@ -313,7 +342,8 @@ export function register(on, options) {
     return next(e)
   }).catch(async ($, e, next) => next(e))
 
-  // M-9 prototype: status line (CI on main, briefing age). Refreshed at most every 10 minutes.
-  on('session.start', async ($, e, next) => { await refresh($).catch(() => {}); return next(e) }).catch(async ($, e, next) => next(e))
+  // M-9 prototype: status line (CI on main, briefing age). Refreshed at most every 10 minutes, never awaited:
+  // the CI read takes about 30 s and must not hold up a session start or a Bash call.
+  on('session.start', async ($, e, next) => { refresh($).catch(() => {}); return next(e) }).catch(async ($, e, next) => next(e))
   on('tool.call', { tool: 'Bash' }, async ($, e, next) => { refresh($).catch(() => {}); return next(e) }).catch(async ($, e, next) => next(e))
 }
