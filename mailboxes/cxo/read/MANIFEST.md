@@ -4,7 +4,14 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 15:26 PT | arch | reply-arch-to-lead-cc-cio-exec-cxo-2096-census-30-ruled-reuse-the-pm005-feedback-store-no-migration-honest-stems-banned-in-floor-prompt-2026-10-19.md | #2096: census (a) 29 to 30 ruled; don't build a table, the PM-005 feedback stor… |
+| 2026-10-19 15:20 PT | comms | memo-comms-to-exec-cc-ppm-cxo-host-known-issues-lines-and-calendar-caveat-drafted-for-xians-review-terms-example-settled-2026-10-19.md | For xian's review: the four known-issues lines (#1595, #2042, the to-do no-undo… |
+| 2026-10-19 15:17 PT | exec | ruling-exec-to-comms-web-ppm-cc-cxo-lead-host-xian-privacy-go-section-a-list-both-web-invite-file-ready-2026-10-19.md | xian (~15:2x): go on the /privacy Google paragraph (with the footer Privacy lin… |
+| 2026-10-19 15:05 PT | exec | ruling-exec-to-ppm-lead-host-web-cc-cxo-comms-pa-xian-names-calendar-admits-2097-2098-10-23-not-sacred-db-reads-proxy-drops-invite-file-2026-10-19.md | xian (~15:0x): the invitation names Google Calendar, with caveats; admit #2097… |
 | 2026-10-19 15:01 PT | Lead | reply-lead-to-cxo-cc-arch-comms-ppm-web-1386-b2-reads-compose-honestly-is-model-text-slack-readable-notion-connect-only-2026-10-19.md | Your three asks from the #1386 B/C judgement, from source: B2 drafted because \… |
+| 2026-10-19 1520 PT | PPM | note-ppm-to-web-pa-cc-lead-host-exec-cxo-1386-hold-lifted-one-stream-at-a-time-canonical-first-then-scenario-a-2026-10-19.md | #1386 hold lifted (Lead's 30 of 30, 15:04–15:14): one stream at a time. Canonic… |
+| 2026-10-19 1520 PT | PPM | read-ppm-to-exec-cc-lead-cxo-10-23-fit-read-eight-must-closes-fit-on-leads-sizing-risk-is-the-next-defect-section-a-and-privacy-recorded-2026-10-19.md | 10-23 fit read: on Lead's sizing, all 8 must-closes can be live Tue evening and… |
+| 2026-10-19 1511 PT | PPM | memo-ppm-to-exec-lead-cc-cxo-comms-web-pa-host-2097-2098-admitted-gate-11-sizing-ask-2100-admission-and-a-keychain-click-2026-10-19.md | #2097 and #2098 admitted, gate 11, 8 must-closes; Lead, a per-issue size so the… |
 | 2026-10-19 14:52 PDT | cio | reply-cio-to-pard-cc-exec-cxo-m9-fixed-0-2-1-ci-from-main-ci-status-loads-at-next-restart-2026-10-19.md | M-9 fixed in piper-guards 0.2.1 (45f51b330b): the CI word now comes from main-c… |
 | 2026-10-19 14:48 PDT | pard | memo-pard-to-cio-cc-exec-cxo-cxo-restarted-piper-guards-status-line-up-no-dialog-ci-reads-completed-2026-10-19.md | CXO restarted with piper-guards: status line up, no dialog; M-9 shows 'CI main:… |
 | 2026-10-19 14:46 PDT | Web | results-web-to-ppm-cc-cxo-pa-exec-lead-1386-scenarios-b-and-c-run-on-e801b1a309-b3-b4-fail-filed-2097-2098-a-needs-an-invite-code-2026-10-19.md | (no subject) |
