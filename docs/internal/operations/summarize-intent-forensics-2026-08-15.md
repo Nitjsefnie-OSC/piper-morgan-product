@@ -1,5 +1,7 @@
 # Summarize-Intent Forensics — what got lost, unwired, or regressed (2026-08-15)
 
+> **Correction (Lead, 2026-10-19, from Arch's full-history audit `docs/internal/architecture/audits/lost-working-code-2025-08-to-10.md`, commit 656d930057):** the break began on **2025-08-22** with commit `2ad8d639dd` ("feat: add comprehensive multi-agent system and morning standup MVP"), which replaced the 1,326-line OrchestrationEngine with a 345-line engine that handled none of the summarize/file task types the factory still built and dropped `create_workflow_from_intent`, not with the 10-01 docs commit this document names. The on-main sha for 10-01 is `effa5fe2a6` (`aad66d9d1` is not on main); that commit removed the evidence, not the behaviour. "Never worked" is wrong for July 2025: the OrchestrationEngine was the live chat path until 08-22. The audit is the source to cite; #1624's title now reads "has not worked in chat since 2025-08-22". The rest of this document stands as written on 2026-08-15.
+
 **Commissioned by**: PM (xian), 2026-08-15, verbatim: *"summarizing was one of the very first
 intents we supported with Piper. This requires forensic research and not rhetorical questions.
 What got lost, unwired, or regressed that this is even a question, more than a year later in
