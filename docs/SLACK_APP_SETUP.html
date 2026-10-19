@@ -223,14 +223,15 @@
   <section class="phase">
     <h2><span class="num">6</span>Add the redirect URL and copy your app credentials</h2>
     <ol class="steps">
-      <li>Left sidebar: <span class="path"><b>Features → OAuth &amp; Permissions</b></span> → <b>Redirect URLs</b> → <b>Add New Redirect URL</b>, paste exactly:</li>
+      <li>Left sidebar: <span class="path"><b>Features → OAuth &amp; Permissions</b></span> → <b>Redirect URLs</b> → <b>Add New Redirect URL</b>, paste each of these exactly (two entries):</li>
     </ol>
-    <div class="copyblock">https://piper-morgan.fly.dev/api/v1/settings/integrations/slack/callback</div>
+    <div class="copyblock">https://alpha.pipermorgan.ai/api/v1/settings/integrations/slack/callback</div>
+    <div class="copyblock">https://alpha.pipermorgan.ai/api/v1/setup/slack/oauth/callback</div>
     <ol class="steps" start="2">
       <li>Click <b>Save URLs</b>.</li>
       <li>Left sidebar: <span class="path"><b>Settings → Basic Information</b></span> → <b>App Credentials</b> → copy the <b>Client ID</b> and <b>Client Secret</b>.</li>
     </ol>
-    <div class="checkpoint"><strong>Checkpoint:</strong> one redirect URL saved; Client ID and Client Secret copied. (Piper never asks for the Signing Secret or Verification Token.)</div>
+    <div class="checkpoint"><strong>Checkpoint:</strong> two redirect URLs saved (Settings connect and the setup wizard); Client ID and Client Secret copied. (Piper never asks for the Signing Secret or Verification Token.)</div>
     <div class="gotcha"><strong>Why no bot-token copying?</strong> Piper gets its <code>xoxb-</code> bot token automatically when you authorize in the next phase — there is deliberately no field to paste one.</div>
   </section>
 

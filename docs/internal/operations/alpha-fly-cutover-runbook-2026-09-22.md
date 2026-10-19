@@ -124,6 +124,7 @@ app: `fly secrets set PIPER_BASE_URL GITHUB_OAUTH_REDIRECT_URI GITHUB_OAUTH_CLIE
 GITHUB_OAUTH_CLIENT_SECRET` (secret from droplet `.env`, never printed). beta's GitHub login no
 longer matches (PM-only). JWT secret not migrated → testers re-login once. Slack/Google redirect
 URIs left on fly.dev pending provider registrations.*
+> **Resolved 2026-10-19 (Lead):** Slack and Google registrations done per `redirect-uri-single-source-runbook-1852.md`; the three redirect secrets were unset 10-18 (07:05 and 07:18) so the app derives every callback from `PIPER_BASE_URL`; the Slack Connect landing on alpha passed in xian's browser 10-19 10:2x ("Slack Connected · Connected to [his workspace]", page on `alpha.pipermorgan.ai/settings/integrations`, card Connected). #1852.
 **9b (added 09-22 09:4x, Lead — found via `fly secrets list`): the URL-bearing secrets must move
 to the alpha.pipermorgan.ai values with the cut** — `PIPER_BASE_URL`,
 `GITHUB_OAUTH_REDIRECT_URI`, `SLACK_SETTINGS_REDIRECT_URI`, `SLACK_REDIRECT_URI`,
