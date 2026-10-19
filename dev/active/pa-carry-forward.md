@@ -175,3 +175,4 @@ half unrelated).
 - **10-19 15:0x:** #1386, PA's part. Criterion 5: 3 of 4 met, plus xian's alembic check. Criterion 2: harness ready (dev/2026/10/19/canonical-retest-1386-alpha.py), blocked on HOST's credential-file ruling and an alpha test account.
 - **10-19 15:1x:** #2090 CLOSED. #1386 criterion 2 is HELD until Lead/HOST call alpha's DB steady (flapping 14:53 on). HOST ruled yes, with conditions, for the warm-run credential file.
 - **10-19 15:2x:** #1386 criterion 5 is 4 of 4 met (alembic check empty). The DB/app flap 14:53–15:03 looks like an app-side stall (Fly service check passing at 15:03:20). Criterion 2 is still held.
+- **10-19 15:4x:** alpha app/DB log streams run in scratch (pids from `pgrep -fl 'fly logs -a piper-morgan'`) until STOP; read them on any stall. Stop them at 21:47 STOP. #1386 criterion 2 held (PPM).

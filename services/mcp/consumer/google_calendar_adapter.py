@@ -166,23 +166,13 @@ class TemporalSummaryResult:
         }
 
 
-def classify_calendar_read_error(exc: BaseException) -> str:
-    """#2092: a short, user-safe class for a failed Google Calendar read.
+# #2092: the classifier lives in services.integrations.calendar.read_errors so the
+# OAuth handler can use it without a direct adapter import (router pattern gate).
+from services.integrations.calendar.read_errors import (  # noqa: E402
+    classify_calendar_read_error,
+)
 
-    "insufficient_scope" when Google refused for missing permission (the 2026-10-19
-    alpha shape: HTTP 403 "Request had insufficient authentication scopes");
-    "unauthorized" for a rejected or expired token (401 / invalid_grant);
-    "not_found" for a calendar id the account cannot see (404); else "error".
-    Never carries the exception text (it can hold URLs and ids).
-    """
-    text = str(exc).lower()
-    if "insufficient" in text and ("scope" in text or "permission" in text):
-        return "insufficient_scope"
-    if "401" in text or "invalid_grant" in text or "unauthorized" in text:
-        return "unauthorized"
-    if "404" in text or "not found" in text:
-        return "not_found"
-    return "error"
+__all__ = ["GoogleCalendarMCPAdapter", "classify_calendar_read_error"]
 
 
 class GoogleCalendarMCPAdapter(BaseSpatialAdapter):
