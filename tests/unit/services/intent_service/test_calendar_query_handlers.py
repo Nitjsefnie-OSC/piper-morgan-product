@@ -495,6 +495,9 @@ class TestMeetingTimeQueryResults:
             mock_router = MagicMock()
             mock_router.authenticate = AsyncMock(return_value=True)
             mock_router.get_events_in_range = AsyncMock(return_value=mock_events)
+            mock_router.last_read_error = (
+                None  # #2092: a MagicMock attribute would read as a failed read
+            )
             MockRouter.return_value = mock_router
 
             result = await intent_service._handle_meeting_time_query(intent, "workflow-id")
@@ -524,6 +527,9 @@ class TestMeetingTimeQueryResults:
             mock_router = MagicMock()
             mock_router.authenticate = AsyncMock(return_value=True)
             mock_router.get_events_in_range = AsyncMock(return_value=[])
+            mock_router.last_read_error = (
+                None  # #2092: a MagicMock attribute would read as a failed read
+            )
             MockRouter.return_value = mock_router
 
             result = await intent_service._handle_meeting_time_query(intent, "workflow-id")
@@ -679,6 +685,9 @@ class TestWeekCalendarQueryResults:
             mock_router = MagicMock()
             mock_router.authenticate = AsyncMock(return_value=True)
             mock_router.get_events_in_range = AsyncMock(return_value=mock_processed_events)
+            mock_router.last_read_error = (
+                None  # #2092: a MagicMock attribute would read as a failed read
+            )
             MockRouter.return_value = mock_router
 
             result = await intent_service._handle_week_calendar_query(intent, "workflow-id")
@@ -705,6 +714,9 @@ class TestWeekCalendarQueryResults:
             mock_router = MagicMock()
             mock_router.authenticate = AsyncMock(return_value=True)
             mock_router.get_events_in_range = AsyncMock(return_value=[])
+            mock_router.last_read_error = (
+                None  # #2092: a MagicMock attribute would read as a failed read
+            )
             MockRouter.return_value = mock_router
 
             result = await intent_service._handle_week_calendar_query(intent, "workflow-id")
