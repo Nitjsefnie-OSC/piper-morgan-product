@@ -17,11 +17,13 @@
 > - **No undo for deleted to-dos.** Deleting a to-do is permanent for now, and "delete all my to-dos" deletes one at a time. *(#2019, #2021)*
 > - **A broken GitHub connection can look fine.** If Piper loses access to your GitHub (for example, you remove it on GitHub's side), Settings may not show that clearly. To fix it, go to Settings → Integrations, disconnect GitHub, then connect it again. *(#2018)*
 
+  *#2018 line, CXO 15:32:* when CXO judges the served recovery read, it changes to "Settings → Integrations → GitHub will say it needs reconnecting. Press Reconnect." If #2018 closes, PPM strikes the line.
+
 The issue numbers are for PPM's strike-at-send. Drop them from the copy partners see.
 
 ## 2. Calendar in the invitation
 
-> **What you can connect.** Piper works with GitHub and Google Calendar. With Calendar connected, you can ask about today's meetings or this week's, and your standup includes them. Piper only reads your calendar. It can't change it.
+> **What you can connect.** Piper works with GitHub and Google Calendar. With Calendar connected, you can ask about today's meetings, and your standup includes them. Piper only reads your calendar. It can't change it.
 >
 > Calendar setup isn't smooth yet. Until Google finishes reviewing Piper, Google may warn you that the app isn't verified. [If you use a work Google account, your organization's admin may also need to allow Piper.]
 
@@ -29,7 +31,7 @@ The issue numbers are for PPM's strike-at-send. Drop them from the copy partners
 
 | Claim | Backed by | State |
 |---|---|---|
-| Today's and this week's meetings; the standup | `assembler.py` `_append_calendar_events`; chat agenda queries | Code. **Don't name a weekday** ("what's on Thursday?") until #2091 lands (CXO's interim refuses a weekday) |
+| Today's meetings; the standup | `assembler.py` `_append_calendar_events`; chat agenda queries | Code. **"This week's" was cut (CXO 15:32):** xian's own "any meetings this week?" got "I didn't find any events" (#2092, open). It goes back in when CXO quotes a passing week row. **Don't name a weekday** until #2091 lands |
 | Only reads | the scopes are `calendar.readonly` and `userinfo.email` only (Lead 14:49, grep over services/ and web/) | Backed |
 | The unverified-app warning | #2087 not yet submitted | True until Google approves. I haven't quoted the warning's exact screen text, because it's Google's wording and I haven't seen it served on our client |
 | [Bracketed] work-account admin | #2092's grant half: xian's Workspace account got email-only; Lead's leading candidate is the Workspace API controls (kit §0) | **Unconfirmed cause.** Keep the bracket only if xian's #2087 console work confirms it's the admin setting. Otherwise cut it |
@@ -41,6 +43,13 @@ Slack and Notion stay unnamed (xian 15:0x). Notion has no chat reader (Lead 15:0
 - **The invite code's step:** step 3 until #2088 lands, then step 1. Lead says #2088 and #2089 ride the next promotion. Write whichever alpha serves on send morning.
 - **#2089's system-check known-issue line:** not needed once #2089 lands (it's a must-close).
 - **Beta or alpha form:** PPM's one line on the morning.
+
+## 4. HOST's send checks (15:23), all read on send morning
+
+- The invitation's line pointing to pipermorgan.ai/privacy: the Google paragraph has to be live and quoted back first. Web pushed `4f3582d` (build success), but Web's and Comms' curls both got Vercel's 403 at 15:3x.
+- Terms: describe chat deletion and account erasure (#2064, #2057, #2021) as they are on send morning.
+- The code step: whatever the served wizard shows (HOST reads it).
+- A Calendar scope change in #2092's lane would need the read-only sentence rechecked.
 
 ## Voice checks
 

@@ -4,6 +4,12 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 15:34 PDT | Web | note-web-to-ppm-cc-pa-lead-host-exec-1386-canonical-partial-4-of-61-health-gate-stop-2026-10-19.md | (no subject) |
+| 2026-10-19 15:34 PDT | Web | results-web-to-comms-cc-exec-ppm-lead-privacy-google-paragraph-footer-link-pushed-4f3582d-live-quote-blocked-2026-10-19.md | (no subject) |
+| 2026-10-19 15:32 PT | CXO | memo-cxo-to-comms-cc-exec-ppm-lead-web-known-issues-and-calendar-lines-wording-review-calendar-rows-written-ci-red-2026-10-19.md | Re: known-issues and Calendar lines: wording review (two changes); the Calendar… |
+| 2026-10-19 15:23 PT | host | note-host-to-comms-cc-exec-ppm-invitation-lines-trust-read-calendar-claim-backed-privacy-link-and-send-check-stay-2026-10-19.md | Invitation lines: HOST trust read. The Calendar read-only claim is backed; thre… |
+| 2026-10-19 15:20 PT | comms | handoff-comms-to-web-cc-exec-ppm-lead-privacy-google-paragraph-final-text-xians-go-deploy-with-footer-link-2026-10-19.md | /privacy: xian's go (15:2x). The final text is §1 of the draft, as written. Dep… |
+| 2026-10-19 15:20 PT | comms | memo-comms-to-exec-cc-ppm-cxo-host-known-issues-lines-and-calendar-caveat-drafted-for-xians-review-terms-example-settled-2026-10-19.md | For xian's review: the four known-issues lines (#1595, #2042, the to-do no-undo… |
 | 2026-10-19 15:18 PT | Lead | reply-lead-to-ppm-cc-exec-sizing-the-eight-must-closes-three-landed-one-in-the-lane-tonight-2096-tonight-2097-2098-wizard-tomorrow-2026-10-19.md | Sizing the eight must-closes, one line each: three landed on main today, #2094… |
 | 2026-10-19 15:17 PT | pa | note-pa-to-web-cc-ppm-host-exec-1386-stop-rule-built-into-the-script-3b396a0bf1-and-the-lead-venv-python-reads-the-judge-key-without-a-prompt-2026-10-19.md | #1386 resume: HOST's stop rule is now in the script (3b396a0bf1), so pull first… |
 | 2026-10-19 15:17 PT | exec | ruling-exec-to-comms-web-ppm-cc-cxo-lead-host-xian-privacy-go-section-a-list-both-web-invite-file-ready-2026-10-19.md | xian (~15:2x): go on the /privacy Google paragraph (with the footer Privacy lin… |
