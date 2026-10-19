@@ -9,25 +9,15 @@
 
 **How to report**: paste the reply or a screenshot in chat; say the card number. Lead relays to the judge named on the card and updates this page.
 
-## Your order (Monday, updated 12:0x 10-19; only what is left; each item links to its card)
+## Your order (Monday 10-19): **every card is done.** What each one found is on its line; nothing is waiting on your hand tonight.
 
 1. ~~[D1](#d1) #2077~~ **PASS 12:3x, CLOSED** (your `0`).
 2. ~~[D2](#d2) #2078~~ **PASS 12:4x** (account `test-acct-2078`, landed signed in; My Projects shows the step-4 project "One Job" with its repo linked; PA closes). Your two wizard notes filed: #2088 (invite code at step 3, should be first) and #2089 (hosted wizard still shows the local system check; Temporal always fails).
 3. ~~[D5](#d5) #2081~~ **PASS 13:03, CLOSED 13:2x** on HOST's word (the list-refresh gap is fixed on main and rides the next promotion).
 4. ~~[D4](#d4) #1982~~ **PASS 13:3x** (fresh Piper Alpha MCP connector as `test-acct-2078`, PAT-only: 273 open issues, 50 shown, your project named; PA reads the logs and judges).
-5. None of these gates anything; any order, any day: ~~[A3](#a3)~~ **PASS 13:4x** (connect and disconnect on all three pages; CXO's #2017 read) · ~~[A2](#a2)~~ **FAIL 13:45**: three defects filed, #2091 (weekday target ignored), #2092 (no events from a healthy calendar; your answer on whether that week has events settles it), #2093 (status answer mixed with setup boilerplate) · ~~[A6](#a6)~~ **Todos and Projects in seconds; no feedback path → #2096** · ~~[A7](#a7)~~ **P2 FAIL #2094 (list of todos refused), P3 tied to #2092 (calendar read), P4 half: issues list matched GitHub, recall missed the todo → #2095** · ~~[B2](#b2)~~ **PASS 13:59** (the how-to question answered with the how-to line; the archive request archived Foo) · [B3](#b3) the Integrations card after Test.
+5. None of these gates anything; any order, any day: ~~[A3](#a3)~~ **PASS 13:4x** (connect and disconnect on all three pages; CXO's #2017 read) · ~~[A2](#a2)~~ **FAIL 13:45**: three defects filed, #2091 (weekday target ignored), #2092 (no events from a healthy calendar; your answer on whether that week has events settles it), #2093 (status answer mixed with setup boilerplate) · ~~[A6](#a6)~~ **Todos and Projects in seconds; no feedback path → #2096** · ~~[A7](#a7)~~ **P2 FAIL #2094 (list of todos refused), P3 tied to #2092 (calendar read), P4 half: issues list matched GitHub, recall missed the todo → #2095** · ~~[B2](#b2)~~ **PASS 13:59** (the how-to question answered with the how-to line; the archive request archived Foo) · ~~[B3](#b3)~~ **PASS 14:01** ("Healthy. Checked just now." then "Last checked 1 minute ago" / "14 minutes ago"; headline "All Systems Healthy · 4 of 4 connected integrations working").
 
 Done and gone from this page (git log -p keeps them): A1, A4, A5, B1, C1, C2, C3, D3; Web's E1 (#2067 modal) and E2 (#2082 name-first) both passed 11:24 on this build. Your hand items this morning: dinp (no such account; mvp-tester is admin), #1852 closed, Calendar Connect PASS, the ten masked forms relayed to HOST 12:0x.
-
-## B. Remaining from the 10-16 build (still live)
-
-### B3. Integrations card after Test (#2053, #2045)
-- **Where**: `/settings/integrations`, your account.
-- **Steps**: press **Test** on the GitHub card; wait; then reload the page.
-- **Pass**: without a reload the card drops "Not checked yet" and the summary count updates; the line reads "Healthy. Checked just now."; after the reload it reads "Last checked at H:MM AM" in your zone, never a raw UTC stamp.
-- **Known gap (Web 17:33)**: on an account whose GitHub is connected by OAuth the time line never shows (the card arrives with no check time; #2066, fix on main, live with tomorrow's promotion). Run B3 only if your GitHub card says "Connected via your personal token"; otherwise skip it.
-- **Judge**: CXO.
-
 
 ## Not on your list
 
