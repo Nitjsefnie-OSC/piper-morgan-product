@@ -156,7 +156,37 @@
             body.appendChild(tr);
           }
         } catch (error) {
+          loading.hidden = false;
           loading.textContent = error.message || 'Could not load invite codes';
+          throw error;
+        }
+      }
+
+      // #2099: a minted code's masked row, shown at the top of the list before the
+      // server's re-read confirms it (the response carries the masked forms).
+      function prependMintedRows(maskedCodes) {
+        const empty = document.getElementById('invites-empty');
+        const table = document.getElementById('invites-table');
+        const body = document.getElementById('invites-body');
+        if (!maskedCodes.length) return;
+        empty.hidden = true;
+        table.hidden = false;
+        const now = new Date().toISOString();
+        for (const masked of maskedCodes.slice().reverse()) {
+          const tr = document.createElement('tr');
+          const code = document.createElement('td'); code.className = 'mono'; code.textContent = masked;
+          const minted = document.createElement('td'); minted.textContent = fmt(now);
+          const status = document.createElement('td');
+          const pill = document.createElement('span'); pill.className = 'status-pill status-unused'; pill.textContent = 'Unused';
+          status.appendChild(pill);
+          const usedBy = document.createElement('td');
+          const actions = document.createElement('td');
+          const btn = document.createElement('button');
+          btn.type = 'button'; btn.className = 'btn btn-danger'; btn.textContent = 'Revoke';
+          btn.addEventListener('click', () => revokeInvite(masked, btn));
+          actions.appendChild(btn);
+          tr.append(code, minted, status, usedBy, actions);
+          body.prepend(tr);
         }
       }
 
@@ -165,7 +195,7 @@
         const input = document.getElementById('mint-count');
         const btn = document.getElementById('mint-btn');
         const count = parseInt(input.value, 10);
-        if (!(count >= 1 && count <= 20)) { showToast('error', 'Mint between 1 and 20 codes at a time.', 'Nothing minted'); return; }
+        if (!(count >= 1 && count <= 20)) { Toast.error('Nothing minted', 'Mint between 1 and 20 codes at a time.'); return; }
         btn.disabled = true; btn.textContent = 'Minting…';
         try {
           const response = await fetch(API, {
@@ -182,10 +212,19 @@
             const li = document.createElement('li'); li.textContent = code; list.appendChild(li);
           }
           document.getElementById('mint-result').hidden = false;
-          showToast('success', `${data.codes.length} code${data.codes.length === 1 ? '' : 's'} minted. Copy them now; they will not be shown again.`, 'Minted');
-          await loadInvites();
+          // #2099: the page called a global toast helper that no script defines
+          // (toast.js exposes Toast.success/error), so the mint threw here and
+          // the list re-read below never ran: codes minted, list unchanged
+          // (xian, D5). Show the new rows at once from the mint response, then re-read.
+          prependMintedRows(data.masked || []);
+          Toast.success('Minted', `${data.codes.length} code${data.codes.length === 1 ? '' : 's'} minted. Copy them now; they will not be shown again.`);
+          try {
+            await loadInvites();
+          } catch (error) {
+            Toast.error('List not refreshed', error.message || 'Reload the page to see the new codes.');
+          }
         } catch (error) {
-          showToast('error', error.message || 'Minting failed', 'Nothing minted');
+          Toast.error('Nothing minted', error.message || 'Minting failed');
         } finally {
           btn.disabled = false; btn.textContent = 'Mint';
         }
@@ -213,22 +252,27 @@
             if (pill) { pill.className = 'status-pill status-revoked'; pill.textContent = `Revoked ${fmt(new Date().toISOString())}`; }
             btn.remove();
           }
-          showToast('success', data.message, 'Revoked');
-          await loadInvites();
+          Toast.success('Revoked', data.message);
+          try {
+            await loadInvites();
+          } catch (error) {
+            Toast.error('List not refreshed', error.message || 'Reload the page to see the current list.');
+          }
         } catch (error) {
           btn.disabled = false;
-          showToast('error', error.message || 'Revoke failed', 'Nothing revoked');
+          Toast.error('Nothing revoked', error.message || 'Revoke failed');
         }
       }
 
       document.getElementById('mint-form').addEventListener('submit', mintCodes);
       document.getElementById('copy-codes-btn').addEventListener('click', async () => {
         const text = Array.from(document.querySelectorAll('#mint-codes li')).map((li) => li.textContent).join('\n');
-        try { await navigator.clipboard.writeText(text); showToast('success', 'Codes copied.', 'Copied'); }
-        catch (e) { showToast('error', 'Select the codes and copy them by hand.', 'Copy failed'); }
+        try { await navigator.clipboard.writeText(text); Toast.success('Copied', 'Codes copied.'); }
+        catch (e) { Toast.error('Copy failed', 'Select the codes and copy them by hand.'); }
       });
-      document.addEventListener('DOMContentLoaded', loadInvites);
-      if (document.readyState !== 'loading') loadInvites();
+      const initialLoad = () => loadInvites().catch(() => {});
+      document.addEventListener('DOMContentLoaded', initialLoad);
+      if (document.readyState !== 'loading') initialLoad();
     })();
   </script>
 {% endblock %}
