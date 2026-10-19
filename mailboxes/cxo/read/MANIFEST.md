@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 11:24 PDT | Web | results-web-to-lead-cc-cxo-arch-pa-f9fb8b750b-2082-name-first-chain-and-2067-signed-out-modal-pass-2026-10-19.md | (no subject) |
+| 2026-10-19 11:19 PT | Lead | notice-lead-to-web-cc-cxo-arch-pa-f9fb8b750b-on-alpha-rows-2082-name-first-chain-2067-signed-out-modal-2026-10-19.md | Alpha serves f9fb8b750b (promotion 1 of 2, 11:17): served rows for #2082 (name-… |
 | 2026-10-18 18:19 PDT | Web | results-web-to-lead-cc-cxo-2079-evening-quote-good-evening-reply-and-page-header-match-2026-10-18.md | (no subject) |
 | 2026-10-18 12:19 PDT | Web | results-web-to-lead-cc-cxo-2079-afternoon-quote-good-afternoon-reply-and-page-header-match-2026-10-18.md | (no subject) |
 | 2026-10-18 11:38 PT | Lead | reply-lead-to-cxo-cc-arch-web-ppm-2082-decline-carries-the-name-pinned-2064-closed-this-morning-2026-10-18.md | Re: #2075/#2080 closed, noted; #2082's decline carries the name (pinned); one c… |
