@@ -178,7 +178,9 @@ CANONICAL_QUERIES = [
     (5, "What makes you different?", "Identity", "floor", None, None),
     # Temporal (5) — Q6 canonical, Q7/9/10 floor (#965), Q8 canonical (pre-classifier→query)
     (6, "What day is it?", "Temporal", "canonical", None, None),
-    (7, "What did we accomplish yesterday?", "Temporal", "floor", None, None),
+    # #1386 (PPM 10-19): was "floor" (June). It routes canonical to query/changes_query, which answers
+    # with the account's own activity (the #1985-era changes path); that's the ruled product.
+    (7, "What did we accomplish yesterday?", "Temporal", "canonical", None, None),
     (
         8,
         "What's on the agenda for today?",
@@ -191,7 +193,9 @@ CANONICAL_QUERIES = [
     (10, "How long have we been working on this project?", "Temporal", "floor", None, None),
     # Spatial / Status (4) — all floor (STATUS routes through floor via safety net)
     (11, "What projects are we working on?", "Spatial", "floor", None, None),
-    (12, "Show me the project landscape", "Spatial", "floor", None, None),
+    # #1386 (PPM 10-19): was "floor" (June). Portfolio reads take the PORTFOLIO rail since #2048
+    # (Arch-ruled), canonical to portfolio/list_projects.
+    (12, "Show me the project landscape", "Spatial", "canonical", None, None),
     (13, "Which project should I focus on?", "Spatial", "floor", None, None),
     (14, "What's the status of project X?", "Spatial", "floor", None, None),
     # Capability (5) — mixed: action for mutations, floor for read-only
