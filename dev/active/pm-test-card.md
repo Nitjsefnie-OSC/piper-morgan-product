@@ -12,7 +12,7 @@
 ## Your order (Monday, updated 12:0x 10-19; only what is left; each item links to its card)
 
 1. ~~[D1](#d1) #2077~~ **PASS 12:3x, CLOSED** (your `0`).
-2. [D2](#d2): the #2078 wizard run with one code from your bank (must-close).
+2. ~~[D2](#d2) #2078~~ **PASS 12:4x** (account `test-acct-2078`, landed signed in; PA closes). Your two wizard notes filed: #2088 (invite code at step 3, should be first) and #2089 (hosted wizard still shows the local system check; Temporal always fails).
 3. [D5](#d5): the admin Invites page as `mvp-tester`: mint two, revoke one (about three minutes).
 4. [D4](#d4): the MCP app reads your A4 PAT-only account's GitHub (#1982, about five minutes; PA reads the logs).
 5. None of these gates anything; any order, any day: [A3](#a3) Disconnect dialog on three pages · [A2](#a2) Calendar answers in chat · [A6](#a6) find your way · [A7](#a7) three spec checks · [B2](#b2) a question never changes a project · [B3](#b3) the Integrations card after Test.
@@ -65,13 +65,6 @@ Done and gone from this page (git log -p keeps them): A1, A4, A5, B1, C1, C2, C3
 
 ## D. New on the Sunday build (live since `47ba746bee` 06:42 10-18, still on `f9fb8b750b`)
 
-### D2. Fresh invited sign-up through the wizard (#2078, must-close; you or Web)
-- **Where**: a private window, signed out; one unused code from `~/.piper-shared/xian-invite-bank-credential-20261018.txt` (mark its line with the account label afterwards); PA's steps are `dev/active/pa-sunday-served-2078-2080-steps.md` §A.
-- **Steps**: `/setup`, enter the invite code, a username, an email and a password, Create Account, then through to step 5.
-- **Pass**: step 5 reads "Setup Complete", "You're all set. You're signed in, and Piper is ready to help." with an **Open Piper** button that lands on `/`, signed in. **Also acceptable**: a toast "Account created, setup did not finish" with the Settings → LLM API Keys pointer, signed in; quote it.
-- **Fail**: "Setup Failed", a button stuck on "Creating…", or landing signed out.
-- **Judge**: PA relays to CXO; closes #2078.
-
 ### D4. The MCP app reads a PAT-only account's GitHub (#1982, PA's lane, your hand)
 - **Why you:** the PAT dual write (on this build) stores a PAT saved in Settings where the MCP app can read it; before it, a PAT-only user got "connect GitHub" from the connector. Your main account is OAuth-only, so the account to use is your **A4 PAT-only account**. First PAT-only user the MCP app serves.
 - **Steps**: (1) on alpha, signed in as A4: Settings → GitHub → paste the same PAT → **Update**; pass: it still reads "Connected" (A4's PAT was saved before the dual write, so this re-save is what makes it readable). (2) In Claude Desktop (or claude.ai) add or reconnect the Piper Alpha connector and sign in **as A4** on the alpha login page it opens. (3) Ask: **"What are my open GitHub issues in Piper?"**
@@ -87,7 +80,7 @@ Done and gone from this page (git log -p keeps them): A1, A4, A5, B1, C1, C2, C3
 
 ## Not on your list
 
-Web ran #2082 and #2067 on this build (both PASS 11:24; CXO CLOSED both 12:32). The must-close set is now #2078 (D2) alone; #2077 closed 12:4x on your `0`. Web also runs S9–S13 (#2057 phrasings, #2053 card, #2055 notice placement, #2046 ordinals); CXO judges; Lead posts results on the issues. Parked, try-and-tell only: #1943. #2061, #2059, #2060 and #2054 have nothing observable to test by hand; they close on being live.
+Web ran #2082 and #2067 on this build (both PASS 11:24; CXO CLOSED both 12:32). Both must-close items are done by your hand: #2077 closed 12:4x on your `0`; #2078 passed 12:4x (PA closes on the quote). Web also runs S9–S13 (#2057 phrasings, #2053 card, #2055 notice placement, #2046 ordinals); CXO judges; Lead posts results on the issues. Parked, try-and-tell only: #1943. #2061, #2059, #2060 and #2054 have nothing observable to test by hand; they close on being live.
 
 ## Version history
 
