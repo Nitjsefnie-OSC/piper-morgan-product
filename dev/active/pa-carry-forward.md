@@ -177,3 +177,4 @@ half unrelated).
 - **10-19 15:2x:** #1386 criterion 5 is 4 of 4 met (alembic check empty). The DB/app flap 14:53–15:03 looks like an app-side stall (Fly service check passing at 15:03:20). Criterion 2 is still held.
 - **10-19 15:4x:** alpha app/DB log streams run in scratch (pids from `pgrep -fl 'fly logs -a piper-morgan'`) until STOP; read them on any stall. Stop them at 21:47 STOP. #1386 criterion 2 held (PPM).
 - **10-19 16:1x:** HOST retention rule: delete `scratchpad/alpha-{app,db}-stream.log` at STOP (kill the two `fly logs` pids first) and confirm in the STOP entry. Repro read is owed on Web's start time. #2101 filed by Lead.
+- **10-19 16:4x:** #2101 window read (a wedge, not OOM; loop blocked around Q16 and after). Judge model fixed in the harness (`0115f2ee47`). Partial triaged. Tuesday: criterion 2 full run after the promotion; PA triages, and fixes Q7/Q12 labels on PPM's word.
