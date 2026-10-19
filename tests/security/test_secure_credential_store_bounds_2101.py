@@ -12,6 +12,7 @@ args, cache hit / expiry / invalidation on store and delete, the slow-read warni
 
 from __future__ import annotations
 
+import itertools
 from contextlib import contextmanager
 from unittest.mock import patch
 
@@ -117,7 +118,7 @@ class TestReadCache:
     def test_expiry_reconnects(self, monkeypatch):
         store, eng = _store()
         clock = {"t": 1000.0}
-        monkeypatch.setattr(mod.time, "monotonic", lambda: clock["t"])
+        monkeypatch.setattr(mod, "_clock", lambda: clock["t"])
         assert store.get("k") == "v1"
         clock["t"] += mod.READ_CACHE_TTL_SECONDS + 1
         assert store.get("k") == "v1"
@@ -127,8 +128,9 @@ class TestReadCache:
 class TestSlowReadWarning:
     def test_a_slow_read_is_logged(self, monkeypatch):
         store, eng = _store()
-        ticks = iter([0.0, 3.0, 3.0, 3.0])
-        monkeypatch.setattr(mod.time, "monotonic", lambda: next(ticks))
+        # The store's own clock is patched, never time.monotonic (asyncio reads it).
+        ticks = itertools.chain([0.0, 3.0], itertools.repeat(3.0))
+        monkeypatch.setattr(mod, "_clock", lambda: next(ticks))
         with patch.object(mod.logger, "warning") as warn:
             store.get("k")
         warn.assert_called_once()

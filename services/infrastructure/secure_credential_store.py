@@ -50,6 +50,11 @@ CONNECT_TIMEOUT_SECONDS = 5
 READ_CACHE_TTL_SECONDS = 60.0
 SLOW_READ_SECONDS = 1.0
 
+# The store's clock, patchable in tests WITHOUT touching time.monotonic itself
+# (asyncio's event loop reads time.monotonic; patching it globally stopped the
+# loop in every later async test of the same run, the 4 errors of 1a38f0d775).
+_clock = time.monotonic
+
 
 class EncryptedDBCredentialStore:
     """Encrypted credential storage in Postgres, keyed by composed name."""
@@ -115,7 +120,7 @@ class EncryptedDBCredentialStore:
             if hit is None:
                 return False, None
             value, expires = hit
-            if time.monotonic() >= expires:
+            if _clock() >= expires:
                 self._read_cache.pop(name, None)
                 return False, None
             return True, value
@@ -124,19 +129,19 @@ class EncryptedDBCredentialStore:
         found, value = self._cached(name)
         if found:
             return value
-        started = time.monotonic()
+        started = _clock()
         with self._get_engine().connect() as conn:
             row = conn.execute(
                 text("SELECT encrypted_value FROM secure_credentials WHERE name = :name"),
                 {"name": name},
             ).first()
-        elapsed = time.monotonic() - started
+        elapsed = _clock() - started
         if elapsed >= SLOW_READ_SECONDS:
             # #2101: this read ran on the event loop; a slow one is the stall.
             logger.warning("credential_store_slow_read", name=name, elapsed_s=round(elapsed, 2))
         value = None if row is None else self._encryptor.decrypt(row[0], _CONTEXT_PREFIX + name)
         with self._cache_lock:
-            self._read_cache[name] = (value, time.monotonic() + READ_CACHE_TTL_SECONDS)
+            self._read_cache[name] = (value, _clock() + READ_CACHE_TTL_SECONDS)
         return value
 
     def delete(self, name: str) -> bool:
