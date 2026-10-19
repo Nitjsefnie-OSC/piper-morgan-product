@@ -36,5 +36,7 @@ def test_mint_shows_the_new_rows_then_rereads_and_says_when_the_reread_fails():
 
 
 def test_load_failure_is_rethrown_so_callers_can_say_so():
-    seam = PAGE[PAGE.index("async function loadInvites()") : PAGE.index("function prependMintedRows")]
+    seam = PAGE[
+        PAGE.index("async function loadInvites()") : PAGE.index("function prependMintedRows")
+    ]
     assert "throw error;" in seam
