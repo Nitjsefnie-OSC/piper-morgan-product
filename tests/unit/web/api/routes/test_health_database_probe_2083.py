@@ -44,6 +44,10 @@ class _FakeConnection:
 
 
 class _FakeEngine:
+    """The shape `_database_probe` reads: `connect()` and `dispose()`."""
+
+    disposed = 0
+
     def __init__(self, behaviour):
         self._behaviour = behaviour
 
@@ -51,22 +55,13 @@ class _FakeEngine:
     async def connect(self):
         yield _FakeConnection(self._behaviour)
 
-
-class _FakeDb:
-    """The shape `_database_probe` reads: `_initialized` and `engine.connect()`."""
-
-    def __init__(self, behaviour):
-        self._initialized = True
-        self.engine = _FakeEngine(behaviour)
-
-    async def initialize(self):  # pragma: no cover — _initialized is True
-        raise AssertionError("initialize() must not run when the engine exists")
+    async def dispose(self):
+        _FakeEngine.disposed += 1
 
 
 def _install(monkeypatch, behaviour, timeout=None):
-    import services.database.connection as connection_module
-
-    monkeypatch.setattr(connection_module, "db", _FakeDb(behaviour))
+    """Replace the probe's engine factory at its one seam; the global singleton is untouched."""
+    monkeypatch.setattr(admin_module, "create_async_engine", lambda *a, **k: _FakeEngine(behaviour))
     if timeout is not None:
         monkeypatch.setattr(admin_module, "DATABASE_PROBE_SECONDS", timeout)
     monkeypatch.setenv(
@@ -141,3 +136,40 @@ class TestHealthDatabaseProbe2083:
 
         _install(monkeypatch, answers)
         assert _client().get("/health").status_code == 200
+
+    def test_probe_never_initializes_the_global_singleton_and_disposes_its_engine(
+        self, monkeypatch
+    ):
+        """13716892ee's red: the probe initialized `services.database.connection.db`
+        under the TestClient's loop and a cancelled asyncpg operation poisoned its pool,
+        so later DB tests in the same process failed with "another operation is in
+        progress". The probe must own its engine and let the singleton alone."""
+        import services.database.connection as connection_module
+
+        async def answers():
+            return None
+
+        _install(monkeypatch, answers)
+        # A fresh, uninitialized singleton for this test only (an earlier test in the
+        # same process may have initialized the real one; order must not matter).
+        fresh = connection_module.DatabaseConnection()
+        monkeypatch.setattr(connection_module, "db", fresh)
+        before = _FakeEngine.disposed
+        assert fresh._initialized is False
+
+        _client().get("/health")
+
+        assert fresh._initialized is False
+        assert fresh.engine is None
+        assert _FakeEngine.disposed == before + 1
+
+    def test_hung_probe_still_disposes_its_engine(self, monkeypatch):
+        async def hangs():
+            await asyncio.sleep(30)
+
+        _install(monkeypatch, hangs, timeout=0.2)
+        before = _FakeEngine.disposed
+
+        _client().get("/health")
+
+        assert _FakeEngine.disposed == before + 1

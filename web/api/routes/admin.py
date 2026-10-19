@@ -45,6 +45,7 @@ from datetime import datetime, timezone
 
 import structlog
 from fastapi import APIRouter, Depends, Request
+from sqlalchemy.ext.asyncio import create_async_engine
 
 from services.auth.auth_middleware import JWTClaims, require_admin
 
@@ -60,27 +61,36 @@ DATABASE_PROBE_SECONDS = 2.0
 
 
 async def _database_probe() -> str:
-    """Return "healthy" when `SELECT 1` answers on the app's engine, else "unreachable".
+    """Return "healthy" when `SELECT 1` answers on the database, else "unreachable".
 
     #2083: on 2026-10-19 alpha's Postgres stopped answering for hours while
     /health kept saying "healthy" (it had no DB check), so sign-in returned 500
     for everyone while the deploy gate, the promotion grant and the test card
-    all read the page as fine. The probe uses the same global engine the app
-    serves requests from (services.database.connection.db, lazily initialized
-    exactly as get_session() does), wrapped in asyncio.wait_for so a hung
-    connection cannot hold the route past Fly's timeout. The body never carries
-    the DSN, the host or the exception text: the class name goes to the log only.
+    all read the page as fine.
+
+    The probe opens its OWN one-connection engine and disposes it in `finally`;
+    it never touches the global singleton (`services.database.connection.db`).
+    The first landing (13716892ee) used the singleton and turned Tests red:
+    `asyncio.wait_for` cancelling an asyncpg operation mid-flight left a POOLED
+    connection in "another operation is in progress", and a health call under
+    a TestClient loop bound the singleton to that loop, so later DB tests in
+    the same process failed (3 new failures, 2026-10-19 10:01). A throwaway
+    engine has no pool to poison and no loop to keep. Cost: one connection
+    setup per check (every 30 s on Fly), which session_scope_fresh() already
+    pays per request on the setup endpoints.
+
+    The body never carries the DSN, the host or the exception text: the class
+    name goes to the log only.
     """
     from sqlalchemy import text
 
-    from services.database.connection import db
+    from services.database.session_factory import _get_database_url
+
+    engine = create_async_engine(
+        _get_database_url(), pool_pre_ping=False, pool_size=1, max_overflow=0
+    )
 
     async def _ping() -> None:
-        if not db._initialized:
-            await db.initialize()
-        engine = db.engine
-        if engine is None:
-            raise RuntimeError("database engine not initialized")
         async with engine.connect() as conn:
             await conn.execute(text("SELECT 1"))
 
@@ -89,6 +99,11 @@ async def _database_probe() -> str:
     except Exception as exc:  # noqa: BLE001 — every failure class reads the same from outside
         logger.warning("health_database_probe_failed", error_class=type(exc).__name__)
         return "unreachable"
+    finally:
+        try:
+            await asyncio.wait_for(engine.dispose(), timeout=DATABASE_PROBE_SECONDS)
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("health_database_probe_dispose_failed", error_class=type(exc).__name__)
     return "healthy"
 
 
