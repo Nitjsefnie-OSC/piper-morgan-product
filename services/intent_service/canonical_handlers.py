@@ -2483,97 +2483,168 @@ Ask me how project context works any time. Are you ready to set up your first pr
             result["write_offer"] = build_add_project_offer(question=offer_text, user_id=user_id)
         return result
 
-    async def _format_integration_setup_guidance(self, user_id: Optional[str] = None) -> Dict:
+    # #2093: which single integration a question names. A word set, not a regex
+    # (Arch 2026-10-19: word sets are binders too, covered by review); a message
+    # naming two or none is the general ask.
+    _INTEGRATION_WORDS: Dict[str, Tuple[str, ...]] = {
+        "github": ("github",),
+        "slack": ("slack",),
+        "calendar": ("calendar", "gcal"),
+        "notion": ("notion",),
+    }
+
+    @classmethod
+    def _asked_integration(cls, original_message: Optional[str]) -> Optional[str]:
+        text = (original_message or "").lower()
+        hits = [
+            name for name, words in cls._INTEGRATION_WORDS.items() if any(w in text for w in words)
+        ]
+        return hits[0] if len(hits) == 1 else None
+
+    async def _format_integration_setup_guidance(
+        self, user_id: Optional[str] = None, original_message: Optional[str] = None
+    ) -> Dict:
         """
         Issue #498: Format guidance response for integration setup requests.
 
-        Returns structured guidance with link to settings page.
-
-        #1547 (status-truth audit F1): reads the canonical
+        #1547: the connected/not-connected split is read live from
         IntegrationStatusService per-user — the plugin registry's `configured`
         bit was constant-false for all four real plugins (#784), so this
         guidance told CONNECTED users everything was "Not connected" and
         enumerated Demo beside real integrations (#1534). The canonical set
         excludes Demo structurally.
+
+        #2093 (CXO's words, 2026-10-19): a yes/no question about ONE integration
+        gets one sentence; the general ask leads with Connected and shows
+        "Not connected yet:" plus setup guidance only for what is missing. When
+        all four are connected there is no opener and no "Popular integrations"
+        block: the list is the answer. Facts (connected, tested, failed) come
+        from the status service, never from the text.
         """
         # Check which integrations are configured (user-scoped, binding-first)
-        integrations_status: List[Dict[str, Any]] = []
+        statuses: Dict[str, Dict[str, Any]] = {}
         status_check_failed = False
         try:
             from services.integrations.integration_status_service import (
                 DISPLAY_NAMES,
+                KNOWN_INTEGRATIONS,
                 IntegrationStatusService,
                 needs_reconnecting,
             )
 
-            statuses = await IntegrationStatusService().get_all(user_id)
-            for name, status in statuses.items():
-                integrations_status.append(
-                    {
-                        "name": name,
-                        "configured": bool(status.get("configured")),
-                        # #2072 follow-up (Arch's ruling): a grant GitHub has rejected
-                        # is listed apart, never under Connected.
-                        "needs_reconnecting": needs_reconnecting(status),
-                    }
-                )
+            raw = await IntegrationStatusService().get_all(user_id)
+            for name in KNOWN_INTEGRATIONS:
+                st = dict(raw.get(name) or {})
+                st["needs_reconnecting"] = needs_reconnecting(st)
+                statuses[name] = st
         except Exception as e:  # silent-ok: #1423 — guidance still renders without live status, but the failure is now WARN-logged with traceback (was debug) AND the message honestly says the status check failed instead of silently omitting connection state
             status_check_failed = True
             DISPLAY_NAMES = {}
+            KNOWN_INTEGRATIONS = ("github", "slack", "calendar", "notion")
             logger.warning(f"Could not check integration status: {e}", exc_info=True)
-
-        needs_reconnect = [i["name"] for i in integrations_status if i.get("needs_reconnecting")]
-        configured = [
-            i["name"]
-            for i in integrations_status
-            if i.get("configured") and not i.get("needs_reconnecting")
-        ]
-        not_configured = [i["name"] for i in integrations_status if not i.get("configured")]
 
         def _display(name: str) -> str:
             return DISPLAY_NAMES.get(name, name.title())
 
-        message = """I'd be happy to help you set up integrations!
+        def _state(st: Dict[str, Any]) -> str:
+            if not st.get("configured"):
+                return "not_connected"
+            if st.get("needs_reconnecting"):
+                return "needs_reconnecting"
+            if st.get("healthy") is True:
+                return "connected_ok"
+            if st.get("healthy") is False:
+                return "connected_failed"
+            return "connected_untested"
 
-**Available Integrations:**
-"""
-        if status_check_failed:
-            message += (
-                "\n(I couldn't check your current connection status just now, "
-                "so I can't say which of these are already connected.)\n"
-            )
+        needs_reconnect = [n for n, st in statuses.items() if _state(st) == "needs_reconnecting"]
+        configured = [
+            n
+            for n, st in statuses.items()
+            if _state(st) in ("connected_ok", "connected_untested", "connected_failed")
+        ]
+        not_configured = [n for n, st in statuses.items() if _state(st) == "not_connected"]
+        asked = self._asked_integration(original_message)
 
-        if configured:
-            message += "\n✅ **Connected:**\n"
-            for name in configured[:5]:
-                message += f"  - {_display(name)}\n"
+        def _settings_path(name: str) -> str:
+            return f"Settings → Integrations → {_display(name)}"
 
-        # #2072 follow-up (CXO's words, 2026-10-17): its own group between Connected
-        # and Not connected, only when it has members.
-        if needs_reconnect:
-            message += "\n🟡 **Needs reconnecting:**\n"
-            for name in needs_reconnect[:5]:
-                message += f"  - {_display(name)}\n"
-            message += "Reconnect it in Settings → Integrations → GitHub.\n"
-
-        if not_configured:
-            message += "\n⚪ **Not connected:**\n"
-            for name in not_configured[:5]:
-                message += f"  - {_display(name)}\n"
-
-        message += """
-To connect integrations, visit the **Settings** hub:
-→ [Settings](/settings)
-
-**Popular integrations to connect:**
-1. **GitHub** - Issue tracking and project management
-2. **Slack** - Team communication and notifications
-3. **Calendar** - Meeting awareness and scheduling
-4. **Notion** - Documentation and knowledge base
-
-Each integration has its own setup process. Would you like guidance on setting up a specific integration?
-
-Once you've connected an integration, let me know and I'll help test the connection."""
+        if asked and not status_check_failed:
+            st = statuses.get(asked, {})
+            state = _state(st)
+            disp = _display(asked)
+            if state == "not_connected":
+                message = (
+                    f"No, {disp} isn't connected. You can connect it in {_settings_path(asked)}."
+                )
+            elif state == "needs_reconnecting":
+                message = (
+                    f"{disp} is connected, but the grant was rejected the last time it was used. "
+                    f"Reconnect it in {_settings_path(asked)}."
+                )
+            elif state == "connected_ok":
+                message = f"Yes, {disp} is connected."
+            elif state == "connected_failed":
+                reason = st.get("last_error")
+                message = (
+                    f"{disp} is connected, but the last check failed"
+                    + (f": {reason}" if reason else "")
+                    + ". Press Test in Settings → Integrations to try again."
+                )
+            else:
+                message = f"Yes, {disp} is connected (not tested yet)."
+        else:
+            lines: List[str] = []
+            if status_check_failed:
+                lines.append(
+                    "I couldn't check your current connection status just now, so I can't say "
+                    "which of these are already connected."
+                )
+                lines.append("")
+                lines.append(
+                    "You can connect integrations in **Settings → Integrations** (/settings/integrations):"
+                )
+                for name in KNOWN_INTEGRATIONS:
+                    lines.append(f"  - {_display(name)}")
+            else:
+                if configured:
+                    lines.append("✅ **Connected:**")
+                    for name in configured:
+                        state = _state(statuses[name])
+                        mark = ""
+                        if state == "connected_untested":
+                            mark = " (not tested yet)"
+                        elif state == "connected_failed":
+                            reason = statuses[name].get("last_error")
+                            mark = " (last check failed" + (f": {reason}" if reason else "") + ")"
+                        lines.append(f"  - {_display(name)}{mark}")
+                # #2072 follow-up (CXO's words, 2026-10-17): its own group between
+                # Connected and Not connected, only when it has members.
+                if needs_reconnect:
+                    lines.append("")
+                    lines.append("🟡 **Needs reconnecting:**")
+                    for name in needs_reconnect:
+                        lines.append(f"  - {_display(name)}")
+                    # CXO's 10-17 words, kept verbatim (pinned by test_stale_binding_renderers_2072).
+                    lines.append(f"Reconnect it in {_settings_path(needs_reconnect[0])}.")
+                if not_configured:
+                    lines.append("")
+                    lines.append("⚪ **Not connected yet:**")
+                    for name in not_configured:
+                        lines.append(
+                            f"  - {_display(name)} — connect it in {_settings_path(name)}."
+                        )
+                    lines.append("")
+                    lines.append(
+                        "Each one has its own short setup; say which you'd like to connect and I'll walk "
+                        "you through it. Once it's connected, let me know and I'll help test the connection."
+                    )
+                if not lines:
+                    lines.append(
+                        "Nothing is connected yet. You can connect GitHub, Slack, Google Calendar and Notion "
+                        "in **Settings → Integrations** (/settings/integrations)."
+                    )
+            message = "\n".join(lines)
 
         return {
             "message": message,
@@ -2583,6 +2654,7 @@ Once you've connected an integration, let me know and I'll help test the connect
                 "confidence": 1.0,
                 "context": {
                     "setup_topic": "integrations",
+                    "asked_integration": asked,
                     "configured_integrations": configured,
                     "needs_reconnecting_integrations": needs_reconnect,
                     "available_integrations": not_configured,
@@ -4327,7 +4399,9 @@ What would you like to set up first?"""
                 return await self._handle_project_setup_request(intent, session_id, user_id)
             elif setup_topic == "integrations":
                 # #1547: thread user_id — integration status is user-scoped
-                return await self._format_integration_setup_guidance(user_id)
+                # #2093: the asked integration (if one) comes from the message.
+                _msg = intent.original_message or (intent.context or {}).get("original_message", "")
+                return await self._format_integration_setup_guidance(user_id, original_message=_msg)
             else:  # general
                 return self._format_general_setup_guidance()
 

@@ -136,6 +136,7 @@ class TestGitHubBindingFirst:
             "via": None,
             "healthy": None,
             "last_check": None,
+            "last_error": None,  # #2093
         }
 
 

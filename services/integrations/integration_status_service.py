@@ -247,6 +247,7 @@ class IntegrationStatusService:
 
         healthy: Optional[bool] = None
         last_check: Optional[str] = None
+        last_error: Optional[str] = None  # #2093: this principal's own failed-check text
         if via == "oauth_binding":
             # Mirrors /health's short-circuit: a BOUND connector reports healthy
             # (the chat reads go through it).
@@ -262,10 +263,12 @@ class IntegrationStatusService:
             if result is not None:
                 healthy = result.ok
                 last_check = result.checked_at_iso
+                last_error = result.error
 
         return {
             "configured": configured,
             "via": via,
+            "last_error": last_error,
             "healthy": healthy,
             "last_check": last_check,
         }
