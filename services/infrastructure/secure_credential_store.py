@@ -23,7 +23,8 @@ binding rail as it lands, shrinking this store's connector share naturally.
 from __future__ import annotations
 
 import threading
-from typing import List, Optional
+import time
+from typing import Dict, List, Optional, Tuple
 
 import structlog
 from sqlalchemy import create_engine, text
@@ -32,6 +33,22 @@ from sqlalchemy.pool import NullPool
 logger = structlog.get_logger(__name__)
 
 _CONTEXT_PREFIX = "secure_credentials."
+
+# #2101 (alpha stalls, 2026-10-19): every read here is a SYNCHRONOUS psycopg2
+# connect on the event loop (NullPool: a fresh connection per op), and the chat
+# path reads several credentials per turn (integration status, GitHub config,
+# the calendar adapter). When the proxy is slow the loop freezes for the connect
+# duration; PA's log window showed a 33 s silence with no DB-side error. Three
+# bounds, none of them the architectural fix (that is Arch's: move the reads
+# off the loop or onto the async engine):
+#   - a connect timeout, so one hung connect costs at most this many seconds;
+#   - a short in-process read cache, so a turn pays one connect per name per
+#     TTL instead of one per read (writes and deletes invalidate their name);
+#   - a WARNING when a read takes longer than SLOW_READ_SECONDS, so the next
+#     stall's log names the call.
+CONNECT_TIMEOUT_SECONDS = 5
+READ_CACHE_TTL_SECONDS = 60.0
+SLOW_READ_SECONDS = 1.0
 
 
 class EncryptedDBCredentialStore:
@@ -51,6 +68,9 @@ class EncryptedDBCredentialStore:
         self._encryptor = encryptor
         self._engine = engine
         self._engine_lock = threading.Lock()
+        # name -> (decrypted value or None, monotonic expiry)
+        self._read_cache: Dict[str, Tuple[Optional[str], float]] = {}
+        self._cache_lock = threading.Lock()
 
     def _get_engine(self):
         if self._engine is None:
@@ -63,7 +83,11 @@ class EncryptedDBCredentialStore:
                     # (connect/settings-time), so every op opens and truly
                     # closes its connection — no idle sync connection parked
                     # against Postgres for the process lifetime.
-                    self._engine = create_engine(get_sync_migration_url(), poolclass=NullPool)
+                    self._engine = create_engine(
+                        get_sync_migration_url(),
+                        poolclass=NullPool,
+                        connect_args={"connect_timeout": CONNECT_TIMEOUT_SECONDS},
+                    )
         return self._engine
 
     def store(self, name: str, value: str) -> None:
@@ -78,17 +102,42 @@ class EncryptedDBCredentialStore:
                 ),
                 {"name": name, "val": encrypted},
             )
+        self._forget(name)
         logger.info("credential_stored_db", name=name)
 
+    def _forget(self, name: str) -> None:
+        with self._cache_lock:
+            self._read_cache.pop(name, None)
+
+    def _cached(self, name: str) -> Tuple[bool, Optional[str]]:
+        with self._cache_lock:
+            hit = self._read_cache.get(name)
+            if hit is None:
+                return False, None
+            value, expires = hit
+            if time.monotonic() >= expires:
+                self._read_cache.pop(name, None)
+                return False, None
+            return True, value
+
     def get(self, name: str) -> Optional[str]:
+        found, value = self._cached(name)
+        if found:
+            return value
+        started = time.monotonic()
         with self._get_engine().connect() as conn:
             row = conn.execute(
                 text("SELECT encrypted_value FROM secure_credentials WHERE name = :name"),
                 {"name": name},
             ).first()
-        if row is None:
-            return None
-        return self._encryptor.decrypt(row[0], _CONTEXT_PREFIX + name)
+        elapsed = time.monotonic() - started
+        if elapsed >= SLOW_READ_SECONDS:
+            # #2101: this read ran on the event loop; a slow one is the stall.
+            logger.warning("credential_store_slow_read", name=name, elapsed_s=round(elapsed, 2))
+        value = None if row is None else self._encryptor.decrypt(row[0], _CONTEXT_PREFIX + name)
+        with self._cache_lock:
+            self._read_cache[name] = (value, time.monotonic() + READ_CACHE_TTL_SECONDS)
+        return value
 
     def delete(self, name: str) -> bool:
         with self._get_engine().begin() as conn:
@@ -96,6 +145,7 @@ class EncryptedDBCredentialStore:
                 text("DELETE FROM secure_credentials WHERE name = :name"), {"name": name}
             )
         deleted = result.rowcount > 0
+        self._forget(name)
         if deleted:
             logger.info("credential_deleted_db", name=name)
         return deleted
