@@ -20,6 +20,18 @@ from __future__ import annotations
 
 from typing import Any, List, Optional, Tuple
 
+# #2095 (ADR-078 D1 amendment): every action_type the ledger may hold. External
+# objects carry an external ref (``owner/repo#N``); Piper's own records carry
+# ``kind:<id>``. The recall's label map is pinned to cover this whole tuple.
+LEDGER_ACTION_TYPES = (
+    "issue_created",
+    "doc_created",
+    "todo_created",
+    "reminder_created",
+    "project_created",
+)
+INTERNAL_RECORD_KINDS = ("todo", "reminder", "project")
+
 
 async def list_session_activities(user_id: str, session_id: str) -> List[Any]:
     """The owner-scoped #1394 ledger read (newest first, per repository order).

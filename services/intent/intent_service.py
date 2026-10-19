@@ -76,6 +76,28 @@ from services.utils.utterance_log import utterance_fields as _utterance_fields
 from services.utils.utterance_log import utterance_preview
 
 
+def _pop_pending_created_activity(
+    session_id: Optional[str], user_id: Optional[str]
+) -> Optional[Dict[str, Any]]:
+    """#2095: take (and clear) the create parked on the session context, or None.
+
+    Module-level on purpose: the observer is exercised with a bare namespace as
+    ``self`` in its pins, and the lookup must not depend on the class.
+    """
+    if not session_id:
+        return None
+    try:
+        from services.intent_service.conversation_context import get_or_create_context
+
+        ctx = get_or_create_context(session_id, user_id=user_id)
+        created = getattr(ctx, "pending_created_activity", None)
+        if created:
+            ctx.pending_created_activity = None
+        return created
+    except Exception:  # silent-ok: a context failure must never block the response
+        return None
+
+
 class _RepoRouteKwargs(TypedDict, total=False):
     """#1567/#1641: explicit owner/repo_name kwargs when the user NAMED a
     repository; empty → the router resolves internally, with the exact #1042
@@ -968,6 +990,11 @@ class IntentService:
         if not user_id:
             return  # D1a — never write an owner-less activity row
         created = (result.intent_data or {}).get("created_activity")
+        if not created:
+            # #2095: a create the handler could not declare in its result (the todo
+            # handlers answer with a string) is parked on the session context by
+            # _remember_created_todo; pop it here, once, for this owner's session.
+            created = _pop_pending_created_activity(session_id, user_id)
         if not created:
             return
         try:
@@ -9520,12 +9547,25 @@ class IntentService:
         if not activities:
             message = "We haven't created anything in this session yet."
         else:
-            _label = {"issue_created": "issue", "doc_created": "doc"}
+            # #2095: every LEDGER_ACTION_TYPES entry has a label (pinned).
+            _label = {
+                "issue_created": "issue",
+                "doc_created": "doc",
+                "todo_created": "todo",
+                "reminder_created": "reminder",
+                "project_created": "project",
+            }
             lines = []
             for a in activities:  # newest first
                 kind = _label.get(a.action_type, a.action_type.replace("_", " "))
-                title = f" — {a.target_title}" if a.target_title else ""
-                lines.append(f"• {a.target_ref} ({kind}){title}")
+                ref = a.target_ref or ""
+                if ref.split(":", 1)[0] in ("todo", "reminder", "project"):
+                    # Piper's own record: the title is what the person knows it by;
+                    # the id is a database fact nobody typed.
+                    lines.append(f"• a {kind}: {a.target_title or '(untitled)'}")
+                else:
+                    title = f" — {a.target_title}" if a.target_title else ""
+                    lines.append(f"• {ref} ({kind}){title}")
             message = "Here's what we created this session:\n" + "\n".join(lines)
 
         return IntentProcessingResult(

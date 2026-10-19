@@ -5703,6 +5703,12 @@ What would you like to set up first?"""
                     "category": IntentCategoryEnum.PORTFOLIO.value,
                     "action": "add_project",
                     "confidence": 1.0,
+                    # #2095 (ADR-078 D1 amendment): the ledger row for this create.
+                    "created_activity": {
+                        "action_type": "project_created",
+                        "target_ref": f"project:{created.id}",
+                        "target_title": stored_name,
+                    },
                     "context": {
                         "project_name": stored_name,
                         "project_id": created.id,

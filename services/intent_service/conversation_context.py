@@ -51,7 +51,7 @@ Architecture (#1207 unification, 2026-06-12 — where this module sits):
 
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import Any, Optional
+from typing import Any, Dict, Optional
 from uuid import UUID, uuid4
 
 import structlog
@@ -184,6 +184,11 @@ class ConversationContext:
     # last_numbered_list: in-memory, within-session, forgotten on restart
     # (the gate then falls to the honest which-todo ask).
     last_created_todo: Optional["CreatedTodo"] = None
+    # #2095 (ADR-078 D1 amendment): a create that the handler could not declare in
+    # its result (the todo handlers answer with a plain string) is parked here for
+    # the central observer, which pops it after the turn. Owner-scoped by the
+    # context's user_id; never read across sessions.
+    pending_created_activity: Optional[Dict[str, Any]] = None
 
     # #1762 (epic 6): the unrendered tail of the most recent capped list, so
     # "…and N more" is a claim we can CASH (GatherOutcome §5b). DELIBERATELY

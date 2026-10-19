@@ -1351,6 +1351,14 @@ class TodoIntentHandlers:
 
             ctx = get_or_create_context(session_id, user_id=user_id)
             ctx.last_created_todo = CreatedTodo(id=str(todo.id), text=todo.text or "", kind=kind)
+            # #2095: the ledger row for this create (ADR-078 D1 amendment). The
+            # handler answers with a string, so it cannot declare
+            # intent_data["created_activity"]; the central observer pops this.
+            ctx.pending_created_activity = {
+                "action_type": f"{kind}_created",
+                "target_ref": f"{kind}:{todo.id}",
+                "target_title": todo.text or "",
+            }
         except Exception as e:  # silent-ok: logged; a pointer then falls to the honest which-todo ask, never a guess
             logger.warning("created_todo_remember_failed", error=str(e), session_id=session_id)
 
@@ -2533,6 +2541,12 @@ async def handle_reminder_time_turn(
                 "action": "create_reminder",
                 "confidence": 1.0,
                 "reminder_saved": True,
+                # #2095: the ledger row (ADR-078 OQ-3 contract).
+                "created_activity": {
+                    "action_type": "reminder_created",
+                    "target_ref": f"reminder:{todo.id}",
+                    "target_title": task_text,
+                },
             },
         }
 
@@ -3005,6 +3019,12 @@ async def handle_reminder_task_turn(
             "action": "create_reminder",
             "confidence": 1.0,
             "reminder_saved": True,
+            # #2095: the ledger row (ADR-078 OQ-3 contract).
+            "created_activity": {
+                "action_type": "reminder_created",
+                "target_ref": f"reminder:{todo.id}",
+                "target_title": task_text,
+            },
         },
     }
 
