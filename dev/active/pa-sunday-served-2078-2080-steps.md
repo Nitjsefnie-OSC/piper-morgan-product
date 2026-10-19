@@ -21,7 +21,7 @@ About 10 minutes for both.
 | B: #2080 chain | **CLOSED** (CXO 10-18 11:34, on Web's quoted chain and decline). Step 6 as I wrote it was unreachable by design (my spec error). |
 | C: #2079 greeting | **CLOSED** (CXO 10-18 12:32, on Web's morning and afternoon quotes). |
 | A: #2078 wizard | **D2 run by xian 10-19 12:4x** on `f9fb8b750b` (`test-acct-2078`): no Setup Failed, signed in, key stored. **Close held** on the step-4 project (My Projects on that account). Comment 6276134129. |
-| D: #1982 MCP PAT read | Not run. On xian's card as **D4** (v82, after D2; Lead 10:0x). His hand; PA reads the MCP logs when he runs it. |
+| D: #1982 MCP PAT read | **First run 10-19 13:1x hit the local plugin**, not the connector (MCP logs: list-only session, no call). Retry steps updated (1b, 3). On xian's card as **D4** (v82, after D2; Lead 10:0x). His hand; PA reads the MCP logs when he runs it. |
 | #2077 | **CLOSED** (Lead 10-19 12:34): xian's own Chrome profile with the saved Piper password, `token` length 0 (card D1). |
 | #2072, #2076, #2069, #2051 | Closed by CXO on Web's rows. |
 
@@ -90,10 +90,11 @@ PM's own account is OAuth-only (A1, 10-17: no PAT), so the account to use is **x
    can't see it yet. On alpha, signed in as the A4 account: Settings → GitHub → paste the same PAT → **Update**.
    **Pass**: it still reads "Connected". (The alternative is runbook step 2b's backfill script, which is xian's hand
    on alpha. Re-saving is simpler for one account.)
+1b. **Sign out of alpha in your default browser** (or stay signed in there as A4). The connector's sign-in opens in the default browser, and a main-account session there would approve the connector as you, not A4. (Added 10-19 after the first run.)
 2. **Connect the MCP connector as the A4 account.** In Claude Desktop (or claude.ai), add or reconnect the Piper
    Alpha connector, and sign in **as the A4 account** on the alpha login page it opens. Your usual connector is
    bound to your main account, which is OAuth and doesn't test this.
-3. Ask: **"What are my open GitHub issues in Piper?"** **Pass**: real issue titles that match GitHub, with the
+3. In a new chat, **turn off the local "Piper Morgan" extension** in the tools menu, leaving "Piper Alpha MCP" on (10-19: the first run went to the local plugin at `localhost:8001`, and the MCP logs show no call). Ask: **"What are my open GitHub issues in Piper?"** **Pass**: real issue titles that match GitHub, with the
    total stated (A4's PAT saw 274 on 10-17). **Fail**: "connect GitHub", `CONNECT_REQUIRED`, or an empty list.
    Screenshot it.
 4. PA reads the MCP app's logs for that call (`fly logs -a piper-morgan-mcp`, a read): `EncryptedDBCredentialStore`,
