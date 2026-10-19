@@ -45,6 +45,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 # Load .env so ANTHROPIC_API_KEY (and others) are available
 try:
     from dotenv import load_dotenv
+
     load_dotenv(PROJECT_ROOT / ".env")
 except ImportError:
     pass
@@ -56,6 +57,7 @@ except ImportError:
 try:
     if not os.environ.get("ANTHROPIC_API_KEY"):
         from services.infrastructure.keychain_service import get_keychain_service
+
         anthropic_key = get_keychain_service().get_api_key("anthropic")
         if anthropic_key:
             os.environ["ANTHROPIC_API_KEY"] = anthropic_key
@@ -77,7 +79,7 @@ BASE_URL = os.environ.get("PIPER_BASE_URL", "http://localhost:8001").rstrip("/")
 HOSTED = not BASE_URL.startswith(("http://localhost", "http://127.0.0.1"))
 INTENT_ENDPOINT = f"{BASE_URL}/api/v1/intent"
 LOGIN_ENDPOINT = f"{BASE_URL}/api/v1/auth/login"  # #989 follow-up 2026-05-25: was /auth/login pre-API-v1-convention
-SETUP_ENDPOINT = f"{BASE_URL}/api/v1/setup"        # for create-user
+SETUP_ENDPOINT = f"{BASE_URL}/api/v1/setup"  # for create-user
 
 # Default fresh-account user (preserves #960 fabrication-guard verification surface).
 # Issue #989: `--warm-user` flag switches to canonical-test-warm which has project +
@@ -108,6 +110,7 @@ def _served_sha() -> str:
         return requests.get(f"{BASE_URL}/health", timeout=15).json().get("git_sha", "unknown")
     except Exception as e:
         return f"unreadable ({type(e).__name__})"
+
 
 # Judge config
 JUDGE_CONFIDENCE_THRESHOLD = 0.7  # Below this → human escalation flag
@@ -148,54 +151,95 @@ CANONICAL_QUERIES = [
     (3, "Are you working properly?", "Identity", "floor", None, None),
     (4, "How do I get help?", "Identity", "floor", None, None),
     (5, "What makes you different?", "Identity", "floor", None, None),
-
     # Temporal (5) — Q6 canonical, Q7/9/10 floor (#965), Q8 canonical (pre-classifier→query)
     (6, "What day is it?", "Temporal", "canonical", None, None),
     (7, "What did we accomplish yesterday?", "Temporal", "floor", None, None),
-    (8, "What's on the agenda for today?", "Temporal", "canonical", None, None),  # pre-classifier routes to query/meeting_time
+    (
+        8,
+        "What's on the agenda for today?",
+        "Temporal",
+        "canonical",
+        None,
+        None,
+    ),  # pre-classifier routes to query/meeting_time
     (9, "When was the last time we worked on this?", "Temporal", "floor", None, None),
     (10, "How long have we been working on this project?", "Temporal", "floor", None, None),
-
     # Spatial / Status (4) — all floor (STATUS routes through floor via safety net)
     (11, "What projects are we working on?", "Spatial", "floor", None, None),
     (12, "Show me the project landscape", "Spatial", "floor", None, None),
     (13, "Which project should I focus on?", "Spatial", "floor", None, None),
     (14, "What's the status of project X?", "Spatial", "floor", None, None),
-
     # Capability (5) — mixed: action for mutations, floor for read-only
     (16, "Create a GitHub issue about testing", "Capability", "action", None, None),
     (17, "Analyze this document", "Capability", "action", None, None),
     (18, "List all my projects", "Capability", "floor", None, None),  # STATUS→floor
     (19, "Generate a status report", "Capability", "floor", None, None),  # STATUS→floor
     (20, "Search for authentication in our documents", "Capability", "action", None, None),
-
     # Predictive (5) — Q21 expected-pass, Q22-25 M2-Beta pending
     (21, "What should I focus on today?", "Predictive", "floor", None, None),
     (22, "What patterns do you see?", "Predictive", "floor", "M2 Beta", "M2-beta-pending"),
     (23, "What risks should I be aware of?", "Predictive", "floor", "M2 Beta", "M2-beta-pending"),
-    (24, "What opportunities should I pursue?", "Predictive", "floor", "M2 Beta", "M2-beta-pending"),
+    (
+        24,
+        "What opportunities should I pursue?",
+        "Predictive",
+        "floor",
+        "M2 Beta",
+        "M2-beta-pending",
+    ),
     (25, "What's the next milestone?", "Predictive", "floor", "M2 Beta", "M2-beta-pending"),
-
     # Conversational (5) — mostly floor, Q29/30 canonical (pre-classifier→query)
     (26, "What else can you help with?", "Conversational", "floor", None, None),
     (27, "Tell me more about the GitHub integration", "Conversational", "floor", None, None),
     (28, "How do I use the calendar feature?", "Conversational", "floor", None, None),
-    (29, "What changed since yesterday?", "Conversational", "canonical", None, None),  # query/changes_query
-    (30, "What needs my attention?", "Conversational", "canonical", None, None),  # query/attention_query
-
+    (
+        29,
+        "What changed since yesterday?",
+        "Conversational",
+        "canonical",
+        None,
+        None,
+    ),  # query/changes_query
+    (
+        30,
+        "What needs my attention?",
+        "Conversational",
+        "canonical",
+        None,
+        None,
+    ),  # query/attention_query
     # Scheduling (5) — Q31/33 M2-pending + fresh-account, Q32 M2-pending, Q34/35 expected-pass
-    (31, "Schedule a meeting about the roadmap", "Scheduling", "canonical", "M2", "fresh-account-no-data"),
+    (
+        31,
+        "Schedule a meeting about the roadmap",
+        "Scheduling",
+        "canonical",
+        "M2",
+        "fresh-account-no-data",
+    ),
     (32, "Remind me to review PRs tomorrow", "Scheduling", "action", "M2", "M2-feature-pending"),
-    (33, "Find time for a 1:1 with the team lead", "Scheduling", "canonical", "M2", "fresh-account-no-data"),
+    (
+        33,
+        "Find time for a 1:1 with the team lead",
+        "Scheduling",
+        "canonical",
+        "M2",
+        "fresh-account-no-data",
+    ),
     (34, "How much time am I spending in meetings?", "Scheduling", "canonical", None, None),
     (35, "Review my recurring meetings", "Scheduling", "canonical", None, None),
-
     # Documents (4) — Q36-38/40 M2-pending (Documents handler not yet shipped)
     (36, "Create a doc from this conversation", "Documents", "floor", "M2", "M2-feature-pending"),
     (37, "Compare these two documents", "Documents", "floor", "M2", "M2-feature-pending"),
-    (38, "Synthesize these sources into a summary", "Documents", "floor", "M2", "M2-feature-pending"),
+    (
+        38,
+        "Synthesize these sources into a summary",
+        "Documents",
+        "floor",
+        "M2",
+        "M2-feature-pending",
+    ),
     (40, "Update the project roadmap document", "Documents", "action", "M2", "M2-feature-pending"),
-
     # GitHub Operations (8) — Q41/Q42/Q58/Q60 need real data; rest expected-pass
     (41, "What did we ship this week?", "GitHub Ops", "canonical", None, "fresh-account-no-data"),
     (42, "Show me stale PRs", "GitHub Ops", "canonical", None, "fresh-account-no-data"),
@@ -203,31 +247,33 @@ CANONICAL_QUERIES = [
     (44, "Create issues from this meeting's action items", "GitHub Ops", "floor", None, None),
     (45, "Close completed issues", "GitHub Ops", "floor", None, None),
     (58, "Update issue #123", "GitHub Ops", "action", None, "fresh-account-no-data"),
-    (59, "Comment on issue #456", "GitHub Ops", "canonical", None, None),  # query/comment_issue_query
+    (
+        59,
+        "Comment on issue #456",
+        "GitHub Ops",
+        "canonical",
+        None,
+        None,
+    ),  # query/comment_issue_query
     (60, "Review issue #789", "GitHub Ops", "canonical", None, "fresh-account-no-data"),
-
     # Slack (5) — Q46-48 M2-pending Slack surfaces; Q49/50 expected-pass
     (46, "Any mentions I missed?", "Slack", "floor", "M2", "M2-feature-pending"),
     (47, "Summarize #general from yesterday", "Slack", "floor", "M2", "M2-feature-pending"),
     (48, "Post this update to the team channel", "Slack", "floor", "M2", "M2-feature-pending"),
     (49, "/standup", "Slack", "action", None, None),
     (50, "/piper help", "Slack", "floor", None, None),
-
     # Productivity (3) — all floor
     (51, "What's my productivity this week?", "Productivity", "floor", None, None),
     (52, "Are we on track for the milestone?", "Productivity", "floor", None, None),
     (53, "What did the team accomplish this sprint?", "Productivity", "floor", None, None),
-
     # Todo Management (4) — Q54-55 action, Q56-57 canonical (pre-classifier→query)
     (54, "Add a todo: review the deployment plan", "Todos", "action", None, None),
     (55, "Complete the PR review todo", "Todos", "action", None, None),
     (56, "Show my todos", "Todos", "canonical", None, None),  # query/list_todos_query
     (57, "What's my next todo?", "Todos", "canonical", None, None),  # query/next_todo_query
-
     # Calendar Extended (2) — both canonical (pre-classifier→query)
     (61, "What's my week look like?", "Calendar Ext", "canonical", None, None),
     (62, "Check my calendar for conflicts", "Calendar Ext", "canonical", None, None),
-
     # Knowledge (1) — Q63 judge rate-limit-prone + M2-pending integration path
     (63, "Upload a file to the knowledge base", "Knowledge", "floor", "M2", "M2-feature-pending"),
 ]
@@ -394,7 +440,10 @@ Score this response per the rubric. Return only the JSON object."""
         return parsed
 
     except json.JSONDecodeError as e:
-        return {"error": f"judge JSON parse failed: {e}", "raw_response": raw[:300] if 'raw' in locals() else ""}
+        return {
+            "error": f"judge JSON parse failed: {e}",
+            "raw_response": raw[:300] if "raw" in locals() else "",
+        }
     except Exception as e:
         return {"error": f"judge call failed: {type(e).__name__}: {e}"}
 
@@ -450,7 +499,9 @@ CANONICAL_CATEGORIES = {"temporal", "status", "priority", "portfolio"}
 ACTION_CATEGORIES = {"execution"}
 
 
-def determine_actual_routing(intent_data: dict, response_text: str, intent_data_extras: dict) -> str:
+def determine_actual_routing(
+    intent_data: dict, response_text: str, intent_data_extras: dict
+) -> str:
     """Inspect the API response to determine which routing path was taken.
 
     The /api/v1/intent endpoint returns intent_data with category, action, and
@@ -487,9 +538,12 @@ def routing_match(expected: str, actual: str) -> bool:
 
 # --- Auth ---
 
+
 def ensure_user(session: requests.Session) -> bool:
     """Ensure the canonical-test user exists. Idempotent."""
-    create_url = f"{SETUP_ENDPOINT}/create-user"  # #989 follow-up 2026-05-25: was /setup/ pre-API-v1
+    create_url = (
+        f"{SETUP_ENDPOINT}/create-user"  # #989 follow-up 2026-05-25: was /setup/ pre-API-v1
+    )
     resp = session.post(
         create_url,
         json={
@@ -538,7 +592,17 @@ def login(session: requests.Session) -> str | None:
 
 # --- Per-query test ---
 
-def run_query(session, query_num, query_text, category, expected_routing, known_issue, pathological_reason, anthropic_client) -> dict:
+
+def run_query(
+    session,
+    query_num,
+    query_text,
+    category,
+    expected_routing,
+    known_issue,
+    pathological_reason,
+    anthropic_client,
+) -> dict:
     """Send one query, classify routing, run heuristic check, run judge if applicable."""
     result = {
         "query_num": query_num,
@@ -651,7 +715,11 @@ def run_query(session, query_num, query_text, category, expected_routing, known_
                 if conf < JUDGE_CONFIDENCE_THRESHOLD:
                     result["escalate_to_human"] = True
                     result["escalate_reason"] = f"low confidence ({conf:.2f})"
-                elif 0 in (judge_result.get("relevance"), judge_result.get("context"), judge_result.get("tone")):
+                elif 0 in (
+                    judge_result.get("relevance"),
+                    judge_result.get("context"),
+                    judge_result.get("tone"),
+                ):
                     result["escalate_to_human"] = True
                     result["escalate_reason"] = "auto-fail (dimension scored 0)"
 
@@ -684,13 +752,13 @@ CSV_FIELDS = [
     "judge_tone",
     "judge_total",
     "judge_verdict",
-    "judge_failure_mode",       # Issue #993: AAXT 6-mode diagnostic label
+    "judge_failure_mode",  # Issue #993: AAXT 6-mode diagnostic label
     "judge_confidence",
     "escalate_to_human",
     "escalate_reason",
     "known_issue",
-    "known_pathological",       # Issue #994: True if pathological_reason was set
-    "pathological_reason",      # Issue #994: short note explaining the bucket
+    "known_pathological",  # Issue #994: True if pathological_reason was set
+    "pathological_reason",  # Issue #994: short note explaining the bucket
     "http_status",
     "error",
     "notes",
@@ -744,7 +812,12 @@ def write_report(results, filepath: Path):
 
     # Issue #993: AAXT 6-mode diagnostic distribution
     aaxt_modes_order = [
-        "Correct", "Reconstructed", "Confabulated", "Absent", "Phantom", "Subliminal",
+        "Correct",
+        "Reconstructed",
+        "Confabulated",
+        "Absent",
+        "Phantom",
+        "Subliminal",
     ]
     aaxt_mode_counts = {m: 0 for m in aaxt_modes_order}
     aaxt_mode_unset = 0
@@ -760,8 +833,12 @@ def write_report(results, filepath: Path):
         cat = r["category"]
         if cat not in by_category:
             by_category[cat] = {
-                "total": 0, "routing_pass": 0,
-                "judge_pass": 0, "judge_marginal": 0, "judge_fail": 0, "judge_skipped": 0,
+                "total": 0,
+                "routing_pass": 0,
+                "judge_pass": 0,
+                "judge_marginal": 0,
+                "judge_fail": 0,
+                "judge_skipped": 0,
                 "pathological": 0,  # Issue #994
             }
         by_category[cat]["total"] += 1
@@ -779,98 +856,115 @@ def write_report(results, filepath: Path):
         else:
             by_category[cat]["judge_skipped"] += 1
 
-    lines = [
-        "# Canonical Query Retest Report — Post-M1 (v3)",
-        "",
-        f"**Date**: {datetime.now().strftime('%Y-%m-%d %H:%M')}",
-        "**Version**: v0.8.6 (post-M1, M1 closed Apr 11)",
-        f"**User**: {USERNAME} (fresh account)",
-        f"**Total Queries**: {total}",
-        f"**Methodology**: canonical-query-test-matrix-v3.md (dual scoring + LLM-as-judge)",
-        "",
-        "---",
-        "",
-        "## Routing Verdict (M0-comparable dimension)",
-        "",
-        f"| Metric | Count | Percentage |",
-        f"|--------|-------|------------|",
-        f"| Routing PASS | {routing_pass} | {routing_pass/total*100:.1f}% |",
-        f"| Routing FAIL | {routing_fail} | {routing_fail/total*100:.1f}% |",
-        "",
-        "**M0 baseline (Mar 12)**: 70.5% routing pass (43/61)",
-        f"**M1 routing**: {routing_pass/total*100:.1f}% ({routing_pass}/{total})",
-        "",
-        "---",
-        "",
-        "## Quality Verdict (Colleague Test, new in v3)",
-        "",
-        f"| Verdict | Count | Percentage |",
-        f"|---------|-------|------------|",
-        f"| PASS (judge ≥7) | {judge_pass} | {judge_pass/total*100:.1f}% |",
-        f"| MARGINAL (judge 5-6) | {judge_marginal} | {judge_marginal/total*100:.1f}% |",
-        f"| FAIL (judge <5 or auto-fail) | {judge_fail} | {judge_fail/total*100:.1f}% |",
-        f"| Skipped (NOT_IMPL or ERROR) | {judge_skipped} | {judge_skipped/total*100:.1f}% |",
-        "",
-        f"**Quality pass rate (judged queries)**: "
-        f"{judge_pass}/{judge_pass+judge_marginal+judge_fail} "
-        f"({judge_pass/max(1, judge_pass+judge_marginal+judge_fail)*100:.1f}%)",
-        "",
-        "---",
-        "",
-        "## Quality Pass Rate — Expected-Pass vs Known-Pathological (#994)",
-        "",
-        "Per PPM 2026-04-16: aggregate quality conflates \"things that should work\" with",
-        "\"things we know can't work yet.\" The split below makes the per-category thresholds",
-        "(≥80% conversational, ≥90% action handlers) meaningful — those targets apply to",
-        "the expected-pass set, not the full corpus.",
-        "",
-        f"| Bucket | Queries | Judged | PASS | Pass Rate |",
-        f"|--------|---------|--------|------|-----------|",
-        f"| **Expected-pass** | {len(expected_pass_results)} | {ep_judged} | {ep_passes} | **{ep_pct}** |",
-        f"| Known-pathological | {len(pathological_results)} | {p_judged} | {p_passes} | {p_pct} |",
-        "",
-        f"*The expected-pass quality rate is the headline number for progress tracking.*",
-        f"*Known-pathological pass rate over time tracks progress on the hard problems.*",
-        "",
-        "---",
-        "",
-        "## AAXT Failure-Mode Distribution (#993)",
-        "",
-        "Six-mode diagnostic taxonomy aligned with Klatch's AAXT harness so",
-        "cross-project results are directly comparable. The R/C/T rubric tells",
-        "you PASS/FAIL; the failure mode tells you *why*.",
-        "",
-        f"| Mode | Count | % of Total |",
-        f"|------|-------|------------|",
-    ] + [
-        f"| {mode} | {aaxt_mode_counts[mode]} | "
-        f"{aaxt_mode_counts[mode]/max(1,total)*100:.1f}% |"
-        for mode in aaxt_modes_order
-    ] + (
-        [f"| _(unset/error)_ | {aaxt_mode_unset} | {aaxt_mode_unset/max(1,total)*100:.1f}% |"]
-        if aaxt_mode_unset else []
-    ) + [
-        "",
-        "- **Correct** = accurate and well-formed",
-        "- **Reconstructed** = accurate but inferred rather than directly known",
-        "- **Confabulated** = hedged invention with uncertainty markers",
-        "- **Absent** = honest absence acknowledgement (PASS-shaped on missing data)",
-        "- **Phantom** = confident invention (Pattern-045 fail case)",
-        "- **Subliminal** = uses knowledge it can't attribute",
-        "",
-        "Phantom counts > 0 should trigger fabrication-probe (#995) re-run.",
-        "",
-        "---",
-        "",
-        "## Results by Category",
-        "",
-        "| Category | Total | Pathological | Routing PASS | Quality PASS | MARGINAL | FAIL |",
-        "|----------|-------|--------------|-------------|--------------|----------|------|",
-    ]
+    lines = (
+        [
+            "# Canonical Query Retest Report — Post-M1 (v3)",
+            "",
+            f"**Date**: {datetime.now().strftime('%Y-%m-%d %H:%M')}",
+            "**Version**: v0.8.6 (post-M1, M1 closed Apr 11)",
+            f"**User**: {USERNAME} (fresh account)",
+            f"**Total Queries**: {total}",
+            f"**Methodology**: canonical-query-test-matrix-v3.md (dual scoring + LLM-as-judge)",
+            "",
+            "---",
+            "",
+            "## Routing Verdict (M0-comparable dimension)",
+            "",
+            f"| Metric | Count | Percentage |",
+            f"|--------|-------|------------|",
+            f"| Routing PASS | {routing_pass} | {routing_pass/total*100:.1f}% |",
+            f"| Routing FAIL | {routing_fail} | {routing_fail/total*100:.1f}% |",
+            "",
+            "**M0 baseline (Mar 12)**: 70.5% routing pass (43/61)",
+            f"**M1 routing**: {routing_pass/total*100:.1f}% ({routing_pass}/{total})",
+            "",
+            "---",
+            "",
+            "## Quality Verdict (Colleague Test, new in v3)",
+            "",
+            f"| Verdict | Count | Percentage |",
+            f"|---------|-------|------------|",
+            f"| PASS (judge ≥7) | {judge_pass} | {judge_pass/total*100:.1f}% |",
+            f"| MARGINAL (judge 5-6) | {judge_marginal} | {judge_marginal/total*100:.1f}% |",
+            f"| FAIL (judge <5 or auto-fail) | {judge_fail} | {judge_fail/total*100:.1f}% |",
+            f"| Skipped (NOT_IMPL or ERROR) | {judge_skipped} | {judge_skipped/total*100:.1f}% |",
+            "",
+            f"**Quality pass rate (judged queries)**: "
+            f"{judge_pass}/{judge_pass+judge_marginal+judge_fail} "
+            f"({judge_pass/max(1, judge_pass+judge_marginal+judge_fail)*100:.1f}%)",
+            "",
+            "---",
+            "",
+            "## Quality Pass Rate — Expected-Pass vs Known-Pathological (#994)",
+            "",
+            'Per PPM 2026-04-16: aggregate quality conflates "things that should work" with',
+            '"things we know can\'t work yet." The split below makes the per-category thresholds',
+            "(≥80% conversational, ≥90% action handlers) meaningful — those targets apply to",
+            "the expected-pass set, not the full corpus.",
+            "",
+            f"| Bucket | Queries | Judged | PASS | Pass Rate |",
+            f"|--------|---------|--------|------|-----------|",
+            f"| **Expected-pass** | {len(expected_pass_results)} | {ep_judged} | {ep_passes} | **{ep_pct}** |",
+            f"| Known-pathological | {len(pathological_results)} | {p_judged} | {p_passes} | {p_pct} |",
+            "",
+            f"*The expected-pass quality rate is the headline number for progress tracking.*",
+            f"*Known-pathological pass rate over time tracks progress on the hard problems.*",
+            "",
+            "---",
+            "",
+            "## AAXT Failure-Mode Distribution (#993)",
+            "",
+            "Six-mode diagnostic taxonomy aligned with Klatch's AAXT harness so",
+            "cross-project results are directly comparable. The R/C/T rubric tells",
+            "you PASS/FAIL; the failure mode tells you *why*.",
+            "",
+            f"| Mode | Count | % of Total |",
+            f"|------|-------|------------|",
+        ]
+        + [
+            f"| {mode} | {aaxt_mode_counts[mode]} | "
+            f"{aaxt_mode_counts[mode]/max(1,total)*100:.1f}% |"
+            for mode in aaxt_modes_order
+        ]
+        + (
+            [f"| _(unset/error)_ | {aaxt_mode_unset} | {aaxt_mode_unset/max(1,total)*100:.1f}% |"]
+            if aaxt_mode_unset
+            else []
+        )
+        + [
+            "",
+            "- **Correct** = accurate and well-formed",
+            "- **Reconstructed** = accurate but inferred rather than directly known",
+            "- **Confabulated** = hedged invention with uncertainty markers",
+            "- **Absent** = honest absence acknowledgement (PASS-shaped on missing data)",
+            "- **Phantom** = confident invention (Pattern-045 fail case)",
+            "- **Subliminal** = uses knowledge it can't attribute",
+            "",
+            "Phantom counts > 0 should trigger fabrication-probe (#995) re-run.",
+            "",
+            "---",
+            "",
+            "## Results by Category",
+            "",
+            "| Category | Total | Pathological | Routing PASS | Quality PASS | MARGINAL | FAIL |",
+            "|----------|-------|--------------|-------------|--------------|----------|------|",
+        ]
+    )
     for cat in [
-        "Identity", "Temporal", "Spatial", "Capability", "Predictive",
-        "Conversational", "Scheduling", "Documents", "GitHub Ops", "Slack",
-        "Productivity", "Todos", "Calendar Ext", "Knowledge",
+        "Identity",
+        "Temporal",
+        "Spatial",
+        "Capability",
+        "Predictive",
+        "Conversational",
+        "Scheduling",
+        "Documents",
+        "GitHub Ops",
+        "Slack",
+        "Productivity",
+        "Todos",
+        "Calendar Ext",
+        "Knowledge",
     ]:
         if cat in by_category:
             d = by_category[cat]
@@ -881,15 +975,17 @@ def write_report(results, filepath: Path):
             )
 
     if escalations:
-        lines.extend([
-            "",
-            "---",
-            "",
-            f"## Human Escalation Queue ({len(escalations)} items)",
-            "",
-            "These results need human review. Triggers: low judge confidence, auto-fail (dimension=0), or judge error.",
-            "",
-        ])
+        lines.extend(
+            [
+                "",
+                "---",
+                "",
+                f"## Human Escalation Queue ({len(escalations)} items)",
+                "",
+                "These results need human review. Triggers: low judge confidence, auto-fail (dimension=0), or judge error.",
+                "",
+            ]
+        )
         for r in escalations:
             lines.append(
                 f"- **Q{r['query_num']}** ({r['category']}): `{r['query'][:60]}` — {r['escalate_reason']}"
@@ -901,26 +997,32 @@ def write_report(results, filepath: Path):
                 )
 
     if errors:
-        lines.extend([
-            "",
-            "---",
-            "",
-            f"## Errors ({len(errors)} items)",
-            "",
-        ])
+        lines.extend(
+            [
+                "",
+                "---",
+                "",
+                f"## Errors ({len(errors)} items)",
+                "",
+            ]
+        )
         for r in errors:
-            lines.append(f"- **Q{r['query_num']}** ({r['category']}): `{r['query'][:60]}` — {r['error']}")
+            lines.append(
+                f"- **Q{r['query_num']}** ({r['category']}): `{r['query'][:60]}` — {r['error']}"
+            )
 
     if known_issues:
-        lines.extend([
-            "",
-            "---",
-            "",
-            f"## Known Issues Run Anyway ({len(known_issues)} items)",
-            "",
-            "Per PM guidance: known failures are still run honestly. Tag indicates tracking.",
-            "",
-        ])
+        lines.extend(
+            [
+                "",
+                "---",
+                "",
+                f"## Known Issues Run Anyway ({len(known_issues)} items)",
+                "",
+                "Per PM guidance: known failures are still run honestly. Tag indicates tracking.",
+                "",
+            ]
+        )
         for r in known_issues:
             verdict = r.get("judge_verdict") or r.get("tier_a_verdict") or "—"
             lines.append(
@@ -930,17 +1032,19 @@ def write_report(results, filepath: Path):
 
     # Issue #994: Known-pathological listing (separate dimension from known_issue)
     if pathological_results:
-        lines.extend([
-            "",
-            "---",
-            "",
-            f"## Known-Pathological Queries ({len(pathological_results)} items, #994)",
-            "",
-            "These queries are tagged as known-pathological — we expect them to fail",
-            "under current conditions (M2 features not shipped, fresh-account lacks real data,",
-            "etc.). They run anyway for tracking progress on the hard problems over time.",
-            "",
-        ])
+        lines.extend(
+            [
+                "",
+                "---",
+                "",
+                f"## Known-Pathological Queries ({len(pathological_results)} items, #994)",
+                "",
+                "These queries are tagged as known-pathological — we expect them to fail",
+                "under current conditions (M2 features not shipped, fresh-account lacks real data,",
+                "etc.). They run anyway for tracking progress on the hard problems over time.",
+                "",
+            ]
+        )
         for r in pathological_results:
             verdict = r.get("judge_verdict") or r.get("tier_a_verdict") or "—"
             lines.append(
@@ -948,20 +1052,22 @@ def write_report(results, filepath: Path):
                 f"`{r['query'][:60]}` — {verdict}"
             )
 
-    lines.extend([
-        "",
-        "---",
-        "",
-        "## Methodology Notes",
-        "",
-        "- **Routing verdict**: Compares actual route taken (floor / canonical / action) to v3 expected route. M0 baseline used a different methodology (literal category matching) so this is a reframed but loosely comparable number.",
-        "- **Quality verdict**: LLM-as-judge using Colleague Test rubric. Judge model: claude-sonnet-4-20250514, temperature 0.2, with calibration examples in system prompt.",
-        f"- **Confidence threshold for human escalation**: < {JUDGE_CONFIDENCE_THRESHOLD}",
-        "- **Auto-fail rule**: any single dimension scoring 0 forces FAIL verdict regardless of total.",
-        "- **Known issues** are run anyway per PM guidance — honest reporting over hiding.",
-        "",
-        f"*Generated {datetime.now().strftime('%Y-%m-%d %H:%M')} by canonical-retest-m1.py*",
-    ])
+    lines.extend(
+        [
+            "",
+            "---",
+            "",
+            "## Methodology Notes",
+            "",
+            "- **Routing verdict**: Compares actual route taken (floor / canonical / action) to v3 expected route. M0 baseline used a different methodology (literal category matching) so this is a reframed but loosely comparable number.",
+            "- **Quality verdict**: LLM-as-judge using Colleague Test rubric. Judge model: claude-sonnet-4-20250514, temperature 0.2, with calibration examples in system prompt.",
+            f"- **Confidence threshold for human escalation**: < {JUDGE_CONFIDENCE_THRESHOLD}",
+            "- **Auto-fail rule**: any single dimension scoring 0 forces FAIL verdict regardless of total.",
+            "- **Known issues** are run anyway per PM guidance — honest reporting over hiding.",
+            "",
+            f"*Generated {datetime.now().strftime('%Y-%m-%d %H:%M')} by canonical-retest-m1.py*",
+        ]
+    )
 
     with open(filepath, "w") as f:
         f.write("\n".join(lines))
@@ -969,11 +1075,13 @@ def write_report(results, filepath: Path):
 
 # --- Main ---
 
+
 def main():
     # Issue #989: --warm-user flag switches to canonical-test-warm with
     # project + todo fixtures populated (set up via
     # dev/2026/05/24/canonical-fixtures-warm-user-2026-05-24.py).
     import argparse
+
     parser = argparse.ArgumentParser(description="Canonical retest runner")
     parser.add_argument(
         "--warm-user",
@@ -999,7 +1107,9 @@ def main():
     print("M1 Canonical Retest — Post-M1 Floor-First Validation")
     print(f"Date: {datetime.now().strftime('%Y-%m-%d %H:%M')}")
     print(f"Target: {BASE_URL} (served sha at start: {start_sha})")
-    print(f"User: {USERNAME}" + (" (#989 warmed fixtures)" if args.warm_user else " (fresh account)"))
+    print(
+        f"User: {USERNAME}" + (" (#989 warmed fixtures)" if args.warm_user else " (fresh account)")
+    )
     print(f"Queries: {len(CANONICAL_QUERIES)}")
     print("=" * 70)
 
@@ -1008,6 +1118,7 @@ def main():
     if JUDGE_ENABLED:
         try:
             from anthropic import Anthropic
+
             api_key = os.getenv("ANTHROPIC_API_KEY")
             if api_key:
                 anthropic_client = Anthropic(api_key=api_key)
@@ -1030,22 +1141,40 @@ def main():
     # Run queries
     results = []
     current_category = None
-    for query_num, query_text, category, expected_routing, known_issue, pathological_reason in CANONICAL_QUERIES:
+    for (
+        query_num,
+        query_text,
+        category,
+        expected_routing,
+        known_issue,
+        pathological_reason,
+    ) in CANONICAL_QUERIES:
         if category != current_category:
             current_category = category
             print(f"\n### {category} ###")
 
         result = run_query(
-            session, query_num, query_text, category, expected_routing, known_issue,
-            pathological_reason, anthropic_client,
+            session,
+            query_num,
+            query_text,
+            category,
+            expected_routing,
+            known_issue,
+            pathological_reason,
+            anthropic_client,
         )
         results.append(result)
 
         # Status icon based on best available verdict
         verdict = result.get("judge_verdict") or result.get("tier_a_verdict") or "?"
         icon = {
-            "PASS": "✅", "MARGINAL": "🟡", "FAIL": "❌",
-            "NOT_IMPL": "⬜", "ERROR": "💥", "OK": "✅", "?": "❓",
+            "PASS": "✅",
+            "MARGINAL": "🟡",
+            "FAIL": "❌",
+            "NOT_IMPL": "⬜",
+            "ERROR": "💥",
+            "OK": "✅",
+            "?": "❓",
         }.get(verdict, "?")
         routing_icon = "→" if result["routing_pass"] else "✗"
         escalate_icon = " 👁" if result["escalate_to_human"] else ""
@@ -1079,7 +1208,10 @@ def main():
     print(f"  Quality FAIL:     {judge_fail} ({judge_fail/total*100:.1f}%)")
     print(f"  Human escalation: {escalations}")
     print()
-    print(f"  Served sha:       start {start_sha} / end {end_sha}" + ("" if start_sha == end_sha else "  ⚠️ CHANGED MID-RUN"))
+    print(
+        f"  Served sha:       start {start_sha} / end {end_sha}"
+        + ("" if start_sha == end_sha else "  ⚠️ CHANGED MID-RUN")
+    )
     print(f"  M0 baseline:      70.5% routing pass")
     print(f"  M1 routing:       {routing_pass/total*100:.1f}%")
 
