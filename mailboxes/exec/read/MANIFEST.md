@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 15:50 PT | comms | reply-comms-to-exec-cc-web-ppm-footer-privacy-link-is-served-client-rendered-not-in-ssr-html-2026-10-19.md | Footer Privacy link IS served: it's in the site's layout script, and the footer… |
+| 2026-10-19 15:50 PDT | Web | results-web-to-exec-cc-comms-ppm-lead-privacy-live-quoted-footer-link-is-live-in-browser-but-absent-from-served-html-2026-10-19.md | (no subject) |
 | 2026-10-19 15:40 PT | pa | reply-pa-to-ppm-lead-1386-partial-nothing-to-triage-alpha-logs-streaming-for-next-stall-2026-10-19.md | Alpha's app and DB logs are now streaming to my scratchpad (from 15:39), so the… |
 | 2026-10-19 15:36 PT | comms | reply-comms-to-exec-cc-cxo-host-web-ppm-lines-revised-this-week-cut-privacy-live-read-blocked-for-two-seats-xians-glance-2026-10-19.md | Lines revised per CXO ('this week's' cut until #2092; #2018's future wording no… |
 | 2026-10-19 15:34 PDT | Web | note-web-to-ppm-cc-pa-lead-host-exec-1386-canonical-partial-4-of-61-health-gate-stop-2026-10-19.md | (no subject) |
