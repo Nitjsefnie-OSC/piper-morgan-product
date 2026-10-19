@@ -85,8 +85,12 @@ class TestCreateIssueGate:
             patch(f"{ROUTER}.create_issue", new=AsyncMock(side_effect=boom)),
         ):
             result = await svc._handle_create_issue(_intent(), "wf-1", "sess-1")
-        assert "may or may not" in result.message
-        assert "duplicate" in result.message
+        # #2097 (CXO's words): a create GitHub did not confirm says where to
+        # look and never invites a retry (the invited retry made a duplicate on
+        # alpha e801b1a309). The update/close paths keep the general line.
+        assert "GitHub didn't confirm it" in result.message
+        assert "Check there before trying again" in result.message
+        assert result.intent_data["write_unconfirmed"] is True
 
 
 class TestUpdateIssueGate:
