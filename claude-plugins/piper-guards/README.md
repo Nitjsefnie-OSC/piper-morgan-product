@@ -2,7 +2,7 @@
 
 The cohort's guard hooks, ported into one Claude Code **mod** (a plugin with a hooks module). The plan is stage 7 of
 `dev/2026/10/03/spec-eval/D-propose-ruleset.md`: port M-1 to M-6 and M-9, run each mod rule alongside its settings
-hook for one week, then retire the hooks. **Status 2026-10-12 (CIO), v0.2.0: M-1 to M-6 implemented, M-9 prototyped. Installed on CIO's seat only (local scope, xian 17:02); live after a restart (M-6 blocked an unset-model Agent call at 18:13, the same call ran at 17:1x before it). Side-by-side week 10-12 to 10-19.** Rollout lesson: each seat needs the install **and** a restart.
+hook for one week, then retire the hooks. **Status 2026-10-12 (CIO), v0.2.0: M-1 to M-6 implemented, M-9 prototyped. Installed on CIO's seat only (local scope, xian 17:02); live after a restart (M-6 blocked an unset-model Agent call at 18:13, the same call ran at 17:1x before it). Side-by-side week 10-12 to 10-19.** **10-19 review (CIO):** 1 real deny (M-6) and 0 false positives in 1,224 Bash, 9 Agent and 23 Write/Edit calls. No settings hook retires yet (the mod runs on 1 of 11 seats). Per-rule table: `docs/internal/operations/hooks-registry.md`, "Decided 10-19". Next: Pard, one quiet PM seat. Rollout lesson: each seat needs the install **and** a restart.
 
 | Rule | What it does | Settings hook it shadows | State |
 |---|---|---|---|

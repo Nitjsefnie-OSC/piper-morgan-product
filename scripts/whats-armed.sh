@@ -54,7 +54,7 @@ g guard-pm-checkout.sh "git status" "cd $pm && git reset --hard"
 g autoclose-guard.sh "echo hi" "git commit -m 'fix #1'"
 g check-branch.sh "echo hi" ""
 g pre-commit-reconcile-drafts.sh "echo hi" ""
-for h in log-maintenance-reminder.sh context-usage-reminder.sh issue-checkbox-lint.sh memory-index-overlimit-warn.sh session-start.sh; do
+for h in log-maintenance-reminder.sh issue-checkbox-lint.sh memory-index-overlimit-warn.sh session-start.sh; do
   if [ -f ".claude/hooks/$h" ] && bash -n ".claude/hooks/$h" 2>/dev/null; then row ARMED file "$h" "present, parses (not run: side effects)"
   else row "NOT ARMED" file "$h" "missing or does not parse"; fi
 done

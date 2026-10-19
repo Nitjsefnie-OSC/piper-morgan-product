@@ -58,7 +58,7 @@ parts of the mechanism."
   Each was fixed at the doc.
 - **Making the links surfaced problems the links weren't looking for:**
   - a hook that is wired and dead (`context-usage-reminder.sh` reads transcripts from a directory this fleet
-    doesn't use);
+    doesn't use; sunset 10-19 at its review, benefit none);
   - six user-level hooks duplicating project hooks while running a lagging copy (removed the same morning);
   - five skills whose frontmatter wasn't valid YAML, four of which had lost their description in the skill
     list (fixed by Arch and Comms within the hour, issue 2006).

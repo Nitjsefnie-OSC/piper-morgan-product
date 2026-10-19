@@ -2,7 +2,7 @@
 type: operations
 title: "Hooks registry: every hook, where it is wired, what it must do"
 valid_from: "2026-10-14"
-last_updated: "2026-10-14"
+last_updated: "2026-10-19"
 ---
 
 # Hooks registry
@@ -32,7 +32,6 @@ PostToolUse or PreCompact hook can only **warn**: the tool has already run, or c
 | `pre-commit-reconcile-drafts.sh` | PreToolUse Bash, if `git commit*` | When a commit touches `docs/public/comms/drafts/`, run `reconcile-drafts-calendar.py` for draft and calendar drift | Can exit 2 | decisions.log (Layer C). Header cites a missing `docs/read/...` path. |
 | `autoclose-guard.sh` | PreToolUse Bash, if `git commit*` | Pass the message to `scripts/check_autoclose_keywords.py`: refuse close/fix/resolve plus `#N` without `Auto-Close: intentional`, and refuse credential-shaped messages | Yes | `commit-message-guards.md` (doorway 1); CLAUDE.md hard rules 5 and 3 |
 | `log-maintenance-reminder.sh` | PostToolUse Bash | Every 15 Bash calls, remind if today's session log is missing or stale. **Note (10-14):** its counter is one shared file, `/tmp/piper-log-reminder-counter`, so "every 15 calls" counts across all seats on the host, not per seat. | No | CLAUDE.md "Role and session log"; methodology-31 and -41 |
-| `context-usage-reminder.sh` | PostToolUse Bash | Once per session at roughly 75 to 85% context, suggest compacting at the next break | No | **None written. Dead on Amber (found 10-14):** it reads `$CLAUDE_SESSION_ID` (unset in the CIO seat's Bash environment) and looks for the transcript under `~/.claude/projects`, but this fleet's transcripts are under `~/.claude-pm/projects` (`CLAUDE_CONFIG_DIR`). For this session the `find` returned 0 there and 1 under `~/.claude-pm`. So it exits 0 every call and never warns. **Sunset candidate at the piper-guards review (10-19):** M-9's status line covers it. If it's kept instead, read `transcript_path` from the hook's stdin JSON. |
 | `issue-checkbox-lint.sh` | PostToolUse Bash | After a commit that closes an issue, warn if the issue body still has unchecked boxes | Warns (exit 2 is advisory after the fact) | `agent-protocols/issue-closure-protocol.md` |
 | `memory-index-overlimit-warn.sh` | PostToolUse Edit, Write, MultiEdit | Warn when the shared memory index nears its silent-truncation limit | No | `memory-index-size-limits.md` (explains the limit; this page names the hook) |
 
@@ -40,6 +39,8 @@ PostToolUse or PreCompact hook can only **warn**: the tool has already run, or c
 - As a **PreToolUse** hook, it reads `git diff --cached` *before* the command runs. On a compound `git add … && git commit` the index isn't staged yet, so it passes. That's why CLAUDE.md says to stage in one call and commit in the next.
 - As part of the **git pre-commit** (section 4), it runs on the settled index. This is the enforcing layer, and it catches the compound form.
 - The PreToolUse copy adds one thing: it still sees a `git commit --no-verify` (which skips git hooks), as long as the index was staged beforehand.
+
+**Sunset 2026-10-19 (CIO): `context-usage-reminder.sh`** (PostToolUse Bash; meant to suggest compacting at about 75 to 85% context). Benefit at review: none. It was dead on Amber from at least 10-14: it read `$CLAUDE_SESSION_ID` and looked under `~/.claude/projects`, but this fleet's transcripts are under `~/.claude-pm/projects`. Nobody reported missing it. Removed from `.claude/settings.json`, the script deleted, whats-armed's file list and the `.gitignore` marker line dropped (before removal: `git grep` found those readers and no user-level wiring). **Replacement: none in the repo.** Claude Code's own context indicator and auto-compact remain. Correction: this row said M-9's status line covers it. It doesn't: M-9 shows main's CI state and briefing age, not context. If a context warning is wanted again, read `transcript_path` from the hook's stdin JSON. The script is in git history at `647a77e7`.
 
 ## 2. Claude Code hooks, user level (`~/.claude-pm/settings.json`, every seat on Amber; Pard installs)
 
@@ -56,7 +57,7 @@ Backup: `~/.claude-pm/settings.json.bak-20261014T104256`. History: in July, proj
 | Hook | Where | Must do | Notes |
 |---|---|---|---|
 | `PROBE-userpromptsubmit.sh` | CIO's `.claude/settings.local.json`, UserPromptSubmit | Append one line per submitted prompt to `dev/state/probe-userpromptsubmit-cio.log` (a submission ledger from outside the model) | CIO seat only; never blocks. It dirties `git status` on every wake (noted in the 10-13 rewrite). |
-| `piper-guards` mod (`claude-plugins/piper-guards/`, v0.2.0) | Plugin on CIO's seat (local scope), parallel week to 10-19 | Rules M-1 to M-6 shadow the settings hooks above and add Projects-v2, mail-on-main, bearer-on-write and subagent-model rules | Concept: its README and `dev/2026/10/03/spec-eval/D-propose-ruleset.md`. Fails open. Decision on retiring the settings hooks after the week. |
+| `piper-guards` mod (`claude-plugins/piper-guards/`, v0.2.0) | Plugin on CIO's seat (local scope); the parallel week ended 10-19 (decisions under "Decided 10-19") | Rules M-1 to M-6 shadow the settings hooks above and add Projects-v2, mail-on-main, bearer-on-write and subagent-model rules | Concept: its README and `dev/2026/10/03/spec-eval/D-propose-ruleset.md`. Fails open. Retires no settings hook yet. |
 
 ## 4. Git hooks (shared git store `.git/hooks/`, every worktree by construction; source in `scripts/git-hooks/`)
 
@@ -92,9 +93,26 @@ Keep `precompact-signoff-warning.sh` at user level, since it has no project copy
 - **Consequence, found 19:05 (Pard):** the hook drumbeat went red ("probe commit LANDED"). It had only ever tested the user-level `check-branch.sh`, the copy this decision removed. PM seats load check-branch from project settings, and project-level PreToolUse fired (the autoclose probe above, a sibling hook). Pard's fixed probe now tests check-branch's project copy directly. Pard fixed the probe at 19:15 to carry PM's project `.claude/` from origin/main, and it PASSES. Neither Pard nor CIO checked what the drumbeat exercised before the removal. The sunset rule now has a "Before you remove" step.
 - **Residual risk:** project-level PostToolUse firing is unmeasured, so the three reminders could go silent. They're advisory, so this is low cost, and it's checked after the edit.
 
+## Decided 10-19: piper-guards after the parallel week
+
+**What the week measured** (CIO's seat, 10-12 18:13 to 10-19 10:15 PT): 1,224 Bash, 9 Agent and 23 Write/Edit calls ran under the mod. **One real deny**, M-6 at 10-12 18:13, an Agent call with no `model`. That was 1 of the 1 such call in the week. **No false positives:** no other mod deny appears in the transcript's tool results. **No disagreement with the settings hooks:** neither `guard-pm-checkout.sh` nor check-branch's mailbox block fired in the week either. The settings hooks that did fire were the 3 commit-message-guard blocks, which the mod doesn't shadow. So the week measured the mod's cost in false positives (none) and not its catch rate. M-1 to M-5 had no live trigger. M-1's only live catch is xian's attended decoy check (10-12, auto mode, PASS with a control).
+
+| Rule | Decision | Why |
+|---|---|---|
+| M-1 (PM checkout) | **Keep both** the mod rule and `guard-pm-checkout.sh` | The mod runs on 1 of 11 seats; retiring the hook would strip the other 10. One live catch (the decoy), 0 on a seat. |
+| M-2 (diff before checkout) | **Renew** | No settings counterpart, so it's net-new coverage. 0 triggers, 0 false positives. |
+| M-3 (mail on main) | **Keep both** | Catches the compound `git add && git commit` that check-branch can't. check-branch can't be retired wholesale anyway: it also runs the stamp check. |
+| M-4 (Projects v2 replace) | **Renew** | No settings counterpart; hard rule 4's only mechanism. 0 triggers. |
+| M-5 (bearer on write) | **Renew** | No pre-write counterpart (the CI lint is after the fact). 23 writes, 0 false positives. |
+| M-6 (subagent model) | **Renew** | 1 of 1 live catch, the only rule with one. |
+| M-9 (status line) | **Prototype, unchanged** | Its render on a live seat hasn't been observed. Not counted. |
+
+**When a settings hook retires:** only after the mod is on every seat and has run a week there, and the shadowed hook's own probe (whats-armed, the drumbeat) has been moved to the mod first. That's the sunset rule's "Before you remove" step: Pard's drumbeat probes check-branch's project copy.
+**Next step (Pard's hand, per the README's rollout):** install on one quiet PM seat (install + restart), then the rest. Asked of Pard 10-19.
+
 ## Still open
 
-- **CIO:** at the piper-guards week's end (10-19), decide per rule whether the mod replaces the settings hook, then update sections 1 and 3.
+- **Pard:** piper-guards on one quiet PM seat, then the rest (asked 10-19).
 
 **Verified how:**
 - Read `.claude/settings.json`, `~/.claude-pm/settings.json` and CIO's `settings.local.json` with a JSON
