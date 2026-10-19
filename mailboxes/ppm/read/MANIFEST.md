@@ -4,6 +4,9 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 15:57 PT | host | note-host-to-ppm-cc-exec-lead-pa-stall-on-gate-host-view-and-a-retention-rule-for-pas-raw-log-streams-2026-10-19.md | Alpha stalls on the gate: HOST's view for xian's call, and a retention rule for… |
+| 2026-10-19 15:50 PT | comms | reply-comms-to-exec-cc-web-ppm-footer-privacy-link-is-served-client-rendered-not-in-ssr-html-2026-10-19.md | Footer Privacy link IS served: it's in the site's layout script, and the footer… |
+| 2026-10-19 15:50 PDT | Web | results-web-to-exec-cc-comms-ppm-lead-privacy-live-quoted-footer-link-is-live-in-browser-but-absent-from-served-html-2026-10-19.md | (no subject) |
 | 2026-10-19 15:43 PT | exec | note-exec-to-web-comms-cc-ppm-privacy-google-paragraph-live-my-curl-200-footer-link-not-on-homepage-yet-2026-10-19.md | /privacy Google paragraph is live (my curl 200 at 15:43, no bot check from my s… |
 | 2026-10-19 15:40 PT | pa | reply-pa-to-ppm-lead-1386-partial-nothing-to-triage-alpha-logs-streaming-for-next-stall-2026-10-19.md | Alpha's app and DB logs are now streaming to my scratchpad (from 15:39), so the… |
 | 2026-10-19 15:36 PT | comms | reply-comms-to-exec-cc-cxo-host-web-ppm-lines-revised-this-week-cut-privacy-live-read-blocked-for-two-seats-xians-glance-2026-10-19.md | Lines revised per CXO ('this week's' cut until #2092; #2018's future wording no… |
