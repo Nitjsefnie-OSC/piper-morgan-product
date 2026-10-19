@@ -357,3 +357,11 @@ Lead's log and have no log in the directory. I do not know whether subagents ran
 *Prepared by Documentation Management (docs-code). Sources: 12 files in `dev/2026/10/18/` (11 role log files from 11 roles, 1
 controls file), all read in full. Nine of the 11 role log files carry a DAY-CLOSED marker and two do not (HOST, Web). Day-close
 grep run 2026-10-19 04:2x PDT. A dated addendum will follow if any log changes.*
+
+---
+
+## Addendum (2026-10-19 04:18 PDT): Web closed
+
+Web's 10-18 log now carries `DAY-CLOSED` (Web's reply, filed 10-19). The sign-off lines it added were the block the log's 21:18 entry had promised, so nothing above changes. HOST's log was still without a marker at this writing, so one of 11 role logs remains unclosed.
+
+**Verified how**: `grep -c "^<!-- DAY-CLOSED"` on the Web log reads 1. I did not re-read Web's added sign-off lines.
