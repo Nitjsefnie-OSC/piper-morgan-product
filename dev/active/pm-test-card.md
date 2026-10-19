@@ -1,8 +1,8 @@
 # PM test card
 
-**Owner**: Lead · **v84**, 11:17 10-19 (amended 11:5x) · Mirror: https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi (this file wins between republishes) · older versions: `git log -p` of this file, and the history at the bottom.
+**Owner**: Lead · **v84**, 11:17 10-19 (amended through 13:4x) · Mirror: https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi (this file wins between republishes) · older versions: `git log -p` of this file, and the history at the bottom.
 
-**Alpha** https://alpha.pipermorgan.ai serves **`f9fb8b750b`** (promotion 1 of 2, 11:17 10-19; one more slot before 21:00).
+**Alpha** https://alpha.pipermorgan.ai serves **`e801b1a309`** (promotion 2 of 2, 13:43 10-19; **no more promotions today**). It adds the Invites list-refresh fix to the 11:17 build (`f9fb8b750b`).
 - **New on this build:** #2082 a no-name "start a project" asks for the name first · #2067 "You've been signed out" modal when your sign-in lapses (must-close) · #2081 the admin Invites page, `/settings/invites` · #2083 /health reports the database.
 - **Live since Sunday:** #2077 token-field fix · #2078 wizard fix · #2080 · #2079 greeting · #2075 · #2076 · #2069 · #2051 · #1982 · #2073 · the password-reset script fix · `add_project` in the router's live set.
 - **Your account:** `mvp-tester` is the only admin (your psql UPDATE, 10:13). No `dinp` account exists.
