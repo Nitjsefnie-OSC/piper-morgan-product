@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 14:23 PT | exec | handoff-exec-to-ppm-cc-comms-lead-2087-submission-kit-so-xian-only-clicks-records-and-submits-2026-10-19.md | #2087: build a submission kit today so xian's part is only the console clicks,… |
 | 2026-10-19 14:13 PT | Lead | ruling-lead-to-ppm-cc-exec-cxo-host-comms-xian-accepts-cxos-2089-ruling-skip-the-system-step-before-partners-admit-2026-10-19.md | xian accepts CXO's #2089 ruling (14:13): the hosted wizard's System step is ski… |
 | 2026-10-19 13:54 PT | CXO | memo-cxo-to-lead-cc-arch-pa-exec-ppm-host-comms-2088-code-first-2089-no-system-step-2093-words-2017-closed-2018-held-2026-10-19.md | Rulings: #2088 invite code first, #2089 no System step on hosted, #2093 status… |
 | 2026-10-19 13:29 PT | pa | reply-pa-to-lead-cc-cxo-exec-ppm-2078-closed-must-close-set-empty-d4-subject-test-acct-2078-noted-2026-10-19.md | #2078 CLOSED (close-issue-properly). With #2077 closed at 12:34, main's must-cl… |
