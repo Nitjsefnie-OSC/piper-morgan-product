@@ -441,3 +441,54 @@ def parse_reminder_time(
     tomorrow = now + timedelta(days=1)
     dt = tomorrow.replace(hour=9, minute=0, second=0, microsecond=0)
     return (dt, "tomorrow morning")
+
+
+# #2091 (CXO 2026-10-19, Arch's shape): a day the parser cannot read must never fall
+# back to "today". These are closed vocabularies read word by word (no regex: Arch's
+# binder rule); the full fix resolves the router's ``when`` argument in code.
+WEEKDAY_WORDS = (
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday",
+)
+MONTH_WORDS = (
+    "january",
+    "february",
+    "march",
+    "april",
+    "june",
+    "july",
+    "august",
+    "september",
+    "october",
+    "november",
+    "december",
+)  # "may" is left out on purpose: it is a verb far more often than a month in chat.
+
+UNRESOLVED_DAY_REFUSAL = (
+    "I can show today, tomorrow or this week, but I can't look up a particular weekday. "
+    "Want one of those?"
+)
+
+
+def unresolved_day_reference(message: Optional[str]) -> Optional[str]:
+    """Return the weekday or month word a message names, or None.
+
+    ``parse_relative_date`` knows today / tomorrow / this week / next week and
+    defaults to today for anything else. A message that names a weekday or a
+    month is asking about a day this parser cannot place, so the caller must
+    refuse (``UNRESOLVED_DAY_REFUSAL``) instead of answering for today (#2091:
+    "what's my agenda Thursday?" → "You have no meetings scheduled for today.").
+    Word-by-word over a closed vocabulary; punctuation is stripped from each word.
+    """
+    if not message:
+        return None
+    for raw in message.lower().split():
+        word = raw.strip(".,;:!?()[]{}\"'")
+        if word in WEEKDAY_WORDS or word in MONTH_WORDS:
+            return word
+    return None
