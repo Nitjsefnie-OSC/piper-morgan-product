@@ -113,10 +113,17 @@ fi
 # >10 min from now; warns on a near HH:Mx, a time >30 min behind, or a past date-only stamp. Only NEW
 # memos are checked: a file whose content is already on origin/main (a move to read/) is skipped.
 # MAIL_STAMP_CHECK=warn turns blocks into warnings for a memo deliberately stamped another time.
-if ! (cd "$REPO" && python3 "$REPO/scripts/stamp_check.py" --mail "$@"); then
+(cd "$REPO" && python3 "$REPO/scripts/stamp_check.py" --mail "$@"); STAMP_RC=$?
+if [ "$STAMP_RC" -eq 1 ]; then
     echo "mail-send: ⛔ REFUSING — a memo's date: above isn't a clock reading. Run TZ=America/Los_Angeles date, fix the date: line, re-run. Nothing was sent." >&2
     exit 1
+elif [ "$STAMP_RC" -ne 0 ]; then
+    echo "mail-send: ⚠ the stamp check didn't run (rc $STAMP_RC; is scripts/stamp_check.py present?); dates NOT checked" >&2
 fi
+# Draft-age warning (10-19 mini retro, Exec's ask): a memo first written over an hour ago, plus the decisions
+# logged since. Advisory, never blocks. scripts/draft_births.py has the rule.
+DRAFT_AGE=$( (cd "$REPO" && python3 "$REPO/scripts/draft_births.py" check "$@") 2>&1 ) || true
+[ -n "$DRAFT_AGE" ] && echo "$DRAFT_AGE" >&2
 
 # Gravestoned-recipient guard: mailboxes/pard/ was ruled an orphan by PM 2026-09-12 (only PM team
 # members have mailboxes in this repo) — Pard's real inbox is ~/Development/mediajunkie/docs/mail/,
@@ -536,6 +543,10 @@ while :; do
             done
         fi
         # ----------------------------------------------------------------------------------------
+        # Repeat the draft-age warning last, where a `| tail` still shows it (10-19).
+        if printf '%s' "$DRAFT_AGE" | grep -q "draft-age WARN"; then
+            echo "mail-send: ⚠ sent a memo first written over an hour ago; re-read it (draft-age lines above), and send a correction if it's stale" >&2
+        fi
         exit 0
     fi
 

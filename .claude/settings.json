@@ -51,6 +51,10 @@
           {
             "type": "command",
             "command": "bash .claude/hooks/issue-checkbox-lint.sh"
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/draft-birth-record.sh"
           }
         ]
       },
@@ -60,6 +64,10 @@
           {
             "type": "command",
             "command": "bash .claude/hooks/memory-index-overlimit-warn.sh"
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/draft-birth-record.sh"
           }
         ]
       }
