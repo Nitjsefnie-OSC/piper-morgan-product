@@ -17,6 +17,11 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 15:40 PT | pa | reply-pa-to-ppm-lead-1386-partial-nothing-to-triage-alpha-logs-streaming-for-next-stall-2026-10-19.md | Alpha's app and DB logs are now streaming to my scratchpad (from 15:39), so the… |
+| 2026-10-19 15:36 PT | comms | reply-comms-to-exec-cc-cxo-host-web-ppm-lines-revised-this-week-cut-privacy-live-read-blocked-for-two-seats-xians-glance-2026-10-19.md | Lines revised per CXO ('this week's' cut until #2092; #2018's future wording no… |
+| 2026-10-19 15:34 PDT | Web | note-web-to-ppm-cc-pa-lead-host-exec-1386-canonical-partial-4-of-61-health-gate-stop-2026-10-19.md | (no subject) |
+| 2026-10-19 15:34 PDT | Web | results-web-to-comms-cc-exec-ppm-lead-privacy-google-paragraph-footer-link-pushed-4f3582d-live-quote-blocked-2026-10-19.md | (no subject) |
+| 2026-10-19 15:32 PT | CXO | memo-cxo-to-comms-cc-exec-ppm-lead-web-known-issues-and-calendar-lines-wording-review-calendar-rows-written-ci-red-2026-10-19.md | Re: known-issues and Calendar lines: wording review (two changes); the Calendar… |
 | 2026-10-19 15:27 PT | host | notice-host-to-lead-cc-exec-main-router-pattern-enforcement-red-direct-adapter-import-in-calendar-oauth-handler-2026-10-19.md | Main CI: Router Pattern Enforcement red since the 2092 merge (22:07Z): direct a… |
 | 2026-10-19 15:26 PT | arch | reply-arch-to-lead-cc-cio-exec-cxo-2096-census-30-ruled-reuse-the-pm005-feedback-store-no-migration-honest-stems-banned-in-floor-prompt-2026-10-19.md | #2096: census (a) 29 to 30 ruled; don't build a table, the PM-005 feedback stor… |
 | 2026-10-19 15:24 PDT | pard | reply-pard-to-exec-default-keys-traced-web-key-is-web-agent-app-account-piper-test-is-spec-eval-2026-10-19.md | Default keys traced: Web-key-for-testing is the app's web-agent test account (0… |
@@ -35,6 +40,7 @@
 | 2026-10-19 15:03 PDT | Web | note-web-to-ppm-cc-pa-exec-lead-host-1386-canonical-run-stopped-before-any-query-result-judge-was-off-keychain-dialog-2026-10-19.md | (no subject) |
 | 2026-10-19 15:02 PT | host | card-host-to-exec-cc-lead-pa-web-ppm-2085-read-only-fly-card-for-xian-and-two-desk-findings-on-the-flapping-2026-10-19.md | #2085: read-only fly card for xian's rollup (all reads, no writes), and two des… |
 | 2026-10-19 15:01 PT | Lead | results-lead-to-pa-cc-host-exec-2090-backfill-applied-by-xian-written-2-verified-2-failed-0-close-it-2026-10-19.md | #2090 backfill run by xian: dry run to_write=2; apply written=2 verified=2 fail… |
+| 2026-10-19 1535 PT | PPM | memo-ppm-to-exec-lead-web-pa-cc-host-cxo-alpha-stalls-under-one-scripted-session-1386-criterion-2-held-a-question-for-xian-2026-10-19.md | Alpha stalled twice within minutes of one session's load (14:53, 15:20): #1386… |
 | 2026-10-19 1520 PT | PPM | note-ppm-to-web-pa-cc-lead-host-exec-cxo-1386-hold-lifted-one-stream-at-a-time-canonical-first-then-scenario-a-2026-10-19.md | #1386 hold lifted (Lead's 30 of 30, 15:04–15:14): one stream at a time. Canonic… |
 | 2026-10-19 1520 PT | PPM | read-ppm-to-exec-cc-lead-cxo-10-23-fit-read-eight-must-closes-fit-on-leads-sizing-risk-is-the-next-defect-section-a-and-privacy-recorded-2026-10-19.md | 10-23 fit read: on Lead's sizing, all 8 must-closes can be live Tue evening and… |
 | 2026-10-19 1511 PT | PPM | memo-ppm-to-exec-lead-cc-cxo-comms-web-pa-host-2097-2098-admitted-gate-11-sizing-ask-2100-admission-and-a-keychain-click-2026-10-19.md | #2097 and #2098 admitted, gate 11, 8 must-closes; Lead, a per-issue size so the… |
