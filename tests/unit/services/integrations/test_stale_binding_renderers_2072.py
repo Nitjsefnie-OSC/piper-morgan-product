@@ -130,10 +130,10 @@ class TestStaleBindingNeverRendersConnected:
         message = result["message"]
         assert "✅ **Connected:**" not in message
         assert STALE_GUIDANCE_GROUP in message
-        not_connected = message.split("⚪ **Not connected:**")[1].split("To connect")[0]
+        not_connected = message.split("⚪ **Not connected yet:**")[1].split("To connect")[0]
         assert "GitHub" not in not_connected
         # Ordered between Connected (absent here) and Not connected.
-        assert message.index(STALE_GUIDANCE_GROUP) < message.index("⚪ **Not connected:**")
+        assert message.index(STALE_GUIDANCE_GROUP) < message.index("⚪ **Not connected yet:**")
         context = result["intent"]["context"]
         assert "github" not in context["configured_integrations"]
         assert context["needs_reconnecting_integrations"] == ["github"]

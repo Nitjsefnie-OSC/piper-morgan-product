@@ -12,7 +12,7 @@
 
 **Who sees it.** Piper sends your messages to the AI provider you connect (Anthropic or OpenAI), using your own key. From there, that provider's privacy terms apply. Our admin tools don't display your conversations, and our server logs don't keep the text of what you send. The app has no analytics or ad tracking.
 
-**When Piper acts for you.** Piper asks before it deletes anything, and it asks when a request is unclear. If you ask it outright to create a GitHub issue or comment on one, it posts right away, without checking with you first. Treat that request as the go. There's no undo yet, so when Piper asks before deleting, take the question seriously.
+**When Piper acts for you.** Piper checks with you before most changes. If you tell it plainly to do something, such as create a GitHub issue, it does it right away, so treat a plain instruction as the go. It asks before it deletes something of yours. There's no undo yet, so take that question seriously.
 
 **When something breaks.** You'll hit rough edges. We'll send you a short list of known issues with this invitation. When you find something new, use Send feedback in Piper, or email alpha@pipermorgan.ai. The team reads both, including me.
 
@@ -36,7 +36,7 @@ Before Production, we'll add [the list xian chooses from: deleting a conversatio
 |---|---|---|
 | Your work is yours | Arch 10-16 (encrypted by category); /privacy (Fly.io, San Jose; uploads encrypted, website `c8fbb15`); #2061 live | /privacy source read |
 | Who sees it | /privacy (own-key providers, admin tools, logs); #2059 and #2060 closed | /privacy source read. "No one can read them" is **not** claimable: the decryption key is a server secret |
-| When Piper acts for you | `collaboration_gate.py` 22-29 (an explicit imperative executes); deletes confirm (Arch 10-16); xian 10-18 (GitHub no-confirm goes in the invitation wording) | Not re-run today |
+| When Piper acts for you | `collaboration_gate.py` 22-29 (any explicit imperative executes, not only GitHub); deletes confirm (Arch 10-16, not re-run per kind, so "something of yours", not "anything"); xian 10-18 (GitHub no-confirm goes in the invitation wording). Revised per CXO 14:42: cut "asks when a request is unclear" (#2057 contradicts it). CXO's example "add a project" left out, because CXO's served row on 10-18 showed adding a project asks one yes/no | Not re-run today |
 | When something breaks | alpha@ reaches the team (HOST 10-16, `docs/ALPHA_KNOWN_ISSUES.md:143`); known-issues list (PPM) | #2096 (Send feedback page) admitted before partners (xian 14:4x, Exec's 14:35 ruling). **Check it's live on alpha before the invitation goes**, or cut "use Send feedback in Piper, or". xian 14:4x: "we can all see support@", so the Leaving paragraph's support@ is read |
 | Leaving | `files.py` 571 (download) and 786 (`download-bulk`); `learning.py:803` (`/controls/export`); no conversation or to-do export (Arch); /privacy 14-day line; `erase_user.py` live (#2064) | Routes grepped today. Provider grants are reported, not revoked, so the draft doesn't promise revocation at GitHub etc. |
 | Your invite code | `invite_token_service` (one redemption); `invite_admin_service.revoke_invite` (revokes ONE unused code; #2081 closed 10-19); no expiry | Code read today. "We'll cancel it" is backed by the admin revoke. No time limit is promised |

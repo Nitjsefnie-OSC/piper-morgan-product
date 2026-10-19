@@ -149,7 +149,7 @@ class TestGuidanceReadsRealBindingState:
 
         message = result["message"]
         assert result["intent"]["context"]["configured_integrations"] == []
-        assert "⚪ **Not connected:**" in message
+        assert "⚪ **Not connected yet:**" in message
         not_connected_section = message.split("⚪")[1]
         assert "GitHub" in not_connected_section
         # Honest negative != status-check failure (the #1423 fallback copy).

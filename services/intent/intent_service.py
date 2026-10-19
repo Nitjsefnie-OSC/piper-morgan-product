@@ -9160,6 +9160,32 @@ class IntentService:
             # Issue #588: Parse date range from original message
             # Note: original_message may be in intent.original_message OR intent.context["original_message"]
             original_message = intent.original_message or intent.context.get("original_message", "")
+
+            # #2091 (CXO, 2026-10-19): a day the parser cannot read ("Thursday",
+            # "October 23") must refuse, never fall back to today's answer. The
+            # full fix resolves the router's ``when`` argument in code (Arch).
+            from services.intent_service.temporal_utils import (
+                UNRESOLVED_DAY_REFUSAL,
+                unresolved_day_reference,
+            )
+
+            unresolved = unresolved_day_reference(original_message)
+            if unresolved:
+                self.logger.info("calendar_day_unresolved", word=unresolved)
+                return IntentProcessingResult(
+                    success=True,
+                    message=UNRESOLVED_DAY_REFUSAL,
+                    intent_data={
+                        "category": intent.category.value,
+                        "action": intent.action,
+                        "confidence": intent.confidence,
+                        "unresolved_day_reference": unresolved,
+                    },
+                    workflow_id=workflow_id,
+                    requires_clarification=True,
+                    implemented=False,
+                )
+
             start_date, end_date, date_label = parse_relative_date(original_message)
 
             # Get events for the requested date range
