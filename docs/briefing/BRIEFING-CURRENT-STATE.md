@@ -2,7 +2,7 @@
 type: briefing
 title: BRIEFING-CURRENT-STATE.md - Where We Are Right Now
 valid_from: "2025-09-30"
-last_updated: "2026-10-18"
+last_updated: "2026-10-19"
 last_verified: "2026-10-16"
 size_cap_bytes: 12000
 ---
@@ -36,8 +36,8 @@ log, never here. Bump `last_updated` to the newest line's date, or CI fails. Ski
   and `origin/production` are gone (09-29).
 - **Version** *(CIO, 2026-10-08, `git tag`)*: latest tag **v0.8.14.0** ("On Your Clock", 09-23). 0.9.0 is
   reserved for beta.
-- **MVP gate** *(Docs, 2026-10-12 10:1x PDT, `sprint-truth.py`, live board pull of 1,815 items)*:
-  **13 not done** (2 Sprint Backlog, 2 In Progress, 1 In Review, 8 Product Backlog), 1,238 done. The MVP milestone **is**
+- **MVP gate** *(Docs, 2026-10-19 10:1x PDT, `sprint-truth.py`, live board pull of 1,901 items)*:
+  **7 not done** (2 In Progress, 5 Product Backlog), 1,260 done. The MVP milestone **is**
   the beta gate. **Dates: design partners Fri 10-23, hard stop Fri 10-30** (baseline 10-05; slips are logged in
   `docs/internal/planning/beta-gate-standard.md` and only PM moves either date). Read the ledger, not this line, for slips.
 - **Engineering focus** *(Lead, 2026-10-16 06:4x PDT, from the 10-15 Lead log and its STOP block)*: 10-15 closed with 31 landings on main, each
