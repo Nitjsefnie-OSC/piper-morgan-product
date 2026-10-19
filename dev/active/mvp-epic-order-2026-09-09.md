@@ -1709,3 +1709,5 @@ out-of-scope call. Gate 14 → 15, fourth slip-ledger entry, dates unchanged; cr
 **`#2080` closed 2026-10-18 11:34** by CXO on Web's chain on alpha `83a2f4e40c`. Gate 8 → 7. #2075 (Production) closed too. #2067 landed e13bf3c65f, served after Monday's promotion.
 
 **`#2067` closed 2026-10-19 12:32** by CXO on Web's rows on alpha `f9fb8b750b` (the signed-out modal). Gate 7 → 6. Must-close set: #2077 and #2078. #2082 (Production) closed too.
+
+**`#2077` closed 2026-10-19 12:34** by Lead on xian's console read (field length 0) on alpha `f9fb8b750b`. Gate 6 → 5. Must-close: #2078 alone. Every privacy and security item on MVP is now closed and live, so the beta-form conditions are met.
