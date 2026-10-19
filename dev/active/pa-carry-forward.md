@@ -166,3 +166,4 @@ half unrelated).
 - **MCP served-sha check** on the next MCP deploy.
 - Today's ten codes: HOST still needs their masked forms (xian's one-liner; not PA's).
 - **10-19 START:** unchanged from 10-18 STOP. Waiting on Monday's promotion (#2082, #2067) and xian's D1, D2 and D4.
+- **10-19 09:5x:** prod DB down since ~05:25 (Postgres process down in a started machine). The restart is xian's or HOST's hand. All served checks wait on the login probe reading 401.

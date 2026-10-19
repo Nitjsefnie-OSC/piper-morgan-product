@@ -40,6 +40,7 @@ The single exception is `GET /health`, which stays open — it is polled by
 deployment infrastructure that cannot authenticate. See its docstring.
 """
 
+import asyncio
 from datetime import datetime, timezone
 
 import structlog
@@ -51,6 +52,44 @@ logger = structlog.get_logger()
 
 # Router configuration - split into multiple routers for clarity
 router = APIRouter(tags=["admin", "monitoring", "health"])
+
+
+# #2083: the database half of the health verdict. Bounded so the route stays fast
+# under Fly's 5 s check timeout; any exception or a timeout reads "unreachable".
+DATABASE_PROBE_SECONDS = 2.0
+
+
+async def _database_probe() -> str:
+    """Return "healthy" when `SELECT 1` answers on the app's engine, else "unreachable".
+
+    #2083: on 2026-10-19 alpha's Postgres stopped answering for hours while
+    /health kept saying "healthy" (it had no DB check), so sign-in returned 500
+    for everyone while the deploy gate, the promotion grant and the test card
+    all read the page as fine. The probe uses the same global engine the app
+    serves requests from (services.database.connection.db, lazily initialized
+    exactly as get_session() does), wrapped in asyncio.wait_for so a hung
+    connection cannot hold the route past Fly's timeout. The body never carries
+    the DSN, the host or the exception text: the class name goes to the log only.
+    """
+    from sqlalchemy import text
+
+    from services.database.connection import db
+
+    async def _ping() -> None:
+        if not db._initialized:
+            await db.initialize()
+        engine = db.engine
+        if engine is None:
+            raise RuntimeError("database engine not initialized")
+        async with engine.connect() as conn:
+            await conn.execute(text("SELECT 1"))
+
+    try:
+        await asyncio.wait_for(_ping(), timeout=DATABASE_PROBE_SECONDS)
+    except Exception as exc:  # noqa: BLE001 — every failure class reads the same from outside
+        logger.warning("health_database_probe_failed", error_class=type(exc).__name__)
+        return "unreachable"
+    return "healthy"
 
 
 @router.get("/health")
@@ -88,19 +127,31 @@ async def health(request: Request):
     primary surfaces (e.g. intent_service=None from a silent startup failure)
     surface in /health rather than only appearing per-request as degradation
     responses.
+
+    #2083 (Arch, 2026-10-19): `services.database` reports healthy|unreachable
+    from a bounded `SELECT 1`, and top-level `status` reads "degraded" when it
+    fails. The HTTP status STAYS 200 either way: Fly restarts the machine on a
+    non-200, and restarting the only machine every 30 s cannot fix a database
+    outage; it would also take down the pages that need no database. Readers
+    that want the verdict read the body's `status`, never the HTTP code.
     """
     # Report status of services that the primary surfaces depend on.
     # Each is checked against app.state for non-None presence.
     intent_service_present = getattr(request.app.state, "intent_service", None) is not None
 
+    database_status = await _database_probe()
+
     services_status = {
         "web": "healthy",
         "intent_enforcement": "active",
         "intent_service": "healthy" if intent_service_present else "degraded",
+        "database": database_status,
     }
 
-    # Overall status degrades if any required service is missing.
-    overall_status = "healthy" if intent_service_present else "degraded"
+    # Overall status degrades if any required service is missing or the DB is unreachable.
+    overall_status = (
+        "healthy" if intent_service_present and database_status == "healthy" else "degraded"
+    )
 
     # #1839: deploy identity on the surface infrastructure actually polls.
     # The first landing put these fields only on staging_health's router,
