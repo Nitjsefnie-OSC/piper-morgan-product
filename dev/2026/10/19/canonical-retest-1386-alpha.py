@@ -74,7 +74,9 @@ except Exception:
 #   PIPER_CRED_FILE  path to a file with lines `username=...` and `password=...` for an EXISTING
 #                    test account (alpha's create-user needs an invite, so this copy never creates
 #                    one on a hosted target). The password is read, never printed or written out.
-#   JUDGE_MODEL      default claude-sonnet-4-20250514 (Run 12's judge)
+#   JUDGE_MODEL      default claude-sonnet-5-5. Run 12's judge (claude-sonnet-4-20250514) is retired: it
+#                    returned 404 on every call in the 10-19 16:09 run, so Quality was never scored.
+#                    A new judge model means a recalibrated baseline; say so when comparing to Run 12.
 BASE_URL = os.environ.get("PIPER_BASE_URL", "http://localhost:8001").rstrip("/")
 HOSTED = not BASE_URL.startswith(("http://localhost", "http://127.0.0.1"))
 INTENT_ENDPOINT = f"{BASE_URL}/api/v1/intent"
@@ -135,6 +137,7 @@ def _health_gate() -> str | None:
 
 
 # Judge config
+JUDGE_MODEL = os.environ.get("JUDGE_MODEL", "claude-sonnet-5-5")
 JUDGE_CONFIDENCE_THRESHOLD = 0.7  # Below this → human escalation flag
 JUDGE_ENABLED = True  # Set False to skip Tier B and use Tier A only
 
@@ -416,7 +419,7 @@ Score this response per the rubric. Return only the JSON object."""
 
     try:
         message = anthropic_client.messages.create(
-            model=os.environ.get("JUDGE_MODEL", "claude-sonnet-4-20250514"),
+            model=JUDGE_MODEL,
             max_tokens=600,
             temperature=0.2,  # Low temperature for consistent scoring
             system=JUDGE_SYSTEM_PROMPT,
@@ -1082,7 +1085,7 @@ def write_report(results, filepath: Path):
             "## Methodology Notes",
             "",
             "- **Routing verdict**: Compares actual route taken (floor / canonical / action) to v3 expected route. M0 baseline used a different methodology (literal category matching) so this is a reframed but loosely comparable number.",
-            "- **Quality verdict**: LLM-as-judge using Colleague Test rubric. Judge model: claude-sonnet-4-20250514, temperature 0.2, with calibration examples in system prompt.",
+            f"- **Quality verdict**: LLM-as-judge using Colleague Test rubric. Judge model: {JUDGE_MODEL}, temperature 0.2, with calibration examples in system prompt.",
             f"- **Confidence threshold for human escalation**: < {JUDGE_CONFIDENCE_THRESHOLD}",
             "- **Auto-fail rule**: any single dimension scoring 0 forces FAIL verdict regardless of total.",
             "- **Known issues** are run anyway per PM guidance — honest reporting over hiding.",
@@ -1144,7 +1147,16 @@ def main():
             api_key = os.getenv("ANTHROPIC_API_KEY")
             if api_key:
                 anthropic_client = Anthropic(api_key=api_key)
-                print("\nLLM-as-judge: enabled (claude-sonnet-4-20250514)")
+                try:
+                    # Fail fast: a retired judge model 404s on every call, which once
+                    # produced a run with no Quality number at all (10-19 16:09).
+                    anthropic_client.models.retrieve(JUDGE_MODEL)
+                except Exception as e:
+                    print(
+                        f"\nFATAL: judge model {JUDGE_MODEL} unavailable ({type(e).__name__}). Set JUDGE_MODEL."
+                    )
+                    sys.exit(4)
+                print(f"\nLLM-as-judge: enabled ({JUDGE_MODEL})")
             else:
                 print("\nLLM-as-judge: DISABLED (no ANTHROPIC_API_KEY)")
         except Exception as e:
