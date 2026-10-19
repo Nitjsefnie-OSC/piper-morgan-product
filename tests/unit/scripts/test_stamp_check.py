@@ -57,3 +57,13 @@ def test_briefing_stamps_reads_only_todays_attributions():
     assert sc.briefing_stamps(line, DAY) == ["2026-10-16 16:1x", "2026-10-16 15:00"]
     assert sc.judge("2026-10-16 16:1x", NOW, DAY)[0] == "WARN"
     assert sc.briefing_stamps("*(Exec, 2026-10-09 06:4x PDT)*", DAY) == []
+
+
+def test_decision_stamps_reads_lead_stamp_and_inline_estimates():
+    line = (
+        "2026-10-16 16:15 PT (xian, in conversation with Lead; recorded by Exec 16:1x) — ADMIN: ..."
+    )
+    assert sc.decision_stamps(line, DAY) == ["2026-10-16 16:15", "2026-10-16 16:1x"]
+    assert sc.judge("2026-10-16 16:1x", NOW, DAY)[0] == "WARN"
+    assert sc.decision_stamps("2026-10-16 07:5x PT (xian) — GOALS", DAY) == ["2026-10-16 07:5x"]
+    assert sc.decision_stamps("2026-10-09 06:4x PT (Exec) — old", DAY) == []

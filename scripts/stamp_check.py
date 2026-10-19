@@ -18,7 +18,8 @@ Log mode only warns. It looks at added lines in staged `dev/YYYY/MM/DD/*-log.md`
 headings carrying a time, and only for today's log: it flags an estimated form or a time ahead of now, not
 one behind (a heading can fairly carry the time a wake began). It also reads today's `*(Role, date time`
 attributions on added lines of BRIEFING-CURRENT-STATE.md (10-17: the briefing held 7 `HH:Mx` stamps, two
-of them CIO's, because it passed through neither mail-send nor a log heading).
+of them CIO's, because it passed through neither mail-send nor a log heading), and today-dated lines added
+to decisions.log, both the leading stamp and any `HH:Mx` inside the line (10-19: "recorded by Exec 10:0x").
 Exit 0 = nothing blocking; 1 = a BLOCK (mail mode only). Owner: CIO. Review: 2026-12-08.
 """
 
@@ -38,6 +39,7 @@ CLOCK = re.compile(r"\b(\d{1,2}):(\d{2})\b")
 DAY = re.compile(r"\b(\d{4}-\d{2}-\d{2})\b")
 BRIEFING = "docs/briefing/BRIEFING-CURRENT-STATE.md"
 BRIEF_STAMP = re.compile(r"\(\w[\w ]*, (\d{4}-\d{2}-\d{2}) (~?\d{1,2}:\d[\dxX])")
+DECISIONS = "docs/internal/architecture/decisions/decisions.log"
 
 
 def git(*a):
@@ -147,7 +149,26 @@ def log_staged(now) -> int:
                 v = judge(stamp, now, today)
                 if v and "behind" not in v[1] and "dated" not in v[1]:
                     print(f"stamp-check WARN: {BRIEFING}: '{stamp}': {v[1]}")
+    if DECISIONS in files:
+        for line in git("diff", "--cached", "-U0", "--", DECISIONS).stdout.splitlines():
+            if not line.startswith("+") or line.startswith("+++"):
+                continue
+            for stamp in decision_stamps(line[1:], today):
+                v = judge(stamp, now, today)
+                if v and "behind" not in v[1] and "dated" not in v[1]:
+                    print(f"stamp-check WARN: {DECISIONS}: '{stamp}': {v[1]}")
     return 0
+
+
+def decision_stamps(line: str, today: str):
+    """A today-dated decisions.log line's leading stamp, plus any `HH:Mx` inside it ("recorded by Exec 10:0x")."""
+    if not line.startswith(today):
+        return []
+    head = CLOCK.search(line[: len(today) + 8]) or MX.search(line[: len(today) + 8])
+    stamps = [f"{today} {head.group(0)}"] if head else []
+    return stamps + [
+        f"{today} {m.group(0)}" for m in MX.finditer(line) if not head or m.start() > head.end()
+    ]
 
 
 def briefing_stamps(line: str, today: str):

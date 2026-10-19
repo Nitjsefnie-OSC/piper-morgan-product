@@ -2,17 +2,19 @@
 type: methodology
 title: Open It — A Summary Is Not Its Contents
 valid_from: "2026-09-07"
-last_updated: "2026-09-07"
+last_updated: "2026-10-19"
 ---
 
 # Open It — A Summary Is Not Its Contents
 
-**Status**: Emerging. **Two instances, two seats, one week** — CXO's own m-45 miscitation and Exec's
+**Status**: **PROVEN (2026-10-19)**: the promotion trigger below was met by a third instance from a
+third seat (Lead, #2081, evidence item 3), six weeks after filing, on an unrelated topic, with a
+measured cost (xian: "it has wasted at least half a day"). As filed: **Two instances, two seats, one week** — CXO's own m-45 miscitation and Exec's
 #1386 criterion-3 miss — arrived at independently in real time (two separate real mistakes, on two
 unrelated topics), with only the *discriminator connecting them* found afterward, not the incidents
 themselves copied from one another. That's real cross-seat corroboration, not a shared confound —
 already a stronger evidentiary footing than methodology-51 had at its own filing (one seat).
-**Promotion trigger**: a third independent instance, from a third seat.
+**Promotion trigger**: a third independent instance, from a third seat. *(Met 2026-10-19.)*
 **Filed**: 2026-09-07 by CIO · **Discriminator ("watch it fire" vs. "open it")**: CXO, 2026-09-07,
 found by actually opening methodology-49 rather than reasoning from its title — noted by CXO as the
 minimum given what was under discussion. **Origin material**: CXO's re-sort of their own m-51
@@ -77,8 +79,40 @@ a static record with a plainly-readable execution requirement — nothing needed
    checklist, which specified execution against a dated deployed artifact — making it perishable
    evidence exactly like the other three criteria that DID get re-run, and in fact the *oldest*
    evidence in the whole gate (2026-07-12, older than any of the others).
+3. **Lead's "one-admin rule" (#2081, 2026-10-18 → 10-19; the promoting instance).** HOST's ruling 1
+   on #2081 (10-18 07:32 PT, an issue comment) reads: "Admin = xian's account only, through the
+   existing fail-closed `require_admin` gate; no agent test account gets `is_admin`." Its point was
+   *no agent accounts*. Lead's 10-18 log weighed granting admin to xian's mvp-tester account and
+   recorded "HOST's one-admin rule argues against", dropped that lane, and chose a password reset
+   for the seeded `dinp` account instead. On 10-19 the reset found no `dinp` user in the Fly
+   database at all, and Lead's memo to HOST cited the ruling *inside quotation marks* as "admin
+   stays on dinp only; mvp-tester not granted". Those words appear in no HOST text: a `grep` of the
+   10-18 and 10-19 logs, sent mail and decisions.log finds them only in Lead's memo and in HOST's
+   rebuttal. HOST opened the comment, found the gap and answered in one memo (10-19 10:03 PT): there is no
+   one-admin rule, and two admin accounts of xian's are inside ruling 1. **Cost**: the grant waited a
+   day on a rule nobody wrote; xian, 10-19 10:01: "We are standing on ceremony not granting admin to
+   my mvp-tester account and it has wasted at least half a day."
 
-Both instances share the identical shape: a plausible-sounding classification made from a fragment
+   *Corroborating, same thread, CIO's own seat (not counted toward promotion):* my 10-18 log filed
+   my own near miss on #2081 (describing migration a1599 from its filename before reading it) as
+   "m-44's shape (a summary is not its content)". That is this entry's shape, cited under the wrong
+   number from memory: m-44 is "Clear Is Not a Measurement". An m-52 instance in the act of naming one.
+
+### What the third instance adds
+
+- **A state and a ruling fused into a rule nobody wrote.** "dinp is the only admin" was a *state*,
+  left by #1599's seeding migration on 08-12. "xian's account only" was a *ruling* with one
+  ambiguous word (account, singular). Read together from memory, they became "the one-admin rule",
+  and the summary then carried more authority than either source. Opening the ruling separates them:
+  the text says who may not be admin, and says nothing about how many.
+- **Quotation marks claim that you opened it.** A paraphrase in quotes, attributed to a seat, is
+  read by everyone downstream as that seat's words, and an override then gets built against text
+  that doesn't exist. Quote only what you have just read; otherwise paraphrase and say so.
+- **The cheapest catch is the cited seat.** HOST corrected it in one read because HOST was cc'd on
+  the memo that quoted it. A ruling cited back to its author gets checked; one cited only to others
+  doesn't.
+
+The first two instances share the identical shape: a plausible-sounding classification made from a fragment
 (a title, a remembered gist, a one-line description) that a single read would have corrected, with
 no ambiguity or judgment call once the actual text was in view.
 
@@ -101,6 +135,10 @@ Operational corollaries:
 
 - **A one-line description in a checklist, an issue, or a title is a label, not the content.** If a
   ruling depends on what that item actually specifies, read the item.
+- **A quotation is a claim that you just read it.** Put a seat's words in quotes only after opening
+  the text; a ruling cited from memory gets paraphrased and labelled as such (evidence item 3).
+- **An observed state is not a ruling.** "X is the only admin" may be what a migration left behind;
+  before treating it as policy, find the text that made it one.
 - **Citing a document by name, from memory of its general subject, is not citing its content.**
   Open it before attributing a specific claim to it — CLAUDE.md already says this for facts and
   figures; this entry extends it explicitly to citations.
