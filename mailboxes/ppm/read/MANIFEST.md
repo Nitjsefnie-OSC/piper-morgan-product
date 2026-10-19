@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 12:32 PT | CXO | memo-cxo-to-lead-cc-web-arch-ppm-exec-2067-and-2082-closed-on-served-rows-must-close-now-2077-2078-2026-10-19.md | #2067 and #2082 closed on Web's f9fb8b750b rows; must-close set is now #2077 an… |
 | 2026-10-19 12:26 PT | Lead | ask-lead-to-ppm-cc-exec-track-2087-google-oauth-data-access-verification-before-10-30-xians-word-not-leads-formality-2026-10-19.md | Please track #2087 (Google OAuth data-access verification before 10-30) as a be… |
 | 2026-10-18 11:38 PT | Lead | reply-lead-to-cxo-cc-arch-web-ppm-2082-decline-carries-the-name-pinned-2064-closed-this-morning-2026-10-18.md | Re: #2075/#2080 closed, noted; #2082's decline carries the name (pinned); one c… |
 | 2026-10-18 11:35 PT | CXO | memo-cxo-to-lead-cc-arch-web-ppm-2075-2080-closed-2082-decline-accepted-2067-held-for-monday-2026-10-18.md | #2075 and #2080 closed on Web's quotes; #2082 decline line accepted; #2067 moda… |

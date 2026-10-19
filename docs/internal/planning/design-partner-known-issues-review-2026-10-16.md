@@ -6,7 +6,7 @@
 
 ## The bar (recorded in `beta-gate-standard.md` §Standing rulings)
 
-- **Must be closed and live on alpha before partners start:** every privacy and security item on MVP. As of 16:3x that was six; at 17:3x, two remain open; at 18:49, three (#2071 admitted); 10-17 08:17, two (#2071 closed live); at 09:26, one: #2064, which waits only on xian's count run; at 16:06, two (#2077 admitted); at 16:34, three (#2078 admitted, the first non-privacy must-close, on xian's word); 10-18 06:09, two: #2077 and #2078, both riding today's slot-1 promotion; 10-18 06:52, three (#2067, "fix first" in xian's section-B review) (#2059 and #2061 closed live on `d741214b6c` at 17:14, #2054 and #2060 at 17:30):
+- **Must be closed and live on alpha before partners start:** every privacy and security item on MVP. As of 16:3x that was six; at 17:3x, two remain open; at 18:49, three (#2071 admitted); 10-17 08:17, two (#2071 closed live); at 09:26, one: #2064, which waits only on xian's count run; at 16:06, two (#2077 admitted); at 16:34, three (#2078 admitted, the first non-privacy must-close, on xian's word); 10-18 06:09, two: #2077 and #2078, both riding today's slot-1 promotion; 10-18 06:52, three (#2067, "fix first" in xian's section-B review); 10-19 12:32, two: #2077 and #2078 (#2067 closed live) (#2059 and #2061 closed live on `d741214b6c` at 17:14, #2054 and #2060 at 17:30):
   - #2054: one user's turn could carry another user's identity in the intent cache;
   - #2059: logs keep message text, against /privacy;
   - #2060: Chroma telemetry, against /privacy;
@@ -16,7 +16,7 @@
   - #2071: one account's Integrations Test result (status, error text, check time) shows on every other account's card and in chat (admitted 18:49; source reading by Arch, not served). **Closed live 10-17 07:24** on alpha `119bd7b9ef` (Web's two-account check, one direction isolated).
   - #2077: the Settings GitHub token field is filled by Chrome with the saved Piper password, which Reconnect would send to GitHub (latent; admitted as a must-close 10-17 16:06, Class 2). Fix 6c3206dd35 **live on alpha** since `47ba746bee` (10-18 06:42); waits on xian's field check.
   - #2078: every invited tester's setup wizard ends in "Setup Failed". The account is created but the key is not stored (Class 4, admitted as a must-close 10-17 16:34 on xian's word). Fix d82b5ce4b3 **live on alpha** since `47ba746bee` (10-18); it closes on the wizard page served end to end in a browser.
-  - #2067: after the 30-minute sign-in lapses, the Integrations page says "Token has expired" under GitHub (Class 3; xian named it "fix first" 10-18 06:52). Landed e13bf3c65f (10-18); CXO's served modal acceptance after Monday's promotion.
+  - #2067: after the 30-minute sign-in lapses, the Integrations page says "Token has expired" under GitHub (Class 3; xian named it "fix first" 10-18 06:52). Landed e13bf3c65f (10-18); CXO's served modal acceptance after Monday's promotion. **Closed live 10-19 12:32** (CXO, on Web's rows on `f9fb8b750b`).
   #2064 (176d66a53c) and #2065 items 1 and 2 (1e9d0f5809) are on main and ride tomorrow's first promotion. #2064 also needs xian's live count; #2065 also needs Comms' /privacy fix 4 (xian's OK).
 - **Disclosed, after this review:** everything else open on MVP, below.
 - **Also before the beta form:** the uploads backfill run with zero remaining (xian approved the four conditions, 16:18). **Met 10-17 15:2x:** xian's C2 run on production reported 0 plaintext, 0 missing (quoted on #1306; not rerun by me).
