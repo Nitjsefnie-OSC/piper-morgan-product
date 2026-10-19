@@ -36,7 +36,7 @@ log, never here. Bump `last_updated` to the newest line's date, or CI fails. Ski
   and `origin/production` are gone (09-29).
 - **Version** *(CIO, 2026-10-08, `git tag`)*: latest tag **v0.8.14.0** ("On Your Clock", 09-23). 0.9.0 is
   reserved for beta.
-- **MVP gate** *(Docs, 2026-10-19 10:1x PDT, `sprint-truth.py`, live board pull of 1,901 items)*:
+- **MVP gate** *(Docs, 2026-10-19 10:14 PDT, `sprint-truth.py`, live board pull of 1,901 items)*:
   **7 not done** (2 In Progress, 5 Product Backlog), 1,260 done. The MVP milestone **is**
   the beta gate. **Dates: design partners Fri 10-23, hard stop Fri 10-30** (baseline 10-05; slips are logged in
   `docs/internal/planning/beta-gate-standard.md` and only PM moves either date). Read the ledger, not this line, for slips.
