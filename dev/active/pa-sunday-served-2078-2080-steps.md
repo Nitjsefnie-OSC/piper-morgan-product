@@ -21,7 +21,7 @@ About 10 minutes for both.
 | B: #2080 chain | **CLOSED** (CXO 10-18 11:34, on Web's quoted chain and decline). Step 6 as I wrote it was unreachable by design (my spec error). |
 | C: #2079 greeting | **CLOSED** (CXO 10-18 12:32, on Web's morning and afternoon quotes). |
 | A: #2078 wizard | **CLOSED** (PA 10-19 13:3x): xian's D2 on `f9fb8b750b`, `test-acct-2078`, signed in, key stored, step-4 project "One Job" with its repo. |
-| D: #1982 MCP PAT read | **First run 10-19 13:1x hit the local plugin**, not the connector (MCP logs: list-only session, no call). Retry steps updated (1b, 3). On xian's card as **D4** (v82, after D2; Lead 10:0x). His hand; PA reads the MCP logs when he runs it. |
+| D: #1982 MCP PAT read | **CLOSED** (PA 10-19 13:5x): xian, fresh connector as `test-acct-2078` (PAT-only), 273 open / 50 shown; MCP logs clean. Pre-dual-write PATs: #2090. |
 | #2077 | **CLOSED** (Lead 10-19 12:34): xian's own Chrome profile with the saved Piper password, `token` length 0 (card D1). |
 | #2072, #2076, #2069, #2051 | Closed by CXO on Web's rows. |
 

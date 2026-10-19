@@ -171,3 +171,4 @@ half unrelated).
 - **10-19 12:47:** #2077 CLOSED (xian's D1). Must-close left: #2078 (D2). D4/#1982 is still xian's.
 - **10-19 13:1x:** #2078 D2 run; the close is held on My Projects for `test-acct-2078` (the step-4 project). Once it's shown, close with close-issue-properly.
 - **10-19 13:3x:** #2078 CLOSED. The must-close set is empty. D4 subject is test-acct-2078 plus a saved PAT; the MCP log read is owed on xian's retry.
+- **10-19 13:5x:** #1982 CLOSED (PAT path live, logs clean). #2090 filed (2b backfill, xian). #2022 reproduced. The card has nothing left that's mine. Owed: MCP served-sha on the next deploy.
