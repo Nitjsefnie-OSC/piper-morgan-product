@@ -1711,3 +1711,5 @@ out-of-scope call. Gate 14 → 15, fourth slip-ledger entry, dates unchanged; cr
 **`#2067` closed 2026-10-19 12:32** by CXO on Web's rows on alpha `f9fb8b750b` (the signed-out modal). Gate 7 → 6. Must-close set: #2077 and #2078. #2082 (Production) closed too.
 
 **`#2077` closed 2026-10-19 12:34** by Lead on xian's console read (field length 0) on alpha `f9fb8b750b`. Gate 6 → 5. Must-close: #2078 alone. Every privacy and security item on MVP is now closed and live, so the beta-form conditions are met.
+
+**`#2078` closed 2026-10-19 13:29** (PA, on xian's D2 run): the must-close set emptied. **`#2017` closed 13:53** (CXO, xian's A3). **`#2089` folded in 14:13, admitted MVP (Gate class 3, a must-close) on xian's word accepting CXO's ruling**: the hosted wizard's System step goes before partners; #2088 gated through it. Gate 5 → 4 → 3 → 4. Must-close: #2089. Admission requests with xian via Exec: #2091, #2092, #2094, #2095 (and #2096 before partners?).
