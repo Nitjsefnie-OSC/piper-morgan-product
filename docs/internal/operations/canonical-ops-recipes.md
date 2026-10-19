@@ -325,6 +325,13 @@ serving the last sha deployed before the red (0e30760c79), whose Tests had faile
 probe (`SHA=<that full sha> GITHUB_REPOSITORY=mediajunkie/piper-morgan-product bash <gate probe>`); never the run list.
 After a red→green on main, remember that staging does not redeploy until a push touching deployable paths lands.
 
+**Which paths deploy (Lead, 2026-10-19):** `fly-deploy.yml` ignores `.claude/**`, `.github/**`, `**/*.log`, `deploy/fly/**`,
+`dev/**`, `mailboxes/**`, `node_modules/**`, `tests/**`, `venv/**`. So a session log, a mailbox memo, a carry-forward, a
+`decisions.log` line or a test-only commit never moves staging. On 2026-10-19 Tests went green at 10:44 and ten pushes
+from six seats over the next twenty minutes were all of those kinds, so staging kept serving the red build's code and the
+promotion gate (rightly) refused. To move staging after a red→green, land something under `docs/` (not `*.log`),
+`services/`, `web/`, `scripts/` or `alembic/`, or wait for the next such push; then re-read staging's `/health` sha.
+
 ## Google Calendar for a hosted deployment (PM ruling 2026-10-01)
 
 The Google OAuth **app** (client ID/secret) is deployment plumbing, set once by the operator as
