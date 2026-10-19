@@ -1,22 +1,21 @@
 # PM test card
 
-**Owner**: Lead. **v83 (11:39 10-18: #2080 and #2075 closed by CXO on Web's quotes; B1 re-run now optional; #2082/#2067/#2081 built for Monday)**, **v82 (09:54 10-18: D4 added, the #1982 MCP read on your A4 account, PA's ask)**, **v81 (08:40 10-18: alpha 83a2f4e40c, promotion 2 of 2; #2064/#2069/#2076/#2072/#2051 closed; D2 with your bank; reset script live)**, **v80 (06:45 10-18: alpha serves 47ba746bee; #2064 closed on your count; Sunday order + section D)**, **v79 (17:16 10-17: #2080 and #2078 landed for Sunday), v78 (16:39 10-17: A4 PASS, B1 create FAIL #2080), v77 (16:21 10-17: A5 PASS, #1913 closed), v76 (15:52 10-17: A4 invite pointer corrected), v75 (15:49 10-17: A5 path corrected), v74 (15:43 10-17: C1 done), v73 (15:28 10-17: C1 query corrected), v72 (15:24 10-17: C2 PASS; jump list links to the cards), v71 (15:21 10-17: A1 PASS), v70 (15:12 10-17, snippet added 15:15: your order at the top; A1 cut to what is left for your hand, read snippet inline), v69 (08:1x 10-17: alpha `118241587e`, slot 2 of 2; every card live, A1 and C2 included), v68 (07:1x: slot 1), v67 (A1 gap #2072 noted 19:3x), v66 (B3 gap 17:5x), v65 17:09 10-16: alpha promoted to the new build, every card is live.** v64 (16:4x) for xian's live session**: one card per test, only the tests that need xian's hand or that nobody has passed yet. Closed rows, Web's rows and the history are gone from this page; `git log -p` of this file keeps every earlier version. Mirror: https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi (this file wins between republishes).
+**Owner**: Lead. **v84 (11:17 10-19: alpha serves `f9fb8b750b`, promotion 1 of 2; #2082, #2067, #2081 live; your order for Monday; D5 added, the admin Invites page)**, **v83 (11:39 10-18: #2080 and #2075 closed by CXO on Web's quotes; B1 re-run now optional; #2082/#2067/#2081 built for Monday)**, **v82 (09:54 10-18: D4 added, the #1982 MCP read on your A4 account, PA's ask)**, **v81 (08:40 10-18: alpha 83a2f4e40c, promotion 2 of 2; #2064/#2069/#2076/#2072/#2051 closed; D2 with your bank; reset script live)**, **v80 (06:45 10-18: alpha serves 47ba746bee; #2064 closed on your count; Sunday order + section D)**, **v79 (17:16 10-17: #2080 and #2078 landed for Sunday), v78 (16:39 10-17: A4 PASS, B1 create FAIL #2080), v77 (16:21 10-17: A5 PASS, #1913 closed), v76 (15:52 10-17: A4 invite pointer corrected), v75 (15:49 10-17: A5 path corrected), v74 (15:43 10-17: C1 done), v73 (15:28 10-17: C1 query corrected), v72 (15:24 10-17: C2 PASS; jump list links to the cards), v71 (15:21 10-17: A1 PASS), v70 (15:12 10-17, snippet added 15:15: your order at the top; A1 cut to what is left for your hand, read snippet inline), v69 (08:1x 10-17: alpha `118241587e`, slot 2 of 2; every card live, A1 and C2 included), v68 (07:1x: slot 1), v67 (A1 gap #2072 noted 19:3x), v66 (B3 gap 17:5x), v65 17:09 10-16: alpha promoted to the new build, every card is live.** v64 (16:4x) for xian's live session**: one card per test, only the tests that need xian's hand or that nobody has passed yet. Closed rows, Web's rows and the history are gone from this page; `git log -p` of this file keeps every earlier version. Mirror: https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi (this file wins between republishes).
 
-**Alpha**: https://alpha.pipermorgan.ai serves **`83a2f4e40c`** (promotion 2 of 2, 08:35 10-18, run 39141164349; /health healthy 08:39). **No more promotions today.** Since the morning build it adds only the password-reset mint fix (the `dinp` reset now works from `fly ssh console`), the add_project live-set mirror and a test pin; every row below is unchanged by it. Live since the morning: #2077 token-field fix, #2078 wizard fix, #2080 both halves, #2079 greeting, #2075, #2076, #2069, #2051, #1982, #2073. Also live by your hand: `add_project` in the router's live set (#2069 closed on it).
+**Alpha**: https://alpha.pipermorgan.ai serves **`f9fb8b750b`** (promotion 1 of 2, 11:17 10-19, run 39300767619; /health healthy). One more promotion possible today before 21:00. New since `83a2f4e40c`: #2082 (a no-name add asks for the name first, then confirms), #2067 ("You've been signed out" modal when your sign-in lapses on the Integrations and settings pages, must-close), #2081 (the admin Invites page, `/settings/invites`, admin only), #2083 (/health now reports the database). Every earlier card is unchanged by it. Live since Sunday: #2077 token-field fix, #2078 wizard fix, #2080, #2079 greeting, #2075, #2076, #2069, #2051, #1982, #2073, the `dinp` reset fix, `add_project` in the router's live set.
 
 **How to report**: paste the reply or a screenshot in chat; say the card number. Lead relays to the judge named on the card and updates this page.
 
-## Your order (Sunday 06:45 10-18; each item links to its card)
+## Your order (Monday 11:17 10-19; each item links to its card)
 
-1. ~~[C3](#c3) #2064 count line~~ **DONE 06:05, #2064 CLOSED 06:09.**
+1. ~~The `dinp` reset~~ (no such account; your `mvp-tester` is the admin since 10:13) · ~~Slack Connect, fly.dev URL removed~~ (#1852 CLOSED 11:10) · still yours: **Calendar Connect once** and **the bank's masked forms to HOST** (the awk line).
 2. [D1](#d1): the #2077 ten-second check (must-close; your browser, your saved password).
-   Before it, your own order this morning: `dinp` password reset (the fixed mint is live), Slack Connect as `dinp` (#1852 step 2.3), remove the fly.dev Redirect URL (2.4), Calendar Connect once.
-3. ~~[B1](#b1) again~~ **#2080 CLOSED 11:34** on Web's chain (confirm reached, yes created the project, no gave the open-door line). Run it yourself only if you want to see it; nothing gates on it.
-4. [D2](#d2): the #2078 wizard run with one code from your bank of ten (must-close; you are the simplest runner now that you hold the codes).
+3. [D2](#d2): the #2078 wizard run with one code from your bank of ten (must-close).
+4. [D5](#d5): the admin Invites page as `mvp-tester` (new this morning; about three minutes).
 5. [D4](#d4): the MCP app reads your A4 PAT-only account's GitHub (#1982, about five minutes; PA reads the logs).
-6. [A3](#a3), [A2](#a2), [A6](#a6), [A7](#a7), [B2](#b2), [B3](#b3): any order; none gates anything.
+6. [E1](#e1) if you want to see it: the signed-out modal (#2067) is Web's served row this morning; [E2](#e2) the name-first add (#2082) likewise. Then [A3](#a3), [A2](#a2), [A6](#a6), [A7](#a7), [B2](#b2), [B3](#b3): any order; none gates anything.
 
-Yesterday's: ~~A1~~ PASS 15:19 · ~~C2~~ PASS 15:22 · ~~A5~~ PASS 16:18 · ~~A4~~ PASS 16:33 · ~~B1~~ offer PASS, create FAIL 16:31 → #2080 (fixed, re-run above) · ~~C1~~ DONE 15:40.
+Done: ~~C3~~ #2064 CLOSED 10-18 · ~~B1~~ #2080 CLOSED 10-18 · ~~A1~~ · ~~C2~~ · ~~A5~~ · ~~A4~~ · ~~C1~~ (10-17).
 
 ## A. Your cards (live since `118241587e`, still live on `47ba746bee`)
 
@@ -128,7 +127,7 @@ fly ssh console -a piper-morgan -C "python -m scripts.backfill_encrypt_files_130
 fly ssh console -a piper-morgan -C "python -m scripts.backfill_encrypt_files_1306"
 ```
 
-## D. New on the Sunday build (live since `47ba746bee` 06:42, still on `83a2f4e40c`)
+## D. New on the Sunday build (live since `47ba746bee` 06:42 10-18, still on `f9fb8b750b`)
 
 ### D1. Token field stays empty (#2077, must-close, your hand)
 - **Why you:** Chrome fills a saved Piper password into password inputs; your browser has one, the test browsers do not. The fix is `autocomplete="new-password"` on ten credential inputs.
@@ -152,6 +151,20 @@ fly ssh console -a piper-morgan -C "python -m scripts.backfill_encrypt_files_130
 - **Pass**: real issue titles that match GitHub, with the total stated (A4's PAT saw 274 on 10-17). **Fail**: "connect GitHub", `CONNECT_REQUIRED`, or an empty list. Screenshot it.
 - **After**: switch the connector back to your main account if you use it day to day. PA reads the MCP app's logs for the call (`EncryptedDBCredentialStore`, no decrypt error). Full steps: `dev/active/pa-sunday-served-2078-2080-steps.md` §D.
 - **Judge**: PA, then Arch's runbook names it as the landing's live check.
+
+### D5. The admin Invites page: mint, see masked, revoke (#2081, Production, your hand)
+- **Before it**: nothing; `mvp-tester` is the only admin (your psql UPDATE 10:13). The page refuses anyone else with 403.
+- **Steps**: signed in as `mvp-tester` on alpha, open Settings: an **Invites** card shows (admins only). Open `/settings/invites`. Mint **2** codes: they show once, in full, on that response only (copy them into your bank file with labels, then leave the page: they are not shown again). The list below shows every code masked (`ABCD…WXYZ`) with status unused/redeemed/revoked and the mint time. Revoke one of the two you just minted: its status reads revoked, and a sign-up with it at `/setup` is refused.
+- **Pass**: the card shows only to `mvp-tester`; a mint shows raw codes once and the list never does; revoke flips the status and the code no longer redeems. **Fail**: a raw code anywhere but the mint response, a non-admin reaching the page, a revoked code still redeeming.
+- **Judge**: HOST (the page was built to HOST's seven rulings); Lead closes #2081 on your screenshot of the masked list plus HOST's word. Masked forms only in anything you paste.
+
+## E. New on the Monday build (live since `f9fb8b750b`; Web's rows, yours only if you want to see them)
+
+### E1. Signed out while on the Integrations page (#2067, must-close, Web runs it)
+- Open `/settings/integrations` signed in, delete the `auth_token` cookie, press **Test** on any card: a modal **You've been signed out** ("Your sign-in expired while you were away. Nothing about your integrations has changed. Sign in again and you'll come back to this page.") with one **Sign in** button that lands you back on the page after sign-in; the cards behind it keep their words. The old "Token has expired" line under GitHub is gone. CXO accepts on Web's quote.
+
+### E2. Starting a project without naming it (#2082, Web runs it)
+- `I'd like to start a new project` → Piper asks for the name → `Klatch` → `Add a project called "Klatch"? (yes/no)` → `yes` creates it, `no` says "Okay — I won't add a project called "Klatch". Nothing has been changed." Nothing is written before the yes. With the name in the first message it goes straight to the confirm, as on Sunday.
 
 ## Not on your list
 Web runs S9–S13 (#2057 phrasings, #2053 card, #2055 notice placement, #2046 ordinals) on this build; CXO judges; Lead posts the results on the issues. Parked, try-and-tell only: #1943 ("mark the first one complete and leave the second one pending"). #2061, #2059, #2060 and #2054 have nothing observable to test by hand; they close on being live.
