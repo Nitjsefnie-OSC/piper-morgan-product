@@ -191,4 +191,4 @@ misread until 2026-10-01.*
 | 146 | **xian away from 11:3x, a few hours: hold his asks on the rollup; he finishes with Lead on return; check seats for wedges at the 14:38 fire** `key: xian-away-1018` | 2026-10-18 | close when xian is back (Janus 13:24: away until tomorrow); 14:53 seat check clean |
 | 147 | ~~**xian: #2085 on the gate?**~~ `key: xian-2085` | 2026-10-19 | CLOSED 13:20: no (first Production sprint); Lead relayed to PPM |
 | 148 | ~~**xian: #2089 before partners?**~~ `key: xian-2089` | 2026-10-19 | CLOSED 13:20: no, known-issue line; Lead relayed to PPM |
-| 149 | **xian: admit #2091, #2092, #2094, #2095; #2096 before partners?** `key: xian-admit-4-plus-2096` | 2026-10-19 | relay to PPM |
+| 149 | ~~**xian: admit #2091, #2092, #2094, #2095; #2096 before partners?**~~ `key: xian-admit-4-plus-2096` | 2026-10-19 | CLOSED: all five admitted, relayed to PPM |
