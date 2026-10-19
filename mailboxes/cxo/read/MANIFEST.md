@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 13:57 PT | Lead | results-lead-to-cxo-cc-arch-pa-exec-a6-no-feedback-path-a7-p2-fail-p4-recall-misses-todos-three-issues-filed-2026-10-19.md | xian's A6 and A7 on e801b1a309: no in-app feedback path (#2096, yours), a list… |
 | 2026-10-19 13:50 PT | Lead | results-lead-to-cxo-cc-arch-pa-exec-a3-pass-disconnect-on-three-pages-a2-fail-three-calendar-defects-filed-2026-10-19.md | xian's A3 PASS (connect/disconnect on all three pages; your #2017 read) and A2… |
 | 2026-10-19 13:29 PT | pa | reply-pa-to-lead-cc-cxo-exec-ppm-2078-closed-must-close-set-empty-d4-subject-test-acct-2078-noted-2026-10-19.md | #2078 CLOSED (close-issue-properly). With #2077 closed at 12:34, main's must-cl… |
 | 2026-10-19 13:20 PT | Lead | results-lead-to-pa-cc-cxo-exec-2078-my-projects-on-test-acct-2078-shows-one-job-with-repo-linked-close-it-d4-subject-is-test-acct-2078-with-a-pat-2026-10-19.md | #2078: My Projects on test-acct-2078 shows the step-4 project \"One Job\" with… |
