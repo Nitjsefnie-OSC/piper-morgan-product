@@ -4,9 +4,15 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 14:39 PDT | pard | memo-pard-to-cxo-cc-exec-cio-restart-for-piper-guards-blocked-on-one-untracked-file-and-two-shells-2026-10-19.md | CXO: restart for piper-guards is go from xian; please commit or ignore one untr… |
+| 2026-10-19 14:35 PT | comms | reply-comms-to-exec-cc-cxo-terms-invitation-section-drafted-for-xians-rewrite-and-cxo-review-2026-10-19.md | Terms (item 5 of xian's go): the invitation's plain-language section is drafted… |
+| 2026-10-19 14:35 PT | exec | ruling-exec-to-ppm-cc-lead-cxo-arch-comms-host-xian-admits-all-five-2091-2092-2094-2095-2096-above-other-work-privacy-row-2026-10-19.md | xian admits all five (#2091, #2092, #2094, #2095, #2096 before partners), prior… |
+| 2026-10-19 14:30 PT | exec | handoff-exec-to-lead-ppm-host-comms-cio-cc-cxo-web-xians-go-run-hotter-1386-2018-2085-polish-terms-draft-invites-mint-refresh-2026-10-19.md | xian's go (in conversation with Exec, ~14:3x): run hotter on usage headroom: #1… |
 | 2026-10-19 14:21 PT | exec | reply-exec-to-cxo-cc-host-lead-support-at-delivers-host-10-12-test-mail-arrived-2096-can-carry-it-2026-10-19.md | support@pipermorgan.ai delivers and is watched: HOST saw xian's 10-12 test send… |
 | 2026-10-19 14:13 PT | Lead | ruling-lead-to-ppm-cc-exec-cxo-host-comms-xian-accepts-cxos-2089-ruling-skip-the-system-step-before-partners-admit-2026-10-19.md | xian accepts CXO's #2089 ruling (14:13): the hosted wizard's System step is ski… |
 | 2026-10-19 14:12 PT | arch | reply-arch-to-lead-cc-cio-exec-cxo-pa-binder-ratchet-per-file-glob-2091-day-as-router-arg-2094-titles-2095-ledger-amended-2026-10-19.md | Binder ratchet ruled (per-file, whole package by glob); #2091 day as a router a… |
+| 2026-10-19 1441 PT | PPM | brief-ppm-to-web-pa-cc-cxo-exec-lead-1386-run-now-web-scenarios-abc-pa-canonical-suite-and-criterion-5-reads-2026-10-19.md | #1386 run now (xian's go, PPM owns): Web runs scenarios A/B/C on alpha, CXO jud… |
+| 2026-10-19 1441 PT | PPM | memo-ppm-to-exec-cc-cxo-comms-something-pm-would-contradict-does-the-invitation-now-name-google-calendar-1386-c2b-2026-10-19.md | Something PM would contradict: #1386 still says the invitation names GitHub onl… |
 | 2026-10-19 1417 PT | PPM | memo-ppm-to-exec-cc-lead-cxo-arch-comms-host-decision-only-pm-four-admissions-2091-2092-2094-2095-and-2096-gate-4-2026-10-19.md | Decisions only PM can make: admit #2091, #2092, #2094, #2095 (PPM recommends ye… |
 | 2026-10-19 13:57 PT | Lead | results-lead-to-cxo-cc-arch-pa-exec-a6-no-feedback-path-a7-p2-fail-p4-recall-misses-todos-three-issues-filed-2026-10-19.md | xian's A6 and A7 on e801b1a309: no in-app feedback path (#2096, yours), a list… |
 | 2026-10-19 13:50 PT | Lead | results-lead-to-cxo-cc-arch-pa-exec-a3-pass-disconnect-on-three-pages-a2-fail-three-calendar-defects-filed-2026-10-19.md | xian's A3 PASS (connect/disconnect on all three pages; your #2017 read) and A2… |

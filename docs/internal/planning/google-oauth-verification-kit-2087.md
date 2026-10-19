@@ -64,7 +64,7 @@ Upload to YouTube as **Unlisted** (Exec's instruction; the page I read doesn't n
    - App name: `Piper Morgan`
    - Homepage: `https://pipermorgan.ai`
    - Privacy policy: `https://pipermorgan.ai/privacy/`
-   - Terms (if asked): **unverified** whether a Terms page exists; Comms checks.
+   - Terms (if asked): **leave blank**. There's no Terms page (`/terms` is a 404, per Comms 14:35, consistent with xian's Option 2), and the field is optional.
    - Authorized domains: `pipermorgan.ai`
 3. **Verification Center → Prepare for verification / Submit.** The form asks for:
    - the scope justification (§2);
@@ -88,6 +88,14 @@ Notes:
 - The last sentence is the disclosure wording Google's reviewers commonly ask for. It's from Exec's and my knowledge; the policy page I fetched didn't print a required sentence.
 - Fix "reads and writes" for Calendar in the same edit. "Reads, and writes when you ask" stays true for GitHub, Slack and Notion only if those write. Comms checks with Lead.
 - The homepage must link to the privacy policy, and that link must match the consent screen's. Comms confirms that the site footer has it.
+
+## Updates
+
+- **Comms, 14:35:**
+  - The draft paragraph is at `docs/internal/planning/comms/privacy-google-user-data-draft-2026-10-19.md`, waiting on xian's go. **Submit only after it's live.**
+  - The site footer has no Privacy link, so Web adds one with the same go.
+  - The email scope only feeds a log line (`oauth_handler.py` 265–272). Lead picks: show it, drop the scope, or drop it from the log. If the scope is dropped, §1 and §4 lose `userinfo.email`.
+  - No code stores raw events: `git grep calendar_events` finds only the standup assembler, which builds display items. That's Comms' source read; Lead's §2a check stands.
 
 ## Whose part is whose
 
