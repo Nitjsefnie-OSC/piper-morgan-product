@@ -112,6 +112,28 @@ def _served_sha() -> str:
         return f"unreadable ({type(e).__name__})"
 
 
+# HOST's stop rule for hosted runs (#1386, 2026-10-19, after alpha's 14:53-15:03 flap): before each
+# query, read /health; stop if it takes over 3 s or the database isn't healthy, or if a query got a
+# 5xx or timed out. The partial results are written and marked PARTIAL.
+HEALTH_MAX_SECONDS = 3.0
+
+
+def _health_gate() -> str | None:
+    """Return a stop reason, or None if alpha looks healthy."""
+    try:
+        t0 = time.monotonic()
+        resp = requests.get(f"{BASE_URL}/health", timeout=10)
+        elapsed = time.monotonic() - t0
+        db = (resp.json().get("services") or {}).get("database", "missing")
+    except Exception as e:
+        return f"/health unreadable ({type(e).__name__})"
+    if elapsed > HEALTH_MAX_SECONDS:
+        return f"/health took {elapsed:.1f}s (> {HEALTH_MAX_SECONDS}s)"
+    if db != "healthy":
+        return f"/health database={db}"
+    return None
+
+
 # Judge config
 JUDGE_CONFIDENCE_THRESHOLD = 0.7  # Below this → human escalation flag
 JUDGE_ENABLED = True  # Set False to skip Tier B and use Tier A only
@@ -1140,6 +1162,7 @@ def main():
 
     # Run queries
     results = []
+    stop_reason = None
     current_category = None
     for (
         query_num,
@@ -1149,6 +1172,11 @@ def main():
         known_issue,
         pathological_reason,
     ) in CANONICAL_QUERIES:
+        if HOSTED:
+            stop_reason = _health_gate()
+            if stop_reason:
+                print(f"\n  STOP (HOST's rule) before Q{query_num}: {stop_reason}")
+                break
         if category != current_category:
             current_category = category
             print(f"\n### {category} ###")
@@ -1164,6 +1192,12 @@ def main():
             anthropic_client,
         )
         results.append(result)
+        if HOSTED and (
+            (result.get("http_status") or 0) >= 500
+            or (result.get("error") or "").startswith("timeout")
+        ):
+            stop_reason = f"Q{query_num}: {result.get('error') or result.get('http_status')}"
+            print(f"\n  STOP (HOST's rule) after {stop_reason[:120]}")
 
         # Status icon based on best available verdict
         verdict = result.get("judge_verdict") or result.get("tier_a_verdict") or "?"
@@ -1187,9 +1221,15 @@ def main():
         )
 
         # Brief pause to avoid hammering the server (and the judge)
+        if stop_reason:
+            break
         time.sleep(0.5)
 
     end_sha = _served_sha()
+    partial = len(results) < len(CANONICAL_QUERIES)
+    if not results:
+        print("No queries ran; nothing to write.")
+        sys.exit(3)
     # Summary
     total = len(results)
     routing_pass = sum(1 for r in results if r["routing_pass"])
@@ -1212,11 +1252,13 @@ def main():
         f"  Served sha:       start {start_sha} / end {end_sha}"
         + ("" if start_sha == end_sha else "  ⚠️ CHANGED MID-RUN")
     )
+    if partial:
+        print(f"  ⚠️ PARTIAL: {total} of {len(CANONICAL_QUERIES)} queries ran")
     print(f"  M0 baseline:      70.5% routing pass")
     print(f"  M1 routing:       {routing_pass/total*100:.1f}%")
 
     # Write outputs
-    stamp = datetime.now().strftime("%Y%m%d-%H%M")
+    stamp = datetime.now().strftime("%Y%m%d-%H%M") + ("-PARTIAL" if partial else "")
     csv_path = OUTPUT_DIR / f"canonical-retest-1386-alpha-{stamp}-results.csv"
     report_path = OUTPUT_DIR / f"canonical-retest-1386-alpha-{stamp}-report.md"
     write_csv(results, csv_path)
