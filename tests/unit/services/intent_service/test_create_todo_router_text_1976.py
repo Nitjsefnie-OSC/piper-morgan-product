@@ -147,7 +147,9 @@ class TestHandlerConsumes:
         await handlers.handle_create_todo(
             _intent("add a todo to web test one"), "s-1976", UUID(_USER)
         )
-        assert handlers.todo_service.create_todo.await_args.kwargs["text"] == "to web test one"
+        # #2094/#2095 (CXO): the regex path now drops a leading "to " as well, so the
+        # legacy fallback stores the todo's own words; the rest of the path is unchanged.
+        assert handlers.todo_service.create_todo.await_args.kwargs["text"] == "web test one"
 
     async def test_refused_router_text_falls_back_to_the_regex(self, handlers):
         await handlers.handle_create_todo(

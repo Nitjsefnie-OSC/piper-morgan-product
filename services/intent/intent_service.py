@@ -1025,27 +1025,31 @@ class IntentService:
             created = _pop_pending_created_activity(session_id, user_id)
         if not created:
             return
+        # #2094: a batch create parks a LIST; one ledger row per element.
+        rows = created if isinstance(created, list) else [created]
         try:
             from services.database.repositories import SessionActivityRepository
             from services.database.session_factory import AsyncSessionFactory
 
             async with AsyncSessionFactory.session_scope() as session:
-                await SessionActivityRepository(session).record(
-                    owner_id=str(user_id),
-                    conversation_id=str(session_id),
-                    action_type=created["action_type"],
-                    target_ref=created["target_ref"],
-                    target_title=created.get("target_title"),
-                    # turn_id: nullable; precise DB-turn linkage is a B3-time refinement
-                    # (needs save_conversation_turn to return the persisted turn id).
-                    turn_id=None,
+                for row in rows:
+                    await SessionActivityRepository(session).record(
+                        owner_id=str(user_id),
+                        conversation_id=str(session_id),
+                        action_type=row["action_type"],
+                        target_ref=row["target_ref"],
+                        target_title=row.get("target_title"),
+                        # turn_id: nullable; precise DB-turn linkage is a B3-time refinement
+                        # (needs save_conversation_turn to return the persisted turn id).
+                        turn_id=None,
+                    )
+            for row in rows:
+                self.logger.info(
+                    "session_activity_recorded",
+                    session_id=session_id,
+                    action_type=row.get("action_type"),
+                    target_ref=row.get("target_ref"),
                 )
-            self.logger.info(
-                "session_activity_recorded",
-                session_id=session_id,
-                action_type=created.get("action_type"),
-                target_ref=created.get("target_ref"),
-            )
         except Exception as e:
             self.logger.warning(
                 "Failed to record session activity (non-blocking)",
