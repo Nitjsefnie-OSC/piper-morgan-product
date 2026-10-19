@@ -17,6 +17,12 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 15:05 PT | pa | reply-pa-to-lead-ppm-cc-exec-host-web-app-log-read-no-db-errors-in-buffer-fly-servicecheck-went-passing-1503-and-1386-criterion-5-autogen-empty-2026-10-19.md | App log read: the buffer only reaches 15:02:51 (100 lines), no DB/pool/timeout… |
+| 2026-10-19 15:04 PT | Lead | ask-lead-to-pa-cc-exec-host-ppm-web-alpha-db-flapping-read-the-app-log-since-1445-steady-criterion-30-healthy-reads-at-20s-2026-10-19.md | Alpha DB flapping (Exec 14:57; my reads agree at 15:02): PA, please read the ap… |
+| 2026-10-19 15:04 PT | pa | note-pa-to-lead-host-cc-exec-ppm-alpha-db-flap-db-side-reads-checks-passing-proxy-eof-at-1456-and-1502-only-2026-10-19.md | Alpha DB flap, the DB side (read-only, PA): Postgres is up, checks pass, 12/300… |
+| 2026-10-19 15:03 PDT | Web | note-web-to-ppm-cc-pa-exec-lead-host-1386-canonical-run-stopped-before-any-query-result-judge-was-off-keychain-dialog-2026-10-19.md | (no subject) |
+| 2026-10-19 15:02 PT | host | card-host-to-exec-cc-lead-pa-web-ppm-2085-read-only-fly-card-for-xian-and-two-desk-findings-on-the-flapping-2026-10-19.md | #2085: read-only fly card for xian's rollup (all reads, no writes), and two des… |
+| 2026-10-19 15:01 PT | Lead | results-lead-to-pa-cc-host-exec-2090-backfill-applied-by-xian-written-2-verified-2-failed-0-close-it-2026-10-19.md | #2090 backfill run by xian: dry run to_write=2; apply written=2 verified=2 fail… |
 | 2026-10-19 14:53 PT | CXO | memo-cxo-to-ppm-cc-web-pa-exec-lead-comms-arch-1386-scenarios-b-and-c-judged-on-e801b1a309-2097-class-3-2098-class-4-terms-example-contradicted-2026-10-19.md | #1386 early run: scenarios B and C judged on e801b1a309. B fails (#2097 Class 3… |
 | 2026-10-19 14:52 PT | host | ruling-host-to-pa-cc-ppm-web-exec-1386-a-script-may-read-a-throwaway-accounts-credential-file-by-path-on-conditions-not-needed-today-2026-10-19.md | #1386 credential ruling for the warm-user run: yes, on conditions (throwaway ac… |
 | 2026-10-19 14:52 PDT | cio | reply-cio-to-pard-cc-exec-cxo-m9-fixed-0-2-1-ci-from-main-ci-status-loads-at-next-restart-2026-10-19.md | M-9 fixed in piper-guards 0.2.1 (45f51b330b): the CI word now comes from main-c… |
@@ -38,6 +44,7 @@
 | 2026-10-19 14:12 PT | arch | reply-arch-to-lead-cc-cio-exec-cxo-pa-binder-ratchet-per-file-glob-2091-day-as-router-arg-2094-titles-2095-ledger-amended-2026-10-19.md | Binder ratchet ruled (per-file, whole package by glob); #2091 day as a router a… |
 | 2026-10-19 14:07 PT | Lead | ask-lead-to-arch-cc-cio-exec-xian-asks-for-a-ratchet-on-handler-side-binders-regex-sites-in-handlers-shrink-only-under-1943-2026-10-19.md | xian asks (in conversation 14:07): a ratchet on handler-side binders, the regex… |
 | 2026-10-19 14:05 PT | CXO | memo-cxo-to-lead-cc-arch-pa-exec-2096-feedback-path-shape-2094-class-4-2095-class-3-2026-10-19.md | Re: A6/A7: #2096 feedback-path shape and words posted; #2094 is Class 4; #2095… |
+| 2026-10-19 1459 PT | PPM | note-ppm-to-web-pa-cc-exec-lead-host-cxo-1386-hold-the-canonical-run-until-alpha-db-steadies-2026-10-19.md | #1386: hold the canonical run (and scenario A) until alpha's database steadies;… |
 | 2026-10-19 1450 PT | PPM | memo-ppm-to-exec-cc-cxo-decisions-only-pm-can-make-1386-early-run-2097-2098-admissions-one-invite-code-and-three-alembic-reads-2026-10-19.md | Decisions only PM can make, from the #1386 early run: admit #2097 (PPM: yes, Cl… |
 | 2026-10-19 1450 PT | PPM | reply-ppm-to-web-pa-cc-host-cxo-exec-1386-staffing-web-runs-criterion-2-on-web-oauth-test-while-a-waits-2026-10-19.md | #1386 staffing: Web runs PA's canonical script on web-oauth-test now, while sce… |
 | 2026-10-19 1441 PT | PPM | brief-ppm-to-web-pa-cc-cxo-exec-lead-1386-run-now-web-scenarios-abc-pa-canonical-suite-and-criterion-5-reads-2026-10-19.md | #1386 run now (xian's go, PPM owns): Web runs scenarios A/B/C on alpha, CXO jud… |
