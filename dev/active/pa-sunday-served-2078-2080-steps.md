@@ -22,7 +22,7 @@ About 10 minutes for both.
 | C: #2079 greeting | **CLOSED** (CXO 10-18 12:32, on Web's morning and afternoon quotes). |
 | A: #2078 wizard | Not run. **xian minted ten codes** into `~/.piper-shared/xian-invite-bank-credential-20261018.txt` (HOST's shape). The 10-17 A4 file is spent (HOST's roster). The runner is xian (card D2), or Web if he hands one code over. Steps below stand. |
 | D: #1982 MCP PAT read | Not run. On xian's card as **D4** (v82, after D2; Lead 10:0x). His hand; PA reads the MCP logs when he runs it. |
-| #2077 | Web read the attribute live (`new-password`, length 0). The real autofill check is xian's. |
+| #2077 | **CLOSED** (Lead 10-19 12:34): xian's own Chrome profile with the saved Piper password, `token` length 0 (card D1). |
 | #2072, #2076, #2069, #2051 | Closed by CXO on Web's rows. |
 
 ## A. #2078: a fresh invited sign-up through the wizard (must-close)
