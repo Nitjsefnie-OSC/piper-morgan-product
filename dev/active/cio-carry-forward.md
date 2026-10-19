@@ -112,3 +112,7 @@ can hide its subject (main-ci-status 20 → 100).
   - A4 invite mint (HOST, Lead seats classifier-denied): xian's, via Exec; not mine to work around.
   - Reviews: 10-19 piper-guards/context-usage-reminder; 10-22 v4 pilot; 10-27 staleness; 10-30 grant; 11-01 sunset inventory; 12-09 methodology audit.
 
+
+**2026-10-18 (START 10:07, STOP 22:07):**
+  **Done:** #2081 seat-rule answer (no seat rule moves; mint-script classifier denial stays); 6 #2081 cc memos filed (landed d626c29d47; Arch's ceiling ruled 29).
+  **Open:** #1968 item 7 (Pard's Exec and Lead LaunchAgents); 7v (Exec's decision); devtools bump after 10-29; first real-commit stamp warning (watch); 10-19 review of piper-guards and context-usage-reminder; 10-22 v4 pilot; 10-27 staleness; 10-30 grant; 11-01 sunset inventory; 12-09 methodology audit.
