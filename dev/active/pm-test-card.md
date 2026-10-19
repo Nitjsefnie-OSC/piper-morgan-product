@@ -14,7 +14,7 @@
 1. ~~[D1](#d1) #2077~~ **PASS 12:3x, CLOSED** (your `0`).
 2. ~~[D2](#d2) #2078~~ **PASS 12:4x** (account `test-acct-2078`, landed signed in; My Projects shows the step-4 project "One Job" with its repo linked; PA closes). Your two wizard notes filed: #2088 (invite code at step 3, should be first) and #2089 (hosted wizard still shows the local system check; Temporal always fails).
 3. ~~[D5](#d5) #2081~~ **PASS 13:03, CLOSED 13:2x** on HOST's word (the list-refresh gap is fixed on main and rides the next promotion).
-4. [D4](#d4): the MCP app reads your A4 PAT-only account's GitHub (#1982, about five minutes; PA reads the logs).
+4. ~~[D4](#d4) #1982~~ **PASS 13:3x** (fresh Piper Alpha MCP connector as `test-acct-2078`, PAT-only: 273 open issues, 50 shown, your project named; PA reads the logs and judges).
 5. None of these gates anything; any order, any day: [A3](#a3) Disconnect dialog on three pages · [A2](#a2) Calendar answers in chat · [A6](#a6) find your way · [A7](#a7) three spec checks · [B2](#b2) a question never changes a project · [B3](#b3) the Integrations card after Test.
 
 Done and gone from this page (git log -p keeps them): A1, A4, A5, B1, C1, C2, C3, D3; Web's E1 (#2067 modal) and E2 (#2082 name-first) both passed 11:24 on this build. Your hand items this morning: dinp (no such account; mvp-tester is admin), #1852 closed, Calendar Connect PASS, the ten masked forms relayed to HOST 12:0x.
@@ -63,14 +63,6 @@ Done and gone from this page (git log -p keeps them): A1, A4, A5, B1, C1, C2, C3
 - **Known gap (Web 17:33)**: on an account whose GitHub is connected by OAuth the time line never shows (the card arrives with no check time; #2066, fix on main, live with tomorrow's promotion). Run B3 only if your GitHub card says "Connected via your personal token"; otherwise skip it.
 - **Judge**: CXO.
 
-## D. New on the Sunday build (live since `47ba746bee` 06:42 10-18, still on `f9fb8b750b`)
-
-### D4. The MCP app reads a PAT-only account's GitHub (#1982, PA's lane, your hand)
-- **What this tests:** a PAT saved in Settings → GitHub is now also stored where the MCP app can read it (the dual write, live since Sunday). Before it, an account whose only GitHub connection was a PAT got "connect GitHub" / `CONNECT_REQUIRED` from the Piper Alpha connector. So the account must be **PAT-only, no OAuth grant**. `mvp-tester` has an OAuth grant now, so it no longer tests this; use **`test-acct-2078`** (fresh, no GitHub yet).
-- **Steps** (PA's connector details, 13:16): (1) on alpha, signed in as `test-acct-2078`: Settings → GitHub → paste a GitHub PAT of yours → Save; pass: "Connected". **Stay signed in as that account in your default browser**, or sign out of alpha there: the connector's sign-in opens in the default browser, and if it is signed in as your main account the approval goes through as you and the test passes for the wrong reason. (2) Claude Desktop → Settings → Connectors → **"Piper Alpha MCP"** (URL `https://mcp.pipermorgan.ai/mcp`): Disconnect, then Connect; on the alpha page that opens, sign in as `test-acct-2078` and approve. (3) New chat; open the tools menu (the slider icon under the message box) and turn **off** the local "Piper Morgan" extension (its tool talks to `localhost:8001` and asked you for a "shared password"); ask **"What are my open GitHub issues in Piper?"**
-- **Pass**: real issue titles that match GitHub, with the total stated. **Fail**: "connect GitHub", `CONNECT_REQUIRED`, an empty list, or anything about `localhost:8001` (wrong connector). Screenshot it.
-- **After**: switch the connector back to your main account if you use it day to day. PA reads the MCP app's logs for the call.
-- **Judge**: PA.
 
 ## Not on your list
 
