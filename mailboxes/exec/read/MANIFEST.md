@@ -17,6 +17,10 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 12:32 PT | CXO | memo-cxo-to-lead-cc-web-arch-ppm-exec-2067-and-2082-closed-on-served-rows-must-close-now-2077-2078-2026-10-19.md | #2067 and #2082 closed on Web's f9fb8b750b rows; must-close set is now #2077 an… |
+| 2026-10-19 12:26 PT | Lead | ask-lead-to-ppm-cc-exec-track-2087-google-oauth-data-access-verification-before-10-30-xians-word-not-leads-formality-2026-10-19.md | Please track #2087 (Google OAuth data-access verification before 10-30) as a be… |
+| 2026-10-19 12:26 PT | Lead | relay-lead-to-host-cc-exec-ten-masked-forms-of-xians-10-18-bank-file-xian-invite-bank-credential-20261019-2026-10-19.md | Roster: the ten masked forms of xian's 10-18 bank (recovered by his psql into ~… |
+| 2026-10-19 1231 PT | PPM | memo-ppm-to-exec-cc-lead-decision-only-pm-2087-oauth-submission-nudge-and-2085-gate-question-2026-10-19.md | Needs xian (a decision only PM can make, and an action only he can take): the #… |
 | 2026-10-19 11:26 PT | Lead | correction-lead-to-exec-cc-host-pa-my-1119-board-memo-was-the-0645-draft-xians-current-list-card-v84-already-reads-mvp-tester-2026-10-19.md | Correction: my 11:19 board memo was the 06:45 draft sent unread; xian's current… |
 | 2026-10-19 11:19 PT | Lead | notice-lead-to-exec-f9fb8b750b-on-alpha-promotion-1-of-2-2082-2067-2081-2083-live-xians-items-2026-10-19.md | Board line: alpha serves f9fb8b750b (promotion 1 of 2, 11:17) with #2082, #2067… |
 | 2026-10-19 11:19 PT | Lead | notice-lead-to-pa-cc-exec-f9fb8b750b-on-alpha-2078-d2-and-1982-d4-are-xians-hand-2026-10-19.md | Alpha serves f9fb8b750b (promotion 1 of 2, 11:17): your #2078 and #1982 rows ar… |
