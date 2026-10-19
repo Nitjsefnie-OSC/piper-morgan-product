@@ -185,14 +185,14 @@ misread until 2026-10-01.*
 | 140 | ~~**Lead: exact #2064 count line for xian card.**~~ `key: 2064-count-line` | 2026-10-17 | CLOSED 08:35: on rollup v388 |
 | 141 | ~~**xian: admit #2077?**~~ `key: xian-2077` | 2026-10-17 | CLOSED 16:06: yes, must-close (relayed by Lead to PPM, CXO, Arch) |
 | 142 | ~~**xian: #2078 admit?**~~ `key: xian-2078` | 2026-10-17 | CLOSED 16:34: yes, Class 4 must-close (relayed by Lead to PPM, Arch, CXO, PA) |
-| 143 | **xian: Medium + LinkedIn crosspost of "Measure the Start, Not the End"** `key: crosspost-measure` | 2026-10-18 | relay URLs to Docs |
+| 143 | ~~**xian: Medium + LinkedIn crosspost of "Measure the Start, Not the End"**~~ `key: crosspost-measure` | 2026-10-18 | CLOSED 10-19: distributed 10-18 (editorial calendar) |
 | 144 | ~~**Ship #065: tell xian draft ready for first look**~~ `key: ship065-first-look` | 2026-10-18 | CLOSED 08:04: told xian, rollup v404 |
 | 145 | **Ship #066: draft weekly goals from reviews Next-week sections by Sat 10-24 afternoon** `key: goals-066` | 2026-10-18 | xian ratifies |
-| 146 | **xian away from 11:3x, a few hours: hold his asks on the rollup; he finishes with Lead on return; check seats for wedges at the 14:38 fire** `key: xian-away-1018` | 2026-10-18 | close when xian is back (Janus 13:24: away until tomorrow); 14:53 seat check clean |
+| 146 | ~~**xian away from 11:3x 10-18**~~ `key: xian-away-1018` | 2026-10-18 | CLOSED 10-19: xian back 10-19 morning, picked up with Lead |
 | 147 | ~~**xian: #2085 on the gate?**~~ `key: xian-2085` | 2026-10-19 | CLOSED 13:20: no (first Production sprint); Lead relayed to PPM |
 | 148 | ~~**xian: #2089 before partners?**~~ `key: xian-2089` | 2026-10-19 | CLOSED 13:20: no, known-issue line; Lead relayed to PPM |
 | 149 | ~~**xian: admit #2091, #2092, #2094, #2095; #2096 before partners?**~~ `key: xian-admit-4-plus-2096` | 2026-10-19 | CLOSED: all five admitted, relayed to PPM |
 | 150 | ~~**xian: does the invitation name Google Calendar?**~~ `key: xian-calendar-in-invite` | 2026-10-19 | CLOSED 15:05: yes with caveats, relayed |
 | 151 | ~~**xian: admit #2097, #2098?**~~ `key: xian-2097-2098` | 2026-10-19 | CLOSED 15:05: yes, relayed |
 | 152 | **xian: admit #2100?** `key: xian-2100` | 2026-10-19 | relay to PPM |
-| 153 | **xian: alpha stalls under light load: on the gate?** `key: xian-stall-gate` | 2026-10-19 | relay to PPM |
+| 153 | ~~**xian: alpha stalls under light load: on the gate?**~~ `key: xian-stall-gate` | 2026-10-19 | CLOSED 16:56: yes, #2101 Class 4, relayed |
