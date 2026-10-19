@@ -188,7 +188,7 @@ class ConversationContext:
     # its result (the todo handlers answer with a plain string) is parked here for
     # the central observer, which pops it after the turn. Owner-scoped by the
     # context's user_id; never read across sessions.
-    pending_created_activity: Optional[Dict[str, Any]] = None
+    pending_created_activity: Optional[Any] = None  # one dict, or a list of dicts (#2094)
 
     # #1762 (epic 6): the unrendered tail of the most recent capped list, so
     # "…and N more" is a claim we can CASH (GatherOutcome §5b). DELIBERATELY

@@ -1408,6 +1408,65 @@ class TodoIntentHandlers:
                 due.append(todo)
         return due
 
+    async def _create_todos_from_items(
+        self, items: List[str], session_id: str, user_id: UUID, original_message: str
+    ) -> str:
+        """#2094: one todo per router-named title; the reply names every one.
+
+        Each row is remembered (the last stays the #1987 referent) and every
+        row is parked for the #2095 ledger (a list; the observer writes one
+        row per element). A failure after some writes says what was saved."""
+        from services.consciousness.todo_consciousness import format_todos_created_conscious
+
+        priority = self._extract_priority(original_message)
+        created = []
+        try:
+            for title in items:
+                todo = await self.todo_service.create_todo(
+                    user_id=user_id, text=self._strip_leading_to(title), priority=priority
+                )
+                created.append(todo)
+                self._remember_created_todo(session_id, user_id, todo, "todo")
+        except (ValueError, SQLAlchemyError, OSError) as e:
+            logger.error(
+                "Todo batch creation failed", error=str(e), user_id=user_id, saved=len(created)
+            )
+            if created:
+                self._park_created_activities(session_id, user_id, created, "todo")
+                names = ", ".join(f"'{t.text}'" for t in created)
+                return (
+                    f"I saved {len(created)} of {len(items)}: {names}. The rest didn't save — "
+                    "it may be a temporary issue; say the missing ones again and I'll add them."
+                )
+            return (
+                "I had trouble saving those todos — it may be a temporary issue. You can try again."
+            )
+        self._park_created_activities(session_id, user_id, created, "todo")
+        logger.info("Todos created from router items", count=len(created), user_id=user_id)
+        return format_todos_created_conscious(created)
+
+    @staticmethod
+    def _park_created_activities(
+        session_id: Optional[str], user_id: Any, todos: list, kind: str
+    ) -> None:
+        """#2094/#2095: park EVERY created row for the ledger observer (a list)."""
+        if not session_id or not todos:
+            return
+        try:
+            from services.intent_service.conversation_context import get_or_create_context
+
+            ctx = get_or_create_context(session_id, user_id=user_id)
+            ctx.pending_created_activity = [
+                {
+                    "action_type": f"{kind}_created",
+                    "target_ref": f"{kind}:{t.id}",
+                    "target_title": t.text or "",
+                }
+                for t in todos
+            ]
+        except Exception as e:  # silent-ok: logged; the ledger misses rows, the save reply stands
+            logger.warning("created_activities_park_failed", error=str(e), session_id=session_id)
+
     async def handle_create_todo(self, intent: Intent, session_id: str, user_id: UUID) -> str:
         """
         Handle: "add todo: Review PR #285"
@@ -1417,11 +1476,21 @@ class TodoIntentHandlers:
         # depending on how the Intent was created (Issue #744)
         original_message = intent.original_message or intent.context.get("original_message", "")
 
+        # #2094: a LIST of titles from the router ("Add three todos …: a, b, c")
+        # makes one todo per element; code never splits a string.
+        items = self._router_todo_items(intent, original_message)
+        if len(items) >= 2:
+            return await self._create_todos_from_items(items, session_id, user_id, original_message)
+
         # #1976: the router's extracted text first ('add a todo to X' → X), the
-        # regex extractor as the fallback for every other path.
-        text = self._router_todo_text(intent, original_message) or self._extract_todo_text(
-            original_message
+        # regex extractor as the fallback for every other path. #2094/#2095: a
+        # single router title wins over the regex; a leading "to " is dropped.
+        text = (
+            (items[0] if items else "")
+            or self._router_todo_text(intent, original_message)
+            or self._extract_todo_text(original_message)
         )
+        text = self._strip_leading_to(text)
         if not text:
             return "I didn't catch what you'd like me to add. Could you try: 'add todo: [description]'?"
 
@@ -2148,6 +2217,49 @@ class TodoIntentHandlers:
         wanted.discard("")
         if not wanted or not wanted <= said:
             return ""
+        return text
+
+    @staticmethod
+    def _router_todo_items(intent: Intent, message: str) -> List[str]:
+        """#2094 (Arch's shape): the router's list of todo titles for one message.
+
+        Measured 2026-10-19 ×3 on alpha's Haiku-class router: "Add three todos
+        for the launch: draft brief, book venue, send invites" →
+        ``args={"items": ["draft brief", "book venue", "send invites"],
+        "context": "launch"}`` with no prompt change. Accepts ``items`` or
+        ``titles``; each element must be a non-empty string whose every word
+        occurs in the user's message (the #1976 honesty guard, a word set);
+        any element failing it empties the whole list (never a partial write
+        from a half-trusted arg). Code never splits a string here.
+        """
+        ctx = intent.context or {}
+        args = ctx.get("inversion_args")
+        if not isinstance(args, dict):
+            return []
+        raw = args.get("items")
+        if raw is None:
+            raw = args.get("titles")
+        if not isinstance(raw, list) or not raw:
+            return []
+        said = {w.strip(string.punctuation).lower() for w in (message or "").split()}
+        out: List[str] = []
+        for item in raw[:20]:
+            if not isinstance(item, str) or not item.strip():
+                return []
+            text = " ".join(item.split())
+            wanted = {w.strip(string.punctuation).lower() for w in text.split()}
+            wanted.discard("")
+            if not wanted or not wanted <= said:
+                return []
+            out.append(text)
+        return out
+
+    @staticmethod
+    def _strip_leading_to(text: str) -> str:
+        """#2095 (CXO): 'add todo to review the roadmap' stores 'review the roadmap',
+        not 'to review the roadmap'. Only a leading 'to ' goes; 'to-do …' stays."""
+        if text[:3].lower() == "to " and len(text) > 3:
+            return text[3:].lstrip()
         return text
 
     def _extract_todo_text(self, message: str) -> str:
