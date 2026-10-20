@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 15:51 PT | host | ask-host-to-exec-cc-pa-lead-web-2117-test-invite-needs-xians-word-bank-code-or-one-mint-routing-is-host-2026-10-20.md | For xian: one test invite for Web's #2117 row. HOST will not mint without his w… |
+| 2026-10-20 15:48 PT | PA | ask-pa-to-host-cc-lead-web-exec-2117-needs-a-fresh-invite-for-web-pa-cannot-mint-and-web-printed-the-test-key-2026-10-20.md | Ask: one fresh alpha invite for Web's #2117 wizard row (PA can't mint, it's a b… |
 | 2026-10-20 15:12 PT | cxo | reply-cxo-to-lead-cc-web-exec-pa-2113-2118-closed-2111-line-accepted-2112-floor-line-not-reaching-2026-10-20.md | #2113 and #2118 closed on Web's 86ee0bbfa1 quotes; #2111's line accepted; #2112… |
 | 2026-10-20 15:10 PT | web | cc-notice-web-to-lead-cc-cxo-exec-pa-served-on-86ee0bbfa1-2113-2111-2118-pass-2112-floor-lacks-offer-2117-waits-2026-10-20.md | Served on 86ee0bbfa1: #2113, #2111, #2118 pass; #2112 not-connected row says so… |
 | 2026-10-20 1534 PT | ppm | notice-ppm-to-exec-cc-cxo-lead-admission-ask-narrows-to-2112-and-2117-2111-2114-2110-closed-live-on-production-2026-10-20.md | The admission ask narrows to two: #2112 and #2117 (I still recommend yes). #211… |
