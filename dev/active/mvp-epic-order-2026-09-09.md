@@ -1719,3 +1719,5 @@ out-of-scope call. Gate 14 → 15, fourth slip-ledger entry, dates unchanged; cr
 **`#2097` and `#2098` folded in 2026-10-19 15:05, admitted MVP as must-closes on xian's word** (\"10/23 isn't sacred\"): #2097 Class 3 (create-issue write lands while the reply hedges; retry duplicates), #2098 Class 4 (draft title correction lands in the body). Both are from the #1386 early run, scenario B. Gate 9 → 11. Must-close: #2089, #2091, #2092, #2094, #2095, #2096, #2097, #2098. xian's order: the five, then these two, then #2089/#2088, #2018, #2085.
 
 **`#2101` folded in 2026-10-19 16:56, admitted MVP (Gate class 4, a must-close) on xian's word**: alpha's app stalls under one scripted session (an event-loop wedge, cause unread). It closes on a full canonical run on alpha with no stall. Gate 11 → 12. Must-close: 9 (#2089, #2091, #2092, #2094, #2095, #2096, #2097, #2098, #2101). Lead owns the cause.
+
+**`#2100` folded in 2026-10-19 17:53, admitted MVP (Gate class 3, a must-close) on xian's word**: the capability reply claims Notion reading that chat lacks. Gate 12 → 13. Must-close: 10. Note: #2098 was reverted at f260d8ed5b (Arch NOT ACCEPTED) and is rebuilt Tuesday.
