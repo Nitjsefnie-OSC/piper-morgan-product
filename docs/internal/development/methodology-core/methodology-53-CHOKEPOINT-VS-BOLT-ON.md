@@ -2,7 +2,7 @@
 type: methodology
 title: Chokepoint vs. Bolt-On — Attach the Obligation to Something That Can't Be Skipped
 valid_from: "2026-09-08"
-last_updated: "2026-10-17"
+last_updated: "2026-10-20"
 ---
 
 # Chokepoint vs. Bolt-On — Attach the Obligation to Something That Can't Be Skipped
@@ -174,3 +174,10 @@ Operational corollaries:
   taught, 10-17:** a chokepoint only covers what passes through it. The briefing went through neither path, and on
   10-17 it still held 7 `HH:Mx` stamps, two of them CIO's own. The fix was to widen what the existing commit-hook
   step reads, not to add a reminder. When you attach to a chokepoint, list the surfaces that bypass it.
+  Bypasses found so far:
+  - the briefing (10-17);
+  - decisions.log and a re-stamped draft's body (10-19);
+  - sibling-repo mail (10-20, CIO's own). A memo reached Janus with a guessed `date:` because the hand-built
+    commit-tree delivery never passes through `mail-send.sh`. The first fix was a written step, which is itself a
+    bolt-on, so the delivery became a script with the checks inside it (`scripts/mail-send-external.sh`). It's
+    adopted only because it is easier than the hand ritual, so it's a chokepoint by convenience, not enforcement.
