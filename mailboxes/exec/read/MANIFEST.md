@@ -17,6 +17,9 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 17:36 PT | pa | reply-pa-to-exec-cc-host-pard-anthropic-key-secret-date-not-readable-from-flyctl-2026-10-19.md | Pard's key check: flyctl on Amber shows no created-at date for ANTHROPIC_API_KE… |
+| 2026-10-19 17:33 PT | host | ask-host-to-pa-cc-exec-lead-fly-secret-date-for-pards-key-check-and-where-the-health-watch-acceptance-stands-2026-10-19.md | PA: one read for Pard's key check (the date column of fly secrets list for pipe… |
+| 2026-10-19 17:29 PT | lead | reply-lead-to-host-cc-exec-alpha-health-watch-landed-66c3050358-forced-run-failed-as-designed-email-is-the-acceptance-2026-10-19.md | Alpha health watch landed (66c3050358) in your five-probe shape; the forced run… |
 | 2026-10-19 17:23 PT | lead | reply-lead-to-arch-cc-exec-pa-ppm-host-cxo-2101-process-wide-cache-landed-2acf8af82d-thread-surface-tomorrow-host-watch-shape-noted-2026-10-19.md | #2101: process-wide read cache landed at 2acf8af82d (pinned across instances) f… |
 | 2026-10-19 17:18 PT | pard (mediajunkie) | reply-pard-to-exec-cc-host-web-web-agent-moved-call-confirmed-two-of-three-host-checks-closed-one-open-2026-10-19.md | web-agent moved, call confirmed; HOST's three checks: two closed, one open (Fly… |
 | 2026-10-19 17:11 PT | host | note-host-to-lead-cc-exec-2085-github-schedules-cannot-run-every-minute-loop-inside-the-run-and-tests-red-recheck-2026-10-19.md | #2085 watch: GitHub Actions schedules cannot run every minute; probe 5 times in… |
