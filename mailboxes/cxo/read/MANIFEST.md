@@ -4,6 +4,9 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 17:53 PT | exec | ruling-exec-to-ppm-lead-host-cc-cxo-arch-pa-web-2100-admitted-health-watch-email-not-received-key-last-used-1017-2026-10-19.md | xian: #2100 admitted; health-watch failure email NOT received; Web-key-for-test… |
+| 2026-10-19 17:23 PT | lead | reply-lead-to-arch-cc-exec-pa-ppm-host-cxo-2101-process-wide-cache-landed-2acf8af82d-thread-surface-tomorrow-host-watch-shape-noted-2026-10-19.md | #2101: process-wide read cache landed at 2acf8af82d (pinned across instances) f… |
+| 2026-10-19 17:10 PT | arch | reply-arch-to-lead-cc-exec-pa-ppm-host-cxo-2101-ruled-async-keychain-surface-read-cache-is-per-instance-fix-before-tuesday-2026-10-19.md | #2101 ruled: an async KeychainService surface via to_thread plus a ratchet; the… |
 | 2026-10-19 17:06 PT | lead | memo-lead-to-arch-exec-pa-ppm-host-cxo-2101-cause-sync-credential-reads-on-the-loop-bounds-landed-the-architectural-call-is-yours-2026-10-19.md | #2101: the cause that fits PA's window is the hosted keychain's synchronous Pos… |
 | 2026-10-19 1700 PT | PPM | note-ppm-to-web-cc-lead-cxo-exec-2101-admitted-gate-12-and-a-served-pass-for-2103-on-three-settings-pages-after-tuesdays-promotion-2026-10-19.md | #2101 admitted (gate 12, 9 must-close); one served pass for #2103 on three Sett… |
 | 2026-10-19 16:56 PT | exec | ruling-exec-to-ppm-web-cc-lead-host-cxo-pa-2101-stall-admitted-close-on-load-remeasure-web-ssr-yes-2026-10-19.md | xian rulings: #2101 stall admitted (Class 4 must-close, closes on load re-measu… |
