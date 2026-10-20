@@ -1154,14 +1154,20 @@ class ContextAssembler:
             logger.warning("context_assembler_calendar_connection_error", error=str(e))
             return {}
         if needs_reconnecting(status):
+            # CXO's words (15:32): what happened and the one action, no guess why.
             return {
                 "status": "needs_reconnecting",
                 "line": (
-                    "Google Calendar needs reconnecting (the grant was revoked or expired; "
-                    "reconnect in Settings → Integrations → Google Calendar)."
+                    "I can't read your calendar: Google no longer accepts the connection. "
+                    "Reconnect it in Settings → Integrations → Google Calendar."
                 ),
             }
-        if status.get("configured"):
+        # Arch's check (15:30): the status service counts the calendar configured
+        # when GOOGLE_CALENDAR_CREDENTIALS or MCP_ENABLED is set (via "env"), a
+        # deployment-wide legacy fallback, not this person's connection. The
+        # floor's "I can read your calendar…" is a claim about THEIR calendar,
+        # so only a per-user connection (via "keychain" / an OAuth binding) earns it.
+        if status.get("configured") and status.get("via") != "env":
             return {"status": "active", "line": chat_reads_line("calendar")}
         return {"status": "not_connected", "line": not_connected_line("calendar") or ""}
 

@@ -61,8 +61,18 @@ async def test_rejected_grant_renders_needs_reconnecting_not_connected():
     out = ConversationalFloor(llm_client=MagicMock())._format_domain_context(
         {"calendar_connection": conn}
     )
-    assert "needs reconnecting" in out
+    assert "Google no longer accepts the connection" in out
+    assert "Reconnect it in Settings → Integrations → Google Calendar" in out
     assert "is connected:" not in out
+
+
+@pytest.mark.asyncio
+async def test_a_deployment_wide_env_credential_is_not_this_persons_calendar():
+    """Arch's check: via "env" (GOOGLE_CALENDAR_CREDENTIALS / MCP_ENABLED set) must not
+    render "I can read your calendar…" for every account."""
+    with patch(STATUS, new=AsyncMock(return_value={"configured": True, "via": "env"})):
+        conn = await ContextAssembler()._gather_calendar_connection("user-1")
+    assert conn["status"] == "not_connected"
 
 
 @pytest.mark.asyncio
