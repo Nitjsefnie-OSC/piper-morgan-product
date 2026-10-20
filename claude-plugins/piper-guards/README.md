@@ -101,10 +101,9 @@ export CLAUDE_CONFIG_DIR=/Users/xian/.claude-pm
 ~/.local/bin/claude plugin list
 ```
 
-To load a new version: `claude plugin marketplace update piper-local`, then
-`claude plugin update piper-guards@piper-local --scope local` from each installed seat's worktree, then a restart.
-Check the cached copy under `~/.claude-pm/plugins/cache/piper-local/piper-guards/<version>/`, not `plugin list`
-(which prints the source's version).
+To load a new version: land it on main, let `scripts/sync-pm-local.sh` fast-forward the primary checkout, then
+restart the seat. The status line after the restart is the check; `plugin list` and the install entry are not (see
+"Measured 10-20" below).
 
 The last line should list `piper-guards`. The running session may need a restart to load it; check `/plugin` in
 the seat's pane shows `1 mod active · piper-guards`. To back out:
@@ -115,14 +114,14 @@ export CLAUDE_CONFIG_DIR=/Users/xian/.claude-pm
 ~/.local/bin/claude plugin uninstall piper-guards@piper-local --scope local
 ```
 
-Measured 10-20 (CIO, from `~/.claude-pm/plugins/`): **the install caches a copy.** `installed_plugins.json` gives both
-seats `installPath` `~/.claude-pm/plugins/cache/piper-local/piper-guards/0.2.0`, whose `register.js` (written 10-19 14:32,
-CXO's install) has no `mainCiSummary`: the pre-0.2.1 code. `claude plugin list` prints the *source* directory's version
-(0.2.1), not the cached copy's, so it can't confirm what a seat runs. A new version needs
-`claude plugin marketplace update piper-local` and a plugin update before the restart (Pard's hand; which copy a session
-loads is not yet read at runtime). Also measured: the `piper-local` marketplace is one per account, and each
-`marketplace add` re-points it. Since CXO's install it points at CXO's worktree (`known_marketplaces.json`), so every
-seat's next update reads CXO's checkout. Still not measured: whether userConfig's `pm_checkout` reaches an installed plugin
+Measured 10-20, at runtime (Pard's restarts of CXO at 11:04 and CIO at 11:05): **with a directory source, a seat
+runs the source folder as it is at session start.** Both status lines read `CI main: green`, which is 0.2.1's word (0.2.0
+had shown `pending` and `in_progress`), while CXO's entry in `installed_plugins.json` still said 0.2.0 with a
+`cache/…/0.2.0` path. So the install entry and the cache are stale metadata, not what runs. CIO's disk-only reading that
+morning, that the cache is what loads, was wrong. **The evidence of what a seat runs is the status line after a
+restart**, not the install entry, the cache or `plugin list`. Also measured: the `piper-local` marketplace is one per
+account, and each `marketplace add` re-points it (CXO's 10-19 install had pointed it at CXO's worktree). Since xian's
+10-20 paste it points at the primary checkout, so every seat runs the primary checkout's copy (main, once `sync-pm-local.sh` has fast-forwarded it) as of its last start. Still not measured: whether userConfig's `pm_checkout` reaches an installed plugin
 (the `register.js` fallback is the same path on Amber, so the result is right either way). The mod fails open, so
-during the side-by-side week the seat records at each fire that `claude plugin list` still shows it loaded:
+a seat checks that its status line still shows the `piper-guards:` segment:
 otherwise "no blocks" can't be told from "not running".
