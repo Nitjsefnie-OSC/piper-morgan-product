@@ -267,6 +267,8 @@ class TestCalendarCredentialIsolation:
         from services.mcp.consumer.google_calendar_adapter import GoogleCalendarMCPAdapter
 
         mock_keychain = MagicMock()
+
+        mock_keychain.aget_api_key = AsyncMock(side_effect=mock_keychain.get_api_key)  # #2101
         mock_keychain.get_api_key.return_value = None  # No token stored
 
         adapter = GoogleCalendarMCPAdapter.__new__(GoogleCalendarMCPAdapter)
@@ -299,6 +301,8 @@ class TestCalendarCredentialIsolation:
         from services.mcp.consumer.google_calendar_adapter import GoogleCalendarMCPAdapter
 
         mock_keychain = MagicMock()
+
+        mock_keychain.aget_api_key = AsyncMock(side_effect=mock_keychain.get_api_key)  # #2101
         # Store a token under global key to prove it's NOT read
         mock_keychain.get_api_key.return_value = "leaked_global_token"
 
@@ -326,6 +330,8 @@ class TestCalendarCredentialIsolation:
         from services.mcp.consumer.google_calendar_adapter import GoogleCalendarMCPAdapter
 
         mock_keychain = MagicMock()
+
+        mock_keychain.aget_api_key = AsyncMock(side_effect=mock_keychain.get_api_key)  # #2101
 
         adapter = GoogleCalendarMCPAdapter.__new__(GoogleCalendarMCPAdapter)
         adapter._user_id = "system"
@@ -356,6 +362,8 @@ class TestCalendarCredentialIsolation:
         }
 
         mock_keychain = MagicMock()
+
+        mock_keychain.aget_api_key = AsyncMock(side_effect=mock_keychain.get_api_key)  # #2101
 
         with (
             patch(

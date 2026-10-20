@@ -161,6 +161,7 @@ def _patched(*, token="ghp_valid", resolved=None, issue=_RAW_ISSUE, resolve_exc=
     (resolve_repo), and the direct fetch. Yields the fetch mock for call asserts."""
     cfg = MagicMock()
     cfg.get_authentication_token.return_value = token
+    cfg.aget_authentication_token = AsyncMock(side_effect=cfg.get_authentication_token)  # #2101
     resolve_mock = (
         AsyncMock(side_effect=resolve_exc)
         if resolve_exc

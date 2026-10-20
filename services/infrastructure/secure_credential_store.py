@@ -62,6 +62,13 @@ _clock = time.monotonic
 # keyed by name: a write or delete through any instance is seen by every other.
 _READ_CACHE: Dict[str, Tuple[Optional[str], float]] = {}
 _READ_CACHE_LOCK = threading.Lock()
+# #2101 (Arch): a per-name generation. ``_forget`` bumps it; a read that started under an
+# older generation does not store its value, so a delete or write that lands while a read
+# is in flight can never be overwritten by that read's stale answer. One-process
+# assumption: the cache and its generations live in this process only; a second app
+# process would not see this one's invalidations (alpha runs one machine; see the
+# module docstring).
+_READ_GENERATION: Dict[str, int] = {}
 
 
 class EncryptedDBCredentialStore:
@@ -119,6 +126,12 @@ class EncryptedDBCredentialStore:
     def _forget(name: str) -> None:
         with _READ_CACHE_LOCK:
             _READ_CACHE.pop(name, None)
+            _READ_GENERATION[name] = _READ_GENERATION.get(name, 0) + 1
+
+    @staticmethod
+    def _generation(name: str) -> int:
+        with _READ_CACHE_LOCK:
+            return _READ_GENERATION.get(name, 0)
 
     @staticmethod
     def _cached(name: str) -> Tuple[bool, Optional[str]]:
@@ -136,6 +149,7 @@ class EncryptedDBCredentialStore:
         found, value = self._cached(name)
         if found:
             return value
+        generation = self._generation(name)
         started = _clock()
         with self._get_engine().connect() as conn:
             row = conn.execute(
@@ -148,7 +162,8 @@ class EncryptedDBCredentialStore:
             logger.warning("credential_store_slow_read", name=name, elapsed_s=round(elapsed, 2))
         value = None if row is None else self._encryptor.decrypt(row[0], _CONTEXT_PREFIX + name)
         with _READ_CACHE_LOCK:
-            _READ_CACHE[name] = (value, _clock() + READ_CACHE_TTL_SECONDS)
+            if _READ_GENERATION.get(name, 0) == generation:
+                _READ_CACHE[name] = (value, _clock() + READ_CACHE_TTL_SECONDS)
         return value
 
     def delete(self, name: str) -> bool:

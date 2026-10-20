@@ -59,6 +59,10 @@ KEYCHAIN_METHODS = {
     "get_api_key": 1,
     "delete_api_key": 1,
     "store_api_key": 2,
+    # #2101: the async surface has the same shape and the same rule.
+    "aget_api_key": 1,
+    "adelete_api_key": 1,
+    "astore_api_key": 2,
 }
 PRINCIPAL_KWARGS = {"username", "user_id", "owner_id"}
 CONFIG_LOADER_CALLS = {"load_standup_config", "get_piper_config"}

@@ -45,6 +45,7 @@ def _clear_integration_env(monkeypatch):
 def _keychain_with(token):
     kc = MagicMock()
     kc.get_api_key.return_value = token
+    kc.aget_api_key = AsyncMock(side_effect=kc.get_api_key)  # #2101: the coroutine path
     return kc
 
 

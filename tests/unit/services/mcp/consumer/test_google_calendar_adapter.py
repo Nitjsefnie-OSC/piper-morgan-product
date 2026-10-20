@@ -542,6 +542,8 @@ class TestUserScopedKeychainAuth:
             adapter = GoogleCalendarMCPAdapter(user_id="alice_123")
 
             mock_keychain = MagicMock()
+
+            mock_keychain.aget_api_key = AsyncMock(side_effect=mock_keychain.get_api_key)  # #2101
             mock_keychain.get_api_key.return_value = "alice_refresh_token"
 
             mock_handler = MagicMock()
@@ -587,6 +589,8 @@ class TestUserScopedKeychainAuth:
             adapter = GoogleCalendarMCPAdapter(user_id="bob_456")
 
             mock_keychain = MagicMock()
+
+            mock_keychain.aget_api_key = AsyncMock(side_effect=mock_keychain.get_api_key)  # #2101
             # User-scoped key returns None — no legacy fallback
             mock_keychain.get_api_key.return_value = None
 
@@ -617,6 +621,8 @@ class TestUserScopedKeychainAuth:
             adapter = GoogleCalendarMCPAdapter()
 
             mock_keychain = MagicMock()
+
+            mock_keychain.aget_api_key = AsyncMock(side_effect=mock_keychain.get_api_key)  # #2101
 
             with patch(
                 "services.infrastructure.keychain_service.KeychainService",
@@ -652,6 +658,8 @@ class TestCredentialsFileLogLevel1592:
             adapter._token_file = "/nonexistent/does-not-exist-token.json"
 
             mock_keychain = MagicMock()
+
+            mock_keychain.aget_api_key = AsyncMock(side_effect=mock_keychain.get_api_key)  # #2101
 
             with (
                 patch(
@@ -695,6 +703,8 @@ class TestCredentialsFileLogLevel1592:
             adapter._token_file = "/nonexistent/does-not-exist-token.json"
 
             mock_keychain = MagicMock()
+
+            mock_keychain.aget_api_key = AsyncMock(side_effect=mock_keychain.get_api_key)  # #2101
             mock_keychain.get_api_key.return_value = None  # no credential stored for this user
 
             with (
