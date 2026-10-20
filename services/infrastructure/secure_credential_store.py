@@ -158,7 +158,7 @@ class EncryptedDBCredentialStore:
             ).first()
         elapsed = _clock() - started
         if elapsed >= SLOW_READ_SECONDS:
-            # #2101: this read ran on the event loop; a slow one is the stall.
+            # #2101: a slow store read; callers on the chat path await the aget_* surface.
             logger.warning("credential_store_slow_read", name=name, elapsed_s=round(elapsed, 2))
         value = None if row is None else self._encryptor.decrypt(row[0], _CONTEXT_PREFIX + name)
         with _READ_CACHE_LOCK:

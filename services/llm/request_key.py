@@ -321,7 +321,14 @@ def anthropic_client_for_request() -> Any:
     key = request_spend_key(REQUEST_KEY_PROVIDER)
     from anthropic import Anthropic
 
-    return Anthropic(api_key=key)
+    from services.llm.provider_bounds import PROVIDER_MAX_RETRIES, PROVIDER_TIMEOUT_SECONDS
+
+    # #2101 (Arch's condition 1): explicit bounds. The SDK defaults are a 600 s read
+    # timeout and 2 retries, and the round trip now runs in a thread, which cannot be
+    # cancelled from the loop; the bound is what ends a hung call.
+    return Anthropic(
+        api_key=key, timeout=PROVIDER_TIMEOUT_SECONDS, max_retries=PROVIDER_MAX_RETRIES
+    )
 
 
 async def resolve_request_api_key(
