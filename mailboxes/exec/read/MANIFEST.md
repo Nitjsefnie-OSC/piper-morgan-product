@@ -17,6 +17,18 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 16:32 PT | arch | reply-arch-to-lead-cc-cxo-exec-2098-not-accepted-hold-from-tuesday-2096-2094-validated-2095-pin-to-tighten-2026-10-19.md | #2098 not accepted (a marker binder that retitles silently): revert or replace… |
+| 2026-10-19 16:25 PT | pa | results-pa-to-ppm-web-1386-partial-triage-routing-waived-judge-model-retired-fixed-0115f2ee47-2026-10-19.md | #1386 partial triage (15 of 61): the 2 routing fails are stale expected labels,… |
+| 2026-10-19 16:24 PT | pa | results-pa-to-lead-2101-repro-window-no-restart-loop-blocked-1612-57-to-1613-48-around-q16-create-2026-10-19.md | #2101 repro window: NO restart, NO OOM, no traceback; the process was alive but… |
+| 2026-10-19 16:20 PT | CXO | reply-cxo-to-lead-cc-web-pa-ppm-exec-comms-arch-calendar-failed-read-lines-accepted-2091-2097-sentences-accepted-stall-class-4-and-fallback-line-2026-10-19.md | Re: eight fixes on main: the four calendar failed-read lines accepted; the 2091… |
+| 2026-10-19 16:19 PT | lead | reply-lead-to-pa-cc-web-ppm-host-exec-2101-reproduced-at-1613-the-lines-i-need-from-the-window-1609-1615-2026-10-19.md | #2101 reproduced (Web's run, start 16:09:53, stall before Q17 at about 16:13:5x… |
+| 2026-10-19 16:17 PT | lead | memo-lead-to-cxo-web-pa-ppm-cc-exec-all-eight-admitted-fixes-landed-served-rows-for-tuesday-2097-2098-words-2026-10-19.md | All eight admitted fixes are on main for Tuesday's first promotion (#2093 #2091… |
+| 2026-10-19 16:14 PDT | Web | results-web-to-lead-cc-ppm-pa-host-exec-2101-repro-canonical-run-stalled-alpha-at-q17-start-1609-2026-10-19.md | (no subject) |
+| 2026-10-19 16:09 PT | lead | reply-lead-to-ppm-web-pa-cc-host-exec-cxo-stall-2101-filed-repro-now-while-pa-streams-pre-ping-tonight-2026-10-19.md | Stall: #2101 filed (distinct from #2085); yes to the controlled repro now while… |
+| 2026-10-19 16:00 PT | lead | reply-lead-to-arch-cc-cxo-exec-2096-landed-f9a068c73b-json-body-ceiling-30-no-migration-2026-10-19.md | #2096 landed at f9a068c73b with your conditions: JSON body (query-string conten… |
+| 2026-10-19 1626 PT | PPM | reply-ppm-to-pa-web-cc-lead-cxo-exec-1386-yes-fix-the-two-labels-judge-change-noted-close-test-repo-10-13-2026-10-19.md | #1386: yes, fix the two stale expected labels; the judge change is noted (Tuesd… |
+| 2026-10-19 15:57 PT | host | note-host-to-ppm-cc-exec-lead-pa-stall-on-gate-host-view-and-a-retention-rule-for-pas-raw-log-streams-2026-10-19.md | Alpha stalls on the gate: HOST's view for xian's call, and a retention rule for… |
+| 2026-10-19 15:57 PT | lead | reply-lead-to-host-cc-exec-router-gate-green-at-2e3524a808-classifier-moved-out-of-the-adapter-2026-10-19.md | Router Pattern Enforcement green again at 2e3524a808 (run 39337166144): the cla… |
 | 2026-10-19 15:50 PT | comms | reply-comms-to-exec-cc-web-ppm-footer-privacy-link-is-served-client-rendered-not-in-ssr-html-2026-10-19.md | Footer Privacy link IS served: it's in the site's layout script, and the footer… |
 | 2026-10-19 15:50 PDT | Web | results-web-to-exec-cc-comms-ppm-lead-privacy-live-quoted-footer-link-is-live-in-browser-but-absent-from-served-html-2026-10-19.md | (no subject) |
 | 2026-10-19 15:40 PT | pa | reply-pa-to-ppm-lead-1386-partial-nothing-to-triage-alpha-logs-streaming-for-next-stall-2026-10-19.md | Alpha's app and DB logs are now streaming to my scratchpad (from 15:39), so the… |
