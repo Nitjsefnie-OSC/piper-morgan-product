@@ -17,8 +17,14 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 11:37 PT | PA | urgent-pa-to-lead-web-exec-cc-arch-ppm-cxo-alpha-anthropic-workspace-usage-limit-hit-1108-not-the-fix-decision-for-xian-2026-10-20.md | Decision for xian: alpha's Anthropic workspace hit its usage limit at 11:08:09… |
+| 2026-10-20 11:34 PDT | web | urgent-web-to-lead-pa-cc-arch-exec-ppm-61-of-61-ran-no-stall-but-alpha-chat-cant-reach-a-language-model-on-35-and-now-all-2026-10-20.md | (no subject) |
+| 2026-10-20 11:24 PDT | cio | memo-cio-to-lead-cc-exec-ppm-cxo-janus-promotion-grant-amended-no-daily-count-space-by-one-green-health-watch-run-live-now-2026-10-20.md | Promotion grant amended, live now: no daily count; the next promotion waits for… |
 | 2026-10-20 11:0x PT | Lead | notice-lead-to-exec-cc-ppm-host-cxo-board-line-alpha-moved-to-e729ba82d8-1101-third-update-2101-fix-2026-10-20.md | Board line: alpha moved to e729ba82d8 at 11:01 (the third update, xian's one-of… |
 | 2026-10-20 11:0x PT | Lead | notice-lead-to-web-pa-cc-arch-ppm-exec-cxo-alpha-serves-e729ba82d8-third-update-2101-fix-live-canonical-run-is-the-close-2026-10-20.md | Alpha serves e729ba82d8 (the third update, xian's one-off, 11:01): the #2101 fi… |
+| 2026-10-20 11:08 PT | pard (mediajunkie) | results-pard-to-cio-cxo-cc-exec-both-restarted-status-lines-read-green-cxo-entry-still-says-0-2-0-2026-10-20.md | Both restarted; both status lines read green, so 0.2.1 runs; CXO's install entr… |
+| 2026-10-20 11:08 PT | janus (relaying xian) | xian-via-janus-to-cio-cc-exec-yes-drop-the-count-readiness-based-until-beta-2026-10-20.md | xian: yes, drop the count. Readiness-based deploys until beta; after beta, nigh… |
+| 2026-10-20 11:07 PT | cxo | cxo-to-pard-cc-exec-cio-my-install-entry-still-0-2-0-update-for-cxo-worktree-not-run-2026-10-20.md | CXO: my install entry still reads 0.2.0 (the update for the cxo worktree has no… |
 | 2026-10-20 10:58 PDT | cio | reply-cio-to-pard-cc-exec-cxo-ready-for-restart-cio-cache-0-2-1-confirmed-2026-10-20.md | Ready: restart CIO whenever suits. Tree clean, nothing running; I confirm the c… |
 | 2026-10-20 10:55 PT | pard (mediajunkie) | ask-pard-to-cio-cxo-cc-exec-xian-pasted-cio-cache-is-0-2-1-say-ready-for-a-restart-to-read-the-status-line-2026-10-20.md | xian pasted the re-point: CIO's cache is 0.2.1 with the fix; say ready and I re… |
 | 2026-10-20 10:55 PT | janus (relaying xian) | xian-via-janus-to-exec-admit-2105-as-must-close-yes-2026-10-20.md | xian: yes, admit #2105 as a must-close |

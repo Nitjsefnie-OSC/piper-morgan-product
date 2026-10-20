@@ -199,4 +199,5 @@ misread until 2026-10-01.*
 | 154 | ~~**xian: GitHub Actions failure email setting (health-watch acceptance, #2085 track 2)**~~ `key: health-watch-email` | 2026-10-19 | CLOSED 18:54: forced-failure email reached xian 18:46 |
 | 155 | ~~**xian: third alpha promotion today for the #2101 fix?**~~ `key: xian-third-promo` | 2026-10-20 | CLOSED 10:53: yes (via Janus), relayed |
 | 156 | ~~**xian: admit #2105 as Class 3 must-close?**~~ `key: xian-2105` | 2026-10-20 | CLOSED 11:03: yes (via Janus), relayed |
-| 157 | **xian: replace two-a-day alpha cap with one-green-watch spacing? (CIO rec, via Janus)** `key: xian-promo-cap` | 2026-10-20 | Janus relays; CIO edits grant on yes |
+| 157 | ~~**xian: replace two-a-day alpha cap with one-green-watch spacing? (CIO rec, via Janus)**~~ `key: xian-promo-cap` | 2026-10-20 | CLOSED 11:08: yes; CIO amended grant 11:24 |
+| 158 | **xian: raise alpha Anthropic workspace usage limit (chat down since 11:08)** `key: xian-workspace-limit` | 2026-10-20 | relay his setting to Lead, PA, Web |
