@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-10-12
+last_updated: 2026-10-19
 currency_claim: rewritten at every substantive fire (3x/day cadence when active)
 max_age_days: 1
 ---
@@ -116,3 +116,17 @@ can hide its subject (main-ci-status 20 → 100).
 **2026-10-18 (START 10:07, STOP 22:07):**
   **Done:** #2081 seat-rule answer (no seat rule moves; mint-script classifier denial stays); 6 #2081 cc memos filed (landed d626c29d47; Arch's ceiling ruled 29).
   **Open:** #1968 item 7 (Pard's Exec and Lead LaunchAgents); 7v (Exec's decision); devtools bump after 10-29; first real-commit stamp warning (watch); 10-19 review of piper-guards and context-usage-reminder; 10-22 v4 pilot; 10-27 staleness; 10-30 grant; 11-01 sunset inventory; 12-09 methodology audit.
+
+**2026-10-19 (START 10:07, STOP 22:07):**
+  **Done:**
+  - m-52 PROVEN (third seat: Lead's quoted "one-admin rule" on #2081, which HOST never wrote). Corollaries: a quotation is a claim you just read it; an observed state is not a ruling.
+  - Exec's mini-retro item 7: draft-age check (draft_births.py + draft-birth-record.sh PostToolUse hook; mail-send warns past 60 min and lists decisions.log lines since the draft). stamp_check reads decisions.log. Review 12-14.
+  - Both mail-send harnesses were red for three days (clones lacked stamp_check.py); fixed, 58/58 and 3/3.
+  - piper-guards review decided (hooks-registry "Decided 10-19"): M-1/M-3 keep both, M-2/4/5/6 renew, M-9 prototype; no settings hook retires until a week on every seat. context-usage-reminder sunset (git rm; original at 647a77e7).
+  - piper-guards LIVE on CXO (Pard restarted it at 14:47); 0.2.1 (45f51b330b) fixes M-9 "CI main: completed" by reading main-ci-status.
+  **Open:**
+  - 0.2.1 runtime read: blocker, a seat restart (Pard reads it at the next one).
+  - piper-guards rest of rollout: CXO quiet week (to about 10-26).
+  - #1968 item 7 (Pard's Exec and Lead LaunchAgents); 7v (Exec's decision); devtools bump after 10-29.
+  - Watch: first real stamp warning (decisions.log, briefing); first real draft-age warning; a logged deny on CXO.
+  - Reviews: 10-22 v4 pilot; 10-27 staleness; 10-30 grant; 11-01 sunset inventory; 12-09 methodology audit; 12-14 draft_births.
