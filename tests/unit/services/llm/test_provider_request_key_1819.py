@@ -30,6 +30,7 @@ import pytest
 
 from services.llm.clients import LLMClient
 from services.llm.config import LLMModel, LLMProvider
+from services.llm.provider_bounds import PROVIDER_MAX_RETRIES, PROVIDER_TIMEOUT_SECONDS
 from services.llm.request_key import (
     UnboundLLMKeyError,
     get_request_api_key,
@@ -156,7 +157,11 @@ class TestOpenAILegInversion:
                 out = await client._openai_complete(prompt="hi", config=_openai_config())
 
         assert out == "served-by-user-key"
-        openai_cls.assert_called_once_with(api_key=USER_OPENAI_KEY)
+        openai_cls.assert_called_once_with(
+            api_key=USER_OPENAI_KEY,
+            timeout=PROVIDER_TIMEOUT_SECONDS,
+            max_retries=PROVIDER_MAX_RETRIES,
+        )
         assert not server.chat.completions.create.called
         # containment (#1814): the fresh client is never stored on the singleton
         assert client.openai_client is server

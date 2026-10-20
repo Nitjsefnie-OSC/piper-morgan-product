@@ -13,6 +13,11 @@ import structlog
 from openai import OpenAI
 
 from services.config.llm_config_service import LLMConfigService
+from services.llm.provider_bounds import (
+    PROVIDER_MAX_RETRIES,
+    PROVIDER_TIMEOUT_SECONDS,
+    run_provider_call,
+)
 from services.llm.request_key import LLMKeyRequiredError
 
 from .config import (
@@ -588,9 +593,10 @@ class LLMClient:
         # called directly it holds the event loop for the whole round trip, and a
         # chat turn stacks several completions (PA's watchdog read, 2026-10-20: 26 of
         # 26 blocks, 91 s of 155 blocked during the canonical run). The round trip
-        # runs in a worker thread; the client is still built on the loop above, where
-        # the request's key contextvar is read.
-        response = await asyncio.to_thread(client.messages.create, **request_params)
+        # runs on the dedicated provider executor (services/llm/provider_bounds.py);
+        # the client is still built on the loop above, where the request's key
+        # contextvar is read.
+        response = await run_provider_call(client.messages.create, **request_params)
 
         # Extract actual token counts from response
         prompt_tokens = (
@@ -637,7 +643,11 @@ class LLMClient:
         """
         from services.llm.request_key import request_spend_key
 
-        client = OpenAI(api_key=request_spend_key("openai"))
+        client = OpenAI(
+            api_key=request_spend_key("openai"),
+            timeout=PROVIDER_TIMEOUT_SECONDS,
+            max_retries=PROVIDER_MAX_RETRIES,
+        )
 
         # Build messages list
         messages = []
@@ -665,7 +675,7 @@ class LLMClient:
             request_params["response_format"] = response_format
 
         # #2101: same as the Anthropic leg — the sync SDK call runs off the loop.
-        response = await asyncio.to_thread(client.chat.completions.create, **request_params)
+        response = await run_provider_call(client.chat.completions.create, **request_params)
 
         # Extract actual token counts from response
         prompt_tokens = (
