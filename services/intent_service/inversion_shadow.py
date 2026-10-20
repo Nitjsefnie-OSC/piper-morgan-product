@@ -189,8 +189,19 @@ def maybe_schedule_shadow_check(
             offer_service=offer_service,
             snapshot=snapshot,
         )
+    # #2109: never the user's key on our measurement. The task runs under the
+    # shadow's own key (PIPER_SHADOW_LLM_KEY) or, with none and a request key
+    # bound, not at all.
+    from services.llm.request_key import shadow_task_context
+
+    shadow_ctx, reason = shadow_task_context()
+    if shadow_ctx is None and reason == "user_key_bound":
+        coro.close()
+        logger.info("inversion_shadow_skipped_user_key_bound", session_id=session_id)
+        return None
     try:
-        task = asyncio.get_running_loop().create_task(coro)
+        loop = asyncio.get_running_loop()
+        task = loop.create_task(coro, context=shadow_ctx) if shadow_ctx else loop.create_task(coro)
     except RuntimeError:
         coro.close()  # never scheduled → close it so it can't warn as never-awaited
         # No running loop (sync caller) — shadow observation is best-effort.

@@ -157,8 +157,17 @@ def maybe_schedule_preclaim_shadow(
         user_id=user_id,
         llm_service=llm_service,
     )
+    # #2109: never the user's key on our measurement (see inversion_shadow).
+    from services.llm.request_key import shadow_task_context
+
+    shadow_ctx, reason = shadow_task_context()
+    if shadow_ctx is None and reason == "user_key_bound":
+        coro.close()
+        logger.info("preclaim_shadow_skipped_user_key_bound", session_id=session_id)
+        return None
     try:
-        task = asyncio.get_running_loop().create_task(coro)
+        loop = asyncio.get_running_loop()
+        task = loop.create_task(coro, context=shadow_ctx) if shadow_ctx else loop.create_task(coro)
     except RuntimeError:
         coro.close()  # never scheduled → close it so it can't warn as never-awaited
         logger.debug("preclaim_shadow_no_event_loop")

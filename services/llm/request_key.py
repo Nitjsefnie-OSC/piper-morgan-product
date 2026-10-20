@@ -72,8 +72,10 @@ Security properties (this is credential handling — keep them):
 from __future__ import annotations
 
 import contextlib
+import contextvars
+import os
 from contextvars import ContextVar
-from typing import Any, Awaitable, Callable, Dict, Iterator, Mapping, Optional, Union
+from typing import Any, Awaitable, Callable, Dict, Iterator, Mapping, Optional, Tuple, Union
 
 
 class _UnboundType:
@@ -186,6 +188,39 @@ class ConsentUnreadableError(LLMKeyRequiredError):
     sense", so that degradation is now incoherent. **Fail-closed means closed,
     not quietly reassigned to the operator's key.**
     """
+
+
+# #2109 (Arch, 2026-10-20): a MEASUREMENT task (the inversion and preclaim shadows) must
+# never spend the request's bound key: asyncio's ``create_task`` copies the request
+# context, so the shadow's model call was billed to the acting user, their own key
+# included. The shadow runs under its own key from this variable, in a context where the
+# request's binding is replaced; with no shadow key and a request key bound, the shadow
+# is skipped. With nothing bound at all (tests, offline scorers) the task runs as before.
+SHADOW_LLM_KEY_ENV = "PIPER_SHADOW_LLM_KEY"
+
+
+def request_key_is_bound() -> bool:
+    """True when this context carries a request-bound LLM key."""
+    return _user_api_key.get() is not _UNBOUND
+
+
+def shadow_task_context() -> Tuple[Optional["contextvars.Context"], str]:
+    """The context a shadow task may run in, and why.
+
+    Returns ``(context, "shadow_key")`` when ``PIPER_SHADOW_LLM_KEY`` is set: a copy of
+    the current context with the request's binding replaced by the shadow's own key.
+    Returns ``(None, "user_key_bound")`` when no shadow key exists and a request key is
+    bound: the caller must skip (never spend the user's key on telemetry). Returns
+    ``(None, "unbound")`` when nothing is bound: the caller may run as it always did.
+    """
+    shadow_key = os.environ.get(SHADOW_LLM_KEY_ENV, "").strip()
+    if shadow_key:
+        ctx = contextvars.copy_context()
+        ctx.run(_user_api_key.set, {REQUEST_KEY_PROVIDER: shadow_key})
+        return ctx, "shadow_key"
+    if request_key_is_bound():
+        return None, "user_key_bound"
+    return None, "unbound"
 
 
 def get_request_api_key(provider: str = REQUEST_KEY_PROVIDER) -> Optional[str]:
