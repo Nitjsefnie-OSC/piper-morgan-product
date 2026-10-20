@@ -1,5 +1,15 @@
 # Lead carry-forward — Fable 5.1 seat; Model A worktree ~/Development/piper-morgan-worktrees/lead
 
+## STATE @ 2026-10-20 16:46 PT — alpha 71b4b15eed (EIGHTH update, 16:45: the #2112 reads line + CXO's reconnect line + env guard; #2120 and #2119 CXO's words; prompts.py examples); main green again after a 21-minute Code Quality red from my unformatted pin file (fixed df47279beb).
+- **Open on the served side (Web, on 71b4b15eed):** #2112 re-ask (no promise after CXO's two sentences; else the fixed code-composed reply CXO authorised 16:05 is the next unit); #2120's line; #2119's line ("I looked at … and found N commits"); #2117 once HOST gets xian's word on an invite. #2112 connected-calendar row = xian's account (Exec).
+- **#1386:** relabel table signed (10 of 11, Q44 rejected; 311d849247); PPM froze the measurement (effect reading, unwired-EXECUTION switch on, guarded); the pass is the seeded re-measure before 10-23 (PA's spec accepted; Web seeded GitHub; invite and Google account on xian's rollup).
+- **Admissions (xian via Exec, PPM's ask):** #2112, #2117, #2120.
+- **Standing (filed today):** the #2113 question form's armed carrier (CXO: not before Friday); the #2112 fixed-reply contingency.
+- **NOW:** drained; next promotion only if something lands (one green watch run after 16:45). STOP wrap at the 21:17 fire.
+- **Lessons (afternoon, cumulative):** format every file a lane touches, in the last commit too, and run `ruff format --check .` before the push; a word landed in a context block serves only the categories that assemble that block; a new question-emitting site must arm or not ask; a quoted "close #123" in a commit BODY auto-closes too; guard an Optional before reading two attributes; invite asks go to HOST; `ls` of the inbox can show residue (trust `git ls-tree origin/main`); never estimate a minute.
+- **Cron:** e0bdd924 (`17 6,9,12,15,18,21`, expires ~10-26; rotate at the 10-25 START).
+
+### Earlier @ 2026-10-20 16:00
 ## STATE @ 2026-10-20 16:00 PT — alpha ee952c73eb (SEVENTH update, 15:59; #2112 floor fact + #2113 example line); main 12/12 green; CLOSED today by CXO on Web's quotes: #2114 #2110 #2111 #2113 #2118 (+ #2101 at 12:5x, #2105).
 - **Open on the served side (Web, on ee952c73eb):** #2112 not-connected row (must use CXO's sentence with the Settings offer); #2113 example line; #2117 once PA mints Web an invite. #2112 connected-calendar row = xian's account (Exec; also settles #2091/#2092's connected rows). #2112 also waits on PA's local reproduction and Arch's validation.
 - **Filed today, Lead lane, standing:** #2113's question form needs an armed "which field" carrier (CXO: not before Friday, not gated).
