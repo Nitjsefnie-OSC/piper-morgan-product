@@ -194,5 +194,5 @@ misread until 2026-10-01.*
 | 149 | ~~**xian: admit #2091, #2092, #2094, #2095; #2096 before partners?**~~ `key: xian-admit-4-plus-2096` | 2026-10-19 | CLOSED: all five admitted, relayed to PPM |
 | 150 | ~~**xian: does the invitation name Google Calendar?**~~ `key: xian-calendar-in-invite` | 2026-10-19 | CLOSED 15:05: yes with caveats, relayed |
 | 151 | ~~**xian: admit #2097, #2098?**~~ `key: xian-2097-2098` | 2026-10-19 | CLOSED 15:05: yes, relayed |
-| 152 | **xian: admit #2100?** `key: xian-2100` | 2026-10-19 | relay to PPM |
+| 152 | ~~**xian: admit #2100?**~~ `key: xian-2100` | 2026-10-19 | CLOSED 17:54: admitted, relayed |
 | 153 | ~~**xian: alpha stalls under light load: on the gate?**~~ `key: xian-stall-gate` | 2026-10-19 | CLOSED 16:56: yes, #2101 Class 4, relayed |
