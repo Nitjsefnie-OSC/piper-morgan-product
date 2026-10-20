@@ -57,6 +57,28 @@ def usage_limit_reset_date(text: str) -> Optional[str]:
     return match.group(1) if match else None
 
 
+def usage_limit_sentence(text: str) -> str:
+    """CXO's words for the usage-limit case (#2107, 2026-10-20 12:32), one source for the
+    route-level translator and the floor. The date is the provider's, read as a month and
+    day; with none, the sentence says so. No own-key sentence until a served check shows a
+    keyed user is not hit (CXO's condition)."""
+    reset = usage_limit_reset_date(text)
+    when = ""
+    if reset:
+        try:
+            from datetime import date
+
+            d = date.fromisoformat(reset)
+            when = f"around {d.strftime('%B')} {d.day}"
+        except ValueError:
+            when = f"around {reset}"
+    tail = f"it's expected to come back {when}" if when else "I don't know when it will come back"
+    return (
+        "I can't answer right now. The service that writes my replies has reached its "
+        f"usage limit, and {tail}. Nothing you did caused this."
+    )
+
+
 # #1872: Gemini's real invalid-key wording, live-verified by the #1870 lane
 # (HTTP 400 body carries `"status": "INVALID_ARGUMENT"`, `"reason":
 # "API_KEY_INVALID"`, human message "API key not valid. Please pass a valid
@@ -219,12 +241,11 @@ class UserFriendlyErrorService:
                 "severity": ErrorSeverity.ERROR,
                 "category": "llm_key",
             },
-            # #2107: the platform key's workspace usage limit (provisional words, CXO's
-            # to replace). `{until}` is filled from the error's own reset date, or
-            # left empty, in make_user_friendly().
+            # #2107: the workspace usage limit. The message is CXO's sentence, built in
+            # make_user_friendly() from the error's own reset date (usage_limit_sentence).
             USAGE_LIMIT_PATTERN: {
-                "message": "The shared language-model allowance is used up{until}.",
-                "recovery": "A key of your own under Settings → LLM API Keys keeps working.",
+                "message": "",  # filled by usage_limit_sentence() in make_user_friendly()
+                "recovery": "",
                 "severity": ErrorSeverity.ERROR,
                 "category": "llm_usage_limit",
             },
@@ -382,11 +403,8 @@ class UserFriendlyErrorService:
             if re.search(pattern, error_str, re.IGNORECASE):
                 result = response.copy()
                 if result.get("category") == "llm_usage_limit":
-                    # #2107: name the reset date when the provider gave one.
-                    reset = usage_limit_reset_date(error_str)
-                    result["message"] = result["message"].format(
-                        until=f" until {reset}" if reset else ""
-                    )
+                    # #2107: CXO's sentence, with the provider's reset date when given.
+                    result["message"] = usage_limit_sentence(error_str)
 
                 # Add contextual information if available
                 if context:

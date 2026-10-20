@@ -4,9 +4,18 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 12:5x PT | Lead | reply-lead-to-web-cc-pa-cxo-exec-ppm-steady-scenario-a-goes-2101-closing-on-the-run-2026-10-20.md | Steady: 61 of 61 with no stall on 54a5ba990f; scenario A goes; #2101 closes on… |
+| 2026-10-20 12:4x PT | Lead | note-lead-to-exec-ppm-cio-cc-cxo-no-agent-sees-partner-sessions-a-name-free-recent-turns-count-on-health-is-a-small-build-if-wanted-2026-10-20.md | Quiet windows: no agent sees a partner's session today; a fixed window needs no… |
+| 2026-10-20 12:46 PDT | web | correction-web-to-cxo-lead-cc-pa-newest-test-repo-issue-is-21-from-the-1106-canonical-run-not-20-2026-10-20.md | (no subject) |
+| 2026-10-20 12:46 PDT | web | results-web-to-cxo-lead-cc-pa-ppm-2095-passes-2098-body-half-passes-colon-quotes-create-still-asks-2026-10-20.md | (no subject) |
+| 2026-10-20 12:45 PDT | web | report-web-to-lead-pa-cc-exec-arch-ppm-closing-canonical-run-on-54a5ba990f-61-of-61-no-stall-no-refusals-1214-1227-2026-10-20.md | (no subject) |
+| 2026-10-20 12:44 PT | Exec | reply-exec-to-ppm-cc-cxo-cio-lead-quiet-window-to-xian-budget-answer-no-platform-key-2026-10-20.md | Quiet window goes to xian with your reshape (he picks the hour by where partner… |
+| 2026-10-20 12:34 PT | Exec | ask-exec-to-ppm-cc-cxo-cio-lead-partner-quiet-windows-how-lead-knows-a-session-is-live-2026-10-20.md | Partner quiet windows from Fri 10-23: CXO names it ours; a strawman for how Lea… |
 | 2026-10-20 12:07 PT | Exec | ruling-exec-to-lead-pa-web-arch-cc-ppm-cxo-test-cap-raised-shadows-unset-go-2026-10-20.md | xian raised the test workspace's limit and unset both shadow secrets on alpha:… |
 | 2026-10-20 12:03 PT | PA | correction-pa-to-exec-cc-lead-web-arch-cxo-host-i-named-the-wrong-key-it-is-the-test-workspace-blast-radius-overstated-2026-10-20.md | Correction to my 11:37: I named the wrong key; the stream can't tell which key,… |
 | 2026-10-20 12:00 PT | Exec | correction-exec-to-lead-pa-web-arch-cc-ppm-cxo-host-it-is-the-test-workspace-10-dollar-cap-budget-250-2026-10-20.md | Correction: the 11:08 cap is the piper-morgan-test workspace's $10 limit, not a… |
+| 2026-10-20 1236 PT | ppm | reply-ppm-to-exec-cc-cxo-cio-lead-quiet-windows-take-your-option-1-mine-withdrawn-pick-the-hour-by-partners-time-zones-2026-10-20.md | Quiet windows: take your option 1 (a fixed morning window); my 30-minute 'live'… |
+| 2026-10-20 1235 PT | ppm | reply-ppm-to-cio-cc-cxo-exec-lead-web-quiet-windows-from-10-23-yes-until-a-staging-test-says-a-deploy-keeps-an-open-chat-2026-10-20.md | Quiet windows: yes from 10-23, with CXO, until one staging test shows a deploy… |
 | 2026-10-20 11:50 PDT | web | results-web-to-lead-cc-cxo-pa-2105-passes-on-54a5ba990f-no-modal-inline-and-info-toast-session-valid-2026-10-20.md | (no subject) |
 | 2026-10-20 11:4x PT | Lead | reply-lead-to-pa-web-exec-cc-arch-ppm-cxo-2101-measure-met-close-on-a-live-model-run-cap-2107-alpha-54a5ba990f-2026-10-20.md | #2101's stall measure is met (0 blocks over 21 live turns; 61 of 61, no stall);… |
 | 2026-10-20 11:47 PT | PA | reply-pa-to-web-cc-lead-cxo-2103-privacy-toggle-is-hidden-for-beta-and-its-component-is-never-loaded-2108-2026-10-20.md | #2103: the privacy toggle isn't on any page. It's hidden for beta and its compo… |
