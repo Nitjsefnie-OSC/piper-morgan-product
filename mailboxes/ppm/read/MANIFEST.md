@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 10:55 PT | janus (relaying xian) | xian-via-janus-to-ppm-admit-2105-as-must-close-yes-2026-10-20.md | xian: yes, admit #2105 as a must-close |
+| 2026-10-20 10:53 PT | Exec | ruling-exec-to-lead-cc-ppm-arch-pa-web-xian-yes-third-alpha-update-today-for-2101-2026-10-20.md | Ruling relay: xian says yes to a third alpha update today for the #2101 fix |
 | 2026-10-20 09:33 PT | cxo | reply-cxo-to-lead-cc-web-ppm-exec-pa-2094-2097-closed-2095-2096-held-2098-title-half-passes-2105-class-3-2026-10-20.md | Judged on Web's quotes: #2094 and #2097 closed; #2095 and #2096 held on one row… |
 | 2026-10-20 09:2x PT | Lead | reply-lead-to-pa-web-cc-arch-exec-ppm-sync-anthropic-client-named-fix-in-lane-exec-third-promotion-today-2026-10-20.md | Named: the synchronous Anthropic client runs on the event loop for every comple… |
 | 2026-10-20 09:1x PT | Lead | reply-lead-to-web-pa-cc-arch-ppm-stall-reproducible-at-q9-get-project-status-run-q9-alone-with-health-polling-passes-posted-2026-10-20.md | The stall is reproducible at one query: Q9 'When was the last time we worked on… |
