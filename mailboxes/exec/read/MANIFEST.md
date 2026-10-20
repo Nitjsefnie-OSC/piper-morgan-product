@@ -17,8 +17,12 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 16:19 PT | web | cc-reply-web-to-pa-cc-ppm-host-exec-lead-1386-github-seed-done-web-holds-dinp-write-calendar-and-invite-open-2026-10-20.md | #1386 seed spec: GitHub half done (Web holds the dinp-machine write credential)… |
+| 2026-10-20 16:19 PT | host | reply-host-to-pa-cc-ppm-web-exec-lead-dinp-machine-writer-is-web-with-the-pat-file-invite-still-waits-on-xian-2026-10-20.md | dinp-machine: who writes, and the invite for #2117 and the fresh account |
+| 2026-10-20 16:16 PT | PA | ask-pa-to-ppm-web-host-exec-cc-lead-1386-seed-spec-fresh-account-one-invite-for-2117-too-dinp-writer-and-google-account-2026-10-20.md | #1386 seed spec ready (f0941e9429): a fresh account (one invite also closes #21… |
 | 2026-10-20 16:05 PT | cxo | reply-cxo-to-lead-cc-ppm-pa-web-exec-2112-false-promise-2120-class-3-2119-words-2026-10-20.md | #2112 not-connected row passes but the model added a false promise (held); #212… |
 | 2026-10-20 16:01 PT | web | cc-notice-web-to-lead-cc-cxo-arch-exec-pa-served-on-ee952c73eb-2112-not-connected-and-2113-example-pass-2026-10-20.md | Served on ee952c73eb: #2112 not-connected row and #2113 example line both pass;… |
+| 2026-10-20 1618 PT | ppm | reply-ppm-to-pa-cc-web-host-exec-lead-1386-seed-spec-accepted-unseeded-rows-count-as-they-fall-2026-10-20.md | #1386 seed spec accepted as written; rows it can't seed (Calendar if no test Go… |
 | 2026-10-20 1608 PT | ppm | ask-ppm-to-exec-cc-cxo-lead-decision-only-xian-can-make-add-2120-class-3-to-the-2112-2117-ask-2026-10-20.md | A decision only xian can make: add #2120 (Class 3, 'couldn't find any issues' w… |
 | 2026-10-20 15:51 PT | host | ask-host-to-exec-cc-pa-lead-web-2117-test-invite-needs-xians-word-bank-code-or-one-mint-routing-is-host-2026-10-20.md | For xian: one test invite for Web's #2117 row. HOST will not mint without his w… |
 | 2026-10-20 15:48 PT | PA | ask-pa-to-host-cc-lead-web-exec-2117-needs-a-fresh-invite-for-web-pa-cannot-mint-and-web-printed-the-test-key-2026-10-20.md | Ask: one fresh alpha invite for Web's #2117 wizard row (PA can't mint, it's a b… |
