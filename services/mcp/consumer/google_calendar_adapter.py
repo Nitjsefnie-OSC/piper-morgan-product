@@ -175,6 +175,12 @@ from services.integrations.calendar.read_errors import (  # noqa: E402
 __all__ = ["GoogleCalendarMCPAdapter", "classify_calendar_read_error"]
 
 
+# #2101: googleapiclient's ``build`` carries a decorator signature mypy cannot read (it
+# resolves to a None-returning positional wrapper), so the thread call goes through an
+# Any-typed alias; the behaviour is ``build`` itself.
+_discovery_build: Any = build
+
+
 class GoogleCalendarMCPAdapter(BaseSpatialAdapter):
     """
     Google Calendar MCP adapter implementation.
@@ -217,7 +223,7 @@ class GoogleCalendarMCPAdapter(BaseSpatialAdapter):
 
         # Google Calendar API configuration
         self._credentials: Optional[Credentials] = None
-        self._service = None
+        self._service: Any = None  # the googleapiclient Resource once authenticated
         self._calendar_id = config.calendar_id
 
         # OAuth 2.0 configuration (from config service, not direct env access)
@@ -433,7 +439,7 @@ class GoogleCalendarMCPAdapter(BaseSpatialAdapter):
 
             # Initialize Calendar service
             self._service = await asyncio.to_thread(
-                build, "calendar", "v3", credentials=self._credentials
+                _discovery_build, "calendar", "v3", credentials=self._credentials
             )
             logger.info("Google Calendar authentication successful")
             return True
@@ -497,7 +503,7 @@ class GoogleCalendarMCPAdapter(BaseSpatialAdapter):
 
             # Initialize Calendar service
             self._service = await asyncio.to_thread(
-                build, "calendar", "v3", credentials=self._credentials
+                _discovery_build, "calendar", "v3", credentials=self._credentials
             )
             logger.info(
                 "Google Calendar authenticated via keychain (Issue #529, user=%s)", self._user_id

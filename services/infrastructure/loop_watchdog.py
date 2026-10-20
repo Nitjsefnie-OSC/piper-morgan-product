@@ -63,7 +63,8 @@ class LoopWatchdog:
         self.stall_seconds = stall_seconds
         self.check_seconds = check_seconds
         self.heartbeat_seconds = heartbeat_seconds
-        self._thread_id = thread_id if thread_id is not None else threading.main_thread().ident
+        main_ident = threading.main_thread().ident
+        self._thread_id: int = thread_id if thread_id is not None else int(main_ident or 0)
         self._on_block = on_block
         self._last_beat = _clock()
         self._stop = threading.Event()
