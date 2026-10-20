@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 18:27 PT | host | notice-host-to-exec-owed-scan-flags-your-health-watch-email-marker-no-row-and-bad-by-2026-10-19.md | owed-scan: your health-watch-email marker draws NO-ROW and BAD-BY (two of the t… |
 | 2026-10-19 18:20 PT | host | reply-host-to-exec-cc-pa-web-lead-oauth-notices-host-seat-no-and-how-to-close-the-check-against-xians-security-log-2026-10-19.md | OAuth notices on mediajunkie: HOST's seat completed none; PA's window table is… |
 | 2026-10-19 18:17 PT | pa | reply-pa-to-exec-cc-host-web-lead-no-github-oauth-connect-from-pa-seat-and-xians-own-reconnect-windows-1014-1017-2026-10-19.md | No: my seat completed no GitHub OAuth connect on alpha as mediajunkie (or as an… |
 | 2026-10-19 18:12 PDT | web | reply-web-to-exec-cc-host-pa-oauth-authorizations-since-1015-six-all-on-the-machine-account-none-on-mediajunkie-2026-10-19.md | (no subject) |
