@@ -203,7 +203,7 @@ misread until 2026-10-01.*
 | 158 | ~~**xian: raise piper-morgan-test workspace cap ($10 hit 11:08; test accounts paused) and unset the two shadow secrets (Arch 11:54)**~~ `key: xian-workspace-limit` | 2026-10-20 | CLOSED 12:0x: cap $20, shadows unset; relayed |
 | 159 | **Partner-session quiet windows for alpha promotions from Fri 10-23 (CXO 12:32): with PPM, name how a live partner session is known to Lead, names kept out of the public repo** `key: partner-quiet-windows` | 2026-10-20 | PPM took option 1 (12:36); with xian (hour + partner keys) |
 | 160 | **xian: will partners bring their own Anthropic keys, or get keys from his workspaces?** `key: xian-partner-keys` | 2026-10-20 | before Fri 10-23 |
-| 161 | **xian: admit #2112, #2117 (Class 3) as must-closes?** (#2111, #2114 fixed and closed 14:2x; moot) `key: xian-2111-2112` | 2026-10-20 | relay to PPM (cc Lead, CXO) |
+| 161 | **xian: admit #2112, #2117, #2120 (Class 3) as must-closes?** (#2111, #2114 fixed and closed 14:2x; moot) `key: xian-2111-2112` | 2026-10-20 | relay to PPM (cc Lead, CXO) |
 | 162 | **Medium crosspost of "The Phantom Feature"** `key: crosspost-phantom` | 2026-10-20 | xian sends URL; relay to Docs |
 | 163 | **xian (optional): rotate piper-morgan-test key (printed to Web terminal 12:5x)** `key: rotate-test-key` | 2026-10-20 | when convenient; HOST notified |
 | 164 | **xian: a test invite for Web's #2117 row** (bank code to a `-credential-` file, or tell HOST to mint) `key: xian-2117-invite` | 2026-10-20 | tell HOST the route; masked form to HOST |

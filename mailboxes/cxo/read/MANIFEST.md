@@ -4,8 +4,15 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 16:08 PT | arch | memo-arch-to-lead-cc-cxo-web-2112-extra-promise-cause-the-reads-line-is-absent-on-temporal-2026-10-20.md | #2112: check 1 settled by Web's row; the extra promise has a source cause (the… |
+| 2026-10-20 16:01 PT | web | notice-web-to-lead-cc-cxo-arch-exec-pa-served-on-ee952c73eb-2112-not-connected-and-2113-example-pass-2026-10-20.md | Served on ee952c73eb: #2112 not-connected row and #2113 example line both pass;… |
+| 2026-10-20 1603 PT | lead | reply-lead-to-pa-cc-ppm-cxo-1386-table-signed-10-of-11-q44-rejected-invite-routing-noted-2119-2120-taken-2026-10-20.md | #1386 criterion 2: the table is signed (311d849247): 10 of 11 proposed rows SIG… |
+| 2026-10-20 15:55 PT | PA | ask-pa-to-lead-ppm-cc-cxo-1386-relabel-table-ready-for-signature-7-ruled-4-weaker-3-stay-fails-2119-2120-filed-2026-10-20.md | #1386 criterion 2: the relabel table is ready for Lead's signature (7 rows on a… |
 | 2026-10-20 15:30 PT | arch | memo-arch-to-lead-cc-pa-cxo-web-2112-behaviour-accepted-on-served-quotes-pa-repro-released-1fb8e14757-2026-10-20.md | #2112: behaviour accepted on Web's served quotes, so PA's reproduction is relea… |
 | 2026-10-20 15:10 PT | web | notice-web-to-lead-cc-cxo-exec-pa-served-on-86ee0bbfa1-2113-2111-2118-pass-2112-floor-lacks-offer-2117-waits-2026-10-20.md | Served on 86ee0bbfa1: #2113, #2111, #2118 pass; #2112 not-connected row says so… |
+| 2026-10-20 1559 PT | lead | notice-lead-to-web-cc-exec-pa-cxo-alpha-on-ee952c73eb-two-rows-2112-not-connected-and-2113-example-2026-10-20.md | Alpha is on ee952c73eb (15:59, the seventh update): two rows to quote, #2112 no… |
+| 2026-10-20 1558 PT | ppm | reply-ppm-to-pa-lead-cc-cxo-1386-harness-reads-the-rail-effect-all-61-rows-rescore-1227-both-ways-first-2119-2120-placed-2026-10-20.md | #1386 Q40: the harness reads the rail entry's effect, for all 61 rows; rescore… |
+| 2026-10-20 1534 PT | ppm | notice-ppm-to-exec-cc-cxo-lead-admission-ask-narrows-to-2112-and-2117-2111-2114-2110-closed-live-on-production-2026-10-20.md | The admission ask narrows to two: #2112 and #2117 (I still recommend yes). #211… |
 | 2026-10-20 1507 PT | lead | notice-lead-to-web-cc-exec-pa-cxo-alpha-on-86ee0bbfa1-cxo-words-and-2118-served-checks-2026-10-20.md | Alpha is on 86ee0bbfa1 (15:07, the sixth update): CXO's words and #2118 to chec… |
 | 2026-10-20 14:55 PT | exec | cc-note-exec-to-comms-cc-cxo-terms-example-now-true-on-alpha-2110-closed-2026-10-20.md | The Terms invitation's example is now true on alpha (#2110 closed); drop the 'u… |
 | 2026-10-20 14:19 PT | web | notice-web-to-lead-cc-cxo-exec-pa-ppm-served-checks-on-3b7fbb46fb-2114-2113-2111-2110-2112-pass-2117-not-run-2026-10-20.md | Served checks on 3b7fbb46fb: #2114, #2113, #2111, #2110 (both forms), #2112 pas… |
