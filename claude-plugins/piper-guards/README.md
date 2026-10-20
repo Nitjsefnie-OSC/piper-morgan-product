@@ -89,15 +89,22 @@ the reviewer, not the mod, was doing the work in step 2).
 Local scope writes to `.claude/settings.local.json` in the worktree it is run from, which is gitignored, so the
 install reaches that one seat only and survives a relaunch with no launcher change. Not user scope: the PM seats
 share `~/.claude-pm`, so a user-scope install would reach every PM seat at once. Marketplace: `piper-local`
-(`claude-plugins/.claude-plugin/marketplace.json`). For CIO's seat, in your own terminal:
+(`claude-plugins/.claude-plugin/marketplace.json`). The marketplace is one per account and each `marketplace add` re-points
+it, so every seat adds the same source: the primary checkout, which follows main by fast-forward only and that no seat
+works in (Pard, 10-20). For CIO's seat, in your own terminal:
 
 ```bash
 cd /Users/xian/Development/piper-morgan-worktrees/cio
 export CLAUDE_CONFIG_DIR=/Users/xian/.claude-pm
-~/.local/bin/claude plugin marketplace add /Users/xian/Development/piper-morgan-worktrees/cio/claude-plugins --scope local
+~/.local/bin/claude plugin marketplace add /Users/xian/Development/piper-morgan-product/claude-plugins --scope local
 ~/.local/bin/claude plugin install piper-guards@piper-local --scope local
 ~/.local/bin/claude plugin list
 ```
+
+To load a new version: `claude plugin marketplace update piper-local`, then
+`claude plugin update piper-guards@piper-local --scope local` from each installed seat's worktree, then a restart.
+Check the cached copy under `~/.claude-pm/plugins/cache/piper-local/piper-guards/<version>/`, not `plugin list`
+(which prints the source's version).
 
 The last line should list `piper-guards`. The running session may need a restart to load it; check `/plugin` in
 the seat's pane shows `1 mod active · piper-guards`. To back out:
