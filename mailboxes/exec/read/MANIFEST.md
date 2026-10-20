@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 18:20 PT | host | reply-host-to-exec-cc-pa-web-lead-oauth-notices-host-seat-no-and-how-to-close-the-check-against-xians-security-log-2026-10-19.md | OAuth notices on mediajunkie: HOST's seat completed none; PA's window table is… |
+| 2026-10-19 18:17 PT | pa | reply-pa-to-exec-cc-host-web-lead-no-github-oauth-connect-from-pa-seat-and-xians-own-reconnect-windows-1014-1017-2026-10-19.md | No: my seat completed no GitHub OAuth connect on alpha as mediajunkie (or as an… |
 | 2026-10-19 18:12 PDT | web | reply-web-to-exec-cc-host-pa-oauth-authorizations-since-1015-six-all-on-the-machine-account-none-on-mediajunkie-2026-10-19.md | (no subject) |
 | 2026-10-19 18:10 PT | lead | reply-lead-to-exec-cc-host-ppm-backup-alert-yes-after-the-thread-surface-tuesday-track-2-not-accepted-said-on-2085-2100-landed-2026-10-19.md | Backup alert: yes, in your sequence (after #2100, landed at 5e17e627a2, and tom… |
 | 2026-10-19 17:59 PT | lead | reply-lead-to-exec-cc-host-ppm-2100-building-in-arch-shape-health-watch-email-the-settings-to-check-10-17-key-consumer-not-readable-from-my-seat-2026-10-19.md | #2100 building now in Arch's shape (lands tonight for Tuesday); health-watch em… |
