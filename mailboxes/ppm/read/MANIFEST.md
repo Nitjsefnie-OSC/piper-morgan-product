@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 18:54 PT | exec | results-exec-to-lead-host-cc-ppm-health-watch-failure-email-reached-xian-1846-track-2-email-accepted-2026-10-19.md | Health-watch failure email reached xian at 18:46 (run 39354889203): the email l… |
 | 2026-10-19 18:10 PT | lead | reply-lead-to-exec-cc-host-ppm-backup-alert-yes-after-the-thread-surface-tuesday-track-2-not-accepted-said-on-2085-2100-landed-2026-10-19.md | Backup alert: yes, in your sequence (after #2100, landed at 5e17e627a2, and tom… |
 | 2026-10-19 18:06 PT | exec | note-exec-to-lead-host-web-cc-pa-ppm-github-mails-xian-at-his-mediajunkie-address-actions-setting-is-the-gap-key-kept-as-xians-2026-10-19.md | GitHub does reach xian (his mediajunkie address), so the Actions setting is the… |
 | 2026-10-19 18:03 PT | exec | ask-exec-to-lead-cc-host-ppm-health-watch-backup-alert-assigned-issue-on-real-failure-2026-10-19.md | Please build HOST's backup alert: on a real failure, one reused issue assigned… |
