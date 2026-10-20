@@ -749,7 +749,7 @@
           const btn = document.getElementById('mint-link-code-btn');
           if (btn) btn.textContent = 'Mint a fresh code';
         } catch (e) {
-          Toast.show('error', "Couldn't mint a link code just now — try again shortly.");
+          Toast.error('Error', "Couldn't mint a link code just now — try again shortly.");
         }
       }
 
@@ -791,10 +791,10 @@
           });
           if (!resp.ok) throw new Error('unlink failed: ' + resp.status);
           const data = await resp.json();
-          Toast.show(data.unlinked ? 'success' : 'error', data.message);
+          Toast.show(data.unlinked ? 'success' : 'error', data.unlinked ? 'Success' : 'Error', data.message);
           loadSlackLinkStatus();
         } catch (e) {
-          Toast.show('error', "Couldn't unlink just now — try again shortly.");
+          Toast.error('Error', "Couldn't unlink just now — try again shortly.");
         }
       }
 
