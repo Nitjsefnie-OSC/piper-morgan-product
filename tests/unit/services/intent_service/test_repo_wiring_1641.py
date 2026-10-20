@@ -612,7 +612,7 @@ class TestAnalysisRepoWiring:
         result = await self._arm_and_answer(
             service, "_handle_generate_report", "generate_report", "t-ana-report"
         )
-        assert f"Generated commit_analysis report for {_FULL}" in result.message
+        assert f"Commit activity for {_FULL}" in result.message  # #2119: no internal type name
 
     async def test_analyze_data_arm_answer_lands_back_in_the_same_handler(self, service):
         result = await self._arm_and_answer(

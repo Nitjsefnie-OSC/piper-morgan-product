@@ -7127,7 +7127,12 @@ class IntentService:
                 # No search terms or no matches
                 return IntentProcessingResult(
                     success=False,
-                    message="I couldn't find any issues matching your description. Please specify an issue number (e.g., 'close issue #123').",
+                    message=(
+                        # #2120: no search ran, so no "couldn't find" claim; the
+                        # honest scope line (CXO's words replace these if they differ).
+                        "I close issues one at a time, by number. Tell me which one "
+                        "(for example 'close issue #123'), or ask me to list the open issues."
+                    ),
                     intent_data={
                         "category": intent.category.value,
                         "action": intent.action,
@@ -7464,7 +7469,11 @@ class IntentService:
                 # No search terms or no matches
                 return IntentProcessingResult(
                     success=False,
-                    message="I couldn't find any issues matching your description. Please specify an issue number (e.g., 'reopen issue #123').",
+                    message=(
+                        # #2120 (the reopen twin of the close line): no search ran.
+                        "I reopen issues one at a time, by number. Tell me which one "
+                        "(for example 'reopen issue #123'), or ask me to list the closed issues."
+                    ),
                     intent_data={
                         "category": intent.category.value,
                         "action": intent.action,
@@ -12719,7 +12728,13 @@ class IntentService:
             # Build response message
             commits = activity.get("commits", [])
             commit_count = len(commits)
-            message = f"Generated {report_type} report for {repository} with {commit_count} commit{'s' if commit_count != 1 else ''} from {timeframe}."
+            # #2119: no internal type name in user copy; say what was counted and
+            # what else a report can cover (CXO's words replace these if they differ).
+            message = (
+                f"Commit activity for {repository}: {commit_count} commit"
+                f"{'s' if commit_count != 1 else ''} in the {timeframe}. "
+                "For a status report on issues, pull requests or todos, say which one."
+            )
 
             return IntentProcessingResult(
                 success=True,

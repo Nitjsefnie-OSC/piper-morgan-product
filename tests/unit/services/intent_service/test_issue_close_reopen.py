@@ -272,7 +272,8 @@ class TestReopenIssueHandler:
             result = await intent_service._handle_reopen_issue_query(intent, "workflow-id")
 
             assert result.success is False
-            assert "couldn't find any issues matching" in result.message
+            assert "one at a time, by number" in result.message  # #2120: no "found nothing" claim
+            assert "couldn't find" not in result.message
             assert result.requires_clarification is True
 
     @pytest.mark.asyncio
@@ -719,7 +720,8 @@ class TestFuzzyCloseIssue:
 
             assert result.success is False
             assert result.requires_clarification is True
-            assert "couldn't find any issues matching" in result.message
+            assert "one at a time, by number" in result.message  # #2120: no "found nothing" claim
+            assert "couldn't find" not in result.message
 
     @pytest.mark.asyncio
     async def test_no_search_terms_returns_fallback(self, intent_service):
@@ -744,7 +746,8 @@ class TestFuzzyCloseIssue:
 
             assert result.success is False
             assert result.requires_clarification is True
-            assert "couldn't find any issues matching" in result.message
+            assert "one at a time, by number" in result.message  # #2120: no "found nothing" claim
+            assert "couldn't find" not in result.message
 
 
 class TestFuzzyReopenIssue:
