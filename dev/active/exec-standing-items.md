@@ -206,4 +206,4 @@ misread until 2026-10-01.*
 | 161 | **xian: admit #2112, #2117, #2120 (Class 3) as must-closes?** (#2111, #2114 fixed and closed 14:2x; moot) `key: xian-2111-2112` | 2026-10-20 | relay to PPM (cc Lead, CXO) |
 | 162 | **Medium crosspost of "The Phantom Feature"** `key: crosspost-phantom` | 2026-10-20 | xian sends URL; relay to Docs |
 | 163 | **xian (optional): rotate piper-morgan-test key (printed to Web terminal 12:5x)** `key: rotate-test-key` | 2026-10-20 | when convenient; HOST notified |
-| 164 | **xian: a test invite for Web's #2117 row** (bank code to a `-credential-` file, or tell HOST to mint) `key: xian-2117-invite` | 2026-10-20 | tell HOST the route; masked form to HOST |
+| 164 | **xian: a test invite (#2117 row + #1386 fresh seeded account) and a test Google account for #1386's calendar rows** (bank code to a `-credential-` file, or tell HOST to mint) `key: xian-2117-invite` | 2026-10-20 | tell HOST the route; masked form to HOST |
