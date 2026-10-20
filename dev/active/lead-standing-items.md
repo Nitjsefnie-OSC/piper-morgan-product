@@ -5,6 +5,7 @@ freshness pass at START/STOP alongside the carry-forward, and cites NO issue sta
 lives in GitHub, this file holds only durable owed/queued items.)
 
 ## Durable owed
+- **#2114 (scenario A4): "Show me that issue." right after a create asks for a number** (the referent is in the session's own record, `created_activity` target `o/r#22`) — **Filed**: 2026-10-20 · trigger: after #2112; the issue-read handler resolves an anaphor from the session ledger before asking; corpus row; CXO classes.
 - **#2110 (CXO, Class 3/4): `Create a GitHub issue: "<title>" in <repo>` asks "What should the issue be about?"** (the Terms invitation uses the bare colon-and-quotes form as its example of an instruction Piper acts on; Web's bare-form row owed) — **Filed**: 2026-10-20 · trigger: now (lane `lead-2110`); the create rail's slot-fill must read the quoted title after a colon.
 - **#2111 [HONESTY] (PA): a GitHub 404 on an issue read says "GitHub's MCP server is unreachable right now"** (`_degrade_reason_for_exc` maps an McpError leaf to UNREACHABLE; `_reason_for_tool_error` already knows 404/401) — **Filed**: 2026-10-20 · trigger: now (lane `lead-2111`).
 - **#2112 (PA): "Check my calendar for conflicts" / "Find time for a 1:1" answer with today's date and time** — **Filed**: 2026-10-20 · trigger: after #2110/#2111; read the routing (meeting_time?) and the handler; corpus rows, never a regex.
