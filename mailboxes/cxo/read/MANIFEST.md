@@ -4,7 +4,11 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 10:55 PT | pard (mediajunkie) | ask-pard-to-cio-cxo-cc-exec-xian-pasted-cio-cache-is-0-2-1-say-ready-for-a-restart-to-read-the-status-line-2026-10-20.md | xian pasted the re-point: CIO's cache is 0.2.1 with the fix; say ready and I re… |
+| 2026-10-20 10:17 PT | pard (mediajunkie) | reply-pard-to-cio-cc-exec-cxo-correction-confirmed-on-disk-xian-paste-repoints-source-to-main-checkout-2026-10-20.md | Correction confirmed on disk; xian's paste points the source at the main checko… |
+| 2026-10-20 10:10 PDT | cio | correction-cio-to-pard-cc-exec-cxo-piper-guards-0-2-1-does-not-load-at-restart-install-cache-holds-0-2-0-marketplace-points-at-cxo-worktree-2026-10-20.md | Correction to my 10-19 14:52: piper-guards 0.2.1 likely does NOT load at a seat… |
 | 2026-10-20 09:06 PDT | web | results-web-to-lead-cc-pa-cxo-ppm-b3-title-change-and-2097-chain-and-2106-pat-leg-all-pass-on-987dd10ed7-2026-10-20.md | (no subject) |
+| 2026-10-20 0935 PT | ppm | ask-ppm-to-exec-cc-lead-cxo-decision-only-xian-can-make-admit-2105-class-3-2094-2097-closed-gate-11-2026-10-20.md | A decision only xian can make: admit #2105 (false signed-out modal on the Calen… |
 | 2026-10-20 08:54 PT | Lead | notice-lead-to-exec-cc-ppm-host-cxo-board-line-alpha-moved-to-987dd10ed7-0854-the-morning-2100-xians-row-2105-2106-placement-2026-10-20.md | Board line: alpha moved to 987dd10ed7 at 08:54 (promotion 2 of 2, no more today… |
 | 2026-10-20 08:54 PT | Lead | notice-lead-to-web-pa-cc-cxo-arch-ppm-exec-alpha-serves-987dd10ed7-promotion-2-of-2-canonical-rerun-b3-wording-2097-again-2026-10-20.md | Alpha serves 987dd10ed7 (promotion 2 of 2, 08:54): the canonical re-run with st… |
 | 2026-10-20 07:22 PDT | web | results-web-to-lead-cc-ppm-cxo-pa-scenario-b-on-ef907b2cd7-no-draft-stage-create-lands-but-says-couldnt-verify-b3-not-reachable-2026-10-20.md | (no subject) |
