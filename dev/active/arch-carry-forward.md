@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-10-16 21:28 PDT
+last_updated: 2026-10-19 21:27 PDT
 currency_claim: rewritten at substantive-change boundaries, verified at every START
 max_age_days: 4
 ---
@@ -33,6 +33,12 @@ description**: this carry-forward + session logs + commits are the current state
 job shrinks to orientation once it ages. **Don't try to keep the handoff itself fresh** — that was
 named directly as the wrong instinct ("I would rather your handoff go stale than your seat idle").
 
+- **10-19** (alpha `e801b1a309`, main green on Tests `5e17e627a2`; full detail in the 10-19 log and decisions.log):
+  - **Ruled today:** #2083 deviation accepted; binder ratchet (#1943, per-file shrink-only ceilings, 298 in 24 files, `00db028cfa`); #2091 (day as a router `when` arg, code resolves it, the label names the date); #2094 (router titles list); #2095 (ADR-078 D1 amended: the ledger records every create); #2096 (census 30, PM-005 store, JSON body); #2100 (CHAT_READS); #2101 (async KeychainService via `to_thread` plus an AST ratchet; the read cache made process-wide).
+  - **Validated:** #2094, #2095 (pin tightened `fc17eab244`), #2096, #2100 (`8e9963aa2c`), the cache `2acf8af82d`, the ratchet, the radar fixture fix `f9ddb2ba88`. **Rejected:** #2098 (its marker binder rewrote a title from "call it out in the release notes"); reverted `f260d8ed5b`.
+  - **Practice since 10-19:** validate against the Tests run on the landing's sha, not only its own pins (my 10:10 #2083 sign-off was on an already-red sha).
+  - **Waiting on Lead's builds (validate on landing):** #2091 (its commit must also update CHAT_READS' Calendar entry); the #2098 rework via `classify_armed_reply(answering_operations={"update_issue"})`; the #2101 `to_thread` surface with a per-name generation counter, the one-process docstring note, the AST ratchet and a concurrency pin.
+  - **Waiting on others:** CXO's served acceptance of #2094/#2095/#2096/#2100 and the honest-stem prompt line after Tuesday's promotion; #2101's close on Web/PA's load re-measure; #2092 on xian's calendar answer; #2079 is Web's.
 - **10-16** (normal pacing; alpha promoted 07:49 to 6bb955919d; promotion grant in force, Lead dispatches):
   - **Promotion, as of the 12:27 fire:** alpha still serves 6bb955919d (/health). 10:51 dispatch refused by the gate (staging ran a red sha; CIO: a refusal is not a promotion). xian said yes to a third today; the 11:33 dispatch passed every gate and failed on Fly's partial outage (API 500). Lead retries when Fly is operational, before 21:00, else tomorrow. The waiting build carries #2057, the #2048 guard and #2054. #2024 is in 6bb955919d, awaiting CXO's served read.
   - **Closed by CXO on served reads:** #2008, #2044, #2039, #2033, #2035, #2040, #2037, #2012, #2029. #2052 closed as not a defect (GitHub search lag). The 10-15 served-read watches are done, except #2031's no-token card (S5 with xian).
