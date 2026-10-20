@@ -362,6 +362,13 @@ CRITICAL — Never retract a prior turn's claimed action (#1517):
 - When you can't verify a prior claim either way, stay neutral and offer to
   check what's actually stored instead of asserting failure.
 
+CRITICAL — Never promise a read an integration does not list (#2100):
+- The "What chat reads from each integration" lines above are the whole truth
+  about what connecting an integration lets you read. NEVER suggest connecting
+  an integration as the way to answer a question about its content unless that
+  integration's line lists that read. If it says chat can't read it yet, say so
+  plainly and offer paste or upload instead.
+
 CRITICAL — No sycophancy, no unbacked promises (#1197):
 - NEVER open with "You're absolutely right" or other reflexive validation. When
   the user corrects you, just correct course plainly: state what was wrong and
@@ -1613,12 +1620,12 @@ class ConversationalFloor:
                 # everything when nothing was active, which (combined with the
                 # #784 constant-false registry) made the floor blind to
                 # integration state entirely.
-                display = {
-                    "github": "GitHub",
-                    "slack": "Slack",
-                    "calendar": "Google Calendar",
-                    "notion": "Notion",
-                }
+                # #2100: the display set and what chat READS per connector live in
+                # capability_legibility, written by code beside the readers.
+                from services.intent_service.capability_legibility import (
+                    INTEGRATION_DISPLAY as display,
+                )
+                from services.intent_service.capability_legibility import chat_reads_line
 
                 def _disp(name: object) -> str:
                     return display.get(str(name), str(name).title())
@@ -1654,6 +1661,15 @@ class ConversationalFloor:
                     lines.append(
                         "- Not connected (available in Settings): " + ", ".join(not_connected)
                     )
+                # #2100: what chat can read from each, connected or not, from code
+                # (the model must never fill this in). An empty declaration renders
+                # the can't-read sentence (CXO's words).
+                lines.append("- What chat reads from each integration:")
+                for i in integrations:
+                    if not isinstance(i, dict) or not i.get("name"):
+                        continue
+                    key = str(i.get("name"))
+                    lines.append(f"  - {_disp(key)}: {chat_reads_line(key)}")
 
         if "trust_profile" in domain_context:
             tp = domain_context["trust_profile"]

@@ -250,3 +250,95 @@ def catalog_coverage() -> Dict[str, int]:
         "wired_total": len(wired),
         "uncovered": len(wired - covered),
     }
+
+
+# ── #2100 (Arch's ruling on the issue, 2026-10-19 15:28 PT): what chat can READ from each
+# connector is declared here by code, beside the readers that do it, and rendered on
+# the floor's integration lines. Without this the model filled the gap itself
+# ("Connect my Notion … would solve it") for a connector chat cannot read at all
+# (ADR-080: a claim about Piper's own capability belongs to code). It changes
+# WITH the reader: a new reader fills its entry in the same commit; a declaration
+# that lags its reader is the same false claim.
+
+
+@dataclass(frozen=True)
+class ChatRead:
+    """One thing chat reads from a connector, and the code symbol that reads it
+    (``module:Qual.name``), so a pin can prove the reader exists."""
+
+    what: str
+    reader: str
+
+
+#: The integration display set (one place; the floor imports it).
+INTEGRATION_DISPLAY: Dict[str, str] = {
+    "github": "GitHub",
+    "slack": "Slack",
+    "calendar": "Google Calendar",
+    "notion": "Notion",
+}
+
+#: Per connector, what chat reads today. EMPTY means: connects, chat reads nothing.
+CHAT_READS: Dict[str, Tuple[ChatRead, ...]] = {
+    "github": (
+        ChatRead(
+            "open issues and their status",
+            "services.mcp.consumer.github_adapter:GitHubMCPSpatialAdapter.list_open_issues",
+        ),
+        ChatRead(
+            "one issue by number",
+            "services.mcp.consumer.github_adapter:GitHubMCPSpatialAdapter.get_issue_connector",
+        ),
+    ),
+    "slack": (
+        ChatRead(
+            "recent conversation history",
+            "services.intent_service.context_assembler:ContextAssembler._fetch_slack_activity_items",
+        ),
+        ChatRead(
+            "messages that mention you",
+            "services.intent_service.context_assembler:ContextAssembler._fetch_slack_mentions_items",
+        ),
+    ),
+    "calendar": (
+        ChatRead(
+            "your agenda for today and tomorrow",
+            "services.intent_service.canonical_handlers:CanonicalHandlers._handle_agenda_query",
+        ),
+        ChatRead(
+            "your meetings this week",
+            "services.intent.intent_service:IntentService._handle_week_calendar_query",
+        ),
+    ),
+    # Notion connects and tests; no chat path reads its pages (Lead's source read,
+    # 2026-10-19). Fill this in the commit that lands a reader.
+    "notion": (),
+}
+
+#: CXO's words for a connector chat cannot read (#2100).
+CANNOT_READ_LINE: Dict[str, str] = {
+    "notion": "connects, but chat can't read your Notion pages yet",
+}
+
+
+def chat_reads_line(key: str) -> str:
+    """The rendered reads for one connector key: what chat reads, or the can't-read
+    sentence when the declaration is empty."""
+    reads = CHAT_READS.get(key, ())
+    if not reads:
+        return CANNOT_READ_LINE.get(key, "connects, but chat can't read its content yet")
+    return "chat reads " + ", ".join(r.what for r in reads)
+
+
+def reader_symbol_resolves(symbol: str) -> bool:
+    """True when ``module:Qual.name`` imports and resolves (the pin's check)."""
+    import importlib
+
+    module_name, _, dotted = symbol.partition(":")
+    try:
+        obj = importlib.import_module(module_name)
+        for part in dotted.split("."):
+            obj = getattr(obj, part)
+    except (ImportError, AttributeError):
+        return False
+    return True
