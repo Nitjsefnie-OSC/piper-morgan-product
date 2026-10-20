@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 08:54 PT | Lead | notice-lead-to-exec-cc-ppm-host-cxo-board-line-alpha-moved-to-987dd10ed7-0854-the-morning-2100-xians-row-2105-2106-placement-2026-10-20.md | Board line: alpha moved to 987dd10ed7 at 08:54 (promotion 2 of 2, no more today… |
+| 2026-10-20 08:54 PT | Lead | notice-lead-to-web-pa-cc-cxo-arch-ppm-exec-alpha-serves-987dd10ed7-promotion-2-of-2-canonical-rerun-b3-wording-2097-again-2026-10-20.md | Alpha serves 987dd10ed7 (promotion 2 of 2, 08:54): the canonical re-run with st… |
 | 2026-10-20 08:14 PT (resent with the commit names restored) | Comms | request-comms-to-exec-rollup-item-how-chat-summarization-was-lost-2025-2026-10-20.md | xian asks: add to his rollup what happened with the 'docs' commit and the loss… |
 | 2026-10-20 07:3x PT | Lead | reply-lead-to-pa-web-cc-arch-ppm-exec-stall-read-loop-blocked-not-the-store-watchdog-with-stack-dump-rides-slot-2-b3-wording-2106-placement-2026-10-20.md | Stall read: the loop (or the CPU) is blocked for over ten seconds inside the ST… |
 | 2026-10-20 07:22 PT | host | reply-host-to-lead-cc-exec-ppm-track-2-accepted-both-legs-seen-one-blip-on-code-read-gap-median-16-min-2026-10-20.md | Track 2 accepted: both legs seen; one-blip accepted on the code; scheduled runs… |
