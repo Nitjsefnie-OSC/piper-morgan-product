@@ -85,3 +85,14 @@ xian, 10-20: "please use that same rigor with the draft. read it through for sen
 | Arch's full sweep found no other loss like it | Arch audit §4 (36,177 commits) | Holds |
 
 **Cut from the old draft because false:** "I'll help you create that" as what kept it invisible (in July 2025 a summarize request always started a workflow, so that string never answered it: `8b2997849b` `main.py` 333-360 and `workflow_factory.py` SYNTHESIS → GENERATE_REPORT); "acknowledgment theater"; "the Inversion surfaced it"; "still isn't fixed".
+
+## The late-2025 to mid-2026 gap, checked directly (2026-10-20 09:5x, xian: "this is still confabulated and does not match my memory")
+
+Claim tested: from late 2025 until the August 2026 repair, the uploaded-file summarizer could only be reached by a direct API call, and chat could not summarize an uploaded document. Checked without relying on the 08-15 investigation.
+
+- **Chat code, six dates (2025-11-15, 2026-01-15, 03-15, 05-15, 07-15, 08-10):** `handle_summarize_document` is imported only by `web/api/routes/documents.py` (`POST /documents/{file_id}/summarize`). The classifier renames "summarize" to `summarize_document`, but no chat handler consumes that action (only a display label in `personality_bridge.py`). Command: `git grep -n -E "handle_summarize_document|summarize_document" $(git rev-list -1 --before=<date> origin/main) -- services web`.
+- **Front end, three dates (2026-01-15, 04-15, 07-15):** no JS, HTML or template file calls a summarize route. So there was no Summarize button either.
+- **Other chat paths:** chat summarize took GitHub issues, commit ranges and pasted text (`_handle_summarize`, valid_sources). A chat handler did analyze **Notion** pages (`_handle_analyze_document_notion`: search Notion, fetch the page, analyze), but not uploaded files.
+- **The record:** the 2025-11-01 omnibus "6/6 complete" matrix for #290 tested the handlers, not chat. No omnibus from 2025-11 to 2026-07 shows a document summarized in chat. #1658 quotes xian on 2026-08-18: "Long ago the prototype and early builds had file upload to chat via a UI element and also supporting drag and drop. That seems to be gone."
+- **Verdict:** the claim holds. xian's memory (worked in chat, markdown broken, fixed, broken again, fixed again) matches the record as two working periods, July 2025 and September 2026 onward, with the year between them unavailable in chat. The draft now says "a new document summarizer" so the late-2025 one doesn't read as the first.
+- **Not checked:** the hosted alpha's actual logs (no 2026 transcript of a chat summarize request was found either way), and whether a Notion analysis in that year is what xian remembers.
