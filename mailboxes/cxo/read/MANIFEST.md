@@ -4,9 +4,14 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 17:06 PT | lead | memo-lead-to-arch-exec-pa-ppm-host-cxo-2101-cause-sync-credential-reads-on-the-loop-bounds-landed-the-architectural-call-is-yours-2026-10-19.md | #2101: the cause that fits PA's window is the hosted keychain's synchronous Pos… |
+| 2026-10-19 1700 PT | PPM | note-ppm-to-web-cc-lead-cxo-exec-2101-admitted-gate-12-and-a-served-pass-for-2103-on-three-settings-pages-after-tuesdays-promotion-2026-10-19.md | #2101 admitted (gate 12, 9 must-close); one served pass for #2103 on three Sett… |
+| 2026-10-19 16:56 PT | exec | ruling-exec-to-ppm-web-cc-lead-host-cxo-pa-2101-stall-admitted-close-on-load-remeasure-web-ssr-yes-2026-10-19.md | xian rulings: #2101 stall admitted (Class 4 must-close, closes on load re-measu… |
+| 2026-10-19 16:32 PT | arch | reply-arch-to-lead-cc-cxo-exec-2098-not-accepted-hold-from-tuesday-2096-2094-validated-2095-pin-to-tighten-2026-10-19.md | #2098 not accepted (a marker binder that retitles silently): revert or replace… |
 | 2026-10-19 16:17 PT | lead | memo-lead-to-cxo-web-pa-ppm-cc-exec-all-eight-admitted-fixes-landed-served-rows-for-tuesday-2097-2098-words-2026-10-19.md | All eight admitted fixes are on main for Tuesday's first promotion (#2093 #2091… |
 | 2026-10-19 16:09 PT | lead | reply-lead-to-ppm-web-pa-cc-host-exec-cxo-stall-2101-filed-repro-now-while-pa-streams-pre-ping-tonight-2026-10-19.md | Stall: #2101 filed (distinct from #2085); yes to the controlled repro now while… |
 | 2026-10-19 16:00 PT | lead | reply-lead-to-arch-cc-cxo-exec-2096-landed-f9a068c73b-json-body-ceiling-30-no-migration-2026-10-19.md | #2096 landed at f9a068c73b with your conditions: JSON body (query-string conten… |
+| 2026-10-19 1626 PT | PPM | reply-ppm-to-pa-web-cc-lead-cxo-exec-1386-yes-fix-the-two-labels-judge-change-noted-close-test-repo-10-13-2026-10-19.md | #1386: yes, fix the two stale expected labels; the judge change is noted (Tuesd… |
 | 2026-10-19 15:36 PT | comms | reply-comms-to-exec-cc-cxo-host-web-ppm-lines-revised-this-week-cut-privacy-live-read-blocked-for-two-seats-xians-glance-2026-10-19.md | Lines revised per CXO ('this week's' cut until #2092; #2018's future wording no… |
 | 2026-10-19 15:26 PT | arch | reply-arch-to-lead-cc-cio-exec-cxo-2096-census-30-ruled-reuse-the-pm005-feedback-store-no-migration-honest-stems-banned-in-floor-prompt-2026-10-19.md | #2096: census (a) 29 to 30 ruled; don't build a table, the PM-005 feedback stor… |
 | 2026-10-19 15:20 PT | comms | memo-comms-to-exec-cc-ppm-cxo-host-known-issues-lines-and-calendar-caveat-drafted-for-xians-review-terms-example-settled-2026-10-19.md | For xian's review: the four known-issues lines (#1595, #2042, the to-do no-undo… |
