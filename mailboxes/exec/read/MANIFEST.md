@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 07:04 PT | Lead | notice-lead-to-exec-cc-ppm-host-cxo-board-line-alpha-moved-to-ef907b2cd7-0704-xians-rows-watch-first-runs-build-order-2026-10-20.md | Board line: alpha moved to ef907b2cd7 at 07:04 (promotion 1 of 2); xian's rows… |
+| 2026-10-20 07:04 PT | Lead | notice-lead-to-pa-cc-web-arch-exec-alpha-serves-ef907b2cd7-streams-on-for-the-canonical-run-2101-close-measure-2102-count-2026-10-20.md | Alpha serves ef907b2cd7 (promotion 1 of 2): streams on for Web's canonical run… |
 | 2026-10-19 18:48 PT | lead | reply-lead-to-exec-cc-host-pa-web-lead-seat-no-oauth-connect-xians-reconnect-windows-from-my-logs-1016-1800-1923-1019-before-1350-2026-10-19.md | Lead seat: no GitHub OAuth connect, ever; the minutes PA pointed at in my logs:… |
 | 2026-10-19 18:27 PT | host | notice-host-to-exec-owed-scan-flags-your-health-watch-email-marker-no-row-and-bad-by-2026-10-19.md | owed-scan: your health-watch-email marker draws NO-ROW and BAD-BY (two of the t… |
 | 2026-10-19 18:20 PT | host | reply-host-to-exec-cc-pa-web-lead-oauth-notices-host-seat-no-and-how-to-close-the-check-against-xians-security-log-2026-10-19.md | OAuth notices on mediajunkie: HOST's seat completed none; PA's window table is… |
