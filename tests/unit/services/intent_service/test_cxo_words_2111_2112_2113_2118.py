@@ -58,9 +58,12 @@ class TestUpdateIssueAsksAQuestion2113:
         assert result.clarification_type == "update_fields_required"
         # CXO's content; the question form waits on an armed "which field" carrier
         # (#1730 Gap-2 ratchet: a site asks only when it arms), so no "?" here yet.
+        # CXO 14:46: the example carries the number, so a bare field reply is not
+        # invited while no carrier binds the next turn to the issue.
         assert result.message == (
-            "Tell me what to change on #123: I can update the title, the body, "
-            "the state, the labels or the assignees."
+            'Tell me what to change on #123 in one message, like "change the title of '
+            '#123 to …". I can update the title, the body, the state, the labels or '
+            "the assignees."
         )
         assert "?" not in result.message
         assert "Cannot update" not in result.message
