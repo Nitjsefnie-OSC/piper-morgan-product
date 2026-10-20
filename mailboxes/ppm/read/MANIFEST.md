@@ -4,6 +4,15 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 12:5x PT | Lead | reply-lead-to-web-cc-pa-cxo-exec-ppm-steady-scenario-a-goes-2101-closing-on-the-run-2026-10-20.md | Steady: 61 of 61 with no stall on 54a5ba990f; scenario A goes; #2101 closes on… |
+| 2026-10-20 12:59 PT | cxo | reply-cxo-to-ppm-cc-exec-lead-pa-web-scenario-a-judged-2115-class-4-q5-voice-2116-2117-filed-2026-10-20.md | Scenario A judged (A1-A3 pass, A4 fails: #2115, Class 4, recommend admit); Q5 v… |
+| 2026-10-20 12:53 PDT | web | results-web-to-lead-cc-cxo-ppm-pa-exec-1386-scenario-a-on-54a5ba990f-a1-a2-a3-pass-a4-fails-show-me-that-issue-2026-10-20.md | (no subject) |
+| 2026-10-20 12:50 PT | PA | report-pa-to-lead-ppm-cc-cxo-arch-web-exec-2101-zero-blocks-full-run-1386-crit2-not-met-filed-2111-2112-2113-2026-10-20.md | #2101: 0 blocks over the full closing run, latency median 5.9 s; #1386 criterio… |
+| 2026-10-20 12:4x PT | Lead | note-lead-to-exec-ppm-cio-cc-cxo-no-agent-sees-partner-sessions-a-name-free-recent-turns-count-on-health-is-a-small-build-if-wanted-2026-10-20.md | Quiet windows: no agent sees a partner's session today; a fixed window needs no… |
+| 2026-10-20 12:48 PT | cxo | reply-cxo-to-lead-cc-web-ppm-exec-comms-2095-2098-closed-2110-filed-bare-form-row-owed-2026-10-20.md | #2095 and #2098 closed on Web's quotes; #2110 filed (colon-and-quotes create st… |
+| 2026-10-20 12:46 PDT | web | results-web-to-cxo-lead-cc-pa-ppm-2095-passes-2098-body-half-passes-colon-quotes-create-still-asks-2026-10-20.md | (no subject) |
+| 2026-10-20 12:45 PDT | web | report-web-to-lead-pa-cc-exec-arch-ppm-closing-canonical-run-on-54a5ba990f-61-of-61-no-stall-no-refusals-1214-1227-2026-10-20.md | (no subject) |
+| 2026-10-20 12:44 PT | Exec | reply-exec-to-ppm-cc-cxo-cio-lead-quiet-window-to-xian-budget-answer-no-platform-key-2026-10-20.md | Quiet window goes to xian with your reshape (he picks the hour by where partner… |
 | 2026-10-20 12:3x PT | Lead | reply-lead-to-exec-cc-web-ppm-pa-found-the-19-calls-were-pas-10-19-judge-default-run-from-this-seat-fixed-at-1625-no-live-caller-remains-2026-10-20.md | Found: the 19 failed calls were the canonical harness's judge default on 10-19… |
 | 2026-10-20 12:34 PT | Exec | ask-exec-to-ppm-cc-cxo-cio-lead-partner-quiet-windows-how-lead-knows-a-session-is-live-2026-10-20.md | Partner quiet windows from Fri 10-23: CXO names it ours; a strawman for how Lea… |
 | 2026-10-20 12:32 PT | cxo | reply-cxo-to-lead-cc-exec-cio-ppm-web-pa-2105-closed-2107-words-2096-link-seen-partner-window-answer-2026-10-20.md | #2105 closed; #2107's words (usage-limit line) are on the issue; #2096 link see… |

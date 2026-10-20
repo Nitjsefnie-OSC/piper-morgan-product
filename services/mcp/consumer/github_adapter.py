@@ -391,15 +391,24 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
         """#1398/A4: a config-resolution failure degrades as MISCONFIGURED, everything
         else as UNREACHABLE. One place so the 6 MCP call-sites stay uniform — they all
         catch ``Exception`` and defer the reason to here rather than hard-coding it."""
-        from services.connectors.server_ref_resolver import ServerRefResolutionError
-
         # The MCP session's task group wraps an exception raised inside ``_mcp_client_ctx``
         # in an ExceptionGroup, so classify the LEAVES (``_leaf_exceptions``), not the wrapper.
+        from mcp.shared.exceptions import McpError
+
+        from services.connectors.server_ref_resolver import ServerRefResolutionError
+
         for leaf in GitHubMCPSpatialAdapter._leaf_exceptions(exc):
             if isinstance(leaf, ServerRefResolutionError):
                 return DegradationReason.MISCONFIGURED
             if isinstance(leaf, GitHubToolError):
                 return leaf.reason  # #1965 OAuth leg: GitHub's 401 is STALE_TOKEN, not an outage
+            if isinstance(leaf, McpError):
+                # #2111 (PA's closing-run read, 2026-10-20): the live server answers a
+                # missing issue with a JSON-RPC error whose text carries GitHub's status
+                # ("failed to get issue: GET …/99999: 404 Not Found"). That is the
+                # resource, not the server: read the text through the same mapper the
+                # tool-error path uses (404 → RESOURCE_NOT_FOUND, 401 → STALE_TOKEN).
+                return _reason_for_tool_error(str(leaf))
         return DegradationReason.UNREACHABLE
 
     async def _degrade_for_exc(self, credential, exc: BaseException) -> DegradationResponse:
