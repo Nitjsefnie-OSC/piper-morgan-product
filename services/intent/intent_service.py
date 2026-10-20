@@ -12735,8 +12735,8 @@ class IntentService:
             # internal type name in user copy.
             if activity.get("read_failed"):
                 message = (
-                    f"I couldn't read {repository} just now (GitHub didn't answer), "
-                    "so there's nothing to report yet."
+                    f"I couldn't read {repository} with this account's GitHub "
+                    "connection, so there's nothing to report yet."
                 )
             else:
                 message = (

@@ -180,9 +180,13 @@ class TestReturnShapeMatchesConsumers:
 class TestFailureIsTheEmptyShape:
     """House shape for this seam (#969/#1039 siblings): empty, never None, never raise."""
 
-    async def test_api_none_responses_yield_empty_shape(self, adapter):
+    async def test_api_none_responses_yield_empty_shape_marked_as_a_failed_read(self, adapter):
+        """#2119: a None REST answer (no session, 401/403, transport) is a read
+        that did not happen, never an empty window ("found 0 commits")."""
         adapter._call_github_api.return_value = None
-        assert await adapter.get_recent_activity(7, repository="o/r") == EMPTY
+        result = await adapter.get_recent_activity(7, repository="o/r")
+        assert {k: result[k] for k in EMPTY} == EMPTY
+        assert result["read_failed"] == [{"error": "no_response"}]
 
     async def test_api_exception_yields_empty_shape_marked_as_a_failed_read(self, adapter):
         adapter._call_github_api.side_effect = RuntimeError("api boom")

@@ -61,4 +61,16 @@ async def test_a_failed_read_never_claims_a_count(intent_service):
     failed = dict(EMPTY, read_failed=[{"error": "RuntimeError"}])
     result = await _run(intent_service, failed)
     assert "found 0 commits" not in result.message
-    assert "I couldn't read dinp-machine/piper-test-activity" in result.message
+    assert (
+        "I couldn't read dinp-machine/piper-test-activity with this account's GitHub connection"
+        in result.message
+    )
+
+
+@pytest.mark.asyncio
+async def test_a_none_rest_answer_is_a_failed_read_not_zero_commits(intent_service):
+    """Web, 71b4b15eed: an OAuth-only account (no native PAT for the REST path) got
+    "found 0 commits" while GitHub had five. The adapter's None now marks the read."""
+    failed = dict(EMPTY, read_failed=[{"error": "no_response"}])
+    result = await _run(intent_service, failed)
+    assert "0 commits" not in result.message

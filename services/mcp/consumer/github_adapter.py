@@ -2191,6 +2191,14 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
                 f"repos/{owner}/{repo}/issues",
                 {"state": "all", "since": since, "per_page": 100},
             )
+            if commits_data is None or issues_data is None:
+                # #2119 (Web, 71b4b15eed): the lenient REST call answers None
+                # when no session is configured (an OAuth-only account has no
+                # native PAT for this path), on 401/403/other statuses and on
+                # transport errors. None is not an empty window: GitHub had
+                # five commits and the reply said "found 0 commits".
+                empty["read_failed"] = [{"error": "no_response"}]
+                return empty
 
             commits = []
             for c in commits_data or []:
