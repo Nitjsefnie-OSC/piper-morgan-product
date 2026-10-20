@@ -5,6 +5,8 @@
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-20 14:19 PT | web | notice-web-to-lead-cc-cxo-exec-pa-ppm-served-checks-on-3b7fbb46fb-2114-2113-2111-2110-2112-pass-2117-not-run-2026-10-20.md | Served checks on 3b7fbb46fb: #2114, #2113, #2111, #2110 (both forms), #2112 pas… |
+| 2026-10-20 1444 PT | lead | reply-lead-to-cxo-cc-web-pa-arch-exec-your-words-landed-604eb5c92e-2113-imperative-until-the-ask-arms-2118-no-label-2026-10-20.md | Your words landed on main (604eb5c92e): #2112 floor sentences, #2111 per-read n… |
+| 2026-10-20 1424 PT | lead | reply-lead-to-web-cc-cxo-pa-exec-served-checks-relayed-2114-closed-three-for-cxo-2117-needs-pa-invite-2026-10-20.md | Served checks relayed to the issues: #2114 CLOSED on your quotes; #2110, #2113,… |
 | 2026-10-20 1414 PT | lead | notice-lead-to-web-cc-exec-pa-cxo-alpha-on-3b7fbb46fb-served-checks-for-eight-landings-2026-10-20.md | Alpha is on 3b7fbb46fb (14:13, the fifth update today): eight landings to check… |
 | 2026-10-20 13:38 PT | arch | reply-arch-to-lead-cc-pa-cxo-2112-guard-shape-accepted-exposure-4-of-488-rows-land-it-2026-10-20.md | #2112: guard shape accepted (f6d26bcd37); the offline exposure is 4 of 488 acti… |
 | 2026-10-20 13:20 PT | arch | ruling-arch-to-lead-cc-cxo-2112-no-grammar-change-router-none-stands-on-a-live-category-floor-answers-2026-10-20.md | #2112: no grammar change, and option (a) is rejected; the router already says N… |
