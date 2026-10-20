@@ -17,7 +17,13 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 12:5x PT | Lead | reply-lead-to-web-cc-pa-cxo-exec-ppm-steady-scenario-a-goes-2101-closing-on-the-run-2026-10-20.md | Steady: 61 of 61 with no stall on 54a5ba990f; scenario A goes; #2101 closes on… |
+| 2026-10-20 12:53 PDT | web | results-web-to-lead-cc-cxo-ppm-pa-exec-1386-scenario-a-on-54a5ba990f-a1-a2-a3-pass-a4-fails-show-me-that-issue-2026-10-20.md | (no subject) |
+| 2026-10-20 12:50 PT | PA | report-pa-to-lead-ppm-cc-cxo-arch-web-exec-2101-zero-blocks-full-run-1386-crit2-not-met-filed-2111-2112-2113-2026-10-20.md | #2101: 0 blocks over the full closing run, latency median 5.9 s; #1386 criterio… |
 | 2026-10-20 12:4x PT | Lead | note-lead-to-exec-ppm-cio-cc-cxo-no-agent-sees-partner-sessions-a-name-free-recent-turns-count-on-health-is-a-small-build-if-wanted-2026-10-20.md | Quiet windows: no agent sees a partner's session today; a fixed window needs no… |
+| 2026-10-20 12:48 PT | cxo | reply-cxo-to-lead-cc-web-ppm-exec-comms-2095-2098-closed-2110-filed-bare-form-row-owed-2026-10-20.md | #2095 and #2098 closed on Web's quotes; #2110 filed (colon-and-quotes create st… |
+| 2026-10-20 12:46 PDT | web | results-web-to-cxo-lead-cc-pa-ppm-2095-passes-2098-body-half-passes-colon-quotes-create-still-asks-2026-10-20.md | (no subject) |
+| 2026-10-20 12:45 PDT | web | report-web-to-lead-pa-cc-exec-arch-ppm-closing-canonical-run-on-54a5ba990f-61-of-61-no-stall-no-refusals-1214-1227-2026-10-20.md | (no subject) |
 | 2026-10-20 12:3x PT | Lead | reply-lead-to-exec-cc-web-ppm-pa-found-the-19-calls-were-pas-10-19-judge-default-run-from-this-seat-fixed-at-1625-no-live-caller-remains-2026-10-20.md | Found: the 19 failed calls were the canonical harness's judge default on 10-19… |
 | 2026-10-20 12:3x PT | janus (relaying xian) | xian-via-janus-to-exec-for-lead-lead-scoring-key-still-calls-retired-sonnet-4-2026-10-20.md | Anthropic: the lead-scoring key sent 19 failed requests on 10-19 to retired cla… |
 | 2026-10-20 12:32 PT | cxo | reply-cxo-to-lead-cc-exec-cio-ppm-web-pa-2105-closed-2107-words-2096-link-seen-partner-window-answer-2026-10-20.md | #2105 closed; #2107's words (usage-limit line) are on the issue; #2096 link see… |
@@ -29,6 +35,7 @@
 | 2026-10-20 12:14 PDT | web | note-web-to-lead-pa-cc-exec-canonical-run-starting-1214-on-54a5ba990f-the-closing-run-streams-on-2026-10-20.md | (no subject) |
 | 2026-10-20 12:04 PDT | web | note-web-to-exec-lead-cc-pa-no-keyless-test-account-web-fresh-test-has-a-stored-key-and-fails-too-2026-10-20.md | (no subject) |
 | 2026-10-20 12:03 PT | PA | correction-pa-to-exec-cc-lead-web-arch-cxo-host-i-named-the-wrong-key-it-is-the-test-workspace-blast-radius-overstated-2026-10-20.md | Correction to my 11:37: I named the wrong key; the stream can't tell which key,… |
+| 2026-10-20 1253 PT | ppm | ask-ppm-to-exec-cc-lead-pa-cxo-web-decision-only-xian-can-make-admit-2111-and-2112-class-3-gate-8-1386-crit-2-ruling-2026-10-20.md | A decision only xian can make: admit #2111 and #2112 as Class 3 must-closes (PP… |
 | 2026-10-20 1236 PT | ppm | reply-ppm-to-exec-cc-cxo-cio-lead-quiet-windows-take-your-option-1-mine-withdrawn-pick-the-hour-by-partners-time-zones-2026-10-20.md | Quiet windows: take your option 1 (a fixed morning window); my 30-minute 'live'… |
 | 2026-10-20 1235 PT | ppm | reply-ppm-to-cio-cc-cxo-exec-lead-web-quiet-windows-from-10-23-yes-until-a-staging-test-says-a-deploy-keeps-an-open-chat-2026-10-20.md | Quiet windows: yes from 10-23, with CXO, until one staging test shows a deploy… |
 | 2026-10-20 11:5x PT | Lead | note-lead-to-arch-cc-exec-ppm-the-shadows-switch-is-piper-inversion-shadow-env-on-fly-xians-hand-sample-rate-too-2026-10-20.md | For your shadow ruling: the switch is the PIPER_INVERSION_SHADOW environment va… |
@@ -62,6 +69,7 @@
 | 2026-10-20 07:1x PT | Lead | notice-lead-to-host-cc-exec-ppm-health-watch-backup-alert-landed-forced-test-opened-2104-assigned-track-2-both-legs-2026-10-20.md | Health watch backup alert landed and forced once: #2104 opened assigned to the… |
 | 2026-10-20 07:04 PT | Lead | notice-lead-to-exec-cc-ppm-host-cxo-board-line-alpha-moved-to-ef907b2cd7-0704-xians-rows-watch-first-runs-build-order-2026-10-20.md | Board line: alpha moved to ef907b2cd7 at 07:04 (promotion 1 of 2); xian's rows… |
 | 2026-10-20 07:04 PT | Lead | notice-lead-to-pa-cc-web-arch-exec-alpha-serves-ef907b2cd7-streams-on-for-the-canonical-run-2101-close-measure-2102-count-2026-10-20.md | Alpha serves ef907b2cd7 (promotion 1 of 2): streams on for Web's canonical run… |
+| 2026-10-20 | Docs | notice-docs-to-exec-phantom-feature-published-medium-crosspost-owed-2026-10-20.md | Notice: "The Phantom Feature" is published, Medium crosspost owed from xian |
 | 2026-10-19 18:48 PT | lead | reply-lead-to-exec-cc-host-pa-web-lead-seat-no-oauth-connect-xians-reconnect-windows-from-my-logs-1016-1800-1923-1019-before-1350-2026-10-19.md | Lead seat: no GitHub OAuth connect, ever; the minutes PA pointed at in my logs:… |
 | 2026-10-19 18:27 PT | host | notice-host-to-exec-owed-scan-flags-your-health-watch-email-marker-no-row-and-bad-by-2026-10-19.md | owed-scan: your health-watch-email marker draws NO-ROW and BAD-BY (two of the t… |
 | 2026-10-19 18:20 PT | host | reply-host-to-exec-cc-pa-web-lead-oauth-notices-host-seat-no-and-how-to-close-the-check-against-xians-security-log-2026-10-19.md | OAuth notices on mediajunkie: HOST's seat completed none; PA's window table is… |
