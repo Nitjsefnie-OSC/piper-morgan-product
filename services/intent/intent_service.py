@@ -17033,6 +17033,30 @@ Add any additional information here.
         """
         category = intent.category.value.upper()
 
+        # #2112 (Arch's ruling, 2026-10-20): on a live category the router's
+        # NONE stands. "Check my calendar for conflicts" scored NONE at 0.95
+        # (the corpus says floor); the consult fell through, the LLM classifier
+        # said TEMPORAL, and the time handler answered with the date. The
+        # owner declined, so the second opinion does not override it. Scoped
+        # by the live flag at runtime; a non-live landing is unchanged.
+        try:
+            from services.intent_service.inversion_live import router_none_stands
+
+            _none_stands = router_none_stands(category, intent.action)
+        except (
+            Exception
+        ) as e:  # silent-ok: LOGGED; a routing predicate never breaks the turn (#1423)
+            self.logger.warning("router_none_stands_check_failed", error=str(e))
+            _none_stands = None
+        if _none_stands:
+            self.logger.info(
+                "router_none_stands",
+                category=category,
+                action=intent.action,
+                live_match=_none_stands,
+            )
+            return True
+
         # Categories fully migrated to Action Gate floor routing:
         _FLOOR_ROUTED_CATEGORIES = {
             "GUIDANCE",  # Phase 1: already floor-routed
