@@ -388,7 +388,8 @@ class GoogleCalendarMCPAdapter(BaseSpatialAdapter):
                     and self._credentials.expired
                     and self._credentials.refresh_token
                 ):
-                    self._credentials.refresh(Request())
+                    # #2101: a synchronous token refresh over HTTP; off the event loop.
+                    await asyncio.to_thread(self._credentials.refresh, Request())
                 else:
                     if not os.path.exists(self._client_secrets_file):
                         # #1592: this file-based OAuth fallback is EXPECTED to have no
@@ -431,7 +432,9 @@ class GoogleCalendarMCPAdapter(BaseSpatialAdapter):
                     token.write(self._credentials.to_json())
 
             # Initialize Calendar service
-            self._service = build("calendar", "v3", credentials=self._credentials)
+            self._service = await asyncio.to_thread(
+                build, "calendar", "v3", credentials=self._credentials
+            )
             logger.info("Google Calendar authentication successful")
             return True
 
@@ -493,7 +496,9 @@ class GoogleCalendarMCPAdapter(BaseSpatialAdapter):
             )
 
             # Initialize Calendar service
-            self._service = build("calendar", "v3", credentials=self._credentials)
+            self._service = await asyncio.to_thread(
+                build, "calendar", "v3", credentials=self._credentials
+            )
             logger.info(
                 "Google Calendar authenticated via keychain (Issue #529, user=%s)", self._user_id
             )
@@ -616,8 +621,9 @@ class GoogleCalendarMCPAdapter(BaseSpatialAdapter):
                 time_min = start_of_day.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
                 time_max = end_of_day.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
 
-                events_result = (
-                    self._service.events()
+                # #2101: googleapiclient is synchronous HTTP; off the event loop.
+                events_result = await asyncio.to_thread(
+                    lambda: self._service.events()
                     .list(
                         calendarId=self._calendar_id,
                         timeMin=time_min,
@@ -1031,8 +1037,9 @@ class GoogleCalendarMCPAdapter(BaseSpatialAdapter):
                 time_min = start_utc.strftime("%Y-%m-%dT%H:%M:%SZ")
                 time_max = end_utc.strftime("%Y-%m-%dT%H:%M:%SZ")
 
-                events_result = (
-                    self._service.events()
+                # #2101: googleapiclient is synchronous HTTP; off the event loop.
+                events_result = await asyncio.to_thread(
+                    lambda: self._service.events()
                     .list(
                         calendarId=self._calendar_id,
                         timeMin=time_min,
@@ -1096,8 +1103,9 @@ class GoogleCalendarMCPAdapter(BaseSpatialAdapter):
                 time_max = (now + timedelta(days=days_ahead)).isoformat().replace("+00:00", "Z")
 
                 # Get events without expanding recurring (singleEvents=False)
-                events_result = (
-                    self._service.events()
+                # #2101: googleapiclient is synchronous HTTP; off the event loop.
+                events_result = await asyncio.to_thread(
+                    lambda: self._service.events()
                     .list(
                         calendarId=self._calendar_id,
                         timeMin=time_min,
