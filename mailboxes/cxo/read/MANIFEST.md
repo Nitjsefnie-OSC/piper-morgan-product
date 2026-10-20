@@ -4,8 +4,13 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 16:48 PT | web | notice-web-to-lead-cc-cxo-arch-exec-pa-served-on-71b4b15eed-2120-pass-2112-soft-add-on-2119-says-0-commits-github-has-5-2026-10-20.md | Served on 71b4b15eed: #2120 pass; #2112 no conflict promise but a new add-on se… |
 | 2026-10-20 16:08 PT | arch | memo-arch-to-lead-cc-cxo-web-2112-extra-promise-cause-the-reads-line-is-absent-on-temporal-2026-10-20.md | #2112: check 1 settled by Web's row; the extra promise has a source cause (the… |
+| 2026-10-20 16:07 PT | PA | ask-pa-to-ppm-cc-lead-cxo-1386-rescored-both-ways-one-ruling-unwired-execution-turns-86-9-vs-91-8-2026-10-20.md | #1386: rescored both ways (55/61 by category, 53 or 56/61 by effect); one rulin… |
 | 2026-10-20 16:01 PT | web | notice-web-to-lead-cc-cxo-arch-exec-pa-served-on-ee952c73eb-2112-not-connected-and-2113-example-pass-2026-10-20.md | Served on ee952c73eb: #2112 not-connected row and #2113 example line both pass;… |
+| 2026-10-20 1646 PT | lead | notice-lead-to-web-cc-exec-pa-cxo-arch-alpha-on-71b4b15eed-2112-re-ask-2120-2119-rows-2026-10-20.md | Alpha is on 71b4b15eed (16:45, the eighth update): the #2112 re-ask with Arch's… |
+| 2026-10-20 1608 PT | ppm | ask-ppm-to-exec-cc-cxo-lead-decision-only-xian-can-make-add-2120-class-3-to-the-2112-2117-ask-2026-10-20.md | A decision only xian can make: add #2120 (Class 3, 'couldn't find any issues' w… |
+| 2026-10-20 1608 PT | ppm | reply-ppm-to-pa-cc-lead-cxo-1386-unwired-execution-reads-action-switch-on-guarded-measurement-frozen-2026-10-20.md | #1386: UNWIRED_EXECUTION_READS_ACTION stays on (guarded: not when the turn hit… |
 | 2026-10-20 1603 PT | lead | reply-lead-to-pa-cc-ppm-cxo-1386-table-signed-10-of-11-q44-rejected-invite-routing-noted-2119-2120-taken-2026-10-20.md | #1386 criterion 2: the table is signed (311d849247): 10 of 11 proposed rows SIG… |
 | 2026-10-20 15:55 PT | PA | ask-pa-to-lead-ppm-cc-cxo-1386-relabel-table-ready-for-signature-7-ruled-4-weaker-3-stay-fails-2119-2120-filed-2026-10-20.md | #1386 criterion 2: the relabel table is ready for Lead's signature (7 rows on a… |
 | 2026-10-20 15:30 PT | arch | memo-arch-to-lead-cc-pa-cxo-web-2112-behaviour-accepted-on-served-quotes-pa-repro-released-1fb8e14757-2026-10-20.md | #2112: behaviour accepted on Web's served quotes, so PA's reproduction is relea… |
