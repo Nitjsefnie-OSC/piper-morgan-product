@@ -1,5 +1,14 @@
 # Lead carry-forward — Fable 5.1 seat; Model A worktree ~/Development/piper-morgan-worktrees/lead
 
+## STATE @ 2026-10-20 16:00 PT — alpha ee952c73eb (SEVENTH update, 15:59; #2112 floor fact + #2113 example line); main 12/12 green; CLOSED today by CXO on Web's quotes: #2114 #2110 #2111 #2113 #2118 (+ #2101 at 12:5x, #2105).
+- **Open on the served side (Web, on ee952c73eb):** #2112 not-connected row (must use CXO's sentence with the Settings offer); #2113 example line; #2117 once PA mints Web an invite. #2112 connected-calendar row = xian's account (Exec; also settles #2091/#2092's connected rows). #2112 also waits on PA's local reproduction and Arch's validation.
+- **Filed today, Lead lane, standing:** #2113's question form needs an armed "which field" carrier (CXO: not before Friday, not gated).
+- **Admissions (xian via Exec, PPM's ask):** #2111 #2112 #2114 #2117 (PPM recommends yes).
+- **NOW:** drained; next promotion only if something lands (one green watch run after 15:59). STOP wrap at the 21:17 fire (sign-off block, DAY-CLOSED marker, carry-forward DAY CLOSED with Wednesday's START order, `scripts/aging-standing-items.sh lead`, heartbeat STOP).
+- **Lessons (afternoon, cumulative):** a word landed in a context block serves only the categories that assemble that block (check the gather path for the turn's category before claiming the slot); a new question-emitting site must arm or not ask; guard an Optional before reading two attributes; a lane's suite includes `tests/intent` and `tests/unit/services/radar` for adapter/create-path changes; `ls` of the inbox can show local residue after mail-send's reconcile (trust `git ls-tree origin/main`); never estimate a minute anywhere.
+- **Cron:** e0bdd924 (`17 6,9,12,15,18,21`, expires ~10-26; rotate at the 10-25 START).
+
+### Earlier @ 2026-10-20 15:08
 ## STATE @ 2026-10-20 15:08 PT — alpha 86ee0bbfa1 (SIXTH update, 15:07; carries CXO's words #2112/#2111/#2113 and #2118); main 12/12 green; #2114, #2110, #2111 CLOSED by CXO on Web's 14:19 quotes; #2101 CLOSED 12:5x.
 - **Open on the served side (Web, on 86ee0bbfa1):** #2113's imperative sentence; #2111's per-read line; #2112's two rows (one on a connected-calendar account: must not say "not connected"); #2118's label-free create; #2117 once PA mints Web an invite. #2112 also waits on PA's local reproduction (route=legacy reason=router_none, then router_none_stands) and Arch's validation.
 - **Open on words:** #2113's question form needs an armed "which field" carrier (the #1730 Gap-2 ratchet refused the question as a new unarmed ask site); CXO/Arch to say whether the arm is wanted; standing item filed.
