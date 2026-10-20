@@ -1725,3 +1725,5 @@ out-of-scope call. Gate 14 → 15, fourth slip-ledger entry, dates unchanged; cr
 **`#2094` and `#2097` closed live 2026-10-20 09:32 (CXO, on Web's served rows)**. Gate 13 → 11. Must-close: 8 (#2089, #2091, #2092, #2095, #2096, #2098, #2100, #2101). Placed 09:4x: #2105 and #2106 on Production; #2105's Class 3 admission is asked of Exec.
 
 **`#2105` folded in 2026-10-20 10:55, admitted MVP (Gate class 3, a must-close) on xian's word via Janus**: Refresh List on the Calendar settings page shows a false "You've been signed out". Gate 11 → 12. Must-close: 9. Lead fixes it after #2101. Also 10:52: xian granted a one-off third promotion today for the #2101 fix (Exec's relay).
+
+**`#2105` closed live 2026-10-20 12:32 (CXO, on Web's served quote from `54a5ba990f`)**. Gate 12 → 11. Must-close: 8 (#2089, #2091, #2092, #2095, #2096, #2098, #2100, #2101). #2101's stall measure was met on `e729ba82d8` (61 of 61 queries, 0 blocks over 21 live turns); it closes on the next full run with the model answering. Placed on Production: #2107 (Lead's), #2108, #2109.

@@ -48,6 +48,6 @@ What brought it back was my stubborn memory and refusal to accept a report sayin
 
 ---
 
-*Next on Building Piper Morgan: "The Tracker That Lost Track" — I sit down with the sprint board six hours after most of the team called it a quiet Sunday, and find it doesn't match reality anymore.*
+*Next on Building Piper Morgan: "The Tracker That Lost Track" — late on a Sunday night, just after most of the team had called it a quiet day, I sit down with the sprint board and find it doesn't match reality anymore.*
 
 *When a careful report contradicts something you remember, which one do you go back and check?*
