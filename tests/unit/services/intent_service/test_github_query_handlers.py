@@ -593,7 +593,9 @@ class TestReviewIssueRouting:
                 },
             )
 
-            mock_handler.assert_called_once_with(intent, mock_workflow.id)
+            mock_handler.assert_called_once_with(
+                intent, mock_workflow.id, "test-session"
+            )  # #2114: the rail threads session_id (positional) to this read
 
     @pytest.mark.asyncio
     async def test_routes_show_issue_action(self, intent_service, mock_workflow):

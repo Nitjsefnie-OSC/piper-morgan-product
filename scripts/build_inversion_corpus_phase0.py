@@ -4533,6 +4533,13 @@ HAND_ROWS = [
         "source": "issue-2110 CXO's bare-form row 2026-10-20 (the invitation's example verbatim shape)",
         "notes": "no repo clause; the configured default repo applies at the rail",
     },
+    {
+        "phrase": "Show me that issue.",
+        "category": "QUERY",
+        "expected": "action:review_issue_query",
+        "source": "issue-2114 Web served 2026-10-20 12:5x scenario A4 (the turn after 'Created issue #22 …')",
+        "notes": "no number in the words; the handler resolves the referent from the session's creation ledger (#2114)",
+    },
 ]
 
 

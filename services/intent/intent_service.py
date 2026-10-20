@@ -6643,8 +6643,33 @@ class IntentService:
                 error_type="GitHubStalePRsQueryError",
             )
 
+    async def _issue_referent_from_ledger(
+        self, user_id: Optional[str], session_id: Optional[str]
+    ) -> Optional[Tuple[str, int]]:
+        """#2114: the most recent issue THIS session created, as ``(repository, number)``.
+
+        "Show me that issue" right after "Created issue #22 …" names the issue the
+        product just announced; the session's creation ledger (#2095) holds it as
+        ``owner/repo#22``. Owner-scoped by construction (D1a): no principal or no
+        session → None, no read. A ledger read failure degrades to None (the caller
+        then asks for a number, exactly as before), never to a fabricated target.
+        """
+        if not user_id or not session_id:
+            return None
+        from services.intent_service.session_activity_read import (
+            issue_head,
+            list_session_activities,
+        )
+
+        try:
+            activities = await list_session_activities(user_id, session_id)
+        except Exception as e:  # silent-ok: logged; the handler falls back to asking for a number
+            self.logger.warning("review_issue_ledger_read_failed", error=str(e))
+            return None
+        return issue_head(activities)
+
     async def _handle_review_issue_query(
-        self, intent: Intent, workflow_id: str
+        self, intent: Intent, workflow_id: str, session_id: Optional[str] = None
     ) -> IntentProcessingResult:
         """
         Handle "Review issue #X" / "Show me issue #X" query.
@@ -6670,7 +6695,24 @@ class IntentService:
             original_message = intent.context.get("original_message", "")
             match = re.search(r"#?(\d+)", original_message)
 
+            # #2114: no number in the words → the referent is the issue this session
+            # just created ("Show me that issue." after "Created issue #22 …"), read
+            # from the owner-scoped ledger, repo included. No match there → the ask.
+            ledger_ref = None
             if not match:
+                ledger_ref = await self._issue_referent_from_ledger(_user_id, session_id)
+                if ledger_ref is not None:
+                    self.logger.info(
+                        "review_issue_referent_resolved",
+                        session_id=session_id,
+                        resolved_ref=f"{ledger_ref[0]}#{ledger_ref[1]}",
+                    )
+
+            if match:
+                issue_number = int(match.group(1))
+            elif ledger_ref is not None:
+                issue_number = ledger_ref[1]
+            else:
                 return IntentProcessingResult(
                     success=False,
                     message="I couldn't find an issue number in your request. Please specify an issue number (e.g., 'show me issue #123').",
@@ -6683,13 +6725,13 @@ class IntentService:
                     requires_clarification=True,
                 )
 
-            issue_number = int(match.group(1))
-
-            # Optional explicit repo from "issue #N in owner/name" → threaded into resolve_repo.
-            explicit_repo = None
-            repo_match = re.search(r"\bin\s+([\w.\-]+/[\w.\-]+)", original_message)
-            if repo_match:
-                explicit_repo = repo_match.group(1)
+            # Optional explicit repo from "issue #N in owner/name" → threaded into resolve_repo;
+            # a ledger-resolved referent carries its repo (#2114).
+            explicit_repo: Optional[str] = ledger_ref[0] if ledger_ref is not None else None
+            if match:
+                repo_match = re.search(r"\bin\s+([\w.\-]+/[\w.\-]+)", original_message)
+                if repo_match:
+                    explicit_repo = repo_match.group(1)
 
             # RECONNECT (#1327 gap 2): connector-first (issue_read method=get, repo via
             # resolve_repo); native-PAT fallback only when not OAuth-connected; honest-degrade

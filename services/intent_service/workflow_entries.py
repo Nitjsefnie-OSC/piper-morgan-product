@@ -1453,11 +1453,11 @@ _READ_QUERY_COHORT: dict[str, list[str]] = {
 # positional arg. The six GitHub LISTINGS render capped lists, and a capped
 # list must ARM its unrendered remainder so "…and there are more" is a claim
 # it can cash (GatherOutcome §5b) — arming is session-scoped state, so the
-# session id has to reach the handler. The other three stay 2-arg:
-# shipped_this_week / stale_prs / review_issue_query render no capped list
-# with a hidden tail (the first two are window listings rendered whole; the
-# third is one issue). Adding a handler here is a signature change — the
-# factory passes the arg only for members of this set.
+# session id has to reach the handler. shipped_this_week / stale_prs stay
+# 2-arg: window listings rendered whole, no capped list with a hidden tail.
+# review_issue_query joined on #2114 (referent from the session ledger), not
+# for a tail. Adding a handler here is a signature change — the factory
+# passes the arg only for members of this set.
 _READ_QUERY_SESSION_THREADED: frozenset[str] = frozenset(
     {
         "_handle_list_issues_query",
@@ -1466,6 +1466,10 @@ _READ_QUERY_SESSION_THREADED: frozenset[str] = frozenset(
         "_handle_list_releases_query",
         "_handle_list_labels_query",
         "_handle_list_branches_query",
+        # #2114: the one-issue read takes session_id too, so "Show me that
+        # issue" right after a create can resolve its referent from the
+        # session's creation ledger (issue_head) before asking for a number.
+        "_handle_review_issue_query",
     }
 )
 
