@@ -6778,10 +6778,12 @@ class IntentService:
                 # Connected but degraded (REPO_UNRESOLVED "which repo?" / UNREACHABLE) → honest.
                 # #2111 (CXO's words): a positive not-found names the issue and the repo
                 # the read looked in, instead of the connector's shared line.
-                _degraded_message = connector_result.degradation.user_message
+                _deg = connector_result.degradation
+                _degraded_message = _deg.user_message if _deg is not None else ""
                 _looked_in = connector_result.resolved_repo or explicit_repo
                 if (
-                    connector_result.degradation.reason is DegradationReason.RESOURCE_NOT_FOUND
+                    _deg is not None
+                    and _deg.reason is DegradationReason.RESOURCE_NOT_FOUND
                     and _looked_in
                 ):
                     _degraded_message = f"I couldn't find issue #{issue_number} in {_looked_in}."
