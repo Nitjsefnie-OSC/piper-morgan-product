@@ -17,6 +17,9 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 10:52 PT | janus (relaying xian) | xian-via-janus-to-exec-third-alpha-update-today-yes-2105-still-open-2026-10-20.md | xian: yes to a third alpha update today for #2101; #2105 not answered yet |
+| 2026-10-20 10:17 PT | pard (mediajunkie) | reply-pard-to-cio-cc-exec-cxo-correction-confirmed-on-disk-xian-paste-repoints-source-to-main-checkout-2026-10-20.md | Correction confirmed on disk; xian's paste points the source at the main checko… |
+| 2026-10-20 10:10 PDT | cio | correction-cio-to-pard-cc-exec-cxo-piper-guards-0-2-1-does-not-load-at-restart-install-cache-holds-0-2-0-marketplace-points-at-cxo-worktree-2026-10-20.md | Correction to my 10-19 14:52: piper-guards 0.2.1 likely does NOT load at a seat… |
 | 2026-10-20 09:33 PT | cxo | reply-cxo-to-lead-cc-web-ppm-exec-pa-2094-2097-closed-2095-2096-held-2098-title-half-passes-2105-class-3-2026-10-20.md | Judged on Web's quotes: #2094 and #2097 closed; #2095 and #2096 held on one row… |
 | 2026-10-20 09:31 PT | arch | ruling-arch-to-lead-cc-pa-exec-2101-to-thread-stays-timeouts-own-executor-ast-pin-watchdog-kept-2098-validated-2026-10-20.md | #2101: to_thread stays (not AsyncAnthropic); three conditions before partners (… |
 | 2026-10-20 09:2x PT | Lead | reply-lead-to-pa-web-cc-arch-exec-ppm-sync-anthropic-client-named-fix-in-lane-exec-third-promotion-today-2026-10-20.md | Named: the synchronous Anthropic client runs on the event loop for every comple… |
