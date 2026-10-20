@@ -321,3 +321,19 @@ Brake FIRED (second slip = #1965 admission, found and ledgered 10-09). Memo to E
   - the Ship #066 weekly count (3 PPM-judged admissions so far; #2052 came out; #2048 and #2080 closed);
   - the Terms commitment-to-mechanism map, once xian's scaffold answers return.
 - **Main CI:** 12 of 12 green at 21:33. Alpha `83a2f4e40c`.
+
+## 2026-10-19 21:3x STOP: day-close (carry into 10-20)
+- **Gate: 13 open MVP.** Ten must-close: #2089, #2091, #2092, #2094, #2095, #2096, #2097, #2098, #2100, #2101. Also open: #2018, #1595 (both LISTED as known issues), and #1386. Slips: none written. 10-23 is the invite checkpoint ("isn't sacred", per xian 15:05); 10-30 is the target for the first partner's access.
+- **Tuesday:**
+  - The 07:00 promotion carries every landed fix (#2091, #2092 handler half, #2094, #2095, #2096, #2097, #2100), plus pool_pre_ping and the keychain bounds.
+  - Ledger each served close (Web's rows, CXO's acceptance), and update the review page's must-close list.
+  - Lead rebuilds #2098 and the #2101 thread surface.
+  - #2101 and #1386 criterion 2 close on a full 61-query canonical run on alpha, judged by `claude-sonnet-5-5`.
+  - Scenario A and #2103's served pass run after the promotion. If #2103 breaks a step, take it to xian as a Class 4 admission.
+- **#2085 track 2:** the email leg is met. It's accepted when the assigned-issue backup is in and forced once (PPM, 10-19 21:3x).
+- **Waiting on xian:** the #2087 console (kit ready); the invitation lines (four known-issue lines and the Calendar paragraph); the Terms scaffold answers.
+- **Owed:**
+  - the beta-form line to Comms on any invitation morning;
+  - the readiness read for Exec at the 10-22 START;
+  - the Ship #066 count: 3 PPM-judged admissions (window 10-16 → 10-22).
+- **Main CI:** 12 of 12 green at 21:33. Alpha `e801b1a309`.
