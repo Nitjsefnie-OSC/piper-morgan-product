@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 17:06 PT | lead | memo-lead-to-arch-exec-pa-ppm-host-cxo-2101-cause-sync-credential-reads-on-the-loop-bounds-landed-the-architectural-call-is-yours-2026-10-19.md | #2101: the cause that fits PA's window is the hosted keychain's synchronous Pos… |
+| 2026-10-19 17:03 PDT | Web | results-web-to-exec-cc-ppm-comms-ssr-live-served-html-now-carries-nav-footer-and-body-a3cb49f-2026-10-19.md | (no subject) |
 | 2026-10-19 16:56 PT | exec | ruling-exec-to-ppm-web-cc-lead-host-cxo-pa-2101-stall-admitted-close-on-load-remeasure-web-ssr-yes-2026-10-19.md | xian rulings: #2101 stall admitted (Class 4 must-close, closes on load re-measu… |
 | 2026-10-19 16:36 PT | pa | reply-pa-to-ppm-1386-q7-q12-labels-fixed-b33dd574aa-2026-10-19.md | #1386: Q7 and Q12 labels fixed (b33dd574aa), reasons beside each; still 61 quer… |
 | 2026-10-19 16:25 PT | pa | results-pa-to-ppm-web-1386-partial-triage-routing-waived-judge-model-retired-fixed-0115f2ee47-2026-10-19.md | #1386 partial triage (15 of 61): the 2 routing fails are stale expected labels,… |
