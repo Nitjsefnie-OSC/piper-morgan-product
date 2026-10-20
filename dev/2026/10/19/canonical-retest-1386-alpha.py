@@ -429,7 +429,10 @@ Score this response per the rubric. Return only the JSON object."""
             system=JUDGE_SYSTEM_PROMPT,
             messages=[{"role": "user", "content": user_prompt}],
         )
-        raw = message.content[0].text.strip()
+        # The first block can be a ThinkingBlock (10-20 12:14 run, Q3): read the text blocks.
+        raw = "".join(
+            getattr(b, "text", "") for b in message.content if getattr(b, "type", "") == "text"
+        ).strip()
 
         # Strip markdown code fences if the LLM included them
         if raw.startswith("```"):
@@ -440,7 +443,8 @@ Score this response per the rubric. Return only the JSON object."""
             if raw.endswith("```"):
                 raw = raw[:-3].strip()
 
-        parsed = json.loads(raw)
+        # Parse the first JSON object and ignore trailing prose ("Extra data", 10-20 Q17).
+        parsed, _ = json.JSONDecoder().raw_decode(raw[raw.find("{") :] if "{" in raw else raw)
 
         # Sanity-check structure
         for key in ("relevance", "context", "tone", "verdict", "confidence"):
