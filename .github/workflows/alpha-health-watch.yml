@@ -15,6 +15,15 @@
 # A probe "misses" when /health does not answer 200 within 10 s, or answers with
 # `"status":"degraded"` (the #2083 body status: the app is up but its database
 # probe failed).
+#
+# Backup alert (HOST's item 4, Exec 2026-10-19 18:10): the email depends on one
+# account's notification settings, so a failing run ALSO opens, or comments on, one
+# reused issue titled "Alpha health watch: failing", assigned to the repo owner, with
+# the repo's own GITHUB_TOKEN. GitHub mails an assignment and every comment on an
+# assigned issue through a second channel (issue notifications), and the issue is
+# visible on the repo whatever the mail does. A forced run exercises the same path
+# and says so in its comment; close the issue by hand after a forced test or once
+# alpha is steady again (the next real failure reopens or comments on it).
 name: Alpha Health Watch
 
 on:
@@ -33,6 +42,7 @@ concurrency:
 
 permissions:
   contents: read
+  issues: write
 
 jobs:
   probe:
@@ -44,6 +54,7 @@ jobs:
       MISS_LIMIT: "3"
     steps:
       - name: Five probes, one minute apart
+        id: probe
         shell: bash
         run: |
           set -u
@@ -63,9 +74,45 @@ jobs:
             [ "$i" -lt "$PROBES" ] && sleep 60
           done
           echo "misses=$misses of $PROBES (limit $MISS_LIMIT)"
+          echo "misses=$misses of $PROBES" >> "$GITHUB_OUTPUT"
           if [ "${{ inputs.force_fail }}" = "true" ]; then
+            echo "kind=forced" >> "$GITHUB_OUTPUT"
             echo "FORCED FAILURE (acceptance test of the alert email)"; exit 1
           fi
           if [ "$misses" -ge "$MISS_LIMIT" ]; then
+            echo "kind=stall" >> "$GITHUB_OUTPUT"
             echo "ALPHA STALL: $misses of $PROBES probes missed in five minutes"; exit 1
+          fi
+
+      # Backup alert: one reused, assigned issue (see the header). Runs only when the
+      # probe step failed, forced or real.
+      - name: Open or comment on the assigned issue
+        if: failure() && steps.probe.outcome == 'failure'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          ASSIGNEE: ${{ github.repository_owner }}
+          TITLE: "Alpha health watch: failing"
+          KIND: ${{ steps.probe.outputs.kind }}
+          MISSES: ${{ steps.probe.outputs.misses }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -u
+          when=$(date -u +'%Y-%m-%d %H:%M:%SZ')
+          if [ "$KIND" = "forced" ]; then
+            line="FORCED TEST of this alert path ($when): probes $MISSES; close this issue after reading it. Run: $RUN_URL"
+          else
+            line="ALPHA STALL ($when): $MISSES probes of https://alpha.pipermorgan.ai/health missed within five minutes. Run: $RUN_URL"
+          fi
+          number=$(gh issue list --state open --search "in:title \"$TITLE\"" --json number,title \
+            --jq "[.[] | select(.title == \"$TITLE\")][0].number // empty")
+          if [ -n "$number" ]; then
+            gh issue comment "$number" --body "$line"
+            echo "commented on #$number"
+          else
+            gh issue create --title "$TITLE" --assignee "$ASSIGNEE" --body "$(printf '%s\n\n%s' \
+              "Opened by the Alpha Health Watch workflow (.github/workflows/alpha-health-watch.yml) as the backup to the failure email. Each later failure comments here; close it once alpha is steady." \
+              "$line")"
+            echo "opened a new issue"
           fi
