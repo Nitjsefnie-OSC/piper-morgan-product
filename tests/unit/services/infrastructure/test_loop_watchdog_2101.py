@@ -124,3 +124,33 @@ class TestStartupPhase:
         assert wd._thread is None
         assert StartupManager.__init__ is not None
         assert LoopWatchdogPhase is StartupManager(app).phases[-1]
+
+
+class TestVisibility:
+    """PA, 2026-10-20: alpha emits no INFO lines, so the start must be WARNING and
+    /health must say whether the thread is alive; otherwise the watchdog's silence on a
+    stalled run cannot be told from a watchdog that never started."""
+
+    @pytest.mark.asyncio
+    async def test_start_logs_at_warning_and_is_running_tracks_the_thread(self, monkeypatch):
+        events = []
+        monkeypatch.setattr(
+            mod.logger, "warning", lambda event, **kw: events.append((event, kw)), raising=False
+        )
+        wd = LoopWatchdog(stall_seconds=5.0, check_seconds=0.1, heartbeat_seconds=0.1)
+        assert wd.is_running is False
+        wd.start()
+        try:
+            assert wd.is_running is True
+            assert any(e == "event_loop_watchdog_started" for e, _ in events)
+        finally:
+            await wd.stop()
+        assert wd.is_running is False
+
+    def test_source_logs_the_start_at_warning_not_info(self):
+        from pathlib import Path
+
+        src = Path(mod.__file__).read_text()
+        start = src[src.index("def start(self)") : src.index("async def stop(self)")]
+        assert 'logger.warning(\n            "event_loop_watchdog_started"' in start
+        assert "logger.info" not in start

@@ -117,6 +117,11 @@ class LoopWatchdog:
                 logger.error("event_loop_watchdog_check_failed", error=str(e))
 
     # ---- lifecycle -------------------------------------------------------------
+    @property
+    def is_running(self) -> bool:
+        """True while the checker thread is alive (what /health reports)."""
+        return self._thread is not None and self._thread.is_alive()
+
     def start(self) -> None:
         if self._thread is not None:
             return
@@ -124,7 +129,10 @@ class LoopWatchdog:
         self._task = asyncio.get_running_loop().create_task(self._heartbeat())
         self._thread = threading.Thread(target=self._run, name="event-loop-watchdog", daemon=True)
         self._thread.start()
-        logger.info(
+        # WARNING, not INFO: alpha's structured log emits no INFO lines (PA, 2026-10-20),
+        # and a watchdog whose start is invisible cannot have its silence read as a
+        # finding. /health carries `services.loop_watchdog` for the same reason.
+        logger.warning(
             "event_loop_watchdog_started",
             stall_s=self.stall_seconds,
             check_s=self.check_seconds,

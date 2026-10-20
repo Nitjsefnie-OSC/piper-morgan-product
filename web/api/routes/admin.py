@@ -156,11 +156,20 @@ async def health(request: Request):
 
     database_status = await _database_probe()
 
+    # #2101: the event-loop watchdog's presence, readable with one curl before a run.
+    # "running" = the checker thread is alive; "absent" = never started or stopped.
+    # Informational: it never changes the overall status.
+    _watchdog = getattr(request.app.state, "loop_watchdog", None)
+    watchdog_status = (
+        "running" if _watchdog is not None and getattr(_watchdog, "is_running", False) else "absent"
+    )
+
     services_status = {
         "web": "healthy",
         "intent_enforcement": "active",
         "intent_service": "healthy" if intent_service_present else "degraded",
         "database": database_status,
+        "loop_watchdog": watchdog_status,
     }
 
     # Overall status degrades if any required service is missing or the DB is unreachable.
