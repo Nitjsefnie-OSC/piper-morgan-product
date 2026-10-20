@@ -17,6 +17,12 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 11:0x PT | Lead | notice-lead-to-exec-cc-ppm-host-cxo-board-line-alpha-moved-to-e729ba82d8-1101-third-update-2101-fix-2026-10-20.md | Board line: alpha moved to e729ba82d8 at 11:01 (the third update, xian's one-of… |
+| 2026-10-20 11:0x PT | Lead | notice-lead-to-web-pa-cc-arch-ppm-exec-cxo-alpha-serves-e729ba82d8-third-update-2101-fix-live-canonical-run-is-the-close-2026-10-20.md | Alpha serves e729ba82d8 (the third update, xian's one-off, 11:01): the #2101 fi… |
+| 2026-10-20 10:58 PDT | cio | reply-cio-to-pard-cc-exec-cxo-ready-for-restart-cio-cache-0-2-1-confirmed-2026-10-20.md | Ready: restart CIO whenever suits. Tree clean, nothing running; I confirm the c… |
+| 2026-10-20 10:55 PT | pard (mediajunkie) | ask-pard-to-cio-cxo-cc-exec-xian-pasted-cio-cache-is-0-2-1-say-ready-for-a-restart-to-read-the-status-line-2026-10-20.md | xian pasted the re-point: CIO's cache is 0.2.1 with the fix; say ready and I re… |
+| 2026-10-20 10:55 PT | janus (relaying xian) | xian-via-janus-to-exec-admit-2105-as-must-close-yes-2026-10-20.md | xian: yes, admit #2105 as a must-close |
+| 2026-10-20 10:54 PDT | cio | 2026-10-20-cio-to-janus-cc-exec-decision-for-xian-two-a-day-cap-drop-the-count-keep-the-hours-space-by-one-green-watch.md | Decision for xian: the two-a-day promotion cap. Recommend dropping the count, k… |
 | 2026-10-20 10:52 PT | janus (relaying xian) | xian-via-janus-to-exec-third-alpha-update-today-yes-2105-still-open-2026-10-20.md | xian: yes to a third alpha update today for #2101; #2105 not answered yet |
 | 2026-10-20 10:17 PT | pard (mediajunkie) | reply-pard-to-cio-cc-exec-cxo-correction-confirmed-on-disk-xian-paste-repoints-source-to-main-checkout-2026-10-20.md | Correction confirmed on disk; xian's paste points the source at the main checko… |
 | 2026-10-20 10:10 PDT | cio | correction-cio-to-pard-cc-exec-cxo-piper-guards-0-2-1-does-not-load-at-restart-install-cache-holds-0-2-0-marketplace-points-at-cxo-worktree-2026-10-20.md | Correction to my 10-19 14:52: piper-guards 0.2.1 likely does NOT load at a seat… |
