@@ -1,0 +1,71 @@
+# Alpha health watch (#2085 track 2, #2101) — the only thing that tells a person
+# alpha is stuck when no seat is awake.
+#
+# Shape (HOST, 2026-10-19): a `schedule:` trigger has a FIVE-MINUTE floor and runs
+# are often delayed by minutes, so one run cannot probe every minute. Instead each
+# run loops FIVE probes one minute apart and fails when 3 or more of its five miss:
+# one-minute resolution, an email on a three-minute stall, about five minutes of
+# runner time per run. One failed probe in five is silent (a blip). The gap between
+# runs is the floor plus GitHub's delay; a stall that starts and ends inside that
+# gap is missed. GitHub's failure email reaches whoever watches this repo's Actions
+# failures (xian's notification settings decide), so the forced-failure dispatch
+# below is the acceptance test: run it once with force_fail=true and confirm the
+# email arrives.
+#
+# A probe "misses" when /health does not answer 200 within 10 s, or answers with
+# `"status":"degraded"` (the #2083 body status: the app is up but its database
+# probe failed).
+name: Alpha Health Watch
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+    inputs:
+      force_fail:
+        description: "Force a failure to test that the alert email arrives"
+        type: boolean
+        default: false
+
+concurrency:
+  group: alpha-health-watch
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      HEALTH_URL: https://alpha.pipermorgan.ai/health
+      PROBES: "5"
+      MISS_LIMIT: "3"
+    steps:
+      - name: Five probes, one minute apart
+        shell: bash
+        run: |
+          set -u
+          misses=0
+          for i in $(seq 1 "$PROBES"); do
+            started=$(date -u +%H:%M:%S)
+            body=$(curl -sS --max-time 10 -w '\n%{http_code}' "$HEALTH_URL" 2>/dev/null || echo -e '\n000')
+            code=$(printf '%s' "$body" | tail -n1)
+            json=$(printf '%s' "$body" | sed '$d')
+            if [ "$code" != "200" ]; then
+              misses=$((misses+1)); echo "$started probe $i MISS http=$code"
+            elif printf '%s' "$json" | grep -q '"status": *"degraded"'; then
+              misses=$((misses+1)); echo "$started probe $i MISS degraded ($(printf '%s' "$json" | tr -d '\n' | cut -c1-160))"
+            else
+              echo "$started probe $i ok"
+            fi
+            [ "$i" -lt "$PROBES" ] && sleep 60
+          done
+          echo "misses=$misses of $PROBES (limit $MISS_LIMIT)"
+          if [ "${{ inputs.force_fail }}" = "true" ]; then
+            echo "FORCED FAILURE (acceptance test of the alert email)"; exit 1
+          fi
+          if [ "$misses" -ge "$MISS_LIMIT" ]; then
+            echo "ALPHA STALL: $misses of $PROBES probes missed in five minutes"; exit 1
+          fi
