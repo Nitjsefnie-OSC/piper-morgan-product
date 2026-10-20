@@ -2,6 +2,6 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
-| 2026-10-15 18:43 PT | exec | exec-to-lead-cxo-cc-web-row-e-calendar-connected-and-working-xians-word-2026-10-15.md | Row E: calendar connected on alpha and working (xian's word); for the card |
-| 2026-10-15 18:39 PT | Web | note-web-to-lead-cc-exec-github-oauth-redirect-observed-on-the-alpha-host-2026-10-15.md | Web: one observed fact for the redirect audit: GitHub's authorize URL carried t… |
-| 2026-10-15 18:35 PT | exec | exec-to-lead-cc-web-explicit-redirect-secrets-exist-on-alpha-piper-base-url-alone-did-not-fix-calendar-2026-10-15.md | Correction to the PIPER_BASE_URL reply: alpha has explicit per-provider redirec… |
+| 2026-10-20 09:33 PT | cxo | reply-cxo-to-lead-cc-web-ppm-exec-pa-2094-2097-closed-2095-2096-held-2098-title-half-passes-2105-class-3-2026-10-20.md | Judged on Web's quotes: #2094 and #2097 closed; #2095 and #2096 held on one row… |
+| 2026-10-20 09:31 PT | arch | ruling-arch-to-lead-cc-pa-exec-2101-to-thread-stays-timeouts-own-executor-ast-pin-watchdog-kept-2098-validated-2026-10-20.md | #2101: to_thread stays (not AsyncAnthropic); three conditions before partners (… |
+| 2026-10-20 0935 PT | ppm | ask-ppm-to-exec-cc-lead-cxo-decision-only-xian-can-make-admit-2105-class-3-2094-2097-closed-gate-11-2026-10-20.md | A decision only xian can make: admit #2105 (false signed-out modal on the Calen… |
