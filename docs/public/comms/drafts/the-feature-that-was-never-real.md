@@ -4,7 +4,7 @@ alt: ''
 caption: ''
 ---
 
-# The Feature That Was Never Real
+# The Phantom Feature
 
 *August 15, 2026*
 
