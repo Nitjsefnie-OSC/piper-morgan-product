@@ -32,17 +32,13 @@
 </style>
 <div class="wrap">
 <h1>Attention rollup — Tuesday 20 October</h1>
-<p class="meta">Exec · v453, rebuilt 12:0x PDT Tue 10-20 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
-
-<div class="card hot"><b>Correction: alpha isn&rsquo;t down for everyone.</b> The 11:08 limit is the <b>$10 cap on the piper-morgan-test workspace</b> (Anthropic&rsquo;s email to you at 11:08:09, the same second the errors began). Web&rsquo;s two test accounts use that key, so their chat is paused until 11-01. Users on alpha&rsquo;s own key should be fine (likely, not tested). My earlier card said everyone was hit; that was wrong.
-<ol>
-<li><b>Raise the test workspace&rsquo;s cap?</b> <b>Lean yes, to about $30,</b> and check the month&rsquo;s total against the project&rsquo;s $250 ceiling ($200 credit plus the $50 overage you&rsquo;ve already set). Pro: Web&rsquo;s closing run for #2101, CXO&rsquo;s held rows and scenario A all run on those test accounts. Con: $20 more of the month. No means those checks wait until 11-01, or move to an account with no stored key.</li>
-<li><b>Turn off the two background classifiers on alpha</b> (Arch ruled 11:54; it&rsquo;s a Fly setting, so it&rsquo;s your hand): <code>fly secrets unset PIPER_INVERSION_SHADOW PIPER_PRECLAIM_SHADOW -a piper-morgan</code>. <b>Lean yes.</b> Pro: about two of every five Claude calls per turn this morning were these measurements, and they spend whatever key the user has, including a partner&rsquo;s own (#2109). Arch says no gate reads their data. Con: alpha restarts once, a short blip. Undo is setting them back to 1, after #2109 lands and with a sample rate of 0.1 or lower.</li>
-</ol></div>
+<p class="meta">Exec · v454, rebuilt 12:1x PDT Tue 10-20 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
 
 
 
-<div class="card win"><b>Ruled and relayed today:</b> 11:08: no daily count on alpha updates; the next waits for one passing health check (CIO amended the grant, live). At beta, probably nightly deploys from staging. 11:03: #2105 admitted as a must-close (must-close now 9; Lead fixes it after the stall). 10:53: a third alpha update today for the stall fix, yes. Pard&rsquo;s plugin paste: done, and both restarted seats show the new version.</div>
+
+
+<div class="card win"><b>Ruled and relayed today:</b> 12:0x: you raised the test workspace&rsquo;s limit to $20 (the $10 cap on Web&rsquo;s test key was the 11:08 cause, not alpha&rsquo;s main key) and switched off the two background classifiers. Budget: $250 total this month. 11:08: no daily count on alpha updates; the next waits for one passing health check (CIO amended the grant, live). At beta, probably nightly deploys from staging. 11:03: #2105 admitted as a must-close (must-close now 9; Lead fixes it after the stall). 10:53: a third alpha update today for the stall fix, yes. Pard&rsquo;s plugin paste: done, and both restarted seats show the new version.</div>
 <div class="card"><b>Alpha moved to 54a5ba990f at 11:45</b>, the first update under the new rule (my /health read: healthy, database healthy). It carries the #2105 fix: Refresh List on an unconnected calendar now says to connect it first, with no false sign-out. <b>The stall fix is live and measured:</b> 0 freezes over 21 live turns. Lead closes #2101 on the next full run with Claude answering. #2105 passed on Web&rsquo;s check (CXO closes). Earlier builds today carried #2091&ndash;#2100, #2098, #2097&rsquo;s confirm fix and the watchdog. CXO closed #2094 and #2097; #2095, #2096 and #2098 each wait on one more check. <b>Your rows</b> (test card v86), whenever you test; nothing gates until Web&rsquo;s rows are judged:
 <ul>
 <li>A2: on your Calendar account, <code>what's my agenda Thursday?</code> should list Thursday&rsquo;s events (#2091). For <code>Do I have any meetings this week?</code>, you say whether that week really has events (#2092).</li>
@@ -98,6 +94,7 @@
 <div class="card">MVP gate: <b>11 open</b>, 9 must-close once PPM moves #2105 in (#2094 and #2097 closed live 09:32, CXO; 0 days moved). Open: #2101, #2100, #2098, #2096, #2095, #2092, #2091, #2089, #2018, epic #1595, gate #1386. CXO holds #2095, #2096 and #2098 on one row each. 10-23 is your checkpoint, not a target to squeeze into. <code>e801b1a309</code>, healthy, database healthy.</div>
 <h2>✅ Removed this rebuild</h2>
 <div class="card">The stall, website SSR and keys decisions (ruled 16:57); the Calendar, #2097/#2098, /privacy and section A decisions (ruled); the alembic reads (passed); the invite file (written); the Console look (sent to Pard); #2090 (backfilled); the DB card (your reads answered it). Older notes are in git history.</div>
+<p class="meta">v454 (12:1x 10-20): your words in session; my curl /health 54a5ba990f healthy at 12:06.</p>
 <p class="meta">v453 (12:0x 10-20): Gmail search found Anthropic&rsquo;s 18:08:09Z email: piper-morgan-test workspace, $10 monthly limit, paused until 11-01. Janus 12:14, Lead 11:5x, Web 11:50, Arch 11:54 read in full. Corrects v451&rsquo;s &ldquo;every keyless user&rdquo;.</p>
 <p class="meta">v452 (11:5x 10-20): Lead 11:4x read in full; my curl /health 54a5ba990f healthy, database healthy.</p>
 <p class="meta">v451 (11:4x 10-20): PA 11:37 and Web 11:34 read in full (the quoted error is the API&rsquo;s text in PA&rsquo;s stream; I did not curl chat myself); CIO 11:24, Pard 11:08, CXO 11:07, Janus 11:08 read.</p>
