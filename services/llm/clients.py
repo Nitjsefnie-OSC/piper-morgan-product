@@ -5,6 +5,7 @@ Handles connections to Anthropic, OpenAI, and Gemini.
 Uses LLMConfigService for secure key management and validation.
 """
 
+import asyncio
 from collections import Counter
 from typing import Any, Dict, Optional
 
@@ -583,7 +584,13 @@ class LLMClient:
 
         # Note: Anthropic doesn't support response_format like OpenAI
         # JSON mode must be handled via prompt engineering
-        response = client.messages.create(**request_params)
+        # #2101: the SDK client here is synchronous (sync httpx down to ssl.read);
+        # called directly it holds the event loop for the whole round trip, and a
+        # chat turn stacks several completions (PA's watchdog read, 2026-10-20: 26 of
+        # 26 blocks, 91 s of 155 blocked during the canonical run). The round trip
+        # runs in a worker thread; the client is still built on the loop above, where
+        # the request's key contextvar is read.
+        response = await asyncio.to_thread(client.messages.create, **request_params)
 
         # Extract actual token counts from response
         prompt_tokens = (
@@ -657,7 +664,8 @@ class LLMClient:
         if response_format:
             request_params["response_format"] = response_format
 
-        response = client.chat.completions.create(**request_params)
+        # #2101: same as the Anthropic leg — the sync SDK call runs off the loop.
+        response = await asyncio.to_thread(client.chat.completions.create, **request_params)
 
         # Extract actual token counts from response
         prompt_tokens = (
