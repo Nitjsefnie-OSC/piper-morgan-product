@@ -4489,6 +4489,33 @@ HAND_ROWS = [
         "source": "phase3-rule10/SET_DEFAULT_REPO_PATTERNS synthesized",
         "notes": "rule-10 held literal (SET_DEFAULT_REPO_PATTERNS); origin=synthesized; framing declarative per Arch 10-09 (pins 1960: asks first)",
     },
+    # 2026-10-20 (Lead) — #2098 (Arch's shape, his NOT ACCEPTED note of 2026-10-19 23:04Z): the drafted-issue carrier
+    # consults the router on a held turn with update_issue as its answering operation.
+    # Row 1 is Web's scenario-B3 turn verbatim (served e801b1a309): a title change with its
+    # value. Row 2 is body prose that the reverted marker list misfired on ("call it"):
+    # the router must read it as none (floor) so the carrier binds it to the body.
+    {
+        "phrase": "Actually, change the title to 'Implement full-text search across nav and global search bar'",
+        "category": "EXECUTION",
+        "expected": "action:update_issue",
+        "expected_args": {"title": "Implement full-text search across nav and global search bar"},
+        "source": "issue-2098 Web #1386 scenario B3 turn 3, served e801b1a309 2026-10-19",
+        "notes": (
+            "armed drafted-issue carrier: a BIND on update_issue with this title retitles the "
+            "pending draft (drafted_issue._consult_title_change); the draft's own number is the "
+            "carrier's, the router only supplies the title"
+        ),
+    },
+    {
+        "phrase": "Also we should call it out in the release notes",
+        "category": "EXECUTION",
+        "expected": "floor",
+        "source": "issue-2098 Arch's misfire control 2026-10-19 (the marker list retitled to 'out in the release notes')",
+        "notes": (
+            "body prose on a held draft: none is the honest router verdict; the carrier then "
+            "appends it to the body (the #1627 bind). A title read here is the binder's mistake"
+        ),
+    },
 ]
 
 

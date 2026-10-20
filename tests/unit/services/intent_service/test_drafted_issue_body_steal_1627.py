@@ -65,7 +65,12 @@ _USER = "3f7b8a52-1627-4b00-9e00-000000001627"
 class _ExplosiveLLM:
     """Any attribute access = the classifier consulted the LLM. The bound
     prose turn must resolve at the pending-offer seam, before classification
-    — the live theft happened because nothing held it there."""
+    — the live theft happened because nothing held it there.
+
+    #2098 (2026-10-20): the seam now makes ONE router consult on a held turn
+    (ADR-080, Arch's shape); its failure path is CONFIRM, which is today's
+    body bind, so these pins still hold without an LLM. The hold itself is
+    unchanged: prose never reaches the classification chain."""
 
     def __getattr__(self, name):
         raise AssertionError(

@@ -262,8 +262,8 @@ class TestCensusDenominators:
         claimed = sum(1 for r in records if r.claim.pattern_list is not None)
         unclaimed = sum(1 for r in records if r.claim.pattern_list is None)
         assert claimed + unclaimed == len(records)
-        assert claimed + unclaimed == 599, (
-            "the corpus is 599 rows as of the 2026-10-19 #2094 'Create three todos: review the roadmap, email the team, and book the launch venue' args row (+1, measured: expected_args.items, three elements; the one NEW failure of Tests run 39334911042 on 2ba2cefc4f, this pin lagging the row); "
+        assert claimed + unclaimed == 601, (
+            "the corpus is 601 rows as of the 2026-10-20 #2098 consult rows (+2: the scenario-B3 title change with its value, and Arch's misfire control 'Also we should call it out in the release notes' expecting floor); before that 599 as of the 2026-10-19 #2094 'Create three todos: review the roadmap, email the team, and book the launch venue' args row (+1, measured: expected_args.items, three elements; the one NEW failure of Tests run 39334911042 on 2ba2cefc4f, this pin lagging the row); "
             "598 rows as of the 2026-10-17 #2051 'what issues are assigned to me?' row (+1, list_assigned_issues alias; measured in the rule-7 batch run); "
             "597 rows as of the 2026-10-16 #2069 'Add a project called Baz with description testing the description' args row (+1, unmeasured at deposit: expected_args.name/description); "
             "596 as of the 2026-10-13 #1976 'add a todo to web test one' args row (+1, measured: expected_args.text); 595 as of the 2026-10-13 #1987 'delete a reminder' row (+1, context-dependent, informational — the half-2 numbered pick); 594 as of the 2026-10-12 #1987 'delete that reminder' row (+1, context-dependent, informational — "
