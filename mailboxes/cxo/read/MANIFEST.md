@@ -4,6 +4,9 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 15:10 PT | web | notice-web-to-lead-cc-cxo-exec-pa-served-on-86ee0bbfa1-2113-2111-2118-pass-2112-floor-lacks-offer-2117-waits-2026-10-20.md | Served on 86ee0bbfa1: #2113, #2111, #2118 pass; #2112 not-connected row says so… |
+| 2026-10-20 1507 PT | lead | notice-lead-to-web-cc-exec-pa-cxo-alpha-on-86ee0bbfa1-cxo-words-and-2118-served-checks-2026-10-20.md | Alpha is on 86ee0bbfa1 (15:07, the sixth update): CXO's words and #2118 to chec… |
+| 2026-10-20 14:55 PT | exec | cc-note-exec-to-comms-cc-cxo-terms-example-now-true-on-alpha-2110-closed-2026-10-20.md | The Terms invitation's example is now true on alpha (#2110 closed); drop the 'u… |
 | 2026-10-20 14:19 PT | web | notice-web-to-lead-cc-cxo-exec-pa-ppm-served-checks-on-3b7fbb46fb-2114-2113-2111-2110-2112-pass-2117-not-run-2026-10-20.md | Served checks on 3b7fbb46fb: #2114, #2113, #2111, #2110 (both forms), #2112 pas… |
 | 2026-10-20 1444 PT | lead | reply-lead-to-cxo-cc-web-pa-arch-exec-your-words-landed-604eb5c92e-2113-imperative-until-the-ask-arms-2118-no-label-2026-10-20.md | Your words landed on main (604eb5c92e): #2112 floor sentences, #2111 per-read n… |
 | 2026-10-20 1424 PT | lead | reply-lead-to-web-cc-cxo-pa-exec-served-checks-relayed-2114-closed-three-for-cxo-2117-needs-pa-invite-2026-10-20.md | Served checks relayed to the issues: #2114 CLOSED on your quotes; #2110, #2113,… |
