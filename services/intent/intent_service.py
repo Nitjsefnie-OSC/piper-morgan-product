@@ -6776,9 +6776,18 @@ class IntentService:
                 issue = await github_router.get_issue(issue_number)
             else:
                 # Connected but degraded (REPO_UNRESOLVED "which repo?" / UNREACHABLE) → honest.
+                # #2111 (CXO's words): a positive not-found names the issue and the repo
+                # the read looked in, instead of the connector's shared line.
+                _degraded_message = connector_result.degradation.user_message
+                _looked_in = connector_result.resolved_repo or explicit_repo
+                if (
+                    connector_result.degradation.reason is DegradationReason.RESOURCE_NOT_FOUND
+                    and _looked_in
+                ):
+                    _degraded_message = f"I couldn't find issue #{issue_number} in {_looked_in}."
                 return IntentProcessingResult(
                     success=True,
-                    message=connector_result.degradation.user_message,
+                    message=_degraded_message,
                     intent_data={
                         "category": intent.category.value,
                         "action": intent.action,
@@ -12428,9 +12437,14 @@ class IntentService:
                 )
                 if clarify is not None:
                     return clarify
+                # #2113 (CXO's words): a question, not an error — the routing
+                # already landed on the right issue; only the field is missing.
                 return IntentProcessingResult(
                     success=False,
-                    message="Cannot update issue: no fields to update specified. Please provide at least one field to update (title, body, state, labels, or assignees).",
+                    message=(
+                        f"What would you like to change on #{issue_number}? I can update "
+                        "the title, the body, the state, the labels or the assignees."
+                    ),
                     intent_data={
                         "category": intent.category.value,
                         "action": intent.action,

@@ -467,7 +467,8 @@ Enhanced conversational context, MCP deployment, pattern validation.
                 pm_start=pm_numbers.get("start_number", 1),
                 pm_padding=pm_numbers.get("padding", 3),
                 api_base=github_section.get("api_base", "https://api.github.com"),
-                default_labels=github_section.get("default_labels", ["enhancement"]),
+                # #2118 (CXO): no default label on a create unless the config names one.
+                default_labels=github_section.get("default_labels", []),
             )
 
             logger.info(

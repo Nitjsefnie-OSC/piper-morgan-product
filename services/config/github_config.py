@@ -95,5 +95,6 @@ class GitHubConfiguration:
             pm_prefix="PM-",
             pm_start=1,
             pm_padding=3,
-            default_labels=["enhancement"],
+            # #2118 (CXO): no label nobody asked for; a configured list still applies.
+            default_labels=[],
         )

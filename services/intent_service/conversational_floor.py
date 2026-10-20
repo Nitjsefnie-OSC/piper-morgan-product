@@ -1669,6 +1669,21 @@ class ConversationalFloor:
                     lines.append(
                         "- Not connected (available in Settings): " + ", ".join(not_connected)
                     )
+                    # #2112 (CXO's words): the sentence to use for a connector that
+                    # is not connected, so the floor says so and offers the connection.
+                    from services.intent_service.capability_legibility import (
+                        not_connected_line,
+                    )
+
+                    for i in integrations:
+                        if not isinstance(i, dict) or i.get("status") in (
+                            "active",
+                            "needs_reconnecting",
+                        ):
+                            continue
+                        _line = not_connected_line(str(i.get("name")))
+                        if _line:
+                            lines.append(f"  - {_disp(i.get('name'))}: say \"{_line}\"")
                 # #2100: what chat can read from each, connected or not, from code
                 # (the model must never fill this in). An empty declaration renders
                 # the can't-read sentence (CXO's words).
