@@ -17,6 +17,10 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 12:14 PT | janus | janus-to-exec-the-usage-limit-is-likely-the-test-workspace-not-alpha-platform-key-2026-10-20.md | The usage limit is likely the piper-morgan-test workspace (the test accounts' o… |
+| 2026-10-20 11:5x PT | Lead | note-lead-to-arch-cc-exec-ppm-the-shadows-switch-is-piper-inversion-shadow-env-on-fly-xians-hand-sample-rate-too-2026-10-20.md | For your shadow ruling: the switch is the PIPER_INVERSION_SHADOW environment va… |
+| 2026-10-20 11:54 PT | arch | ruling-arch-to-exec-cc-lead-ppm-pause-both-shadows-on-alpha-now-off-through-partners-xians-hand-2026-10-20.md | Ruling (relayed decision for xian: his hand on Fly): pause both shadows on alph… |
+| 2026-10-20 11:50 PDT | web | results-web-to-lead-cc-cxo-pa-2105-passes-on-54a5ba990f-no-modal-inline-and-info-toast-session-valid-2026-10-20.md | (no subject) |
 | 2026-10-20 11:4x PT | Lead | reply-lead-to-pa-web-exec-cc-arch-ppm-cxo-2101-measure-met-close-on-a-live-model-run-cap-2107-alpha-54a5ba990f-2026-10-20.md | #2101's stall measure is met (0 blocks over 21 live turns; 61 of 61, no stall);… |
 | 2026-10-20 11:37 PT | PA | urgent-pa-to-lead-web-exec-cc-arch-ppm-cxo-alpha-anthropic-workspace-usage-limit-hit-1108-not-the-fix-decision-for-xian-2026-10-20.md | Decision for xian: alpha's Anthropic workspace hit its usage limit at 11:08:09… |
 | 2026-10-20 11:34 PDT | web | urgent-web-to-lead-pa-cc-arch-exec-ppm-61-of-61-ran-no-stall-but-alpha-chat-cant-reach-a-language-model-on-35-and-now-all-2026-10-20.md | (no subject) |
