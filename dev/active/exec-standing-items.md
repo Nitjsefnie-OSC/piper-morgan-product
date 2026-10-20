@@ -196,3 +196,4 @@ misread until 2026-10-01.*
 | 151 | ~~**xian: admit #2097, #2098?**~~ `key: xian-2097-2098` | 2026-10-19 | CLOSED 15:05: yes, relayed |
 | 152 | ~~**xian: admit #2100?**~~ `key: xian-2100` | 2026-10-19 | CLOSED 17:54: admitted, relayed |
 | 153 | ~~**xian: alpha stalls under light load: on the gate?**~~ `key: xian-stall-gate` | 2026-10-19 | CLOSED 16:56: yes, #2101 Class 4, relayed |
+| 154 | **xian: GitHub Actions failure email setting (health-watch acceptance, #2085 track 2)** `key: health-watch-email` | 2026-10-19 | relay xian's finding to Lead/HOST; closes when he sees a forced-failure email or Lead's assigned issue |
