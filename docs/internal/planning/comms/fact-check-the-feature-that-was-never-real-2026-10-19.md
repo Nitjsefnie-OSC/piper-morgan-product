@@ -74,7 +74,7 @@ xian, 10-20: "please use that same rigor with the draft. read it through for sen
 | July 2025: Piper summarized uploaded files in chat | `8b2997849b:main.py` (ANALYZE_FILE result → "Here's my summary of…"); `workflow_factory.py` analyze_file mapping; omnibus 07-07, 07-12, 07-13 | Holds |
 | One path said "couldn't generate a summary" when it had made one | omnibus 07-07 line 14, 07-12 ("misleading") | Holds |
 | "like markdown had a fight with Unicode and everybody lost", in a post about that week | "Two-Fisted Coding", work 07-08, published 2025-08-01 (calendar) | Holds |
-| The team spent the following week fixing them | omnibus 07-07 → 07-13 | Holds |
+| Within days both were fixed: structured output, the app builds the formatting, the false failure gone | omnibus 07-09 (JSON mode, `DocumentSummary.to_markdown()`, 19 tests), 07-12 (SUMMARIZE result contract fixed); the Two-Fisted post (about 07-08) still says "remains unsolved" | Holds (revised 10-20 on xian's question). No July screenshot of a clean summary was found. Aside: the 09-2026 run-on bullets (#1729) came from code re-bulleting that same `to_markdown()` output |
 | Broke 2025-08-22 in a commit about multi-agent and standup; smaller engine; no handler for file analyze/summarize or six others incl. GitHub issue creation | Arch audit §1; `2ad8d639dd` message | Holds |
 | September bug diagnosed as a missing connection, fixed by routing around | #172 (closed 09-18), Arch audit §2 | Holds |
 | Comment "broken in August 22 refactor", only the standup restored | `4ecdd5ef3d:web/app.py:715` | Holds |

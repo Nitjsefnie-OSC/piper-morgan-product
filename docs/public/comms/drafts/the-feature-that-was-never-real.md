@@ -26,7 +26,7 @@ That evening I approved Lead's recommended repair: connect chat to the summarize
 
 The report never matched my memory. I was sure I had used document summarization early on, so two months later, getting this post ready, I asked my communications agent (Comms) to check the record.
 
-It had worked. In July 2025, Piper summarized uploaded files in chat. The summaries were rough. One path reported that it "couldn't generate a summary" when it had made one, and in a post I later wrote about that week I described the formatting as looking "like markdown had a fight with Unicode and everybody lost." The team spent the following week fixing them.
+It had worked. In July 2025, Piper summarized uploaded files in chat. The summaries were rough. One path reported that it "couldn't generate a summary" when it had made one, and in a post I later wrote about that week I described the formatting as looking "like markdown had a fight with Unicode and everybody lost." Within days the team had fixed both. The summarizer started returning structured data, the app built the formatting itself, and the false failure message went away.
 
 It broke on August 22nd, 2025, inside a large commit about something else, a new multi-agent system and a morning standup. That commit replaced the engine that ran Piper's longer tasks with a smaller one. The new engine had no handler for analyzing or summarizing a file, or for six other kinds of task, including creating a GitHub issue from chat.
 
