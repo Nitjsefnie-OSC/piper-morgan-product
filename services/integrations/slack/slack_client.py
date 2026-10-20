@@ -7,6 +7,7 @@ Implements production-ready Slack API design following GitHub client patterns.
 """
 
 import asyncio
+import contextlib
 import logging
 import time
 from dataclasses import dataclass, field
@@ -80,18 +81,39 @@ class SlackClient:
         self.user_id = user_id
         self.logger = logging.getLogger(__name__)
         self._session: Optional[ClientSession] = None
+        # #2102: a persistent session is held ONLY inside ``async with SlackClient(...)``.
+        # A client built bare (the per-turn integration router, the settings route) never
+        # closed the session _ensure_session made on its first request: one
+        # "Unclosed client session" per standup turn on alpha (PA's 2026-10-20 read, 8 in
+        # four bursts, all on the standup/context-assembly path).
+        self._entered = False
         self._rate_limit_reset = 0
         self._requests_this_minute = 0
         self._last_request_time = 0
 
     async def __aenter__(self):
         """Async context manager entry"""
+        self._entered = True
         await self._ensure_session()
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         """Async context manager exit"""
         await self._close_session()
+        self._entered = False
+
+    @contextlib.asynccontextmanager
+    async def _request_session(self):
+        """#2102: the session for one request. Inside ``async with SlackClient(...)`` it is
+        the held session; for a bare client it is a short-lived session closed after the
+        request, so nothing is left for the garbage collector to warn about."""
+        if self._entered:
+            await self._ensure_session()
+            yield self._session
+            return
+        config = self.config_service.get_config(self.user_id)
+        async with ClientSession(timeout=ClientTimeout(total=config.timeout_seconds)) as session:
+            yield session
 
     async def _ensure_session(self):
         """Ensure HTTP session is available"""
@@ -141,7 +163,6 @@ class SlackClient:
         SlackResponse) rather than calling Slack with an empty bearer. ``params`` sends
         query-string params (search.messages is a GET/params method, not JSON-body).
         """
-        await self._ensure_session()
         await self._check_rate_limit()
 
         config = self.config_service.get_config(self.user_id)
@@ -173,13 +194,16 @@ class SlackClient:
         try:
             self._requests_this_minute += 1
 
-            async with self._session.request(
-                method=method,
-                url=url,
-                json=request_data,
-                params=params,
-                headers=request_headers,
-            ) as response:
+            async with (
+                self._request_session() as session,
+                session.request(
+                    method=method,
+                    url=url,
+                    json=request_data,
+                    params=params,
+                    headers=request_headers,
+                ) as response,
+            ):
                 response_data = await response.json()
 
                 # Handle rate limiting
