@@ -2770,7 +2770,7 @@ corpus:
   - phrase: "Actually, change the title to 'Implement full-text search across nav and global search bar'"
     category: EXECUTION
     expected: action:update_issue
-    source: "issue-2098 Web #1386 scenario B3 turn 3, served e801b1a309 2026-10-19"
+    source: "phase3-args/update_issue issue-2098 Web #1386 scenario B3 turn 3, served e801b1a309 2026-10-19"
     expected_args: {"title": "Implement full-text search across nav and global search bar"}
     notes: "armed drafted-issue carrier: a BIND on update_issue with this title retitles the pending draft (drafted_issue._consult_title_change); the draft's own number is the carrier's, the router only supplies the title"
   - phrase: "Also we should call it out in the release notes"
