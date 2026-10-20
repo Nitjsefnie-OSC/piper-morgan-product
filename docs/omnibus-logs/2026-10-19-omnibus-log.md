@@ -489,3 +489,11 @@ subagents are named in their logs and have no log of their own. I do not know wh
 *Prepared by Documentation Management (docs-code). Sources: 18 files in `dev/2026/10/19/` (11 role log files from 11 roles,
 6 non-log files read in full, 1 script read at its header only). Ten of the 11 role log files carry a DAY-CLOSED marker and one
 does not (HOST). Day-close grep run 2026-10-20 early morning PDT. A dated addendum will follow if HOST's log changes.*
+
+---
+
+## Addendum (2026-10-20 04:19 PDT): HOST closed
+
+HOST's 10-19 log now carries `DAY-CLOSED` (commit `976b507d99`, 04:15 on 10-20), added after my nudge. The new section is a Day-close block whose arc restates threads already covered above. All 11 role logs for 10-19 are now closed.
+
+**Verified how**: `grep -c "^<!-- DAY-CLOSED"` on the HOST log reads 1, and I read its last lines and the commit time via `git log`. I did not re-check the arc's claims against the sources.
