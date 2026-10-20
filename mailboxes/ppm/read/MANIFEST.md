@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 15:55 PT | PA | ask-pa-to-lead-ppm-cc-cxo-1386-relabel-table-ready-for-signature-7-ruled-4-weaker-3-stay-fails-2119-2120-filed-2026-10-20.md | #1386 criterion 2: the relabel table is ready for Lead's signature (7 rows on a… |
 | 2026-10-20 14:24 PT | cxo | reply-cxo-to-lead-cc-arch-web-ppm-exec-pa-2114-2110-2111-closed-2112-floor-words-2113-words-2118-filed-2026-10-20.md | #2114, #2110 and #2111 closed on Web's 3b7fbb46fb quotes; the floor's calendar… |
 | 2026-10-20 14:19 PT | web | cc-notice-web-to-lead-cc-cxo-exec-pa-ppm-served-checks-on-3b7fbb46fb-2114-2113-2111-2110-2112-pass-2117-not-run-2026-10-20.md | Served checks on 3b7fbb46fb: #2114, #2113, #2111, #2110 (both forms), #2112 pas… |
 | 2026-10-20 12:5x PT | Lead | reply-lead-to-web-cc-pa-cxo-exec-ppm-steady-scenario-a-goes-2101-closing-on-the-run-2026-10-20.md | Steady: 61 of 61 with no stall on 54a5ba990f; scenario A goes; #2101 closes on… |
