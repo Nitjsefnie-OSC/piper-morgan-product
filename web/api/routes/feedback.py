@@ -78,7 +78,9 @@ async def submit_feedback(
         # Arch (#2096 validation): "//evil.example/x" starts with "/" and is a
         # protocol-relative outside URL; only a single leading slash is a path here.
         _ctx = (
-            {"page_path": _path} if _path.startswith("/") and not _path.startswith("//") else None
+            {"page_path": _path}
+            if _path.startswith("/") and not _path.startswith(("//", "/\\"))
+            else None
         )
         feedback_id = await feedback_service.capture_feedback(
             session_id=f"api-{current_user.sub}",

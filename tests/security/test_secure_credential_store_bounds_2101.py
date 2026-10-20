@@ -90,6 +90,13 @@ class TestConnectTimeout:
         assert 1 <= mod.CONNECT_TIMEOUT_SECONDS <= 10
 
 
+@pytest.fixture(autouse=True)
+def _clear_process_cache():
+    mod._READ_CACHE.clear()
+    yield
+    mod._READ_CACHE.clear()
+
+
 class TestReadCache:
     def test_second_read_within_ttl_does_not_connect(self):
         store, eng = _store()
@@ -142,3 +149,33 @@ class TestSlowReadWarning:
         with patch.object(mod.logger, "warning") as warn:
             store.get("k")
         warn.assert_not_called()
+
+
+class TestCacheIsProcessWide:
+    """Arch (#2101 ruling): KeychainService() builds a fresh store per construction, so
+    the cache must be shared across instances: write through A, read through B; delete
+    through A, B reads None."""
+
+    def test_write_through_one_instance_is_read_through_another(self):
+        eng = _FakeEngine()
+        a = EncryptedDBCredentialStore(encryptor=_Enc(), engine=eng)
+        b = EncryptedDBCredentialStore(encryptor=_Enc(), engine=eng)
+        assert b.get("k") == "v1"
+        a.store("k", "v2")
+        assert b.get("k") == "v2"
+
+    def test_delete_through_one_instance_is_seen_by_another(self):
+        eng = _FakeEngine()
+        a = EncryptedDBCredentialStore(encryptor=_Enc(), engine=eng)
+        b = EncryptedDBCredentialStore(encryptor=_Enc(), engine=eng)
+        assert b.get("k") == "v1"
+        a.delete("k")
+        assert b.get("k") is None
+
+    def test_a_fresh_instance_hits_the_cache(self):
+        eng = _FakeEngine()
+        a = EncryptedDBCredentialStore(encryptor=_Enc(), engine=eng)
+        assert a.get("k") == "v1"
+        b = EncryptedDBCredentialStore(encryptor=_Enc(), engine=eng)
+        assert b.get("k") == "v1"
+        assert eng.connects == 1

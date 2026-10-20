@@ -86,6 +86,15 @@ class TestSubmitFromThePage:
         kw = svc.capture_feedback.await_args.kwargs
         assert kw["context"] is None and kw["source"] == "api"
 
+    def test_a_backslash_scheme_relative_path_is_not_attached(self):
+        # Arch: "/\\evil.example" is a browser-tolerated protocol-relative form too.
+        svc = _service()
+        r = _client(svc).post(
+            "/api/v1/feedback", json={"content": "Hi", "page_path": "/\\evil.example/x"}
+        )
+        assert r.status_code == 200
+        assert svc.capture_feedback.await_args.kwargs["context"] is None
+
     def test_empty_content_is_refused_without_a_write(self):
         svc = _service()
         r = _client(svc).post("/api/v1/feedback", json={"content": "   "})

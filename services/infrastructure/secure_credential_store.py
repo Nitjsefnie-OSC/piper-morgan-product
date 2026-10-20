@@ -55,6 +55,14 @@ SLOW_READ_SECONDS = 1.0
 # loop in every later async test of the same run, the 4 errors of 1a38f0d775).
 _clock = time.monotonic
 
+# Arch (#2101 ruling, comment 6280164505): the read cache is PROCESS-WIDE, not
+# per instance. KeychainService() builds a fresh store on every construction
+# (43 sites), so a per-instance cache barely bounded the chat path and let a
+# long-lived instance serve a deleted credential for up to 60 s. One dict,
+# keyed by name: a write or delete through any instance is seen by every other.
+_READ_CACHE: Dict[str, Tuple[Optional[str], float]] = {}
+_READ_CACHE_LOCK = threading.Lock()
+
 
 class EncryptedDBCredentialStore:
     """Encrypted credential storage in Postgres, keyed by composed name."""
@@ -73,9 +81,6 @@ class EncryptedDBCredentialStore:
         self._encryptor = encryptor
         self._engine = engine
         self._engine_lock = threading.Lock()
-        # name -> (decrypted value or None, monotonic expiry)
-        self._read_cache: Dict[str, Tuple[Optional[str], float]] = {}
-        self._cache_lock = threading.Lock()
 
     def _get_engine(self):
         if self._engine is None:
@@ -110,18 +115,20 @@ class EncryptedDBCredentialStore:
         self._forget(name)
         logger.info("credential_stored_db", name=name)
 
-    def _forget(self, name: str) -> None:
-        with self._cache_lock:
-            self._read_cache.pop(name, None)
+    @staticmethod
+    def _forget(name: str) -> None:
+        with _READ_CACHE_LOCK:
+            _READ_CACHE.pop(name, None)
 
-    def _cached(self, name: str) -> Tuple[bool, Optional[str]]:
-        with self._cache_lock:
-            hit = self._read_cache.get(name)
+    @staticmethod
+    def _cached(name: str) -> Tuple[bool, Optional[str]]:
+        with _READ_CACHE_LOCK:
+            hit = _READ_CACHE.get(name)
             if hit is None:
                 return False, None
             value, expires = hit
             if _clock() >= expires:
-                self._read_cache.pop(name, None)
+                _READ_CACHE.pop(name, None)
                 return False, None
             return True, value
 
@@ -140,8 +147,8 @@ class EncryptedDBCredentialStore:
             # #2101: this read ran on the event loop; a slow one is the stall.
             logger.warning("credential_store_slow_read", name=name, elapsed_s=round(elapsed, 2))
         value = None if row is None else self._encryptor.decrypt(row[0], _CONTEXT_PREFIX + name)
-        with self._cache_lock:
-            self._read_cache[name] = (value, _clock() + READ_CACHE_TTL_SECONDS)
+        with _READ_CACHE_LOCK:
+            _READ_CACHE[name] = (value, _clock() + READ_CACHE_TTL_SECONDS)
         return value
 
     def delete(self, name: str) -> bool:
