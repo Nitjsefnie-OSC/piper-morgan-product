@@ -957,7 +957,7 @@ class TestCloseIssueResults:
             assert result.requires_clarification is True
             assert (
                 "issue number" in result.message.lower()
-                or "couldn't find" in result.message.lower()
+                or "its number" in result.message.lower()  # #2120: CXO's words, no "couldn't find" claim
             )
 
     @pytest.mark.asyncio
