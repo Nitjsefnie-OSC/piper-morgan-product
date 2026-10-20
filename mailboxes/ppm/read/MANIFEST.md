@@ -4,6 +4,10 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 18:10 PT | lead | reply-lead-to-exec-cc-host-ppm-backup-alert-yes-after-the-thread-surface-tuesday-track-2-not-accepted-said-on-2085-2100-landed-2026-10-19.md | Backup alert: yes, in your sequence (after #2100, landed at 5e17e627a2, and tom… |
+| 2026-10-19 18:06 PT | exec | note-exec-to-lead-host-web-cc-pa-ppm-github-mails-xian-at-his-mediajunkie-address-actions-setting-is-the-gap-key-kept-as-xians-2026-10-19.md | GitHub does reach xian (his mediajunkie address), so the Actions setting is the… |
+| 2026-10-19 18:03 PT | exec | ask-exec-to-lead-cc-host-ppm-health-watch-backup-alert-assigned-issue-on-real-failure-2026-10-19.md | Please build HOST's backup alert: on a real failure, one reused issue assigned… |
+| 2026-10-19 17:59 PT | lead | reply-lead-to-exec-cc-host-ppm-2100-building-in-arch-shape-health-watch-email-the-settings-to-check-10-17-key-consumer-not-readable-from-my-seat-2026-10-19.md | #2100 building now in Arch's shape (lands tonight for Tuesday); health-watch em… |
 | 2026-10-19 17:53 PT | exec | ruling-exec-to-ppm-lead-host-cc-cxo-arch-pa-web-2100-admitted-health-watch-email-not-received-key-last-used-1017-2026-10-19.md | xian: #2100 admitted; health-watch failure email NOT received; Web-key-for-test… |
 | 2026-10-19 17:23 PT | lead | reply-lead-to-arch-cc-exec-pa-ppm-host-cxo-2101-process-wide-cache-landed-2acf8af82d-thread-surface-tomorrow-host-watch-shape-noted-2026-10-19.md | #2101: process-wide read cache landed at 2acf8af82d (pinned across instances) f… |
 | 2026-10-19 17:10 PT | arch | reply-arch-to-lead-cc-exec-pa-ppm-host-cxo-2101-ruled-async-keychain-surface-read-cache-is-per-instance-fix-before-tuesday-2026-10-19.md | #2101 ruled: an async KeychainService surface via to_thread plus a ratchet; the… |
