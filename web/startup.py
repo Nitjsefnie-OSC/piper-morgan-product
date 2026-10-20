@@ -689,6 +689,32 @@ class SlackSocketModePhase:
             await runner.stop()
 
 
+class LoopWatchdogPhase:
+    """#2101: a daemon thread that logs the main thread's stack when the event loop
+    stops answering for more than STALL_SECONDS (services/infrastructure/loop_watchdog.py).
+    Last phase, so a slow phase before it is not read as a stall."""
+
+    @staticmethod
+    async def startup(app) -> None:
+        try:
+            from services.infrastructure.loop_watchdog import LoopWatchdog
+
+            watchdog = LoopWatchdog()
+            watchdog.start()
+            app.state.loop_watchdog = watchdog
+        except Exception as e:  # silent-ok: #2101 — an instrument must never block startup; logged, app continues without it
+            print(f"⚠️  Event-loop watchdog not started: {e}")
+
+    @staticmethod
+    async def shutdown(app) -> None:
+        watchdog = getattr(app.state, "loop_watchdog", None)
+        if watchdog is not None:
+            try:
+                await watchdog.stop()
+            except Exception as e:  # silent-ok: #2101 — shutdown must not raise over an instrument
+                print(f"⚠️  Event-loop watchdog stop failed: {e}")
+
+
 class StartupManager:
     """Orchestrates all startup phases in sequence"""
 
@@ -711,6 +737,7 @@ class StartupManager:
             OutputFilterWiringPhase,  # Issue #1017 Phase 2.3: attach OutputFilter to LLMClient
             CompostingSchedulerPhase,  # Issue #1035 Phase 5: insight composting cycle
             SlackSocketModePhase,  # Issue #1129: Slack inbound (Socket Mode)
+            LoopWatchdogPhase,  # #2101: name the call that blocks the event loop
         ]
 
     async def startup(self) -> None:
