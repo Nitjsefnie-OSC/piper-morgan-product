@@ -76,12 +76,34 @@ async def sm(monkeypatch):
 
 
 def _fixture(
-    adapter, *, create_returns_number=True, readback_works=True, search_has_it=True, old=False
+    adapter,
+    *,
+    create_returns_number=True,
+    readback_works=True,
+    search_has_it=True,
+    old=False,
+    list_has_it=None,
+    list_tool=True,
+    older_twin=False,
 ):
     """Fake github-mcp-server: issue_write/create lands #10 titled TITLE; the response may omit
-    the number; issue_read may lose it; search_issues finds it by title (or not)."""
+    the number; issue_read may lose it; list_issues (the consistent read) and search_issues
+    (the lagging index) each find it by title, or not. ``list_has_it`` mirrors ``search_has_it``
+    unless given. ``older_twin``: a same-title #9 from three days ago is open too."""
     server = FastMCP("github-2097-fixture")
-    created_at = datetime.now(timezone.utc) - (timedelta(days=3) if old else timedelta(seconds=5))
+    if list_has_it is None:
+        list_has_it = search_has_it
+    # created a moment AFTER the write starts (the fixture issue is "the new one")
+    created_at = datetime.now(timezone.utc) - (timedelta(days=3) if old else timedelta(seconds=-1))
+    twin = {
+        "number": 9,
+        "title": TITLE,
+        "state": "open",
+        "html_url": f"https://github.com/{_FULL}/issues/9",
+        "created_at": (datetime.now(timezone.utc) - timedelta(days=3))
+        .isoformat()
+        .replace("+00:00", "Z"),
+    }
     issue = {
         "number": 10,
         "title": TITLE,
@@ -106,9 +128,30 @@ def _fixture(
 
     @server.tool(name="search_issues")
     def search_issues(query: str, sort: str = None, order: str = None, perPage: int = 30) -> str:
+        items = []
         if search_has_it and f"repo:{_FULL}" in query and TITLE in query:
-            return json.dumps({"total_count": 1, "items": [issue]})
-        return json.dumps({"total_count": 0, "items": []})
+            items.append(issue)
+        if older_twin and f"repo:{_FULL}" in query and TITLE in query:
+            items.append(twin)
+        return json.dumps({"total_count": len(items), "items": items})
+
+    if list_tool:
+
+        @server.tool(name="list_issues")
+        def list_issues(
+            owner: str,
+            repo: str,
+            state: str = None,
+            sort: str = None,
+            direction: str = None,
+            perPage: int = 30,
+        ) -> str:
+            rows = []
+            if list_has_it and f"{owner}/{repo}" == _FULL:
+                rows.append(issue)
+            if older_twin and f"{owner}/{repo}" == _FULL:
+                rows.append(twin)
+            return json.dumps(rows)  # the bare-array shape
 
     @contextlib.asynccontextmanager
     async def _ctx(binding):
@@ -210,6 +253,72 @@ def _gate_open():
     return patch(
         "services.intent_service.collaboration_gate.gate_holds", new=AsyncMock(return_value=False)
     )
+
+
+class TestConfirmReadsTheList:
+    """#2097 served on ef907b2cd7 (Web, 2026-10-20): the search index lagged a fresh create."""
+
+    async def test_index_lag_search_empty_list_has_it_confirms(self, sm):
+        adapter = GitHubMCPSpatialAdapter()
+        _fixture(adapter, create_returns_number=False, search_has_it=False, list_has_it=True)
+        wr = await adapter.create_issue_connector(
+            _ALPHA, owner="dinp-machine", repo="piper-test-activity", title=TITLE, body="b"
+        )
+        assert wr.verified is True and wr.issue_number == 10
+
+    async def test_an_older_same_title_issue_is_never_taken_for_the_new_one(self, sm):
+        """Web's step 3: the minute-old #14 was named for the new #15. With only the older
+        twin visible, the write stays unconfirmed rather than naming the wrong issue."""
+        adapter = GitHubMCPSpatialAdapter()
+        _fixture(
+            adapter,
+            create_returns_number=False,
+            search_has_it=False,
+            list_has_it=False,
+            older_twin=True,
+        )
+        wr = await adapter.create_issue_connector(
+            _ALPHA, owner="dinp-machine", repo="piper-test-activity", title=TITLE, body="b"
+        )
+        assert wr.verified is False
+        assert wr.issue_number is None
+
+    async def test_with_a_twin_present_the_new_issue_is_the_one_confirmed(self, sm):
+        adapter = GitHubMCPSpatialAdapter()
+        _fixture(
+            adapter,
+            create_returns_number=False,
+            search_has_it=False,
+            list_has_it=True,
+            older_twin=True,
+        )
+        wr = await adapter.create_issue_connector(
+            _ALPHA, owner="dinp-machine", repo="piper-test-activity", title=TITLE, body="b"
+        )
+        assert wr.verified is True and wr.issue_number == 10
+
+    async def test_without_a_list_tool_the_search_is_the_fallback(self, sm):
+        adapter = GitHubMCPSpatialAdapter()
+        _fixture(adapter, create_returns_number=False, search_has_it=True, list_tool=False)
+        wr = await adapter.create_issue_connector(
+            _ALPHA, owner="dinp-machine", repo="piper-test-activity", title=TITLE, body="b"
+        )
+        assert wr.verified is True and wr.issue_number == 10
+
+    async def test_duplicate_check_reads_the_list_not_the_index(self, sm):
+        adapter = GitHubMCPSpatialAdapter()
+        _fixture(adapter, search_has_it=False, list_has_it=True)
+        found = await adapter.find_open_issue_by_title_connector(
+            _ALPHA, owner="dinp-machine", repo="piper-test-activity", title=TITLE
+        )
+        assert found is not None and found["number"] == 10
+        _fixture(adapter, search_has_it=False, list_has_it=False)
+        assert (
+            await adapter.find_open_issue_by_title_connector(
+                _ALPHA, owner="dinp-machine", repo="piper-test-activity", title=TITLE
+            )
+            is None
+        )
 
 
 class TestRendererWords:
@@ -327,3 +436,107 @@ class TestDraftedIssueRelease:
         assert "file it" not in out["message"]
         svc.workflow_offer_service.set_pending_offer.assert_not_called()
         assert out["intent_data"]["drafted_issue_released"] is True
+
+
+class TestUnknownToolIsADefiniteRefusal:
+    """#2106 (PA's PAT-leg read on ef907b2cd7): the server answered `unknown tool "issue_write"`
+    and the reply said "may or may not have gone through". A refusal by name is definite."""
+
+    async def test_unknown_write_tool_is_refused_and_misconfigured(self, sm):
+        from services.mcp.consumer.connector import DegradationReason
+
+        adapter = GitHubMCPSpatialAdapter()
+        server = FastMCP("github-2106-fixture")  # no issue_write registered at all
+
+        @server.tool(name="issue_read")
+        def issue_read(method: str, owner: str, repo: str, issue_number: int) -> str:
+            return json.dumps({})
+
+        @contextlib.asynccontextmanager
+        async def _ctx(binding):
+            async with create_connected_server_and_client_session(server) as session:
+                yield MCPClient(session)
+
+        adapter._mcp_client_ctx = _ctx
+        wr = await adapter.create_issue_connector(
+            _ALPHA, owner="dinp-machine", repo="piper-test-activity", title=TITLE, body="b"
+        )
+        assert wr.attempted is True  # never the state that licenses a native fallback (1220)
+        assert wr.refused is True
+        assert wr.verified is False
+        assert wr.degradation is not None
+        assert wr.degradation.reason is DegradationReason.MISCONFIGURED
+        assert "nothing was created" in wr.degradation.user_message
+
+
+class TestEveryCreateAliasGetsCxosUnverifiedLine:
+    def test_aliases_match_the_registered_entry(self):
+        from services.intent.intent_service import _CREATE_ISSUE_ACTIONS
+        from services.intent_service.workflow_dispatcher import (
+            WORKFLOW_REGISTRY,
+            get_action_workflows,
+        )
+        from services.intent_service.workflow_entries import register_default_workflows
+
+        saved = dict(WORKFLOW_REGISTRY)
+        try:
+            register_default_workflows()
+            workflows = get_action_workflows()
+        finally:
+            WORKFLOW_REGISTRY.clear()
+            WORKFLOW_REGISTRY.update(saved)
+        entry = workflows["create_issue"]
+        aliases = {name for name, e in workflows.items() if e is entry}
+        assert aliases == set(_CREATE_ISSUE_ACTIONS), aliases
+
+
+class TestHandlerRendersTheRefusalAndTheAliases:
+    async def test_refused_write_says_nothing_was_created_with_the_hint(self, service):
+        from services.integrations.github.github_integration_router import GitHubWriteRefused
+
+        refused = GitHubWriteRefused(
+            user_message="GitHub's server doesn't offer that write for this connection, so nothing was created.",
+            action_hint="Reconnect GitHub from Settings → Integrations.",
+        )
+        with (
+            _gate_open(),
+            _github_config(),
+            patch(f"{ROUTER}.initialize", new=AsyncMock()),
+            patch(f"{ROUTER}.is_available", new=AsyncMock(return_value=True)),
+            patch(f"{ROUTER}.find_open_issue_by_title", new=AsyncMock(return_value=None)),
+            patch(f"{ROUTER}.create_issue", new=AsyncMock(side_effect=refused)),
+        ):
+            result = await service._handle_create_issue(_intent(), "wf", "s-2106-a", user_id=_ALPHA)
+        assert result.message == (
+            "GitHub's server doesn't offer that write for this connection, so nothing was created. "
+            "Reconnect GitHub from Settings → Integrations."
+        )
+        assert result.intent_data.get("write_refused") is True
+        assert "may or may not" not in result.message
+        assert "check the repository" not in result.message.lower()
+
+    async def test_unverified_create_under_an_alias_action_gets_cxos_line(self, service):
+        """Web's direct create on ef907b2cd7 arrived as create_github_issue and got the
+        generic 'may or may not' line; every alias of create_issue_entry gets CXO's."""
+        hedge = RuntimeError(
+            "GitHub write could not be verified — it may or may not have landed. "
+            "Check the repository directly before retrying; do not assume success."
+        )
+        intent = _intent()
+        intent.action = "create_github_issue"
+        with (
+            _gate_open(),
+            _github_config(),
+            patch(f"{ROUTER}.initialize", new=AsyncMock()),
+            patch(f"{ROUTER}.is_available", new=AsyncMock(return_value=True)),
+            patch(f"{ROUTER}.find_open_issue_by_title", new=AsyncMock(return_value=None)),
+            patch(f"{ROUTER}.create_issue", new=AsyncMock(side_effect=hedge)),
+        ):
+            result = await service._handle_create_issue(
+                intent, "wf", "s-2097-alias", user_id=_ALPHA
+            )
+        assert result.message.startswith("I sent the request to create it")
+        assert result.message.endswith(
+            "but GitHub didn't confirm it. Check there before trying again."
+        )
+        assert result.intent_data.get("write_unconfirmed") is True
