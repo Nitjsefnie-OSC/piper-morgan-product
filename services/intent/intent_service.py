@@ -14512,7 +14512,7 @@ Add any additional information here.
 
         # Resolve the token (keychain-first for a connected user; #1192 Blocker 1 —
         # a connected PAT wins over a stale global env token).
-        token = GitHubConfigService().get_authentication_token(user_id or "system")
+        token = await GitHubConfigService().aget_authentication_token(user_id or "system")
         if not token:
             raise ValueError("GitHub is not configured")
 

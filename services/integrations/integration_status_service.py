@@ -164,7 +164,7 @@ async def get_config_status(
                     from services.infrastructure.keychain_service import KeychainService
 
                     keychain = KeychainService()
-                    if keychain.get_api_key("slack_bot", username=user_id):
+                    if await keychain.aget_api_key("slack_bot", username=user_id):
                         return "configured", "keychain"
                 except Exception:
                     pass
@@ -177,7 +177,7 @@ async def get_config_status(
                 try:
                     from services.infrastructure.keychain_service import KeychainService
 
-                    if KeychainService().get_api_key("github_token", username=user_id):
+                    if await KeychainService().aget_api_key("github_token", username=user_id):
                         return "configured", "keychain"
                 except Exception:
                     pass
@@ -189,7 +189,7 @@ async def get_config_status(
 
                 keychain = KeychainService()
                 key_name = f"google_calendar_{user_id}" if user_id else "google_calendar"
-                if keychain.get_api_key(key_name):
+                if await keychain.aget_api_key(key_name):
                     return "configured", "keychain"
             except Exception:
                 pass

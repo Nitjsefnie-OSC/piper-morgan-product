@@ -8013,7 +8013,7 @@ class TestLogNeverSlicesUserText2059:
     # "path:line" -> reason. Every entry is a name that LOOKS like user text but is
     # system text (verified by reading the call and its callers, 2026-10-16).
     ALLOW_SITES: dict = {
-        "services/infrastructure/keychain_service.py:127": "`raw` is an environment-variable value (the keychain timeout), not user text",
+        "services/infrastructure/keychain_service.py:128": "`raw` is an environment-variable value (the keychain timeout), not user text",
         "web/startup.py:114": "`message` is the upload-dir probe's own status string",
         "web/startup.py:117": "`message` is the upload-dir probe's own status string",
         "web/utils/error_responses.py:124": "`message` is the server's HTTP error summary (system copy)",
@@ -8785,4 +8785,118 @@ class TestBinderFileRatchet:
             "Binder ceilings are frozen at MEASURED counts (tightness). Drift: "
             f"measured={counts} ceilings={self.CEILINGS}. Lower a ceiling in the commit "
             "that earns it; never raise one without Arch's review."
+        )
+
+
+class TestSyncCredentialCallsInAsyncRatchet:
+    """#2101 (Arch's shape, 2026-10-19): a credential read on the hosted path is a
+    synchronous psycopg2 connect (``EncryptedDBCredentialStore``, NullPool) and on a Mac
+    a C call; a coroutine that calls the sync method directly blocks the event loop for
+    the whole connect, and a chat turn reads several credentials (the 16:13 stall's
+    window: 33 s of nothing logged inside one turn). ``KeychainService`` now carries
+    ``aget_api_key`` / ``aread_secret`` / ``astore_api_key`` / ``adelete_api_key`` and
+    ``GitHubConfigService.aget_authentication_token`` (each the sync op in
+    ``asyncio.to_thread``); the chat-path callers were moved first.
+
+    The ratchet, shrink-only:
+    1. Scope: every ``.py`` under ``services/`` and ``web/`` (glob, no list).
+    2. Count: a direct call ``<expr>.<name>(...)`` with ``name`` in ``SYNC_NAMES`` that
+       sits anywhere inside an ``async def`` (nested sync helpers called from a
+       coroutine are not seen; that limit is stated, not hidden).
+    3. Per-file ceilings equal the measured counts exactly; a file not listed has
+       ceiling 0, so a new coroutine with a sync credential call fails. Lower a ceiling
+       in the commit that migrates a call; never raise one (Arch rules).
+
+    MEASURED 2026-10-20 by this class in the #2101 lane: 39 calls in 10 files (527 files
+    scanned), after the chat-path migrations (integration status ×3, calendar adapter,
+    GitHub config via the router and the issue fetch, the adapter's PAT read).
+    """
+
+    PACKAGES = ("services", "web")
+    SYNC_NAMES = frozenset(
+        {
+            "get_api_key",
+            "store_api_key",
+            "delete_api_key",
+            "read_secret",
+            "get_authentication_token",
+        }
+    )
+    MIN_FILES_IN_SCOPE = 400  # vacuity: 527 measured 2026-10-20
+
+    CEILINGS = {
+        "web/api/routes/settings_integrations.py": 12,
+        "services/connectors/disconnect.py": 6,
+        "web/api/routes/setup.py": 6,
+        "services/security/user_api_key_service.py": 4,
+        "services/integrations/slack/socket_mode_runner.py": 3,
+        "web/api/routes/integrations.py": 3,
+        "services/integrations/slack/oauth_handler.py": 2,
+        "services/config/llm_config_service.py": 1,
+        "services/integrations/notion/notion_integration_router.py": 1,
+        "services/mcp/consumer/notion_adapter.py": 1,
+    }
+
+    @classmethod
+    def _files(cls):
+        root = Path(__file__).resolve().parent.parent
+        out = []
+        for pkg in cls.PACKAGES:
+            out.extend(sorted((root / pkg).rglob("*.py")))
+        return root, out
+
+    @classmethod
+    def _count_file(cls, path) -> int:
+        try:
+            tree = ast.parse(path.read_text(encoding="utf-8"))
+        except SyntaxError:
+            return 0
+        count = 0
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.AsyncFunctionDef):
+                continue
+            for sub in ast.walk(node):
+                if (
+                    isinstance(sub, ast.Call)
+                    and isinstance(sub.func, ast.Attribute)
+                    and sub.func.attr in cls.SYNC_NAMES
+                ):
+                    count += 1
+        return count
+
+    @classmethod
+    def _all_counts(cls):
+        root, files = cls._files()
+        counts = {}
+        for f in files:
+            n = cls._count_file(f)
+            if n:
+                counts[str(f.relative_to(root))] = n
+        return len(files), counts
+
+    def test_scope_is_not_vacuous(self):
+        scanned, _ = self._all_counts()
+        assert (
+            scanned >= self.MIN_FILES_IN_SCOPE
+        ), f"only {scanned} files scanned under {self.PACKAGES}"
+
+    def test_no_file_exceeds_its_ceiling(self):
+        _, counts = self._all_counts()
+        over = {
+            f: (n, self.CEILINGS.get(f, 0))
+            for f, n in counts.items()
+            if n > self.CEILINGS.get(f, 0)
+        }
+        assert not over, (
+            "sync credential calls inside async def grew (#2101): "
+            f"{over} (file: (measured, ceiling)). Await the a-prefixed method "
+            "(KeychainService.aget_api_key etc.) instead of the sync one."
+        )
+
+    def test_ceilings_are_tight(self):
+        _, counts = self._all_counts()
+        slack = {f: (counts.get(f, 0), c) for f, c in self.CEILINGS.items() if counts.get(f, 0) < c}
+        assert not slack, (
+            f"a sync credential call was migrated: lower its ceiling in this commit: {slack} "
+            "(file: (measured, ceiling))"
         )

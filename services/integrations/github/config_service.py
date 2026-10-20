@@ -9,6 +9,7 @@ Provides centralized configuration management for GitHub operations including:
 - Environment-specific settings
 """
 
+import asyncio
 import os
 from dataclasses import dataclass, field
 from enum import Enum
@@ -114,6 +115,14 @@ class GitHubConfigService:
         }
 
         return environment_mapping.get(env_name, GitHubEnvironment.DEVELOPMENT)
+
+    async def aget_authentication_token(self, user_id: str) -> Optional[str]:
+        """``get_authentication_token`` off the event loop (#2101).
+
+        The sync method reads the user's keychain entry (a synchronous store connect on
+        the hosted path); a coroutine on the chat path awaits this instead.
+        """
+        return await asyncio.to_thread(self.get_authentication_token, user_id)
 
     def get_authentication_token(self, user_id: str) -> Optional[str]:
         """

@@ -464,7 +464,7 @@ class GoogleCalendarMCPAdapter(BaseSpatialAdapter):
             # connected before multi-tenancy, User B would silently inherit their token.
             refresh_token = None
             if self._is_user_scoped:
-                refresh_token = keychain.get_api_key(f"google_calendar_{self._user_id}")
+                refresh_token = await keychain.aget_api_key(f"google_calendar_{self._user_id}")
 
             if not refresh_token:
                 # #1436: stdlib logger — kwargs raised TypeError when this ran

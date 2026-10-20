@@ -5,7 +5,7 @@ siblings. With #1507 removing the restart-volatile env write, the user-scoped
 keychain check is the ONLY correct source for PAT-connected users.
 """
 
-from unittest.mock import MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
@@ -15,6 +15,7 @@ from web.api.routes.integrations import _get_integration_config_status
 def _keychain_with(token):
     kc = MagicMock()
     kc.get_api_key.return_value = token
+    kc.aget_api_key = AsyncMock(side_effect=kc.get_api_key)  # #2101: the coroutine path
     return kc
 
 

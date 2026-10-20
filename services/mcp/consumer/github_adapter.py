@@ -1369,7 +1369,10 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
         stale = None
         if binding is not None:
             stale = _NONBOUND_REASON.get(binding.status, DegradationReason.CONNECT_REQUIRED)
-        pat = await self._user_pat_at_rest(user_id) or self._user_pat(user_id)
+        # #2101: the PAT read is a store connect on the hosted path; off the loop.
+        pat = await self._user_pat_at_rest(user_id) or await asyncio.to_thread(
+            self._user_pat, user_id
+        )
         if pat:
             return GitHubCredential(
                 owner_id=getattr(binding, "owner_id", user_id),

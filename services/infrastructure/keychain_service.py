@@ -12,6 +12,7 @@ Security Features:
 - Comprehensive error handling and logging
 """
 
+import asyncio
 import os
 import threading
 from dataclasses import dataclass
@@ -496,6 +497,34 @@ class KeychainService:
             log_identifier = f"{username}/{provider}" if username else provider
             logger.error(f"Failed to delete API key for {log_identifier}: {e}")
             return False
+
+    # ------------------------------------------------------------------
+    # #2101: the async surface. On the hosted path every read is a synchronous
+    # psycopg2 connect (EncryptedDBCredentialStore, NullPool); on a Mac it is a
+    # C call. Either one blocks the event loop when awaited code calls the sync
+    # method directly, and a chat turn reads several credentials. A coroutine
+    # calls these instead; each runs the sync method in a worker thread with the
+    # same contract (same return, same swallow or raise). The sync methods stay
+    # for sync callers; ``TestSyncCredentialCallsInAsyncRatchet`` holds the
+    # count of direct sync calls inside ``async def`` at its measured ceilings.
+    # ------------------------------------------------------------------
+    async def aget_api_key(self, provider: str, username: Optional[str] = None) -> Optional[str]:
+        """``get_api_key`` off the event loop (#2101)."""
+        return await asyncio.to_thread(self.get_api_key, provider, username)
+
+    async def aread_secret(self, provider: str, username: Optional[str] = None) -> SecretRead:
+        """``read_secret`` off the event loop (#2101)."""
+        return await asyncio.to_thread(self.read_secret, provider, username)
+
+    async def astore_api_key(
+        self, provider: str, api_key: str, username: Optional[str] = None
+    ) -> None:
+        """``store_api_key`` off the event loop (#2101); raises as the sync method does."""
+        await asyncio.to_thread(self.store_api_key, provider, api_key, username)
+
+    async def adelete_api_key(self, provider: str, username: Optional[str] = None) -> bool:
+        """``delete_api_key`` off the event loop (#2101)."""
+        return await asyncio.to_thread(self.delete_api_key, provider, username)
 
     def list_stored_keys(self) -> List[str]:
         """
