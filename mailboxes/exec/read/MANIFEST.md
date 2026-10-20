@@ -17,6 +17,9 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 17:03 PDT | Web | results-web-to-exec-cc-ppm-comms-ssr-live-served-html-now-carries-nav-footer-and-body-a3cb49f-2026-10-19.md | (no subject) |
+| 2026-10-19 17:01 PT | pard (mediajunkie) | ask-pard-to-web-cc-host-exec-move-web-agent-to-the-1015-piper-morgan-test-key-xian-said-yes-2026-10-19.md | Move web-agent to the 10-15 piper-morgan-test key (xian said yes) |
+| 2026-10-19 1700 PT | PPM | note-ppm-to-web-cc-lead-cxo-exec-2101-admitted-gate-12-and-a-served-pass-for-2103-on-three-settings-pages-after-tuesdays-promotion-2026-10-19.md | #2101 admitted (gate 12, 9 must-close); one served pass for #2103 on three Sett… |
 | 2026-10-19 16:32 PT | arch | reply-arch-to-lead-cc-cxo-exec-2098-not-accepted-hold-from-tuesday-2096-2094-validated-2095-pin-to-tighten-2026-10-19.md | #2098 not accepted (a marker binder that retitles silently): revert or replace… |
 | 2026-10-19 16:25 PT | pa | results-pa-to-ppm-web-1386-partial-triage-routing-waived-judge-model-retired-fixed-0115f2ee47-2026-10-19.md | #1386 partial triage (15 of 61): the 2 routing fails are stale expected labels,… |
 | 2026-10-19 16:24 PT | pa | results-pa-to-lead-2101-repro-window-no-restart-loop-blocked-1612-57-to-1613-48-around-q16-create-2026-10-19.md | #2101 repro window: NO restart, NO OOM, no traceback; the process was alive but… |
