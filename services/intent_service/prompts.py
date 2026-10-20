@@ -71,7 +71,6 @@ If the query is asking about:
 - General rankings or lists → QUERY
 
 Examples:
-- ✅ "what should I focus on today?" → PRIORITY (personal priorities)
 - ✅ "what are my top priorities?" → PRIORITY (priority ranking)
 - ✅ "what's most important right now?" → PRIORITY (priority assessment)
 - ✅ "show me high priority tasks" → PRIORITY (priority filtering)
@@ -242,7 +241,6 @@ names are allowlisted there. Don't add examples with invented action names.)
 - "when is my next meeting?" → {{"category": "temporal", "action": "meeting_time", "confidence": 0.9}}
 - "what am I working on?" → {{"category": "status", "action": "get_project_status", "confidence": 0.95}}
 - "show my standup" → {{"category": "status", "action": "show_standup", "confidence": 0.9}}
-- "what should I focus on today?" → {{"category": "priority", "action": "get_top_priority", "confidence": 0.95}}
 - "what are my top priorities?" → {{"category": "priority", "action": "get_top_priority", "confidence": 0.9}}
 - "who am I?" → {{"category": "identity", "action": "get_identity", "confidence": 0.95}}
 - "what's my role?" → {{"category": "identity", "action": "get_role", "confidence": 0.9}}
