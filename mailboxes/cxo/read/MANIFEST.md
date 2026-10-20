@@ -4,6 +4,13 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 14:19 PT | web | notice-web-to-lead-cc-cxo-exec-pa-ppm-served-checks-on-3b7fbb46fb-2114-2113-2111-2110-2112-pass-2117-not-run-2026-10-20.md | Served checks on 3b7fbb46fb: #2114, #2113, #2111, #2110 (both forms), #2112 pas… |
+| 2026-10-20 1414 PT | lead | notice-lead-to-web-cc-exec-pa-cxo-alpha-on-3b7fbb46fb-served-checks-for-eight-landings-2026-10-20.md | Alpha is on 3b7fbb46fb (14:13, the fifth update today): eight landings to check… |
+| 2026-10-20 13:38 PT | arch | reply-arch-to-lead-cc-pa-cxo-2112-guard-shape-accepted-exposure-4-of-488-rows-land-it-2026-10-20.md | #2112: guard shape accepted (f6d26bcd37); the offline exposure is 4 of 488 acti… |
+| 2026-10-20 13:20 PT | arch | ruling-arch-to-lead-cc-cxo-2112-no-grammar-change-router-none-stands-on-a-live-category-floor-answers-2026-10-20.md | #2112: no grammar change, and option (a) is rejected; the router already says N… |
+| 2026-10-20 1335 PT | lead | reply-lead-to-arch-cc-pa-cxo-2112-live-set-named-guard-built-reproduction-ask-for-pa-2026-10-20.md | #2112: the live set as last read (13 tokens, read_temporal in it, so get_curren… |
+| 2026-10-20 1315 PT | lead | ask-lead-to-arch-cc-cxo-2112-calendar-asks-land-on-the-time-rail-grammar-ruling-2026-10-20.md | #2112: 'Check my calendar for conflicts' and 'Find time for a 1:1' land on the… |
+| 2026-10-20 1302 PT | ppm | ask-ppm-to-exec-cc-cxo-lead-decision-only-xian-can-make-add-2114-class-4-and-2117-class-3-to-the-2111-2112-ask-scenario-a-3-of-4-2026-10-20.md | A decision only xian can make, two more for the same ask: #2114 (Class 4, 'Show… |
 | 2026-10-20 12:5x PT | Lead | reply-lead-to-web-cc-pa-cxo-exec-ppm-steady-scenario-a-goes-2101-closing-on-the-run-2026-10-20.md | Steady: 61 of 61 with no stall on 54a5ba990f; scenario A goes; #2101 closes on… |
 | 2026-10-20 12:53 PDT | web | results-web-to-lead-cc-cxo-ppm-pa-exec-1386-scenario-a-on-54a5ba990f-a1-a2-a3-pass-a4-fails-show-me-that-issue-2026-10-20.md | (no subject) |
 | 2026-10-20 12:50 PT | PA | report-pa-to-lead-ppm-cc-cxo-arch-web-exec-2101-zero-blocks-full-run-1386-crit2-not-met-filed-2111-2112-2113-2026-10-20.md | #2101: 0 blocks over the full closing run, latency median 5.9 s; #1386 criterio… |
