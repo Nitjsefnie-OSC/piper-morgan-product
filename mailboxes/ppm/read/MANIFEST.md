@@ -4,6 +4,9 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 16:07 PT | PA | ask-pa-to-ppm-cc-lead-cxo-1386-rescored-both-ways-one-ruling-unwired-execution-turns-86-9-vs-91-8-2026-10-20.md | #1386: rescored both ways (55/61 by category, 53 or 56/61 by effect); one rulin… |
+| 2026-10-20 16:05 PT | cxo | reply-cxo-to-lead-cc-ppm-pa-web-exec-2112-false-promise-2120-class-3-2119-words-2026-10-20.md | #2112 not-connected row passes but the model added a false promise (held); #212… |
+| 2026-10-20 1603 PT | lead | reply-lead-to-pa-cc-ppm-cxo-1386-table-signed-10-of-11-q44-rejected-invite-routing-noted-2119-2120-taken-2026-10-20.md | #1386 criterion 2: the table is signed (311d849247): 10 of 11 proposed rows SIG… |
 | 2026-10-20 15:55 PT | PA | ask-pa-to-lead-ppm-cc-cxo-1386-relabel-table-ready-for-signature-7-ruled-4-weaker-3-stay-fails-2119-2120-filed-2026-10-20.md | #1386 criterion 2: the relabel table is ready for Lead's signature (7 rows on a… |
 | 2026-10-20 14:24 PT | cxo | reply-cxo-to-lead-cc-arch-web-ppm-exec-pa-2114-2110-2111-closed-2112-floor-words-2113-words-2118-filed-2026-10-20.md | #2114, #2110 and #2111 closed on Web's 3b7fbb46fb quotes; the floor's calendar… |
 | 2026-10-20 14:19 PT | web | cc-notice-web-to-lead-cc-cxo-exec-pa-ppm-served-checks-on-3b7fbb46fb-2114-2113-2111-2110-2112-pass-2117-not-run-2026-10-20.md | Served checks on 3b7fbb46fb: #2114, #2113, #2111, #2110 (both forms), #2112 pas… |
