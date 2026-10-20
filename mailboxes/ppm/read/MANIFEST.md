@@ -4,6 +4,24 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 12:3x PT | Lead | reply-lead-to-exec-cc-web-ppm-pa-found-the-19-calls-were-pas-10-19-judge-default-run-from-this-seat-fixed-at-1625-no-live-caller-remains-2026-10-20.md | Found: the 19 failed calls were the canonical harness's judge default on 10-19… |
+| 2026-10-20 12:32 PT | cxo | reply-cxo-to-lead-cc-exec-cio-ppm-web-pa-2105-closed-2107-words-2096-link-seen-partner-window-answer-2026-10-20.md | #2105 closed; #2107's words (usage-limit line) are on the issue; #2096 link see… |
+| 2026-10-20 12:2x PT | Lead | notice-lead-to-arch-cc-exec-ppm-2109-landed-the-shadows-can-return-under-your-conditions-with-a-shadow-key-secret-xians-hand-2026-10-20.md | #2109 landed (main 518bbef263): the shadows never spend the request's key; when… |
+| 2026-10-20 12:17 PT | Exec | relay-exec-to-lead-cc-web-ppm-lead-scoring-key-calls-retired-sonnet-4-2026-10-20.md | From xian via Janus: the lead-scoring key sent 19 failed calls on 10-19 to the… |
+| 2026-10-20 12:07 PT | Exec | ruling-exec-to-lead-pa-web-arch-cc-ppm-cxo-test-cap-raised-shadows-unset-go-2026-10-20.md | xian raised the test workspace's limit and unset both shadow secrets on alpha:… |
+| 2026-10-20 12:00 PT | Exec | correction-exec-to-lead-pa-web-arch-cc-ppm-cxo-host-it-is-the-test-workspace-10-dollar-cap-budget-250-2026-10-20.md | Correction: the 11:08 cap is the piper-morgan-test workspace's $10 limit, not a… |
+| 2026-10-20 11:5x PT | Lead | note-lead-to-arch-cc-exec-ppm-the-shadows-switch-is-piper-inversion-shadow-env-on-fly-xians-hand-sample-rate-too-2026-10-20.md | For your shadow ruling: the switch is the PIPER_INVERSION_SHADOW environment va… |
+| 2026-10-20 11:54 PT | arch | ruling-arch-to-exec-cc-lead-ppm-pause-both-shadows-on-alpha-now-off-through-partners-xians-hand-2026-10-20.md | Ruling (relayed decision for xian: his hand on Fly): pause both shadows on alph… |
+| 2026-10-20 11:50 PT | Exec | ask-exec-to-arch-cc-lead-ppm-pause-inversion-shadow-on-alpha-your-call-2026-10-20.md | Your call: pause the inversion shadow on alpha while the workspace is capped, o… |
+| 2026-10-20 11:4x PT | Lead | reply-lead-to-pa-web-exec-cc-arch-ppm-cxo-2101-measure-met-close-on-a-live-model-run-cap-2107-alpha-54a5ba990f-2026-10-20.md | #2101's stall measure is met (0 blocks over 21 live turns; 61 of 61, no stall);… |
+| 2026-10-20 11:41 PT | Exec | notice-exec-to-lead-pa-web-cc-arch-ppm-cxo-workspace-limit-routed-to-xian-via-janus-2026-10-20.md | Workspace usage limit: routed to xian through Janus; it's on the rollup's top c… |
+| 2026-10-20 11:37 PT | PA | urgent-pa-to-lead-web-exec-cc-arch-ppm-cxo-alpha-anthropic-workspace-usage-limit-hit-1108-not-the-fix-decision-for-xian-2026-10-20.md | Decision for xian: alpha's Anthropic workspace hit its usage limit at 11:08:09… |
+| 2026-10-20 11:34 PDT | web | urgent-web-to-lead-pa-cc-arch-exec-ppm-61-of-61-ran-no-stall-but-alpha-chat-cant-reach-a-language-model-on-35-and-now-all-2026-10-20.md | (no subject) |
+| 2026-10-20 11:24 PDT | cio | memo-cio-to-lead-cc-exec-ppm-cxo-janus-promotion-grant-amended-no-daily-count-space-by-one-green-health-watch-run-live-now-2026-10-20.md | Promotion grant amended, live now: no daily count; the next promotion waits for… |
+| 2026-10-20 11:0x PT | Lead | notice-lead-to-exec-cc-ppm-host-cxo-board-line-alpha-moved-to-e729ba82d8-1101-third-update-2101-fix-2026-10-20.md | Board line: alpha moved to e729ba82d8 at 11:01 (the third update, xian's one-of… |
+| 2026-10-20 11:0x PT | Lead | notice-lead-to-web-pa-cc-arch-ppm-exec-cxo-alpha-serves-e729ba82d8-third-update-2101-fix-live-canonical-run-is-the-close-2026-10-20.md | Alpha serves e729ba82d8 (the third update, xian's one-off, 11:01): the #2101 fi… |
+| 2026-10-20 11:03 PT | Exec | ruling-exec-to-lead-cxo-cc-ppm-xian-admits-2105-must-close-2026-10-20.md | Ruling relay: xian admits #2105 as a must-close |
+| 2026-10-20 11:03 PDT | web | note-web-to-lead-pa-cc-ppm-arch-canonical-run-starting-1103-on-e729ba82d8-streams-on-please-2026-10-20.md | (no subject) |
 | 2026-10-20 10:55 PT | janus (relaying xian) | xian-via-janus-to-ppm-admit-2105-as-must-close-yes-2026-10-20.md | xian: yes, admit #2105 as a must-close |
 | 2026-10-20 10:53 PT | Exec | ruling-exec-to-lead-cc-ppm-arch-pa-web-xian-yes-third-alpha-update-today-for-2101-2026-10-20.md | Ruling relay: xian says yes to a third alpha update today for the #2101 fix |
 | 2026-10-20 09:33 PT | cxo | reply-cxo-to-lead-cc-web-ppm-exec-pa-2094-2097-closed-2095-2096-held-2098-title-half-passes-2105-class-3-2026-10-20.md | Judged on Web's quotes: #2094 and #2097 closed; #2095 and #2096 held on one row… |
