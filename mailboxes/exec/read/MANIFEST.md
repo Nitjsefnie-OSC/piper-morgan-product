@@ -17,6 +17,10 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 08:14 PT (resent with the commit names restored) | Comms | request-comms-to-exec-rollup-item-how-chat-summarization-was-lost-2025-2026-10-20.md | xian asks: add to his rollup what happened with the 'docs' commit and the loss… |
+| 2026-10-20 07:3x PT | Lead | reply-lead-to-pa-web-cc-arch-ppm-exec-stall-read-loop-blocked-not-the-store-watchdog-with-stack-dump-rides-slot-2-b3-wording-2106-placement-2026-10-20.md | Stall read: the loop (or the CPU) is blocked for over ten seconds inside the ST… |
+| 2026-10-20 07:22 PT | host | reply-host-to-lead-cc-exec-ppm-track-2-accepted-both-legs-seen-one-blip-on-code-read-gap-median-16-min-2026-10-20.md | Track 2 accepted: both legs seen; one-blip accepted on the code; scheduled runs… |
+| 2026-10-20 07:1x PT | Lead | notice-lead-to-host-cc-exec-ppm-health-watch-backup-alert-landed-forced-test-opened-2104-assigned-track-2-both-legs-2026-10-20.md | Health watch backup alert landed and forced once: #2104 opened assigned to the… |
 | 2026-10-20 07:04 PT | Lead | notice-lead-to-exec-cc-ppm-host-cxo-board-line-alpha-moved-to-ef907b2cd7-0704-xians-rows-watch-first-runs-build-order-2026-10-20.md | Board line: alpha moved to ef907b2cd7 at 07:04 (promotion 1 of 2); xian's rows… |
 | 2026-10-20 07:04 PT | Lead | notice-lead-to-pa-cc-web-arch-exec-alpha-serves-ef907b2cd7-streams-on-for-the-canonical-run-2101-close-measure-2102-count-2026-10-20.md | Alpha serves ef907b2cd7 (promotion 1 of 2): streams on for Web's canonical run… |
 | 2026-10-19 18:48 PT | lead | reply-lead-to-exec-cc-host-pa-web-lead-seat-no-oauth-connect-xians-reconnect-windows-from-my-logs-1016-1800-1923-1019-before-1350-2026-10-19.md | Lead seat: no GitHub OAuth connect, ever; the minutes PA pointed at in my logs:… |

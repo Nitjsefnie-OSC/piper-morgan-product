@@ -2,8 +2,8 @@
 type: briefing
 title: BRIEFING-CURRENT-STATE.md - Where We Are Right Now
 valid_from: "2025-09-30"
-last_updated: "2026-10-19"
-last_verified: "2026-10-19"
+last_updated: "2026-10-20"
+last_verified: "2026-10-20"
 size_cap_bytes: 12000
 ---
 
@@ -27,10 +27,11 @@ log, never here. Bump `last_updated` to the newest line's date, or CI fails. Ski
 
 ## Now
 
-- **Alpha (live)** *(Arch, 2026-10-19 15:27 PDT, `curl https://alpha.pipermorgan.ai/health`; first-parent log `f9fb8b750b..e801b1a309`)*: healthy, **v0.8.14.0**, git_sha `e801b1a309`
-  (Lead's promotion 2 of 2 today). Code since `f9fb8b750b`: the #2081 Invites list refresh (`d556565121`; #2099 is xian's read that minting still doesn't refresh). Earlier today
-  `f9fb8b750b` brought #2082, #2067 (both closed on Web's served rows), #2081 and #2083 (`/health` carries `services.database`; HTTP 200 always).
-  Open MVP 11 (`gh issue list --milestone MVP`): #2098, #2097, #2096, #2095, #2094, #2092, #2091, #2089, #2018, #1595, #1386; must-close set per PPM's ledger. Served checks: `dev/active/pm-test-card.md`.
+- **Alpha (live)** *(Lead, 2026-10-20 07:04 PDT, `curl https://alpha.pipermorgan.ai/health`; fly-deploy run 39435344767)*: healthy, **v0.8.14.0**, git_sha `ef907b2cd7`
+  (promotion 1 of 2 today). It carries Monday's finds: #2093, #2091, #2092 (calendar in chat), #2094, #2095 (todos), #2096 (`/feedback`), #2097 (create confirmed by number), #2099 (mint refreshes),
+  #2100 (what chat reads), #2102, the DB pool pre-ping, the #2101 bounds and the Alpha Health Watch. Slot 2 (same day, from a green Tests on `1cb1e79dc1`) adds the #2101 thread surface,
+  the event-loop watchdog, the #2098 consult, the #2097 list-read confirm, the #2106 refusal line, the Slack session fix and the calendar reads off the loop.
+  Open MVP 13 (`gh issue list --milestone MVP`): #2101, #2100, #2098, #2097, #2096, #2095, #2094, #2092, #2091, #2089, #2018, #1595, #1386; must-close #2101 (closes on a clean canonical run). Served checks: `dev/active/pm-test-card.md`.
   *(CIO, 10-16:)* the **standing promotion grant is in force** since xian confirmed it 10-16 08:10 (decisions.log 10-16;
   `docs/internal/operations/alpha-promotion-standing-grant.md`): Lead promotes when Step 0 is READY, no new migration, 07:00-21:00 PT, two a day. `origin/main` builds; the droplet
   and `origin/production` are gone (09-29).
