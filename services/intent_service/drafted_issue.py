@@ -704,6 +704,121 @@ def _bind_body_prose(
     }
 
 
+_TITLE_CONSULT_OPERATIONS = frozenset({"update_issue"})
+
+
+async def _consult_title_change(
+    message: str,
+    *,
+    session_id: str,
+    user_id: Optional[str],
+    intent_service: Any,
+) -> Optional[str]:
+    """#2098 (Arch's shape, 2026-10-19): the drafted-issue carrier consults the
+    router on a held turn through the ADR-080 armed-turn idiom, with
+    ``update_issue`` as THIS carrier's own answering operation. Returns the new
+    title only on a BIND that names ``update_issue`` with a non-empty ``title``
+    arg; every other outcome returns None and the turn continues down today's
+    path unchanged (a router ``none`` keeps the body-prose bind; a RELEASE keeps
+    the #1627 hold, since prose on a held draft never leaves the seam; CONFIRM
+    means uncertain meaning or no router, and the instruction lands visibly in
+    the body rather than retitling on a guess). No word list reads the message
+    here: the marker-list version (reverted at f260d8ed5b) was a binder that
+    retitled on "we should call it out in the release notes"."""
+    from services.intent_service.armed_turn_consult import (
+        ArmedReplyOutcome,
+        classify_armed_reply,
+    )
+
+    consult = await classify_armed_reply(
+        message,
+        user_id,
+        session_id=session_id,
+        intent_service=intent_service,
+        answering_operations=_TITLE_CONSULT_OPERATIONS,
+    )
+    if consult.outcome is ArmedReplyOutcome.BIND and consult.operation in _TITLE_CONSULT_OPERATIONS:
+        title = consult.args.get("title")
+        if isinstance(title, str) and title.strip():
+            logger.info(
+                "drafted_issue_title_change_bound",
+                session_id=session_id,
+                confidence=consult.confidence,
+                title_chars=len(title.strip()),
+            )
+            return title.strip()
+        logger.info("drafted_issue_title_change_without_value", session_id=session_id)
+        return None
+    logger.info(
+        "drafted_issue_title_consult_passed",
+        session_id=session_id,
+        outcome=consult.outcome.value,
+        operation=consult.operation,
+    )
+    return None
+
+
+def _retitle_draft(
+    pending_offer: Dict[str, Any],
+    pending_action: Dict[str, Any],
+    new_title: str,
+    *,
+    session_id: str,
+    user_id: Optional[str],
+    intent_service: Any,
+) -> Dict[str, Any]:
+    """#2098 — replace the pending draft's title, keep its body, re-arm the SAME
+    offer, and show the draft with the new title (CXO's words: "Updated the
+    title. Here's the draft: …"). The create rail reads ``intent.context["title"]``
+    first, so the new title is also written there: "file it as is" files it."""
+    draft = pending_action.setdefault("draft", {})
+    old_title = draft.get("title") or ""
+    draft["title"] = new_title
+    pending_action["summary"] = _draft_summary(new_title, draft.get("repository"))
+    body = draft.get("body") or ""
+    intent = pending_action.get("intent")
+    if intent is not None:
+        intent.context = dict(intent.context or {})
+        intent.context["title"] = new_title
+    pending_offer["pending_action"] = pending_action
+    pending_offer["question"] = _POST_BIND_ASK
+    rearmed = True
+    try:
+        intent_service.workflow_offer_service.set_pending_offer(
+            session_id, pending_offer, user_id=user_id
+        )
+    except Exception as e:  # silent-ok: #2098 — a store failure must not crash the turn; logged ERROR, and the copy below never claims a bound draft
+        logger.error("drafted_issue_retitle_rearm_failed", error=str(e))
+        rearmed = False
+    logger.info(
+        "drafted_issue_retitled",
+        session_id=session_id,
+        old_title_chars=len(old_title),
+        new_title_chars=len(new_title),
+        rearmed=rearmed,
+    )
+    if not rearmed:
+        return {
+            "message": (
+                "I've got the new title, but I couldn't keep the draft bound — nothing was "
+                "filed. Ask me to draft the issue again and we'll rebuild it with that title."
+            ),
+            "intent_data": _retained_intent_data(pending_action),
+        }
+    intent_data = _retained_intent_data(pending_action)
+    intent_data["drafted_issue_retitled"] = True
+    return {
+        "message": (
+            "Updated the title. Nothing is filed yet. Here's the draft:\n\n"
+            f"**Title**: {new_title}\n\n"
+            f"**Body**:\n{body or '(no body yet)'}\n\n"
+            f"{_POST_BIND_ASK}"
+        ),
+        "intent_data": intent_data,
+        "requires_clarification": True,
+    }
+
+
 async def handle_drafted_issue_turn(
     pending_offer: Dict[str, Any],
     message: str,
@@ -768,6 +883,24 @@ async def handle_drafted_issue_turn(
                 # decline_message (same destination as the pre-adoption
                 # fall-through for declines).
                 return None
+            # #2098: one router consult on the held turn (ADR-080). Only a BIND
+            # that names update_issue WITH a title retitles the draft; anything
+            # else continues below exactly as before.
+            new_title = await _consult_title_change(
+                message,
+                session_id=session_id,
+                user_id=user_id,
+                intent_service=intent_service,
+            )
+            if new_title:
+                return _retitle_draft(
+                    pending_offer,
+                    pending_action,
+                    new_title,
+                    session_id=session_id,
+                    user_id=user_id,
+                    intent_service=intent_service,
+                )
             # #1627: a prose turn that answers the draft's open question
             # BINDS to the draft. Checked BEFORE the near-accept consult so
             # the unanchored accept rows ("^please\s", "^yes,?\s") can't

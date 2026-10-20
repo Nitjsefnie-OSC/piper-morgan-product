@@ -228,7 +228,12 @@ _COMPOSE_RE = re.compile(
 # the pre-classifier was never unsure about.
 _EXECUTE_RE = re.compile(
     r"^\s*"
-    r"(?:(?:please|hey|hi|ok(?:ay)?|piper)[,!\s]+)*"
+    # #2098 (2026-10-20): "Actually, change the title to …" (Web's scenario-B3 turn,
+    # now a corpus row) is an imperative behind a discourse marker; "actually" joins
+    # the lead-ins TestExecuteVocabCoverage demands be transparent. A DESTRUCTIVE
+    # action still CONFIRMs in every cell, so the marker changes no consent outcome
+    # there; for a WRITE it reads as the same request without the marker.
+    r"(?:(?:please|hey|hi|ok(?:ay)?|piper|actually)[,!\s]+)*"
     r"(?:go\s+ahead\s+and\s+)?"
     r"(?:(?:can|could|would|will)\s+you\s+(?:please\s+)?)?"
     # 1943 (2026-10-06): "I want you to clear …" / "I'd like you to …" are
