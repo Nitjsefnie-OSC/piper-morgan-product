@@ -12437,13 +12437,17 @@ class IntentService:
                 )
                 if clarify is not None:
                     return clarify
-                # #2113 (CXO's words): a question, not an error — the routing
-                # already landed on the right issue; only the field is missing.
+                # #2113 (CXO's content, provisional form): not an error — the
+                # routing landed on the right issue; only the field is missing.
+                # CXO's wording is a question; the #1730 Gap-2 ratchet lets a
+                # site ask only when it arms a pending offer, and this site has
+                # no armed "which field" carrier yet, so the sentence is
+                # imperative until that arm is built (tracked on #2113).
                 return IntentProcessingResult(
                     success=False,
                     message=(
-                        f"What would you like to change on #{issue_number}? I can update "
-                        "the title, the body, the state, the labels or the assignees."
+                        f"Tell me what to change on #{issue_number}: I can update the "
+                        "title, the body, the state, the labels or the assignees."
                     ),
                     intent_data={
                         "category": intent.category.value,

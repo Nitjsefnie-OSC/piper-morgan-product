@@ -56,10 +56,13 @@ class TestUpdateIssueAsksAQuestion2113:
         ):
             result = await intent_service._handle_update_issue(intent, "wf-2113", user_id=_USER)
         assert result.clarification_type == "update_fields_required"
+        # CXO's content; the question form waits on an armed "which field" carrier
+        # (#1730 Gap-2 ratchet: a site asks only when it arms), so no "?" here yet.
         assert result.message == (
-            "What would you like to change on #123? I can update the title, the body, "
+            "Tell me what to change on #123: I can update the title, the body, "
             "the state, the labels or the assignees."
         )
+        assert "?" not in result.message
         assert "Cannot update" not in result.message
 
 
