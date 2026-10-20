@@ -8629,3 +8629,160 @@ class TestSecurityCheckBypassCallers1982:
         param = inspect.signature(UserAPIKeyService.store_user_key).parameters["security_check"]
         assert param.kind is inspect.Parameter.KEYWORD_ONLY
         assert param.default is True
+
+
+class TestBinderFileRatchet:
+    """#1943 / xian's ask (2026-10-19, "Please do ask Arch for a ratchet on binders"),
+    Arch's ruling on #1943 (comment 6277415066): every regex binder in the two intent
+    packages is counted PER FILE, whether or not it sits inside a named span.
+
+    The ratchet:
+    1. Scope is the package, not a list: every ``.py`` under ``services/intent_service/``
+       and ``services/intent/`` found by glob. A file absent from ``CEILINGS`` has ceiling
+       0, so a new module with a regex fails, and so does moving a binder into a new file.
+       ``pre_classifier.py`` is excluded: it stays under the Phase 3 gate alone.
+    2. Per-file ceilings: a shrink in one file never pays for growth in another.
+    3. Counting rule: ``TestExtractionPatternRatchet._count_regex_literals`` applied to the
+       WHOLE module (shared, not a second copy) — every ``re``/``_re`` call with an inline
+       pattern, every element of a ``*pattern*``-named list or tuple — plus one per module-
+       or class-level string constant passed BY NAME to an ``re`` call. A compiled pattern
+       counts at its ``compile``, not at each use. Patterns, not call sites.
+    4. Tightness: ceilings equal the measured counts exactly; drift either way is loud.
+       Lower a ceiling in the commit that earns it.
+    5. The rule: a new failing phrasing gets a corpus row and a router arg
+       (``intent.context["inversion_args"]``), never a new binder. A raise is allowed only
+       for a regex that does not read the user's message (output formatting, a code-made
+       id), with the reason in the ceiling comment and a decisions.log line; Arch validates.
+    6. Honest limit: this counts regex only. Word sets and ``str.split`` on the message are
+       binders too, held by review (the #2098 marker list was one).
+
+    MEASURED 2026-10-19 by this class at 3a837f20fa: 298 literals in 24 files (59 files in
+    scope), matching Arch's independent AST count the same day (298 / 24, same top six).
+    """
+
+    PACKAGES = ("services/intent_service", "services/intent")
+    EXCLUDED = frozenset({"services/intent_service/pre_classifier.py"})
+    MIN_FILES_IN_SCOPE = 50  # vacuity: 59 measured 2026-10-19
+
+    # Frozen per-file ceilings — MEASURED 2026-10-19 (see class docstring). A file not
+    # listed has ceiling 0.
+    CEILINGS = {
+        "services/intent_service/canonical_handlers.py": 81,
+        "services/intent_service/classifier.py": 51,
+        "services/intent/intent_service.py": 37,
+        "services/intent_service/todo_handlers.py": 33,
+        "services/intent_service/reminder_clear.py": 18,
+        "services/intent_service/repo_clarification.py": 14,
+        "services/intent_service/drafted_issue.py": 9,
+        "services/intent_service/conversational_floor.py": 7,
+        "services/intent_service/temporal_utils.py": 7,
+        "services/intent_service/collaboration_gate.py": 6,
+        "services/intent_service/unarmed_offer.py": 6,
+        "services/intent_service/destructive_confirm.py": 4,
+        "services/intent_service/scope_guard.py": 4,
+        "services/intent_service/unwired_writes.py": 4,
+        "services/intent_service/acceptance.py": 3,
+        "services/intent_service/soft_invocation.py": 3,
+        "services/intent_service/standup_preferences.py": 3,
+        "services/intent_service/verified_inference.py": 2,
+        "services/intent_service/add_project_clarify.py": 1,
+        "services/intent_service/adopted_category_reads_only.py": 1,
+        "services/intent_service/clear_todos.py": 1,
+        "services/intent_service/consent_gate.py": 1,
+        "services/intent_service/inversion_router.py": 1,
+        "services/intent_service/workflow_entries.py": 1,
+    }
+
+    @classmethod
+    def _files(cls):
+        import glob
+
+        root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        out = []
+        for pkg in cls.PACKAGES:
+            for path in glob.glob(os.path.join(root, pkg, "**", "*.py"), recursive=True):
+                rel = os.path.relpath(path, root).replace(os.sep, "/")
+                if rel not in cls.EXCLUDED:
+                    out.append((rel, path))
+        return sorted(out)
+
+    @staticmethod
+    def _named_constants_passed(tree) -> int:
+        """Module- or class-level string constants passed by name to an ``re`` call,
+        counted once each (the file-scope half of Arch's rule 3)."""
+        import ast
+
+        consts = set()
+        for node in tree.body:
+            scope = node.body if isinstance(node, ast.ClassDef) else [node]
+            for n in scope:
+                if (
+                    isinstance(n, ast.Assign)
+                    and isinstance(n.value, ast.Constant)
+                    and isinstance(n.value.value, str)
+                ):
+                    consts.update(t.id for t in n.targets if isinstance(t, ast.Name))
+        used = set()
+        methods = TestExtractionPatternRatchet._RE_METHODS
+        for sub in ast.walk(tree):
+            if isinstance(sub, ast.Call):
+                f = sub.func
+                if (
+                    isinstance(f, ast.Attribute)
+                    and f.attr in methods
+                    and isinstance(f.value, ast.Name)
+                    and f.value.id in ("re", "_re")
+                    and sub.args
+                    and isinstance(sub.args[0], ast.Name)
+                    and sub.args[0].id in consts
+                ):
+                    used.add(sub.args[0].id)
+        return len(used)
+
+    @classmethod
+    def _count_file(cls, path) -> int:
+        import ast
+
+        with open(path, encoding="utf-8") as fh:
+            tree = ast.parse(fh.read())
+        shared = TestExtractionPatternRatchet()._count_regex_literals(tree)
+        return shared + cls._named_constants_passed(tree)
+
+    @classmethod
+    def _all_counts(cls) -> dict:
+        return {rel: cls._count_file(path) for rel, path in cls._files()}
+
+    def test_scope_is_the_package(self):
+        files = self._files()
+        assert len(files) >= self.MIN_FILES_IN_SCOPE, (
+            f"VACUITY: only {len(files)} files found under {self.PACKAGES}; "
+            "the glob or the packages moved — re-point the ratchet."
+        )
+        assert not any(rel.endswith("pre_classifier.py") for rel, _ in files)
+        for rel in self.CEILINGS:
+            assert any(r == rel for r, _ in files), (
+                f"VACUITY: {rel} has a ceiling but no longer exists in scope — "
+                "remove its row (and re-measure) in the same commit."
+            )
+
+    def test_no_file_exceeds_its_ceiling(self):
+        over = {
+            rel: (count, self.CEILINGS.get(rel, 0))
+            for rel, count in self._all_counts().items()
+            if count > self.CEILINGS.get(rel, 0)
+        }
+        assert not over, (
+            "BINDER RATCHET (Arch, #1943, 2026-10-19): regex binders grew in "
+            f"{sorted(over)} (count, ceiling): {over}. A new failing phrasing gets a corpus "
+            "row and a router arg (intent.context['inversion_args']), never a new binder. "
+            "A raise is allowed only for a regex that does not read the user's message, "
+            "with the reason in the ceiling comment and a decisions.log line (Arch validates)."
+        )
+
+    def test_binder_ratchet_stays_tight(self):
+        counts = {rel: c for rel, c in self._all_counts().items() if c}
+        assert counts == self.CEILINGS, (
+            "Binder ceilings are frozen at MEASURED counts (tightness). Drift: "
+            f"measured={counts} ceilings={self.CEILINGS}. Lower a ceiling in the commit "
+            "that earns it; never raise one without Arch's review."
+        )
