@@ -1,6 +1,6 @@
 ---
-image: ''
-alt: ''
+image: 'the-feature-that-was-never-real-the-sealed-doorway-and-the-key.jpg'
+alt: 'A luminous AI inspector gestures confidently at a bricked-up doorway while a skeptical woman holds up an old key.'
 caption: ''
 ---
 
