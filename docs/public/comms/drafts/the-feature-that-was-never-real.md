@@ -22,7 +22,7 @@ The report also explained how nobody had noticed. It traced three moments:
 - **June 2026.** Two decisions sent summaries down Piper's general conversational route and set documents aside for later. The issue tracking that deferral was closed with nothing to follow it.
 - **Early August 2026,** two weeks before my test. A cleanup dropped the word "document" from the list of sources Piper's classifier was taught to recognize.
 
-A new part of the system we were building, the Inversion, which works out what Piper can do from a registry of its real capabilities, had no entry for summarizing a document either.
+A correction to the conversational architecture we were building, the Inversion, which works out what Piper can do from a registry of its real capabilities, had not included an entry for summarizing a document either.
 
 That Saturday evening I approved Lead's recommended repair: connect chat to the summarizer the API already used, and fix the classifier's vocabulary. (In the build, fixing the vocabulary meant putting "document" back.) A fourth option, about a day more work, went to a later milestone. The repair merged Sunday morning. When I tried it on Tuesday, the upload page failed on every attempt. On September 8th, with uploads fixed, I asked Piper to summarize one of our documents and got an accurate summary back, with its bullet points mashed into one run-on line. That was fixed on September 23rd.
 
