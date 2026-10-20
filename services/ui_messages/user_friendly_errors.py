@@ -42,6 +42,21 @@ QUOTA_PATTERN = (
     r"|credit.balance.*too low|credit_balance_exhausted"
 )
 
+# #2107 (alpha, 2026-10-20 11:08 PT): the Anthropic WORKSPACE usage limit. Not the key
+# holder's own quota (the QUOTA bucket's copy says "top up the key's billing", which a
+# keyless user cannot do): the platform key's workspace cap, held until a dated reset
+# the error names ("You will regain access on 2026-11-01 at 00:00 UTC"). The honest
+# sentence differs, so it is its own bucket (the #1824 rule).
+USAGE_LIMIT_PATTERN = r"workspace api usage limits|regain access on \d{4}-\d{2}-\d{2}"
+USAGE_LIMIT_RESET_RE = re.compile(r"regain access on (\d{4}-\d{2}-\d{2})", re.IGNORECASE)
+
+
+def usage_limit_reset_date(text: str) -> Optional[str]:
+    """The reset date the provider names in a usage-limit error, else None."""
+    match = USAGE_LIMIT_RESET_RE.search(text or "")
+    return match.group(1) if match else None
+
+
 # #1872: Gemini's real invalid-key wording, live-verified by the #1870 lane
 # (HTTP 400 body carries `"status": "INVALID_ARGUMENT"`, `"reason":
 # "API_KEY_INVALID"`, human message "API key not valid. Please pass a valid
@@ -88,6 +103,12 @@ def classify_llm_error_text(text: str) -> str:
     disagreements pinned in test_llm_error_classifier_agreement_1870.py).
     """
     error_str = text.lower()
+
+    # #2107: the workspace cap is checked before the key-holder's quota; the two
+    # overlap on no word, but the cap's sentence must never fall through to
+    # "top up the key's billing" or to 'transient'.
+    if re.search(USAGE_LIMIT_PATTERN, error_str, re.IGNORECASE):
+        return "usage_limit"
 
     # Same regex as the quota bucket below — one source (#1870); checked
     # first so a quota message can't fall through to 'transient'.
@@ -197,6 +218,15 @@ class UserFriendlyErrorService:
                 "recovery": "Add an OpenAI or Anthropic key under Settings → LLM API Keys.",
                 "severity": ErrorSeverity.ERROR,
                 "category": "llm_key",
+            },
+            # #2107: the platform key's workspace usage limit (provisional words, CXO's
+            # to replace). `{until}` is filled from the error's own reset date, or
+            # left empty, in make_user_friendly().
+            USAGE_LIMIT_PATTERN: {
+                "message": "The shared language-model allowance is used up{until}.",
+                "recovery": "A key of your own under Settings → LLM API Keys keeps working.",
+                "severity": ErrorSeverity.ERROR,
+                "category": "llm_usage_limit",
             },
             r"all configured llm providers failed": {
                 "message": "I couldn't reach a language model just now.",
@@ -351,6 +381,12 @@ class UserFriendlyErrorService:
         for pattern, response in self.error_patterns.items():
             if re.search(pattern, error_str, re.IGNORECASE):
                 result = response.copy()
+                if result.get("category") == "llm_usage_limit":
+                    # #2107: name the reset date when the provider gave one.
+                    reset = usage_limit_reset_date(error_str)
+                    result["message"] = result["message"].format(
+                        until=f" until {reset}" if reset else ""
+                    )
 
                 # Add contextual information if available
                 if context:
