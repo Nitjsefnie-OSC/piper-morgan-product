@@ -34,6 +34,7 @@ NAME=$(basename "$MEMO")
 MSG=${4:-"mail: ${NAME%.md}"}
 
 [ -f "$MEMO" ] || { echo "mail-send-external: ⛔ no such file: $MEMO" >&2; exit 1; }
+MEMO=$(cd "$(dirname "$MEMO")" && pwd)/$NAME  # absolute: the git calls below run inside the recipient repo
 git -C "$DEST_REPO" rev-parse --git-dir >/dev/null 2>&1 || { echo "mail-send-external: ⛔ not a git repo: $DEST_REPO" >&2; exit 1; }
 grep -q '^reply-to:' "$MEMO" || { echo "mail-send-external: ⛔ $MEMO has no reply-to: line" >&2; exit 1; }
 
