@@ -157,7 +157,12 @@ address. Mail to a role in *this* repo still goes to `mailboxes/{role}/inbox/` v
    spurious non-fast-forward rejections.
 3. **Stage your own file by exact path** and commit. Other agents' uncommitted memos routinely sit on
    disk in those checkouts. Never `git add -A` or a directory-level add there.
-4. **Push to that repo's `main`**, then confirm the file is observable at the destination on
+4. **Easiest: `scripts/mail-send-external.sh <repo> <mail-dir> <memo>`** (10-20) does steps 2 to 4 for you. It runs the
+   stamp check and bearer lint that `mail-send.sh` runs here, builds the commit on the recipient's fresh `origin/main`
+   with a scratch index (that checkout's working tree is never touched), pushes, and confirms the blob landed. Write
+   the memo in your own `sent/` and pass that path. Why it exists: a hand-built delivery bypasses those checks, and on
+   10-20 CIO's memo reached Janus with a guessed `date:` 7 minutes ahead of the clock. By hand instead: run
+   `python3 scripts/stamp_check.py --mail <the memo>` first (exit 1 means fix the `date:`). **Push to that repo's `main`**, then confirm the file is observable at the destination on
    `origin/main` before calling it sent. `mail-send.sh` refuses any path outside `mailboxes/`, so it is
    not the tool for this. A sibling-repo write gives you no push receipt, which is why step 4 exists:
    7 Docs memos sat as untracked files in `~/Development/dispatch/mail/` for up to a month, and a
