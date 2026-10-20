@@ -4499,7 +4499,7 @@ HAND_ROWS = [
         "category": "EXECUTION",
         "expected": "action:update_issue",
         "expected_args": {"title": "Implement full-text search across nav and global search bar"},
-        "source": "issue-2098 Web #1386 scenario B3 turn 3, served e801b1a309 2026-10-19",
+        "source": "phase3-args/update_issue issue-2098 Web #1386 scenario B3 turn 3, served e801b1a309 2026-10-19",
         "notes": (
             "armed drafted-issue carrier: a BIND on update_issue with this title retitles the "
             "pending draft (drafted_issue._consult_title_change); the draft's own number is the "
