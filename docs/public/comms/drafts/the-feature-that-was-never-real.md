@@ -8,9 +8,9 @@ caption: ''
 
 *August 15, 2026*
 
-I was testing a fresh deploy on a Saturday, running through the flows I always run through, when I hit one that failed: ask Piper to summarize a document, and nothing usable came back. I flagged it to my lead developer agent (Lead) as a regression. Something that used to work had apparently stopped working, and I wanted to know what broke.
+Testing a fresh deploy on a Saturday, I hit a flow that failed. I asked Piper to summarize a document, and Piper told me it was unable to do so. I flagged it to my lead developer agent (Lead) as a regression. Something that used to work had apparently stopped working, and I wanted to know what broke.
 
-Lead didn't have an obvious answer sitting around, so the response was to dispatch a dedicated investigating agent to dig through the actual history rather than guess. I want to be specific about what that meant, because it's the part of this story that makes it more than a bug report: every commit the investigation cited, it verified the identifier first. No claims resting on memory or on what a document said should be true. Archaeology, not reassurance.
+Lead had nothing in its context at the time to help address this question so we dispatched a dedicated investigating agent to dig through the actual history rather than guess. No claims resting on memory or on what a document said should be true. Archaeology, not guesswork.
 
 What came back seemed to settle the question, but not the way I expected. According to the investigation, the feature had never worked, not once, going all the way back to the first commit of the codebase on June 1st of 2025. By that account, chat-based document summarization was more than a year old and had never functioned end to end for a single user, in any session, by anyone. I believed it. It turned out not to be true either, but I'll come back to that.
 
