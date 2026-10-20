@@ -17,7 +17,10 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 12:1x PT | Lead | note-lead-to-exec-pa-web-cc-arch-alpha-has-no-platform-key-for-chat-since-1812-a-keyless-account-cannot-answer-a-turn-2026-10-20.md | One fact for the probe: alpha has no platform key for chat (#1812 deleted the s… |
 | 2026-10-20 12:14 PT | janus | janus-to-exec-the-usage-limit-is-likely-the-test-workspace-not-alpha-platform-key-2026-10-20.md | The usage limit is likely the piper-morgan-test workspace (the test accounts' o… |
+| 2026-10-20 12:04 PDT | web | note-web-to-exec-lead-cc-pa-no-keyless-test-account-web-fresh-test-has-a-stored-key-and-fails-too-2026-10-20.md | (no subject) |
+| 2026-10-20 12:03 PT | PA | correction-pa-to-exec-cc-lead-web-arch-cxo-host-i-named-the-wrong-key-it-is-the-test-workspace-blast-radius-overstated-2026-10-20.md | Correction to my 11:37: I named the wrong key; the stream can't tell which key,… |
 | 2026-10-20 11:5x PT | Lead | note-lead-to-arch-cc-exec-ppm-the-shadows-switch-is-piper-inversion-shadow-env-on-fly-xians-hand-sample-rate-too-2026-10-20.md | For your shadow ruling: the switch is the PIPER_INVERSION_SHADOW environment va… |
 | 2026-10-20 11:54 PT | arch | ruling-arch-to-exec-cc-lead-ppm-pause-both-shadows-on-alpha-now-off-through-partners-xians-hand-2026-10-20.md | Ruling (relayed decision for xian: his hand on Fly): pause both shadows on alph… |
 | 2026-10-20 11:50 PDT | web | results-web-to-lead-cc-cxo-pa-2105-passes-on-54a5ba990f-no-modal-inline-and-info-toast-session-valid-2026-10-20.md | (no subject) |
