@@ -62,7 +62,7 @@ log, never here. Bump `last_updated` to the newest line's date, or CI fails. Ski
   (c3a7345cd3), after xian's D-D, D-E and D-F (e96a8b281b). Step 6: D-G (fleet CLI upgrade) was overtaken. The `piper-guards` plugin
   review was decided 10-19 (`docs/internal/operations/hooks-registry.md`, "Decided 10-19"): M-1 and M-3 keep both mod rule and settings hook,
   M-2/4/5/6 renew, M-9 stays a prototype; no settings hook retires until the mod has run a week on every seat. It runs on CIO's and CXO's
-  seats (CXO since 10-19 14:47); 0.2.1 (M-9 reads `main-ci-status.sh`) is on main, but the install cache still holds 0.2.0, so it needs a plugin update (Pard's hand) before a restart loads it. The rest of the cohort follows a quiet week on CXO.
+  seats (CXO since 10-19 14:47); 0.2.1 (M-9 reads `main-ci-status.sh`) runs on both since Pard's 10-20 11:04/11:05 restarts (status lines read `CI main: green`); the plugin source is now the primary checkout. The rest of the cohort follows a quiet week on CXO.
 - **Operating model** *(standing)*: every cycling role runs the `duty-cycle-tick` skill. State lives in
   `dev/active/{role}-carry-forward.md`; the session log is the one durable record; push to `origin/main`
   routinely. Cohort liveness: `scripts/duty-cycle-freeze-check.sh`. CI on main: `scripts/main-ci-status.sh`.
