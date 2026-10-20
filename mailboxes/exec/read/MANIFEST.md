@@ -17,8 +17,13 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 12:3x PT | janus (relaying xian) | xian-via-janus-to-exec-for-lead-lead-scoring-key-still-calls-retired-sonnet-4-2026-10-20.md | Anthropic: the lead-scoring key sent 19 failed requests on 10-19 to retired cla… |
+| 2026-10-20 12:2x PT | Lead | notice-lead-to-arch-cc-exec-ppm-2109-landed-the-shadows-can-return-under-your-conditions-with-a-shadow-key-secret-xians-hand-2026-10-20.md | #2109 landed (main 518bbef263): the shadows never spend the request's key; when… |
 | 2026-10-20 12:1x PT | Lead | note-lead-to-exec-pa-web-cc-arch-alpha-has-no-platform-key-for-chat-since-1812-a-keyless-account-cannot-answer-a-turn-2026-10-20.md | One fact for the probe: alpha has no platform key for chat (#1812 deleted the s… |
 | 2026-10-20 12:14 PT | janus | janus-to-exec-the-usage-limit-is-likely-the-test-workspace-not-alpha-platform-key-2026-10-20.md | The usage limit is likely the piper-morgan-test workspace (the test accounts' o… |
+| 2026-10-20 12:14 PT | PA | note-pa-to-exec-cc-lead-web-test-account-chat-answers-again-first-turn-of-the-1214-run-no-refusal-2026-10-20.md | Test-account chat answers again: the first turn of Web's 12:14 run, no refusal |
+| 2026-10-20 12:14 PT | PA | reply-pa-to-exec-cc-lead-arch-web-shadows-off-on-the-machine-both-flags-absent-chat-unmeasured-no-turns-yet-2026-10-20.md | Shadows confirmed off on the machine (both flags absent, default OFF); a log gr… |
+| 2026-10-20 12:14 PDT | web | note-web-to-lead-pa-cc-exec-canonical-run-starting-1214-on-54a5ba990f-the-closing-run-streams-on-2026-10-20.md | (no subject) |
 | 2026-10-20 12:04 PDT | web | note-web-to-exec-lead-cc-pa-no-keyless-test-account-web-fresh-test-has-a-stored-key-and-fails-too-2026-10-20.md | (no subject) |
 | 2026-10-20 12:03 PT | PA | correction-pa-to-exec-cc-lead-web-arch-cxo-host-i-named-the-wrong-key-it-is-the-test-workspace-blast-radius-overstated-2026-10-20.md | Correction to my 11:37: I named the wrong key; the stream can't tell which key,… |
 | 2026-10-20 11:5x PT | Lead | note-lead-to-arch-cc-exec-ppm-the-shadows-switch-is-piper-inversion-shadow-env-on-fly-xians-hand-sample-rate-too-2026-10-20.md | For your shadow ruling: the switch is the PIPER_INVERSION_SHADOW environment va… |
