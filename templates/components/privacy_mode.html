@@ -364,9 +364,7 @@
         confirmBtn.addEventListener('click', () => {
           closeDialog(dialog);
           setPrivacyState(true);
-          if (window.showToast) {
-            window.showToast('Private session started', 'info');
-          }
+          Toast.show('info', 'Private session started');
           resolve(true);
         });
 
@@ -403,9 +401,7 @@
      */
     function endPrivateSession() {
       setPrivacyState(false);
-      if (window.showToast) {
-        window.showToast('Private session ended', 'info');
-      }
+      Toast.show('info', 'Private session ended');
     }
 
     /**
@@ -440,9 +436,7 @@
         const confirmBtn = dialog.querySelector('.confirm');
         confirmBtn.addEventListener('click', () => {
           closeDialog(dialog);
-          if (window.showToast) {
-            window.showToast('Marked as private', 'info');
-          }
+          Toast.show('info', 'Marked as private');
           resolve(true);
         });
 

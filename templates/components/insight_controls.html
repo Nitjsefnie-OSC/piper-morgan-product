@@ -373,9 +373,7 @@
           if (after) {
             closeDialog(dialog);
             // D2: "Thanks, I'll remember that"
-            if (window.showToast) {
-              window.showToast(RESPONSES.correction, 'success');
-            }
+            Toast.show('success', RESPONSES.correction);
             resolve({ before: beforeText, after: after });
           }
         });
@@ -441,9 +439,7 @@
         submitBtn.addEventListener('click', () => {
           closeDialog(dialog);
           // D2: "Got it, that's gone"
-          if (window.showToast) {
-            window.showToast(RESPONSES.deletion, 'info');
-          }
+          Toast.show('info', RESPONSES.deletion);
           resolve(true);
         });
 
@@ -512,9 +508,7 @@
           if (input.value === 'RESET') {
             closeDialog(dialog);
             // D2: "Starting fresh"
-            if (window.showToast) {
-              window.showToast(RESPONSES.reset, 'info');
-            }
+            Toast.show('info', RESPONSES.reset);
             resolve(true);
           }
         });

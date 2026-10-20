@@ -659,11 +659,11 @@
 
         if (params.get('success') === 'true') {
           const email = params.get('email') || 'Calendar';
-          showToast('success', `Connected as ${decodeURIComponent(email)}`, 'Calendar Connected');
+          Toast.show('success', 'Calendar Connected', `Connected as ${decodeURIComponent(email)}`);
           window.history.replaceState({}, document.title, '/settings/integrations/calendar');
         } else if (params.get('error')) {
           const error = params.get('error');
-          showToast('error', `Failed to connect: ${error}`, 'Connection Failed');
+          Toast.show('error', 'Connection Failed', `Failed to connect: ${error}`);
           window.history.replaceState({}, document.title, '/settings/integrations/calendar');
         }
       }
@@ -679,7 +679,7 @@
           updateStatusUI(data);
         } catch (error) {
           console.error('Failed to load Calendar status:', error);
-          showToast('error', 'Failed to load connection status', 'Error');
+          Toast.show('error', 'Error', 'Failed to load connection status');
         }
       }
 
@@ -759,7 +759,7 @@
           window.location.href = data.auth_url;  // → Google consent screen
         } catch (error) {
           console.error('Connect failed:', error);
-          showToast('error', error.message, 'Connection Failed');
+          Toast.show('error', 'Connection Failed', error.message);
           connectBtnEl.disabled = false;
           connectBtnEl.innerHTML = '<svg class="google-logo" viewBox="0 0 24 24"><path fill="#fff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#fff" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#fff" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#fff" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg> Connect with Google';
         }
@@ -791,14 +791,14 @@
           const data = await response.json();
 
           if (data.success) {
-            showToast('success', 'Google Calendar disconnected', 'Disconnected');
+            Toast.show('success', 'Disconnected', 'Google Calendar disconnected');
             loadCalendarStatus();  // Refresh status
           } else {
             throw new Error(data.message || 'Failed to disconnect');
           }
         } catch (error) {
           console.error('Disconnect failed:', error);
-          showToast('error', error.message, 'Disconnect Failed');
+          Toast.show('error', 'Disconnect Failed', error.message);
           disconnectBtnEl.disabled = false;
           disconnectBtnEl.textContent = 'Disconnect';
         }
@@ -901,11 +901,11 @@
 
         // Validate inputs
         if (!clientId) {
-          showToast('error', 'I need a Client ID to connect', 'Missing Field');
+          Toast.show('error', 'Missing Field', 'I need a Client ID to connect');
           return;
         }
         if (!clientSecret) {
-          showToast('error', 'I need a Client Secret to connect', 'Missing Field');
+          Toast.show('error', 'Missing Field', 'I need a Client Secret to connect');
           return;
         }
 
@@ -931,7 +931,7 @@
 
           const data = await response.json();
           if (data.success) {
-            showToast('success', 'Google Calendar app credentials saved securely', 'Credentials Saved');
+            Toast.show('success', 'Credentials Saved', 'Google Calendar app credentials saved securely');
             appCredentialsConfigured = true;
             updateAppConfigUI(true);
             // Clear the form for security
@@ -942,7 +942,7 @@
           }
         } catch (error) {
           console.error('Failed to save credentials:', error);
-          showToast('error', error.message, 'Save Failed');
+          Toast.show('error', 'Save Failed', error.message);
         } finally {
           saveBtn.disabled = false;
           saveBtn.textContent = 'Save Credentials';
@@ -987,7 +987,7 @@
         } catch (error) {
           console.error('Failed to load calendars:', error);
           calendarListEl.innerHTML = '<div class="calendar-list-empty">I couldn\'t load your calendars. Try refreshing the page.</div>';
-          showToast('error', 'Failed to load calendar list', 'Error');
+          Toast.show('error', 'Error', 'Failed to load calendar list');
         }
       }
 
@@ -1050,7 +1050,7 @@
 
         try {
           await loadCalendarList();
-          showToast('success', 'Calendar list refreshed', 'Refreshed');
+          Toast.show('success', 'Refreshed', 'Calendar list refreshed');
         } finally {
           refreshBtn.disabled = false;
           refreshBtn.textContent = 'Refresh List';
@@ -1063,17 +1063,17 @@
 
         // Validation
         if (selectedCalendars.length === 0) {
-          showToast('warning', 'Please select at least one calendar', 'No Selection');
+          Toast.show('warning', 'No Selection', 'Please select at least one calendar');
           return;
         }
 
         if (!primaryCalendar) {
-          showToast('warning', 'Pick a primary calendar for me to use', 'Choose Primary');
+          Toast.show('warning', 'Choose Primary', 'Pick a primary calendar for me to use');
           return;
         }
 
         if (!selectedCalendars.includes(primaryCalendar)) {
-          showToast('warning', 'Primary calendar must be in the selected list', 'Invalid Selection');
+          Toast.show('warning', 'Invalid Selection', 'Primary calendar must be in the selected list');
           return;
         }
 
@@ -1097,11 +1097,11 @@
             throw new Error(parseApiDetail(errorData.detail, 'Failed to save preferences'));
           }
 
-          showToast('success', `Saved ${selectedCalendars.length} calendar(s)`, 'Preferences Saved');
+          Toast.show('success', 'Preferences Saved', `Saved ${selectedCalendars.length} calendar(s)`);
 
         } catch (error) {
           console.error('Failed to save preferences:', error);
-          showToast('error', error.message, 'Save Failed');
+          Toast.show('error', 'Save Failed', error.message);
         } finally {
           saveBtn.disabled = false;
           saveBtn.textContent = 'Save Preferences';
@@ -1114,30 +1114,5 @@
       // quotes — an attribute-injection hole (#1581's class), now fixed by
       // using the shared quote-complete implementation instead.
 
-      function showToast(type, message, title = null) {
-        if (typeof Toast !== 'undefined') {
-          const toastTitle = title || {
-            'error': 'Error',
-            'success': 'Success',
-            'warning': 'Warning',
-            'info': 'Info'
-          }[type] || 'Calendar';
-
-          // Note: Using direct Toast calls here intentionally (#642)
-          // Toast type and message are dynamic from server responses,
-          // so ToastMessages centralization doesn't apply.
-          if (type === 'error' && Toast.error) {
-            Toast.error(toastTitle, message);
-          } else if (type === 'success' && Toast.success) {
-            Toast.success(toastTitle, message);
-          } else if (type === 'warning' && Toast.warning) {
-            Toast.warning(toastTitle, message);
-          } else if (Toast.info) {
-            Toast.info(toastTitle, message);
-          }
-        } else {
-          console.log(`[${type}] ${message}`);
-        }
-      }
     </script>
 {% endblock %}

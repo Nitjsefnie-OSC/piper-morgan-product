@@ -494,7 +494,7 @@
           updateStatusUI(data);
         } catch (error) {
           console.error('Failed to load Notion status:', error);
-          showToast('error', 'Failed to load connection status', 'Error');
+          Toast.show('error', 'Error', 'Failed to load connection status');
         }
       }
 
@@ -559,14 +559,14 @@
         const apiKey = apiKeyEl.value.trim();
 
         if (!apiKey) {
-          showToast('warning', 'Please enter your Notion API key', 'Missing Key');
+          Toast.show('warning', 'Missing Key', 'Please enter your Notion API key');
           apiKeyEl.focus();
           return;
         }
 
         // Validate format
         if (!apiKey.startsWith('secret_') && !apiKey.startsWith('ntn_')) {
-          showToast('warning', 'Notion API keys start with "secret_" or "ntn_"', 'Invalid Format');
+          Toast.show('warning', 'Invalid Format', 'Notion API keys start with "secret_" or "ntn_"');
           apiKeyEl.focus();
           return;
         }
@@ -593,7 +593,7 @@
           const data = await response.json();
 
           if (data.success) {
-            showToast('success', data.message || 'Notion connected successfully', 'Connected');
+            Toast.show('success', 'Connected', data.message || 'Notion connected successfully');
             apiKeyEl.value = '';  // Clear the input
             loadNotionStatus();  // Refresh status
           } else {
@@ -601,7 +601,7 @@
           }
         } catch (error) {
           console.error('Save failed:', error);
-          showToast('error', error.message, 'Connection Failed');
+          Toast.show('error', 'Connection Failed', error.message);
         } finally {
           saveBtnEl.disabled = false;
           saveBtnEl.textContent = originalText;
@@ -633,14 +633,14 @@
           const data = await response.json();
 
           if (data.success) {
-            showToast('success', 'Notion disconnected', 'Disconnected');
+            Toast.show('success', 'Disconnected', 'Notion disconnected');
             loadNotionStatus();  // Refresh status
           } else {
             throw new Error(data.message || 'Failed to disconnect');
           }
         } catch (error) {
           console.error('Disconnect failed:', error);
-          showToast('error', error.message, 'Disconnect Failed');
+          Toast.show('error', 'Disconnect Failed', error.message);
           disconnectBtnEl.disabled = false;
           disconnectBtnEl.textContent = 'Disconnect';
         }
@@ -674,7 +674,7 @@
         } catch (error) {
           console.error('Failed to load databases:', error);
           listEl.innerHTML = '<div class="database-list-empty">I couldn\'t load your databases. Try refreshing the page.</div>';
-          showToast('error', 'Failed to load Notion databases', 'Error');
+          Toast.show('error', 'Error', 'Failed to load Notion databases');
         }
       }
 
@@ -757,9 +757,9 @@
       }
 
       async function refreshDatabaseList() {
-        showToast('info', 'Refreshing database list...', 'Refreshing');
+        Toast.show('info', 'Refreshing', 'Refreshing database list...');
         await loadDatabaseList();
-        showToast('success', 'Database list refreshed', 'Refreshed');
+        Toast.show('success', 'Refreshed', 'Database list refreshed');
       }
 
       async function saveNotionPreferences() {
@@ -767,12 +767,12 @@
         const defaultDatabase = document.getElementById('default-database-select').value;
 
         if (selectedDatabases.length === 0) {
-          showToast('warning', 'Please select at least one database', 'No Selection');
+          Toast.show('warning', 'No Selection', 'Please select at least one database');
           return;
         }
 
         if (!defaultDatabase) {
-          showToast('warning', 'Please select a default database', 'No Default');
+          Toast.show('warning', 'No Default', 'Please select a default database');
           return;
         }
 
@@ -793,10 +793,10 @@
             throw new Error(parseApiDetail(error.detail, 'Failed to save preferences'));
           }
 
-          showToast('success', 'Database preferences saved', 'Saved');
+          Toast.show('success', 'Saved', 'Database preferences saved');
         } catch (error) {
           console.error('Failed to save preferences:', error);
-          showToast('error', error.message, 'Save Failed');
+          Toast.show('error', 'Save Failed', error.message);
         }
       }
 
@@ -806,30 +806,5 @@
       // quotes — an attribute-injection hole (#1581's class), now fixed by
       // using the shared quote-complete implementation instead.
 
-      function showToast(type, message, title = null) {
-        if (typeof Toast !== 'undefined') {
-          const toastTitle = title || {
-            'error': 'Error',
-            'success': 'Success',
-            'warning': 'Warning',
-            'info': 'Info'
-          }[type] || 'Notion';
-
-          // Note: Using direct Toast calls here intentionally (#642)
-          // Toast type and message are dynamic from server responses,
-          // so ToastMessages centralization doesn't apply.
-          if (type === 'error' && Toast.error) {
-            Toast.error(toastTitle, message);
-          } else if (type === 'success' && Toast.success) {
-            Toast.success(toastTitle, message);
-          } else if (type === 'warning' && Toast.warning) {
-            Toast.warning(toastTitle, message);
-          } else if (Toast.info) {
-            Toast.info(toastTitle, message);
-          }
-        } else {
-          console.log(`[${type}] ${message}`);
-        }
-      }
     </script>
 {% endblock %}

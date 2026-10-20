@@ -563,9 +563,7 @@
      */
     function handleConfirm(insight) {
       // D2: "That's what I had noted—glad to confirm it's correct!"
-      if (window.showToast) {
-        window.showToast("Thanks for confirming! I'll keep that in mind.", 'success');
-      }
+      Toast.show('success', "Thanks for confirming! I'll keep that in mind.");
 
       // Fire event
       window.dispatchEvent(new CustomEvent('insight-confirmed', {
@@ -580,9 +578,7 @@
      */
     function handleCorrection(insight, newValue) {
       // D2: "Thanks for the correction. I've updated my understanding"
-      if (window.showToast) {
-        window.showToast("Thanks, I'll remember that.", 'success');
-      }
+      Toast.show('success', "Thanks, I'll remember that.");
 
       // Fire event with before/after
       window.dispatchEvent(new CustomEvent('insight-corrected', {
@@ -608,9 +604,7 @@
         message: `This will stop being used. We keep it for a while — ask if you need it back.`,
       })) {
         // D2: "Got it, that's gone"
-        if (window.showToast) {
-          window.showToast("Got it, that's gone.", 'info');
-        }
+        Toast.show('info', "Got it, that's gone.");
 
         // Fire event
         window.dispatchEvent(new CustomEvent('insight-deleted', {

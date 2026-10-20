@@ -459,23 +459,23 @@
     // Check Slack OAuth callback
     if (params.get('slack_success') === 'true') {
       const workspace = params.get('slack_workspace') || 'Workspace';
-      showToast('success', `Connected to ${decodeURIComponent(workspace)}`, 'Slack Connected');
+      Toast.show('success', 'Slack Connected', `Connected to ${decodeURIComponent(workspace)}`);
       // Clean up URL
       window.history.replaceState({}, document.title, '/settings/integrations');
     } else if (params.get('slack_error')) {
       const error = params.get('slack_error');
-      showToast('error', `Failed to connect: ${error}`, 'Slack Connection Failed');
+      Toast.show('error', 'Slack Connection Failed', `Failed to connect: ${error}`);
       window.history.replaceState({}, document.title, '/settings/integrations');
     }
 
     // Check Calendar OAuth callback
     if (params.get('calendar_success') === 'true') {
       const email = params.get('calendar_email') || 'Calendar';
-      showToast('success', `Connected as ${decodeURIComponent(email)}`, 'Calendar Connected');
+      Toast.show('success', 'Calendar Connected', `Connected as ${decodeURIComponent(email)}`);
       window.history.replaceState({}, document.title, '/settings/integrations');
     } else if (params.get('calendar_error')) {
       const error = params.get('calendar_error');
-      showToast('error', `Failed to connect: ${error}`, 'Calendar Connection Failed');
+      Toast.show('error', 'Calendar Connection Failed', `Failed to connect: ${error}`);
       window.history.replaceState({}, document.title, '/settings/integrations');
     }
   }
@@ -749,7 +749,7 @@
         if (fixEl) fixEl.remove();
 
         // #2053 (CXO): a working Test that still needs attention is not a plain pass.
-        showToast(stale ? 'warning' : 'success', result.message, stale ? 'Works, needs attention' : 'Test Passed');
+        Toast.show(stale ? 'warning' : 'success', stale ? 'Works, needs attention' : 'Test Passed', result.message);
       } else {
         statusEl.textContent = result.message;
         statusEl.classList.add('error');
@@ -766,12 +766,12 @@
           fixEl.textContent = result.fix_suggestion;
         }
 
-        showToast('error', result.message, 'Test Failed');
+        Toast.show('error', 'Test Failed', result.message);
       }
     } catch (error) {
       statusEl.textContent = 'Test failed';
       statusEl.classList.add('error');
-      showToast('error', `Failed to test ${integrationName}`, 'Test Error');
+      Toast.show('error', 'Test Error', `Failed to test ${integrationName}`);
     } finally {
       btn.disabled = false;
       btn.classList.remove('testing');
@@ -823,16 +823,14 @@
       // Count successes
       const successCount = results.filter(r => r.success).length;
       const allPassed = successCount === results.length;
-      showToast(
-        allPassed ? 'success' : 'warning',
-        `${successCount} of ${results.length} connections successful`,
-        allPassed ? 'All Tests Passed' : 'Some Tests Failed'
-      );
+      Toast.show(allPassed ? 'success' : 'warning',
+        allPassed ? 'All Tests Passed' : 'Some Tests Failed',
+        `${successCount} of ${results.length} connections successful`);
 
       // Reload overall status
       loadIntegrationsHealth();
     } catch (error) {
-      showToast('error', 'Failed to test connections', 'Test Error');
+      Toast.show('error', 'Test Error', 'Failed to test connections');
     } finally {
       btn.disabled = false;
       btn.classList.remove('testing');
@@ -871,7 +869,7 @@
         // Redirect to OAuth provider
         window.location.href = data.auth_url;
       } else {
-        showToast('error', 'No authorization URL returned', 'Connection Error');
+        Toast.show('error', 'Connection Error', 'No authorization URL returned');
         if (btn) {
           btn.disabled = false;
           btn.textContent = 'Connect';
@@ -879,7 +877,7 @@
       }
     } catch (error) {
       console.error('Connect failed:', error);
-      showToast('error', error.message, 'Connection Failed');
+      Toast.show('error', 'Connection Failed', error.message);
       if (btn) {
         btn.disabled = false;
         btn.textContent = 'Connect';
@@ -921,7 +919,7 @@
       const data = await response.json();
 
       if (data.success) {
-        showToast('success', data.message || `${displayName} disconnected`, 'Disconnected');
+        Toast.show('success', 'Disconnected', data.message || `${displayName} disconnected`);
         // Reload integrations to update UI
         loadIntegrationsHealth();
       } else {
@@ -929,7 +927,7 @@
       }
     } catch (error) {
       console.error('Disconnect failed:', error);
-      showToast('error', error.message, 'Disconnect Failed');
+      Toast.show('error', 'Disconnect Failed', error.message);
       if (btn) {
         btn.disabled = false;
         btn.textContent = 'Disconnect';
@@ -972,7 +970,7 @@
       const data = await response.json();
 
       if (data.success) {
-        showToast('success', data.message || `${displayName} disconnected`, 'Disconnected');
+        Toast.show('success', 'Disconnected', data.message || `${displayName} disconnected`);
         // Reload integrations to update UI
         loadIntegrationsHealth();
       } else {
@@ -980,7 +978,7 @@
       }
     } catch (error) {
       console.error('Disconnect failed:', error);
-      showToast('error', error.message, 'Disconnect Failed');
+      Toast.show('error', 'Disconnect Failed', error.message);
       if (btn) {
         btn.disabled = false;
         btn.textContent = 'Disconnect';
@@ -1005,7 +1003,7 @@
     });
 
     if (connected.length === 0) {
-      showToast('info', 'No integrations to disconnect', 'Nothing to Do');
+      Toast.show('info', 'Nothing to Do', 'No integrations to disconnect');
       return;
     }
 
@@ -1058,11 +1056,11 @@
     // Show result
     const total = connected.length;
     if (successCount === total) {
-      showToast('success', `${successCount} of ${total} integrations disconnected`, 'All Disconnected');
+      Toast.show('success', 'All Disconnected', `${successCount} of ${total} integrations disconnected`);
     } else if (successCount > 0) {
-      showToast('warning', `${successCount} of ${total} disconnected. Failed: ${failedNames.join(', ')}`, 'Partial Disconnect');
+      Toast.show('warning', 'Partial Disconnect', `${successCount} of ${total} disconnected. Failed: ${failedNames.join(', ')}`);
     } else {
-      showToast('error', `Failed to disconnect any integrations`, 'Disconnect Failed');
+      Toast.show('error', 'Disconnect Failed', `Failed to disconnect any integrations`);
     }
 
     // Reset button and reload UI
@@ -1088,33 +1086,5 @@
     `;
   }
 
-  function showToast(type, message, title = null) {
-    // Use existing toast system - matches pattern from todos.html, files.html, etc.
-    // Toast has convenience methods: Toast.error(title, message), Toast.success(title, message), etc.
-    if (typeof Toast !== 'undefined') {
-      // Use provided title or generate a contextual one
-      const toastTitle = title || {
-        'error': 'Connection Error',
-        'success': 'Connection Successful',
-        'warning': 'Connection Warning',
-        'info': 'Connection Status'
-      }[type] || 'Integration Status';
-
-      // Note: Using direct Toast calls here intentionally (#642)
-      // Toast type and message are dynamic from server responses,
-      // so ToastMessages centralization doesn't apply.
-      if (type === 'error' && Toast.error) {
-        Toast.error(toastTitle, message);
-      } else if (type === 'success' && Toast.success) {
-        Toast.success(toastTitle, message);
-      } else if (type === 'warning' && Toast.warning) {
-        Toast.warning(toastTitle, message);
-      } else if (Toast.info) {
-        Toast.info(toastTitle, message);
-      }
-    } else {
-      console.log(`[${type}] ${message}`);
-    }
-  }
 </script>
 {% endblock %}

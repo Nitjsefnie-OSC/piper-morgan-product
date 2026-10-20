@@ -203,7 +203,7 @@
       onConfirm: async () => {
         const repoId = document.getElementById('link-repo-select').value;
         if (!repoId) {
-          showToast('warning', 'Please select a repository');
+          Toast.warning('Notice', 'Please select a repository');
           return false;
         }
         try {
@@ -214,18 +214,18 @@
             body: JSON.stringify({}),
           });
           if (resp.status === 409) {
-            showToast('warning', 'This repository is already linked to this project');
+            Toast.warning('Notice', 'This repository is already linked to this project');
             return false;
           }
           if (!resp.ok) {
-            showToast('error', 'Failed to link repository');
+            Toast.error('Error', 'Failed to link repository');
             return false;
           }
-          showToast('success', 'Repository linked to project');
+          Toast.success('Success', 'Repository linked to project');
           await loadRepos();
           return true;
         } catch (err) {
-          showToast('error', 'Failed to link repository');
+          Toast.error('Error', 'Failed to link repository');
           return false;
         }
       },
@@ -264,7 +264,7 @@
         const provider = document.getElementById('new-repo-provider').value;
 
         if (!fullName || !fullName.includes('/')) {
-          showToast('warning', 'Enter repository in owner/repo format');
+          Toast.warning('Notice', 'Enter repository in owner/repo format');
           return false;
         }
 
@@ -277,12 +277,12 @@
           });
 
           if (createResp.status === 409) {
-            showToast('warning', 'This repository is already registered. Use the link dialog instead.');
+            Toast.warning('Notice', 'This repository is already registered. Use the link dialog instead.');
             return false;
           }
           if (!createResp.ok) {
             const errData = await createResp.json().catch(() => ({}));
-            showToast('error', errData.detail || 'Failed to register repository');
+            Toast.error('Error', errData.detail || 'Failed to register repository');
             return false;
           }
 
@@ -296,16 +296,16 @@
           });
 
           if (!linkResp.ok) {
-            showToast('warning', 'Repository registered but failed to link. Try linking it manually.');
+            Toast.warning('Notice', 'Repository registered but failed to link. Try linking it manually.');
             await loadRepos();
             return true;
           }
 
-          showToast('success', `${fullName} registered and linked`);
+          Toast.success('Success', `${fullName} registered and linked`);
           await loadRepos();
           return true;
         } catch (err) {
-          showToast('error', 'Failed to register repository');
+          Toast.error('Error', 'Failed to register repository');
           return false;
         }
       },
@@ -324,13 +324,13 @@
             credentials: 'include',
           });
           if (!resp.ok) {
-            showToast('error', 'Failed to unlink repository');
+            Toast.error('Error', 'Failed to unlink repository');
             return;
           }
-          showToast('success', 'Repository unlinked from project');
+          Toast.success('Success', 'Repository unlinked from project');
           await loadRepos();
         } catch (err) {
-          showToast('error', 'Failed to unlink repository');
+          Toast.error('Error', 'Failed to unlink repository');
         }
       },
     });
@@ -424,11 +424,11 @@
         const name = document.getElementById('dialog-integ-name').value.trim();
 
         if (!type) {
-          showToast('warning', 'Please select an integration type');
+          Toast.warning('Notice', 'Please select an integration type');
           return false;
         }
         if (!name) {
-          showToast('warning', 'Please enter a name');
+          Toast.warning('Notice', 'Please enter a name');
           return false;
         }
 
@@ -444,20 +444,20 @@
           });
 
           if (resp.status === 409) {
-            showToast('warning', `A ${type} integration already exists for this project`);
+            Toast.warning('Notice', `A ${type} integration already exists for this project`);
             return false;
           }
           if (!resp.ok) {
             const errData = await resp.json().catch(() => ({}));
-            showToast('error', errData.detail || 'Failed to add integration');
+            Toast.error('Error', errData.detail || 'Failed to add integration');
             return false;
           }
 
-          showToast('success', `${name} integration added`);
+          Toast.success('Success', `${name} integration added`);
           await loadIntegrations();
           return true;
         } catch (err) {
-          showToast('error', 'Failed to add integration');
+          Toast.error('Error', 'Failed to add integration');
           return false;
         }
       },
@@ -501,7 +501,7 @@
         const isActive = document.getElementById('edit-integ-active').value === 'true';
 
         if (!name) {
-          showToast('warning', 'Name is required');
+          Toast.warning('Notice', 'Name is required');
           return false;
         }
 
@@ -509,7 +509,7 @@
         for (const field of typeMeta.fields) {
           const val = document.getElementById(`edit-config-${field.key}`).value.trim();
           if (!val) {
-            showToast('warning', `${field.label} is required`);
+            Toast.warning('Notice', `${field.label} is required`);
             return false;
           }
           config[field.key] = val;
@@ -525,15 +525,15 @@
 
           if (!resp.ok) {
             const errData = await resp.json().catch(() => ({}));
-            showToast('error', errData.detail || 'Failed to update integration');
+            Toast.error('Error', errData.detail || 'Failed to update integration');
             return false;
           }
 
-          showToast('success', 'Integration updated');
+          Toast.success('Success', 'Integration updated');
           await loadIntegrations();
           return true;
         } catch (err) {
-          showToast('error', 'Failed to update integration');
+          Toast.error('Error', 'Failed to update integration');
           return false;
         }
       },
@@ -552,13 +552,13 @@
             credentials: 'include',
           });
           if (!resp.ok) {
-            showToast('error', 'Failed to remove integration');
+            Toast.error('Error', 'Failed to remove integration');
             return;
           }
-          showToast('success', 'Integration removed');
+          Toast.success('Success', 'Integration removed');
           await loadIntegrations();
         } catch (err) {
-          showToast('error', 'Failed to remove integration');
+          Toast.error('Error', 'Failed to remove integration');
         }
       },
     });
@@ -616,7 +616,7 @@
     for (const field of typeMeta.fields) {
       const val = document.getElementById(`config-${field.key}`).value.trim();
       if (!val) {
-        showToast('warning', `${field.label} is required`);
+        Toast.warning('Notice', `${field.label} is required`);
         return null;
       }
       config[field.key] = val;
@@ -633,18 +633,6 @@
   // attribute-injection hole (#1581's class), now fixed by using the
   // shared quote-complete implementation instead.
 
-  function showToast(type, message) {
-    if (typeof Toast === 'undefined') {
-      console.warn('Toast not available:', type, message);
-      return;
-    }
-    switch (type) {
-      case 'success': Toast.success('Success', message); break;
-      case 'error': Toast.error('Error', message); break;
-      case 'warning': Toast.warning('Notice', message); break;
-      default: Toast.info('Info', message);
-    }
-  }
 
   // ===== Public API =====
 

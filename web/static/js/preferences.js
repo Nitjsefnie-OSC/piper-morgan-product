@@ -67,10 +67,8 @@ async function acceptPreference(hintId, event) {
       }, 300);
 
       // Show success toast
-      showToast(
-        `Preference applied: ${result.dimension || "Your profile updated"}!`,
-        "success"
-      );
+      Toast.show("success",
+        `Preference applied: ${result.dimension || "Your profile updated"}!`);
 
       // Log to analytics
       logPreferenceEvent("preference_accepted", {
@@ -83,10 +81,8 @@ async function acceptPreference(hintId, event) {
     }
   } catch (error) {
     console.error("Error accepting preference:", error);
-    showToast(
-      `Error: ${error.message || "Failed to apply preference"}`,
-      "error"
-    );
+    Toast.show("error",
+      `Error: ${error.message || "Failed to apply preference"}`);
 
     // Re-enable buttons
     buttons.forEach((btn) => (btn.disabled = false));
@@ -301,7 +297,7 @@ function getCurrentSessionId() {
 }
 
 /**
- * Log preference event (uses toast.js showToast if available)
+ * Log preference event (analytics hook; toasts go through Toast.show)
  */
 function logPreferenceEvent(eventName, data) {
   try {

@@ -80,7 +80,7 @@ def _run(body: str, reply: dict) -> dict:
         "  return null; },\n"
         "  createElement() { return {}; } };\n"
         "const fetch = async () => ({ json: async () => JSON.parse(process.argv[1]) });\n"
-        "function showToast(type, message, title) { calls.push({type, message, title}); }\n"
+        "const Toast = { show(type, title, message) { calls.push({type, message, title}); } };\n"
         "function loadIntegrationsHealth() {}\n"  # #2045: the page redraws after a Test
         + _handler(body)
         + "\n(async () => { await testConnection('github');\n"
@@ -199,7 +199,7 @@ def _run_all(body: str, replies: list) -> dict:
         "  if (m[1] === 'status') return els[name].statusEl;\n"
         "  return { querySelector() { return els[name].dot; } }; } };\n"
         "const fetch = async () => ({ json: async () => JSON.parse(process.argv[1]) });\n"
-        "function showToast(type, message, title) { toasts.push({type, message, title}); }\n"
+        "const Toast = { show(type, title, message) { toasts.push({type, message, title}); } };\n"
         "function loadIntegrationsHealth() {}\n"
         + _test_all(body)
         + "\n(async () => { await testAllConnections();\n"

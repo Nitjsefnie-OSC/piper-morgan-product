@@ -521,7 +521,7 @@
           updateStatusUI(data);
         } catch (error) {
           console.error('Failed to load GitHub status:', error);
-          showToast('error', 'Failed to load connection status', 'Error');
+          Toast.show('error', 'Error', 'Failed to load connection status');
         }
         // #1329: check the OAuth-connector binding LAST so it wins over a stale
         // native-PAT "Connection Issue" — the connector is the live read path post-cutover.
@@ -674,14 +674,14 @@
         const token = tokenEl.value.trim();
 
         if (!token) {
-          showToast('warning', 'Please enter your GitHub personal access token', 'Missing Token');
+          Toast.show('warning', 'Missing Token', 'Please enter your GitHub personal access token');
           tokenEl.focus();
           return;
         }
 
         // Validate format (classic PAT or fine-grained)
         if (!token.startsWith('ghp_') && !token.startsWith('github_pat_')) {
-          showToast('warning', 'GitHub tokens start with "ghp_" (classic) or "github_pat_" (fine-grained)', 'Invalid Format');
+          Toast.show('warning', 'Invalid Format', 'GitHub tokens start with "ghp_" (classic) or "github_pat_" (fine-grained)');
           tokenEl.focus();
           return;
         }
@@ -708,7 +708,7 @@
           const data = await response.json();
 
           if (data.success) {
-            showToast('success', data.message || 'GitHub connected successfully', 'Connected');
+            Toast.show('success', 'Connected', data.message || 'GitHub connected successfully');
             tokenEl.value = '';  // Clear the input
             loadGitHubStatus();  // Refresh status
           } else {
@@ -716,7 +716,7 @@
           }
         } catch (error) {
           console.error('Save failed:', error);
-          showToast('error', error.message, 'Connection Failed');
+          Toast.show('error', 'Connection Failed', error.message);
         } finally {
           saveBtnEl.disabled = false;
           saveBtnEl.textContent = originalText;
@@ -748,14 +748,14 @@
           const data = await response.json();
 
           if (data.success) {
-            showToast('success', 'GitHub disconnected', 'Disconnected');
+            Toast.show('success', 'Disconnected', 'GitHub disconnected');
             loadGitHubStatus();  // Refresh status
           } else {
             throw new Error(data.message || 'Failed to disconnect');
           }
         } catch (error) {
           console.error('Disconnect failed:', error);
-          showToast('error', error.message, 'Disconnect Failed');
+          Toast.show('error', 'Disconnect Failed', error.message);
           disconnectBtnEl.disabled = false;
           disconnectBtnEl.textContent = 'Disconnect';
         }
@@ -789,7 +789,7 @@
         } catch (error) {
           console.error('Failed to load repositories:', error);
           listEl.innerHTML = '<div class="repository-list-empty">I couldn\'t load your repositories. Try refreshing the page.</div>';
-          showToast('error', 'Failed to load GitHub repositories', 'Error');
+          Toast.show('error', 'Error', 'Failed to load GitHub repositories');
         }
       }
 
@@ -872,9 +872,9 @@
       }
 
       async function refreshRepositoryList() {
-        showToast('info', 'Refreshing repository list...', 'Refreshing');
+        Toast.show('info', 'Refreshing', 'Refreshing repository list...');
         await loadRepositoryList();
-        showToast('success', 'Repository list refreshed', 'Refreshed');
+        Toast.show('success', 'Refreshed', 'Repository list refreshed');
       }
 
       async function saveGitHubPreferences() {
@@ -882,12 +882,12 @@
         const defaultRepository = document.getElementById('default-repository-select').value;
 
         if (selectedRepositories.length === 0) {
-          showToast('warning', 'Please select at least one repository', 'No Selection');
+          Toast.show('warning', 'No Selection', 'Please select at least one repository');
           return;
         }
 
         if (!defaultRepository) {
-          showToast('warning', 'Please select a default repository', 'No Default');
+          Toast.show('warning', 'No Default', 'Please select a default repository');
           return;
         }
 
@@ -908,10 +908,10 @@
             throw new Error(parseApiDetail(error.detail, 'Failed to save preferences'));
           }
 
-          showToast('success', 'Repository preferences saved', 'Saved');
+          Toast.show('success', 'Saved', 'Repository preferences saved');
         } catch (error) {
           console.error('Failed to save preferences:', error);
-          showToast('error', error.message, 'Save Failed');
+          Toast.show('error', 'Save Failed', error.message);
         }
       }
 
@@ -921,30 +921,5 @@
       // quotes — an attribute-injection hole (#1581's class), now fixed by
       // using the shared quote-complete implementation instead.
 
-      function showToast(type, message, title = null) {
-        if (typeof Toast !== 'undefined') {
-          const toastTitle = title || {
-            'error': 'Error',
-            'success': 'Success',
-            'warning': 'Warning',
-            'info': 'Info'
-          }[type] || 'GitHub';
-
-          // Note: Using direct Toast calls here intentionally (#642)
-          // Toast type and message are dynamic from server responses,
-          // so ToastMessages centralization doesn't apply.
-          if (type === 'error' && Toast.error) {
-            Toast.error(toastTitle, message);
-          } else if (type === 'success' && Toast.success) {
-            Toast.success(toastTitle, message);
-          } else if (type === 'warning' && Toast.warning) {
-            Toast.warning(toastTitle, message);
-          } else if (Toast.info) {
-            Toast.info(toastTitle, message);
-          }
-        } else {
-          console.log(`[${type}] ${message}`);
-        }
-      }
     </script>
 {% endblock %}

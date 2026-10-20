@@ -759,8 +759,8 @@
                 document.getElementById('slack-client-secret').value = '';
 
                 // Show success and switch to connect view
-                if (typeof showToast === 'function') {
-                    showToast('success', 'Slack app credentials saved');
+                if (typeof Toast !== 'undefined') {
+                    Toast.show('success', 'Slack app credentials saved');
                 }
                 showSlackCredentialsConfigured();
             } else {
@@ -979,8 +979,8 @@
                 document.getElementById('calendar-client-secret').value = '';
 
                 // Show success and switch to connect view
-                if (typeof showToast === 'function') {
-                    showToast('success', 'Google Calendar app credentials saved');
+                if (typeof Toast !== 'undefined') {
+                    Toast.show('success', 'Google Calendar app credentials saved');
                 }
                 showCalendarCredentialsConfigured();
             } else {
