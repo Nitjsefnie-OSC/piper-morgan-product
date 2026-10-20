@@ -713,12 +713,13 @@ FLOOR_FALLBACK_TRANSIENT = (
 # Quota/billing-exhausted keys had no bucket here and fell to 'transient' — wrong
 # advice for a permanent billing problem (#1870). Copy is the translator's ratified
 # sentence (#1718/#1381), reused verbatim.
-# #2107 (provisional words, CXO's to replace): the platform key's workspace usage limit,
-# not the key holder's quota. The floor's copy is static (no date); the translator's
-# route-level copy names the reset date the provider gave.
+# #2107: the workspace usage limit, not the key holder's quota. The floor's line is
+# CXO's sentence built from the error's own text (the reset date when given) by
+# user_friendly_errors.usage_limit_sentence(); this constant is the no-date form, used
+# only when respond() has no error text to read.
 FLOOR_FALLBACK_USAGE_LIMIT = (
-    "The shared language-model allowance is used up for now. A key of your own under "
-    "Settings → LLM API Keys keeps working."
+    "I can't answer right now. The service that writes my replies has reached its usage "
+    "limit, and I don't know when it will come back. Nothing you did caused this."
 )
 FLOOR_FALLBACK_QUOTA = (
     "I can't reach a language model — the API key on your account is out of "
@@ -1907,6 +1908,11 @@ class ConversationalFloor:
                 "usage_limit": FLOOR_FALLBACK_USAGE_LIMIT,  # #2107
             }
             fallback_message = fallback_messages.get(error_type, FLOOR_FALLBACK_TRANSIENT)
+            if error_type == "usage_limit":
+                # #2107: the dated form when the error text carries the reset date.
+                from services.ui_messages.user_friendly_errors import usage_limit_sentence
+
+                fallback_message = usage_limit_sentence(str(e))
 
             logger.error(
                 "conversational_floor_error",
