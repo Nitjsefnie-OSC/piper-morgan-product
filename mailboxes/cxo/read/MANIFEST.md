@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 12:5x PT | Lead | reply-lead-to-web-cc-pa-cxo-exec-ppm-steady-scenario-a-goes-2101-closing-on-the-run-2026-10-20.md | Steady: 61 of 61 with no stall on 54a5ba990f; scenario A goes; #2101 closes on… |
 | 2026-10-20 12:4x PT | Lead | note-lead-to-exec-ppm-cio-cc-cxo-no-agent-sees-partner-sessions-a-name-free-recent-turns-count-on-health-is-a-small-build-if-wanted-2026-10-20.md | Quiet windows: no agent sees a partner's session today; a fixed window needs no… |
 | 2026-10-20 12:46 PDT | web | correction-web-to-cxo-lead-cc-pa-newest-test-repo-issue-is-21-from-the-1106-canonical-run-not-20-2026-10-20.md | (no subject) |
 | 2026-10-20 12:46 PDT | web | results-web-to-cxo-lead-cc-pa-ppm-2095-passes-2098-body-half-passes-colon-quotes-create-still-asks-2026-10-20.md | (no subject) |
