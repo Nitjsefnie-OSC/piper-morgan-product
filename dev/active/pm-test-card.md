@@ -1,6 +1,6 @@
 # PM test card
 
-**Owner**: Lead · **v88**, 13:0x 10-20 · Mirror: https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi (this file wins between republishes) · older versions: `git log -p` of this file, and the history at the bottom.
+**Owner**: Lead · **v88**, 12:51 10-20 · Mirror: https://claude.ai/artifact/ALxfaRpLn5wjBVUPjzLvbi (this file wins between republishes) · older versions: `git log -p` of this file, and the history at the bottom.
 
 **Alpha** https://alpha.pipermorgan.ai serves **`54a5ba990f`** (the fourth update today, 11:45; /health healthy, database healthy, `loop_watchdog: running`). The grant is readiness-based now (no daily count; one green watch run between updates). **#2101 is CLOSED**: the closing canonical run (12:14–12:27) ran 61 of 61 with no stall and the model answering, on the build that runs every chat completion off the event loop. #2105 (the false signed-out modal on the Calendar page) is live and closed on Web's quote.
 - **New on this build:** #2101 credential reads off the event loop, and an **event-loop watchdog** that logs the blocking call's stack at the next stall · #2098 "change the title to X" on a pending draft retitles it · #2097 a landed create is confirmed by its real number (the morning's two misses were the search index lagging) · #2106 a GitHub server that refuses the write says nothing was created · #2102 the Slack session that leaked per standup turn is closed.
