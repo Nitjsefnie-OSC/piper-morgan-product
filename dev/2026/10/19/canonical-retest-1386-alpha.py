@@ -192,7 +192,8 @@ CANONICAL_QUERIES = [
     (9, "When was the last time we worked on this?", "Temporal", "floor", None, None),
     (10, "How long have we been working on this project?", "Temporal", "floor", None, None),
     # Spatial / Status (4) — all floor (STATUS routes through floor via safety net)
-    (11, "What projects are we working on?", "Spatial", "floor", None, None),
+    # #1386 (Lead-signed 10-20, 1386-criterion-2-relabel-table-2026-10-20.md): was "floor". list_projects is the post-split read (PPM 10-06 re-judge).
+    (11, "What projects are we working on?", "Spatial", "canonical", None, None),
     # #1386 (PPM 10-19): was "floor" (June). Portfolio reads take the PORTFOLIO rail since #2048
     # (Arch-ruled), canonical to portfolio/list_projects.
     (12, "Show me the project landscape", "Spatial", "canonical", None, None),
@@ -200,12 +201,16 @@ CANONICAL_QUERIES = [
     (14, "What's the status of project X?", "Spatial", "floor", None, None),
     # Capability (5) — mixed: action for mutations, floor for read-only
     (16, "Create a GitHub issue about testing", "Capability", "action", None, None),
-    (17, "Analyze this document", "Capability", "action", None, None),
-    (18, "List all my projects", "Capability", "floor", None, None),  # STATUS→floor
+    # #1386 (Lead-signed 10-20, 1386-criterion-2-relabel-table-2026-10-20.md): was "action". A READ analysis entry (#1124); routing only, the quality FAIL stands.
+    (17, "Analyze this document", "Capability", "canonical", None, None),
+    # #1386 (Lead-signed 10-20, 1386-criterion-2-relabel-table-2026-10-20.md): was "floor". list_projects, the live QUERY entry in read_status (Arch 10-04).
+    (18, "List all my projects", "Capability", "canonical", None, None),
     (19, "Generate a status report", "Capability", "floor", None, None),  # STATUS→floor
-    (20, "Search for authentication in our documents", "Capability", "action", None, None),
+    # #1386 (Lead-signed 10-20, 1386-criterion-2-relabel-table-2026-10-20.md): was "action". search_documents is a READ (#1841, Arch 09-22).
+    (20, "Search for authentication in our documents", "Capability", "canonical", None, None),
     # Predictive (5) — Q21 expected-pass, Q22-25 M2-Beta pending
-    (21, "What should I focus on today?", "Predictive", "floor", None, None),
+    # #1386 (Lead-signed 10-20, 1386-criterion-2-relabel-table-2026-10-20.md): was "floor". attention_query (CXO 10-01, this phrase; reaffirmed 10-10).
+    (21, "What should I focus on today?", "Predictive", "canonical", None, None),
     (22, "What patterns do you see?", "Predictive", "floor", "M2 Beta", "M2-beta-pending"),
     (23, "What risks should I be aware of?", "Predictive", "floor", "M2 Beta", "M2-beta-pending"),
     (
@@ -260,11 +265,12 @@ CANONICAL_QUERIES = [
     # Documents (4) — Q36-38/40 M2-pending (Documents handler not yet shipped)
     (36, "Create a doc from this conversation", "Documents", "floor", "M2", "M2-feature-pending"),
     (37, "Compare these two documents", "Documents", "floor", "M2", "M2-feature-pending"),
+    # #1386 (Lead-signed 10-20, 1386-criterion-2-relabel-table-2026-10-20.md): was "floor". summarize_document via the action-dispatch rail (#1624, PM 08-15).
     (
         38,
         "Synthesize these sources into a summary",
         "Documents",
-        "floor",
+        "canonical",
         "M2",
         "M2-feature-pending",
     ),
@@ -276,23 +282,19 @@ CANONICAL_QUERIES = [
     (44, "Create issues from this meeting's action items", "GitHub Ops", "floor", None, None),
     (45, "Close completed issues", "GitHub Ops", "floor", None, None),
     (58, "Update issue #123", "GitHub Ops", "action", None, "fresh-account-no-data"),
-    (
-        59,
-        "Comment on issue #456",
-        "GitHub Ops",
-        "canonical",
-        None,
-        None,
-    ),  # query/comment_issue_query
+    # #1386 (Lead-signed 10-20, 1386-criterion-2-relabel-table-2026-10-20.md): was "canonical". comment_issue_query is a WRITE rail entry (corpus, EXECUTION).
+    (59, "Comment on issue #456", "GitHub Ops", "action", None, None),
     (60, "Review issue #789", "GitHub Ops", "canonical", None, "fresh-account-no-data"),
     # Slack (5) — Q46-48 M2-pending Slack surfaces; Q49/50 expected-pass
     (46, "Any mentions I missed?", "Slack", "floor", "M2", "M2-feature-pending"),
     (47, "Summarize #general from yesterday", "Slack", "floor", "M2", "M2-feature-pending"),
-    (48, "Post this update to the team channel", "Slack", "floor", "M2", "M2-feature-pending"),
+    # #1386 (Lead-signed 10-20, 1386-criterion-2-relabel-table-2026-10-20.md): was "floor". An unwired EXECUTION action must honest-decline, never the floor (#1333).
+    (48, "Post this update to the team channel", "Slack", "action", "M2", "M2-feature-pending"),
     (49, "/standup", "Slack", "action", None, None),
     (50, "/piper help", "Slack", "floor", None, None),
     # Productivity (3) — all floor
-    (51, "What's my productivity this week?", "Productivity", "floor", None, None),
+    # #1386 (Lead-signed 10-20, 1386-criterion-2-relabel-table-2026-10-20.md): was "floor". productivity_query, READ (inversion corpus rows).
+    (51, "What's my productivity this week?", "Productivity", "canonical", None, None),
     (52, "Are we on track for the milestone?", "Productivity", "floor", None, None),
     (53, "What did the team accomplish this sprint?", "Productivity", "floor", None, None),
     # Todo Management (4) — Q54-55 action, Q56-57 canonical (pre-classifier→query)
@@ -304,7 +306,8 @@ CANONICAL_QUERIES = [
     (61, "What's my week look like?", "Calendar Ext", "canonical", None, None),
     (62, "Check my calendar for conflicts", "Calendar Ext", "canonical", None, None),
     # Knowledge (1) — Q63 judge rate-limit-prone + M2-pending integration path
-    (63, "Upload a file to the knowledge base", "Knowledge", "floor", "M2", "M2-feature-pending"),
+    # #1386 (Lead-signed 10-20, 1386-criterion-2-relabel-table-2026-10-20.md): was "floor". An unwired EXECUTION action must honest-decline, never the floor (#1333).
+    (63, "Upload a file to the knowledge base", "Knowledge", "action", "M2", "M2-feature-pending"),
 ]
 
 
@@ -532,31 +535,70 @@ CANONICAL_CATEGORIES = {"temporal", "status", "priority", "portfolio"}
 ACTION_CATEGORIES = {"execution"}
 
 
-def determine_actual_routing(
-    intent_data: dict, response_text: str, intent_data_extras: dict
-) -> str:
-    """Inspect the API response to determine which routing path was taken.
+def determine_routing_by_category(intent_data: dict) -> str:
+    """The pre-10-20 reading (#968): floor_hit, else the classifier's category.
 
-    The /api/v1/intent endpoint returns intent_data with category, action, and
-    optionally floor_hit (set when the conversational floor handles the response).
-
-    #968: Simplified after empirical reconciliation — floor_hit is the primary
-    signal. For queries without floor_hit, classify based on category.
+    Kept as the ``actual_routing_category`` column so a run reports both readings
+    (PPM's #1386 ruling, 10-20 15:58). It reads a rail WRITE whose classifier
+    category is QUERY as ``canonical`` (Q40, ``update_document_query``).
     """
     if not intent_data:
         return "unknown"
+    if intent_data.get("floor_hit") is True:
+        return "floor"
+    if (intent_data.get("category") or "").lower() == "execution":
+        return "action"
+    return "canonical"
 
-    # Most reliable signal: floor_hit flag
+
+# #1386 (PPM 10-20 15:58): an EXECUTION-category turn whose action has no rail entry
+# (an unwired action's #1333 honest decline, e.g. post_message, upload_file; or the
+# standup interview turn) reads ``action``. PPM's literal rule ("anything else reads
+# canonical") would read them ``canonical``; that contradicts Lead's signed Q48/Q63
+# (#1333). Pending PPM's word; flip to False for the literal rule.
+UNWIRED_EXECUTION_READS_ACTION = True
+
+_ACTION_EFFECTS = None
+
+
+def _action_effects() -> dict:
+    """Action name -> EffectClass from the rail registry on this tree (fails loudly)."""
+    global _ACTION_EFFECTS
+    if _ACTION_EFFECTS is None:
+        from services.intent_service.workflow_dispatcher import get_action_workflows
+        from services.intent_service.workflow_entries import register_default_workflows
+
+        register_default_workflows()
+        _ACTION_EFFECTS = {k: v.effect for k, v in get_action_workflows().items()}
+    return _ACTION_EFFECTS
+
+
+def determine_actual_routing(
+    intent_data: dict, response_text: str, intent_data_extras: dict
+) -> str:
+    """Which route the turn took, by the rail entry's effect (#1386, PPM 10-20 15:58).
+
+    The floor reads ``floor``; an action whose rail entry is WRITE or DESTRUCTIVE reads
+    ``action``; an EXECUTION-category action with no rail entry reads ``action`` while
+    ``UNWIRED_EXECUTION_READS_ACTION``; anything else reads ``canonical``.
+    """
+    if not intent_data:
+        return "unknown"
     if intent_data.get("floor_hit") is True:
         return "floor"
 
-    category = (intent_data.get("category") or "").lower()
+    from services.shared_types import EffectClass
 
-    # Execution category without floor_hit = action handler
-    if category == "execution":
+    action = intent_data.get("action") or ""
+    effect = _action_effects().get(action)
+    if effect is not None and effect >= EffectClass.WRITE:
         return "action"
-
-    # Everything without floor_hit that isn't execution = canonical/handler path
+    if (
+        effect is None
+        and UNWIRED_EXECUTION_READS_ACTION
+        and (intent_data.get("category") or "").lower() == "execution"
+    ):
+        return "action"
     return "canonical"
 
 
@@ -646,6 +688,7 @@ def run_query(
         "pathological_reason": pathological_reason or "",
         "known_pathological": bool(pathological_reason),  # Issue #994
         "actual_routing": None,
+        "actual_routing_category": None,
         "actual_intent_category": None,
         "actual_intent_action": None,
         "http_status": None,
@@ -694,6 +737,7 @@ def run_query(
         result["response_text"] = message
         result["response_preview"] = message[:200]
         result["actual_routing"] = determine_actual_routing(intent_data, message, data)
+        result["actual_routing_category"] = determine_routing_by_category(intent_data)
         result["routing_pass"] = routing_match(expected_routing, result["actual_routing"])
 
         # Tier A heuristic
@@ -776,6 +820,7 @@ CSV_FIELDS = [
     "category",
     "expected_routing",
     "actual_routing",
+    "actual_routing_category",
     "routing_pass",
     "actual_intent_category",
     "actual_intent_action",
@@ -827,6 +872,11 @@ def write_report(results, filepath: Path):
 
     routing_pass = sum(1 for r in results if r["routing_pass"])
     routing_fail = total - routing_pass
+    routing_pass_category = sum(
+        1
+        for r in results
+        if routing_match(r["expected_routing"], r.get("actual_routing_category") or "")
+    )
 
     judge_pass = sum(1 for r in results if r.get("judge_verdict") == "PASS")
     judge_marginal = sum(1 for r in results if r.get("judge_verdict") == "MARGINAL")
@@ -910,6 +960,10 @@ def write_report(results, filepath: Path):
             "",
             "**M0 baseline (Mar 12)**: 70.5% routing pass (43/61)",
             f"**M1 routing**: {routing_pass/total*100:.1f}% ({routing_pass}/{total})",
+            f"**Routing by the rail entry's effect** (PPM 10-20, the headline): "
+            f"{routing_pass}/{total}. **By the classifier's category** (the pre-10-20 "
+            f"reading, for comparison): {routing_pass_category}/{total} "
+            f"({routing_pass_category/total*100:.1f}%).",
             "",
             "---",
             "",
@@ -1134,6 +1188,13 @@ def main():
     elif HOSTED:
         print("FATAL: a hosted target needs PIPER_CRED_FILE for an existing test account.")
         sys.exit(2)
+    # #1386 (PPM 10-20): routing reads the rail entry's effect, so the registry must load
+    # before Q1; a run that can't read it would score every route wrong.
+    try:
+        print(f"Rail registry: {len(_action_effects())} actions with an effect")
+    except Exception as e:
+        print(f"FATAL: rail registry unavailable ({type(e).__name__}: {e}).")
+        sys.exit(5)
     start_sha = _served_sha()
 
     print("=" * 70)
