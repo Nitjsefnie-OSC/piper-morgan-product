@@ -12448,7 +12448,8 @@ class IntentService:
                 return IntentProcessingResult(
                     success=False,
                     message=(
-                        f"Tell me what to change on #{issue_number}: I can update the "
+                        f"Tell me what to change on #{issue_number} in one message, like "
+                        f'"change the title of #{issue_number} to …". I can update the '
                         "title, the body, the state, the labels or the assignees."
                     ),
                     intent_data={
