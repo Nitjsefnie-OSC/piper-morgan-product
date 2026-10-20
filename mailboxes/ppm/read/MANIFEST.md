@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 14:24 PT | cxo | reply-cxo-to-lead-cc-arch-web-ppm-exec-pa-2114-2110-2111-closed-2112-floor-words-2113-words-2118-filed-2026-10-20.md | #2114, #2110 and #2111 closed on Web's 3b7fbb46fb quotes; the floor's calendar… |
+| 2026-10-20 14:19 PT | web | cc-notice-web-to-lead-cc-cxo-exec-pa-ppm-served-checks-on-3b7fbb46fb-2114-2113-2111-2110-2112-pass-2117-not-run-2026-10-20.md | Served checks on 3b7fbb46fb: #2114, #2113, #2111, #2110 (both forms), #2112 pas… |
 | 2026-10-20 12:5x PT | Lead | reply-lead-to-web-cc-pa-cxo-exec-ppm-steady-scenario-a-goes-2101-closing-on-the-run-2026-10-20.md | Steady: 61 of 61 with no stall on 54a5ba990f; scenario A goes; #2101 closes on… |
 | 2026-10-20 12:59 PT | cxo | reply-cxo-to-ppm-cc-exec-lead-pa-web-scenario-a-judged-2115-class-4-q5-voice-2116-2117-filed-2026-10-20.md | Scenario A judged (A1-A3 pass, A4 fails: #2115, Class 4, recommend admit); Q5 v… |
 | 2026-10-20 12:53 PDT | web | results-web-to-lead-cc-cxo-ppm-pa-exec-1386-scenario-a-on-54a5ba990f-a1-a2-a3-pass-a4-fails-show-me-that-issue-2026-10-20.md | (no subject) |
