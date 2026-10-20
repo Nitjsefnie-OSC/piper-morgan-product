@@ -27,7 +27,7 @@ log, never here. Bump `last_updated` to the newest line's date, or CI fails. Ski
 
 ## Now
 
-- **Alpha (live)** *(Lead, 2026-10-20 07:04 PDT, `curl https://alpha.pipermorgan.ai/health`; fly-deploy run 39435344767)*: healthy, **v0.8.14.0**, git_sha `ef907b2cd7`
+- **Alpha (live)** *(Lead, 2026-10-20 14:13 PDT, `curl https://alpha.pipermorgan.ai/health`; fly-deploy run 39498121922)*: healthy, **v0.8.14.0**, git_sha `3b7fbb46fb`, `loop_watchdog: running`; the fifth update of 10-20 (07:04, 08:54, 11:01, 11:45, 14:13) under the readiness-based grant (CIO 11:23: one green Alpha Health Watch run between updates, 07:00–21:00). #2101 (alpha stalls) CLOSED 12:5x on Web's 61-of-61 canonical run; this build adds #2110, #2111, #2112 (Arch: on a live landing the router's NONE stands), #2113, #2114, #2117, #2107's usage-limit words and #2109, all open for Web's served quotes.
   (promotion 1 of 2 today). It carries Monday's finds: #2093, #2091, #2092 (calendar in chat), #2094, #2095 (todos), #2096 (`/feedback`), #2097 (create confirmed by number), #2099 (mint refreshes),
   #2100 (what chat reads), #2102, the DB pool pre-ping, the #2101 bounds and the Alpha Health Watch. Slot 2 (same day, from a green Tests on `1cb1e79dc1`) adds the #2101 thread surface,
   the event-loop watchdog, the #2098 consult, the #2097 list-read confirm, the #2106 refusal line, the Slack session fix and the calendar reads off the loop.
@@ -41,7 +41,7 @@ log, never here. Bump `last_updated` to the newest line's date, or CI fails. Ski
   **7 not done** (2 In Progress, 5 Product Backlog), 1,260 done. The MVP milestone **is**
   the beta gate. **Dates: design partners Fri 10-23, hard stop Fri 10-30** (baseline 10-05; slips are logged in
   `docs/internal/planning/beta-gate-standard.md` and only PM moves either date). Read the ledger, not this line, for slips.
-- **Engineering focus** *(Lead, 2026-10-16 06:4x PDT, from the 10-15 Lead log and its STOP block)*: 10-15 closed with 31 landings on main, each
+- **Engineering focus** *(Lead, 2026-10-20 14:17 PDT, from the 10-20 Lead log)*: the partners' invitation surface on alpha — every served miss from the canonical run and scenario A gets a corpus row or a ruled fix the same day (today: eight landings and five promotions; corpus census 606); the event-loop watchdog stays on permanently; the MVP gate (PPM 13:02) is 8 open, 5 must-close, with #2111 #2112 #2114 #2117 on xian's admission ask via Exec.
   re-run at merge: the seven-branch held batch (#2011, ANALYSIS margin, #1965+#2012, #2009/#2013/#2014 with three migrations, #2010), #2020, #2017,
   #2019's delete cap, #1771 in seven units with the #888 escape-word map, #2026, #2027's dead suggestion lists, #2024, #2029 (+ amber icon), #2008
   formats, #2031, #2030, #2033, #2037, #2035, #2039, #2040, #2041, #2044 (Integrations card "Connected / Not checked yet. Press Test."), lint.yml
