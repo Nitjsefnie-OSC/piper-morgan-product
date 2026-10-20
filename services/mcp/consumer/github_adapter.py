@@ -1607,7 +1607,9 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
             return False
 
     def _rest_configured(self) -> bool:
-        return self._session is not None or self._rest_headers is not None
+        # getattr: the radar strict-read pins build the adapter with __new__
+        # (no __init__), so the attribute may be absent; absent means unconfigured.
+        return self._session is not None or getattr(self, "_rest_headers", None) is not None
 
     @contextlib.asynccontextmanager
     async def _rest_session(self) -> AsyncIterator[aiohttp.ClientSession]:
@@ -1617,7 +1619,9 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
         if self._session is not None:
             yield self._session
             return
-        async with aiohttp.ClientSession(headers=self._rest_headers or {}) as session:
+        async with aiohttp.ClientSession(
+            headers=getattr(self, "_rest_headers", None) or {}
+        ) as session:
             yield session
 
     async def _call_github_api(
