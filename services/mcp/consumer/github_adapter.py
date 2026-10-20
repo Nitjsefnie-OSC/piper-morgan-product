@@ -6,11 +6,12 @@ spatial adapter pattern for external system integration.
 """
 
 import asyncio
+import contextlib
 import json
 import logging
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
-from typing import Any, Dict, List, Literal, Optional, Tuple
+from typing import Any, AsyncIterator, Dict, List, Literal, Optional, Tuple
 
 import aiohttp
 
@@ -304,6 +305,7 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
         self._github_token: Optional[str] = None
         self._github_api_base = "https://api.github.com"
         self._session: Optional[aiohttp.ClientSession] = None
+        self._rest_headers: Optional[Dict[str, str]] = None  # #2102: per-call sessions
 
         # Token counting for MCP operations (Issue #369)
         self.token_counter = TokenCounter()
@@ -1584,21 +1586,39 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
             if api_base:
                 self._github_api_base = api_base
 
-            # Create HTTP session for GitHub API calls
-            if self._session is None:
-                headers = {}
-                if self._github_token:
-                    headers["Authorization"] = f"token {self._github_token}"
-                headers["Accept"] = "application/vnd.github.v3+json"
-
-                self._session = aiohttp.ClientSession(headers=headers)
-                logger.info("GitHub API session created")
+            # #2102: configure stores the REST headers and opens NO session. A
+            # session opened here leaked once per request (routers are built per
+            # chat turn and nothing closed them: 40 "Unclosed client session"
+            # warnings in six minutes on alpha, PA 2026-10-19). Each REST call
+            # now opens a short-lived session in ``_rest_session()`` and closes
+            # it; a session a caller or test assigns to ``_session`` is still
+            # honoured and still closed by ``disconnect()``.
+            headers = {}
+            if self._github_token:
+                headers["Authorization"] = f"token {self._github_token}"
+            headers["Accept"] = "application/vnd.github.v3+json"
+            self._rest_headers = headers
+            logger.info("GitHub API REST headers configured")
 
             return True
 
         except Exception as e:
             logger.error(f"Error configuring GitHub API: {e}")
             return False
+
+    def _rest_configured(self) -> bool:
+        return self._session is not None or self._rest_headers is not None
+
+    @contextlib.asynccontextmanager
+    async def _rest_session(self) -> AsyncIterator[aiohttp.ClientSession]:
+        """#2102: the session for ONE REST call. An assigned ``_session`` is used
+        as is (never closed here); otherwise a short-lived session with the
+        configured headers is opened and closed around the call."""
+        if self._session is not None:
+            yield self._session
+            return
+        async with aiohttp.ClientSession(headers=self._rest_headers or {}) as session:
+            yield session
 
     async def _call_github_api(
         self, endpoint: str, params: Optional[Dict[str, Any]] = None, *, strict: bool = False
@@ -1610,12 +1630,12 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
         if strict:
             return await self._call_github_api_strict(endpoint, params)
         try:
-            if not self._session:
+            if not self._rest_configured():
                 logger.warning("GitHub API session not configured")
                 return None
 
             url = f"{self._github_api_base}/{endpoint}"
-            async with self._session.get(url, params=params) as response:
+            async with self._rest_session() as session, session.get(url, params=params) as response:
                 if response.status == 200:
                     return await response.json()
                 elif response.status == 401:
@@ -1636,11 +1656,11 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
         self, endpoint: str, params: Optional[Dict[str, Any]] = None
     ) -> Any:
         """#1965: the honest read — every failure raises ``GitHubReadFailed``."""
-        if not self._session:
+        if not self._rest_configured():
             raise GitHubReadFailed("GitHub API session not configured (no usable token)")
         url = f"{self._github_api_base}/{endpoint}"
         try:
-            async with self._session.get(url, params=params) as response:
+            async with self._rest_session() as session, session.get(url, params=params) as response:
                 if response.status == 200:
                     return await response.json()
                 raise GitHubReadFailed(
@@ -1691,12 +1711,12 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
     ) -> Optional[Dict[str, Any]]:
         """Make GitHub API POST call"""
         try:
-            if not self._session:
+            if not self._rest_configured():
                 logger.warning("GitHub API session not configured")
                 return None
 
             url = f"{self._github_api_base}/{endpoint}"
-            async with self._session.post(url, json=data) as response:
+            async with self._rest_session() as session, session.post(url, json=data) as response:
                 if response.status in (200, 201):
                     return await response.json()
                 elif response.status == 401:
@@ -1723,12 +1743,12 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
         Mirrors _post_github_api but uses PATCH method.
         """
         try:
-            if not self._session:
+            if not self._rest_configured():
                 logger.warning("GitHub API session not configured")
                 return None
 
             url = f"{self._github_api_base}/{endpoint}"
-            async with self._session.patch(url, json=data) as response:
+            async with self._rest_session() as session, session.patch(url, json=data) as response:
                 if response.status == 200:
                     return await response.json()
                 elif response.status == 401:
