@@ -7,10 +7,12 @@ spatial adapter pattern for external system integration.
 
 import asyncio
 import contextlib
+import html
 import json
 import logging
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
+from datetime import datetime, timedelta, timezone
 from typing import Any, AsyncIterator, Dict, List, Literal, Optional, Tuple
 
 import aiohttp
@@ -272,6 +274,10 @@ class GitHubWriteResult:
     # "no such issue" instead of sending the user to check the repository
     # for a write that provably never happened.
     not_found: bool = False
+    # #2106: the server refused the write tool BY NAME, so the write provably never
+    # fired. attempted stays True (no native fallback may double-write on a
+    # misconfigured connection); the caller says nothing was created.
+    refused: bool = False
 
 
 def _github_404(text: Optional[str]) -> bool:
@@ -591,6 +597,36 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
         text = payload.lower()
         return "not found" in text or '"status": "404"' in text or "404" in text.split()
 
+    @staticmethod
+    def _is_unknown_tool_text(text: Optional[str]) -> bool:
+        return "unknown tool" in (text or "").lower()
+
+    @classmethod
+    def _is_unknown_tool_exc(cls, exc: BaseException) -> bool:
+        """#2106: the MCP server's 'unknown tool' refusal, at any depth of the task-group wrap."""
+        return any(cls._is_unknown_tool_text(str(leaf)) for leaf in cls._leaf_exceptions(exc))
+
+    @staticmethod
+    def _unknown_tool_refusal(tool: str) -> "GitHubWriteResult":
+        """#2106: refused=True lets the caller say nothing was created."""
+        _slog.warning("github_write_tool_unknown", tool=tool)
+        return GitHubWriteResult(
+            verified=False,
+            attempted=True,
+            refused=True,
+            degradation=DegradationResponse(
+                reason=DegradationReason.MISCONFIGURED,
+                user_message=(
+                    "GitHub's server doesn't offer that write for this connection, "
+                    "so nothing was created."
+                ),
+                action_hint=(
+                    "Reconnect GitHub from Settings → Integrations (the GitHub sign-in "
+                    "carries the write tools; a token may not)."
+                ),
+            ),
+        )
+
     @classmethod
     def _leaf_exceptions(cls, exc: BaseException) -> List[BaseException]:
         """Flatten an ``ExceptionGroup`` to its leaves (recursively); a plain
@@ -642,75 +678,135 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
     # e801b1a309 (#10 then a duplicate #11) while the reply said "couldn't
     # verify"; the outcome was knowable.
     _CREATE_CONFIRM_WINDOW_SECONDS = 600
+    # #2097 (Web's served rows on ef907b2cd7, 2026-10-20): GitHub's SEARCH index lags a fresh
+    # create by seconds to a minute, so a search-based confirm missed a seconds-old issue and
+    # later named a minute-old same-title issue for a newer one. The confirm now reads the
+    # repo's issue LIST (a consistent REST read) and accepts only an exact-title match created
+    # after the write started (minus a clock-skew allowance); search is the fallback when the
+    # list tool is unavailable, filtered the same way.
+    _LIST_ISSUES_TOOL = "list_issues"
+    _CREATE_CONFIRM_SKEW_SECONDS = 5
 
     @staticmethod
     def _title_norm(value: Any) -> str:
-        import html as _html
+        return " ".join(html.unescape(str(value or "")).split()).casefold()
 
-        return " ".join(_html.unescape(str(value or "")).split()).casefold()
-
-    async def _confirm_create_by_title(
-        self, client: Any, *, owner: str, repo: str, title: str
-    ) -> Optional[Dict[str, Any]]:
-        """The newest issue in ``owner/repo`` whose title equals ``title``
-        exactly (entity- and whitespace-normalized) and was created inside
-        the confirm window, else None. Never raises: a failed confirming read
-        leaves the write honest-uncertain."""
-        if not title:
+    @staticmethod
+    def _created_at(it: Dict[str, Any]) -> Optional["datetime"]:
+        raw = it.get("created_at")
+        if not isinstance(raw, str):
             return None
-        query = f'repo:{owner}/{repo} is:issue in:title "{title}"'
+        try:
+            return datetime.fromisoformat(raw.replace("Z", "+00:00"))
+        except ValueError:
+            return None
+
+    async def _list_recent_open_issues(
+        self, client: Any, *, owner: str, repo: str, limit: int = 20
+    ) -> Optional[List[Dict[str, Any]]]:
+        """The repo's newest open issues through ``list_issues`` (consistent, unlike the
+        search index). None when the tool is unavailable or the read fails."""
+        try:
+            result = await client.call_tool(
+                self._LIST_ISSUES_TOOL,
+                {
+                    "owner": owner,
+                    "repo": repo,
+                    "state": "open",
+                    "sort": "created",
+                    "direction": "desc",
+                    "perPage": limit,
+                },
+            )
+            items, _total = self._parse_issue_search(self._tool_text(result), limit=limit)
+            return [it for it in items if isinstance(it, dict)]
+        except Exception as exc:  # silent-ok: #2097 — the list read is a belt; its failure falls back to the search read (logged), never a crash of the write turn
+            _slog.warning("github_list_issues_failed", error=str(exc)[:200])
+            return None
+
+    async def _search_issues_by_title(
+        self, client: Any, *, owner: str, repo: str, title: str, open_only: bool
+    ) -> List[Dict[str, Any]]:
+        query = f'repo:{owner}/{repo} is:issue{" is:open" if open_only else ""} in:title "{title}"'
         try:
             result = await client.call_tool(
                 _ISSUES_TOOL,
-                {"query": query, "sort": "created", "order": "desc", "perPage": 5},
+                {"query": query, "sort": "created", "order": "desc", "perPage": 10},
             )
-            items, _total = self._parse_issue_search(self._tool_text(result), limit=5)
+            items, _total = self._parse_issue_search(self._tool_text(result), limit=10)
+            return [it for it in items if isinstance(it, dict)]
         except Exception as exc:  # silent-ok: #2097 — the confirming read is a belt; its failure keeps the write unverified (logged), never a crash of the write turn
             _slog.warning("github_create_confirm_search_failed", error=str(exc)[:200])
+            return []
+
+    async def _confirm_create_by_title(
+        self,
+        client: Any,
+        *,
+        owner: str,
+        repo: str,
+        title: str,
+        started_at: Optional["datetime"] = None,
+    ) -> Optional[Dict[str, Any]]:
+        """The newest open issue in ``owner/repo`` whose title equals ``title``
+        exactly (entity- and whitespace-normalized) and was created after
+        ``started_at`` (the write's start; minus the skew allowance), else
+        None. Without ``started_at`` the confirm window applies. A pre-existing
+        same-title issue is therefore never taken for the new one. Never
+        raises: a failed confirming read leaves the write honest-uncertain."""
+        if not title:
             return None
+        items = await self._list_recent_open_issues(client, owner=owner, repo=repo)
+        source = "list"
+        if items is None:
+            items = await self._search_issues_by_title(
+                client, owner=owner, repo=repo, title=title, open_only=False
+            )
+            source = "search"
         want = self._title_norm(title)
         matches = [
-            it
-            for it in items
-            if isinstance(it, dict)
-            and it.get("number")
-            and self._title_norm(it.get("title")) == want
+            it for it in items if it.get("number") and self._title_norm(it.get("title")) == want
         ]
         if not matches:
             return None
-        from datetime import datetime, timezone
-
-        def _created(it: Dict[str, Any]) -> Optional[datetime]:
-            raw = it.get("created_at")
-            if not isinstance(raw, str):
-                return None
-            try:
-                return datetime.fromisoformat(raw.replace("Z", "+00:00"))
-            except ValueError:
-                return None
-
         now = datetime.now(timezone.utc)
         recent = []
         for it in matches:
-            when = _created(it)
-            if when is None or (now - when).total_seconds() <= self._CREATE_CONFIRM_WINDOW_SECONDS:
+            when = self._created_at(it)
+            if started_at is not None:
+                floor = started_at - timedelta(seconds=self._CREATE_CONFIRM_SKEW_SECONDS)
+                if when is not None and when >= floor:
+                    recent.append(it)
+            elif (
+                when is None or (now - when).total_seconds() <= self._CREATE_CONFIRM_WINDOW_SECONDS
+            ):
                 recent.append(it)
         if not recent:
-            _slog.warning("github_create_confirm_only_old_matches", count=len(matches))
+            _slog.warning(
+                "github_create_confirm_only_old_matches", count=len(matches), source=source
+            )
             return None
         recent.sort(key=lambda it: int(it.get("number") or 0), reverse=True)
-        _slog.info("github_create_confirmed_by_title_search", number=recent[0].get("number"))
+        _slog.info(
+            "github_create_confirmed_by_title", number=recent[0].get("number"), source=source
+        )
         return recent[0]
 
     async def _confirm_create_by_title_after(
-        self, binding: Any, *, owner: str, repo: str, title: str
+        self,
+        binding: Any,
+        *,
+        owner: str,
+        repo: str,
+        title: str,
+        started_at: Optional["datetime"] = None,
     ) -> Optional[Dict[str, Any]]:
         """``_confirm_create_by_title`` on a fresh client (the write's client
         context is closed once the read-back leg returns)."""
         try:
             async with self._mcp_client_ctx(binding) as client:
                 return await self._confirm_create_by_title(
-                    client, owner=owner, repo=repo, title=title
+                    client, owner=owner, repo=repo, title=title, started_at=started_at
                 )
         except Exception as exc:  # silent-ok: #2097 — same belt as above; a failed confirming read leaves the write unverified, logged
             _slog.warning("github_create_confirm_search_failed", error=str(exc)[:200], leg="after")
@@ -720,21 +816,29 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
         self, user_id: str, *, owner: str, repo: str, title: str
     ) -> Optional[Dict[str, Any]]:
         """#2097: an OPEN issue in ``owner/repo`` titled exactly ``title`` (the
-        duplicate check before a second create), else None. A degraded or
-        failed read answers None: the check never blocks a create."""
+        duplicate check before a second create), else None. Reads the repo's
+        issue list (consistent); search is the fallback. A degraded or failed
+        read answers None: the check never blocks a create."""
         if not title:
             return None
-        query = f'repo:{owner}/{repo} is:issue is:open in:title "{title}"'
-        found = await self._search_via_connector(user_id, tool=_ISSUES_TOOL, query=query, limit=10)
-        if found.degradation is not None or not found.issues:
+        binding = await self.resolve_credential(user_id)  # #1965 (b): the one resolver
+        if isinstance(binding, DegradationResponse):
+            return None
+        try:
+            async with self._mcp_client_ctx(binding) as client:
+                items = await self._list_recent_open_issues(
+                    client, owner=owner, repo=repo, limit=50
+                )
+                if items is None:
+                    items = await self._search_issues_by_title(
+                        client, owner=owner, repo=repo, title=title, open_only=True
+                    )
+        except Exception as exc:  # silent-ok: #2097 — the duplicate check never blocks a create; a failed read answers None (logged)
+            _slog.warning("github_duplicate_title_check_failed", error=str(exc)[:200])
             return None
         want = self._title_norm(title)
         matches = [
-            it
-            for it in found.issues
-            if isinstance(it, dict)
-            and it.get("number")
-            and self._title_norm(it.get("title")) == want
+            it for it in items if it.get("number") and self._title_norm(it.get("title")) == want
         ]
         if not matches:
             return None
@@ -767,9 +871,17 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
         written: Optional[Dict[str, Any]] = None
         try:
             async with self._mcp_client_ctx(binding_or_degrade) as client:
+                started_at = datetime.now(
+                    timezone.utc
+                )  # #2097: the confirm accepts only issues created after this
                 result = await client.call_tool(tool, args)
                 raw_text = self._first_text(result.content)
                 written = self._parse_issue_payload(raw_text)
+                if written is None and self._is_unknown_tool_text(raw_text):
+                    # #2106: the server refused the tool BY NAME in-band (some servers
+                    # answer "Unknown tool: …" as content, the live one raises; both
+                    # mean the write never fired). Definite, never "may or may not".
+                    return self._unknown_tool_refusal(tool)
                 if written is None:
                     # The response wasn't a parseable artifact — often an in-band
                     # tool ERROR (e.g. "unknown tool") that call_tool surfaces as
@@ -797,6 +909,7 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
                         owner=args["owner"],
                         repo=args["repo"],
                         title=args.get("title") or "",
+                        started_at=started_at,
                     )
                     if confirmed is not None:
                         number = confirmed.get("number")
@@ -861,6 +974,11 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
                     not_found=True,
                     issue_number=int(args["issue_number"]),
                 )
+            if raw_text is None and self._is_unknown_tool_exc(exc):
+                # #2106 (PA's PAT-leg read, 2026-10-20): the server refused the
+                # tool by name ("unknown tool"), so the write provably never
+                # fired. Definite, not "may or may not" (#1858's family).
+                return self._unknown_tool_refusal(tool)
             # Mid-flight failure: the write MAY have landed before the error —
             # attempted=True forbids a native retry (double-write hazard).
             logger.warning("github_write_failed_unreachable tool=%s", tool, exc_info=True)
@@ -878,6 +996,7 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
                     owner=args["owner"],
                     repo=args["repo"],
                     title=args.get("title") or "",
+                    started_at=started_at,
                 )
                 if confirmed is not None and confirmed.get("number") == int(number):
                     return GitHubWriteResult(
@@ -1046,6 +1165,8 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
             data = json.loads(payload)
         except (ValueError, TypeError):
             return [], None
+        if isinstance(data, list):
+            data = {"issues": data}  # list_issues answers a bare array on some server versions
         if not isinstance(data, dict):
             return [], None
         items = data.get("items")

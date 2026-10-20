@@ -35,6 +35,16 @@ from .github_operations_protocol import GitHubOperations
 logger = logging.getLogger(__name__)
 
 
+class GitHubWriteRefused(RuntimeError):
+    """#2106: the server refused the write tool by name, so nothing was written.
+    Definite (not the "may or may not" hedge); carries the connector's own words."""
+
+    def __init__(self, user_message: str, action_hint: Optional[str] = None) -> None:
+        super().__init__(user_message)
+        self.user_message = user_message
+        self.action_hint = action_hint
+
+
 class GitHubIssueNotFound(RuntimeError):
     """#1858: an update-shaped GitHub write targeted an issue that does not
     exist — confirmed on both the write response and the same-session
@@ -329,6 +339,15 @@ class GitHubIntegrationRouter:
             return wr.raw
         if not wr.attempted:
             return None  # never fired — safe native fallback
+        if getattr(wr, "refused", False):
+            # #2106: definitive — the server does not offer the tool for this
+            # connection; nothing was written. No double-write caution needed.
+            deg = wr.degradation
+            raise GitHubWriteRefused(
+                user_message=getattr(deg, "user_message", None)
+                or "GitHub's server refused that write, so nothing was created.",
+                action_hint=getattr(deg, "action_hint", None),
+            )
         if getattr(wr, "not_found", False):
             # #1858: definitive — the target artifact does not exist, so the
             # write never landed. A different bucket from unverified: the
