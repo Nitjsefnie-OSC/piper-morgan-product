@@ -425,7 +425,7 @@ Score this response per the rubric. Return only the JSON object."""
         message = anthropic_client.messages.create(
             model=JUDGE_MODEL,
             max_tokens=600,
-            temperature=0.2,  # Low temperature for consistent scoring
+            # No temperature: claude-sonnet-5-5 rejects it (400, 10-20 07:15 run).
             system=JUDGE_SYSTEM_PROMPT,
             messages=[{"role": "user", "content": user_prompt}],
         )
@@ -1089,7 +1089,7 @@ def write_report(results, filepath: Path):
             "## Methodology Notes",
             "",
             "- **Routing verdict**: Compares actual route taken (floor / canonical / action) to v3 expected route. M0 baseline used a different methodology (literal category matching) so this is a reframed but loosely comparable number.",
-            f"- **Quality verdict**: LLM-as-judge using Colleague Test rubric. Judge model: {JUDGE_MODEL}, temperature 0.2, with calibration examples in system prompt.",
+            f"- **Quality verdict**: LLM-as-judge using Colleague Test rubric. Judge model: {JUDGE_MODEL}, default sampling, with calibration examples in system prompt.",
             f"- **Confidence threshold for human escalation**: < {JUDGE_CONFIDENCE_THRESHOLD}",
             "- **Auto-fail rule**: any single dimension scoring 0 forces FAIL verdict regardless of total.",
             "- **Known issues** are run anyway per PM guidance — honest reporting over hiding.",
@@ -1152,9 +1152,16 @@ def main():
             if api_key:
                 anthropic_client = Anthropic(api_key=api_key)
                 try:
-                    # Fail fast: a retired judge model 404s on every call, which once
-                    # produced a run with no Quality number at all (10-19 16:09).
-                    anthropic_client.models.retrieve(JUDGE_MODEL)
+                    # Fail fast: a retired judge model 404s on every call (10-19 16:09), and a
+                    # rejected parameter 400s on every call (10-20 07:15). Both once produced a
+                    # run with no Quality number, so probe with a one-token call shaped like the
+                    # judge's own (same model and parameters, short of the prompt).
+                    anthropic_client.messages.create(
+                        model=JUDGE_MODEL,
+                        max_tokens=1,
+                        system=JUDGE_SYSTEM_PROMPT,
+                        messages=[{"role": "user", "content": "ok"}],
+                    )
                 except Exception as e:
                     print(
                         f"\nFATAL: judge model {JUDGE_MODEL} unavailable ({type(e).__name__}). Set JUDGE_MODEL."
