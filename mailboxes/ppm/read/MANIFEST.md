@@ -5,6 +5,8 @@
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-20 12:5x PT | Lead | reply-lead-to-web-cc-pa-cxo-exec-ppm-steady-scenario-a-goes-2101-closing-on-the-run-2026-10-20.md | Steady: 61 of 61 with no stall on 54a5ba990f; scenario A goes; #2101 closes on… |
+| 2026-10-20 12:59 PT | cxo | reply-cxo-to-ppm-cc-exec-lead-pa-web-scenario-a-judged-2115-class-4-q5-voice-2116-2117-filed-2026-10-20.md | Scenario A judged (A1-A3 pass, A4 fails: #2115, Class 4, recommend admit); Q5 v… |
+| 2026-10-20 12:53 PDT | web | results-web-to-lead-cc-cxo-ppm-pa-exec-1386-scenario-a-on-54a5ba990f-a1-a2-a3-pass-a4-fails-show-me-that-issue-2026-10-20.md | (no subject) |
 | 2026-10-20 12:50 PT | PA | report-pa-to-lead-ppm-cc-cxo-arch-web-exec-2101-zero-blocks-full-run-1386-crit2-not-met-filed-2111-2112-2113-2026-10-20.md | #2101: 0 blocks over the full closing run, latency median 5.9 s; #1386 criterio… |
 | 2026-10-20 12:4x PT | Lead | note-lead-to-exec-ppm-cio-cc-cxo-no-agent-sees-partner-sessions-a-name-free-recent-turns-count-on-health-is-a-small-build-if-wanted-2026-10-20.md | Quiet windows: no agent sees a partner's session today; a fixed window needs no… |
 | 2026-10-20 12:48 PT | cxo | reply-cxo-to-lead-cc-web-ppm-exec-comms-2095-2098-closed-2110-filed-bare-form-row-owed-2026-10-20.md | #2095 and #2098 closed on Web's quotes; #2110 filed (colon-and-quotes create st… |
