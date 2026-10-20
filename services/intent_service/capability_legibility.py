@@ -321,13 +321,42 @@ CANNOT_READ_LINE: Dict[str, str] = {
 }
 
 
+#: #2112 (CXO's words, Arch's ruling): a connector whose reads have a stated
+#: limit renders CXO's sentence instead of the generic "chat reads …" list, so
+#: the floor never implies a read it does not have (conflicts, other people's
+#: availability). The claim is confirmed against the rail: meeting_time (one
+#: day) and week_calendar (the week, free time included).
+READS_WITH_LIMITS_LINE: Dict[str, str] = {
+    "calendar": (
+        "I can read your calendar for today, tomorrow or this week, including your "
+        "free time. I can't check for conflicts or find a time that works for other "
+        "people yet."
+    ),
+}
+
+#: #2112 (CXO's words): what the floor says when this connector is not connected.
+NOT_CONNECTED_LINE: Dict[str, str] = {
+    "calendar": (
+        "Your calendar isn't connected, so I can't look at it. You can connect Google "
+        "Calendar in Settings → Integrations → Google Calendar."
+    ),
+}
+
+
 def chat_reads_line(key: str) -> str:
     """The rendered reads for one connector key: what chat reads, or the can't-read
-    sentence when the declaration is empty."""
+    sentence when the declaration is empty, or CXO's limits sentence (#2112)."""
     reads = CHAT_READS.get(key, ())
     if not reads:
         return CANNOT_READ_LINE.get(key, "connects, but chat can't read its content yet")
+    if key in READS_WITH_LIMITS_LINE:
+        return READS_WITH_LIMITS_LINE[key]
     return "chat reads " + ", ".join(r.what for r in reads)
+
+
+def not_connected_line(key: str) -> Optional[str]:
+    """CXO's sentence for a connector that is not connected (#2112), or None."""
+    return NOT_CONNECTED_LINE.get(key)
 
 
 def reader_symbol_resolves(symbol: str) -> bool:

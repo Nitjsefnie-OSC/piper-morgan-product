@@ -1272,7 +1272,8 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
                 "GitHub MCP issue_read failed (server unreachable/unprovisioned)", exc_info=True
             )
             return GitHubIssueResult(
-                degradation=await self._degrade_for_exc(binding_or_degrade, exc)
+                degradation=await self._degrade_for_exc(binding_or_degrade, exc),
+                resolved_repo=resolved.full_name,  # #2111: the repo the read looked in
             )
         return GitHubIssueResult(item=item, resolved_repo=resolved.full_name)
 
