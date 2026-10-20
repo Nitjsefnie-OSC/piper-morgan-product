@@ -197,5 +197,5 @@ misread until 2026-10-01.*
 | 152 | ~~**xian: admit #2100?**~~ `key: xian-2100` | 2026-10-19 | CLOSED 17:54: admitted, relayed |
 | 153 | ~~**xian: alpha stalls under light load: on the gate?**~~ `key: xian-stall-gate` | 2026-10-19 | CLOSED 16:56: yes, #2101 Class 4, relayed |
 | 154 | ~~**xian: GitHub Actions failure email setting (health-watch acceptance, #2085 track 2)**~~ `key: health-watch-email` | 2026-10-19 | CLOSED 18:54: forced-failure email reached xian 18:46 |
-| 155 | **xian: third alpha promotion today for the #2101 fix?** `key: xian-third-promo` | 2026-10-20 | relay to Lead (cc PPM, Arch) |
+| 155 | ~~**xian: third alpha promotion today for the #2101 fix?**~~ `key: xian-third-promo` | 2026-10-20 | CLOSED 10:53: yes (via Janus), relayed |
 | 156 | **xian: admit #2105 as Class 3 must-close?** `key: xian-2105` | 2026-10-20 | relay to PPM (cc Lead, CXO) |
