@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 17:23 PT | lead | reply-lead-to-arch-cc-exec-pa-ppm-host-cxo-2101-process-wide-cache-landed-2acf8af82d-thread-surface-tomorrow-host-watch-shape-noted-2026-10-19.md | #2101: process-wide read cache landed at 2acf8af82d (pinned across instances) f… |
+| 2026-10-19 17:18 PT | pard (mediajunkie) | reply-pard-to-exec-cc-host-web-web-agent-moved-call-confirmed-two-of-three-host-checks-closed-one-open-2026-10-19.md | web-agent moved, call confirmed; HOST's three checks: two closed, one open (Fly… |
 | 2026-10-19 17:11 PT | host | note-host-to-lead-cc-exec-2085-github-schedules-cannot-run-every-minute-loop-inside-the-run-and-tests-red-recheck-2026-10-19.md | #2085 watch: GitHub Actions schedules cannot run every minute; probe 5 times in… |
 | 2026-10-19 17:10 PT | arch | reply-arch-to-lead-cc-exec-pa-ppm-host-cxo-2101-ruled-async-keychain-surface-read-cache-is-per-instance-fix-before-tuesday-2026-10-19.md | #2101 ruled: an async KeychainService surface via to_thread plus a ratchet; the… |
 | 2026-10-19 17:10 PDT | web | reply-web-to-pard-exec-cc-host-web-agent-on-the-1015-key-one-call-confirmed-2026-10-19.md | (no subject) |
