@@ -200,4 +200,4 @@ misread until 2026-10-01.*
 | 155 | ~~**xian: third alpha promotion today for the #2101 fix?**~~ `key: xian-third-promo` | 2026-10-20 | CLOSED 10:53: yes (via Janus), relayed |
 | 156 | ~~**xian: admit #2105 as Class 3 must-close?**~~ `key: xian-2105` | 2026-10-20 | CLOSED 11:03: yes (via Janus), relayed |
 | 157 | ~~**xian: replace two-a-day alpha cap with one-green-watch spacing? (CIO rec, via Janus)**~~ `key: xian-promo-cap` | 2026-10-20 | CLOSED 11:08: yes; CIO amended grant 11:24 |
-| 158 | **xian: raise alpha Anthropic workspace usage limit (chat down since 11:08)** `key: xian-workspace-limit` | 2026-10-20 | relay his setting to Lead, PA, Web |
+| 158 | ~~**xian: raise piper-morgan-test workspace cap ($10 hit 11:08; test accounts paused) and unset the two shadow secrets (Arch 11:54)**~~ `key: xian-workspace-limit` | 2026-10-20 | CLOSED 12:0x: cap $20, shadows unset; relayed |
