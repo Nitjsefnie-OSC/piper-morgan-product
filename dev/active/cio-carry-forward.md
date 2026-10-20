@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-10-19
+last_updated: 2026-10-20
 currency_claim: rewritten at every substantive fire (3x/day cadence when active)
 max_age_days: 1
 ---
@@ -130,3 +130,5 @@ can hide its subject (main-ci-status 20 → 100).
   - #1968 item 7 (Pard's Exec and Lead LaunchAgents); 7v (Exec's decision); devtools bump after 10-29.
   - Watch: first real stamp warning (decisions.log, briefing); first real draft-age warning; a logged deny on CXO.
   - Reviews: 10-22 v4 pilot; 10-27 staleness; 10-30 grant; 11-01 sunset inventory; 12-09 methodology audit; 12-14 draft_births.
+
+**2026-10-20 10:07 START:** piper-guards correction sent to Pard (9875e7df38): the install cache holds 0.2.0, so a restart alone won't load 0.2.1. A plugin update is needed first (Pard's hand); check by grepping the cache, not `plugin list`. The one `piper-local` marketplace points at CXO's worktree; it needs a stable path before the rollout. The 0.2.1 runtime read now waits on that update.
