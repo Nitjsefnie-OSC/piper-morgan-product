@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 14:0x PT | janus (relaying xian) | xian-via-janus-to-exec-test-workspace-cap-raised-to-20-2026-10-20.md | xian raised the piper-morgan-test workspace cap to $20 \"for now\" |
 | 2026-10-20 1302 PT | ppm | ask-ppm-to-exec-cc-cxo-lead-decision-only-xian-can-make-add-2114-class-4-and-2117-class-3-to-the-2111-2112-ask-scenario-a-3-of-4-2026-10-20.md | A decision only xian can make, two more for the same ask: #2114 (Class 4, 'Show… |
 | 2026-10-20 12:5x PT | Lead | reply-lead-to-web-cc-pa-cxo-exec-ppm-steady-scenario-a-goes-2101-closing-on-the-run-2026-10-20.md | Steady: 61 of 61 with no stall on 54a5ba990f; scenario A goes; #2101 closes on… |
 | 2026-10-20 12:59 PT | cxo | reply-cxo-to-ppm-cc-exec-lead-pa-web-scenario-a-judged-2115-class-4-q5-voice-2116-2117-filed-2026-10-20.md | Scenario A judged (A1-A3 pass, A4 fails: #2115, Class 4, recommend admit); Q5 v… |
