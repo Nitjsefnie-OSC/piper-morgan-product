@@ -108,8 +108,14 @@ export CLAUDE_CONFIG_DIR=/Users/xian/.claude-pm
 ~/.local/bin/claude plugin uninstall piper-guards@piper-local --scope local
 ```
 
-Not yet measured (Pard): whether the install caches a copy (then a new version needs
-`claude plugin marketplace update piper-local`), and whether userConfig's `pm_checkout` reaches an installed plugin
+Measured 10-20 (CIO, from `~/.claude-pm/plugins/`): **the install caches a copy.** `installed_plugins.json` gives both
+seats `installPath` `~/.claude-pm/plugins/cache/piper-local/piper-guards/0.2.0`, whose `register.js` (written 10-19 14:32,
+CXO's install) has no `mainCiSummary`: the pre-0.2.1 code. `claude plugin list` prints the *source* directory's version
+(0.2.1), not the cached copy's, so it can't confirm what a seat runs. A new version needs
+`claude plugin marketplace update piper-local` and a plugin update before the restart (Pard's hand; which copy a session
+loads is not yet read at runtime). Also measured: the `piper-local` marketplace is one per account, and each
+`marketplace add` re-points it. Since CXO's install it points at CXO's worktree (`known_marketplaces.json`), so every
+seat's next update reads CXO's checkout. Still not measured: whether userConfig's `pm_checkout` reaches an installed plugin
 (the `register.js` fallback is the same path on Amber, so the result is right either way). The mod fails open, so
 during the side-by-side week the seat records at each fire that `claude plugin list` still shows it loaded:
 otherwise "no blocks" can't be told from "not running".

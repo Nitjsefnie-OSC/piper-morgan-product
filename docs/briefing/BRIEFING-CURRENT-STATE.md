@@ -51,17 +51,18 @@ log, never here. Bump `last_updated` to the newest line's date, or CI fails. Ski
   (#2021 lifts), #2023 corpus rows first. Pacing: normal from 10-16 (run-hot ended 10-15 22:00).
 - **PM's open asks** *(Exec, 2026-10-09 06:4x PDT)*: on Exec's attention rollup at
   `claude.ai/artifact/719UZ4h1NELjEwWZbDCceT` (its own header line carries the current version; do not pin one here, it was v90 at 04:2x and v95 by 06:4x). Do not copy the list here: it goes stale within hours.
-- **Usage** *(CIO, 2026-10-17 10:08 PDT, last row of `dev/heartbeats/usage-per-account.tsv`, read 09:23)*: the pipermorgan.ai
-  weekly meter is at **18%**; the next reset is **10-22 22:00 PDT** (10-23 05:00Z). The stop line is **95%**
-  of the weekly meter (PM-approved 10-06). Normal pacing since 10-16.
+- **Usage** *(CIO, 2026-10-20 10:07 PDT, last row of `dev/heartbeats/usage-per-account.tsv`, read 09:23)*: the pipermorgan.ai
+  weekly meter is at **49%**; the next reset is **10-22 22:00 PDT** (10-23 05:00Z). The stop line is **95%**
+  of the weekly meter (PM-approved 10-06). Normal pacing.
 - **Mail** *(CIO, 2026-10-15)*: v3 (`scripts/mail-send.sh`) for everyone. **Mail v4 pilot** (exec, cio and lead)
   runs through `scripts/mail4.py` in the private `piper-morgan-mail` repo; see
   `docs/internal/operations/mail-v4-pilot.md`. HOST and the other seats aren't in v4, and a v4 send to them is refused. No mail to PM:
   anything for PM goes to Exec (10-03). Since 10-14, mail-send refuses any new file in `mailboxes/xian (ceo)/inbox/`.
-- **Ruleset refactor (R6)** *(CIO, 2026-10-15, from git log and CIO logs)*: steps 1 to 5 done. The slim CLAUDE.md landed 10-12
-  (c3a7345cd3), after xian's D-D, D-E and D-F (e96a8b281b). Step 6: D-G (fleet CLI upgrade) was overtaken, with all seats on 2.1.296
-  after the 10-10 reboot. The `piper-guards` plugin runs in parallel with the settings hooks on CIO's seat only, through 10-19. The
-  per-rule keep-or-replace decision is at that review (`docs/internal/operations/hooks-registry.md`).
+- **Ruleset refactor (R6)** *(CIO, 2026-10-20, from git log and CIO logs)*: steps 1 to 5 done. The slim CLAUDE.md landed 10-12
+  (c3a7345cd3), after xian's D-D, D-E and D-F (e96a8b281b). Step 6: D-G (fleet CLI upgrade) was overtaken. The `piper-guards` plugin
+  review was decided 10-19 (`docs/internal/operations/hooks-registry.md`, "Decided 10-19"): M-1 and M-3 keep both mod rule and settings hook,
+  M-2/4/5/6 renew, M-9 stays a prototype; no settings hook retires until the mod has run a week on every seat. It runs on CIO's and CXO's
+  seats (CXO since 10-19 14:47); 0.2.1 (M-9 reads `main-ci-status.sh`) is on main, but the install cache still holds 0.2.0, so it needs a plugin update (Pard's hand) before a restart loads it. The rest of the cohort follows a quiet week on CXO.
 - **Operating model** *(standing)*: every cycling role runs the `duty-cycle-tick` skill. State lives in
   `dev/active/{role}-carry-forward.md`; the session log is the one durable record; push to `origin/main`
   routinely. Cohort liveness: `scripts/duty-cycle-freeze-check.sh`. CI on main: `scripts/main-ci-status.sh`.
