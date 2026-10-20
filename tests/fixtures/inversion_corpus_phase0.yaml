@@ -2793,3 +2793,8 @@ corpus:
     expected: action:review_issue_query
     source: "issue-2114 Web served 2026-10-20 12:5x scenario A4 (the turn after 'Created issue #22 …')"
     notes: "no number in the words; the handler resolves the referent from the session's creation ledger (#2114)"
+  - phrase: "Update issue #123"
+    category: QUERY
+    expected: action:update_issue
+    source: "issue-2113 PA canonical run on 54a5ba990f 2026-10-20 12:2x (Q58; served update_document_query, the Notion line)"
+    notes: "an explicit issue number with no field named; the update_issue handler asks what to change (#2113)"

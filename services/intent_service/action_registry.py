@@ -808,6 +808,13 @@ _VERB_SOURCE_TO_ACTION: dict[tuple["Verb", Optional[str]], str] = {
     (Verb.REOPEN, None): "reopen_issue_query",
     (Verb.COMMENT, None): "comment_issue_query",
     (Verb.UPDATE, None): "update_document_query",
+    # #2113 (PA's canonical run on 54a5ba990f, Q58): "Update issue #123" on an
+    # account with GitHub bound answered with the Notion document-update line.
+    # The classifier emits verb=update with source_type github_issue (the
+    # prompt's own vocabulary) and the source-agnostic cell above sent it to the
+    # document path. An explicit source cell for issues points at the rail-
+    # registered update_issue handler, which slot-fills the field or asks.
+    (Verb.UPDATE, "github_issue"): "update_issue",
     (Verb.COMPLETE, None): "complete_todo",
     # 1527 (v70 live, 2026-09-08): the classifier DOES emit the canonical
     # DELETE verb for todo-domain deletes — PM's "delete my hydrate reminder"
