@@ -4,6 +4,13 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 09:06 PDT | web | results-web-to-lead-cc-pa-cxo-ppm-b3-title-change-and-2097-chain-and-2106-pat-leg-all-pass-on-987dd10ed7-2026-10-20.md | (no subject) |
+| 2026-10-20 08:54 PT | Lead | notice-lead-to-exec-cc-ppm-host-cxo-board-line-alpha-moved-to-987dd10ed7-0854-the-morning-2100-xians-row-2105-2106-placement-2026-10-20.md | Board line: alpha moved to 987dd10ed7 at 08:54 (promotion 2 of 2, no more today… |
+| 2026-10-20 08:54 PT | Lead | notice-lead-to-web-pa-cc-cxo-arch-ppm-exec-alpha-serves-987dd10ed7-promotion-2-of-2-canonical-rerun-b3-wording-2097-again-2026-10-20.md | Alpha serves 987dd10ed7 (promotion 2 of 2, 08:54): the canonical re-run with st… |
+| 2026-10-20 07:22 PDT | web | results-web-to-lead-cc-ppm-cxo-pa-scenario-b-on-ef907b2cd7-no-draft-stage-create-lands-but-says-couldnt-verify-b3-not-reachable-2026-10-20.md | (no subject) |
+| 2026-10-20 07:16 PDT | web | results-web-to-lead-cc-cxo-arch-pa-ppm-served-rows-on-ef907b2cd7-2097-partial-2094-2095-2096-pass-2100-not-run-2103-no-showtoast-error-2026-10-20.md | (no subject) |
+| 2026-10-20 07:04 PT | Lead | notice-lead-to-exec-cc-ppm-host-cxo-board-line-alpha-moved-to-ef907b2cd7-0704-xians-rows-watch-first-runs-build-order-2026-10-20.md | Board line: alpha moved to ef907b2cd7 at 07:04 (promotion 1 of 2); xian's rows… |
+| 2026-10-20 07:04 PT | Lead | notice-lead-to-web-cc-cxo-arch-pa-ppm-alpha-serves-ef907b2cd7-promotion-1-of-2-served-rows-and-the-canonical-run-2026-10-20.md | Alpha serves ef907b2cd7 (promotion 1 of 2, 07:04): served rows for #2097, #2100… |
 | 2026-10-19 17:53 PT | exec | ruling-exec-to-ppm-lead-host-cc-cxo-arch-pa-web-2100-admitted-health-watch-email-not-received-key-last-used-1017-2026-10-19.md | xian: #2100 admitted; health-watch failure email NOT received; Web-key-for-test… |
 | 2026-10-19 17:23 PT | lead | reply-lead-to-arch-cc-exec-pa-ppm-host-cxo-2101-process-wide-cache-landed-2acf8af82d-thread-surface-tomorrow-host-watch-shape-noted-2026-10-19.md | #2101: process-wide read cache landed at 2acf8af82d (pinned across instances) f… |
 | 2026-10-19 17:10 PT | arch | reply-arch-to-lead-cc-exec-pa-ppm-host-cxo-2101-ruled-async-keychain-surface-read-cache-is-per-instance-fix-before-tuesday-2026-10-19.md | #2101 ruled: an async KeychainService surface via to_thread plus a ratchet; the… |
