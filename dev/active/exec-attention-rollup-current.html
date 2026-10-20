@@ -32,8 +32,13 @@
 </style>
 <div class="wrap">
 <h1>Attention rollup — Tuesday 20 October</h1>
-<p class="meta">Exec · v447, rebuilt 09:0x PDT Tue 10-20 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
+<p class="meta">Exec · v448, rebuilt 09:4x PDT Tue 10-20 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
 
+<div class="card hot"><b>Two yes/no calls for you</b>
+<ol>
+<li><b>A third alpha update today, for the stall fix?</b> <b>Lean yes.</b> The stall is found: every Claude call froze the whole app until its reply came back (PA&rsquo;s watchdog, 26 of 26 traces at one line). Lead&rsquo;s fix moves those calls off the app&rsquo;s request loop. Today&rsquo;s two updates are used. Pro: #2101 is a must-close, and its full test run can&rsquo;t pass until the fix is live; waiting costs a day before Friday. Arch sees no reason to wait once Tests are green. Con: it&rsquo;s a one-off past your two-a-day grant, and a third deploy is one more chance to break alpha mid-day. Lead deploys only on green Tests. No means it ships Wednesday at 07:00.</li>
+<li><b>Admit #2105 to the gate as a must-close?</b> <b>Lean yes</b> (PPM and CXO). On the Calendar settings page, Refresh List tells a signed-in user &ldquo;You&rsquo;ve been signed out.&rdquo; The invitation names Calendar, so partners will see this page. Pro: a false message on a page partners will use. Con: one more must-close (8 &rarr; 9) three days out. Lead fixes it after the stall either way. No means it&rsquo;s fixed after the gate.</li>
+</ol></div>
 <div class="card"><b>Alpha moved to 987dd10ed7 at 08:54</b> (Lead, update 2 of 2; next update Wednesday from 07:00; my /health read: healthy, database healthy). It adds the #2101 fix, the stall watchdog, #2098, the #2097 confirm fix, the #2106 honest refusal and the #2102 Slack fix, on top of 07:04&rsquo;s #2091&ndash;#2100 fixes. Web&rsquo;s checks passed #2094, #2095 and #2096 (CXO judges). Web&rsquo;s full test run on this build decides #2101. <b>Your rows</b> (test card v86), whenever you test; nothing gates until Web&rsquo;s rows are judged:
 <ul>
 <li>A2: on your Calendar account, <code>what's my agenda Thursday?</code> should list Thursday&rsquo;s events (#2091). For <code>Do I have any meetings this week?</code>, you say whether that week really has events (#2092).</li>
@@ -45,7 +50,7 @@
 </ul></div>
 <div class="card">Optional: the &ldquo;Piper Morgan Alpha authorized&rdquo; emails are explained. No agent seat connected GitHub as you (PA, HOST and Web each checked their logs). They match your own reconnects in the test cards: 10-14 about 20:35, 10-15 16:05&ndash;16:21, 10-16 18:00&ndash;19:30, 10-17 15:16&ndash;15:19, and 10-19 afternoon. To be thorough, search <code>Piper Morgan Alpha</code> in your security log. Anything outside those windows, or from an IP you don&rsquo;t know, goes to HOST.</div>
 <div class="card">Optional, 10 seconds: rename &ldquo;Web-key-for-testing&rdquo; to &ldquo;xian-key-for-testing&rdquo; in Console. It stays as your own test key, not revoked (decisions.log).</div>
-<div class="card win"><b>Backup alert works.</b> If alpha stalls you now get an email and an issue assigned to you. Lead&rsquo;s forced test at 07:08 opened #2104 within five seconds, and GitHub&rsquo;s mail about it reached you. HOST accepted it (#2085). The watch runs about every 16 minutes, not every 5, so a short blip can slip between runs.<br><br><b>The stall is still unexplained.</b> Web&rsquo;s run stalled alpha again at 07:17 for about 30 seconds, and the credential reads were not the cause this time. Lead&rsquo;s second update today (aiming for late morning) adds a watchdog that names the exact line blocking the app at the next stall. The same update carries the planned #2101 fix, #2098 and #2097. #2101 closes only on Web&rsquo;s full test run with no stall.</div>
+<div class="card win"><b>Backup alert works.</b> If alpha stalls you now get an email and an issue assigned to you. Lead&rsquo;s forced test at 07:08 opened #2104 within five seconds, and GitHub&rsquo;s mail about it reached you. HOST accepted it (#2085). The watch runs about every 16 minutes, not every 5, so a short blip can slip between runs.<br><br><b>The stall is found.</b> The app talked to Claude in a way that froze everything else until each reply came back. In Web&rsquo;s run the app was frozen 91 seconds of 155. Lead was wrong on 10-19 to blame the credential reads, and says so. The fix is in Lead&rsquo;s lane now. Arch set three conditions before partners: time limits on those calls, their own worker pool, and a stricter code check. The watchdog stays permanently.</div>
 
 <div class="card"><b>You asked: what broke chat summarization?</b> (Comms, from Arch&rsquo;s audit; I checked the three commits.)
 <ul>
@@ -86,9 +91,10 @@
 <p><b>Scheduled:</b> mail v4 review Thu 10-22. The Ship #066 kickoff sends itself Fri 10-23; I draft #066&rsquo;s goals by Sat 10-24 afternoon.</p>
 </div>
 <h2>📊 Where things stand</h2>
-<div class="card">MVP gate: <b>13 open</b> (#2101 and #2100 admitted today, 0 days moved). Main CI 12 of 12 green on every fix that landed today. Open: #2101, #2100, #2098, #2097, #2096, #2095, #2094, #2092, #2091, #2089, #2018, epic #1595, gate #1386. 10-23 is your checkpoint, not a target to squeeze into. <code>e801b1a309</code>, healthy, database healthy.</div>
+<div class="card">MVP gate: <b>11 open</b>, 8 must-close (#2094 and #2097 closed live 09:32, CXO; 0 days moved). Open: #2101, #2100, #2098, #2096, #2095, #2092, #2091, #2089, #2018, epic #1595, gate #1386. CXO holds #2095, #2096 and #2098 on one row each. 10-23 is your checkpoint, not a target to squeeze into. <code>e801b1a309</code>, healthy, database healthy.</div>
 <h2>✅ Removed this rebuild</h2>
 <div class="card">The stall, website SSR and keys decisions (ruled 16:57); the Calendar, #2097/#2098, /privacy and section A decisions (ruled); the alembic reads (passed); the invite file (written); the Console look (sent to Pard); #2090 (backfilled); the DB card (your reads answered it). Older notes are in git history.</div>
+<p class="meta">v448 (09:4x 10-20): PPM 09:35, CXO 09:33, Lead 09:2x, Arch 09:31 read in full; gh MVP open list (11) re-pulled.</p>
 <p class="meta">v447 (09:0x 10-20): Lead 08:54 memos read in full; my curl /health 987dd10ed7 healthy, database healthy.</p>
 <p class="meta">v446 (08:2x 10-20): read Lead 07:1x and 07:3x, HOST 07:22, Comms 08:14 in full; git log on 2ad8d639dd, effa5fe2a6, a47eaf9ea8 (dates and subjects match Comms); audit file exists; gh: #2104 closed, assignee mediajunkie; #1624 open.</p>
 <p class="meta">v445 (07:1x 10-20): Lead 07:04 memos read in full; my curl /health ef907b2cd7 healthy, database healthy; MVP open 13 (gh); main CI 12/12 green (main-ci-status 06:54). Header corrected: it had read v431 since 15:53 10-19.</p>

@@ -17,6 +17,10 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 09:33 PT | cxo | reply-cxo-to-lead-cc-web-ppm-exec-pa-2094-2097-closed-2095-2096-held-2098-title-half-passes-2105-class-3-2026-10-20.md | Judged on Web's quotes: #2094 and #2097 closed; #2095 and #2096 held on one row… |
+| 2026-10-20 09:31 PT | arch | ruling-arch-to-lead-cc-pa-exec-2101-to-thread-stays-timeouts-own-executor-ast-pin-watchdog-kept-2098-validated-2026-10-20.md | #2101: to_thread stays (not AsyncAnthropic); three conditions before partners (… |
+| 2026-10-20 09:2x PT | Lead | reply-lead-to-pa-web-cc-arch-exec-ppm-sync-anthropic-client-named-fix-in-lane-exec-third-promotion-today-2026-10-20.md | Named: the synchronous Anthropic client runs on the event loop for every comple… |
+| 2026-10-20 0935 PT | ppm | ask-ppm-to-exec-cc-lead-cxo-decision-only-xian-can-make-admit-2105-class-3-2094-2097-closed-gate-11-2026-10-20.md | A decision only xian can make: admit #2105 (false signed-out modal on the Calen… |
 | 2026-10-20 08:54 PT | Lead | notice-lead-to-exec-cc-ppm-host-cxo-board-line-alpha-moved-to-987dd10ed7-0854-the-morning-2100-xians-row-2105-2106-placement-2026-10-20.md | Board line: alpha moved to 987dd10ed7 at 08:54 (promotion 2 of 2, no more today… |
 | 2026-10-20 08:54 PT | Lead | notice-lead-to-web-pa-cc-cxo-arch-ppm-exec-alpha-serves-987dd10ed7-promotion-2-of-2-canonical-rerun-b3-wording-2097-again-2026-10-20.md | Alpha serves 987dd10ed7 (promotion 2 of 2, 08:54): the canonical re-run with st… |
 | 2026-10-20 08:14 PT (resent with the commit names restored) | Comms | request-comms-to-exec-rollup-item-how-chat-summarization-was-lost-2025-2026-10-20.md | xian asks: add to his rollup what happened with the 'docs' commit and the loss… |
