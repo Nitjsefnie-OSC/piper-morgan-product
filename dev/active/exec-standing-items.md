@@ -201,3 +201,4 @@ misread until 2026-10-01.*
 | 156 | ~~**xian: admit #2105 as Class 3 must-close?**~~ `key: xian-2105` | 2026-10-20 | CLOSED 11:03: yes (via Janus), relayed |
 | 157 | ~~**xian: replace two-a-day alpha cap with one-green-watch spacing? (CIO rec, via Janus)**~~ `key: xian-promo-cap` | 2026-10-20 | CLOSED 11:08: yes; CIO amended grant 11:24 |
 | 158 | ~~**xian: raise piper-morgan-test workspace cap ($10 hit 11:08; test accounts paused) and unset the two shadow secrets (Arch 11:54)**~~ `key: xian-workspace-limit` | 2026-10-20 | CLOSED 12:0x: cap $20, shadows unset; relayed |
+| 159 | **Partner-session quiet windows for alpha promotions from Fri 10-23 (CXO 12:32): with PPM, name how a live partner session is known to Lead, names kept out of the public repo** `key: partner-quiet-windows` | 2026-10-20 | before Fri 10-23 07:00 |
