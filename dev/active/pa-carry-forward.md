@@ -158,24 +158,9 @@ half unrelated).
 - **Main Tests red** on `3311d40219`; Lead's fix `9b7a46c883` was running at STOP. Recheck at START.
 - **MCP served-sha check:** on the next MCP deploy.
 
-### 10-18 STOP (21:48)
-- **Alpha `83a2f4e40c`.** Monday's promotion carries #2082 (`4b6023eae2`) and #2067 (`e13bf3c65f`, Web's served rows).
-- **Must-close left: #2077 and #2078, both xian's hand.** For #2077, card D1 is his autofill check (the attribute is already live per Web). For #2078, card D2 is a fresh wizard sign-up with a bank code (or Web, if he hands one over). Then relay the quotes to CXO and comment on the issue. Steps: `dev/active/pa-sunday-served-2078-2080-steps.md` section A. A `setup_complete` count of 11/6 is a DB read, which is xian's.
-- **#1982 card D4 (xian):** re-save the A4 PAT, connect the connector as A4, and ask for open issues. PA reads `fly logs -a piper-morgan-mcp` and comments on #1982.
-- **Closed 10-18:** #2072, #2076, #2069, #2051, #2080, #2079 (CXO).
+### 10-19 STOP (21:48)
+- **Alpha `e801b1a309`, DB healthy.** Main 12 of 12 green; Lead names `5e17e627a2` as Tuesday's gate input. Must-close set from the weekend is empty (#2077, #2078, #1982, #2090 closed 10-19).
+- **TUESDAY, after Lead's promotion memo:** restart both streams into scratch (`fly logs -a piper-morgan`, `fly logs -a piper-morgan-db`, backgrounded) BEFORE Web starts scenario A or the canonical run. Triage the canonical CSV from `dev/2026/10/19/canonical-retest-1386-alpha.py` (61 queries; judge `claude-sonnet-5-5`, recalibrated baseline; Routing >= 90%, Quality >= 75%). It counts for #1386 criterion 2 (PPM) and for #2101's close (Class 4, one full run with no stall). Kill and delete the streams at STOP and confirm it in the entry (HOST's rule).
+- **#1386:** criterion 5 is 4 of 4 met; criterion 2 waits on Tuesday's run.
+- **Waiting on xian:** the OAuth security-log match against PA's and Lead's windows; Pard's key date (Fly dashboard).
 - **MCP served-sha check** on the next MCP deploy.
-- Today's ten codes: HOST still needs their masked forms (xian's one-liner; not PA's).
-- **10-19 START:** unchanged from 10-18 STOP. Waiting on Monday's promotion (#2082, #2067) and xian's D1, D2 and D4.
-- **10-19 09:5x:** prod DB down since ~05:25 (Postgres process down in a started machine). The restart is xian's or HOST's hand. All served checks wait on the login probe reading 401.
-- **10-19 11:2x:** the DB is back (restart 09:52), alpha `f9fb8b750b` (#2082, #2067 in). Served checks are unblocked; D1, D2 and D4 are still xian's.
-- **10-19 12:47:** #2077 CLOSED (xian's D1). Must-close left: #2078 (D2). D4/#1982 is still xian's.
-- **10-19 13:1x:** #2078 D2 run; the close is held on My Projects for `test-acct-2078` (the step-4 project). Once it's shown, close with close-issue-properly.
-- **10-19 13:3x:** #2078 CLOSED. The must-close set is empty. D4 subject is test-acct-2078 plus a saved PAT; the MCP log read is owed on xian's retry.
-- **10-19 13:5x:** #1982 CLOSED (PAT path live, logs clean). #2090 filed (2b backfill, xian). #2022 reproduced. The card has nothing left that's mine. Owed: MCP served-sha on the next deploy.
-- **10-19 15:0x:** #1386, PA's part. Criterion 5: 3 of 4 met, plus xian's alembic check. Criterion 2: harness ready (dev/2026/10/19/canonical-retest-1386-alpha.py), blocked on HOST's credential-file ruling and an alpha test account.
-- **10-19 15:1x:** #2090 CLOSED. #1386 criterion 2 is HELD until Lead/HOST call alpha's DB steady (flapping 14:53 on). HOST ruled yes, with conditions, for the warm-run credential file.
-- **10-19 15:2x:** #1386 criterion 5 is 4 of 4 met (alembic check empty). The DB/app flap 14:53–15:03 looks like an app-side stall (Fly service check passing at 15:03:20). Criterion 2 is still held.
-- **10-19 15:4x:** alpha app/DB log streams run in scratch (pids from `pgrep -fl 'fly logs -a piper-morgan'`) until STOP; read them on any stall. Stop them at 21:47 STOP. #1386 criterion 2 held (PPM).
-- **10-19 16:1x:** HOST retention rule: delete `scratchpad/alpha-{app,db}-stream.log` at STOP (kill the two `fly logs` pids first) and confirm in the STOP entry. Repro read is owed on Web's start time. #2101 filed by Lead.
-- **10-19 16:4x:** #2101 window read (a wedge, not OOM; loop blocked around Q16 and after). Judge model fixed in the harness (`0115f2ee47`). Partial triaged. Tuesday: criterion 2 full run after the promotion; PA triages, and fixes Q7/Q12 labels on PPM's word.
-- **10-19 17:1x, for TUESDAY:** after Lead's promotion memo, restart both `fly logs` streams (app and db) into scratch BEFORE Web starts scenario A or the canonical run. Triage the canonical CSV (criterion 2 and #2101's close; judge claude-sonnet-5-5, recalibrated baseline). Delete the streams at STOP (HOST's rule).
