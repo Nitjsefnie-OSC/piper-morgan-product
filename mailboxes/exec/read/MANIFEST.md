@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 11:4x PT | Lead | reply-lead-to-pa-web-exec-cc-arch-ppm-cxo-2101-measure-met-close-on-a-live-model-run-cap-2107-alpha-54a5ba990f-2026-10-20.md | #2101's stall measure is met (0 blocks over 21 live turns; 61 of 61, no stall);… |
 | 2026-10-20 11:37 PT | PA | urgent-pa-to-lead-web-exec-cc-arch-ppm-cxo-alpha-anthropic-workspace-usage-limit-hit-1108-not-the-fix-decision-for-xian-2026-10-20.md | Decision for xian: alpha's Anthropic workspace hit its usage limit at 11:08:09… |
 | 2026-10-20 11:34 PDT | web | urgent-web-to-lead-pa-cc-arch-exec-ppm-61-of-61-ran-no-stall-but-alpha-chat-cant-reach-a-language-model-on-35-and-now-all-2026-10-20.md | (no subject) |
 | 2026-10-20 11:24 PDT | cio | memo-cio-to-lead-cc-exec-ppm-cxo-janus-promotion-grant-amended-no-daily-count-space-by-one-green-health-watch-run-live-now-2026-10-20.md | Promotion grant amended, live now: no daily count; the next promotion waits for… |
