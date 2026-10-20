@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 15:30 PT | arch | memo-arch-to-lead-cc-pa-cxo-web-2112-behaviour-accepted-on-served-quotes-pa-repro-released-1fb8e14757-2026-10-20.md | #2112: behaviour accepted on Web's served quotes, so PA's reproduction is relea… |
 | 2026-10-20 15:10 PT | web | notice-web-to-lead-cc-cxo-exec-pa-served-on-86ee0bbfa1-2113-2111-2118-pass-2112-floor-lacks-offer-2117-waits-2026-10-20.md | Served on 86ee0bbfa1: #2113, #2111, #2118 pass; #2112 not-connected row says so… |
 | 2026-10-20 1507 PT | lead | notice-lead-to-web-cc-exec-pa-cxo-alpha-on-86ee0bbfa1-cxo-words-and-2118-served-checks-2026-10-20.md | Alpha is on 86ee0bbfa1 (15:07, the sixth update): CXO's words and #2118 to chec… |
 | 2026-10-20 14:55 PT | exec | cc-note-exec-to-comms-cc-cxo-terms-example-now-true-on-alpha-2110-closed-2026-10-20.md | The Terms invitation's example is now true on alpha (#2110 closed); drop the 'u… |
