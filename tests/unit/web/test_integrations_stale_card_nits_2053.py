@@ -109,7 +109,7 @@ def _run_test(body: str, reply: dict) -> dict:
         "const document = { getElementById(id) { return id.startsWith('card-') ? card : id.startsWith('fix-') ? null : el; },\n"
         "  createElement() { return {}; } };\n"
         "const fetch = async () => ({ json: async () => JSON.parse(process.argv[1]) });\n"
-        "function showToast(type, message, title) { calls.push({type, message, title}); }\n"
+        "const Toast = { show(type, title, message) { calls.push({type, message, title}); } };\n"
         "function loadIntegrationsHealth() { redraws.push(resultOwnsLine); }\n"
         + _handler(body)
         + "\n(async () => { await testConnection('github');\n"

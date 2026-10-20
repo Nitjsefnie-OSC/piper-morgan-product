@@ -427,9 +427,7 @@
      */
     function handleConfirm(insight) {
       // D2: "That's what I had noted—glad to confirm it's correct!"
-      if (window.showToast) {
-        window.showToast("Thanks for confirming! I'll keep that in mind.", 'success');
-      }
+      Toast.show('success', "Thanks for confirming! I'll keep that in mind.");
 
       // Fire event
       window.dispatchEvent(new CustomEvent('insight-confirm', {
@@ -469,9 +467,7 @@
         }
 
         // D2: "Got it, that's gone"
-        if (window.showToast) {
-          window.showToast("Got it, that's gone.", 'info');
-        }
+        Toast.show('info', "Got it, that's gone.");
 
         // Update counts
         updateTopicCounts();
@@ -505,9 +501,7 @@
         renderInsights();
 
         // D2: "Starting fresh"
-        if (window.showToast) {
-          window.showToast("Starting fresh. I'll begin learning again as we work together.", 'info');
-        }
+        Toast.show('info', "Starting fresh. I'll begin learning again as we work together.");
 
         // Fire event
         window.dispatchEvent(new CustomEvent('insights-reset'));
@@ -574,10 +568,10 @@
           `/api/v1/insights/${insight.id}/correct`,
           {correction_text: correctionText}
         );
-        if (window.showToast) window.showToast('Got it, I noted that.', 'success');
+        Toast.show('success', 'Got it, I noted that.');
       } catch (err) {
         console.error('correct failed', err);
-        if (window.showToast) window.showToast('Couldn\'t save the correction.', 'error');
+        Toast.show('error', 'Couldn\'t save the correction.');
       }
     });
 
@@ -596,11 +590,7 @@
       try {
         const data = await postJSON(`/api/v1/insights/${insight.id}/why`);
         const explanation = data.explanation || 'I noticed this from observation.';
-        if (window.showToast) {
-          window.showToast(explanation, 'info');
-        } else {
-          await Dialog.alert({ title: 'Why I noticed this', body: explanation });  // #1170: Dialog, not native alert
-        }
+        await Dialog.alert({ title: 'Why I noticed this', body: explanation });  // #1170: Dialog, not native alert
       } catch (err) {
         console.error('why failed', err);
       }
@@ -613,7 +603,7 @@
         // Toast already shown by the IIFE handler ("Got it, that's gone.")
       } catch (err) {
         console.error('delete failed', err);
-        if (window.showToast) window.showToast('Couldn\'t delete that one.', 'error');
+        Toast.show('error', 'Couldn\'t delete that one.');
       }
     });
 
@@ -623,7 +613,7 @@
         // Toast already shown by the IIFE handler ("Starting fresh.")
       } catch (err) {
         console.error('reset failed', err);
-        if (window.showToast) window.showToast('Couldn\'t reset insights.', 'error');
+        Toast.show('error', 'Couldn\'t reset insights.');
       }
     });
   })();

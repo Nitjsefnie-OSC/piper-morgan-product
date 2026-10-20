@@ -749,9 +749,7 @@
           const btn = document.getElementById('mint-link-code-btn');
           if (btn) btn.textContent = 'Mint a fresh code';
         } catch (e) {
-          if (typeof showToast === 'function') {
-            showToast("Couldn't mint a link code just now — try again shortly.", 'error');
-          }
+          Toast.show('error', "Couldn't mint a link code just now — try again shortly.");
         }
       }
 
@@ -793,14 +791,10 @@
           });
           if (!resp.ok) throw new Error('unlink failed: ' + resp.status);
           const data = await resp.json();
-          if (typeof showToast === 'function') {
-            showToast(data.message, data.unlinked ? 'success' : 'error');
-          }
+          Toast.show(data.unlinked ? 'success' : 'error', data.message);
           loadSlackLinkStatus();
         } catch (e) {
-          if (typeof showToast === 'function') {
-            showToast("Couldn't unlink just now — try again shortly.", 'error');
-          }
+          Toast.show('error', "Couldn't unlink just now — try again shortly.");
         }
       }
 
@@ -863,15 +857,15 @@
               const err = await resp.json();
               if (err && err.detail) detail = err.detail;
             } catch (e) { /* use default */ }
-            showToast('error', detail, 'Slack replies');
+            Toast.show('error', 'Slack replies', detail);
             return;
           }
           const data = await resp.json();
           input.value = '';
           renderInboundStatus(data.state);
-          showToast('success', 'Slack replies enabled.', 'Slack replies');
+          Toast.show('success', 'Slack replies', 'Slack replies enabled.');
         } catch (e) {
-          showToast('error', "Couldn't connect to Slack. Double-check that Socket Mode is enabled and try again.", 'Slack replies');
+          Toast.show('error', 'Slack replies', "Couldn't connect to Slack. Double-check that Socket Mode is enabled and try again.");
         } finally {
           btn.disabled = false;
         }
@@ -882,11 +876,11 @@
 
         if (params.get('success') === 'true') {
           const workspace = params.get('workspace') || 'Workspace';
-          showToast('success', `Connected to ${decodeURIComponent(workspace)}`, 'Slack Connected');
+          Toast.show('success', 'Slack Connected', `Connected to ${decodeURIComponent(workspace)}`);
           window.history.replaceState({}, document.title, '/settings/integrations/slack');
         } else if (params.get('error')) {
           const error = params.get('error');
-          showToast('error', `Failed to connect: ${error}`, 'Connection Failed');
+          Toast.show('error', 'Connection Failed', `Failed to connect: ${error}`);
           window.history.replaceState({}, document.title, '/settings/integrations/slack');
         }
       }
@@ -902,7 +896,7 @@
           updateStatusUI(data);
         } catch (error) {
           console.error('Failed to load Slack status:', error);
-          showToast('error', 'Failed to load connection status', 'Error');
+          Toast.show('error', 'Error', 'Failed to load connection status');
         }
       }
 
@@ -979,7 +973,7 @@
           }
         } catch (error) {
           console.error('Connect failed:', error);
-          showToast('error', error.message, 'Connection Failed');
+          Toast.show('error', 'Connection Failed', error.message);
           connectBtnEl.disabled = false;
           connectBtnEl.innerHTML = '<svg class="slack-logo" viewBox="0 0 24 24" fill="currentColor"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/></svg> Add to Slack';
         }
@@ -1016,14 +1010,14 @@
           const data = await response.json();
 
           if (data.success) {
-            showToast('success', 'Slack disconnected', 'Disconnected');
+            Toast.show('success', 'Disconnected', 'Slack disconnected');
             loadSlackStatus();  // Refresh status
           } else {
             throw new Error(data.message || 'Failed to disconnect');
           }
         } catch (error) {
           console.error('Disconnect failed:', error);
-          showToast('error', error.message, 'Disconnect Failed');
+          Toast.show('error', 'Disconnect Failed', error.message);
           disconnectBtnEl.disabled = false;
           disconnectBtnEl.textContent = 'Disconnect';
         }
@@ -1192,42 +1186,17 @@
             throw new Error(parseApiDetail(errorData.detail, 'Failed to save preferences'));
           }
 
-          showToast('success', 'Channel settings saved successfully', 'Settings Saved');
+          Toast.show('success', 'Settings Saved', 'Channel settings saved successfully');
 
         } catch (error) {
           console.error('Failed to save preferences:', error);
-          showToast('error', error.message, 'Save Failed');
+          Toast.show('error', 'Save Failed', error.message);
         } finally {
           saveBtn.disabled = false;
           saveBtn.textContent = 'Save Settings';
         }
       }
 
-      function showToast(type, message, title = null) {
-        if (typeof Toast !== 'undefined') {
-          const toastTitle = title || {
-            'error': 'Error',
-            'success': 'Success',
-            'warning': 'Warning',
-            'info': 'Info'
-          }[type] || 'Slack';
-
-          // Note: Using direct Toast calls here intentionally (#642)
-          // Toast type and message are dynamic from server responses,
-          // so ToastMessages centralization doesn't apply.
-          if (type === 'error' && Toast.error) {
-            Toast.error(toastTitle, message);
-          } else if (type === 'success' && Toast.success) {
-            Toast.success(toastTitle, message);
-          } else if (type === 'warning' && Toast.warning) {
-            Toast.warning(toastTitle, message);
-          } else if (Toast.info) {
-            Toast.info(toastTitle, message);
-          }
-        } else {
-          console.log(`[${type}] ${message}`);
-        }
-      }
 
       // ============================================================================
       // App Credentials Functions (Issue #576)
@@ -1320,11 +1289,11 @@
 
         // Validate inputs
         if (!clientId) {
-          showToast('error', 'I need a Client ID to connect', 'Missing Field');
+          Toast.show('error', 'Missing Field', 'I need a Client ID to connect');
           return;
         }
         if (!clientSecret) {
-          showToast('error', 'I need a Client Secret to connect', 'Missing Field');
+          Toast.show('error', 'Missing Field', 'I need a Client Secret to connect');
           return;
         }
 
@@ -1351,7 +1320,7 @@
           const data = await response.json();
 
           if (data.success) {
-            showToast('success', 'App credentials saved securely', 'Credentials Saved');
+            Toast.show('success', 'Credentials Saved', 'App credentials saved securely');
             appCredentialsConfigured = true;
             updateAppConfigUI(true);
             // Clear form for security
@@ -1362,7 +1331,7 @@
           }
         } catch (error) {
           console.error('Failed to save app credentials:', error);
-          showToast('error', error.message, 'Save Failed');
+          Toast.show('error', 'Save Failed', error.message);
         } finally {
           saveBtn.disabled = false;
           saveBtn.textContent = 'Save Credentials';
