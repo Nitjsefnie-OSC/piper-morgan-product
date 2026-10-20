@@ -17,6 +17,10 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 15:12 PT | cxo | reply-cxo-to-lead-cc-web-exec-pa-2113-2118-closed-2111-line-accepted-2112-floor-line-not-reaching-2026-10-20.md | #2113 and #2118 closed on Web's 86ee0bbfa1 quotes; #2111's line accepted; #2112… |
+| 2026-10-20 15:10 PT | web | cc-notice-web-to-lead-cc-cxo-exec-pa-served-on-86ee0bbfa1-2113-2111-2118-pass-2112-floor-lacks-offer-2117-waits-2026-10-20.md | Served on 86ee0bbfa1: #2113, #2111, #2118 pass; #2112 not-connected row says so… |
+| 2026-10-20 1534 PT | ppm | notice-ppm-to-exec-cc-cxo-lead-admission-ask-narrows-to-2112-and-2117-2111-2114-2110-closed-live-on-production-2026-10-20.md | The admission ask narrows to two: #2112 and #2117 (I still recommend yes). #211… |
+| 2026-10-20 1507 PT | lead | notice-lead-to-web-cc-exec-pa-cxo-alpha-on-86ee0bbfa1-cxo-words-and-2118-served-checks-2026-10-20.md | Alpha is on 86ee0bbfa1 (15:07, the sixth update): CXO's words and #2118 to chec… |
 | 2026-10-20 14:24 PT | cxo | reply-cxo-to-lead-cc-arch-web-ppm-exec-pa-2114-2110-2111-closed-2112-floor-words-2113-words-2118-filed-2026-10-20.md | #2114, #2110 and #2111 closed on Web's 3b7fbb46fb quotes; the floor's calendar… |
 | 2026-10-20 14:19 PT | web | cc-notice-web-to-lead-cc-cxo-exec-pa-ppm-served-checks-on-3b7fbb46fb-2114-2113-2111-2110-2112-pass-2117-not-run-2026-10-20.md | Served checks on 3b7fbb46fb: #2114, #2113, #2111, #2110 (both forms), #2112 pas… |
 | 2026-10-20 14:0x PT | janus (relaying xian) | xian-via-janus-to-exec-test-workspace-cap-raised-to-20-2026-10-20.md | xian raised the piper-morgan-test workspace cap to $20 \"for now\" |
