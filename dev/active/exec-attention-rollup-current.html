@@ -32,7 +32,7 @@
 </style>
 <div class="wrap">
 <h1>Attention rollup — Tuesday 20 October</h1>
-<p class="meta">Exec · v459, rebuilt 13:0x PDT Tue 10-20 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
+<p class="meta">Exec · v460, rebuilt 13:1x PDT Tue 10-20 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
 
 
 
@@ -40,10 +40,17 @@
 
 <div class="card hot"><b>Four quick calls for you, before Friday</b>
 <ol>
-<li><b>Admit #2111 and #2112 as must-closes?</b> <b>Lean yes</b> (PPM). Both came from today&rsquo;s full run, and both are on the two connectors the invitation names. #2111: GitHub&rsquo;s &ldquo;issue not found&rdquo; comes out as &ldquo;GitHub&rsquo;s server is unreachable,&rdquo; which is false (PA calls the fix small). #2112: &ldquo;Check my calendar for conflicts&rdquo; answers with today&rsquo;s date and time, the same family as #2091. Pro: false or useless answers on the invited connectors. Con: must-close goes from 5 to 7 with three days left. No means both are fixed after the gate.</li>
+<li><b>Admit four to the gate as must-closes?</b> <b>Lean yes to all four</b> (PPM and CXO). Each fix is small.
+<ul>
+<li><b>#2111:</b> GitHub&rsquo;s &ldquo;issue not found&rdquo; comes out as &ldquo;GitHub&rsquo;s server is unreachable,&rdquo; which is false.</li>
+<li><b>#2112:</b> &ldquo;Check my calendar for conflicts&rdquo; answers with today&rsquo;s date and time.</li>
+<li><b>#2114</b> (the worst of the four, Class 4): right after Piper creates an issue, &ldquo;Show me that issue&rdquo; answers &ldquo;I couldn&rsquo;t find an issue number.&rdquo; Create-then-look is the path the invitation walks.</li>
+<li><b>#2117:</b> every partner&rsquo;s setup wizard says &ldquo;claude-3.5 access confirmed,&rdquo; but nothing was checked. The fix is one line: &ldquo;Key accepted.&rdquo;</li>
+</ul>
+Pro: each is false or broken on a path partners walk on day one. Con: the gate goes from 8 open (5 must-close) to 12 open (9 must-close) with three days left. A partial yes is fine; #2114 matters most.</li>
 <li><b>When can alpha update on partner days?</b> PPM, CXO and I propose one fixed daily window, so no one has to track who&rsquo;s online. A must-close fix can still go outside it on your word. The rule lifts once Web shows on staging that an update doesn&rsquo;t cut off an open chat. <b>You pick the hour</b>, since you know where partners are: <b>07:00&ndash;08:30 PT</b> if they&rsquo;re all on the West Coast, otherwise <b>20:00&ndash;21:00 PT</b>. Pro: no build and no names needed. Con: a fix ready at noon waits until the window unless you say go. (Lead offers a half-day build so the check can see whether anyone chatted in the last 30 minutes. Not needed for Friday.)</li>
 <li><b>Will partners bring their own Anthropic keys?</b> Alpha has no key of its own, so each partner&rsquo;s chat spends the key on their account. If they bring their own, your $250 isn&rsquo;t touched. If you&rsquo;ll hand them keys from one of your workspaces, say which, and we&rsquo;ll set its limit before Friday.</li>
-<li><b>Optional: rotate the $20 test key.</b> At about 12:5x, Web printed it to their own terminal by mistake while masking. It isn&rsquo;t in git or mail. <b>Lean: rotate when convenient, not today.</b> It&rsquo;s capped, but rotating means storing the new key again on four test accounts. HOST has the notice.</li>
+<li><b>Optional: rotate the $20 test key.</b> At about 12:5x, Web printed it to their own terminal by mistake while masking. It isn&rsquo;t in git or mail. <b>Lean: rotate when convenient, not today.</b> It&rsquo;s capped, but rotating means storing the new key again on four test accounts. HOST agrees: low stakes, rotate when convenient.</li>
 </ol></div>
 <div class="card win"><b>Ruled and relayed today:</b> 12:0x: you raised the test workspace&rsquo;s limit to $20 (the $10 cap on Web&rsquo;s test key was the 11:08 cause; alpha has no key of its own, so every account, partners included, chats on a key it stores, and only the test accounts were hit) and switched off the two background classifiers. Budget: $250 total this month. 11:08: no daily count on alpha updates; the next waits for one passing health check (CIO amended the grant, live). At beta, probably nightly deploys from staging. 11:03: #2105 admitted as a must-close (must-close now 9; Lead fixes it after the stall). 10:53: a third alpha update today for the stall fix, yes. Pard&rsquo;s plugin paste: done, and both restarted seats show the new version.</div>
 <div class="card win"><b>#2101 is closed: the stall is fixed.</b> Web&rsquo;s full run, 12:14&ndash;12:27: 61 of 61 answered, 0 freezes (PA), no errors, median reply 5.9 s. CXO also closed #2095 and #2098. <b>Gate: 8 open, 5 must-close:</b> #2089, #2091, #2092, #2096 (your A6 admin read), #2100 (an account with Notion connected). Scenario A on a fresh wizard account: steps 1&ndash;3 pass; step 4 (&ldquo;Show me that issue&rdquo;) fails, and Lead and CXO are on it. #1386&rsquo;s routing and quality bars aren&rsquo;t met yet (73.8% and 57.5% against 90% and 75%). Most of the routing misses look like outdated expected answers. PPM ruled a relabel each row must justify, then one re-run on a seeded account before 10-23. The bars don&rsquo;t move.<br><br><b>&ldquo;The Phantom Feature&rdquo; is live</b> (Docs; my curl 200). Yours: the Medium crosspost. Send Docs the URL.</div>
@@ -103,6 +110,7 @@
 <div class="card">MVP gate: <b>8 open</b>, 5 must-close (#2101, #2095, #2098 closed 12:48&ndash;12:49; #2105 at 12:32) (#2094 and #2097 closed live 09:32, CXO; 0 days moved). Open: #2101, #2100, #2098, #2096, #2095, #2092, #2091, #2089, #2018, epic #1595, gate #1386. CXO holds #2095, #2096 and #2098 on one row each. 10-23 is your checkpoint, not a target to squeeze into. <code>e801b1a309</code>, healthy, database healthy.</div>
 <h2>✅ Removed this rebuild</h2>
 <div class="card">The stall, website SSR and keys decisions (ruled 16:57); the Calendar, #2097/#2098, /privacy and section A decisions (ruled); the alembic reads (passed); the invite file (written); the Console look (sent to Pard); #2090 (backfilled); the DB card (your reads answered it). Older notes are in git history.</div>
+<p class="meta">v460 (13:1x 10-20): PPM 13:02, CXO 12:59, HOST 12:58 read in full.</p>
 <p class="meta">v459 (13:0x 10-20): eight memos read in full (PPM 12:53, Docs, CXO 12:48, Lead 12:5x, PA 12:50, Web 12:45, 12:46, 12:53); gh: #2101, #2095, #2098 CLOSED; #2111, #2112 Production; MVP open 8; curl 200 on the post.</p>
 <p class="meta">v458 (12:4x 10-20): PPM 12:35 and 12:36, Lead 12:4x read in full.</p>
 <p class="meta">v457 (12:3x 10-20): CXO 12:32 and Lead 12:3x read in full; gh: #2105 CLOSED, MVP open 11.</p>
