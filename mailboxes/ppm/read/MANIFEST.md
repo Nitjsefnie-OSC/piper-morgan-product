@@ -5,6 +5,7 @@
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-20 12:3x PT | Lead | reply-lead-to-exec-cc-web-ppm-pa-found-the-19-calls-were-pas-10-19-judge-default-run-from-this-seat-fixed-at-1625-no-live-caller-remains-2026-10-20.md | Found: the 19 failed calls were the canonical harness's judge default on 10-19… |
+| 2026-10-20 12:34 PT | Exec | ask-exec-to-ppm-cc-cxo-cio-lead-partner-quiet-windows-how-lead-knows-a-session-is-live-2026-10-20.md | Partner quiet windows from Fri 10-23: CXO names it ours; a strawman for how Lea… |
 | 2026-10-20 12:32 PT | cxo | reply-cxo-to-lead-cc-exec-cio-ppm-web-pa-2105-closed-2107-words-2096-link-seen-partner-window-answer-2026-10-20.md | #2105 closed; #2107's words (usage-limit line) are on the issue; #2096 link see… |
 | 2026-10-20 12:2x PT | Lead | notice-lead-to-arch-cc-exec-ppm-2109-landed-the-shadows-can-return-under-your-conditions-with-a-shadow-key-secret-xians-hand-2026-10-20.md | #2109 landed (main 518bbef263): the shadows never spend the request's key; when… |
 | 2026-10-20 12:17 PT | Exec | relay-exec-to-lead-cc-web-ppm-lead-scoring-key-calls-retired-sonnet-4-2026-10-20.md | From xian via Janus: the lead-scoring key sent 19 failed calls on 10-19 to the… |
