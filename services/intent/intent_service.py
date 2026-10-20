@@ -11060,8 +11060,13 @@ class IntentService:
             # "titled" keyword, missed extraction, and shipped the garbage
             # fallback title. A quoted span introduced by a colon after
             # issue/ticket wording is the title.
+            # #2110 (CXO, 2026-10-20): the colon-and-quotes form may end with the
+            # repo clause the invitation's example carries ("… in owner/repo"); the
+            # title is the quoted span, the clause is read by the repository pattern
+            # above. Same literal, one optional tail; no new binder.
             m = _re.search(
-                r"\b(?:issue|ticket)\b[^:\n]*:\s*['\"\u2018\u201c](.+?)['\"\u2019\u201d]\s*$",
+                r"\b(?:issue|ticket)\b[^:\n]*:\s*['\"\u2018\u201c](.+?)['\"\u2019\u201d]"
+                r"(?:\s+(?:in|for|on)\s+\S+)?\s*$",
                 message,
             )
             if m:

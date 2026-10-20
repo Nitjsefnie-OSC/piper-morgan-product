@@ -4516,6 +4516,23 @@ HAND_ROWS = [
             "appends it to the body (the #1627 bind). A title read here is the binder's mistake"
         ),
     },
+    # 2026-10-20 (Lead) — #2110 (CXO, Web's served row on 54a5ba990f): the Terms invitation's
+    # example form. Both rows route to create_issue; the handler's slot-fill reads the quoted
+    # title (and the trailing repo clause when present).
+    {
+        "phrase": 'Create a GitHub issue: "Served check colon quotes" in dinp-machine/piper-test-activity',
+        "category": "EXECUTION",
+        "expected": "action:create_issue",
+        "source": "issue-2110 Web served 2026-10-20 12:46 (colon-and-quotes form with a repo clause)",
+        "notes": "the invitation's example form with the repo named; the title is the quoted span",
+    },
+    {
+        "phrase": 'Create a GitHub issue: "Served check bare form"',
+        "category": "EXECUTION",
+        "expected": "action:create_issue",
+        "source": "issue-2110 CXO's bare-form row 2026-10-20 (the invitation's example verbatim shape)",
+        "notes": "no repo clause; the configured default repo applies at the rail",
+    },
 ]
 
 
