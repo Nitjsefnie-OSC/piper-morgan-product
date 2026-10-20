@@ -22,12 +22,19 @@ STATUS = "services.integrations.integration_status_service.IntegrationStatusServ
 async def test_not_connected_carries_cxo_sentence():
     with patch(STATUS, new=AsyncMock(return_value={"configured": False, "via": None})):
         conn = await ContextAssembler()._gather_calendar_connection("user-1")
-    assert conn == {"status": "not_connected", "line": cl.not_connected_line("calendar")}
+    assert conn["status"] == "not_connected"
+    assert conn["line"] == cl.not_connected_line("calendar")
     out = ConversationalFloor(llm_client=MagicMock())._format_domain_context(
         {"calendar_connection": conn}
     )
     assert "Google Calendar is not connected: say \"Your calendar isn't connected" in out
     assert "Settings → Integrations → Google Calendar" in out
+    # Arch (16:08): the #2100 never-promise rule needs the reads line on this turn too.
+    assert conn["reads"] == cl.chat_reads_line("calendar")
+    assert (
+        "What chat reads from Google Calendar once it is connected: I can read your calendar" in out
+    )
+    assert "Never promise more than that." in out
 
 
 @pytest.mark.asyncio
@@ -42,6 +49,7 @@ async def test_connected_carries_reads_with_limits_and_never_says_not_connected(
     )
     assert "Google Calendar is connected: I can read your calendar for today" in out
     assert "I can't check for conflicts" in out
+    assert "once it is connected" not in out  # the reads line rides only the non-active states
     assert "isn't connected" not in out
 
 
@@ -63,7 +71,7 @@ async def test_rejected_grant_renders_needs_reconnecting_not_connected():
     )
     assert "Google no longer accepts the connection" in out
     assert "Reconnect it in Settings → Integrations → Google Calendar" in out
-    assert "is connected:" not in out
+    assert "Google Calendar is connected:" not in out
 
 
 @pytest.mark.asyncio

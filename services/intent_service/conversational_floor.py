@@ -1221,6 +1221,13 @@ class ConversationalFloor:
                     lines.append(f"- {conn['line']}")
                 else:
                     lines.append(f"- Google Calendar is not connected: say \"{conn['line']}\"")
+                if conn.get("status") != "active" and conn.get("reads"):
+                    # Arch (16:08): the #2100 rule's premise on a TEMPORAL turn —
+                    # what chat reads once connected, and nothing more.
+                    lines.append(
+                        f"- What chat reads from Google Calendar once it is connected: "
+                        f"{conn['reads']} Never promise more than that."
+                    )
 
         if "calendar" in domain_context:
             cal = domain_context["calendar"]

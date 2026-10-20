@@ -1153,6 +1153,12 @@ class ContextAssembler:
         ) as e:  # silent-ok: logged; the floor gets no calendar fact rather than a wrong one
             logger.warning("context_assembler_calendar_connection_error", error=str(e))
             return {}
+        # Arch (16:08): the floor's #2100 rule ("never promise a read an integration
+        # does not list") points the model at the "what chat reads" line, which a
+        # TEMPORAL turn never carried, so on ee952c73eb the model added "Once it's
+        # connected, checking for conflicts is something I can do". The reads line
+        # (CXO's words, already landed) rides every non-active state as `reads`.
+        reads = chat_reads_line("calendar")
         if needs_reconnecting(status):
             # CXO's words (15:32): what happened and the one action, no guess why.
             return {
@@ -1161,6 +1167,7 @@ class ContextAssembler:
                     "I can't read your calendar: Google no longer accepts the connection. "
                     "Reconnect it in Settings → Integrations → Google Calendar."
                 ),
+                "reads": reads,
             }
         # Arch's check (15:30): the status service counts the calendar configured
         # when GOOGLE_CALENDAR_CREDENTIALS or MCP_ENABLED is set (via "env"), a
@@ -1169,7 +1176,11 @@ class ContextAssembler:
         # so only a per-user connection (via "keychain" / an OAuth binding) earns it.
         if status.get("configured") and status.get("via") != "env":
             return {"status": "active", "line": chat_reads_line("calendar")}
-        return {"status": "not_connected", "line": not_connected_line("calendar") or ""}
+        return {
+            "status": "not_connected",
+            "line": not_connected_line("calendar") or "",
+            "reads": reads,
+        }
 
     async def _compute_calendar_context(self, user_id: str) -> Dict[str, Any]:
         """
