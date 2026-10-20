@@ -157,6 +157,18 @@ class CalendarInfo(BaseModel):
     selected: bool = False
 
 
+# #2105 (CXO's words, 2026-10-20): a calendar with no credential is NOT a lapsed sign-in.
+# The calendars endpoint used to answer 401 for "not connected" and "token refresh failed",
+# and the shared 401 interceptor raised the #2067 "You've been signed out" modal on a valid
+# session. Both are 409 now, with the line the page shows; 401 stays for the session.
+CALENDAR_NOT_CONNECTED_LINE = (
+    "Google Calendar isn't connected yet. Connect it first, then refresh the list."
+)
+CALENDAR_NEEDS_RECONNECT_LINE = (
+    "Google Calendar needs reconnecting. Reconnect it, then refresh the list."
+)
+
+
 class CalendarListResponse(BaseModel):
     """Response containing list of Google calendars."""
 
@@ -1458,12 +1470,12 @@ async def get_calendar_list(current_user: JWTClaims = Depends(get_current_user))
         keychain = KeychainService()
         # Issue #839: Use user-scoped key
         key_name = f"google_calendar_{current_user.sub}"
-        refresh_token = keychain.get_api_key(key_name)
+        refresh_token = await keychain.aget_api_key(key_name)  # #2101: off the loop
 
         if not refresh_token:
+            # #2105: not a session problem; never a 401 (the modal's trigger).
             raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Calendar not connected. Please connect Google Calendar first.",
+                status_code=status.HTTP_409_CONFLICT, detail=CALENDAR_NOT_CONNECTED_LINE
             )
 
         # Get fresh access token
@@ -1472,8 +1484,7 @@ async def get_calendar_list(current_user: JWTClaims = Depends(get_current_user))
 
         if not tokens:
             raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Failed to refresh calendar token. Please reconnect Google Calendar.",
+                status_code=status.HTTP_409_CONFLICT, detail=CALENDAR_NEEDS_RECONNECT_LINE
             )
 
         # Fetch calendar list from Google API

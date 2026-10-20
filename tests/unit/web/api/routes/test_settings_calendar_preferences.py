@@ -14,16 +14,23 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from web.api.routes.settings_integrations import get_calendar_list
+from web.api.routes.settings_integrations import (
+    CALENDAR_NEEDS_RECONNECT_LINE,
+    CALENDAR_NOT_CONNECTED_LINE,
+    get_calendar_list,
+)
 
 
 class TestGetCalendarList:
     """Tests for GET /api/v1/settings/integrations/calendar/calendars"""
 
     @pytest.mark.asyncio
-    async def test_returns_401_when_not_connected(self):
-        """Should return 401 when no refresh token in keychain"""
+    async def test_returns_409_not_connected_line_when_no_credential(self):
+        """#2105: no refresh token is NOT a lapsed sign-in: 409 with CXO's line, never 401 (the modal's trigger)."""
         mock_keychain = MagicMock()
+        mock_keychain.aget_api_key = AsyncMock(
+            side_effect=lambda *a, **k: mock_keychain.get_api_key(*a, **k)
+        )  # #2101
         mock_keychain.get_api_key.return_value = None
 
         mock_user = MagicMock()
@@ -38,13 +45,16 @@ class TestGetCalendarList:
             with pytest.raises(HTTPException) as exc_info:
                 await get_calendar_list(current_user=mock_user)
 
-            assert exc_info.value.status_code == 401
-            assert "Calendar not connected" in str(exc_info.value.detail)
+            assert exc_info.value.status_code == 409
+            assert exc_info.value.detail == CALENDAR_NOT_CONNECTED_LINE
 
     @pytest.mark.asyncio
-    async def test_returns_401_when_token_refresh_fails(self):
-        """Should return 401 when token refresh fails"""
+    async def test_returns_409_reconnect_line_when_token_refresh_fails(self):
+        """#2105: a failed token refresh is the calendar credential, not the session: 409 with the reconnect line."""
         mock_keychain = MagicMock()
+        mock_keychain.aget_api_key = AsyncMock(
+            side_effect=lambda *a, **k: mock_keychain.get_api_key(*a, **k)
+        )  # #2101
         mock_keychain.get_api_key.return_value = "test_refresh_token"
 
         mock_handler = MagicMock()
@@ -68,13 +78,16 @@ class TestGetCalendarList:
             with pytest.raises(HTTPException) as exc_info:
                 await get_calendar_list(current_user=mock_user)
 
-            assert exc_info.value.status_code == 401
-            assert "refresh" in str(exc_info.value.detail).lower()
+            assert exc_info.value.status_code == 409
+            assert exc_info.value.detail == CALENDAR_NEEDS_RECONNECT_LINE
 
     @pytest.mark.asyncio
     async def test_returns_calendar_list_when_connected(self):
         """Should return list of calendars when connected"""
         mock_keychain = MagicMock()
+        mock_keychain.aget_api_key = AsyncMock(
+            side_effect=lambda *a, **k: mock_keychain.get_api_key(*a, **k)
+        )  # #2101
         mock_keychain.get_api_key.return_value = "test_refresh_token"
 
         mock_tokens = MagicMock()

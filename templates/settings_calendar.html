@@ -956,6 +956,7 @@
       // Store loaded calendars for reference
       let loadedCalendars = [];
 
+      // Returns true when the list loaded, false otherwise (the caller decides what to say).
       async function loadCalendarList() {
         const calendarListEl = document.getElementById('calendar-list');
         calendarListEl.innerHTML = '<div class="calendar-list-loading"><span class="loading-spinner"></span> Loading calendars...</div>';
@@ -968,7 +969,16 @@
             if (response.status === 401) {
               // #2067: a 401 is the sign-in lapsing, not "Calendar not connected".
               // The shared signed-out modal is up; change nothing on the page.
-              return;
+              return false;
+            }
+            if (response.status === 409) {
+              // #2105: the calendar credential (not connected, or needs reconnecting),
+              // never the session. Show the server's line; no modal, no sign-out wording.
+              const body = await response.json().catch(() => ({}));
+              const line = body.detail || "Google Calendar isn't connected yet. Connect it first, then refresh the list.";
+              calendarListEl.innerHTML = `<div class="calendar-list-empty">${escapeHtml(line)}</div>`;
+              Toast.show('info', 'Google Calendar', line);
+              return false;
             }
             throw new Error('Failed to load calendars');
           }
@@ -978,16 +988,18 @@
 
           if (loadedCalendars.length === 0) {
             calendarListEl.innerHTML = '<div class="calendar-list-empty">I don\'t see any calendars yet. Check that you\'ve authorized calendar access, then refresh.</div>';
-            return;
+            return true;
           }
 
           renderCalendarList(loadedCalendars);
           updatePrimaryDropdown(loadedCalendars);
+          return true;
 
         } catch (error) {
           console.error('Failed to load calendars:', error);
           calendarListEl.innerHTML = '<div class="calendar-list-empty">I couldn\'t load your calendars. Try refreshing the page.</div>';
           Toast.show('error', 'Error', 'Failed to load calendar list');
+          return false;
         }
       }
 
@@ -1049,8 +1061,9 @@
         refreshBtn.textContent = 'Refreshing...';
 
         try {
-          await loadCalendarList();
-          Toast.show('success', 'Refreshed', 'Calendar list refreshed');
+          // #2105: say "Refreshed" only when the list actually loaded.
+          const loaded = await loadCalendarList();
+          if (loaded) Toast.show('success', 'Refreshed', 'Calendar list refreshed');
         } finally {
           refreshBtn.disabled = false;
           refreshBtn.textContent = 'Refresh List';
