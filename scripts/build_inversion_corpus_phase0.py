@@ -4547,6 +4547,13 @@ HAND_ROWS = [
         "source": "issue-2113 PA canonical run on 54a5ba990f 2026-10-20 12:2x (Q58; served update_document_query, the Notion line)",
         "notes": "an explicit issue number with no field named; the update_issue handler asks what to change (#2113)",
     },
+    {
+        "phrase": "Find time for a 1:1 with the team lead",
+        "category": "QUERY",
+        "expected": "floor",
+        "source": "issue-2112 PA canonical run on 54a5ba990f 2026-10-20 12:2x (Q33; served the date and time)",
+        "notes": "Arch 2026-10-20: finding a slot with someone else is floor (twin of 'find time for a 1:1 with sarah'); the router's NONE now stands over the legacy TEMPORAL landing (#2112)",
+    },
 ]
 
 

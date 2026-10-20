@@ -625,6 +625,64 @@ def sibling_segments(message: str, multi_result: Any) -> Optional[list]:
     return out
 
 
+def router_none_stands(category: Optional[str], action: Optional[str]) -> Optional[str]:
+    """#2112 (Arch's ruling, 2026-10-20): on a live category the router's NONE stands.
+
+    The live consult declined this turn with ``router_none`` at or above the
+    dispatch threshold, and the legacy chain then landed on something the
+    router owns. The owner declined; the second opinion does not override it,
+    so the turn goes to the floor. Returns the surface that makes the landing
+    live — ``"operation"`` / ``"group"`` / ``"category"`` (the same names
+    :func:`resolve_live_match` reports) or ``"category_ops"`` (every rail
+    operation the ACTION_REGISTRY files under the landing's category is live,
+    TEMPORAL's shape: ``get_current_time`` in ``read_temporal``) — or None
+    when the guard does not apply: the consult never ran or routed live, the
+    decline was not NONE, it was sub-threshold, the live set is empty, or the
+    landing is not live (other categories keep today's path, unchanged).
+
+    Read from the turn's own provenance (peek, never take — the shadow
+    observer still consumes it) and the flag, exactly as the consult does.
+    """
+    record = peek_live_route_provenance()
+    if record is None or record.routed_live or record.reason != "router_none":
+        return None
+    if record.confidence is None or record.confidence < live_min_confidence():
+        return None
+    cats = live_categories()
+    if not cats:
+        return None
+    from services.intent_service.action_registry import ACTION_REGISTRY
+    from services.intent_service.inversion_router import derive_routing_grammar
+    from services.intent_service.workflow_dispatcher import get_action_workflows
+
+    grammar = derive_routing_grammar()
+    workflows = get_action_workflows()
+    by_op = _category_by_operation(grammar)
+    cat_upper = category.upper() if category else None
+
+    def _match(op: str) -> Optional[str]:
+        entry = workflows.get(op)
+        return resolve_live_match(
+            operation=op,
+            canonical=grammar.alias_to_canonical.get(op, op),
+            flip_group=entry.flip_group if entry is not None else None,
+            category=by_op.get(op),
+            cats=cats,
+        )
+
+    if action:
+        matched = _match(action)
+        if matched:
+            return matched
+    if cat_upper and cat_upper in cats:
+        return "category"
+    if cat_upper:
+        ops = [a for (c, a) in ACTION_REGISTRY if str(c).upper() == cat_upper]
+        if ops and all(_match(a) for a in ops):
+            return "category_ops"
+    return None
+
+
 def live_min_confidence() -> float:
     """Dispatch threshold, clamped to [0, 1]; unparseable → the default."""
     raw = os.environ.get(MIN_CONFIDENCE_ENV, "")
