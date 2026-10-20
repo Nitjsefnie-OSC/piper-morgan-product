@@ -600,14 +600,17 @@ async def validate_notion_key_and_get_workspace(
         return False, None, "Validation failed. Please try again"
 
 
+# #2117: the wizard's words when a provider key passes its check.
+KEY_ACCEPTED_MESSAGE = "Key accepted."
+
+
 @router.post("/validate-key", response_model=ApiKeyValidateResponse)
 async def validate_api_key(req: ApiKeyValidateRequest):
     """
     Validate an API key with the provider.
 
     Uses UserAPIKeyService to validate keys against provider APIs:
-    - OpenAI: Tests gpt-4 access with minimal request
-    - Anthropic: Tests claude-3.5 access with minimal request
+    - OpenAI / Anthropic: a minimal request with the key (the reply names no model, #2117)
     - GitHub: Skipped (validated on first use)
     - Notion: Tests workspace access with users.me() (#527)
 
@@ -662,12 +665,13 @@ async def validate_api_key(req: ApiKeyValidateRequest):
                     store=False,  # Issue #485: Don't create DB records during validation
                 )
 
-                # Validation succeeded
-                model_info = "gpt-4" if req.provider == "openai" else "claude-3.5"
+                # Validation succeeded. #2117 (CXO): the old line named a model
+                # that was a constant here, not anything the check reached; say
+                # only what was checked.
                 return ApiKeyValidateResponse(
                     provider=req.provider,
                     valid=True,
-                    message=f"Valid ({model_info} access confirmed)",
+                    message=KEY_ACCEPTED_MESSAGE,
                 )
 
             except ValueError as e:
