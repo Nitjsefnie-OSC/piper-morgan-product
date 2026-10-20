@@ -2261,6 +2261,10 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
 
         except Exception as e:
             logger.error(f"Error getting recent activity: {e}")
+            # #2119: a read that did not happen is not an empty window. The house
+            # shape stays (four lists, never None); this additive key lets a
+            # consumer say "I couldn't read" instead of "found 0 commits".
+            empty["read_failed"] = [{"error": type(e).__name__}]
             return empty
 
     async def list_milestones(

@@ -7130,8 +7130,9 @@ class IntentService:
                     message=(
                         # #2120: no search ran, so no "couldn't find" claim; the
                         # honest scope line (CXO's words replace these if they differ).
-                        "I close issues one at a time, by number. Tell me which one "
-                        "(for example 'close issue #123'), or ask me to list the open issues."
+                        "I can close a particular issue if you give me its number, like "
+                        '"close #123". I don\'t search for finished issues or close them in '
+                        "bulk yet."
                     ),
                     intent_data={
                         "category": intent.category.value,
@@ -7471,8 +7472,9 @@ class IntentService:
                     success=False,
                     message=(
                         # #2120 (the reopen twin of the close line): no search ran.
-                        "I reopen issues one at a time, by number. Tell me which one "
-                        "(for example 'reopen issue #123'), or ask me to list the closed issues."
+                        "I can reopen a particular issue if you give me its number, like "
+                        '"reopen #123". I don\'t search for closed issues or reopen them in '
+                        "bulk yet."
                     ),
                     intent_data={
                         "category": intent.category.value,
@@ -12728,13 +12730,19 @@ class IntentService:
             # Build response message
             commits = activity.get("commits", [])
             commit_count = len(commits)
-            # #2119: no internal type name in user copy; say what was counted and
-            # what else a report can cover (CXO's words replace these if they differ).
-            message = (
-                f"Commit activity for {repository}: {commit_count} commit"
-                f"{'s' if commit_count != 1 else ''} in the {timeframe}. "
-                "For a status report on issues, pull requests or todos, say which one."
-            )
+            # #2119 (CXO's words, 16:05): a count only from a read that happened;
+            # a failed read says so (the adapter marks it, #2119). Never an
+            # internal type name in user copy.
+            if activity.get("read_failed"):
+                message = (
+                    f"I couldn't read {repository} just now (GitHub didn't answer), "
+                    "so there's nothing to report yet."
+                )
+            else:
+                message = (
+                    f"I looked at {repository} for the {timeframe} and found "
+                    f"{commit_count} commit{'s' if commit_count != 1 else ''}."
+                )
 
             return IntentProcessingResult(
                 success=True,

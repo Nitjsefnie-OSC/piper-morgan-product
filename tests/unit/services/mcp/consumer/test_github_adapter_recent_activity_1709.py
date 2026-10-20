@@ -184,6 +184,8 @@ class TestFailureIsTheEmptyShape:
         adapter._call_github_api.return_value = None
         assert await adapter.get_recent_activity(7, repository="o/r") == EMPTY
 
-    async def test_api_exception_yields_empty_shape(self, adapter):
+    async def test_api_exception_yields_empty_shape_marked_as_a_failed_read(self, adapter):
         adapter._call_github_api.side_effect = RuntimeError("api boom")
-        assert await adapter.get_recent_activity(7, repository="o/r") == EMPTY
+        result = await adapter.get_recent_activity(7, repository="o/r")
+        assert {k: result[k] for k in EMPTY} == EMPTY  # the house shape holds
+        assert result["read_failed"] == [{"error": "RuntimeError"}]  # #2119: not an empty window

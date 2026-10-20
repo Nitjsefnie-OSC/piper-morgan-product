@@ -693,7 +693,9 @@ class TestAnalysisHandlers:
         assert result.requires_clarification is False
 
         # Should contain report data
-        assert "report" in result.message.lower() or "generated" in result.message.lower()
+        assert (
+            "looked at" in result.message.lower() and "commit" in result.message.lower()
+        )  # #2119: CXO's words
         assert "report_type" in result.intent_data
         assert result.intent_data["report_type"] == "commit_analysis"
 
