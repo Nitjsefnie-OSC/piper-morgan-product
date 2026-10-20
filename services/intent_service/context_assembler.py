@@ -955,6 +955,15 @@ class ContextAssembler:
         cal_ctx = await self._gather_calendar_context(user_id)
         context.update(cal_ctx)
 
+        # #2112 (CXO's words, Arch's ruling): a TEMPORAL floor turn ("check my
+        # calendar for conflicts") must know whether the calendar is connected,
+        # or the model writes its own guess and never offers the connection
+        # (Web, 86ee0bbfa1, 15:10). The summary above is {} both when the
+        # calendar is empty and when it is absent; this is the explicit fact.
+        cal_conn = await self._gather_calendar_connection(user_id)
+        if cal_conn:
+            context["calendar_connection"] = cal_conn
+
         # #984: Cached todos (per-method per-user). Eager-invalidated on
         # todo CRUD (Q3=c) via TodoManagementService mutation hooks.
         if user_id:
@@ -1115,6 +1124,46 @@ class ContextAssembler:
             ttl_seconds=_TTL_CALENDAR,
             compute_fn=lambda: self._compute_calendar_context(user_id),
         )
+
+    async def _gather_calendar_connection(self, user_id: Optional[str]) -> Dict[str, Any]:
+        """#2112: the calendar's connection state with CXO's sentence for it.
+
+        ``{"status": "active" | "needs_reconnecting" | "not_connected", "line": str}``
+        from the one status service every surface reads (#2072: ``configured``
+        means a connection exists; a rejected grant renders as needs
+        reconnecting, never as connected). No principal, or a status-service
+        failure, returns {} — the floor then says nothing about the calendar
+        rather than guessing.
+        """
+        if not user_id:
+            return {}
+        try:
+            from services.integrations.integration_status_service import (
+                IntegrationStatusService,
+                needs_reconnecting,
+            )
+            from services.intent_service.capability_legibility import (
+                chat_reads_line,
+                not_connected_line,
+            )
+
+            status = await IntegrationStatusService().get_status(user_id, "calendar")
+        except (
+            Exception
+        ) as e:  # silent-ok: logged; the floor gets no calendar fact rather than a wrong one
+            logger.warning("context_assembler_calendar_connection_error", error=str(e))
+            return {}
+        if needs_reconnecting(status):
+            return {
+                "status": "needs_reconnecting",
+                "line": (
+                    "Google Calendar needs reconnecting (the grant was revoked or expired; "
+                    "reconnect in Settings → Integrations → Google Calendar)."
+                ),
+            }
+        if status.get("configured"):
+            return {"status": "active", "line": chat_reads_line("calendar")}
+        return {"status": "not_connected", "line": not_connected_line("calendar") or ""}
 
     async def _compute_calendar_context(self, user_id: str) -> Dict[str, Any]:
         """

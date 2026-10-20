@@ -1210,6 +1210,18 @@ class ConversationalFloor:
                     "sounds wrong."
                 )
 
+        if "calendar_connection" in domain_context:
+            # #2112 (CXO's words): the calendar's connection state, stated so the
+            # floor says it and offers the connection instead of guessing.
+            conn = domain_context["calendar_connection"]
+            if isinstance(conn, dict) and conn.get("line"):
+                if conn.get("status") == "active":
+                    lines.append(f"- Google Calendar is connected: {conn['line']}")
+                elif conn.get("status") == "needs_reconnecting":
+                    lines.append(f"- {conn['line']}")
+                else:
+                    lines.append(f"- Google Calendar is not connected: say \"{conn['line']}\"")
+
         if "calendar" in domain_context:
             cal = domain_context["calendar"]
             if cal.get("next_meeting"):
