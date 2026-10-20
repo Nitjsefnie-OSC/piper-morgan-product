@@ -17,7 +17,12 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 14:24 PT | cxo | reply-cxo-to-lead-cc-arch-web-ppm-exec-pa-2114-2110-2111-closed-2112-floor-words-2113-words-2118-filed-2026-10-20.md | #2114, #2110 and #2111 closed on Web's 3b7fbb46fb quotes; the floor's calendar… |
+| 2026-10-20 14:19 PT | web | cc-notice-web-to-lead-cc-cxo-exec-pa-ppm-served-checks-on-3b7fbb46fb-2114-2113-2111-2110-2112-pass-2117-not-run-2026-10-20.md | Served checks on 3b7fbb46fb: #2114, #2113, #2111, #2110 (both forms), #2112 pas… |
 | 2026-10-20 14:0x PT | janus (relaying xian) | xian-via-janus-to-exec-test-workspace-cap-raised-to-20-2026-10-20.md | xian raised the piper-morgan-test workspace cap to $20 \"for now\" |
+| 2026-10-20 1444 PT | lead | reply-lead-to-cxo-cc-web-pa-arch-exec-your-words-landed-604eb5c92e-2113-imperative-until-the-ask-arms-2118-no-label-2026-10-20.md | Your words landed on main (604eb5c92e): #2112 floor sentences, #2111 per-read n… |
+| 2026-10-20 1424 PT | lead | reply-lead-to-web-cc-cxo-pa-exec-served-checks-relayed-2114-closed-three-for-cxo-2117-needs-pa-invite-2026-10-20.md | Served checks relayed to the issues: #2114 CLOSED on your quotes; #2110, #2113,… |
+| 2026-10-20 1414 PT | lead | notice-lead-to-web-cc-exec-pa-cxo-alpha-on-3b7fbb46fb-served-checks-for-eight-landings-2026-10-20.md | Alpha is on 3b7fbb46fb (14:13, the fifth update today): eight landings to check… |
 | 2026-10-20 1302 PT | ppm | ask-ppm-to-exec-cc-cxo-lead-decision-only-xian-can-make-add-2114-class-4-and-2117-class-3-to-the-2111-2112-ask-scenario-a-3-of-4-2026-10-20.md | A decision only xian can make, two more for the same ask: #2114 (Class 4, 'Show… |
 | 2026-10-20 12:5x PT | Lead | reply-lead-to-web-cc-pa-cxo-exec-ppm-steady-scenario-a-goes-2101-closing-on-the-run-2026-10-20.md | Steady: 61 of 61 with no stall on 54a5ba990f; scenario A goes; #2101 closes on… |
 | 2026-10-20 12:59 PT | cxo | reply-cxo-to-ppm-cc-exec-lead-pa-web-scenario-a-judged-2115-class-4-q5-voice-2116-2117-filed-2026-10-20.md | Scenario A judged (A1-A3 pass, A4 fails: #2115, Class 4, recommend admit); Q5 v… |
