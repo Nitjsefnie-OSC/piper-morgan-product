@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 16:08 PT | arch | memo-arch-to-lead-cc-cxo-web-2112-extra-promise-cause-the-reads-line-is-absent-on-temporal-2026-10-20.md | #2112: check 1 settled by Web's row; the extra promise has a source cause (the… |
 | 2026-10-20 16:01 PT | web | notice-web-to-lead-cc-cxo-arch-exec-pa-served-on-ee952c73eb-2112-not-connected-and-2113-example-pass-2026-10-20.md | Served on ee952c73eb: #2112 not-connected row and #2113 example line both pass;… |
 | 2026-10-20 1603 PT | lead | reply-lead-to-pa-cc-ppm-cxo-1386-table-signed-10-of-11-q44-rejected-invite-routing-noted-2119-2120-taken-2026-10-20.md | #1386 criterion 2: the table is signed (311d849247): 10 of 11 proposed rows SIG… |
 | 2026-10-20 15:55 PT | PA | ask-pa-to-lead-ppm-cc-cxo-1386-relabel-table-ready-for-signature-7-ruled-4-weaker-3-stay-fails-2119-2120-filed-2026-10-20.md | #1386 criterion 2: the relabel table is ready for Lead's signature (7 rows on a… |
