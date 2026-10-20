@@ -19,6 +19,8 @@
 
   *#2018 line, CXO 15:32:* when CXO judges the served recovery read, it changes to "Settings → Integrations → GitHub will say it needs reconnecting. Press Reconnect." If #2018 closes, PPM strikes the line.
 
+**Contingent fifth line (#2101, chat stall), CXO 16:20:** goes in only if xian rules the stall isn't fixed before partners. CXO's wording: "Piper may stop responding for a few minutes. Reload the page and try again." It's a fact only if the stall recovers by itself, which both observed stalls did. If that's in doubt on send morning, write "usually": "Piper may stop responding for a few minutes. Reloading the page and trying again usually works." *(#2101)*
+
 The issue numbers are for PPM's strike-at-send. Drop them from the copy partners see.
 
 ## 2. Calendar in the invitation
@@ -46,7 +48,7 @@ Slack and Notion stay unnamed (xian 15:0x). Notion has no chat reader (Lead 15:0
 
 ## 4. HOST's send checks (15:23), all read on send morning
 
-- The invitation's line pointing to pipermorgan.ai/privacy: the Google paragraph has to be live and quoted back first. Web pushed `4f3582d` (build success), but Web's and Comms' curls both got Vercel's 403 at 15:3x.
+- The invitation's line pointing to pipermorgan.ai/privacy: **done 15:50.** Web quoted the Google paragraph from the rendered live page (website `4f3582d`), and since `a3cb49f` (17:0x) the paragraph and the footer Privacy link are in the served HTML too (Web's curl of four pages). Re-read only if the page changes again.
 - Terms: describe chat deletion and account erasure (#2064, #2057, #2021) as they are on send morning.
 - The code step: whatever the served wizard shows (HOST reads it).
 - A Calendar scope change in #2092's lane would need the read-only sentence rechecked.
