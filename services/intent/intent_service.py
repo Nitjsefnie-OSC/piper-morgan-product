@@ -465,6 +465,20 @@ def _clarification_truncation_tail(total: int, shown: int) -> str:
     return f"\n\n…and {hidden} more not shown. Add more of the title to narrow it down."
 
 
+# #2097: the create-issue aliases registered on create_issue_entry (workflow_entries);
+# the unverified-create wording applies to every one of them.
+_CREATE_ISSUE_ACTIONS = frozenset(
+    {
+        "create_issue",
+        "create_github_issue",
+        "create_ticket",
+        "create_item",
+        "make_github_issue",
+        "new_github_issue",
+    }
+)
+
+
 class IntentService:
     """
     Service for processing user intents.
@@ -11203,8 +11217,25 @@ class IntentService:
         Returns a result, or None when e isn't that case."""
         from services.integrations.github.github_integration_router import (
             GitHubIssueNotFound,
+            GitHubWriteRefused,
         )
 
+        if isinstance(e, GitHubWriteRefused):
+            # #2106: the server refused the tool by name; nothing was written.
+            # Say so, with the connector's hint; no "check the repository".
+            hint = f" {e.action_hint}" if e.action_hint else ""
+            return IntentProcessingResult(
+                success=True,
+                message=f"{e.user_message}{hint}",
+                intent_data={
+                    "category": intent.category.value,
+                    "action": intent.action,
+                    "confidence": intent.confidence,
+                    "write_refused": True,
+                },
+                workflow_id=workflow_id,
+                requires_clarification=False,
+            )
         if isinstance(e, GitHubIssueNotFound):
             # #1858: definitive not-found — a different bucket from
             # unverified. Say so plainly; no "check the repository" for a
@@ -11226,10 +11257,13 @@ class IntentService:
             )
         if "may or may not have landed" not in str(e):
             return None
-        if intent.action in ("create_issue", "create_ticket"):
+        if intent.action in _CREATE_ISSUE_ACTIONS:
             # #2097 (CXO's words): the request was sent and GitHub did not
             # confirm it. Say where to look; never invite a retry (the invited
-            # retry made the duplicate on alpha e801b1a309).
+            # retry made the duplicate on alpha e801b1a309). Every alias that
+            # maps to create_issue_entry takes this branch (Web's direct create
+            # on ef907b2cd7 arrived as create_github_issue and got the generic
+            # line, 2026-10-20).
             where = f" in {repository}" if repository else ""
             return IntentProcessingResult(
                 success=True,
