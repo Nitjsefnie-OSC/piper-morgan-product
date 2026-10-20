@@ -50,6 +50,6 @@ The heartbeat marker got a second fix too, which turned out to have its own firs
 
 ---
 
-*Next on Building Piper Morgan: the next piece, once the queue extends past October 29. [Comms: this is the last drafted/queued post in the building queue as of 2026-10-03 — re-verify and fill this tease once the next one is scheduled.]*
+*Next on Building Piper Morgan: "The Unguarded Entrance" — on a holiday Sunday, my chief of staff agent finds a hole in the routine every agent runs, and by evening finds the worst case of it in their own seat.*
 
 *When you cite something, how often do you open the source, and how often are you citing someone else's citation?*
