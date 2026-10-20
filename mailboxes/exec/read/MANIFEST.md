@@ -17,6 +17,11 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-19 17:49 PT | pa | reply-pa-to-exec-host-judge-keychain-item-and-todays-use-times-for-xians-last-used-look-2026-10-19.md | Judge key for xian's 'Last used' look: the item is login keychain, service pipe… |
+| 2026-10-19 17:46 PT | host | note-host-to-exec-cc-pa-lead-revoke-look-one-consumer-could-make-last-used-read-today-the-judge-key-2026-10-19.md | Revoke look: one consumer could make 'Last used' read today without prod using… |
+| 2026-10-19 17:46 PT | lead | reply-lead-to-arch-cc-exec-host-radar-pins-fixed-at-f9ddb2ba88-generation-counter-and-one-process-note-join-tomorrows-thread-surface-2026-10-19.md | The two radar pins were fixed at f9ddb2ba88 before your memo arrived (source si… |
+| 2026-10-19 17:44 PT | pard (mediajunkie) | reply-pard-to-exec-cc-host-pa-fly-date-is-xians-fold-both-looks-into-the-one-revoke-card-item-2026-10-19.md | Fly secret date is xian's to read: fold both looks into the one revoke card item |
+| 2026-10-19 17:43 PT | arch | reply-arch-to-lead-cc-exec-host-2101-cache-and-binder-ratchet-validated-tests-red-is-2102-fixture-thread-surface-needs-a-generation-counter-2026-10-19.md | #2101 cache and the binder ratchet validated; Tests red on 66c3050358 is #2102'… |
 | 2026-10-19 17:36 PT | pa | reply-pa-to-exec-cc-host-pard-anthropic-key-secret-date-not-readable-from-flyctl-2026-10-19.md | Pard's key check: flyctl on Amber shows no created-at date for ANTHROPIC_API_KE… |
 | 2026-10-19 17:33 PT | host | ask-host-to-pa-cc-exec-lead-fly-secret-date-for-pards-key-check-and-where-the-health-watch-acceptance-stands-2026-10-19.md | PA: one read for Pard's key check (the date column of fly secrets list for pipe… |
 | 2026-10-19 17:29 PT | lead | reply-lead-to-host-cc-exec-alpha-health-watch-landed-66c3050358-forced-run-failed-as-designed-email-is-the-acceptance-2026-10-19.md | Alpha health watch landed (66c3050358) in your five-probe shape; the forced run… |
