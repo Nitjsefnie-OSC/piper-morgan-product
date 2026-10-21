@@ -73,8 +73,14 @@
         }
     }
 
-    // Step 1: System Check
-    document.getElementById('check-system-btn').addEventListener('click', async function() {
+    // #2089: on a hosted instance (the server rendered body[data-hosted="true"])
+    // there is no System step; step 1 is the invite code (#2088). Self-host keeps
+    // the System check unchanged.
+    const hosted = document.body.dataset.hosted === 'true';
+
+    // Step 1 (self-host): System Check
+    const checkSystemBtn = document.getElementById('check-system-btn');
+    if (checkSystemBtn) checkSystemBtn.addEventListener('click', async function() {
         this.disabled = true;
         this.textContent = 'Checking...';
         document.getElementById('step-1-description').textContent = 'Checking that all required services are running...';
@@ -164,7 +170,51 @@
         }
     });
 
-    document.getElementById('next-1').addEventListener('click', () => showStep(2));
+    // #2088 (CXO 2026-10-19): hosted step 1 collects the invite code and checks it
+    // without spending it (the code is spent only at Create Account); a refused
+    // code gets CXO's sentence and the step stays. Self-host: Continue as before.
+    async function continueFromInviteStep() {
+        const input = document.getElementById('invite-token-first');
+        const code = input ? input.value.trim() : '';
+        if (!code) {
+            showError('Alpha access is invite-only. Paste the code you received.', 'Invite code');
+            if (input) input.focus();
+            return;
+        }
+        const btn = document.getElementById('next-1');
+        btn.disabled = true;
+        try {
+            const response = await fetch('/api/v1/setup/check-invite', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ invite_token: code })
+            });
+            const data = await response.json();
+            if (!response.ok || !data.valid) {
+                showError(
+                    (data && (data.message || data.detail)) || "That code isn't valid or has already been used. Check it and try again, or ask whoever sent it for a new one.",
+                    'Invite code'
+                );
+                if (input) input.focus();
+                return;
+            }
+            // Carry the checked code to Create Account (#1344 requires it there).
+            document.getElementById('invite-token').value = code;
+            showStep(2);
+        } catch (err) {
+            showError('Unable to reach server. Please try again.', 'Connection Failed');
+        } finally {
+            btn.disabled = false;
+        }
+    }
+
+    document.getElementById('next-1').addEventListener('click', () => {
+        if (hosted) {
+            continueFromInviteStep();
+        } else {
+            showStep(2);
+        }
+    });
 
     // Back button handlers for navigation between steps
     const back2Btn = document.getElementById('back-2');

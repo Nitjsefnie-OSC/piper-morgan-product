@@ -21,7 +21,7 @@ from pydantic import BaseModel, Field, field_validator
 from sqlalchemy import select, text
 
 from services.auth.auth_middleware import get_current_user
-from services.auth.invite_token_service import consume_invite_token
+from services.auth.invite_token_service import check_invite_token, consume_invite_token
 from services.auth.jwt_service import JWTClaims
 from services.auth.password_service import PasswordService
 from services.auth.session_cookies import set_session_cookies
@@ -185,6 +185,14 @@ _IN_DOCKER = (
     or bool(os.getenv("FLY_APP_NAME"))
     or (os.getenv("PIPER_ENVIRONMENT") or "").lower() == "production"
 )
+
+
+def wizard_is_hosted() -> bool:
+    """#2089 (CXO 2026-10-19): the setup page renders without the System step
+    when the platform runs the services (Fly, Docker, or a declared production
+    environment), the same signals check_docker trusts. With none present the
+    wizard keeps the System check rather than hide a real failure."""
+    return _IN_DOCKER
 
 
 async def check_docker() -> bool:
@@ -602,6 +610,43 @@ async def validate_notion_key_and_get_workspace(
 
 # #2117: the wizard's words when a provider key passes its check.
 KEY_ACCEPTED_MESSAGE = "Key accepted."
+
+
+INVITE_REFUSED_MESSAGE = (
+    "That code isn't valid or has already been used. Check it and try again, "
+    "or ask whoever sent it for a new one."
+)
+
+
+class InviteCheckRequest(BaseModel):
+    """#2088: the hosted wizard's step 1 asks for the code first."""
+
+    invite_token: str = Field(min_length=1, description="Alpha invite token, checked, not spent")
+
+
+class InviteCheckResponse(BaseModel):
+    valid: bool
+    message: Optional[str] = None
+
+
+@router.post("/check-invite", response_model=InviteCheckResponse)
+async def check_invite(req: InviteCheckRequest) -> InviteCheckResponse:
+    """#2088 (CXO 2026-10-19): check an invite code WITHOUT spending it, so the
+    hosted wizard can ask for it first. The code is spent only inside
+    create_user's transaction (#1344). A READ, so not behind the #1504 lockout
+    (the check-system reasoning, #1875). The token itself is never logged.
+    """
+    try:
+        async with AsyncSessionFactory.session_scope_fresh() as session:
+            valid = await check_invite_token(session, req.invite_token)
+    except Exception as e:
+        logger.error("invite_check_failed", error_type=type(e).__name__)
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="The invite check couldn't run. Try again in a moment.",
+        )
+    logger.info("invite_check", valid=valid)
+    return InviteCheckResponse(valid=valid, message=None if valid else INVITE_REFUSED_MESSAGE)
 
 
 @router.post("/validate-key", response_model=ApiKeyValidateResponse)

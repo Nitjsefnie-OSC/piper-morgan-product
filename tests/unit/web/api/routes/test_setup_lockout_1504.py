@@ -39,6 +39,7 @@ PRINCIPAL_GATED = {
 # 403'd the wizard's Step 1 for every invited user on an initialized instance.
 UNGATED_OK = {
     "/api/v1/setup/check-system",
+    "/api/v1/setup/check-invite",  # #2088: a READ (checks, never spends)
     "/api/v1/setup/status",
     "/api/v1/setup/validate-key",
     "/api/v1/setup/check-keychain/{provider}",

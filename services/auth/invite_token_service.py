@@ -23,7 +23,7 @@ import secrets
 from datetime import datetime, timezone
 from uuid import UUID
 
-from sqlalchemy import update
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from services.database.models import InviteToken
@@ -45,6 +45,24 @@ def normalize_token(raw: str) -> str:
     (e.g. "abcd-efgh-..."); dashes/spaces are cosmetic only, never load-bearing.
     """
     return re.sub(r"[^0-9A-Z]", "", raw.strip().upper())
+
+
+async def check_invite_token(session: AsyncSession, raw_token: str) -> bool:
+    """A read: True iff the token exists and is unused. Never spends it.
+
+    #2088 (CXO 2026-10-19): the hosted wizard's first step checks the code
+    before the person types anything else. This is NOT the validity gate for
+    account creation: consume_invite_token's single conditional UPDATE stays
+    the only burn, so the TOCTOU argument above is untouched (a code spent
+    between this read and Create Account is refused there).
+    """
+    token = normalize_token(raw_token)
+    if not token:
+        return False
+    result = await session.execute(
+        select(InviteToken.token).where(InviteToken.token == token, InviteToken.used_at.is_(None))
+    )
+    return result.scalar_one_or_none() is not None
 
 
 async def consume_invite_token(session: AsyncSession, raw_token: str, user_id: UUID) -> bool:

@@ -33,6 +33,7 @@ from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 
 from services.auth.auth_middleware import JWTClaims, require_admin
+from web.api.routes.setup import wizard_is_hosted
 
 logger = structlog.get_logger()
 
@@ -389,7 +390,10 @@ async def setup_page(request: Request):
     Accessible without authentication.
     """
     templates = _get_templates(request)
-    return templates.TemplateResponse("setup.html", {"request": request})
+    # #2089/#2088: hosted has no System step and asks for the invite first.
+    return templates.TemplateResponse(
+        "setup.html", {"request": request, "hosted": wizard_is_hosted()}
+    )
 
 
 @router.get("/standup", response_class=HTMLResponse)

@@ -324,7 +324,7 @@
       }
     </style>
   </head>
-  <body>
+  <body data-hosted="{{ 'true' if hosted else 'false' }}">
     {% include 'components/toast.html' %}
     <div class="auth-container" style="max-width: 600px">
       <!-- Header -->
@@ -365,13 +365,37 @@
 
       <!-- Progress indicator -->
       <div class="setup-progress">
+        {% if hosted %}
+        <div class="step active" data-step="1">1. Invite</div>
+        {% else %}
         <div class="step active" data-step="1">1. System</div>
+        {% endif %}
         <div class="step" data-step="2">2. API Keys</div>
         <div class="step" data-step="3">3. Account</div>
         <div class="step" data-step="4">4. Projects</div>
         <div class="step" data-step="5">5. Complete</div>
       </div>
 
+      {% if hosted %}
+      <!-- Step 1 (hosted; #2088, #2089, CXO 2026-10-19): the invite code comes
+           first. The platform runs the services, so there is no System step. -->
+      <div id="step-1" class="setup-step active">
+        <h2>Your invite code</h2>
+        <div class="form-group">
+          <label for="invite-token-first">Invite code</label>
+          <input
+            type="text"
+            id="invite-token-first"
+            name="invite_token_first"
+            required
+            autocomplete="off"
+            placeholder="From your invitation"
+          />
+          <small>Alpha access is invite-only. Paste the code you received.</small>
+        </div>
+        <button id="next-1" class="auth-button">Continue</button>
+      </div>
+      {% else %}
       <!-- Step 1: System Check -->
       <div id="step-1" class="setup-step active">
         <h2>System Requirements</h2>
@@ -382,6 +406,7 @@
           Continue
         </button>
       </div>
+      {% endif %}
 
       <!-- Step 2: API Keys (#940: single-provider LLM setup) -->
       <div id="step-2" class="setup-step">
@@ -650,6 +675,11 @@
         <form id="account-form" class="auth-form">
           <!-- #1344: account creation is invite-gated; the backend REQUIRES this
                token (the wizard omitted it entirely -- every create 422'd). -->
+          {% if hosted %}
+          <!-- #2088: the code was collected and checked at step 1; carried here
+               because create-user requires it. Never asked twice. -->
+          <input type="hidden" id="invite-token" name="invite_token" />
+          {% else %}
           <div class="form-group">
             <label for="invite-token">Invite code</label>
             <input
@@ -662,6 +692,7 @@
             />
             <small>Alpha access is invite-only — paste the code you received.</small>
           </div>
+          {% endif %}
           <div class="form-group">
             <label for="username">Username</label>
             <input
