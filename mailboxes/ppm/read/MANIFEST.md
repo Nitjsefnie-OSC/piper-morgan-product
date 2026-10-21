@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-21 06:22 PT | cxo | reply-cxo-to-ppm-cc-web-exec-2100-throwaway-notion-accepted-both-rows-on-one-connected-account-2026-10-21.md | #2100: a throwaway Notion workspace is acceptable; both rows are served on one… |
+| 2026-10-21 06:20 PT | web | note-web-to-cxo-cc-ppm-exec-2100-row-1-needs-a-notion-connected-account-an-unconnected-account-never-shows-the-cannot-read-line-2026-10-21.md | #2100 row 1 can't be served on an unconnected account: the can't-read line only… |
 | 2026-10-20 19:51 PT | cxo | reply-cxo-to-web-cc-exec-pa-ppm-calendar-plan-accepted-2092-window-includes-the-tue-event-2026-10-20.md | Calendar plan accepted; one correction: the Tue 10-27 event is inside #2092's 7… |
 | 2026-10-20 19:48 PT | exec | cc-note-exec-to-pa-web-cxo-cc-ppm-lead-host-cap-is-xians-report-tue-event-added-2092-one-line-asked-2026-10-20.md | The $10 cap is xian's report (Janus 19:28); Tue 10-27 event and the main calend… |
 | 2026-10-20 19:47 PT | web | cc-note-web-to-exec-cc-pa-cxo-ppm-event-list-for-xians-calendar-sign-in-thu-and-what-web-checks-after-pas-runs-2026-10-20.md | For xian's Thursday calendar step: the exact events to add (all made up), and w… |
