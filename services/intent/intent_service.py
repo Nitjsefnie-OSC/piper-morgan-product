@@ -1108,6 +1108,15 @@ class IntentService:
         # string "None".
         effective_user_id = str(ctx.user_id) if ctx and ctx.user_id is not None else user_id
         effective_session_id = str(ctx.conversation_id) if ctx else session_id
+        # The quiet count (grant condition 3, xian 2026-10-20): every chat turn
+        # is recorded name-free (a hash of the principal and a timestamp) so
+        # /health can say whether any account was active in the last 30 minutes.
+        try:
+            from services.infrastructure.turn_activity import TURN_ACTIVITY
+
+            TURN_ACTIVITY.record(effective_user_id)
+        except Exception as e:  # silent-ok: logged; a counter must never block a turn
+            self.logger.warning("turn_activity_record_failed", error=str(e))
 
         # Issue #913: Continuation rate instrumentation
         # Check if the previous response in this session was a floor hit

@@ -42,6 +42,7 @@ deployment infrastructure that cannot authenticate. See its docstring.
 
 import asyncio
 from datetime import datetime, timezone
+from typing import Dict
 
 import structlog
 from fastapi import APIRouter, Depends, Request
@@ -107,6 +108,17 @@ async def _database_probe() -> str:
     return "healthy"
 
 
+def _quiet_count() -> Dict[str, int]:
+    """The name-free activity window from the intent service's recorder; a failure
+    reads as an empty window rather than taking /health down."""
+    try:
+        from services.infrastructure.turn_activity import TURN_ACTIVITY
+
+        return TURN_ACTIVITY.snapshot()
+    except Exception:  # silent-ok: /health is polled by Fly; never let a counter fail it
+        return {"accounts": 0, "turns": 0}
+
+
 @router.get("/health")
 async def health(request: Request):
     """
@@ -170,6 +182,10 @@ async def health(request: Request):
         "intent_service": "healthy" if intent_service_present else "degraded",
         "database": database_status,
         "loop_watchdog": watchdog_status,
+        # The quiet count (grant condition 3): accounts with a chat turn in the
+        # last 30 minutes, name-free; the promote gate reads `.accounts` and
+        # refuses while it is above zero. Informational for the status line.
+        "chat_turns_last_30m": _quiet_count(),
     }
 
     # Overall status degrades if any required service is missing or the DB is unreachable.

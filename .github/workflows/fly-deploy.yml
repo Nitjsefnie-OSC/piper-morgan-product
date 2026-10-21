@@ -70,6 +70,10 @@ on:
         description: "DRILL: run the staging job with the health verdict FORCED red, to prove the gate skips the deploy (never deploys)"
         type: boolean
         default: false
+      quiet_override:
+        description: "Grant condition 3(c): promote a must-close on xian's word while accounts are active in the last 30 minutes (otherwise the quiet count refuses)"
+        type: boolean
+        default: false
 
 concurrency:
   # Never let two deploys race to the SAME app. Do NOT cancel in-progress: a half-applied
@@ -401,6 +405,31 @@ jobs:
             exit 1
           fi
           echo "Tests concluded success on ${anc}; ${SHA} differs from it only outside Tests' trigger paths ($(git diff --name-only "$anc" "$SHA" | wc -l | tr -d ' ') files)"
+
+      - name: Alpha must be quiet (no account with a chat turn in the last 30 minutes)
+        env:
+          QUIET_OVERRIDE: ${{ inputs.quiet_override }}
+        run: |
+          # Grant condition 3 (CIO 2026-10-20, xian's ruling): partners are worldwide, so no hour
+          # is quiet; a promotion waits until alpha's own /health says no account sent a chat turn
+          # in the last 30 minutes (`services.chat_turns_last_30m.accounts`, name-free). A build
+          # that does not serve the field (absent) is noted and not refused: until it is served
+          # the grant's clock window applies, which is the operator's rule, not this step's.
+          # Condition 3(c): a must-close may go out on xian's word with quiet_override=true.
+          accounts="$(curl -fsS --max-time 10 https://alpha.pipermorgan.ai/health \
+                     | python3 -c 'import sys,json; v=(json.load(sys.stdin).get("services") or {}).get("chat_turns_last_30m"); print("" if not isinstance(v, dict) else v.get("accounts",""))')"
+          if [ -z "$accounts" ]; then
+            echo "::notice title=Quiet count not served::alpha /health has no services.chat_turns_last_30m; the grant's clock window applies to this promotion."
+          elif [ "$accounts" != "0" ]; then
+            if [ "$QUIET_OVERRIDE" = "true" ]; then
+              echo "::warning title=Quiet count overridden::${accounts} account(s) active in the last 30 minutes; promoting on quiet_override (grant condition 3(c), xian's word)."
+            else
+              echo "::error title=Alpha is not quiet::${accounts} account(s) sent a chat turn in the last 30 minutes. Dispatch again when the count reads 0, or with quiet_override=true on xian's word for a must-close."
+              exit 1
+            fi
+          else
+            echo "Alpha is quiet: 0 accounts with a chat turn in the last 30 minutes."
+          fi
 
       - name: Content-parity gate
         run: |
