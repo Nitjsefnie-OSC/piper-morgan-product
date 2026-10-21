@@ -1735,3 +1735,9 @@ out-of-scope call. Gate 14 → 15, fourth slip-ledger entry, dates unchanged; cr
 - 2026-10-20 18:3x PT: #2123 placed on Production (conditional Class 2 ask if a GitHub env token is set on alpha).
 
 - 2026-10-20 19:30 PT: #2117 closed live (CXO). Gate 10 -> 9 open MVP, 6 must-close. #2122 closed (Production).
+
+- 2026-10-21 12:3x PT: #2124 (alert issue) placed on Ongoing.
+
+- 2026-10-21 15:32 PT: #2089 closed live (CXO); #2088 closed (Production). Gate 9 -> 8 open MVP.
+
+- 2026-10-21 15:4x PT: #2085 admitted, Class 4, must-close (xian 15:01/15:11). Gate 8 -> 9 open MVP, 6 must-close.
