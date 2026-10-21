@@ -24,3 +24,14 @@ def test_the_search_handler_serves_cxo_line():
 
 def test_no_partner_facing_line_names_the_env_var():
     assert "NOTION_API_KEY locally" not in inspect.getsource(svc)
+
+
+def test_the_analyze_and_update_handlers_serve_cxo_lines():
+    """CXO 18:17: #2100's rule covers all three strings; no 'once connected' promise."""
+    analyze = inspect.getsource(svc.IntentService._handle_analyze_document_notion)
+    update = inspect.getsource(svc.IntentService._handle_update_document_notion)
+    assert "I can't analyze your documents from chat yet" in analyze
+    assert "I can't update documents from chat yet. Tell me what you want changed" in update
+    for src in (analyze, update):
+        assert "Once connected" not in src
+        assert "NOTION_API_KEY" not in src

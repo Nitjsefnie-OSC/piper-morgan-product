@@ -5904,10 +5904,10 @@ class IntentService:
             if not notion_router.is_available(_user_id):
                 return IntentProcessingResult(
                     success=True,
+                    # #2100/#2122 (CXO's words, 2026-10-20): no promise of a Notion read.
                     message=(
-                        "I'd love to analyze your document, but Notion isn't configured yet. "
-                        "To enable document analysis, connect Notion in Settings → Integrations → Notion. "
-                        "Alternatively, you can upload a file directly and I'll analyze that instead!"
+                        "I can't analyze your documents from chat yet, and I can't read your "
+                        "Notion pages in chat yet. If you paste the text here, I can work with it."
                     ),
                     intent_data={
                         "category": intent.category.value,
@@ -6085,10 +6085,10 @@ class IntentService:
             if not notion_router.is_available(_user_id):
                 return IntentProcessingResult(
                     success=True,
+                    # #2100/#2122 (CXO's words, 2026-10-20): no promise of a Notion write.
                     message=(
-                        "I'd love to help update your document, but Notion isn't configured yet. "
-                        "To enable document updates, connect Notion in Settings → Integrations → Notion. "
-                        "Once connected, I can update documents in your Notion workspace!"
+                        "I can't update documents from chat yet. Tell me what you want changed "
+                        "and I'll draft the text for you to paste."
                     ),
                     intent_data={
                         "category": intent.category.value,

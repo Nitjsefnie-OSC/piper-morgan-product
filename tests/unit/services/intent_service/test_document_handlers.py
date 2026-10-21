@@ -283,7 +283,9 @@ class TestNotionNotConfiguredGracefulDegradation:
             )
 
             assert result.success is True
-            assert "Notion isn't configured yet" in result.message
+            assert (
+                "I can't analyze your documents from chat yet" in result.message
+            )  # #2122: CXO's words
             assert "NOTION_API_KEY" not in result.message  # #2122
             assert result.implemented is False
 
