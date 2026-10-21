@@ -32,7 +32,7 @@
 </style>
 <div class="wrap">
 <h1>Attention rollup — Tuesday 20 October</h1>
-<p class="meta">Exec · v483, rebuilt 07:47 PDT Wed 10-21 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
+<p class="meta">Exec · v484, rebuilt 08:01 PDT Wed 10-21 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
 
 
 
@@ -40,14 +40,7 @@
 
 <div class="card hot"><b>Four things left, all small</b> (the OpenAI key is in, thank you)
 <ol>
-<li><b>Seed the test calendar yourself, by Thu 10-22 about 09:00 PT</b> (about 10 minutes). Google blocked Web&rsquo;s automated browser at sign-in. <b>Lean: do it</b>, because otherwise the nine calendar questions probably cost the routing bar.
-<ol type="a">
-<li>In a separate browser profile, sign in to the throwaway account only.</li>
-<li>On its main calendar, add these made-up events. <b>Thu 10-22:</b> &ldquo;Team sync&rdquo; 10:00&ndash;10:30, repeating weekly; &ldquo;1:1 with Sam&rdquo; 11:00&ndash;11:30 and &ldquo;Planning review&rdquo; 11:15&ndash;11:45 (the overlap); afternoon free. <b>Fri 10-23:</b> &ldquo;1:1 with Alex&rdquo; 09:30&ndash;10:00 and &ldquo;Design check-in&rdquo; 14:00&ndash;14:30. <b>Tue 10-27:</b> &ldquo;Roadmap review&rdquo; 13:00&ndash;14:00. (Web&rsquo;s list.)</li>
-<li>On alpha, log in as <code>web-seed-1386</code> (login in <code>~/.piper-shared/web-seed-1386-credentials-2026-10-20.txt</code>). Go to Settings &rarr; Integrations &rarr; Google Calendar &rarr; Connect, and check the consent screen names the throwaway account.</li>
-<li><b>Send no chat message there.</b> Tell Web through Janus when it&rsquo;s done.</li>
-</ol>
-The latest start for the run is Thu 12:00 (PA). PA then runs the OpenAI check straight after, on the same build. Web&rsquo;s OpenAI account is built, and the wizard said &ldquo;Key accepted.&rdquo;</li>
+<li><b>Calendar: the events are in, thank you (Janus 08:0x).</b> Google then refused the connect because the app is &ldquo;being tested&rdquo;. Once the throwaway address is on the test-user list in Google Cloud, retry: on alpha log in as <code>web-seed-1386</code> (login in <code>~/.piper-shared/web-seed-1386-credentials-2026-10-20.txt</code>), Settings &rarr; Integrations &rarr; Google Calendar &rarr; Connect, check the consent screen names the throwaway account, <b>send no chat</b>, and tell Web through Janus. Latest start for PA&rsquo;s run is Thu 12:00. <b>This screen will hit every partner too</b> until Google verifies the app (#2087, on Production). I&rsquo;ve asked PPM where #2087 sits, and HOST and Comms to add a &ldquo;send us the Google address you&rsquo;ll connect&rdquo; step to the invitation, so you add each one to the test list (cap 100).</li>
 <li><b>New, same Thursday sitting (about 5 minutes): a throwaway Notion workspace for #2100.</b> CXO accepted it at 06:22. Notion&rsquo;s sign-up emails a code Web can&rsquo;t read, and its Google sign-in refuses Web&rsquo;s browser the way Google did. <b>Lean: do it</b>, because otherwise #2100 needs your own Notion account. In the throwaway-account browser profile, create a free Notion workspace with that Google login and add no pages. Then tell Web through Janus; Web connects it on <code>web-scn-a-1020</code> if Notion lets the browser through. If not, Web tells you where that account&rsquo;s login is; log in to alpha with it and click Settings &rarr; Integrations &rarr; Notion &rarr; Connect. Web then asks the two rows.</li>
 <li><b>The staging invite</b>, any time Wednesday: tell HOST &ldquo;mint the staging invite&rdquo; in a HOST session you&rsquo;re in.</li>
 <li><b>One yes/no for #2092</b>, whenever: on 10-19, chat told you your connected calendar had no events in the next 7 days. Did that Google account&rsquo;s main calendar actually have events from 10-19 to 10-26? Lead already found the cause: Google refused the read, and Piper reported it as empty.</li>
@@ -113,6 +106,7 @@ Done tonight, thank you: both alpha codes, the Google account and the OpenAI key
 <div class="card">MVP gate: <b>9 open</b>, 6 must-close (#2089, #2091, #2092, #2096, #2100, #2112), 0 days moved. Also open: #2018, epic #1595, gate #1386. Main: 12 of 12 green. Alpha <code>8e61423f1a</code> (07:34), healthy. <b>The quiet count is live:</b> alpha&rsquo;s /health now reports how many accounts chatted in the last 30 minutes, and an update is refused unless it reads 0 (a must-close can go through on your word). So the 20:00&ndash;21:00 window is now only a fallback. 10-23 is your checkpoint, not a target to squeeze into.</div>
 <h2>✅ Removed this rebuild</h2>
 <div class="card">The stall, website SSR and keys decisions (ruled 16:57); the Calendar, #2097/#2098, /privacy and section A decisions (ruled); the alembic reads (passed); the invite file (written); the Console look (sent to Pard); #2090 (backfilled); the DB card (your reads answered it). Older notes are in git history.</div>
+<p class="meta">v484 (08:01 10-21): Web x2, Lead 07:48, CIO 07:5x, Janus 08:0x read in full; gh #2087 OPEN Production.</p>
 <p class="meta">v483 (07:47 10-21): Comms 07:1x, Docs 07:4x, Lead 07:34, CIO 07:3x read in full; Ship page 200; /health 8e61423f1a, accounts 0.</p>
 <p class="meta">v482 (06:39 10-21, fire 06:38): Web 06:1x and 06:3x, CXO 06:22 read in full; main 12/12; MVP open 9; /health edf95b5c0c.</p>
 <p class="meta">v481 (19:5x 10-20): Web 19:47 (event list) read in full.</p>
