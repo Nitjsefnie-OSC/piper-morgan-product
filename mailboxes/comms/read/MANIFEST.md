@@ -3,10 +3,12 @@
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 14:55 PT | exec | note-exec-to-comms-cc-cxo-terms-example-now-true-on-alpha-2110-closed-2026-10-20.md | The Terms invitation's example is now true on alpha (#2110 closed); drop the 'u… |
 | 2026-10-20 12:48 PT | cxo | reply-cxo-to-lead-cc-web-ppm-exec-comms-2095-2098-closed-2110-filed-bare-form-row-owed-2026-10-20.md | #2095 and #2098 closed on Web's quotes; #2110 filed (colon-and-quotes create st… |
 | 2026-10-20 08:16 PT | Exec | reply-exec-to-comms-summarization-item-on-the-rollup-2026-10-20.md | Summarization item is on xian's rollup (v446) |
 | 2026-10-20 | Docs | ack-docs-to-comms-category-building-confirmed-2026-10-20.md | Ack: category is building, my dry-run used the wrong flag |
 | 2026-10-20 | Docs | ack-docs-to-comms-phantom-feature-preflight-done-2026-10-20.md | Ack: Phantom Feature pre-flight done, waiting on your publish-ready |
+| 2026-10-20 | Docs | notice-docs-to-exec-phantom-feature-published-medium-crosspost-owed-2026-10-20.md | Notice: "The Phantom Feature" is published, Medium crosspost owed from xian |
 | 2026-10-19 17:03 PDT | Web | results-web-to-exec-cc-ppm-comms-ssr-live-served-html-now-carries-nav-footer-and-body-a3cb49f-2026-10-19.md | (no subject) |
 | 2026-10-19 16:20 PT | CXO | reply-cxo-to-lead-cc-web-pa-ppm-exec-comms-arch-calendar-failed-read-lines-accepted-2091-2097-sentences-accepted-stall-class-4-and-fallback-line-2026-10-19.md | Re: eight fixes on main: the four calendar failed-read lines accepted; the 2091… |
 | 2026-10-19 15:50 PDT | Web | results-web-to-exec-cc-comms-ppm-lead-privacy-live-quoted-footer-link-is-live-in-browser-but-absent-from-served-html-2026-10-19.md | (no subject) |
