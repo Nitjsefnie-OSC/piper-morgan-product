@@ -32,14 +32,14 @@
 </style>
 <div class="wrap">
 <h1>Attention rollup — Tuesday 20 October</h1>
-<p class="meta">Exec · v503, rebuilt 15:05 PDT Wed 10-21 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
+<p class="meta">Exec · v504, rebuilt 15:12 PDT Wed 10-21 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
 
 
 
 
 
-<div class="card"><b>Alpha is back.</b> You ran the memory command at about 14:12; my six /health reads at 14:15 were all healthy. The outage ran about 11:19 to 14:12. Lead promoted the held build at 14:25 (alpha ae702f6a04): the wizard now asks for the invite code first.</div>
-<div class="card hot"><b>Your restart-policy step is on its way.</b> You admitted #2085 and said yes to automatic restart (15:00, recorded). Lead or PA is checking the exact paste step against the machine. One open question: both outages left the machine running with Postgres dead inside it, and a restart policy acts only when the machine exits. If the policy alone doesn&rsquo;t cover that, the step will say so and what does.</div>
+<div class="card"><b>Alpha is back.</b> You ran the memory command at about 14:12; my six /health reads at 14:15 were all healthy. The outage ran about 11:19 to 14:12. Lead promoted the held build at 14:25 (alpha 76789a8988): the wizard now asks for the invite code first.</div>
+<div class="card hot"><b>No step to paste. One choice instead.</b> Automatic restart is already on (&ldquo;always&rdquo;), and memory reads 512&nbsp;MB (PA 15:05, Lead agrees). Don&rsquo;t run a restart command. It can&rsquo;t catch this crash anyway: Postgres dies but the machine keeps running, and Fly&rsquo;s Postgres image never restarts Postgres. The memory fix removes the cause, but nothing makes it recover by itself.<ol><li>(a) Build the phone-approved restart button. It meets #2085&rsquo;s bar, but it isn&rsquo;t safe until main is protected, and it needs a new database-only token.</li><li>(b) Accept the risk: the memory fix, plus the alert (about 5 min), plus a written &ldquo;who restarts it, how fast&rdquo; line for partner days. Today&rsquo;s gap from alert to fix was about three hours.</li></ol><b>Lean: (b)</b>, if you can commit to a real time such as within an hour on partner days. Otherwise (a), after main is protected.</div>
 <div class="card hot"><b>Three things left, all small</b>
 <ol>
 <li><b>Notion (#2100): one decision.</b> The re-saved token connected to a workspace with real working pages (&ldquo;testing Piper Morgan&rdquo;), not an empty one. Web disconnected at once, asked nothing and wrote nothing down. <b>Lean: revoke that integration in Notion</b> (HOST, CXO and Web agree; CXO won&rsquo;t accept a row on that workspace) (it sat on alpha for about 2 minutes and is in Web&rsquo;s session output). Make a new one in a workspace that really is empty, and re-save it in the same file. The alternative is to keep this workspace, but Web won&rsquo;t run the summarize row on it. No hurry before Thursday.</li>
@@ -102,7 +102,7 @@
 <p><b>Scheduled:</b> mail v4 review Thu 10-22. The Ship #066 kickoff sends itself Fri 10-23; I draft #066&rsquo;s goals by Sat 10-24 afternoon.</p>
 </div>
 <h2>📊 Where things stand</h2>
-<div class="card">MVP gate: <b>9 open</b>, 6 must-close (#2089, #2091, #2092, #2096, #2100, #2112), 0 days moved. Also open: #2018, epic #1595, gate #1386. Main: 12 of 12 green. Alpha <code>ae702f6a04</code> (my /health read at 10:54), healthy. Lead hasn&rsquo;t sent a note on this update yet. <b>The quiet count is live:</b> alpha&rsquo;s /health now reports how many accounts chatted in the last 30 minutes, and an update is refused unless it reads 0 (a must-close can go through on your word). Its first real check passed at 08:09, and it now also waits 30 minutes after any restart. So the 20:00&ndash;21:00 window is now only a fallback. 10-23 is your checkpoint, not a target to squeeze into.</div>
+<div class="card">MVP gate: <b>9 open</b>, 6 must-close (#2089, #2091, #2092, #2096, #2100, #2112), 0 days moved. Also open: #2018, epic #1595, gate #1386. Main: 12 of 12 green. Alpha <code>76789a8988</code> (my /health read at 10:54), healthy. Lead hasn&rsquo;t sent a note on this update yet. <b>The quiet count is live:</b> alpha&rsquo;s /health now reports how many accounts chatted in the last 30 minutes, and an update is refused unless it reads 0 (a must-close can go through on your word). Its first real check passed at 08:09, and it now also waits 30 minutes after any restart. So the 20:00&ndash;21:00 window is now only a fallback. 10-23 is your checkpoint, not a target to squeeze into.</div>
 <h2>✅ Removed this rebuild</h2>
 <div class="card">The stall, website SSR and keys decisions (ruled 16:57); the Calendar, #2097/#2098, /privacy and section A decisions (ruled); the alembic reads (passed); the invite file (written); the Console look (sent to Pard); #2090 (backfilled); the DB card (your reads answered it). Older notes are in git history.</div>
 <p class="meta">v500 (12:52 10-21): PA 12:48 (OOM), Lead 12:4x, CIO 12:4x, HOST 12:4x read in full; /health still degraded.</p>
@@ -111,7 +111,7 @@
 <p class="meta">v497 (11:30 10-21): Lead 11:28 incident read in full; my /health: degraded, database unreachable.</p>
 <p class="meta">v496 (11:10 10-21): Web 11:0x, Docs 11:0x read in full.</p>
 <p class="meta">v495 (10:57 10-21): Janus 10:5x read in full.</p>
-<p class="meta">v494 (10:54 10-21, fire 10:38): main 12/12; MVP open 9; /health ae702f6a04.</p>
+<p class="meta">v494 (10:54 10-21, fire 10:38): main 12/12; MVP open 9; /health 76789a8988.</p>
 <p class="meta">v493 (10:37 10-21): CIO 10:3x, PPM 10:3x, Web 10:3x read in full; removed the 10-20 17:3x card (resolved), which carried a partner location.</p>
 <p class="meta">v492 (10:24 10-21): Janus 10:2x, Comms 10:2x, CXO 10:2x read in full.</p>
 <p class="meta">v491 (10:11 10-21): Lead 10:11 read in full.</p>
