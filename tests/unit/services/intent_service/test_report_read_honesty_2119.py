@@ -47,6 +47,23 @@ async def _run(intent_service, activity):
 
 
 @pytest.mark.asyncio
+async def test_the_read_carries_the_principal(intent_service):
+    """#2121: the handler threads the principal so an OAuth-only account reads with its grant."""
+    domain = MagicMock()
+    domain._github_agent.get_recent_activity = AsyncMock(return_value=dict(EMPTY))
+    with (
+        patch("services.domain.github_domain_service.GitHubDomainService", return_value=domain),
+        patch.object(
+            intent_service,
+            "_resolve_analysis_repository",
+            new=AsyncMock(return_value=("dinp-machine/piper-test-activity", None)),
+        ),
+    ):
+        await intent_service._handle_generate_report(_intent(), "wf-2121")
+    assert domain._github_agent.get_recent_activity.await_args.kwargs["user_id"] == "u-2119"
+
+
+@pytest.mark.asyncio
 async def test_a_real_empty_window_says_it_looked_and_found_none(intent_service):
     result = await _run(intent_service, dict(EMPTY))
     assert result.message == (

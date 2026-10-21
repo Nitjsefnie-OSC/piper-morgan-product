@@ -1636,6 +1636,21 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
     # Isolated so resolve()'s degrade rail is testable against a fixture-backed client,
     # and so the provisioning-gated bits below are confined to two small methods.
 
+    async def _grant_headers_for(self, user_id) -> Optional[Dict[str, str]]:
+        """#2121: the account's own Authorization for a raw REST read — the PAT leg's
+        token, or the stored OAuth grant (#358 store) for a BOUND binding — resolved
+        through ``resolve_credential`` like every connector read. None when the
+        account has no usable credential (the caller reports a failed read)."""
+        credential = await self.resolve_credential(user_id)
+        if isinstance(credential, DegradationResponse):
+            return None
+        if credential.leg == "pat":
+            grant = credential.token
+        else:
+            async with AsyncSessionFactory.session_scope() as session:
+                grant = await ConnectorGrantStore().get(session, str(credential.owner_id), _GITHUB)
+        return {"Authorization": f"Bearer {grant}"} if grant else None
+
     @asynccontextmanager
     async def _mcp_client_ctx(self, binding):
         """Yield a connected ``MCPClient`` for this binding — streamable-HTTP to the
@@ -1759,7 +1774,12 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
             yield session
 
     async def _call_github_api(
-        self, endpoint: str, params: Optional[Dict[str, Any]] = None, *, strict: bool = False
+        self,
+        endpoint: str,
+        params: Optional[Dict[str, Any]] = None,
+        *,
+        strict: bool = False,
+        headers: Optional[Dict[str, str]] = None,
     ) -> Optional[Dict[str, Any]]:
         """Make GitHub API call.
 
@@ -1768,12 +1788,19 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
         if strict:
             return await self._call_github_api_strict(endpoint, params)
         try:
-            if not self._rest_configured():
+            if headers is None and not self._rest_configured():
                 logger.warning("GitHub API session not configured")
                 return None
 
             url = f"{self._github_api_base}/{endpoint}"
-            async with self._rest_session() as session, session.get(url, params=params) as response:
+            # #2121: a per-call Authorization (the account's OAuth grant) rides a
+            # short-lived session instead of the native-PAT session.
+            session_ctx = (
+                aiohttp.ClientSession(headers=headers)
+                if headers is not None
+                else self._rest_session()
+            )
+            async with session_ctx as session, session.get(url, params=params) as response:
                 if response.status == 200:
                     return await response.json()
                 elif response.status == 401:
@@ -1814,7 +1841,12 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
             ) from e
 
     async def _call_github_api_list(
-        self, endpoint: str, params: Optional[Dict[str, Any]] = None, *, strict: bool = False
+        self,
+        endpoint: str,
+        params: Optional[Dict[str, Any]] = None,
+        *,
+        strict: bool = False,
+        headers: Optional[Dict[str, str]] = None,
     ) -> Optional[List[Dict[str, Any]]]:
         """Call a GitHub *collection* endpoint, which returns a JSON array.
 
@@ -1831,7 +1863,11 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
         result: Any = (
             await self._call_github_api(endpoint, params, strict=True)
             if strict
-            else await self._call_github_api(endpoint, params)
+            else (
+                await self._call_github_api(endpoint, params, headers=headers)
+                if headers is not None
+                else await self._call_github_api(endpoint, params)
+            )
         )
         if result is None:
             return None
@@ -2120,7 +2156,11 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
             return []
 
     async def get_recent_activity(
-        self, days: int = 7, repository: Optional[str] = None
+        self,
+        days: int = 7,
+        repository: Optional[str] = None,
+        *,
+        user_id: Optional[str] = None,
     ) -> Dict[str, List[Dict[str, Any]]]:
         """#1709: recent repo activity — commits, PRs, issues — over the ``days`` window.
 
@@ -2184,12 +2224,26 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
                 "%Y-%m-%dT%H:%M:%SZ"
             )
 
+            # #2121: the REST path is configured only by a native PAT; an
+            # OAuth-only account (Web, 71b4b15eed: "found 0 commits" with five
+            # on GitHub) reads with its own stored grant instead, resolved the
+            # way every connector read resolves it. No principal, or no grant,
+            # is a read that did not happen (read_failed), never an empty window.
+            grant_headers: Optional[Dict[str, str]] = None
+            if user_id and not self._rest_configured():
+                grant_headers = await self._grant_headers_for(user_id)
+                if grant_headers is None:
+                    empty["read_failed"] = [{"error": "no_credential"}]
+                    return empty
             commits_data = await self._call_github_api_list(
-                f"repos/{owner}/{repo}/commits", {"since": since, "per_page": 100}
+                f"repos/{owner}/{repo}/commits",
+                {"since": since, "per_page": 100},
+                headers=grant_headers,
             )
             issues_data = await self._call_github_api_list(
                 f"repos/{owner}/{repo}/issues",
                 {"state": "all", "since": since, "per_page": 100},
+                headers=grant_headers,
             )
             if commits_data is None or issues_data is None:
                 # #2119 (Web, 71b4b15eed): the lenient REST call answers None

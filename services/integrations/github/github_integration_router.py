@@ -855,7 +855,7 @@ class GitHubIntegrationRouter:
         return empty
 
     async def get_recent_activity(
-        self, days: int = 7, repository: Optional[str] = None
+        self, days: int = 7, repository: Optional[str] = None, user_id: Optional[str] = None
     ) -> Dict[str, List[Dict[str, Any]]]:
         """
         Get recent GitHub activity for standup (commits, PRs, issues).
@@ -877,9 +877,12 @@ class GitHubIntegrationRouter:
         if not self._initialized:
             await self.initialize()
         integration = self._get_integration("get_recent_activity")
+        # #2121: the principal rides along so an OAuth-only account reads with
+        # its own grant when no native-PAT REST session exists.
+        extra: Dict[str, Any] = {"user_id": user_id} if user_id else {}
         if repository is not None:
-            return await integration.get_recent_activity(days, repository=repository)
-        return await integration.get_recent_activity(days)
+            return await integration.get_recent_activity(days, repository=repository, **extra)
+        return await integration.get_recent_activity(days, **extra)
 
     async def list_repositories(self) -> List[Dict[str, Any]]:
         """

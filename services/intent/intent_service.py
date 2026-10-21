@@ -12591,7 +12591,7 @@ class IntentService:
             # names {repository}, so the query must be scoped to it (m-43).
             self.logger.info(f"Fetching commits for {repository} (last {days} days)")
             activity = await github_service._github_agent.get_recent_activity(
-                days=days, repository=repository
+                days=days, repository=repository, user_id=_principal_from_intent(intent)
             )
 
             # Extract commits from activity
@@ -12713,7 +12713,7 @@ class IntentService:
             # names {repository}, so the query must be scoped to it (m-43).
             self.logger.info(f"Generating {report_type} report for {repository} (last {days} days)")
             activity = await github_service._github_agent.get_recent_activity(
-                days=days, repository=repository
+                days=days, repository=repository, user_id=_principal_from_intent(intent)
             )
 
             # Generate report based on type
@@ -12898,7 +12898,7 @@ class IntentService:
             github_service = GitHubDomainService()
             self.logger.info(f"Analyzing {data_type} for {repository} (last {days} days)")
             activity = await github_service._github_agent.get_recent_activity(
-                days=days, repository=repository
+                days=days, repository=repository, user_id=_principal_from_intent(intent)
             )
 
             # Route to appropriate analysis helper

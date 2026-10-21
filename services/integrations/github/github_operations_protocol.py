@@ -81,7 +81,7 @@ class GitHubOperations(Protocol):
     # ── Live callers exist; implementation tracked in #1709 / #1723 ────
 
     async def get_recent_activity(
-        self, days: int, repository: Optional[str] = None
+        self, days: int, repository: Optional[str] = None, *, user_id: Optional[str] = None
     ) -> Dict[str, Any]: ...
 
     # #1723 implementation note: declared sync when this Protocol was written
