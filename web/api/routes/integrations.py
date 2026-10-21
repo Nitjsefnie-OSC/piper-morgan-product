@@ -427,7 +427,7 @@ _GITHUB_CARD_PAT_DETAIL = (
     "Your GitHub connection needs re-authorizing, so I'm not using it right now."
 )
 _GITHUB_CARD_RECONNECT_TITLE = "Needs reconnecting"
-_GITHUB_CARD_RECONNECT_DETAIL = "GitHub no longer accepts your connection."
+GITHUB_CARD_RECONNECT_DETAIL = "GitHub no longer accepts your connection."
 _GITHUB_CARD_NOT_CONFIGURED = "Not configured"
 _WARNING_ICON = "⚠️"
 
@@ -478,7 +478,7 @@ async def _github_card(
         status="degraded",
         status_icon=_WARNING_ICON,
         status_message=_GITHUB_CARD_RECONNECT_TITLE,
-        status_detail=_GITHUB_CARD_RECONNECT_DETAIL,
+        status_detail=GITHUB_CARD_RECONNECT_DETAIL,
         can_test=False,
         show_test=False,
         action="reconnect",
