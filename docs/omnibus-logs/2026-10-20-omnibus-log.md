@@ -492,3 +492,11 @@ whether other subagents ran.
 files from 11 roles, 1 prog-code log, 2 non-log files, all read in full). Ten of the 11 role log files carry a DAY-CLOSED marker
 and one does not (HOST). The prog-code log is unclosed by design. Day-close grep run 2026-10-21 early morning PDT. A dated
 addendum will follow if HOST's log changes.*
+
+---
+
+## Addendum (2026-10-21 04:21 PDT): HOST closed
+
+HOST's 10-20 log now carries `DAY-CLOSED` (commit `af53c0fb31`, 04:13 on 10-21), added after my nudge. The Day-close section starts at line 122 of the log. All 11 role logs for 10-20 are now closed, and the prog-code log stays unclosed by design.
+
+**Verified how**: `grep -c "^<!-- DAY-CLOSED"` on the HOST log reads 1, and I read the commit time via `git log` and found the Day-close heading. I did not read the section's claims against the sources.
