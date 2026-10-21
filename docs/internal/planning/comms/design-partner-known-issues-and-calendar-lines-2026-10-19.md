@@ -41,6 +41,13 @@ The issue numbers are for PPM's strike-at-send. Drop them from the copy partners
 | The unverified-app warning | #2087 not yet submitted | True until Google approves. I haven't quoted the warning's exact screen text, because it's Google's wording and I haven't seen it served on our client |
 | [Bracketed] work-account admin | #2092's grant half: xian's Workspace account got email-only; Lead's leading candidate is the Workspace API controls (kit §0) | **Unconfirmed cause.** Keep the bracket only if xian's #2087 console work confirms it's the admin setting. Otherwise cut it |
 
+**Google's refusal, 10-21 (Exec 08:01, PPM 08:04, #2087):** xian's test connect this morning got Google's hard block ("The app is currently being tested, and can only be accessed by developer-approved testers… Error 403: access_denied"), not the click-through warning the caveat above describes. Which line applies depends on xian's check of the console's Audience status:
+- **In production (the 10-19 setting holds or is restored):** the caveat above stands as written.
+- **Testing, with test users as the route (PPM: fallback only):** replace the caveat's second sentence, and add one step to the invitation:
+  > Calendar setup isn't smooth yet. Before you connect it, send us the Google address you'll use, so we can add you to Google's list of approved testers. Without that, Google will block the connection.
+  If Lead confirms Google expires Testing-mode tokens weekly, add: "For now, you may need to reconnect Calendar about once a week." Unverified until then.
+  The owner who tells xian before each partner's first connect: HOST (PPM's suggestion, HOST to confirm). Addresses go only in Google Cloud and private mail, never in this repo.
+
 Slack and Notion stay unnamed (xian 15:0x). Notion has no chat reader (Lead 15:01, #2100).
 
 ## 3. Other invitation lines still open on the checklist (no draft needed yet)
