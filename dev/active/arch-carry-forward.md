@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-10-19 21:27 PDT
+last_updated: 2026-10-20 21:28 PDT
 currency_claim: rewritten at substantive-change boundaries, verified at every START
 max_age_days: 4
 ---
@@ -33,6 +33,15 @@ description**: this carry-forward + session logs + commits are the current state
 job shrinks to orientation once it ages. **Don't try to keep the handoff itself fresh** — that was
 named directly as the wrong instinct ("I would rather your handoff go stale than your seat idle").
 
+- **10-20** (alpha serves 0.8.14.0, `d1c64a92e3` at 17:37; Tests success `edf95b5c0c`, Code Quality success `6c6e205660`; full detail in the 10-20 log and decisions.log):
+  - **#2101 (alpha stalls):** the cause was the synchronous Anthropic call on the event loop. `to_thread` stays (no AsyncAnthropic per request). Three conditions built in `cb11e68eac` and validated: timeouts, the dedicated `llm-provider` executor, the AST pin. Closing run: 61 of 61 turns, 0 blocks. Close is Lead's; condition 2 under concurrency gets its first read from partner traffic.
+  - **Shadows:** paused on alpha (xian unset both, 12:07). #2109 (`49b30d987b`) validated. Re-enable conditions (decisions.log): an Arch ruling naming the consumer; #2109 live; sample ≤0.1; a `PIPER_SHADOW_LLM_KEY` from a workspace xian names.
+  - **#2112 (calendar asks answered with the date):** ruled no grammar change; the router's NONE stands on a live category (`3b7fbb46fb`, validated). Behaviour accepted on served quotes; PA's reproduction released. The floor's calendar fact `1fb8e14757` was validated; my reads-line fix was accepted by CXO. **Open: the connected-account row only (xian's calendar account, via Exec).** A fixed reply is pre-authorised by CXO if a promise of conflict checks returns.
+  - **#2113:** #1730 Gap-2 ratchet upheld (ask only when armed); the imperative serves; the question form needs a pending-action carrier, Lead's unit.
+  - **#2121 / #2123:** the activity read now goes through `resolve_credential`; a missing credential is `read_failed`. **Ruled #2123:** with a principal present, a GitHub read uses that principal's credential, never a system session. Fix `dedbe6e3ad` validated (Tests `9e7bd077af`). Not live until the next promotion. Alpha has no env GitHub token (PA). The "system" keychain row is unread (DB), inferred absent from a public-repo None at 16:48. **Open: CXO's served cross-account row (needs a second GitHub account with a private repo).**
+  - **10-19 waits resolved:** #2091, the #2098 rework, the #2101 surface all landed and were validated.
+  - **Own misses 10-20:** wrote "alpha's capped platform key" (alpha has none; it was the test workspace's cap). Proposed an INFO-level stream grep as a confirmation (alpha emits no INFO). Guessed a memo date ahead of the clock (mail-send refused it). zsh doesn't word-split an unquoted `$P`; use `${=P}`.
+  - **Watches:** the next promotion (#2123, the reads-line fix); CXO served acceptance of #2094/#2095/#2096/#2100/#2098; #2100's three Notion handler strings (Lead and CXO); #1386 criterion 2 (PPM and Lead); #2092 (xian via Exec); #2079 (Web).
 - **10-19** (alpha `e801b1a309`, main green on Tests `5e17e627a2`; full detail in the 10-19 log and decisions.log):
   - **Ruled today:** #2083 deviation accepted; binder ratchet (#1943, per-file shrink-only ceilings, 298 in 24 files, `00db028cfa`); #2091 (day as a router `when` arg, code resolves it, the label names the date); #2094 (router titles list); #2095 (ADR-078 D1 amended: the ledger records every create); #2096 (census 30, PM-005 store, JSON body); #2100 (CHAT_READS); #2101 (async KeychainService via `to_thread` plus an AST ratchet; the read cache made process-wide).
   - **Validated:** #2094, #2095 (pin tightened `fc17eab244`), #2096, #2100 (`8e9963aa2c`), the cache `2acf8af82d`, the ratchet, the radar fixture fix `f9ddb2ba88`. **Rejected:** #2098 (its marker binder rewrote a title from "call it out in the release notes"); reverted `f260d8ed5b`.
