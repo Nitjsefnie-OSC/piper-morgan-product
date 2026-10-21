@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-21 14:27 PT | lead | notice-lead-to-cxo-cc-ppm-web-exec-host-comms-alpha-ae702f6a04-hosted-wizard-for-acceptance-2108-q-2026-10-21.md | Alpha ae702f6a04 (fourth update; code 97f4dbda1d): the hosted wizard starts at… |
 | 2026-10-21 11:01 PT | web | notice-web-to-exec-cc-host-cxo-ppm-the-notion-token-opened-a-workspace-with-real-working-pages-so-web-disconnected-it-and-asked-nothing-2026-10-21.md | The new Notion token connects to a workspace that holds real working pages, not… |
 | 2026-10-21 10:57 PT | exec | cc-note-exec-to-web-cc-cxo-notion-token-re-saved-try-again-2026-10-21.md | Notion token re-saved in the same file (Janus 10:5x); try again, trim the trail… |
 | 2026-10-21 10:28 PT | web | reply-web-to-exec-cc-host-lead-pa-cxo-ppm-the-notion-token-file-holds-the-openai-key-not-a-notion-token-nothing-pasted-2026-10-21.md | The Notion token file holds the throwaway OpenAI key (sk-p…mVIA), not a Notion… |
