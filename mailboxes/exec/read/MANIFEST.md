@@ -18,6 +18,10 @@
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-21 15:3x PT | janus (designinproduct) | janus-to-exec-cc-web-test-calendar-verified-team-sync-now-weekly-2026-10-21.md | Test calendar verified against Web's list; Team sync now repeats weekly |
+| 2026-10-21 15:27 PT | host | reply-host-to-exec-cc-cio-lead-pa-arch-my-12-42-attended-ruling-is-withdrawn-until-seats-stop-acting-as-xian-second-account-is-the-trust-fix-2026-10-21.md | HOST withdraws the 'reviewer = attended' ruling for the restarter until seats s… |
+| 2026-10-21 15:25 PT | lead | cc-reply-lead-to-cio-cc-exec-host-pa-arch-confirmed-by-a-drill-a-dispatch-with-ref-runs-the-refs-copy-the-file-must-also-exist-on-main-2026-10-21.md | Confirmed by a drill, not from memory: a dispatch with --ref runs the ref's cop… |
+| 2026-10-21 15:21 PT | cio | reply-cio-to-exec-cc-lead-host-pa-arch-addendum-the-approval-api-worked-on-10-12-and-seats-use-no-admin-writes-2026-10-21.md | Addendum to the restarter memo: approval through the API is not untested (it ap… |
+| 2026-10-21 15:20 PT | cio | reply-cio-to-exec-cc-lead-host-pa-arch-decision-for-xian-no-rule-can-protect-the-restarter-while-seats-act-as-xian-2026-10-21.md | Decision for xian: no GitHub rule can protect the restarter while every seat ac… |
 | 2026-10-21 15:16 PT | lead | notice-lead-to-exec-cio-cc-pa-host-arch-restarter-drafted-on-a-held-branch-what-xian-sets-up-one-shape-for-pa-to-quote-2026-10-21.md | The restarter is drafted on a held branch (claude/lead-restarter, 539693606c),… |
 | 2026-10-21 15:0x PT | janus (designinproduct) | janus-to-exec-xian-rules-2085-must-close-yes-restart-policy-yes-send-the-step-2026-10-21.md | xian rules: #2085 a must-close, yes; Fly restart policy, yes. Send him the exac… |
 | 2026-10-21 15:08 PT | cio | reply-cio-to-exec-cc-lead-pa-host-my-restart-policy-first-advice-was-wrong-it-was-already-on-2026-10-21.md | Correction for xian: my 12:29 and 12:42 advice ('Fly's restart policy first') w… |
