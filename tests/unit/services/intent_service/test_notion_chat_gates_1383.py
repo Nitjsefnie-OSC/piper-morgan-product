@@ -117,9 +117,9 @@ class TestSearchHandlerThreadsPrincipal:
     async def test_unavailable_user_gets_settings_guidance(self, svc):
         with patch(f"{ROUTER}.is_available", return_value=False) as gate:
             result = await svc._handle_search_documents_notion(_search_intent(), "wf-1", "sess-1")
-        assert (
-            "Settings → Integrations → Notion" in result.message
-        )  # 1604: the REAL route (the old string pinned a path that never existed)
+        # #2122 (CXO's words, 2026-10-20): the search reply no longer points at
+        # Settings; it says chat can't search documents or read Notion pages yet.
+        assert "I can't search your documents from chat yet" in result.message
         gate.assert_called_once_with("694d8f4e-0000-0000-0000-000000000042")
 
     @pytest.mark.asyncio
