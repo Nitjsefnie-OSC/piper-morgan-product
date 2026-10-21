@@ -41,6 +41,7 @@ deployment infrastructure that cannot authenticate. See its docstring.
 """
 
 import asyncio
+import time
 from datetime import datetime, timezone
 from typing import Dict
 
@@ -106,6 +107,16 @@ async def _database_probe() -> str:
         except Exception as exc:  # noqa: BLE001
             logger.warning("health_database_probe_dispose_failed", error_class=type(exc).__name__)
     return "healthy"
+
+
+def _uptime_seconds() -> int:
+    """Seconds since this process started (the quiet count zeroes on a restart)."""
+    try:
+        from services.infrastructure.turn_activity import PROCESS_STARTED_AT
+
+        return max(0, int(time.time() - PROCESS_STARTED_AT))
+    except Exception:  # silent-ok: never let a counter fail /health
+        return 0
 
 
 def _quiet_count() -> Dict[str, int]:
@@ -186,6 +197,9 @@ async def health(request: Request):
         # last 30 minutes, name-free; the promote gate reads `.accounts` and
         # refuses while it is above zero. Informational for the status line.
         "chat_turns_last_30m": _quiet_count(),
+        # Seconds since the process started: a promotion restarts alpha and zeroes the
+        # count, so the dispatcher reads this beside it (grant condition 3, CIO 10-21).
+        "uptime_seconds": _uptime_seconds(),
     }
 
     # Overall status degrades if any required service is missing or the DB is unreachable.

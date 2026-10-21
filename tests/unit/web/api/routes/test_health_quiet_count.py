@@ -52,3 +52,10 @@ def test_health_serves_the_quiet_count(monkeypatch):
     assert busy["services"]["chat_turns_last_30m"] == {"accounts": 2, "turns": 2}
     # informational: the status line is what the DB and intent service say
     assert busy["status"] == quiet["status"]
+
+
+def test_health_serves_uptime_beside_the_count(monkeypatch):
+    _install(monkeypatch)
+    body = _client().get("/health").json()
+    assert isinstance(body["services"]["uptime_seconds"], int)
+    assert body["services"]["uptime_seconds"] >= 0

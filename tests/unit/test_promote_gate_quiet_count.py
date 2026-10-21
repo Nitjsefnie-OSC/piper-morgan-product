@@ -19,3 +19,6 @@ def test_the_promote_job_carries_the_quiet_gate():
     assert "quiet_override" in text[: text.index("concurrency:")]  # the dispatch input exists
     assert "QUIET_OVERRIDE" in gate
     assert "Quiet count not served" in gate  # absent field: noted, not refused
+    # CIO 10-21: a down alpha is its own branch; the override reaches it (a forward fix)
+    assert "Alpha did not answer /health" in gate
+    assert gate.index("|| true") < gate.index("Alpha did not answer")

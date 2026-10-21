@@ -22,6 +22,10 @@ from typing import Deque, Dict, Optional
 
 WINDOW_SECONDS = 30 * 60
 
+#: When this process started; /health serves the uptime so a dispatcher can tell a
+#: quiet count that is quiet from one that was zeroed by a restart minutes ago.
+PROCESS_STARTED_AT = time.time()
+
 
 class TurnActivity:
     """A rolling window of chat-turn activity, counted without names."""

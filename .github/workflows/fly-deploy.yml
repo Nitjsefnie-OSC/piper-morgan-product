@@ -416,19 +416,32 @@ jobs:
           # that does not serve the field (absent) is noted and not refused: until it is served
           # the grant's clock window applies, which is the operator's rule, not this step's.
           # Condition 3(c): a must-close may go out on xian's word with quiet_override=true.
-          accounts="$(curl -fsS --max-time 10 https://alpha.pipermorgan.ai/health \
-                     | python3 -c 'import sys,json; v=(json.load(sys.stdin).get("services") or {}).get("chat_turns_last_30m"); print("" if not isinstance(v, dict) else v.get("accounts",""))')"
-          if [ -z "$accounts" ]; then
-            echo "::notice title=Quiet count not served::alpha /health has no services.chat_turns_last_30m; the grant's clock window applies to this promotion."
-          elif [ "$accounts" != "0" ]; then
+          # CIO's question (2026-10-21): a down alpha must not strand a forward fix. The read is
+          # its own branch: no answer -> refuse unless quiet_override (a must-close on xian's
+          # word is exactly the forward-fix case), never a silent pass and never a stop the
+          # override cannot reach.
+          body="$(curl -fsS --max-time 10 https://alpha.pipermorgan.ai/health || true)"
+          if [ -z "$body" ]; then
             if [ "$QUIET_OVERRIDE" = "true" ]; then
-              echo "::warning title=Quiet count overridden::${accounts} account(s) active in the last 30 minutes; promoting on quiet_override (grant condition 3(c), xian's word)."
+              echo "::warning title=Alpha did not answer /health::promoting on quiet_override (grant condition 3(c), xian's word): a forward fix for a down alpha."
             else
-              echo "::error title=Alpha is not quiet::${accounts} account(s) sent a chat turn in the last 30 minutes. Dispatch again when the count reads 0, or with quiet_override=true on xian's word for a must-close."
+              echo "::error title=Alpha did not answer /health::the quiet count could not be read (alpha down or unreachable). A forward fix goes out with quiet_override=true on xian's word; otherwise stop and tell xian."
               exit 1
             fi
           else
-            echo "Alpha is quiet: 0 accounts with a chat turn in the last 30 minutes."
+            accounts="$(printf '%s' "$body" | python3 -c 'import sys,json; v=(json.load(sys.stdin).get("services") or {}).get("chat_turns_last_30m"); print("" if not isinstance(v, dict) else v.get("accounts",""))')"
+            if [ -z "$accounts" ]; then
+              echo "::notice title=Quiet count not served::alpha /health has no services.chat_turns_last_30m; the grant's clock window applies to this promotion."
+            elif [ "$accounts" != "0" ]; then
+              if [ "$QUIET_OVERRIDE" = "true" ]; then
+                echo "::warning title=Quiet count overridden::${accounts} account(s) active in the last 30 minutes; promoting on quiet_override (grant condition 3(c), xian's word)."
+              else
+                echo "::error title=Alpha is not quiet::${accounts} account(s) sent a chat turn in the last 30 minutes. Dispatch again when the count reads 0, or with quiet_override=true on xian's word for a must-close."
+                exit 1
+              fi
+            else
+              echo "Alpha is quiet: 0 accounts with a chat turn in the last 30 minutes."
+            fi
           fi
 
       - name: Content-parity gate
