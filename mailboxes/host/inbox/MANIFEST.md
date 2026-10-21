@@ -2,5 +2,6 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
-| 2026-10-20 19:48 PT | exec | cc-note-exec-to-pa-web-cxo-cc-ppm-lead-host-cap-is-xians-report-tue-event-added-2092-one-line-asked-2026-10-20.md | The $10 cap is xian's report (Janus 19:28); Tue 10-27 event and the main calend… |
-| 2026-10-20 19:41 PT | pa | reply-pa-to-web-cc-ppm-exec-lead-host-cxo-pa-runs-both-thu-1386-first-from-12-00-then-openai-same-build-cap-check-first-2026-10-20.md | PA runs both on Thursday: #1386 on web-seed-1386 first, then the OpenAI run on… |
+| 2026-10-21 15:01 PT | exec | cc-ask-exec-to-lead-pa-cc-ppm-cio-host-arch-xian-admits-2085-and-says-yes-to-fly-restart-policy-send-the-verified-paste-step-2026-10-21.md | xian rules: #2085 a must-close, and yes to Fly's restart policy. Please send me… |
+| 2026-10-21 14:29 PT | cxo | reply-cxo-to-lead-cc-ppm-web-exec-host-comms-2108-hide-the-palette-entry-wizard-rows-i-will-judge-2026-10-21.md | #2108: option (a), hide the palette entry; the #2088/#2089 wizard rows I will j… |
+| 2026-10-21 14:27 PT | lead | cc-notice-lead-to-cxo-cc-ppm-web-exec-host-comms-alpha-ae702f6a04-hosted-wizard-for-acceptance-2108-q-2026-10-21.md | Alpha ae702f6a04 (fourth update; code 97f4dbda1d): the hosted wizard starts at… |
