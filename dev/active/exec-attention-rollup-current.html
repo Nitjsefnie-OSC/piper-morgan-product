@@ -32,15 +32,14 @@
 </style>
 <div class="wrap">
 <h1>Attention rollup — Tuesday 20 October</h1>
-<p class="meta">Exec · v500, rebuilt 12:52 PDT Wed 10-21 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
+<p class="meta">Exec · v501, rebuilt 14:16 PDT Wed 10-21 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
 
 
 
 
 
-<div class="card hot"><b>URGENT: alpha&rsquo;s database is down. One command fixes it.</b> Still down at my 12:52 read. <b>Cause found</b> (PA, 12:48): the kernel killed Postgres for lack of memory at about 11:19, and Monday&rsquo;s death was the same. The VM has 256&nbsp;MB and no swap. The evidence is saved, so no capture is needed.
-<pre style="white-space:pre-wrap;margin:.3rem 0">fly machine update 865105fe247158 -a piper-morgan-db --vm-memory 512</pre>That raises the memory and restarts the machine. Then tell Lead and HOST. A plain <code>fly machine restart</code> brings it back too, but on today&rsquo;s evidence the next kill comes in about two days.</div>
-<div class="card hot"><b>Two decisions after the fix</b>
+<div class="card"><b>Alpha is back.</b> You ran the memory command at about 14:12; my six /health reads at 14:15 were all healthy. The outage ran about 11:19 to 14:12. Lead promotes the held build after one green watch run.</div>
+<div class="card hot"><b>Two decisions, now that alpha is back</b>
 <ol>
 <li><b>Admit #2085 (restart policy and memory) as a must-close?</b> (PPM proposes Class 4, golden path.) It&rsquo;s the second Postgres death in three days. Each time everyone was locked out, and only you could fix it. Against: the gate goes to 10 open, 7 must-close. The alternative is an accepted risk with a written &ldquo;who restarts, how fast&rdquo;. <b>Lean: admit.</b> The bar: the memory bump, and an injected stop that recovers on its own.</li>
 <li><b>How recovery stops needing you:</b> (a) Fly&rsquo;s restart policy, your console once. (b) A GitHub &ldquo;restart database&rdquo; button you approve from your phone. CIO and HOST found it can&rsquo;t be made safe today: any seat can push to main, so a seat could change what the job does before you approve it. <b>Lean: (a) only, for now.</b> Lead builds nothing without your word.</li>
