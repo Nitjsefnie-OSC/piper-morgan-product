@@ -18,6 +18,7 @@ Google requires the video to "show the complete OAuth consent screen, with the s
 **Do step 1 of §4 (declare the scopes) first**, then Disconnect → Connect once.
 - If the consent screen still shows email only on xian's Workspace account, either mark the client Trusted in Workspace Admin (Security → Access and data control → API controls → App access control), or record with a **personal Google account** (not on the Workspace domain) signed into a test Piper account.
 - A personal account will also show Google's "unverified app" screen first. That's expected; click through it on camera.
+- **10-21:** that click-through happens only while the app is **In production**. In Testing, Google refuses any account not on the test-user list ("The app is currently being tested…", seen on the throwaway account on 10-21). Check Audience before recording.
 
 ## 1. Scopes (from code)
 
