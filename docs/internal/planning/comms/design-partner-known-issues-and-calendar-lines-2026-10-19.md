@@ -30,7 +30,7 @@ The issue numbers are for PPM's strike-at-send. Drop them from the copy partners
 
 > **What you can connect.** Piper works with GitHub and Google Calendar. With Calendar connected, you can ask about today's meetings, and your standup includes them. Piper only reads your calendar. It can't change it.
 >
-> Calendar setup isn't smooth yet. Until Google finishes reviewing Piper, Google may warn you that the app isn't verified. [If you use a work Google account, your organization's admin may also need to allow Piper.]
+> Calendar setup isn't smooth yet. Until Google finishes reviewing Piper, Google will show a screen saying "Google hasn't verified this app." That's expected for now. Click "Advanced", then "Go to Piper Morgan (Alpha) (unsafe)". On the next two screens, choose your account and click "Continue". [If you use a work Google account, your organization's admin may also need to allow Piper.]
 
 **Facts behind it:**
 
@@ -38,15 +38,15 @@ The issue numbers are for PPM's strike-at-send. Drop them from the copy partners
 |---|---|---|
 | Today's meetings; the standup | `assembler.py` `_append_calendar_events`; chat agenda queries | Code. **"This week's" was cut (CXO 15:32):** xian's own "any meetings this week?" got "I didn't find any events" (#2092, open). It goes back in when CXO quotes a passing week row. **Don't name a weekday** until #2091 lands |
 | Only reads | the scopes are `calendar.readonly` and `userinfo.email` only (Lead 14:49, grep over services/ and web/) | Backed |
-| The unverified-app warning | #2087 not yet submitted | True until Google approves. I haven't quoted the warning's exact screen text, because it's Google's wording and I haven't seen it served on our client |
+| The unverified-app screens and click path | xian's four screenshots, 10-21 10:0x, app "Piper Morgan (Alpha)", In production, unverified (Janus 10:2x, transcribed; PNGs in the private DinP repo, addresses blanked). Lead 09:38 quotes Google's page: In production with a sensitive scope shows the unverified-app warnings. Wording per CXO 09:48 (say what to do, in Google's exact words). Screen 4's one scope reads "See and download any calendar you can access using your Google Calendar", which backs "only reads" | Google's words are quoted from screenshots. **Recheck at send:** the app name in "Go to Piper Morgan (Alpha) (unsafe)" changes if alpha moves to the Piper Morgan project's client (PPM 09:34). Use the name the served screen shows that morning |
 | [Bracketed] work-account admin | #2092's grant half: xian's Workspace account got email-only; Lead's leading candidate is the Workspace API controls (kit §0) | **Unconfirmed cause.** Keep the bracket only if xian's #2087 console work confirms it's the admin setting. Otherwise cut it |
 
-**Google's refusal, 10-21 (Exec 08:01, PPM 08:04, #2087):** xian's test connect this morning got Google's hard block ("The app is currently being tested, and can only be accessed by developer-approved testers… Error 403: access_denied"), not the click-through warning the caveat above describes. Which line applies depends on xian's check of the console's Audience status:
-- **In production (the 10-19 setting holds or is restored):** the caveat above stands as written.
-- **Testing, with test users as the route (PPM: fallback only):** replace the caveat's second sentence, and add one step to the invitation:
-  > Calendar setup isn't smooth yet. Before you connect it, send us the Google address you'll use, so we can add you to Google's list of approved testers. Without that, Google will block the connection.
-  If Lead confirms Google expires Testing-mode tokens weekly, add: "For now, you may need to reconnect Calendar about once a week." Unverified until then.
-  The owner who tells xian before each partner's first connect: HOST (PPM's suggestion, HOST to confirm). Addresses go only in Google Cloud and private mail, never in this repo.
+**Which Calendar line goes (#2087, updated 10-21 10:3x):** the line partners get has to match what Google does on send morning. HOST's send check picks it, and HOST releases no send until xian has said which reading holds. **Neither line goes until Connect works for a Google account outside the Workspace domain** (CXO 09:48, PPM 09:34).
+- **In production** (xian's Audience screenshot shows this today, PPM 09:34): use the caveat above, with the click path. This morning's "being tested" refusal came from elsewhere. Lead's client-ID read suggests alpha may be sending another project's client. If it is, PPM recommends rotating alpha to a new client in the Piper Morgan project, and the app name on the screens changes.
+- **Testing** (fallback only): replace the caveat's second through fourth sentences with CXO's final wording (09:48):
+  > Before you connect Google Calendar, send us the Google address you'll use. We have to add you to Google's list of approved testers first. Without that, Google blocks the connection. In this mode Google asks you to reconnect Calendar about once a week.
+
+  Sourced: Google's refusal text (Web, Janus); the 100-tester cap and the 7-day refresh-token expiry are quoted by Lead (09:38) from Google's "OAuth app state overview". **HOST owns the per-partner step** (09:28): xian opens the partner's reply at alpha@, HOST tracks received/added only, and Exec relays to xian. Addresses go only in Google Cloud and xian's private mail, never in this repo.
 
 Slack and Notion stay unnamed (xian 15:0x). Notion has no chat reader (Lead 15:01, #2100).
 
