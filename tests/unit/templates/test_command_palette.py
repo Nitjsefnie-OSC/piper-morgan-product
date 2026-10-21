@@ -324,3 +324,25 @@ class TestHistoryCommands:
         block = palette_content[start:end]
         assert "shortcut:" in block
         assert "H" in block
+
+
+def _live_script(text: str) -> str:
+    """The script with // line comments removed (block comments too)."""
+    import re
+
+    text = re.sub(r"/\*.*?\*/", "", text, flags=re.S)
+    return "\n".join(line.split("//", 1)[0] for line in text.splitlines())
+
+
+class TestPrivateSessionEntryHidden2108:
+    """#2108 (CXO 2026-10-21): a listed command that does nothing says Piper can do
+    something it can't. The entry is hidden while privacy is postponed; the
+    commented source keeps it for the day it ships."""
+
+    def test_the_palette_lists_no_private_session_command(self):
+        text = open("templates/components/command_palette.html").read()
+        live = _live_script(text)
+        assert "history-private" not in live
+        assert "Start private session" not in live
+        assert "PrivacyMode" not in live
+        assert "history-private" in text  # kept, commented, not deleted

@@ -487,20 +487,24 @@
       hardness: 3,  // MEDIUM - Stage 3+
       shortcut: null
     },
-    {
-      id: 'history-private',
-      name: 'Start private session',
-      description: 'This conversation won\'t be remembered',
-      category: 'History',
-      icon: 'lock',
-      action: () => {
-        if (window.PrivacyMode) {
-          window.PrivacyMode.startPrivateSession();
-        }
-      },
-      hardness: 3,  // MEDIUM - Stage 3+
-      shortcut: null
-    },
+    // #2108 (CXO 2026-10-21 14:29): "Start private session" is hidden while the
+    // privacy feature is postponed (post-MVP), matching the sidebar's hidden
+    // toggle. The entry called window.PrivacyMode, which no template loads, so
+    // it silently did nothing. Kept here, commented, until privacy ships.
+    // {
+    //   id: 'history-private',
+    //   name: 'Start private session',
+    //   description: 'This conversation won\'t be remembered',
+    //   category: 'History',
+    //   icon: 'lock',
+    //   action: () => {
+    //     if (window.PrivacyMode) {
+    //       window.PrivacyMode.startPrivateSession();
+    //     }
+    //   },
+    //   hardness: 3,  // MEDIUM - Stage 3+
+    //   shortcut: null
+    // },
 
     // Meta
     {
