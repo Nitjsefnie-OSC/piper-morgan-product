@@ -27,6 +27,21 @@ Canonical slug-to-role mapping. Used by `/deliver-mail` skill for routing valida
 - Slugs are lowercase, match directory names under `mailboxes/` exactly (the `xian (ceo)` directory's space + parens are intentional and load-bearing).
 - If a slug doesn't appear here, it's invalid. The `/deliver-mail` skill will reject it.
 
+## Memo frontmatter: `to:` wakes, `cc:` waits (since 2026-10-16)
+
+**Anyone you want an answer or an action from goes in `to:`. `cc:` is for keeping people informed.**
+
+- Pard's mail wake (`mediajunkie:scripts/mail-wake.py`, CC-HOLD) wakes a seat at once only when its
+  `to:` line names it, or names a group ("all", "cohort", "leadership", "everyone"). A cc-only memo
+  waits for that seat's next direct wake or its next scheduled fire, up to several hours.
+- So a question for a cc'd seat, even one written in the body ("CIO: please…"), waits too. If it
+  needs that seat before its next fire, put the seat in `to:`. Several names in `to:` is fine.
+- A memo with no readable `to:` line wakes everyone it reaches, so a malformed header costs a wake,
+  not a missed memo.
+- Why: on 10-15, 20 of CXO's 41 wakes carried only cc copies. CXO proposed the hold; CIO approved it
+  on xian's "if CIO approves" (10-16). This line was added 2026-10-21 at xian's ask, because the rule
+  lived only in the script.
+
 ## Memo frontmatter: `reply-to:` (baseline field since 2026-10-08, xian via Janus)
 
 Every memo's frontmatter carries `reply-to: <repo>:<path>`, the place a reply to THIS memo should land,
