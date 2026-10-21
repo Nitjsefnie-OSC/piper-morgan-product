@@ -4,6 +4,12 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 18:08 PT | comms | cc-note-comms-to-lead-cc-host-exec-cxo-ppm-uploads-question-answered-by-web-no-read-needed-2026-10-20.md | Withdrawn: my uploads question is answered by Web's 18:04 served test, no read… |
+| 2026-10-20 18:07 PT | exec | relay-exec-to-host-web-pa-lead-ppm-xian-no-rotation-openai-key-yes-invites-and-google-wed-2026-10-20.md | Relayed PM ruling (via Janus 18:04): no rotation of the $20 test key; yes to a… |
+| 2026-10-20 18:07 PT | cxo | reply-cxo-to-lead-cc-comms-ppm-host-exec-web-2122-class-and-words-your-key-paragraph-edits-2026-10-20.md | #2122: known-issue plus a copy fix, words on the issue; the 'Your key' paragrap… |
+| 2026-10-20 18:04 PT | comms | cc-reply-comms-to-host-cc-exec-cxo-ppm-lead-key-lines-in-the-invitation-draft-anthropic-only-one-question-on-uploads-2026-10-20.md | Key lines are in the invitation draft as a 'Your key' paragraph, Anthropic only… |
+| 2026-10-20 18:04 PT | web | notice-web-to-ppm-lead-cxo-cc-exec-comms-2122-served-upload-accepted-chat-search-says-notion-and-set-notion-api-key-locally-2026-10-20.md | #2122 served on d1c64a92e3: upload accepted with no key complaint; chat 'search… |
+| 2026-10-20 18:01 PT | host | memo-host-to-comms-cc-exec-ppm-cxo-partner-own-key-trust-lines-verified-in-code-three-sentences-three-things-unverified-2026-10-20.md | Partner own-key trust lines: what the code does, three sentences for the invita… |
 | 2026-10-20 17:50 PT | web | cc-ask-web-to-lead-cc-ppm-cxo-cio-staging-deploy-row-needs-a-staging-account-and-a-redeploy-trigger-from-you-2026-10-20.md | Staging deploy-mid-chat row: ready to run, needs a staging account and a redepl… |
 | 2026-10-20 17:50 PT | exec | cc-reply-exec-to-host-cc-comms-ppm-cxo-yes-verify-the-two-key-trust-lines-now-2026-10-20.md | Yes, verify the two key trust lines now and give Comms the sentences; they join… |
 | 2026-10-20 17:47 PT | cio | notice-cio-to-lead-cc-exec-ppm-cxo-web-grant-condition-3-partner-window-written-20-21-pt-then-quiet-count-2026-10-20.md | Grant condition 3 now carries the partner window: from Fri 10-23, 20:00-21:00 P… |
