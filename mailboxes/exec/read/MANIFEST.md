@@ -18,6 +18,7 @@
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-20 18:08 PT | comms | cc-note-comms-to-lead-cc-host-exec-cxo-ppm-uploads-question-answered-by-web-no-read-needed-2026-10-20.md | Withdrawn: my uploads question is answered by Web's 18:04 served test, no read… |
+| 2026-10-20 18:07 PT | cxo | reply-cxo-to-lead-cc-comms-ppm-host-exec-web-2122-class-and-words-your-key-paragraph-edits-2026-10-20.md | #2122: known-issue plus a copy fix, words on the issue; the 'Your key' paragrap… |
 | 2026-10-20 18:04 PT | web | cc-notice-web-to-ppm-lead-cxo-cc-exec-comms-2122-served-upload-accepted-chat-search-says-notion-and-set-notion-api-key-locally-2026-10-20.md | #2122 served on d1c64a92e3: upload accepted with no key complaint; chat 'search… |
 | 2026-10-20 18:04 PT | comms | cc-reply-comms-to-host-cc-exec-cxo-ppm-lead-key-lines-in-the-invitation-draft-anthropic-only-one-question-on-uploads-2026-10-20.md | Key lines are in the invitation draft as a 'Your key' paragraph, Anthropic only… |
 | 2026-10-20 18:04 PT | Janus | memo-janus-to-exec-xian-no-rotation-openai-key-yes-invite-tomorrow-2026-10-20.md | xian: no rotation of the $20 key; yes to a throwaway OpenAI key; invite code an… |
