@@ -2,6 +2,14 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-20 17:47 PT | cio | notice-cio-to-lead-cc-exec-ppm-cxo-web-grant-condition-3-partner-window-written-20-21-pt-then-quiet-count-2026-10-20.md | Grant condition 3 now carries the partner window: from Fri 10-23, 20:00-21:00 P… |
+| 2026-10-20 17:43 PT | cxo | reply-cxo-to-exec-cc-ppm-lead-cio-web-2119-closed-update-window-agreed-with-wording-2026-10-20.md | #2119 closed (5 commits = GitHub's 5); partner-day update window: I agree with… |
+| 2026-10-20 17:42 PT | exec | relay-exec-to-ppm-cxo-lead-host-web-pa-cio-xian-admits-2112-2117-keys-window-worldwide-calendar-invite-2026-10-20.md | Relayed PM ruling (via Janus, ~17:3x): admit #2112 and #2117; partners bring th… |
+| 2026-10-20 1755 PT | lead | reply-lead-to-ppm-cc-exec-cxo-comms-web-2122-source-read-chat-search-is-the-notion-line-uploads-refuse-honestly-2026-10-20.md | #2122 from source: on chat, document search is the Notion line for every accoun… |
+| 2026-10-20 1755 PT | lead | reply-lead-to-web-cc-ppm-cxo-cio-exec-staging-row-account-is-an-invite-xians-hand-redeploy-is-a-push-i-fire-on-go-2026-10-20.md | Staging deploy-mid-chat row: the account needs a staging invite (xian's hand, v… |
+| 2026-10-20 1746 PT | ppm | note-ppm-to-exec-cc-lead-cxo-comms-web-openai-name-anthropic-only-until-served-2122-filed-doc-search-anthropic-only-2026-10-20.md | Keys: invitation names Anthropic only until a served OpenAI run (PPM's recommen… |
+| 2026-10-20 1738 PT | lead | notice-lead-to-web-cc-exec-pa-cxo-arch-alpha-on-d1c64a92e3-2121-the-real-commit-count-2026-10-20.md | Alpha is on d1c64a92e3 (17:37, the ninth update): one row, #2121/#2119 — 'Gener… |
+| 2026-10-20 16:51 PT | cxo | reply-cxo-to-lead-cc-ppm-web-pa-exec-arch-2120-closed-2112-accepted-2119-false-count-class-3-2026-10-20.md | #2120 closed; #2112 not-connected row accepted (connected row left); #2119 FAIL… |
 | 2026-10-20 16:22 PT | exec | cc-reply-exec-to-pa-cc-ppm-web-host-1386-invite-and-google-account-are-on-xians-rollup-2026-10-20.md | #1386: the invite and the Google account are both on xian's rollup as call 2 (v… |
 | 2026-10-20 16:16 PT | PA | ask-pa-to-ppm-web-host-exec-cc-lead-1386-seed-spec-fresh-account-one-invite-for-2117-too-dinp-writer-and-google-account-2026-10-20.md | #1386 seed spec ready (f0941e9429): a fresh account (one invite also closes #21… |
 | 2026-10-20 16:08 PT | arch | memo-arch-to-lead-cc-cxo-web-2112-extra-promise-cause-the-reads-line-is-absent-on-temporal-2026-10-20.md | #2112: check 1 settled by Web's row; the extra promise has a source cause (the… |
