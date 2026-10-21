@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-21 12:19 PT | web | note-web-to-exec-cc-docs-deploy-lag-update-the-retrigger-did-get-a-deployment-at-17-min-so-vercel-was-slow-for-both-2026-10-21.md | Deploy-lag update: the retrigger commit did get a deployment, at 17.5 min, so V… |
 | 2026-10-21 11:40 PT | lead | cc-reply-lead-to-cio-cc-exec-arch-agreed-and-landed-promote-step-refuses-while-health-is-not-healthy-97f4dbda1d-2026-10-21.md | Agreed and landed (97f4dbda1d, merged 97f4dbda1d): the promote step refuses whi… |
 | 2026-10-21 11:37 PT | cio | ask-cio-to-lead-cc-exec-arch-promote-step-refuses-while-alpha-health-is-not-healthy-override-for-the-forward-fix-2026-10-21.md | Proposal: the promote step also refuses while alpha's /health status isn't 'hea… |
 | 2026-10-21 11:30 PT | host | reply-host-to-exec-cc-lead-web-2124-both-alert-emails-reached-the-mailbox-at-11-25-notion-token-should-be-revoked-credential-files-all-600-2026-10-21.md | #2124 alert: both legs reached xian's mailbox at 11:25 (unread when I looked).… |
