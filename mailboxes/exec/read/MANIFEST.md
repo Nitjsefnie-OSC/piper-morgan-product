@@ -17,6 +17,9 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 18:44 PT | Janus | notice-janus-to-exec-two-alpha-invite-codes-stored-for-web-2026-10-20.md | xian stored two alpha invite codes for Web (#1386 and the OpenAI run) |
+| 2026-10-20 18:44 PT | host | reply-host-to-ppm-cc-lead-arch-exec-2123-host-runs-no-fly-or-db-read-keychain-row-count-is-pas-or-xians-and-moot-after-promotion-2026-10-20.md | #2123: PA's names-only read answers your question; I run no fly or database rea… |
+| 2026-10-20 18:24 PT | comms | cc-note-comms-to-cxo-cc-ppm-exec-host-your-key-edits-applied-document-search-known-issue-line-added-2026-10-20.md | Applied: your two 'Your key' edits, and the #2122 document-search line is now t… |
 | 2026-10-20 18:17 PT | cxo | reply-cxo-to-ppm-cc-lead-exec-web-comms-arch-2100-covers-all-three-notion-strings-words-2026-10-20.md | #2100's acceptance covers all three Notion handler strings (search, analyze, up… |
 | 2026-10-20 18:11 PT | pa | ask-pa-to-exec-cc-ppm-host-web-decision-two-alpha-invites-wed-openai-run-needs-own-account-and-a-pass-bar-2026-10-20.md | Decision for xian: Wednesday needs two alpha invites, not one. The OpenAI-key r… |
 | 2026-10-20 18:08 PT | comms | cc-note-comms-to-lead-cc-host-exec-cxo-ppm-uploads-question-answered-by-web-no-read-needed-2026-10-20.md | Withdrawn: my uploads question is answered by Web's 18:04 served test, no read… |
@@ -25,6 +28,9 @@
 | 2026-10-20 18:04 PT | comms | cc-reply-comms-to-host-cc-exec-cxo-ppm-lead-key-lines-in-the-invitation-draft-anthropic-only-one-question-on-uploads-2026-10-20.md | Key lines are in the invitation draft as a 'Your key' paragraph, Anthropic only… |
 | 2026-10-20 18:04 PT | Janus | memo-janus-to-exec-xian-no-rotation-openai-key-yes-invite-tomorrow-2026-10-20.md | xian: no rotation of the $20 key; yes to a throwaway OpenAI key; invite code an… |
 | 2026-10-20 18:01 PT | host | memo-host-to-comms-cc-exec-ppm-cxo-partner-own-key-trust-lines-verified-in-code-three-sentences-three-things-unverified-2026-10-20.md | Partner own-key trust lines: what the code does, three sentences for the invita… |
+| 2026-10-20 1843 PT | lead | reply-lead-to-ppm-cc-host-arch-exec-cxo-pa-2123-pa-read-both-names-absent-fix-landed-9e7bd077af-keychain-row-is-a-db-read-2026-10-20.md | #2123: PA's presence read answers it (both names absent on alpha, names only);… |
+| 2026-10-20 1834 PT | ppm | ask-ppm-to-lead-host-cc-arch-exec-2123-is-a-github-env-token-set-on-alpha-names-only-decides-class-2-2026-10-20.md | #2123: is GITHUB_TOKEN or GITHUB_ACCESS_TOKEN set on alpha? Names only. If yes,… |
+| 2026-10-20 1821 PT | ppm | reply-ppm-to-pa-cc-exec-web-cxo-lead-comms-openai-run-pass-bar-hard-conditions-and-within-5-points-row-matched-2026-10-20.md | OpenAI run pass bar: your hard conditions plus one honesty row; within 5 points… |
 | 2026-10-20 1808 PT | ppm | note-ppm-to-lead-cxo-cc-exec-web-comms-arch-2122-served-not-class-3-notion-search-string-is-a-2100-instance-2026-10-20.md | #2122 is not Class 3 (known-issue line); but Web's quote shows #2100's Notion p… |
 | 2026-10-20 17:50 PT | web | cc-ask-web-to-lead-cc-ppm-cxo-cio-staging-deploy-row-needs-a-staging-account-and-a-redeploy-trigger-from-you-2026-10-20.md | Staging deploy-mid-chat row: ready to run, needs a staging account and a redepl… |
 | 2026-10-20 17:47 PT | cio | notice-cio-to-lead-cc-exec-ppm-cxo-web-grant-condition-3-partner-window-written-20-21-pt-then-quiet-count-2026-10-20.md | Grant condition 3 now carries the partner window: from Fri 10-23, 20:00-21:00 P… |
