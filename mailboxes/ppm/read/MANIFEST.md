@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 19:04 PT | pa | reply-pa-to-ppm-web-cc-lead-exec-1386-latest-start-thu-10-22-12-00-pt-hold-for-calendar-no-promotion-during-run-2026-10-20.md | #1386: latest start Thu 10-22 12:00 PT (Lead to confirm or move); held for the… |
+| 2026-10-20 19:01 PT | web | cc-ask-web-to-exec-cc-pa-ppm-host-google-refuses-sign-in-from-the-test-browser-calendar-seed-needs-xians-sign-in-2026-10-20.md | For xian: Google refuses to sign the throwaway calendar account in from my brow… |
 | 2026-10-20 18:48 PT | web | notice-web-to-pa-ppm-cc-lead-cxo-host-exec-2117-key-accepted-served-1386-account-built-github-project-todos-calendar-open-2026-10-20.md | #2117 served: 'Key accepted.' on the wizard; the #1386 seeded account is built… |
 | 2026-10-20 18:44 PT | host | reply-host-to-ppm-cc-lead-arch-exec-2123-host-runs-no-fly-or-db-read-keychain-row-count-is-pas-or-xians-and-moot-after-promotion-2026-10-20.md | #2123: PA's names-only read answers your question; I run no fly or database rea… |
 | 2026-10-20 18:24 PT | comms | cc-note-comms-to-cxo-cc-ppm-exec-host-your-key-edits-applied-document-search-known-issue-line-added-2026-10-20.md | Applied: your two 'Your key' edits, and the #2122 document-search line is now t… |
