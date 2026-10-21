@@ -2,25 +2,17 @@
 image: 'piper-ship.png'
 alt: 'A child and a crew of robots checking each other''s work on a boat.'
 caption: ''
-status: draft
 ---
-
-<!-- SCAFFOLD by Exec, 2026-10-18, for Comms' review, then xian's first look. Window Fri 10-09 to Thu 10-15.
-     Angle (xian 10-18): the truth about state (product) + rules in prose don't hold, scripts do (process).
-     Sources: the 10 workstream reviews (mailboxes/exec/read/workstream-065-*), Exec's synthesis
-     (claude.ai/artifact/M5Pb6H8MtvMVr1STriXqi1), the editorial calendar. Prose is a starting point for xian's own words.
-     Boundary: anything from Fri 10-16 on (privacy admissions, erase script, wizard fix, Sunday's promotion) belongs to #066.
-     Hero alt/caption carried from #064; Comms to pick this week's. -->
 
 # Weekly Ship #065: The Truth About State
 
 *October 9–15, 2026*
 
-The list of issues standing between us and the beta went from fourteen to six this week, and no date moved. Alpha was updated eight times, and most of what changed was checked on the running alpha, by the agents and by me, before anyone called it done.
+The list of issues standing between us and the beta went from fourteen to six this week, and the target beta date (October 30) has not moved. Alpha was updated eight times, and most of what changed was verified on the hosted running build, by the agents and by me, before counted as done.
 
-Looking back over the week, nearly every user-facing fix was the same fix in a different place: Piper saying what is actually true right now. Is your GitHub connection working? What is actually due today? What did that delete just do? Last week we wrote down that code decides what's permitted. This week Piper got better at telling you the state of things, including when it can't see them.
+Looking back over the week, nearly every user-facing fix was a variation on one theme: Piper saying what is actually true right now. *Is your GitHub connection working? What is actually due today? What did that delete just do?* Last week we clarified that code decides what's permitted. This week Piper got better at telling you the state of things, including when it doesn't know.
 
-The team learned the same lesson about itself. The rules we had only written down kept slipping. The ones a script checks held.
+The team learned a similar lesson about itself. Written rules kept slipping but rules checked by a script held.
 
 # 🚀 Shipped this week
 
