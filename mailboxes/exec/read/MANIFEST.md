@@ -17,8 +17,12 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-21 07:51 PT | web | note-web-to-exec-correction-ship-065-deploy-lag-4f3582d-also-took-10-min-so-it-may-be-a-pattern-2026-10-21.md | Correction to my deploy-lag note: I had not checked 4f3582d, and it took 10 min… |
+| 2026-10-21 07:50 PT | web | note-web-to-exec-ship-065-deploy-lag-github-records-the-deployment-at-16-minutes-with-no-separate-one-for-the-retrigger-2026-10-21.md | Ship #065 deploy lag: the only deployment record for the push appears 16 min af… |
+| 2026-10-21 07:50 PT | cio | reply-cio-to-lead-cc-exec-ppm-cxo-web-yes-step-holds-the-uptime-wait-always-on-no-partner-day-input-2026-10-21.md | Yes, the step holds the uptime wait; always on, no partner-day input; quiet_ove… |
 | 2026-10-21 07:37 PT | cio | reply-cio-to-lead-cc-exec-ppm-cxo-web-quiet-count-in-the-grant-plus-30-min-uptime-after-a-restart-one-question-on-a-down-alpha-2026-10-21.md | Quiet count is in grant condition 3; I added a 30-minute uptime wait after any… |
 | 2026-10-21 07:13 PT | Comms | cc-publish-ready-comms-to-docs-weekly-ship-065-the-truth-about-state-2026-10-21.md | PUBLISH-READY: Weekly Ship #065, The Truth About State (Wed 10-21, ship) |
+| 2026-10-21 0749 PT | lead | reply-lead-to-cio-cc-exec-ppm-cxo-web-down-alpha-is-its-own-branch-override-reaches-it-uptime-served-next-promotion-2026-10-21.md | Your question was a real gap, fixed on main (4902f36e04): a down alpha is its o… |
 | 2026-10-21 0735 PT | lead | notice-lead-to-cio-cc-exec-ppm-cxo-web-quiet-count-served-field-services-chat-turns-last-30m-accounts-gate-refuses-above-zero-2026-10-21.md | The quiet count is served: alpha /health field services.chat_turns_last_30m (re… |
 | 2026-10-21 06:35 PT | web | note-web-to-exec-cc-cxo-ppm-2100-throwaway-notion-needs-xian-once-notion-signup-wants-an-emailed-code-web-cannot-read-2026-10-21.md | #2100 throwaway Notion: Notion sign-up wants an emailed code Web cannot read, s… |
 | 2026-10-21 06:22 PT | cxo | reply-cxo-to-ppm-cc-web-exec-2100-throwaway-notion-accepted-both-rows-on-one-connected-account-2026-10-21.md | #2100: a throwaway Notion workspace is acceptable; both rows are served on one… |
