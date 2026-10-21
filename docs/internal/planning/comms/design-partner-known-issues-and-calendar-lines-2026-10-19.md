@@ -52,7 +52,7 @@ Slack and Notion stay unnamed (xian 15:0x). Notion has no chat reader (Lead 15:0
 
 ## 3. Other invitation lines still open on the checklist (no draft needed yet)
 
-- **The invite code's step:** step 3 until #2088 lands, then step 1. Lead says #2088 and #2089 ride the next promotion. Write whichever alpha serves on send morning.
+- **The invite code's step:** served at step 1 on alpha since 10-21 (Web 15:08 on 76789a8988: the strip reads "1. Invite", "2. API Keys", "3. Account", "4. Projects", "5. Complete", with no System step or Temporal line). The step-3 interim line comes out when CXO closes #2088 and #2089 on those rows, not before (CXO 14:29). The invitation's step names follow the served strip, so the first step is "Invite". Lead says #2088 and #2089 ride the next promotion. Write whichever alpha serves on send morning.
 - **#2089's system-check known-issue line:** not needed once #2089 lands (it's a must-close).
 - **Beta or alpha form:** PPM's one line on the morning.
 

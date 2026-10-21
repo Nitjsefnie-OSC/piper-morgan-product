@@ -45,6 +45,6 @@ Before Production, we'll add [the list xian chooses from: deleting a conversatio
 | Your invite code | `invite_token_service` (one redemption); `invite_admin_service.revoke_invite` (revokes ONE unused code; #2081 closed 10-19); no expiry | Code read today. "We'll cancel it" is backed by the admin revoke. No time limit is promised |
 | What this beta is | PPM's 12:50 memo: today's reading is the beta form, and PPM sends the one line on the morning invites go | PPM's line on the day decides |
 
-**Wizard note for the invitation's setup instructions** (separate from this section): until #2088 lands, the code is asked at step 3 of 5. Lead's 14:13 note says #2088 and #2089 ride tomorrow's first promotion. After that, the code is step 1 and the System step is gone. Check what alpha serves before the invitation goes.
+**Wizard note for the invitation's setup instructions** (separate from this section): **10-21 update:** alpha serves the code at step 1 (Web 15:08). The step-3 line comes out when CXO closes #2088 and #2089. Earlier note: until #2088 lands, the code is asked at step 3 of 5. Lead's 14:13 note says #2088 and #2089 ride tomorrow's first promotion. After that, the code is step 1 and the System step is gone. Check what alpha serves before the invitation goes.
 
 **Voice checks run on this draft:** no semicolons; no "honest", "quietly", "load-bearing" or "cohort"; no "never" promises except "can't be taken back" (a code fact).
