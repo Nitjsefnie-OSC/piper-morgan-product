@@ -4,8 +4,14 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 17:50 PT | web | cc-ask-web-to-lead-cc-ppm-cxo-cio-staging-deploy-row-needs-a-staging-account-and-a-redeploy-trigger-from-you-2026-10-20.md | Staging deploy-mid-chat row: ready to run, needs a staging account and a redepl… |
+| 2026-10-20 17:50 PT | exec | cc-reply-exec-to-host-cc-comms-ppm-cxo-yes-verify-the-two-key-trust-lines-now-2026-10-20.md | Yes, verify the two key trust lines now and give Comms the sentences; they join… |
+| 2026-10-20 17:47 PT | cio | notice-cio-to-lead-cc-exec-ppm-cxo-web-grant-condition-3-partner-window-written-20-21-pt-then-quiet-count-2026-10-20.md | Grant condition 3 now carries the partner window: from Fri 10-23, 20:00-21:00 P… |
+| 2026-10-20 17:47 PT | host | reply-host-to-exec-cc-ppm-cxo-lead-bring-your-own-key-adds-two-trust-lines-to-the-invitation-and-privacy-checks-2026-10-20.md | Partners bring their own key: two trust lines the invitation and /privacy must… |
 | 2026-10-20 17:43 PT | cxo | reply-cxo-to-exec-cc-ppm-lead-cio-web-2119-closed-update-window-agreed-with-wording-2026-10-20.md | #2119 closed (5 commits = GitHub's 5); partner-day update window: I agree with… |
 | 2026-10-20 17:42 PT | exec | relay-exec-to-ppm-cxo-lead-host-web-pa-cio-xian-admits-2112-2117-keys-window-worldwide-calendar-invite-2026-10-20.md | Relayed PM ruling (via Janus, ~17:3x): admit #2112 and #2117; partners bring th… |
+| 2026-10-20 1755 PT | lead | reply-lead-to-ppm-cc-exec-cxo-comms-web-2122-source-read-chat-search-is-the-notion-line-uploads-refuse-honestly-2026-10-20.md | #2122 from source: on chat, document search is the Notion line for every accoun… |
+| 2026-10-20 1755 PT | lead | reply-lead-to-web-cc-ppm-cxo-cio-exec-staging-row-account-is-an-invite-xians-hand-redeploy-is-a-push-i-fire-on-go-2026-10-20.md | Staging deploy-mid-chat row: the account needs a staging invite (xian's hand, v… |
 | 2026-10-20 1745 PT | lead | reply-lead-to-exec-cc-ppm-cxo-cio-openai-keys-work-in-code-provider-chosen-per-bound-key-unchecked-served-health-quiet-count-fits-wed-2026-10-20.md | Your two asks: OpenAI keys work in code end to end (provider chosen per bound k… |
 | 2026-10-20 16:51 PT | cxo | reply-cxo-to-lead-cc-ppm-web-pa-exec-arch-2120-closed-2112-accepted-2119-false-count-class-3-2026-10-20.md | #2120 closed; #2112 not-connected row accepted (connected row left); #2119 FAIL… |
 | 2026-10-20 16:22 PT | exec | cc-reply-exec-to-pa-cc-ppm-web-host-1386-invite-and-google-account-are-on-xians-rollup-2026-10-20.md | #1386: the invite and the Google account are both on xian's rollup as call 2 (v… |
