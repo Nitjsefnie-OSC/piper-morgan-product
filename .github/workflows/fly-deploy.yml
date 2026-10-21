@@ -430,6 +430,24 @@ jobs:
               exit 1
             fi
           else
+            # CIO (2026-10-21 11:37, after the 11:25 dispatch into a database incident): a
+            # promotion must not go out while alpha's own /health verdict is not "healthy"
+            # (the #2083 body status: "degraded" means the database probe failed; the database
+            # is a separate Fly app and a promotion does not restart it). A body with no
+            # status refuses like an unreachable alpha. quiet_override reaches it (the forward
+            # fix on xian's word). Grant condition 2 names it.
+            health="$(printf '%s' "$body" | python3 -c 'import sys,json; d=json.load(sys.stdin); s=d.get("status"); db=(d.get("services") or {}).get("database"); print((s if isinstance(s, str) and s else "missing") + " " + (db if isinstance(db, str) and db else "unknown"))')"
+            hstatus="${health%% *}"; hdb="${health#* }"
+            if [ "$hstatus" != "healthy" ]; then
+              if [ "$QUIET_OVERRIDE" = "true" ]; then
+                echo "::warning title=Alpha is not healthy, overridden::alpha /health status is '${hstatus}' (services.database: ${hdb}); promoting on quiet_override (grant condition 3(c), xian's word): a forward fix."
+              else
+                echo "::error title=Alpha is not healthy::alpha /health status is '${hstatus}' (services.database: ${hdb}). A promotion does not restart the database; fix the incident first, or dispatch with quiet_override=true on xian's word for a forward fix."
+                exit 1
+              fi
+            else
+              echo "Alpha is healthy (services.database: ${hdb})."
+            fi
             # Arch (2026-10-21): a served-but-broken count is not an older build. The reader
             # prints "absent" (no field), "broken" (a field with no integer accounts, or a
             # record failure inside the window), or the integer.

@@ -30,28 +30,32 @@ def test_the_promote_job_carries_the_quiet_gate():
     assert "Quiet count broken" in gate
     assert "record_failed_in_window" in gate
     assert gate.index('"broken"') < gate.index("Quiet count broken")
+    # CIO 10-21 11:37: a not-healthy alpha refuses before the quiet read; override reaches it
+    assert "Alpha is not healthy" in gate
+    assert gate.index("Alpha is not healthy") < gate.index("Quiet count not served")
+    assert "Alpha is not healthy, overridden" in gate
     # 10-21 11:25: the older count shape is "legacy" (noted), never "broken" (refused)
     assert "Quiet verdict not served" in gate
     assert gate.index('"legacy"') < gate.index("Quiet verdict not served")
 
 
-def _reader_program() -> str:
+def _reader_program(marker: str = 'verdict="$(printf') -> str:
     text = WORKFLOW.read_text()
     promote = text[text.index("  promote-alpha:") :]
     gate = promote[promote.index("Alpha must be quiet") : promote.index("Content-parity gate")]
-    line = [ln for ln in gate.splitlines() if 'verdict="$(printf' in ln][0]
+    line = [ln for ln in gate.splitlines() if marker in ln][0]
     start = line.index("python3 -c '") + len("python3 -c '")
     end = line.rindex("')\"")
     return line[start:end]
 
 
-def _verdict(body) -> str:
+def _verdict(body, marker: str = 'verdict="$(printf') -> str:
     import json
     import subprocess
     import sys
 
     out = subprocess.run(
-        [sys.executable, "-c", _reader_program()],
+        [sys.executable, "-c", _reader_program(marker)],
         input=json.dumps(body),
         capture_output=True,
         text=True,
@@ -78,3 +82,16 @@ def test_the_reader_runs_the_served_shapes_the_way_the_step_documents():
     assert _verdict(svc("zero")) == "broken"
     assert _verdict(svc({})) == "broken"
     assert _verdict(svc({"accounts": True})) == "broken"  # a bool is not a count
+
+
+def test_the_health_reader_names_the_status_and_the_database():
+    """CIO 10-21 11:37: the 11:25 body (degraded, database unreachable) must refuse;
+    a missing status reads "missing" and refuses like an unreachable alpha."""
+    h = lambda body: _verdict(body, marker='health="$(printf')  # noqa: E731
+    assert h({"status": "healthy", "services": {"database": "healthy"}}) == "healthy healthy"
+    assert (
+        h({"status": "degraded", "services": {"database": "unreachable"}}) == "degraded unreachable"
+    )
+    assert h({"services": {"database": "healthy"}}) == "missing healthy"
+    assert h({"status": "", "services": {}}) == "missing unknown"
+    assert h({"status": "healthy"}) == "healthy unknown"
