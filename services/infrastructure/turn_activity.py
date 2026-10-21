@@ -18,7 +18,7 @@ import hashlib
 import threading
 import time
 from collections import deque
-from typing import Deque, Dict, Optional
+from typing import Any, Deque, Dict, Optional
 
 WINDOW_SECONDS = 30 * 60
 
@@ -35,19 +35,34 @@ class TurnActivity:
         self._last_turn_by_account: Dict[str, float] = {}
         self._turns: Deque[float] = deque()
         self._lock = threading.Lock()
+        #: Arch (2026-10-21): a recorder that throws on every turn must not leave the
+        #: count at 0 and read as quiet. The last failure's time rides the snapshot.
+        self._last_record_failure: Optional[float] = None
 
     @staticmethod
     def _token(principal: str) -> str:
         return hashlib.sha256(principal.encode("utf-8")).hexdigest()[:16]
 
     def record(self, principal: Optional[str], now: Optional[float] = None) -> None:
-        """Record one chat turn. A turn with no principal counts as a turn, not an account."""
+        """Record one chat turn. A turn with no principal counts as a turn, not an account.
+
+        A failure is remembered (``note_record_failure``) and re-raised; the caller
+        logs and never blocks the turn, and the snapshot says the count is not to be
+        trusted for the next 30 minutes."""
         ts = time.time() if now is None else now
-        with self._lock:
-            self._turns.append(ts)
-            if principal:
-                self._last_turn_by_account[self._token(str(principal))] = ts
-            self._prune(ts)
+        try:
+            with self._lock:
+                self._turns.append(ts)
+                if principal:
+                    self._last_turn_by_account[self._token(str(principal))] = ts
+                self._prune(ts)
+        except Exception:
+            self.note_record_failure(ts)
+            raise
+
+    def note_record_failure(self, now: Optional[float] = None) -> None:
+        """Mark that a turn could not be recorded (the caller's catch-all calls this too)."""
+        self._last_record_failure = time.time() if now is None else now
 
     def _prune(self, now: float) -> None:
         cutoff = now - self.window_seconds
@@ -57,12 +72,23 @@ class TurnActivity:
         for k in stale:
             del self._last_turn_by_account[k]
 
-    def snapshot(self, now: Optional[float] = None) -> Dict[str, int]:
-        """``{"accounts": N, "turns": M}`` for the window ending now."""
+    def snapshot(self, now: Optional[float] = None) -> Dict[str, Any]:
+        """``{"accounts": N, "turns": M, "record_failed_in_window": bool}`` for the
+        window ending now. The flag is True while a record failure lies inside the
+        window: the gate then refuses, because a count that may be missing turns
+        must not read as quiet (Arch, 2026-10-21)."""
         ts = time.time() if now is None else now
         with self._lock:
             self._prune(ts)
-            return {"accounts": len(self._last_turn_by_account), "turns": len(self._turns)}
+            failed = (
+                self._last_record_failure is not None
+                and ts - self._last_record_failure < self.window_seconds
+            )
+            return {
+                "accounts": len(self._last_turn_by_account),
+                "turns": len(self._turns),
+                "record_failed_in_window": failed,
+            }
 
 
 #: The one process-wide instance: the intent service records into it, /health reads it.

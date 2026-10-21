@@ -45,11 +45,19 @@ def _install(monkeypatch):
 def test_health_serves_the_quiet_count(monkeypatch):
     _install(monkeypatch)
     quiet = _client().get("/health").json()
-    assert quiet["services"]["chat_turns_last_30m"] == {"accounts": 0, "turns": 0}
+    assert quiet["services"]["chat_turns_last_30m"] == {
+        "accounts": 0,
+        "turns": 0,
+        "record_failed_in_window": False,
+    }
     turn_activity.TURN_ACTIVITY.record("user-a")
     turn_activity.TURN_ACTIVITY.record("user-b")
     busy = _client().get("/health").json()
-    assert busy["services"]["chat_turns_last_30m"] == {"accounts": 2, "turns": 2}
+    assert busy["services"]["chat_turns_last_30m"] == {
+        "accounts": 2,
+        "turns": 2,
+        "record_failed_in_window": False,
+    }
     # informational: the status line is what the DB and intent service say
     assert busy["status"] == quiet["status"]
 
@@ -59,3 +67,25 @@ def test_health_serves_uptime_beside_the_count(monkeypatch):
     body = _client().get("/health").json()
     assert isinstance(body["services"]["uptime_seconds"], int)
     assert body["services"]["uptime_seconds"] >= 0
+
+
+def test_a_broken_counter_serves_a_marker_not_a_quiet_zero(monkeypatch):
+    """Arch 10-21: a counter that cannot count must not read as quiet."""
+    _install(monkeypatch)
+
+    class _Exploding:
+        def snapshot(self):
+            raise RuntimeError("counter down")
+
+    monkeypatch.setattr(turn_activity, "TURN_ACTIVITY", _Exploding())
+    body = _client().get("/health").json()
+    field = body["services"]["chat_turns_last_30m"]
+    assert "accounts" not in field and field.get("error") == "unavailable"
+    assert body["status"] in ("healthy", "degraded")  # /health itself stays up
+
+
+def test_a_record_failure_in_the_window_is_served(monkeypatch):
+    _install(monkeypatch)
+    turn_activity.TURN_ACTIVITY.note_record_failure()
+    body = _client().get("/health").json()
+    assert body["services"]["chat_turns_last_30m"]["record_failed_in_window"] is True

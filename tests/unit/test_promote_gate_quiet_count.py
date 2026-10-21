@@ -26,3 +26,7 @@ def test_the_promote_job_carries_the_quiet_gate():
     assert "uptime_seconds" in gate and "1800" in gate
     assert "Alpha restarted less than 30 minutes ago" in gate
     assert "Uptime not served" in gate  # absent field: noted, not refused
+    # Arch 10-21: a served-but-broken count refuses (not "not served"); override reaches it
+    assert "Quiet count broken" in gate
+    assert "record_failed_in_window" in gate
+    assert gate.index('"broken"') < gate.index("Quiet count broken")

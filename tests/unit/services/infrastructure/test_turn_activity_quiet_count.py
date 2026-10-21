@@ -3,26 +3,30 @@
 from services.infrastructure.turn_activity import WINDOW_SECONDS, TurnActivity
 
 
+def _counts(snap):
+    return {k: snap[k] for k in ("accounts", "turns")}
+
+
 def test_counts_distinct_accounts_and_turns_in_the_window():
     a = TurnActivity()
     a.record("user-a", now=1000.0)
     a.record("user-a", now=1100.0)
     a.record("user-b", now=1200.0)
-    assert a.snapshot(now=1300.0) == {"accounts": 2, "turns": 3}
+    assert _counts(a.snapshot(now=1300.0)) == {"accounts": 2, "turns": 3}
 
 
 def test_turns_and_accounts_leave_the_window_after_30_minutes():
     a = TurnActivity()
     a.record("user-a", now=0.0)
     a.record("user-b", now=600.0)
-    assert a.snapshot(now=WINDOW_SECONDS + 1.0) == {"accounts": 1, "turns": 1}
-    assert a.snapshot(now=WINDOW_SECONDS + 601.0) == {"accounts": 0, "turns": 0}
+    assert _counts(a.snapshot(now=WINDOW_SECONDS + 1.0)) == {"accounts": 1, "turns": 1}
+    assert _counts(a.snapshot(now=WINDOW_SECONDS + 601.0)) == {"accounts": 0, "turns": 0}
 
 
 def test_no_principal_is_a_turn_but_not_an_account():
     a = TurnActivity()
     a.record(None, now=10.0)
-    assert a.snapshot(now=11.0) == {"accounts": 0, "turns": 1}
+    assert _counts(a.snapshot(now=11.0)) == {"accounts": 0, "turns": 1}
 
 
 def test_no_raw_id_is_kept():
@@ -34,3 +38,23 @@ def test_no_raw_id_is_kept():
 
 def test_window_is_thirty_minutes():
     assert WINDOW_SECONDS == 1800
+
+
+def test_a_record_failure_marks_the_window_untrusted_then_clears():
+    a = TurnActivity()
+    a.record("user-a", now=100.0)
+    a.note_record_failure(now=200.0)
+    assert a.snapshot(now=300.0)["record_failed_in_window"] is True
+    assert a.snapshot(now=200.0 + WINDOW_SECONDS + 1)["record_failed_in_window"] is False
+
+
+def test_a_failure_inside_record_is_marked_and_re_raised():
+    a = TurnActivity()
+    a._prune = lambda now: (_ for _ in ()).throw(RuntimeError("boom"))  # type: ignore[assignment]
+    try:
+        a.record("user-a", now=50.0)
+    except RuntimeError:
+        pass
+    else:
+        raise AssertionError("record must re-raise")
+    assert a._last_record_failure == 50.0

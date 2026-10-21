@@ -43,7 +43,7 @@ deployment infrastructure that cannot authenticate. See its docstring.
 import asyncio
 import time
 from datetime import datetime, timezone
-from typing import Dict
+from typing import Any, Dict
 
 import structlog
 from fastapi import APIRouter, Depends, Request
@@ -119,15 +119,17 @@ def _uptime_seconds() -> int:
         return 0
 
 
-def _quiet_count() -> Dict[str, int]:
-    """The name-free activity window from the intent service's recorder; a failure
-    reads as an empty window rather than taking /health down."""
+def _quiet_count() -> Dict[str, Any]:
+    """The name-free activity window from the intent service's recorder. A failure
+    serves a marker, never a quiet-looking zero (Arch, 2026-10-21: a counter that
+    cannot count must not read as quiet; the gate refuses on a field with no
+    integer ``accounts``). /health stays 200 either way."""
     try:
         from services.infrastructure.turn_activity import TURN_ACTIVITY
 
         return TURN_ACTIVITY.snapshot()
     except Exception:  # silent-ok: /health is polled by Fly; never let a counter fail it
-        return {"accounts": 0, "turns": 0}
+        return {"error": "unavailable"}
 
 
 @router.get("/health")

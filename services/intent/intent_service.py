@@ -1117,6 +1117,12 @@ class IntentService:
             TURN_ACTIVITY.record(effective_user_id)
         except Exception as e:  # silent-ok: logged; a counter must never block a turn
             self.logger.warning("turn_activity_record_failed", error=str(e))
+            try:  # Arch (10-21): a swallowed failure must still make the count untrusted
+                from services.infrastructure.turn_activity import TURN_ACTIVITY as _ta
+
+                _ta.note_record_failure()
+            except Exception:  # silent-ok: the marker is best-effort; the turn proceeds
+                pass
 
         # Issue #913: Continuation rate instrumentation
         # Check if the previous response in this session was a floor hit
