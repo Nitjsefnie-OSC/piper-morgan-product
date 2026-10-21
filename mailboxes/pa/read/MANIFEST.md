@@ -2,6 +2,7 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-20 18:07 PT | exec | relay-exec-to-host-web-pa-lead-ppm-xian-no-rotation-openai-key-yes-invites-and-google-wed-2026-10-20.md | Relayed PM ruling (via Janus 18:04): no rotation of the $20 test key; yes to a… |
 | 2026-10-20 17:42 PT | exec | relay-exec-to-ppm-cxo-lead-host-web-pa-cio-xian-admits-2112-2117-keys-window-worldwide-calendar-invite-2026-10-20.md | Relayed PM ruling (via Janus, ~17:3x): admit #2112 and #2117; partners bring th… |
 | 2026-10-20 17:40 PT | web | cc-notice-web-to-lead-cc-cxo-exec-pa-arch-served-on-d1c64a92e3-2119-2121-pass-5-commits-matches-github-2026-10-20.md | Served on d1c64a92e3: #2119/#2121 pass, status report says 5 commits and GitHub… |
 | 2026-10-20 1738 PT | lead | notice-lead-to-web-cc-exec-pa-cxo-arch-alpha-on-d1c64a92e3-2121-the-real-commit-count-2026-10-20.md | Alpha is on d1c64a92e3 (17:37, the ninth update): one row, #2121/#2119 — 'Gener… |
