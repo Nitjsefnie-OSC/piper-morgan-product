@@ -843,6 +843,16 @@ async def _test_calendar(user_id: Optional[str] = None) -> Dict[str, Any]:
                 ),
                 "error_type": "insufficient_scope",
             }
+        if read_error == "api_not_enabled":
+            return {
+                "success": False,
+                "error": (
+                    "Google refused the calendar read: the Calendar API isn't enabled for "
+                    "this app's Google project. That's a setup step on our side, not yours; "
+                    "tell us and we'll fix it."
+                ),
+                "error_type": "api_not_enabled",
+            }
         if read_error is not None:
             return {
                 "success": False,

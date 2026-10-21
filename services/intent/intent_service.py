@@ -92,6 +92,14 @@ CALENDAR_READ_FAILED_LINES = {
         "I couldn't read your calendar: Google says the calendar isn't there for this account. "
         "Check which calendar is connected in Settings → Integrations → Google Calendar."
     ),
+    # 2026-10-21 (provisional words, CXO's to replace): the Google project that
+    # issued the connection has the Calendar API switched off; a setup step on
+    # our side, not the person's.
+    "api_not_enabled": (
+        "I couldn't read your calendar: Google says the Calendar API isn't switched on "
+        "for this app yet. That's a setup step on our side, not yours; tell us and we'll "
+        "fix it."
+    ),
     "error": (
         "I couldn't read your calendar just now. Press Test in Settings → Integrations → "
         "Google Calendar to see what Google says, then try again."

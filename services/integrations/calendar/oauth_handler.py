@@ -421,5 +421,14 @@ async def probe_calendar_read(access_token: str) -> Optional[str]:
     try:
         await asyncio.wait_for(asyncio.to_thread(_read), timeout=10.0)
     except Exception as exc:  # noqa: BLE001 — the class is the whole answer here
-        return classify_calendar_read_error(exc)
+        error_class = classify_calendar_read_error(exc)
+        # 2026-10-21 (Exec's ask: "the server log for that read"): there was none.
+        # Log the class and the exception type, never the text (it can carry URLs
+        # and ids) and never the token.
+        logger.warning(
+            "calendar_read_probe_failed",
+            error_class=error_class,
+            exception_type=type(exc).__name__,
+        )
+        return error_class
     return None
