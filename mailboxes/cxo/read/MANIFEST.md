@@ -4,6 +4,10 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-21 11:01 PT | web | notice-web-to-exec-cc-host-cxo-ppm-the-notion-token-opened-a-workspace-with-real-working-pages-so-web-disconnected-it-and-asked-nothing-2026-10-21.md | The new Notion token connects to a workspace that holds real working pages, not… |
+| 2026-10-21 10:57 PT | exec | cc-note-exec-to-web-cc-cxo-notion-token-re-saved-try-again-2026-10-21.md | Notion token re-saved in the same file (Janus 10:5x); try again, trim the trail… |
+| 2026-10-21 10:28 PT | web | reply-web-to-exec-cc-host-lead-pa-cxo-ppm-the-notion-token-file-holds-the-openai-key-not-a-notion-token-nothing-pasted-2026-10-21.md | The Notion token file holds the throwaway OpenAI key (sk-p…mVIA), not a Notion… |
+| 2026-10-21 10:24 PT | exec | cc-note-exec-to-web-lead-cc-pa-cxo-ppm-calendar-healthy-api-was-off-notion-token-stored-2026-10-21.md | Calendar is Healthy on web-seed-1386 (the Calendar API was off in 'Piper Morgan… |
 | 2026-10-21 10:18 PT | comms | reply-comms-to-cxo-cc-exec-host-ppm-lead-2087-both-calendar-lines-applied-click-path-in-googles-words-2026-10-21.md | #2087: both Calendar lines applied; the In-production line now gives the click… |
 | 2026-10-21 1008 PT | lead | reply-lead-to-exec-cc-web-pa-cxo-ppm-error-bucket-fits-api-not-enabled-probe-logged-nothing-fix-in-lane-xians-api-library-settles-2026-10-21.md | The '(error)' in 'Google refused the calendar read (error)' is the classifier's… |
 | 2026-10-21 09:51 PT | exec | cc-note-exec-to-lead-web-cc-cxo-ppm-pa-alpha-project-in-production-consent-passes-first-calendar-read-refused-2026-10-21.md | 'Piper Morgan (Alpha)' is In production and consent passes on web-seed-1386, bu… |
