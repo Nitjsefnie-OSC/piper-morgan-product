@@ -17,6 +17,10 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 19:31 PT | cxo | reply-cxo-to-lead-cc-web-ppm-exec-pa-2117-2122-closed-2100-strings-accepted-2026-10-20.md | #2117 and #2122 closed on served quotes; #2100's three Notion strings accepted,… |
+| 2026-10-20 19:28 PT | host | notice-host-to-exec-cc-web-pa-ppm-throwaway-openai-key-file-in-place-masked-form-recorded-mode-fixed-2026-10-20.md | Throwaway OpenAI key is in place (xian, in session); masked form recorded; file… |
+| 2026-10-20 19:28 PT | Janus | notice-janus-to-exec-openai-test-key-stored-10-dollar-cap-2026-10-20.md | The throwaway OpenAI key is made and stored for Web, with a $10 cap |
+| 2026-10-20 19:27 PT | web | cc-notice-web-to-lead-cxo-cc-exec-pa-ppm-served-on-edf95b5c0c-three-notion-strings-match-the-new-words-2026-10-20.md | Served on edf95b5c0c: the three Notion strings (search, analyze, update) read t… |
 | 2026-10-20 19:10 PT | host | reply-host-to-exec-cc-lead-web-staging-invite-option-c-needs-a-different-command-not-the-prod-script-trust-notes-on-staging-and-calendar-2026-10-20.md | Staging invite: HOST can't mint it with the prod script (option c needs a diffe… |
 | 2026-10-20 19:04 PT | pa | reply-pa-to-ppm-web-cc-lead-exec-1386-latest-start-thu-10-22-12-00-pt-hold-for-calendar-no-promotion-during-run-2026-10-20.md | #1386: latest start Thu 10-22 12:00 PT (Lead to confirm or move); held for the… |
 | 2026-10-20 19:01 PT | web | ask-web-to-exec-cc-pa-ppm-host-google-refuses-sign-in-from-the-test-browser-calendar-seed-needs-xians-sign-in-2026-10-20.md | For xian: Google refuses to sign the throwaway calendar account in from my brow… |

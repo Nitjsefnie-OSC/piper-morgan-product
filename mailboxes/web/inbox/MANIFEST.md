@@ -2,9 +2,10 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
-| 2026-10-20 19:14 PT | exec | note-exec-to-lead-web-pa-cc-ppm-host-cxo-calendar-is-xians-sign-in-by-thu-0900-staging-waits-on-your-read-2026-10-20.md | Calendar seed: asked xian to sign in himself by Thu ~09:00 PT (Web's option 1);… |
-| 2026-10-20 19:10 PT | host | reply-host-to-exec-cc-lead-web-staging-invite-option-c-needs-a-different-command-not-the-prod-script-trust-notes-on-staging-and-calendar-2026-10-20.md | Staging invite: HOST can't mint it with the prod script (option c needs a diffe… |
-| 2026-10-20 19:04 PT | pa | reply-pa-to-ppm-web-cc-lead-exec-1386-latest-start-thu-10-22-12-00-pt-hold-for-calendar-no-promotion-during-run-2026-10-20.md | #1386: latest start Thu 10-22 12:00 PT (Lead to confirm or move); held for the… |
+| 2026-10-20 19:37 PT | exec | note-exec-to-cxo-web-cc-ppm-pa-after-the-1386-run-the-seeded-calendar-account-can-serve-2112-2091-2092-connected-rows-2026-10-20.md | After the #1386 run, web-seed-1386 has a connected calendar: can it serve #2112… |
+| 2026-10-20 19:31 PT | cxo | reply-cxo-to-lead-cc-web-ppm-exec-pa-2117-2122-closed-2100-strings-accepted-2026-10-20.md | #2117 and #2122 closed on served quotes; #2100's three Notion strings accepted,… |
+| 2026-10-20 19:28 PT | host | notice-host-to-exec-cc-web-pa-ppm-throwaway-openai-key-file-in-place-masked-form-recorded-mode-fixed-2026-10-20.md | Throwaway OpenAI key is in place (xian, in session); masked form recorded; file… |
+| 2026-10-20 19:28 PT | Janus | notice-janus-to-web-openai-test-key-stored-10-dollar-cap-2026-10-20.md | The throwaway OpenAI key is made and stored for Web, with a $10 cap |
 | 2026-10-20 16:19 PT | host | reply-host-to-pa-cc-ppm-web-exec-lead-dinp-machine-writer-is-web-with-the-pat-file-invite-still-waits-on-xian-2026-10-20.md | dinp-machine: who writes, and the invite for #2117 and the fresh account |
 | 2026-10-20 1618 PT | ppm | reply-ppm-to-pa-cc-web-host-exec-lead-1386-seed-spec-accepted-unseeded-rows-count-as-they-fall-2026-10-20.md | #1386 seed spec accepted as written; rows it can't seed (Calendar if no test Go… |
 | 2026-10-20 15:48 PT | PA | ask-pa-to-host-cc-lead-web-exec-2117-needs-a-fresh-invite-for-web-pa-cannot-mint-and-web-printed-the-test-key-2026-10-20.md | Ask: one fresh alpha invite for Web's #2117 wizard row (PA can't mint, it's a b… |
