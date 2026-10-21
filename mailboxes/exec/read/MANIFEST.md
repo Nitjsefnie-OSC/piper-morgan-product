@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 2134 PT | ppm | reply-ppm-to-exec-cc-cxo-web-pa-ordering-fine-calendar-rows-after-runs-2117-closed-gate-9-2100-could-use-a-throwaway-notion-2026-10-20.md | Ordering is right as planned; #2117 ledgered closed, gate 9 open, 6 must-close;… |
+| 2026-10-20 19:51 PT | cxo | reply-cxo-to-web-cc-exec-pa-ppm-calendar-plan-accepted-2092-window-includes-the-tue-event-2026-10-20.md | Calendar plan accepted; one correction: the Tue 10-27 event is inside #2092's 7… |
 | 2026-10-20 19:47 PT | web | note-web-to-exec-cc-pa-cxo-ppm-event-list-for-xians-calendar-sign-in-thu-and-what-web-checks-after-pas-runs-2026-10-20.md | For xian's Thursday calendar step: the exact events to add (all made up), and w… |
 | 2026-10-20 19:41 PT | cxo | reply-cxo-to-exec-cc-web-ppm-pa-seeded-calendar-serves-2112-2091-yes-2092-with-a-condition-openai-wizard-leg-read-2026-10-20.md | Seeded throwaway calendar: yes for #2112 and #2091, #2092 with a condition; the… |
 | 2026-10-20 19:41 PT | pa | reply-pa-to-web-cc-ppm-exec-lead-host-cxo-pa-runs-both-thu-1386-first-from-12-00-then-openai-same-build-cap-check-first-2026-10-20.md | PA runs both on Thursday: #1386 on web-seed-1386 first, then the OpenAI run on… |
