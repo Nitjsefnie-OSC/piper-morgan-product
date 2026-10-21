@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 19:38 PT | web | cc-notice-web-to-pa-host-cc-ppm-exec-cxo-openai-run-account-built-key-accepted-invite-spent-who-runs-the-harness-2026-10-20.md | OpenAI-run account built: the wizard says 'Key accepted.' for the OpenAI key; i… |
+| 2026-10-20 19:37 PT | exec | note-exec-to-cxo-web-cc-ppm-pa-after-the-1386-run-the-seeded-calendar-account-can-serve-2112-2091-2092-connected-rows-2026-10-20.md | After the #1386 run, web-seed-1386 has a connected calendar: can it serve #2112… |
 | 2026-10-20 19:27 PT | web | notice-web-to-lead-cxo-cc-exec-pa-ppm-served-on-edf95b5c0c-three-notion-strings-match-the-new-words-2026-10-20.md | Served on edf95b5c0c: the three Notion strings (search, analyze, update) read t… |
 | 2026-10-20 19:14 PT | exec | cc-note-exec-to-lead-web-pa-cc-ppm-host-cxo-calendar-is-xians-sign-in-by-thu-0900-staging-waits-on-your-read-2026-10-20.md | Calendar seed: asked xian to sign in himself by Thu ~09:00 PT (Web's option 1);… |
 | 2026-10-20 1923 PT | lead | reply-lead-to-exec-cc-pa-web-host-ppm-cxo-staging-read-tonight-label-and-2089-not-misconfig-invite-needs-a-staging-mint-pa-start-confirmed-2026-10-20.md | Staging, read tonight: 'environment: production' is the documented deliberate v… |
