@@ -30,5 +30,51 @@ def test_the_promote_job_carries_the_quiet_gate():
     assert "Quiet count broken" in gate
     assert "record_failed_in_window" in gate
     assert gate.index('"broken"') < gate.index("Quiet count broken")
-    reader = [line for line in gate.splitlines() if 'verdict="$(printf' in line][0]
-    assert "accounts" not in reader  # the count is not read; the verdict is
+    # 10-21 11:25: the older count shape is "legacy" (noted), never "broken" (refused)
+    assert "Quiet verdict not served" in gate
+    assert gate.index('"legacy"') < gate.index("Quiet verdict not served")
+
+
+def _reader_program() -> str:
+    text = WORKFLOW.read_text()
+    promote = text[text.index("  promote-alpha:") :]
+    gate = promote[promote.index("Alpha must be quiet") : promote.index("Content-parity gate")]
+    line = [ln for ln in gate.splitlines() if 'verdict="$(printf' in ln][0]
+    start = line.index("python3 -c '") + len("python3 -c '")
+    end = line.rindex("')\"")
+    return line[start:end]
+
+
+def _verdict(body) -> str:
+    import json
+    import subprocess
+    import sys
+
+    out = subprocess.run(
+        [sys.executable, "-c", _reader_program()],
+        input=json.dumps(body),
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    return out.stdout.strip()
+
+
+def test_the_reader_runs_the_served_shapes_the_way_the_step_documents():
+    """The reader is shell-embedded Python; run it on the bodies alpha has served
+    or could serve. The 11:25 refusal was the second row reading "broken"."""
+    svc = lambda v: {"services": {"chat_turns_last_30m": v}}  # noqa: E731
+    assert _verdict({"services": {"web": "healthy"}}) == "absent"
+    # the older build (b28d46a97f): counts, no verdict -> noted, not refused
+    assert _verdict(svc({"accounts": 0, "turns": 0, "record_failed_in_window": False})) == "legacy"
+    assert _verdict(svc({"accounts": 2, "turns": 5, "record_failed_in_window": False})) == "legacy"
+    # the verdict shape (d09b7e0d86)
+    assert _verdict(svc({"quiet": True, "record_failed_in_window": False})) == "quiet"
+    assert _verdict(svc({"quiet": False, "record_failed_in_window": False})) == "busy"
+    # broken: a record failure in the window, an error marker, or no usable field
+    assert _verdict(svc({"quiet": True, "record_failed_in_window": True})) == "broken"
+    assert _verdict(svc({"accounts": 0, "turns": 0, "record_failed_in_window": True})) == "broken"
+    assert _verdict(svc({"error": "unavailable"})) == "broken"
+    assert _verdict(svc("zero")) == "broken"
+    assert _verdict(svc({})) == "broken"
+    assert _verdict(svc({"accounts": True})) == "broken"  # a bool is not a count

@@ -437,9 +437,17 @@ jobs:
             # failure marker; the counts are in the server log. The reader prints absent (no
             # field), broken (no boolean `quiet`, an error marker, or a record failure inside
             # the window), quiet, or busy.
-            verdict="$(printf '%s' "$body" | python3 -c 'import sys,json; v=(json.load(sys.stdin).get("services") or {}).get("chat_turns_last_30m"); print("absent" if v is None else ("broken" if (not isinstance(v, dict) or not isinstance(v.get("quiet"), bool) or v.get("record_failed_in_window") is True) else ("quiet" if v["quiet"] else "busy")))')"
+            # 2026-10-21 11:25 (Lead): the first dispatch after the verdict landed was refused as
+            # "broken" because alpha still served the older count shape ({accounts, turns, ...},
+            # no `quiet`). An older build is "legacy": noted, not refused; the dispatcher reads
+            # the count by hand on that one promotion. Broken stays: an error marker, a record
+            # failure inside the window, or a field with neither a boolean `quiet` nor an
+            # integer `accounts`.
+            verdict="$(printf '%s' "$body" | python3 -c 'import sys,json; v=(json.load(sys.stdin).get("services") or {}).get("chat_turns_last_30m"); print("absent" if v is None else ("broken" if (not isinstance(v, dict) or v.get("error") is not None or v.get("record_failed_in_window") is True) else ("quiet" if v.get("quiet") is True else ("busy" if v.get("quiet") is False else ("legacy" if isinstance(v.get("accounts"), int) and not isinstance(v.get("accounts"), bool) else "broken")))))')"
             if [ "$verdict" = "absent" ]; then
               echo "::notice title=Quiet count not served::alpha /health has no services.chat_turns_last_30m; the grant's clock window applies to this promotion."
+            elif [ "$verdict" = "legacy" ]; then
+              echo "::notice title=Quiet verdict not served::alpha serves the older count shape (no services.chat_turns_last_30m.quiet); the dispatcher reads the count by hand on this promotion, and the next build serves the verdict."
             elif [ "$verdict" = "broken" ]; then
               if [ "$QUIET_OVERRIDE" = "true" ]; then
                 echo "::warning title=Quiet count broken, overridden::alpha serves the field without a usable verdict (an error marker or a record failure in the window); promoting on quiet_override (grant condition 3(c), xian's word)."
