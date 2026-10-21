@@ -13,8 +13,10 @@
 #   1. Refuse unless the fault is the database's: alpha's /health must read the database as
 #      not healthy AND the Postgres machine's own `pg` check must read failing. An unreachable
 #      but healthy database (network, DNS, a proxy) is not cured by a restart.
-#   2. One restart, then stop: refuse if a successful run of this workflow completed in the
-#      last 30 minutes. A restart that doesn't cure must reach a person, not loop.
+#   2. One restart, then stop: refuse if any run of this workflow, whatever its conclusion,
+#      restarted the machine in the last 30 minutes (an uncured restart FAILS its own run, so
+#      the step's outcome is read, never the run's). A restart that doesn't cure must reach a
+#      person, not loop.
 #   3. Capture before you restart: the machine's state and events and the last Postgres
 #      log lines go into the run log first, because a restart erases the evidence.
 # Custody (HOST 2026-10-21 12:42): the token lives only as the environment secret
@@ -101,10 +103,13 @@ jobs:
           print((st[0] or "unknown").lower() if st else "absent")')"
           echo "pg check reads: $pg"
           echo "pg=$pg" >> "$GITHUB_OUTPUT"
+          # Arch (15:29): Fly checks read passing, warning or critical. A warning is the
+          # uncertain reading (a slow boot, a timeout under load), and uncertain meaning never
+          # writes; a restart is a write. Only critical restarts.
           case "$pg" in
-            critical|warning|failing|failed) ;;
+            critical) ;;
             *)
-              echo "::error title=pg check is not failing::the Postgres machine's own pg check reads '${pg}'. The fault is not shown to be the database's (an unreachable-but-healthy database is not cured by a restart). Nothing restarted."
+              echo "::error title=pg check is not critical::the Postgres machine's own pg check reads '${pg}'. Only a critical check shows the fault is the database's; a warning that lasts turns critical and the next dispatch can take it. Nothing restarted."
               exit 1 ;;
           esac
 
@@ -113,19 +118,43 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
+          THIS_RUN: ${{ github.run_id }}
         run: |
           set -u
-          last="$(gh run list --workflow restart-alpha-postgres.yml --status success --limit 1 --json updatedAt --jq '.[0].updatedAt // empty')"
-          if [ -n "$last" ]; then
-            age="$(python3 -c "from datetime import datetime,timezone; print(int((datetime.now(timezone.utc)-datetime.strptime('$last','%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=timezone.utc)).total_seconds()))")"
-            echo "last successful restart run finished ${age}s ago"
-            if [ "$age" -lt 1800 ]; then
-              echo "::error title=A restart already ran in the last 30 minutes::this workflow restarted the machine ${age}s ago and the database is still not healthy. A restart that does not cure must reach a person, not loop. Nothing restarted."
-              exit 1
-            fi
-          else
-            echo "no earlier successful restart run"
-          fi
+          # Arch (15:29): a restart that does not cure FAILS its run (the verify step), so a read
+          # of successful runs would miss exactly the restart this guard exists to stop. Read
+          # every recent run of this workflow and ask whether its restart step itself succeeded.
+          ids="$(gh run list --workflow restart-alpha-postgres.yml --limit 10 --json databaseId,updatedAt --jq '.[] | select((.databaseId|tostring) != "'"$THIS_RUN"'") | "\(.databaseId) \(.updatedAt)"')"
+          runs="["; sep=""
+          while read -r id at; do
+            [ -z "$id" ] && continue
+            jobs="$(gh run view "$id" --json jobs --jq '.jobs' 2>/dev/null || echo '[]')"
+            runs="$runs$sep{\"updatedAt\":\"$at\",\"jobs\":$jobs}"; sep=","
+          done <<< "$ids"
+          runs="$runs]"
+          decide="$(printf '%s' "$runs" | python3 -c 'import sys,json
+          from datetime import datetime,timezone
+          now=datetime.now(timezone.utc)
+          try:
+              runs=json.load(sys.stdin)
+          except Exception:
+              runs=[]
+          hits=[]
+          for r in runs:
+              try:
+                  age=(now-datetime.strptime(r["updatedAt"],"%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)).total_seconds()
+              except Exception:
+                  continue
+              restarted=any((s.get("name") or "").startswith("Restart the Postgres machine") and s.get("conclusion")=="success" for j in (r.get("jobs") or []) for s in (j.get("steps") or []))
+              if restarted and age<1800:
+                  hits.append(int(age))
+          print("block %d" % min(hits) if hits else "clear")')"
+          echo "guard 2 reads: $decide"
+          case "$decide" in
+            block*)
+              echo "::error title=A restart already ran in the last 30 minutes::this workflow restarted the machine ${decide#block }s ago (whatever that run's conclusion) and the database is still not healthy. A restart that does not cure must reach a person, not loop. Nothing restarted."
+              exit 1 ;;
+          esac
 
       - name: Guard 3, capture state, events and the last Postgres log lines before restarting
         shell: bash
@@ -133,17 +162,23 @@ jobs:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN_ALPHA_DB }}
         run: |
           set -u
+          # Arch (15:29): "capture before restart", not "no restart without a capture". Actions
+          # runs bash with -e -o pipefail; every read here is best-effort, and what could not be
+          # read shows as a line, never as a failed step that stops the restart.
+          set +o pipefail
           # Machine state and Postgres messages only. The filter drops any line that looks like
           # a credential or an environment value (HOST's custody line 3); nothing echoes env.
           filter() { grep -v -i -E 'password|secret|token|DATABASE_URL|postgres://|authorization|api[_-]?key|BEGIN [A-Z ]*PRIVATE' || true; }
+          cap() { label="$1"; shift; { "$@" 2>&1 || echo "(not captured: $label)"; } | filter; }
           echo "===== machine status ($DB_MACHINE) ====="
-          flyctl machine status "$DB_MACHINE" --app "$DB_APP" --display-config 2>&1 | filter | head -n 120
+          cap "machine status" flyctl machine status "$DB_MACHINE" --app "$DB_APP" --display-config | head -n 120
           echo "===== checks ====="
-          flyctl checks list --app "$DB_APP" 2>&1 | filter | head -n 40
+          cap "checks list" flyctl checks list --app "$DB_APP" | head -n 40
           echo "===== last Postgres log lines ====="
-          flyctl logs --app "$DB_APP" --no-tail 2>&1 | filter | tail -n 100
+          cap "last Postgres log lines" flyctl logs --app "$DB_APP" --no-tail | tail -n 100
           echo "===== kernel messages (oom) ====="
-          flyctl ssh console --app "$DB_APP" --machine "$DB_MACHINE" -C "sh -c 'dmesg 2>/dev/null | grep -i -E \"oom|out of memory|killed process\" | tail -n 20'" 2>&1 | filter | tail -n 20 || echo "(ssh read not available; the lines above are the capture)"
+          cap "kernel oom lines (ssh)" flyctl ssh console --app "$DB_APP" --machine "$DB_MACHINE" -C "sh -c 'dmesg 2>/dev/null | grep -i -E \"oom|out of memory|killed process\" | tail -n 20'" | tail -n 20
+          echo "===== capture done; the restart follows ====="
 
       - name: Restart the Postgres machine (once)
         id: restart

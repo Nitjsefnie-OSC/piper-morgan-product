@@ -47,10 +47,14 @@ def test_the_three_guards_come_before_the_one_restart_in_order():
     assert text.count("flyctl machine restart") == 1
     # Guard 1: the fault must be the database's, read from both sides
     assert 'if [ "$db" = "healthy" ]' in text[g1a:g1b]
-    assert "critical|warning|failing|failed" in text[g1b:g2]
+    assert "critical) ;;" in text[g1b:g2]  # Arch 15:29: only critical restarts
+    patterns = [ln.strip() for ln in text[g1b:g2].splitlines() if ln.strip().endswith(") ;;")]
+    assert patterns == ["critical) ;;"]  # no warning|failing|failed pattern
     # Guard 2: thirty minutes, read from this workflow's own successful runs
-    assert "--workflow restart-alpha-postgres.yml --status success" in text[g2:g3]
-    assert '"$age" -lt 1800' in text[g2:g3]
+    assert "--status success" not in text[g2:g3]  # an uncured restart fails its run
+    assert "--json jobs" in text[g2:g3]
+    assert 'startswith("Restart the Postgres machine")' in text[g2:g3]
+    assert "age<1800" in text[g2:g3]
     # Guard 3: evidence first
     assert "flyctl machine status" in text[g3:restart]
     assert "flyctl logs" in text[g3:restart]
@@ -78,3 +82,74 @@ def test_a_restart_that_does_not_cure_fails_the_job_and_still_comments():
     comment = verify[verify.index("Comment on the open alert issue") :]
     assert "if: always() && steps.restart.outcome == 'success'" in comment
     assert "a person is needed" in comment
+
+
+def _guard2_program() -> str:
+    doc = yaml.safe_load(_text())
+    steps = doc["jobs"]["restart"]["steps"]
+    run = next(s["run"] for s in steps if s.get("name", "").startswith("Guard 2"))
+    start = run.index("python3 -c '") + len("python3 -c '")
+    end = run.index("')\"", start)
+    return run[start:end]
+
+
+def _guard2(runs) -> str:
+    import json
+    import subprocess
+    import sys
+
+    out = subprocess.run(
+        [sys.executable, "-c", _guard2_program()],
+        input=json.dumps(runs),
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    return out.stdout.strip()
+
+
+def _run(minutes_ago: int, restart_conclusion):
+    from datetime import datetime, timedelta, timezone
+
+    at = (datetime.now(timezone.utc) - timedelta(minutes=minutes_ago)).strftime(
+        "%Y-%m-%dT%H:%M:%SZ"
+    )
+    steps = [
+        {
+            "name": "Guard 1a, alpha's own verdict says the database is not healthy",
+            "conclusion": "success",
+        },
+        {"name": "Restart the Postgres machine (once)", "conclusion": restart_conclusion},
+        {
+            "name": "Verify alpha reads the database healthy within three minutes",
+            "conclusion": "failure",
+        },
+    ]
+    return {"updatedAt": at, "jobs": [{"name": "restart", "conclusion": "failure", "steps": steps}]}
+
+
+def test_guard_2_blocks_on_a_restart_whose_run_failed_afterwards():
+    """Arch 15:29: the run that restarted and did not cure concludes `failure`; the
+    guard must still see its restart step and refuse a second restart."""
+    assert _guard2([_run(10, "success")]).startswith("block ")
+    # a refused run (restart skipped) does not count
+    assert _guard2([_run(10, "skipped")]) == "clear"
+    # an old restart does not count
+    assert _guard2([_run(40, "success")]) == "clear"
+    assert _guard2([]) == "clear"
+    assert _guard2([{"updatedAt": "garbage", "jobs": []}]) == "clear"
+
+
+def test_the_capture_is_best_effort_and_cannot_block_the_restart():
+    text = _text()
+    g3 = text.index("Guard 3")
+    restart = text.index("flyctl machine restart")
+    capture = text[g3:restart]
+    assert "set +o pipefail" in capture
+    assert "(not captured:" in capture
+    assert "cap()" in capture
+    for cmd in ("flyctl machine status", "flyctl checks list", "flyctl logs", "flyctl ssh console"):
+        line = next(
+            ln for ln in capture.splitlines() if cmd in ln and not ln.strip().startswith("#")
+        )
+        assert line.strip().startswith('cap "'), line
