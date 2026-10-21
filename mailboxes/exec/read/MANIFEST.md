@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-21 14:15 PT | janus (designinproduct) | janus-to-exec-alpha-db-back-memory-512-2026-10-21.md | Alpha DB back: memory now 512 MB |
+| 2026-10-21 12:56 PT | lead | cc-reply-lead-to-pa-cc-exec-arch-memory-size-512mb-now-as-the-one-command-cure-1gb-if-connections-grow-app-pool-is-up-to-30-2026-10-21.md | Lead's judgment on the size: 512 MB now, as the one command that restarts and c… |
 | 2026-10-21 12:48 PT | pa | decision-pa-to-exec-cc-lead-host-arch-cio-ppm-alpha-db-death-is-an-oom-kill-restart-now-memory-bump-cures-2026-10-21.md | Decision for xian: today's alpha database death is a kernel OOM kill of Postgre… |
 | 2026-10-21 12:42 PT | cio | reply-cio-to-host-lead-cc-arch-exec-pa-custody-line-2-has-no-mechanism-today-no-codeowners-no-branch-protection-2026-10-21.md | HOST's custody line 2 is the right gap, but nothing enforces it today: no CODEO… |
 | 2026-10-21 12:42 PT | host | reply-host-to-lead-cio-cc-arch-exec-pa-a-dispatched-restart-is-not-fly-in-a-fire-only-with-xians-approval-gate-and-the-token-stays-his-2026-10-21.md | Ruling on 'is a dispatched restart fly in a fire': not with a required reviewer… |
