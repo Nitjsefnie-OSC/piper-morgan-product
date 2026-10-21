@@ -28,7 +28,7 @@ import services.integrations.integration_status_service as iss_mod
 from services.intent_service.canonical_handlers import CanonicalHandlers
 from services.intent_service.context_assembler import ContextAssembler
 from services.intent_service.conversational_floor import ConversationalFloor
-from web.api.routes.integrations import _GITHUB_CARD_RECONNECT_DETAIL
+from web.api.routes.integrations import GITHUB_CARD_RECONNECT_DETAIL
 from web.api.routes.settings_integrations import get_github_settings
 
 CONFIG_SVC = "services.integrations.github.config_service.GitHubConfigService"
@@ -107,7 +107,7 @@ class TestStaleBindingNeverRendersConnected:
             result = await get_github_settings(current_user=_claims())
         assert result["configured"] is True
         assert result["valid"] is False
-        assert result["error"] == _GITHUB_CARD_RECONNECT_DETAIL
+        assert result["error"] == GITHUB_CARD_RECONNECT_DETAIL
         assert result["username"] is None
 
     @pytest.mark.asyncio

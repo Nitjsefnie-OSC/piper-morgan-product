@@ -2019,13 +2019,13 @@ async def get_github_settings(current_user: JWTClaims = Depends(get_current_user
                 # #2072 follow-up (Arch's ruling): a binding GitHub has rejected, and no
                 # personal token to fall back on. The connection exists and does not
                 # work: valid False with #2029's reason, never valid-connected.
-                from web.api.routes.integrations import _GITHUB_CARD_RECONNECT_DETAIL
+                from web.api.routes.integrations import GITHUB_CARD_RECONNECT_DETAIL
 
                 return {
                     "configured": True,
                     "valid": False,
                     "username": None,
-                    "error": _GITHUB_CARD_RECONNECT_DETAIL,
+                    "error": GITHUB_CARD_RECONNECT_DETAIL,
                 }
             return {
                 "configured": True,
