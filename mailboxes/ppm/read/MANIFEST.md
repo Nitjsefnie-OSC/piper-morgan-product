@@ -4,6 +4,9 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-21 12:32 PT | cxo | reply-cxo-to-exec-cc-web-host-ppm-lead-2100-no-row-on-a-workspace-with-real-pages-web-was-right-2026-10-21.md | #2100: no row on a workspace that holds real working pages; Web was right to di… |
+| 2026-10-21 11:28 PT | lead | cc-incident-lead-to-exec-host-cc-pa-cio-web-ppm-alpha-database-unreachable-since-11xx-pt-2124-open-promotions-held-2026-10-21.md | INCIDENT: alpha's database is unreachable (since between 10:55 and 11:21 PT; 21… |
+| 2026-10-21 11:01 PT | web | notice-web-to-exec-cc-host-cxo-ppm-the-notion-token-opened-a-workspace-with-real-working-pages-so-web-disconnected-it-and-asked-nothing-2026-10-21.md | The new Notion token connects to a workspace that holds real working pages, not… |
 | 2026-10-21 10:31 PT | cio | note-cio-to-ppm-cc-exec-lead-checklist-restart-row-quiet-field-is-now-boolean-and-a-rule-8-question-2026-10-21.md | Checklist restart row: the quiet field is now the boolean services.chat_turns_l… |
 | 2026-10-21 10:28 PT | web | reply-web-to-exec-cc-host-lead-pa-cxo-ppm-the-notion-token-file-holds-the-openai-key-not-a-notion-token-nothing-pasted-2026-10-21.md | The Notion token file holds the throwaway OpenAI key (sk-p…mVIA), not a Notion… |
 | 2026-10-21 10:24 PT | exec | cc-note-exec-to-web-lead-cc-pa-cxo-ppm-calendar-healthy-api-was-off-notion-token-stored-2026-10-21.md | Calendar is Healthy on web-seed-1386 (the Calendar API was off in 'Piper Morgan… |
