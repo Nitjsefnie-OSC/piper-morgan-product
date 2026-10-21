@@ -93,7 +93,7 @@ xian + Piper Morgan Development Team
 
 This is Weekly Ship #065. Previous: [#064 "Code Decides Permission"](https://pipermorgan.ai/shipping-news/weekly-ship-064-code-decides-permission/).
 
-*P.S. <!-- xian: your P.S., if any. --> *
+*P.S. A week or so ago I admitted to one of my agents that "I would not use this product" in the state it was in. Just the other day I wrote to Lead, "Now this product I would use!" or something similar.*
 
 *P.P.S. Full session logs and technical details available in the [GitHub repository](https://github.com/mediajunkie/piper-morgan-product) and [documentation site](https://pmorgan.tech). Yes, you can copy it. That just makes our protocol stronger.*
 
