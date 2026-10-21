@@ -1,0 +1,201 @@
+# Restart alpha's Postgres machine (#2085 track 1, the external restarter).
+#
+# Why this exists (2026-10-21): twice in three days the kernel OOM-killed Postgres inside
+# piper-morgan-db's one machine while the machine stayed `started`. Fly's restart policy
+# (`always`, already set) acts on machine exit, and Fly's Postgres image lets Postgres exit
+# without exiting the machine (PA's read of fly-apps/postgres-flex), so nothing restarted it
+# and each outage waited for a person at a terminal. xian ruled 15:11: build this, after
+# main is protected (a path rule on this file, CIO's proposal), and run it behind the
+# `alpha-db` environment with xian as the required reviewer. A seat dispatches it on an open
+# health-watch alert; GitHub asks xian to approve; the run log is the record.
+#
+# Guards (Arch 2026-10-21 12:28), in order, before the one restart:
+#   1. Refuse unless the fault is the database's: alpha's /health must read the database as
+#      not healthy AND the Postgres machine's own `pg` check must read failing. An unreachable
+#      but healthy database (network, DNS, a proxy) is not cured by a restart.
+#   2. One restart, then stop: refuse if a successful run of this workflow completed in the
+#      last 30 minutes. A restart that doesn't cure must reach a person, not loop.
+#   3. Capture before you restart: the machine's state and events and the last Postgres
+#      log lines go into the run log first, because a restart erases the evidence.
+# Custody (HOST 2026-10-21 12:42): the token lives only as the environment secret
+# FLY_API_TOKEN_ALPHA_DB (scoped to piper-morgan-db, created by xian); the capture prints
+# machine state and Postgres messages only, filtered for anything that looks like a
+# credential or an environment value; nothing here echoes the environment.
+#
+# After the restart the job polls alpha's /health; if the database still does not answer
+# within three minutes the job FAILS, so the failure email reaches a person. Either way it
+# comments on the open "Alpha health watch: failing" issue with the run URL.
+name: Restart alpha Postgres
+
+on:
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Why (the alert issue number, or the attended test's name)"
+        type: string
+        required: true
+
+concurrency:
+  group: restart-alpha-postgres
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  actions: read
+  issues: write
+
+jobs:
+  restart:
+    runs-on: ubuntu-latest
+    environment: alpha-db
+    timeout-minutes: 15
+    env:
+      DB_APP: piper-morgan-db
+      DB_MACHINE: "865105fe247158"
+      HEALTH_URL: https://alpha.pipermorgan.ai/health
+      ALERT_TITLE: "Alpha health watch: failing"
+    steps:
+      - name: Guard 1a, alpha's own verdict says the database is not healthy
+        id: health
+        shell: bash
+        run: |
+          set -u
+          body="$(curl -fsS --max-time 10 "$HEALTH_URL" || true)"
+          db="$(printf '%s' "$body" | python3 -c 'import sys,json
+          try:
+              d=json.load(sys.stdin)
+          except Exception:
+              print("unreadable"); raise SystemExit
+          v=(d.get("services") or {}).get("database"); print(v if isinstance(v,str) and v else "missing")')"
+          echo "alpha services.database reads: $db"
+          echo "db=$db" >> "$GITHUB_OUTPUT"
+          if [ "$db" = "healthy" ]; then
+            echo "::error title=Database is healthy::alpha /health reads services.database healthy; a restart would only add an outage. Nothing restarted."
+            exit 1
+          fi
+
+      # Pinned to the commit behind release 1.5, as fly-deploy.yml does (Arch review 2026-09-29).
+      - uses: superfly/flyctl-actions/setup-flyctl@fc53c09e1bc3be6f54706524e3b82c4f462f77be # 1.5
+
+      - name: Guard 1b, the Postgres machine's own pg check reads failing
+        id: pgcheck
+        shell: bash
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN_ALPHA_DB }}
+        run: |
+          set -u
+          checks="$(flyctl checks list --app "$DB_APP" --json 2>/dev/null || echo '[]')"
+          pg="$(printf '%s' "$checks" | python3 -c 'import sys,json
+          try:
+              rows=json.load(sys.stdin)
+          except Exception:
+              rows=[]
+          # flyctl prints either a flat list of checks or a list per machine; read both shapes.
+          flat=[]
+          for r in rows if isinstance(rows,list) else []:
+              if isinstance(r,dict) and "checks" in r and isinstance(r["checks"],list):
+                  flat.extend(r["checks"])
+              elif isinstance(r,dict):
+                  flat.append(r)
+          st=[c.get("status") or c.get("Status") for c in flat if (c.get("name") or c.get("Name"))=="pg"]
+          print((st[0] or "unknown").lower() if st else "absent")')"
+          echo "pg check reads: $pg"
+          echo "pg=$pg" >> "$GITHUB_OUTPUT"
+          case "$pg" in
+            critical|warning|failing|failed) ;;
+            *)
+              echo "::error title=pg check is not failing::the Postgres machine's own pg check reads '${pg}'. The fault is not shown to be the database's (an unreachable-but-healthy database is not cured by a restart). Nothing restarted."
+              exit 1 ;;
+          esac
+
+      - name: Guard 2, one restart per thirty minutes
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -u
+          last="$(gh run list --workflow restart-alpha-postgres.yml --status success --limit 1 --json updatedAt --jq '.[0].updatedAt // empty')"
+          if [ -n "$last" ]; then
+            age="$(python3 -c "from datetime import datetime,timezone; print(int((datetime.now(timezone.utc)-datetime.strptime('$last','%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=timezone.utc)).total_seconds()))")"
+            echo "last successful restart run finished ${age}s ago"
+            if [ "$age" -lt 1800 ]; then
+              echo "::error title=A restart already ran in the last 30 minutes::this workflow restarted the machine ${age}s ago and the database is still not healthy. A restart that does not cure must reach a person, not loop. Nothing restarted."
+              exit 1
+            fi
+          else
+            echo "no earlier successful restart run"
+          fi
+
+      - name: Guard 3, capture state, events and the last Postgres log lines before restarting
+        shell: bash
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN_ALPHA_DB }}
+        run: |
+          set -u
+          # Machine state and Postgres messages only. The filter drops any line that looks like
+          # a credential or an environment value (HOST's custody line 3); nothing echoes env.
+          filter() { grep -v -i -E 'password|secret|token|DATABASE_URL|postgres://|authorization|api[_-]?key|BEGIN [A-Z ]*PRIVATE' || true; }
+          echo "===== machine status ($DB_MACHINE) ====="
+          flyctl machine status "$DB_MACHINE" --app "$DB_APP" --display-config 2>&1 | filter | head -n 120
+          echo "===== checks ====="
+          flyctl checks list --app "$DB_APP" 2>&1 | filter | head -n 40
+          echo "===== last Postgres log lines ====="
+          flyctl logs --app "$DB_APP" --no-tail 2>&1 | filter | tail -n 100
+          echo "===== kernel messages (oom) ====="
+          flyctl ssh console --app "$DB_APP" --machine "$DB_MACHINE" -C "sh -c 'dmesg 2>/dev/null | grep -i -E \"oom|out of memory|killed process\" | tail -n 20'" 2>&1 | filter | tail -n 20 || echo "(ssh read not available; the lines above are the capture)"
+
+      - name: Restart the Postgres machine (once)
+        id: restart
+        shell: bash
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN_ALPHA_DB }}
+        run: |
+          set -u
+          echo "reason: ${{ inputs.reason }}"
+          flyctl machine restart "$DB_MACHINE" --app "$DB_APP"
+          echo "restarted_at=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> "$GITHUB_OUTPUT"
+
+      - name: Verify alpha reads the database healthy within three minutes
+        id: verify
+        shell: bash
+        run: |
+          set -u
+          ok=no
+          for i in $(seq 1 18); do
+            sleep 10
+            db="$(curl -fsS --max-time 10 "$HEALTH_URL" 2>/dev/null | python3 -c 'import sys,json
+          try:
+              print(((json.load(sys.stdin).get("services") or {}).get("database")) or "missing")
+          except Exception:
+              print("unreadable")' || echo unreadable)"
+            echo "$(date -u +%H:%M:%S) probe $i services.database=$db"
+            if [ "$db" = "healthy" ]; then ok=yes; break; fi
+          done
+          echo "ok=$ok" >> "$GITHUB_OUTPUT"
+          if [ "$ok" != "yes" ]; then
+            echo "::error title=Database still not healthy after the restart::alpha /health did not read services.database healthy within three minutes of the restart. The restart did not cure it; a person is needed."
+            exit 1
+          fi
+          echo "alpha reads the database healthy after the restart"
+
+      - name: Comment on the open alert issue
+        if: always() && steps.restart.outcome == 'success'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          OK: ${{ steps.verify.outputs.ok }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          REASON: ${{ inputs.reason }}
+        run: |
+          set -u
+          when=$(date -u +'%Y-%m-%d %H:%M:%SZ')
+          if [ "$OK" = "yes" ]; then
+            line="RESTARTED the Postgres machine ($when; reason: $REASON): alpha reads the database healthy again. Capture before the restart is in the run log: $RUN_URL"
+          else
+            line="RESTARTED the Postgres machine ($when; reason: $REASON) but alpha still does not read the database healthy: a person is needed. Run: $RUN_URL"
+          fi
+          number=$(gh issue list --state open --search "in:title \"$ALERT_TITLE\"" --json number,title \
+            --jq "[.[] | select(.title == \"$ALERT_TITLE\")][0].number // empty")
+          if [ -n "$number" ]; then gh issue comment "$number" --body "$line"; echo "commented on #$number"; else echo "no open alert issue; nothing to comment on"; fi
