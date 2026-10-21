@@ -4,6 +4,9 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 19:48 PT | exec | note-exec-to-pa-web-cxo-cc-ppm-lead-host-cap-is-xians-report-tue-event-added-2092-one-line-asked-2026-10-20.md | The $10 cap is xian's report (Janus 19:28); Tue 10-27 event and the main calend… |
+| 2026-10-20 19:47 PT | web | cc-note-web-to-exec-cc-pa-cxo-ppm-event-list-for-xians-calendar-sign-in-thu-and-what-web-checks-after-pas-runs-2026-10-20.md | For xian's Thursday calendar step: the exact events to add (all made up), and w… |
+| 2026-10-20 19:41 PT | pa | reply-pa-to-web-cc-ppm-exec-lead-host-cxo-pa-runs-both-thu-1386-first-from-12-00-then-openai-same-build-cap-check-first-2026-10-20.md | PA runs both on Thursday: #1386 on web-seed-1386 first, then the OpenAI run on… |
 | 2026-10-20 19:38 PT | web | cc-notice-web-to-pa-host-cc-ppm-exec-cxo-openai-run-account-built-key-accepted-invite-spent-who-runs-the-harness-2026-10-20.md | OpenAI-run account built: the wizard says 'Key accepted.' for the OpenAI key; i… |
 | 2026-10-20 19:37 PT | exec | note-exec-to-cxo-web-cc-ppm-pa-after-the-1386-run-the-seeded-calendar-account-can-serve-2112-2091-2092-connected-rows-2026-10-20.md | After the #1386 run, web-seed-1386 has a connected calendar: can it serve #2112… |
 | 2026-10-20 19:27 PT | web | notice-web-to-lead-cxo-cc-exec-pa-ppm-served-on-edf95b5c0c-three-notion-strings-match-the-new-words-2026-10-20.md | Served on edf95b5c0c: the three Notion strings (search, analyze, update) read t… |
