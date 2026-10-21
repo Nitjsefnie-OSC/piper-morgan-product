@@ -5769,11 +5769,11 @@ class IntentService:
             if not notion_router.is_available(_user_id):
                 return IntentProcessingResult(
                     success=True,
+                    # #2122 (CXO's words, 2026-10-20): no env var, no workspace promise;
+                    # chat cannot search uploads either, so say both and offer the paste.
                     message=(
-                        "I'd love to help search your documents, but Notion isn't configured yet. "
-                        "To enable document search, connect Notion in Settings → Integrations → Notion "
-                        "(or set NOTION_API_KEY locally). Once connected, I can search your "
-                        "entire Notion workspace for you!"
+                        "I can't search your documents from chat yet, and I can't read your "
+                        "Notion pages in chat yet. If you paste the text here, I can work with it."
                     ),
                     intent_data={
                         "category": intent.category.value,
@@ -5906,9 +5906,8 @@ class IntentService:
                     success=True,
                     message=(
                         "I'd love to analyze your document, but Notion isn't configured yet. "
-                        "To enable document analysis, connect Notion in Settings → Integrations → Notion "
-                        "(or set NOTION_API_KEY locally). Alternatively, you can upload a file directly "
-                        "and I'll analyze that instead!"
+                        "To enable document analysis, connect Notion in Settings → Integrations → Notion. "
+                        "Alternatively, you can upload a file directly and I'll analyze that instead!"
                     ),
                     intent_data={
                         "category": intent.category.value,
@@ -6088,9 +6087,8 @@ class IntentService:
                     success=True,
                     message=(
                         "I'd love to help update your document, but Notion isn't configured yet. "
-                        "To enable document updates, connect Notion in Settings → Integrations → Notion "
-                        "(or set NOTION_API_KEY locally). Once connected, I can update documents "
-                        "in your Notion workspace!"
+                        "To enable document updates, connect Notion in Settings → Integrations → Notion. "
+                        "Once connected, I can update documents in your Notion workspace!"
                     ),
                     intent_data={
                         "category": intent.category.value,
