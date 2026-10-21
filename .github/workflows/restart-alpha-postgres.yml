@@ -92,13 +92,19 @@ jobs:
               rows=json.load(sys.stdin)
           except Exception:
               rows=[]
-          # flyctl prints either a flat list of checks or a list per machine; read both shapes.
+          # PA (15:48, run on the live app): flyctl prints a dict keyed by machine id, each value
+          # a list of checks with lower-case name/status keys. The two list shapes are kept in
+          # case a flyctl release changes it; anything else reads absent and refuses.
           flat=[]
-          for r in rows if isinstance(rows,list) else []:
-              if isinstance(r,dict) and "checks" in r and isinstance(r["checks"],list):
-                  flat.extend(r["checks"])
-              elif isinstance(r,dict):
-                  flat.append(r)
+          if isinstance(rows,dict):
+              for v in rows.values():
+                  flat.extend([c for c in v if isinstance(c,dict)] if isinstance(v,list) else [])
+          elif isinstance(rows,list):
+              for r in rows:
+                  if isinstance(r,dict) and "checks" in r and isinstance(r["checks"],list):
+                      flat.extend([c for c in r["checks"] if isinstance(c,dict)])
+                  elif isinstance(r,dict):
+                      flat.append(r)
           st=[c.get("status") or c.get("Status") for c in flat if (c.get("name") or c.get("Name"))=="pg"]
           print((st[0] or "unknown").lower() if st else "absent")')"
           echo "pg check reads: $pg"

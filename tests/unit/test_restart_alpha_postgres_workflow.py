@@ -184,3 +184,55 @@ def test_the_capture_is_best_effort_and_cannot_block_the_restart():
             ln for ln in capture.splitlines() if cmd in ln and not ln.strip().startswith("#")
         )
         assert line.strip().startswith('cap "'), line
+
+
+def _guard1b_program() -> str:
+    doc = yaml.safe_load(_text())
+    steps = doc["jobs"]["restart"]["steps"]
+    run = next(s["run"] for s in steps if s.get("name", "").startswith("Guard 1b"))
+    start = run.index("python3 -c '") + len("python3 -c '")
+    end = run.index("')\"", start)
+    return run[start:end]
+
+
+def _guard1b(stdin_text: str) -> str:
+    import subprocess
+    import sys
+
+    out = subprocess.run(
+        [sys.executable, "-c", _guard1b_program()],
+        input=stdin_text,
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    return out.stdout.strip()
+
+
+def test_guard_1b_reads_flyctls_real_shape_a_dict_keyed_by_machine_id():
+    """PA 15:48 ran the guard's own parser on `flyctl checks list --json` from the live
+    app: the top level is {"<machine id>": [{"name", "status", "output", "updated_at"}, ...]}.
+    The first draft read only lists and printed "absent" for every run."""
+    import json
+
+    def live(pg_status: str) -> str:
+        return json.dumps(
+            {
+                "865105fe247158": [
+                    {"name": "pg", "status": pg_status, "output": "...", "updated_at": "t"},
+                    {"name": "role", "status": "passing", "output": "...", "updated_at": "t"},
+                    {"name": "vm", "status": "passing", "output": "...", "updated_at": "t"},
+                ]
+            }
+        )
+
+    assert _guard1b(live("passing")) == "passing"
+    assert _guard1b(live("critical")) == "critical"
+    assert _guard1b(live("warning")) == "warning"
+    # the two list shapes still read
+    assert _guard1b(json.dumps([{"name": "pg", "status": "critical"}])) == "critical"
+    assert _guard1b(json.dumps([{"checks": [{"name": "pg", "status": "critical"}]}])) == "critical"
+    # anything unreadable reads absent (and the step refuses on absent)
+    assert _guard1b("not json") == "absent"
+    assert _guard1b(json.dumps({"865105fe247158": "zero"})) == "absent"
+    assert _guard1b(json.dumps({})) == "absent"
