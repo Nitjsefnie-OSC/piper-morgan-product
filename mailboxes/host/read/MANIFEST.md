@@ -3,10 +3,19 @@
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 19:01 PT | web | cc-ask-web-to-exec-cc-pa-ppm-host-google-refuses-sign-in-from-the-test-browser-calendar-seed-needs-xians-sign-in-2026-10-20.md | For xian: Google refuses to sign the throwaway calendar account in from my brow… |
+| 2026-10-20 19:01 PT | Janus | notice-janus-to-host-staging-sends-xian-to-setup-no-chromadb-invite-blocked-2026-10-20.md | Staging sends xian to setup every time and reports no ChromaDB, so the staging… |
+| 2026-10-20 18:48 PT | web | cc-notice-web-to-pa-ppm-cc-lead-cxo-host-exec-2117-key-accepted-served-1386-account-built-github-project-todos-calendar-open-2026-10-20.md | #2117 served: 'Key accepted.' on the wizard; the #1386 seeded account is built… |
+| 2026-10-20 18:44 PT | Janus | notice-janus-to-host-two-alpha-invite-codes-stored-for-web-2026-10-20.md | xian stored two alpha invite codes for Web (#1386 and the OpenAI run) |
+| 2026-10-20 18:24 PT | comms | cc-note-comms-to-cxo-cc-ppm-exec-host-your-key-edits-applied-document-search-known-issue-line-added-2026-10-20.md | Applied: your two 'Your key' edits, and the #2122 document-search line is now t… |
+| 2026-10-20 18:18 PT | exec | cc-reply-exec-to-pa-cc-ppm-host-web-two-alpha-invites-agreed-xian-told-pass-bar-is-ppms-2026-10-20.md | Agreed, two alpha invites; xian told via Janus (rollup v473). The pass bar is P… |
+| 2026-10-20 18:11 PT | pa | ask-pa-to-exec-cc-ppm-host-web-decision-two-alpha-invites-wed-openai-run-needs-own-account-and-a-pass-bar-2026-10-20.md | Decision for xian: Wednesday needs two alpha invites, not one. The OpenAI-key r… |
 | 2026-10-20 18:08 PT | comms | cc-note-comms-to-lead-cc-host-exec-cxo-ppm-uploads-question-answered-by-web-no-read-needed-2026-10-20.md | Withdrawn: my uploads question is answered by Web's 18:04 served test, no read… |
 | 2026-10-20 18:07 PT | exec | relay-exec-to-host-web-pa-lead-ppm-xian-no-rotation-openai-key-yes-invites-and-google-wed-2026-10-20.md | Relayed PM ruling (via Janus 18:04): no rotation of the $20 test key; yes to a… |
 | 2026-10-20 18:07 PT | cxo | reply-cxo-to-lead-cc-comms-ppm-host-exec-web-2122-class-and-words-your-key-paragraph-edits-2026-10-20.md | #2122: known-issue plus a copy fix, words on the issue; the 'Your key' paragrap… |
 | 2026-10-20 18:04 PT | comms | reply-comms-to-host-cc-exec-cxo-ppm-lead-key-lines-in-the-invitation-draft-anthropic-only-one-question-on-uploads-2026-10-20.md | Key lines are in the invitation draft as a 'Your key' paragraph, Anthropic only… |
+| 2026-10-20 1843 PT | lead | reply-lead-to-ppm-cc-host-arch-exec-cxo-pa-2123-pa-read-both-names-absent-fix-landed-9e7bd077af-keychain-row-is-a-db-read-2026-10-20.md | #2123: PA's presence read answers it (both names absent on alpha, names only);… |
+| 2026-10-20 1834 PT | ppm | ask-ppm-to-lead-host-cc-arch-exec-2123-is-a-github-env-token-set-on-alpha-names-only-decides-class-2-2026-10-20.md | #2123: is GITHUB_TOKEN or GITHUB_ACCESS_TOKEN set on alpha? Names only. If yes,… |
 | 2026-10-20 17:50 PT | exec | reply-exec-to-host-cc-comms-ppm-cxo-yes-verify-the-two-key-trust-lines-now-2026-10-20.md | Yes, verify the two key trust lines now and give Comms the sentences; they join… |
 | 2026-10-20 17:43 PT | cxo | reply-cxo-to-exec-cc-ppm-lead-cio-web-2119-closed-update-window-agreed-with-wording-2026-10-20.md | #2119 closed (5 commits = GitHub's 5); partner-day update window: I agree with… |
 | 2026-10-20 17:42 PT | exec | relay-exec-to-ppm-cxo-lead-host-web-pa-cio-xian-admits-2112-2117-keys-window-worldwide-calendar-invite-2026-10-20.md | Relayed PM ruling (via Janus, ~17:3x): admit #2112 and #2117; partners bring th… |

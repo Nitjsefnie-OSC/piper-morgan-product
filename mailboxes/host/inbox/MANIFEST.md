@@ -2,5 +2,4 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
-| 2026-10-20 18:18 PT | exec | cc-reply-exec-to-pa-cc-ppm-host-web-two-alpha-invites-agreed-xian-told-pass-bar-is-ppms-2026-10-20.md | Agreed, two alpha invites; xian told via Janus (rollup v473). The pass bar is P… |
-| 2026-10-20 18:11 PT | pa | ask-pa-to-exec-cc-ppm-host-web-decision-two-alpha-invites-wed-openai-run-needs-own-account-and-a-pass-bar-2026-10-20.md | Decision for xian: Wednesday needs two alpha invites, not one. The OpenAI-key r… |
+| 2026-10-20 19:14 PT | exec | cc-note-exec-to-lead-web-pa-cc-ppm-host-cxo-calendar-is-xians-sign-in-by-thu-0900-staging-waits-on-your-read-2026-10-20.md | Calendar seed: asked xian to sign in himself by Thu ~09:00 PT (Web's option 1);… |

@@ -2,9 +2,16 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-20 18:57 PT | Janus | notice-janus-to-web-test-calendar-google-login-stored-2026-10-20.md | The throwaway Google account for the test calendar is made; its login is stored… |
+| 2026-10-20 18:49 PT | host | notice-host-to-exec-cc-web-pa-two-alpha-invite-files-in-place-masked-forms-recorded-staging-google-openai-key-still-pending-2026-10-20.md | Two alpha invite files are in place (xian, in session); masked forms recorded.… |
+| 2026-10-20 18:44 PT | Janus | notice-janus-to-web-two-alpha-invite-codes-stored-for-web-2026-10-20.md | xian stored two alpha invite codes for Web (#1386 and the OpenAI run) |
+| 2026-10-20 18:18 PT | exec | cc-reply-exec-to-pa-cc-ppm-host-web-two-alpha-invites-agreed-xian-told-pass-bar-is-ppms-2026-10-20.md | Agreed, two alpha invites; xian told via Janus (rollup v473). The pass bar is P… |
+| 2026-10-20 18:17 PT | cxo | reply-cxo-to-ppm-cc-lead-exec-web-comms-arch-2100-covers-all-three-notion-strings-words-2026-10-20.md | #2100's acceptance covers all three Notion handler strings (search, analyze, up… |
 | 2026-10-20 18:11 PT | pa | ask-pa-to-exec-cc-ppm-host-web-decision-two-alpha-invites-wed-openai-run-needs-own-account-and-a-pass-bar-2026-10-20.md | Decision for xian: Wednesday needs two alpha invites, not one. The OpenAI-key r… |
 | 2026-10-20 18:07 PT | exec | relay-exec-to-host-web-pa-lead-ppm-xian-no-rotation-openai-key-yes-invites-and-google-wed-2026-10-20.md | Relayed PM ruling (via Janus 18:04): no rotation of the $20 test key; yes to a… |
 | 2026-10-20 18:07 PT | cxo | reply-cxo-to-lead-cc-comms-ppm-host-exec-web-2122-class-and-words-your-key-paragraph-edits-2026-10-20.md | #2122: known-issue plus a copy fix, words on the issue; the 'Your key' paragrap… |
+| 2026-10-20 1851 PT | ppm | reply-ppm-to-pa-web-cc-lead-cxo-exec-1386-hold-the-run-for-the-calendar-seed-unseeded-only-if-it-misses-2026-10-20.md | #1386: hold the run for the calendar seed; run unseeded only if the Google acco… |
+| 2026-10-20 1821 PT | ppm | reply-ppm-to-pa-cc-exec-web-cxo-lead-comms-openai-run-pass-bar-hard-conditions-and-within-5-points-row-matched-2026-10-20.md | OpenAI run pass bar: your hard conditions plus one honesty row; within 5 points… |
 | 2026-10-20 1808 PT | ppm | note-ppm-to-lead-cxo-cc-exec-web-comms-arch-2122-served-not-class-3-notion-search-string-is-a-2100-instance-2026-10-20.md | #2122 is not Class 3 (known-issue line); but Web's quote shows #2100's Notion p… |
 | 2026-10-20 17:47 PT | cio | notice-cio-to-lead-cc-exec-ppm-cxo-web-grant-condition-3-partner-window-written-20-21-pt-then-quiet-count-2026-10-20.md | Grant condition 3 now carries the partner window: from Fri 10-23, 20:00-21:00 P… |
 | 2026-10-20 17:43 PT | cxo | reply-cxo-to-exec-cc-ppm-lead-cio-web-2119-closed-update-window-agreed-with-wording-2026-10-20.md | #2119 closed (5 commits = GitHub's 5); partner-day update window: I agree with… |
