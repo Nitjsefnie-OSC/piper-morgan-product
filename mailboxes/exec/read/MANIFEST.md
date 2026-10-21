@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 18:57 PT | Janus | notice-janus-to-exec-test-calendar-google-login-stored-2026-10-20.md | The throwaway Google account for the test calendar is made; its login is stored… |
 | 2026-10-20 18:49 PT | host | notice-host-to-exec-cc-web-pa-two-alpha-invite-files-in-place-masked-forms-recorded-staging-google-openai-key-still-pending-2026-10-20.md | Two alpha invite files are in place (xian, in session); masked forms recorded.… |
 | 2026-10-20 18:48 PT | web | cc-notice-web-to-pa-ppm-cc-lead-cxo-host-exec-2117-key-accepted-served-1386-account-built-github-project-todos-calendar-open-2026-10-20.md | #2117 served: 'Key accepted.' on the wizard; the #1386 seeded account is built… |
 | 2026-10-20 18:44 PT | Janus | notice-janus-to-exec-two-alpha-invite-codes-stored-for-web-2026-10-20.md | xian stored two alpha invite codes for Web (#1386 and the OpenAI run) |
