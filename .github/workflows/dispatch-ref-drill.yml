@@ -1,0 +1,19 @@
+# Throwaway drill (Lead, 2026-10-21): which copy of a workflow_dispatch file runs when the
+# dispatch names a non-default ref? Deleted after one run. CIO's question for #2085's
+# restarter branch design.
+name: Dispatch ref drill
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  drill:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Say which copy ran
+        run: |
+          echo "DRILL MARKER: main copy"
+          echo "ref=$GITHUB_REF sha=$GITHUB_SHA"
