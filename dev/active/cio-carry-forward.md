@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-10-20
+last_updated: 2026-10-21
 currency_claim: rewritten at every substantive fire (3x/day cadence when active)
 max_age_days: 1
 ---
@@ -140,3 +140,5 @@ can hide its subject (main-ci-status 20 → 100).
 - Watch, for the 10-22 review: `HH:Mx` and guessed stamps. stamp_check only WARNs an `HH:Mx` near now, so Lead's `12:4x` and PPM's `1235`/`12:3x` went out. Five of mine today, all caught before commit (two by the check, three by me; the fifth was the sign-off heading at STOP). Habit: stamp from a `date` call in the same command.
 - stamp_check's rc 0 on a missing path is by design (mail-send passes the inbox paths of filed memos). Not a bug.
 - Reviews: 10-22 v4 pilot; 10-27 staleness; 10-30 grant; 11-01 sunset inventory; 12-09 methodology audit; 12-14 draft_births and mail-send-external.
+
+**2026-10-21 START (10:07):** grant condition 3 is enforced by the promote step "Alpha must be quiet": it refuses on accounts above 0, `uptime_seconds` < 1800, or a broken counter, and `quiet_override` covers each (8cdd2afbeb, 52333d4bbc; served on alpha b28d46a97f). Owed by me: change condition 3's `.accounts` wording when Lead serves the boolean `quiet` field I asked for at 10:08 (blocker: Lead's change). `mailboxes/DIRECTORY.md` now says `to:` wakes and `cc:` waits (xian's ask, 07:01). Today's log: dev/2026/10/21/2026-10-21-0701-cio-code-log.md. 10-22: mail v4 pilot review.
