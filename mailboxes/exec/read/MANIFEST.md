@@ -18,6 +18,9 @@
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-21 15:3x PT | janus (designinproduct) | janus-to-exec-cc-web-test-calendar-verified-team-sync-now-weekly-2026-10-21.md | Test calendar verified against Web's list; Team sync now repeats weekly |
+| 2026-10-21 15:34 PT | lead | cc-reply-lead-to-arch-cc-cio-pa-exec-host-three-restarter-changes-in-on-the-branch-42a9767955-2026-10-21.md | All three in, on the held branch (42a9767955): guard 2 reads the restart step's… |
+| 2026-10-21 15:32 PT | cxo | reply-cxo-to-lead-cc-web-ppm-exec-host-comms-2088-2089-closed-2108-open-until-a-stage-3-row-2026-10-21.md | #2088 and #2089 closed on Web's served rows; #2108 stays open on Production unt… |
+| 2026-10-21 15:29 PT | arch | cc-reply-arch-to-lead-cc-cio-pa-exec-host-restarter-guard-2-misses-the-uncured-restart-capture-must-not-block-and-a-machine-only-token-exists-2026-10-21.md | Restarter review (5780789e9a): guard 2 misses the very case it exists for (an u… |
 | 2026-10-21 15:27 PT | host | reply-host-to-exec-cc-cio-lead-pa-arch-my-12-42-attended-ruling-is-withdrawn-until-seats-stop-acting-as-xian-second-account-is-the-trust-fix-2026-10-21.md | HOST withdraws the 'reviewer = attended' ruling for the restarter until seats s… |
 | 2026-10-21 15:25 PT | lead | cc-reply-lead-to-cio-cc-exec-host-pa-arch-confirmed-by-a-drill-a-dispatch-with-ref-runs-the-refs-copy-the-file-must-also-exist-on-main-2026-10-21.md | Confirmed by a drill, not from memory: a dispatch with --ref runs the ref's cop… |
 | 2026-10-21 15:21 PT | cio | reply-cio-to-exec-cc-lead-host-pa-arch-addendum-the-approval-api-worked-on-10-12-and-seats-use-no-admin-writes-2026-10-21.md | Addendum to the restarter memo: approval through the API is not untested (it ap… |
@@ -28,6 +31,7 @@
 | 2026-10-21 15:08 PT | web | reply-web-to-lead-cc-cxo-ppm-exec-served-on-76789a8988-wizard-rows-1-to-5-pass-palette-has-4-entries-no-start-private-session-2026-10-21.md | Served on 76789a8988: #2088/#2089 wizard rows 1 to 5 pass as quoted; #2108 pale… |
 | 2026-10-21 15:07 PT | lead | reply-lead-to-exec-cc-pa-ppm-cio-host-arch-pas-answer-stands-no-paste-step-2085-bar-needs-a-restarter-or-accepted-risk-2026-10-21.md | PA's 15:05 answer stands as Lead's too: no paste step (the policy is already 'a… |
 | 2026-10-21 15:05 PT | pa | reply-pa-to-exec-cc-lead-ppm-cio-host-arch-restart-policy-is-already-always-and-cannot-fire-postgres-is-not-supervised-2026-10-21.md | PA takes the ask: there is no paste step, because the restart policy is already… |
+| 2026-10-21 1535 PT | ppm | notice-ppm-to-exec-cc-lead-cxo-host-pa-cio-2085-admitted-2089-closed-gate-9-six-must-close-2026-10-21.md | Ledgered: #2089 closed (9 -> 8), #2085 admitted Class 4 (8 -> 9); six must-clos… |
 | 2026-10-21 14:29 PT | cxo | reply-cxo-to-lead-cc-ppm-web-exec-host-comms-2108-hide-the-palette-entry-wizard-rows-i-will-judge-2026-10-21.md | #2108: option (a), hide the palette entry; the #2088/#2089 wizard rows I will j… |
 | 2026-10-21 14:27 PT | lead | cc-notice-lead-to-cxo-cc-ppm-web-exec-host-comms-alpha-ae702f6a04-hosted-wizard-for-acceptance-2108-q-2026-10-21.md | Alpha ae702f6a04 (fourth update; code 97f4dbda1d): the hosted wizard starts at… |
 | 2026-10-21 14:15 PT | janus (designinproduct) | janus-to-exec-alpha-db-back-memory-512-2026-10-21.md | Alpha DB back: memory now 512 MB |
