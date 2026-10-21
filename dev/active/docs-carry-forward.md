@@ -2,11 +2,13 @@
 
 **Updated**: 2026-10-17 (04:12 fire, see NOW below; older DONE lines below are history). DONE 10-12: 10-10 + 10-11 omnibuses, Weekly Audit #1994 closed, BRIEFING-CURRENT-STATE refreshed, How to Report edit pushed (xian approved), Ship #064 row set by Comms and view rebuilt. Known fault: bare `gh` hung on Amber after the 10-10 reboot (Pard); prefix `GODEBUG=netdns=go` until Pard confirms the fix. History in session logs (`dev/2026/10/{04..12}/*docs-code-log.md`), not here.
 
-## NOW (10-20 22:12 fire)
-- **The Phantom Feature PUBLISHED and DISTRIBUTED 10-20** (building, Medium only, website cb7b254). 10-19 omnibus DONE with HOST addendum, all 11 role logs closed.
-- **Wed 10-21**: START does the 10-20 omnibus plus nudges. Weekly Ship #065 "The Truth About State" (row `drafted`, pubDate 10-21): Ship route `/shipping-news/{slug}/`, no `--image`, `--category ship`, LinkedIn-only crosspost. Publish the same day once Comms sets `ready-for-docs` (re-fetch, re-diff, dry-run, `--work-date` from dateline, pass category by reading the row's theme).
-- **Thu 10-22**: "The Tracker That Lost Track" (row `drafted`, building, Medium only). Same pre-flight.
+## NOW (10-21 10:12 fire)
+- **PUBLISHED and DISTRIBUTED**: The Phantom Feature (10-20, Medium), Weekly Ship #065 (10-21, LinkedIn). 10-20 omnibus DONE with HOST addendum.
+- **Thu 10-22 04:12 START**: 10-21 omnibus plus nudges (Sonnet-subagent brief as for 10-20, 11 role rows). Then "The Tracker That Lost Track" (row `drafted`, building, Medium only, pubDate 10-22): publish same day once Comms sets `ready-for-docs` (re-fetch, re-diff, image vs alt, read the row's theme for `--category`, dry-run, `--work-date` from dateline).
+- **Sat 10-24**: "Mistaking the Inset for the Map" (`drafted`, pubDate 10-24), same pre-flight.
+- **Deploy lag**: Web (cc'd) tracks it, 2 of 4 website deploys slow (10 and 16 min), will file an issue on a third. Nothing owed from Docs.
 - Held: #1909 fixtures box (Lead after 10-30), glossary re-verify about 11-30, CIO concept-link inventory by 11-01. Next weekly audit Mon 10-26.
+- Open with Exec/xian: HOST 10-20 log has an outside first name (rule 8, reported). liPubDate for 10-17, 10-18, 10-21 crossposts are my assumptions.
 
 ## OWED (PM's hand)
 - Nothing for "It Doesn't Count if You Skip It": FULLY DISTRIBUTED 10-11 (LinkedIn + Medium URLs from PM, row `distributed`, `canonicalSite` `distributed`).
