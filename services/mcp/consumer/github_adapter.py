@@ -2229,8 +2229,13 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
             # on GitHub) reads with its own stored grant instead, resolved the
             # way every connector read resolves it. No principal, or no grant,
             # is a read that did not happen (read_failed), never an empty window.
+            # #2123 (Arch): with a principal present, the read uses THAT principal's
+            # resolved credential even when a system REST session exists (an env
+            # GITHUB_TOKEN would otherwise answer for every account, and could see
+            # repos the account was never granted). The system session serves
+            # only principal-less callers.
             grant_headers: Optional[Dict[str, str]] = None
-            if user_id and not self._rest_configured():
+            if user_id:
                 grant_headers = await self._grant_headers_for(user_id)
                 if grant_headers is None:
                     empty["read_failed"] = [{"error": "no_credential"}]

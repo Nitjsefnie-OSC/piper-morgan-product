@@ -88,3 +88,32 @@ async def test_no_principal_keeps_the_pat_session_path(adapter):
     result = await adapter.get_recent_activity(7, repository="o/r")
     adapter.resolve_credential.assert_not_awaited()
     assert result["read_failed"] == [{"error": "no_response"}]
+
+
+@pytest.mark.asyncio
+async def test_a_principal_reads_with_its_own_grant_even_when_a_system_session_exists(adapter):
+    """#2123 (Arch): an env GITHUB_TOKEN configures a system REST session; a request
+    with a principal must still read with that principal's credential."""
+    adapter._rest_configured = lambda: True
+    adapter.resolve_credential = AsyncMock(return_value=_oauth_credential())
+    with (
+        patch(GRANT, new=AsyncMock(return_value="gho_mine")),
+        patch(SESSION, return_value=_Scope()),
+    ):
+        result = await adapter.get_recent_activity(7, repository="o/r", user_id="u-1")
+    assert "read_failed" not in result
+    for c in adapter._call_github_api.await_args_list:
+        assert c.kwargs["headers"] == {"Authorization": "Bearer gho_mine"}
+
+
+@pytest.mark.asyncio
+async def test_a_principal_with_no_credential_never_falls_back_to_the_system_session(adapter):
+    adapter._rest_configured = lambda: True
+    adapter.resolve_credential = AsyncMock(
+        return_value=DegradationResponse(
+            reason=DegradationReason.CONNECT_REQUIRED, user_message="connect GitHub"
+        )
+    )
+    result = await adapter.get_recent_activity(7, repository="o/r", user_id="u-1")
+    assert result["read_failed"] == [{"error": "no_credential"}]
+    adapter._call_github_api.assert_not_awaited()
