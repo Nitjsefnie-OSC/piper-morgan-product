@@ -2,14 +2,14 @@
 type: methodology
 title: methodology-49 — Described Is Not Running
 valid_from: "2026-08-12"
-last_updated: "2026-09-07"
+last_updated: "2026-10-21"
 ---
 
 # methodology-49 — Described Is Not Running
 
 **Status**: Emerging (one canonical instance plus five corroborating — three original, two added
-2026-09-07 from CXO's own re-sorted evidence; watching for independent cross-project recurrence
-before Proven)
+2026-09-07 from CXO's own re-sorted evidence, four more on 2026-10-21 from three seats in one
+incident; watching for independent cross-project recurrence before Proven)
 **Filed**: 2026-08-12 (CIO) · **Found by**: Janus (canonical instance) · **Routed by**: Docs
 (candidate correctly left to CIO to govern rather than self-filed — per methodology-28's own
 slot-availability discipline, which this file's neighbors, methodology-19/37, just paid the cost
@@ -73,6 +73,26 @@ observation could settle, and neither was observed before being acted on.
   a control... an absent hook and a silent hook look identical"** is this exact rule, already
   operative in this repo's prose, pre-dating this filing.
 
+## Four in one day, three seats: a guard read by its decision line (2026-10-21)
+
+All four came out of one incident: alpha's database died twice of memory, and the cohort built the
+promote step's health checks and an external Postgres restarter the same day. Each one was a
+safeguard judged by reading it, and each was caught by running it on what it would actually get.
+
+| who | read as working | what it did on the real input | caught by |
+|---|---|---|---|
+| Lead | the quiet-count reader "reads the old shape as absent" | read it as *broken*, and refused a dispatch on that bug | Lead, running the reader on 11 shapes |
+| Lead | "the deploy workflow's Fly token" can restart the database | the token is for another app | CIO, reading the token's scope |
+| CIO (filer) | Fly's restart policy as the first fix | `restart: always` was already set through both outages; Postgres died inside a machine that stayed started, and the image never restarts it | PA, reading the machine's config and the image source |
+| Arch | guard 1b "validated" from its `critical) ;;` case | its parser skipped Fly's real JSON (a map keyed by machine) and read `absent` for every input, so it would refuse every run | PA, running the guard's own Python on live `checks list` output |
+
+The third is the canonical shape: a config value whose name says the protection exists, and which
+the failure goes around. The fourth is the sharper one. The decision line was right, and it was
+reviewed. The input it decides on was assumed. Arch's own rule after it: *a guard that reads tool
+output is validated by running it on that tool's real output.* All four failed closed or were
+caught before anything changed, and in all four the reviewer had the real thing one read-only
+command away.
+
 ## Boundary — this is not methodology-44 restated
 
 m-44's claim is about an **instrument's output**: a check emits "clear" identically whether it
@@ -109,3 +129,7 @@ verdict, start with m-44. If it's prose, config, or a comment asserting a mechan
   literal syntax that triggers it — in the same rendering pipeline the bug lives in, not just in
   your source markdown.
 - A detector's existence is not its reach. Ask what consumes its output before calling it done.
+- For a guard or parser that reads another tool's output, the validation is running it on that
+  tool's real output, not reading its decision line. A config value that names a protection
+  ("restart: always") is a description of the protection; ask what event it acts on, and whether
+  the failure produces that event. (2026-10-21)
