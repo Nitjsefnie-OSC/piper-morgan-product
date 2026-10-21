@@ -8,11 +8,11 @@ caption: ''
 
 *October 9–15, 2026*
 
-The list of issues standing between us and the beta went from fourteen to six this week, and the target beta date (October 30) has not moved. Alpha was updated eight times, and most of what changed was verified on the hosted running build, by the agents and by me, before counted as done.
+The list of issues standing between us and the beta went from fourteen to six this week, and the target beta date (October 30) has not moved. Alpha was updated eight times, and most of what changed was verified on the hosted running build, by the agents and by me, before it was counted as done.
 
 Looking back over the week, nearly every user-facing fix was a variation on one theme: Piper saying what is actually true right now. *Is your GitHub connection working? What is actually due today? What did that delete just do?* Last week we clarified that code decides what's permitted. This week Piper got better at telling you the state of things, including when it doesn't know.
 
-The team learned a similar lesson about itself. Written rules kept slipping but rules checked by a script held.
+The team learned a similar lesson about itself. Written rules kept slipping, but rules checked by a script held.
 
 # 🚀 Shipped this week
 
@@ -28,7 +28,7 @@ On alpha:
 
 On [pipermorgan.ai](https://pipermorgan.ai/privacy), the privacy policy has a new section on your Piper account, and the site also picked up stronger keyboard-focus rings, a fixed skip link in dark mode, and some contrast fixes.
 
-Not yet: disconnecting an integration passed on the two pages we could test. The other three need a connection we don't have yet, so the issue stays open for now. A fix for current-format Anthropic keys in Settings is closed in code, but has not been tried it on alpha yet.
+Not yet: disconnecting an integration passed on the two pages we could test. The other three need a connection we don't have yet, so the issue stays open for now. A fix for current-format Anthropic keys in Settings is closed in code, but has not been tried on alpha yet.
 
 ## ⚙️ Below the line: engineering & architecture
 
@@ -40,9 +40,9 @@ Not yet: disconnecting an integration passed on the two pages we could test. The
 ## 🔬 Methodology & process innovation
 
 - **Rules in prose don't hold. Scripts do.** Seven of the ten agents wrote clock times they had guessed instead of looked up, some off by as much as four hours. The rule says to check the clock first, and it's been written down for months. Separately, the Friday request for each agent's weekly review got missed two Fridays running. (Right after this sprint window closed, both became checks in code: the Friday request now sends itself, and the mail tool refuses a memo stamped in the future.)
-- **Cost follows turns.** CXO noticed that what we spend tracks how many times the agents wake up, far more than which model they run. On one busy day CXO woke 41 times, and 20 of those were only to read copies of mail meant for someone else. We're changing copies like that to wait for the agent's next scheduled wake.
+- **Cost follows turns.** CXO noticed that what we spend tracks how many times the agents wake up, far more than which model they run. On one busy day CXO woke 41 times, and 20 of those were only to read copies of mail meant for another agent. We're changing copies like that to wait for the agent's next scheduled wake.
 
-I must say that relying on scripts for critical rules has been a bit of a game changer and relieves me of a lot of worried reminding or anxious noticing that a rule I thought was being followed has been ignored again.
+I must say that relying on scripts for critical rules has been a bit of a game changer and has relieved me of a lot of worried reminding or anxious noticing that a rule I thought was being followed has been ignored again.
 
 ## 🌍 Published this week
 
@@ -64,11 +64,11 @@ I must say that relying on scripts for critical rules has been a bit of a game c
 - **Updates to alpha:** 8
 - **Hand-written routing rules left (goal is reduction):** 155 → 90
 - **Max 20x plan weekly usage:** 88%
-- **API spend:** $41 (against a new $200/month credit),  mostly Lead's router scoring
+- **API spend:** $41, mostly Lead's router scoring (against a new $200/month credit)
 
 # 🎯 Coming up next week
 
-Close what's left on the gate and get it checked on alpha, so that on October 23 I can judge whether we're on track. We have been finding more issues but many are post-MVP and we continue to close them as fast as we find 'em.
+Close what's left on the gate and get it checked on alpha, so that on October 23 I can judge whether we're on track. We have been finding more issues, but many are post-MVP and we continue to close them as fast as we find 'em.
 
 # 🚧 Blockers & asks
 
@@ -93,7 +93,7 @@ xian + Piper Morgan Development Team
 
 This is Weekly Ship #065. Previous: [#064 "Code Decides Permission"](https://pipermorgan.ai/shipping-news/weekly-ship-064-code-decides-permission/).
 
-*P.S. A week or so ago I admitted to one of my agents that "I would not use this product" in the state it was in. Just the other day I wrote to Lead, "Now this product I would use!" or something similar.*
+*P.S. A couple of weeks ago I admitted to one of my agents that "I would not use this product" in the state it was in. Just the other day I wrote to Lead, "Now this product I would use!" or something similar.*
 
 *P.P.S. Full session logs and technical details available in the [GitHub repository](https://github.com/mediajunkie/piper-morgan-product) and [documentation site](https://pmorgan.tech). Yes, you can copy it. That just makes our protocol stronger.*
 
