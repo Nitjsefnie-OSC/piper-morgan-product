@@ -158,9 +158,14 @@ half unrelated).
 - **Main Tests red** on `3311d40219`; Lead's fix `9b7a46c883` was running at STOP. Recheck at START.
 - **MCP served-sha check:** on the next MCP deploy.
 
-### 10-19 STOP (21:48)
-- **Alpha `e801b1a309`, DB healthy.** Main 12 of 12 green; Lead names `5e17e627a2` as Tuesday's gate input. Must-close set from the weekend is empty (#2077, #2078, #1982, #2090 closed 10-19).
-- **TUESDAY, after Lead's promotion memo:** restart both streams into scratch (`fly logs -a piper-morgan`, `fly logs -a piper-morgan-db`, backgrounded) BEFORE Web starts scenario A or the canonical run. Triage the canonical CSV from `dev/2026/10/19/canonical-retest-1386-alpha.py` (61 queries; judge `claude-sonnet-5-5`, recalibrated baseline; Routing >= 90%, Quality >= 75%). It counts for #1386 criterion 2 (PPM) and for #2101's close (Class 4, one full run with no stall). Kill and delete the streams at STOP and confirm it in the entry (HOST's rule).
-- **#1386:** criterion 5 is 4 of 4 met; criterion 2 waits on Tuesday's run.
-- **Waiting on xian:** the OAuth security-log match against PA's and Lead's windows; Pard's key date (Fly dashboard).
-- **MCP served-sha check** on the next MCP deploy.
+### 10-20 STOP (21:47)
+- **Alpha `edf95b5c0c`** (includes #2123's fix `9e7bd077af`), main 12 of 12 green. #2101 closed. #2117, #2120, #2122 closed. Gate: 9 open MVP, 6 must-close (PPM 21:34).
+- **THURSDAY 10-22, the #1386 re-measure, then the OpenAI run.** PA runs both on the frozen harness `dev/2026/10/19/canonical-retest-1386-alpha.py` (`f7ae6f66a4`, effect reading, `UNWIRED_EXECUTION_READS_ACTION` on), with `PIPER_CRED_FILE` read by path, never printed.
+  1. **Start trigger:** Web's go once xian has connected the throwaway calendar on `web-seed-1386` and the events show (target Thu 09:00), or **no later than Thu 12:00 PT** (Lead confirmed). Past 12:00 with no calendar, run anyway; the nine Calendar rows count as they fall and are reported separately (PPM 16:18).
+  2. **Before:** mail Lead the start (Lead holds promotions). Read `/health` (sha, `loop_watchdog`). Restart both streams into scratch. GitHub REST read of the seed (milestone "Beta launch" due 10-29, PRs #27–29, commits). Web's events check.
+  3. **Run 1:** `web-seed-1386` (Anthropic test key). **Run 2:** `web-openai-run` (OpenAI throwaway key; cap is "xian's report, not read"). Same build, nothing in between. Then mail Lead the end; Web then asks #2112, #2091, #2092 on `web-seed-1386`.
+  4. **#1386 bars:** routing >= 90%, expected-pass >= 75%, both readings; seeded vs unseeded rows reported separately. Spec: `dev/2026/10/20/1386-seeded-account-spec-2026-10-20.md`; relabel table `dev/2026/10/20/1386-criterion-2-relabel-table-2026-10-20.md`.
+  5. **OpenAI pass bar (PPM 18:21):** wizard "Key accepted." (done, 19:38); 0 provider failures, 0 5xx, 0 `event_loop_blocked`; no missing-key refusal; no reply names the wrong provider or model (CXO judges); routing and expected-pass within 5 points on matched rows (baseline: the seeded run on the same build, minus seeded and Calendar rows). One run, no rerun except once for infrastructure. If it fails or doesn't run, the invitation says Anthropic only.
+  6. Delete the stream files at that day's STOP (HOST's rule).
+- **Waiting on xian:** the calendar sign-in (Thursday), #2092's yes or no (Exec asked), the OAuth match, Pard's key date, #2100's Notion row.
+- **MCP served-sha check:** on the next MCP deploy.
