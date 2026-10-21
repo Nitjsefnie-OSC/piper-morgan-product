@@ -1,6 +1,6 @@
 # Lead carry-forward — Fable 5.1 seat; Model A worktree ~/Development/piper-morgan-worktrees/lead
 
-## STATE @ 2026-10-21 07:35 PT — alpha 8e61423f1a (Wednesday's first update, 07:34; the quiet count served: `services.chat_turns_last_30m`); main 12/12 green; the promote gate refuses while `.accounts` > 0 (override input `quiet_override`).
+## STATE @ 2026-10-21 08:14 PT — alpha 95dea16f50 (Wednesday's second update, 08:14; the quiet count and `uptime_seconds` served; the quiet gate's first served verdict "quiet: 0"); main 12/12 green; a down alpha is its own gate branch (quiet_override reaches it).
 - **Done today:** the quiet count (lane quiet, 420d3fd2b7 → f885995a4a); CIO told the field name and the served read (grant condition 3).
 - **NOW / next:** Web's staging deploy-mid-chat row once the staging invite exists (xian or HOST with him; I fire a docs push on "go" and report the deploy step's times); Web's rows as they return (#2112 connected calendar after xian's Thu ~09:00 sign-in; #2100's Notion-bound row; #2123's proof needs a second GitHub account); Thursday: hold all promotions from PA's start mail (#1386 on web-seed-1386, latest 12:00 PT, then the OpenAI run on the same build) to the end-of-both-runs mail.
 - **Grant:** readiness-based, one green watch run after the previous promotion, 07:00–21:00, Step 0 READY on staging's sha, no migration, no hold, not during an announced test; the quiet count now gates every dispatch (absent → clock window; CIO writes the final text).
