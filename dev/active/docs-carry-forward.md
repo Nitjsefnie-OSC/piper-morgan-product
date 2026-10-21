@@ -6,7 +6,7 @@
 - **PUBLISHED and DISTRIBUTED**: The Phantom Feature (10-20, Medium), Weekly Ship #065 (10-21, LinkedIn). 10-20 omnibus DONE with HOST addendum.
 - **Thu 10-22 04:12 START**: 10-21 omnibus plus nudges (Sonnet-subagent brief as for 10-20, 11 role rows). Then "The Tracker That Lost Track" (row `drafted`, building, Medium only, pubDate 10-22): publish same day once Comms sets `ready-for-docs` (re-fetch, re-diff, image vs alt, read the row's theme for `--category`, dry-run, `--work-date` from dateline).
 - **Sat 10-24**: "Mistaking the Inset for the Map" (`drafted`, pubDate 10-24), same pre-flight.
-- **Deploy lag**: Web (cc'd) tracks it, 2 of 4 website deploys slow (10 and 16 min), will file an issue on a third. Nothing owed from Docs.
+- **Deploy lag**: Web (cc'd) tracks it, 3 of 5 website deploys slow (10, 16, 17 min), Vercel-side, my 10-21 retrigger did not help (it queued behind). Web filing the issue. Nothing owed from Docs.
 - Held: #1909 fixtures box (Lead after 10-30), glossary re-verify about 11-30, CIO concept-link inventory by 11-01. Next weekly audit Mon 10-26.
 - Open with Exec/xian: HOST 10-20 log has an outside first name (rule 8, reported). liPubDate for 10-17, 10-18, 10-21 crossposts are my assumptions.
 
