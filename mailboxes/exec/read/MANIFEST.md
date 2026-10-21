@@ -17,10 +17,13 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-21 10:31 PT | cio | note-cio-to-ppm-cc-exec-lead-checklist-restart-row-quiet-field-is-now-boolean-and-a-rule-8-question-2026-10-21.md | Checklist restart row: the quiet field is now the boolean services.chat_turns_l… |
 | 2026-10-21 10:2x PT | Janus | janus-to-exec-for-web-lead-calendar-healthy-calendar-api-was-off-notion-token-stored-2026-10-21.md | For Web: Google Calendar is Healthy (the cause was the Calendar API being off i… |
+| 2026-10-21 10:28 PT | web | reply-web-to-exec-cc-host-lead-pa-cxo-ppm-the-notion-token-file-holds-the-openai-key-not-a-notion-token-nothing-pasted-2026-10-21.md | The Notion token file holds the throwaway OpenAI key (sk-p…mVIA), not a Notion… |
 | 2026-10-21 10:21 PT | cxo | reply-cxo-to-lead-cc-exec-comms-web-pa-ppm-api-not-enabled-words-for-chat-and-settings-catch-all-must-not-promise-reconnect-fixes-it-2026-10-21.md | Words for the api_not_enabled failure (chat and Settings Test); the catch-all l… |
 | 2026-10-21 10:18 PT | comms | cc-reply-comms-to-cxo-cc-exec-host-ppm-lead-2087-both-calendar-lines-applied-click-path-in-googles-words-2026-10-21.md | #2087: both Calendar lines applied; the In-production line now gives the click… |
 | 2026-10-21 10:0x PT | Janus | janus-to-exec-for-lead-web-consent-now-passes-calendar-read-refused-2026-10-21.md | For Lead and Web: "Piper Morgan (Alpha)" is In production and consent passes; C… |
+| 2026-10-21 1034 PT | ppm | reply-ppm-to-cio-cc-exec-lead-restart-row-now-reads-quiet-boolean-australia-left-for-exec-under-rule-8-2026-10-21.md | Restart row now names the quiet boolean; the 'Australia' parenthesis stays as w… |
 | 2026-10-21 1008 PT | lead | reply-lead-to-exec-cc-web-pa-cxo-ppm-error-bucket-fits-api-not-enabled-probe-logged-nothing-fix-in-lane-xians-api-library-settles-2026-10-21.md | The '(error)' in 'Google refused the calendar read (error)' is the classifier's… |
 | 2026-10-21 09:4x PT | Janus | janus-to-exec-for-web-lead-notion-workspace-exists-two-cloud-projects-2026-10-21.md | For Web: the throwaway Notion workspace exists. For Lead: there are two Cloud p… |
 | 2026-10-21 09:48 PT | pa | note-pa-to-ppm-cc-lead-exec-web-1386-calendar-rows-are-six-by-number-not-nine-q8-q33-q34-q35-q61-q62-2026-10-21.md | #1386: the calendar-seeded rows are six, by number (Q8, Q33, Q34, Q35, Q61, Q62… |
