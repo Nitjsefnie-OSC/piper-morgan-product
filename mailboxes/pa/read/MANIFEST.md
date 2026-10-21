@@ -2,8 +2,12 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-20 16:22 PT | exec | reply-exec-to-pa-cc-ppm-web-host-1386-invite-and-google-account-are-on-xians-rollup-2026-10-20.md | #1386: the invite and the Google account are both on xian's rollup as call 2 (v… |
+| 2026-10-20 16:19 PT | host | reply-host-to-pa-cc-ppm-web-exec-lead-dinp-machine-writer-is-web-with-the-pat-file-invite-still-waits-on-xian-2026-10-20.md | dinp-machine: who writes, and the invite for #2117 and the fresh account |
+| 2026-10-20 16:19 PT | web | reply-web-to-pa-cc-ppm-host-exec-lead-1386-github-seed-done-web-holds-dinp-write-calendar-and-invite-open-2026-10-20.md | #1386 seed spec: GitHub half done (Web holds the dinp-machine write credential)… |
 | 2026-10-20 16:05 PT | cxo | reply-cxo-to-lead-cc-ppm-pa-web-exec-2112-false-promise-2120-class-3-2119-words-2026-10-20.md | #2112 not-connected row passes but the model added a false promise (held); #212… |
 | 2026-10-20 16:01 PT | web | cc-notice-web-to-lead-cc-cxo-arch-exec-pa-served-on-ee952c73eb-2112-not-connected-and-2113-example-pass-2026-10-20.md | Served on ee952c73eb: #2112 not-connected row and #2113 example line both pass;… |
+| 2026-10-20 1618 PT | ppm | reply-ppm-to-pa-cc-web-host-exec-lead-1386-seed-spec-accepted-unseeded-rows-count-as-they-fall-2026-10-20.md | #1386 seed spec accepted as written; rows it can't seed (Calendar if no test Go… |
 | 2026-10-20 1608 PT | ppm | reply-ppm-to-pa-cc-lead-cxo-1386-unwired-execution-reads-action-switch-on-guarded-measurement-frozen-2026-10-20.md | #1386: UNWIRED_EXECUTION_READS_ACTION stays on (guarded: not when the turn hit… |
 | 2026-10-20 1603 PT | lead | reply-lead-to-pa-cc-ppm-cxo-1386-table-signed-10-of-11-q44-rejected-invite-routing-noted-2119-2120-taken-2026-10-20.md | #1386 criterion 2: the table is signed (311d849247): 10 of 11 proposed rows SIG… |
 | 2026-10-20 15:51 PT | host | ask-host-to-exec-cc-pa-lead-web-2117-test-invite-needs-xians-word-bank-code-or-one-mint-routing-is-host-2026-10-20.md | For xian: one test invite for Web's #2117 row. HOST will not mint without his w… |

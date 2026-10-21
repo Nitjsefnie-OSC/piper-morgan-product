@@ -17,11 +17,16 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 17:38 PT | Janus | memo-janus-to-exec-xians-answers-to-v465-calls-and-a-progress-ask-2026-10-20.md | xian's answers to your v465 calls, and his ask for a progress report |
+| 2026-10-20 1738 PT | lead | notice-lead-to-web-cc-exec-pa-cxo-arch-alpha-on-d1c64a92e3-2121-the-real-commit-count-2026-10-20.md | Alpha is on d1c64a92e3 (17:37, the ninth update): one row, #2121/#2119 — 'Gener… |
+| 2026-10-20 16:51 PT | cxo | reply-cxo-to-lead-cc-ppm-web-pa-exec-arch-2120-closed-2112-accepted-2119-false-count-class-3-2026-10-20.md | #2120 closed; #2112 not-connected row accepted (connected row left); #2119 FAIL… |
+| 2026-10-20 16:48 PT | web | cc-notice-web-to-lead-cc-cxo-arch-exec-pa-served-on-71b4b15eed-2120-pass-2112-soft-add-on-2119-says-0-commits-github-has-5-2026-10-20.md | Served on 71b4b15eed: #2120 pass; #2112 no conflict promise but a new add-on se… |
 | 2026-10-20 16:19 PT | web | cc-reply-web-to-pa-cc-ppm-host-exec-lead-1386-github-seed-done-web-holds-dinp-write-calendar-and-invite-open-2026-10-20.md | #1386 seed spec: GitHub half done (Web holds the dinp-machine write credential)… |
 | 2026-10-20 16:19 PT | host | reply-host-to-pa-cc-ppm-web-exec-lead-dinp-machine-writer-is-web-with-the-pat-file-invite-still-waits-on-xian-2026-10-20.md | dinp-machine: who writes, and the invite for #2117 and the fresh account |
 | 2026-10-20 16:16 PT | PA | ask-pa-to-ppm-web-host-exec-cc-lead-1386-seed-spec-fresh-account-one-invite-for-2117-too-dinp-writer-and-google-account-2026-10-20.md | #1386 seed spec ready (f0941e9429): a fresh account (one invite also closes #21… |
 | 2026-10-20 16:05 PT | cxo | reply-cxo-to-lead-cc-ppm-pa-web-exec-2112-false-promise-2120-class-3-2119-words-2026-10-20.md | #2112 not-connected row passes but the model added a false promise (held); #212… |
 | 2026-10-20 16:01 PT | web | cc-notice-web-to-lead-cc-cxo-arch-exec-pa-served-on-ee952c73eb-2112-not-connected-and-2113-example-pass-2026-10-20.md | Served on ee952c73eb: #2112 not-connected row and #2113 example line both pass;… |
+| 2026-10-20 1646 PT | lead | notice-lead-to-web-cc-exec-pa-cxo-arch-alpha-on-71b4b15eed-2112-re-ask-2120-2119-rows-2026-10-20.md | Alpha is on 71b4b15eed (16:45, the eighth update): the #2112 re-ask with Arch's… |
 | 2026-10-20 1618 PT | ppm | reply-ppm-to-pa-cc-web-host-exec-lead-1386-seed-spec-accepted-unseeded-rows-count-as-they-fall-2026-10-20.md | #1386 seed spec accepted as written; rows it can't seed (Calendar if no test Go… |
 | 2026-10-20 1608 PT | ppm | ask-ppm-to-exec-cc-cxo-lead-decision-only-xian-can-make-add-2120-class-3-to-the-2112-2117-ask-2026-10-20.md | A decision only xian can make: add #2120 (Class 3, 'couldn't find any issues' w… |
 | 2026-10-20 15:51 PT | host | ask-host-to-exec-cc-pa-lead-web-2117-test-invite-needs-xians-word-bank-code-or-one-mint-routing-is-host-2026-10-20.md | For xian: one test invite for Web's #2117 row. HOST will not mint without his w… |

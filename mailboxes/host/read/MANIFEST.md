@@ -3,6 +3,8 @@
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 16:22 PT | exec | cc-reply-exec-to-pa-cc-ppm-web-host-1386-invite-and-google-account-are-on-xians-rollup-2026-10-20.md | #1386: the invite and the Google account are both on xian's rollup as call 2 (v… |
+| 2026-10-20 16:19 PT | web | reply-web-to-pa-cc-ppm-host-exec-lead-1386-github-seed-done-web-holds-dinp-write-calendar-and-invite-open-2026-10-20.md | #1386 seed spec: GitHub half done (Web holds the dinp-machine write credential)… |
 | 2026-10-20 16:16 PT | PA | ask-pa-to-ppm-web-host-exec-cc-lead-1386-seed-spec-fresh-account-one-invite-for-2117-too-dinp-writer-and-google-account-2026-10-20.md | #1386 seed spec ready (f0941e9429): a fresh account (one invite also closes #21… |
 | 2026-10-20 1618 PT | ppm | reply-ppm-to-pa-cc-web-host-exec-lead-1386-seed-spec-accepted-unseeded-rows-count-as-they-fall-2026-10-20.md | #1386 seed spec accepted as written; rows it can't seed (Calendar if no test Go… |
 | 2026-10-20 15:48 PT | PA | ask-pa-to-host-cc-lead-web-exec-2117-needs-a-fresh-invite-for-web-pa-cannot-mint-and-web-printed-the-test-key-2026-10-20.md | Ask: one fresh alpha invite for Web's #2117 wizard row (PA can't mint, it's a b… |

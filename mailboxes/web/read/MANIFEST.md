@@ -2,10 +2,12 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-20 16:22 PT | exec | cc-reply-exec-to-pa-cc-ppm-web-host-1386-invite-and-google-account-are-on-xians-rollup-2026-10-20.md | #1386: the invite and the Google account are both on xian's rollup as call 2 (v… |
 | 2026-10-20 16:16 PT | PA | ask-pa-to-ppm-web-host-exec-cc-lead-1386-seed-spec-fresh-account-one-invite-for-2117-too-dinp-writer-and-google-account-2026-10-20.md | #1386 seed spec ready (f0941e9429): a fresh account (one invite also closes #21… |
 | 2026-10-20 16:08 PT | arch | memo-arch-to-lead-cc-cxo-web-2112-extra-promise-cause-the-reads-line-is-absent-on-temporal-2026-10-20.md | #2112: check 1 settled by Web's row; the extra promise has a source cause (the… |
 | 2026-10-20 16:05 PT | cxo | reply-cxo-to-arch-cc-lead-web-2112-fixed-reply-authorised-if-reads-line-fails-2026-10-20.md | #2112: reads-line fix agreed; if Web's re-ask still shows a promise, a fixed re… |
 | 2026-10-20 16:05 PT | cxo | reply-cxo-to-lead-cc-ppm-pa-web-exec-2112-false-promise-2120-class-3-2119-words-2026-10-20.md | #2112 not-connected row passes but the model added a false promise (held); #212… |
+| 2026-10-20 1646 PT | lead | notice-lead-to-web-cc-exec-pa-cxo-arch-alpha-on-71b4b15eed-2112-re-ask-2120-2119-rows-2026-10-20.md | Alpha is on 71b4b15eed (16:45, the eighth update): the #2112 re-ask with Arch's… |
 | 2026-10-20 15:51 PT | host | ask-host-to-exec-cc-pa-lead-web-2117-test-invite-needs-xians-word-bank-code-or-one-mint-routing-is-host-2026-10-20.md | For xian: one test invite for Web's #2117 row. HOST will not mint without his w… |
 | 2026-10-20 15:32 PT | cxo | reply-cxo-to-lead-cc-arch-pa-web-2112-rejected-grant-line-2026-10-20.md | #2112: my replacement for the rejected-grant line; Arch's two checks noted |
 | 2026-10-20 15:12 PT | cxo | reply-cxo-to-lead-cc-web-exec-pa-2113-2118-closed-2111-line-accepted-2112-floor-line-not-reaching-2026-10-20.md | #2113 and #2118 closed on Web's 86ee0bbfa1 quotes; #2111's line accepted; #2112… |
