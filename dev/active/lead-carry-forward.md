@@ -1,5 +1,15 @@
 # Lead carry-forward — Fable 5.1 seat; Model A worktree ~/Development/piper-morgan-worktrees/lead
 
+## STATE @ 2026-10-20 17:38 PT — alpha d1c64a92e3 (NINTH update, 17:37: #2121 the OAuth activity read + #2119's honest failed-read line); main 12/12 green; CLOSED today by CXO: #2114 #2110 #2111 #2113 #2118 #2120 (+ #2101, #2105).
+- **Open on the served side (Web, on d1c64a92e3):** #2121/#2119: `Generate a status report` on `web-scn-a-1020` reads back the real commit count (a wrong count comes back to me); #2117 once HOST gets xian's word on an invite. #2112: CXO accepted the not-connected row; open on the connected-calendar row only (xian's account, via Exec).
+- **#1386:** relabel table signed (10 of 11); measurement frozen (effect reading, unwired-EXECUTION switch on, guarded); the pass is the seeded re-measure before 10-23 (PA's spec; Web seeded GitHub; invite + Google account on xian's rollup).
+- **Admissions (xian via Exec, PPM's ask):** #2112, #2117, #2120 (PPM recommends yes).
+- **Standing (filed today):** the #2113 question form's armed carrier (CXO: not before Friday); the #2112 fixed-reply contingency (CXO: only if a promise returns).
+- **NOW:** drained; next promotion only if something lands (one green watch run after 17:37). STOP wrap at the 21:17 fire: sign-off block, DAY-CLOSED marker, carry-forward DAY CLOSED with Wednesday's START order, `scripts/aging-standing-items.sh lead`, heartbeat STOP.
+- **Lessons (afternoon, cumulative):** a seam that "returns None on any failure" must be read as no-read by any consumer that counts (the false "0 commits"); a helper inserted before a decorated method steals the decorator (check the line above the def); a per-call kwarg on a pinned call changes its shape (branch, don't add); format every file a lane touches and run `ruff format --check .` before the push; a context block serves only the categories that assemble it; a new question site must arm or not ask; "close #123" in a commit body auto-closes; invite asks go to HOST; never estimate a minute.
+- **Cron:** e0bdd924 (`17 6,9,12,15,18,21`, expires ~10-26; rotate at the 10-25 START).
+
+### Earlier @ 2026-10-20 16:46
 ## STATE @ 2026-10-20 16:46 PT — alpha 71b4b15eed (EIGHTH update, 16:45: the #2112 reads line + CXO's reconnect line + env guard; #2120 and #2119 CXO's words; prompts.py examples); main green again after a 21-minute Code Quality red from my unformatted pin file (fixed df47279beb).
 - **Open on the served side (Web, on 71b4b15eed):** #2112 re-ask (no promise after CXO's two sentences; else the fixed code-composed reply CXO authorised 16:05 is the next unit); #2120's line; #2119's line ("I looked at … and found N commits"); #2117 once HOST gets xian's word on an invite. #2112 connected-calendar row = xian's account (Exec).
 - **#1386:** relabel table signed (10 of 11, Q44 rejected; 311d849247); PPM froze the measurement (effect reading, unwired-EXECUTION switch on, guarded); the pass is the seeded re-measure before 10-23 (PA's spec accepted; Web seeded GitHub; invite and Google account on xian's rollup).
