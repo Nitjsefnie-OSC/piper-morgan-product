@@ -45,9 +45,77 @@ def test_the_other_classes_are_unchanged():
 
 
 def test_the_chat_line_names_a_setup_step_on_our_side():
+    """CXO's words (10-21 10:21): say only what the class proves, and that
+    reconnecting won't fix it (the sentence the old catch-all got wrong)."""
     line = calendar_read_failed_line("api_not_enabled")
-    assert "Calendar API isn't switched on" in line
-    assert "on our side" in line
+    assert line == (
+        "I couldn't read your calendar. Google refused the request because the Calendar "
+        "service isn't switched on for this app yet. That's a setup step on our side, and "
+        "reconnecting won't fix it."
+    )
+    assert "API" not in line
+
+
+async def _settings_test_with_read_error(read_error):
+    from unittest.mock import AsyncMock, MagicMock, patch
+
+    from web.api.routes.integrations import _test_calendar
+
+    keychain = MagicMock()
+    keychain.get_api_key.return_value = "valid_refresh_token"
+    handler = MagicMock()
+    handler.refresh_access_token = AsyncMock(return_value=MagicMock(access_token="tok"))
+    with (
+        patch(
+            "services.integrations.calendar.oauth_handler.probe_calendar_read",
+            new=AsyncMock(return_value=read_error),
+        ),
+        patch(
+            "services.infrastructure.keychain_service.KeychainService",
+            return_value=keychain,
+        ),
+        patch(
+            "services.integrations.calendar.oauth_handler.GoogleCalendarOAuthHandler",
+            return_value=handler,
+        ),
+    ):
+        return await _test_calendar()
+
+
+@pytest.mark.asyncio
+async def test_settings_test_says_the_service_is_off_and_reconnecting_wont_help():
+    result = await _settings_test_with_read_error("api_not_enabled")
+    assert result["success"] is False
+    assert result["error_type"] == "api_not_enabled"
+    assert result["error"] == (
+        "Google refused the calendar read: the Calendar service isn't switched on "
+        "for this app yet. That's a setup step on our side. Reconnecting won't help."
+    )
+
+
+@pytest.mark.asyncio
+async def test_settings_test_catch_all_does_not_promise_that_reconnecting_fixes_it():
+    """CXO: "(error)" tells the user nothing, and "Reconnect and try again" is a
+    promise the product can't back when the cause is ours."""
+    result = await _settings_test_with_read_error("error")
+    assert result["success"] is False
+    assert result["error_type"] == "error"
+    assert result["error"] == (
+        "Google refused the calendar read, and I couldn't tell why. "
+        "Reconnecting may help. If it doesn't, tell us."
+    )
+    assert "(error)" not in result["error"]
+    assert "Reconnect and try again" not in result["error"]
+
+
+@pytest.mark.asyncio
+async def test_settings_test_keeps_the_known_classes_on_their_lines():
+    """CXO: only the catch-all and the new class change."""
+    result = await _settings_test_with_read_error("unauthorized")
+    assert result["error_type"] == "unauthorized"
+    assert result["error"] == (
+        "Google refused the calendar read (unauthorized). Reconnect and try again."
+    )
 
 
 @pytest.mark.asyncio
