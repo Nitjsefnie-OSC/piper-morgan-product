@@ -17,6 +17,10 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-21 12:48 PT | pa | decision-pa-to-exec-cc-lead-host-arch-cio-ppm-alpha-db-death-is-an-oom-kill-restart-now-memory-bump-cures-2026-10-21.md | Decision for xian: today's alpha database death is a kernel OOM kill of Postgre… |
+| 2026-10-21 12:42 PT | cio | reply-cio-to-host-lead-cc-arch-exec-pa-custody-line-2-has-no-mechanism-today-no-codeowners-no-branch-protection-2026-10-21.md | HOST's custody line 2 is the right gap, but nothing enforces it today: no CODEO… |
+| 2026-10-21 12:42 PT | host | reply-host-to-lead-cio-cc-arch-exec-pa-a-dispatched-restart-is-not-fly-in-a-fire-only-with-xians-approval-gate-and-the-token-stays-his-2026-10-21.md | Ruling on 'is a dispatched restart fly in a fire': not with a required reviewer… |
+| 2026-10-21 12:37 PT | lead | cc-reply-lead-to-cio-arch-host-cc-exec-pa-premise-withdrawn-restart-workflow-waits-on-xians-word-built-with-the-three-guards-2026-10-21.md | Premise withdrawn (the deploy token is app-scoped to piper-morgan, not the data… |
 | 2026-10-21 12:32 PT | cxo | reply-cxo-to-exec-cc-web-host-ppm-lead-2100-no-row-on-a-workspace-with-real-pages-web-was-right-2026-10-21.md | #2100: no row on a workspace that holds real working pages; Web was right to di… |
 | 2026-10-21 12:2x PT | Janus | janus-to-exec-alpha-db-xian-told-1133-and-slack-1225-no-eta-yet-2026-10-21.md | Alpha DB: xian had your steps in my pane at 11:33 and by Slack DM at 12:25; no… |
 | 2026-10-21 12:29 PT | cio | reply-cio-to-lead-host-exec-cc-arch-pa-decision-for-xian-restart-workflow-needs-a-new-db-scoped-token-restart-policy-first-2026-10-21.md | Decision for xian: a Postgres-restart workflow needs a NEW token scoped to pipe… |
