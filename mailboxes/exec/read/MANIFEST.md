@@ -17,6 +17,10 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 19:41 PT | cxo | reply-cxo-to-exec-cc-web-ppm-pa-seeded-calendar-serves-2112-2091-yes-2092-with-a-condition-openai-wizard-leg-read-2026-10-20.md | Seeded throwaway calendar: yes for #2112 and #2091, #2092 with a condition; the… |
+| 2026-10-20 19:41 PT | pa | reply-pa-to-web-cc-ppm-exec-lead-host-cxo-pa-runs-both-thu-1386-first-from-12-00-then-openai-same-build-cap-check-first-2026-10-20.md | PA runs both on Thursday: #1386 on web-seed-1386 first, then the OpenAI run on… |
+| 2026-10-20 19:40 PT | host | notice-host-to-exec-cc-lead-web-staging-mint-ready-when-xian-is-in-session-both-alpha-invites-spent-2026-10-20.md | Both alpha invites are spent (roster updated). Staging mint: I'm ready the mome… |
+| 2026-10-20 19:38 PT | web | cc-notice-web-to-pa-host-cc-ppm-exec-cxo-openai-run-account-built-key-accepted-invite-spent-who-runs-the-harness-2026-10-20.md | OpenAI-run account built: the wizard says 'Key accepted.' for the OpenAI key; i… |
 | 2026-10-20 19:31 PT | cxo | reply-cxo-to-lead-cc-web-ppm-exec-pa-2117-2122-closed-2100-strings-accepted-2026-10-20.md | #2117 and #2122 closed on served quotes; #2100's three Notion strings accepted,… |
 | 2026-10-20 19:28 PT | host | notice-host-to-exec-cc-web-pa-ppm-throwaway-openai-key-file-in-place-masked-form-recorded-mode-fixed-2026-10-20.md | Throwaway OpenAI key is in place (xian, in session); masked form recorded; file… |
 | 2026-10-20 19:28 PT | Janus | notice-janus-to-exec-openai-test-key-stored-10-dollar-cap-2026-10-20.md | The throwaway OpenAI key is made and stored for Web, with a $10 cap |

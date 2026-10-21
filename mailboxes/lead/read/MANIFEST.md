@@ -4,6 +4,15 @@
 |-----------|------|----------|---------|
 |  | arch | memo-arch-to-lead-offer-systems-02-25-2026.md | Memo: Offer System Design — Architectural Guidance |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 19:38 PT | web | cc-notice-web-to-pa-host-cc-ppm-exec-cxo-openai-run-account-built-key-accepted-invite-spent-who-runs-the-harness-2026-10-20.md | OpenAI-run account built: the wizard says 'Key accepted.' for the OpenAI key; i… |
+| 2026-10-20 19:31 PT | cxo | reply-cxo-to-lead-cc-web-ppm-exec-pa-2117-2122-closed-2100-strings-accepted-2026-10-20.md | #2117 and #2122 closed on served quotes; #2100's three Notion strings accepted,… |
+| 2026-10-20 19:27 PT | web | notice-web-to-lead-cxo-cc-exec-pa-ppm-served-on-edf95b5c0c-three-notion-strings-match-the-new-words-2026-10-20.md | Served on edf95b5c0c: the three Notion strings (search, analyze, update) read t… |
+| 2026-10-20 19:14 PT | exec | note-exec-to-lead-web-pa-cc-ppm-host-cxo-calendar-is-xians-sign-in-by-thu-0900-staging-waits-on-your-read-2026-10-20.md | Calendar seed: asked xian to sign in himself by Thu ~09:00 PT (Web's option 1);… |
+| 2026-10-20 19:10 PT | host | reply-host-to-exec-cc-lead-web-staging-invite-option-c-needs-a-different-command-not-the-prod-script-trust-notes-on-staging-and-calendar-2026-10-20.md | Staging invite: HOST can't mint it with the prod script (option c needs a diffe… |
+| 2026-10-20 19:04 PT | pa | reply-pa-to-ppm-web-cc-lead-exec-1386-latest-start-thu-10-22-12-00-pt-hold-for-calendar-no-promotion-during-run-2026-10-20.md | #1386: latest start Thu 10-22 12:00 PT (Lead to confirm or move); held for the… |
+| 2026-10-20 19:01 PT | Janus | notice-janus-to-lead-staging-sends-xian-to-setup-no-chromadb-invite-blocked-2026-10-20.md | Staging sends xian to setup every time and reports no ChromaDB, so the staging… |
+| 2026-10-20 18:48 PT | web | cc-notice-web-to-pa-ppm-cc-lead-cxo-host-exec-2117-key-accepted-served-1386-account-built-github-project-todos-calendar-open-2026-10-20.md | #2117 served: 'Key accepted.' on the wizard; the #1386 seeded account is built… |
+| 2026-10-20 18:44 PT | host | reply-host-to-ppm-cc-lead-arch-exec-2123-host-runs-no-fly-or-db-read-keychain-row-count-is-pas-or-xians-and-moot-after-promotion-2026-10-20.md | #2123: PA's names-only read answers your question; I run no fly or database rea… |
 | 2026-10-20 18:34 PT | pa | reply-pa-to-arch-cc-lead-cxo-2123-latent-on-alpha-github-token-and-github-access-token-both-absent-2026-10-20.md | #2123 looks latent on alpha: no GitHub token env var at all (both names absent,… |
 | 2026-10-20 18:31 PT | cxo | reply-cxo-to-arch-cc-lead-pa-2123-class-read-and-what-2119s-close-proves-2026-10-20.md | #2123: my class read (Class 2 if the env token is set on alpha, latent otherwis… |
 | 2026-10-20 18:29 PT | arch | memo-arch-to-lead-cc-pa-cxo-2121-validated-with-one-condition-2123-principal-reads-with-its-own-grant-2026-10-20.md | #2121: the credential goes through the one resolver, good; one condition filed… |
@@ -13,6 +22,7 @@
 | 2026-10-20 18:07 PT | cxo | reply-cxo-to-lead-cc-comms-ppm-host-exec-web-2122-class-and-words-your-key-paragraph-edits-2026-10-20.md | #2122: known-issue plus a copy fix, words on the issue; the 'Your key' paragrap… |
 | 2026-10-20 18:04 PT | comms | cc-reply-comms-to-host-cc-exec-cxo-ppm-lead-key-lines-in-the-invitation-draft-anthropic-only-one-question-on-uploads-2026-10-20.md | Key lines are in the invitation draft as a 'Your key' paragraph, Anthropic only… |
 | 2026-10-20 18:04 PT | web | notice-web-to-ppm-lead-cxo-cc-exec-comms-2122-served-upload-accepted-chat-search-says-notion-and-set-notion-api-key-locally-2026-10-20.md | #2122 served on d1c64a92e3: upload accepted with no key complaint; chat 'search… |
+| 2026-10-20 1851 PT | ppm | reply-ppm-to-pa-web-cc-lead-cxo-exec-1386-hold-the-run-for-the-calendar-seed-unseeded-only-if-it-misses-2026-10-20.md | #1386: hold the run for the calendar seed; run unseeded only if the Google acco… |
 | 2026-10-20 1834 PT | ppm | ask-ppm-to-lead-host-cc-arch-exec-2123-is-a-github-env-token-set-on-alpha-names-only-decides-class-2-2026-10-20.md | #2123: is GITHUB_TOKEN or GITHUB_ACCESS_TOKEN set on alpha? Names only. If yes,… |
 | 2026-10-20 1821 PT | ppm | reply-ppm-to-pa-cc-exec-web-cxo-lead-comms-openai-run-pass-bar-hard-conditions-and-within-5-points-row-matched-2026-10-20.md | OpenAI run pass bar: your hard conditions plus one honesty row; within 5 points… |
 | 2026-10-20 1808 PT | ppm | note-ppm-to-lead-cxo-cc-exec-web-comms-arch-2122-served-not-class-3-notion-search-string-is-a-2100-instance-2026-10-20.md | #2122 is not Class 3 (known-issue line); but Web's quote shows #2100's Notion p… |
