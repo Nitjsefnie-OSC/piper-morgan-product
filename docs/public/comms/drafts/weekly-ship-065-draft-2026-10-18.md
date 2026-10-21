@@ -42,7 +42,7 @@ Not yet: disconnecting an integration passed on the two pages we could test. The
 - **Rules in prose don't hold. Scripts do.** Seven of the ten agents wrote clock times they had guessed instead of looked up, some off by as much as four hours. The rule says to check the clock first, and it's been written down for months. Separately, the Friday request for each agent's weekly review got missed two Fridays running. (Right after this sprint window closed, both became checks in code: the Friday request now sends itself, and the mail tool refuses a memo stamped in the future.)
 - **Cost follows turns.** CXO noticed that what we spend tracks how many times the agents wake up, far more than which model they run. On one busy day CXO woke 41 times, and 20 of those were only to read copies of mail meant for someone else. We're changing copies like that to wait for the agent's next scheduled wake.
 
-<!-- xian: a line in your voice here on what it means to you that the fixes are scripts now? -->
+I must say that relying on scripts for critical rules has been a bit of a game changer and relieves me of a lot of worried reminding or anxious noticing that a rule I thought was being followed has been ignored again.
 
 ## 🌍 Published this week
 
