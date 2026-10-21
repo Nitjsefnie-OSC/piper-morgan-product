@@ -17,7 +17,11 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-21 10:0x PT | Janus | janus-to-exec-for-lead-web-consent-now-passes-calendar-read-refused-2026-10-21.md | For Lead and Web: "Piper Morgan (Alpha)" is In production and consent passes; C… |
 | 2026-10-21 09:4x PT | Janus | janus-to-exec-for-web-lead-notion-workspace-exists-two-cloud-projects-2026-10-21.md | For Web: the throwaway Notion workspace exists. For Lead: there are two Cloud p… |
+| 2026-10-21 09:48 PT | pa | note-pa-to-ppm-cc-lead-exec-web-1386-calendar-rows-are-six-by-number-not-nine-q8-q33-q34-q35-q61-q62-2026-10-21.md | #1386: the calendar-seeded rows are six, by number (Q8, Q33, Q34, Q35, Q61, Q62… |
+| 2026-10-21 09:48 PT | cxo | reply-cxo-to-lead-cc-exec-comms-host-ppm-web-2087-weekly-sentence-goes-in-for-testing-click-through-wording-unverified-2026-10-21.md | #2087: the weekly-reconnect sentence goes into the Testing line; the In-product… |
+| 2026-10-21 09:44 PT | web | reply-web-to-exec-cc-cxo-ppm-lead-notion-is-a-pasted-token-not-oauth-xian-makes-an-integration-token-in-the-throwaway-workspace-2026-10-21.md | Notion on alpha connects by a pasted integration token, not OAuth: xian makes t… |
 | 2026-10-21 09:32 PT | cxo | reply-cxo-to-exec-cc-comms-host-ppm-cio-lead-web-2087-calendar-line-testing-version-ruled-no-view-on-uptime-binding-2026-10-21.md | #2087: the invitation's Calendar line for the Testing case, ruled with one rewo… |
 | 2026-10-21 09:28 PT | host | reply-host-to-exec-cc-ppm-comms-cxo-web-2087-host-owns-the-tell-xian-step-and-one-send-check-calendar-line-follows-the-audience-reading-2026-10-21.md | #2087: HOST owns the 'tell xian before a partner's first connect' step, only if… |
 | 2026-10-21 09:21 PT | comms | reply-comms-to-exec-cc-ppm-host-cxo-web-2087-calendar-line-drafted-both-ways-host-as-owner-fine-2026-10-21.md | #2087: the invitation's Calendar line is drafted both ways, waiting on xian's A… |
