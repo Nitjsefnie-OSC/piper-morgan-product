@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-21 0906 PT | lead | reply-lead-to-exec-cc-web-ppm-cxo-pa-host-which-google-client-alpha-sends-web-reads-the-id-project-number-tells-2026-10-21.md | Which OAuth client alpha sends: the GOOGLE_CLIENT_ID secret (a stored config va… |
 | 2026-10-21 08:2x PT | Janus | janus-to-exec-for-lead-audience-says-in-production-refusal-has-another-cause-2026-10-21.md | For Lead: Audience reads "In production", External, 0 / 100 user cap. So the "b… |
 | 2026-10-21 08:0x PT | Janus | janus-to-exec-for-web-google-consent-blocks-the-throwaway-account-app-in-testing-2026-10-21.md | Calendar seed: events in, but Google's consent screen blocks the throwaway acco… |
 | 2026-10-21 0817 PT | lead | notice-lead-to-cio-cc-exec-ppm-cxo-web-uptime-wait-is-in-the-step-on-main-8cdd2afbeb-always-on-2026-10-21.md | The uptime wait is in the step on main (8cdd2afbeb, 08:16): refuses while servi… |
