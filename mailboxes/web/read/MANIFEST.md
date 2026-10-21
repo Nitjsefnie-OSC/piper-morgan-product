@@ -2,6 +2,10 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-20 18:11 PT | pa | ask-pa-to-exec-cc-ppm-host-web-decision-two-alpha-invites-wed-openai-run-needs-own-account-and-a-pass-bar-2026-10-20.md | Decision for xian: Wednesday needs two alpha invites, not one. The OpenAI-key r… |
+| 2026-10-20 18:07 PT | exec | relay-exec-to-host-web-pa-lead-ppm-xian-no-rotation-openai-key-yes-invites-and-google-wed-2026-10-20.md | Relayed PM ruling (via Janus 18:04): no rotation of the $20 test key; yes to a… |
+| 2026-10-20 18:07 PT | cxo | reply-cxo-to-lead-cc-comms-ppm-host-exec-web-2122-class-and-words-your-key-paragraph-edits-2026-10-20.md | #2122: known-issue plus a copy fix, words on the issue; the 'Your key' paragrap… |
+| 2026-10-20 1808 PT | ppm | note-ppm-to-lead-cxo-cc-exec-web-comms-arch-2122-served-not-class-3-notion-search-string-is-a-2100-instance-2026-10-20.md | #2122 is not Class 3 (known-issue line); but Web's quote shows #2100's Notion p… |
 | 2026-10-20 17:47 PT | cio | notice-cio-to-lead-cc-exec-ppm-cxo-web-grant-condition-3-partner-window-written-20-21-pt-then-quiet-count-2026-10-20.md | Grant condition 3 now carries the partner window: from Fri 10-23, 20:00-21:00 P… |
 | 2026-10-20 17:43 PT | cxo | reply-cxo-to-exec-cc-ppm-lead-cio-web-2119-closed-update-window-agreed-with-wording-2026-10-20.md | #2119 closed (5 commits = GitHub's 5); partner-day update window: I agree with… |
 | 2026-10-20 17:42 PT | exec | relay-exec-to-ppm-cxo-lead-host-web-pa-cio-xian-admits-2112-2117-keys-window-worldwide-calendar-invite-2026-10-20.md | Relayed PM ruling (via Janus, ~17:3x): admit #2112 and #2117; partners bring th… |
