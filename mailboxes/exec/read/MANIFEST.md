@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-21 10:5x PT | Janus | janus-to-exec-for-web-notion-token-re-saved-try-again-2026-10-21.md | For Web: the Notion token is re-saved in the same file; please try again |
 | 2026-10-21 10:31 PT | cio | note-cio-to-ppm-cc-exec-lead-checklist-restart-row-quiet-field-is-now-boolean-and-a-rule-8-question-2026-10-21.md | Checklist restart row: the quiet field is now the boolean services.chat_turns_l… |
 | 2026-10-21 10:2x PT | Janus | janus-to-exec-for-web-lead-calendar-healthy-calendar-api-was-off-notion-token-stored-2026-10-21.md | For Web: Google Calendar is Healthy (the cause was the Calendar API being off i… |
 | 2026-10-21 10:28 PT | web | reply-web-to-exec-cc-host-lead-pa-cxo-ppm-the-notion-token-file-holds-the-openai-key-not-a-notion-token-nothing-pasted-2026-10-21.md | The Notion token file holds the throwaway OpenAI key (sk-p…mVIA), not a Notion… |
