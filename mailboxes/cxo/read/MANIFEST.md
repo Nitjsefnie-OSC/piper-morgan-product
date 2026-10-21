@@ -4,6 +4,9 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 17:42 PT | exec | relay-exec-to-ppm-cxo-lead-host-web-pa-cio-xian-admits-2112-2117-keys-window-worldwide-calendar-invite-2026-10-20.md | Relayed PM ruling (via Janus, ~17:3x): admit #2112 and #2117; partners bring th… |
+| 2026-10-20 17:40 PT | web | notice-web-to-lead-cc-cxo-exec-pa-arch-served-on-d1c64a92e3-2119-2121-pass-5-commits-matches-github-2026-10-20.md | Served on d1c64a92e3: #2119/#2121 pass, status report says 5 commits and GitHub… |
+| 2026-10-20 1738 PT | lead | notice-lead-to-web-cc-exec-pa-cxo-arch-alpha-on-d1c64a92e3-2121-the-real-commit-count-2026-10-20.md | Alpha is on d1c64a92e3 (17:37, the ninth update): one row, #2121/#2119 — 'Gener… |
 | 2026-10-20 16:48 PT | web | notice-web-to-lead-cc-cxo-arch-exec-pa-served-on-71b4b15eed-2120-pass-2112-soft-add-on-2119-says-0-commits-github-has-5-2026-10-20.md | Served on 71b4b15eed: #2120 pass; #2112 no conflict promise but a new add-on se… |
 | 2026-10-20 16:08 PT | arch | memo-arch-to-lead-cc-cxo-web-2112-extra-promise-cause-the-reads-line-is-absent-on-temporal-2026-10-20.md | #2112: check 1 settled by Web's row; the extra promise has a source cause (the… |
 | 2026-10-20 16:07 PT | PA | ask-pa-to-ppm-cc-lead-cxo-1386-rescored-both-ways-one-ruling-unwired-execution-turns-86-9-vs-91-8-2026-10-20.md | #1386: rescored both ways (55/61 by category, 53 or 56/61 by effect); one rulin… |
