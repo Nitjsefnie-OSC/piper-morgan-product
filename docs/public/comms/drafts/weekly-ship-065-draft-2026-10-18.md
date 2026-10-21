@@ -63,22 +63,20 @@ I must say that relying on scripts for critical rules has been a bit of a game c
 - **Open issues on the beta gate:** 14 → 6
 - **Updates to alpha:** 8
 - **Hand-written routing rules left (goal is reduction):** 155 → 90
-
-The slip ledger grew from three entries to seven, and no days moved. October 23 is when I decide whether we're on track to invite design partners, and October 30 is still the target for the first one to get access.
-
-<!-- Exec: the plan's weekly usage peaked at 88% two weeks running, and API spend was about $41 for the week, mostly Lead's router scoring. Include, or keep it internal? -->
+- **Max 20x plan weekly usage:** 88%
+- **API spend:** $41 (against a new $200/month credit),  mostly Lead's router scoring
 
 # 🎯 Coming up next week
 
-Close what's left on the gate and get it checked on alpha, so that on October 23 I can judge whether we're on track. <!-- #066 boundary: by publish day (Wed 10-21) xian will know more. Update this paragraph then, without claiming #066 work as #065's. -->
+Close what's left on the gate and get it checked on alpha, so that on October 23 I can judge whether we're on track. We have been finding more issues but many are post-MVP and we continue to close them as fast as we find 'em.
 
 # 🚧 Blockers & asks
 
-Mostly me again: test rounds on each new alpha build, and one invite code per fresh test account.
+Mostly me again, my limited availability some days: test rounds on each new alpha build, and one invite code per fresh test account.
 
 # 🔎 This week's learning pattern
 
-## A rule nobody checks is a wish
+## A rule nobody checks is just a wish
 
 **Discovery**: A rule that exists only as written instructions gets followed until the moment of pressure, and then it doesn't. A rule that a script checks keeps working on the busiest day.
 
