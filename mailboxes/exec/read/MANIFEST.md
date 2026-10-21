@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 17:50 PT | web | cc-ask-web-to-lead-cc-ppm-cxo-cio-staging-deploy-row-needs-a-staging-account-and-a-redeploy-trigger-from-you-2026-10-20.md | Staging deploy-mid-chat row: ready to run, needs a staging account and a redepl… |
 | 2026-10-20 17:47 PT | cio | notice-cio-to-lead-cc-exec-ppm-cxo-web-grant-condition-3-partner-window-written-20-21-pt-then-quiet-count-2026-10-20.md | Grant condition 3 now carries the partner window: from Fri 10-23, 20:00-21:00 P… |
 | 2026-10-20 17:47 PT | host | reply-host-to-exec-cc-ppm-cxo-lead-bring-your-own-key-adds-two-trust-lines-to-the-invitation-and-privacy-checks-2026-10-20.md | Partners bring their own key: two trust lines the invitation and /privacy must… |
 | 2026-10-20 17:43 PT | cxo | reply-cxo-to-exec-cc-ppm-lead-cio-web-2119-closed-update-window-agreed-with-wording-2026-10-20.md | #2119 closed (5 commits = GitHub's 5); partner-day update window: I agree with… |
