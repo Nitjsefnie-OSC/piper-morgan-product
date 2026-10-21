@@ -120,14 +120,29 @@ def _uptime_seconds() -> int:
 
 
 def _quiet_count() -> Dict[str, Any]:
-    """The name-free activity window from the intent service's recorder. A failure
-    serves a marker, never a quiet-looking zero (Arch, 2026-10-21: a counter that
-    cannot count must not read as quiet; the gate refuses on a field with no
-    integer ``accounts``). /health stays 200 either way."""
+    """The quiet verdict for the promote gate, from the intent service's recorder.
+
+    CIO (2026-10-21): /health is public, so it serves only ``quiet`` (no account
+    sent a chat turn in the last 30 minutes) plus the failure marker; the counts
+    go to the server log. A failure serves ``{"error": "unavailable"}`` and a
+    record failure inside the window serves ``quiet: false`` with the flag, so
+    a counter that cannot count never reads as quiet (Arch). /health stays 200.
+    """
     try:
         from services.infrastructure.turn_activity import TURN_ACTIVITY
 
-        return TURN_ACTIVITY.snapshot()
+        snap = TURN_ACTIVITY.snapshot()
+        failed = bool(snap.get("record_failed_in_window"))
+        logger.info(
+            "quiet_count_computed",
+            accounts=snap.get("accounts"),
+            turns=snap.get("turns"),
+            record_failed_in_window=failed,
+        )
+        return {
+            "quiet": (snap.get("accounts") == 0) and not failed,
+            "record_failed_in_window": failed,
+        }
     except Exception:  # silent-ok: /health is polled by Fly; never let a counter fail it
         return {"error": "unavailable"}
 

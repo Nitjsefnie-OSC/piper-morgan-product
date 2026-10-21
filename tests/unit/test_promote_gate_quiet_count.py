@@ -30,3 +30,5 @@ def test_the_promote_job_carries_the_quiet_gate():
     assert "Quiet count broken" in gate
     assert "record_failed_in_window" in gate
     assert gate.index('"broken"') < gate.index("Quiet count broken")
+    reader = [line for line in gate.splitlines() if 'verdict="$(printf' in line][0]
+    assert "accounts" not in reader  # the count is not read; the verdict is

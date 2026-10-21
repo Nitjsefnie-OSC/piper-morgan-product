@@ -412,7 +412,8 @@ jobs:
         run: |
           # Grant condition 3 (CIO 2026-10-20, xian's ruling): partners are worldwide, so no hour
           # is quiet; a promotion waits until alpha's own /health says no account sent a chat turn
-          # in the last 30 minutes (`services.chat_turns_last_30m.accounts`, name-free). A build
+          # in the last 30 minutes (`services.chat_turns_last_30m.quiet`, a verdict only: the
+          # counts are in the server log, CIO 2026-10-21). A build
           # that does not serve the field (absent) is noted and not refused: until it is served
           # the grant's clock window applies, which is the operator's rule, not this step's.
           # Condition 3(c): a must-close may go out on xian's word with quiet_override=true.
@@ -432,25 +433,29 @@ jobs:
             # Arch (2026-10-21): a served-but-broken count is not an older build. The reader
             # prints "absent" (no field), "broken" (a field with no integer accounts, or a
             # record failure inside the window), or the integer.
-            accounts="$(printf '%s' "$body" | python3 -c 'import sys,json; v=(json.load(sys.stdin).get("services") or {}).get("chat_turns_last_30m"); print("absent" if v is None else ("broken" if (not isinstance(v, dict) or not isinstance(v.get("accounts"), int) or v.get("record_failed_in_window") is True) else v["accounts"]))')"
-            if [ "$accounts" = "absent" ]; then
+            # CIO (2026-10-21): /health serves only the verdict (`quiet` true/false) plus the
+            # failure marker; the counts are in the server log. The reader prints absent (no
+            # field), broken (no boolean `quiet`, an error marker, or a record failure inside
+            # the window), quiet, or busy.
+            verdict="$(printf '%s' "$body" | python3 -c 'import sys,json; v=(json.load(sys.stdin).get("services") or {}).get("chat_turns_last_30m"); print("absent" if v is None else ("broken" if (not isinstance(v, dict) or not isinstance(v.get("quiet"), bool) or v.get("record_failed_in_window") is True) else ("quiet" if v["quiet"] else "busy")))')"
+            if [ "$verdict" = "absent" ]; then
               echo "::notice title=Quiet count not served::alpha /health has no services.chat_turns_last_30m; the grant's clock window applies to this promotion."
-            elif [ "$accounts" = "broken" ]; then
+            elif [ "$verdict" = "broken" ]; then
               if [ "$QUIET_OVERRIDE" = "true" ]; then
-                echo "::warning title=Quiet count broken, overridden::alpha serves the field without a usable count (an error marker or a record failure in the window); promoting on quiet_override (grant condition 3(c), xian's word)."
+                echo "::warning title=Quiet count broken, overridden::alpha serves the field without a usable verdict (an error marker or a record failure in the window); promoting on quiet_override (grant condition 3(c), xian's word)."
               else
-                echo "::error title=Quiet count broken::alpha serves services.chat_turns_last_30m without a usable count (an error marker, or a record failure inside the window). A counter that cannot count must not read as quiet. Fix the counter, or dispatch with quiet_override=true on xian's word for a must-close."
+                echo "::error title=Quiet count broken::alpha serves services.chat_turns_last_30m without a usable verdict (an error marker, or a record failure inside the window). A counter that cannot count must not read as quiet. Fix the counter, or dispatch with quiet_override=true on xian's word for a must-close."
                 exit 1
               fi
-            elif [ "$accounts" != "0" ]; then
+            elif [ "$verdict" = "busy" ]; then
               if [ "$QUIET_OVERRIDE" = "true" ]; then
-                echo "::warning title=Quiet count overridden::${accounts} account(s) active in the last 30 minutes; promoting on quiet_override (grant condition 3(c), xian's word)."
+                echo "::warning title=Quiet count overridden::an account sent a chat turn in the last 30 minutes; promoting on quiet_override (grant condition 3(c), xian's word)."
               else
-                echo "::error title=Alpha is not quiet::${accounts} account(s) sent a chat turn in the last 30 minutes. Dispatch again when the count reads 0, or with quiet_override=true on xian's word for a must-close."
+                echo "::error title=Alpha is not quiet::an account sent a chat turn in the last 30 minutes. Dispatch again when services.chat_turns_last_30m.quiet reads true, or with quiet_override=true on xian's word for a must-close."
                 exit 1
               fi
             else
-              echo "Alpha is quiet: 0 accounts with a chat turn in the last 30 minutes."
+              echo "Alpha is quiet: no account sent a chat turn in the last 30 minutes."
             fi
             # CIO (2026-10-21, PPM agreed): a promotion restarts alpha and zeroes the count, so a
             # count of 0 minutes after a restart says nothing about a partner mid-session. The step

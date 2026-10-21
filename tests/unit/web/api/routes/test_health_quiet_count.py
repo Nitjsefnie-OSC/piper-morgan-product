@@ -45,19 +45,19 @@ def _install(monkeypatch):
 def test_health_serves_the_quiet_count(monkeypatch):
     _install(monkeypatch)
     quiet = _client().get("/health").json()
+    # CIO 10-21: the public body serves only the verdict and the marker; counts go to the log
     assert quiet["services"]["chat_turns_last_30m"] == {
-        "accounts": 0,
-        "turns": 0,
+        "quiet": True,
         "record_failed_in_window": False,
     }
     turn_activity.TURN_ACTIVITY.record("user-a")
     turn_activity.TURN_ACTIVITY.record("user-b")
     busy = _client().get("/health").json()
     assert busy["services"]["chat_turns_last_30m"] == {
-        "accounts": 2,
-        "turns": 2,
+        "quiet": False,
         "record_failed_in_window": False,
     }
+    assert "accounts" not in busy["services"]["chat_turns_last_30m"]
     # informational: the status line is what the DB and intent service say
     assert busy["status"] == quiet["status"]
 
@@ -80,7 +80,7 @@ def test_a_broken_counter_serves_a_marker_not_a_quiet_zero(monkeypatch):
     monkeypatch.setattr(turn_activity, "TURN_ACTIVITY", _Exploding())
     body = _client().get("/health").json()
     field = body["services"]["chat_turns_last_30m"]
-    assert "accounts" not in field and field.get("error") == "unavailable"
+    assert "quiet" not in field and field.get("error") == "unavailable"
     assert body["status"] in ("healthy", "degraded")  # /health itself stays up
 
 
@@ -88,4 +88,6 @@ def test_a_record_failure_in_the_window_is_served(monkeypatch):
     _install(monkeypatch)
     turn_activity.TURN_ACTIVITY.note_record_failure()
     body = _client().get("/health").json()
-    assert body["services"]["chat_turns_last_30m"]["record_failed_in_window"] is True
+    field = body["services"]["chat_turns_last_30m"]
+    assert field["record_failed_in_window"] is True
+    assert field["quiet"] is False  # a count that may be missing turns never reads quiet
