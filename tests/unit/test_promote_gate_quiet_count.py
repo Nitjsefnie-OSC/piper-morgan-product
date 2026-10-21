@@ -22,3 +22,7 @@ def test_the_promote_job_carries_the_quiet_gate():
     # CIO 10-21: a down alpha is its own branch; the override reaches it (a forward fix)
     assert "Alpha did not answer /health" in gate
     assert gate.index("|| true") < gate.index("Alpha did not answer")
+    # CIO 10-21: the step also holds the 30-minute uptime wait, always on, override reaches it
+    assert "uptime_seconds" in gate and "1800" in gate
+    assert "Alpha restarted less than 30 minutes ago" in gate
+    assert "Uptime not served" in gate  # absent field: noted, not refused

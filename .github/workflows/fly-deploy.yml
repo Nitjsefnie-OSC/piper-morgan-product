@@ -442,6 +442,24 @@ jobs:
             else
               echo "Alpha is quiet: 0 accounts with a chat turn in the last 30 minutes."
             fi
+            # CIO (2026-10-21, PPM agreed): a promotion restarts alpha and zeroes the count, so a
+            # count of 0 minutes after a restart says nothing about a partner mid-session. The step
+            # also refuses while alpha has been up less than 30 minutes (`services.uptime_seconds`),
+            # always on, no input to remember; quiet_override covers it like the count. An older
+            # build without the field is noted, not refused.
+            uptime="$(printf '%s' "$body" | python3 -c 'import sys,json; v=(json.load(sys.stdin).get("services") or {}).get("uptime_seconds"); print("" if not isinstance(v, int) else v)')"
+            if [ -z "$uptime" ]; then
+              echo "::notice title=Uptime not served::alpha /health has no services.uptime_seconds; the 30-minute uptime wait is the dispatcher's rule on this build."
+            elif [ "$uptime" -lt 1800 ]; then
+              if [ "$QUIET_OVERRIDE" = "true" ]; then
+                echo "::warning title=Uptime wait overridden::alpha has been up ${uptime}s (< 1800); promoting on quiet_override (grant condition 3(c), xian's word)."
+              else
+                echo "::error title=Alpha restarted less than 30 minutes ago::alpha has been up ${uptime}s; a quiet count this soon after a restart proves nothing. Dispatch again after 1800s, or with quiet_override=true on xian's word for a must-close."
+                exit 1
+              fi
+            else
+              echo "Alpha has been up ${uptime}s (>= 1800)."
+            fi
           fi
 
       - name: Content-parity gate
