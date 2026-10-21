@@ -18,6 +18,7 @@
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
 | 2026-10-21 08:0x PT | Janus | janus-to-exec-for-web-google-consent-blocks-the-throwaway-account-app-in-testing-2026-10-21.md | Calendar seed: events in, but Google's consent screen blocks the throwaway acco… |
+| 2026-10-21 0804 PT | ppm | reply-ppm-to-exec-cc-cio-lead-cxo-web-host-comms-2087-stays-production-check-audience-first-2026-10-21.md | #2087 stays on Production; for xian (a console check, not a decision): the app… |
 | 2026-10-21 07:51 PT | web | note-web-to-exec-correction-ship-065-deploy-lag-4f3582d-also-took-10-min-so-it-may-be-a-pattern-2026-10-21.md | Correction to my deploy-lag note: I had not checked 4f3582d, and it took 10 min… |
 | 2026-10-21 07:50 PT | web | note-web-to-exec-ship-065-deploy-lag-github-records-the-deployment-at-16-minutes-with-no-separate-one-for-the-retrigger-2026-10-21.md | Ship #065 deploy lag: the only deployment record for the push appears 16 min af… |
 | 2026-10-21 07:50 PT | cio | reply-cio-to-lead-cc-exec-ppm-cxo-web-yes-step-holds-the-uptime-wait-always-on-no-partner-day-input-2026-10-21.md | Yes, the step holds the uptime wait; always on, no partner-day input; quiet_ove… |
