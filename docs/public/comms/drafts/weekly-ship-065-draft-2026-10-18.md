@@ -20,29 +20,29 @@ The team learned a similar lesson about itself. Written rules kept slipping but 
 
 On alpha:
 
-- **Hear the truth about a broken GitHub connection**, in chat, in the standup, on the Radar card and in exports, and reconnect. PA and I ran this check together on my account. On Wednesday, all four places Piper reads GitHub wrongly said all was clear. On Thursday, all four told the truth. Long lists are now capped, and Piper offers the rest instead of dumping everything.
+- **See the truth about a broken GitHub connection**, in chat, in the standup, on the Radar card and in exports, and reconnect. PA and I ran this check together on my account. On Wednesday, all four places Piper reads GitHub wrongly said all was clear. On Thursday, all four told the truth. Long lists are now capped, and Piper offers the rest instead of dumping everything.
 - **Get useful answers about today.** Overdue items come with counts and ages ("1 day overdue"), and "Today:" lists what's actually due.
-- **Delete without fear.** <!-- Comms: xian ruled 10-18 that the no-undo on todo deletes goes on the partners' known-issues list (soft delete #2021 not built). Consider "Delete with a safety check." --> "Delete that reminder" deletes exactly one. "Delete the first two reminders" picks the right two. Any request to delete more than one at a time gets a short list of what would go, ending "Nothing has been changed."
-- **Leave the standup in your own words.** "Stop," "never mind" and "not now" pause it and keep your answers so far. "Cancel" ends it, and "skip" skips a question.
-- **Ask Claude Desktop about your GitHub issues through the Piper connector** and get the real total, with Piper saying so plainly when a list has been cut short. I checked this one myself.
+- **Delete with a safety check.** "Delete that reminder" deletes exactly one. "Delete the first two reminders" picks the right two. Any request to delete more than one at a time gets a short list of what would go, ending "Nothing has been changed."
+- **Exit the standup in your own words.** "Stop," "never mind" and "not now" pause it and keep your answers so far. "Cancel" ends it, and "skip" skips a question.
+- **Ask Claude about your GitHub issues through the Piper Morgan MCP connector** and get the real total, with Piper clear about when a list has been cut short. I checked this one myself.
 
-On pipermorgan.ai, the privacy policy has a new section on your Piper account, and the site picked up stronger keyboard focus rings, a fixed skip link in dark mode, and contrast fixes.
+On [pipermorgan.ai](https://pipermorgan.ai/privacy), the privacy policy has a new section on your Piper account, and the site also picked up stronger keyboard-focus rings, a fixed skip link in dark mode, and some contrast fixes.
 
-Not yet: disconnecting an integration passed on the two pages we could test. The other three need a connection we don't have yet, so it stays open. A fix for current-format Anthropic keys in Settings is closed in code, but nobody has tried it on alpha yet.
+Not yet: disconnecting an integration passed on the two pages we could test. The other three need a connection we don't have yet, so the issue stays open for now. A fix for current-format Anthropic keys in Settings is closed in code, but has not been tried it on alpha yet.
 
 ## ⚙️ Below the line: engineering & architecture
 
-- **Hand-written phrase-matching rules: 155 → 90.** That's most of last week's unfinished tail, with Arch ruling which ones were safe to delete. Twenty-nine of the remaining ninety are a permanent floor. The other sixty-one wait on the language model's routing getting good enough to replace them.
-- **Two real test accounts.** With invites and custody rules from HOST, Web set up one account connected to GitHub by signing in and one by personal token, so the agents can check both kinds of connection on alpha instead of reasoning about them.
-- **Red builds that never shipped.** Lead's pushes turned our main branch red on six of seven days, each time from tests that the pre-push check didn't select. None of it reached alpha. Each was fixed the same day, and from Tuesday the release check refused any build whose tests hadn't passed. CIO also found that 91 of the last 100 code-quality runs had been cancelled before finishing, so "green" had meant very little until Thursday. That's fixed.
-- **Checked before ruling.** Arch's "0 of 11 entry points" turned out to be 21 when counted. Every review this week named mistakes like that one, caught either by the agent who made it or by another.
+- **Hand-written phrase-matching rules: 155 → 90.** Most of last week's unfinished tail, with Arch ruling which ones were safe to delete. Twenty-nine of the remaining ninety are a permanent floor. The other sixty-one wait on the language model's routing getting good enough to replace them.
+- **Two real test accounts.** With invites and custody rules from HOST, Web set up one account connected to GitHub by signing in and one by personal token, so the agents can check both kinds of connection on alpha instead of just reasoning about them.
+- **Red builds that never shipped.** Lead's pushes turned our main branch red on six of seven days, each time from tests that the pre-push check didn't select. No red build reached alpha. Each was fixed the same day, and from Tuesday the release check refused any build whose tests hadn't passed. CIO also found that 91 of the last 100 code-quality runs had been cancelled before finishing, so "green" had meant very little until Thursday. That's now fixed.
+- **Checked before ruling.** Arch's "0 of 11 entry points" turned out to be 21 when counted. Every review this week named scope mistakes like that one, caught either by the agent who made it or by another.
 
 ## 🔬 Methodology & process innovation
 
-- **Rules in prose don't hold. Scripts do.** Seven of the ten agents wrote clock times they had guessed instead of looked up, some off by as much as four hours. The rule says to check the clock first, and it's been written down for months. Separately, the Friday request for each agent's weekly review got missed two Fridays running. Right after the window closed, both became checks in code: the Friday request now sends itself, and the mail tool refuses a memo stamped in the future.
+- **Rules in prose don't hold. Scripts do.** Seven of the ten agents wrote clock times they had guessed instead of looked up, some off by as much as four hours. The rule says to check the clock first, and it's been written down for months. Separately, the Friday request for each agent's weekly review got missed two Fridays running. (Right after this sprint window closed, both became checks in code: the Friday request now sends itself, and the mail tool refuses a memo stamped in the future.)
 - **Cost follows turns.** CXO noticed that what we spend tracks how many times the agents wake up, far more than which model they run. On one busy day CXO woke 41 times, and 20 of those were only to read copies of mail meant for someone else. We're changing copies like that to wait for the agent's next scheduled wake.
 
-<!-- xian: a line in your voice here on what it means to you that the fixes are scripts now? -->
+I must say that relying on scripts for critical rules has been a bit of a game changer and relieves me of a lot of worried reminding or anxious noticing that a rule I thought was being followed has been ignored again.
 
 ## 🌍 Published this week
 
@@ -63,22 +63,20 @@ Not yet: disconnecting an integration passed on the two pages we could test. The
 - **Open issues on the beta gate:** 14 → 6
 - **Updates to alpha:** 8
 - **Hand-written routing rules left (goal is reduction):** 155 → 90
-
-The slip ledger grew from three entries to seven, and no days moved. October 23 is when I decide whether we're on track to invite design partners, and October 30 is still the target for the first one to get access.
-
-<!-- Exec: the plan's weekly usage peaked at 88% two weeks running, and API spend was about $41 for the week, mostly Lead's router scoring. Include, or keep it internal? -->
+- **Max 20x plan weekly usage:** 88%
+- **API spend:** $41 (against a new $200/month credit),  mostly Lead's router scoring
 
 # 🎯 Coming up next week
 
-Close what's left on the gate and get it checked on alpha, so that on October 23 I can judge whether we're on track. <!-- #066 boundary: by publish day (Wed 10-21) xian will know more. Update this paragraph then, without claiming #066 work as #065's. -->
+Close what's left on the gate and get it checked on alpha, so that on October 23 I can judge whether we're on track. We have been finding more issues but many are post-MVP and we continue to close them as fast as we find 'em.
 
 # 🚧 Blockers & asks
 
-Mostly me again: test rounds on each new alpha build, and one invite code per fresh test account.
+Mostly me again, my limited availability some days: test rounds on each new alpha build, and one invite code per fresh test account.
 
 # 🔎 This week's learning pattern
 
-## A rule nobody checks is a wish
+## A rule nobody checks is just a wish
 
 **Discovery**: A rule that exists only as written instructions gets followed until the moment of pressure, and then it doesn't. A rule that a script checks keeps working on the busiest day.
 
