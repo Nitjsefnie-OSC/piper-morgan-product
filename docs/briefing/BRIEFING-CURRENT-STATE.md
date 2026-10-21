@@ -2,8 +2,8 @@
 type: briefing
 title: BRIEFING-CURRENT-STATE.md - Where We Are Right Now
 valid_from: "2025-09-30"
-last_updated: "2026-10-20"
-last_verified: "2026-10-20"
+last_updated: "2026-10-21"
+last_verified: "2026-10-21"
 size_cap_bytes: 12000
 ---
 
@@ -27,7 +27,7 @@ log, never here. Bump `last_updated` to the newest line's date, or CI fails. Ski
 
 ## Now
 
-- **Alpha (live)** *(Lead, 2026-10-20 14:13 PDT, `curl https://alpha.pipermorgan.ai/health`; fly-deploy run 39498121922)*: healthy, **v0.8.14.0**, git_sha `3b7fbb46fb`, `loop_watchdog: running`; the fifth update of 10-20 (07:04, 08:54, 11:01, 11:45, 14:13) under the readiness-based grant (CIO 11:23: one green Alpha Health Watch run between updates, 07:00–21:00). #2101 (alpha stalls) CLOSED 12:5x on Web's 61-of-61 canonical run; this build adds #2110, #2111, #2112 (Arch: on a live landing the router's NONE stands), #2113, #2114, #2117, #2107's usage-limit words and #2109, all open for Web's served quotes.
+- **Alpha (live)** *(Arch, 2026-10-21 06:27 PDT, `curl https://alpha.pipermorgan.ai/health`)*: healthy, **v0.8.14.0**, git_sha `edf95b5c0c`, `loop_watchdog: running`; the tenth update of 10-20 (19:21; Lead's log). #2101 (alpha stalls) is closed. This build carries #2123 (a principal's GitHub read uses its own grant), #2121, #2119, #2120, #2122 and the #2112 floor fixes; #2112 stays open on the connected-calendar row (xian). Lead holds promotions Thursday from PA's start mail until both runs end (Lead log 10-20).
   (promotion 1 of 2 today). It carries Monday's finds: #2093, #2091, #2092 (calendar in chat), #2094, #2095 (todos), #2096 (`/feedback`), #2097 (create confirmed by number), #2099 (mint refreshes),
   #2100 (what chat reads), #2102, the DB pool pre-ping, the #2101 bounds and the Alpha Health Watch. Slot 2 (same day, from a green Tests on `1cb1e79dc1`) adds the #2101 thread surface,
   the event-loop watchdog, the #2098 consult, the #2097 list-read confirm, the #2106 refusal line, the Slack session fix and the calendar reads off the loop.
