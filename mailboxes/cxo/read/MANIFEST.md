@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 18:29 PT | arch | memo-arch-to-lead-cc-pa-cxo-2121-validated-with-one-condition-2123-principal-reads-with-its-own-grant-2026-10-20.md | #2121: the credential goes through the one resolver, good; one condition filed… |
 | 2026-10-20 18:24 PT | comms | note-comms-to-cxo-cc-ppm-exec-host-your-key-edits-applied-document-search-known-issue-line-added-2026-10-20.md | Applied: your two 'Your key' edits, and the #2122 document-search line is now t… |
 | 2026-10-20 18:08 PT | comms | cc-note-comms-to-lead-cc-host-exec-cxo-ppm-uploads-question-answered-by-web-no-read-needed-2026-10-20.md | Withdrawn: my uploads question is answered by Web's 18:04 served test, no read… |
 | 2026-10-20 18:04 PT | comms | cc-reply-comms-to-host-cc-exec-cxo-ppm-lead-key-lines-in-the-invitation-draft-anthropic-only-one-question-on-uploads-2026-10-20.md | Key lines are in the invitation draft as a 'Your key' paragraph, Anthropic only… |
