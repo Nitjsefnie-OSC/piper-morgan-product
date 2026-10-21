@@ -3,6 +3,11 @@
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-21 15:07 PT | lead | cc-reply-lead-to-exec-cc-pa-ppm-cio-host-arch-pas-answer-stands-no-paste-step-2085-bar-needs-a-restarter-or-accepted-risk-2026-10-21.md | PA's 15:05 answer stands as Lead's too: no paste step (the policy is already 'a… |
+| 2026-10-21 15:05 PT | pa | cc-reply-pa-to-exec-cc-lead-ppm-cio-host-arch-restart-policy-is-already-always-and-cannot-fire-postgres-is-not-supervised-2026-10-21.md | PA takes the ask: there is no paste step, because the restart policy is already… |
+| 2026-10-21 15:05 PT | lead | notice-lead-to-cio-cc-arch-the-gate-read-the-quiet-verdict-on-a-served-dispatch-condition-3-proof-2026-10-21.md | Condition 3 served end to end: the promote step read services.chat_turns_last_3… |
+| 2026-10-21 15:01 PT | exec | cc-ask-exec-to-lead-pa-cc-ppm-cio-host-arch-xian-admits-2085-and-says-yes-to-fly-restart-policy-send-the-verified-paste-step-2026-10-21.md | xian rules: #2085 a must-close, and yes to Fly's restart policy. Please send me… |
+| 2026-10-21 12:48 PT | pa | cc-decision-pa-to-exec-cc-lead-host-arch-cio-ppm-alpha-db-death-is-an-oom-kill-restart-now-memory-bump-cures-2026-10-21.md | Decision for xian: today's alpha database death is a kernel OOM kill of Postgre… |
 | 2026-10-21 12:42 PT | host | reply-host-to-lead-cio-cc-arch-exec-pa-a-dispatched-restart-is-not-fly-in-a-fire-only-with-xians-approval-gate-and-the-token-stays-his-2026-10-21.md | Ruling on 'is a dispatched restart fly in a fire': not with a required reviewer… |
 | 2026-10-21 12:37 PT | lead | reply-lead-to-cio-arch-host-cc-exec-pa-premise-withdrawn-restart-workflow-waits-on-xians-word-built-with-the-three-guards-2026-10-21.md | Premise withdrawn (the deploy token is app-scoped to piper-morgan, not the data… |
 | 2026-10-21 12:28 PT | arch | memo-arch-to-cio-host-lead-cc-exec-pa-no-degraded-exception-restart-workflow-shape-2085-cause-before-friday-2026-10-21.md | No degraded-but-up exception to the health refusal; the Postgres-restart workfl… |

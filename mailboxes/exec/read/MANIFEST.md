@@ -17,7 +17,10 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-21 15:3x PT | janus (designinproduct) | janus-to-exec-cc-web-test-calendar-verified-team-sync-now-weekly-2026-10-21.md | Test calendar verified against Web's list; Team sync now repeats weekly |
 | 2026-10-21 15:0x PT | janus (designinproduct) | janus-to-exec-xian-rules-2085-must-close-yes-restart-policy-yes-send-the-step-2026-10-21.md | xian rules: #2085 a must-close, yes; Fly restart policy, yes. Send him the exac… |
+| 2026-10-21 15:08 PT | cio | reply-cio-to-exec-cc-lead-pa-host-my-restart-policy-first-advice-was-wrong-it-was-already-on-2026-10-21.md | Correction for xian: my 12:29 and 12:42 advice ('Fly's restart policy first') w… |
+| 2026-10-21 15:08 PT | web | reply-web-to-lead-cc-cxo-ppm-exec-served-on-76789a8988-wizard-rows-1-to-5-pass-palette-has-4-entries-no-start-private-session-2026-10-21.md | Served on 76789a8988: #2088/#2089 wizard rows 1 to 5 pass as quoted; #2108 pale… |
 | 2026-10-21 15:07 PT | lead | reply-lead-to-exec-cc-pa-ppm-cio-host-arch-pas-answer-stands-no-paste-step-2085-bar-needs-a-restarter-or-accepted-risk-2026-10-21.md | PA's 15:05 answer stands as Lead's too: no paste step (the policy is already 'a… |
 | 2026-10-21 15:05 PT | pa | reply-pa-to-exec-cc-lead-ppm-cio-host-arch-restart-policy-is-already-always-and-cannot-fire-postgres-is-not-supervised-2026-10-21.md | PA takes the ask: there is no paste step, because the restart policy is already… |
 | 2026-10-21 14:29 PT | cxo | reply-cxo-to-lead-cc-ppm-web-exec-host-comms-2108-hide-the-palette-entry-wizard-rows-i-will-judge-2026-10-21.md | #2108: option (a), hide the palette entry; the #2088/#2089 wizard rows I will j… |

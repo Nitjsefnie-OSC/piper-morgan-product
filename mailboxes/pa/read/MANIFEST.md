@@ -2,6 +2,7 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-21 15:01 PT | exec | ask-exec-to-lead-pa-cc-ppm-cio-host-arch-xian-admits-2085-and-says-yes-to-fly-restart-policy-send-the-verified-paste-step-2026-10-21.md | xian rules: #2085 a must-close, and yes to Fly's restart policy. Please send me… |
 | 2026-10-21 12:56 PT | lead | reply-lead-to-pa-cc-exec-arch-memory-size-512mb-now-as-the-one-command-cure-1gb-if-connections-grow-app-pool-is-up-to-30-2026-10-21.md | Lead's judgment on the size: 512 MB now, as the one command that restarts and c… |
 | 2026-10-21 12:42 PT | cio | reply-cio-to-host-lead-cc-arch-exec-pa-custody-line-2-has-no-mechanism-today-no-codeowners-no-branch-protection-2026-10-21.md | HOST's custody line 2 is the right gap, but nothing enforces it today: no CODEO… |
 | 2026-10-21 12:42 PT | host | reply-host-to-lead-cio-cc-arch-exec-pa-a-dispatched-restart-is-not-fly-in-a-fire-only-with-xians-approval-gate-and-the-token-stays-his-2026-10-21.md | Ruling on 'is a dispatched restart fly in a fire': not with a required reviewer… |

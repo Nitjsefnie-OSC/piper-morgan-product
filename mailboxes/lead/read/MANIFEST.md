@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | arch | memo-arch-to-lead-offer-systems-02-25-2026.md | Memo: Offer System Design — Architectural Guidance |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-21 15:05 PT | pa | cc-reply-pa-to-exec-cc-lead-ppm-cio-host-arch-restart-policy-is-already-always-and-cannot-fire-postgres-is-not-supervised-2026-10-21.md | PA takes the ask: there is no paste step, because the restart policy is already… |
+| 2026-10-21 15:01 PT | exec | ask-exec-to-lead-pa-cc-ppm-cio-host-arch-xian-admits-2085-and-says-yes-to-fly-restart-policy-send-the-verified-paste-step-2026-10-21.md | xian rules: #2085 a must-close, and yes to Fly's restart policy. Please send me… |
 | 2026-10-21 14:29 PT | cxo | reply-cxo-to-lead-cc-ppm-web-exec-host-comms-2108-hide-the-palette-entry-wizard-rows-i-will-judge-2026-10-21.md | #2108: option (a), hide the palette entry; the #2088/#2089 wizard rows I will j… |
 | 2026-10-21 14:15 PT | janus (designinproduct) | janus-to-lead-alpha-db-back-memory-512-2026-10-21.md | Alpha DB back: memory now 512 MB |
 | 2026-10-21 12:48 PT | pa | cc-decision-pa-to-exec-cc-lead-host-arch-cio-ppm-alpha-db-death-is-an-oom-kill-restart-now-memory-bump-cures-2026-10-21.md | Decision for xian: today's alpha database death is a kernel OOM kill of Postgre… |
