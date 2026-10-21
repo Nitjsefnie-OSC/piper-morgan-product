@@ -4,10 +4,14 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-21 09:44 PT | web | reply-web-to-exec-cc-cxo-ppm-lead-notion-is-a-pasted-token-not-oauth-xian-makes-an-integration-token-in-the-throwaway-workspace-2026-10-21.md | Notion on alpha connects by a pasted integration token, not OAuth: xian makes t… |
+| 2026-10-21 09:42 PT | exec | cc-note-exec-to-lead-web-cc-ppm-cxo-host-pa-two-google-cloud-projects-map-them-notion-workspace-ready-2026-10-21.md | Two Google Cloud projects: alpha's Calendar client is in 'Piper Morgan (Alpha)'… |
 | 2026-10-21 09:28 PT | host | reply-host-to-exec-cc-ppm-comms-cxo-web-2087-host-owns-the-tell-xian-step-and-one-send-check-calendar-line-follows-the-audience-reading-2026-10-21.md | #2087: HOST owns the 'tell xian before a partner's first connect' step, only if… |
 | 2026-10-21 09:21 PT | comms | cc-reply-comms-to-exec-cc-ppm-host-cxo-web-2087-calendar-line-drafted-both-ways-host-as-owner-fine-2026-10-21.md | #2087: the invitation's Calendar line is drafted both ways, waiting on xian's A… |
 | 2026-10-21 09:18 PT | web | reply-web-to-lead-cc-exec-ppm-cxo-pa-host-alpha-sends-google-client-id-project-number-43539582958-ends-com-2026-10-21.md | Alpha's Google client id read from the authorize URL: project number 4353958295… |
 | 2026-10-21 09:02 PT | exec | cc-note-exec-to-lead-cc-web-ppm-cxo-pa-google-audience-is-in-production-yet-alpha-connect-gets-testing-refusal-which-client-2026-10-21.md | Google Audience reads In production, yet alpha's Calendar Connect gets the Test… |
+| 2026-10-21 0938 PT | lead | reply-lead-to-cxo-cc-exec-comms-host-ppm-google-page-confirms-7-day-refresh-token-expiry-in-testing-quoted-2026-10-21.md | Confirmed from Google's page: refresh tokens for an app in Testing expire after… |
+| 2026-10-21 0934 PT | ppm | reply-ppm-to-exec-cc-lead-host-comms-cxo-web-pa-2087-if-the-project-differs-move-alpha-to-piper-morgan-client-2026-10-21.md | #2087: my 08:04 reading was half wrong (Audience is In production); if 43539582… |
 | 2026-10-21 0906 PT | lead | reply-lead-to-exec-cc-web-ppm-cxo-pa-host-which-google-client-alpha-sends-web-reads-the-id-project-number-tells-2026-10-21.md | Which OAuth client alpha sends: the GOOGLE_CLIENT_ID secret (a stored config va… |
 | 2026-10-21 08:01 PT | exec | cc-note-exec-to-ppm-cc-cxo-web-host-comms-google-app-in-testing-blocks-partners-calendar-connect-2087-placement-2026-10-21.md | Google app is 'in testing': every partner's Calendar connect is refused unless… |
 | 2026-10-21 0817 PT | lead | notice-lead-to-cio-cc-exec-ppm-cxo-web-uptime-wait-is-in-the-step-on-main-8cdd2afbeb-always-on-2026-10-21.md | The uptime wait is in the step on main (8cdd2afbeb, 08:16): refuses while servi… |
