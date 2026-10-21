@@ -154,7 +154,7 @@ class TestUpdateDocumentNotConfigured:
             )
 
             assert result.success is True
-            assert "Notion isn't configured" in result.message
+            assert "I can't update documents from chat yet" in result.message  # #2122: CXO's words
             assert result.implemented is False
 
 
