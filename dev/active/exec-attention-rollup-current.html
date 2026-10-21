@@ -32,7 +32,7 @@
 </style>
 <div class="wrap">
 <h1>Attention rollup — Tuesday 20 October</h1>
-<p class="meta">Exec · v485, rebuilt 08:13 PDT Wed 10-21 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
+<p class="meta">Exec · v486, rebuilt 09:02 PDT Wed 10-21 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
 
 
 
@@ -40,7 +40,7 @@
 
 <div class="card hot"><b>Four things left, all small</b> (the OpenAI key is in, thank you)
 <ol>
-<li><b>Calendar: the events are in, thank you (Janus 08:0x).</b> Google then refused the connect because the app is &ldquo;being tested&rdquo;. Once the throwaway address is on the test-user list in Google Cloud, retry: on alpha log in as <code>web-seed-1386</code> (login in <code>~/.piper-shared/web-seed-1386-credentials-2026-10-20.txt</code>), Settings &rarr; Integrations &rarr; Google Calendar &rarr; Connect, check the consent screen names the throwaway account, <b>send no chat</b>, and tell Web through Janus. Latest start for PA&rsquo;s run is Thu 12:00. <b>While you&rsquo;re in Google Cloud, one look (PPM):</b> Google Auth Platform &rarr; Audience &rarr; publishing status. You set &ldquo;In production&rdquo; on 10-19, but &ldquo;being tested&rdquo; is the Testing-mode screen. If it says Testing, set it back to In production: partners then get the click-through &ldquo;unverified app&rdquo; screen that the invitation already mentions, with no per-partner step. If it says In production, tell Lead. #2087 stays on Production (a checklist item before 10-30).</li>
+<li><b>Calendar: hold until Lead says.</b> The events are in, and Audience reads In production (your 08:2x screenshot, thank you), yet Connect still got the Testing refusal. So the cause is elsewhere. Janus guesses alpha uses an OAuth client in another Cloud project. Lead is finding which client alpha sends and what you should change. When Lead says, retry: on alpha log in as <code>web-seed-1386</code>, Settings &rarr; Integrations &rarr; Google Calendar &rarr; Connect, <b>send no chat</b>, and tell Web. PA&rsquo;s latest start is Thu 12:00. If it isn&rsquo;t fixed by then, Lead tells PA and PPM what the run does without it.</li>
 <li><b>New, same Thursday sitting (about 5 minutes): a throwaway Notion workspace for #2100.</b> CXO accepted it at 06:22. Notion&rsquo;s sign-up emails a code Web can&rsquo;t read, and its Google sign-in refuses Web&rsquo;s browser the way Google did. <b>Lean: do it</b>, because otherwise #2100 needs your own Notion account. In the throwaway-account browser profile, create a free Notion workspace with that Google login and add no pages. Then tell Web through Janus; Web connects it on <code>web-scn-a-1020</code> if Notion lets the browser through. If not, Web tells you where that account&rsquo;s login is; log in to alpha with it and click Settings &rarr; Integrations &rarr; Notion &rarr; Connect. Web then asks the two rows.</li>
 <li><b>The staging invite</b>, any time Wednesday: tell HOST &ldquo;mint the staging invite&rdquo; in a HOST session you&rsquo;re in.</li>
 <li><b>One yes/no for #2092</b>, whenever: on 10-19, chat told you your connected calendar had no events in the next 7 days. Did that Google account&rsquo;s main calendar actually have events from 10-19 to 10-26? Lead already found the cause: Google refused the read, and Piper reported it as empty.</li>
@@ -103,9 +103,10 @@ Done tonight, thank you: both alpha codes, the Google account and the OpenAI key
 <p><b>Scheduled:</b> mail v4 review Thu 10-22. The Ship #066 kickoff sends itself Fri 10-23; I draft #066&rsquo;s goals by Sat 10-24 afternoon.</p>
 </div>
 <h2>📊 Where things stand</h2>
-<div class="card">MVP gate: <b>9 open</b>, 6 must-close (#2089, #2091, #2092, #2096, #2100, #2112), 0 days moved. Also open: #2018, epic #1595, gate #1386. Main: 12 of 12 green. Alpha <code>8e61423f1a</code> (07:34), healthy. <b>The quiet count is live:</b> alpha&rsquo;s /health now reports how many accounts chatted in the last 30 minutes, and an update is refused unless it reads 0 (a must-close can go through on your word). So the 20:00&ndash;21:00 window is now only a fallback. 10-23 is your checkpoint, not a target to squeeze into.</div>
+<div class="card">MVP gate: <b>9 open</b>, 6 must-close (#2089, #2091, #2092, #2096, #2100, #2112), 0 days moved. Also open: #2018, epic #1595, gate #1386. Main: 12 of 12 green. Alpha <code>95dea16f50</code> (08:14; Thursday&rsquo;s build for PA&rsquo;s runs), healthy. <b>The quiet count is live:</b> alpha&rsquo;s /health now reports how many accounts chatted in the last 30 minutes, and an update is refused unless it reads 0 (a must-close can go through on your word). Its first real check passed at 08:09, and it now also waits 30 minutes after any restart. So the 20:00&ndash;21:00 window is now only a fallback. 10-23 is your checkpoint, not a target to squeeze into.</div>
 <h2>✅ Removed this rebuild</h2>
 <div class="card">The stall, website SSR and keys decisions (ruled 16:57); the Calendar, #2097/#2098, /privacy and section A decisions (ruled); the alembic reads (passed); the invite file (written); the Console look (sent to Pard); #2090 (backfilled); the DB card (your reads answered it). Older notes are in git history.</div>
+<p class="meta">v486 (09:02 10-21): Janus 08:2x, Lead 08:14, 08:16 read in full.</p>
 <p class="meta">v485 (08:13 10-21): PPM 08:1x read in full.</p>
 <p class="meta">v484 (08:01 10-21): Web x2, Lead 07:48, CIO 07:5x, Janus 08:0x read in full; gh #2087 OPEN Production.</p>
 <p class="meta">v483 (07:47 10-21): Comms 07:1x, Docs 07:4x, Lead 07:34, CIO 07:3x read in full; Ship page 200; /health 8e61423f1a, accounts 0.</p>
