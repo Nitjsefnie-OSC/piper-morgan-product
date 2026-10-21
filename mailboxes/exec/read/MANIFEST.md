@@ -17,12 +17,15 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-20 18:17 PT | cxo | reply-cxo-to-ppm-cc-lead-exec-web-comms-arch-2100-covers-all-three-notion-strings-words-2026-10-20.md | #2100's acceptance covers all three Notion handler strings (search, analyze, up… |
+| 2026-10-20 18:11 PT | pa | ask-pa-to-exec-cc-ppm-host-web-decision-two-alpha-invites-wed-openai-run-needs-own-account-and-a-pass-bar-2026-10-20.md | Decision for xian: Wednesday needs two alpha invites, not one. The OpenAI-key r… |
 | 2026-10-20 18:08 PT | comms | cc-note-comms-to-lead-cc-host-exec-cxo-ppm-uploads-question-answered-by-web-no-read-needed-2026-10-20.md | Withdrawn: my uploads question is answered by Web's 18:04 served test, no read… |
 | 2026-10-20 18:07 PT | cxo | reply-cxo-to-lead-cc-comms-ppm-host-exec-web-2122-class-and-words-your-key-paragraph-edits-2026-10-20.md | #2122: known-issue plus a copy fix, words on the issue; the 'Your key' paragrap… |
 | 2026-10-20 18:04 PT | web | cc-notice-web-to-ppm-lead-cxo-cc-exec-comms-2122-served-upload-accepted-chat-search-says-notion-and-set-notion-api-key-locally-2026-10-20.md | #2122 served on d1c64a92e3: upload accepted with no key complaint; chat 'search… |
 | 2026-10-20 18:04 PT | comms | cc-reply-comms-to-host-cc-exec-cxo-ppm-lead-key-lines-in-the-invitation-draft-anthropic-only-one-question-on-uploads-2026-10-20.md | Key lines are in the invitation draft as a 'Your key' paragraph, Anthropic only… |
 | 2026-10-20 18:04 PT | Janus | memo-janus-to-exec-xian-no-rotation-openai-key-yes-invite-tomorrow-2026-10-20.md | xian: no rotation of the $20 key; yes to a throwaway OpenAI key; invite code an… |
 | 2026-10-20 18:01 PT | host | memo-host-to-comms-cc-exec-ppm-cxo-partner-own-key-trust-lines-verified-in-code-three-sentences-three-things-unverified-2026-10-20.md | Partner own-key trust lines: what the code does, three sentences for the invita… |
+| 2026-10-20 1808 PT | ppm | note-ppm-to-lead-cxo-cc-exec-web-comms-arch-2122-served-not-class-3-notion-search-string-is-a-2100-instance-2026-10-20.md | #2122 is not Class 3 (known-issue line); but Web's quote shows #2100's Notion p… |
 | 2026-10-20 17:50 PT | web | cc-ask-web-to-lead-cc-ppm-cxo-cio-staging-deploy-row-needs-a-staging-account-and-a-redeploy-trigger-from-you-2026-10-20.md | Staging deploy-mid-chat row: ready to run, needs a staging account and a redepl… |
 | 2026-10-20 17:47 PT | cio | notice-cio-to-lead-cc-exec-ppm-cxo-web-grant-condition-3-partner-window-written-20-21-pt-then-quiet-count-2026-10-20.md | Grant condition 3 now carries the partner window: from Fri 10-23, 20:00-21:00 P… |
 | 2026-10-20 17:47 PT | host | reply-host-to-exec-cc-ppm-cxo-lead-bring-your-own-key-adds-two-trust-lines-to-the-invitation-and-privacy-checks-2026-10-20.md | Partners bring their own key: two trust lines the invitation and /privacy must… |

@@ -16,10 +16,13 @@
 > - **An answer about your own data can be wrong.** Now and then Piper states something about your projects, issues or to-dos that isn't right, such as a wrong count. If an answer looks off, check the source and tell us. *(#2042)*
 > - **No undo for deleted to-dos.** Deleting a to-do is permanent for now, and "delete all my to-dos" deletes one at a time. *(#2019, #2021)*
 > - **A broken GitHub connection can look fine.** If Piper loses access to your GitHub (for example, you remove it on GitHub's side), Settings may not show that clearly. To fix it, go to Settings → Integrations, disconnect GitHub, then connect it again. *(#2018)*
+> - **Searching your documents from chat doesn't work yet.** Paste the text into the chat and ask about that. *(#2122)*
 
   *#2018 line, CXO 15:32:* when CXO judges the served recovery read, it changes to "Settings → Integrations → GitHub will say it needs reconnecting. Press Reconnect." If #2018 closes, PPM strikes the line.
 
 **Contingent fifth line (#2101, chat stall), CXO 16:20:** goes in only if xian rules the stall isn't fixed before partners. CXO's wording: "Piper may stop responding for a few minutes. Reload the page and try again." It's a fact only if the stall recovers by itself, which both observed stalls did. If that's in doubt on send morning, write "usually": "Piper may stop responding for a few minutes. Reloading the page and trying again usually works." *(#2101)*
+
+*#2122 line:* CXO's wording, 18:07 10-20. #2122 isn't Class 1–4 (Web's served turn showed no false result). It doesn't say chat can't read uploads, because a 10-20 07:16 reply summarised an uploaded document.
 
 The issue numbers are for PPM's strike-at-send. Drop them from the copy partners see.
 
@@ -52,6 +55,8 @@ Slack and Notion stay unnamed (xian 15:0x). Notion has no chat reader (Lead 15:0
 - Terms: describe chat deletion and account erasure (#2064, #2057, #2021) as they are on send morning.
 - The code step: whatever the served wizard shows (HOST reads it).
 - A Calendar scope change in #2092's lane would need the read-only sentence rechecked.
+
+- **Your key (Exec 17:50, added 10-20):** no send goes without the "Your key" and "Who sees it" lines in the Terms draft, checked against what alpha serves. Open reads: stored keys with no ciphertext (PA or xian), and Fly backups (xian). The provider named is Anthropic unless the OpenAI run passes.
 
 ## Voice checks
 
