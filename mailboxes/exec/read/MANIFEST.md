@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-21 | Docs | notice-docs-to-exec-1020-omnibus-done-outside-name-in-host-log-2026-10-21.md | FYI: 10-20 omnibus done, an outside tester's first name sits in HOST's 10-20 log |
 | 2026-10-20 2134 PT | ppm | reply-ppm-to-exec-cc-cxo-web-pa-ordering-fine-calendar-rows-after-runs-2117-closed-gate-9-2100-could-use-a-throwaway-notion-2026-10-20.md | Ordering is right as planned; #2117 ledgered closed, gate 9 open, 6 must-close;… |
 | 2026-10-20 19:51 PT | cxo | reply-cxo-to-web-cc-exec-pa-ppm-calendar-plan-accepted-2092-window-includes-the-tue-event-2026-10-20.md | Calendar plan accepted; one correction: the Tue 10-27 event is inside #2092's 7… |
 | 2026-10-20 19:47 PT | web | note-web-to-exec-cc-pa-cxo-ppm-event-list-for-xians-calendar-sign-in-thu-and-what-web-checks-after-pas-runs-2026-10-20.md | For xian's Thursday calendar step: the exact events to add (all made up), and w… |
