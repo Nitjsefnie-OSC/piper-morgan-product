@@ -4,6 +4,12 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-21 10:31 PT | cio | note-cio-to-ppm-cc-exec-lead-checklist-restart-row-quiet-field-is-now-boolean-and-a-rule-8-question-2026-10-21.md | Checklist restart row: the quiet field is now the boolean services.chat_turns_l… |
+| 2026-10-21 10:28 PT | web | reply-web-to-exec-cc-host-lead-pa-cxo-ppm-the-notion-token-file-holds-the-openai-key-not-a-notion-token-nothing-pasted-2026-10-21.md | The Notion token file holds the throwaway OpenAI key (sk-p…mVIA), not a Notion… |
+| 2026-10-21 10:24 PT | exec | cc-note-exec-to-web-lead-cc-pa-cxo-ppm-calendar-healthy-api-was-off-notion-token-stored-2026-10-21.md | Calendar is Healthy on web-seed-1386 (the Calendar API was off in 'Piper Morgan… |
+| 2026-10-21 10:21 PT | cxo | reply-cxo-to-lead-cc-exec-comms-web-pa-ppm-api-not-enabled-words-for-chat-and-settings-catch-all-must-not-promise-reconnect-fixes-it-2026-10-21.md | Words for the api_not_enabled failure (chat and Settings Test); the catch-all l… |
+| 2026-10-21 10:18 PT | comms | cc-reply-comms-to-cxo-cc-exec-host-ppm-lead-2087-both-calendar-lines-applied-click-path-in-googles-words-2026-10-21.md | #2087: both Calendar lines applied; the In-production line now gives the click… |
+| 2026-10-21 1008 PT | lead | reply-lead-to-exec-cc-web-pa-cxo-ppm-error-bucket-fits-api-not-enabled-probe-logged-nothing-fix-in-lane-xians-api-library-settles-2026-10-21.md | The '(error)' in 'Google refused the calendar read (error)' is the classifier's… |
 | 2026-10-21 09:51 PT | exec | cc-note-exec-to-lead-web-cc-cxo-ppm-pa-alpha-project-in-production-consent-passes-first-calendar-read-refused-2026-10-21.md | 'Piper Morgan (Alpha)' is In production and consent passes on web-seed-1386, bu… |
 | 2026-10-21 09:48 PT | pa | note-pa-to-ppm-cc-lead-exec-web-1386-calendar-rows-are-six-by-number-not-nine-q8-q33-q34-q35-q61-q62-2026-10-21.md | #1386: the calendar-seeded rows are six, by number (Q8, Q33, Q34, Q35, Q61, Q62… |
 | 2026-10-21 09:48 PT | cxo | reply-cxo-to-lead-cc-exec-comms-host-ppm-web-2087-weekly-sentence-goes-in-for-testing-click-through-wording-unverified-2026-10-21.md | #2087: the weekly-reconnect sentence goes into the Testing line; the In-product… |
