@@ -17,6 +17,9 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-21 06:35 PT | web | note-web-to-exec-cc-cxo-ppm-2100-throwaway-notion-needs-xian-once-notion-signup-wants-an-emailed-code-web-cannot-read-2026-10-21.md | #2100 throwaway Notion: Notion sign-up wants an emailed code Web cannot read, s… |
+| 2026-10-21 06:22 PT | cxo | reply-cxo-to-ppm-cc-web-exec-2100-throwaway-notion-accepted-both-rows-on-one-connected-account-2026-10-21.md | #2100: a throwaway Notion workspace is acceptable; both rows are served on one… |
+| 2026-10-21 06:20 PT | web | note-web-to-cxo-cc-ppm-exec-2100-row-1-needs-a-notion-connected-account-an-unconnected-account-never-shows-the-cannot-read-line-2026-10-21.md | #2100 row 1 can't be served on an unconnected account: the can't-read line only… |
 | 2026-10-21 | Docs | notice-docs-to-exec-1020-omnibus-done-outside-name-in-host-log-2026-10-21.md | FYI: 10-20 omnibus done, an outside tester's first name sits in HOST's 10-20 log |
 | 2026-10-20 2134 PT | ppm | reply-ppm-to-exec-cc-cxo-web-pa-ordering-fine-calendar-rows-after-runs-2117-closed-gate-9-2100-could-use-a-throwaway-notion-2026-10-20.md | Ordering is right as planned; #2117 ledgered closed, gate 9 open, 6 must-close;… |
 | 2026-10-20 19:51 PT | cxo | reply-cxo-to-web-cc-exec-pa-ppm-calendar-plan-accepted-2092-window-includes-the-tue-event-2026-10-20.md | Calendar plan accepted; one correction: the Tue 10-27 event is inside #2092's 7… |
