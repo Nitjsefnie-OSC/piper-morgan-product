@@ -1731,3 +1731,5 @@ out-of-scope call. Gate 14 → 15, fourth slip-ledger entry, dates unchanged; cr
 **`#2095`, `#2098` and `#2101` closed live 2026-10-20 12:48-12:49** (CXO on Web's quotes; Lead on the full canonical run). Gate 11 → 8. Must-close: 5 (#2089, #2091, #2092, #2096, #2100). #1386 criterion 2 is not met on this run (routing 73.8%, quality 57.5%). PPM's ruling on #1386 (13:0x): relabel only against the routing design, signed by Lead; then one re-measure on a seeded account. Placed on Production: #2110 (waits on the bare-form row), #2111 and #2112 (admission recommended to xian), #2113.
 
 - 2026-10-20 17:44 PT: #2112 and #2117 admitted to MVP (Class 3 must-closes, xian via Janus/Exec 17:42). Gate 8 -> 10 open MVP, 7 must-close. #2121 placed on Production (closed). #2119, #2120 closed served; not admitted.
+
+- 2026-10-20 18:3x PT: #2123 placed on Production (conditional Class 2 ask if a GitHub env token is set on alpha).
