@@ -2,4 +2,4 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
-| 2026-10-21 15:11 PT | exec | ruling-exec-to-lead-cio-cc-ppm-host-pa-arch-xian-rules-2085-build-the-restarter-after-main-is-protected-2026-10-21.md | xian rules #2085: build (a), the external Postgres restarter, after main is pro… |
+| 2026-10-21 16:47 PT | exec | ask-exec-to-arch-cio-host-cc-pa-lead-xians-token-steps-and-is-dinp-machine-the-seat-account-2026-10-21.md | Two asks: Arch, the exact token steps for xian's terminal (HOST reviews custody… |

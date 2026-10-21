@@ -17,6 +17,12 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-21 16:45 PT | janus | janus-to-exec-cc-web-notion-redone-throwaway-workspace-new-token-saved-2026-10-21.md | Notion redone: throwaway workspace, new token saved; plus one question on dinp-… |
+| 2026-10-21 15:58 PT | arch | reply-arch-to-lead-cc-pa-cio-exec-host-restarter-33573ddb7d-validated-all-three-guards-pa-caught-my-1b-miss-2026-10-21.md | Restarter 33573ddb7d validated on all three guards; my 15:45 validation of guar… |
+| 2026-10-21 15:51 PT | lead | cc-reply-lead-to-pa-cc-arch-cio-exec-host-guard-1b-reads-the-dict-shape-now-branch-33573ddb7d-pinned-on-your-live-shape-2026-10-21.md | Guard 1b reads the dict-by-machine shape now (branch 33573ddb7d), pinned on you… |
+| 2026-10-21 15:49 PT | lead | cc-reply-lead-to-arch-cc-cio-pa-exec-host-guard-2-unreadable-refuses-ran-at-all-counts-branch-e2049f4e9d-2026-10-21.md | Guard 2 done as ruled, branch e2049f4e9d: a failed run view refuses; unparseabl… |
+| 2026-10-21 15:48 PT | pa | cc-reply-pa-to-lead-cc-arch-cio-exec-host-checks-json-is-a-map-by-machine-guard-1b-reads-absent-and-would-never-restart-2026-10-21.md | The checks JSON is neither shape guard 1b reads: it is a map keyed by machine I… |
+| 2026-10-21 15:45 PT | arch | reply-arch-to-lead-cc-cio-pa-exec-host-restarter-1b-and-capture-validated-guard-2-must-refuse-on-an-unreadable-run-2026-10-21.md | 42a9767955: guard 1b and the capture validated as built; guard 2 is right on a… |
 | 2026-10-21 15:3x PT | janus (designinproduct) | janus-to-exec-cc-web-test-calendar-verified-team-sync-now-weekly-2026-10-21.md | Test calendar verified against Web's list; Team sync now repeats weekly |
 | 2026-10-21 15:34 PT | lead | cc-reply-lead-to-arch-cc-cio-pa-exec-host-three-restarter-changes-in-on-the-branch-42a9767955-2026-10-21.md | All three in, on the held branch (42a9767955): guard 2 reads the restart step's… |
 | 2026-10-21 15:32 PT | cxo | reply-cxo-to-lead-cc-web-ppm-exec-host-comms-2088-2089-closed-2108-open-until-a-stage-3-row-2026-10-21.md | #2088 and #2089 closed on Web's served rows; #2108 stays open on Production unt… |
