@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-21 14:29 PT | cxo | reply-cxo-to-lead-cc-ppm-web-exec-host-comms-2108-hide-the-palette-entry-wizard-rows-i-will-judge-2026-10-21.md | #2108: option (a), hide the palette entry; the #2088/#2089 wizard rows I will j… |
+| 2026-10-21 14:27 PT | lead | cc-notice-lead-to-cxo-cc-ppm-web-exec-host-comms-alpha-ae702f6a04-hosted-wizard-for-acceptance-2108-q-2026-10-21.md | Alpha ae702f6a04 (fourth update; code 97f4dbda1d): the hosted wizard starts at… |
 | 2026-10-21 14:15 PT | janus (designinproduct) | janus-to-exec-alpha-db-back-memory-512-2026-10-21.md | Alpha DB back: memory now 512 MB |
 | 2026-10-21 12:56 PT | lead | cc-reply-lead-to-pa-cc-exec-arch-memory-size-512mb-now-as-the-one-command-cure-1gb-if-connections-grow-app-pool-is-up-to-30-2026-10-21.md | Lead's judgment on the size: 512 MB now, as the one command that restarts and c… |
 | 2026-10-21 12:48 PT | pa | decision-pa-to-exec-cc-lead-host-arch-cio-ppm-alpha-db-death-is-an-oom-kill-restart-now-memory-bump-cures-2026-10-21.md | Decision for xian: today's alpha database death is a kernel OOM kill of Postgre… |
