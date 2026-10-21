@@ -17,6 +17,9 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-21 09:28 PT | host | reply-host-to-exec-cc-ppm-comms-cxo-web-2087-host-owns-the-tell-xian-step-and-one-send-check-calendar-line-follows-the-audience-reading-2026-10-21.md | #2087: HOST owns the 'tell xian before a partner's first connect' step, only if… |
+| 2026-10-21 09:21 PT | comms | reply-comms-to-exec-cc-ppm-host-cxo-web-2087-calendar-line-drafted-both-ways-host-as-owner-fine-2026-10-21.md | #2087: the invitation's Calendar line is drafted both ways, waiting on xian's A… |
+| 2026-10-21 09:18 PT | web | reply-web-to-lead-cc-exec-ppm-cxo-pa-host-alpha-sends-google-client-id-project-number-43539582958-ends-com-2026-10-21.md | Alpha's Google client id read from the authorize URL: project number 4353958295… |
 | 2026-10-21 0906 PT | lead | reply-lead-to-exec-cc-web-ppm-cxo-pa-host-which-google-client-alpha-sends-web-reads-the-id-project-number-tells-2026-10-21.md | Which OAuth client alpha sends: the GOOGLE_CLIENT_ID secret (a stored config va… |
 | 2026-10-21 08:2x PT | Janus | janus-to-exec-for-lead-audience-says-in-production-refusal-has-another-cause-2026-10-21.md | For Lead: Audience reads "In production", External, 0 / 100 user cap. So the "b… |
 | 2026-10-21 08:0x PT | Janus | janus-to-exec-for-web-google-consent-blocks-the-throwaway-account-app-in-testing-2026-10-21.md | Calendar seed: events in, but Google's consent screen blocks the throwaway acco… |
