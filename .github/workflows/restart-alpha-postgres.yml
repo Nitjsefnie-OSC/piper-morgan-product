@@ -128,7 +128,9 @@ jobs:
           runs="["; sep=""
           while read -r id at; do
             [ -z "$id" ] && continue
-            jobs="$(gh run view "$id" --json jobs --jq '.jobs' 2>/dev/null || echo '[]')"
+            # Arch (15:45): a run that cannot be read must never read as clear; "clear" licenses
+            # a restart, and a wrong refusal costs one manual restart by the reviewer.
+            jobs="$(gh run view "$id" --json jobs --jq '.jobs' 2>/dev/null)" || { echo "::error title=Cannot read run $id::guard 2 could not read run $id of this workflow; refusing rather than guessing that it did not restart the machine. Nothing restarted."; exit 1; }
             runs="$runs$sep{\"updatedAt\":\"$at\",\"jobs\":$jobs}"; sep=","
           done <<< "$ids"
           runs="$runs]"
@@ -138,19 +140,24 @@ jobs:
           try:
               runs=json.load(sys.stdin)
           except Exception:
-              runs=[]
+              print("block unreadable"); raise SystemExit
           hits=[]
           for r in runs:
               try:
                   age=(now-datetime.strptime(r["updatedAt"],"%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)).total_seconds()
               except Exception:
-                  continue
-              restarted=any((s.get("name") or "").startswith("Restart the Postgres machine") and s.get("conclusion")=="success" for j in (r.get("jobs") or []) for s in (j.get("steps") or []))
+                  print("block unreadable"); raise SystemExit
+              # the restart step counts if it ran at all: a restart issued and then cancelled, or
+              # one that errored after Fly accepted it, may still have restarted the machine
+              restarted=any((s.get("name") or "").startswith("Restart the Postgres machine") and s.get("conclusion") in ("success","failure","cancelled") for j in (r.get("jobs") or []) for s in (j.get("steps") or []))
               if restarted and age<1800:
                   hits.append(int(age))
           print("block %d" % min(hits) if hits else "clear")')"
           echo "guard 2 reads: $decide"
           case "$decide" in
+            "block unreadable")
+              echo "::error title=Restart history unreadable::guard 2 could not parse this workflow's recent runs; refusing rather than guessing. Nothing restarted."
+              exit 1 ;;
             block*)
               echo "::error title=A restart already ran in the last 30 minutes::this workflow restarted the machine ${decide#block }s ago (whatever that run's conclusion) and the database is still not healthy. A restart that does not cure must reach a person, not loop. Nothing restarted."
               exit 1 ;;

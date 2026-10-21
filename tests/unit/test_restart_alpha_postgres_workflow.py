@@ -136,8 +136,39 @@ def test_guard_2_blocks_on_a_restart_whose_run_failed_afterwards():
     assert _guard2([_run(10, "skipped")]) == "clear"
     # an old restart does not count
     assert _guard2([_run(40, "success")]) == "clear"
-    assert _guard2([]) == "clear"
-    assert _guard2([{"updatedAt": "garbage", "jobs": []}]) == "clear"
+    assert _guard2([]) == "clear"  # an empty history is a readable answer
+    # Arch 15:45: unreadable must refuse; "clear" licenses a write
+    assert _guard2([{"updatedAt": "garbage", "jobs": []}]) == "block unreadable"
+    assert _guard2_raw("not json") == "block unreadable"
+    # a restart step that ran at all counts, success or not
+    assert _guard2([_run(10, "failure")]).startswith("block ")
+    assert _guard2([_run(10, "cancelled")]).startswith("block ")
+
+
+def _guard2_raw(stdin_text: str) -> str:
+    import subprocess
+    import sys
+
+    out = subprocess.run(
+        [sys.executable, "-c", _guard2_program()],
+        input=stdin_text,
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    return out.stdout.strip()
+
+
+def test_guard_2_refuses_when_a_run_cannot_be_read():
+    text = _text()
+    g2 = text.index("Guard 2")
+    g3 = text.index("Guard 3")
+    loop = text[g2:g3]
+    assert "|| echo '[]'" not in loop
+    assert "Cannot read run" in loop
+    view = loop.index('gh run view "$id"')
+    assert "exit 1" in loop[view : loop.index("done <<<")]
+    assert '"block unreadable")' in loop
 
 
 def test_the_capture_is_best_effort_and_cannot_block_the_restart():
