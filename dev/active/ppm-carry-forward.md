@@ -337,3 +337,25 @@ Brake FIRED (second slip = #1965 admission, found and ledgered 10-09). Memo to E
   - the readiness read for Exec at the 10-22 START;
   - the Ship #066 count: 3 PPM-judged admissions (window 10-16 → 10-22).
 - **Main CI:** 12 of 12 green at 21:33. Alpha `e801b1a309`.
+
+## 2026-10-20 21:3x STOP: day-close (carry into 10-21)
+- **Gate: 9 open MVP.** Six must-close: #2089, #2091, #2092, #2096, #2100, #2112. Also open: #2018 and #1595 (both listed as known issues), and #1386. Slips: none written. 10-23 is the invite checkpoint; 10-30 is the target for the first partner's access.
+- **Thursday 10-22 (PA, Lead confirmed):**
+  - xian signs in to the throwaway Google account and connects it on `web-seed-1386` (target ~09:00; no chat). Web checks the events and gives PA the go.
+  - PA runs #1386 on `web-seed-1386` (no later than 12:00), then the OpenAI run on `web-openai-run`, on the same build. Lead holds promotions.
+  - The 16:18 rule: if the calendar isn't seeded by 12:00, the nine rows run unseeded, count as they fall and are reported separately. One run.
+  - **OpenAI bar** (my 18:2x memo): hard conditions, no wrong provider named, within 5 points on matched rows. If it fails or doesn't run, the invitation says Anthropic only.
+  - After both runs, Web asks #2112's, #2091's and #2092's connected rows on `web-seed-1386` (CXO accepted 19:41). #2092 also needs xian's one line.
+- **#2100:** the three strings are accepted. Owed: the capability reply's Notion line, served (Web), and a Notion-bound row. I suggested a throwaway Notion (CXO to answer).
+- **#2096:** xian's admin read. **#2089:** not served yet.
+- **Ledger** each served close; update the review page and the order doc.
+- **Checklist** (`beta-formalities-checklist.md`):
+  - the keys row: Anthropic only unless the OpenAI run passes;
+  - the restart row: CIO's grant condition 3; Lead's quiet count Wednesday; the staging row needs a staging invite (an attended mint);
+  - the trust-lines row: two reads open, the null-ciphertext count and Fly backups.
+- **Owed:**
+  - the beta-form line to Comms on any invitation morning;
+  - the readiness read for Exec at the 10-22 START;
+  - the Ship #066 count: 3 PPM-judged admissions (window 10-16 → 10-22; today's admissions were all on xian's word);
+  - the Terms map, once xian's answers return.
+- **Main CI:** 12 of 12 green at 21:33. Alpha `edf95b5c0c` (the tenth promotion, 19:21).

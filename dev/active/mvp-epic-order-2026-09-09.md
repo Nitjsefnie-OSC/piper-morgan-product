@@ -1733,3 +1733,5 @@ out-of-scope call. Gate 14 → 15, fourth slip-ledger entry, dates unchanged; cr
 - 2026-10-20 17:44 PT: #2112 and #2117 admitted to MVP (Class 3 must-closes, xian via Janus/Exec 17:42). Gate 8 -> 10 open MVP, 7 must-close. #2121 placed on Production (closed). #2119, #2120 closed served; not admitted.
 
 - 2026-10-20 18:3x PT: #2123 placed on Production (conditional Class 2 ask if a GitHub env token is set on alpha).
+
+- 2026-10-20 19:30 PT: #2117 closed live (CXO). Gate 10 -> 9 open MVP, 6 must-close. #2122 closed (Production).
