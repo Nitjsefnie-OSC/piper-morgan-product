@@ -1,5 +1,15 @@
 # Lead carry-forward — Fable 5.1 seat; Model A worktree ~/Development/piper-morgan-worktrees/lead
 
+## STATE @ 2026-10-20 19:22 PT — alpha edf95b5c0c (TENTH update, 19:21: the three Notion lines #2122/#2100 + #2123); main 12/12 green; CLOSED today: #2101 #2105 #2114 #2110 #2111 #2113 #2118 #2120 #2119 #2121.
+- **Open on the served side (Web, on edf95b5c0c):** the three Notion asks (#2122's acceptance; #2100's handler strings); #2117 once the invite lands (Wed ~18:00); #2112's connected-calendar row (the throwaway Google account, Wed); the staging deploy-mid-chat row (staging invite Wed; I fire the docs push on Web's "go").
+- **Wednesday 10-21 START, in order:** (1) mail; (2) `scripts/main-ci-status.sh`; (3) the /health quiet count (half a day): a process-local ring of chat-turn timestamps, name-free, `services.chat_turns_last_30m` on /health + the promote gate's read; name the field to CIO (grant condition 3) — the partner window is 20:00–21:00 PT from Fri until it is served; (4) Web's staging row when the invite exists; (5) whatever Web's rows return.
+- **#1386:** table signed; harness frozen (f7ae6f66a4); seeded re-measure Thu (invite Wed ~18:00); OpenAI run after it if Thursday allows (PPM's bar: hard conditions + within 5 points on matched rows; the invitation names OpenAI only if it passes).
+- **Admissions:** #2112 and #2117 admitted (gate 10 open, 7 must-close).
+- **Standing (filed today):** the #2113 question form's armed carrier (CXO: not before Friday); the #2112 fixed-reply contingency (only if a promise returns); #2123's served proof needs a second GitHub account with a private repo.
+- **Lessons (today, cumulative):** read the assert's exact lines before editing a pin (three blind misses on one pin); a seam that "returns None on any failure" is a no-read to any consumer that counts; a helper inserted before a decorated method steals the decorator; a per-call kwarg on a pinned call changes its shape; format every file a lane touches and run `ruff format --check .`; a context block serves only the categories that assemble it; a new question site must arm or not ask; "close #123" in a commit body auto-closes; invite asks go to HOST; never estimate a minute.
+- **Cron:** e0bdd924 (`17 6,9,12,15,18,21`, expires ~10-26; rotate at the 10-25 START). STOP wrap at the 21:17 fire.
+
+### Earlier @ 2026-10-20 17:38
 ## STATE @ 2026-10-20 17:38 PT — alpha d1c64a92e3 (NINTH update, 17:37: #2121 the OAuth activity read + #2119's honest failed-read line); main 12/12 green; CLOSED today by CXO: #2114 #2110 #2111 #2113 #2118 #2120 (+ #2101, #2105).
 - **Open on the served side (Web, on d1c64a92e3):** #2121/#2119: `Generate a status report` on `web-scn-a-1020` reads back the real commit count (a wrong count comes back to me); #2117 once HOST gets xian's word on an invite. #2112: CXO accepted the not-connected row; open on the connected-calendar row only (xian's account, via Exec).
 - **#1386:** relabel table signed (10 of 11); measurement frozen (effect reading, unwired-EXECUTION switch on, guarded); the pass is the seeded re-measure before 10-23 (PA's spec; Web seeded GitHub; invite + Google account on xian's rollup).
