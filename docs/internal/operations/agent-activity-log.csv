@@ -2997,3 +2997,14 @@ date,role,slug,environment,model,log_filename,notes
 2026-10-19,Piper Alpha,pa,code,opus,2026-10-19-0647-pa-code-log.md,PA checks on served alpha
 2026-10-19,Chief of Staff,exec,code,opus,2026-10-19-0653-exec-code-log.md,"Rollups, MVP gate, Ship 065"
 2026-10-19,Chief Innovation Officer,cio,code,opus,2026-10-19-1007-cio-code-log.md,CIO review work
+2026-10-20,Docs mgr,docs,code,sonnet,2026-10-20-0412-docs-code-log.md,"The Phantom Feature published and distributed, 10-19 omnibus and HOST addendum"
+2026-10-20,Head of Sapient Trust,host,code,sonnet,2026-10-20-0420-host-code-log.md,"Sweeps, held sends, 10-20 wakes"
+2026-10-20,Web,web,code,sonnet,2026-10-20-0618-web-code-log.md,Served rows and test-card support
+2026-10-20,Comms,comms,code,opus,2026-10-20-0619-comms-code-log.md,"Phantom Feature publish-ready, editorial calendar"
+2026-10-20,Chief Architect,arch,code,opus,2026-10-20-0627-arch-code-log.md,Architecture rulings and admissions
+2026-10-20,Chief Experience Officer,cxo,code,sonnet,2026-10-20-0631-cxo-code-log.md,Experience rulings and closes
+2026-10-20,Principal PM,ppm,code,opus,2026-10-20-0633-ppm-code-log.md,MVP list and sequencing
+2026-10-20,Lead Dev,lead,code,fable,2026-10-20-0647-lead-code-log.md,"Promotions, toast ratchet, defect landings"
+2026-10-20,Piper Alpha,pa,code,opus,2026-10-20-0647-pa-code-log.md,PA checks on served alpha
+2026-10-20,Chief of Staff,exec,code,opus,2026-10-20-0654-exec-code-log.md,"Rollups, MVP gate, Ship 065"
+2026-10-20,Chief Innovation Officer,cio,code,opus,2026-10-20-1007-cio-code-log.md,CIO review work
