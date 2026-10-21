@@ -1,5 +1,7 @@
 # Lead carry-forward — Fable 5.1 seat; Model A worktree ~/Development/piper-morgan-worktrees/lead
 
+## STATE @ 2026-10-21 15:06 PT — alpha 76789a8988 (Wednesday's fifth update, 15:02: 2108 hidden; the gate's first served read of the quiet verdict); database on 512 MB since 14:12 (OOM outage 11:19–14:12, 2124 closed); main green; PROMOTIONS HELD today unless a must-close lands (Web's rows run on this build); Thursday hold from PA's start mail.
+### Earlier @ 2026-10-21 14:28
 ## STATE @ 2026-10-21 14:28 PT — alpha ae702f6a04 (Wednesday's fourth update, 14:25; code 97f4dbda1d: the boolean quiet verdict served, CXO's calendar words, the hosted wizard 2089/2088, two gate fixes); database back on 512 MB since 14:12 (OOM kill, outage 11:19–14:12); main green; PA's Thursday hold still ahead.
 - **Open on the served side:** Web's signed-out wizard row on `/setup` (step strip, heading, help line, two toasts; no Create Account) → CXO closes 2089 + 2088 → HOST/Comms drop the "code at step 3" interim line. CXO's answer on 2108's shape (hide the palette entry, or load the component).
 - **2124:** close on the first green watch run after the 14:25 restart (background wait running); 2085 carries the restart policy, the admission (PPM: Class 4, xian's call) and the restart-workflow decision (standing row; CIO/HOST/Arch conditions).
