@@ -33,7 +33,7 @@ log, never here. Bump `last_updated` to the newest line's date, or CI fails. Ski
   the event-loop watchdog, the #2098 consult, the #2097 list-read confirm, the #2106 refusal line, the Slack session fix and the calendar reads off the loop.
   Open MVP 13 (`gh issue list --milestone MVP`): #2101, #2100, #2098, #2097, #2096, #2095, #2094, #2092, #2091, #2089, #2018, #1595, #1386; must-close #2101 (closes on a clean canonical run). Served checks: `dev/active/pm-test-card.md`.
   *(CIO, 10-16:)* the **standing promotion grant is in force** since xian confirmed it 10-16 08:10 (decisions.log 10-16;
-  `docs/internal/operations/alpha-promotion-standing-grant.md`): Lead promotes when Step 0 is READY, no new migration, 07:00-21:00 PT, with no daily count since 10-20 (xian): the next promotion waits for one green Alpha Health Watch run. From 10-23 (partners invited), only 20:00-21:00 PT until Lead's name-free /health quiet count is served, then a quiet 30 minutes at any hour (grant condition 3; CIO 2026-10-20 17:47). `origin/main` builds; the droplet
+  `docs/internal/operations/alpha-promotion-standing-grant.md`): Lead promotes when Step 0 is READY, no new migration, 07:00-21:00 PT, with no daily count since 10-20 (xian): the next promotion waits for one green Alpha Health Watch run. From 10-23 (partners invited), a promotion waits for alpha's /health `services.chat_turns_last_30m.accounts` = 0 and 30 minutes' uptime; the gate refuses otherwise (grant condition 3; served 10-21 on 8e61423f1a). `origin/main` builds; the droplet
   and `origin/production` are gone (09-29).
 - **Version** *(CIO, 2026-10-08, `git tag`)*: latest tag **v0.8.14.0** ("On Your Clock", 09-23). 0.9.0 is
   reserved for beta.
