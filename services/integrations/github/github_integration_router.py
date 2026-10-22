@@ -27,6 +27,7 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional, Union
 
 from services.infrastructure.config.feature_flags import FeatureFlags
+from services.integrations.github.read_failed import GitHubReadFailed
 from services.integrations.spatial.github_spatial import GitHubSpatialIntelligence
 
 from .config_service import GitHubConfigService
@@ -753,7 +754,8 @@ class GitHubIntegrationRouter:
         """List GitHub milestones via MCP adapter (Issue #1039).
 
         ``owner``/``repo`` optional kwargs; router resolves via
-        ``repo_resolver`` if not provided. Returns ``[]`` if unresolved.
+        ``repo_resolver`` if not provided. #1524: an unresolved repo or a read that did not
+        happen raises ``GitHubReadFailed``; ``[]`` means the repo answered with none.
 
         Args:
             state: GitHub milestone state filter — "open" (default),
@@ -769,11 +771,13 @@ class GitHubIntegrationRouter:
             if not owner or not repo:
                 resolved = await self._resolve_default_repo()
                 if resolved is None:
-                    return []
+                    raise GitHubReadFailed("no_repository")  # #1524: never "no milestones"
                 owner, repo = resolved
-            return await self.mcp_adapter.list_milestones(repo, owner, state=state)
-        # Spatial fallback: no spatial integration for milestones at MVP
-        return []
+            return await self.mcp_adapter.list_milestones(
+                repo, owner, state=state, user_id=self._user_id
+            )
+        # #1524: no adapter is a read that did not happen, not an empty list
+        raise GitHubReadFailed("unavailable")
 
     async def list_releases_via_mcp(
         self,
@@ -783,7 +787,8 @@ class GitHubIntegrationRouter:
         """List GitHub releases via MCP adapter (Issue #1039).
 
         ``owner``/``repo`` optional kwargs; router resolves via
-        ``repo_resolver`` if not provided. Returns ``[]`` if unresolved.
+        ``repo_resolver`` if not provided. #1524: an unresolved repo or a read that did not
+        happen raises ``GitHubReadFailed``; ``[]`` means the repo answered with none.
 
         Note: prerelease-only / stable-only filter is deferred to #1051.
         Handler shows prerelease flag inline where useful.
@@ -795,11 +800,10 @@ class GitHubIntegrationRouter:
             if not owner or not repo:
                 resolved = await self._resolve_default_repo()
                 if resolved is None:
-                    return []
+                    raise GitHubReadFailed("no_repository")
                 owner, repo = resolved
-            return await self.mcp_adapter.list_releases(repo, owner)
-        # Spatial fallback: no spatial integration for releases at MVP
-        return []
+            return await self.mcp_adapter.list_releases(repo, owner, user_id=self._user_id)
+        raise GitHubReadFailed("unavailable")
 
     async def list_labels_via_mcp(
         self,
@@ -809,7 +813,8 @@ class GitHubIntegrationRouter:
         """List GitHub labels via MCP adapter (Issue #1040).
 
         ``owner``/``repo`` optional kwargs; router resolves via
-        ``repo_resolver`` if not provided. Returns ``[]`` if unresolved.
+        ``repo_resolver`` if not provided. #1524: an unresolved repo or a read that did not
+        happen raises ``GitHubReadFailed``; ``[]`` means the repo answered with none.
         """
         if not self._initialized:
             await self.initialize()
@@ -818,11 +823,10 @@ class GitHubIntegrationRouter:
             if not owner or not repo:
                 resolved = await self._resolve_default_repo()
                 if resolved is None:
-                    return []
+                    raise GitHubReadFailed("no_repository")
                 owner, repo = resolved
-            return await self.mcp_adapter.list_labels(repo, owner)
-        # Spatial fallback: no spatial integration for labels at MVP
-        return []
+            return await self.mcp_adapter.list_labels(repo, owner, user_id=self._user_id)
+        raise GitHubReadFailed("unavailable")
 
     async def list_branches_via_mcp(
         self,
@@ -835,24 +839,22 @@ class GitHubIntegrationRouter:
         so handler can sort default-first per Q5 disposition.
 
         ``owner``/``repo`` optional kwargs; router resolves via
-        ``repo_resolver`` if not provided. Returns empty shape if unresolved.
+        ``repo_resolver`` if not provided. #1524: unresolved or unread raises ``GitHubReadFailed``.
         """
         if not self._initialized:
             await self.initialize()
 
-        empty = {"branches": [], "default_branch": ""}
         if self.mcp_adapter:
             if not owner or not repo:
                 resolved = await self._resolve_default_repo()
                 if resolved is None:
-                    return empty
+                    raise GitHubReadFailed("no_repository")
                 owner, repo = resolved
-            branches = await self.mcp_adapter.list_branches(repo, owner)
+            branches = await self.mcp_adapter.list_branches(repo, owner, user_id=self._user_id)
             repo_info = await self.mcp_adapter.get_repository_info(repo, owner)
             default_branch = (repo_info or {}).get("default_branch", "") or ""
             return {"branches": branches, "default_branch": default_branch}
-        # Spatial fallback
-        return empty
+        raise GitHubReadFailed("unavailable")
 
     async def get_recent_activity(
         self, days: int = 7, repository: Optional[str] = None, user_id: Optional[str] = None

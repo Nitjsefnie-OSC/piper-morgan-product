@@ -6,6 +6,7 @@ from unittest.mock import AsyncMock
 
 import pytest
 
+from services.integrations.github.read_failed import GitHubReadFailed
 from services.mcp.consumer.github_adapter import GitHubMCPSpatialAdapter
 
 
@@ -42,12 +43,19 @@ class TestListLabels:
         adapter._call_github_api.assert_awaited_once_with("repos/o/r/labels", {"per_page": 100})
 
     async def test_empty_response(self, adapter):
+        # #1524: no response is a read that did not happen, never "none"
         adapter._call_github_api.return_value = None
-        assert await adapter.list_labels("r", "o") == []
+        with pytest.raises(GitHubReadFailed) as ei:
+            await adapter.list_labels("r", "o")
+        assert ei.value.reason == "no_response"
+        adapter._call_github_api.return_value = []
+        assert await adapter.list_labels("r", "o") == []  # the repo answered: empty
 
-    async def test_exception_returns_empty_list(self, adapter):
+    async def test_exception_is_a_failed_read(self, adapter):
         adapter._call_github_api.side_effect = RuntimeError("boom")
-        assert await adapter.list_labels("r", "o") == []
+        with pytest.raises(GitHubReadFailed) as ei:  # #1524: was asserting the lie
+            await adapter.list_labels("r", "o")
+        assert ei.value.reason == "RuntimeError"
 
     async def test_required_args_no_defaults(self, adapter):
         with pytest.raises(TypeError):
@@ -87,12 +95,19 @@ class TestListBranches:
         assert result[0]["commit_sha"] == ""
 
     async def test_empty_response(self, adapter):
+        # #1524: no response is a read that did not happen, never "none"
         adapter._call_github_api.return_value = None
-        assert await adapter.list_branches("r", "o") == []
+        with pytest.raises(GitHubReadFailed) as ei:
+            await adapter.list_branches("r", "o")
+        assert ei.value.reason == "no_response"
+        adapter._call_github_api.return_value = []
+        assert await adapter.list_branches("r", "o") == []  # the repo answered: empty
 
-    async def test_exception_returns_empty_list(self, adapter):
+    async def test_exception_is_a_failed_read(self, adapter):
         adapter._call_github_api.side_effect = RuntimeError("boom")
-        assert await adapter.list_branches("r", "o") == []
+        with pytest.raises(GitHubReadFailed) as ei:  # #1524: was asserting the lie
+            await adapter.list_branches("r", "o")
+        assert ei.value.reason == "RuntimeError"
 
     async def test_required_args_no_defaults(self, adapter):
         with pytest.raises(TypeError):

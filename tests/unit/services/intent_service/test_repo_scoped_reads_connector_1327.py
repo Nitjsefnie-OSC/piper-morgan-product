@@ -89,6 +89,7 @@ class TestBranchesHandler:
     async def test_falls_back_to_native_when_not_connected(self, intent_service):
         degrade = GitHubRepoScopedResult(degradation=_connect_required())
         native_router = MagicMock()
+        native_router.initialize = AsyncMock()  # #1524: the fallback reads as the principal
         native_router.list_branches_via_mcp = AsyncMock(
             return_value={
                 "branches": [{"name": "main", "protected": True}],
@@ -157,6 +158,7 @@ class TestReleasesHandler:
     async def test_falls_back_to_native_when_not_connected(self, intent_service):
         degrade = GitHubRepoScopedResult(degradation=_connect_required())
         native_router = MagicMock()
+        native_router.initialize = AsyncMock()  # #1524: the fallback reads as the principal
         native_router.list_releases_via_mcp = AsyncMock(
             return_value=[
                 {"tag_name": "v9.9.9", "name": "9", "prerelease": False, "published_at": None}

@@ -8741,6 +8741,33 @@ class IntentService:
                 error_type="list_prs_error",
             )
 
+    def _github_list_read_failed(self, rf, action: str, noun: str) -> "IntentProcessingResult":
+        """#1524: a GitHub list read that did not happen, said as that, never as "none".
+
+        ``no_repository`` gets the adapter's "which repo?" words (REPO_UNRESOLVED);
+        anything else names the repo when known and says the read failed (the #2119
+        sentence, scoped to the list asked for)."""
+        if rf.reason == "no_repository":
+            message = (
+                "Which repo? I couldn't tell which repository you mean — name one "
+                "(e.g. `owner/name`), link a repo to your project, or set a default repo."
+            )
+        else:
+            message = (
+                f"I couldn't read {rf.repo or 'the repository'} with this account's GitHub "
+                f"connection, so I can't list its {noun} yet."
+            )
+        self.logger.warning("github_list_read_failed", action=action, reason=rf.reason)
+        return IntentProcessingResult(
+            success=False,
+            message=message,
+            intent_data={
+                "category": "query",
+                "action": action,
+                "context": {"read_failed": rf.reason},
+            },
+        )
+
     async def _handle_list_milestones_query(
         self, intent: Intent, workflow_id: str, session_id: Optional[str] = None
     ) -> IntentProcessingResult:
@@ -8761,9 +8788,16 @@ class IntentService:
             from services.integrations.github.github_integration_router import (
                 GitHubIntegrationRouter,
             )
+            from services.integrations.github.read_failed import GitHubReadFailed
 
+            # #1524: the router reads for the acting principal (its grant, its default
+            # repo); an unresolved repo or a failed read is said, never "no milestones".
             github_router = GitHubIntegrationRouter()
-            milestones = await github_router.list_milestones_via_mcp()
+            await github_router.initialize(user_id=_principal_from_intent(intent))
+            try:
+                milestones = await github_router.list_milestones_via_mcp()
+            except GitHubReadFailed as rf:
+                return self._github_list_read_failed(rf, "list_milestones_query", "milestones")
 
             if milestones:
                 count = len(milestones)
@@ -8869,9 +8903,14 @@ class IntentService:
                 from services.integrations.github.github_integration_router import (
                     GitHubIntegrationRouter,
                 )
+                from services.integrations.github.read_failed import GitHubReadFailed
 
                 github_router = GitHubIntegrationRouter()
-                releases = await github_router.list_releases_via_mcp()
+                await github_router.initialize(user_id=_user_id)
+                try:
+                    releases = await github_router.list_releases_via_mcp()
+                except GitHubReadFailed as rf:
+                    return self._github_list_read_failed(rf, "list_releases_query", "releases")
             else:
                 return IntentProcessingResult(
                     success=True,
@@ -8996,9 +9035,14 @@ class IntentService:
             from services.integrations.github.github_integration_router import (
                 GitHubIntegrationRouter,
             )
+            from services.integrations.github.read_failed import GitHubReadFailed
 
             github_router = GitHubIntegrationRouter()
-            labels = await github_router.list_labels_via_mcp()
+            await github_router.initialize(user_id=_principal_from_intent(intent))
+            try:
+                labels = await github_router.list_labels_via_mcp()
+            except GitHubReadFailed as rf:
+                return self._github_list_read_failed(rf, "list_labels_query", "labels")
 
             if labels:
                 count = len(labels)
@@ -9101,9 +9145,14 @@ class IntentService:
                 from services.integrations.github.github_integration_router import (
                     GitHubIntegrationRouter,
                 )
+                from services.integrations.github.read_failed import GitHubReadFailed
 
                 github_router = GitHubIntegrationRouter()
-                payload = await github_router.list_branches_via_mcp()
+                await github_router.initialize(user_id=_user_id)
+                try:
+                    payload = await github_router.list_branches_via_mcp()
+                except GitHubReadFailed as rf:
+                    return self._github_list_read_failed(rf, "list_branches_query", "branches")
                 branches = payload.get("branches", [])
                 default_branch = payload.get("default_branch", "") or ""
             else:

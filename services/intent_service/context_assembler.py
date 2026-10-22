@@ -1946,7 +1946,13 @@ class ContextAssembler:
 
             github = GitHubIntegrationRouter()
             await github.initialize(user_id=user_id)
-            milestones = await github.list_milestones_via_mcp(state="open")
+            from services.integrations.github.read_failed import GitHubReadFailed
+
+            try:
+                milestones = await github.list_milestones_via_mcp(state="open")
+            except GitHubReadFailed:
+                # #1524: a failed read contributes no context; it never asserts "none"
+                return None
             if not milestones:
                 return None
 
