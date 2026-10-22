@@ -109,7 +109,7 @@ async def handle_analyze_document(file_id: str, user_id: str) -> Dict:
                 from services.file_context.artifact_view import artifact_filename
 
                 analysis_result = await _doc_analyzer.analyze_text(
-                    artifact.content or "", source_id=artifact.id
+                    artifact.content or "", source_id=artifact.id, user_id=user_id
                 )
                 return {
                     "file_id": artifact.id,
@@ -140,6 +140,7 @@ async def handle_analyze_document(file_id: str, user_id: str) -> Dict:
             str(file_path),
             file_type=file_record.file_type,
             filename=file_record.filename,
+            user_id=user_id,  # #2131: the acting principal picks the provider
         )
 
         # 4. Return formatted result
@@ -216,7 +217,9 @@ Cite specific sections when possible.
 If the answer is not in the document, say so clearly."""
 
         # 5. Call LLM
-        answer = await llm_client.complete(task_type="question_answering", prompt=prompt)
+        answer = await llm_client.complete(
+            task_type="question_answering", prompt=prompt, user_id=user_id
+        )
 
         return {
             "file_id": file_id,
@@ -366,7 +369,9 @@ Provide a structured comparison:
 """
 
     # 3. Call LLM
-    comparison = await llm_client.complete(task_type="document_comparison", prompt=prompt)
+    comparison = await llm_client.complete(
+        task_type="document_comparison", prompt=prompt, user_id=user_id
+    )
 
     return {
         "file_ids": file_ids,
@@ -518,7 +523,9 @@ Provide a helpful response that:
 Format your response naturally, as if continuing the conversation."""
 
     # 5. Call LLM for synthesis
-    response = await llm_client.complete(task_type="conversational_reference", prompt=prompt)
+    response = await llm_client.complete(
+        task_type="conversational_reference", prompt=prompt, user_id=user_id
+    )
 
     return {
         "response": response,

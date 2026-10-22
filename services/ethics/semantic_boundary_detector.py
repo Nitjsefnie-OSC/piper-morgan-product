@@ -559,6 +559,7 @@ class SemanticBoundaryDetector:
                 task_type=self.TASK_TYPE,
                 prompt=message,
                 system=self._prompt,
+                user_id=(context or {}).get("user_id"),
             )
         except Exception as exc:  # noqa: BLE001 — broad on purpose, conservative fallback
             logger.warning(

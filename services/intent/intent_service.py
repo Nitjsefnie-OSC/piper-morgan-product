@@ -2623,6 +2623,7 @@ class IntentService:
                     context={
                         "source": "intent_service",
                         "timestamp": datetime.now(timezone.utc),
+                        "user_id": user_id,  # #2131: the detector's LLM call reads as the principal
                     },
                 )
 
@@ -6165,6 +6166,7 @@ class IntentService:
                 template=DOCUMENT_UPDATE_TEMPLATE,
                 llm_service=self.llm_client,
                 conversation_history=conversation_history or None,
+                user_id=_principal_from_intent(intent),  # #2131
             )
             doc_name = extracted.get("doc_name")
             update_content = extracted.get("content")
@@ -7808,6 +7810,7 @@ class IntentService:
                 template=COMMENT_ISSUE_TEMPLATE,
                 llm_service=self.llm_client,
                 conversation_history=conversation_history or None,
+                user_id=_principal_from_intent(intent),  # #2131
             )
 
             # issue_number arrives as an ENTITY string — pull the digits.

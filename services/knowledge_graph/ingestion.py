@@ -133,7 +133,9 @@ class DocumentIngester:
             self._llm = container.get_service("llm")
         return self._llm
 
-    async def _analyze_document_relationships(self, content: str, existing_metadata: Dict) -> Dict:
+    async def _analyze_document_relationships(
+        self, content: str, existing_metadata: Dict, *, user_id: Optional[str] = None
+    ) -> Dict:
         """Use LLM to analyze document relationships and hierarchy"""
 
         prompt = f"""Analyze this PM document and extract relationship metadata.
@@ -167,6 +169,7 @@ Be specific and concise. Extract real concepts from the content."""
                 prompt=prompt,
                 context=existing_metadata,
                 system=piper_config_loader.get_system_prompt(),
+                user_id=user_id,
             )
 
             parsed = json.loads(response)
@@ -209,7 +212,9 @@ Be specific and concise. Extract real concepts from the content."""
                 "relationship_analysis_version": "fallback",
             }
 
-    async def ingest_pdf(self, file_path: str, metadata: Optional[Dict] = None) -> Dict:
+    async def ingest_pdf(
+        self, file_path: str, metadata: Optional[Dict] = None, *, user_id: Optional[str] = None
+    ) -> Dict:
         """
         Ingest a PDF document into the knowledge base with relationship analysis
 
@@ -234,7 +239,9 @@ Be specific and concise. Extract real concepts from the content."""
         if chunks:
             logger.info("Analyzing document relationships...")
 
-            enhanced_metadata = await self._analyze_document_relationships(chunks[0], metadata)
+            enhanced_metadata = await self._analyze_document_relationships(
+                chunks[0], metadata, user_id=user_id
+            )
 
         # Generate document ID based on content hash
         doc_hash = hashlib.md5(open(file_path, "rb").read()).hexdigest()[:8]
@@ -244,7 +251,9 @@ Be specific and concise. Extract real concepts from the content."""
         enhanced_metadata = metadata
         if chunks:
             logger.info("Analyzing document relationships...")
-            enhanced_metadata = await self._analyze_document_relationships(chunks[0], metadata)
+            enhanced_metadata = await self._analyze_document_relationships(
+                chunks[0], metadata, user_id=user_id
+            )
 
         # Prepare documents for ChromaDB
         documents = []

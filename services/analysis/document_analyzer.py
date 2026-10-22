@@ -142,7 +142,7 @@ class DocumentAnalyzer(BaseAnalyzer):
             filename: Original filename, if known (extension-fallback dispatch;
                 the storage path itself preserves the original extension, so
                 bare analyze(path) callers still dispatch correctly)
-            **kwargs: Additional optional parameters (not used currently)
+            **kwargs: ``user_id`` (#2131: the acting principal picks the provider); others unused
         """
         try:
             # #1306: bytes via the decrypt seam, never a raw open()
@@ -156,7 +156,9 @@ class DocumentAnalyzer(BaseAnalyzer):
             )
 
             if kind == "text":
-                return await self._analyze_plain_text_bytes(data, file_path)
+                return await self._analyze_plain_text_bytes(
+                    data, file_path, user_id=kwargs.get("user_id")
+                )
 
             if kind == "unknown":
                 # #1648 honesty contract: no claimed analysis without real
@@ -208,6 +210,7 @@ class DocumentAnalyzer(BaseAnalyzer):
                             task_type=TaskType.SUMMARIZE.value,
                             prompt=json_prompt.format(content=text[:3000]),
                             response_format={"type": "json_object"},
+                            user_id=kwargs.get("user_id"),
                         )
 
                         # Parse JSON into domain model
@@ -257,7 +260,9 @@ class DocumentAnalyzer(BaseAnalyzer):
                 generated_at=datetime.now(),
             )
 
-    async def analyze_text(self, text: str, source_id: str = "inline-text") -> AnalysisResult:
+    async def analyze_text(
+        self, text: str, source_id: str = "inline-text", *, user_id: Optional[str] = None
+    ) -> AnalysisResult:
         """Analyze already-extracted text through the SAME LLM-summary path
         ``analyze()`` uses for PDF text (#1657).
 
@@ -269,7 +274,7 @@ class DocumentAnalyzer(BaseAnalyzer):
         same summary shape.
         """
         metadata: Dict[str, Any] = {"text": text}
-        summary, key_points = await self._summarize_text(text)
+        summary, key_points = await self._summarize_text(text, user_id=user_id)
         metadata["summary"] = summary
         metadata["key_points"] = key_points
         return AnalysisResult(
@@ -282,14 +287,16 @@ class DocumentAnalyzer(BaseAnalyzer):
             metadata=metadata,
         )
 
-    async def _analyze_plain_text_bytes(self, data: bytes, file_path: str) -> AnalysisResult:
+    async def _analyze_plain_text_bytes(
+        self, data: bytes, file_path: str, *, user_id: Optional[str] = None
+    ) -> AnalysisResult:
         """analyze()'s plain-text branch (#1659): decode the stored bytes and
         run them through the same LLM-summary path the PDF branch uses for
         extracted text. Result shape mirrors the PDF branch (DOCUMENT type,
         file_id = storage path, text + summary + key_points in metadata)."""
         text = data.decode("utf-8", errors="replace")
         metadata: Dict[str, Any] = {"text": text}
-        summary, key_points = await self._summarize_text(text)
+        summary, key_points = await self._summarize_text(text, user_id=user_id)
         metadata["summary"] = summary
         metadata["key_points"] = key_points
         return AnalysisResult(
@@ -302,7 +309,9 @@ class DocumentAnalyzer(BaseAnalyzer):
             metadata=metadata,
         )
 
-    async def _summarize_text(self, text: str) -> Tuple[str, List[str]]:
+    async def _summarize_text(
+        self, text: str, *, user_id: Optional[str] = None
+    ) -> Tuple[str, List[str]]:
         """Shared LLM-summarize step for the text paths (#1657 analyze_text +
         #1659 plain-text uploads): JSON-mode summary via SummaryParser, with
         the same honest fallbacks analyze_text always had. The PDF branch in
@@ -320,6 +329,7 @@ class DocumentAnalyzer(BaseAnalyzer):
                     task_type=TaskType.SUMMARIZE.value,
                     prompt=json_prompt.format(content=text[:3000]),
                     response_format={"type": "json_object"},
+                    user_id=user_id,
                 )
                 document_summary = self.summary_parser.parse_json(json_response)
                 return document_summary.to_markdown(), document_summary.key_findings

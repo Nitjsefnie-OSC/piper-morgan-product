@@ -135,7 +135,11 @@ class DocumentService:
         source: Any = None,
     ) -> Dict[str, Any]:
         """Ingest into ChromaDB, then write the relational anchor row (#1238)."""
-        result = await self.ingester.ingest_pdf(file_path, metadata)
+        result = await self.ingester.ingest_pdf(
+            file_path,
+            metadata,
+            user_id=str(owner_id) if owner_id else None,  # #2131
+        )
         base_id = result.get("document_id")
         if base_id:
             await self._anchor_document(

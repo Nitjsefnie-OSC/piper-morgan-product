@@ -28,7 +28,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
 import structlog
 
@@ -141,7 +141,9 @@ def apply_secret_rules(content: str) -> Tuple[str, RuleMatchResult]:
 # ============================================================================
 
 
-async def apply_boundary_rules(content: str, boundary_enforcer) -> RuleMatchResult:
+async def apply_boundary_rules(
+    content: str, boundary_enforcer, user_id: Optional[str] = None
+) -> RuleMatchResult:
     """Apply BoundaryEnforcer category check to LLM output text.
 
     Reuses `BoundaryEnforcer.enforce_boundaries(content, ...)` whose
@@ -163,7 +165,7 @@ async def apply_boundary_rules(content: str, boundary_enforcer) -> RuleMatchResu
     try:
         decision = await boundary_enforcer.enforce_boundaries(
             message=content,
-            context={"source": "output_filter"},
+            context={"source": "output_filter", "user_id": user_id},  # #2131
         )
     except Exception as exc:  # pragma: no cover — defensive log
         logger.warning("output_filter_boundary_check_failed", error=str(exc))

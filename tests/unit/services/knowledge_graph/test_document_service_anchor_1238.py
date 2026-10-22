@@ -37,7 +37,7 @@ class _FakeIngester:
     def __init__(self):
         self.calls = []
 
-    async def ingest_pdf(self, file_path, metadata=None):
+    async def ingest_pdf(self, file_path, metadata=None, **kwargs):  # #2131: user_id
         self.calls.append(file_path)
         return {"status": "success", "document_id": "pdf_wiretest", "chunks_created": 3}
 

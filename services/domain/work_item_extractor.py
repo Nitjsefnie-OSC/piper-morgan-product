@@ -57,6 +57,7 @@ class WorkItemExtractor:
                 task_type="work_item_extraction",
                 prompt=extraction_prompt,
                 response_format={"type": "json_object"},
+                user_id=None,  # #2131: no callers; a revived caller must pass its principal
             )
 
             # Parse JSON response

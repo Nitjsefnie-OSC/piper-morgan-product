@@ -318,7 +318,9 @@ class OutputFilter:
 
         # Tier 2 — BoundaryEnforcer category check.
         if self._boundary_enforcer is not None:
-            boundary_match = await apply_boundary_rules(filtered_content, self._boundary_enforcer)
+            boundary_match = await apply_boundary_rules(
+                filtered_content, self._boundary_enforcer, user_id=user_id
+            )
             if boundary_match.is_violation:
                 # Critical: drop the LLM output, substitute canned response.
                 decision.matched_rules.extend(boundary_match.matched_rules)

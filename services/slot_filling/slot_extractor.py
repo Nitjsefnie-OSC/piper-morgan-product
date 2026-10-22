@@ -29,6 +29,7 @@ async def extract_slots(
     llm_service,
     existing_values: Optional[dict[str, Any]] = None,
     conversation_history: Optional[list[dict[str, str]]] = None,
+    user_id: Optional[str] = None,
 ) -> dict[str, Any]:
     """
     Extract slot values from a user message using LLM.
@@ -62,6 +63,7 @@ async def extract_slots(
                 "You are a slot extraction engine. Extract structured data from user messages. "
                 "Respond ONLY with valid JSON. No explanation, no markdown."
             ),
+            user_id=user_id,
         )
         return _parse_extraction_response(response, template)
     except Exception as e:
