@@ -27,7 +27,7 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional, Union
 
 from services.infrastructure.config.feature_flags import FeatureFlags
-from services.integrations.github.read_failed import GitHubReadFailed
+from services.integrations.github.read_failed import GitHubReadFailed, repo_unresolved
 from services.integrations.spatial.github_spatial import GitHubSpatialIntelligence
 
 from .config_service import GitHubConfigService
@@ -655,8 +655,6 @@ class GitHubIntegrationRouter:
             open_issues = [issue for issue in all_issues if issue.get("state") == "open"]
             return open_issues[:limit] if open_issues else []
         if strict:
-            from services.mcp.consumer.github_adapter import GitHubReadFailed
-
             raise GitHubReadFailed("no GitHub MCP adapter available for a strict read")
         # Spatial fallback
         return await self.spatial_github.get_open_issues(project, limit)
@@ -670,7 +668,6 @@ class GitHubIntegrationRouter:
         carrying the resolver's reason (CONNECT_REQUIRED / STALE_TOKEN /
         UNREACHABLE / MISCONFIGURED); items come back in the same dict shape
         ``list_github_issues_direct`` produced, so consumers are unchanged."""
-        from services.mcp.consumer.github_adapter import GitHubReadFailed
 
         adapter = self.mcp_adapter
         if adapter is None:
@@ -771,13 +768,13 @@ class GitHubIntegrationRouter:
             if not owner or not repo:
                 resolved = await self._resolve_default_repo()
                 if resolved is None:
-                    raise GitHubReadFailed("no_repository")  # #1524: never "no milestones"
+                    raise repo_unresolved()  # #1524: never "no milestones"
                 owner, repo = resolved
             return await self.mcp_adapter.list_milestones(
                 repo, owner, state=state, user_id=self._user_id
             )
         # #1524: no adapter is a read that did not happen, not an empty list
-        raise GitHubReadFailed("unavailable")
+        raise GitHubReadFailed("no GitHub adapter for this read", None, detail="no_adapter")
 
     async def list_releases_via_mcp(
         self,
@@ -800,10 +797,10 @@ class GitHubIntegrationRouter:
             if not owner or not repo:
                 resolved = await self._resolve_default_repo()
                 if resolved is None:
-                    raise GitHubReadFailed("no_repository")
+                    raise repo_unresolved()
                 owner, repo = resolved
             return await self.mcp_adapter.list_releases(repo, owner, user_id=self._user_id)
-        raise GitHubReadFailed("unavailable")
+        raise GitHubReadFailed("no GitHub adapter for this read", None, detail="no_adapter")
 
     async def list_labels_via_mcp(
         self,
@@ -823,10 +820,10 @@ class GitHubIntegrationRouter:
             if not owner or not repo:
                 resolved = await self._resolve_default_repo()
                 if resolved is None:
-                    raise GitHubReadFailed("no_repository")
+                    raise repo_unresolved()
                 owner, repo = resolved
             return await self.mcp_adapter.list_labels(repo, owner, user_id=self._user_id)
-        raise GitHubReadFailed("unavailable")
+        raise GitHubReadFailed("no GitHub adapter for this read", None, detail="no_adapter")
 
     async def list_branches_via_mcp(
         self,
@@ -848,13 +845,13 @@ class GitHubIntegrationRouter:
             if not owner or not repo:
                 resolved = await self._resolve_default_repo()
                 if resolved is None:
-                    raise GitHubReadFailed("no_repository")
+                    raise repo_unresolved()
                 owner, repo = resolved
             branches = await self.mcp_adapter.list_branches(repo, owner, user_id=self._user_id)
             repo_info = await self.mcp_adapter.get_repository_info(repo, owner)
             default_branch = (repo_info or {}).get("default_branch", "") or ""
             return {"branches": branches, "default_branch": default_branch}
-        raise GitHubReadFailed("unavailable")
+        raise GitHubReadFailed("no GitHub adapter for this read", None, detail="no_adapter")
 
     async def get_recent_activity(
         self, days: int = 7, repository: Optional[str] = None, user_id: Optional[str] = None
@@ -913,11 +910,9 @@ class GitHubIntegrationRouter:
         → env) and calls by keyword; an unresolved repo is a failed read, not an
         empty one.
         """
-        from services.integrations.github.read_failed import GitHubReadFailed
-
         resolved = await self._resolve_default_repo(project)
         if resolved is None:
-            raise GitHubReadFailed("no_repository")
+            raise repo_unresolved()
         owner, name = resolved
         return await self._get_integration("get_closed_issues").get_closed_issues(
             repo=name,

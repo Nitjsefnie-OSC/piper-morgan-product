@@ -14,7 +14,7 @@ import pytest
 
 from services.domain.models import Intent
 from services.integrations.github.github_integration_router import GitHubIntegrationRouter
-from services.integrations.github.read_failed import GitHubReadFailed
+from services.integrations.github.read_failed import GitHubReadFailed, repo_unresolved
 from services.intent.intent_service import IntentService
 from services.mcp.consumer.connector import DegradationReason, DegradationResponse
 from services.mcp.consumer.github_adapter import GitHubCredential, GitHubMCPSpatialAdapter
@@ -63,7 +63,7 @@ def _router(**reads):
 
 @pytest.mark.asyncio
 async def test_q25_an_unresolved_repo_says_so_never_says_no_milestones(intent_service):
-    r = _router(list_milestones_via_mcp=GitHubReadFailed("no_repository"))
+    r = _router(list_milestones_via_mcp=repo_unresolved())
     with patch(_NATIVE, return_value=r):
         res = await intent_service._handle_list_milestones_query(
             _intent("list_milestones_query", "What's the next milestone?"), "wf"
@@ -77,7 +77,11 @@ async def test_q25_an_unresolved_repo_says_so_never_says_no_milestones(intent_se
 
 @pytest.mark.asyncio
 async def test_a_failed_milestone_read_names_the_repo_and_says_it_failed(intent_service):
-    r = _router(list_milestones_via_mcp=GitHubReadFailed("no_credential", "octo/seeded"))
+    r = _router(
+        list_milestones_via_mcp=GitHubReadFailed(
+            "x", None, repo="octo/seeded", detail="no_credential"
+        )
+    )
     with patch(_NATIVE, return_value=r):
         res = await intent_service._handle_list_milestones_query(
             _intent("list_milestones_query", "What's the next milestone?"), "wf"
@@ -87,7 +91,7 @@ async def test_a_failed_milestone_read_names_the_repo_and_says_it_failed(intent_
         "I couldn't read octo/seeded with this account's GitHub connection, so I can't list "
         "its milestones yet."
     )
-    assert res.intent_data["context"] == {"read_failed": "no_credential"}
+    assert res.intent_data["context"] == {"read_failed": "unclassified", "detail": "no_credential"}
 
 
 @pytest.mark.asyncio
@@ -103,7 +107,11 @@ async def test_a_real_empty_answer_still_says_none(intent_service):
 
 @pytest.mark.asyncio
 async def test_labels_read_as_the_principal_and_say_a_failed_read(intent_service):
-    r = _router(list_labels_via_mcp=GitHubReadFailed("no_response", "octo/seeded"))
+    r = _router(
+        list_labels_via_mcp=GitHubReadFailed(
+            "x", DegradationReason.UNREACHABLE, repo="octo/seeded", detail="no_response"
+        )
+    )
     with patch(_NATIVE, return_value=r):
         res = await intent_service._handle_list_labels_query(
             _intent("list_labels_query", "show labels"), "wf"
@@ -133,7 +141,7 @@ async def test_router_unresolved_repo_raises_instead_of_returning_empty(method):
     router._resolve_default_repo = AsyncMock(return_value=None)
     with pytest.raises(GitHubReadFailed) as ei:
         await getattr(router, method)()
-    assert ei.value.reason == "no_repository"
+    assert ei.value.reason is DegradationReason.REPO_UNRESOLVED
 
 
 @pytest.mark.asyncio
@@ -156,7 +164,7 @@ async def test_router_without_an_adapter_is_a_failed_read():
     router.mcp_adapter = None
     with pytest.raises(GitHubReadFailed) as ei:
         await router.list_labels_via_mcp(owner="o", repo="r")
-    assert ei.value.reason == "unavailable"
+    assert ei.value.reason is None and ei.value.detail == "no_adapter"
 
 
 # --- adapter ---------------------------------------------------------------------
@@ -201,5 +209,9 @@ async def test_adapter_without_a_credential_is_a_failed_read_and_does_not_read()
     a._call_github_api_list = AsyncMock(return_value=[])
     with pytest.raises(GitHubReadFailed) as ei:
         await a.list_labels("seeded", "octo", user_id="u-1")
-    assert ei.value.reason == "no_credential" and ei.value.repo == "octo/seeded"
+    assert (
+        ei.value.reason is None
+        and ei.value.detail == "no_credential"
+        and ei.value.repo == "octo/seeded"
+    )
     a._call_github_api_list.assert_not_awaited()

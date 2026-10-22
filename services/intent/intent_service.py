@@ -6448,7 +6448,12 @@ class IntentService:
                 closed_items = await github_router.get_closed_issues(limit=50, user_id=_user_id)
             except GitHubReadFailed as rf:
                 # #2128: a read that did not happen is said as that, never as "nothing shipped"
-                self.logger.warning("shipped_this_week_read_failed", reason=rf.reason, repo=rf.repo)
+                self.logger.warning(
+                    "shipped_this_week_read_failed",
+                    reason=rf.reason_code,
+                    detail=rf.detail,
+                    repo=rf.repo,
+                )
                 return IntentProcessingResult(
                     success=False,
                     message=(
@@ -6459,7 +6464,7 @@ class IntentService:
                         "category": intent.category.value,
                         "action": intent.action,
                         "confidence": intent.confidence,
-                        "read_failed": rf.reason,
+                        "read_failed": rf.reason_code,
                     },
                     workflow_id=workflow_id,
                     requires_clarification=False,
@@ -8751,7 +8756,9 @@ class IntentService:
         question: an unarmed question site is refused by the #1730 Gap-2 ratchet
         (the #2113 precedent). Anything else names the repo when known and says the
         read failed (the #2119 sentence, scoped to the list asked for)."""
-        if rf.reason == "no_repository":
+        from services.mcp.consumer.connector import DegradationReason
+
+        if rf.reason is DegradationReason.REPO_UNRESOLVED:
             message = (
                 "I couldn't tell which repository you mean. Name one (e.g. `owner/name`), "
                 "link a repo to your project, or set a default repo."
@@ -8761,14 +8768,16 @@ class IntentService:
                 f"I couldn't read {rf.repo or 'the repository'} with this account's GitHub "
                 f"connection, so I can't list its {noun} yet."
             )
-        self.logger.warning("github_list_read_failed", action=action, reason=rf.reason)
+        self.logger.warning(
+            "github_list_read_failed", action=action, reason=rf.reason_code, detail=rf.detail
+        )
         return IntentProcessingResult(
             success=False,
             message=message,
             intent_data={
                 "category": "query",
                 "action": action,
-                "context": {"read_failed": rf.reason},
+                "context": {"read_failed": rf.reason_code, "detail": rf.detail},
             },
         )
 
@@ -9894,7 +9903,10 @@ class IntentService:
                     except GitHubReadFailed as rf:
                         # #2128: never "Issues/PRs Closed: 0" for a read that did not happen
                         self.logger.warning(
-                            "productivity_github_read_failed", reason=rf.reason, repo=rf.repo
+                            "productivity_github_read_failed",
+                            reason=rf.reason_code,
+                            detail=rf.detail,
+                            repo=rf.repo,
                         )
                         closed_items = None
 

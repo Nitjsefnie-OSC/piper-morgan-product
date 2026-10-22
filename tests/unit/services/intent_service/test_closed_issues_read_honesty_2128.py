@@ -70,7 +70,7 @@ async def test_an_unresolved_repo_is_a_failed_read_not_an_empty_one():
     router._resolve_default_repo = AsyncMock(return_value=None)
     with pytest.raises(GitHubReadFailed) as ei:
         await router.get_closed_issues(limit=50, user_id="u-1")
-    assert ei.value.reason == "no_repository"
+    assert ei.value.reason is DegradationReason.REPO_UNRESOLVED
     router.mcp_adapter.get_closed_issues.assert_not_awaited()
 
 
@@ -115,7 +115,11 @@ async def test_no_credential_is_a_failed_read(adapter):
     adapter._call_github_api_list = AsyncMock(return_value=[])
     with pytest.raises(GitHubReadFailed) as ei:
         await adapter.get_closed_issues("seeded", "octo", limit=50, user_id="u-1")
-    assert ei.value.reason == "no_credential" and ei.value.repo == "octo/seeded"
+    assert (
+        ei.value.reason is None
+        and ei.value.detail == "no_credential"
+        and ei.value.repo == "octo/seeded"
+    )
     adapter._call_github_api_list.assert_not_awaited()
 
 
@@ -124,7 +128,7 @@ async def test_no_response_is_a_failed_read_and_an_empty_list_is_empty(adapter):
     adapter._call_github_api_list = AsyncMock(return_value=None)
     with pytest.raises(GitHubReadFailed) as ei:
         await adapter.get_closed_issues("seeded", "octo", limit=50)
-    assert ei.value.reason == "no_response"
+    assert ei.value.reason is DegradationReason.UNREACHABLE and ei.value.detail == "no_response"
     adapter._call_github_api_list = AsyncMock(return_value=[])
     assert await adapter.get_closed_issues("seeded", "octo", limit=50) == []
 
@@ -134,7 +138,7 @@ async def test_an_error_during_the_read_is_a_failed_read_with_the_type(adapter):
     adapter._call_github_api_list = AsyncMock(side_effect=TimeoutError("slow"))
     with pytest.raises(GitHubReadFailed) as ei:
         await adapter.get_closed_issues("seeded", "octo", limit=50)
-    assert ei.value.reason == "TimeoutError"
+    assert ei.value.reason is DegradationReason.UNREACHABLE and ei.value.detail == "TimeoutError"
 
 
 # --- the handlers ------------------------------------------------------------------
@@ -160,7 +164,7 @@ async def test_shipped_this_week_says_the_read_failed_not_nothing_shipped(intent
         mock_router.is_available = AsyncMock(return_value=True)
         mock_router.initialize = AsyncMock()
         mock_router.get_closed_issues = AsyncMock(
-            side_effect=GitHubReadFailed("no_credential", "octo/seeded")
+            side_effect=GitHubReadFailed("x", None, repo="octo/seeded", detail="no_credential")
         )
         MockRouter.return_value = mock_router
         result = await intent_service._handle_shipped_this_week(_intent("shipped_this_week"), "wf")
@@ -185,7 +189,9 @@ async def test_productivity_never_counts_zero_for_a_failed_read(intent_service):
         mock_router.is_available = AsyncMock(return_value=True)
         mock_router.initialize = AsyncMock()
         mock_router.get_closed_issues = AsyncMock(
-            side_effect=GitHubReadFailed("no_response", "octo/seeded")
+            side_effect=GitHubReadFailed(
+                "x", DegradationReason.UNREACHABLE, repo="octo/seeded", detail="no_response"
+            )
         )
         MockRouter.return_value = mock_router
         repo = MagicMock()

@@ -7,6 +7,7 @@ from unittest.mock import AsyncMock, MagicMock
 import pytest
 
 from services.integrations.github.read_failed import GitHubReadFailed
+from services.mcp.consumer.connector import DegradationReason
 from services.mcp.consumer.github_adapter import GitHubMCPSpatialAdapter
 
 
@@ -67,7 +68,7 @@ class TestListMilestones:
         adapter._call_github_api.return_value = None
         with pytest.raises(GitHubReadFailed) as ei:
             await adapter.list_milestones("r", "o")
-        assert ei.value.reason == "no_response"
+        assert ei.value.reason is DegradationReason.UNREACHABLE and ei.value.detail == "no_response"
         adapter._call_github_api.return_value = []
         assert await adapter.list_milestones("r", "o") == []  # the repo answered: empty
 
@@ -75,7 +76,7 @@ class TestListMilestones:
         adapter._call_github_api.side_effect = Exception("api boom")
         with pytest.raises(GitHubReadFailed) as ei:  # #1524: was asserting the lie
             await adapter.list_milestones("r", "o")
-        assert ei.value.reason == "Exception"
+        assert ei.value.reason is None and ei.value.detail == "Exception"
 
     async def test_required_args_no_defaults(self, adapter):
         # Cannot call without repo + owner — TypeError on missing positional args
@@ -139,7 +140,7 @@ class TestListReleases:
         adapter._call_github_api.return_value = None
         with pytest.raises(GitHubReadFailed) as ei:
             await adapter.list_releases("r", "o")
-        assert ei.value.reason == "no_response"
+        assert ei.value.reason is DegradationReason.UNREACHABLE and ei.value.detail == "no_response"
         adapter._call_github_api.return_value = []
         assert await adapter.list_releases("r", "o") == []  # the repo answered: empty
 
@@ -147,7 +148,7 @@ class TestListReleases:
         adapter._call_github_api.side_effect = RuntimeError("boom")
         with pytest.raises(GitHubReadFailed) as ei:  # #1524: was asserting the lie
             await adapter.list_releases("r", "o")
-        assert ei.value.reason == "RuntimeError"
+        assert ei.value.reason is None and ei.value.detail == "RuntimeError"
 
     async def test_required_args_no_defaults(self, adapter):
         with pytest.raises(TypeError):

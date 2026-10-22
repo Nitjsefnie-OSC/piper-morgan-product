@@ -7,6 +7,7 @@ from unittest.mock import AsyncMock
 import pytest
 
 from services.integrations.github.read_failed import GitHubReadFailed
+from services.mcp.consumer.connector import DegradationReason
 from services.mcp.consumer.github_adapter import GitHubMCPSpatialAdapter
 
 
@@ -47,7 +48,7 @@ class TestListLabels:
         adapter._call_github_api.return_value = None
         with pytest.raises(GitHubReadFailed) as ei:
             await adapter.list_labels("r", "o")
-        assert ei.value.reason == "no_response"
+        assert ei.value.reason is DegradationReason.UNREACHABLE and ei.value.detail == "no_response"
         adapter._call_github_api.return_value = []
         assert await adapter.list_labels("r", "o") == []  # the repo answered: empty
 
@@ -55,7 +56,7 @@ class TestListLabels:
         adapter._call_github_api.side_effect = RuntimeError("boom")
         with pytest.raises(GitHubReadFailed) as ei:  # #1524: was asserting the lie
             await adapter.list_labels("r", "o")
-        assert ei.value.reason == "RuntimeError"
+        assert ei.value.reason is None and ei.value.detail == "RuntimeError"
 
     async def test_required_args_no_defaults(self, adapter):
         with pytest.raises(TypeError):
@@ -99,7 +100,7 @@ class TestListBranches:
         adapter._call_github_api.return_value = None
         with pytest.raises(GitHubReadFailed) as ei:
             await adapter.list_branches("r", "o")
-        assert ei.value.reason == "no_response"
+        assert ei.value.reason is DegradationReason.UNREACHABLE and ei.value.detail == "no_response"
         adapter._call_github_api.return_value = []
         assert await adapter.list_branches("r", "o") == []  # the repo answered: empty
 
@@ -107,7 +108,7 @@ class TestListBranches:
         adapter._call_github_api.side_effect = RuntimeError("boom")
         with pytest.raises(GitHubReadFailed) as ei:  # #1524: was asserting the lie
             await adapter.list_branches("r", "o")
-        assert ei.value.reason == "RuntimeError"
+        assert ei.value.reason is None and ei.value.detail == "RuntimeError"
 
     async def test_required_args_no_defaults(self, adapter):
         with pytest.raises(TypeError):

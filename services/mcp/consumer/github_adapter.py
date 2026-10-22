@@ -20,9 +20,8 @@ import aiohttp
 from services.connectors.binding_repository import ConnectorBindingRepository
 from services.database.session_factory import AsyncSessionFactory
 
-# #1524/#2128: the list reads' failed-read type. Aliased because this module also
-# defines its own GitHubReadFailed (#1965, the strict read path, a different shape).
-from services.integrations.github.read_failed import GitHubReadFailed as ListReadFailed
+# The one failed-read type (Arch 2026-10-22: unified; the #1965 class moved there).
+from services.integrations.github.read_failed import GitHubReadFailed, transport_reason
 from services.integrations.github.repo_resolver import (
     ResolvedRepo,
     UnresolvedRepoError,
@@ -107,23 +106,8 @@ import structlog
 _slog = structlog.get_logger(__name__)
 
 
-class GitHubReadFailed(Exception):
-    """#1965: a GitHub read that genuinely FAILED (no configured session, a
-    non-200 response, or a transport error) — raised only by the ``strict=True``
-    read path, so a caller that must tell failure from "nothing there" (the
-    Radar/standup work-items gather, #1587) can. The lenient default path keeps
-    its long-standing ``None`` / ``[]`` contract for every other caller.
-
-    ``reason`` (Arch's #1965 ruling): the connector layer's own taxonomy, so
-    "re-authorize", "not found" and "GitHub is down" stay distinct downstream.
-    ``None`` = unclassified. A missing session is deliberately UNCLASSIFIED here,
-    not CONNECT_REQUIRED: on this path (before #1965 (b)) an OAuth-connected user
-    has no PAT, so "no credential" does not mean "not connected" (CXO's rule).
-    """
-
-    def __init__(self, message: str, reason: "Optional[DegradationReason]" = None):
-        super().__init__(message)
-        self.reason = reason
+# #1965's GitHubReadFailed now lives in services/integrations/github/read_failed.py
+# (one class, one taxonomy; Arch 2026-10-22). Imported above, so this module still exports it.
 
 
 class GitHubToolError(Exception):
@@ -2137,7 +2121,7 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
         (were defaulted to "piper-morgan-product" / "mediajunkie").
 
         #2128: with a principal, the read carries the account's own grant (the
-        #2121 shape); a read that did not happen raises ``ListReadFailed`` (read_failed.ListReadFailed)
+        #2121 shape); a read that did not happen raises ``GitHubReadFailed``
         (no credential, no response, an error), never returns ``[]``. An empty
         list means the repo answered and nothing is closed.
         """
@@ -2149,10 +2133,20 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
             if user_id:
                 grant_headers = await self._grant_headers_for(user_id)
                 if grant_headers is None:
-                    raise ListReadFailed("no_credential", full_name)
+                    raise GitHubReadFailed(
+                        "no credential for this account",
+                        None,
+                        repo=full_name,
+                        detail="no_credential",
+                    )
             issues_data = await self._call_github_api_list(endpoint, params, headers=grant_headers)
             if issues_data is None:
-                raise ListReadFailed("no_response", full_name)
+                raise GitHubReadFailed(
+                    "no response from GitHub",
+                    DegradationReason.UNREACHABLE,
+                    repo=full_name,
+                    detail="no_response",
+                )
             if not issues_data:
                 return []
 
@@ -2171,11 +2165,13 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
                 )
             return issues
 
-        except ListReadFailed:
+        except GitHubReadFailed:
             raise
         except Exception as e:
             logger.error(f"Error getting closed issues: {type(e).__name__}")
-            raise ListReadFailed(type(e).__name__, full_name) from e
+            raise GitHubReadFailed(
+                "GitHub read error", transport_reason(e), repo=full_name, detail=type(e).__name__
+            ) from e
 
     async def get_recent_activity(
         self,
@@ -2371,7 +2367,7 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
         Returns:
             List of normalized milestone dicts with keys: title, number,
             state, due_on, open_issues, closed_issues, html_url, description.
-            Empty list on any failure.
+            Raises GitHubReadFailed when the read did not happen (#1524); [] means none.
         """
         try:
             endpoint = f"repos/{owner}/{repo}/milestones"
@@ -2380,12 +2376,22 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
             if user_id:
                 grant_headers = await self._grant_headers_for(user_id)
                 if grant_headers is None:
-                    raise ListReadFailed("no_credential", f"{owner}/{repo}")
+                    raise GitHubReadFailed(
+                        "no credential for this account",
+                        None,
+                        repo=f"{owner}/{repo}",
+                        detail="no_credential",
+                    )
             milestones_data = await self._call_github_api_list(
                 endpoint, params, headers=grant_headers
             )
             if milestones_data is None:
-                raise ListReadFailed("no_response", f"{owner}/{repo}")
+                raise GitHubReadFailed(
+                    "no response from GitHub",
+                    DegradationReason.UNREACHABLE,
+                    repo=f"{owner}/{repo}",
+                    detail="no_response",
+                )
             if not milestones_data:
                 return []
 
@@ -2408,12 +2414,17 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
             )
             return milestones
 
-        except ListReadFailed:
+        except GitHubReadFailed:
             raise
 
         except Exception as e:
             logger.error(f"list_milestones read failed: {type(e).__name__}")
-            raise ListReadFailed(type(e).__name__, f"{owner}/{repo}") from e
+            raise GitHubReadFailed(
+                "GitHub read error",
+                transport_reason(e),
+                repo=f"{owner}/{repo}",
+                detail=type(e).__name__,
+            ) from e
 
     async def list_releases(
         self, repo: str, owner: str, *, user_id: Optional[str] = None
@@ -2439,12 +2450,22 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
             if user_id:
                 grant_headers = await self._grant_headers_for(user_id)
                 if grant_headers is None:
-                    raise ListReadFailed("no_credential", f"{owner}/{repo}")
+                    raise GitHubReadFailed(
+                        "no credential for this account",
+                        None,
+                        repo=f"{owner}/{repo}",
+                        detail="no_credential",
+                    )
             releases_data = await self._call_github_api_list(
                 endpoint, params, headers=grant_headers
             )
             if releases_data is None:
-                raise ListReadFailed("no_response", f"{owner}/{repo}")
+                raise GitHubReadFailed(
+                    "no response from GitHub",
+                    DegradationReason.UNREACHABLE,
+                    repo=f"{owner}/{repo}",
+                    detail="no_response",
+                )
             if not releases_data:
                 return []
 
@@ -2468,12 +2489,17 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
             logger.info(f"Retrieved {len(releases)} releases from {owner}/{repo}")
             return releases
 
-        except ListReadFailed:
+        except GitHubReadFailed:
             raise
 
         except Exception as e:
             logger.error(f"list_releases read failed: {type(e).__name__}")
-            raise ListReadFailed(type(e).__name__, f"{owner}/{repo}") from e
+            raise GitHubReadFailed(
+                "GitHub read error",
+                transport_reason(e),
+                repo=f"{owner}/{repo}",
+                detail=type(e).__name__,
+            ) from e
 
     async def list_labels(
         self, repo: str, owner: str, *, user_id: Optional[str] = None
@@ -2486,7 +2512,7 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
 
         Returns:
             List of normalized label dicts with keys: name, color, description,
-            html_url. Empty list on any failure.
+            html_url. Raises GitHubReadFailed when the read did not happen (#1524); [] means none.
         """
         try:
             endpoint = f"repos/{owner}/{repo}/labels"
@@ -2495,10 +2521,20 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
             if user_id:
                 grant_headers = await self._grant_headers_for(user_id)
                 if grant_headers is None:
-                    raise ListReadFailed("no_credential", f"{owner}/{repo}")
+                    raise GitHubReadFailed(
+                        "no credential for this account",
+                        None,
+                        repo=f"{owner}/{repo}",
+                        detail="no_credential",
+                    )
             labels_data = await self._call_github_api_list(endpoint, params, headers=grant_headers)
             if labels_data is None:
-                raise ListReadFailed("no_response", f"{owner}/{repo}")
+                raise GitHubReadFailed(
+                    "no response from GitHub",
+                    DegradationReason.UNREACHABLE,
+                    repo=f"{owner}/{repo}",
+                    detail="no_response",
+                )
             if not labels_data:
                 return []
 
@@ -2515,12 +2551,17 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
             logger.info(f"Retrieved {len(labels)} labels from {owner}/{repo}")
             return labels
 
-        except ListReadFailed:
+        except GitHubReadFailed:
             raise
 
         except Exception as e:
             logger.error(f"list_labels read failed: {type(e).__name__}")
-            raise ListReadFailed(type(e).__name__, f"{owner}/{repo}") from e
+            raise GitHubReadFailed(
+                "GitHub read error",
+                transport_reason(e),
+                repo=f"{owner}/{repo}",
+                detail=type(e).__name__,
+            ) from e
 
     async def list_branches(
         self, repo: str, owner: str, *, user_id: Optional[str] = None
@@ -2535,7 +2576,7 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
             List of normalized branch dicts with keys: name, protected,
             commit_sha. Default-branch identification happens at the
             handler layer (compares against repo's default_branch).
-            Empty list on any failure.
+            Raises GitHubReadFailed when the read did not happen (#1524); [] means none.
 
         Note: per Q5 disposition, returns ALL branches; default-vs-non-default
         sorting + filtering for "feature branches" colloquial query happens
@@ -2549,12 +2590,22 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
             if user_id:
                 grant_headers = await self._grant_headers_for(user_id)
                 if grant_headers is None:
-                    raise ListReadFailed("no_credential", f"{owner}/{repo}")
+                    raise GitHubReadFailed(
+                        "no credential for this account",
+                        None,
+                        repo=f"{owner}/{repo}",
+                        detail="no_credential",
+                    )
             branches_data = await self._call_github_api_list(
                 endpoint, params, headers=grant_headers
             )
             if branches_data is None:
-                raise ListReadFailed("no_response", f"{owner}/{repo}")
+                raise GitHubReadFailed(
+                    "no response from GitHub",
+                    DegradationReason.UNREACHABLE,
+                    repo=f"{owner}/{repo}",
+                    detail="no_response",
+                )
             if not branches_data:
                 return []
 
@@ -2571,12 +2622,17 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
             logger.info(f"Retrieved {len(branches)} branches from {owner}/{repo}")
             return branches
 
-        except ListReadFailed:
+        except GitHubReadFailed:
             raise
 
         except Exception as e:
             logger.error(f"list_branches read failed: {type(e).__name__}")
-            raise ListReadFailed(type(e).__name__, f"{owner}/{repo}") from e
+            raise GitHubReadFailed(
+                "GitHub read error",
+                transport_reason(e),
+                repo=f"{owner}/{repo}",
+                detail=type(e).__name__,
+            ) from e
 
     async def list_repositories(self) -> List[Dict[str, Any]]:
         """#1723: list the repositories accessible to the configured token.
@@ -2594,7 +2650,7 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
             Normalized repo dicts — ``{id, name, full_name, description,
             html_url, private, archived, updated_at}`` (the caller reads
             ``name`` + ``full_name``; the rest mirrors the
-            ``GitHubRepositoryInfo`` shape). Empty list on any failure.
+            ``GitHubRepositoryInfo`` shape). Raises GitHubReadFailed when the read did not happen (#1524); [] means none.
         """
         try:
             repos_data = await self._call_github_api_list(
