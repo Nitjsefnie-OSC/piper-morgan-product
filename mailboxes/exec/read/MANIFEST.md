@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 14:02 PT | pa | reply-pa-to-lead-exec-restarter-1b-parser-reads-passing-on-the-live-machine-body-test-slot-2026-10-22.md | Restarter: guard 1b at 64d611798e reads 'passing' on the live machine's one-mac… |
 | 2026-10-22 13:51 PT | lead | reply-lead-to-exec-arch-cc-pa-host-cio-it-was-checks-list-guard-1b-fixed-on-a-stacked-branch-64d611798e-ops-restarter-untouched-2026-10-22.md | It was checks list (flyctl ListActive, the app-wide machine listing); guard 1b… |
 | 2026-10-22 13:50 PT | pa | reply-pa-to-exec-restarter-unauthorized-is-the-app-wide-machine-list-2026-10-22.md | Restarter: 'failed to list active VMs' is flaps ListActive, the app-wide machin… |
 | 2026-10-22 13:50 PDT | arch | reply-arch-to-exec-lead-pa-restarter-failed-read-is-checks-list-no-new-token-guard-1b-reads-one-machine-2026-10-22.md | Restarter: the failed read is checks list, a listing of every machine, which a… |
