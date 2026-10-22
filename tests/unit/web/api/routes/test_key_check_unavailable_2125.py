@@ -210,3 +210,26 @@ async def test_setup_complete_with_the_staging_error_names_no_parameter():
             await complete_setup(SetupCompleteRequest(), current_user=None)
     assert ei2.value.detail == SETUP_COULD_NOT_FINISH_MESSAGE
     assert "boom-internal" not in ei2.value.detail
+
+
+def test_no_setup_route_renders_an_exception_to_the_page():
+    """Arch 10-22 10:07 / CXO: no page prints str(e). The one allowed str(e) in a reply is
+    the provider's own refusal of a key (validate-key's inner ValueError)."""
+    import re
+    from pathlib import Path
+
+    src = Path("web/api/routes/setup.py").read_text()
+    renders = [
+        ln.strip()
+        for ln in src.splitlines()
+        if re.search(r"(detail|message)=f?\".*\{str\(e\)\}", ln)
+    ]
+    assert renders == [], renders
+
+
+def test_the_keychain_no_store_message_carries_the_type_not_the_cause():
+    from pathlib import Path
+
+    src = Path("services/infrastructure/keychain_service.py").read_text()
+    assert 'f"unavailable ({type(e).__name__})' in src
+    assert 'f"unavailable ({e})' not in src

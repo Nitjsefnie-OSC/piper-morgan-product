@@ -247,9 +247,11 @@ class KeychainService:
                 )
                 return
             except Exception as e:
+                # #2125 (Arch): the cause stays in the log below; the message carries only
+                # the type, so no caller can print a key parameter whatever its catch-all does.
                 self._no_secure_store = (
                     "No OS keyring backend AND the encrypted-DB fallback is "
-                    f"unavailable ({e}) — no secure credential store; refusing "
+                    f"unavailable ({type(e).__name__}) — no secure credential store; refusing "
                     "the operation (#1382)."
                 )
                 logger.error(

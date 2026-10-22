@@ -528,7 +528,7 @@ async def check_system():
         logger.error("system_check_failed", error=str(e), exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"System check failed: {str(e)}",
+            detail=SYSTEM_CHECK_COULD_NOT_RUN_MESSAGE,
         )
 
 
@@ -675,6 +675,18 @@ def provider_display_name(provider: str) -> str:
 
 
 KEY_CHECK_COULD_NOT_RUN_MESSAGE = KEY_CHECK_UNAVAILABLE_MESSAGE  # one sentence, one source
+# #2125 (Arch, CXO): no page prints str(e). One tail, one line per route; the cause is logged.
+_TRY_AGAIN = "Try again in a moment; if it keeps failing, tell us."
+SYSTEM_CHECK_COULD_NOT_RUN_MESSAGE = f"The system check couldn't run just now. {_TRY_AGAIN}"
+CREDENTIALS_COULD_NOT_BE_SAVED_MESSAGE = f"The credentials couldn't be saved just now. {_TRY_AGAIN}"
+ACCOUNT_COULD_NOT_BE_CREATED_MESSAGE = f"The account couldn't be created just now. {_TRY_AGAIN}"
+PROJECT_COULD_NOT_BE_CREATED_MESSAGE = f"The project couldn't be created just now. {_TRY_AGAIN}"
+SLACK_CONNECT_COULD_NOT_START_MESSAGE = (
+    f"The Slack connection couldn't start just now. {_TRY_AGAIN}"
+)
+CALENDAR_CONNECT_COULD_NOT_START_MESSAGE = (
+    f"The Google Calendar connection couldn't start just now. {_TRY_AGAIN}"
+)
 SETUP_COULD_NOT_FINISH_MESSAGE = (
     "Setup couldn't finish just now. Try again in a moment; if it keeps failing, tell us."
 )
@@ -963,7 +975,7 @@ async def save_slack_credentials_setup(credentials: SlackCredentialsRequest):
         logger.error("slack_credentials_setup_error", error=str(e), exc_info=True)
         return SlackCredentialsResponse(
             success=False,
-            message=f"Failed to save credentials: {str(e)}",
+            message=CREDENTIALS_COULD_NOT_BE_SAVED_MESSAGE,
         )
 
 
@@ -1115,7 +1127,7 @@ async def create_user(
             logger.error("user_creation_failed", username=req.username, error=str(e), exc_info=True)
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=f"User creation failed: {str(e)}",
+                detail=ACCOUNT_COULD_NOT_BE_CREATED_MESSAGE,
             )
 
 
@@ -1453,7 +1465,7 @@ async def create_setup_project(
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to create project: {str(e)}",
+            detail=PROJECT_COULD_NOT_BE_CREATED_MESSAGE,
         )
 
 
@@ -1526,7 +1538,7 @@ async def start_slack_oauth(
         logger.error("slack_oauth_start_failed", error=str(e), exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to start Slack OAuth: {str(e)}",
+            detail=SLACK_CONNECT_COULD_NOT_START_MESSAGE,
         )
 
 
@@ -1688,7 +1700,7 @@ async def start_calendar_oauth(
         logger.error("calendar_oauth_start_failed", error=str(e), exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to start Calendar OAuth: {str(e)}",
+            detail=CALENDAR_CONNECT_COULD_NOT_START_MESSAGE,
         )
 
 
