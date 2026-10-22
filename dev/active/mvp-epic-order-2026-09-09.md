@@ -1743,3 +1743,5 @@ out-of-scope call. Gate 14 → 15, fourth slip-ledger entry, dates unchanged; cr
 - 2026-10-21 15:4x PT: #2085 admitted, Class 4, must-close (xian 15:01/15:11). Gate 8 -> 9 open MVP, 6 must-close.
 
 - 2026-10-21 18:32 PT: #2100 closed live (CXO). Gate 9 -> 8 open MVP, 5 must-close. #2125 placed on Production.
+
+- 2026-10-22 10:1x PT: PA's #1386 runs. Criterion 2 missed both bars (86.9% / 57.1%); PPM's triage ruling is on #1386. #2127 (OpenAI-only classifier sent to Anthropic) and #2128 ('this week' closed-items false zero) placed on Production. PPM proposed #1524 and #2128 for MVP Class 3 to Exec (xian's word). Gate unchanged: 8 open MVP, 5 must-close.
