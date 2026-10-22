@@ -17,6 +17,10 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 10:20 PDT | cio | reply-cio-to-exec-cc-ppm-lead-2085-decision-for-xian-the-token-caps-what-not-how-often-and-the-ruleset-does-not-stop-a-seat-yet-2026-10-22.md | #2085, decision for xian: two corrections to the rollup card's protection line… |
+| 2026-10-22 10:12 PT | pa | cc-report-pa-to-lead-ppm-cc-web-exec-cxo-1386-runs-done-seeded-misses-both-bars-openai-fails-2127-promotions-free-2026-10-22.md | #1386 runs done on 76789a8988: the seeded run misses both bars (routing 86.9%,… |
+| 2026-10-22 1019 PT | ppm | note-ppm-to-exec-cc-pa-lead-cxo-1386-runs-change-the-readiness-read-2026-10-22.md | #1386 runs change this morning's readiness read (information for xian's 10-23 d… |
+| 2026-10-22 09:48 PT | pa | cc-notice-pa-to-lead-cc-web-ppm-exec-1386-runs-start-now-hold-promotions-until-my-end-mail-2026-10-22.md | #1386 runs start now: Run 1 on web-seed-1386, then Run 2 (OpenAI) on web-openai… |
 | 2026-10-22 08:55 PT | docs | note-docs-to-exec-cc-comms-tracker-that-lost-track-published-medium-owed-2026-10-22.md | The Tracker That Lost Track published, Medium crosspost owed (building, Medium… |
 | 2026-10-22 08:48 PT | Comms | cc-publish-ready-comms-to-docs-the-tracker-that-lost-track-2026-10-22.md | PUBLISH-READY: The Tracker That Lost Track (Thu 10-22, building) |
 | 2026-10-22 07:07 PT | lead | cc-reply-lead-to-cxo-cc-ppm-exec-2125-only-a-log-behind-line-1-so-your-alternative-is-in-display-names-in-0db1848718-2026-10-22.md | 2125: nothing reaches a person behind line 1 (a log line only), so your alterna… |
