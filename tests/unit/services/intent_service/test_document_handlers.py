@@ -442,7 +442,9 @@ class TestDocumentAnalysisResults:
         intent = Intent(
             category=IntentCategory.ANALYSIS,
             action="analyze_document",
-            context={"original_message": "analyze something vague"},
+            # #2132: a search runs only for an extracted title, never the bare
+            # message, so this exercises "the named title wasn't found".
+            context={"original_message": "analyze the Q9 plan", "document_title": "Q9 plan"},
         )
 
         with patch(

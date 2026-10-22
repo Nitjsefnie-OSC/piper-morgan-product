@@ -5947,9 +5947,30 @@ class IntentService:
             document_id = intent.context.get("document_id") or intent.context.get("page_id")
             document_title = intent.context.get("document_title") or intent.context.get("filename")
 
-            # If no specific document, search for one based on message
+            # #2132 (Arch 15:05, CXO 15:25): a deictic ask ("analyze this
+            # document") resolves only to a BOUND referent. Searching Notion with
+            # the whole message and presenting the top hit as "the document"
+            # claims a referent the product guessed. Search only for a title the
+            # classifier extracted, and name the page read; with no title, say so.
+            if not document_id and not document_title:
+                return IntentProcessingResult(
+                    success=True,
+                    message=(
+                        "I don't see a document in this chat. "
+                        "Paste the text here and I'll work with it."
+                    ),
+                    intent_data={
+                        "category": intent.category.value,
+                        "action": intent.action,
+                        "confidence": intent.confidence,
+                    },
+                    workflow_id=workflow_id,
+                    requires_clarification=False,
+                    implemented=False,
+                )
+
             if not document_id:
-                search_query = intent.context.get("original_message", "")
+                search_query = str(document_title)
                 await notion_router.connect_for_user(_user_id)
                 results = await notion_router.search_notion(query=search_query, page_size=1)
 
@@ -6026,7 +6047,11 @@ class IntentService:
             title = page_data.get("title", document_title or "Untitled")
             last_edited = page_data.get("last_edited_time", "Unknown")
 
-            message = f"""**Document Analysis: {title}**
+            # #2132: name the page that was read, so the user can see what
+            # "this document" resolved to.
+            message = f"""I read '{title}' in Notion.
+
+**Document Analysis: {title}**
 
 **Overview:**
 - Word count: {word_count:,}
