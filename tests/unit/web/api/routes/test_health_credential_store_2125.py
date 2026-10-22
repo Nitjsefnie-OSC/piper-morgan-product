@@ -67,12 +67,38 @@ def test_a_32_byte_master_key_reads_healthy(monkeypatch):
     field_encryption.reset_credential_store_probe()
 
 
-def test_no_master_key_reads_not_configured_and_does_not_degrade(monkeypatch):
+def test_no_master_key_reads_not_configured_and_does_not_degrade_on_a_local_box(monkeypatch):
     """A local dev box without the variable falls back to the OS keychain; boot is never
     refused and /health does not degrade for it."""
     _install(monkeypatch, None)
+    monkeypatch.delenv("FLY_APP_NAME", raising=False)
     body = _client().get("/health").json()
     assert body["services"]["credential_store"] == "not_configured"
+    # (the bare test app has no intent service, so the overall status is degraded for
+    # that reason alone; the probe's own verdict is the assertion here)
+    field_encryption.reset_credential_store_probe()
+
+
+def test_no_master_key_on_a_fly_box_reads_unavailable_and_degraded(monkeypatch):
+    """Arch 10-22 10:07: no OS keyring on a Fly machine, so a box missing the variable
+    cannot store a key and must not read clear."""
+    _install(monkeypatch, None)
+    monkeypatch.setenv("FLY_APP_NAME", "piper-morgan-test")
+    body = _client().get("/health").json()
+    assert body["services"]["credential_store"] == "unavailable"
+    assert body["status"] == "degraded"
+    field_encryption.reset_credential_store_probe()
+
+
+def test_scoped_subkeys_on_a_fly_box_read_healthy(monkeypatch):
+    """The MCP app holds ENCRYPTION_SCOPED_SUBKEYS, never the master key (fly.mcp.toml)."""
+    _install(monkeypatch, None)
+    monkeypatch.setenv("FLY_APP_NAME", "piper-morgan-mcp-test")
+    monkeypatch.setenv(
+        "ENCRYPTION_SCOPED_SUBKEYS", "github=" + base64.b64encode(b"s" * 32).decode()
+    )
+    field_encryption.reset_credential_store_probe()
+    assert field_encryption.probe_credential_store()["status"] == "healthy"
     field_encryption.reset_credential_store_probe()
 
 

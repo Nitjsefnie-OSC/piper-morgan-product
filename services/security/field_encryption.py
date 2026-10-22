@@ -276,7 +276,15 @@ def probe_credential_store(force: bool = False) -> Dict[str, Any]:
         return _CREDENTIAL_STORE_STATUS
     try:
         svc = FieldEncryptionService.from_env()
-        status = {"status": "healthy" if svc is not None else "not_configured", "error_type": None}
+        if svc is not None:
+            status = {"status": "healthy", "error_type": None}
+        elif os.getenv("FLY_APP_NAME"):
+            # Arch (2026-10-22 10:07): on a Fly machine there is no OS keyring, so a box
+            # without the variable cannot store a key; "not_configured" must not read
+            # clear there (the fail-closed rule). A scoped-subkey box reads healthy above.
+            status = {"status": "unavailable", "error_type": "NotConfiguredOnHostedBox"}
+        else:
+            status = {"status": "not_configured", "error_type": None}
     except KeyStoreConfigError as e:
         status = {"status": "unavailable", "error_type": type(e).__name__}
     except Exception as e:  # a surprise is still "unavailable", never a crash
