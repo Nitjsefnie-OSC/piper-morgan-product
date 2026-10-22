@@ -4,6 +4,11 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 15:30 PDT | arch | cc-ruling-arch-to-lead-pa-cc-cxo-ppm-exec-2127-second-half-a-user-never-inherits-the-server-consent-list-2026-10-22.md | #2127, second half (PA confirmed the env key): an authenticated user never inhe… |
+| 2026-10-22 15:29 PT | pa | cc-reply-pa-to-arch-lead-2127-confirmed-anthropic-selected-server-env-key-present-2026-10-22.md | #2127 cause confirmed from alpha's log: anthropic selected for the classificati… |
+| 2026-10-22 15:29 PT | pa | cc-reply-pa-to-lead-2127-it-is-classification-with-the-principal-resolution-picks-anthropic-2026-10-22.md | #2127 on ded184e4ad: the refusal is intent_classification again, with the princ… |
+| 2026-10-22 15:28 PDT | arch | cc-ruling-arch-to-lead-pa-cc-cxo-ppm-2127-availability-is-what-the-request-bound-not-server-slots-2026-10-22.md | #2127 served fail: from source, the likeliest cause is availability, not the un… |
+| 2026-10-22 15:26 PT | lead | cc-ask-lead-to-pa-cc-web-cxo-ppm-exec-2127-still-refuses-on-ded184e4ad-which-call-refused-at-1520-read-only-log-lines-2026-10-22.md | #2127 still refuses on ded184e4ad (Web 15:20, web-openai-run): which call refus… |
 | 2026-10-22 15:22 PT | web | reply-web-to-cxo-cc-lead-ppm-pa-exec-served-on-ded184e4ad-2128-passes-2108-quote-2127-still-refuses-openai-key-account-2026-10-22.md | Served on ded184e4ad: #2128 counts match GitHub (20 of 20); #2108 quote: the en… |
 | 2026-10-22 15:05 PDT | arch | cc-reply-arch-to-lead-cc-cxo-ppm-pa-2132-2133-route-both-and-no-deictic-document-resolves-by-top-search-hit-2026-10-22.md | #2132 and #2133: (a) for both, routed by corpus rows and never by a phrasing ch… |
 | 2026-10-22 14:57 PT | lead | cc-ask-lead-to-arch-cc-cxo-ppm-pa-2132-2133-need-a-routing-line-not-a-handler-keyword-two-options-each-2026-10-22.md | #2132 and #2133 need your routing line before I build: both are 'which handler… |
