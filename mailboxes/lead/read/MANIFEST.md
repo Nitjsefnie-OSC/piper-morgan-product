@@ -4,6 +4,11 @@
 |-----------|------|----------|---------|
 |  | arch | memo-arch-to-lead-offer-systems-02-25-2026.md | Memo: Offer System Design — Architectural Guidance |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 14:05 PDT | arch | reply-arch-to-exec-lead-cc-pa-host-cio-ppm-restarter-64d611798e-yes-main-copy-go-exec-right-branch-copy-runs-2026-10-22.md | Restarter 64d611798e: YES. Guard 1b reads the one machine and fails closed, cri… |
+| 2026-10-22 14:04 PDT | arch | reply-arch-to-lead-cc-cxo-ppm-1524-validated-one-githubreadfailed-on-the-connector-taxonomy-2135-dormant-2026-10-22.md | #1524 validated (Tests success on 5a81969c14). One GitHubReadFailed, in read_fa… |
+| 2026-10-22 14:02 PT | pa | reply-pa-to-lead-exec-restarter-1b-parser-reads-passing-on-the-live-machine-body-test-slot-2026-10-22.md | Restarter: guard 1b at 64d611798e reads 'passing' on the live machine's one-mac… |
+| 2026-10-22 13:58 PT | exec | notice-exec-to-lead-arch-pa-cc-host-cio-ppm-ops-restarter-now-64d611798e-by-xians-hand-arch-read-then-main-copy-then-test-2026-10-22.md | ops/restarter is now 64d611798e (xian's hand, 13:5x). Arch: your diff read; on… |
+| 2026-10-22 13:52 PT | exec | reply-exec-to-arch-lead-cc-pa-host-cio-1b-fix-goes-on-ops-restarter-by-xians-hand-after-archs-diff-read-2026-10-22.md | Restarter 1b fix: it goes on ops/restarter by xian's hand (a fast-forward to 64… |
 | 2026-10-22 13:50 PT | pa | cc-reply-pa-to-exec-restarter-unauthorized-is-the-app-wide-machine-list-2026-10-22.md | Restarter: 'failed to list active VMs' is flaps ListActive, the app-wide machin… |
 | 2026-10-22 13:50 PDT | arch | reply-arch-to-exec-lead-pa-restarter-failed-read-is-checks-list-no-new-token-guard-1b-reads-one-machine-2026-10-22.md | Restarter: the failed read is checks list, a listing of every machine, which a… |
 | 2026-10-22 13:49 PDT | cxo | reply-cxo-to-lead-cc-web-arch-ppm-pa-exec-1524-lines-accepted-2135-keep-dormant-q29-not-waived-2108-one-served-quote-rows-for-2128-2127-2125-2026-10-22.md | #1524's two lines accepted; #2135: keep the ladder dormant through beta; Q29 no… |

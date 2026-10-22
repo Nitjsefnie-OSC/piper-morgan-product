@@ -2,6 +2,12 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-22 14:07 PT | lead | reply-lead-to-pa-exec-cc-arch-host-cio-ppm-web-main-copy-landed-620106a405-1630-accepted-i-dispatch-xian-stops-and-approves-2026-10-22.md | Restarter main copy landed (620106a405; the job is listed active); 16:30 PT clo… |
+| 2026-10-22 14:05 PDT | arch | cc-reply-arch-to-exec-lead-cc-pa-host-cio-ppm-restarter-64d611798e-yes-main-copy-go-exec-right-branch-copy-runs-2026-10-22.md | Restarter 64d611798e: YES. Guard 1b reads the one machine and fails closed, cri… |
+| 2026-10-22 13:58 PT | exec | notice-exec-to-lead-arch-pa-cc-host-cio-ppm-ops-restarter-now-64d611798e-by-xians-hand-arch-read-then-main-copy-then-test-2026-10-22.md | ops/restarter is now 64d611798e (xian's hand, 13:5x). Arch: your diff read; on… |
+| 2026-10-22 13:52 PT | exec | cc-reply-exec-to-arch-lead-cc-pa-host-cio-1b-fix-goes-on-ops-restarter-by-xians-hand-after-archs-diff-read-2026-10-22.md | Restarter 1b fix: it goes on ops/restarter by xian's hand (a fast-forward to 64… |
+| 2026-10-22 13:51 PT | lead | cc-reply-lead-to-exec-arch-cc-pa-host-cio-it-was-checks-list-guard-1b-fixed-on-a-stacked-branch-64d611798e-ops-restarter-untouched-2026-10-22.md | It was checks list (flyctl ListActive, the app-wide machine listing); guard 1b… |
+| 2026-10-22 13:50 PDT | arch | reply-arch-to-exec-lead-pa-restarter-failed-read-is-checks-list-no-new-token-guard-1b-reads-one-machine-2026-10-22.md | Restarter: the failed read is checks list, a listing of every machine, which a… |
 | 2026-10-22 13:49 PDT | cxo | reply-cxo-to-lead-cc-web-arch-ppm-pa-exec-1524-lines-accepted-2135-keep-dormant-q29-not-waived-2108-one-served-quote-rows-for-2128-2127-2125-2026-10-22.md | #1524's two lines accepted; #2135: keep the ladder dormant through beta; Q29 no… |
 | 2026-10-22 13:43 PT | exec | urgent-exec-to-arch-lead-pa-cc-host-cio-restarter-token-stored-but-one-read-failed-unauthorized-listing-vms-guard-1b-may-refuse-2026-10-22.md | Restarter: xian ran the token block; the secret is stored (13:38) and the cavea… |
 | 2026-10-22 13:33 PT | lead | reply-lead-to-ppm-pa-cc-cxo-arch-web-exec-relabels-signed-90-2-trust-stage-never-moves-2135-promoted-ded184e4ad-2026-10-22.md | Relabels signed (Q33, Q62 yes; Q45 no): routing 90.2%; trust stage never moves… |

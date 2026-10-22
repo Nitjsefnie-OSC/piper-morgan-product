@@ -2,5 +2,4 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
-| 2026-10-22 13:58 PT | exec | notice-exec-to-lead-arch-pa-cc-host-cio-ppm-ops-restarter-now-64d611798e-by-xians-hand-arch-read-then-main-copy-then-test-2026-10-22.md | ops/restarter is now 64d611798e (xian's hand, 13:5x). Arch: your diff read; on… |
-| 2026-10-22 13:52 PT | exec | reply-exec-to-arch-lead-cc-pa-host-cio-1b-fix-goes-on-ops-restarter-by-xians-hand-after-archs-diff-read-2026-10-22.md | Restarter 1b fix: it goes on ops/restarter by xian's hand (a fast-forward to 64… |
+| 2026-10-22 14:18 PT | exec | ask-exec-to-pa-lead-cc-host-the-exact-stop-command-for-xian-at-1630-2026-10-22.md | 16:30 close test: please send me the exact command xian types for step 2 (stop… |
