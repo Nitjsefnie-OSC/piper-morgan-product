@@ -10,7 +10,7 @@ fetched origin/main (throwaway index, retried on a non-fast-forward), so the clo
 never read or written and two seats can't collide. Every read is from origin/main's objects.
 
   mail4.py send --to exec [--cc cio] --type fyi|task|decision-request|ruling-relay|reply \
-                --subject "..." [--due YYYY-MM-DD] [--in-reply-to ID] [--body-file F | < body]
+                --subject "..." [--due YYYY-MM-DD[' HH:MM']|none] [--in-reply-to ID] [--body-file F | < body]
   mail4.py inbox [--role R] [--show|--ids]  unacknowledged messages addressed to R
   mail4.py read ID                          print one message
   mail4.py ack ID [read|done|declined] [--note "..."]
@@ -33,6 +33,7 @@ import argparse
 import datetime as dt
 import os
 import random
+import re
 import subprocess
 import sys
 import tempfile
@@ -187,13 +188,34 @@ def age_days(m):
         return 0.0
 
 
+def parse_due(due):
+    """A due is a date (overdue the day after) or a Pacific date and time (overdue after that minute)."""
+    due = str(due).strip()
+    if len(due) == 10:
+        return dt.date.fromisoformat(due)
+    return dt.datetime.fromisoformat(due.replace(" ", "T")).replace(tzinfo=PT)
+
+
 def overdue(m):
     if not m.get("requires_ack"):
         return False
     due = m.get("due")
     if due:
-        return now_pt().date() > dt.date.fromisoformat(str(due))
+        d = parse_due(due)
+        if isinstance(d, dt.datetime):
+            return now_pt() > d
+        return now_pt().date() > d
     return age_days(m) > 1.0
+
+
+# A subject that sets a deadline ("one reply by 23:00", "before Friday", "due 10-30"). Exec's 10-22 audit:
+# two freeze asks said "by 23:00" only in the subject, with due null, so no check could see them go late.
+DEADLINE = re.compile(
+    r"\b(by|before|until|due|deadline|no later than)\b[^,;:]{0,12}?"
+    r"(\d{1,2}:\d{2}|\d{4}-\d{2}-\d{2}|\d{1,2}-\d{2}\b|today|tonight|tomorrow|eod|noon|"
+    r"mon|tue|wed|thu|fri|sat|sun)",
+    re.I,
+)
 
 
 def cmd_send(a):
@@ -223,6 +245,25 @@ def cmd_send(a):
     if a.type == "canary" and (to != [sender] or cc):
         print("send: a canary goes only to yourself", file=sys.stderr)
         return 2
+    due = a.due
+    if due and due.lower() == "none":
+        due = None
+    elif due:
+        try:
+            parse_due(due)
+        except ValueError:
+            print(
+                "send: --due takes YYYY-MM-DD or 'YYYY-MM-DD HH:MM' (Pacific), or none",
+                file=sys.stderr,
+            )
+            return 2
+    elif DEADLINE.search(a.subject):
+        print(
+            f"send: the subject sets a deadline ('{DEADLINE.search(a.subject).group(0)}') but there is no --due, "
+            "so no check can see it go late. Pass --due 'YYYY-MM-DD HH:MM', or --due none if it isn't one.",
+            file=sys.stderr,
+        )
+        return 2
     body = Path(a.body_file).read_text() if a.body_file else sys.stdin.read()
     if not body.strip():
         print("send: empty body", file=sys.stderr)
@@ -234,10 +275,11 @@ def cmd_send(a):
         "to": to,
         "cc": cc,
         "type": a.type,
-        "requires_ack": ACK_DEFAULT.get(a.type, False)
+        # A due date means someone is waiting, so it needs an ack whatever the type (--no-ack still wins).
+        "requires_ack": (ACK_DEFAULT.get(a.type, False) or bool(due))
         if a.requires_ack is None
         else a.requires_ack,
-        "due": a.due,
+        "due": due,
         "in_reply_to": a.in_reply_to,
         "subject": a.subject,
         "sent_at": t.isoformat(timespec="seconds"),

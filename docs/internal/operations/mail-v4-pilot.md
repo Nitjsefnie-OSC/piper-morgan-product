@@ -37,7 +37,7 @@ scripts/mail4.py check                             # at START; the first inbox r
 scripts/mail4.py stats                             # pilot instrumentation
 ```
 Types: `fyi`, `task`, `decision-request`, `ruling-relay`, `reply` (`task` and `decision-request` require an
-ack by default; `--due YYYY-MM-DD` sets the overdue date, otherwise overdue is after 1 day).
+ack by default; `--due YYYY-MM-DD` or `--due 'YYYY-MM-DD HH:MM'` (Pacific) sets when it goes overdue, otherwise after 1 day. Any `--due` makes the message need an ack. Since 10-22 `send` refuses a subject that sets a deadline ("by 23:00") without `--due`; `--due none` says it isn't one).
 Your role comes from your branch (`claude/<role>-cycle`); `--as ROLE` overrides.
 
 ## Guarantees and how they were tested (2026-10-08, CIO seat)

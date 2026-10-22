@@ -5,16 +5,15 @@
 
 ## Verdict
 
-Delivery worked: no required-ack message was missed or late. The daily canary did not run as specified,
-and Exec's 20-message audit, the one independent check, has not been done. Recommendation: keep v4 for
-the three pilot seats; do not widen it until Exec's audit is in and the canaries have run every day for
+Delivery worked: no required-ack message was missed or late, and Exec's 20-message audit (done 10:24) found 0 not acted on. The daily canary did not run as specified. Recommendation: keep v4 for
+the three pilot seats; do not widen it until the canaries have run every day for
 a week under the fix below. Widening is xian's call (to Exec).
 
 ## Criteria, one by one
 
 | Criterion | Result | Verified how |
 |---|---|---|
-| Zero missed required-ack messages (Exec's 20-message audit) | **Not run.** My backstop: 23 of 23 required-ack recipient slots acked, 0 after their due time; 97 of 97 recipient slots acked at all | Script over every message file and `acks/*.log` on piper-morgan-mail origin/main (95 non-canary messages). Layer: the ack log, not whether the recipient acted. That is what Exec's audit checks, so mine does not replace it |
+| Zero missed required-ack messages (Exec's 20-message audit) | **Pass, with one finding** (Exec, 10:24: `dev/2026/10/22/mail-v4-audit-20-messages-exec-2026-10-22.md`): 18 of 21 recipient instances acted, 1 ack-only, 2 needed no action, 0 not found. The finding: two freeze asks set "by 23:00" only in the subject with due null, so the ack metric couldn't see them go late (acks came about 10 hours later; the work was done at 22:44). My backstop: 23 of 23 required-ack recipient slots acked, 0 after their due time; 97 of 97 recipient slots acked at all | Script over every message file and `acks/*.log` on piper-morgan-mail origin/main (95 non-canary messages). Layer: the ack log, not whether the recipient acted. That is what Exec's audit checks, so mine does not replace it |
 | All 14 daily canaries pass | **Fail: not run.** 15 of 41 seat-days had one: CIO 9 of 15, Exec 3 of 15 (none after 10-10), Lead 3 of 11 (none after 10-14). All 18 that ran passed | Canary message dates per sender on origin/main; ack `done` present for 18 of 18 |
 | At least 60% fewer files per message | **Pass.** v4 is 1 file per message. v3 averaged 3.9 new files per memo (1,808 commits since 10-08 that added mail), plus a move to `read/` per recipient | `git show -M --name-status` over every `mail(` commit on main since 10-08 (3,212 commits; 1,808 add files) |
 | Inbox read cost no higher than v3 | **Pass on what a seat reads; slower on the clock.** `inbox` prints one summary line plus one line per open message. It takes 2.4 s against 0.003 s for `ls`, because it fetches. v3 needs a fetch too before `ls` means anything | `time` on both, CIO seat, this morning |
@@ -29,6 +28,8 @@ Traffic: 95 messages (37 reply, 25 fyi, 17 task, 11 ruling-relay, 4 decision-req
 - **The canary is no longer a step to remember.** The first `mail4.py inbox` of the day, by the seat itself, runs it (not in `--ids` mode, so Pard's watcher doesn't). `check` now names any pilot seat with no canary today. Skill v1.58. This is methodology-36 (mechanisms over vigilance): the step was written down at 10-08 and decayed in every seat within a week.
 - **Known limit closed:** v4 mail does wake its recipient. Pard's `mail-wake.py` reads `mail4.py inbox --ids` (mediajunkie `scripts/mail-wake.py`, `mail4_ids`); CIO's log 10-16 11:14 records a v4 mail wake. The ops doc is updated.
 
+- **A deadline in the subject now needs `--due`** (Exec's audit finding). `--due` takes a Pacific time (`'YYYY-MM-DD HH:MM'`) as well as a date; `send` refuses a subject that sets a deadline ("by 23:00", "before Friday") with no `--due`, and `--due none` says it isn't one; any `--due` makes the message need an ack. Over the pilot's 97 subjects the detector matches 5: the two freeze asks, and three rulings that name a date or a window ("run hot until Thu"), which would need `--due none`. Tested: the refusal (exit 2), a bad due (exit 2), and a reply due 10:00 today flagged OVERDUE by `check` (exit 1), then acked.
+
 ## Watch items carried in
 
 - **Stamps.** v4 writes `sent_at` itself, so the guessed-header-time class cannot happen in v4. In v3 it still does: `stamp_check` only warns on an `HH:Mx` near now, and some went out 10-21. Times inside a body are free text in both systems.
@@ -36,5 +37,4 @@ Traffic: 95 messages (37 reply, 25 fyi, 17 task, 11 ruling-relay, 4 decision-req
 
 ## Open
 
-- Exec: the 20-message audit (owed since the pilot started; Exec's half per the 10-03 ruling).
-- Next review: 2026-11-05, on Exec's audit and a week of canaries.
+- Next review: 2026-11-05, on a week of canaries from all three seats (at 10:28 today `check` showed none yet from exec or lead; their seats run the new `inbox` once their worktrees fast-forward).
