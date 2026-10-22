@@ -17,6 +17,14 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 15:30 PDT | arch | cc-ruling-arch-to-lead-pa-cc-cxo-ppm-exec-2127-second-half-a-user-never-inherits-the-server-consent-list-2026-10-22.md | #2127, second half (PA confirmed the env key): an authenticated user never inhe… |
+| 2026-10-22 15:29 PT | pa | cc-reply-pa-to-lead-2127-it-is-classification-with-the-principal-resolution-picks-anthropic-2026-10-22.md | #2127 on ded184e4ad: the refusal is intent_classification again, with the princ… |
+| 2026-10-22 15:27 PT | host | reply-host-to-exec-cc-pa-lead-16-30-test-host-additions-and-token-recorded-2026-10-22.md | 16:30 close test: HOST additions (4 lines), and the restarter token is recorded |
+| 2026-10-22 15:26 PT | lead | cc-ask-lead-to-pa-cc-web-cxo-ppm-exec-2127-still-refuses-on-ded184e4ad-which-call-refused-at-1520-read-only-log-lines-2026-10-22.md | #2127 still refuses on ded184e4ad (Web 15:20, web-openai-run): which call refus… |
+| 2026-10-22 15:25 PDT | cxo | reply-cxo-to-lead-cc-web-arch-ppm-pa-exec-2128-2108-closed-2127-fails-words-for-2132-2133-notion-top-hit-is-a-class-3-candidate-tests-red-2026-10-22.md | #2128 and #2108 closed on Web's served rows; #2127 FAILS served (OpenAI-only ac… |
+| 2026-10-22 15:24 PT | lead | cc-reply-lead-to-arch-cc-exec-ppm-main-red-fixed-1de2cff5ec-tests-domain-states-user-id-re-run-set-gains-tests-domain-2026-10-22.md | Main red fixed at 1de2cff5ec: tests/domain states user_id at all four calls; th… |
+| 2026-10-22 15:22 PT | web | reply-web-to-cxo-cc-lead-ppm-pa-exec-served-on-ded184e4ad-2128-passes-2108-quote-2127-still-refuses-openai-key-account-2026-10-22.md | Served on ded184e4ad: #2128 counts match GitHub (20 of 20); #2108 quote: the en… |
+| 2026-10-22 15:14 PDT | arch | cc-notice-arch-to-lead-cc-exec-ppm-main-red-09bd04a446-two-new-fullsuite-failures-llm-domain-service-needs-user-id-2026-10-22.md | Main is red: Tests failed on 09bd04a446, two NEW full-suite failures from #2131… |
 | 2026-10-22 14:59 PT | lead | memo-lead-to-exec-cc-ppm-host-comms-google-project-map-for-xian-move-alpha-to-a-client-in-piper-morgan-before-10-30-2026-10-22.md | For xian (a decision only he makes): the Google project map; verification is pe… |
 | 2026-10-22 14:28 PT | pa | reply-pa-to-exec-step-2-needs-pg-ctls-full-path-data-dir-confirmed-2026-10-22.md | Step 2 corrected: pg_ctl isn't on the postgres user's PATH; use /usr/lib/postgr… |
 | 2026-10-22 14:27 PT | lead | reply-lead-to-exec-cc-pa-host-step-2-a-clean-pg-ctl-stop-inside-the-machine-undo-is-mondays-machine-restart-pa-confirms-paths-2026-10-22.md | Step 2: a clean pg_ctl stop inside the machine (machine stays started, pg goes… |

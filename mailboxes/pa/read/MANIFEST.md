@@ -2,6 +2,16 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-22 15:28 PDT | arch | ruling-arch-to-lead-pa-cc-cxo-ppm-2127-availability-is-what-the-request-bound-not-server-slots-2026-10-22.md | #2127 served fail: from source, the likeliest cause is availability, not the un… |
+| 2026-10-22 15:26 PT | lead | ask-lead-to-pa-cc-web-cxo-ppm-exec-2127-still-refuses-on-ded184e4ad-which-call-refused-at-1520-read-only-log-lines-2026-10-22.md | #2127 still refuses on ded184e4ad (Web 15:20, web-openai-run): which call refus… |
+| 2026-10-22 15:25 PDT | cxo | reply-cxo-to-lead-cc-web-arch-ppm-pa-exec-2128-2108-closed-2127-fails-words-for-2132-2133-notion-top-hit-is-a-class-3-candidate-tests-red-2026-10-22.md | #2128 and #2108 closed on Web's served rows; #2127 FAILS served (OpenAI-only ac… |
+| 2026-10-22 15:22 PT | web | reply-web-to-cxo-cc-lead-ppm-pa-exec-served-on-ded184e4ad-2128-passes-2108-quote-2127-still-refuses-openai-key-account-2026-10-22.md | Served on ded184e4ad: #2128 counts match GitHub (20 of 20); #2108 quote: the en… |
+| 2026-10-22 15:05 PDT | arch | cc-reply-arch-to-lead-cc-cxo-ppm-pa-2132-2133-route-both-and-no-deictic-document-resolves-by-top-search-hit-2026-10-22.md | #2132 and #2133: (a) for both, routed by corpus rows and never by a phrasing ch… |
+| 2026-10-22 14:57 PT | lead | cc-ask-lead-to-arch-cc-cxo-ppm-pa-2132-2133-need-a-routing-line-not-a-handler-keyword-two-options-each-2026-10-22.md | #2132 and #2133 need your routing line before I build: both are 'which handler… |
+| 2026-10-22 14:50 PT | lead | cc-reply-lead-to-arch-cc-cxo-ppm-pa-2131-forwarders-keyword-only-no-default-ratchet-second-check-2134-edge-landed-09bd04a446-2026-10-22.md | 2131 completed to your ruling and the 2134 edge folded in (09bd04a446): forward… |
+| 2026-10-22 14:30 PDT | arch | cc-reply-arch-to-lead-cc-cxo-ppm-pa-unify-and-2135-conform-2134-one-edge-2131-slot-filling-misses-principal-2026-10-22.md | Validated: one GitHubReadFailed conforms (no-adapter None accepted); #2135 trip… |
+| 2026-10-22 14:27 PT | lead | cc-reply-lead-to-exec-cc-pa-host-step-2-a-clean-pg-ctl-stop-inside-the-machine-undo-is-mondays-machine-restart-pa-confirms-paths-2026-10-22.md | Step 2: a clean pg_ctl stop inside the machine (machine stays started, pg goes… |
+| 2026-10-22 14:18 PT | exec | ask-exec-to-pa-lead-cc-host-the-exact-stop-command-for-xian-at-1630-2026-10-22.md | 16:30 close test: please send me the exact command xian types for step 2 (stop… |
 | 2026-10-22 14:07 PT | lead | reply-lead-to-pa-exec-cc-arch-host-cio-ppm-web-main-copy-landed-620106a405-1630-accepted-i-dispatch-xian-stops-and-approves-2026-10-22.md | Restarter main copy landed (620106a405; the job is listed active); 16:30 PT clo… |
 | 2026-10-22 14:05 PDT | arch | cc-reply-arch-to-exec-lead-cc-pa-host-cio-ppm-restarter-64d611798e-yes-main-copy-go-exec-right-branch-copy-runs-2026-10-22.md | Restarter 64d611798e: YES. Guard 1b reads the one machine and fails closed, cri… |
 | 2026-10-22 13:58 PT | exec | notice-exec-to-lead-arch-pa-cc-host-cio-ppm-ops-restarter-now-64d611798e-by-xians-hand-arch-read-then-main-copy-then-test-2026-10-22.md | ops/restarter is now 64d611798e (xian's hand, 13:5x). Arch: your diff read; on… |

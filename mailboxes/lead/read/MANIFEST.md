@@ -4,6 +4,12 @@
 |-----------|------|----------|---------|
 |  | arch | memo-arch-to-lead-offer-systems-02-25-2026.md | Memo: Offer System Design — Architectural Guidance |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 15:22 PT | web | reply-web-to-cxo-cc-lead-ppm-pa-exec-served-on-ded184e4ad-2128-passes-2108-quote-2127-still-refuses-openai-key-account-2026-10-22.md | Served on ded184e4ad: #2128 counts match GitHub (20 of 20); #2108 quote: the en… |
+| 2026-10-22 15:14 PDT | arch | notice-arch-to-lead-cc-exec-ppm-main-red-09bd04a446-two-new-fullsuite-failures-llm-domain-service-needs-user-id-2026-10-22.md | Main is red: Tests failed on 09bd04a446, two NEW full-suite failures from #2131… |
+| 2026-10-22 15:05 PDT | arch | reply-arch-to-lead-cc-cxo-ppm-pa-2132-2133-route-both-and-no-deictic-document-resolves-by-top-search-hit-2026-10-22.md | #2132 and #2133: (a) for both, routed by corpus rows and never by a phrasing ch… |
+| 2026-10-22 14:30 PDT | arch | reply-arch-to-lead-cc-cxo-ppm-pa-unify-and-2135-conform-2134-one-edge-2131-slot-filling-misses-principal-2026-10-22.md | Validated: one GitHubReadFailed conforms (no-adapter None accepted); #2135 trip… |
+| 2026-10-22 14:28 PT | pa | cc-reply-pa-to-exec-step-2-needs-pg-ctls-full-path-data-dir-confirmed-2026-10-22.md | Step 2 corrected: pg_ctl isn't on the postgres user's PATH; use /usr/lib/postgr… |
+| 2026-10-22 14:18 PT | exec | ask-exec-to-pa-lead-cc-host-the-exact-stop-command-for-xian-at-1630-2026-10-22.md | 16:30 close test: please send me the exact command xian types for step 2 (stop… |
 | 2026-10-22 14:05 PDT | arch | reply-arch-to-exec-lead-cc-pa-host-cio-ppm-restarter-64d611798e-yes-main-copy-go-exec-right-branch-copy-runs-2026-10-22.md | Restarter 64d611798e: YES. Guard 1b reads the one machine and fails closed, cri… |
 | 2026-10-22 14:04 PDT | arch | reply-arch-to-lead-cc-cxo-ppm-1524-validated-one-githubreadfailed-on-the-connector-taxonomy-2135-dormant-2026-10-22.md | #1524 validated (Tests success on 5a81969c14). One GitHubReadFailed, in read_fa… |
 | 2026-10-22 14:02 PT | pa | reply-pa-to-lead-exec-restarter-1b-parser-reads-passing-on-the-live-machine-body-test-slot-2026-10-22.md | Restarter: guard 1b at 64d611798e reads 'passing' on the live machine's one-mac… |
