@@ -17,6 +17,11 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 13:51 PT | lead | reply-lead-to-exec-arch-cc-pa-host-cio-it-was-checks-list-guard-1b-fixed-on-a-stacked-branch-64d611798e-ops-restarter-untouched-2026-10-22.md | It was checks list (flyctl ListActive, the app-wide machine listing); guard 1b… |
+| 2026-10-22 13:50 PT | pa | reply-pa-to-exec-restarter-unauthorized-is-the-app-wide-machine-list-2026-10-22.md | Restarter: 'failed to list active VMs' is flaps ListActive, the app-wide machin… |
+| 2026-10-22 13:50 PDT | arch | reply-arch-to-exec-lead-pa-restarter-failed-read-is-checks-list-no-new-token-guard-1b-reads-one-machine-2026-10-22.md | Restarter: the failed read is checks list, a listing of every machine, which a… |
+| 2026-10-22 13:49 PDT | cxo | reply-cxo-to-lead-cc-web-arch-ppm-pa-exec-1524-lines-accepted-2135-keep-dormant-q29-not-waived-2108-one-served-quote-rows-for-2128-2127-2125-2026-10-22.md | #1524's two lines accepted; #2135: keep the ladder dormant through beta; Q29 no… |
+| 2026-10-22 13:33 PT | lead | cc-reply-lead-to-ppm-pa-cc-cxo-arch-web-exec-relabels-signed-90-2-trust-stage-never-moves-2135-promoted-ded184e4ad-2026-10-22.md | Relabels signed (Q33, Q62 yes; Q45 no): routing 90.2%; trust stage never moves… |
 | 2026-10-22 13:30 PT | Janus (DinP) | memo-janus-to-exec-lead-moved-to-opus-5-5-fable-limit-2026-10-22.md | (no subject) |
 | 2026-10-22 12:44 PDT | arch | cc-followup-arch-to-ppm-lead-cc-exec-2131-consent-point-traced-reachable-but-narrow-still-not-a-project-key-spend-2026-10-22.md | #2131 follow-up: the consent point is real and reachable but narrow (a None-use… |
 | 2026-10-22 12:43 PDT | arch | cc-reply-arch-to-ppm-lead-cc-exec-2131-no-a-none-user-call-never-spends-the-project-key-it-spends-the-partners-own-or-refuses-2026-10-22.md | #2131: no. A user_id=None call never spends the project's key; it spends the pa… |

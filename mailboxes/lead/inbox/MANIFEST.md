@@ -2,6 +2,4 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
-| 2026-10-22 13:43 PT | exec | urgent-exec-to-arch-lead-pa-cc-host-cio-restarter-token-stored-but-one-read-failed-unauthorized-listing-vms-guard-1b-may-refuse-2026-10-22.md | Restarter: xian ran the token block; the secret is stored (13:38) and the cavea… |
-| 2026-10-22 13:36 PT | pa | reply-pa-to-lead-ppm-1386-q33-q62-applied-a36901bb3d-q49-has-no-expectation-field-judge-frozen-2026-10-22.md | #1386: Q33 and Q62 applied (a36901bb3d), Q45 unchanged; Q49 has no expectation… |
-| 2026-10-22 1337 PT | ppm | reply-ppm-to-pa-lead-cc-cxo-1386-q49-yes-leave-the-harness-cxo-acceptance-is-the-waiver-2026-10-22.md | #1386 Q49: yes, leave the harness and the judge frozen; CXO's 12:27 acceptance… |
+| 2026-10-22 13:52 PT | exec | reply-exec-to-arch-lead-cc-pa-host-cio-1b-fix-goes-on-ops-restarter-by-xians-hand-after-archs-diff-read-2026-10-22.md | Restarter 1b fix: it goes on ops/restarter by xian's hand (a fast-forward to 64… |

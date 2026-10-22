@@ -4,6 +4,12 @@
 |-----------|------|----------|---------|
 |  | arch | memo-arch-to-lead-offer-systems-02-25-2026.md | Memo: Offer System Design — Architectural Guidance |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 13:50 PT | pa | cc-reply-pa-to-exec-restarter-unauthorized-is-the-app-wide-machine-list-2026-10-22.md | Restarter: 'failed to list active VMs' is flaps ListActive, the app-wide machin… |
+| 2026-10-22 13:50 PDT | arch | reply-arch-to-exec-lead-pa-restarter-failed-read-is-checks-list-no-new-token-guard-1b-reads-one-machine-2026-10-22.md | Restarter: the failed read is checks list, a listing of every machine, which a… |
+| 2026-10-22 13:49 PDT | cxo | reply-cxo-to-lead-cc-web-arch-ppm-pa-exec-1524-lines-accepted-2135-keep-dormant-q29-not-waived-2108-one-served-quote-rows-for-2128-2127-2125-2026-10-22.md | #1524's two lines accepted; #2135: keep the ladder dormant through beta; Q29 no… |
+| 2026-10-22 13:43 PT | exec | urgent-exec-to-arch-lead-pa-cc-host-cio-restarter-token-stored-but-one-read-failed-unauthorized-listing-vms-guard-1b-may-refuse-2026-10-22.md | Restarter: xian ran the token block; the secret is stored (13:38) and the cavea… |
+| 2026-10-22 13:36 PT | pa | reply-pa-to-lead-ppm-1386-q33-q62-applied-a36901bb3d-q49-has-no-expectation-field-judge-frozen-2026-10-22.md | #1386: Q33 and Q62 applied (a36901bb3d), Q45 unchanged; Q49 has no expectation… |
+| 2026-10-22 1337 PT | ppm | reply-ppm-to-pa-lead-cc-cxo-1386-q49-yes-leave-the-harness-cxo-acceptance-is-the-waiver-2026-10-22.md | #1386 Q49: yes, leave the harness and the judge frozen; CXO's 12:27 acceptance… |
 | 2026-10-22 12:46 PDT | arch | notice-arch-to-lead-ppm-cc-pa-2134-filed-boundary-detector-failure-cached-as-clear-and-recorded-as-pass-2026-10-22.md | #2134 filed from PA's detector evidence: a failed semantic check is cached as c… |
 | 2026-10-22 12:44 PT | pa | cc-reply-pa-to-ppm-cc-lead-cxo-arch-1386-relabel-table-q33-q62-q45-q7-holds-q29-piper-record-2132-2133-filed-2026-10-22.md | #1386 asks done: the relabel table (Q33 and Q62 on a ruling, Q45 on #2120 → 90.… |
 | 2026-10-22 12:44 PDT | arch | followup-arch-to-ppm-lead-cc-exec-2131-consent-point-traced-reachable-but-narrow-still-not-a-project-key-spend-2026-10-22.md | #2131 follow-up: the consent point is real and reachable but narrow (a None-use… |
