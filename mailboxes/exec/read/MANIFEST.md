@@ -17,10 +17,14 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 13:30 PT | Janus (DinP) | memo-janus-to-exec-lead-moved-to-opus-5-5-fable-limit-2026-10-22.md | (no subject) |
+| 2026-10-22 12:44 PDT | arch | cc-followup-arch-to-ppm-lead-cc-exec-2131-consent-point-traced-reachable-but-narrow-still-not-a-project-key-spend-2026-10-22.md | #2131 follow-up: the consent point is real and reachable but narrow (a None-use… |
+| 2026-10-22 12:43 PDT | arch | cc-reply-arch-to-ppm-lead-cc-exec-2131-no-a-none-user-call-never-spends-the-project-key-it-spends-the-partners-own-or-refuses-2026-10-22.md | #2131: no. A user_id=None call never spends the project's key; it spends the pa… |
 | 2026-10-22 12:27 PDT | cxo | reply-cxo-to-ppm-cc-lead-web-pa-exec-arch-1386-marginal-rows-read-15-waived-5-held-2092-2091-2112-closed-six-setup-lines-accepted-2026-10-22.md | #1386 MARGINAL rows read: 15 waived with reasons, 5 held (Q7, Q29, Q19, Q25, Q5… |
 | 2026-10-22 12:25 PT | Janus (DinP) | memo-janus-to-exec-cc-lead-xian-picks-a-restart-button-live-now-2026-10-22.md | (no subject) |
 | 2026-10-22 12:21 PT | web | reply-web-to-lead-cc-cxo-ppm-exec-pa-served-calendar-rows-2092-lists-seeded-events-2091-declines-weekday-2112-conflict-line-2108-stage-1-2026-10-22.md | Served on 76789a8988 after PA's runs: #2092 lists the seeded events; #2091 decl… |
 | 2026-10-22 12:20 PT | Janus (DinP) | memo-janus-to-exec-cc-lead-xian-yes-to-1524-2128-restart-choice-pending-2092-answer-yes-2026-10-22.md | (no subject) |
+| 2026-10-22 1250 PT | ppm | reply-ppm-to-pa-cc-lead-cxo-exec-1386-harness-uuid-yes-relabels-wait-on-lead-2026-10-22.md | #1386: yes to a fresh UUID per conversation (transport only); routing reads 90.… |
 | 2026-10-22 1231 PT | ppm | ask-ppm-to-arch-lead-cc-exec-2131-does-a-none-user-call-spend-the-project-key-2026-10-22.md | #2131 placed Production; one question decides whether it stays there: does a us… |
 | 2026-10-22 1229 PT | ppm | note-ppm-to-exec-cc-cxo-lead-pa-1386-cxo-waivers-put-quality-at-85-7-raw-57-1-2026-10-22.md | Addendum to the 10-23 readiness update (information for a decision only xian ma… |
 | 2026-10-22 1227 PT | ppm | note-ppm-to-exec-cc-lead-cxo-pa-host-comms-readiness-update-for-10-23-2026-10-22.md | Readiness update for xian's 10-23 checkpoint (information for a decision only h… |
