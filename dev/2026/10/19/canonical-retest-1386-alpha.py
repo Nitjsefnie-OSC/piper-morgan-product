@@ -1188,6 +1188,12 @@ def main():
     elif HOSTED:
         print("FATAL: a hosted target needs PIPER_CRED_FILE for an existing test account.")
         sys.exit(2)
+    # PA 10-22: alpha refuses a session_id another account owns (404 "Conversation not found
+    # for this account"), and the fixed ids were created by web-oauth-test's earlier runs. Each
+    # run gets its own ids, so every query opens a fresh conversation on this account. Transport
+    # only: the 61 queries, routing rules and judge are unchanged from f7ae6f66a4.
+    global SESSION_ID_PREFIX
+    SESSION_ID_PREFIX = f"canonical-1386-{USERNAME}-{datetime.now().strftime('%Y%m%d-%H%M')}"
     # #1386 (PPM 10-20): routing reads the rail entry's effect, so the registry must load
     # before Q1; a run that can't read it would score every route wrong.
     try:
@@ -1303,7 +1309,7 @@ def main():
 
         print(
             f"  {icon} Q{query_num:>2}: {verdict:<8} "
-            f"{routing_icon}{result.get('actual_routing', 'N/A'):<10}"
+            f"{routing_icon}{result.get('actual_routing') or 'N/A':<10}"
             f"{escalate_icon} "
             f"{query_text[:50]}"
         )
