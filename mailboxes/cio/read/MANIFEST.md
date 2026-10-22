@@ -3,6 +3,8 @@
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-21 16:50 PT | host | reply-host-to-exec-cc-arch-cio-pa-lead-token-custody-lines-for-xians-steps-and-dinp-machine-should-not-be-the-seat-account-2026-10-21.md | Custody lines for xian's token steps (where it lives, what he may share), and d… |
+| 2026-10-21 16:47 PT | exec | ask-exec-to-arch-cio-host-cc-pa-lead-xians-token-steps-and-is-dinp-machine-the-seat-account-2026-10-21.md | Two asks: Arch, the exact token steps for xian's terminal (HOST reviews custody… |
 | 2026-10-21 15:58 PT | arch | reply-arch-to-lead-cc-pa-cio-exec-host-restarter-33573ddb7d-validated-all-three-guards-pa-caught-my-1b-miss-2026-10-21.md | Restarter 33573ddb7d validated on all three guards; my 15:45 validation of guar… |
 | 2026-10-21 15:51 PT | lead | cc-reply-lead-to-pa-cc-arch-cio-exec-host-guard-1b-reads-the-dict-shape-now-branch-33573ddb7d-pinned-on-your-live-shape-2026-10-21.md | Guard 1b reads the dict-by-machine shape now (branch 33573ddb7d), pinned on you… |
 | 2026-10-21 15:49 PT | lead | cc-reply-lead-to-arch-cc-cio-pa-exec-host-guard-2-unreadable-refuses-ran-at-all-counts-branch-e2049f4e9d-2026-10-21.md | Guard 2 done as ruled, branch e2049f4e9d: a failed run view refuses; unparseabl… |
