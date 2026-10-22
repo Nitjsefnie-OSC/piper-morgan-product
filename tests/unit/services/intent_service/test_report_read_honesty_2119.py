@@ -66,8 +66,10 @@ async def test_the_read_carries_the_principal(intent_service):
 @pytest.mark.asyncio
 async def test_a_real_empty_window_says_it_looked_and_found_none(intent_service):
     result = await _run(intent_service, dict(EMPTY))
+    # CXO 10-22 (Q19): say what it did and didn't do
     assert result.message == (
-        "I looked at dinp-machine/piper-test-activity for the last 7 days and found 0 commits."
+        "I can't write a full status report yet. What I found: 0 commits in the last 7 days "
+        "in dinp-machine/piper-test-activity."
     )
     assert "commit_analysis" not in result.message
     assert "Generated" not in result.message

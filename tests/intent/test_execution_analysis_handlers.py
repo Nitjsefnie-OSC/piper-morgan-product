@@ -694,8 +694,8 @@ class TestAnalysisHandlers:
 
         # Should contain report data
         assert (
-            "looked at" in result.message.lower() and "commit" in result.message.lower()
-        )  # #2119: CXO's words
+            "what i found:" in result.message.lower() and "commit" in result.message.lower()
+        )  # #2119 / Q19: CXO's words
         assert "report_type" in result.intent_data
         assert result.intent_data["report_type"] == "commit_analysis"
 

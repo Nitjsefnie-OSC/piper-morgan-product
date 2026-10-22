@@ -612,9 +612,8 @@ class TestAnalysisRepoWiring:
         result = await self._arm_and_answer(
             service, "_handle_generate_report", "generate_report", "t-ana-report"
         )
-        assert (
-            f"I looked at {_FULL} for the" in result.message
-        )  # #2119: CXO's words, no internal type name
+        assert "I can't write a full status report yet. What I found:" in result.message
+        assert f"in {_FULL}." in result.message  # #2119 / Q19: CXO's words, no type name
 
     async def test_analyze_data_arm_answer_lands_back_in_the_same_handler(self, service):
         result = await self._arm_and_answer(

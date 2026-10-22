@@ -12870,9 +12870,13 @@ class IntentService:
                     "connection, so there's nothing to report yet."
                 )
             else:
+                # CXO (10-22 12:27, Q19 of the #1386 run): the reply answered a smaller ask
+                # than "a status report" without saying so; it now says what it did and
+                # didn't do.
                 message = (
-                    f"I looked at {repository} for the {timeframe} and found "
-                    f"{commit_count} commit{'s' if commit_count != 1 else ''}."
+                    "I can't write a full status report yet. What I found: "
+                    f"{commit_count} commit{'s' if commit_count != 1 else ''} in the "
+                    f"{timeframe} in {repository}."
                 )
 
             return IntentProcessingResult(
