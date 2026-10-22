@@ -253,11 +253,12 @@ CANONICAL_QUERIES = [
         "fresh-account-no-data",
     ),
     (32, "Remind me to review PRs tomorrow", "Scheduling", "action", "M2", "M2-feature-pending"),
+    # #1386 (Lead-signed 10-22, 1386-criterion-2-relabel-table-2026-10-22.md): was "canonical". Find-time-with-someone goes to the floor (Arch's #2112 ruling 10-20, decisions.log; exact corpus row).
     (
         33,
         "Find time for a 1:1 with the team lead",
         "Scheduling",
-        "canonical",
+        "floor",
         "M2",
         "fresh-account-no-data",
     ),
@@ -305,7 +306,8 @@ CANONICAL_QUERIES = [
     (57, "What's my next todo?", "Todos", "canonical", None, None),  # query/next_todo_query
     # Calendar Extended (2) — both canonical (pre-classifier→query)
     (61, "What's my week look like?", "Calendar Ext", "canonical", None, None),
-    (62, "Check my calendar for conflicts", "Calendar Ext", "canonical", None, None),
+    # #1386 (Lead-signed 10-22, 1386-criterion-2-relabel-table-2026-10-22.md): was "canonical". Conflict checks go to the floor (Arch's #2112 ruling 10-20, decisions.log; exact corpus row).
+    (62, "Check my calendar for conflicts", "Calendar Ext", "floor", None, None),
     # Knowledge (1) — Q63 judge rate-limit-prone + M2-pending integration path
     # #1386 (Lead-signed 10-20, 1386-criterion-2-relabel-table-2026-10-20.md): was "floor". An unwired EXECUTION action must honest-decline, never the floor (#1333).
     (63, "Upload a file to the knowledge base", "Knowledge", "action", "M2", "M2-feature-pending"),

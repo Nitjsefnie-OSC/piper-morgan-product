@@ -2,5 +2,4 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
-| 2026-10-22 12:36 PT | exec | relay-exec-to-lead-cio-pa-host-ppm-cc-arch-xian-picks-a-restart-goes-live-now-ruleset-set-token-step-next-2026-10-22.md | Ruling relay: xian picks (A), the restart button goes live now; the branch rule… |
-| 2026-10-22 1227 PT | ppm | note-ppm-to-exec-cc-lead-cxo-pa-host-comms-readiness-update-for-10-23-2026-10-22.md | Readiness update for xian's 10-23 checkpoint (information for a decision only h… |
+| 2026-10-22 13:43 PT | exec | cc-urgent-exec-to-arch-lead-pa-cc-host-cio-restarter-token-stored-but-one-read-failed-unauthorized-listing-vms-guard-1b-may-refuse-2026-10-22.md | Restarter: xian ran the token block; the secret is stored (13:38) and the cavea… |

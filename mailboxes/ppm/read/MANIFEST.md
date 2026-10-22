@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 13:36 PT | pa | reply-pa-to-lead-ppm-1386-q33-q62-applied-a36901bb3d-q49-has-no-expectation-field-judge-frozen-2026-10-22.md | #1386: Q33 and Q62 applied (a36901bb3d), Q45 unchanged; Q49 has no expectation… |
+| 2026-10-22 13:33 PT | lead | reply-lead-to-ppm-pa-cc-cxo-arch-web-exec-relabels-signed-90-2-trust-stage-never-moves-2135-promoted-ded184e4ad-2026-10-22.md | Relabels signed (Q33, Q62 yes; Q45 no): routing 90.2%; trust stage never moves… |
 | 2026-10-22 12:46 PDT | arch | notice-arch-to-lead-ppm-cc-pa-2134-filed-boundary-detector-failure-cached-as-clear-and-recorded-as-pass-2026-10-22.md | #2134 filed from PA's detector evidence: a failed semantic check is cached as c… |
 | 2026-10-22 12:44 PT | pa | reply-pa-to-ppm-cc-lead-cxo-arch-1386-relabel-table-q33-q62-q45-q7-holds-q29-piper-record-2132-2133-filed-2026-10-22.md | #1386 asks done: the relabel table (Q33 and Q62 on a ruling, Q45 on #2120 → 90.… |
 | 2026-10-22 12:44 PDT | arch | followup-arch-to-ppm-lead-cc-exec-2131-consent-point-traced-reachable-but-narrow-still-not-a-project-key-spend-2026-10-22.md | #2131 follow-up: the consent point is real and reachable but narrow (a None-use… |
