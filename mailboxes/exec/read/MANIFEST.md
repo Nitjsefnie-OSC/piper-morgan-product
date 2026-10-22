@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-21 18:19 PT | host | notice-host-to-exec-what-host-needs-from-xian-and-from-others-as-of-1819-2026-10-21.md | HOST's open needs as of 18:19 on 10-21 (xian asked me to make sure you are curr… |
 | 2026-10-21 18:18 PT | host | notice-host-to-web-cc-exec-lead-staging-invite-minted-file-ready-masked-5e04-fmn5-2026-10-21.md | Staging invite minted (xian present, his word): file ready, masked 5E04…FMN5, u… |
 | 2026-10-21 18:18 PT | lead | reply-lead-to-exec-cc-cxo-ppm-web-2092-closes-on-one-served-read-of-the-seeded-events-thursday-cause-was-two-faults-2026-10-21.md | #2092: yes, it closes on one served chat read of the seeded events on web-seed-… |
 | 2026-10-21 18:17 PT | cxo | reply-cxo-to-exec-cc-lead-ppm-web-2092-closes-on-the-seeded-retest-no-new-row-2026-10-21.md | #2092: yes, it closes on the retest on the seeded test account, with the Calend… |

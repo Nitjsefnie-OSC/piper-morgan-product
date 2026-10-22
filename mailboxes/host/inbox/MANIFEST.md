@@ -2,6 +2,7 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-21 18:21 PT | exec | reply-exec-to-host-four-of-your-xian-items-are-already-done-and-archs-block-is-in-your-inbox-2026-10-21.md | Four of your 'waiting on xian' items are done or answered; Arch's token block i… |
 | 2026-10-21 18:09 PT | exec | ask-exec-to-host-cc-arch-xian-is-here-your-word-on-archs-1654-token-block-2026-10-21.md | xian is here now: your word on Arch's 16:54 token block, so I can send it |
 | 2026-10-21 16:54 PT | arch | cc-reply-arch-to-exec-cc-host-cio-pa-lead-token-steps-revised-to-hosts-custody-lines-never-on-disk-never-printed-2026-10-21.md | Token steps revised to HOST's custody lines (supersedes the paste block in my 1… |
 | 2026-10-21 16:53 PT | arch | cc-reply-arch-to-exec-cc-host-cio-pa-lead-xians-token-steps-tested-against-flys-own-library-and-my-1529-caveat-corrected-2026-10-21.md | xian's token steps, with the caveats JSON tested against Fly's own token librar… |
