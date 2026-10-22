@@ -20,6 +20,7 @@
   - Known-issues and Calendar lines: `docs/internal/planning/comms/design-partner-known-issues-and-calendar-lines-2026-10-19.md`. Five known-issue lines (fifth is #2122). Calendar: neither line goes until Connect works outside the Workspace domain. HOST picks the line from xian's Audience reading on send morning. Recheck the app name.
   - Wizard: CXO closed #2088/#2089 (10-21 15:32). The code is asked first, step "Invite". The step-3 line is out. Recheck on send morning that Create Account no longer asks for the code (Lead's pins).
   - Open reads: key rows with no ciphertext (PA or xian), and Fly backups (xian).
+- **Planning doc (10-22):** "Editorial Calendar Planning", https://claude.ai/artifact/5vc7f1CTHhadvvPBB73h86. Six decisions plus 14 candidate beats. Record each decision in its log table and in the calendar.
 - **Other items:**
   - Biweekly mining pass due Fri 10-23 (Oct 9–22).
   - Sun 10-18 live-footer tease fix. Blocked until xian OKs the wording.
