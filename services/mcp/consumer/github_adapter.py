@@ -2678,15 +2678,28 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
             logger.error(f"Error listing repositories: {e}")
             return []
 
-    async def get_repository_info(self, repo: str, owner: str) -> Optional[Dict[str, Any]]:
+    async def get_repository_info(
+        self, repo: str, owner: str, *, user_id: Optional[str] = None
+    ) -> Optional[Dict[str, Any]]:
         """Fetch repository metadata (used to identify default_branch).
 
         Issue #1040: needed by branch handler to identify which branch is
         the default and surface it first.
+
+        #1524 follow-up: reads with the acting user's own grant, like the
+        ``list_branches`` call beside it, so an OAuth-only account can see its
+        private repo's default branch. Best-effort by design: ``None`` (no
+        grant, no response, any error) only loses the default-first ordering;
+        it never stands in for the branch list itself.
         """
         try:
             endpoint = f"repos/{owner}/{repo}"
-            data = await self._call_github_api(endpoint)
+            grant_headers = None
+            if user_id:
+                grant_headers = await self._grant_headers_for(user_id)
+                if grant_headers is None:
+                    return None
+            data = await self._call_github_api(endpoint, headers=grant_headers)
             if not data:
                 return None
             return {

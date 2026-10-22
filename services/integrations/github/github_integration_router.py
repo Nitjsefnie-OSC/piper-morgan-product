@@ -848,7 +848,9 @@ class GitHubIntegrationRouter:
                     raise repo_unresolved()
                 owner, repo = resolved
             branches = await self.mcp_adapter.list_branches(repo, owner, user_id=self._user_id)
-            repo_info = await self.mcp_adapter.get_repository_info(repo, owner)
+            repo_info = await self.mcp_adapter.get_repository_info(
+                repo, owner, user_id=self._user_id
+            )
             default_branch = (repo_info or {}).get("default_branch", "") or ""
             return {"branches": branches, "default_branch": default_branch}
         raise GitHubReadFailed("no GitHub adapter for this read", None, detail="no_adapter")

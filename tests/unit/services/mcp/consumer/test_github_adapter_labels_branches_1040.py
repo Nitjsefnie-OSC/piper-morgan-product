@@ -138,6 +138,23 @@ class TestGetRepositoryInfo:
         adapter._call_github_api.side_effect = RuntimeError("boom")
         assert await adapter.get_repository_info("r", "o") is None
 
+    async def test_reads_with_the_users_grant(self, adapter):
+        # #1524 follow-up: the default-branch read uses the acting user's grant,
+        # like list_branches beside it.
+        adapter._grant_headers_for = AsyncMock(return_value={"Authorization": "Bearer user-grant"})
+        adapter._call_github_api.return_value = {"default_branch": "trunk"}
+        result = await adapter.get_repository_info("r", "o", user_id="u1")
+        assert result is not None and result["default_branch"] == "trunk"
+        adapter._grant_headers_for.assert_awaited_once_with("u1")
+        assert adapter._call_github_api.call_args.kwargs["headers"] == {
+            "Authorization": "Bearer user-grant"
+        }
+
+    async def test_no_grant_returns_none_without_reading(self, adapter):
+        adapter._grant_headers_for = AsyncMock(return_value=None)
+        assert await adapter.get_repository_info("r", "o", user_id="u1") is None
+        adapter._call_github_api.assert_not_called()
+
 
 class TestEndpointPaths:
     """Per #1042: endpoint paths use {owner}/{repo} from required args."""
