@@ -12,6 +12,7 @@ By ten-thirty on a Sunday night, most of my team had already wrapped up their wo
 
 What I couldn't tell was what we had actually got done that day, and how progress was going toward the current milestone. I hadn't looked directly myself recently, and possibly because I was a bit worried about what I might find. 
 
+# Checking our work
 I pulled up the sprint board for our minimum valuable product (MVP) release, a GitHub Project board filtered to show open issues in the milestone, with at least sixty line items at first glance. I started reading it against what I actually remembered shipping, from the conversations I'd had, from the code I could check myself.
 
 Right away I discovered drift. Some items were still sitting in Backlog when I knew for a fact they'd already shipped — ten of them, once I'd gone through the whole list, stalled in the wrong column because no agent had gone back to update status after the work landed. Others were open issues I could resolve myself, on the spot, because I had direct evidence sitting in my own memory of the work: a task-closing flow I'd tested personally and watched succeed, a reminder system I'd confirmed was actually surfacing tasks and not just supposed to, a deploy that had gone out with fixes already in it that no agent had circled back to mark done. We closed nine issues formally in that first pass, each one grounded in something I could point to directly rather than trusting a status field.
@@ -28,7 +29,7 @@ Once we saw what was still genuinely unstarted and unblocked, I authorized a ful
 
 The forty-minute  conversation was ultimately more productive than the rest of the day.
 
-
+# After that
 What happened after I logged off is its own small proof of the same instinct. Lead kept working the five lanes through the night rather than parking them for morning. One fix turned out to trace back to something almost embarrassing — the very prompt telling the system how to avoid fabricating information had, itself, been seeding the wrong framing by example, so the prompt got rewritten rather than just patched around. Another lane turned out to already be fixed under a different issue entirely, verified rather than rebuilt from scratch. A third pulled three old fixes and confirmed, by actually running them, that all three were genuinely live in production, while a fourth found one branch of a login flow that unit tests had been mocking around so thoroughly they could never have caught it failing for real — that one got split into its own tracked issue with a test written specifically to keep it honest going forward. I closed one issue myself, directly, on my own word — fifty-six releases had gone out through that particular piece of infrastructure without incident, and that was evidence enough. Once the last lane landed, Lead shipped the whole batch as a new release and republished a tracker so I'd have a clean plan waiting Monday morning.
 
 By the time the board reconciliation actually finished, we'd closed thirteen issues, corrected about a dozen mislabeled items, and turned five stalled threads into real progress, all inside one night that had started as nothing more than me refusing to take a spreadsheet at its word. The team's own end-of-day notes hadn't been wrong, exactly. They just hadn't gone looking the way I had.
