@@ -29,12 +29,22 @@ Once we saw what was still genuinely unstarted and unblocked, I authorized a ful
 
 The forty-minute  conversation was ultimately more productive than the rest of the day.
 
-# After that
-What happened after I logged off is its own small proof of the same instinct. Lead kept working the five lanes through the night rather than parking them for morning. One fix turned out to trace back to something almost embarrassing — the very prompt telling the system how to avoid fabricating information had, itself, been seeding the wrong framing by example, so the prompt got rewritten rather than just patched around. Another lane turned out to already be fixed under a different issue entirely, verified rather than rebuilt from scratch. A third pulled three old fixes and confirmed, by actually running them, that all three were genuinely live in production, while a fourth found one branch of a login flow that unit tests had been mocking around so thoroughly they could never have caught it failing for real — that one got split into its own tracked issue with a test written specifically to keep it honest going forward. I closed one issue myself, directly, on my own word — fifty-six releases had gone out through that particular piece of infrastructure without incident, and that was evidence enough. Once the last lane landed, Lead shipped the whole batch as a new release and republished a tracker so I'd have a clean plan waiting Monday morning.
+# The all-nighter
 
-By the time the board reconciliation actually finished, we'd closed thirteen issues, corrected about a dozen mislabeled items, and turned five stalled threads into real progress, all inside one night that had started as nothing more than me refusing to take a spreadsheet at its word. The team's own end-of-day notes hadn't been wrong, exactly. They just hadn't gone looking the way I had.
+What happened after I logged off is its own small proof of the same instinct. Lead kept working the five lanes through the night rather than parking them for morning. One fix turned out to trace back to something almost embarrassing (and a sort of meta-pattern I am noticing more and more often these days): 
 
-What stays with me is how easy it would have been to let the board keep saying what it had been saying, because nobody had contradicted it yet — not the count. A tracking system drifts because checking it takes longer than trusting it, not because anyone means for it to, until eventually somebody has to sit down and actually check.
+*The very prompt telling the system how to avoid fabricating information was itself providing an incorrectly framed example.*
+
+Lead rewrote the prompt rather than patching around it.
+
+Another lane turned out to already be fixed under a different issue entirely, so it just had to be verified rather than rebuilt from scratch. A third checked three old fixes and confirmed, by actually running them, that all three were genuinely live in production, while a fourth found one branch of a login flow that unit tests had been mocking around so thoroughly they could never have caught it failing for real. The latter finding got split out into its own tracked issue with a test written specifically to keep it in line going forward. 
+
+I also closed one issue myself, directly, on my own word — fifty-six releases had gone out through that particular piece of infrastructure without incident, and that was evidence enough for me. When all five lanes concleded, Lead shipped the whole batch as a new release and updated the tracker so I'd have a clean plan waiting Monday morning.
+
+# Tidied up
+By the time I finished reconciling the sprint board, we'd closed thirteen issues, corrected about a dozen mislabeled items, and turned five stalled threads into real progress, all over one night after I questioned a status update.
+
+Like so many of the instruments and methods I've embraced or developed to do this work,, the sprint tracker grew from "we should keep track of issues in GitHub" to "we should work in sprints" to "we should close issues properly with evidence" and on and on. Along the way, the sprint board has gotten richly expressive and the agents have gotten much better at maintaining and reading it themselves, but neverthl
 
 ---
 
