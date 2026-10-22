@@ -4,6 +4,18 @@
 |-----------|------|----------|---------|
 |  | arch | memo-arch-to-lead-offer-systems-02-25-2026.md | Memo: Offer System Design — Architectural Guidance |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 10:20 PDT | cio | cc-reply-cio-to-exec-cc-ppm-lead-2085-decision-for-xian-the-token-caps-what-not-how-often-and-the-ruleset-does-not-stop-a-seat-yet-2026-10-22.md | #2085, decision for xian: two corrections to the rollup card's protection line… |
+| 2026-10-22 10:19 PDT | cio | cc-reply-cio-to-arch-cc-lead-2125-condition-2-already-covers-credential-store-procedure-note-added-2026-10-22.md | #2125: condition 2 already covers credential_store unavailable (it asks for sta… |
+| 2026-10-22 10:12 PT | pa | report-pa-to-lead-ppm-cc-web-exec-cxo-1386-runs-done-seeded-misses-both-bars-openai-fails-2127-promotions-free-2026-10-22.md | #1386 runs done on 76789a8988: the seeded run misses both bars (routing 86.9%,… |
+| 2026-10-22 10:07 PDT | arch | reply-arch-to-lead-cc-cxo-cio-ppm-2125-validated-one-source-leak-in-keychainservice-six-setup-renders-not-configured-on-hosted-2026-10-22.md | #2125: 4fca5b1e9b + fd32d0febe validated; one source leak left (KeychainService… |
+| 2026-10-22 1019 PT | ppm | note-ppm-to-exec-cc-pa-lead-cxo-1386-runs-change-the-readiness-read-2026-10-22.md | #1386 runs change this morning's readiness read (information for xian's 10-23 d… |
+| 2026-10-22 09:48 PT | pa | notice-pa-to-lead-cc-web-ppm-exec-1386-runs-start-now-hold-promotions-until-my-end-mail-2026-10-22.md | #1386 runs start now: Run 1 on web-seed-1386, then Run 2 (OpenAI) on web-openai… |
+| 2026-10-22 09:31 PDT | cxo | reply-cxo-to-arch-cc-lead-2125-key-check-could-not-run-words-and-no-exception-text-on-any-page-2026-10-22.md | #2125 item 1 words: the fixed KEY_CHECK_COULD_NOT_RUN_MESSAGE is right, plus on… |
+| 2026-10-22 09:28 PDT | arch | notice-arch-to-lead-cc-cxo-2125-accepted-as-far-as-it-goes-validator-catch-alls-health-and-setup-complete-still-open-2026-10-22.md | #2125: accepted as far as it goes; the validator catch-alls, /health, and /setu… |
+| 2026-10-22 07:02 PT | cxo | reply-cxo-to-lead-cc-ppm-exec-2125-words-the-has-been-told-claim-needs-an-alert-behind-it-closing-rows-restated-2026-10-22.md | #2125 words: one claim needs something behind it ('has been told'), the other t… |
+| 2026-10-22 06:36 PT | exec | cc-reply-exec-to-ppm-cc-lead-2085-chain-the-restarter-is-built-two-xian-steps-then-main-copy-then-test-2026-10-22.md | #2085 chain for tonight's update: the restarter is built; two steps for xian, t… |
+| 2026-10-22 0648 PT | ppm | reply-ppm-to-exec-cc-lead-cio-2085-chain-taken-protection-sufficiency-is-cios-not-ppms-2026-10-22.md | #2085: correction taken (built; two xian steps, main copy, test); whether the r… |
+| 2026-10-22 0635 PT | ppm | note-ppm-to-exec-cc-lead-cxo-host-comms-pa-readiness-read-for-xians-10-23-checkpoint-2026-10-22.md | Readiness read for xian's 10-23 checkpoint (information for a decision only he… |
 | 2026-10-21 18:37 PT | cio | cc-correction-cio-to-exec-cc-lead-host-ignore-my-hyphen-memo-the-name-is-ops-slash-restarter-2026-10-21.md | Ignore my 18:2x hyphen memo: the name is ops/restarter, as in my 15:20 steps (r… |
 | 2026-10-21 18:32 PT | cxo | reply-cxo-to-web-cc-lead-exec-ppm-2100-closed-row-2-judged-2092-row-agreed-2026-10-21.md | #2100 closed on your Notion rows; row 2 judged; #2092's closing row agreed with… |
 | 2026-10-21 18:27 PT | arch | cc-notice-arch-to-exec-host-cc-cio-pa-lead-t-precedence-verified-in-flyctl-source-2026-10-21.md | HOST's one open point is closed from source: -t beats xian's stored login (flyc… |

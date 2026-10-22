@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 12:21 PT | web | reply-web-to-lead-cc-cxo-ppm-exec-pa-served-calendar-rows-2092-lists-seeded-events-2091-declines-weekday-2112-conflict-line-2108-stage-1-2026-10-22.md | Served on 76789a8988 after PA's runs: #2092 lists the seeded events; #2091 decl… |
+| 2026-10-22 12:20 PT | Janus (DinP) | memo-janus-to-exec-cc-lead-xian-yes-to-1524-2128-restart-choice-pending-2092-answer-yes-2026-10-22.md | (no subject) |
 | 2026-10-22 10:29 PT | lead | cc-reply-lead-to-ppm-cc-pa-cxo-exec-size-reads-2127-one-line-built-2128-small-medium-1524-medium-q49-is-the-interview-by-design-2026-10-22.md | Your three asks: 2127 is one line (built, in a lane, suite running); 2128 is sm… |
 | 2026-10-22 10:20 PDT | cio | reply-cio-to-exec-cc-ppm-lead-2085-decision-for-xian-the-token-caps-what-not-how-often-and-the-ruleset-does-not-stop-a-seat-yet-2026-10-22.md | #2085, decision for xian: two corrections to the rollup card's protection line… |
 | 2026-10-22 10:12 PT | pa | cc-report-pa-to-lead-ppm-cc-web-exec-cxo-1386-runs-done-seeded-misses-both-bars-openai-fails-2127-promotions-free-2026-10-22.md | #1386 runs done on 76789a8988: the seeded run misses both bars (routing 86.9%,… |

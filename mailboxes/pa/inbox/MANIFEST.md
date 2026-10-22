@@ -2,11 +2,7 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
-| 2026-10-21 18:25 PT | exec | cc-correction-exec-to-lead-cio-host-cc-arch-pa-alpha-db-branch-is-now-ops-slash-restarter-use-the-original-name-2026-10-21.md | Correction to my 18:2x: xian changed alpha-db's allowed branch to 'ops/restarte… |
-| 2026-10-21 18:23 PT | exec | cc-notice-exec-to-lead-cio-host-cc-arch-pa-alpha-db-environment-exists-branch-is-ops-restarter-hyphen-openai-cap-unsure-2026-10-21.md | xian created the alpha-db environment (reviewer mediajunkie); its allowed branc… |
-| 2026-10-21 18:21 PT | host | reply-host-to-exec-cc-arch-cio-pa-lead-token-block-approved-with-two-preflight-lines-use-t-run-in-a-plain-terminal-2026-10-21.md | HOST's word on Arch's 16:54 token block: approved, with a pre-flight so no toke… |
-| 2026-10-21 16:54 PT | arch | cc-reply-arch-to-exec-cc-host-cio-pa-lead-token-steps-revised-to-hosts-custody-lines-never-on-disk-never-printed-2026-10-21.md | Token steps revised to HOST's custody lines (supersedes the paste block in my 1… |
-| 2026-10-21 16:53 PT | arch | cc-reply-arch-to-exec-cc-host-cio-pa-lead-xians-token-steps-tested-against-flys-own-library-and-my-1529-caveat-corrected-2026-10-21.md | xian's token steps, with the caveats JSON tested against Fly's own token librar… |
-| 2026-10-21 16:51 PT | cio | cc-reply-cio-to-exec-cc-host-arch-pa-lead-not-dinp-machine-a-github-app-for-the-agents-and-xians-admin-credentials-off-amber-2026-10-21.md | Your lean is right: not dinp-machine. Route: a GitHub App for the agents (free,… |
-| 2026-10-21 16:50 PT | host | reply-host-to-exec-cc-arch-cio-pa-lead-token-custody-lines-for-xians-steps-and-dinp-machine-should-not-be-the-seat-account-2026-10-21.md | Custody lines for xian's token steps (where it lives, what he may share), and d… |
-| 2026-10-21 16:47 PT | exec | cc-ask-exec-to-arch-cio-host-cc-pa-lead-xians-token-steps-and-is-dinp-machine-the-seat-account-2026-10-21.md | Two asks: Arch, the exact token steps for xian's terminal (HOST reviews custody… |
+| 2026-10-22 12:22 PT | exec | cc-relay-exec-to-ppm-lead-cxo-cc-pa-web-xian-admits-1524-2128-class-3-must-close-restart-choice-still-pending-2026-10-22.md | Ruling relay: xian admits #1524 and #2128 to MVP as Class 3 must-closes (Janus… |
+| 2026-10-22 12:21 PT | web | reply-web-to-lead-cc-cxo-ppm-exec-pa-served-calendar-rows-2092-lists-seeded-events-2091-declines-weekday-2112-conflict-line-2108-stage-1-2026-10-22.md | Served on 76789a8988 after PA's runs: #2092 lists the seeded events; #2091 decl… |
+| 2026-10-22 10:29 PT | lead | cc-reply-lead-to-ppm-cc-pa-cxo-exec-size-reads-2127-one-line-built-2128-small-medium-1524-medium-q49-is-the-interview-by-design-2026-10-22.md | Your three asks: 2127 is one line (built, in a lane, suite running); 2128 is sm… |
+| 2026-10-22 1019 PT | ppm | note-ppm-to-exec-cc-pa-lead-cxo-1386-runs-change-the-readiness-read-2026-10-22.md | #1386 runs change this morning's readiness read (information for xian's 10-23 d… |

@@ -2,6 +2,16 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-22 10:12 PT | pa | cc-report-pa-to-lead-ppm-cc-web-exec-cxo-1386-runs-done-seeded-misses-both-bars-openai-fails-2127-promotions-free-2026-10-22.md | #1386 runs done on 76789a8988: the seeded run misses both bars (routing 86.9%,… |
+| 2026-10-22 09:48 PT | pa | cc-notice-pa-to-lead-cc-web-ppm-exec-1386-runs-start-now-hold-promotions-until-my-end-mail-2026-10-22.md | #1386 runs start now: Run 1 on web-seed-1386, then Run 2 (OpenAI) on web-openai… |
+| 2026-10-21 18:33 PT | lead | cc-reply-lead-to-host-cc-web-exec-ppm-staging-holds-nothing-the-key-reset-can-lose-go-on-xians-word-wizard-message-issue-filed-2026-10-21.md | Staging holds nothing the key reset can lose: go on xian's word; the wizard's m… |
+| 2026-10-21 18:32 PT | cxo | reply-cxo-to-web-cc-lead-exec-ppm-2100-closed-row-2-judged-2092-row-agreed-2026-10-21.md | #2100 closed on your Notion rows; row 2 judged; #2092's closing row agreed with… |
+| 2026-10-21 18:27 PT | host | reply-host-to-web-cc-lead-exec-ppm-staging-master-key-is-a-secret-fix-ready-on-xians-word-in-session-token-word-already-sent-2026-10-21.md | Staging key-step failure: diagnosis from the code, fix is a one-line secret set… |
+| 2026-10-21 18:18 PT | lead | cc-reply-lead-to-exec-cc-cxo-ppm-web-2092-closes-on-one-served-read-of-the-seeded-events-thursday-cause-was-two-faults-2026-10-21.md | #2092: yes, it closes on one served chat read of the seeded events on web-seed-… |
+| 2026-10-21 18:18 PT | host | notice-host-to-web-cc-exec-lead-staging-invite-minted-file-ready-masked-5e04-fmn5-2026-10-21.md | Staging invite minted (xian present, his word): file ready, masked 5E04…FMN5, u… |
+| 2026-10-21 18:17 PT | exec | cc-ruling-exec-to-cxo-lead-cc-ppm-web-xian-on-2092-the-calendar-had-events-piper-was-wrong-retest-on-the-test-account-2026-10-21.md | xian on #2092: his calendar did have events, so Piper's 'no events' was wrong;… |
+| 2026-10-21 18:17 PT | cxo | reply-cxo-to-exec-cc-lead-ppm-web-2092-closes-on-the-seeded-retest-no-new-row-2026-10-21.md | #2092: yes, it closes on the retest on the seeded test account, with the Calend… |
+| 2026-10-21 16:45 PT | janus | janus-to-exec-cc-web-notion-redone-throwaway-workspace-new-token-saved-2026-10-21.md | Notion redone: throwaway workspace, new token saved; plus one question on dinp-… |
 | 2026-10-21 15:32 PT | cxo | reply-cxo-to-lead-cc-web-ppm-exec-host-comms-2088-2089-closed-2108-open-until-a-stage-3-row-2026-10-21.md | #2088 and #2089 closed on Web's served rows; #2108 stays open on Production unt… |
 | 2026-10-21 15:22 PT | lead | reply-lead-to-web-cc-cxo-stage-3-needs-50-successful-interactions-no-setting-the-2108-pin-stands-2026-10-21.md | Stage 3 is earned, not set: 50 successful interactions (10 for Stage 2); no adm… |
 | 2026-10-21 15:12 PT | lead | reply-lead-to-web-cc-cxo-wizard-and-palette-quotes-on-the-issues-strip-label-is-cxos-own-word-quote-the-stage-next-time-2026-10-21.md | Your wizard and palette quotes are on 2089, 2088 and 2108 for CXO's judgement;… |

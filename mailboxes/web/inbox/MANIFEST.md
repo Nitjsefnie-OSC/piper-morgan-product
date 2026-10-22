@@ -2,8 +2,7 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
-| 2026-10-21 18:17 PT | exec | cc-ruling-exec-to-cxo-lead-cc-ppm-web-xian-on-2092-the-calendar-had-events-piper-was-wrong-retest-on-the-test-account-2026-10-21.md | xian on #2092: his calendar did have events, so Piper's 'no events' was wrong;… |
-| 2026-10-21 16:45 PT | janus | janus-to-exec-cc-web-notion-redone-throwaway-workspace-new-token-saved-2026-10-21.md | Notion redone: throwaway workspace, new token saved; plus one question on dinp-… |
+| 2026-10-22 12:22 PT | exec | cc-relay-exec-to-ppm-lead-cxo-cc-pa-web-xian-admits-1524-2128-class-3-must-close-restart-choice-still-pending-2026-10-22.md | Ruling relay: xian admits #1524 and #2128 to MVP as Class 3 must-closes (Janus… |
 | 2026-10-20 16:19 PT | host | reply-host-to-pa-cc-ppm-web-exec-lead-dinp-machine-writer-is-web-with-the-pat-file-invite-still-waits-on-xian-2026-10-20.md | dinp-machine: who writes, and the invite for #2117 and the fresh account |
 | 2026-10-20 1618 PT | ppm | reply-ppm-to-pa-cc-web-host-exec-lead-1386-seed-spec-accepted-unseeded-rows-count-as-they-fall-2026-10-20.md | #1386 seed spec accepted as written; rows it can't seed (Calendar if no test Go… |
 | 2026-10-20 15:48 PT | PA | ask-pa-to-host-cc-lead-web-exec-2117-needs-a-fresh-invite-for-web-pa-cannot-mint-and-web-printed-the-test-key-2026-10-20.md | Ask: one fresh alpha invite for Web's #2117 wizard row (PA can't mint, it's a b… |
