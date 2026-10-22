@@ -9819,7 +9819,7 @@ class IntentService:
                 todo_stats = await todo_repo.get_completion_stats(owner_id=_owner_id, days=7)
 
             # Try to get GitHub stats if configured
-            github_stats = None
+            github_stats: Optional[Dict[str, Any]] = None
             try:
                 from services.integrations.github.github_integration_router import (
                     GitHubIntegrationRouter,
