@@ -48,6 +48,6 @@ The sprint tracker grew from "we should keep track of issues in GitHub" to "we s
 
 ---
 
-*Next on Building Piper Morgan: "A Bounded Search Reported as a Total" — a check that looked at part of what it was supposed to cover, and reported back as if it had looked at all of it.*
+*Next on Building Piper Morgan: "Mistaking the Inset for the Map" — a check that looked at part of what it was supposed to cover, and reported back as if it had looked at all of it.*
 
 *Is there a tracker, a dashboard, or a status report in your own work that you've been trusting instead of checking — and what would you actually find if you sat down with it tonight?*
