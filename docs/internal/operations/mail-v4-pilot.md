@@ -1,7 +1,7 @@
 # Mail v4 pilot — operations
 
 **Status**: LIVE 2026-10-08 (CIO built it after the weekly quota reset, the named trigger). Pilot roles:
-**exec, cio**; **lead joins 2026-10-12**. Runs 2 weeks, review **2026-10-22**. Owner: CIO (mechanism),
+**exec, cio**; **lead joins 2026-10-12**. Ran 2 weeks; reviewed **2026-10-22** (`dev/2026/10/22/mail-v4-pilot-review-2026-10-22.md`): continues for the three seats, next review **2026-11-05**. Owner: CIO (mechanism),
 Exec (audit and rollup). Design: `dev/2026/10/03/spec-eval/proposal-mail-v4-fan-out-on-read.md` (Spec;
 PM approved 2026-10-03).
 
@@ -33,7 +33,7 @@ scripts/mail4.py inbox [--show]                    # every wake, alongside the v
 scripts/mail4.py read <ID>
 scripts/mail4.py ack <ID> done --note "what I did"  # read | done | declined
 scripts/mail4.py send --to exec --type task --subject "..." --body-file memo.md   # or body on stdin
-scripts/mail4.py check --canary                    # once a day, at START
+scripts/mail4.py check                             # at START; the first inbox read of the day already ran the canary
 scripts/mail4.py stats                             # pilot instrumentation
 ```
 Types: `fyi`, `task`, `decision-request`, `ruling-relay`, `reply` (`task` and `decision-request` require an
@@ -52,8 +52,8 @@ Your role comes from your branch (`claude/<role>-cycle`); `--as ROLE` overrides.
 
 ## Known limits (pilot)
 
-- **No mail wake yet.** The automatic MAIL WAKE watches this repo's `mailboxes/`, not the private repo, so a
-  v4 message is seen at the recipient's next scheduled wake. Asked Pard (owner of the watcher) to add it.
+- ~~No mail wake yet.~~ Closed: Pard's `mail-wake.py` reads `mail4.py inbox --ids`, so a v4 message wakes its recipient (seen 10-16).
+- The daily canary runs on the seat's first `inbox` read of the day (since 10-22; it had run on 15 of 41 seat-days as a START step). `check` names seats without one today.
 - No per-message search beyond `inbox` and `read`. `check` scans every message; fine at pilot volume.
 
 ## Success and stop criteria (from the proposal)

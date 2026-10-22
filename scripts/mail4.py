@@ -26,7 +26,7 @@ roles.yaml go through v4; anything else is refused with a pointer to scripts/mai
 PM ('xian') is never addressable (CLAUDE.md, PM ruling 2026-10-03): PM-bound items go to exec.
 
 Cost: one fetch + one commit per send/ack. Benefit: none yet: measuring (pilot).
-Review: 2026-10-22 (end of the 2-week pilot). Owner: CIO.
+Review: 2026-10-22 done (dev/2026/10/22/mail-v4-pilot-review-2026-10-22.md); next 2026-11-05. Owner: CIO.
 """
 
 import argparse
@@ -260,6 +260,13 @@ def cmd_inbox(a):
         # Machine form for watchers (Pard's mail-wake): unacknowledged IDs only, one per line.
         print("\n".join(m["id"] for m in sorted(open_, key=lambda m: m["sent_at"])))
         return 0
+    rc = 0
+    if role == my_role() and not canaried_today(msgs, role):
+        # The daily canary used to be a START step that each seat had to remember. Over the pilot it ran on
+        # 15 of 41 seat-days (review 2026-10-22), so the first inbox read of the day runs it instead.
+        ok, mid = canary(role)
+        print(f"canary {mid} for {role} (first inbox read today): {'PASS' if ok else 'FAIL'}")
+        rc = 0 if ok else 2
     since = min((m["sent_at"] for m in msgs), default="—")
     print(
         f"mail4 inbox · role={role} · scanned {len(msgs)} messages since {since}; "
@@ -270,7 +277,21 @@ def cmd_inbox(a):
         print(f"  {m['id']}  {m['from']:>5} → {role}  {m['type']}{flag}  {m['subject']}")
         if a.show:
             print("    " + m["_body"].strip().replace("\n", "\n    ") + "\n")
-    return 0
+    return rc
+
+
+def canaried_today(msgs, role):
+    today = now_pt().strftime("%Y-%m-%d")
+    return any(
+        m.get("type") == "canary" and m["from"] == role and m["sent_at"][:10] == today for m in msgs
+    )
+
+
+def last_canary(msgs, role):
+    return max(
+        (m["sent_at"][:10] for m in msgs if m.get("type") == "canary" and m["from"] == role),
+        default=None,
+    )
 
 
 def cmd_read(a):
@@ -343,7 +364,12 @@ def cmd_check(a):
         )
         rc = 0 if ok else 2
         tip = fetch_tip()
-    msgs = [m for m in all_messages(tip) if m.get("type") != "canary"]
+    every = all_messages(tip)
+    msgs = [m for m in every if m.get("type") != "canary"]
+    today = now_pt().strftime("%Y-%m-%d")
+    stale = [
+        f"{r} {last_canary(every, r) or 'never'}" for r in pilot if last_canary(every, r) != today
+    ]
     late = []
     for r in pilot:
         ack = acks(tip, r)
@@ -353,6 +379,10 @@ def cmd_check(a):
         f"mail4 check · scanned {len(msgs)} messages (canaries excluded) to {len(pilot)} pilot roles "
         f"({', '.join(pilot)}) since {since}; {len(late)} required-ack overdue"
     )
+    if stale:
+        print(
+            f"  no canary today from: {', '.join(stale)} (last run); a seat's first inbox read of the day runs it"
+        )
     for r, m in late:
         print(f"  OVERDUE {r}: {m['id']} from {m['from']} ({age_days(m):.1f}d) {m['subject']}")
     if not msgs:
