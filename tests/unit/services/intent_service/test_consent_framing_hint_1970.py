@@ -253,7 +253,7 @@ class TestRouterFramingParse:
                 '"confidence": 0.9, "rationale": "x"}'
             ]
         )
-        d = await route("remind me at 9am", llm_service=llm)
+        d = await route("remind me at 9am", llm_service=llm, user_id=None)
         assert d.outcome == "operation"
         assert d.framing == FRAMING_EXECUTE
 
@@ -264,7 +264,7 @@ class TestRouterFramingParse:
                 '"confidence": 0.9, "rationale": "x"}'
             ]
         )
-        d = await route("remind me at 9am", llm_service=llm)
+        d = await route("remind me at 9am", llm_service=llm, user_id=None)
         assert d.framing == FRAMING_COMPOSE
 
     async def test_valid_ambiguous_framing_parses(self):
@@ -274,7 +274,7 @@ class TestRouterFramingParse:
                 '"confidence": 0.9, "rationale": "x"}'
             ]
         )
-        d = await route("remind me at 9am", llm_service=llm)
+        d = await route("remind me at 9am", llm_service=llm, user_id=None)
         assert d.framing == FRAMING_AMBIGUOUS
 
     async def test_invalid_framing_value_drops_to_none(self):
@@ -286,7 +286,7 @@ class TestRouterFramingParse:
                 '"confidence": 0.9, "rationale": "x"}'
             ]
         )
-        d = await route("remind me at 9am", llm_service=llm)
+        d = await route("remind me at 9am", llm_service=llm, user_id=None)
         assert d.framing is None
 
     async def test_wrong_type_framing_drops_to_none(self):
@@ -296,14 +296,14 @@ class TestRouterFramingParse:
                 '"confidence": 0.9, "rationale": "x"}'
             ]
         )
-        d = await route("remind me at 9am", llm_service=llm)
+        d = await route("remind me at 9am", llm_service=llm, user_id=None)
         assert d.framing is None
 
     async def test_missing_framing_defaults_to_none(self):
         """A router that doesn't emit the key at all yields None — today's
         behavior, byte-for-byte (no prompt change in this step)."""
         llm = ScriptedLLM(['{"operation": "create_reminder", "confidence": 0.9, "rationale": "x"}'])
-        d = await route("remind me at 9am", llm_service=llm)
+        d = await route("remind me at 9am", llm_service=llm, user_id=None)
         assert d.framing is None
 
     async def test_plan_level_framing_is_top_level_not_per_element(self):
@@ -316,7 +316,7 @@ class TestRouterFramingParse:
                 '{"operation": "delete_todo", "confidence": 0.9, "rationale": "y"}]}'
             ]
         )
-        d = await route("two things", llm_service=llm)
+        d = await route("two things", llm_service=llm, user_id=None)
         assert d.outcome == "plan"
         assert d.framing == FRAMING_COMPOSE
         for op in d.operations:
@@ -330,7 +330,7 @@ class TestRouterFramingParse:
                 '{"operation": "delete_todo", "confidence": 0.9, "rationale": "y"}]}'
             ]
         )
-        d = await route("two things", llm_service=llm)
+        d = await route("two things", llm_service=llm, user_id=None)
         assert d.outcome == "plan"
         assert d.framing is None
 

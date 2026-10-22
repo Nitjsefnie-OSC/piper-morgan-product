@@ -600,7 +600,7 @@ async def route(
     *,
     llm_service: Any = None,
     grammar: Optional[RoutingGrammar] = None,
-    user_id: Optional[str] = None,
+    user_id: Optional[str],  # #2131: no default; None = a measurement/system call
 ) -> RoutingDecision:
     """One constrained routing call. SHADOW-ONLY — the result is data.
 

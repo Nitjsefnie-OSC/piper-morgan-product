@@ -74,7 +74,7 @@ async def _probe(phrases: list[str], samples: int, provider: Optional[str] = Non
     for phrase in phrases:
         for n in range(1, samples + 1):
             before = len(served_seen)
-            intent, _reasoning = await classifier._classify_with_reasoning(phrase)
+            intent, _reasoning = await classifier._classify_with_reasoning(phrase, user_id=None)
             category = getattr(getattr(intent, "category", None), "value", None)
             served = served_seen[-1] if len(served_seen) > before else "unrecorded"
             rows.append(

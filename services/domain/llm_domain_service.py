@@ -117,7 +117,8 @@ class LLMDomainService:
         response_format: Optional[Dict[str, Any]] = None,
         session: Optional[AsyncSession] = None,
         system: Optional[str] = None,
-        user_id: Optional[str] = None,
+        *,
+        user_id: Optional[str],  # #2131 (Arch): stated by every caller; None = a system call
         served: Optional[Dict[str, str]] = None,
     ) -> str:
         """

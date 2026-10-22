@@ -511,7 +511,7 @@ class IntentClassifier:
         try:
             # Perform classification with confidence scoring
             intent, reasoning = await self._classify_with_reasoning(
-                message, context, "", spatial_context, user_id
+                message, context, "", spatial_context, user_id=user_id
             )
 
             # --- ACTION NORMALIZATION ---
@@ -771,7 +771,8 @@ class IntentClassifier:
         context: Optional[Dict] = None,
         file_context: str = "",
         spatial_context: Optional[Dict] = None,
-        user_id: Optional[str] = None,
+        *,
+        user_id: Optional[str],  # #2131: no default; the caller states the principal
     ) -> Tuple[Intent, Dict[str, Any]]:
         """Classify intent with detailed reasoning"""
         # Prepare context for LLM

@@ -188,7 +188,12 @@ class SlotFillingManager:
         # Extract slots from initial message
         extracted = {}
         if self._llm_service and initial_message.strip():
-            extracted = await extract_slots(initial_message, template, self._llm_service)
+            extracted = await extract_slots(
+                initial_message,
+                template,
+                self._llm_service,
+                user_id=user_id,  # #2131
+            )
             update_slot_state(slot_state, extracted)
 
         return self._determine_next_step(session)
@@ -245,6 +250,7 @@ class SlotFillingManager:
                 session.template,
                 self._llm_service,
                 existing_values=session.slot_state.filled_slots,
+                user_id=session.user_id,  # #2131 (Arch): the session holds the principal
             )
             update_slot_state(session.slot_state, extracted)
 
@@ -262,6 +268,7 @@ class SlotFillingManager:
                 session.template,
                 self._llm_service,
                 existing_values=session.slot_state.filled_slots,
+                user_id=session.user_id,  # #2131 (Arch): the session holds the principal
             )
             update_slot_state(session.slot_state, extracted)
 

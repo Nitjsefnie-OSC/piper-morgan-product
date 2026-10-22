@@ -142,7 +142,7 @@ def apply_secret_rules(content: str) -> Tuple[str, RuleMatchResult]:
 
 
 async def apply_boundary_rules(
-    content: str, boundary_enforcer, user_id: Optional[str] = None
+    content: str, boundary_enforcer, *, user_id: Optional[str]
 ) -> RuleMatchResult:
     """Apply BoundaryEnforcer category check to LLM output text.
 

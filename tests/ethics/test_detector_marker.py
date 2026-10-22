@@ -195,3 +195,19 @@ async def test_the_envelope_records_unavailable_not_pass():
     assert decision.violation_detected is False  # #1004's no-false-positive fallback stands
     assert decision.audit_data.get("detector") == "semantic-unavailable"
     assert decision.audit_data.get("decision_tier") == "unavailable"
+
+
+@pytest.mark.asyncio
+async def test_a_detector_that_fails_to_build_records_unavailable_not_pass():
+    """#2134 edge (Arch 14:30): semantic layer enabled, detector failed to build → the
+    layer did not run, so the envelope reads unavailable, never "pass"."""
+    enforcer = BoundaryEnforcer()
+    enforcer._enable_semantic = True
+    enforcer._get_semantic_detector = lambda: None
+    decision = await enforcer.enforce_boundaries(
+        message="Please help me write a product spec for a new onboarding flow.",
+        session_id="t-2134-edge",
+    )
+    assert decision.violation_detected is False
+    assert decision.audit_data.get("detector") == "semantic-unavailable"
+    assert decision.audit_data.get("decision_tier") == "unavailable"

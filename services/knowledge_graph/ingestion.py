@@ -134,7 +134,7 @@ class DocumentIngester:
         return self._llm
 
     async def _analyze_document_relationships(
-        self, content: str, existing_metadata: Dict, *, user_id: Optional[str] = None
+        self, content: str, existing_metadata: Dict, *, user_id: Optional[str]
     ) -> Dict:
         """Use LLM to analyze document relationships and hierarchy"""
 
@@ -213,7 +213,7 @@ Be specific and concise. Extract real concepts from the content."""
             }
 
     async def ingest_pdf(
-        self, file_path: str, metadata: Optional[Dict] = None, *, user_id: Optional[str] = None
+        self, file_path: str, metadata: Optional[Dict] = None, *, user_id: Optional[str]
     ) -> Dict:
         """
         Ingest a PDF document into the knowledge base with relationship analysis

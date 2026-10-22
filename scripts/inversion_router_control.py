@@ -45,7 +45,7 @@ async def _control(phrases: list[str], samples: int, provider: Optional[str]) ->
     for phrase in phrases:
         for n in range(1, samples + 1):
             try:
-                d = await route(phrase, None, llm_service=llm, grammar=grammar)
+                d = await route(phrase, None, llm_service=llm, grammar=grammar, user_id=None)
                 label = d.route_label
                 conf = d.confidence
                 served = (

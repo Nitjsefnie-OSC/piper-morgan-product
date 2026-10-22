@@ -2006,7 +2006,7 @@ class ConversationalFloor:
         *,
         user_message: str,
         draft: str,
-        user_id: Optional[str] = None,
+        user_id: Optional[str],  # #2131: no default
     ) -> str:
         """#1837 shape 3: apply a free-form edit request to a draft artifact.
 

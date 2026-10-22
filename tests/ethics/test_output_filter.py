@@ -209,21 +209,21 @@ class _MockBoundaryEnforcer:
 class TestApplyBoundaryRules:
     @pytest.mark.asyncio
     async def test_no_enforcer_returns_clean(self):
-        result = await apply_boundary_rules("some text", boundary_enforcer=None)
+        result = await apply_boundary_rules("some text", boundary_enforcer=None, user_id=None)
         assert result.is_violation is False
         assert result.matched_rules == []
 
     @pytest.mark.asyncio
     async def test_enforcer_passes_clean_content(self):
         enforcer = _MockBoundaryEnforcer(will_flag=False)
-        result = await apply_boundary_rules("clean text", enforcer)
+        result = await apply_boundary_rules("clean text", enforcer, user_id=None)
         assert result.is_violation is False
         assert enforcer.calls == 1
 
     @pytest.mark.asyncio
     async def test_enforcer_flags_violation(self):
         enforcer = _MockBoundaryEnforcer(will_flag=True, violation_type="harassment")
-        result = await apply_boundary_rules("something bad", enforcer)
+        result = await apply_boundary_rules("something bad", enforcer, user_id=None)
         assert result.is_violation is True
         assert "boundary:harassment" in result.matched_rules
 

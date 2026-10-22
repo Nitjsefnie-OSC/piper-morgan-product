@@ -1036,7 +1036,7 @@ async def run(
         llm._config_service.get_default_provider = lambda user_id=None: provider  # type: ignore[method-assign]
 
     async def router_fn(phrase: str):
-        return await route(phrase, None, llm_service=llm, grammar=grammar)
+        return await route(phrase, None, llm_service=llm, grammar=grammar, user_id=None)
 
     decisions = await route_all(rows, router_fn)
     scored = score(rows, decisions)

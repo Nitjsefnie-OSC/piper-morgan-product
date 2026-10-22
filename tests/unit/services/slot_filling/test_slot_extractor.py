@@ -62,6 +62,7 @@ class TestExtractSlots:
             "Set up a meeting with Sarah Tuesday at 2pm about Q3 planning",
             MEETING_TEMPLATE,
             mock_llm,
+            user_id=None,
         )
         assert result["attendee"] == "Sarah"
         assert result["day"] == "Tuesday"
@@ -76,6 +77,7 @@ class TestExtractSlots:
             "Schedule something with Sarah",
             MEETING_TEMPLATE,
             mock_llm,
+            user_id=None,
         )
         assert result == {"attendee": "Sarah"}
 
@@ -87,20 +89,21 @@ class TestExtractSlots:
             "Schedule a meeting",
             MEETING_TEMPLATE,
             mock_llm,
+            user_id=None,
         )
         assert result == {}
 
     @pytest.mark.asyncio
     async def test_empty_message(self, mock_llm):
         """Empty message returns empty dict without calling LLM."""
-        result = await extract_slots("", MEETING_TEMPLATE, mock_llm)
+        result = await extract_slots("", MEETING_TEMPLATE, mock_llm, user_id=None)
         assert result == {}
         mock_llm.complete.assert_not_called()
 
     @pytest.mark.asyncio
     async def test_whitespace_only_message(self, mock_llm):
         """Whitespace-only message returns empty dict."""
-        result = await extract_slots("   ", MEETING_TEMPLATE, mock_llm)
+        result = await extract_slots("   ", MEETING_TEMPLATE, mock_llm, user_id=None)
         assert result == {}
         mock_llm.complete.assert_not_called()
 
@@ -112,6 +115,7 @@ class TestExtractSlots:
             "Meeting with Sarah Tuesday at 2pm",
             MEETING_TEMPLATE,
             mock_llm,
+            user_id=None,
         )
         assert result == {}
 
@@ -124,6 +128,7 @@ class TestExtractSlots:
             MEETING_TEMPLATE,
             mock_llm,
             existing_values={"attendee": "Sarah", "time": "3pm"},
+            user_id=None,
         )
         assert result == {"time": "4pm"}
         # Verify existing values were in the prompt
@@ -136,7 +141,7 @@ class TestExtractSlots:
     async def test_llm_called_with_correct_task_type(self, mock_llm):
         """LLM is called with 'slot_extraction' task type."""
         mock_llm.complete.return_value = "{}"
-        await extract_slots("test message", MEETING_TEMPLATE, mock_llm)
+        await extract_slots("test message", MEETING_TEMPLATE, mock_llm, user_id=None)
         mock_llm.complete.assert_called_once()
         call_kwargs = mock_llm.complete.call_args
         assert call_kwargs.kwargs.get("task_type") == "slot_extraction"
@@ -145,7 +150,7 @@ class TestExtractSlots:
     async def test_markdown_fences_stripped(self, mock_llm):
         """JSON wrapped in markdown code fences is handled."""
         mock_llm.complete.return_value = '```json\n{"attendee": "Sarah"}\n```'
-        result = await extract_slots("With Sarah", MEETING_TEMPLATE, mock_llm)
+        result = await extract_slots("With Sarah", MEETING_TEMPLATE, mock_llm, user_id=None)
         assert result == {"attendee": "Sarah"}
 
 
@@ -457,6 +462,7 @@ class TestExtractSlotsWithHistory:
             conversation_history=[
                 {"role": "user", "content": "Earlier I mentioned Sarah"},
             ],
+            user_id=None,
         )
         # The mock returned {"attendee": "Sarah"}; verify it passed through
         assert result == {"attendee": "Sarah"}
@@ -472,6 +478,7 @@ class TestExtractSlotsWithHistory:
             conversation_history=[
                 {"role": "user", "content": "Update Piper Morgan test page"},
             ],
+            user_id=None,
         )
         # Inspect the prompt that was passed to llm.complete
         call_args = mock_llm.complete.call_args
@@ -487,6 +494,7 @@ class TestExtractSlotsWithHistory:
             "Schedule a meeting",
             MEETING_TEMPLATE,
             mock_llm,
+            user_id=None,
         )
         call_args = mock_llm.complete.call_args
         prompt = call_args.kwargs.get("prompt") or call_args.args[0]

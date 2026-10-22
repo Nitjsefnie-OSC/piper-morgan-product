@@ -43,7 +43,7 @@ async def _classify(clf, llm_response, message="summarize issue 42"):
     ):
         clf._llm = AsyncMock()
         clf._llm.complete = AsyncMock(return_value=llm_response)
-        intent, reasoning = await clf._classify_with_reasoning(message)
+        intent, reasoning = await clf._classify_with_reasoning(message, user_id=None)
     return intent
 
 

@@ -213,7 +213,9 @@ async def _route_rows(
         if state_key and r.get(state_key):
             session_state = RouterSnapshot(state_block=r[state_key])
         try:
-            d = await route(r["phrase"], session_state, llm_service=llm, grammar=grammar)
+            d = await route(
+                r["phrase"], session_state, llm_service=llm, grammar=grammar, user_id=None
+            )
         except Exception as e:  # probe discipline: ERROR recorded, run continues
             d = RoutingDecision(outcome="error", error=f"{type(e).__name__}: {e}")
         decisions.append(d)

@@ -29,7 +29,8 @@ async def extract_slots(
     llm_service,
     existing_values: Optional[dict[str, Any]] = None,
     conversation_history: Optional[list[dict[str, str]]] = None,
-    user_id: Optional[str] = None,
+    *,
+    user_id: Optional[str],  # #2131 (Arch): no default, so a caller can't drop the principal
 ) -> dict[str, Any]:
     """
     Extract slot values from a user message using LLM.

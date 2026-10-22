@@ -54,5 +54,5 @@ async def test_an_anonymous_turn_still_passes_none_not_a_made_up_principal():
         clf._llm = AsyncMock()
         clf._llm.complete = AsyncMock(return_value=_llm_json())
         complete = clf._llm.complete
-        await clf._classify_with_reasoning("hello")
+        await clf._classify_with_reasoning("hello", user_id=None)  # #2131: stated
     assert complete.await_args.kwargs["user_id"] is None

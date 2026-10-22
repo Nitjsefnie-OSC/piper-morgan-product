@@ -34,6 +34,7 @@ from services.ethics.audit_transparency import audit_transparency
 from services.ethics.semantic_boundary_detector import (
     AMBIGUOUS_THRESHOLD,
     BLOCK_THRESHOLD,
+    REFUSAL_FALLBACK,
     SemanticBoundaryDetector,
     SemanticDetectorOutput,
     classify_decision,
@@ -232,6 +233,10 @@ class BoundaryEnforcer:
         cache_hit = False
         if not fast_path_hit and self._enable_semantic:
             detector_instance = self._get_semantic_detector()
+            if detector_instance is None:
+                # #2134 edge (Arch 14:30): enabled but the detector failed to build: the
+                # layer did not run, so it records "unavailable", never "pass".
+                semantic_output = REFUSAL_FALLBACK
             if detector_instance is not None:
                 cache_hit = detector_instance.cache_lookup(content)
                 semantic_output = await detector_instance.detect(content, context=context)

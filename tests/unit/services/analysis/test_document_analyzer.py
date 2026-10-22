@@ -27,7 +27,7 @@ class TestDocumentAnalyzer:
     async def test_basic_pdf_analysis(self):
         """Test page count and text extraction from a normal PDF"""
         pdf_path = os.path.join(FIXTURE_DIR, "chapter.pdf")
-        result = await self.analyzer.analyze(pdf_path)
+        result = await self.analyzer.analyze(pdf_path, user_id=None)
         # Be more flexible with page count - just check it's a positive number
         assert result.metadata["page_count"] > 0
         assert isinstance(result.metadata["text"], str)
@@ -41,7 +41,7 @@ class TestDocumentAnalyzer:
         self.mock_llm.complete.return_value = (
             '{"summary": "This is a summary.", "key_findings": ["Point 1", "Point 2"]}'
         )
-        result = await self.analyzer.analyze(pdf_path)
+        result = await self.analyzer.analyze(pdf_path, user_id=None)
         assert "summary" in result.metadata
         assert result.metadata["summary"] is not None
 
@@ -54,7 +54,7 @@ class TestDocumentAnalyzer:
         self.mock_llm.complete.return_value = (
             '{"summary": "This is a summary.", "key_findings": ["Point 1", "Point 2"]}'
         )
-        result = await self.analyzer.analyze(pdf_path)
+        result = await self.analyzer.analyze(pdf_path, user_id=None)
         assert "key_points" in result.metadata
         assert isinstance(result.metadata["key_points"], list)
 
@@ -62,7 +62,7 @@ class TestDocumentAnalyzer:
     async def test_empty_pdf_handling(self):
         """Test that empty PDF (no text) returns zero page count and empty text"""
         pdf_path = os.path.join(FIXTURE_DIR, "empty_document.pdf")
-        result = await self.analyzer.analyze(pdf_path)
+        result = await self.analyzer.analyze(pdf_path, user_id=None)
         # Be more flexible - check it's a valid page count
         assert result.metadata["page_count"] >= 0
         assert isinstance(result.metadata["text"], str)
@@ -72,7 +72,7 @@ class TestDocumentAnalyzer:
     async def test_corrupted_pdf_handling(self):
         """Test that corrupted PDF returns error gracefully"""
         pdf_path = os.path.join(FIXTURE_DIR, "corrupted_document.pdf")
-        result = await self.analyzer.analyze(pdf_path)
+        result = await self.analyzer.analyze(pdf_path, user_id=None)
         assert result.metadata.get("error") is not None
         assert (
             "corrupt" in result.metadata.get("error", "").lower()
@@ -89,7 +89,7 @@ class TestDocumentAnalyzer:
     @pytest.mark.smoke
     async def test_analyze_returns_analysis_result(self):
         pdf_path = os.path.join(FIXTURE_DIR, "chapter.pdf")
-        result = await self.analyzer.analyze(pdf_path)
+        result = await self.analyzer.analyze(pdf_path, user_id=None)
         assert isinstance(result, AnalysisResult)
 
     @pytest.mark.smoke
@@ -106,7 +106,7 @@ async def test_document_basic_pdf_analysis():
     from services.analysis.document_analyzer import DocumentAnalyzer
 
     analyzer = DocumentAnalyzer()
-    result = await analyzer.analyze(FIXTURE_DIR + "chapter.pdf")
+    result = await analyzer.analyze(FIXTURE_DIR + "chapter.pdf", user_id=None)
     # Be more flexible with page count
     assert result.metadata["page_count"] > 0
     assert isinstance(result.metadata["text"], str)
@@ -124,7 +124,7 @@ async def test_document_summary_generation():
         '{"summary": "This is a summary.", "key_findings": ["Point 1", "Point 2"]}'
     )
     analyzer = DocumentAnalyzer(llm_client=mock_llm)
-    result = await analyzer.analyze(FIXTURE_DIR + "chapter.pdf")
+    result = await analyzer.analyze(FIXTURE_DIR + "chapter.pdf", user_id=None)
     assert "summary" in result.metadata
     assert result.metadata["summary"] is not None
 
@@ -140,7 +140,7 @@ async def test_document_key_points_extraction():
         '{"summary": "This is a summary.", "key_findings": ["Point 1", "Point 2"]}'
     )
     analyzer = DocumentAnalyzer(llm_client=mock_llm)
-    result = await analyzer.analyze(FIXTURE_DIR + "chapter.pdf")
+    result = await analyzer.analyze(FIXTURE_DIR + "chapter.pdf", user_id=None)
     assert "key_points" in result.metadata
     assert isinstance(result.metadata["key_points"], list)
 
@@ -151,7 +151,7 @@ async def test_document_empty_pdf_handling():
     from services.analysis.document_analyzer import DocumentAnalyzer
 
     analyzer = DocumentAnalyzer()
-    result = await analyzer.analyze(FIXTURE_DIR + "empty_document.pdf")
+    result = await analyzer.analyze(FIXTURE_DIR + "empty_document.pdf", user_id=None)
     assert result.metadata["page_count"] >= 0
     assert isinstance(result.metadata["text"], str)
 
@@ -162,7 +162,7 @@ async def test_document_corrupted_pdf_handling():
     from services.analysis.document_analyzer import DocumentAnalyzer
 
     analyzer = DocumentAnalyzer()
-    result = await analyzer.analyze(FIXTURE_DIR + "corrupted_document.pdf")
+    result = await analyzer.analyze(FIXTURE_DIR + "corrupted_document.pdf", user_id=None)
     assert "error" in result.metadata
     assert "corrupt" in result.metadata["error"] or "invalid" in result.metadata["error"]
 
@@ -182,7 +182,7 @@ async def test_document_analyze_returns_analysis_result():
     from services.analysis.document_analyzer import DocumentAnalyzer
 
     analyzer = DocumentAnalyzer()
-    result = await analyzer.analyze(FIXTURE_DIR + "chapter.pdf")
+    result = await analyzer.analyze(FIXTURE_DIR + "chapter.pdf", user_id=None)
     assert isinstance(result, AnalysisResult)
 
 
@@ -226,7 +226,9 @@ class Test1659TypeDispatch:
         p = tmp_path / "20260830_120000_abc123_notes.txt"
         p.write_text(f"Team planning notes.\n{MARKER_1659}\nEnd of notes.\n", encoding="utf-8")
 
-        result = await self.analyzer.analyze(str(p), file_type="text/plain", filename="notes.txt")
+        result = await self.analyzer.analyze(
+            str(p), file_type="text/plain", filename="notes.txt", user_id=None
+        )
 
         assert MARKER_1659 in result.metadata["text"]
         sent_prompt = self.mock_llm.complete.await_args.kwargs["prompt"]
@@ -243,7 +245,9 @@ class Test1659TypeDispatch:
         p = tmp_path / "20260830_120000_def456_plan.md"
         p.write_text(f"# Plan\n\n{MARKER_1659}\n", encoding="utf-8")
 
-        result = await self.analyzer.analyze(str(p), file_type="text/markdown", filename="plan.md")
+        result = await self.analyzer.analyze(
+            str(p), file_type="text/markdown", filename="plan.md", user_id=None
+        )
 
         assert MARKER_1659 in result.metadata["text"]
         assert MARKER_1659 in self.mock_llm.complete.await_args.kwargs["prompt"]
@@ -256,7 +260,7 @@ class Test1659TypeDispatch:
         p = tmp_path / "20260830_120000_ghi789_fixture.txt"
         p.write_text(MARKER_1659, encoding="utf-8")
 
-        result = await self.analyzer.analyze(str(p))
+        result = await self.analyzer.analyze(str(p), user_id=None)
 
         assert MARKER_1659 in result.metadata["text"]
         assert "Unable to analyze PDF" not in result.summary
@@ -269,7 +273,7 @@ class Test1659TypeDispatch:
         content = "Some plain text content."
         p.write_text(content, encoding="utf-8")
 
-        result = await DocumentAnalyzer().analyze(str(p), file_type="text/plain")
+        result = await DocumentAnalyzer().analyze(str(p), file_type="text/plain", user_id=None)
 
         assert result.summary == f"Document with {len(content)} characters of text."
         assert "PDF" not in result.summary
@@ -279,7 +283,7 @@ class Test1659TypeDispatch:
         p = tmp_path / "empty.txt"
         p.write_text("", encoding="utf-8")
 
-        result = await self.analyzer.analyze(str(p), file_type="text/plain")
+        result = await self.analyzer.analyze(str(p), file_type="text/plain", user_id=None)
 
         assert result.summary == ""
         assert result.metadata["key_points"] == []
@@ -292,6 +296,7 @@ class Test1659TypeDispatch:
             os.path.join(FIXTURE_DIR, "chapter.pdf"),
             file_type="application/pdf",
             filename="chapter.pdf",
+            user_id=None,
         )
 
         assert result.metadata["page_count"] > 0
@@ -305,7 +310,10 @@ class Test1659TypeDispatch:
         p.write_bytes(b"PK\x03\x04 not really analyzable binary content")
 
         result = await self.analyzer.analyze(
-            str(p), file_type="application/zip", filename="archive.zip"
+            str(p),
+            file_type="application/zip",
+            filename="archive.zip",
+            user_id=None,
         )
 
         assert result.summary == "I can't analyze .zip files yet"
@@ -324,6 +332,7 @@ class Test1659TypeDispatch:
             str(p),
             file_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             filename="report.docx",
+            user_id=None,
         )
 
         assert result.summary == "I can't analyze .docx files yet"

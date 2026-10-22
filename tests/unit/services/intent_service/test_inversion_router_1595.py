@@ -226,7 +226,7 @@ class TestRouteEnforcement:
                 '"confidence": 0.92, "rationale": "reminder request"}'
             ]
         )
-        d = await route("remind me at 9am", llm_service=llm)
+        d = await route("remind me at 9am", llm_service=llm, user_id=None)
         assert d.outcome == "operation"
         assert d.operation == "create_reminder"
         assert d.args == {"when": "9am"}
@@ -244,7 +244,7 @@ class TestRouteEnforcement:
                 '{"operation": "create_reminder", "confidence": 0.9, "rationale": "x"}',
             ]
         )
-        d = await route("remind me at 9am", llm_service=llm)
+        d = await route("remind me at 9am", llm_service=llm, user_id=None)
         assert d.outcome == "operation"
         assert d.operation == "create_reminder"
         assert d.llm_calls == 2
@@ -253,7 +253,7 @@ class TestRouteEnforcement:
 
     async def test_malformed_twice_is_refused_never_guessed(self):
         llm = ScriptedLLM(["I think you want a reminder!", "still not json"])
-        d = await route("remind me at 9am", llm_service=llm)
+        d = await route("remind me at 9am", llm_service=llm, user_id=None)
         assert d.outcome == "refused"
         assert d.operation is None  # NEVER a guessed route
         assert d.llm_calls == 2
@@ -262,7 +262,7 @@ class TestRouteEnforcement:
 
     async def test_llm_failure_is_error_recorded_not_faked(self):
         llm = ScriptedLLM([RuntimeError("connection down")])
-        d = await route("what time is it?", llm_service=llm)
+        d = await route("what time is it?", llm_service=llm, user_id=None)
         assert d.outcome == "error"
         assert d.operation is None
         assert "connection down" in (d.error or "")
@@ -271,12 +271,12 @@ class TestRouteEnforcement:
         llm = ScriptedLLM(
             [f'{{"operation": "{NONE_ROUTE}", "confidence": 0.8, "rationale": "chat"}}']
         )
-        d = await route("nice weather today", llm_service=llm)
+        d = await route("nice weather today", llm_service=llm, user_id=None)
         assert d.outcome == "none" and d.operation is None
         llm = ScriptedLLM(
             [f'{{"operation": "{CLARIFY_ROUTE}", "confidence": 0.5, "rationale": "??"}}']
         )
-        d = await route("do the thing", llm_service=llm)
+        d = await route("do the thing", llm_service=llm, user_id=None)
         assert d.outcome == "clarify" and d.operation is None
 
     # -------------------------------------------------------------------
@@ -296,7 +296,9 @@ class TestRouteEnforcement:
                 '"confidence": 0.85, "rationale": "remove one"}]}'
             ]
         )
-        d = await route("what are my todos and delete my hydrate reminder", llm_service=llm)
+        d = await route(
+            "what are my todos and delete my hydrate reminder", llm_service=llm, user_id=None
+        )
         assert d.outcome == "plan"
         assert d.operation is None
         assert d.args == {}
@@ -325,7 +327,7 @@ class TestRouteEnforcement:
                 '"confidence": 0.9, "rationale": "y"}]}'
             ]
         )
-        d = await route("two things", llm_service=llm)
+        d = await route("two things", llm_service=llm, user_id=None)
         assert d.outcome == "plan"
         assert d.operations[0]["args"]["nested"] == {"deep": "ok"}
 
@@ -338,7 +340,7 @@ class TestRouteEnforcement:
                 '[{"operation": "list_todos_query", "confidence": 0.9, "rationale": "x"}]}',
             ]
         )
-        d = await route("one thing", llm_service=llm)
+        d = await route("one thing", llm_service=llm, user_id=None)
         assert d.outcome == "refused"
         assert d.operations == []
         assert d.llm_calls == 2
@@ -357,7 +359,7 @@ class TestRouteEnforcement:
                 '{"operation": "made_up_operation_xyz", "confidence": 0.9, "rationale": "y"}]}',
             ]
         )
-        d = await route("two things", llm_service=llm)
+        d = await route("two things", llm_service=llm, user_id=None)
         assert d.outcome == "refused"
         assert d.operations == []
         assert "made_up_operation_xyz" in (d.error or "")
@@ -375,7 +377,7 @@ class TestRouteEnforcement:
                 '{"confidence": 0.9, "rationale": "no operation key"}]}',
             ]
         )
-        d = await route("two things", llm_service=llm)
+        d = await route("two things", llm_service=llm, user_id=None)
         assert d.outcome == "refused"
         assert "operations[1]" in (d.error or "")
 
@@ -396,7 +398,7 @@ class TestRouteEnforcement:
                 '"confidence": 0.9, "rationale": "y"}]}',
             ]
         )
-        d = await route("delete two things", llm_service=llm)
+        d = await route("delete two things", llm_service=llm, user_id=None)
         assert d.outcome == "refused"
         assert "DISTINCT" in (d.error or "")
 
@@ -414,7 +416,7 @@ class TestRouteEnforcement:
                 f'{{"operation": "{NONE_ROUTE}", "confidence": 0.9, "rationale": "y"}}]}}',
             ]
         )
-        d = await route("todos and something vague", llm_service=llm)
+        d = await route("todos and something vague", llm_service=llm, user_id=None)
         assert d.outcome == "refused"
         assert NONE_ROUTE in (d.error or "")
 
@@ -430,7 +432,9 @@ class TestRouteEnforcement:
                 '{"operation": "delete_todo", "confidence": 0.9, "rationale": "y"}]}',
             ]
         )
-        d = await route("what are my todos and delete my hydrate reminder", llm_service=llm)
+        d = await route(
+            "what are my todos and delete my hydrate reminder", llm_service=llm, user_id=None
+        )
         assert d.outcome == "plan"
         assert [op["operation"] for op in d.operations] == [
             "list_todos_query",
@@ -452,7 +456,7 @@ class TestRouteEnforcement:
                 '{"operation": "create_reminder", "confidence": 0.9, "rationale": "x"}',
             ]
         )
-        d = await route("remind me at 9am", llm_service=llm)
+        d = await route("remind me at 9am", llm_service=llm, user_id=None)
         assert d.outcome == "operation"
         assert d.operation == "create_reminder"
         assert d.operations == []
@@ -485,7 +489,7 @@ class TestRouteEnforcement:
     async def test_router_uses_inversion_routing_task_type(self):
         """Model selection rides the app config path (light tier / Haiku)."""
         llm = ScriptedLLM(['{"operation": "NONE", "confidence": 1, "rationale": "x"}'])
-        await route("hi", llm_service=llm)
+        await route("hi", llm_service=llm, user_id=None)
         assert llm.calls[0]["task_type"] == "inversion_routing"
         assert llm.calls[0]["response_format"] == {"type": "json_object"}
 
@@ -496,7 +500,7 @@ class TestRouteEnforcement:
         from services.llm.clients import LLMClient
 
         grammar = derive_routing_grammar()
-        d = await route("what time is it?", llm_service=LLMClient(), grammar=grammar)
+        d = await route("what time is it?", llm_service=LLMClient(), grammar=grammar, user_id=None)
         assert d.outcome in ("operation", "none", "clarify")
         if d.outcome == "operation":
             assert d.operation in grammar.names()

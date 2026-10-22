@@ -36,6 +36,53 @@ def _calls_without_principal():
     return out
 
 
+def _forwarders_with_a_default():
+    """Arch 10-22 14:30: in any function whose LLM call passes ``user_id=<one of its own
+    parameters>``, that parameter has no default; otherwise a caller one level up drops
+    the principal silently (the slot-filling manager did, through extract_slots)."""
+    out = []
+    for f in sorted((REPO / "services").rglob("*.py")):
+        tree = ast.parse(f.read_text())
+        for fn in ast.walk(tree):
+            if not isinstance(fn, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                continue
+            a = fn.args
+            pos = a.posonlyargs + a.args
+            has_default = dict(
+                zip(
+                    [p.arg for p in pos],
+                    [False] * (len(pos) - len(a.defaults)) + [True] * len(a.defaults),
+                )
+            )
+            has_default.update({p.arg: d is not None for p, d in zip(a.kwonlyargs, a.kw_defaults)})
+            for node in ast.walk(fn):
+                if (
+                    isinstance(node, ast.Call)
+                    and isinstance(node.func, ast.Attribute)
+                    and node.func.attr == "complete"
+                ):
+                    for kw in node.keywords:
+                        if (
+                            kw.arg == "user_id"
+                            and isinstance(kw.value, ast.Name)
+                            and has_default.get(kw.value.id)
+                        ):
+                            out.append(f"{f.relative_to(REPO)}:{fn.lineno} {fn.name}")
+    return sorted(set(out))
+
+
+FORWARDER_CEILING = 0  # lower-only; was 7 on 2026-10-22 before Arch's 14:30 ruling
+
+
+def test_no_function_forwards_a_defaulted_principal_into_an_llm_call():
+    found = _forwarders_with_a_default()
+    assert len(found) <= FORWARDER_CEILING, (
+        f"Functions forwarding a defaulted user_id into an LLM call (#2131): {found}. Make the "
+        "parameter keyword-only with no default, so every caller states the principal "
+        "(None for a system call)."
+    )
+
+
 def test_no_llm_call_omits_the_principal():
     missing = _calls_without_principal()
     assert len(missing) <= CEILING, (

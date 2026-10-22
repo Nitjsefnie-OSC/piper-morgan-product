@@ -132,6 +132,8 @@ class DocumentAnalyzer(BaseAnalyzer):
         file_path: str,
         file_type: Optional[str] = None,
         filename: Optional[str] = None,
+        *,
+        user_id: Optional[str],  # #2131 (Arch): named, keyword-only, no default
         **kwargs,
     ) -> AnalysisResult:
         """Analyze a stored document, dispatched on file type (#1659).
@@ -142,7 +144,8 @@ class DocumentAnalyzer(BaseAnalyzer):
             filename: Original filename, if known (extension-fallback dispatch;
                 the storage path itself preserves the original extension, so
                 bare analyze(path) callers still dispatch correctly)
-            **kwargs: ``user_id`` (#2131: the acting principal picks the provider); others unused
+            user_id: the acting principal (#2131: picks the provider); None = a system call
+            **kwargs: unused
         """
         try:
             # #1306: bytes via the decrypt seam, never a raw open()
@@ -156,9 +159,7 @@ class DocumentAnalyzer(BaseAnalyzer):
             )
 
             if kind == "text":
-                return await self._analyze_plain_text_bytes(
-                    data, file_path, user_id=kwargs.get("user_id")
-                )
+                return await self._analyze_plain_text_bytes(data, file_path, user_id=user_id)
 
             if kind == "unknown":
                 # #1648 honesty contract: no claimed analysis without real
@@ -210,7 +211,7 @@ class DocumentAnalyzer(BaseAnalyzer):
                             task_type=TaskType.SUMMARIZE.value,
                             prompt=json_prompt.format(content=text[:3000]),
                             response_format={"type": "json_object"},
-                            user_id=kwargs.get("user_id"),
+                            user_id=user_id,
                         )
 
                         # Parse JSON into domain model
@@ -261,7 +262,7 @@ class DocumentAnalyzer(BaseAnalyzer):
             )
 
     async def analyze_text(
-        self, text: str, source_id: str = "inline-text", *, user_id: Optional[str] = None
+        self, text: str, source_id: str = "inline-text", *, user_id: Optional[str]
     ) -> AnalysisResult:
         """Analyze already-extracted text through the SAME LLM-summary path
         ``analyze()`` uses for PDF text (#1657).
@@ -288,7 +289,7 @@ class DocumentAnalyzer(BaseAnalyzer):
         )
 
     async def _analyze_plain_text_bytes(
-        self, data: bytes, file_path: str, *, user_id: Optional[str] = None
+        self, data: bytes, file_path: str, *, user_id: Optional[str]
     ) -> AnalysisResult:
         """analyze()'s plain-text branch (#1659): decode the stored bytes and
         run them through the same LLM-summary path the PDF branch uses for
@@ -309,9 +310,7 @@ class DocumentAnalyzer(BaseAnalyzer):
             metadata=metadata,
         )
 
-    async def _summarize_text(
-        self, text: str, *, user_id: Optional[str] = None
-    ) -> Tuple[str, List[str]]:
+    async def _summarize_text(self, text: str, *, user_id: Optional[str]) -> Tuple[str, List[str]]:
         """Shared LLM-summarize step for the text paths (#1657 analyze_text +
         #1659 plain-text uploads): JSON-mode summary via SummaryParser, with
         the same honest fallbacks analyze_text always had. The PDF branch in
