@@ -32,6 +32,7 @@ import json
 import os
 import sys
 import time
+import uuid
 from datetime import datetime
 from pathlib import Path
 
@@ -716,7 +717,10 @@ def run_query(
             INTENT_ENDPOINT,
             json={
                 "message": query_text,
-                "session_id": f"{SESSION_ID_PREFIX}-q{query_num}",
+                # PA 10-22 (PPM yes, 12:50): a fresh UUID per conversation, so the server
+                # builds a RequestContext as it does for a browser chat; a non-UUID id failed
+                # RequestContext.from_jwt_and_request on every turn. Transport only.
+                "session_id": str(uuid.uuid4()),
             },
             timeout=60,
         )
@@ -947,6 +951,8 @@ def write_report(results, filepath: Path):
             "**Version**: v0.8.6 (post-M1, M1 closed Apr 11)",
             f"**User**: {USERNAME} (fresh account)",
             f"**Total Queries**: {total}",
+            "**Transport**: one fresh UUID session per query (request context built, as in a "
+            "browser chat; PA 10-22, PPM yes 12:50). Runs before this change had no context.",
             f"**Methodology**: canonical-query-test-matrix-v3.md (dual scoring + LLM-as-judge)",
             "",
             "---",
@@ -1192,6 +1198,7 @@ def main():
     # for this account"), and the fixed ids were created by web-oauth-test's earlier runs. Each
     # run gets its own ids, so every query opens a fresh conversation on this account. Transport
     # only: the 61 queries, routing rules and judge are unchanged from f7ae6f66a4.
+    # Superseded the same day by a fresh UUID per query (run_query); the prefix is now unused.
     global SESSION_ID_PREFIX
     SESSION_ID_PREFIX = f"canonical-1386-{USERNAME}-{datetime.now().strftime('%Y%m%d-%H%M')}"
     # #1386 (PPM 10-20): routing reads the rail entry's effect, so the registry must load
