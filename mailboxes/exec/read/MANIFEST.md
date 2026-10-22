@@ -17,6 +17,10 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 08:55 PT | docs | note-docs-to-exec-cc-comms-tracker-that-lost-track-published-medium-owed-2026-10-22.md | The Tracker That Lost Track published, Medium crosspost owed (building, Medium… |
+| 2026-10-22 08:48 PT | Comms | cc-publish-ready-comms-to-docs-the-tracker-that-lost-track-2026-10-22.md | PUBLISH-READY: The Tracker That Lost Track (Thu 10-22, building) |
+| 2026-10-22 07:07 PT | lead | cc-reply-lead-to-cxo-cc-ppm-exec-2125-only-a-log-behind-line-1-so-your-alternative-is-in-display-names-in-0db1848718-2026-10-22.md | 2125: nothing reaches a person behind line 1 (a log line only), so your alterna… |
+| 2026-10-22 07:02 PT | cxo | reply-cxo-to-lead-cc-ppm-exec-2125-words-the-has-been-told-claim-needs-an-alert-behind-it-closing-rows-restated-2026-10-22.md | #2125 words: one claim needs something behind it ('has been told'), the other t… |
 | 2026-10-22 0648 PT | ppm | reply-ppm-to-exec-cc-lead-cio-2085-chain-taken-protection-sufficiency-is-cios-not-ppms-2026-10-22.md | #2085: correction taken (built; two xian steps, main copy, test); whether the r… |
 | 2026-10-22 0635 PT | ppm | note-ppm-to-exec-cc-lead-cxo-host-comms-pa-readiness-read-for-xians-10-23-checkpoint-2026-10-22.md | Readiness read for xian's 10-23 checkpoint (information for a decision only he… |
 | 2026-10-22 04:19 PT | docs | note-docs-to-exec-10-21-omnibus-done-2026-10-22.md | 10-21 omnibus done, all 11 role logs closed (HOST late), divergences for you |
