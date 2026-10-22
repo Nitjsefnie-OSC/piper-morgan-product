@@ -359,3 +359,22 @@ Brake FIRED (second slip = #1965 admission, found and ledgered 10-09). Memo to E
   - the Ship #066 count: 3 PPM-judged admissions (window 10-16 → 10-22; today's admissions were all on xian's word);
   - the Terms map, once xian's answers return.
 - **Main CI:** 12 of 12 green at 21:33. Alpha `edf95b5c0c` (the tenth promotion, 19:21).
+
+## 2026-10-21 21:3x STOP: day-close (carry into 10-22)
+- **Gate: 8 open MVP.** Five must-close: #2085, #2091, #2092, #2096, #2112. Also open: #2018 and #1595 (listed as known issues), and #1386. No slips written. 10-23 is the invite checkpoint; 10-30 is the target for the first partner's access.
+- **Thursday 10-22:**
+  - The calendar is connected on `web-seed-1386`: the Calendar API is enabled in "Piper Morgan (Alpha)", and Test passed at 10:27.
+  - PA runs #1386 by 12:00, then the OpenAI run, on the build `/health` names at the start. Lead holds promotions.
+  - **The calendar-seeded rows are six (Q8, Q33, Q34, Q35, Q61, Q62), not nine.**
+  - OpenAI bar as set on 10-20, using PA's 36 matched rows.
+  - After both runs, Web asks the connected rows for #2112, #2091 and #2092. #2092 closes on "Do I have any meetings this week?" naming the seeded events (CXO and Lead 18:1x). Web also reads the Stage 3+ palette row for #2108.
+- **#2085** (Class 4, admitted 15:01): CIO proposes the protection for main, xian rules on it, Lead builds the external restarter, then an attended injected-stop test. Memory is 512 MB since 14:12. There's a conditional checklist row for the interim restart line if 10-30 comes first.
+- **#2087:** two Google Cloud projects. Lead maps them after Thursday, and xian picks the home before 10-30. Both invitation Calendar lines are applied; HOST's send check picks one on the morning.
+- **#2096:** xian's admin read.
+- **Staging restart row:** blocked on staging's master key (HOST, on xian's word). Web can run it until Thu 22:00.
+- **Owed:**
+  - **the readiness read for Exec at the 10-22 START** (for xian's 10-23 assessment);
+  - the beta-form line to Comms on any invitation morning;
+  - the Ship #066 count (window ends 10-22): 3 PPM-judged admissions; the admissions on 10-20 and 10-21 were on xian's word;
+  - the Terms map, once xian's answers return.
+- **Main CI:** 12 of 12 green at 21:33. Alpha `76789a8988`, healthy.
