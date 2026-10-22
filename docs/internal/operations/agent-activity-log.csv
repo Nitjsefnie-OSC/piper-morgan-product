@@ -3008,3 +3008,14 @@ date,role,slug,environment,model,log_filename,notes
 2026-10-20,Piper Alpha,pa,code,opus,2026-10-20-0647-pa-code-log.md,PA checks on served alpha
 2026-10-20,Chief of Staff,exec,code,opus,2026-10-20-0654-exec-code-log.md,"Rollups, MVP gate, Ship 065"
 2026-10-20,Chief Innovation Officer,cio,code,opus,2026-10-20-1007-cio-code-log.md,CIO review work
+2026-10-21,Docs mgr,docs,code,sonnet,2026-10-21-0412-docs-code-log.md,"10-20 omnibus, Ship 065 published and distributed"
+2026-10-21,Head of Sapient Trust,host,code,sonnet,2026-10-21-0414-host-code-log.md,"Wakes and trust checks, log unclosed"
+2026-10-21,Web,web,code,sonnet,2026-10-21-0618-web-code-log.md,"Website and canonical run work, model carried from 10-20"
+2026-10-21,Comms,comms,code,opus,2026-10-21-0619-comms-code-log.md,"Ship 065 publish-ready, model carried from 10-20"
+2026-10-21,Chief Architect,arch,code,opus,2026-10-21-0627-arch-code-log.md,"Architecture review work, model carried from 10-20"
+2026-10-21,Chief Experience Officer,cxo,code,sonnet,2026-10-21-0622-cxo-code-log.md,"Experience review work, model carried from 10-20"
+2026-10-21,Principal PM,ppm,code,opus,2026-10-21-0625-ppm-code-log.md,MVP ledger work
+2026-10-21,Lead Dev,lead,code,fable,2026-10-21-0647-lead-code-log.md,Promotions and defect drain
+2026-10-21,Piper Alpha,pa,code,opus,2026-10-21-0647-pa-code-log.md,Served-alpha checks and rescore scripts
+2026-10-21,Chief of Staff,exec,code,opus,2026-10-21-0423-exec-code-log.md,Rollups and MVP gate
+2026-10-21,Chief Innovation Officer,cio,code,opus,2026-10-21-0701-cio-code-log.md,"CIO review work, model carried from 10-20"
