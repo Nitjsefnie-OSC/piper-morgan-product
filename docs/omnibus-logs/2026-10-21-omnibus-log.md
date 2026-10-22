@@ -481,3 +481,11 @@ Lead's lanes are named in Lead's log and have no log of their own. I do not know
 files from 11 roles and 3 non-log files, all read in full). Ten of the 11 role log files carry a DAY-CLOSED marker and one
 does not (HOST). No prog-code log exists for the day. Day-close grep run 2026-10-22 early morning PDT. A dated addendum will
 follow if HOST's log changes.*
+
+---
+
+## Addendum (2026-10-22 04:19 PDT): HOST closed
+
+HOST's 10-21 log now carries `DAY-CLOSED` (commit `906dd144db`, 04:16 on 10-22), added after my nudge. It adds a 04:16 wake entry and a Day-close section whose arc line gives the database outage as 11:19 to 14:14 PT. All 11 role logs for 10-21 are now closed. There is no prog-code log for the day.
+
+**Verified how**: `grep -c "^<!-- DAY-CLOSED"` on the HOST log reads 1, and the commit time and subject came from `git log` on the file. I read the Day-close heading and the tail of the log. I did not check the section's claims against the other logs, and I did not revise the Divergences entry on outage start and recovery times.
