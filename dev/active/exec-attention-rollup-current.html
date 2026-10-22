@@ -32,7 +32,7 @@
 </style>
 <div class="wrap">
 <h1>Attention rollup — Thursday 22 October</h1>
-<p class="meta">Exec · v523, rebuilt 13:52 PDT Thu 10-22 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
+<p class="meta">Exec · v525, rebuilt 13:58 PDT Thu 10-22 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
 
 
 
@@ -40,12 +40,12 @@
 
 <div class="card hot"><b>Friday 10-23: your alpha checkpoint.</b> Your 10-18 rule: if MVP looks on track to close by 10-30 (or close enough), approve inviting people. PPM sends one updated read tonight.
 <ul style="margin:.3rem 0 .2rem 1.2rem;padding:0">
-<li><b>Gate: 7 open, 4 must-close.</b> #2128 is live on alpha since 13:31 (waits on Web&rsquo;s check); #1524 being built now (about a day); #2085, the restart button (below); #2096, your admin read of <code>/api/v1/admin/feedback</code> (that a feedback note is stored).</li>
+<li><b>Gate: 7 open, 4 must-close.</b> #2128 is live on alpha since 13:31 (waits on Web&rsquo;s check); #1524 being built now (about a day); #2085, the restart button (your part done; the test is next); #2096, your admin read of <code>/api/v1/admin/feedback</code> (that a feedback note is stored).</li>
 <li><b>#1386, the gate&rsquo;s own test:</b> quality 85.7% with CXO&rsquo;s waivers, 57.1% raw (bar 75%). Routing 90.2% with Lead&rsquo;s two signed relabels, 86.9% raw (bar 90%). It closes on a rerun after #2128 and #1524 land. <b>Your Friday question:</b> do waived figures count as &ldquo;close enough&rdquo;?</li>
 <li><b>The invitation names Anthropic only</b> (the OpenAI run failed on #2127; it can be named after a fix and a passing rerun).</li>
 <li>Invitation paperwork still open: the staging sentence (below), the &ldquo;Your key&rdquo; lines, Terms (or your word that the invitation goes without one), HOST&rsquo;s send-morning checks.</li>
 </ul></div>
-<div class="card hot"><b>Restart button: fixed without a new token; one more command from you after Arch&rsquo;s review.</b> The failed read was <code>fly checks list</code>. It lists every machine, and a one-machine token can&rsquo;t do that by design (Arch, PA and Lead agree, from source). Lead rewrote that one check to read just the database machine, which your token allows. Because the branch is locked, moving it to Lead&rsquo;s fix is your hand: one command, which I&rsquo;ll send once Arch has read the change. Then Lead puts the job on main, and PA and Lead run the test.</div>
+<div class="card"><b>Restart button: your part is done.</b> Branch rule, token and the fix are all in place (branch now at Lead&rsquo;s fix, 13:5x). Next: Arch reads the change, Lead puts the job on main, and PA and Lead run the attended test. Nothing for you unless Arch finds a problem.</div>
 <div class="card win"><b>Before 22:00 tonight: in HOST&rsquo;s session, say &ldquo;set the staging key&rdquo;.</b> Staging&rsquo;s encryption key is the wrong length, so its wizard can&rsquo;t save an API key. HOST resets it (nothing on staging is lost), and Web runs the row behind the invitation&rsquo;s &ldquo;send it again&rdquo; sentence. Web&rsquo;s window closes at 22:00.</div>
 <h2>Next time you&rsquo;re here</h2>
 <div class="card act"><ol style="margin:.2rem 0 .2rem 1.2rem;padding:0">
@@ -69,78 +69,11 @@
 <h2>🚧 In motion, nothing for you</h2>
 <div class="card"><ul style="margin:.2rem 0 .2rem 1.2rem;padding:0">
 <li>Alpha promoted 13:31 (<code>ded184e4ad</code>: #2125, #2127, #2128); Web&rsquo;s checks on #2128 and #2127 are runnable. Lead builds #1524 next. Trust stages never advance on any account (#2135); CXO keeps them dormant through beta.</li>
-<li>Restarter: Arch reviews Lead&rsquo;s fix (64d611798e); then your command, Lead&rsquo;s main copy, and the attended test.</li>
+<li>Restarter: Arch&rsquo;s read of the fix, then Lead&rsquo;s main copy and the attended test.</li>
 <li>Ship #066 kickoff sends itself Fri 10-23; I draft #066&rsquo;s goals by Sat 10-24 afternoon. Mail v4: keep to three seats until the 11-05 review.</li>
 </ul></div>
 <h2>📊 Where things stand</h2>
 <div class="card">MVP gate: <b>7 open</b>, 4 must-close (#2128, #1524, #2085, #2096). Also open: #2018 and #1595 (known issues), #1386 (the gate&rsquo;s test). Main: 12 of 12 green. Alpha <code>ded184e4ad</code>, healthy (my /health read at 13:45).</div>
-<h2>✅ Removed this rebuild</h2>
-<div class="card">The stall, website SSR and keys decisions (ruled 16:57); the Calendar, #2097/#2098, /privacy and section A decisions (ruled); the alembic reads (passed); the invite file (written); the Console look (sent to Pard); #2090 (backfilled); the DB card (your reads answered it). Older notes are in git history.</div>
-<p class="meta">v523 (13:52 10-22): Arch, PA, Lead x2, CXO 13:3x&ndash;13:5x read in full.</p>
-<p class="meta">v522 (13:45 10-22): scrubbed at xian&rsquo;s ask. Removed: the (A)/(B) and admit decisions, the token steps (done), invitation-lines review (ruled), OpenAI top-up (done), the A2/A6/A7/D5 test notes, the staging-invite and Notion notes, calendar rows (closed), the audit (done), the 10-21 quiet-count note.</p>
-<p class="meta">v521 (13:32 10-22): Arch 12:43/12:44 (#2131: no project-key spend; Production), PPM 12:50, Janus 13:30 read in full; alpha-db secret still empty.</p>
-<p class="meta">v520 (12:36 10-22): Janus 12:25 (A), PPM 12:27 and 12:29, CXO 12:27, PPM 12:31 read in full; ruleset 25669869 read.</p>
-<p class="meta">v519 (12:22 10-22): Janus 12:20 (admit yes; restart pending), Web 12:21 read in full.</p>
-<p class="meta">v518 (11:09 10-22, fire 10:38): Lead 10:29 read in full; main 12/12; /health 76789a8988 healthy.</p>
-<p class="meta">v517 (10:23 10-22): PA 09:48 and 10:12, PPM 10:19, CIO 10:20 read in full.</p>
-<p class="meta">v516 (10:20 10-22): CIO v4 review 10:16 read in full.</p>
-<p class="meta">v515 (08:58 10-22): Docs 08:55, Comms 08:48, Lead 07:07, CXO 07:02 read in full; Phantom Feature line dropped (10-21).</p>
-<p class="meta">v514 (06:36 10-22): PPM 06:35 readiness read in full; dropped &ldquo;Alpha is back&rdquo;.</p>
-<p class="meta">v500 (12:52 10-21): PA 12:48 (OOM), Lead 12:4x, CIO 12:4x, HOST 12:4x read in full; /health still degraded.</p>
-<p class="meta">v499 (12:35 10-21): Lead 12:27, Janus 12:2x, Arch 12:3x, PPM 12:3x, HOST 12:27, CIO 12:3x, CXO 12:2x read in full; /health still degraded.</p>
-<p class="meta">v498 (11:43 10-21): CIO 11:3x, Lead 11:4x, HOST 11:3x read in full; /health still degraded.</p>
-<p class="meta">v497 (11:30 10-21): Lead 11:28 incident read in full; my /health: degraded, database unreachable.</p>
-<p class="meta">v496 (11:10 10-21): Web 11:0x, Docs 11:0x read in full.</p>
-<p class="meta">v495 (10:57 10-21): Janus 10:5x read in full.</p>
-<p class="meta">v494 (10:54 10-21, fire 10:38): main 12/12; MVP open 9; /health 76789a8988.</p>
-<p class="meta">v493 (10:37 10-21): CIO 10:3x, PPM 10:3x, Web 10:3x read in full; removed the 10-20 17:3x card (resolved), which carried a partner location.</p>
-<p class="meta">v492 (10:24 10-21): Janus 10:2x, Comms 10:2x, CXO 10:2x read in full.</p>
-<p class="meta">v491 (10:11 10-21): Lead 10:11 read in full.</p>
-<p class="meta">v490 (09:51 10-21): Janus 10:0x, PA 09:4x, CXO 09:4x, Web 09:4x read in full.</p>
-<p class="meta">v489 (09:42 10-21): Janus 09:4x read in full (two projects; Notion made).</p>
-<p class="meta">v488 (09:41 10-21): CXO 09:3x, Lead 09:3x, PPM 09:3x read in full; lean corrected.</p>
-<p class="meta">v487 (09:28 10-21): Lead 09:06, Web 09:18, Comms 09:21, HOST 09:2x read in full.</p>
-<p class="meta">v486 (09:02 10-21): Janus 08:2x, Lead 08:14, 08:16 read in full.</p>
-<p class="meta">v485 (08:13 10-21): PPM 08:1x read in full.</p>
-<p class="meta">v484 (08:01 10-21): Web x2, Lead 07:48, CIO 07:5x, Janus 08:0x read in full; gh #2087 OPEN Production.</p>
-<p class="meta">v483 (07:47 10-21): Comms 07:1x, Docs 07:4x, Lead 07:34, CIO 07:3x read in full; Ship page 200; /health 8e61423f1a, accounts 0.</p>
-<p class="meta">v482 (06:39 10-21, fire 06:38): Web 06:1x and 06:3x, CXO 06:22 read in full; main 12/12; MVP open 9; /health edf95b5c0c.</p>
-<p class="meta">v481 (19:5x 10-20): Web 19:47 (event list) read in full.</p>
-<p class="meta">v480 (19:5x 10-20): Web 19:38, HOST 19:40, CXO 19:41, PA 19:41 read in full.</p>
-<p class="meta">v479 (19:4x 10-20): Web 19:27, HOST 19:28, Janus 19:28, CXO 19:31 read in full; gh: #2117, #2122 CLOSED; MVP open 9.</p>
-<p class="meta">v478 (19:3x 10-20): Lead 19:22, 19:23 read in full; alpha edf95b5c0c (tenth update).</p>
-<p class="meta">v477 (19:2x 10-20): Web 19:01, Janus 19:01, HOST 19:10, PA 19:04 read in full.</p>
-<p class="meta">v476 (19:0x 10-20): Janus 18:57 read in full.</p>
-<p class="meta">v475 (18:5x 10-20, fire 18:38): Web 18:48, HOST 18:49, PPM 18:51 read in full; main 12/12; MVP open 10; /health d1c64a92e3 healthy.</p>
-<p class="meta">v474 (18:5x 10-20): Janus 18:44, PPM 18:21, 18:34, HOST 18:44, Lead 18:43, Comms 18:24 read in full.</p>
-<p class="meta">v473 (18:2x 10-20): PA 18:11, PPM 18:08 read in full; correction: two alpha invites, not one.</p>
-<p class="meta">v472 (18:1x 10-20): CXO 18:07 read in full.</p>
-<p class="meta">v471 (18:1x 10-20): Janus 18:04 (xian), HOST 18:01, Comms 18:04, 18:08, Web 18:04, Lead 17:55 x2 read in full.</p>
-<p class="meta">v470 (17:5x 10-20): PPM 17:46, CIO 17:47, HOST 17:47 read in full. (v469&rsquo;s &ldquo;18:0x&rdquo; was a guess; it was built at about 17:48.)</p>
-<p class="meta">v469 (18:0x 10-20): Lead 17:45 read in full. Lead builds the 30-minute quiet check Wed morning.</p>
-<p class="meta">v468 (17:5x 10-20): PPM 17:45 read in full; gh MVP open 10.</p>
-<p class="meta">v467 (17:5x 10-20): Web 17:40, CXO 17:43 read in full.</p>
-<p class="meta">v466 (17:5x 10-20): Janus 17:38 (xian&rsquo;s answers), Web 16:48, Lead 16:46, 17:38, CXO 16:51 read in full; gh search 62 closed / 80 filed since 10-16; /health d1c64a92e3.</p>
-<p class="meta">v465 (16:2x 10-20): PA 16:16, Web 16:19, HOST 16:19, PPM 16:18 read in full.</p>
-<p class="meta">v464 (16:1x 10-20): PPM 16:08, CXO 16:05, Web 16:01, Lead 15:59 read in full; /health ee952c73eb healthy.</p>
-<p class="meta">v463 (15:5x 10-20): HOST 15:51, PA 15:48 read in full.</p>
-<p class="meta">v462 (15:3x 10-20): Web 15:10, Lead 15:07, CXO 15:12, PPM 15:34 read in full; /health 86ee0bbfa1 healthy.</p>
-<p class="meta">v461 (14:5x 10-20): Web 14:19, Lead 14:14, 14:24, 14:44, CXO 14:24 read in full; gh: #2111, #2114, #2110 CLOSED, #2112, #2117 open; MVP open 8; main 12/12; /health 12/12 healthy.</p>
-<p class="meta">v460 (13:1x 10-20): PPM 13:02, CXO 12:59, HOST 12:58 read in full.</p>
-<p class="meta">v459 (13:0x 10-20): eight memos read in full (PPM 12:53, Docs, CXO 12:48, Lead 12:5x, PA 12:50, Web 12:45, 12:46, 12:53); gh: #2101, #2095, #2098 CLOSED; #2111, #2112 Production; MVP open 8; curl 200 on the post.</p>
-<p class="meta">v458 (12:4x 10-20): PPM 12:35 and 12:36, Lead 12:4x read in full.</p>
-<p class="meta">v457 (12:3x 10-20): CXO 12:32 and Lead 12:3x read in full; gh: #2105 CLOSED, MVP open 11.</p>
-<p class="meta">v456 (12:3x 10-20): PA 12:14 x2 (machine env read, presence only), Web 12:14, Lead 12:2x, Janus 12:3x read in full.</p>
-<p class="meta">v455 (12:1x 10-20): Lead 12:1x (request_key.py: no platform key since #1812), PA 12:03, Web 12:04 read in full.</p>
-<p class="meta">v454 (12:1x 10-20): your words in session; my curl /health 54a5ba990f healthy at 12:06.</p>
-<p class="meta">v453 (12:0x 10-20): Gmail search found Anthropic&rsquo;s 18:08:09Z email: piper-morgan-test workspace, $10 monthly limit, paused until 11-01. Janus 12:14, Lead 11:5x, Web 11:50, Arch 11:54 read in full. Corrects v451&rsquo;s &ldquo;every keyless user&rdquo;.</p>
-<p class="meta">v452 (11:5x 10-20): Lead 11:4x read in full; my curl /health 54a5ba990f healthy, database healthy.</p>
-<p class="meta">v451 (11:4x 10-20): PA 11:37 and Web 11:34 read in full (the quoted error is the API&rsquo;s text in PA&rsquo;s stream; I did not curl chat myself); CIO 11:24, Pard 11:08, CXO 11:07, Janus 11:08 read.</p>
-<p class="meta">v450 (11:0x 10-20): six memos read in full (CIO 10:54 and 10:58, Pard 10:55, Lead 11:0x x2, Janus 10:55); my curl /health e729ba82d8 healthy, database healthy; decisions.log 11:03 line.</p>
-<p class="meta">v449 (10:5x 10-20): Janus 10:52 relay, CIO 10:10 and Pard 10:17 read in full; decisions.log 10:53 line.</p>
-<p class="meta">v448 (09:4x 10-20): PPM 09:35, CXO 09:33, Lead 09:2x, Arch 09:31 read in full; gh MVP open list (11) re-pulled.</p>
-<p class="meta">v447 (09:0x 10-20): Lead 08:54 memos read in full; my curl /health 987dd10ed7 healthy, database healthy.</p>
-<p class="meta">v446 (08:2x 10-20): read Lead 07:1x and 07:3x, HOST 07:22, Comms 08:14 in full; git log on 2ad8d639dd, effa5fe2a6, a47eaf9ea8 (dates and subjects match Comms); audit file exists; gh: #2104 closed, assignee mediajunkie; #1624 open.</p>
-<p class="meta">v445 (07:1x 10-20): Lead 07:04 memos read in full; my curl /health ef907b2cd7 healthy, database healthy; MVP open 13 (gh); main CI 12/12 green (main-ci-status 06:54). Header corrected: it had read v431 since 15:53 10-19.</p>
-<footer><b>Verified how</b> (v444, 18:54: Gmail metadata for the 18:46 failure mail; main-ci-status 12 of 12; MVP list re-pulled (13); /health database healthy.) (v443, 18:23: PA&rsquo;s and HOST&rsquo;s log greps read; neither seat drove a GitHub OAuth connect.) (v442, 18:18: your security-log screenshot, unfiltered, 9 recent events.) (v441, 18:13: Web&rsquo;s count of their six OAuth connects (all dinp-machine) and Lead&rsquo;s memo read. Correction: v440 and my chat reply said the emails were probably our tests; Web&rsquo;s records say no.) (v440, 18:06: your screenshot of GitHub&rsquo;s OAuth-authorized email. I&rsquo;ve asked Web to confirm those authorizations are all ours.) (v439, 18:03: HOST and Lead memos read; the settings labels are theirs from memory, so your screen is the check.) (v438, 17:54: your three answers; <code>gh api</code> on run 39347484450: triggering actor mediajunkie, workflow_dispatch.) (v437, 17:53: HOST, PA, Pard, Arch and Lead memos read. The revoke card gains the judge-keychain case (HOST, PA) and Pard&rsquo;s Fly look.) (v436, 17:42: HOST, Lead and PA memos read; two Gmail searches (&ldquo;Alpha Health Watch&rdquo; in the last day; any notifications@github.com in the last 3 days) both empty, so this mailbox isn&rsquo;t where GitHub writes.) (v435, 17:29: Lead and Pard memos read. Correction: v434 put the revoke up as ready; Pard holds it on one open check (the Fly secret&rsquo;s date), and the last-used test is &ldquo;on or before 10-15&rdquo;, not &ldquo;before 17:00 today&rdquo;.) (v434, 17:16: four memos read (Lead, Arch, HOST, Web). Billing on the new key isn&rsquo;t measured; Console is the only place it shows.) (v433, 17:06: three memos read (Pard, PPM, Web); my curl of / shows href="/privacy/" in the served HTML.) (v432, 16:59: your three answers relayed (PPM, Web; Pard in mediajunkie, landed) and recorded in decisions.log; twelve memos read (Lead ×4, PA ×2, Arch, CXO, HOST, PPM, Web); #2100 body read; main-ci-status 10 of 12: Security Tests red at 1a38f0d775 (Lead&rsquo;s merge, notice sent), Tests re-running.) (v431, 15:53: Web&rsquo;s browser quotes and Comms&rsquo; layout-chunk read; my 15:4x &ldquo;no footer link&rdquo; was an HTML-only read of a client-drawn page.) (v430, 15:43: six memos read; /privacy 200 with the new text, homepage 200 with 0 &ldquo;privacy&rdquo; matches (my curls).) (v429, 15:30: nine memos read; main-ci-status 11 of 12 (Router Pattern Enforcement red since the #2092 merge, HOST told Lead); MVP open 11.) (v428, 15:19: six memos read (PPM 15:1x; Lead sizing and #2085; Lead steady notice; HOST; PA).) (v427, 15:17: your 15:1x answers relayed (Comms, Web, PPM; Pard in mediajunkie); decisions.log lines added; Lead 15:01 on the #2090 backfill. I couldn&rsquo;t check the invite file&rsquo;s size (my ls was denied), so Web checks it before use.) (v426, 15:06: your fly checks, machine list and logs read in full; rulings in decisions.log.) (v425, 14:59: 12 /health reads 14:55&ndash;14:57 (6 not healthy) plus 6 more at 14:58 (2 timeouts); 3 login probes (401, 000, 401). Public HTTP only.) (v424, 14:52: ten memos read (PPM 14:50 ×2; CXO 14:42 ×2; Pard 14:48; Comms 14:45; Lead 14:49 ×2; PA 14:45; Web 14:46); MVP list re-pulled (9).) (v423, 14:42: eight memos read (PPM 14:41 ×2; Comms 14:35 ×2; CIO 14:40; HOST 14:32 ×2; Pard 14:39). Your 10-06 GitHub-only ruling is decisions.log line 2381; I found no later ruling naming Calendar for partners.) (v422, 14:35: your admissions relayed to PPM and recorded in decisions.log; the Pard memo landed (mediajunkie origin/main).) (v421, 14:31: PPM 14:30 reply and the kit&rsquo;s §0–§3 read.) (v420, 14:30: MVP list re-pulled; the crosspost row is removed because the editorial calendar shows &ldquo;Measure the Start&rdquo; distributed on 10-18 to Medium and LinkedIn. I missed that check on Sunday; it is the rule in my memory.) (v419, 14:22: eight memos read (PPM 14:17 and CXO 14:05 in full; Lead 13:50, 13:57, 14:07, 14:13; CXO 13:54; Arch 14:12); MVP list re-pulled (4); decisions.log 2654 and 2655 hold your 14:07 and 14:13 words.) (v418, 13:45: eleven memos read (Lead 13:20, 13:44 and five results; PA 13:29, 13:43 and two more; HOST 13:09); MVP open 4; /health e801b1a309, database healthy (my curl 13:45); decisions.log line 2653 holds your 13:20 rulings. Correction: the &ldquo;Today&rdquo; heading was garbled from v406 at 11:3x Sun until now (a sed substitution of mine); fixed.) (v417, 12:52: three memos read (Lead 12:34, 12:49; PPM 12:50); MVP open 5. Google test-users row removed: the app is External + In production (Lead 12:26).) (v416, 12:33: four memos read (Lead 12:26 x2, PPM 12:31, CXO 12:32); MVP open 6; #2085 body read; off-switch confirmed by xian&rsquo;s paste output.) (v415, 11:57: Calendar connected (xian, in chat). Off-switch paste located: mediajunkie logs/2026-10-18-pard-log.md, 09:07 entry.) (v414, 11:35: Lead 11:26 correction read (11:19 memo was a stale 06:45 draft; card v84 reads mvp-tester); #2067 still OPEN pending CXO.) (v413, 11:22: Lead 11:19 notices read; /health f9fb8b750b, status healthy, database healthy (my curl 11:21).) (v412, 10:55: six memos read in full (Lead 10:13, 10:23, 10:36; CIO 10:18; Pard 10:20; Arch 10:09); login probe 401 at 10:53; #1852 step 2.3 passed (Docs 6a848a0a5c). Lead corrected: xian ran the restart, not Lead.) (v411, 10:06: Lead 10:01 and HOST 10:03 memos read in full; ruling recorded in decisions.log. Lead restarted the DB (HOST 10:03).) (v410, 09:54: curl login probe 401 at 09:53 and 20 s later; PA 09:48, HOST 09:49, Arch 09:28 memos read in full. Who ran the restart and whether a snapshot exists: not recorded on main yet.) (v409, 07:11: Lead 07:05 and HOST 07:08 notices read in full; my curl login probe 500 at 07:11; /health 200 83a2f4e40c.) (v408, 06:56: no mail overnight; MVP open 7 unchanged; /health 83a2f4e40c; <code>git log</code> since 15:00 Sun shows no action on any row, so every row carries. All ten seats fired this morning.) (v407, 14:54: MVP open 7; <code>gh issue view 2080</code> CLOSED 18:34Z; /health 83a2f4e40c; six memos read (Janus 13:24, Lead 12:33, 13:26, 13:42, HOST 12:27, 13:34). #2081 ruling 4 reader check done (Lead 12:33); HOST signs off the shape; is_admin read still yours. Seat check: all ten fired after their 12:xx slot.) (v406, 10:55: <code>gh issue list --milestone MVP --state open</code> = 8; <code>gh issue view</code> 2069 CLOSED, 2081 and 1852 Production; /health 83a2f4e40c (my curl 10:54); main-ci-status 12 green; twelve memos read (Lead 08:37, 08:39, 09:53, 10:46; PPM 09:35; CXO 08:27; Comms 08:32; Arch and CIO on #2081).) (v405, 08:29: <code>gh issue view 2072</code> CLOSED; MVP open list re-pulled.) (v404, 08:04: Comms 08:00 reply; <code>git log</code> shows 33964ee62a on the draft.) (v403, 07:52: Lead 07:31 report read in full. Correction: v402&rsquo;s &ldquo;07:52&rdquo; stamp was written before I ran <code>date</code>; it was built about 07:4x.) (v402): <code>gh issue list --milestone MVP --state open</code> = 8; alpha /health 47ba746bee (my curl 06:54); main-ci-status 12 green 06:53; six memos read in full (Lead 07:11, 07:18, 07:24; HOST 07:14, 07:27; Arch 07:22); editorial calendar row Ship #065 = planned, pub 10-21, no draft path; known-issues doc sections read. Calendar reconnect: I found no record either way, hence &ldquo;if you haven&rsquo;t&rdquo;.</footer>
+<p class="meta">How I checked each version: <code>dev/active/exec-rollup-verification-history.md</code> (not needed to read this page).</p>
+
 </div>
