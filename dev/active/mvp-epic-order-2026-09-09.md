@@ -1749,3 +1749,5 @@ out-of-scope call. Gate 14 → 15, fourth slip-ledger entry, dates unchanged; cr
 - 2026-10-22 12:20 PT: #1524 and #2128 admitted, Class 3, must-close (xian via Janus and Exec). 12:26: #2091, #2092 and #2112 closed live (CXO, on Web's rows). Gate 8 -> 10 -> 7 open MVP, 4 must-close (#1524, #2085, #2096, #2128). #2126 placed on Ongoing.
 
 - 2026-10-22 15:24 PT: #2128 closed live (CXO). Gate 7 -> 6 open MVP, 3 must-close (#1524, #2085, #2096). #2108 closed (Production). #2127 fails served (still refuses on an OpenAI-only account); stays Production, invitation Anthropic only.
+
+- 2026-10-22 16:20 PT: #2132 admitted, Class 3, must-close (xian in session via Exec). Gate 6 -> 7 open MVP, 4 must-close (#1524, #2085, #2096, #2132).
