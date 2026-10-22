@@ -236,8 +236,22 @@ class LLMConfigService:
             f"excluded={self._excluded_providers}, default={self._default_provider}"
         )
 
-    def get_configured_providers(self, user_id: Optional[str] = None) -> List[str]:
+    def get_configured_providers(
+        self, user_id: Optional[str] = None, *, include_server_keys: bool = False
+    ) -> List[str]:
         """Return providers with API keys configured AND authorized for the caller.
+
+        #2127 (Arch's ruling, 2026-10-22): a provider is AVAILABLE to a call only
+        if THIS REQUEST bound a key for it (``get_api_key`` step 0), intersected
+        with consent. The server's own keychain slot and env var (steps 1 and 2)
+        are not availability: since #1812 ``request_spend_key`` has no server arm,
+        so counting them only ever selected a provider guaranteed to refuse.
+        Served on alpha: an env ``ANTHROPIC_API_KEY`` made anthropic "configured"
+        for an OpenAI-only account, selection picked it, and the turn refused with
+        "add a key" to a user who had one. ``include_server_keys=True`` is for the
+        operator surfaces that describe the SERVER's own keys (the ``main.py``
+        CLI listing, ``validate_all_providers`` at startup); nothing that selects
+        a provider for a turn may pass it.
 
         #946: setup stores an 'authorized_llm_providers' consent list. Only
         providers on that list are returned — stale keys from previous installs
@@ -260,9 +274,14 @@ class LLMConfigService:
         from services.llm.provider_selection import resolve_authorized_providers
 
         # Check which providers have keys available
-        all_configured = [
-            name for name in self._providers.keys() if self.get_api_key(name) is not None
-        ]
+        if include_server_keys:
+            all_configured = [
+                name for name in self._providers.keys() if self.get_api_key(name) is not None
+            ]
+        else:
+            from services.llm.request_key import get_request_api_key
+
+            all_configured = [name for name in self._providers.keys() if get_request_api_key(name)]
 
         filtered = resolve_authorized_providers(
             user_id,
@@ -911,7 +930,7 @@ class LLMConfigService:
         Returns dict of provider -> ValidationResult
         Logs results and raises if required provider fails
         """
-        configured = self.get_configured_providers()
+        configured = self.get_configured_providers(include_server_keys=True)
 
         if not configured:
             logger.warning("No LLM providers configured")

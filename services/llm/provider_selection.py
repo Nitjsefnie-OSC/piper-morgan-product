@@ -13,8 +13,8 @@ Resolution chains (every call, no instance state):
 
   default provider:  per-user choice -> server/global choice -> env default
                      -> first available
-  consent filter:    per-user list  -> server/global list    -> legacy (all
-                     configured)
+  consent filter:    per-user list -> the user's own bound providers (#2127);
+                     server/global list only when there is no principal
                      and on a FAILED read: FAIL CLOSED by REFUSING the turn
                      (``ConsentUnreadableError``). Census F1 established the
                      fail-closed requirement; #1816 made it reachable (the old
@@ -82,17 +82,19 @@ def _read_slot(kc, username: Optional[str]) -> SecretRead:
 def _read_consent_slot(kc, user_id: Optional[str]) -> SecretRead:
     """Read the consent slot for the acting principal (#1816).
 
-    Per-user slot first, then the server/global slot — but only ever falling
-    through on a **verified absence**. A failed read of the per-user slot stops
-    here: falling through to the global list on an error would be the same
-    absence-means-permission mistake one slot down, and the global list is
-    typically the permissive one.
+    #2127 (Arch's ruling, 2026-10-22): an authenticated user's consent NEVER
+    comes from the server/global slot. That list belongs to the install's /setup
+    principal; applied to a user whose key came in through Settings it is another
+    principal's choice. So for a ``user_id`` this returns the per-user read as it
+    is: present (use it), failed (the caller refuses, #1816), or verified absent
+    (the caller's legacy branch then treats the user's own BOUND providers as
+    their consent, because availability is the request's binding since #2127).
+    The global slot is read only for ``user_id=None``, which since #1812 binds
+    nothing and so refuses at spend whatever this returns.
     """
     if user_id:
-        per_user = _read_slot(kc, str(user_id))
-        if not per_user.is_verified_absent:
-            return per_user
-    # global-ok: server-level consent list — the per-user slot was checked first (#1415)
+        return _read_slot(kc, str(user_id))
+    # global-ok: server-level consent list, read only for the no-principal path (#2127)
     return _read_slot(kc, None)
 
 
@@ -103,8 +105,9 @@ def resolve_authorized_providers(
 ) -> List[str]:
     """Apply the #946 consent filter for the acting principal.
 
-    Per-user list first, then the server/global list, else legacy behavior
-    (no list anywhere -> everything configured is authorized).
+    An authenticated user's own list, else (verified absent) everything
+    configured, which since #2127 means the providers this request bound. The
+    server/global list is read only when ``user_id`` is None (#2127).
 
     FAIL CLOSED (#1415 F1, repaired by #1816): if the consent read FAILS, this
     raises ``ConsentUnreadableError`` and the turn is refused. It never returns

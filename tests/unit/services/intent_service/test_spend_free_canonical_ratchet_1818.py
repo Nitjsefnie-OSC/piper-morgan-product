@@ -335,13 +335,20 @@ async def test_canonical_pair_spend_reach(pair, message, spend_chokepoint, real_
     # (#1809 — a refusal surfaces; the ROUTE layer converts it to honest copy), so for
     # spending pairs the drive ends in the refusal. The chokepoint counter has already
     # recorded the crossing by then.
-    from services.llm.request_key import UnboundLLMKeyError
+    from services.llm.request_key import UnboundLLMKeyError, request_api_key
 
+    # #2127: availability is the providers THIS request bound, never the server's
+    # env vars, so the 1929 env keys above no longer make a provider "configured".
+    # Bind dummy keys for the drive instead (a keyed user's shape). The patched
+    # chokepoint still refuses every spend, so nothing can bill.
     refused = False
     try:
-        result = await real_intent_service.process_intent(
-            message=message, session_id=f"spendfree-{pair[1]}", user_id=None
-        )
+        with request_api_key(
+            {"anthropic": "sk-ant-test-1818-ratchet-dummy", "openai": "sk-test-1818-ratchet-dummy"}
+        ):
+            result = await real_intent_service.process_intent(
+                message=message, session_id=f"spendfree-{pair[1]}", user_id=None
+            )
         assert result is not None, f"{pair}: process_intent returned nothing"
     except UnboundLLMKeyError:
         refused = True

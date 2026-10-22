@@ -365,13 +365,27 @@ class LLMClient:
             # clients no longer exist, so fall back to whichever provider THIS
             # REQUEST is entitled to spend (same read the fallback loop's gate
             # uses; the gate and this fallback cannot disagree).
-            from services.llm.request_key import provider_spend_entitled
+            from services.llm.request_key import (
+                UnboundLLMKeyError,
+                provider_spend_entitled,
+                request_key_is_bound,
+            )
 
             for candidate in _FALLBACK_ORDER:
                 if provider_spend_entitled(candidate.value):
                     primary_provider = candidate
                     break
             else:
+                # #2127: availability is the request's binding now, so a call that
+                # bound nothing lands here instead of selecting a server key and
+                # refusing at the chokepoint. Keep that refusal: it is the same
+                # #1809 error the chokepoint raised before, and the route maps it
+                # to the same copy.
+                if not request_key_is_bound():
+                    raise UnboundLLMKeyError(
+                        "No LLM key is bound on this call; refusing rather than "
+                        "selecting a provider the request cannot spend (#2127/#1809)."
+                    )
                 raise RuntimeError("No LLM providers configured. Add an API key in Settings.")
 
         # Build runtime config with correct model for this provider

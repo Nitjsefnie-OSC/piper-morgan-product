@@ -326,7 +326,7 @@ if __name__ == "__main__":
                 sys.exit(0)
 
             elif action == "list":
-                configured = llm_config.get_configured_providers()
+                configured = llm_config.get_configured_providers(include_server_keys=True)
                 if not configured:
                     print("No providers configured.")
                 else:

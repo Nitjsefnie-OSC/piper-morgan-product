@@ -117,9 +117,16 @@ class TestConsentFilter:
         )
         assert resolve_authorized_providers("user-a", self.CONFIGURED, kc) == ["anthropic"]
 
-    def test_global_list_applies_when_no_user_list(self):
+    def test_global_list_never_applies_to_an_authenticated_user(self):
+        # #2127 (Arch, 2026-10-22): the global list is the /setup principal's
+        # choice, not this user's. With no per-user list, the user's own
+        # configured (since #2127: bound) providers are their consent.
         kc = FakeKeychain({("authorized_llm_providers", None): "openai"})
-        assert resolve_authorized_providers("user-a", self.CONFIGURED, kc) == ["openai"]
+        assert resolve_authorized_providers("user-a", self.CONFIGURED, kc) == self.CONFIGURED
+
+    def test_global_list_applies_only_with_no_principal(self):
+        kc = FakeKeychain({("authorized_llm_providers", None): "openai"})
+        assert resolve_authorized_providers(None, self.CONFIGURED, kc) == ["openai"]
 
     def test_legacy_no_lists_returns_all_configured(self):
         assert (

@@ -41,6 +41,22 @@ def mock_keychain_service():
     return mock
 
 
+def _as_bound(service, call):
+    """#2127: selection reads only the keys THIS REQUEST bound, never the server's
+    keychain slot or env var. Bind exactly the keys these tests put in the server's
+    env/keychain, so each test still measures its own logic (consent, exclusion,
+    default) rather than the old "server key counts as available" rung."""
+    from services.llm.request_key import request_api_key
+
+    bound = {
+        name: key
+        for name in service._providers
+        if (key := service.get_api_key(name, include_request_key=False))
+    }
+    with request_api_key(bound):
+        return call()
+
+
 class TestLLMConfigServiceInit:
     """Test service initialization"""
 
@@ -49,7 +65,7 @@ class TestLLMConfigServiceInit:
         service = LLMConfigService()
 
         # Should load providers from environment
-        providers = service.get_configured_providers()
+        providers = service.get_configured_providers(include_server_keys=True)
         assert isinstance(providers, list)
 
         # If keys are set, they should be configured
@@ -118,7 +134,7 @@ class TestProviderConfiguration:
                 mock_keychain.get_api_key.return_value = None
 
                 service = LLMConfigService()
-                providers = service.get_configured_providers()
+                providers = service.get_configured_providers(include_server_keys=True)
 
                 assert "openai" in providers
                 assert "anthropic" in providers
@@ -517,7 +533,7 @@ class TestProviderSelection:
             clear=True,
         ):
             service = LLMConfigService()
-            available = service.get_available_providers()
+            available = _as_bound(service, service.get_available_providers)
             assert "anthropic" not in available
             assert "openai" in available
 
@@ -534,7 +550,7 @@ class TestProviderSelection:
             clear=True,
         ):
             service = LLMConfigService()
-            available = service.get_available_providers()
+            available = _as_bound(service, service.get_available_providers)
             assert "anthropic" not in available
             assert "gemini" not in available
             assert "openai" in available
@@ -559,7 +575,7 @@ class TestProviderSelection:
             clear=True,
         ):
             service = LLMConfigService(keychain_service=mock_keychain_service)
-            default = service.get_default_provider()
+            default = _as_bound(service, service.get_default_provider)
             assert default == "openai"
 
     def test_default_provider_excluded_uses_fallback(self):
@@ -577,7 +593,7 @@ class TestProviderSelection:
             clear=True,
         ):
             service = LLMConfigService()
-            provider = service.get_provider_with_fallback()
+            provider = _as_bound(service, service.get_provider_with_fallback)
             assert provider in ["openai", "gemini"]
             assert provider != "anthropic"
 
@@ -589,7 +605,9 @@ class TestProviderSelection:
             clear=True,
         ):
             service = LLMConfigService()
-            provider = service.get_provider_with_fallback(preferred="gemini")
+            provider = _as_bound(
+                service, lambda: service.get_provider_with_fallback(preferred="gemini")
+            )
             assert provider == "gemini"
 
     def test_is_provider_excluded(self):
@@ -640,7 +658,7 @@ class TestProviderSelection:
                 mock_keychain.get_api_key.return_value = None
 
                 service = LLMConfigService()
-            available = service.get_available_providers()
+            available = _as_bound(service, service.get_available_providers)
             # Only OpenAI should be available (others don't have keys)
             assert "openai" in available
             assert "anthropic" not in available  # No key
@@ -738,7 +756,7 @@ class TestAuthorizedProviders:
 
         with patch.dict(os.environ, {}, clear=True):
             service = LLMConfigService(keychain_service=mock_keychain_service)
-            providers = service.get_configured_providers()
+            providers = _as_bound(service, service.get_configured_providers)
 
         assert "anthropic" in providers
         assert "openai" not in providers, "stale OpenAI key should be filtered out"
@@ -777,7 +795,7 @@ class TestAuthorizedProviders:
 
         with patch.dict(os.environ, {}, clear=True):
             service = LLMConfigService(keychain_service=mock_keychain_service)
-            providers = service.get_configured_providers()
+            providers = _as_bound(service, service.get_configured_providers)
 
         assert "openai" in providers
         assert "anthropic" in providers
@@ -798,7 +816,7 @@ class TestAuthorizedProviders:
 
         with patch.dict(os.environ, {}, clear=True):
             service = LLMConfigService(keychain_service=mock_keychain_service)
-            providers = service.get_configured_providers()
+            providers = _as_bound(service, service.get_configured_providers)
 
         assert "openai" in providers
         assert "anthropic" in providers
