@@ -53,14 +53,11 @@ class GitHubReadFailed(Exception):
 
 def transport_reason(exc: BaseException) -> Optional["DegradationReason"]:
     """UNREACHABLE for a transport fault (timeout, connection, OS error); None otherwise."""
+    import aiohttp
+
     from services.mcp.consumer.connector import DegradationReason
 
-    try:
-        import aiohttp
-
-        transport = (asyncio.TimeoutError, TimeoutError, OSError, aiohttp.ClientError)
-    except Exception:  # pragma: no cover - aiohttp is a dependency
-        transport = (asyncio.TimeoutError, TimeoutError, OSError)
+    transport = (asyncio.TimeoutError, TimeoutError, OSError, aiohttp.ClientError)
     return DegradationReason.UNREACHABLE if isinstance(exc, transport) else None
 
 
