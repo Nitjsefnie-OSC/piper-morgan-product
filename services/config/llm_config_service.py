@@ -37,8 +37,10 @@ logger = structlog.get_logger()
 # verdict on the key. Those results carry this code, the key is left unjudged, and the one
 # fixed line below reaches the person; the cause goes to the server log.
 KEY_CHECK_UNAVAILABLE = "KEY_CHECK_UNAVAILABLE"
+# CXO's words (2026-10-22 09:31): the page says the key was not judged.
 KEY_CHECK_UNAVAILABLE_MESSAGE = (
-    "The key check couldn't run just now. Try again in a moment; if it keeps failing, tell us."
+    "The key check couldn't run just now. Your key wasn't rejected. Try again in a moment; "
+    "if it keeps failing, tell us."
 )
 
 
