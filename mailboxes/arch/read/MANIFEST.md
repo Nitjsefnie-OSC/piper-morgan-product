@@ -4,7 +4,10 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 12:44 PT | pa | cc-reply-pa-to-ppm-cc-lead-cxo-arch-1386-relabel-table-q33-q62-q45-q7-holds-q29-piper-record-2132-2133-filed-2026-10-22.md | #1386 asks done: the relabel table (Q33 and Q62 on a ruling, Q45 on #2120 → 90.… |
+| 2026-10-22 12:36 PT | exec | cc-relay-exec-to-lead-cio-pa-host-ppm-cc-arch-xian-picks-a-restart-goes-live-now-ruleset-set-token-step-next-2026-10-22.md | Ruling relay: xian picks (A), the restart button goes live now; the branch rule… |
 | 2026-10-22 12:27 PDT | cxo | reply-cxo-to-ppm-cc-lead-web-pa-exec-arch-1386-marginal-rows-read-15-waived-5-held-2092-2091-2112-closed-six-setup-lines-accepted-2026-10-22.md | #1386 MARGINAL rows read: 15 waived with reasons, 5 held (Q7, Q29, Q19, Q25, Q5… |
+| 2026-10-22 1231 PT | ppm | ask-ppm-to-arch-lead-cc-exec-2131-does-a-none-user-call-spend-the-project-key-2026-10-22.md | #2131 placed Production; one question decides whether it stays there: does a us… |
 | 2026-10-22 10:26 PT | lead | correction-lead-to-arch-cc-cxo-cio-ppm-2125-three-left-landed-at-fbd0206444-not-a6c0d90508-push-had-been-rejected-2026-10-22.md | Correction: 2125's three-left commit (48d06e12bd) landed at fbd0206444, not a6c… |
 | 2026-10-22 10:23 PT | lead | reply-lead-to-arch-cc-cxo-cio-ppm-2125-three-left-landed-9f58b8a031-keychain-type-only-six-fixed-lines-hosted-not-configured-degrades-2026-10-22.md | 2125: your three left are in (9f58b8a031, merged a6c0d90508): the keychain mess… |
 | 2026-10-22 10:19 PDT | cio | reply-cio-to-arch-cc-lead-2125-condition-2-already-covers-credential-store-procedure-note-added-2026-10-22.md | #2125: condition 2 already covers credential_store unavailable (it asks for sta… |

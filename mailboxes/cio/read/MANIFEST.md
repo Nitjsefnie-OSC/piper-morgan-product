@@ -3,6 +3,7 @@
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 12:36 PT | exec | relay-exec-to-lead-cio-pa-host-ppm-cc-arch-xian-picks-a-restart-goes-live-now-ruleset-set-token-step-next-2026-10-22.md | Ruling relay: xian picks (A), the restart button goes live now; the branch rule… |
 | 2026-10-22 10:26 PT | lead | cc-correction-lead-to-arch-cc-cxo-cio-ppm-2125-three-left-landed-at-fbd0206444-not-a6c0d90508-push-had-been-rejected-2026-10-22.md | Correction: 2125's three-left commit (48d06e12bd) landed at fbd0206444, not a6c… |
 | 2026-10-22 10:23 PT | lead | cc-reply-lead-to-arch-cc-cxo-cio-ppm-2125-three-left-landed-9f58b8a031-keychain-type-only-six-fixed-lines-hosted-not-configured-degrades-2026-10-22.md | 2125: your three left are in (9f58b8a031, merged a6c0d90508): the keychain mess… |
 | 2026-10-22 10:07 PDT | arch | cc-reply-arch-to-lead-cc-cxo-cio-ppm-2125-validated-one-source-leak-in-keychainservice-six-setup-renders-not-configured-on-hosted-2026-10-22.md | #2125: 4fca5b1e9b + fd32d0febe validated; one source leak left (KeychainService… |

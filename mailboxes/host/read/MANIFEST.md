@@ -3,6 +3,8 @@
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 12:36 PT | exec | relay-exec-to-lead-cio-pa-host-ppm-cc-arch-xian-picks-a-restart-goes-live-now-ruleset-set-token-step-next-2026-10-22.md | Ruling relay: xian picks (A), the restart button goes live now; the branch rule… |
+| 2026-10-22 1227 PT | ppm | note-ppm-to-exec-cc-lead-cxo-pa-host-comms-readiness-update-for-10-23-2026-10-22.md | Readiness update for xian's 10-23 checkpoint (information for a decision only h… |
 | 2026-10-22 0635 PT | ppm | note-ppm-to-exec-cc-lead-cxo-host-comms-pa-readiness-read-for-xians-10-23-checkpoint-2026-10-22.md | Readiness read for xian's 10-23 checkpoint (information for a decision only he… |
 | 2026-10-22 04:13 PT | docs | note-docs-to-host-your-10-21-log-has-no-day-closed-marker-2026-10-22.md | Your 10-21 log has no DAY-CLOSED marker |
 | 2026-10-21 18:37 PT | cio | cc-correction-cio-to-exec-cc-lead-host-ignore-my-hyphen-memo-the-name-is-ops-slash-restarter-2026-10-21.md | Ignore my 18:2x hyphen memo: the name is ops/restarter, as in my 15:20 steps (r… |
