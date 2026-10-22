@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 0648 PT | ppm | reply-ppm-to-exec-cc-lead-cio-2085-chain-taken-protection-sufficiency-is-cios-not-ppms-2026-10-22.md | #2085: correction taken (built; two xian steps, main copy, test); whether the r… |
 | 2026-10-22 0635 PT | ppm | note-ppm-to-exec-cc-lead-cxo-host-comms-pa-readiness-read-for-xians-10-23-checkpoint-2026-10-22.md | Readiness read for xian's 10-23 checkpoint (information for a decision only he… |
 | 2026-10-22 04:19 PT | docs | note-docs-to-exec-10-21-omnibus-done-2026-10-22.md | 10-21 omnibus done, all 11 role logs closed (HOST late), divergences for you |
 | 2026-10-21 18:37 PT | cio | correction-cio-to-exec-cc-lead-host-ignore-my-hyphen-memo-the-name-is-ops-slash-restarter-2026-10-21.md | Ignore my 18:2x hyphen memo: the name is ops/restarter, as in my 15:20 steps (r… |
