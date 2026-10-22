@@ -6440,7 +6440,29 @@ class IntentService:
             # Get closed issues from the past 7 days
             from datetime import datetime, timedelta, timezone
 
-            closed_items = await github_router.get_closed_issues(limit=50)
+            from services.integrations.github.read_failed import GitHubReadFailed
+
+            try:
+                closed_items = await github_router.get_closed_issues(limit=50, user_id=_user_id)
+            except GitHubReadFailed as rf:
+                # #2128: a read that did not happen is said as that, never as "nothing shipped"
+                self.logger.warning("shipped_this_week_read_failed", reason=rf.reason, repo=rf.repo)
+                return IntentProcessingResult(
+                    success=False,
+                    message=(
+                        f"I couldn't read {rf.repo or 'the repository'} with this account's "
+                        "GitHub connection, so there's nothing to report yet."
+                    ),
+                    intent_data={
+                        "category": intent.category.value,
+                        "action": intent.action,
+                        "confidence": intent.confidence,
+                        "read_failed": rf.reason,
+                    },
+                    workflow_id=workflow_id,
+                    requires_clarification=False,
+                    implemented=True,
+                )
 
             # Filter to past 7 days
             now = datetime.now(timezone.utc)
@@ -6461,10 +6483,11 @@ class IntentService:
             if not recent_closed:
                 total_checked = len(closed_items)
                 if total_checked == 0:
+                    # #2128: the read happened and came back empty; a read that did
+                    # not happen raised above, so the old "auth issue" hedge is gone.
                     message = (
-                        "No closed issues or PRs returned from GitHub. "
-                        "This could mean none exist in the recent window, or "
-                        "there's a configuration or auth issue worth checking."
+                        "No closed issues or PRs came back for this repo, so nothing "
+                        "closed in the window I checked."
                     )
                 else:
                     message = (
@@ -9809,23 +9832,39 @@ class IntentService:
 
                 if await github_router.is_available():
                     # Get closed issues from past 7 days
-                    closed_items = await github_router.get_closed_issues(limit=100)
+                    from services.integrations.github.read_failed import GitHubReadFailed
 
-                    now = datetime.now(timezone.utc)
-                    week_ago = now - timedelta(days=7)
+                    try:
+                        closed_items = await github_router.get_closed_issues(
+                            limit=100, user_id=_user_id
+                        )
+                    except GitHubReadFailed as rf:
+                        # #2128: never "Issues/PRs Closed: 0" for a read that did not happen
+                        self.logger.warning(
+                            "productivity_github_read_failed", reason=rf.reason, repo=rf.repo
+                        )
+                        closed_items = None
 
-                    recent_closed = []
-                    for item in closed_items:
-                        closed_at_str = item.get("closed_at")
-                        if closed_at_str:
-                            closed_at = datetime.fromisoformat(closed_at_str.replace("Z", "+00:00"))
-                            if closed_at >= week_ago:
-                                recent_closed.append(item)
+                    if closed_items is None:
+                        github_stats = {"read_failed": True, "issues_closed": None, "items": []}
+                    else:
+                        now = datetime.now(timezone.utc)
+                        week_ago = now - timedelta(days=7)
 
-                    github_stats = {
-                        "issues_closed": len(recent_closed),
-                        "items": recent_closed,
-                    }
+                        recent_closed = []
+                        for item in closed_items:
+                            closed_at_str = item.get("closed_at")
+                            if closed_at_str:
+                                closed_at = datetime.fromisoformat(
+                                    closed_at_str.replace("Z", "+00:00")
+                                )
+                                if closed_at >= week_ago:
+                                    recent_closed.append(item)
+
+                        github_stats = {
+                            "issues_closed": len(recent_closed),
+                            "items": recent_closed,
+                        }
 
             except Exception as gh_error:
                 self.logger.warning(f"GitHub productivity metrics unavailable: {gh_error}")
@@ -9844,14 +9883,20 @@ class IntentService:
                 lines.append(f"- Completion Rate: {completion_rate:.1f}%")
 
             # GitHub metrics (if available)
-            if github_stats:
+            if github_stats and github_stats.get("read_failed"):
+                lines.append("\n**GitHub:**")
+                lines.append(
+                    "- I couldn't read this account's GitHub connection, so nothing is counted here."
+                )
+            elif github_stats:
                 lines.append("\n**GitHub:**")
                 lines.append(f"- Issues/PRs Closed: {github_stats['issues_closed']}")
 
             # Overall assessment
             lines.append("\n**Assessment:**")
             total_completed = todo_stats["completed"] + (
-                github_stats["issues_closed"] if github_stats else 0
+                (github_stats or {}).get("issues_closed")
+                or 0  # #2128: a failed read counts nothing
             )
 
             if total_completed == 0:

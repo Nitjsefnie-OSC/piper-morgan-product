@@ -75,7 +75,13 @@ class GitHubOperations(Protocol):
     ) -> Dict[str, Any]: ...
 
     async def get_closed_issues(
-        self, project: Optional[str] = None, limit: int = 10
+        self,
+        repo: str,
+        owner: str,
+        project: Optional[str] = None,
+        limit: int = 10,
+        *,
+        user_id: Optional[str] = None,
     ) -> List[Dict[str, Any]]: ...
 
     # ── Live callers exist; implementation tracked in #1709 / #1723 ────

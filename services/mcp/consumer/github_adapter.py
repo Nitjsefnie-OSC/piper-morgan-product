@@ -2121,18 +2121,36 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
         owner: str,
         project: str = None,
         limit: int = 50,
+        *,
+        user_id: Optional[str] = None,
     ) -> List[Dict[str, Any]]:
         """#969: Get closed issues from GitHub API.
 
-        Filters issues by state=closed. Used by _handle_shipped_this_week().
+        Filters issues by state=closed. Used by _handle_shipped_this_week() and
+        the productivity read.
 
         Issue #1042: ``repo`` and ``owner`` are now required positional args
         (were defaulted to "piper-morgan-product" / "mediajunkie").
+
+        #2128: with a principal, the read carries the account's own grant (the
+        #2121 shape); a read that did not happen raises ``GitHubReadFailed``
+        (no credential, no response, an error), never returns ``[]``. An empty
+        list means the repo answered and nothing is closed.
         """
+        from services.integrations.github.read_failed import GitHubReadFailed
+
+        full_name = f"{owner}/{repo}"
         try:
             endpoint = f"repos/{owner}/{repo}/issues"
             params = {"state": "closed", "per_page": min(limit, 100)}
-            issues_data = await self._call_github_api_list(endpoint, params)
+            grant_headers = None
+            if user_id:
+                grant_headers = await self._grant_headers_for(user_id)
+                if grant_headers is None:
+                    raise GitHubReadFailed("no_credential", full_name)
+            issues_data = await self._call_github_api_list(endpoint, params, headers=grant_headers)
+            if issues_data is None:
+                raise GitHubReadFailed("no_response", full_name)
             if not issues_data:
                 return []
 
@@ -2151,9 +2169,11 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
                 )
             return issues
 
+        except GitHubReadFailed:
+            raise
         except Exception as e:
-            logger.error(f"Error getting closed issues: {e}")
-            return []
+            logger.error(f"Error getting closed issues: {type(e).__name__}")
+            raise GitHubReadFailed(type(e).__name__, full_name) from e
 
     async def get_recent_activity(
         self,

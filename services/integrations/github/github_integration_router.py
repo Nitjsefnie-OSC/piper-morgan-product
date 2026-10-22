@@ -899,12 +899,31 @@ class GitHubIntegrationRouter:
         return await self._get_integration("list_repositories").list_repositories()
 
     async def get_closed_issues(
-        self, project: Optional[str] = None, limit: int = 10
+        self, project: Optional[str] = None, limit: int = 10, *, user_id: Optional[str] = None
     ) -> List[Dict[str, Any]]:
         """
         Get closed issues from GitHub repository.
+
+        #2128: this passed ``(project, limit)`` positionally into the adapter's
+        ``(repo, owner, ...)`` since #1042 made those required, so every read hit
+        ``repos/<limit>/<None>/issues`` and returned ``[]``: the "Issues/PRs Closed:
+        0" PA's run saw. The router now resolves the repo (project → user default
+        → env) and calls by keyword; an unresolved repo is a failed read, not an
+        empty one.
         """
-        return await self._get_integration("get_closed_issues").get_closed_issues(project, limit)
+        from services.integrations.github.read_failed import GitHubReadFailed
+
+        resolved = await self._resolve_default_repo(project)
+        if resolved is None:
+            raise GitHubReadFailed("no_repository")
+        owner, name = resolved
+        return await self._get_integration("get_closed_issues").get_closed_issues(
+            repo=name,
+            owner=owner,
+            project=project,
+            limit=limit,
+            user_id=user_id or self._user_id,
+        )
 
 
 # Convenience factory function

@@ -402,7 +402,8 @@ class TestShippedThisWeekResults:
             result = await intent_service._handle_shipped_this_week(intent, "workflow-id")
 
             assert result.success is True
-            assert "No closed issues or PRs returned from GitHub" in result.message
+            # #2128: an empty list is a read that happened; the old "auth issue" hedge is gone
+            assert "No closed issues or PRs came back for this repo" in result.message
             assert result.intent_data["shipped_count"] == 0
 
 
