@@ -204,7 +204,7 @@ class TestEmptyProjectsOffer:
         db = _Db(monkeypatch, [])
         sid = str(uuid4())
 
-        msg, expected, question = route(clf, user_id=None)
+        msg, expected, question = route(clf)
         first = await svc.process_intent(message=msg, session_id=sid, user_id=_USER)
         assert first.message == expected
         armed = _peek(svc, sid)
@@ -243,7 +243,7 @@ class TestEmptyProjectsOffer:
         db = _Db(monkeypatch, [])
         sid = str(uuid4())
 
-        msg, expected, _q = route(clf, user_id=None)
+        msg, expected, _q = route(clf)
         await svc.process_intent(message=msg, session_id=sid, user_id=_USER)
         seen = len(clf.seen)
         with _write_path_explosive():
