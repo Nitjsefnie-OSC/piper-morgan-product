@@ -169,3 +169,4 @@ half unrelated).
   6. Delete the stream files at that day's STOP (HOST's rule).
 - **Waiting on xian:** the calendar sign-in (Thursday), #2092's yes or no (Exec asked), the OAuth match, Pard's key date, #2100's Notion row.
 - **MCP served-sha check:** on the next MCP deploy.
+- **10-21 18:47 updates for Thursday:** the calendar on `web-seed-1386` reads Healthy (the API was enabled 10:2x), so the start trigger is Web's go or 12:00. The six calendar rows (Q8, Q33, Q34, Q35, Q61, Q62) are reported separately. Alpha is on `76789a8988`, database healthy (512 MB after the OOM kill). **If the OpenAI run hits a quota refusal:** it counts as the one infrastructure rerun, not a model miss (Lead 18:33). The cap is "$20 or topped up", xian's words, unread. The Console read is xian's.
