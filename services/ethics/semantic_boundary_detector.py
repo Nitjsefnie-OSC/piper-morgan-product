@@ -102,6 +102,12 @@ REFUSAL_FALLBACK = SemanticDetectorOutput(
 )
 
 
+def is_unavailable(output: Optional["SemanticDetectorOutput"]) -> bool:
+    """#2134 (Arch): the fallback means the semantic layer did not run. A failure is not a
+    reading: it is never cached, and the enforcer records it as its own tier."""
+    return output is REFUSAL_FALLBACK
+
+
 # ---------------------------------------------------------------------------
 # Prompt body — CXO v0.1 (dev/2026/04/26/1004-prompt-body-draft-v0-1.md)
 # ---------------------------------------------------------------------------
@@ -566,11 +572,12 @@ class SemanticBoundaryDetector:
                 "semantic_detector_llm_failure",
                 extra={"error": str(exc), "exc_type": type(exc).__name__},
             )
-            self._cache.put(key, REFUSAL_FALLBACK)
+            # #2134: never cache a failure; the next call for this message tries again.
             return REFUSAL_FALLBACK
 
         parsed = self._parse_response(raw)
-        self._cache.put(key, parsed)
+        if not is_unavailable(parsed):  # #2134: cache only a parsed, validated reading
+            self._cache.put(key, parsed)
         return parsed
 
     @staticmethod

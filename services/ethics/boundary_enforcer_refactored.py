@@ -37,6 +37,7 @@ from services.ethics.semantic_boundary_detector import (
     SemanticBoundaryDetector,
     SemanticDetectorOutput,
     classify_decision,
+    is_unavailable,
 )
 from services.infrastructure.logging.config import get_ethics_logger
 from services.infrastructure.monitoring.ethics_metrics import (
@@ -255,6 +256,9 @@ class BoundaryEnforcer:
         # "semantic" when the LLM detector fires.
         if fast_path_hit:
             detector = "literal-trigger"
+        elif is_unavailable(semantic_output):
+            # #2134: the semantic layer did not run; never recorded as "none"
+            detector = "semantic-unavailable"
         elif (
             semantic_output is not None
             and semantic_output.violation_detected
@@ -266,7 +270,10 @@ class BoundaryEnforcer:
             detector = "none"
 
         # #1004 contract — decision tier on the audit envelope (telemetry-ready).
-        if semantic_output is not None:
+        if is_unavailable(semantic_output):
+            # #2134 (Arch): a failure is not a reading; "pass" would hide it in the envelope
+            decision_tier = "unavailable"
+        elif semantic_output is not None:
             decision_tier = classify_decision(semantic_output.confidence)
         elif fast_path_hit:
             decision_tier = "block"
