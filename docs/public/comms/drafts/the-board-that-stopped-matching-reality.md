@@ -41,10 +41,10 @@ Another lane turned out to already be fixed under a different issue entirely, so
 
 I also closed one issue myself, directly, on my own word — fifty-six releases had gone out through that particular piece of infrastructure without incident, and that was evidence enough for me. When all five lanes concleded, Lead shipped the whole batch as a new release and updated the tracker so I'd have a clean plan waiting Monday morning.
 
-# Tidied up
+# Tidied up, for now
 By the time I finished reconciling the sprint board, we'd closed thirteen issues, corrected about a dozen mislabeled items, and turned five stalled threads into real progress, all over one night after I questioned a status update.
 
-Like so many of the instruments and methods I've embraced or developed to do this work,, the sprint tracker grew from "we should keep track of issues in GitHub" to "we should work in sprints" to "we should close issues properly with evidence" and on and on. Along the way, the sprint board has gotten richly expressive and the agents have gotten much better at maintaining and reading it themselves, but neverthl
+The sprint tracker grew from "we should keep track of issues in GitHub" to "we should work in sprints" to "we should close issues properly with evidence" and on and on. Along the way, the sprint board has gotten richly expressive and the agents have gotten much better at maintaining and reading it themselves. Nevertheless, like so many of the instruments and methods I've embraced or developed to do this work, it has evolved from idea to convention to rigorous process to scripted routines with each round of improvement triggered by my looking for the information I need and not finding what I expected.
 
 ---
 
