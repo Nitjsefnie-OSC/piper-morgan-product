@@ -653,10 +653,26 @@ async def check_invite(req: InviteCheckRequest) -> InviteCheckResponse:
 # #2125 (Web on staging, 2026-10-21): a server whose encryption key is unusable told the
 # person their API key failed validation and printed the parameter. Say whose fault it is,
 # and never render an exception to the page; the server log carries the cause.
+# CXO (2026-10-22 07:02): "has been told" would claim an action; this route only writes a
+# log line, so the sentence asks the person to tell us instead.
 SERVER_CANNOT_STORE_KEYS_MESSAGE = (
     "The server can't store keys right now, so no key can be saved. Your key isn't the "
-    "problem; the person who runs this instance has been told."
+    "problem. This is on our side, so please tell us."
 )
+# CXO (2026-10-22): the display name, not the provider id, in lines a person reads.
+PROVIDER_DISPLAY_NAMES = {
+    "openai": "OpenAI",
+    "anthropic": "Anthropic",
+    "gemini": "Gemini",
+    "notion": "Notion",
+    "github": "GitHub",
+}
+
+
+def provider_display_name(provider: str) -> str:
+    return PROVIDER_DISPLAY_NAMES.get(provider, provider)
+
+
 KEY_CHECK_COULD_NOT_RUN_MESSAGE = (
     "The key check couldn't run just now. Try again in a moment; if it keeps failing, tell us."
 )
@@ -848,7 +864,7 @@ async def use_keychain(req: KeychainUseRequest):
             provider=req.provider,
             success=True,
             valid=True,
-            message=f"Using the {req.provider} key from your keychain.",
+            message=f"Using the {provider_display_name(req.provider)} key from your keychain.",
         )
 
     except Exception as e:

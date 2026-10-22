@@ -89,7 +89,7 @@ async def test_use_keychain_names_no_model_and_renders_no_exception_text():
     with patch("services.infrastructure.keychain_service.KeychainService", return_value=keychain):
         response = await use_keychain(KeychainUseRequest(provider="anthropic"))
     assert response.success is True
-    assert response.message == "Using the anthropic key from your keychain."
+    assert response.message == "Using the Anthropic key from your keychain."  # CXO: display name
     for model_word in ("claude", "gpt", "gemini-pro", "3.5"):
         assert model_word not in response.message
     broken = MagicMock()
@@ -99,3 +99,13 @@ async def test_use_keychain_names_no_model_and_renders_no_exception_text():
     assert response.success is False
     assert response.message == KEY_CHECK_COULD_NOT_RUN_MESSAGE
     assert "keyring-internal-detail" not in response.message
+
+
+def test_the_server_side_line_claims_no_action_it_does_not_take():
+    """CXO 10-22 07:02: the route only logs; it must not say anyone 'has been told'."""
+    assert "has been told" not in SERVER_CANNOT_STORE_KEYS_MESSAGE
+    assert "please tell us" in SERVER_CANNOT_STORE_KEYS_MESSAGE
+    assert SERVER_CANNOT_STORE_KEYS_MESSAGE == (
+        "The server can't store keys right now, so no key can be saved. Your key isn't the "
+        "problem. This is on our side, so please tell us."
+    )
