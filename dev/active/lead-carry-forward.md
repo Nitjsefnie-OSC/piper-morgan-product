@@ -1,6 +1,6 @@
 # Lead carry-forward — Fable 5.1 seat; Model A worktree ~/Development/piper-morgan-worktrees/lead
 
-## STATE @ 2026-10-22 13:34 PT — alpha ded184e4ad (promoted 13:31: 2125 complete, 2127, 2128); credential_store healthy; main green; model now Opus 5.5 (Fable limit at 13:25). Gate per PPM 12:50: 7 open / 4 must-close (2085, 1524, 2096, 2128) after CXO closed 2092, 2091, 2112.
+## STATE @ 2026-10-22 14:08 PT — alpha ded184e4ad (13:31); main green-pending; landed since: 1524 (5a81969c14), 2131 (1b0fad8b4c), restarter main copy + 2135 tripwire (620106a405). **16:30 PT: the attended restarter close test** (xian stops Postgres + approves; Lead dispatches `gh workflow run restart-alpha-postgres.yml --ref ops/restarter -f reason="2085 close test"`; PA watches; guard 1b must print critical). No promotion before it; after it, promote (1524, 2131) once Tests is green on main's head.
 - **NOW:** #1524 (Class 3 must-close). Then 2131 turn sites + ratchet, 2134, Q19 words, 2132, 2133, 2129.
 - **Restarter:** ruleset `restarter branch` ACTIVE (xian 12:35, picks A); token secret not yet set; on Exec's word: merge the job file onto main, then the attended injected-stop test with PA (`--ref ops/restarter`).
 - **Served rows open on ded184e4ad:** 2128 (Q41/Q51 on web-seed-1386), 2127 (web-openai-run 'What should I focus on today?'), 2125 (CXO's forced timeout). 2108 can't be served (2135).
