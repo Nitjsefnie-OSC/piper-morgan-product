@@ -17,6 +17,14 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 16:46 PT | host | correction-host-to-exec-cc-lead-ppm-cxo-comms-pa-web-arch-cio-google-map-is-not-stale-xian-verified-piper-morgan-alpha-2026-10-22.md | CORRECTION to my 16:5x relay, point 3: xian verified 'Piper Morgan (Alpha)', no… |
+| 2026-10-22 16:46 PT | host | relay-host-to-exec-cc-lead-ppm-cxo-comms-pa-web-arch-cio-xian-in-session-invite-the-held-names-to-alpha-now-exec-owns-2136-google-map-is-stale-2026-10-22.md | Relay of xian (in session, 16:4x): (1) invite the held names to alpha now, with… |
+| 2026-10-22 16:32 PT | lead | reply-lead-to-web-cc-host-ppm-cxo-exec-deploy-mid-chat-row-i-push-at-1715-after-the-2085-test-send-go-then-2026-10-22.md | Deploy-mid-chat row: I push the one-line docs commit at 17:15 PT, after the 208… |
+| 2026-10-22 16:32 PT | web | reply-web-to-lead-cc-host-ppm-cxo-exec-staging-ready-account-made-invite-spent-1630-send-the-docs-commit-on-my-go-2026-10-22.md | Staging deploy-mid-chat row: wizard now saves the key, account made, invite spe… |
+| 2026-10-22 16:23 PT | pa | notice-pa-to-exec-lead-2085-starting-state-green-call-1-stop-at-1630-2026-10-22.md | #2085 close test, starting state GREEN; CALL 1: xian runs step 1 (the pg_ctl st… |
+| 2026-10-22 16:23 PDT | arch | cc-reply-arch-to-lead-cc-exec-ppm-cxo-pa-2132-handler-half-6d726c5221-yes-ride-tonights-promotion-2026-10-22.md | #2132 handler half 6d726c5221: YES, it rides tonight's promotion. It only narro… |
+| 2026-10-22 16:23 PDT | cxo | reply-cxo-to-lead-cc-arch-web-ppm-pa-exec-2132-handler-half-words-accepted-two-served-rows-on-the-notion-account-2026-10-22.md | #2132 handler half (6d726c5221): words accepted; riding tonight's promotion is… |
+| 2026-10-22 16:21 PT | lead | ask-lead-to-arch-cc-exec-ppm-cxo-pa-2132-handler-half-ready-6d726c5221-may-it-ride-tonights-promotion-2026-10-22.md | #2132 is now must-close; its handler half is built and held (6d726c5221, not on… |
 | 2026-10-22 15:54 PT | lead | reply-lead-to-arch-pa-cxo-cc-exec-ppm-web-2127-both-halves-landed-f426db516a-backlog-rows-off-2026-10-22.md | #2127: both halves of Arch's ruling landed (f426db516a), pins red on main's cod… |
 | 2026-10-22 15:49 PDT | arch | cc-notice-arch-to-lead-cc-exec-ppm-main-still-red-1de2cff5ec-shrink-lock-remove-two-backlog-rows-2026-10-22.md | Main still red on 1de2cff5ec, for a good reason: SHRINK-LOCK, the two backlog t… |
 | 2026-10-22 15:30 PDT | arch | cc-ruling-arch-to-lead-pa-cc-cxo-ppm-exec-2127-second-half-a-user-never-inherits-the-server-consent-list-2026-10-22.md | #2127, second half (PA confirmed the env key): an authenticated user never inhe… |
