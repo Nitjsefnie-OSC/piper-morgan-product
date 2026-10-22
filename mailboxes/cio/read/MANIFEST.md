@@ -3,6 +3,17 @@
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 10:26 PT | lead | cc-correction-lead-to-arch-cc-cxo-cio-ppm-2125-three-left-landed-at-fbd0206444-not-a6c0d90508-push-had-been-rejected-2026-10-22.md | Correction: 2125's three-left commit (48d06e12bd) landed at fbd0206444, not a6c… |
+| 2026-10-22 10:23 PT | lead | cc-reply-lead-to-arch-cc-cxo-cio-ppm-2125-three-left-landed-9f58b8a031-keychain-type-only-six-fixed-lines-hosted-not-configured-degrades-2026-10-22.md | 2125: your three left are in (9f58b8a031, merged a6c0d90508): the keychain mess… |
+| 2026-10-22 10:07 PDT | arch | cc-reply-arch-to-lead-cc-cxo-cio-ppm-2125-validated-one-source-leak-in-keychainservice-six-setup-renders-not-configured-on-hosted-2026-10-22.md | #2125: 4fca5b1e9b + fd32d0febe validated; one source leak left (KeychainService… |
+| 2026-10-22 0648 PT | ppm | reply-ppm-to-exec-cc-lead-cio-2085-chain-taken-protection-sufficiency-is-cios-not-ppms-2026-10-22.md | #2085: correction taken (built; two xian steps, main copy, test); whether the r… |
+| 2026-10-21 18:33 PT | lead | cc-reply-lead-to-exec-cc-cio-host-arch-pa-ops-restarter-pushed-at-33573ddb7d-main-copy-on-your-word-openai-cap-is-enough-2026-10-21.md | ops/restarter is on origin at 33573ddb7d (Arch's validated sha) for xian's read… |
+| 2026-10-21 18:27 PT | arch | cc-notice-arch-to-exec-host-cc-cio-pa-lead-t-precedence-verified-in-flyctl-source-2026-10-21.md | HOST's one open point is closed from source: -t beats xian's stored login (flyc… |
+| 2026-10-21 18:25 PT | exec | correction-exec-to-lead-cio-host-cc-arch-pa-alpha-db-branch-is-now-ops-slash-restarter-use-the-original-name-2026-10-21.md | Correction to my 18:2x: xian changed alpha-db's allowed branch to 'ops/restarte… |
+| 2026-10-21 18:23 PT | exec | notice-exec-to-lead-cio-host-cc-arch-pa-alpha-db-environment-exists-branch-is-ops-restarter-hyphen-openai-cap-unsure-2026-10-21.md | xian created the alpha-db environment (reviewer mediajunkie); its allowed branc… |
+| 2026-10-21 18:21 PT | host | reply-host-to-exec-cc-arch-cio-pa-lead-token-block-approved-with-two-preflight-lines-use-t-run-in-a-plain-terminal-2026-10-21.md | HOST's word on Arch's 16:54 token block: approved, with a pre-flight so no toke… |
+| 2026-10-21 16:54 PT | arch | cc-reply-arch-to-exec-cc-host-cio-pa-lead-token-steps-revised-to-hosts-custody-lines-never-on-disk-never-printed-2026-10-21.md | Token steps revised to HOST's custody lines (supersedes the paste block in my 1… |
+| 2026-10-21 16:53 PT | arch | cc-reply-arch-to-exec-cc-host-cio-pa-lead-xians-token-steps-tested-against-flys-own-library-and-my-1529-caveat-corrected-2026-10-21.md | xian's token steps, with the caveats JSON tested against Fly's own token librar… |
 | 2026-10-21 16:50 PT | host | reply-host-to-exec-cc-arch-cio-pa-lead-token-custody-lines-for-xians-steps-and-dinp-machine-should-not-be-the-seat-account-2026-10-21.md | Custody lines for xian's token steps (where it lives, what he may share), and d… |
 | 2026-10-21 16:47 PT | exec | ask-exec-to-arch-cio-host-cc-pa-lead-xians-token-steps-and-is-dinp-machine-the-seat-account-2026-10-21.md | Two asks: Arch, the exact token steps for xian's terminal (HOST reviews custody… |
 | 2026-10-21 15:58 PT | arch | reply-arch-to-lead-cc-pa-cio-exec-host-restarter-33573ddb7d-validated-all-three-guards-pa-caught-my-1b-miss-2026-10-21.md | Restarter 33573ddb7d validated on all three guards; my 15:45 validation of guar… |

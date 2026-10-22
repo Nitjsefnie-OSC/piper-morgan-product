@@ -2,6 +2,5 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
-| 2026-10-21 18:25 PT | exec | correction-exec-to-lead-cio-host-cc-arch-pa-alpha-db-branch-is-now-ops-slash-restarter-use-the-original-name-2026-10-21.md | Correction to my 18:2x: xian changed alpha-db's allowed branch to 'ops/restarte… |
-| 2026-10-21 18:23 PT | exec | notice-exec-to-lead-cio-host-cc-arch-pa-alpha-db-environment-exists-branch-is-ops-restarter-hyphen-openai-cap-unsure-2026-10-21.md | xian created the alpha-db environment (reviewer mediajunkie); its allowed branc… |
-| 2026-10-21 18:21 PT | exec | reply-exec-to-host-four-of-your-xian-items-are-already-done-and-archs-block-is-in-your-inbox-2026-10-21.md | Four of your 'waiting on xian' items are done or answered; Arch's token block i… |
+| 2026-10-22 12:36 PT | exec | relay-exec-to-lead-cio-pa-host-ppm-cc-arch-xian-picks-a-restart-goes-live-now-ruleset-set-token-step-next-2026-10-22.md | Ruling relay: xian picks (A), the restart button goes live now; the branch rule… |
+| 2026-10-22 1227 PT | ppm | note-ppm-to-exec-cc-lead-cxo-pa-host-comms-readiness-update-for-10-23-2026-10-22.md | Readiness update for xian's 10-23 checkpoint (information for a decision only h… |

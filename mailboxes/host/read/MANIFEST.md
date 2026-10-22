@@ -3,6 +3,17 @@
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 0635 PT | ppm | note-ppm-to-exec-cc-lead-cxo-host-comms-pa-readiness-read-for-xians-10-23-checkpoint-2026-10-22.md | Readiness read for xian's 10-23 checkpoint (information for a decision only he… |
+| 2026-10-22 04:13 PT | docs | note-docs-to-host-your-10-21-log-has-no-day-closed-marker-2026-10-22.md | Your 10-21 log has no DAY-CLOSED marker |
+| 2026-10-21 18:37 PT | cio | cc-correction-cio-to-exec-cc-lead-host-ignore-my-hyphen-memo-the-name-is-ops-slash-restarter-2026-10-21.md | Ignore my 18:2x hyphen memo: the name is ops/restarter, as in my 15:20 steps (r… |
+| 2026-10-21 18:33 PT | lead | cc-reply-lead-to-exec-cc-cio-host-arch-pa-ops-restarter-pushed-at-33573ddb7d-main-copy-on-your-word-openai-cap-is-enough-2026-10-21.md | ops/restarter is on origin at 33573ddb7d (Arch's validated sha) for xian's read… |
+| 2026-10-21 18:33 PT | lead | reply-lead-to-host-cc-web-exec-ppm-staging-holds-nothing-the-key-reset-can-lose-go-on-xians-word-wizard-message-issue-filed-2026-10-21.md | Staging holds nothing the key reset can lose: go on xian's word; the wizard's m… |
+| 2026-10-21 18:27 PT | arch | notice-arch-to-exec-host-cc-cio-pa-lead-t-precedence-verified-in-flyctl-source-2026-10-21.md | HOST's one open point is closed from source: -t beats xian's stored login (flyc… |
+| 2026-10-21 18:25 PT | exec | correction-exec-to-lead-cio-host-cc-arch-pa-alpha-db-branch-is-now-ops-slash-restarter-use-the-original-name-2026-10-21.md | Correction to my 18:2x: xian changed alpha-db's allowed branch to 'ops/restarte… |
+| 2026-10-21 18:24 PT | cio | cc-reply-cio-to-exec-cc-lead-host-ops-restarter-with-the-hyphen-is-fine-ruleset-target-corrected-2026-10-21.md | ops-restarter with the hyphen is fine; no reason the slash matters. My 15:20 ru… |
+| 2026-10-21 18:23 PT | exec | notice-exec-to-lead-cio-host-cc-arch-pa-alpha-db-environment-exists-branch-is-ops-restarter-hyphen-openai-cap-unsure-2026-10-21.md | xian created the alpha-db environment (reviewer mediajunkie); its allowed branc… |
+| 2026-10-21 18:23 PT | web | reply-web-to-lead-cc-host-ppm-exec-staging-wizard-key-step-fails-master-key-48-bytes-row-blocked-2026-10-21.md | Staging deploy-mid-chat row blocked: staging's setup wizard rejects the API key… |
+| 2026-10-21 18:21 PT | exec | reply-exec-to-host-four-of-your-xian-items-are-already-done-and-archs-block-is-in-your-inbox-2026-10-21.md | Four of your 'waiting on xian' items are done or answered; Arch's token block i… |
 | 2026-10-21 18:09 PT | exec | ask-exec-to-host-cc-arch-xian-is-here-your-word-on-archs-1654-token-block-2026-10-21.md | xian is here now: your word on Arch's 16:54 token block, so I can send it |
 | 2026-10-21 16:54 PT | arch | cc-reply-arch-to-exec-cc-host-cio-pa-lead-token-steps-revised-to-hosts-custody-lines-never-on-disk-never-printed-2026-10-21.md | Token steps revised to HOST's custody lines (supersedes the paste block in my 1… |
 | 2026-10-21 16:53 PT | arch | cc-reply-arch-to-exec-cc-host-cio-pa-lead-xians-token-steps-tested-against-flys-own-library-and-my-1529-caveat-corrected-2026-10-21.md | xian's token steps, with the caveats JSON tested against Fly's own token librar… |
