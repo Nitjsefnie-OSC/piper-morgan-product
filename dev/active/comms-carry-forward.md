@@ -1,13 +1,12 @@
 # Comms carry-forward
 
-## ⭐ CURRENT STATE — 2026-10-20 21:2x PT. Read this first. It supersedes everything below.
-- **Log:** `dev/2026/10/20/2026-10-20-0619-comms-code-log.md`, DAY-CLOSED. Close every log with exactly `<!-- DAY-CLOSED: YYYY-MM-DD -->`.
-- **Published 10-20:** Tue "The Phantom Feature", as building (https://pipermorgan.ai/blog/the-phantom-feature/). The Medium crosspost is xian's. Next: a live check, and remind xian to crosspost.
-- **xian's order (10-20):**
-  1. His final pass on Ship #065 (pubDate Wed 10-21). Comms reviewed it on 10-18. If he edits it, re-check the changed lines.
-  2. Discuss the upcoming drafts.
-  3. Discuss the story candidates, Sep 7 to Oct 19, as one list in date order.
-  4. Thu 10-22 "The Tracker That Lost Track", after his rewrite.
+## ⭐ CURRENT STATE — 2026-10-21 21:19 PT. Read this first. It supersedes everything below.
+- **Log:** `dev/2026/10/21/2026-10-21-0619-comms-code-log.md`, DAY-CLOSED. Close every log with exactly `<!-- DAY-CLOSED: YYYY-MM-DD -->`.
+- **Published 10-21:** Ship #065 "The Truth About State" (https://pipermorgan.ai/shipping-news/weekly-ship-065-the-truth-about-state/), after xian's edits and Comms' approved fixes. LinkedIn done, row distributed.
+- **xian's order (10-20), items left:**
+  1. Discuss the upcoming drafts (10-24, 10-25 title pick, 10-27, 10-29, 11-03).
+  2. Discuss the story candidates, Sep 7 to Oct 19, as one list in date order.
+  3. Thu 10-22 "The Tracker That Lost Track", after his rewrite. At 21:19 on 10-21 the draft was unchanged since 10-02 (no commit, nothing in PM's checkout). A day-before rewrite is normal.
 - **Fact-check ledgers for xian's rewrites** (`docs/internal/planning/comms/fact-check-*-2026-10-20.md`):
   - Thu 10-22 Tracker
   - Sat 10-24 Inset (fix the H1 to the calendar title)
@@ -17,9 +16,10 @@
   - After each rewrite: check it against its ledger, run template-audit, then send publish-ready to Docs.
 - **Narrative survey:** the Oct 14–19 ledger is in the 10-20 log, and earlier surveys cover Sep 7 to Oct 13 (10-14 log). The front is Sep 6 (11-03 "The Unguarded Entrance", a scaffold). Before any 10-19 draft, settle the count mismatch: Lead's "MVP open 4" vs PPM's 7→13.
 - **Design-partner invitation (send checks, 10-23):**
-  - Terms draft: `docs/internal/design/terms-invitation-draft-for-xian-2026-10-19.md`. It now has a "Your key" paragraph (HOST's code read plus CXO's 18:07 edits) and names Anthropic only. "Or OpenAI" returns only if PA's OpenAI run passes PPM's 18:21 bar (one run, after the seeded #1386 run).
-  - Known-issues lines: `docs/internal/planning/comms/design-partner-known-issues-and-calendar-lines-2026-10-19.md`. Five lines; the fifth is #2122 document search.
-  - Open reads: key rows with no ciphertext (PA or xian), and Fly backups (xian). Still to check: Send feedback (#2096) live on alpha, and the code step (#2088).
+  - Terms draft: `docs/internal/design/terms-invitation-draft-for-xian-2026-10-19.md` ("Your key" paragraph, Anthropic only. "Or OpenAI" returns only if PA's run passes PPM's 18:21 bar).
+  - Known-issues and Calendar lines: `docs/internal/planning/comms/design-partner-known-issues-and-calendar-lines-2026-10-19.md`. Five known-issue lines (fifth is #2122). Calendar: neither line goes until Connect works outside the Workspace domain. HOST picks the line from xian's Audience reading on send morning. Recheck the app name.
+  - Wizard: CXO closed #2088/#2089 (10-21 15:32). The code is asked first, step "Invite". The step-3 line is out. Recheck on send morning that Create Account no longer asks for the code (Lead's pins).
+  - Open reads: key rows with no ciphertext (PA or xian), and Fly backups (xian).
 - **Other items:**
   - Biweekly mining pass due Fri 10-23 (Oct 9–22).
   - Sun 10-18 live-footer tease fix. Blocked until xian OKs the wording.
