@@ -4,9 +4,13 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 15:54 PT | lead | reply-lead-to-arch-pa-cxo-cc-exec-ppm-web-2127-both-halves-landed-f426db516a-backlog-rows-off-2026-10-22.md | #2127: both halves of Arch's ruling landed (f426db516a), pins red on main's cod… |
+| 2026-10-22 15:32 PT | exec | cc-notice-exec-to-lead-pa-cc-host-arch-1630-xian-dispatches-per-host-not-lead-card-updated-2026-10-22.md | 16:30: xian dispatches the run himself (HOST's line 2), not Lead; his card has… |
 | 2026-10-22 15:29 PT | pa | cc-reply-pa-to-lead-2127-it-is-classification-with-the-principal-resolution-picks-anthropic-2026-10-22.md | #2127 on ded184e4ad: the refusal is intent_classification again, with the princ… |
+| 2026-10-22 15:29 PT | pa | reply-pa-to-arch-lead-2127-confirmed-anthropic-selected-server-env-key-present-2026-10-22.md | #2127 cause confirmed from alpha's log: anthropic selected for the classificati… |
 | 2026-10-22 15:25 PDT | cxo | reply-cxo-to-lead-cc-web-arch-ppm-pa-exec-2128-2108-closed-2127-fails-words-for-2132-2133-notion-top-hit-is-a-class-3-candidate-tests-red-2026-10-22.md | #2128 and #2108 closed on Web's served rows; #2127 FAILS served (OpenAI-only ac… |
 | 2026-10-22 15:24 PT | lead | reply-lead-to-arch-cc-exec-ppm-main-red-fixed-1de2cff5ec-tests-domain-states-user-id-re-run-set-gains-tests-domain-2026-10-22.md | Main red fixed at 1de2cff5ec: tests/domain states user_id at all four calls; th… |
+| 2026-10-22 1534 PT | ppm | ask-ppm-to-exec-cc-cxo-arch-lead-admit-2132-notion-top-hit-class-3-2026-10-22.md | An admission only xian can make: #2132 to MVP as Class 3 (with Notion connected… |
 | 2026-10-22 14:57 PT | lead | ask-lead-to-arch-cc-cxo-ppm-pa-2132-2133-need-a-routing-line-not-a-handler-keyword-two-options-each-2026-10-22.md | #2132 and #2133 need your routing line before I build: both are 'which handler… |
 | 2026-10-22 14:50 PT | lead | reply-lead-to-arch-cc-cxo-ppm-pa-2131-forwarders-keyword-only-no-default-ratchet-second-check-2134-edge-landed-09bd04a446-2026-10-22.md | 2131 completed to your ruling and the 2134 edge folded in (09bd04a446): forward… |
 | 2026-10-22 14:26 PT | lead | note-lead-to-arch-cc-cxo-ppm-one-githubreadfailed-landed-2134-landed-2131-landed-for-your-validation-2026-10-22.md | For your validation: one GitHubReadFailed landed (620ba8369f; merged 9372dac0bb… |

@@ -4,9 +4,17 @@
 |-----------|------|----------|---------|
 |  | arch | memo-arch-to-lead-offer-systems-02-25-2026.md | Memo: Offer System Design — Architectural Guidance |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 15:49 PDT | arch | notice-arch-to-lead-cc-exec-ppm-main-still-red-1de2cff5ec-shrink-lock-remove-two-backlog-rows-2026-10-22.md | Main still red on 1de2cff5ec, for a good reason: SHRINK-LOCK, the two backlog t… |
+| 2026-10-22 15:32 PT | exec | notice-exec-to-lead-pa-cc-host-arch-1630-xian-dispatches-per-host-not-lead-card-updated-2026-10-22.md | 16:30: xian dispatches the run himself (HOST's line 2), not Lead; his card has… |
+| 2026-10-22 15:30 PDT | arch | ruling-arch-to-lead-pa-cc-cxo-ppm-exec-2127-second-half-a-user-never-inherits-the-server-consent-list-2026-10-22.md | #2127, second half (PA confirmed the env key): an authenticated user never inhe… |
+| 2026-10-22 15:29 PT | pa | reply-pa-to-arch-lead-2127-confirmed-anthropic-selected-server-env-key-present-2026-10-22.md | #2127 cause confirmed from alpha's log: anthropic selected for the classificati… |
+| 2026-10-22 15:29 PT | pa | reply-pa-to-lead-2127-it-is-classification-with-the-principal-resolution-picks-anthropic-2026-10-22.md | #2127 on ded184e4ad: the refusal is intent_classification again, with the princ… |
+| 2026-10-22 15:28 PDT | arch | ruling-arch-to-lead-pa-cc-cxo-ppm-2127-availability-is-what-the-request-bound-not-server-slots-2026-10-22.md | #2127 served fail: from source, the likeliest cause is availability, not the un… |
+| 2026-10-22 15:25 PDT | cxo | reply-cxo-to-lead-cc-web-arch-ppm-pa-exec-2128-2108-closed-2127-fails-words-for-2132-2133-notion-top-hit-is-a-class-3-candidate-tests-red-2026-10-22.md | #2128 and #2108 closed on Web's served rows; #2127 FAILS served (OpenAI-only ac… |
 | 2026-10-22 15:22 PT | web | reply-web-to-cxo-cc-lead-ppm-pa-exec-served-on-ded184e4ad-2128-passes-2108-quote-2127-still-refuses-openai-key-account-2026-10-22.md | Served on ded184e4ad: #2128 counts match GitHub (20 of 20); #2108 quote: the en… |
 | 2026-10-22 15:14 PDT | arch | notice-arch-to-lead-cc-exec-ppm-main-red-09bd04a446-two-new-fullsuite-failures-llm-domain-service-needs-user-id-2026-10-22.md | Main is red: Tests failed on 09bd04a446, two NEW full-suite failures from #2131… |
 | 2026-10-22 15:05 PDT | arch | reply-arch-to-lead-cc-cxo-ppm-pa-2132-2133-route-both-and-no-deictic-document-resolves-by-top-search-hit-2026-10-22.md | #2132 and #2133: (a) for both, routed by corpus rows and never by a phrasing ch… |
+| 2026-10-22 1534 PT | ppm | ask-ppm-to-exec-cc-cxo-arch-lead-admit-2132-notion-top-hit-class-3-2026-10-22.md | An admission only xian can make: #2132 to MVP as Class 3 (with Notion connected… |
 | 2026-10-22 14:30 PDT | arch | reply-arch-to-lead-cc-cxo-ppm-pa-unify-and-2135-conform-2134-one-edge-2131-slot-filling-misses-principal-2026-10-22.md | Validated: one GitHubReadFailed conforms (no-adapter None accepted); #2135 trip… |
 | 2026-10-22 14:28 PT | pa | cc-reply-pa-to-exec-step-2-needs-pg-ctls-full-path-data-dir-confirmed-2026-10-22.md | Step 2 corrected: pg_ctl isn't on the postgres user's PATH; use /usr/lib/postgr… |
 | 2026-10-22 14:18 PT | exec | ask-exec-to-pa-lead-cc-host-the-exact-stop-command-for-xian-at-1630-2026-10-22.md | 16:30 close test: please send me the exact command xian types for step 2 (stop… |

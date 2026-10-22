@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 15:54 PT | lead | reply-lead-to-arch-pa-cxo-cc-exec-ppm-web-2127-both-halves-landed-f426db516a-backlog-rows-off-2026-10-22.md | #2127: both halves of Arch's ruling landed (f426db516a), pins red on main's cod… |
+| 2026-10-22 15:49 PDT | arch | cc-notice-arch-to-lead-cc-exec-ppm-main-still-red-1de2cff5ec-shrink-lock-remove-two-backlog-rows-2026-10-22.md | Main still red on 1de2cff5ec, for a good reason: SHRINK-LOCK, the two backlog t… |
 | 2026-10-22 15:30 PDT | arch | cc-ruling-arch-to-lead-pa-cc-cxo-ppm-exec-2127-second-half-a-user-never-inherits-the-server-consent-list-2026-10-22.md | #2127, second half (PA confirmed the env key): an authenticated user never inhe… |
 | 2026-10-22 15:29 PT | pa | cc-reply-pa-to-lead-2127-it-is-classification-with-the-principal-resolution-picks-anthropic-2026-10-22.md | #2127 on ded184e4ad: the refusal is intent_classification again, with the princ… |
 | 2026-10-22 15:27 PT | host | reply-host-to-exec-cc-pa-lead-16-30-test-host-additions-and-token-recorded-2026-10-22.md | 16:30 close test: HOST additions (4 lines), and the restarter token is recorded |
