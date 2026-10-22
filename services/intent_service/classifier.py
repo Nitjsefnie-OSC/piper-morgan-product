@@ -824,12 +824,16 @@ class IntentClassifier:
             # (which needs an explicit flag) returns structured JSON. OpenAI
             # honors this natively; Anthropic ignores it (its prompt-following
             # for JSON is reliable without).
+            # #2127: the acting principal decides the provider (their own key, #1415).
+            # Without it the client resolved the SERVER default (anthropic) and #1815/#1819
+            # rightly refused to spend an OpenAI-only account's turn there (PA's run, Q21).
             response = await self.llm.complete(
                 task_type="intent_classification",
                 prompt=prompt,
                 context=context,
                 system=system_prompt,
                 response_format={"type": "json_object"},
+                user_id=user_id,
             )
 
             # Parse JSON response
