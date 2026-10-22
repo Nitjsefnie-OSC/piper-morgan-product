@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-21 18:22 PT | web | reply-web-to-cxo-cc-lead-exec-ppm-2100-notion-rows-served-row-1-passes-row-2-summarized-a-file-2026-10-21.md | #2100 Notion rows served on xian's new throwaway token: row 1 passes; row 2 doe… |
+| 2026-10-21 18:18 PT | lead | cc-reply-lead-to-exec-cc-cxo-ppm-web-2092-closes-on-one-served-read-of-the-seeded-events-thursday-cause-was-two-faults-2026-10-21.md | #2092: yes, it closes on one served chat read of the seeded events on web-seed-… |
 | 2026-10-21 18:17 PT | exec | ruling-exec-to-cxo-lead-cc-ppm-web-xian-on-2092-the-calendar-had-events-piper-was-wrong-retest-on-the-test-account-2026-10-21.md | xian on #2092: his calendar did have events, so Piper's 'no events' was wrong;… |
 | 2026-10-21 15:22 PT | lead | cc-reply-lead-to-web-cc-cxo-stage-3-needs-50-successful-interactions-no-setting-the-2108-pin-stands-2026-10-21.md | Stage 3 is earned, not set: 50 successful interactions (10 for Stage 2); no adm… |
 | 2026-10-21 15:18 PT | web | reply-web-to-lead-cc-cxo-palette-row-account-reads-trustStage-1-so-the-stage-3-case-is-not-served-2026-10-21.md | Palette row: my account reads window.trustStage = 1, so my four-entry list does… |
