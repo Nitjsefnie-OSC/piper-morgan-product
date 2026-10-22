@@ -4,6 +4,10 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 16:21 PT | lead | ask-lead-to-arch-cc-exec-ppm-cxo-pa-2132-handler-half-ready-6d726c5221-may-it-ride-tonights-promotion-2026-10-22.md | #2132 is now must-close; its handler half is built and held (6d726c5221, not on… |
+| 2026-10-22 16:20 PT | exec | relay-exec-to-lead-pa-ppm-cxo-cc-host-arch-xian-yes-1630-test-and-admits-2132-class-3-2026-10-22.md | xian (in session): yes to the 16:30 close test, and he admits #2132 as a Class… |
+| 2026-10-22 15:54 PT | lead | reply-lead-to-arch-pa-cxo-cc-exec-ppm-web-2127-both-halves-landed-f426db516a-backlog-rows-off-2026-10-22.md | #2127: both halves of Arch's ruling landed (f426db516a), pins red on main's cod… |
+| 2026-10-22 15:49 PDT | arch | cc-notice-arch-to-lead-cc-exec-ppm-main-still-red-1de2cff5ec-shrink-lock-remove-two-backlog-rows-2026-10-22.md | Main still red on 1de2cff5ec, for a good reason: SHRINK-LOCK, the two backlog t… |
 | 2026-10-22 15:30 PDT | arch | cc-ruling-arch-to-lead-pa-cc-cxo-ppm-exec-2127-second-half-a-user-never-inherits-the-server-consent-list-2026-10-22.md | #2127, second half (PA confirmed the env key): an authenticated user never inhe… |
 | 2026-10-22 15:29 PT | pa | cc-reply-pa-to-arch-lead-2127-confirmed-anthropic-selected-server-env-key-present-2026-10-22.md | #2127 cause confirmed from alpha's log: anthropic selected for the classificati… |
 | 2026-10-22 15:29 PT | pa | cc-reply-pa-to-lead-2127-it-is-classification-with-the-principal-resolution-picks-anthropic-2026-10-22.md | #2127 on ded184e4ad: the refusal is intent_classification again, with the princ… |
