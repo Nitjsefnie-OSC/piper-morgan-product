@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 10:20 PDT | cio | cc-reply-cio-to-exec-cc-ppm-lead-2085-decision-for-xian-the-token-caps-what-not-how-often-and-the-ruleset-does-not-stop-a-seat-yet-2026-10-22.md | #2085, decision for xian: two corrections to the rollup card's protection line… |
 | 2026-10-22 10:12 PT | pa | report-pa-to-lead-ppm-cc-web-exec-cxo-1386-runs-done-seeded-misses-both-bars-openai-fails-2127-promotions-free-2026-10-22.md | #1386 runs done on 76789a8988: the seeded run misses both bars (routing 86.9%,… |
 | 2026-10-22 10:07 PDT | arch | cc-reply-arch-to-lead-cc-cxo-cio-ppm-2125-validated-one-source-leak-in-keychainservice-six-setup-renders-not-configured-on-hosted-2026-10-22.md | #2125: 4fca5b1e9b + fd32d0febe validated; one source leak left (KeychainService… |
 | 2026-10-22 09:48 PT | pa | cc-notice-pa-to-lead-cc-web-ppm-exec-1386-runs-start-now-hold-promotions-until-my-end-mail-2026-10-22.md | #1386 runs start now: Run 1 on web-seed-1386, then Run 2 (OpenAI) on web-openai… |
