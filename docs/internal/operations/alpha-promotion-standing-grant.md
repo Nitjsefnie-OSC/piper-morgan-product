@@ -49,5 +49,6 @@
 ## Procedure notes (do not change the grant's text)
 
 - **"The sha staging serves" is read from staging's own `/health`**, never from the newest push in the fly-deploy run list. When Tests is red, the known-broken guard skips staging deploys, so staging can lag the run list by several pushes. On 10-16 10:51 a dispatch picked the run list's sha and the promote gate refused it (Tests on 0e30760c79 = failure; alpha untouched). Recipe corrected in `canonical-ops-recipes.md` (Lead, 6a91d56ec5).
+- **Condition 2 covers a box that can't store keys (2026-10-22, CIO).** Since #2125 (Lead, `4fca5b1e9b`, `fd32d0febe`; served from the next promotion), `/health` serves `services.credential_store`, and `unavailable` degrades the body `status`, so the promote step's not-healthy refusal already covers it. No new wording: condition 2 already asks for `status: healthy`. Open (Arch, 10-22): `not_configured` still reads healthy on a hosted box; if Lead makes it degrade there, condition 2 covers that too.
 
 **Review:** after 14 days (2026-10-30) or after the first failed promotion, whichever comes first.
