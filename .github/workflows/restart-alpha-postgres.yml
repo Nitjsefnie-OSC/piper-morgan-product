@@ -86,7 +86,19 @@ jobs:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN_ALPHA_DB }}
         run: |
           set -u
-          checks="$(flyctl checks list --app "$DB_APP" --json 2>/dev/null || echo '[]')"
+          # 2026-10-22 (xian's token block): `flyctl checks list` lists every machine in the app
+          # (flaps ListActive) and the one-machine caveat refuses that ("failed to list active
+          # VMs: unauthorized"). Read the one machine instead: the Machines API's GET returns it
+          # with its `checks` list, which the parser below already reads. Fly's client sends a
+          # macaroon token as "FlyV1 <token>" (fly-go tokens.FlapsHeader); the secret may or may
+          # not carry the scheme, so add it only when absent. The token is never echoed.
+          case "$FLY_API_TOKEN" in
+            "FlyV1 "*) auth="$FLY_API_TOKEN" ;;
+            *) auth="FlyV1 $FLY_API_TOKEN" ;;
+          esac
+          checks="$(curl -fsS --max-time 15 -H "Authorization: $auth" \
+            "https://api.machines.dev/v1/apps/$DB_APP/machines/$DB_MACHINE" 2>/dev/null || echo '{}')"
+          unset auth
           pg="$(printf '%s' "$checks" | python3 -c 'import sys,json
           try:
               rows=json.load(sys.stdin)
@@ -186,7 +198,7 @@ jobs:
           echo "===== machine status ($DB_MACHINE) ====="
           cap "machine status" flyctl machine status "$DB_MACHINE" --app "$DB_APP" --display-config | head -n 120
           echo "===== checks ====="
-          cap "checks list" flyctl checks list --app "$DB_APP" | head -n 40
+          cap "checks (machine status)" flyctl machine status "$DB_MACHINE" --app "$DB_APP" | grep -i -A 8 "checks" | head -n 20
           echo "===== last Postgres log lines ====="
           cap "last Postgres log lines" flyctl logs --app "$DB_APP" --no-tail | tail -n 100
           echo "===== kernel messages (oom) ====="

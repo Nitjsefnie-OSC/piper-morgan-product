@@ -179,7 +179,7 @@ def test_the_capture_is_best_effort_and_cannot_block_the_restart():
     assert "set +o pipefail" in capture
     assert "(not captured:" in capture
     assert "cap()" in capture
-    for cmd in ("flyctl machine status", "flyctl checks list", "flyctl logs", "flyctl ssh console"):
+    for cmd in ("flyctl machine status", "flyctl logs", "flyctl ssh console"):
         line = next(
             ln for ln in capture.splitlines() if cmd in ln and not ln.strip().startswith("#")
         )
@@ -236,3 +236,42 @@ def test_guard_1b_reads_flyctls_real_shape_a_dict_keyed_by_machine_id():
     assert _guard1b("not json") == "absent"
     assert _guard1b(json.dumps({"865105fe247158": "zero"})) == "absent"
     assert _guard1b(json.dumps({})) == "absent"
+
+
+def test_guard_1b_reads_the_one_machine_not_the_app_wide_listing():
+    """xian's token block (10-22 13:38): `checks list` lists every machine (ListActive),
+    which the one-machine caveat refuses. Guard 1b reads the single machine's GET."""
+    text = _text()
+    g1b = text[text.index("Guard 1b") : text.index("Guard 2")]
+    commands = "\n".join(ln for ln in g1b.splitlines() if not ln.strip().startswith("#"))
+    assert "flyctl checks list" not in commands
+    assert "https://api.machines.dev/v1/apps/$DB_APP/machines/$DB_MACHINE" in g1b
+    assert '"FlyV1 "*) auth="$FLY_API_TOKEN"' in g1b
+    assert "unset auth" in g1b
+    assert 'echo "$auth' not in g1b and "echo $auth" not in g1b
+
+
+def test_guard_1b_parser_reads_the_machine_get_shape():
+    """The Machines API's single-machine GET (fly-go Machine: `checks` is a list of
+    {name, status, output, updated_at}); other list fields (events, host_features)
+    must not confuse it."""
+    import json
+
+    def machine(pg_status):
+        return json.dumps(
+            {
+                "id": "865105fe247158",
+                "state": "started",
+                "host_features": ["x"],
+                "events": [{"type": "launch", "status": "started"}],
+                "checks": [
+                    {"name": "pg", "status": pg_status, "output": "...", "updated_at": "t"},
+                    {"name": "role", "status": "passing"},
+                    {"name": "vm", "status": "passing"},
+                ],
+            }
+        )
+
+    assert _guard1b(machine("critical")) == "critical"
+    assert _guard1b(machine("passing")) == "passing"
+    assert _guard1b("{}") == "absent"  # an unread or refused machine reads absent and refuses
