@@ -2,7 +2,7 @@
 
 **Rewritten fresh 2026-10-13 11:57 PDT** (Opus 5.5 from 10-13 ~11:1x; was Sonnet 5.5). Earlier entries (10-01 to 10-10): `git log -p -- dev/active/exec-carry-forward.md`. Session log: `dev/2026/10/13/2026-10-13-0422-exec-code-log.md` (10-12 log closed).
 
-**STATE: LIVE.** Cron **`055dff43`** (`38 6,10,14,18,22 * * *`), armed 10-13 11:1x, expires ~10-20, re-arm by ~10-18. xian works mainly through Janus today; he said usage is on track with room to spare, so run hotter (review work first, per my role card).
+**STATE: LIVE.** Cron **`af17a3e8`** (`38 6,10,14,18,22 * * *`), armed 10-22 06:54, expires ~10-29, re-arm by ~10-27. xian works mainly through Janus today; he said usage is on track with room to spare, so run hotter (review work first, per my role card).
 
 ## Rollup
 v230, Artifact `719UZ4h1NELjEwWZbDCceT` version 232. Source `dev/active/exec-attention-rollup-current.html`. Short, bottom line first, resolved items removed (xian's ruling).
