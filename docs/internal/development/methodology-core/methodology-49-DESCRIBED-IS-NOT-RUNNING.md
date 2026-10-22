@@ -2,14 +2,14 @@
 type: methodology
 title: methodology-49 — Described Is Not Running
 valid_from: "2026-08-12"
-last_updated: "2026-10-21"
+last_updated: "2026-10-22"
 ---
 
 # methodology-49 — Described Is Not Running
 
 **Status**: Emerging (one canonical instance plus five corroborating — three original, two added
 2026-09-07 from CXO's own re-sorted evidence, four more on 2026-10-21 from three seats in one
-incident; watching for independent cross-project recurrence before Proven)
+incident, and a fifth in the same thread on 10-22; watching for independent cross-project recurrence before Proven)
 **Filed**: 2026-08-12 (CIO) · **Found by**: Janus (canonical instance) · **Routed by**: Docs
 (candidate correctly left to CIO to govern rather than self-filed — per methodology-28's own
 slot-availability discipline, which this file's neighbors, methodology-19/37, just paid the cost
@@ -73,9 +73,9 @@ observation could settle, and neither was observed before being acted on.
   a control... an absent hook and a silent hook look identical"** is this exact rule, already
   operative in this repo's prose, pre-dating this filing.
 
-## Four in one day, three seats: a guard read by its decision line (2026-10-21)
+## Four in one day, three seats, and a fifth the next: a guard read by its decision line (2026-10-21, 10-22)
 
-All four came out of one incident: alpha's database died twice of memory, and the cohort built the
+All five came out of one incident: alpha's database died twice of memory, and the cohort built the
 promote step's health checks and an external Postgres restarter the same day. Each one was a
 safeguard judged by reading it, and each was caught by running it on what it would actually get.
 
@@ -85,12 +85,13 @@ safeguard judged by reading it, and each was caught by running it on what it wou
 | Lead | "the deploy workflow's Fly token" can restart the database | the token is for another app | CIO, reading the token's scope |
 | CIO (filer) | Fly's restart policy as the first fix | `restart: always` was already set through both outages; Postgres died inside a machine that stayed started, and the image never restarts it | PA, reading the machine's config and the image source |
 | Arch | guard 1b "validated" from its `critical) ;;` case | its parser skipped Fly's real JSON (a map keyed by machine) and read `absent` for every input, so it would refuse every run | PA, running the guard's own Python on live `checks list` output |
+| Arch (10-22, same thread) | the narrowed token's caveat "allows every read", from a library test | the test checked a read that names no machine. Guard 1b's `checks list` is a listing, which Fly treats as the unspecified machine, and the one-machine set refuses it ("failed to list active VMs: unauthorized"). The job would have refused every run again | xian, running the real token block; fixed by a single-machine GET, validated by PA running the parser on the live machine body |
 
 The third is the canonical shape: a config value whose name says the protection exists, and which
 the failure goes around. The fourth is the sharper one. The decision line was right, and it was
 reviewed. The input it decides on was assumed. Arch's own rule after it: *a guard that reads tool
-output is validated by running it on that tool's real output.* All four failed closed or were
-caught before anything changed, and in all four the reviewer had the real thing one read-only
+output is validated by running it on that tool's real output.* The fifth broke that rule one layer down, the next day: a token's permission was validated on a test call instead of the job's real call. All five failed closed or were
+caught before anything changed, and in all of them the reviewer had the real thing one read-only
 command away.
 
 ## Boundary — this is not methodology-44 restated
