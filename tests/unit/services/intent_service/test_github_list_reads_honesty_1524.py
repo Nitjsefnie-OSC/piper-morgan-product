@@ -24,8 +24,8 @@ _NATIVE = "services.integrations.github.github_integration_router.GitHubIntegrat
 GRANT = "services.mcp.consumer.github_adapter.ConnectorGrantStore.get"
 SESSION = "services.mcp.consumer.github_adapter.AsyncSessionFactory.session_scope"
 WHICH_REPO = (
-    "Which repo? I couldn't tell which repository you mean — name one "
-    "(e.g. `owner/name`), link a repo to your project, or set a default repo."
+    "I couldn't tell which repository you mean. Name one (e.g. `owner/name`), "
+    "link a repo to your project, or set a default repo."
 )
 
 
@@ -62,7 +62,7 @@ def _router(**reads):
 
 
 @pytest.mark.asyncio
-async def test_q25_an_unresolved_repo_asks_which_repo_never_says_no_milestones(intent_service):
+async def test_q25_an_unresolved_repo_says_so_never_says_no_milestones(intent_service):
     r = _router(list_milestones_via_mcp=GitHubReadFailed("no_repository"))
     with patch(_NATIVE, return_value=r):
         res = await intent_service._handle_list_milestones_query(
@@ -71,6 +71,7 @@ async def test_q25_an_unresolved_repo_asks_which_repo_never_says_no_milestones(i
     assert res.success is False
     assert res.message == WHICH_REPO
     assert "don't have any open milestones" not in res.message
+    assert "?" not in res.message  # an imperative: no unarmed question (#1730 Gap-2)
     r.initialize.assert_awaited_once_with(user_id="u-1")  # reads as the principal
 
 

@@ -8744,13 +8744,14 @@ class IntentService:
     def _github_list_read_failed(self, rf, action: str, noun: str) -> "IntentProcessingResult":
         """#1524: a GitHub list read that did not happen, said as that, never as "none".
 
-        ``no_repository`` gets the adapter's "which repo?" words (REPO_UNRESOLVED);
-        anything else names the repo when known and says the read failed (the #2119
-        sentence, scoped to the list asked for)."""
+        ``no_repository`` gets the REPO_UNRESOLVED words as an imperative, not a
+        question: an unarmed question site is refused by the #1730 Gap-2 ratchet
+        (the #2113 precedent). Anything else names the repo when known and says the
+        read failed (the #2119 sentence, scoped to the list asked for)."""
         if rf.reason == "no_repository":
             message = (
-                "Which repo? I couldn't tell which repository you mean — name one "
-                "(e.g. `owner/name`), link a repo to your project, or set a default repo."
+                "I couldn't tell which repository you mean. Name one (e.g. `owner/name`), "
+                "link a repo to your project, or set a default repo."
             )
         else:
             message = (
