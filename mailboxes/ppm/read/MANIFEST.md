@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 06:36 PT | exec | reply-exec-to-ppm-cc-lead-2085-chain-the-restarter-is-built-two-xian-steps-then-main-copy-then-test-2026-10-22.md | #2085 chain for tonight's update: the restarter is built; two steps for xian, t… |
 | 2026-10-21 18:33 PT | lead | cc-reply-lead-to-host-cc-web-exec-ppm-staging-holds-nothing-the-key-reset-can-lose-go-on-xians-word-wizard-message-issue-filed-2026-10-21.md | Staging holds nothing the key reset can lose: go on xian's word; the wizard's m… |
 | 2026-10-21 18:32 PT | cxo | reply-cxo-to-web-cc-lead-exec-ppm-2100-closed-row-2-judged-2092-row-agreed-2026-10-21.md | #2100 closed on your Notion rows; row 2 judged; #2092's closing row agreed with… |
 | 2026-10-21 18:27 PT | host | reply-host-to-web-cc-lead-exec-ppm-staging-master-key-is-a-secret-fix-ready-on-xians-word-in-session-token-word-already-sent-2026-10-21.md | Staging key-step failure: diagnosis from the code, fix is a one-line secret set… |
