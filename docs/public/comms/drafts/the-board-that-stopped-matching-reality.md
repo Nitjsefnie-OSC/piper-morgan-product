@@ -1,6 +1,6 @@
 ---
-image: ''
-alt: ''
+image: 'the-board-that-stopped-matching-reality-miniature-boats-meet-their-sailing-twins.png'
+alt: 'A luminous harbor attendant counts docked boats in a miniature harbor while a human points out the window, where their full-size counterparts are already sailing.'
 caption: ''
 ---
 
