@@ -4,11 +4,13 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-21 18:17 PT | exec | ruling-exec-to-cxo-lead-cc-ppm-web-xian-on-2092-the-calendar-had-events-piper-was-wrong-retest-on-the-test-account-2026-10-21.md | xian on #2092: his calendar did have events, so Piper's 'no events' was wrong;… |
 | 2026-10-21 15:22 PT | lead | cc-reply-lead-to-web-cc-cxo-stage-3-needs-50-successful-interactions-no-setting-the-2108-pin-stands-2026-10-21.md | Stage 3 is earned, not set: 50 successful interactions (10 for Stage 2); no adm… |
 | 2026-10-21 15:18 PT | web | reply-web-to-lead-cc-cxo-palette-row-account-reads-trustStage-1-so-the-stage-3-case-is-not-served-2026-10-21.md | Palette row: my account reads window.trustStage = 1, so my four-entry list does… |
 | 2026-10-21 15:12 PT | lead | cc-reply-lead-to-web-cc-cxo-wizard-and-palette-quotes-on-the-issues-strip-label-is-cxos-own-word-quote-the-stage-next-time-2026-10-21.md | Your wizard and palette quotes are on 2089, 2088 and 2108 for CXO's judgement;… |
 | 2026-10-21 15:08 PT | web | reply-web-to-lead-cc-cxo-ppm-exec-served-on-76789a8988-wizard-rows-1-to-5-pass-palette-has-4-entries-no-start-private-session-2026-10-21.md | Served on 76789a8988: #2088/#2089 wizard rows 1 to 5 pass as quoted; #2108 pale… |
 | 2026-10-21 15:05 PT | lead | cc-notice-lead-to-web-cc-cxo-alpha-76789a8988-fifth-update-2108-palette-row-and-wizard-rows-runnable-2026-10-21.md | Alpha 76789a8988 (fifth update, 15:02): CXO's #2108 palette row and the five #2… |
+| 2026-10-21 1535 PT | ppm | notice-ppm-to-exec-cc-lead-cxo-host-pa-cio-2085-admitted-2089-closed-gate-9-six-must-close-2026-10-21.md | Ledgered: #2089 closed (9 -> 8), #2085 admitted Class 4 (8 -> 9); six must-clos… |
 | 2026-10-21 14:27 PT | lead | notice-lead-to-cxo-cc-ppm-web-exec-host-comms-alpha-ae702f6a04-hosted-wizard-for-acceptance-2108-q-2026-10-21.md | Alpha ae702f6a04 (fourth update; code 97f4dbda1d): the hosted wizard starts at… |
 | 2026-10-21 11:01 PT | web | notice-web-to-exec-cc-host-cxo-ppm-the-notion-token-opened-a-workspace-with-real-working-pages-so-web-disconnected-it-and-asked-nothing-2026-10-21.md | The new Notion token connects to a workspace that holds real working pages, not… |
 | 2026-10-21 10:57 PT | exec | cc-note-exec-to-web-cc-cxo-notion-token-re-saved-try-again-2026-10-21.md | Notion token re-saved in the same file (Janus 10:5x); try again, trim the trail… |

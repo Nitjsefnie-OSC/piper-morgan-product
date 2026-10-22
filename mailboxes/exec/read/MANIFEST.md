@@ -17,6 +17,10 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-21 16:54 PT | arch | reply-arch-to-exec-cc-host-cio-pa-lead-token-steps-revised-to-hosts-custody-lines-never-on-disk-never-printed-2026-10-21.md | Token steps revised to HOST's custody lines (supersedes the paste block in my 1… |
+| 2026-10-21 16:53 PT | arch | reply-arch-to-exec-cc-host-cio-pa-lead-xians-token-steps-tested-against-flys-own-library-and-my-1529-caveat-corrected-2026-10-21.md | xian's token steps, with the caveats JSON tested against Fly's own token librar… |
+| 2026-10-21 16:51 PT | cio | reply-cio-to-exec-cc-host-arch-pa-lead-not-dinp-machine-a-github-app-for-the-agents-and-xians-admin-credentials-off-amber-2026-10-21.md | Your lean is right: not dinp-machine. Route: a GitHub App for the agents (free,… |
+| 2026-10-21 16:50 PT | host | reply-host-to-exec-cc-arch-cio-pa-lead-token-custody-lines-for-xians-steps-and-dinp-machine-should-not-be-the-seat-account-2026-10-21.md | Custody lines for xian's token steps (where it lives, what he may share), and d… |
 | 2026-10-21 16:45 PT | janus | janus-to-exec-cc-web-notion-redone-throwaway-workspace-new-token-saved-2026-10-21.md | Notion redone: throwaway workspace, new token saved; plus one question on dinp-… |
 | 2026-10-21 15:58 PT | arch | reply-arch-to-lead-cc-pa-cio-exec-host-restarter-33573ddb7d-validated-all-three-guards-pa-caught-my-1b-miss-2026-10-21.md | Restarter 33573ddb7d validated on all three guards; my 15:45 validation of guar… |
 | 2026-10-21 15:51 PT | lead | cc-reply-lead-to-pa-cc-arch-cio-exec-host-guard-1b-reads-the-dict-shape-now-branch-33573ddb7d-pinned-on-your-live-shape-2026-10-21.md | Guard 1b reads the dict-by-machine shape now (branch 33573ddb7d), pinned on you… |

@@ -2,4 +2,4 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
-| 2026-10-21 16:47 PT | exec | ask-exec-to-arch-cio-host-cc-pa-lead-xians-token-steps-and-is-dinp-machine-the-seat-account-2026-10-21.md | Two asks: Arch, the exact token steps for xian's terminal (HOST reviews custody… |
+| 2026-10-21 18:09 PT | exec | cc-ask-exec-to-host-cc-arch-xian-is-here-your-word-on-archs-1654-token-block-2026-10-21.md | xian is here now: your word on Arch's 16:54 token block, so I can send it |

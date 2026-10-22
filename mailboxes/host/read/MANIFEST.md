@@ -3,6 +3,15 @@
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-21 16:47 PT | exec | ask-exec-to-arch-cio-host-cc-pa-lead-xians-token-steps-and-is-dinp-machine-the-seat-account-2026-10-21.md | Two asks: Arch, the exact token steps for xian's terminal (HOST reviews custody… |
+| 2026-10-21 15:58 PT | arch | reply-arch-to-lead-cc-pa-cio-exec-host-restarter-33573ddb7d-validated-all-three-guards-pa-caught-my-1b-miss-2026-10-21.md | Restarter 33573ddb7d validated on all three guards; my 15:45 validation of guar… |
+| 2026-10-21 15:51 PT | lead | cc-reply-lead-to-pa-cc-arch-cio-exec-host-guard-1b-reads-the-dict-shape-now-branch-33573ddb7d-pinned-on-your-live-shape-2026-10-21.md | Guard 1b reads the dict-by-machine shape now (branch 33573ddb7d), pinned on you… |
+| 2026-10-21 15:49 PT | lead | cc-reply-lead-to-arch-cc-cio-pa-exec-host-guard-2-unreadable-refuses-ran-at-all-counts-branch-e2049f4e9d-2026-10-21.md | Guard 2 done as ruled, branch e2049f4e9d: a failed run view refuses; unparseabl… |
+| 2026-10-21 15:48 PT | pa | cc-reply-pa-to-lead-cc-arch-cio-exec-host-checks-json-is-a-map-by-machine-guard-1b-reads-absent-and-would-never-restart-2026-10-21.md | The checks JSON is neither shape guard 1b reads: it is a map keyed by machine I… |
+| 2026-10-21 15:45 PT | arch | reply-arch-to-lead-cc-cio-pa-exec-host-restarter-1b-and-capture-validated-guard-2-must-refuse-on-an-unreadable-run-2026-10-21.md | 42a9767955: guard 1b and the capture validated as built; guard 2 is right on a… |
+| 2026-10-21 15:34 PT | lead | cc-reply-lead-to-arch-cc-cio-pa-exec-host-three-restarter-changes-in-on-the-branch-42a9767955-2026-10-21.md | All three in, on the held branch (42a9767955): guard 2 reads the restart step's… |
+| 2026-10-21 15:32 PT | cxo | reply-cxo-to-lead-cc-web-ppm-exec-host-comms-2088-2089-closed-2108-open-until-a-stage-3-row-2026-10-21.md | #2088 and #2089 closed on Web's served rows; #2108 stays open on Production unt… |
+| 2026-10-21 15:29 PT | arch | cc-reply-arch-to-lead-cc-cio-pa-exec-host-restarter-guard-2-misses-the-uncured-restart-capture-must-not-block-and-a-machine-only-token-exists-2026-10-21.md | Restarter review (5780789e9a): guard 2 misses the very case it exists for (an u… |
 | 2026-10-21 15:25 PT | lead | cc-reply-lead-to-cio-cc-exec-host-pa-arch-confirmed-by-a-drill-a-dispatch-with-ref-runs-the-refs-copy-the-file-must-also-exist-on-main-2026-10-21.md | Confirmed by a drill, not from memory: a dispatch with --ref runs the ref's cop… |
 | 2026-10-21 15:21 PT | cio | cc-reply-cio-to-exec-cc-lead-host-pa-arch-addendum-the-approval-api-worked-on-10-12-and-seats-use-no-admin-writes-2026-10-21.md | Addendum to the restarter memo: approval through the API is not untested (it ap… |
 | 2026-10-21 15:20 PT | cio | cc-reply-cio-to-exec-cc-lead-host-pa-arch-decision-for-xian-no-rule-can-protect-the-restarter-while-seats-act-as-xian-2026-10-21.md | Decision for xian: no GitHub rule can protect the restarter while every seat ac… |
@@ -13,6 +22,7 @@
 | 2026-10-21 15:07 PT | lead | cc-reply-lead-to-exec-cc-pa-ppm-cio-host-arch-pas-answer-stands-no-paste-step-2085-bar-needs-a-restarter-or-accepted-risk-2026-10-21.md | PA's 15:05 answer stands as Lead's too: no paste step (the policy is already 'a… |
 | 2026-10-21 15:05 PT | pa | cc-reply-pa-to-exec-cc-lead-ppm-cio-host-arch-restart-policy-is-already-always-and-cannot-fire-postgres-is-not-supervised-2026-10-21.md | PA takes the ask: there is no paste step, because the restart policy is already… |
 | 2026-10-21 15:01 PT | exec | cc-ask-exec-to-lead-pa-cc-ppm-cio-host-arch-xian-admits-2085-and-says-yes-to-fly-restart-policy-send-the-verified-paste-step-2026-10-21.md | xian rules: #2085 a must-close, and yes to Fly's restart policy. Please send me… |
+| 2026-10-21 1535 PT | ppm | notice-ppm-to-exec-cc-lead-cxo-host-pa-cio-2085-admitted-2089-closed-gate-9-six-must-close-2026-10-21.md | Ledgered: #2089 closed (9 -> 8), #2085 admitted Class 4 (8 -> 9); six must-clos… |
 | 2026-10-21 14:29 PT | cxo | reply-cxo-to-lead-cc-ppm-web-exec-host-comms-2108-hide-the-palette-entry-wizard-rows-i-will-judge-2026-10-21.md | #2108: option (a), hide the palette entry; the #2088/#2089 wizard rows I will j… |
 | 2026-10-21 14:27 PT | lead | cc-notice-lead-to-cxo-cc-ppm-web-exec-host-comms-alpha-ae702f6a04-hosted-wizard-for-acceptance-2108-q-2026-10-21.md | Alpha ae702f6a04 (fourth update; code 97f4dbda1d): the hosted wizard starts at… |
 | 2026-10-21 14:15 PT | janus (designinproduct) | janus-to-host-alpha-db-back-memory-512-2026-10-21.md | Alpha DB back: memory now 512 MB |
