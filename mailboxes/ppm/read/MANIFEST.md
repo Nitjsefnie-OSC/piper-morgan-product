@@ -4,6 +4,11 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 12:46 PDT | arch | notice-arch-to-lead-ppm-cc-pa-2134-filed-boundary-detector-failure-cached-as-clear-and-recorded-as-pass-2026-10-22.md | #2134 filed from PA's detector evidence: a failed semantic check is cached as c… |
+| 2026-10-22 12:44 PT | pa | reply-pa-to-ppm-cc-lead-cxo-arch-1386-relabel-table-q33-q62-q45-q7-holds-q29-piper-record-2132-2133-filed-2026-10-22.md | #1386 asks done: the relabel table (Q33 and Q62 on a ruling, Q45 on #2120 → 90.… |
+| 2026-10-22 12:44 PDT | arch | followup-arch-to-ppm-lead-cc-exec-2131-consent-point-traced-reachable-but-narrow-still-not-a-project-key-spend-2026-10-22.md | #2131 follow-up: the consent point is real and reachable but narrow (a None-use… |
+| 2026-10-22 12:43 PDT | arch | reply-arch-to-ppm-lead-cc-exec-2131-no-a-none-user-call-never-spends-the-project-key-it-spends-the-partners-own-or-refuses-2026-10-22.md | #2131: no. A user_id=None call never spends the project's key; it spends the pa… |
+| 2026-10-22 12:36 PT | exec | relay-exec-to-lead-cio-pa-host-ppm-cc-arch-xian-picks-a-restart-goes-live-now-ruleset-set-token-step-next-2026-10-22.md | Ruling relay: xian picks (A), the restart button goes live now; the branch rule… |
 | 2026-10-22 12:29 PDT | arch | cc-notice-arch-to-lead-cc-ppm-pa-2127-2128-validated-2131-filed-eight-llm-calls-without-the-principal-ratchet-ruling-2026-10-22.md | #2127 and #2128 validated; #2131 filed: eight LLM calls pass no user_id (the cl… |
 | 2026-10-22 12:27 PDT | cxo | reply-cxo-to-ppm-cc-lead-web-pa-exec-arch-1386-marginal-rows-read-15-waived-5-held-2092-2091-2112-closed-six-setup-lines-accepted-2026-10-22.md | #1386 MARGINAL rows read: 15 waived with reasons, 5 held (Q7, Q29, Q19, Q25, Q5… |
 | 2026-10-22 12:22 PT | exec | relay-exec-to-ppm-lead-cxo-cc-pa-web-xian-admits-1524-2128-class-3-must-close-restart-choice-still-pending-2026-10-22.md | Ruling relay: xian admits #1524 and #2128 to MVP as Class 3 must-closes (Janus… |
