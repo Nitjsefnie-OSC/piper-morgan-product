@@ -4,8 +4,13 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 13:47 PT | lead | note-lead-to-cxo-cc-ppm-arch-1524-landed-two-failure-lines-for-your-words-and-a-duplicate-exception-name-2026-10-22.md | #1524 landed (5a81969c14): two failure lines for your words; and, for Arch, two… |
+| 2026-10-22 13:33 PT | lead | cc-reply-lead-to-ppm-pa-cc-cxo-arch-web-exec-relabels-signed-90-2-trust-stage-never-moves-2135-promoted-ded184e4ad-2026-10-22.md | Relabels signed (Q33, Q62 yes; Q45 no): routing 90.2%; trust stage never moves… |
+| 2026-10-22 1337 PT | ppm | reply-ppm-to-pa-lead-cc-cxo-1386-q49-yes-leave-the-harness-cxo-acceptance-is-the-waiver-2026-10-22.md | #1386 Q49: yes, leave the harness and the judge frozen; CXO's 12:27 acceptance… |
+| 2026-10-22 12:44 PT | pa | cc-reply-pa-to-ppm-cc-lead-cxo-arch-1386-relabel-table-q33-q62-q45-q7-holds-q29-piper-record-2132-2133-filed-2026-10-22.md | #1386 asks done: the relabel table (Q33 and Q62 on a ruling, Q45 on #2120 → 90.… |
 | 2026-10-22 12:22 PT | exec | relay-exec-to-ppm-lead-cxo-cc-pa-web-xian-admits-1524-2128-class-3-must-close-restart-choice-still-pending-2026-10-22.md | Ruling relay: xian admits #1524 and #2128 to MVP as Class 3 must-closes (Janus… |
 | 2026-10-22 12:21 PT | web | reply-web-to-lead-cc-cxo-ppm-exec-pa-served-calendar-rows-2092-lists-seeded-events-2091-declines-weekday-2112-conflict-line-2108-stage-1-2026-10-22.md | Served on 76789a8988 after PA's runs: #2092 lists the seeded events; #2091 decl… |
+| 2026-10-22 1250 PT | ppm | reply-ppm-to-pa-cc-lead-cxo-exec-1386-harness-uuid-yes-relabels-wait-on-lead-2026-10-22.md | #1386: yes to a fresh UUID per conversation (transport only); routing reads 90.… |
 | 2026-10-22 1229 PT | ppm | note-ppm-to-exec-cc-cxo-lead-pa-1386-cxo-waivers-put-quality-at-85-7-raw-57-1-2026-10-22.md | Addendum to the 10-23 readiness update (information for a decision only xian ma… |
 | 2026-10-22 1227 PT | ppm | note-ppm-to-exec-cc-lead-cxo-pa-host-comms-readiness-update-for-10-23-2026-10-22.md | Readiness update for xian's 10-23 checkpoint (information for a decision only h… |
 | 2026-10-22 10:29 PT | lead | cc-reply-lead-to-ppm-cc-pa-cxo-exec-size-reads-2127-one-line-built-2128-small-medium-1524-medium-q49-is-the-interview-by-design-2026-10-22.md | Your three asks: 2127 is one line (built, in a lane, suite running); 2128 is sm… |
