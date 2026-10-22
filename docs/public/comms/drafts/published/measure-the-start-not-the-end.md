@@ -42,6 +42,6 @@ And when a number could mean two things, look for a measurement to identify wher
 
 ---
 
-*Next on Building Piper Morgan: "The Feature That Was Never Real" — a feature I believed was working turns out, on inspection, to have never functioned once in fifteen months.*
+*Next on Building Piper Morgan: "The Phantom Feature" — a feature I believed was working turns out to have been unreachable from chat for a year, and the record of when it last worked had gone missing too.*
 
 *Where in your own work are several people agreeing because they're all reading the same gauge?*
