@@ -25,6 +25,7 @@ from services.auth.invite_token_service import check_invite_token, consume_invit
 from services.auth.jwt_service import JWTClaims
 from services.auth.password_service import PasswordService
 from services.auth.session_cookies import set_session_cookies
+from services.config.llm_config_service import KEY_CHECK_UNAVAILABLE_MESSAGE, KeyCheckUnavailable
 from services.database.models import User
 from services.database.session_factory import AsyncSessionFactory
 from services.security.field_encryption import KeyStoreConfigError
@@ -673,8 +674,9 @@ def provider_display_name(provider: str) -> str:
     return PROVIDER_DISPLAY_NAMES.get(provider, provider)
 
 
-KEY_CHECK_COULD_NOT_RUN_MESSAGE = (
-    "The key check couldn't run just now. Try again in a moment; if it keeps failing, tell us."
+KEY_CHECK_COULD_NOT_RUN_MESSAGE = KEY_CHECK_UNAVAILABLE_MESSAGE  # one sentence, one source
+SETUP_COULD_NOT_FINISH_MESSAGE = (
+    "Setup couldn't finish just now. Try again in a moment; if it keeps failing, tell us."
 )
 
 
@@ -748,14 +750,28 @@ async def validate_api_key(req: ApiKeyValidateRequest):
                     message=KEY_ACCEPTED_MESSAGE,
                 )
 
+            except KeyStoreConfigError:
+                # #2125 (Arch): a ValueError by type; must reach the server-fault branch
+                # below, never this one, even if a later change builds an encryptor here.
+                raise
+            except KeyCheckUnavailable:
+                raise
             except ValueError as e:
-                # Validation failed
+                # The provider's own refusal of the key: the person reads its reason
                 return ApiKeyValidateResponse(
                     provider=req.provider,
                     valid=False,
                     message=str(e),
                 )
 
+    except KeyCheckUnavailable:
+        # #2125: the check did not run (timeout, network, a fault of ours); the key is unjudged
+        logger.warning("key_check_unavailable_at_route", provider=req.provider)
+        return ApiKeyValidateResponse(
+            provider=req.provider,
+            valid=False,
+            message=KEY_CHECK_COULD_NOT_RUN_MESSAGE,
+        )
     except KeyStoreConfigError as e:
         # #2125: the instance cannot encrypt (master key length/encoding, both modes set).
         logger.error("key_store_unavailable", provider=req.provider, error_type=type(e).__name__)
@@ -820,7 +836,7 @@ async def check_keychain(provider: str):
         return KeychainCheckResponse(
             provider=provider,
             exists=False,
-            message=f"Keychain access error: {str(e)}",
+            message=KEY_CHECK_COULD_NOT_RUN_MESSAGE,  # #2125: no exception text on the page
         )
 
 
@@ -1283,11 +1299,20 @@ async def complete_setup(
             redirect_url="/",  # #2078: the session was issued at create-user
         )
 
+    except HTTPException:
+        raise
+    except KeyStoreConfigError as e:
+        # #2125: the instance cannot encrypt; say so, never the parameter
+        logger.error("key_store_unavailable", user_id=user_id, error_type=type(e).__name__)
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=SERVER_CANNOT_STORE_KEYS_MESSAGE,
+        )
     except Exception as e:
         logger.error("setup_completion_failed", user_id=user_id, error=str(e), exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Setup completion failed: {str(e)}",
+            detail=SETUP_COULD_NOT_FINISH_MESSAGE,
         )
 
 

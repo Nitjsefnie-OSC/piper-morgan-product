@@ -15,7 +15,13 @@ from uuid import UUID
 from sqlalchemy import and_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from services.config.llm_config_service import LLMConfigService, humanize_validation_result
+from services.config.llm_config_service import (
+    KEY_CHECK_UNAVAILABLE,
+    KEY_CHECK_UNAVAILABLE_MESSAGE,
+    KeyCheckUnavailable,
+    LLMConfigService,
+    humanize_validation_result,
+)
 from services.database.models import UserAPIKey
 from services.infrastructure.keychain_service import KeychainService
 from services.security.api_key_validator import APIKeyValidator
@@ -215,6 +221,11 @@ class UserAPIKeyService:
                     provider, api_key
                 )
                 is_valid = validation_result.is_valid
+                # #2125: an unrun check is not a verdict; never let a route read it
+                # as "invalid". Validation-only callers get the typed error; a store
+                # proceeds as before with is_valid False and the cause in the log.
+                if validation_result.error_code == KEY_CHECK_UNAVAILABLE and not store:
+                    raise KeyCheckUnavailable(KEY_CHECK_UNAVAILABLE_MESSAGE)
                 if not is_valid:
                     validation_message = humanize_validation_result(validation_result)
                     logger.warning(f"Provider API validation failed for {provider}")
@@ -222,14 +233,14 @@ class UserAPIKeyService:
                     if not store:
                         raise ValueError(validation_message)
                 logger.info(f"Provider API validation result for {provider}: {is_valid}")
-            except ValueError:
-                # Re-raise validation errors
+            except (ValueError, KeyCheckUnavailable):
+                # Re-raise validation errors and the typed unavailable error
                 raise
             except Exception as e:
-                logger.warning(f"Provider API validation error for {provider}: {e}")
-                # Issue #485: For validation-only mode, raise error on validation failure
+                logger.warning(f"Provider API validation error for {provider}: {type(e).__name__}")
+                # #2125: a fault of ours during the check is not a verdict on the key
                 if not store:
-                    raise ValueError(f"API key validation error for {provider}: {e}")
+                    raise KeyCheckUnavailable(KEY_CHECK_UNAVAILABLE_MESSAGE) from e
 
         # Issue #485: If store=False, return early after validation (no DB writes)
         if not store:

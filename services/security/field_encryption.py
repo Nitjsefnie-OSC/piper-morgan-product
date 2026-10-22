@@ -32,7 +32,7 @@ from __future__ import annotations
 
 import base64
 import os
-from typing import Dict, Mapping, Optional
+from typing import Any, Dict, Mapping, Optional
 
 from cryptography.exceptions import InvalidTag
 from cryptography.hazmat.primitives import hashes
@@ -256,3 +256,36 @@ def format_scoped_subkeys(subkeys: Mapping[str, bytes]) -> str:
     return ",".join(
         f"{context}={base64.b64encode(key).decode('ascii')}" for context, key in subkeys.items()
     )
+
+
+# -- #2125: the credential store's readiness, probed once per process ----------------------
+# Built at startup (web/startup.py) and read by /health, so a box whose master key is unusable
+# reads degraded before anyone presses Validate, and the promote gate's health refusal holds.
+# Boot is never refused: a local dev box without the variable falls back to the OS keychain.
+_CREDENTIAL_STORE_STATUS: Optional[Dict[str, Any]] = None
+
+
+def probe_credential_store(force: bool = False) -> Dict[str, Any]:
+    """Return {"status": healthy|unavailable|not_configured, "error_type": str|None}.
+
+    Cached per process; a secret change restarts the process, so one probe is enough.
+    Never raises: /health must answer whatever the configuration looks like.
+    """
+    global _CREDENTIAL_STORE_STATUS
+    if _CREDENTIAL_STORE_STATUS is not None and not force:
+        return _CREDENTIAL_STORE_STATUS
+    try:
+        svc = FieldEncryptionService.from_env()
+        status = {"status": "healthy" if svc is not None else "not_configured", "error_type": None}
+    except KeyStoreConfigError as e:
+        status = {"status": "unavailable", "error_type": type(e).__name__}
+    except Exception as e:  # a surprise is still "unavailable", never a crash
+        status = {"status": "unavailable", "error_type": type(e).__name__}
+    _CREDENTIAL_STORE_STATUS = status
+    return status
+
+
+def reset_credential_store_probe() -> None:
+    """Tests only."""
+    global _CREDENTIAL_STORE_STATUS
+    _CREDENTIAL_STORE_STATUS = None

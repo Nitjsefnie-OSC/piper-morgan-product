@@ -109,6 +109,17 @@ async def _database_probe() -> str:
     return "healthy"
 
 
+def _credential_store_status() -> str:
+    """#2125: healthy | unavailable | not_configured, from the startup probe (cached);
+    never raises."""
+    try:
+        from services.security.field_encryption import probe_credential_store
+
+        return str(probe_credential_store().get("status") or "unavailable")
+    except Exception:
+        return "unavailable"
+
+
 def _uptime_seconds() -> int:
     """Seconds since this process started (the quiet count zeroes on a restart)."""
     try:
@@ -217,11 +228,19 @@ async def health(request: Request):
         # Seconds since the process started: a promotion restarts alpha and zeroes the
         # count, so the dispatcher reads this beside it (grant condition 3, CIO 10-21).
         "uptime_seconds": _uptime_seconds(),
+        # #2125: a box that cannot store keys reads degraded before anyone presses Validate,
+        # and the promote step's health refusal holds a promotion onto it.
+        "credential_store": _credential_store_status(),
     }
 
-    # Overall status degrades if any required service is missing or the DB is unreachable.
+    # Overall status degrades if any required service is missing, the DB is unreachable,
+    # or the credential store cannot encrypt.
     overall_status = (
-        "healthy" if intent_service_present and database_status == "healthy" else "degraded"
+        "healthy"
+        if intent_service_present
+        and database_status == "healthy"
+        and services_status["credential_store"] != "unavailable"
+        else "degraded"
     )
 
     # #1839: deploy identity on the surface infrastructure actually polls.

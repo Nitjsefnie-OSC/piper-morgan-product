@@ -271,6 +271,16 @@ class WebComponentsInitializationPhase:
         print("🎨 Phase 4: Initializing Web Components")
         print("=" * 60)
 
+        # #2125: probe the credential store once, at startup, so /health reads it. A bad
+        # master key never refuses boot; it reads "unavailable" until the secret is fixed.
+        try:
+            from services.security.field_encryption import probe_credential_store
+
+            _store = probe_credential_store()
+            print(f"   🔐 Credential store: {_store['status']}")
+        except Exception as _e:  # never let the probe block startup
+            print(f"   🔐 Credential store: probe failed ({type(_e).__name__})")
+
         try:
             from pathlib import Path
 

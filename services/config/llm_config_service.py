@@ -33,6 +33,35 @@ except ImportError:
 logger = structlog.get_logger()
 
 
+# #2125 (Arch's ruling, 2026-10-22): a timeout, a network fault or a bug of ours is not a
+# verdict on the key. Those results carry this code, the key is left unjudged, and the one
+# fixed line below reaches the person; the cause goes to the server log.
+KEY_CHECK_UNAVAILABLE = "KEY_CHECK_UNAVAILABLE"
+KEY_CHECK_UNAVAILABLE_MESSAGE = (
+    "The key check couldn't run just now. Try again in a moment; if it keeps failing, tell us."
+)
+
+
+class KeyCheckUnavailable(RuntimeError):
+    """The key could not be checked (not a ValueError: routes must not read it as
+    "invalid"). Raised by UserAPIKeyService when the validator reports
+    KEY_CHECK_UNAVAILABLE or itself fails."""
+
+
+def _key_check_unavailable(provider: str, exc: Optional[BaseException]) -> "ValidationResult":
+    logger.warning(
+        "key_check_unavailable",
+        provider=provider,
+        error_type=type(exc).__name__ if exc is not None else "timeout",
+    )
+    return ValidationResult(
+        provider=provider,
+        is_valid=False,
+        error_message=KEY_CHECK_UNAVAILABLE_MESSAGE,
+        error_code=KEY_CHECK_UNAVAILABLE,
+    )
+
+
 @dataclass
 class ValidationResult:
     """Result of provider key validation"""
@@ -79,6 +108,8 @@ def humanize_validation_result(result: "ValidationResult") -> str:
     """
     if result.is_valid:
         return ""
+    if result.error_code == KEY_CHECK_UNAVAILABLE:
+        return KEY_CHECK_UNAVAILABLE_MESSAGE
     from services.ui_messages.user_friendly_errors import make_error_user_friendly
 
     probe_text = f"{result.error_code or ''}: {result.error_message or ''}"
@@ -592,12 +623,7 @@ class LLMConfigService:
                     error_code="UNSUPPORTED_PROVIDER",
                 )
         except Exception as e:
-            return ValidationResult(
-                provider=provider,
-                is_valid=False,
-                error_message=f"Validation error: {e}",
-                error_code="VALIDATION_ERROR",
-            )
+            return _key_check_unavailable(provider, e)
 
     async def validate_api_key(self, provider: str, api_key: str) -> bool:
         """
@@ -673,19 +699,9 @@ class LLMConfigService:
                     )
 
         except httpx.TimeoutException:
-            return ValidationResult(
-                provider=config.name,
-                is_valid=False,
-                error_message="Network error: Connection timeout",
-                error_code="NETWORK_ERROR",
-            )
+            return _key_check_unavailable(config.name, None)
         except Exception as e:
-            return ValidationResult(
-                provider=config.name,
-                is_valid=False,
-                error_message=f"Validation error: {str(e)}",
-                error_code="VALIDATION_ERROR",
-            )
+            return _key_check_unavailable(config.name, e)
 
     async def _validate_anthropic(self, config: ProviderConfig) -> ValidationResult:
         """Validate Anthropic API key"""
@@ -745,19 +761,9 @@ class LLMConfigService:
                     )
 
         except httpx.TimeoutException:
-            return ValidationResult(
-                provider=config.name,
-                is_valid=False,
-                error_message="Network error: Connection timeout",
-                error_code="NETWORK_ERROR",
-            )
+            return _key_check_unavailable(config.name, None)
         except Exception as e:
-            return ValidationResult(
-                provider=config.name,
-                is_valid=False,
-                error_message=f"Validation error: {str(e)}",
-                error_code="VALIDATION_ERROR",
-            )
+            return _key_check_unavailable(config.name, e)
 
     async def _validate_gemini(self, config: ProviderConfig) -> ValidationResult:
         """Validate Gemini API key"""
@@ -818,19 +824,9 @@ class LLMConfigService:
                     )
 
         except httpx.TimeoutException:
-            return ValidationResult(
-                provider=config.name,
-                is_valid=False,
-                error_message="Network error: Connection timeout",
-                error_code="NETWORK_ERROR",
-            )
+            return _key_check_unavailable(config.name, None)
         except Exception as e:
-            return ValidationResult(
-                provider=config.name,
-                is_valid=False,
-                error_message=f"Validation error: {str(e)}",
-                error_code="VALIDATION_ERROR",
-            )
+            return _key_check_unavailable(config.name, e)
 
     async def _validate_perplexity(self, config: ProviderConfig) -> ValidationResult:
         """Validate Perplexity API key"""
@@ -902,19 +898,9 @@ class LLMConfigService:
                     )
 
         except httpx.TimeoutException:
-            return ValidationResult(
-                provider=config.name,
-                is_valid=False,
-                error_message="Network error: Connection timeout",
-                error_code="NETWORK_ERROR",
-            )
+            return _key_check_unavailable(config.name, None)
         except Exception as e:
-            return ValidationResult(
-                provider=config.name,
-                is_valid=False,
-                error_message=f"Validation error: {str(e)}",
-                error_code="VALIDATION_ERROR",
-            )
+            return _key_check_unavailable(config.name, e)
 
     async def validate_all_providers(self) -> Dict[str, ValidationResult]:
         """
