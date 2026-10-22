@@ -2,6 +2,8 @@
 
 **Owner:** Lead (map); **decision:** xian. **Written:** 2026-10-22 from source on main and the console facts relayed 10-21 (Janus via Exec, Web's read of the authorize URL). No secret values were read; client ids are named by project only.
 
+> **Update 2026-10-22 16:50 PT (xian, relayed by HOST at 16:46).** xian: "I verified Piper Morgan (Alpha) on the xian@pipermorgan.ai Google account in the last few days and that is the one I have been testing on most recently." So verification work exists in the **Alpha** project, which alpha's client already uses. **Recommendation (A) below is withdrawn**, and the working direction is (B), which xian has already started. Still open: whether that verification is **submitted or approved**, and whether branding and the scope submission were made in the Alpha project too. Exec is asking xian. Sections 1 to 3 are kept as written for the client wiring, which hasn't changed.
+
 ## 1. What Piper uses Google for
 
 Only **Google Calendar** (read-only). Source has no Google sign-in, no Gmail or Drive client, and no other Google API. `accounts.google.com` appears only in the Calendar OAuth handler.
@@ -17,7 +19,7 @@ Only **Google Calendar** (read-only). Source has no Google sign-in, no Gmail or 
 
 **OAuth parameters alpha sends** (source, confirmed by Web 10-21): scopes `calendar.readonly` and `userinfo.email`; offline access; consent prompt. Redirect URIs: `{PIPER_BASE_URL}/api/v1/setup/calendar/oauth/callback` (override `GOOGLE_CALENDAR_REDIRECT_URI`) and `{PIPER_BASE_URL}/api/v1/settings/integrations/calendar/callback` (override `GOOGLE_SETTINGS_REDIRECT_URI`); alpha's base is `https://alpha.pipermorgan.ai`.
 
-**Audience (console, relayed):** "Piper Morgan": In production, External. "Piper Morgan (Alpha)": set In production by xian 10-21 (was Testing, which caused the 7-day token expiry and the 100-user allowlist). Both unverified, so partners see "Google hasn't verified this app" and a 100-user cap applies.
+**Audience (console, relayed):** "Piper Morgan": In production, External. "Piper Morgan (Alpha)": set In production by xian 10-21 (was Testing, which caused the 7-day token expiry and the 100-user allowlist). Both read as unverified on 10-21. Superseded for the Alpha project by xian's 10-22 word (top of page): its verification state is now submitted or approved, which is not yet known.
 
 **Unverified by me:** staging's and production's `GOOGLE_CLIENT_ID` (secrets I can't read); whether any other client exists in either project.
 
@@ -44,6 +46,8 @@ Verification is **per project**. All of #2087's verification work sits in "Piper
 
 ## 4. Recommendation
 
-**(A), before 10-30**, because the reconnect cost is lowest now. Verification does not need to finish first: the submission stays in "Piper Morgan" and applies to the new client when approved. After the switch, HOST's send check reads the consent screen's app name on the morning of any invitation, and Comms' line changes from "Piper Morgan (Alpha)" to whatever the served screen shows.
+**Withdrawn 10-22 (see the update at the top).** Alpha stays on its own project's client, and no secret change or reconnect is needed. If the Alpha project's verification is approved, the consent screen partners see is the verified one, and Comms' click-through line drops out. If it is only submitted, the unverified screen stays until approval. "Piper Morgan" (538609082609) then serves no client, and xian can retire it or keep it for the brand. Lead's part: after xian's answer, verify both connect paths and a calendar read on a test account outside the Workspace domain, and post the result on #2087.
+
+*Original recommendation, kept for the record:* **(A), before 10-30**, because the reconnect cost is lowest now. Verification does not need to finish first: the submission stays in "Piper Morgan" and applies to the new client when approved. After the switch, HOST's send check reads the consent screen's app name on the morning of any invitation, and Comms' line changes from "Piper Morgan (Alpha)" to whatever the served screen shows.
 
 **Lead's part if xian picks (A):** none in code (the client is env-driven); I verify after the switch that both connect paths complete on a test account and that a calendar read returns events, and I post the result on #2087.
