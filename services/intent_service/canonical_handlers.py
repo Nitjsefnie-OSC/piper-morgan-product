@@ -439,7 +439,7 @@ class CanonicalHandlers:
                 if stats.get("total_meetings_today", 0) > 0:
                     meeting_count = stats["total_meetings_today"]
                     meeting_hours = stats.get("total_meeting_time_minutes", 0) / 60
-                    message += f"\n\n**Meeting Load**: {meeting_count} meetings ({meeting_hours:.1f} hours)"
+                    message += f"\n\n**Meeting Load**: {meeting_count} meeting{'s' if meeting_count != 1 else ''} ({meeting_hours:.1f} hours)"  # #2129
                     calendar_context["meeting_load"] = {
                         "count": meeting_count,
                         "hours": meeting_hours,
@@ -499,7 +499,7 @@ class CanonicalHandlers:
                     stats = temporal_summary.get("stats", {})
                     if stats.get("total_meetings_today", 0) > 0:
                         meeting_count = stats["total_meetings_today"]
-                        message += f" ({meeting_count} meetings scheduled today)"
+                        message += f" ({meeting_count} meeting{'s' if meeting_count != 1 else ''} scheduled today)"  # #2129
                         calendar_context["meeting_load"] = {"count": meeting_count}
                     else:
                         message += " (No meetings - great day for deep work!)"
@@ -4880,8 +4880,11 @@ What would you like to set up first?"""
                         # to a renderer that consumes structured outcomes
                         # (epic 6), never to a data-destroying slice here.
                         project_names = [p.name for p in projects]
-                        response = f"You have {len(projects)} active projects:\n\n" + "\n".join(
-                            f"- {name}" for name in project_names
+                        response = (
+                            f"You have {len(projects)} active project{'s' if len(projects) != 1 else ''}:\n\n"
+                            + "\n".join(  # #2129
+                                f"- {name}" for name in project_names
+                            )
                         )
                     else:
                         from services.consciousness.files_consciousness import (

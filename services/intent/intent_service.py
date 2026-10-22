@@ -9720,7 +9720,7 @@ class IntentService:
                         if not e.get("is_all_day", False)
                     )
 
-                    message += f"**{day_name}** ({meeting_count} meetings, {total_time} min)\n"
+                    message += f"**{day_name}** ({meeting_count} meeting{'s' if meeting_count != 1 else ''}, {total_time} min)\n"  # #2129
 
                     for event in day_events:
                         summary = event.get("summary", "Untitled")
@@ -9970,15 +9970,15 @@ class IntentService:
                 )
             elif total_completed < 5:
                 lines.append(
-                    f"Light week with {total_completed} items completed. Keep building momentum!"
+                    f"Light week with {total_completed} item{'s' if total_completed != 1 else ''} completed. Keep building momentum!"
                 )
             elif total_completed < 15:
                 lines.append(
-                    f"Solid progress with {total_completed} items completed. You're making steady headway!"
+                    f"Solid progress with {total_completed} item{'s' if total_completed != 1 else ''} completed. You're making steady headway!"
                 )
             else:
                 lines.append(
-                    f"Highly productive week with {total_completed} items completed. Excellent work!"
+                    f"Highly productive week with {total_completed} item{'s' if total_completed != 1 else ''} completed. Excellent work!"
                 )
 
             message = "\n".join(lines)

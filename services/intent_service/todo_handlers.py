@@ -2004,7 +2004,7 @@ class TodoIntentHandlers:
                     if idx < 0 or idx >= len(todos):
                         return _reply(
                             f"I couldn't find todo #{todo_number}. "
-                            f"You have {len(todos)} active todos."
+                            f"You have {len(todos)} active todo{'s' if len(todos) != 1 else ''}."  # #2129
                         )
                     todo = todos[idx]
                 except ValueError:
@@ -2160,7 +2160,8 @@ class TodoIntentHandlers:
                 idx = int(todo_number) - 1
                 if idx < 0 or idx >= len(todos):
                     return (
-                        f"I couldn't find todo #{todo_number}. You have {len(todos)} active todos."
+                        f"I couldn't find todo #{todo_number}. You have {len(todos)} active "
+                        f"todo{'s' if len(todos) != 1 else ''}."  # #2129
                     )
             except ValueError:
                 return f"'{todo_number}' doesn't look like a number. Try: 'delete todo 1'"
