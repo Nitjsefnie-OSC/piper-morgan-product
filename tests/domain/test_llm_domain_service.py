@@ -49,7 +49,9 @@ class TestLLMDomainService:
             service = LLMDomainService(config_service=mock_config_service)
             await service.initialize()
 
-            result = await service.complete(task_type="test_task", prompt="test prompt")
+            result = await service.complete(
+                task_type="test_task", prompt="test prompt", user_id=None
+            )
 
             assert result == "test response"
             # #1452: the pass-through gained system/user_id (per-user LLM rail)
@@ -60,6 +62,7 @@ class TestLLMDomainService:
                 response_format=None,
                 system=None,
                 user_id=None,
+                served=None,  # #1620: the per-call serving record
             )
 
     async def test_complete_with_context(self, mock_config_service, mock_llm_client):
@@ -70,7 +73,10 @@ class TestLLMDomainService:
 
             context = {"key": "value"}
             result = await service.complete(
-                task_type="test_task", prompt="test prompt", context=context
+                task_type="test_task",
+                prompt="test prompt",
+                context=context,
+                user_id=None,
             )
 
             assert result == "test response"
@@ -81,6 +87,7 @@ class TestLLMDomainService:
                 response_format=None,
                 system=None,
                 user_id=None,
+                served=None,  # #1620: the per-call serving record
             )
 
     async def test_complete_before_initialization(self):
@@ -88,7 +95,7 @@ class TestLLMDomainService:
         service = LLMDomainService()
 
         with pytest.raises(RuntimeError, match="not initialized"):
-            await service.complete("test_task", "test")
+            await service.complete("test_task", "test", user_id=None)
 
     async def test_get_available_providers(self, mock_config_service, mock_llm_client):
         """Returns available providers"""
@@ -125,7 +132,7 @@ class TestLLMDomainService:
             await service.initialize()
 
             with pytest.raises(ValueError, match="Client error"):
-                await service.complete("test_task", "test")
+                await service.complete("test_task", "test", user_id=None)
 
 
 class TestServiceRegistry:

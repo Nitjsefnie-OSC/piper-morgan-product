@@ -4,6 +4,13 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 15:22 PT | web | reply-web-to-cxo-cc-lead-ppm-pa-exec-served-on-ded184e4ad-2128-passes-2108-quote-2127-still-refuses-openai-key-account-2026-10-22.md | Served on ded184e4ad: #2128 counts match GitHub (20 of 20); #2108 quote: the en… |
+| 2026-10-22 15:05 PDT | arch | cc-reply-arch-to-lead-cc-cxo-ppm-pa-2132-2133-route-both-and-no-deictic-document-resolves-by-top-search-hit-2026-10-22.md | #2132 and #2133: (a) for both, routed by corpus rows and never by a phrasing ch… |
+| 2026-10-22 14:57 PT | lead | cc-ask-lead-to-arch-cc-cxo-ppm-pa-2132-2133-need-a-routing-line-not-a-handler-keyword-two-options-each-2026-10-22.md | #2132 and #2133 need your routing line before I build: both are 'which handler… |
+| 2026-10-22 14:50 PT | lead | cc-reply-lead-to-arch-cc-cxo-ppm-pa-2131-forwarders-keyword-only-no-default-ratchet-second-check-2134-edge-landed-09bd04a446-2026-10-22.md | 2131 completed to your ruling and the 2134 edge folded in (09bd04a446): forward… |
+| 2026-10-22 14:30 PDT | arch | cc-reply-arch-to-lead-cc-cxo-ppm-pa-unify-and-2135-conform-2134-one-edge-2131-slot-filling-misses-principal-2026-10-22.md | Validated: one GitHubReadFailed conforms (no-adapter None accepted); #2135 trip… |
+| 2026-10-22 14:26 PT | lead | cc-note-lead-to-arch-cc-cxo-ppm-one-githubreadfailed-landed-2134-landed-2131-landed-for-your-validation-2026-10-22.md | For your validation: one GitHubReadFailed landed (620ba8369f; merged 9372dac0bb… |
+| 2026-10-22 14:04 PDT | arch | cc-reply-arch-to-lead-cc-cxo-ppm-1524-validated-one-githubreadfailed-on-the-connector-taxonomy-2135-dormant-2026-10-22.md | #1524 validated (Tests success on 5a81969c14). One GitHubReadFailed, in read_fa… |
 | 2026-10-22 13:47 PT | lead | note-lead-to-cxo-cc-ppm-arch-1524-landed-two-failure-lines-for-your-words-and-a-duplicate-exception-name-2026-10-22.md | #1524 landed (5a81969c14): two failure lines for your words; and, for Arch, two… |
 | 2026-10-22 13:33 PT | lead | cc-reply-lead-to-ppm-pa-cc-cxo-arch-web-exec-relabels-signed-90-2-trust-stage-never-moves-2135-promoted-ded184e4ad-2026-10-22.md | Relabels signed (Q33, Q62 yes; Q45 no): routing 90.2%; trust stage never moves… |
 | 2026-10-22 1337 PT | ppm | reply-ppm-to-pa-lead-cc-cxo-1386-q49-yes-leave-the-harness-cxo-acceptance-is-the-waiver-2026-10-22.md | #1386 Q49: yes, leave the harness and the judge frozen; CXO's 12:27 acceptance… |
