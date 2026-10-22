@@ -32,7 +32,7 @@
 </style>
 <div class="wrap">
 <h1>Attention rollup — Thursday 22 October</h1>
-<p class="meta">Exec · v520, rebuilt 12:36 PDT Thu 10-22 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
+<p class="meta">Exec · v521, rebuilt 13:32 PDT Thu 10-22 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
 
 
 
@@ -40,7 +40,7 @@
 
 <div class="card hot"><b>Friday 10-23: your alpha checkpoint. Today&rsquo;s runs changed it (PA 10:12, PPM 10:19); PPM sends one updated read tonight.</b> Your 10-18 rule: on 10-23, if MVP looks on track to close by 10-30 (or close enough), approve inviting people.
 <ul style="margin:.3rem 0 .2rem 1.2rem;padding:0">
-<li><b>#1386, the gate&rsquo;s own test, missed both bars:</b> routing 86.9% (bar 90%), expected-pass 57.1% (bar 75%). It is now real work to 10-30, not a sign-off. Routing looks fixable by relabels (PA proposes, Lead signs). Of the 18 answers not judged PASS, 16 are MARGINAL, 10 of them with the right data said poorly. CXO reads each one to decide which can be waived. False statements about your data can&rsquo;t be waived. <b>CXO has read them (12:27):</b> 12 of the 18 waived, with reasons, which puts quality at <b>85.7% waived, 57.1% raw</b>. The 6 not waived are false or need new words (#2128, #1524 and others). Routing still waits on the relabels. <b>The Friday question here:</b> do you accept a waived figure as &ldquo;close enough&rdquo;? Criterion 2 then closes on a rerun after #2128 and #1524 land.</li>
+<li><b>#1386, the gate&rsquo;s own test, missed both bars:</b> routing 86.9% (bar 90%), expected-pass 57.1% (bar 75%). It is now real work to 10-30, not a sign-off. Routing looks fixable by relabels (PA proposes, Lead signs). Of the 18 answers not judged PASS, 16 are MARGINAL, 10 of them with the right data said poorly. CXO reads each one to decide which can be waived. False statements about your data can&rsquo;t be waived. <b>CXO has read them (12:27):</b> 12 of the 18 waived, with reasons, which puts quality at <b>85.7% waived, 57.1% raw</b>. The 6 not waived are false or need new words (#2128, #1524 and others). Routing (86.9% raw) reads 90.2% if Lead signs two relabels that rest on Arch&rsquo;s routing ruling (PPM 12:50); nothing signed yet. <b>The Friday question here:</b> do you accept a waived figure as &ldquo;close enough&rdquo;? Criterion 2 then closes on a rerun after #2128 and #1524 land.</li>
 <li><b>Gate now: 7 open, 4 must-close</b> (my gh list). You admitted #1524 and #2128 (12:20); CXO closed #2091, #2092 and #2112 on Web&rsquo;s rows (12:26). Lead builds #2128 (about half a day), then #1524 (about a day). #2085 waits on your token step; #2096 on your admin read.</li>
 <li><b>The invitation names Anthropic only.</b> The OpenAI run failed: an OpenAI-only account got a missing-key refusal (#2127, Production), and answer quality fell 43 points. The 10-20 rule allows no rerun for a product bug. Lead&rsquo;s fix for #2127 is one line and lands today; OpenAI can be named after it closes and a new run passes.</li>
 <li><b>#2085</b> (restart button): see the decision below. #2096 closes on your admin read of <code>/api/v1/admin/feedback</code>.</li>
@@ -98,6 +98,7 @@ unset T1 T2</pre><p style="margin:.4rem 0 .2rem"><b>Send back only:</b> &ldquo;c
 <div class="card">MVP gate: <b>7 open</b>, 4 must-close (#2128, #1524, #2085, #2096), 0 days moved. Also open: #2018, epic #1595, gate #1386. Main: 12 of 12 green. Alpha <code>76789a8988</code> (my /health read at 06:36 10-22), healthy. Lead hasn&rsquo;t sent a note on this update yet. <b>The quiet count is live:</b> alpha&rsquo;s /health now reports how many accounts chatted in the last 30 minutes, and an update is refused unless it reads 0 (a must-close can go through on your word). Its first real check passed at 08:09, and it now also waits 30 minutes after any restart. So the 20:00&ndash;21:00 window is now only a fallback. 10-23 is your checkpoint, not a target to squeeze into.</div>
 <h2>✅ Removed this rebuild</h2>
 <div class="card">The stall, website SSR and keys decisions (ruled 16:57); the Calendar, #2097/#2098, /privacy and section A decisions (ruled); the alembic reads (passed); the invite file (written); the Console look (sent to Pard); #2090 (backfilled); the DB card (your reads answered it). Older notes are in git history.</div>
+<p class="meta">v521 (13:32 10-22): Arch 12:43/12:44 (#2131: no project-key spend; Production), PPM 12:50, Janus 13:30 read in full; alpha-db secret still empty.</p>
 <p class="meta">v520 (12:36 10-22): Janus 12:25 (A), PPM 12:27 and 12:29, CXO 12:27, PPM 12:31 read in full; ruleset 25669869 read.</p>
 <p class="meta">v519 (12:22 10-22): Janus 12:20 (admit yes; restart pending), Web 12:21 read in full.</p>
 <p class="meta">v518 (11:09 10-22, fire 10:38): Lead 10:29 read in full; main 12/12; /health 76789a8988 healthy.</p>
