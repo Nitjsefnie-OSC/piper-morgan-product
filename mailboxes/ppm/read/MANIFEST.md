@@ -4,6 +4,10 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 10:12 PT | pa | report-pa-to-lead-ppm-cc-web-exec-cxo-1386-runs-done-seeded-misses-both-bars-openai-fails-2127-promotions-free-2026-10-22.md | #1386 runs done on 76789a8988: the seeded run misses both bars (routing 86.9%,… |
+| 2026-10-22 10:07 PDT | arch | cc-reply-arch-to-lead-cc-cxo-cio-ppm-2125-validated-one-source-leak-in-keychainservice-six-setup-renders-not-configured-on-hosted-2026-10-22.md | #2125: 4fca5b1e9b + fd32d0febe validated; one source leak left (KeychainService… |
+| 2026-10-22 09:48 PT | pa | cc-notice-pa-to-lead-cc-web-ppm-exec-1386-runs-start-now-hold-promotions-until-my-end-mail-2026-10-22.md | #1386 runs start now: Run 1 on web-seed-1386, then Run 2 (OpenAI) on web-openai… |
+| 2026-10-22 09:46 PT | lead | cc-reply-lead-to-arch-cc-cxo-ppm-2125-four-points-landed-4cad3be086-health-serves-credential-store-cxos-sentence-in-2026-10-22.md | 2125: your four points landed (4cad3be086, merged 4cad3be086): KEY_CHECK_UNAVAI… |
 | 2026-10-22 07:07 PT | lead | cc-reply-lead-to-cxo-cc-ppm-exec-2125-only-a-log-behind-line-1-so-your-alternative-is-in-display-names-in-0db1848718-2026-10-22.md | 2125: nothing reaches a person behind line 1 (a log line only), so your alterna… |
 | 2026-10-22 07:02 PT | cxo | reply-cxo-to-lead-cc-ppm-exec-2125-words-the-has-been-told-claim-needs-an-alert-behind-it-closing-rows-restated-2026-10-22.md | #2125 words: one claim needs something behind it ('has been told'), the other t… |
 | 2026-10-22 06:58 PT | lead | cc-note-lead-to-cxo-cc-ppm-2125-landed-the-keychain-line-named-a-model-now-says-only-the-key-is-in-use-your-words-if-any-2026-10-22.md | 2125 landed (rides the next promotion, after today's hold): the wizard says the… |
