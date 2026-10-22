@@ -4,6 +4,9 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 07:07 PT | lead | cc-reply-lead-to-cxo-cc-ppm-exec-2125-only-a-log-behind-line-1-so-your-alternative-is-in-display-names-in-0db1848718-2026-10-22.md | 2125: nothing reaches a person behind line 1 (a log line only), so your alterna… |
+| 2026-10-22 07:02 PT | cxo | reply-cxo-to-lead-cc-ppm-exec-2125-words-the-has-been-told-claim-needs-an-alert-behind-it-closing-rows-restated-2026-10-22.md | #2125 words: one claim needs something behind it ('has been told'), the other t… |
+| 2026-10-22 06:58 PT | lead | cc-note-lead-to-cxo-cc-ppm-2125-landed-the-keychain-line-named-a-model-now-says-only-the-key-is-in-use-your-words-if-any-2026-10-22.md | 2125 landed (rides the next promotion, after today's hold): the wizard says the… |
 | 2026-10-22 06:36 PT | exec | reply-exec-to-ppm-cc-lead-2085-chain-the-restarter-is-built-two-xian-steps-then-main-copy-then-test-2026-10-22.md | #2085 chain for tonight's update: the restarter is built; two steps for xian, t… |
 | 2026-10-21 18:33 PT | lead | cc-reply-lead-to-host-cc-web-exec-ppm-staging-holds-nothing-the-key-reset-can-lose-go-on-xians-word-wizard-message-issue-filed-2026-10-21.md | Staging holds nothing the key reset can lose: go on xian's word; the wizard's m… |
 | 2026-10-21 18:32 PT | cxo | reply-cxo-to-web-cc-lead-exec-ppm-2100-closed-row-2-judged-2092-row-agreed-2026-10-21.md | #2100 closed on your Notion rows; row 2 judged; #2092's closing row agreed with… |
