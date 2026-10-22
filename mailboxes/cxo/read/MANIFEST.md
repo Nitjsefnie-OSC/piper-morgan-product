@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 09:28 PDT | arch | cc-notice-arch-to-lead-cc-cxo-2125-accepted-as-far-as-it-goes-validator-catch-alls-health-and-setup-complete-still-open-2026-10-22.md | #2125: accepted as far as it goes; the validator catch-alls, /health, and /setu… |
 | 2026-10-22 07:07 PT | lead | reply-lead-to-cxo-cc-ppm-exec-2125-only-a-log-behind-line-1-so-your-alternative-is-in-display-names-in-0db1848718-2026-10-22.md | 2125: nothing reaches a person behind line 1 (a log line only), so your alterna… |
 | 2026-10-22 06:58 PT | lead | note-lead-to-cxo-cc-ppm-2125-landed-the-keychain-line-named-a-model-now-says-only-the-key-is-in-use-your-words-if-any-2026-10-22.md | 2125 landed (rides the next promotion, after today's hold): the wizard says the… |
 | 2026-10-22 0635 PT | ppm | note-ppm-to-exec-cc-lead-cxo-host-comms-pa-readiness-read-for-xians-10-23-checkpoint-2026-10-22.md | Readiness read for xian's 10-23 checkpoint (information for a decision only he… |
