@@ -27,7 +27,7 @@ log, never here. Bump `last_updated` to the newest line's date, or CI fails. Ski
 
 ## Now
 
-- **Alpha (live)** *(Arch, 2026-10-21 15:27 PDT, `curl https://piper-morgan.fly.dev/health`)*: healthy, git_sha `76789a8988`, `database: healthy`, `loop_watchdog: running`; serves the boolean quiet shape `{quiet, record_failed_in_window}`, first read by a promote step on run 39683038998 (grant condition 3 served end to end). The 10-21 database outage (#2124, ~11:19-14:13) was a kernel OOM kill of Postgres on a 256 MB VM; memory is now 512 MB. #2085 is an MVP must-close (xian 15:11): the external Postgres restarter, held on `claude/lead-restarter` until main is protected. #2112 stays open on the connected-calendar row (xian). Lead holds promotions Thursday from PA's start mail until both runs end.
+- **Alpha (live)** *(Arch, 2026-10-21 15:27 PDT, `curl https://piper-morgan.fly.dev/health`)*: healthy, git_sha `76789a8988`, `database: healthy`, `loop_watchdog: running`; serves the boolean quiet shape `{quiet, record_failed_in_window}`, first read by a promote step on run 39683038998 (grant condition 3 served end to end). The 10-21 database outage (#2124, ~11:19-14:13) was a kernel OOM kill of Postgres on a 256 MB VM; memory is now 512 MB. #2085 is an MVP must-close (xian 15:11): the external Postgres restarter, on `ops/restarter` (33573ddb7d, Arch-validated) *(CIO, 2026-10-22 START, `gh api`)*: the `alpha-db` environment exists; the branch ruleset and the `FLY_API_TOKEN_ALPHA_DB` secret do not yet (xian's hand), and the job is not on main. #2112 stays open on the connected-calendar row (xian). Lead holds promotions Thursday from PA's start mail until both runs end.
   (promotion 1 of 2 today). It carries Monday's finds: #2093, #2091, #2092 (calendar in chat), #2094, #2095 (todos), #2096 (`/feedback`), #2097 (create confirmed by number), #2099 (mint refreshes),
   #2100 (what chat reads), #2102, the DB pool pre-ping, the #2101 bounds and the Alpha Health Watch. Slot 2 (same day, from a green Tests on `1cb1e79dc1`) adds the #2101 thread surface,
   the event-loop watchdog, the #2098 consult, the #2097 list-read confirm, the #2106 refusal line, the Slack session fix and the calendar reads off the loop.
@@ -54,8 +54,8 @@ log, never here. Bump `last_updated` to the newest line's date, or CI fails. Ski
 - **Usage** *(CIO, 2026-10-20 10:07 PDT, last row of `dev/heartbeats/usage-per-account.tsv`, read 09:23)*: the pipermorgan.ai
   weekly meter is at **49%**; the next reset is **10-22 22:00 PDT** (10-23 05:00Z). The stop line is **95%**
   of the weekly meter (PM-approved 10-06). Normal pacing.
-- **Mail** *(CIO, 2026-10-15)*: v3 (`scripts/mail-send.sh`) for everyone. **Mail v4 pilot** (exec, cio and lead)
-  runs through `scripts/mail4.py` in the private `piper-morgan-mail` repo; see
+- **Mail** *(CIO, 2026-10-22)*: v3 (`scripts/mail-send.sh`) for everyone. **Mail v4 pilot** (exec, cio and lead)
+  runs through `scripts/mail4.py` in the private `piper-morgan-mail` repo; reviewed 10-22 (delivery 23 of 23 on time; it continues for the three seats, not widened before the 11-05 review; the first inbox read of the day now runs the canary); see
   `docs/internal/operations/mail-v4-pilot.md`. HOST and the other seats aren't in v4, and a v4 send to them is refused. No mail to PM:
   anything for PM goes to Exec (10-03). Since 10-14, mail-send refuses any new file in `mailboxes/xian (ceo)/inbox/`.
 - **Ruleset refactor (R6)** *(CIO, 2026-10-20, from git log and CIO logs)*: steps 1 to 5 done. The slim CLAUDE.md landed 10-12

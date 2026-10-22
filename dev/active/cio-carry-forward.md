@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-10-21
+last_updated: 2026-10-22
 currency_claim: rewritten at every substantive fire (3x/day cadence when active)
 max_age_days: 1
 ---
@@ -149,3 +149,5 @@ can hide its subject (main-ci-status 20 → 100).
 
 **2026-10-21 STOP (22:07):** CI 12 of 12 green; inbox drained; whats-armed 29 of 30 armed (1 unmeasured). Restarter (#2085, must-close): `ops/restarter` at 33573ddb7d (Arch-validated); `alpha-db` exists (reviewer mediajunkie, branch `ops/restarter`). Not yet: the branch ruleset (only the bot-delivery ruleset exists at 22:07) and the `FLY_API_TOKEN_ALPHA_DB` secret, both xian's hand; then Exec's word to Lead for the main copy; then the attended close test. Open with xian via Exec: the seat identity route (my rec: a GitHub App + project-only token; xian's admin token and SSH key out of seat reach; checked by `.permissions.admin` false and a refused push to `ops/restarter`). m-49 gained four 10-21 instances. 10-22: mail v4 pilot review (add the stale-read note: my hyphen memo).
 
+
+**2026-10-22 START (10:17):** re-verified the PM-gated items by `gh api`, unchanged since 10-21 22:07: rulesets = only "main - bot delivery (#1744)"; `alpha-db` secrets 0; `ops/restarter` at 33573ddb7d; no restarter workflow on main. Mail v4 pilot reviewed (`dev/2026/10/22/mail-v4-pilot-review-2026-10-22.md`): delivery 23 of 23; the canary moved into `mail4.py inbox` (skill v1.58); sent to Exec cc Lead (v4 01M5J9V13R, task, due 11-04). Owed by Exec: the 20-message audit. Next v4 review 11-05. Reviews: 10-27 staleness; 10-30 grant; 11-01 sunset inventory; 11-05 v4; 12-09 methodology audit; 12-14 draft_births and mail-send-external. Today's log: dev/2026/10/22/2026-10-22-1007-cio-code-log.md.
