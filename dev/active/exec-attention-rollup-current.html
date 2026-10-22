@@ -32,17 +32,17 @@
 </style>
 <div class="wrap">
 <h1>Attention rollup — Thursday 22 October</h1>
-<p class="meta">Exec · v518, rebuilt 11:09 PDT Thu 10-22 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
+<p class="meta">Exec · v519, rebuilt 12:22 PDT Thu 10-22 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
 
 
 
 
 
-<div class="card hot"><b>Decision: admit #1524 and #2128 to MVP as Class 3 must-closes? (PPM 10:19) Lean: yes.</b> Today&rsquo;s test run made two false answers visible on GitHub. #1524: &ldquo;You don&rsquo;t have any open milestones&rdquo; when the repo has &ldquo;Beta launch&rdquo; due 10-29. #2128: &ldquo;Issues/PRs Closed: 0&rdquo; in a week with a merged PR and two closed issues. Both are the same kind of false empty as #2092, which you admitted as Class 3. <b>Pros:</b> partners would see these on the main surface, and the rule stays consistent. <b>Cons:</b> the gate goes to 10 open, 7 must-close, two days before your checkpoint. Lead&rsquo;s sizes (10:29): #2128 about half a day, #1524 about a day; separate fixes, same discipline. Lead builds #2128 first if you admit. Until you rule, both stay on Production.</div>
 <div class="card hot"><b>Friday 10-23: your alpha checkpoint. Today&rsquo;s runs changed it (PA 10:12, PPM 10:19); PPM sends one updated read tonight.</b> Your 10-18 rule: on 10-23, if MVP looks on track to close by 10-30 (or close enough), approve inviting people.
 <ul style="margin:.3rem 0 .2rem 1.2rem;padding:0">
 <li><b>#1386, the gate&rsquo;s own test, missed both bars:</b> routing 86.9% (bar 90%), expected-pass 57.1% (bar 75%). It is now real work to 10-30, not a sign-off. Routing looks fixable by relabels (PA proposes, Lead signs). Of the 18 answers not judged PASS, 16 are MARGINAL, 10 of them with the right data said poorly. CXO reads each one to decide which can be waived. False statements about your data can&rsquo;t be waived. <b>The Friday question here:</b> will CXO waive most of them, or do answers need fixing and a rerun?</li>
-<li><b>Good news:</b> calendar reads work on a served account for the first time (the seeded events listed). Web&rsquo;s close rows for #2112, #2091 and #2092 run now.</li>
+<li><b>You admitted #1524 and #2128</b> (12:20): the gate becomes 10 open, 7 must-close. Lead builds #2128 (about half a day), then #1524 (about a day).</li>
+<li><b>Calendar, Web 12:21:</b> #2092 passes (&ldquo;this week&rdquo; lists the seeded events), so CXO can close it. #2091 gives an honest decline for a named weekday (&ldquo;can&rsquo;t look up a particular weekday yet&rdquo;), and CXO and Lead decide whether that closes it. #2112&rsquo;s conflict reply reads the ask as a multi-person check; CXO judges.</li>
 <li><b>The invitation names Anthropic only.</b> The OpenAI run failed: an OpenAI-only account got a missing-key refusal (#2127, Production), and answer quality fell 43 points. The 10-20 rule allows no rerun for a product bug. Lead&rsquo;s fix for #2127 is one line and lands today; OpenAI can be named after it closes and a new run passes.</li>
 <li><b>#2085</b> (restart button): see the decision below. #2096 closes on your admin read of <code>/api/v1/admin/feedback</code>.</li>
 <li>Invitation paperwork: ready except four items (the staging &ldquo;send it again&rdquo; sentence, which needs the staging key; the &ldquo;Your key&rdquo; lines; Terms, or your word that the invitation goes without a Terms page; HOST&rsquo;s send-morning checks).</li>
@@ -100,6 +100,7 @@ unset T1 T2</pre><p style="margin:.4rem 0 .2rem"><b>Send back only:</b> &ldquo;c
 <div class="card">MVP gate: <b>8 open</b>, 5 must-close (#2085, #2091, #2092, #2096, #2112; #2089 and #2100 closed 10-21), 0 days moved. Also open: #2018, epic #1595, gate #1386. Main: 12 of 12 green. Alpha <code>76789a8988</code> (my /health read at 06:36 10-22), healthy. Lead hasn&rsquo;t sent a note on this update yet. <b>The quiet count is live:</b> alpha&rsquo;s /health now reports how many accounts chatted in the last 30 minutes, and an update is refused unless it reads 0 (a must-close can go through on your word). Its first real check passed at 08:09, and it now also waits 30 minutes after any restart. So the 20:00&ndash;21:00 window is now only a fallback. 10-23 is your checkpoint, not a target to squeeze into.</div>
 <h2>✅ Removed this rebuild</h2>
 <div class="card">The stall, website SSR and keys decisions (ruled 16:57); the Calendar, #2097/#2098, /privacy and section A decisions (ruled); the alembic reads (passed); the invite file (written); the Console look (sent to Pard); #2090 (backfilled); the DB card (your reads answered it). Older notes are in git history.</div>
+<p class="meta">v519 (12:22 10-22): Janus 12:20 (admit yes; restart pending), Web 12:21 read in full.</p>
 <p class="meta">v518 (11:09 10-22, fire 10:38): Lead 10:29 read in full; main 12/12; /health 76789a8988 healthy.</p>
 <p class="meta">v517 (10:23 10-22): PA 09:48 and 10:12, PPM 10:19, CIO 10:20 read in full.</p>
 <p class="meta">v516 (10:20 10-22): CIO v4 review 10:16 read in full.</p>
