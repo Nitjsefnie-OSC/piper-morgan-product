@@ -32,7 +32,7 @@
 </style>
 <div class="wrap">
 <h1>Attention rollup — Thursday 22 October</h1>
-<p class="meta">Exec · v529, rebuilt 15:01 PDT Thu 10-22 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
+<p class="meta">Exec · v530, rebuilt 15:32 PDT Thu 10-22 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
 
 
 
@@ -40,18 +40,20 @@
 
 <div class="card hot"><b>Friday 10-23: your alpha checkpoint.</b> Your 10-18 rule: if MVP looks on track to close by 10-30 (or close enough), approve inviting people. PPM sends one updated read tonight.
 <ul style="margin:.3rem 0 .2rem 1.2rem;padding:0">
-<li><b>Gate: 7 open, 4 must-close.</b> #2128 is live on alpha since 13:31 (waits on Web&rsquo;s check); #1524 being built now (about a day); #2085, the restart button (the attended test, proposed 16:30 today); #2096, your admin read of <code>/api/v1/admin/feedback</code> (that a feedback note is stored).</li>
+<li><b>Gate: 6 open, 3 must-close.</b> #2128 closed (15:25, Web&rsquo;s counts match GitHub); #1524 being built now (about a day); #2085, the restart button (the attended test, proposed 16:30 today); #2096, your admin read of <code>/api/v1/admin/feedback</code> (that a feedback note is stored).</li>
 <li><b>#1386, the gate&rsquo;s own test:</b> quality 85.7% with CXO&rsquo;s waivers, 57.1% raw (bar 75%). Routing 90.2% with Lead&rsquo;s two signed relabels, 86.9% raw (bar 90%). It closes on a rerun after #2128 and #1524 land. <b>Your Friday question:</b> do waived figures count as &ldquo;close enough&rdquo;?</li>
-<li><b>The invitation names Anthropic only</b> (the OpenAI run failed on #2127; it can be named after a fix and a passing rerun).</li>
+<li><b>The invitation names Anthropic only.</b> Lead&rsquo;s #2127 fix is live but not enough: an OpenAI-only account is still refused. Arch has ruled the second half of the fix.</li>
 <li>Invitation paperwork still open: the staging sentence (below), the &ldquo;Your key&rdquo; lines, Terms (or your word that the invitation goes without one), HOST&rsquo;s send-morning checks.</li>
 </ul></div>
 <div class="card hot"><b>Restart button test, 16:30 today (about 15 minutes): is the time OK?</b> Arch approved the fix, and the job is on main. Run everything in a plain Terminal on your Mac with your own <code>fly</code> login. Wait for PA&rsquo;s &ldquo;starting state&rdquo; post at about 16:25 before you begin.
 <p style="margin:.4rem 0 .2rem"><b>1. Stop Postgres</b> (the machine stays up). Expect <code>waiting for server to shut down.... done</code> and <code>server stopped</code>:</p>
 <pre style="white-space:pre-wrap;margin:.2rem 0">fly ssh console -a piper-morgan-db --machine 865105fe247158 -C "su postgres -c '/usr/lib/postgresql/18/bin/pg_ctl stop -D /data/postgresql -m fast'"</pre>
-<p style="margin:.4rem 0 .2rem"><b>2. Approve the run in GitHub.</b> Once PA confirms the database reads down, Lead starts the run, and GitHub asks you to approve the <code>alpha-db</code> deployment. Approve it, and PA and Lead read the result.</p>
+<p style="margin:.4rem 0 .2rem"><b>2. Start the run, once PA confirms the database reads down.</b> HOST&rsquo;s rule: you start it, not an agent. Same Terminal:</p>
+<pre style="white-space:pre-wrap;margin:.2rem 0">gh workflow run restart-alpha-postgres.yml --repo mediajunkie/piper-morgan-product --ref ops/restarter -f reason="2085 close test"</pre>
+<p style="margin:.4rem 0 .2rem"><b>3. Approve it.</b> GitHub asks you to approve the <code>alpha-db</code> deployment (Actions &rarr; the run &rarr; Review deployments). PA and Lead read the result.</p>
 <p style="margin:.4rem 0 .2rem"><b>Undo, only if they tell you</b> (the run refused, or the database isn&rsquo;t healthy 3 minutes after the restart):</p>
 <pre style="white-space:pre-wrap;margin:.2rem 0">fly machine restart 865105fe247158 -a piper-morgan-db</pre>
-<p style="margin:.2rem 0">PA checked the command&rsquo;s paths on the machine at 14:3x, and Lead&rsquo;s first version would have failed. Alpha is down for a few minutes.</p></div>
+<p style="margin:.2rem 0">The job allows one restart per 30 minutes, so a second try after an undo waits 30 minutes. Alpha is down for a few minutes.</p></div>
 <div class="card win"><b>Before 22:00 tonight: in HOST&rsquo;s session, say &ldquo;set the staging key&rdquo;.</b> Staging&rsquo;s encryption key is the wrong length, so its wizard can&rsquo;t save an API key. HOST resets it (nothing on staging is lost), and Web runs the row behind the invitation&rsquo;s &ldquo;send it again&rdquo; sentence. Web&rsquo;s window closes at 22:00.</div>
 <h2>Next time you&rsquo;re here</h2>
 <div class="card act"><ol style="margin:.2rem 0 .2rem 1.2rem;padding:0">
@@ -75,11 +77,11 @@
 <h2>🚧 In motion, nothing for you</h2>
 <div class="card"><ul style="margin:.2rem 0 .2rem 1.2rem;padding:0">
 <li>Alpha promoted 13:31 (<code>ded184e4ad</code>: #2125, #2127, #2128); Web&rsquo;s checks on #2128 and #2127 are runnable. Lead builds #1524 next. Trust stages never advance on any account (#2135); CXO keeps them dormant through beta.</li>
-<li>Restarter: fix approved (Arch), job on main (Lead), test at 16:30. No alpha update until after the test.</li>
+<li>Restarter: fix approved (Arch), job on main (Lead), token recorded (HOST), test at 16:30. CXO flags a likely new Class 3: with Notion connected, &ldquo;analyze this document&rdquo; presents a guessed page as the one asked about. PPM places it, and admitting it would be your call.</li>
 <li>Ship #066 kickoff sends itself Fri 10-23; I draft #066&rsquo;s goals by Sat 10-24 afternoon. Mail v4: keep to three seats until the 11-05 review.</li>
 </ul></div>
 <h2>📊 Where things stand</h2>
-<div class="card">MVP gate: <b>7 open</b>, 4 must-close (#2128, #1524, #2085, #2096). Also open: #2018 and #1595 (known issues), #1386 (the gate&rsquo;s test). Main: 12 of 12 green. Alpha <code>ded184e4ad</code>, healthy (my /health read at 13:45).</div>
+<div class="card">MVP gate: <b>6 open</b>, 3 must-close (#1524, #2085, #2096). Also open: #2018 and #1595 (known issues), #1386 (the gate&rsquo;s test). Main: Tests red since 14:50 (Lead&rsquo;s test fix 1de2cff5ec is in; no alpha update until green). Alpha <code>ded184e4ad</code>, healthy (my /health read at 13:45).</div>
 <p class="meta">How I checked each version: <code>dev/active/exec-rollup-verification-history.md</code> (not needed to read this page).</p>
 
 </div>
