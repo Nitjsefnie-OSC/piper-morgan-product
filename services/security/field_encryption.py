@@ -49,6 +49,14 @@ ENV_MASTER_KEY = "ENCRYPTION_MASTER_KEY"
 ENV_SCOPED_SUBKEYS = "ENCRYPTION_SCOPED_SUBKEYS"
 
 
+class KeyStoreConfigError(ValueError):
+    """#2125: the process cannot encrypt because its key configuration is unusable
+    (a master key of the wrong length or encoding, both modes set, a bad scoped
+    subkey). A ValueError still, so existing handlers and pins hold; routes that
+    face a person catch this type and say the server can't store keys, never the
+    parameter."""
+
+
 class DecryptionError(Exception):
     """Raised when a token can't be decrypted (wrong key/context, or tampered)."""
 
@@ -76,7 +84,7 @@ class FieldEncryptionService:
                 if isinstance(master_key, (bytes, bytearray))
                 else type(master_key).__name__
             )
-            raise ValueError(f"master_key must be {_KEY_LEN} bytes (AES-256); got {got}")
+            raise KeyStoreConfigError(f"master_key must be {_KEY_LEN} bytes (AES-256); got {got}")
         self._master_key: Optional[bytes] = bytes(master_key)
         self._scoped: Optional[Dict[str, bytes]] = None
 
@@ -87,13 +95,13 @@ class FieldEncryptionService:
         """#1982: a decrypt-only service holding exactly ``subkeys`` (context → 32-byte
         subkey). No master key exists in this process; nothing can be derived."""
         if not subkeys:
-            raise ValueError("scoped FieldEncryptionService needs at least one context")
+            raise KeyStoreConfigError("scoped FieldEncryptionService needs at least one context")
         held: Dict[str, bytes] = {}
         for context, key in subkeys.items():
             if not context:
-                raise ValueError("scoped subkey context label must be non-empty")
+                raise KeyStoreConfigError("scoped subkey context label must be non-empty")
             if not isinstance(key, (bytes, bytearray)) or len(key) != _KEY_LEN:
-                raise ValueError(f"scoped subkey for {context!r} must be {_KEY_LEN} bytes")
+                raise KeyStoreConfigError(f"scoped subkey for {context!r} must be {_KEY_LEN} bytes")
             held[context] = bytes(key)
         svc = cls.__new__(cls)
         svc._master_key = None
@@ -116,7 +124,7 @@ class FieldEncryptionService:
         raw = os.getenv(env_var)
         raw_scoped = os.getenv(scoped_env_var)
         if raw and raw_scoped:
-            raise ValueError(
+            raise KeyStoreConfigError(
                 f"{env_var} and {scoped_env_var} are both set; a process holds the master "
                 "key or scoped subkeys, never both (#1982)"
             )
@@ -127,7 +135,7 @@ class FieldEncryptionService:
         try:
             key = base64.b64decode(raw)
         except Exception as e:  # a malformed env value is a hard config error
-            raise ValueError(f"{env_var} is not valid base64") from e
+            raise KeyStoreConfigError(f"{env_var} is not valid base64") from e
         return cls(key)
 
     # -- mode + key access ------------------------------------------------------

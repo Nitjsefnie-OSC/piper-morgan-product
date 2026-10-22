@@ -27,6 +27,7 @@ from services.auth.password_service import PasswordService
 from services.auth.session_cookies import set_session_cookies
 from services.database.models import User
 from services.database.session_factory import AsyncSessionFactory
+from services.security.field_encryption import KeyStoreConfigError
 from services.security.user_api_key_service import UserAPIKeyService
 
 router = APIRouter(prefix="/api/v1/setup", tags=["setup"])
@@ -649,6 +650,18 @@ async def check_invite(req: InviteCheckRequest) -> InviteCheckResponse:
     return InviteCheckResponse(valid=valid, message=None if valid else INVITE_REFUSED_MESSAGE)
 
 
+# #2125 (Web on staging, 2026-10-21): a server whose encryption key is unusable told the
+# person their API key failed validation and printed the parameter. Say whose fault it is,
+# and never render an exception to the page; the server log carries the cause.
+SERVER_CANNOT_STORE_KEYS_MESSAGE = (
+    "The server can't store keys right now, so no key can be saved. Your key isn't the "
+    "problem; the person who runs this instance has been told."
+)
+KEY_CHECK_COULD_NOT_RUN_MESSAGE = (
+    "The key check couldn't run just now. Try again in a moment; if it keeps failing, tell us."
+)
+
+
 @router.post("/validate-key", response_model=ApiKeyValidateResponse)
 async def validate_api_key(req: ApiKeyValidateRequest):
     """
@@ -727,6 +740,14 @@ async def validate_api_key(req: ApiKeyValidateRequest):
                     message=str(e),
                 )
 
+    except KeyStoreConfigError as e:
+        # #2125: the instance cannot encrypt (master key length/encoding, both modes set).
+        logger.error("key_store_unavailable", provider=req.provider, error_type=type(e).__name__)
+        return ApiKeyValidateResponse(
+            provider=req.provider,
+            valid=False,
+            message=SERVER_CANNOT_STORE_KEYS_MESSAGE,
+        )
     except Exception as e:
         logger.error(
             "api_key_validation_failed", provider=req.provider, error=str(e), exc_info=True
@@ -734,7 +755,7 @@ async def validate_api_key(req: ApiKeyValidateRequest):
         return ApiKeyValidateResponse(
             provider=req.provider,
             valid=False,
-            message=f"Validation error: {str(e)}",
+            message=KEY_CHECK_COULD_NOT_RUN_MESSAGE,
         )
 
 
@@ -820,20 +841,14 @@ async def use_keychain(req: KeychainUseRequest):
             )
 
         # Key exists in keychain - trust it was validated when stored
-        # We skip re-validation to avoid event loop issues with database sessions
-        provider_models = {
-            "openai": "gpt-4",
-            "anthropic": "claude-3.5",
-            "gemini": "gemini-pro",
-            "notion": "workspace",
-        }
-        model_info = provider_models.get(req.provider, req.provider)
-
+        # We skip re-validation to avoid event loop issues with database sessions.
+        # #2117's rule (CXO): say only what was checked. Nothing here reached a model;
+        # the old line named one from a constant table.
         return KeychainUseResponse(
             provider=req.provider,
             success=True,
             valid=True,
-            message=f"Using {req.provider} key from keychain ({model_info})",
+            message=f"Using the {req.provider} key from your keychain.",
         )
 
     except Exception as e:
@@ -842,7 +857,7 @@ async def use_keychain(req: KeychainUseRequest):
             provider=req.provider,
             success=False,
             valid=False,
-            message=f"Keychain access error: {str(e)}",
+            message=KEY_CHECK_COULD_NOT_RUN_MESSAGE,
         )
 
 
