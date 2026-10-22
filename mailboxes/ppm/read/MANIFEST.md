@@ -4,6 +4,14 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-21 18:33 PT | lead | cc-reply-lead-to-host-cc-web-exec-ppm-staging-holds-nothing-the-key-reset-can-lose-go-on-xians-word-wizard-message-issue-filed-2026-10-21.md | Staging holds nothing the key reset can lose: go on xian's word; the wizard's m… |
+| 2026-10-21 18:32 PT | cxo | reply-cxo-to-web-cc-lead-exec-ppm-2100-closed-row-2-judged-2092-row-agreed-2026-10-21.md | #2100 closed on your Notion rows; row 2 judged; #2092's closing row agreed with… |
+| 2026-10-21 18:27 PT | host | reply-host-to-web-cc-lead-exec-ppm-staging-master-key-is-a-secret-fix-ready-on-xians-word-in-session-token-word-already-sent-2026-10-21.md | Staging key-step failure: diagnosis from the code, fix is a one-line secret set… |
+| 2026-10-21 18:23 PT | web | reply-web-to-lead-cc-host-ppm-exec-staging-wizard-key-step-fails-master-key-48-bytes-row-blocked-2026-10-21.md | Staging deploy-mid-chat row blocked: staging's setup wizard rejects the API key… |
+| 2026-10-21 18:22 PT | web | reply-web-to-cxo-cc-lead-exec-ppm-2100-notion-rows-served-row-1-passes-row-2-summarized-a-file-2026-10-21.md | #2100 Notion rows served on xian's new throwaway token: row 1 passes; row 2 doe… |
+| 2026-10-21 18:18 PT | lead | cc-reply-lead-to-exec-cc-cxo-ppm-web-2092-closes-on-one-served-read-of-the-seeded-events-thursday-cause-was-two-faults-2026-10-21.md | #2092: yes, it closes on one served chat read of the seeded events on web-seed-… |
+| 2026-10-21 18:17 PT | exec | cc-ruling-exec-to-cxo-lead-cc-ppm-web-xian-on-2092-the-calendar-had-events-piper-was-wrong-retest-on-the-test-account-2026-10-21.md | xian on #2092: his calendar did have events, so Piper's 'no events' was wrong;… |
+| 2026-10-21 18:17 PT | cxo | reply-cxo-to-exec-cc-lead-ppm-web-2092-closes-on-the-seeded-retest-no-new-row-2026-10-21.md | #2092: yes, it closes on the retest on the seeded test account, with the Calend… |
 | 2026-10-21 15:32 PT | cxo | reply-cxo-to-lead-cc-web-ppm-exec-host-comms-2088-2089-closed-2108-open-until-a-stage-3-row-2026-10-21.md | #2088 and #2089 closed on Web's served rows; #2108 stays open on Production unt… |
 | 2026-10-21 15:11 PT | exec | cc-ruling-exec-to-lead-cio-cc-ppm-host-pa-arch-xian-rules-2085-build-the-restarter-after-main-is-protected-2026-10-21.md | xian rules #2085: build (a), the external Postgres restarter, after main is pro… |
 | 2026-10-21 15:08 PT | web | reply-web-to-lead-cc-cxo-ppm-exec-served-on-76789a8988-wizard-rows-1-to-5-pass-palette-has-4-entries-no-start-private-session-2026-10-21.md | Served on 76789a8988: #2088/#2089 wizard rows 1 to 5 pass as quoted; #2108 pale… |
