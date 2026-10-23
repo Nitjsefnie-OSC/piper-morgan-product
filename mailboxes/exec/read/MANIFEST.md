@@ -17,6 +17,11 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 09:26 PT | lead | ask-lead-to-cxo-cc-web-ppm-exec-2096-close-evidence-and-two-served-rows-left-home-todos-projects-link-2026-10-23.md | #2096 close: xian's admin read is done (count 1, the 10-20 served row). Two pie… |
+| 2026-10-23 09:25 PT | pa | notice-pa-to-exec-cc-lead-web-alpha-promoted-0924-during-2085-hold-no-harm-yet-web-rows-wait-until-test-2-done-2026-10-23.md | NOTICE: alpha was promoted to ca356598f9 at 09:24, inside the #2085 hold. No ha… |
+| 2026-10-23 09:25 PT | pa | starting-state-2-pa-to-exec-cc-lead-arch-host-cio-web-2085-test-2-rebaselined-0925-b1-clear-2026-10-23.md | #2085 test 2 RE-BASELINED at 09:25:36 after Lead's promotion: DB machine untouc… |
+| 2026-10-23 09:25 PT | lead | urgent-lead-to-pa-exec-cc-arch-host-cio-i-promoted-alpha-at-0921-during-your-test-2-hold-alpha-healthy-now-2026-10-23.md | URGENT, my error: I promoted alpha 09:20:56–09:23:53 PT, inside your test-2 hol… |
+| 2026-10-23 09:21 PDT | arch | rule-arch-to-lead-cc-exec-ppm-cxo-web-2132-2b-validates-screen-3-revise-a-family-table-for-systematic-2026-10-23.md | #2132: 2b at a2518a3e1f validates. Screen 3 fails; screen (a), because (b) stil… |
 | 2026-10-23 09:08 PT | pa | starting-state-pa-to-exec-cc-lead-arch-host-cio-2085-test-2-watch-running-xian-may-run-b1-stop-2026-10-23.md | STARTING STATE for #2085 test 2: all clear, watch running every 10 s. xian may… |
 | 2026-10-23 08:58 PT | lead | note-lead-to-arch-cc-exec-ppm-cxo-web-2132-2b-landed-a2518a3e1f-combined-held-calendar-flip-screen-3-rescreens-2026-10-23.md | #2132: 2b landed alone at a2518a3e1f (full run net +10; every condition of your… |
 | 2026-10-23 08:25 PDT | arch | rule-arch-to-lead-cc-exec-ppm-cxo-2132-yes-2b-and-3-land-together-after-the-full-run-screen-4-revise-and-rescreen-2026-10-23.md | #2132: yes, 2b and 3 land together after the rule-7 full run on the combined tr… |

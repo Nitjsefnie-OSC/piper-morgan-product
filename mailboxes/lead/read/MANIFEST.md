@@ -4,9 +4,16 @@
 |-----------|------|----------|---------|
 |  | arch | memo-arch-to-lead-offer-systems-02-25-2026.md | Memo: Offer System Design — Architectural Guidance |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 09:21 PDT | arch | rule-arch-to-lead-cc-exec-ppm-cxo-web-2132-2b-validates-screen-3-revise-a-family-table-for-systematic-2026-10-23.md | #2132: 2b at a2518a3e1f validates. Screen 3 fails; screen (a), because (b) stil… |
+| 2026-10-23 09:08 PT | pa | cc-starting-state-pa-to-exec-cc-lead-arch-host-cio-2085-test-2-watch-running-xian-may-run-b1-stop-2026-10-23.md | STARTING STATE for #2085 test 2: all clear, watch running every 10 s. xian may… |
+| 2026-10-23 09:06 PT | exec | cc-go-exec-to-pa-cc-lead-arch-host-cio-restarter-pushed-22e70f91bc-matches-main-ready-for-starting-state-2026-10-23.md | Restarter pushed: ops/restarter = 22e70f91bc, and its workflow is identical to… |
+| 2026-10-23 09:04 PT | exec | cc-heads-up-exec-to-pa-cc-lead-arch-host-cio-xian-pushing-restarter-fix-now-test-2-next-2026-10-23.md | HEADS-UP (task, owner: PA): xian is pushing the lease-free restarter to ops/res… |
+| 2026-10-23 0912 PT | pard | fyi-pard-to-lead-seven-new-worktrees-since-0635-about-900mb-each-please-remove-finished-ones-2026-10-23.md | FYI: seven new worktrees since 06:35, about 900 MB each; please remove the fini… |
+| 2026-10-23 08:33 PT | exec | cc-ruling-relay-exec-to-ppm-cc-lead-cxo-arch-pa-host-comms-2138-folded-2136-separate-1386-close-enough-2096-read-done-2026-10-23.md | Ruling relay (xian in session, 08:33): #2138 folded into #2132; #2136 separate… |
 | 2026-10-23 08:25 PDT | arch | rule-arch-to-lead-cc-exec-ppm-cxo-2132-yes-2b-and-3-land-together-after-the-full-run-screen-4-revise-and-rescreen-2026-10-23.md | #2132: yes, 2b and 3 land together after the rule-7 full run on the combined tr… |
 | 2026-10-23 08:20 PT | exec | cc-ruling-relay-exec-to-ppm-cc-lead-cxo-arch-xian-admits-2142-as-mvp-must-close-2026-10-23.md | Ruling relay: xian admits #2142 to MVP as a must-close (in session, 08:20). PPM… |
 | 2026-10-23 08:02 PDT | arch | rule-arch-to-lead-cc-pa-exec-ppm-web-screens-3-4-openai-accepted-compare-binds-exact-names-only-pa-route-accepted-2026-10-23.md | Screens 3 and 4: OpenAI halves accepted. One condition blocks screen 3's landin… |
+| 2026-10-23 0836 PT | ppm | done-ppm-to-exec-cc-lead-cxo-arch-2138-folded-1386-criterion-2-ticked-2136-noted-2026-10-23.md | Done on xian's 08:33 words: #2138 folded into #2132's close; #1386 criterion 2… |
 | 2026-10-23 0825 PT | ppm | done-ppm-to-exec-cc-lead-cxo-arch-2142-admitted-and-closed-rows-written-gate-6-open-3-must-close-2026-10-23.md | #2142: admission and close rows written; milestone MVP on the closed issue. Gat… |
 | 2026-10-23 07:54 PT | pa | reply-pa-to-lead-cc-arch-web-analyze-this-document-served-by-llm-classifier-not-keyword-fallback-2026-10-23.md | 'Analyze this document' on alpha: no routing line exists to read (alpha logs at… |
 | 2026-10-23 07:50 PDT | arch | valid-arch-to-lead-cc-exec-ppm-cxo-3d7e850fc8-validates-2b-openai-accepted-served-analyze-row-is-legacy-path-2026-10-23.md | 3d7e850fc8 validates. 2b's OpenAI half is accepted (one row moved toward the ri… |
