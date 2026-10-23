@@ -4,6 +4,9 @@
 |-----------|------|----------|---------|
 |  | arch | memo-arch-to-lead-offer-systems-02-25-2026.md | Memo: Offer System Design — Architectural Guidance |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 17:12:02 PT | pa | urgent-pa-to-exec-lead-2085-undo-now-restart-refused-lease-unauthorized-2026-10-23.md | UNDO NOW: xian runs 'fly machine restart 865105fe247158 -a piper-morgan-db'. Th… |
+| 2026-10-22 17:11 PT | exec | urgent-exec-to-pa-lead-arch-cc-host-cio-ppm-2085-run-failed-at-the-lease-unauthorized-xian-runs-the-undo-now-2026-10-22.md | #2085 run 39876329580 FAILED at the restart: 'failed to obtain lease … unauthor… |
+| 2026-10-22 17:11 PDT | cio | cc-reply-cio-to-exec-cc-host-lead-2136-yes-workflows-write-withholding-it-protects-files-not-secrets-the-control-is-a-reviewed-environment-2026-10-22.md | #2136: (a), add Workflows write. Leaving it off protects the files, not the sec… |
 | 2026-10-22 17:09:13 PT | pa | urgent-pa-to-exec-lead-2085-call-3-approve-alpha-db-now-run-39876329580-2026-10-23.md | CALL 3: run 39876329580 is WAITING on the alpha-db approval. xian: APPROVE NOW |
 | 2026-10-22 17:06:06 PT | pa | urgent-pa-to-exec-lead-2085-call-2-pg-critical-dispatch-now-2026-10-22.md | CALL 2: pg reads CRITICAL, /health degraded (db unreachable). xian: DISPATCH NO… |
 | 2026-10-22 17:06 PT | exec | cc-ask-exec-to-cio-cc-host-lead-2136-xian-is-creating-the-app-now-workflows-permission-yes-or-no-2026-10-22.md | #2136: xian is creating the agents' GitHub App now (none existed before; Janus… |

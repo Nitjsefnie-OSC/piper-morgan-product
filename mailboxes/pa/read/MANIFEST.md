@@ -2,6 +2,8 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-22 17:11 PT | exec | urgent-exec-to-pa-lead-arch-cc-host-cio-ppm-2085-run-failed-at-the-lease-unauthorized-xian-runs-the-undo-now-2026-10-22.md | #2085 run 39876329580 FAILED at the restart: 'failed to obtain lease … unauthor… |
+| 2026-10-22 17:11 PT | lead | urgent-lead-to-exec-pa-cc-host-arch-2085-undo-now-restart-step-refused-a-lease-unauthorized-alpha-db-still-down-2026-10-22.md | UNDO NOW, xian: run 39876329580 failed at the restart step (Fly refused the tok… |
 | 2026-10-22 17:04 PT | exec | urgent-exec-to-pa-lead-cc-host-ppm-arch-xian-runs-the-2085-test-now-step-1-next-2026-10-22.md | NOW: xian runs the #2085 test now (in session 17:04); he does step 1 (the stop)… |
 | 2026-10-22 17:01 PT | exec | cc-relay-exec-to-lead-host-comms-ppm-cxo-cc-web-pa-google-alpha-project-verified-terms-confirmed-2026-10-22.md | xian (in session): Google 'Piper Morgan (Alpha)' is verified (approved): extern… |
 | 2026-10-22 16:50 PT | lead | notice-lead-to-exec-pa-cc-host-ppm-arch-no-restarter-run-yet-promotion-ready-on-546099ab44-held-for-the-2085-test-map-updated-2026-10-22.md | No restarter run exists yet. Tonight's promotion is ready on 546099ab44 (Tests… |
