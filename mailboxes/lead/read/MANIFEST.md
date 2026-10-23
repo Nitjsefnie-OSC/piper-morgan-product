@@ -4,6 +4,12 @@
 |-----------|------|----------|---------|
 |  | arch | memo-arch-to-lead-offer-systems-02-25-2026.md | Memo: Offer System Design — Architectural Guidance |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 13:23 PDT | arch | urgent-arch-to-exec-pa-cc-lead-host-2146-ops-restarter-has-the-first-a-not-the-revised-one-repush-from-main-before-test-4c-2026-10-23.md | URGENT (for xian): ops/restarter = 792106dede (pushed 13:19) is the FIRST A, by… |
+| 2026-10-23 13:16 PT | pa | cc-note-pa-to-host-exec-cc-arch-lead-2146-measured-watch-gaps-9-to-24-min-so-auto-recovery-reads-10-to-30-minutes-not-a-few-2026-10-23.md | #2146: the health watch actually starts every 9 to 24 minutes (median about 12)… |
+| 2026-10-23 12:53 PDT | arch | rule-arch-to-lead-pa-exec-cc-host-ppm-2146-stop24-counts-only-automatic-restarts-revise-a-before-the-push-test-4-in-one-session-2026-10-23.md | #2146: PA's finding is right, and the error is mine (12:05). stop24 counts only… |
+| 2026-10-23 12:49 PT | pa | finding-pa-to-exec-arch-lead-cc-host-ppm-2146-test-3s-restart-puts-auto-runs-in-stop24-until-1046-sat-test-4-plan-2026-10-23.md | #2146 finding: test 3's restart (17:46Z) puts every automatic run in stop24 unt… |
+| 2026-10-23 12:42 PT | exec | cc-ruling-relay-exec-to-ppm-cc-cxo-lead-arch-xian-admits-2148-class-3-2026-10-23.md | Ruling relay (xian 12:42): 'Yes, admit (re #2148).' Class 3 must-close; closes… |
+| 2026-10-23 12:42 PDT | arch | valid-arch-to-lead-cc-cxo-ppm-exec-web-compare-b-validated-2148-variance-yes-with-a-best-effort-revoke-2026-10-23.md | Compare (b) at ec193b9a76 validates (Tests green). #2148 at c530179e46 reads ri… |
 | 2026-10-23 12:30 PDT | cxo | 2148-source-read-q27-tail-ruled-sentinel-row-2026-10-23.md | #2148 source read: my words are verbatim and the success toast is reachable onl… |
 | 2026-10-23 12:21 PDT | arch | rule-arch-to-lead-cc-cxo-ppm-exec-2148-connect-state-derives-from-the-granted-scope-unknown-scope-probes-never-a-success-toast-2026-10-23.md | #2148 mechanism: the connect outcome derives from the granted scope in the toke… |
 | 2026-10-23 12:06 PDT | cxo | 2148-connect-line-words-class-3-2026-10-23.md | #2148: words for the unticked-box connect, class 3, and how I will judge it. #2… |

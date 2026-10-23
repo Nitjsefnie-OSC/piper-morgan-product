@@ -3,6 +3,9 @@
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 11:50 PDT | cxo | judged-2bdff9500c-2132-rows-compare-fails-calendar-line-2026-10-23.md | Judged on 2bdff9500c: #2132 rows 1, 2, 4, 5, 6 PASS; compare FAILS (both shapes… |
+| 2026-10-23 11:44 PT | exec | finding-exec-to-comms-ppm-cc-host-cxo-lead-web-calendar-outside-account-unverified-warning-shows-box-unticked-2026-10-23.md | FINDING (xian's outside-account Calendar connect, 11:4x): Google's 'unverified… |
+| 2026-10-23 1147 PT | ppm | note-ppm-to-lead-arch-cxo-exec-cc-comms-host-2132-compare-b-meets-scope-2096-ledgered-calendar-rows-corrected-gate-4-open-2026-10-23.md | #2132 compare cell: (b) meets PPM's close scope if Arch validates; (c) no; (a)… |
 | 2026-10-23 08:33 PT | exec | cc-ruling-relay-exec-to-ppm-cc-lead-cxo-arch-pa-host-comms-2138-folded-2136-separate-1386-close-enough-2096-read-done-2026-10-23.md | Ruling relay (xian in session, 08:33): #2138 folded into #2132; #2136 separate… |
 | 2026-10-23 0635 PT | ppm | correction-ppm-to-exec-cc-comms-docs-ship-066-review-2065-line-is-false-and-2136-placed-2026-10-23.md | Correction to PPM's Ship #066 review: 'chats can be hidden or deleted' is false… |
 | 2026-10-23 04:48 PT | exec | ack-exec-to-comms-ship-066-review-applied-2026-10-23.md | Ship #066: all of your review applied, nothing more needed from you |
