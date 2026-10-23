@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-10-22 15:28 PDT
+last_updated: 2026-10-22 21:28 PDT
 currency_claim: rewritten at substantive-change boundaries, verified at every START
 max_age_days: 4
 ---
@@ -33,12 +33,28 @@ description**: this carry-forward + session logs + commits are the current state
 job shrinks to orientation once it ages. **Don't try to keep the handoff itself fresh** — that was
 named directly as the wrong instinct ("I would rather your handoff go stale than your seat idle").
 
-- **10-22** (alpha `ded184e4ad`, promoted 13:31; main went red on `09bd04a446` from #2131's tests, fixed at `1de2cff5ec`, Tests pending at 15:28; full detail in the 10-22 log and decisions.log):
-  - **Restarter #2085:** the token is stored (13:38). `checks list` was refused, because a listing needs the zero ID, which a one-machine set can't hold. Guard 1b now reads the one machine by GET (`64d611798e`, Arch YES). It's on `ops/restarter` by xian's hand, and the main copy is at `620106a405`. **The attended close test is at 16:30:** guard 1b must print `critical`. If it prints `absent`, the narrowed GET was refused: Arch's caveat question. Lease and restart under `rC` are verified only by that test.
-  - **Validated:** #2125 (Arch side), #2127/#2128 code, #1524, the GitHubReadFailed unify, #2134 (+ edge), the #2135 tripwire. **#2131:** validated from source; Tests is green only once `1de2cff5ec` passes.
-  - **#2127 FAILS served** (CXO, OpenAI-only account). Ruled: availability = the providers the request bound ∩ consent, never the server slots or env. PA is confirming from alpha's log and the key names. Lead builds.
-  - **Rulings in flight (Lead builds):** #2132/#2133 route by corpus rows. A deictic document resolves only to a bound referent, never Notion's top hit; CXO calls that Class 3, and PPM places it. #2135 is dormant (an ADR-053 amendment is needed to wire it).
-  - **Own misses 10-22:** two guessed timestamps; the 10-21 "caveat allows every read" claim (not true for listings); "the main copy runs" (it's the branch copy).
+- **10-22, closed at 21:27** (alpha `ac3c7581ff`, healthy; Tests green on `07c6f2b43a`; Code Quality green 04:19Z; full detail in the 10-22 log and decisions.log):
+  - **#2085 restarter: OPEN.**
+    - Run 39876329580 (17:08): guards 1a, 1b (`critical` under the narrowed token, live), 2 and 3 passed. **The restart was refused at the lease** (`machineAcquireLease`, unauthorized). xian's undo took about 7 min.
+    - Ruled route (1): a Machines API POST `/restart` with no lease and no new token. Built at `a1bda537c0` on main; Arch said YES; Tests green on `f3751c4ee2`.
+    - **Waiting on xian:** his push to `ops/restarter` (still `64d611798e` at 21:27), then the second attended test.
+    - Pass: `restart accepted: HTTP 2xx`, verify healthy within 3 min, alert comment posts. On 401/403: the pre-ruled fallback, re-mint `rwC` on 865105fe247158 only (HOST approved at 17:16).
+    - Copy nit for the next change: the `000` message's "database is still down".
+  - **#2132 (+#2138 folded, pending xian's word): OPEN, must-close.**
+    - Lead's lane failed rule 7: six unrelated rows flipped ×6.
+    - **Ruled:** (i) the handler-only split first, no rule 7 (held file via `FileResolver`, the `title` arg from `inversion_args`, CXO's lines). Then single-variable catalog screens, smallest first: an `ACTION_EXAMPLES` example → the description → narrowing `analyze_data` last. New ops (`compare_documents`, the batch decline) land separately.
+    - Lead builds at 10-23 START. **Arch reads the (i) diff.**
+  - **Ruled today, waiting on builds:**
+    - #2139: the string is a handler fix that rides with (i); routing is a catalog screen; document screens report both providers, OpenAI gating before OpenAI is named.
+    - #2142: render context by each item's source tag, per-source counts. Small; it can ride with (i).
+    - #2135: dormant, with the tripwire landed.
+  - **Closed or validated today:** #2125 (Arch side), #2127 (served close by CXO), #2128 (closed), #1524 (closed), #2131 (closed on PA's zero), #2134 (+edge), the GitHubReadFailed unify, the #2135 tripwire. #2129's PR label is served at `ac3c7581ff`.
+  - **Own misses 10-22:**
+    - guessed stamps, four times, all caught before anyone acted;
+    - the 10-21 "caveat allows every read" (not true for listings);
+    - "the main copy runs" (the branch copy does);
+    - **16:33 "chat carries no file context"**: one mechanism read as all; `FileResolver` is the path.
+    - Practice: search every path to a resource before claiming its absence.
 - **10-21** (alpha healthy on `76789a8988`, quiet shape served; Code Quality success `f953223f78`, Tests success `f4e8ad46d1`; full detail in the 10-21 log and decisions.log):
   - **Quiet count (grant condition 3): closed.** The fail-opens were fixed, CIO's boolean shape `{quiet, record_failed_in_window}` is served, and the promote step read it on run 39683038998 (validated from its executed lines). The health refusal `97f4dbda1d` is in. Ruled: no degraded-but-up exception; `quiet_override` covers a forward fix.
   - **#2124 / #2085 (alpha DB died ~11:19):** a kernel OOM kill of Postgres on a 256 MB VM (my hypothesis, confirmed by PA's dmesg; Monday was the same). Memory is now 512 MB. Fly's restart policy is already `always` and can't fire: postgres-flex runs Postgres without restart, so the machine never exits. xian (15:11): #2085 is a must-close; build the external restarter. **The restarter `33573ddb7d` is validated** on all three guards (1b `critical` only, the parser run on the live checks JSON; guard 2 fails closed, and a restart that ran at all counts; best-effort capture). It's pushed to `ops/restarter`. Ruled no fork of postgres-flex.
