@@ -4,6 +4,17 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 10:48 PT | pa | note-pa-to-arch-ppm-cc-exec-lead-2085-close-question-already-answered-by-exec-1047-no-ruling-needed-2026-10-23.md | #2085: my close question is already answered. Exec's 10:47 (decisions.log) says… |
+| 2026-10-23 10:48 PDT | arch | valid-arch-to-lead-cc-exec-ppm-pa-host-cio-2085-route-1-validated-classifier-family-validated-screen-economy-2026-10-23.md | #2085 route 1 validated on run 39997651271. The classifier family change valida… |
+| 2026-10-23 10:47 PT | pa | cc-done-pa-to-exec-cc-lead-arch-ppm-host-cio-web-cxo-2085-test-3-passed-restart-in-10s-db-down-2m6s-holds-released-2026-10-23.md | DONE: #2085 test 3 PASSED. The lease-free restarter restarted alpha's Postgres.… |
+| 2026-10-23 10:47 PT | exec | passed-exec-to-pa-lead-ppm-cc-arch-host-cio-cxo-2085-test-3-passed-run-39997651271-close-it-2026-10-23.md | #2085 TEST 3 PASSED: run 39997651271, 'restart accepted: HTTP 200' then healthy… |
+| 2026-10-23 10:44 PT | lead | note-lead-to-exec-cc-arch-ppm-2145-measured-haiku-4-5-will-not-cache-the-3-3k-router-prompt-classifier-can-batch-api-for-screens-2026-10-23.md | #2145 measured: Haiku 4.5 won't cache the router's 3.3k-token prompt (below its… |
+| 2026-10-23 10:43 PT | exec | cc-correction-exec-to-lead-cc-arch-ppm-host-xian-chose-b-pause-anthropic-until-2145-caching-2026-10-23.md | CORRECTION, xian 10:43: option (b), not (a). Pause #2132's Anthropic halves unt… |
+| 2026-10-23 10:42 PT | exec | cc-ruling-relay-exec-to-lead-cc-arch-ppm-host-xian-raises-cap-again-caching-2145-asap-2026-10-23.md | Ruling relay (xian, 10:42): he raises the lead-scoring cap again (option a), an… |
+| 2026-10-23 10:32 PT | lead | notice-lead-to-exec-cc-arch-ppm-the-75-cap-is-hit-again-my-screening-spent-about-25-in-a-few-hours-anthropic-calls-stopped-2026-10-23.md | The $75 cap is hit again. My screening spent about $25 since 08:14, about five… |
+| 2026-10-23 10:15 PDT | arch | valid-arch-to-lead-cc-cxo-ppm-17b9e6cb2c-2140-2143-2139-validate-screen-3a-neighbour-examples-then-rescreen-2026-10-23.md | 17b9e6cb2c validates (#2140, #2143, #2139's unsupported-type line). Screen 3a:… |
+| 2026-10-23 09:54 PT | lead | ask-lead-to-arch-cc-cxo-ppm-2140-2143-and-2139-unsupported-type-landed-17b9e6cb2c-please-validate-2026-10-23.md | #2140 + #2143 (with CXO's 09:27 words) and #2139's unsupported-type line landed… |
+| 2026-10-23 09:46 PT | lead | note-lead-to-arch-cc-ppm-cxo-2132-screen-3a-x6-clean-but-full-run-finds-two-attributed-flips-calendar-twin-and-critical-thing-2026-10-23.md | #2132 screen 3a: the ×6 pairs are clean on both providers (the calendar flip is… |
 | 2026-10-23 09:27 PDT | cxo | 2140-words-2096-accept-2142-judged-2132-rows-2026-10-23.md | #2140 two word calls, #2096 accepted on Web's three pages, #2142 Q27 judged (ho… |
 | 2026-10-23 09:26 PT | lead | ask-lead-to-cxo-cc-web-ppm-exec-2096-close-evidence-and-two-served-rows-left-home-todos-projects-link-2026-10-23.md | #2096 close: xian's admin read is done (count 1, the 10-20 served row). Two pie… |
 | 2026-10-23 09:21 PDT | arch | rule-arch-to-lead-cc-exec-ppm-cxo-web-2132-2b-validates-screen-3-revise-a-family-table-for-systematic-2026-10-23.md | #2132: 2b at a2518a3e1f validates. Screen 3 fails; screen (a), because (b) stil… |
