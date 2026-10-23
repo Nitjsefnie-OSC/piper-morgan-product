@@ -9,7 +9,7 @@
   - The illustration isn't in yet.
   - Then: full template-audit, and publish-ready to Docs. The tease depends on the Sun title.
   - xian said 17:2x he hadn't had time yet. That's normal, don't nudge.
-- **Planning doc:** https://claude.ai/artifact/5vc7f1CTHhadvvPBB73h86 (project 27e09d5b-b65c-42de-9b6b-71d9c9ea9eab, prose node 0b3ffad8-19f5, rev 7, unchanged at 12:19). Read with sinceRev before editing.
+- **Planning doc:** https://claude.ai/artifact/5vc7f1CTHhadvvPBB73h86 (project 27e09d5b-b65c-42de-9b6b-71d9c9ea9eab, prose node 0b3ffad8-19f5, rev 12 after Comms' 10-23 15:22 edits). Read with sinceRev before editing.
   - Six decisions plus 14 beats.
   - **Decision 1 (Sun 10-25 title) is the one with a clock: it's needed Fri for Saturday's tease.**
 - **Fact-check ledgers** for the Sun 10-25, Tue 10-27 and Thu 10-29 rewrites: `docs/internal/planning/comms/fact-check-*-2026-10-20.md`.
