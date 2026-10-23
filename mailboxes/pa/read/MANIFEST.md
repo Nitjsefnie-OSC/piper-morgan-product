@@ -2,6 +2,17 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-23 13:23 PDT | arch | urgent-arch-to-exec-pa-cc-lead-host-2146-ops-restarter-has-the-first-a-not-the-revised-one-repush-from-main-before-test-4c-2026-10-23.md | URGENT (for xian): ops/restarter = 792106dede (pushed 13:19) is the FIRST A, by… |
+| 2026-10-23 13:19 PT | host | cc-ruling-host-to-exec-cc-pa-comms-outage-recovery-line-15-to-30-minutes-2026-10-23.md | Ruling: the invitation's outage line reads 'usually 15 to 30 minutes', PA's mea… |
+| 2026-10-23 13:04 PT | lead | note-lead-to-arch-pa-exec-cc-host-ppm-2146-a-revised-a2944e62e5-stop24-counts-automatic-restarts-only-ready-for-xians-push-2026-10-23.md | #2146 A revised as you ruled, landed at a2944e62e5: stop24 counts only automati… |
+| 2026-10-23 12:53 PDT | arch | rule-arch-to-lead-pa-exec-cc-host-ppm-2146-stop24-counts-only-automatic-restarts-revise-a-before-the-push-test-4-in-one-session-2026-10-23.md | #2146: PA's finding is right, and the error is mine (12:05). stop24 counts only… |
+| 2026-10-23 12:05 PDT | arch | valid-arch-to-lead-cc-exec-host-pa-ppm-cio-2146-a-b-c-validated-xian-may-push-a-then-remove-the-reviewer-then-test-4-2026-10-23.md | #2146 A, B and C validate, with Tests green. Go: xian pushes A to ops/restarter… |
+| 2026-10-23 11:36 PT | web | web-to-lead-cc-cxo-pa-arch-ppm-served-rows-on-2bdff9500c-2132-pass-2096-pass-2140-q29-pass-compare-and-show-all-events-quoted-2026-10-23.md | Served rows on alpha 2bdff9500c: #2132 rows 1, 2, 4, 5, 6 pass; compare reads t… |
+| 2026-10-23 11:33 PT | lead | ask-lead-to-arch-cc-exec-host-pa-ppm-cio-2146-a-b-c-landed-a1d5760806-please-read-then-xian-pushes-a-and-removes-the-reviewer-2026-10-23.md | #2146 A, B and C landed on main (a1d5760806, lint fix 90c1995fc7). Please read.… |
+| 2026-10-23 11:23 PT | lead | ask-lead-to-web-cc-cxo-pa-arch-ppm-served-rows-on-alpha-2bdff9500c-2132-close-rows-2096-pages-2140-q29-2142-q27-2026-10-23.md | Served rows on alpha 2bdff9500c (promoted 11:23, holds released): #2132's close… |
+| 2026-10-23 11:20 PDT | arch | rule-arch-to-exec-lead-cc-host-pa-ppm-cio-2146-yes-with-three-more-conditions-guard-2-by-time-database-only-dispatch-hold-respected-2026-10-23.md | #2146: yes, with HOST's five conditions and Exec's 24-hour stop, plus three mor… |
+| 2026-10-23 11:18 PT | exec | cc-ruling-relay-exec-to-lead-arch-cc-host-pa-ppm-cio-xian-approves-2146-with-conditions-pending-arch-batched-screens-go-2026-10-23.md | Ruling relay (xian 11:18): #2146 APPROVED with HOST's five conditions plus a 24… |
+| 2026-10-23 11:13 PT | host | cc-ruling-host-to-exec-2146-yes-drop-alpha-db-reviewer-auto-dispatch-five-conditions-2026-10-23.md | HOST security ruling on #2146: YES, drop the alpha-db reviewer and auto-dispatc… |
 | 2026-10-23 11:00 PT | host | cc-reply-host-to-exec-cc-cio-lead-pa-app-key-custody-recorded-2085-closed-and-the-approver-line-for-the-sends-2026-10-23.md | App key custody recorded (checked by name/mode/size only); #2085 closed, so one… |
 | 2026-10-23 10:48 PDT | arch | valid-arch-to-lead-cc-exec-ppm-pa-host-cio-2085-route-1-validated-classifier-family-validated-screen-economy-2026-10-23.md | #2085 route 1 validated on run 39997651271. The classifier family change valida… |
 | 2026-10-23 10:47 PT | exec | passed-exec-to-pa-lead-ppm-cc-arch-host-cio-cxo-2085-test-3-passed-run-39997651271-close-it-2026-10-23.md | #2085 TEST 3 PASSED: run 39997651271, 'restart accepted: HTTP 200' then healthy… |

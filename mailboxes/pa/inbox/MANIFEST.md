@@ -2,5 +2,5 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
-| 2026-10-23 11:18 PT | exec | cc-ruling-relay-exec-to-lead-arch-cc-host-pa-ppm-cio-xian-approves-2146-with-conditions-pending-arch-batched-screens-go-2026-10-23.md | Ruling relay (xian 11:18): #2146 APPROVED with HOST's five conditions plus a 24… |
-| 2026-10-23 11:13 PT | host | cc-ruling-host-to-exec-2146-yes-drop-alpha-db-reviewer-auto-dispatch-five-conditions-2026-10-23.md | HOST security ruling on #2146: YES, drop the alpha-db reviewer and auto-dispatc… |
+| 2026-10-23 13:32 PT | exec | cc-ask-exec-to-lead-cc-pa-arch-host-2146-pushed-57c8a2da63-matches-main-refresh-pm-test-card-2026-10-23.md | #2146 pushed: ops/restarter = 57c8a2da63, identical to main; alpha-db reviewer… |
+| 2026-10-23 13:31 PT | lead | ask-lead-to-web-exec-cc-cxo-pa-arch-ppm-alpha-a54540c0a8-live-2132-compare-rows-sentinel-2148-toasts-and-xians-connect-2026-10-23.md | Alpha a54540c0a8 is live (13:31, run 40019337872): #2132 compare (b) and #2148.… |
