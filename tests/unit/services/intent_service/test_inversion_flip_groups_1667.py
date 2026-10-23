@@ -337,7 +337,9 @@ class TestFlipGroupDeclaration:
         # sweep could silently make it live before the ops it resolves into
         # are. One named exception, not a weakened invariant: any OTHER
         # ungrouped READ op still fails this assertion.
-        expected_ungrouped = {"clear_todos"}
+        # compare_documents (#2132 option (b), 2026-10-23): router-hidden by
+        # construction (router_visible=False), so it can never hold a flip group.
+        expected_ungrouped = {"clear_todos", "compare_documents"}
         ungrouped_reads = {
             k for k, e in rail.items() if e.effect == EffectClass.READ and e.flip_group is None
         }
@@ -632,7 +634,9 @@ class TestLiveConsultSurfaces:
         named exception, stated denominator: 1 of 94 READ rail keys."""
         rail = get_action_workflows()
         read_keys = {k: e for k, e in rail.items() if e.effect == EffectClass.READ}
-        expected_ungrouped = {"clear_todos"}
+        # compare_documents (#2132 option (b), 2026-10-23): router-hidden by
+        # construction (router_visible=False), so it can never hold a flip group.
+        expected_ungrouped = {"clear_todos", "compare_documents"}
         ungrouped = {k for k, e in read_keys.items() if e.flip_group is None}
         assert ungrouped == expected_ungrouped, (
             f"{len(ungrouped)}/{len(read_keys)} READ keys ungrouped, expected only "
@@ -932,8 +936,12 @@ class TestFlipCoverageAudit:
         unassigned = [
             k for k, e in rail.items() if e.effect == EffectClass.READ and e.flip_group is None
         ]
-        assert unassigned == ["clear_todos"], f"expected only clear_todos, found: {unassigned}"
-        assert "UNASSIGNED — the 1 READ keys NO WAVE CAN FLIP, by name" in report
+        # compare_documents: router-hidden (#2132 option (b)), so never flip-grouped.
+        assert unassigned == [
+            "clear_todos",
+            "compare_documents",
+        ], f"expected only clear_todos and compare_documents, found: {unassigned}"
+        assert "UNASSIGNED — the 2 READ keys NO WAVE CAN FLIP, by name" in report
         for op in unassigned:
             assert op in report, f"unassigned op {op} missing from --audit output"
 

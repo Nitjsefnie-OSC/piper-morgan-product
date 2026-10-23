@@ -286,7 +286,13 @@ def derive_routing_grammar() -> RoutingGrammar:
     ops: list[RoutingOperation] = []
     by_entry_id: dict[int, dict] = {}
     order: list[int] = []
+    hidden: set[str] = set()
     for key, entry in workflows.items():  # dict preserves registration order
+        # #2132 option (b): a router-hidden entry adds no op and no catalog text; its
+        # keys are still "covered" so the registry pass below never re-adds them.
+        if not getattr(entry, "router_visible", True):
+            hidden.add(key)
+            continue
         rec = by_entry_id.get(id(entry))
         if rec is None:
             by_entry_id[id(entry)] = {"canonical": key, "aliases": [], "entry": entry}
@@ -294,7 +300,7 @@ def derive_routing_grammar() -> RoutingGrammar:
         else:
             rec["aliases"].append(key)
 
-    covered: set[str] = set()
+    covered: set[str] = set(hidden)
     alias_to_canonical: dict[str, str] = {}
     for eid in order:
         rec = by_entry_id[eid]

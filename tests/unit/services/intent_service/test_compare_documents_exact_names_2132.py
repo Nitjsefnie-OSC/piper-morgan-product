@@ -55,7 +55,25 @@ class TestEntry:
         assert entry.effect == EffectClass.READ
         assert entry.outwardness == Outwardness.PRIVATE
         assert entry.action_triggered is True
-        assert entry.flip_group == get_action_workflows()["analyze_document"].flip_group
+        # option (b): a rail entry for the classifier, off the router's grammar
+        assert entry.router_visible is False and entry.flip_group is None
+
+    def test_compare_adds_nothing_to_the_router_catalog(self):
+        from services.intent_service.inversion_router import derive_routing_grammar
+
+        names = {op.name for op in derive_routing_grammar().operations}
+        assert "compare_documents" not in names
+
+    def test_a_hidden_entry_cannot_hold_a_flip_group(self):
+        from services.intent_service.workflow_dispatcher import WorkflowEntry
+
+        with pytest.raises(ValueError):
+            WorkflowEntry(
+                entry_point=run_compare_documents_workflow,
+                effect=EffectClass.READ,
+                router_visible=False,
+                flip_group="read_referent",
+            )
 
     def test_cxo_words_are_exact(self):
         assert NO_TWO_DOCUMENTS_LINE == CXO_COMPARE_LINE

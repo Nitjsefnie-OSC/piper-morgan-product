@@ -3605,13 +3605,9 @@ def register_default_workflows() -> None:
     # stored bytes + one LLM comparison rendered back; nothing is written
     # (document_handlers.handle_compare_documents).
     # outwardness: PRIVATE — rendered to the asking user in their own chat.
-    # flip_group: read_referent — by analogy with analyze_document (the
-    # neighbour it mirrors): grouped by what it must RESOLVE (two bound files),
-    # not by what it emits. ⚠️ read_referent is LIVE (CURRENT_LIVE_CATEGORIES in
-    # scripts/inversion_phase3_deletion_gate.py), so this widens a live group:
-    # the router can land this op on alpha from the deploy that carries it.
-    # The rule-7 full run and the Phase-2 gate for the widened group are the
-    # Lead's, before promotion.
+    # Router-hidden (#2132 option (b), 10-23): each compare op text screened on the
+    # router moved a calendar or priority neighbour, so compare stays off the router
+    # grammar; the legacy classifier's compare_documents lands here on the rail.
     compare_documents_entry = WorkflowEntry(
         entry_point=run_compare_documents_workflow,
         effect=EffectClass.READ,
@@ -3624,7 +3620,9 @@ def register_default_workflows() -> None:
         ),
         requires_context=["intent"],
         action_triggered=True,
-        flip_group="read_referent",
+        # #2132 option (b): off the router (each compare text screened moved a neighbour,
+        # 10-23); the legacy classifier already emits compare_documents.
+        router_visible=False,
     )
 
     # RECONNECT #1327 build #2: conversational "what's my default repo" — the read

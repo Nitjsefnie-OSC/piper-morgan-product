@@ -4584,22 +4584,6 @@ HAND_ROWS = [
         "source": "issue-2132 Web served alpha fc183c41bc 2026-10-22",
         "notes": "the title arg is a later screened change (Arch 10-23); this row checks the op only",
     },
-    # 2026-10-23 (Lead) — #2132 screen 3a (Arch 10-23): compare asks are the compare op, which
-    # reads only files named exactly; never analyze_data.
-    {
-        "phrase": "Compare these two documents",
-        "category": "ANALYSIS",
-        "expected": "action:compare_documents",
-        "source": "issue-2132 Q37 #1386 Run 1 alpha 76789a8988 2026-10-22 (served analyze_data repo metrics)",
-        "notes": "compare_documents reads only files named exactly (Arch 10-23); else CXO's line",
-    },
-    {
-        "phrase": "Compare the two files I uploaded",
-        "category": "ANALYSIS",
-        "expected": "action:compare_documents",
-        "source": "issue-2132 compare ask (Arch 15:05)",
-        "notes": "names no file, so nothing binds and the op answers CXO's line",
-    },
 ]
 
 

@@ -593,8 +593,19 @@ class WorkflowEntry:
     # #1677 named-WRITE flip allowlist key (Arch ruling 2026-08-25). See the
     # FLIP_WRITE_ALLOWLIST block above; validated in __post_init__ below.
     flip_write_allowlist_key: Optional[str] = None
+    # #2132 (Lead's option (b), 2026-10-23): False keeps this entry OFF the router's
+    # grammar (derive_routing_grammar skips it and its aliases), so it adds no catalog
+    # text; the legacy classifier's action still dispatches to it on the rail. The
+    # alias principle (input-side only) applied to a whole entry. A hidden entry
+    # cannot hold a flip group: a flip group means the ROUTER may dispatch it.
+    router_visible: bool = True
 
     def __post_init__(self) -> None:
+        if not self.router_visible and self.flip_group is not None:
+            raise ValueError(
+                "a router-hidden WorkflowEntry cannot hold a flip_group "
+                f"({self.flip_group!r}): the router never sees it, so it can never flip"
+            )
         """Reject an unrepresentable flip declaration LOUDLY, at construction.
 
         Three rejections, all at the earliest possible moment (import of
