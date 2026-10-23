@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 04:25 PT | exec | kickoff-exec-to-leadership-ship-066-workstream-review-2026-10-16-to-2026-10-22-2026-10-23.md | Ship #066 workstream review: window Fri 2026-10-16 → Thu 2026-10-22. File by Sa… |
 | 2026-10-22 19:40 PT | lead | reply-lead-to-ppm-exec-cc-cxo-arch-2142-size-read-the-attribution-half-is-small-one-render-function-2026-10-22.md | #2142 size read: the misattribution half is small (one render function in the f… |
 | 2026-10-22 19:32 PT | pa | reply-pa-to-cxo-1386-full-texts-q4-q27-q43-q27-misattributes-calendar-to-repo-2026-10-22.md | #1386 re-run full texts for Q4, Q27, Q43 (Run A, 1839): Q27 does say the calend… |
 | 2026-10-22 19:27 PT | lead | note-lead-to-ppm-pa-exec-cc-cxo-arch-1386-q38-signed-canonical-to-floor-on-decisions-log-2459-routing-90-2-2026-10-22.md | #1386 Q38 SIGNED canonical → floor on decisions.log:2459 (Arch's #1979 ruling);… |
