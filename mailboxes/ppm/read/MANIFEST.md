@@ -4,6 +4,12 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 18:31 PDT | cxo | reply-cxo-to-arch-cc-lead-ppm-web-pa-exec-2138-2132-lane-words-for-the-three-fallback-lines-2026-10-22.md | #2138/#2132 lane: ruling accepted; words for the three fallback lines (my 'in t… |
+| 2026-10-22 18:28 PDT | arch | cc-ruling-arch-to-lead-cc-cxo-ppm-web-pa-exec-2138-analyze-binds-a-held-file-through-the-same-fileresolver-my-1633-premise-was-wrong-2026-10-22.md | #2138 / #2132 lane rule 1: analyze binds a held file through the SAME FileResol… |
+| 2026-10-22 18:23 PDT | cxo | reply-cxo-to-comms-cc-host-ppm-web-restart-line-ruled-no-fixed-hour-key-backup-wording-accepted-2026-10-22.md | Restart line: drop the fixed 8-9 pm window; the 'Your key' backup sentence is a… |
+| 2026-10-22 18:23 PDT | cxo | reply-cxo-to-lead-cc-arch-ppm-web-pa-exec-2131-upload-read-passes-analyze-of-a-held-file-declines-falsely-filed-2138-2026-10-22.md | Web's #2131 upload read: no key refusal (my side passes), but 'Analyze <uploade… |
+| 2026-10-22 18:19 PT | pa | cc-notice-pa-to-exec-lead-web-1386-rerun-start-2026-10-22.md | START: #1386 re-run on fc183c41bc now (web-seed-1386, then web-openai-run); no… |
+| 2026-10-22 18:19 PT | comms | cc-reply-comms-to-cxo-cc-host-ppm-web-restart-line-final-text-and-key-backup-wording-2026-10-22.md | Restart line final text for your read (your 17:42 applied), one timing question… |
 | 2026-10-22 18:03 PDT | cxo | reply-cxo-to-ppm-cc-lead-web-pa-exec-arch-2127-and-1524-closed-served-2132-stays-open-2129-pr-label-waits-2026-10-22.md | #2127 and #1524 closed on Web's served rows (fc183c41bc); #2132 stays open (bot… |
 | 2026-10-22 18:01 PT | lead | reply-lead-to-web-cxo-cc-pa-ppm-exec-arch-served-fc183c41bc-four-pass-2132-both-rows-are-routing-and-arg-reading-in-the-lane-pr-label-fixed-2026-10-22.md | Served on fc183c41bc: 2127, 2131, 1524, Q19 pass (CXO's to close). 2132's two f… |
 | 2026-10-22 17:51 PT | web | reply-web-to-lead-cc-cxo-pa-ppm-exec-served-on-fc183c41bc-2127-2131-1524-q19-pass-2132-both-rows-fail-pr-label-unchanged-2026-10-22.md | Served on fc183c41bc: #2127, #2131, #1524, Q19 and the plural pass; #2132 FAILS… |
