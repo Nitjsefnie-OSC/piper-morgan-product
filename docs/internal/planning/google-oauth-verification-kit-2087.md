@@ -49,9 +49,9 @@ Record with the macOS screen recorder (Cmd-Shift-5) or QuickTime. Keep the **add
 2. Go to `https://alpha.pipermorgan.ai` and sign in to the test account.
 3. Open Settings → Integrations, find Google Calendar (not connected), and press **Connect**.
 4. Google's account chooser: pick the account. If the "unverified app" screen appears, show it and continue.
-5. **The consent screen: hold it about 5 seconds.** It must show the app name "Piper Morgan", the logo, and the line for **"See and download any calendar you can access using your Google Calendar"** (Google's wording for `calendar.readonly` as PPM recalls it; whatever calendar line appears is what matters). Press Continue or Allow.
+5. **The consent screen: hold it about 5 seconds.** It must show the app name ("Piper Morgan (Alpha)" in the Alpha project), the logo, and the line for **"See and download any calendar you can access using your Google Calendar"** (Google's wording for `calendar.readonly` as PPM recalls it; whatever calendar line appears is what matters). Press Continue or Allow.
 6. Back in Piper: the Calendar card reads Connected. Press **Test** and show the result.
-7. Open chat and ask "what's on my calendar this week?". Show the reply naming real events from that calendar.
+7. Open chat and ask "what's on my calendar today?". Show the reply naming the test events (10-23 update: "today", not "this week").
 8. Optional, about 10 seconds: Settings → Integrations → Calendar → **Disconnect**, to show the user can revoke.
 
 Upload to YouTube as **Unlisted** (Exec's instruction; the page I read doesn't name a host). Paste the link into the form.
@@ -105,6 +105,14 @@ Notes:
   - **The email scope stays** (to label the connection later). Lane 2092 stops logging the address (`has_email=True/False`). The privacy line: the address is "read to confirm which account connected" until Settings shows it.
 
 - **15:43 (Exec's curl):** the /privacy Google paragraph is live. The homepage seemed to have no Privacy link. **Resolved 15:50 (Web, rendered browser): the footer shows Privacy → /privacy/.** The site renders client-side, so the link isn't in the raw HTML. **§5 is done; submit when ready** (§0 first). If Google's reviewer reports the homepage link missing, the cause is the client-side render, and Web has a sitewide fix ready (about 1 h).
+
+- **10-23 (Exec, after xian's outside-account connect at 11:4x).** The step-by-step reading copy for recording is the artifact built from this kit (`google-oauth-verification-kit-2087.html`). What changed:
+  - **Project:** submit in **"Piper Morgan (Alpha)"** (project number 43539582958), where alpha's Calendar client lives (Lead's 10-22 map). The kit was written before we knew there were two projects. The branding there reads "Piper Morgan (Alpha)", so leave it as is.
+  - **§0 is answered.** A personal Gmail that had never touched alpha saw the full-page "Google hasn't verified this app", then a consent page with a yellow unverified box and the one calendar line ("See and download any calendar you can access…") as a **checkbox that starts unticked**. Tick it on camera. Settings → Test then passed.
+  - **The 10-22 "verified" was branding only.** This submission (data access, sensitive scope) is what removes the warnings.
+  - **Step 7: ask "what's on my calendar today?"** That shows only the account's own test events. "This week" would put real meetings with other people's names into a video Google's reviewers watch. #2091 and #2092 are closed, but "today" is still the safest ask.
+  - **Server render is live** (website `a3cb49f`, 10-19), so the footer's Privacy link is in the raw HTML too.
+  - **Before recording:** disconnect in Piper. Piper's Disconnect also revoked the grant at Google (xian's Linked apps reads empty). Hide the bookmarks bar and turn on Do Not Disturb.
 
 ## Whose part is whose
 
