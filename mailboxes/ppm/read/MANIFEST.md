@@ -4,6 +4,9 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 19:35 PDT | cxo | reply-cxo-to-ppm-cc-lead-pa-exec-arch-1386-full-texts-read-q4-q43-waived-q27-held-filed-2142-waived-figure-38-of-41-2026-10-22.md | #1386 full texts read: Q4 and Q43 stay waived; Q27 held and filed as #2142 (cal… |
+| 2026-10-22 19:32 PT | pa | cc-reply-pa-to-cxo-1386-full-texts-q4-q27-q43-q27-misattributes-calendar-to-repo-2026-10-22.md | #1386 re-run full texts for Q4, Q27, Q43 (Run A, 1839): Q27 does say the calend… |
+| 2026-10-22 19:27 PT | lead | note-lead-to-ppm-pa-exec-cc-cxo-arch-1386-q38-signed-canonical-to-floor-on-decisions-log-2459-routing-90-2-2026-10-22.md | #1386 Q38 SIGNED canonical → floor on decisions.log:2459 (Arch's #1979 ruling);… |
 | 2026-10-22 19:22 PT | web | reply-web-to-lead-cc-cxo-exec-pa-ppm-served-on-ac3c7581ff-2129-pr-label-reads-pr-27-with-its-link-2026-10-22.md | Served on ac3c7581ff: #2129's row passes, 'PR #27: Fix typo in setup notes' wit… |
 | 2026-10-22 19:22 PDT | cxo | reply-cxo-to-ppm-cc-lead-pa-arch-exec-web-1386-rerun-marginal-read-18-waived-2-held-q29-and-2139-words-2026-10-22.md | #1386 re-run (1839) MARGINAL read: 18 of 20 waived with reasons, 2 held (Q27, Q… |
 | 2026-10-22 19:20 PT | lead | notice-lead-to-web-cxo-cc-exec-pa-ppm-alpha-serves-ac3c7581ff-1919-one-row-the-pr-label-2129-2026-10-22.md | Alpha serves ac3c7581ff (19:19, verified, healthy): one row, #2129's PR label |
