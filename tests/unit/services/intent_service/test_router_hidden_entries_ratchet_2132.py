@@ -4,6 +4,11 @@ A ``router_visible=False`` entry is reachable only through the legacy classifier
 That is a bounded exception with a named exit (#2149, catalog size), never a
 second routing surface. The ceiling only goes DOWN (when #2149 lets compare onto
 the router); raising it needs Arch's ruling.
+
+A hidden entry's legacy landing must survive EVERY legacy-side override:
+``router_none_stands`` today (#2112; it sent compare to the floor on alpha
+a54540c0a8 until 90f0000588), and any override added later. A new override
+must exempt router-hidden landings, or the hidden entry closes nothing.
 """
 
 from services.intent_service.workflow_dispatcher import get_action_workflows
