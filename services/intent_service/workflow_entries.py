@@ -1411,6 +1411,42 @@ async def run_summarize_document_workflow(
         )
 
 
+# #2133 (Arch 15:05: batch-from-meeting asks route to a READ decline; CXO's words).
+BATCH_FROM_MEETING_DECLINE = (
+    "I can't create several issues from a meeting yet. Tell me the first action "
+    "item and I'll create it."
+)
+
+
+async def run_decline_batch_issues_from_meeting_workflow(
+    session_id: str,
+    user_id: Optional[str] = None,
+    context: Optional[Dict[str, Any]] = None,
+) -> Any:
+    """#2133: the READ decline for creating several issues from a meeting.
+
+    Arch (15:05): which handler owns the ask is meaning, so it is routed by
+    corpus rows and this entry's description, never by a phrasing check in the
+    create handler; create stays single-issue and never splits one message
+    into several writes. This entry writes nothing: it answers with CXO's
+    words and offers the single create the product can do.
+    """
+    from services.intent.intent_service import IntentProcessingResult
+
+    return IntentProcessingResult(
+        success=True,
+        message=BATCH_FROM_MEETING_DECLINE,
+        intent_data={
+            "category": "execution",
+            "action": "decline_batch_issues_from_meeting",
+            "context": {"reason": "batch_create_not_supported"},
+        },
+        workflow_id=None,
+        requires_clarification=False,
+        implemented=False,
+    )
+
+
 # handler_attr → classifier aliases (mirror the migrated elif branches exactly).
 _READ_QUERY_COHORT: dict[str, list[str]] = {
     "_handle_shipped_this_week": [
@@ -3493,6 +3529,39 @@ def register_default_workflows() -> None:
         flip_group="read_synthesis",
     )
 
+    # #2133 (Arch 2026-10-22 15:05): creating SEVERAL issues from a meeting is a
+    # READ decline in CXO's words, routed by corpus rows and this description,
+    # never by a phrasing check in the create handler (which stays single-issue
+    # and never splits one message into several writes). Chosen over #886's
+    # _get_contextual_fallback block: that copy sits on the floor, which the
+    # classifier's create_ticket landing never reaches (the #2133 strand), and
+    # reaching it would take a phrase check in a handler.
+    # Name: NOT create_issues_from_meeting / batch_create_issues — those are
+    # the action tokens the #1426 denial-freshness ratchet
+    # (CONTEXTUAL_FALLBACK_DENIALS in tests/test_architecture_enforcement.py)
+    # reserves for the real batch capability; this op is its decline.
+    # effect: READ — returns fixed copy; no router, store or connector call.
+    # outwardness: PRIVATE.
+    # flip_group: None — DELIBERATE, the clear_todos precedent (pinned in
+    # test_inversion_flip_groups_1667.py's expected_ungrouped). Every group is
+    # live today, so any group would make this op live on deploy with no token.
+    # It flips by its own op token, decline_batch_issues_from_meeting, in
+    # PIPER_INVERSION_LIVE_CATEGORIES (xian's hand, after the rule-7 run;
+    # mirror CURRENT_LIVE_CATEGORIES first). Until then the classifier's
+    # create_ticket landing still reaches the create handler's subject ask.
+    decline_batch_issues_from_meeting_entry = WorkflowEntry(
+        entry_point=run_decline_batch_issues_from_meeting_workflow,
+        effect=EffectClass.READ,
+        outwardness=Outwardness.PRIVATE,
+        description=(
+            "Create SEVERAL issues at once from a meeting, its notes or its action items "
+            "(a batch): not supported yet; says so and offers to create the first one. "
+            "One issue about one thing is create_issue"
+        ),
+        requires_context=[],
+        action_triggered=True,
+    )
+
     # RECONNECT #1327 build #2: conversational "what's my default repo" — the read
     # counterpart. Same 2-arg (intent, workflow_id) factory + action-dispatch rail.
     # effect: READ — _handle_get_default_repo reads the same preference key the
@@ -3914,6 +3983,7 @@ def register_default_workflows() -> None:
         "summarize_file": summarize_document_entry,
         "summarize_upload": summarize_document_entry,
         "summarize_uploaded_file": summarize_document_entry,
+        "decline_batch_issues_from_meeting": decline_batch_issues_from_meeting_entry,
     }
 
     # #1124 step 3 cohort 2: GitHub read-query cohort — one shared entry point per
