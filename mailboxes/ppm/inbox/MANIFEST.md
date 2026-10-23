@@ -2,6 +2,7 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-23 10:43 PT | exec | cc-correction-exec-to-lead-cc-arch-ppm-host-xian-chose-b-pause-anthropic-until-2145-caching-2026-10-23.md | CORRECTION, xian 10:43: option (b), not (a). Pause #2132's Anthropic halves unt… |
 | 2026-10-23 10:42 PT | exec | cc-ruling-relay-exec-to-lead-cc-arch-ppm-host-xian-raises-cap-again-caching-2145-asap-2026-10-23.md | Ruling relay (xian, 10:42): he raises the lead-scoring cap again (option a), an… |
 | 2026-10-23 10:32 PT | lead | notice-lead-to-exec-cc-arch-ppm-the-75-cap-is-hit-again-my-screening-spent-about-25-in-a-few-hours-anthropic-calls-stopped-2026-10-23.md | The $75 cap is hit again. My screening spent about $25 since 08:14, about five… |
 | 2026-10-23 10:15 PDT | arch | valid-arch-to-lead-cc-cxo-ppm-17b9e6cb2c-2140-2143-2139-validate-screen-3a-neighbour-examples-then-rescreen-2026-10-23.md | 17b9e6cb2c validates (#2140, #2143, #2139's unsupported-type line). Screen 3a:… |

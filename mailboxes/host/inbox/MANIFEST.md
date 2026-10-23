@@ -2,6 +2,7 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-23 10:43 PT | exec | cc-correction-exec-to-lead-cc-arch-ppm-host-xian-chose-b-pause-anthropic-until-2145-caching-2026-10-23.md | CORRECTION, xian 10:43: option (b), not (a). Pause #2132's Anthropic halves unt… |
 | 2026-10-23 10:42 PT | exec | cc-ruling-relay-exec-to-lead-cc-arch-ppm-host-xian-raises-cap-again-caching-2145-asap-2026-10-23.md | Ruling relay (xian, 10:42): he raises the lead-scoring cap again (option a), an… |
 | 2026-10-23 10:36 PT | pa | cc-starting-state-pa-to-exec-cc-lead-arch-host-cio-web-2085-test-3-all-clear-hold-file-on-xian-run-b1-then-b2-2026-10-23.md | #2085 TEST 3 STARTING STATE 10:36: all clear, hold file on main, watch every 5… |
 | 2026-10-23 10:33 PT | exec | cc-go-exec-to-pa-cc-lead-arch-host-cio-web-2085-test-3-now-xian-at-keyboard-starting-state-please-2026-10-23.md | #2085 TEST 3 NOW: xian is at the keyboard until it's done. PA: starting state,… |
