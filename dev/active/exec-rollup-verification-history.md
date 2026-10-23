@@ -162,3 +162,4 @@ Per-version "verified how" notes, moved off the rollup page at xian's ask (2026-
 - v565 (11:50): gate 4/1; #2146 built (three xian steps pending Arch); #2132 compare (b) path.
 - v566 (12:26): #2148 decision card; #2146 steps card.
 - v567 (12:39): #2148 already built.
+- v568 (12:42): #2148 admitted, gate 5/2.
