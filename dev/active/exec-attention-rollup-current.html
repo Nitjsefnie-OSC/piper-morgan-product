@@ -32,7 +32,7 @@
 </style>
 <div class="wrap">
 <h1>Attention rollup — Thursday 22 October</h1>
-<p class="meta">Exec · v537, rebuilt 17:36 PDT Thu 10-22 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
+<p class="meta">Exec · v538, rebuilt 17:39 PDT Thu 10-22 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
 
 
 
@@ -46,13 +46,16 @@
 <li>Invitation paperwork: Google is verified on alpha&rsquo;s project, so the Calendar line is a plain connect step. Terms Option 2 covers the three held names; you invite them to alpha now with a beta short-list line, and Comms drafts the letter. Still open: the &ldquo;Your key&rdquo; lines (backups keep about 4 days; the empty-key count needs a production read by HOST or you), and HOST&rsquo;s send-morning checks.</li>
 </ul></div>
 <div class="card hot"><b>Restart button: your steps tonight (all in a plain Terminal on your Mac, your own logins).</b> Background: the first test (17:05) passed every check, but Fly refused the restart&rsquo;s lock. Lead built a restart without the lock, Arch approved it, and the tests are green (f3751c4ee2, 17:3x).
-<p style="margin:.4rem 0 .2rem"><b>A. Move the fix onto the locked branch</b>, in any checkout of the repo. <b>Stop if the <code>--stat</code> line lists anything but <code>.github/workflows/restart-alpha-postgres.yml</code>.</b></p>
-<pre style="white-space:pre-wrap;margin:.2rem 0">git fetch origin
-git checkout -B ops/restarter origin/ops/restarter
-git checkout origin/main -- .github/workflows/restart-alpha-postgres.yml
-git diff --cached --stat
-git commit -m "restarter: restart without a lease (2085 route 1)"
-git push origin ops/restarter</pre>
+<p style="margin:.4rem 0 .2rem"><b>Step A: copy Lead&rsquo;s fixed job file onto the locked <code>ops/restarter</code> branch.</b> Only your account can push to that branch. Run this in a plain Terminal on your Mac. It makes a temporary copy of the repo in /tmp, so your own working folder isn&rsquo;t touched:</p>
+<pre style="white-space:pre-wrap;margin:.2rem 0">gh repo clone mediajunkie/piper-morgan-product /tmp/restarter-push -- --depth 1 --branch ops/restarter
+cd /tmp/restarter-push
+git fetch --depth 1 origin main
+git checkout FETCH_HEAD -- .github/workflows/restart-alpha-postgres.yml
+git diff --cached --stat</pre>
+<p style="margin:.2rem 0">The last line should print exactly one file: <code>.github/workflows/restart-alpha-postgres.yml | 33 ++++-</code> and <code>1 file changed, 30 insertions(+), 3 deletions(-)</code>. <b>If it shows anything else, stop and tell me.</b> If it matches:</p>
+<pre style="white-space:pre-wrap;margin:.2rem 0">git commit -m "restarter: restart without a lease (2085 route 1)"
+git push origin ops/restarter
+cd ~ &amp;&amp; rm -rf /tmp/restarter-push</pre>
 <p style="margin:.4rem 0 .2rem"><b>B. Second test</b>, any time before 21:00. Tell me first so PA starts the watch, and wait for PA&rsquo;s &ldquo;starting state&rdquo;. Then:</p>
 <p style="margin:.2rem 0">B1. Stop Postgres (expect <code>server stopped</code>):</p>
 <pre style="white-space:pre-wrap;margin:.2rem 0">fly ssh console -a piper-morgan-db --machine 865105fe247158 -C "su postgres -c '/usr/lib/postgresql/18/bin/pg_ctl stop -D /data/postgresql -m fast'"</pre>
@@ -63,7 +66,7 @@ git push origin ops/restarter</pre>
 <pre style="white-space:pre-wrap;margin:.2rem 0">fly machine restart 865105fe247158 -a piper-morgan-db</pre>
 <p style="margin:.2rem 0">Pass looks like: the run prints &ldquo;restart accepted: HTTP 200&rdquo;, then alpha reads healthy within 3 minutes. If it prints HTTP 401 or 403, the fallback is a new token with one more permission, already approved; I&rsquo;ll give you that block.</p></div>
 <div class="card hot"><b>GitHub App <code>piper-morgan-agents</code> (#2136): your steps.</b> App ID 5434481. You&rsquo;ve created it and generated the key.
-<p style="margin:.4rem 0 .2rem"><b>1. Fix one permission.</b> On <a href="https://github.com/settings/apps/piper-morgan-agents/permissions">Permissions &amp; events</a>, <b>Actions</b> reads &ldquo;No access&rdquo;; set it to <b>Read and write</b>, then click <b>Save changes</b>. Everything else in your screenshot is right: Contents, Issues and Pull requests are Read and write; Metadata is Read-only; Workflows, Administration, Environments, Deployments and Secrets are No access.</p>
+<p style="margin:.4rem 0 .2rem"><b>1. Permissions: done</b> (Actions fixed to Read and write at 17:4x; the rest checked from your screenshot).</p>
 <p style="margin:.4rem 0 .2rem"><b>2. Move the key to Amber</b> from your Mac&rsquo;s Terminal (replace <code>amber</code> with how you ssh to Amber):</p>
 <pre style="white-space:pre-wrap;margin:.2rem 0">scp ~/Downloads/piper-morgan-agents.*.private-key.pem amber:/Users/xian/.piper-shared/github-app-piper-morgan-agents-credential-2026-10-22.pem
 ssh amber chmod 600 /Users/xian/.piper-shared/github-app-piper-morgan-agents-credential-2026-10-22.pem
@@ -72,6 +75,7 @@ rm ~/Downloads/piper-morgan-agents.*.private-key.pem</pre>
 <p style="margin:.4rem 0 .2rem"><b>3. Install it:</b> <a href="https://github.com/settings/apps/piper-morgan-agents/installations">Install App</a> &rarr; your account &rarr; <b>Only select repositories</b> &rarr; <code>piper-morgan-product</code> &rarr; Install. Nothing changes for the agents until Pard&rsquo;s helper hands out App tokens.</p>
 <p style="margin:.2rem 0">Later, not tonight: Pard&rsquo;s token helper; adding the v4 mail repo; how agents reach Janus&rsquo;s and Pard&rsquo;s repos; then your admin token and SSH key leave Amber (the real fix).</p></div>
 <h2>Next time you&rsquo;re here</h2>
+<div class="card"><b>Spec&rsquo;s seven recommendations (R1&ndash;R7): a conversational walk, one at a time, between other work.</b> First I write a one-page status of all seven (by the 10:38 fire Friday). This sat on &ldquo;whenever&rdquo; from 10-12 without moving; my miss.</div>
 <div class="card act"><ol style="margin:.2rem 0 .2rem 1.2rem;padding:0">
 <li><b>Medium crosspost: &ldquo;The Tracker That Lost Track&rdquo;</b> (<a href="https://pipermorgan.ai/blog/the-tracker-that-lost-track/">live</a>). Medium only; send Docs the URL.</li>
 <li><b>Terms section for the invitation:</b> rewrite in your words, then your HALT pass: <a href="file:///Users/xian/Development/piper-morgan-worktrees/exec/docs/internal/design/terms-invitation-draft-for-xian-2026-10-19.md">terms-invitation-draft-for-xian-2026-10-19.md</a>. Or decide the invitation goes without a Terms page.</li>
@@ -87,7 +91,7 @@ rm ~/Downloads/piper-morgan-agents.*.private-key.pem</pre>
 <li><b>Two-week sprints</b> for the next milestone.</li>
 <li><b>Delete old revisions on 15 issues</b> (only you can): 297, 809, 1476, 1477, 1509, 1510, 1536&ndash;1540, 1718, 1830; comments on 377 and 646.</li>
 <li><b>&ldquo;Hide this chat&rdquo; control?</b> Lean: not before invites.</li>
-<li>Re-clone Kindbook; Spec R1&ndash;R7 walk-through; blog mining with Comms.</li>
+<li>Re-clone Kindbook; blog mining with Comms.</li>
 <li>Optional: search <code>Piper Morgan Alpha</code> in your GitHub security log (the &ldquo;authorized&rdquo; emails match your own reconnects); rename &ldquo;Web-key-for-testing&rdquo; in Console.</li>
 </ol></div>
 <h2>🚧 In motion, nothing for you</h2>
