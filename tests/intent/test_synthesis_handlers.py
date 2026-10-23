@@ -79,11 +79,17 @@ class TestSynthesisHandlers:
 
         result = await intent_service._handle_generate_content(intent, workflow_id="test_wf")
 
-        # Should fail validation
-        assert result.success is False
-        assert result.requires_clarification is True
-        assert result.clarification_type == "content_type_required"
-        assert "content type" in result.message.lower() or "content_type" in result.message.lower()
+        # #2139 (CXO 10-22 19:2x): makes nothing, says what it can make, no
+        # internal validation string and no unarmed ask (#1730 Gap-2)
+        assert result.success is True
+        assert result.requires_clarification is False
+        assert result.message == (
+            "I can draft a status report, a README section or an issue template. "
+            "Tell me which one and what it's about, and I'll write it."
+        )
+        assert "content type" not in result.message.lower()
+        assert "?" not in result.message
+        assert result.intent_data["reason"] == "content_type_required"
 
     @pytest.mark.asyncio
     async def test_generate_content_unknown_content_type(self, intent_service):

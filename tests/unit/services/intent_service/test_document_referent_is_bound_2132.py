@@ -14,7 +14,11 @@ from services.domain.models import Intent
 from services.intent.intent_service import IntentService
 from services.shared_types import IntentCategory
 
-NO_DOC_LINE = "I don't see a document in this chat. Paste the text here and I'll work with it."
+# #2138 (CXO 18:5x): Notion connected, nothing bound, no title.
+NO_DOC_LINE = (
+    "I couldn't tell which document you mean. Name an uploaded file or a "
+    "Notion page, or paste the text here and I'll work with it."
+)
 
 
 @pytest.fixture

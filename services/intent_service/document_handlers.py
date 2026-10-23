@@ -160,6 +160,68 @@ async def handle_analyze_document(file_id: str, user_id: str) -> Dict:
         }
 
 
+# #2132: the resolver confidence a held-file binding needs. FileResolver
+# returns 0.98 for a stored filename named verbatim in the message and 0.95
+# for "the file I uploaded" when the user has exactly one file; below that it
+# is a recency/type score over every file the user owns, which would bind an
+# unnamed "this document" to whatever scored best (Arch 15:05: never a guessed
+# referent). A state check on the resolver's own output, not on the message.
+# Arch 18:28 (#2138): the analyze path binds through the SAME honesty contract as
+# summarize, which applies no cutoff of its own: the resolver's pick binds, its
+# ambiguity lists the candidates, and its None falls through. Kept at 0.0 so the
+# shape stays visible; raising it again is a ruling, not a tuning.
+HELD_FILE_MIN_CONFIDENCE = 0.0
+
+
+async def resolve_held_files(message: str, user_id: Optional[str], action: str) -> List[Dict]:
+    """The user's files this turn names, via the SAME resolver summarize uses (#2132).
+
+    Reuses ``FileResolver(FileRepository, artifact_repository=ArtifactRepository)
+    .resolve_file_reference`` exactly as ``run_summarize_document_workflow``
+    does (uploads ∪ artifacts, owner-scoped, #1312/#1657); this function adds
+    no lookup of its own. There is no chat-session file list in the product,
+    so "held" is what the resolver binds from the message: a stored filename
+    named verbatim (several named → several returned, the resolver's
+    exact-match ambiguity), or "the file I uploaded" with exactly one file.
+    Any pick the resolver makes binds, and any ambiguity returns its candidates
+    (Arch 18:28: the summarize contract, no extra cutoff).
+
+    Returns ``[{"file_id", "filename"}]`` (``filename`` None when the resolver
+    returned only an id); empty when nothing is bound or there is no user.
+    """
+    if not user_id or not message:
+        return []
+
+    from services.database.repositories import ArtifactRepository
+    from services.domain.models import Intent
+    from services.file_context.exceptions import AmbiguousFileReferenceError
+    from services.file_context.file_resolver import FileResolver
+    from services.repositories.file_repository import FileRepository
+    from services.shared_types import IntentCategory
+
+    # A detached view, never the turn's own intent (the summarize convention).
+    resolver_view = Intent(
+        category=IntentCategory.ANALYSIS,
+        action=action,
+        original_message=message,
+        context={"original_message": message},
+    )
+    try:
+        async with AsyncSessionFactory.session_scope() as session:
+            resolver = FileResolver(
+                FileRepository(session),
+                artifact_repository=ArtifactRepository(session),
+            )
+            file_id, confidence = await resolver.resolve_file_reference(resolver_view, user_id)
+    except AmbiguousFileReferenceError as e:
+        if e.scores and all(s >= HELD_FILE_MIN_CONFIDENCE for s in e.scores):
+            return [{"file_id": str(f.id), "filename": f.filename} for f in e.files]
+        return []
+    if file_id and confidence >= HELD_FILE_MIN_CONFIDENCE:
+        return [{"file_id": str(file_id), "filename": None}]
+    return []
+
+
 async def handle_question_document(file_id: str, question: str, user_id: str) -> Dict:
     """
     Test 20: Answer question about document.
