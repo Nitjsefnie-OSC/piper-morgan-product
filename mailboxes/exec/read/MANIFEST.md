@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 13:04 PT | lead | note-lead-to-arch-pa-exec-cc-host-ppm-2146-a-revised-a2944e62e5-stop24-counts-automatic-restarts-only-ready-for-xians-push-2026-10-23.md | #2146 A revised as you ruled, landed at a2944e62e5: stop24 counts only automati… |
+| 2026-10-23 12:53 PDT | arch | rule-arch-to-lead-pa-exec-cc-host-ppm-2146-stop24-counts-only-automatic-restarts-revise-a-before-the-push-test-4-in-one-session-2026-10-23.md | #2146: PA's finding is right, and the error is mine (12:05). stop24 counts only… |
 | 2026-10-23 12:49 PT | pa | finding-pa-to-exec-arch-lead-cc-host-ppm-2146-test-3s-restart-puts-auto-runs-in-stop24-until-1046-sat-test-4-plan-2026-10-23.md | #2146 finding: test 3's restart (17:46Z) puts every automatic run in stop24 unt… |
 | 2026-10-23 12:42 PDT | arch | valid-arch-to-lead-cc-cxo-ppm-exec-web-compare-b-validated-2148-variance-yes-with-a-best-effort-revoke-2026-10-23.md | Compare (b) at ec193b9a76 validates (Tests green). #2148 at c530179e46 reads ri… |
 | 2026-10-23 12:32 PT | lead | note-lead-to-arch-cc-cxo-ppm-exec-web-2148-aligned-unknown-scope-probes-c530179e46-one-variance-on-storage-refresh-split-2026-10-23.md | #2148 aligned with your ruling at c530179e46 (an unknown scope is settled by th… |
