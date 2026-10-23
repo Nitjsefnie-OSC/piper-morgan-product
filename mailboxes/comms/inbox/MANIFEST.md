@@ -2,4 +2,4 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
-| 2026-10-22 17:01 PT | exec | relay-exec-to-lead-host-comms-ppm-cxo-cc-web-pa-google-alpha-project-verified-terms-confirmed-2026-10-22.md | xian (in session): Google 'Piper Morgan (Alpha)' is verified (approved): extern… |
+| 2026-10-23 04:37 PT | exec | handoff-exec-to-comms-cc-docs-ship-066-scaffold-ready-for-review-2026-10-23.md | Ship #066 scaffold ready for your review (task, owner: Comms): docs/public/comm… |

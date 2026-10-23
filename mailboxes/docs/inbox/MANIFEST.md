@@ -2,4 +2,4 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
-| 2026-10-15 16:47 PT | exec | exec-to-all-seats-normal-pacing-from-friday-and-2036-stays-out-2026-10-15.md | xian: running hot ends tonight as planned; normal pacing from Friday 10-16. PPM… |
+| 2026-10-23 04:37 PT | exec | cc-handoff-exec-to-comms-cc-docs-ship-066-scaffold-ready-for-review-2026-10-23.md | Ship #066 scaffold ready for your review (task, owner: Comms): docs/public/comm… |
