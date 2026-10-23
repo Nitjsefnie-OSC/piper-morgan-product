@@ -1242,6 +1242,13 @@ async def handle_calendar_callback(
         granted = {"granted": True, "not_granted": False}.get(grant)  # None: unconfirmed
         if granted is False:
             logger.warning("calendar_settings_oauth_scope_missing", user_id=result.get("user_id"))
+            # Arch 10-23: revoke the scope-less grant (best-effort, logged, never blocks
+            # the redirect), so the user's Google account keeps nothing Piper can't revoke.
+            if getattr(tokens, "refresh_token", None):
+                try:
+                    await handler.revoke_token(tokens.refresh_token)
+                except Exception as revoke_error:  # silent-ok: best-effort revoke; logged, the honest redirect still follows (#2148)
+                    logger.warning("calendar_scope_missing_revoke_failed", error=str(revoke_error))
             return RedirectResponse(
                 url="/settings/integrations?calendar_error=scope_missing", status_code=302
             )
