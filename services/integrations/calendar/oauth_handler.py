@@ -427,6 +427,36 @@ def calendar_access_granted(scope: Optional[str]) -> Optional[bool]:
     return CALENDAR_READ_SCOPE in granted or "https://www.googleapis.com/auth/calendar" in granted
 
 
+async def resolve_calendar_grant(tokens) -> str:
+    """#2148 (Arch 10-23): "granted", "not_granted" or "unconfirmed", one derivation.
+
+    The token response's ``scope`` decides when present; when it is empty or
+    absent, the #2092 Test's own read (``probe_calendar_read``) decides: Google
+    answering means granted, ``insufficient_scope`` means not granted, anything
+    else (another refusal, a timeout) is unconfirmed. Never "granted" on an
+    unknown.
+    """
+    granted = calendar_access_granted(getattr(tokens, "scope", None))
+    if granted is True:
+        return "granted"
+    if granted is False:
+        return "not_granted"
+    access_token = getattr(tokens, "access_token", None)
+    if not isinstance(access_token, str) or not access_token:
+        return "unconfirmed"
+    try:
+        read_error = await probe_calendar_read(access_token)
+    except (
+        Exception
+    ):  # silent-ok: an unreadable grant is "unconfirmed", never "granted" (#2148 fail-closed)
+        return "unconfirmed"
+    if read_error is None:
+        return "granted"
+    if read_error == "insufficient_scope":
+        return "not_granted"
+    return "unconfirmed"
+
+
 async def probe_calendar_read(access_token: str) -> Optional[str]:
     """#2092: one real, minimal calendar read with a fresh access token.
 

@@ -1754,9 +1754,10 @@ async def handle_calendar_oauth_callback(
         # Store refresh token securely with user-scoped key
         tokens = result["tokens"]
         # #2148: a grant without calendar access is not a connection (CXO's words).
-        from services.integrations.calendar.oauth_handler import calendar_access_granted
+        from services.integrations.calendar.oauth_handler import resolve_calendar_grant
 
-        granted = calendar_access_granted(getattr(tokens, "scope", ""))
+        grant = await resolve_calendar_grant(tokens)
+        granted = {"granted": True, "not_granted": False}.get(grant)  # None: unconfirmed
         if granted is False:
             logger.warning("calendar_oauth_scope_missing", user_id=result.get("user_id"))
             return RedirectResponse(

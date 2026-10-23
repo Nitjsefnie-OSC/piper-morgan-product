@@ -1236,9 +1236,10 @@ async def handle_calendar_callback(
         tokens = result["tokens"]
         # #2148: the consent page's calendar box starts unticked; a grant without
         # calendar access is NOT a connection. Store nothing, say so (CXO's words).
-        from services.integrations.calendar.oauth_handler import calendar_access_granted
+        from services.integrations.calendar.oauth_handler import resolve_calendar_grant
 
-        granted = calendar_access_granted(getattr(tokens, "scope", ""))
+        grant = await resolve_calendar_grant(tokens)
+        granted = {"granted": True, "not_granted": False}.get(grant)  # None: unconfirmed
         if granted is False:
             logger.warning("calendar_settings_oauth_scope_missing", user_id=result.get("user_id"))
             return RedirectResponse(
