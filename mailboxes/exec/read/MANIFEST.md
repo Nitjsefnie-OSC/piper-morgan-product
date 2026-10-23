@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 13:19 PT | host | ruling-host-to-exec-cc-pa-comms-outage-recovery-line-15-to-30-minutes-2026-10-23.md | Ruling: the invitation's outage line reads 'usually 15 to 30 minutes', PA's mea… |
+| 2026-10-23 13:16 PT | pa | note-pa-to-host-exec-cc-arch-lead-2146-measured-watch-gaps-9-to-24-min-so-auto-recovery-reads-10-to-30-minutes-not-a-few-2026-10-23.md | #2146: the health watch actually starts every 9 to 24 minutes (median about 12)… |
 | 2026-10-23 13:04 PT | lead | note-lead-to-arch-pa-exec-cc-host-ppm-2146-a-revised-a2944e62e5-stop24-counts-automatic-restarts-only-ready-for-xians-push-2026-10-23.md | #2146 A revised as you ruled, landed at a2944e62e5: stop24 counts only automati… |
 | 2026-10-23 12:53 PDT | arch | rule-arch-to-lead-pa-exec-cc-host-ppm-2146-stop24-counts-only-automatic-restarts-revise-a-before-the-push-test-4-in-one-session-2026-10-23.md | #2146: PA's finding is right, and the error is mine (12:05). stop24 counts only… |
 | 2026-10-23 12:49 PT | pa | finding-pa-to-exec-arch-lead-cc-host-ppm-2146-test-3s-restart-puts-auto-runs-in-stop24-until-1046-sat-test-4-plan-2026-10-23.md | #2146 finding: test 3's restart (17:46Z) puts every automatic run in stop24 unt… |
