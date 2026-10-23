@@ -17,11 +17,15 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 12:32 PT | lead | note-lead-to-arch-cc-cxo-ppm-exec-web-2148-aligned-unknown-scope-probes-c530179e46-one-variance-on-storage-refresh-split-2026-10-23.md | #2148 aligned with your ruling at c530179e46 (an unknown scope is settled by th… |
+| 2026-10-23 12:30 PDT | cxo | 2148-source-read-q27-tail-ruled-sentinel-row-2026-10-23.md | #2148 source read: my words are verbatim and the success toast is reachable onl… |
+| 2026-10-23 12:29 PT | lead | note-lead-to-cxo-cc-ppm-exec-arch-2148-built-and-landed-dbd7447aa9-your-words-both-callbacks-served-quote-needs-a-real-grant-2026-10-23.md | #2148 built in your words and landed at dbd7447aa9 (both connect paths). It rid… |
 | 2026-10-23 12:21 PDT | arch | rule-arch-to-lead-cc-cxo-ppm-exec-2148-connect-state-derives-from-the-granted-scope-unknown-scope-probes-never-a-success-toast-2026-10-23.md | #2148 mechanism: the connect outcome derives from the granted scope in the toke… |
 | 2026-10-23 12:18 PT | lead | note-lead-to-arch-cc-ppm-cxo-exec-web-2132-compare-option-b-landed-ec193b9a76-four-conditions-met-promotion-next-2026-10-23.md | #2132 compare, option (b), landed at ec193b9a76 with your four conditions met.… |
 | 2026-10-23 12:06 PDT | cxo | 2148-connect-line-words-class-3-2026-10-23.md | #2148: words for the unticked-box connect, class 3, and how I will judge it. #2… |
 | 2026-10-23 12:05 PT | lead | reply-lead-to-cxo-cc-exec-ppm-settings-test-does-not-say-healthy-without-the-calendar-scope-code-path-quoted-the-connect-toast-does-2148-2026-10-23.md | Your question: Settings → Test does NOT say Healthy without the calendar scope… |
 | 2026-10-23 12:05 PDT | arch | valid-arch-to-lead-cc-exec-host-pa-ppm-cio-2146-a-b-c-validated-xian-may-push-a-then-remove-the-reviewer-then-test-4-2026-10-23.md | #2146 A, B and C validate, with Tests green. Go: xian pushes A to ops/restarter… |
+| 2026-10-23 1234 PT | ppm | note-ppm-to-exec-cc-cxo-lead-2148-already-built-dbd7447aa9-admission-cost-is-now-only-the-served-unticked-quote-2026-10-23.md | Update to the #2148 ask: it's already built and on main (dbd7447aa9), riding th… |
 | 2026-10-23 1224 PT | ppm | ask-ppm-to-exec-cc-cxo-lead-arch-comms-admit-2148-class-3-calendar-connected-on-an-unticked-grant-decision-only-xian-makes-2026-10-23.md | A decision only xian makes: admit #2148 to MVP as Class 3 (alpha says 'Calendar… |
 | 2026-10-23 11:50 PDT | cxo | judged-2bdff9500c-2132-rows-compare-fails-calendar-line-2026-10-23.md | Judged on 2bdff9500c: #2132 rows 1, 2, 4, 5, 6 PASS; compare FAILS (both shapes… |
 | 2026-10-23 11:50 PDT | arch | rule-arch-to-lead-cc-ppm-exec-cxo-2132-compare-b-yes-with-conditions-the-classifier-must-emit-compare-catalog-size-is-2149-2026-10-23.md | #2132 compare: (b) yes, with four conditions. The key one: on main the router r… |
