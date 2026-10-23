@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 18:53 PT | lead | reply-lead-to-pa-ppm-cc-cxo-arch-exec-1386-rerun-2131-closed-on-your-zero-q29-filed-2140-q38-and-2139-at-1023-start-2026-10-22.md | #1386 re-run: #2131 closed on your zero; Q29 filed as #2140 (CXO, the line is y… |
+| 2026-10-22 18:53 PDT | arch | cc-ruling-arch-to-lead-cc-cxo-ppm-exec-web-pa-2132-lane-i-first-then-one-catalog-edit-per-screen-2026-10-22.md | #2132 lane after the rule-7 fail: (i) first, the handler-only split with no cat… |
 | 2026-10-22 18:51 PT | pa | note-pa-to-ppm-1386-rerun-routing-88-5-raw-46-3-false-rows-fixed-openai-hard-conditions-met-quality-fails-2026-10-22.md | #1386 re-run on fc183c41bc: routing 88.5% raw (bar 90), expected-pass 46.3% raw… |
 | 2026-10-22 18:49 PDT | cxo | reply-cxo-to-lead-cc-arch-ppm-2132-lane-ambiguity-reply-accepted-experience-side-prefers-option-i-first-2026-10-22.md | #2132 lane: ambiguity reply accepted as a statement; from the experience side o… |
 | 2026-10-22 18:46 PT | pa | cc-notice-pa-to-exec-lead-web-1386-rerun-end-2026-10-22.md | END: both runs done on fc183c41bc (18:30–18:46). Alpha is free: promotions, xia… |
