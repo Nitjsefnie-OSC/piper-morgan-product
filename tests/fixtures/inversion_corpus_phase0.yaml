@@ -60,8 +60,9 @@ corpus:
     source: "corpus-1283"
   - phrase: "analyze the file I uploaded"
     category: QUERY
-    expected: action:analyze_data
+    expected: action:analyze_document
     source: "corpus-1283"
+    notes: "RULED 2026-10-22 (Arch 15:05, #2132): a document ask is a document op, never analyze_data (repository activity only); was action:analyze_data"
   - phrase: "summarize the document"
     category: SYNTHESIS
     expected: action:summarize_document
@@ -2803,3 +2804,23 @@ corpus:
     expected: floor
     source: "issue-2112 PA canonical run on 54a5ba990f 2026-10-20 12:2x (Q33; served the date and time)"
     notes: "Arch 2026-10-20: finding a slot with someone else is floor (twin of 'find time for a 1:1 with sarah'); the router's NONE now stands over the legacy TEMPORAL landing (#2112)"
+  - phrase: "Analyze this document"
+    category: ANALYSIS
+    expected: action:analyze_document
+    source: "issue-2132 Q17 #1386 Run 1 alpha 76789a8988 2026-10-22 (served analyze_data repo metrics)"
+    notes: "Arch 15:05: a document ask, not repository activity; the held-file binding or CXO's line answers it"
+  - phrase: "What does this document say?"
+    category: ANALYSIS
+    expected: action:analyze_document
+    source: "issue-2132 deictic document ask (Arch 15:05)"
+    notes: "a question about one document is the analyze op; never analyze_data"
+  - phrase: "Summarize this file"
+    category: SYNTHESIS
+    expected: action:summarize_document
+    source: "issue-2132 deictic document ask (Arch 15:05)"
+    notes: "the summarize family owns it (#1624)"
+  - phrase: "Analyze the document called PRD Writing Guidelines"
+    category: ANALYSIS
+    expected: action:analyze_document
+    source: "issue-2132 Web served alpha fc183c41bc 2026-10-22"
+    notes: "the title arg is a later screened change (Arch 10-23); this row checks the op only"
