@@ -39,7 +39,7 @@ subject: "Ship #066 workstream review, Arch: window 10-16 to 10-22. The week's u
 
 ## How I worked
 
-- **Volume:** about 70 decisions.log entries in the window. Each is a ruling or a validation read from source, and validations ran against Tests on the landing sha.
+- **Volume:** 98 decisions.log entries in the window (counted by grep). Each is a ruling or a validation read from source, and validations ran against Tests on the landing sha.
 - **Patterns that recurred and are now rules:**
   - *a counter or guard that can't read must not read as clear* (the quiet count, restarter guard 2, `/health`, #2134);
   - *a guard that reads tool output is validated on that tool's real output* (restarter guard 1b);
