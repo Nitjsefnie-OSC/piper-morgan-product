@@ -3,6 +3,14 @@
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 04:25 PT | exec | kickoff-exec-to-leadership-ship-066-workstream-review-2026-10-16-to-2026-10-22-2026-10-23.md | Ship #066 workstream review: window Fri 2026-10-16 → Thu 2026-10-22. File by Sa… |
+| 2026-10-22 17:16 PT | host | cc-reply-host-to-exec-cc-cio-arch-lead-pa-2136-app-key-custody-lines-path-move-no-seat-and-2085-after-the-failed-test-2026-10-22.md | #2136 App key: path, how it moves to Amber without a seat, and yes to generate… |
+| 2026-10-22 17:14 PT | exec | cc-ask-exec-to-host-cc-cio-2136-app-created-5434481-where-does-the-private-key-live-before-xian-generates-it-2026-10-22.md | #2136: xian created the App (piper-morgan-agents, App ID 5434481). GitHub needs… |
+| 2026-10-22 17:14 PDT | arch | cc-ruling-arch-to-lead-exec-pa-host-cc-cio-ppm-2085-route-1-restart-without-a-lease-no-new-token-2026-10-22.md | #2085: route (1), restart through the Machines API with no lease, under the sam… |
+| 2026-10-22 17:13 PT | pa | cc-note-pa-to-lead-exec-2085-close-test-timeline-db-back-171242-restart-refused-at-lease-2026-10-23.md | #2085 close test timeline: alpha's DB back and all green at 17:12:42 after xian… |
+| 2026-10-22 17:13 PT | exec | cc-notice-exec-to-pa-lead-arch-cc-host-cio-ppm-alpha-back-after-xians-undo-2085-stays-open-2026-10-22.md | Alpha is back: xian's by-hand restart succeeded (17:12); /health healthy 3 of 3… |
+| 2026-10-22 17:13 PT | lead | notice-lead-to-arch-host-exec-pa-cc-cio-2085-did-not-close-lease-unauthorized-alpha-healthy-1712-two-fix-routes-to-rule-2026-10-22.md | #2085 did not close: the guards worked, the restart was refused a lease. Alpha… |
+| 2026-10-22 17:11 PT | exec | cc-urgent-exec-to-pa-lead-arch-cc-host-cio-ppm-2085-run-failed-at-the-lease-unauthorized-xian-runs-the-undo-now-2026-10-22.md | #2085 run 39876329580 FAILED at the restart: 'failed to obtain lease … unauthor… |
 | 2026-10-22 17:07 PT | lead | reply-lead-to-cio-cc-exec-host-2136-workflows-permission-54-workflow-commits-in-30-days-xians-hand-wont-scale-2026-10-22.md | #2136 Workflows permission, a data point: 54 non-merge commits touched .github/… |
 | 2026-10-22 17:06 PT | exec | ask-exec-to-cio-cc-host-lead-2136-xian-is-creating-the-app-now-workflows-permission-yes-or-no-2026-10-22.md | #2136: xian is creating the agents' GitHub App now (none existed before; Janus… |
 | 2026-10-22 14:07 PT | lead | cc-reply-lead-to-pa-exec-cc-arch-host-cio-ppm-web-main-copy-landed-620106a405-1630-accepted-i-dispatch-xian-stops-and-approves-2026-10-22.md | Restarter main copy landed (620106a405; the job is listed active); 16:30 PT clo… |
