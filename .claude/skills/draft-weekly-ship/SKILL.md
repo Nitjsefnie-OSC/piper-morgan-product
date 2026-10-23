@@ -100,6 +100,8 @@ Open all 4 in order. Read the process guide first (it tells you what the deliver
 
 **Before drafting begins, the INTERNAL REPORT for PM must exist and Janus must be notified** (steps 5-6 of PM's ten-step weekly-reporting cycle — see the process guide's canonical-cycle section). The report is an artifact: dashboard element on top (progress / challenges / at-a-glance), per-workstream detail, and anything needing a leadership/strategic/planning decision. The Ship draft follows the PM discussion of that report (step 7), or PM's async replies via Janus. **Ship #054 skipped this** — went straight from the 6/6 gate to the public draft — and PM named the full cycle as the standard the next day. Emphasis in both report and kickoff memos: **progress toward goals and milestone status, not just activity.**
 
+**Where it lives and how the cycle tracks it (v1.13, 2026-10-23):** write the synthesis to `docs/internal/planning/comms/ship-reviews/ship-NNN-week-review.html` and publish it as an artifact. The day xian discusses it, add `<!-- discussed: YYYY-MM-DD -->` to that file. `scripts/ship-kickoff.sh`, which runs at the end of every Exec fire, prints a `ship-status #NNN` line from Friday to Wednesday: reviews filed, synthesis, discussed, draft, calendar, and the NEXT step. **When that line says INVOKE the skill, invoke it; don't work from memory of last week's Ship.** A pre-commit gate (`.claude/hooks/pre-commit-ship-synthesis-gate.sh`) refuses to add a new Ship draft until the synthesis exists and carries the discussed marker. **#066 skipped this step too** (2026-10-23): Exec drafted from the reviews and last week's Ship without opening this skill, and a review's false privacy line reached the draft.
+
 ### Step 3: Read ALL omnibus logs in the window — REQUIRED, FULL READ
 
 **This step is non-negotiable and not a spot-check.** Per PM directive May 20: the Chief of Staff reads the actual logs, doesn't rely on staff reports alone. Workstream memos are perspectives — each role lens is real but partial. Engineering shipped arcs in particular tend to live in the omnibus + Lead Dev session logs, not in the methodology-focused workstream memos.
@@ -353,6 +355,10 @@ The Ship #043 v0.1 failure was not knowing the template existed — it was choos
 ---
 
 ## Version history
+
+### v1.13 (2026-10-23)
+
+**Step 2c gets a fixed path, a discussed marker, a status line and a commit gate.** Ship #066's draft was written straight from the ten reviews, skipping the synthesis, the omnibus read (Step 3) and the same-commit calendar row (Step 7). It was the second skip of Step 2c after #054, by an Exec working from habit. xian approved the two-part fix: `scripts/ship-kickoff.sh` prints the cycle's state and next step on every fire from Friday to Wednesday, and a pre-commit gate blocks a new draft until the synthesis exists and is marked discussed. The gate is written and waits for CIO's review before it's registered.
 
 ### v1.12 (2026-08-08)
 

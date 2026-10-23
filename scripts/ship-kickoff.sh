@@ -45,8 +45,60 @@ print(f"{ship:03d}", (fri - dt.timedelta(days=7)).isoformat(), (fri - dt.timedel
 EOF
 )
 
-# Due only Fri (4), Sat (5), Sun (6).
-if [ "$MODE" = send ] && [ "$DOW" -lt 4 ]; then exit 0; fi
+ROLES="arch cio cxo comms docs host lead pa ppm web"
+
+# The cycle's status line, printed on every fire Fri → Wed once the kickoff is out (xian 2026-10-23,
+# after Exec skipped the skill's synthesis step for #066 and went straight to a draft). It reads the
+# files that define each step, so it cannot drift from what has actually happened, and it names the
+# next step and the skill that runs it. Steps (draft-weekly-ship skill, process guide's ten steps):
+#   reviews 10/10 → synthesis (Step 2c) → discussed with xian (step 7) → draft (step 8) → published.
+# The synthesis lives at docs/internal/planning/comms/ship-reviews/ship-NNN-week-review.html and
+# carries `<!-- discussed: YYYY-MM-DD -->` once xian has discussed it.
+ship_status() {
+  python3 - "$SHIP" "$ROLES" <<'EOF'
+import sys, subprocess, csv, glob, os, re
+ship, roles = sys.argv[1], sys.argv[2].split()
+def tree(path):
+    out = subprocess.run(["git", "ls-tree", "-r", "--name-only", "origin/main", path],
+                         capture_output=True, text=True).stdout.split()
+    return out
+files = tree("mailboxes/exec/inbox") + tree("mailboxes/exec/read")
+filed = sorted({r for r in roles for f in files if os.path.basename(f).startswith(f"workstream-{ship}-{r}-")})
+missing = [r for r in roles if r not in filed]
+syn = f"docs/internal/planning/comms/ship-reviews/ship-{ship}-week-review.html"
+has_syn = os.path.exists(syn)
+discussed = has_syn and re.search(r"<!-- discussed: \d{4}-\d{2}-\d{2} -->", open(syn).read())
+drafts = glob.glob(f"docs/public/comms/drafts/weekly-ship-{ship}-draft-*.md") + \
+         glob.glob(f"docs/public/comms/drafts/published/weekly-ship-{ship}-*.md")
+status = ""
+for row in csv.DictReader(open("docs/internal/planning/comms/editorial-calendar.csv")):
+    if row.get("title", "").startswith(f"Weekly Ship #{ship}"):
+        status = row.get("status", "")
+parts = [f"reviews {len(filed)}/{len(roles)}",
+         f"synthesis: {'discussed' if discussed else ('written, not yet discussed' if has_syn else 'none')}",
+         f"draft: {'yes' if drafts else 'none'}", f"calendar: {status or '?'}"]
+if missing:
+    nxt = f"wait for reviews; missing: {', '.join(missing)} (nudge after Saturday midday)"
+elif not has_syn:
+    nxt = "INVOKE the draft-weekly-ship skill, Step 2c: write the synthesis for xian. No draft before it."
+    if drafts:
+        nxt = "A DRAFT EXISTS WITH NO SYNTHESIS (the skill was skipped). " + nxt
+elif not discussed:
+    nxt = "discuss the synthesis with xian (rollup card, notify Janus). No draft until he has."
+    if drafts:
+        nxt += " A draft already exists ahead of the discussion: hold it, and rebuild it from the discussion."
+elif not drafts:
+    nxt = "INVOKE the draft-weekly-ship skill, step 8: draft from the discussion, calendar row in the same commit."
+elif status in ("distributed", "published"):
+    nxt = "done."
+else:
+    nxt = "Comms review, then xian's first look; publish Wednesday."
+print(f"ship-status #{ship}: " + " · ".join(parts) + f" · NEXT: {nxt}")
+EOF
+}
+
+# Due only Fri (4), Sat (5), Sun (6). Mon (0) to Wed (2) print the status line only. Thu is silent.
+if [ "$MODE" = send ] && [ "$DOW" -eq 3 ]; then exit 0; fi
 
 # Already sent? Check origin/main (the record other seats see) and the local tree. No `grep -q` in a
 # pipe: under pipefail its early exit SIGPIPEs the producer and the test reads false (sent a
@@ -56,10 +108,15 @@ SENT_ORIGIN="$(git ls-tree --name-only origin/main mailboxes/exec/sent/ | grep -
 SENT_LOCAL="$(find mailboxes/exec/sent -maxdepth 1 -name "*-ship-${SHIP}-workstream-review*" | wc -l | tr -d ' ')"
 if [ "${SENT_ORIGIN:-0}" -gt 0 ] || [ "${SENT_LOCAL:-0}" -gt 0 ]; then
   [ "$MODE" = dry ] && echo "ship-kickoff: #${SHIP} kickoff already sent; nothing to do"
+  ship_status || echo "ship-status #${SHIP}: could not read the cycle's state; check by hand" >&2
+  exit 0
+fi
+# Mon–Wed with no kickoff sent: the cycle never started. Say so rather than stay silent.
+if [ "$DOW" -lt 3 ]; then
+  echo "ship-status #${SHIP}: NO KICKOFF was sent for this week. Send it now (--if-due works Fri–Sun) and tell xian." >&2
   exit 0
 fi
 
-ROLES="arch cio cxo comms docs host lead pa ppm web"
 NEXT_START="$FRIDAY"
 NEXT_END="$(python3 -c "import datetime as d;print((d.date.fromisoformat('$FRIDAY')+d.timedelta(days=6)).isoformat())")"
 NAME="kickoff-exec-to-leadership-ship-${SHIP}-workstream-review-${WSTART}-to-${WEND}-${FRIDAY}.md"
