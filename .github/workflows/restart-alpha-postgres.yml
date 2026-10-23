@@ -210,10 +210,37 @@ jobs:
         shell: bash
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN_ALPHA_DB }}
+          REASON: ${{ inputs.reason }}
         run: |
-          set -u
-          echo "reason: ${{ inputs.reason }}"
-          flyctl machine restart "$DB_MACHINE" --app "$DB_APP"
+          set -u -o pipefail
+          # The dispatch input reaches the script through env, never interpolated into it (Arch,
+          # 2026-10-22: an input expression written into the script is a shell-injection shape).
+          echo "reason: $REASON"
+          # 2026-10-22 attended test (run 39876329580): flyctl's machine-restart command takes a machine
+          # lease first (flaps machineAcquireLease) and Fly refused the one-machine token that
+          # call: "failed to get lease on VM ...: unauthorized". Arch's ruling (route 1): POST the
+          # Machines API restart directly, with no lease and no new token. fly-go's Restart sends
+          # a lease nonce only when one is held, so a lease-free restart is the client's own
+          # shape. Our runs are serialized by `concurrency` and guard 2; a machine leased by
+          # someone else refuses an un-nonced change, which fails this step loudly (right: never
+          # restart under another change). No force_stop and no signal, so Fly's defaults apply,
+          # as flyctl's would. Same header handling as guard 1b; the token is never echoed.
+          case "$FLY_API_TOKEN" in
+            "FlyV1 "*) auth="$FLY_API_TOKEN" ;;
+            *) auth="FlyV1 $FLY_API_TOKEN" ;;
+          esac
+          code="$(curl -sS --max-time 60 -o /dev/null -w '%{http_code}' -X POST \
+            -H "Authorization: $auth" \
+            "https://api.machines.dev/v1/apps/$DB_APP/machines/$DB_MACHINE/restart" 2>/dev/null || true)"
+          unset auth
+          # curl prints 000 itself when nothing answered; an empty value means the same.
+          [ -n "$code" ] || code=000
+          case "$code" in
+            2??) echo "restart accepted: HTTP $code" ;;
+            *)
+              echo "::error title=Restart refused::the Machines API answered HTTP $code (000 means no answer within 60 s). Nothing retries; the database is still down and needs a person."
+              exit 1 ;;
+          esac
           echo "restarted_at=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> "$GITHUB_OUTPUT"
 
       - name: Verify alpha reads the database healthy within three minutes
