@@ -6530,7 +6530,9 @@ class IntentService:
                 lines = [f"**Shipped This Week** ({len(recent_closed)} items):\n"]
                 for item in recent_closed:
                     number = item.get("number", "?")
-                    is_pr = bool(item.get("pull_request"))
+                    # The adapter normalizes GitHub's `pull_request` object to
+                    # `is_pull_request` (#986); read either shape.
+                    is_pr = bool(item.get("is_pull_request") or item.get("pull_request"))
                     item_type = "PR" if is_pr else "Issue"
                     # #1628: degenerate GitHub titles (the literal "{" class) never render verbatim
                     title = display_title(item.get("title"), f"(untitled {item_type} #{number})")
