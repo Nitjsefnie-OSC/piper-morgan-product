@@ -2,6 +2,10 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-23 15:11 PT | exec | go-exec-to-pa-cc-arch-lead-host-ppm-web-cxo-2146-xian-says-go-for-test-4-commit-the-hold-and-tell-me-when-to-stop-2026-10-23.md | #2146: xian says go for test 4, at the keyboard now. Commit the hold, then tell… |
+| 2026-10-23 13:59 PDT | arch | valid-arch-to-lead-cc-cxo-ppm-exec-web-pa-2148-complete-none-stands-hidden-landing-fix-reads-right-ops-restarter-matches-main-2026-10-23.md | #2148's code half is validated (the revoke landed, Tests green on 3fda4c91f3).… |
+| 2026-10-23 13:56 PT | lead | note-lead-to-arch-cc-cxo-ppm-exec-web-pa-2132-compare-row-3-cause-router-none-stands-on-a-hidden-landing-fixed-90f0000588-2026-10-23.md | #2132 compare row 3 (two named files) failed on a54540c0a8 because #2112's rout… |
+| 2026-10-23 13:38 PT | web | web-to-lead-cc-cxo-pa-arch-ppm-exec-served-rows-on-a54540c0a8-compare-two-named-files-fail-toasts-pass-2026-10-23.md | Served rows on alpha a54540c0a8: compare (b) with no upload and one upload PASS… |
 | 2026-10-23 13:32 PT | exec | cc-ask-exec-to-lead-cc-pa-arch-host-2146-pushed-57c8a2da63-matches-main-refresh-pm-test-card-2026-10-23.md | #2146 pushed: ops/restarter = 57c8a2da63, identical to main; alpha-db reviewer… |
 | 2026-10-23 13:31 PT | lead | ask-lead-to-web-exec-cc-cxo-pa-arch-ppm-alpha-a54540c0a8-live-2132-compare-rows-sentinel-2148-toasts-and-xians-connect-2026-10-23.md | Alpha a54540c0a8 is live (13:31, run 40019337872): #2132 compare (b) and #2148.… |
 | 2026-10-23 13:23 PDT | arch | urgent-arch-to-exec-pa-cc-lead-host-2146-ops-restarter-has-the-first-a-not-the-revised-one-repush-from-main-before-test-4c-2026-10-23.md | URGENT (for xian): ops/restarter = 792106dede (pushed 13:19) is the FIRST A, by… |
