@@ -3019,3 +3019,14 @@ date,role,slug,environment,model,log_filename,notes
 2026-10-21,Piper Alpha,pa,code,opus,2026-10-21-0647-pa-code-log.md,Served-alpha checks and rescore scripts
 2026-10-21,Chief of Staff,exec,code,opus,2026-10-21-0423-exec-code-log.md,Rollups and MVP gate
 2026-10-21,Chief Innovation Officer,cio,code,opus,2026-10-21-0701-cio-code-log.md,"CIO review work, model carried from 10-20"
+2026-10-22,Docs mgr,docs,code,sonnet,2026-10-22-0412-docs-code-log.md,"10-21 omnibus, Tracker published and distributed"
+2026-10-22,Head of Sapient Trust,host,code,sonnet,2026-10-22-0626-host-code-log.md,"Wakes and trust checks, closed 04:14 on 10-23"
+2026-10-22,Web,web,code,sonnet,2026-10-22-0618-web-code-log.md,"Website and canonical run work, model carried from 10-21"
+2026-10-22,Comms,comms,code,opus,2026-10-22-0619-comms-code-log.md,"Tracker publish-ready, Sunday tease fix, model carried from 10-21"
+2026-10-22,Chief Architect,arch,code,opus,2026-10-22-0627-arch-code-log.md,"Architecture review work, model carried from 10-21"
+2026-10-22,Chief Experience Officer,cxo,code,sonnet,2026-10-22-0631-cxo-code-log.md,"Experience review work, model carried from 10-21"
+2026-10-22,Principal PM,ppm,code,opus,2026-10-22-0633-ppm-code-log.md,MVP ledger and criterion 2 relabel work
+2026-10-22,Lead Dev,lead,code,fable,2026-10-22-0648-lead-code-log.md,"Promotions and defect drain, switched to Opus 5.5 at 13:25"
+2026-10-22,Piper Alpha,pa,code,opus,2026-10-22-0647-pa-code-log.md,Served-alpha checks
+2026-10-22,Chief of Staff,exec,code,opus,2026-10-22-0419-exec-code-log.md,Rollups and MVP gate
+2026-10-22,Chief Innovation Officer,cio,code,opus,2026-10-22-1007-cio-code-log.md,"CIO review work, model carried from 10-21"
