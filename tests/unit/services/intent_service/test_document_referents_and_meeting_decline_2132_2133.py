@@ -36,9 +36,13 @@ from services.intent_service.workflow_entries import (
 from services.shared_types import EffectClass, IntentCategory, Outwardness
 
 _USER = "3f7b8a52-2132-4b00-9e00-000000002132"
-NO_DOC_LINE = "I don't see a document in this chat. Paste the text here and I'll work with it."
+# #2138 (CXO 18:5x): Notion connected, nothing bound, no title.
+NO_DOC_LINE = (
+    "I couldn't tell which document you mean. Name an uploaded file or a "
+    "Notion page, or paste the text here and I'll work with it."
+)
 CXO_COMPARE_LINE = (
-    "I don't see two documents in this chat. Paste the text of both here and I'll compare them."
+    "I need two documents to compare. Name two uploaded files, or paste the text of both here."
 )
 CXO_BATCH_LINE = (
     "I can't create several issues from a meeting yet. Tell me the first action item and "
@@ -136,7 +140,7 @@ class TestHeldFileFirst:
         assert result.message.startswith("I read 'q3-plan.pdf' from your files.")
 
     @pytest.mark.asyncio
-    async def test_nothing_held_and_notion_unavailable_gets_the_notion_line(self, intent_service):
+    async def test_nothing_held_and_notion_unavailable_names_no_notion(self, intent_service):
         intent = _analyze_intent("Analyze launch-notes-2131.txt", user_id=_USER)
         router = _notion_router()
         router.is_available.return_value = False
@@ -148,7 +152,11 @@ class TestHeldFileFirst:
         ):
             result = await intent_service._handle_analyze_document_notion(intent, "wf", "s")
         analyze.assert_not_called()
-        assert "can't read your Notion pages in chat yet" in result.message
+        # #2138 (Arch 18:4x, step 3): Notion not connected → no Notion named.
+        assert result.message == (
+            "I don't see that document among your uploads. Paste the text here and I'll work with it."
+        )
+        assert "Notion" not in result.message
 
     @pytest.mark.asyncio
     async def test_several_named_files_are_listed_and_none_is_read(self, intent_service):
@@ -328,10 +336,12 @@ class TestResolveHeldFiles:
         assert resolver.resolve_file_reference.await_args.args[1] == _USER
 
     @pytest.mark.asyncio
-    async def test_a_scored_pick_binds_nothing(self):
-        """'Analyze this document' with uploads on the account: the resolver's
-        recency/type score would pick one. That is a guessed referent."""
-        assert await self._run(_resolver_returning(("f-1", 0.62)), "Analyze this document") == []
+    async def test_a_scored_pick_binds_like_summarize(self):
+        """Arch 18:28 (#2138): the summarize contract, no extra cutoff. The
+        resolver's own pick binds; its None is what falls through."""
+        assert await self._run(_resolver_returning(("f-1", 0.62)), "Analyze this document") == [
+            {"file_id": "f-1", "filename": None}
+        ]
 
     @pytest.mark.asyncio
     async def test_nothing_resolved_binds_nothing(self):
@@ -349,15 +359,16 @@ class TestResolveHeldFiles:
         assert got == [{"file_id": "a", "filename": "a.md"}, {"file_id": "b", "filename": "b.md"}]
 
     @pytest.mark.asyncio
-    async def test_scored_ambiguity_binds_nothing(self):
+    async def test_scored_ambiguity_returns_the_candidates(self):
+        """Arch 18:28: an ambiguous match lists the candidates, as summarize does."""
         from services.file_context.exceptions import AmbiguousFileReferenceError
 
         files = [MagicMock(id="a", filename="a.md"), MagicMock(id="b", filename="b.md")]
         got = await self._run(
             _resolver_returning(raises=AmbiguousFileReferenceError(files, [0.6, 0.55])),
-            "Compare these two documents",
+            "Analyze the notes",
         )
-        assert got == []
+        assert got == [{"file_id": "a", "filename": "a.md"}, {"file_id": "b", "filename": "b.md"}]
 
 
 # ---------------------------------------------------------------------------

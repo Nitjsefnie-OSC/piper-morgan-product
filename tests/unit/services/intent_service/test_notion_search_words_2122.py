@@ -30,7 +30,10 @@ def test_the_analyze_and_update_handlers_serve_cxo_lines():
     """CXO 18:17: #2100's rule covers all three strings; no 'once connected' promise."""
     analyze = inspect.getsource(svc.IntentService._handle_analyze_document_notion)
     update = inspect.getsource(svc.IntentService._handle_update_document_notion)
-    assert "I can't analyze your documents from chat yet" in analyze
+    # #2138 (CXO and Arch, 2026-10-22): the analyze handler reads held files first,
+    # so its Notion-unavailable branch never claims "can't analyze" and names no Notion.
+    assert "I can't analyze your documents from chat yet" not in analyze
+    assert "I don't see that document among your uploads. " in analyze
     assert "I can't update documents from chat yet. Tell me what you want changed" in update
     for src in (analyze, update):
         assert "Once connected" not in src

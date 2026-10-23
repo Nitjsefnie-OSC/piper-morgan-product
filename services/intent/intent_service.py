@@ -6009,10 +6009,14 @@ class IntentService:
             if not notion_router.is_available(_user_id):
                 return IntentProcessingResult(
                     success=True,
-                    # #2100/#2122 (CXO's words, 2026-10-20): no promise of a Notion read.
+                    # #2138 (CXO and Arch, 2026-10-22, served fc183c41bc): this branch
+                    # runs only after no held file bound, so "I can't analyze your
+                    # documents from chat yet" is false (step 1 can), and naming Notion
+                    # to an account without it is a second false claim. Arch's 18:4x
+                    # ruling, step 3: no Notion named, no can't-analyze claim.
                     message=(
-                        "I can't analyze your documents from chat yet, and I can't read your "
-                        "Notion pages in chat yet. If you paste the text here, I can work with it."
+                        "I don't see that document among your uploads. "
+                        "Paste the text here and I'll work with it."
                     ),
                     intent_data={
                         "category": intent.category.value,
@@ -6046,9 +6050,12 @@ class IntentService:
             if not document_id and not document_title:
                 return IntentProcessingResult(
                     success=True,
+                    # #2138 (CXO 18:5x): names only what was checked (uploads and
+                    # Notion), as an imperative; replaces "in this chat", which stopped
+                    # being exact once chat turns were shown to reach uploads.
                     message=(
-                        "I don't see a document in this chat. "
-                        "Paste the text here and I'll work with it."
+                        "I couldn't tell which document you mean. Name an uploaded file or a "
+                        "Notion page, or paste the text here and I'll work with it."
                     ),
                     intent_data={
                         "category": intent.category.value,
@@ -6225,7 +6232,7 @@ class IntentService:
                 # Stated, not asked (the #1730 rule: an ask arms the #846
                 # store or isn't made); the user answers with the exact name.
                 message=(
-                    "More than one of your files matches that name, so I didn't pick one:\n"
+                    "You've uploaded a few files and I'm not sure which one you mean:\n"
                     f"{listing}\nTell me the exact file name, or paste the text here."
                 ),
                 intent_data={**intent_data, "candidates": [f["filename"] for f in bound]},

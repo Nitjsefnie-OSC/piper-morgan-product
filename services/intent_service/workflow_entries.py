@@ -1415,7 +1415,8 @@ async def run_summarize_document_workflow(
 # documents" resolves only to bound referents, the same rule analyze_document
 # follows. Kept as module constants so the pins quote the exact words.
 NO_TWO_DOCUMENTS_LINE = (
-    "I don't see two documents in this chat. Paste the text of both here and " "I'll compare them."
+    # #2138 (CXO 18:5x): names only what was checked, as an imperative.
+    "I need two documents to compare. Name two uploaded files, or paste the text of both here."
 )
 # #2133 (Arch 15:05: batch-from-meeting asks route to a READ decline; CXO's words).
 BATCH_FROM_MEETING_DECLINE = (

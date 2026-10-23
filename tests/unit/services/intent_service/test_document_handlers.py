@@ -284,8 +284,10 @@ class TestNotionNotConfiguredGracefulDegradation:
 
             assert result.success is True
             assert (
-                "I can't analyze your documents from chat yet" in result.message
-            )  # #2122: CXO's words
+                result.message
+                == "I don't see that document among your uploads. Paste the text here and I'll work with it."
+            )  # #2138: no Notion named to an account without it, no can't-analyze claim
+            assert "Notion" not in result.message
             assert "NOTION_API_KEY" not in result.message  # #2122
             assert result.implemented is False
 

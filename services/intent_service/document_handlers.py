@@ -166,7 +166,11 @@ async def handle_analyze_document(file_id: str, user_id: str) -> Dict:
 # is a recency/type score over every file the user owns, which would bind an
 # unnamed "this document" to whatever scored best (Arch 15:05: never a guessed
 # referent). A state check on the resolver's own output, not on the message.
-HELD_FILE_MIN_CONFIDENCE = 0.95
+# Arch 18:28 (#2138): the analyze path binds through the SAME honesty contract as
+# summarize, which applies no cutoff of its own: the resolver's pick binds, its
+# ambiguity lists the candidates, and its None falls through. Kept at 0.0 so the
+# shape stays visible; raising it again is a ruling, not a tuning.
+HELD_FILE_MIN_CONFIDENCE = 0.0
 
 
 async def resolve_held_files(message: str, user_id: Optional[str], action: str) -> List[Dict]:
@@ -179,7 +183,8 @@ async def resolve_held_files(message: str, user_id: Optional[str], action: str) 
     so "held" is what the resolver binds from the message: a stored filename
     named verbatim (several named → several returned, the resolver's
     exact-match ambiguity), or "the file I uploaded" with exactly one file.
-    A lower-confidence (scored) pick or a scored ambiguity binds nothing.
+    Any pick the resolver makes binds, and any ambiguity returns its candidates
+    (Arch 18:28: the summarize contract, no extra cutoff).
 
     Returns ``[{"file_id", "filename"}]`` (``filename`` None when the resolver
     returned only an id); empty when nothing is bound or there is no user.
