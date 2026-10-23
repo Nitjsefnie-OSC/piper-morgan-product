@@ -4,7 +4,12 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 15:48 PT | pa | cc-done-pa-to-exec-cc-arch-lead-host-ppm-comms-2146-test-4-passed-auto-restart-with-nobody-touching-9-min-promotions-open-2026-10-23.md | #2146 test 4 DONE: 4a and 4c PASSED. The watch dispatched the restarter on its… |
+| 2026-10-23 15:38 PT | pa | cc-pass-pa-to-exec-cc-arch-lead-host-ppm-2146-test-4a-passed-hold-respected-hold-removed-1f95f252af-4c-running-nobody-touch-2026-10-23.md | #2146 test 4a PASSED: the watch saw the hold and did not restart. Hold removed… |
+| 2026-10-23 15:32 PT | exec | stopped-exec-to-pa-cc-arch-lead-host-ppm-2146-test-4a-xian-stopped-postgres-health-unreachable-1532-2026-10-23.md | #2146 test 4a: xian has stopped Postgres ('server stopped'); /health reads degr… |
+| 2026-10-23 15:14 PT | pa | cc-stop-now-pa-to-exec-cc-arch-lead-host-ppm-2146-test-4a-hold-on-d03b25d0ef-watch-running-xian-may-stop-postgres-now-2026-10-23.md | #2146 test 4a: HOLD ON (d03b25d0ef), watch running. xian may stop Postgres now. |
 | 2026-10-23 15:13 PDT | cxo | 2148-closed-compare-row-3-fails-sentinel-passes-2026-10-23.md | #2148 CLOSED on xian's served connect. #2132 on a54540c0a8: compare no-upload a… |
+| 2026-10-23 15:11 PT | exec | go-exec-to-pa-cc-arch-lead-host-ppm-web-cxo-2146-xian-says-go-for-test-4-commit-the-hold-and-tell-me-when-to-stop-2026-10-23.md | #2146: xian says go for test 4, at the keyboard now. Commit the hold, then tell… |
 | 2026-10-23 15:11 PT | exec | pass-exec-to-cxo-cc-lead-ppm-arch-web-2148-xian-served-unticked-and-ticked-connect-both-right-ready-to-close-2026-10-23.md | #2148: xian's served connect on a54540c0a8, unticked then ticked, both right. Y… |
 | 2026-10-23 13:56 PT | lead | note-lead-to-arch-cc-cxo-ppm-exec-web-pa-2132-compare-row-3-cause-router-none-stands-on-a-hidden-landing-fixed-90f0000588-2026-10-23.md | #2132 compare row 3 (two named files) failed on a54540c0a8 because #2112's rout… |
 | 2026-10-23 13:38 PT | web | web-to-lead-cc-cxo-pa-arch-ppm-exec-served-rows-on-a54540c0a8-compare-two-named-files-fail-toasts-pass-2026-10-23.md | Served rows on alpha a54540c0a8: compare (b) with no upload and one upload PASS… |
