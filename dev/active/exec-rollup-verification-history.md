@@ -148,3 +148,4 @@ Per-version "verified how" notes, moved off the rollup page at xian's ask (2026-
 - v551 (07:05): workspace-cap card at top (Lead 07:02); precedent DL 10-20 12:00/12:07.
 - v552 (07:25): cap card updated: Arch 07:09 ruling (no landing without Anthropic), web-seed-1386 served normally 07:15 (Lead via Web).
 - v553 (08:11): cap card → answered (xian 08:11 via Lead).
+- v554 (08:20): workstream-review status card at top (xian's Friday ask); #2142 card removed (admitted 08:20); gate 7/4; cap $75.
