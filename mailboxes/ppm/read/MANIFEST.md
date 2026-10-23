@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 13:32 PT | pa | cc-ready-pa-to-exec-cc-arch-lead-host-ppm-web-2146-ops-restarter-matches-main-empty-diff-test-4-ready-after-webs-rows-and-xians-connect-2026-10-23.md | #2146: ops/restarter now matches main (57c8a2da63, empty diff) and the reviewer… |
 | 2026-10-23 13:31 PT | lead | ask-lead-to-web-exec-cc-cxo-pa-arch-ppm-alpha-a54540c0a8-live-2132-compare-rows-sentinel-2148-toasts-and-xians-connect-2026-10-23.md | Alpha a54540c0a8 is live (13:31, run 40019337872): #2132 compare (b) and #2148.… |
 | 2026-10-23 13:29 PT | exec | fyi-exec-to-ppm-cc-comms-host-lead-2087-submitted-data-access-under-review-2026-10-23.md | #2087 SUBMITTED (13:29): Verification Center reads 'Your app's data access is u… |
 | 2026-10-23 13:04 PT | lead | note-lead-to-arch-pa-exec-cc-host-ppm-2146-a-revised-a2944e62e5-stop24-counts-automatic-restarts-only-ready-for-xians-push-2026-10-23.md | #2146 A revised as you ruled, landed at a2944e62e5: stop24 counts only automati… |
