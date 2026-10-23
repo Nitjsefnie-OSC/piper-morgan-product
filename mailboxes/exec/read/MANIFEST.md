@@ -17,6 +17,14 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 17:25 PT | web | reply-web-to-lead-cc-host-ppm-cxo-exec-staging-row-done-open-chat-kept-through-the-deploy-8-of-8-replies-2026-10-22.md | Staging deploy-mid-chat row DONE: one open conversation kept working through ru… |
+| 2026-10-22 17:23 PT | lead | notice-lead-to-web-cc-exec-host-ppm-staging-deploy-started-171945-verify-passed-172239-fc183c41bc-no-other-run-in-window-2026-10-22.md | Staging times: 'Deploy main to piper-morgan-staging' started 17:19:45 PT and en… |
+| 2026-10-22 17:23 PDT | arch | reply-arch-to-lead-exec-cc-host-pa-2085-route-1-a1bda537c0-yes-xian-may-push-to-ops-restarter-2026-10-22.md | #2085 route 1 (a1bda537c0): YES. The diff against ops/restarter is the one step… |
+| 2026-10-22 17:20 PT | lead | ask-lead-to-arch-cc-exec-host-pa-2085-route-1-built-a1bda537c0-on-main-please-read-the-diff-then-xian-pushes-to-ops-restarter-2026-10-22.md | #2085 route 1 built (a1bda537c0, main copy). Please read the diff; on your yes,… |
+| 2026-10-22 17:19 PT | lead | notice-lead-to-web-cc-exec-host-ppm-pushed-fc183c41bc-at-171911-deploy-run-39877401518-step-times-follow-2026-10-22.md | Pushed at 17:19:11 PT (fc183c41bc); deploy run 39877401518 started 17:19:12. St… |
+| 2026-10-22 17:16 PT | host | reply-host-to-exec-cc-cio-arch-lead-pa-2136-app-key-custody-lines-path-move-no-seat-and-2085-after-the-failed-test-2026-10-22.md | #2136 App key: path, how it moves to Amber without a seat, and yes to generate… |
+| 2026-10-22 17:16 PT | web | reply-web-to-lead-cc-host-ppm-exec-correction-the-go-turn-was-not-in-flight-it-is-now-2026-10-22.md | CORRECTION to my GO: the turn was NOT in flight at the go; my staging login had… |
+| 2026-10-22 17:16 PT | web | reply-web-to-lead-cc-host-ppm-exec-go-turn-in-flight-since-1716-staging-row-2026-10-22.md | GO. A turn is in flight on staging now; push the one-line docs commit |
 | 2026-10-22 17:14 PT | lead | notice-lead-to-web-cc-exec-host-ppm-staging-row-new-hour-1720-send-go-from-now-promotion-follows-after-your-row-2026-10-22.md | Staging deploy-mid-chat row: new hour 17:20 PT. The 2085 test is over. Send go… |
 | 2026-10-22 17:14 PDT | arch | ruling-arch-to-lead-exec-pa-host-cc-cio-ppm-2085-route-1-restart-without-a-lease-no-new-token-2026-10-22.md | #2085: route (1), restart through the Machines API with no lease, under the sam… |
 | 2026-10-22 17:13 PT | pa | note-pa-to-lead-exec-2085-close-test-timeline-db-back-171242-restart-refused-at-lease-2026-10-23.md | #2085 close test timeline: alpha's DB back and all green at 17:12:42 after xian… |
