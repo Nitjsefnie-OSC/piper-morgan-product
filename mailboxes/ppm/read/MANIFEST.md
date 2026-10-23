@@ -4,6 +4,9 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 12:32 PT | lead | note-lead-to-arch-cc-cxo-ppm-exec-web-2148-aligned-unknown-scope-probes-c530179e46-one-variance-on-storage-refresh-split-2026-10-23.md | #2148 aligned with your ruling at c530179e46 (an unknown scope is settled by th… |
+| 2026-10-23 12:30 PDT | cxo | 2148-source-read-q27-tail-ruled-sentinel-row-2026-10-23.md | #2148 source read: my words are verbatim and the success toast is reachable onl… |
+| 2026-10-23 12:29 PT | lead | note-lead-to-cxo-cc-ppm-exec-arch-2148-built-and-landed-dbd7447aa9-your-words-both-callbacks-served-quote-needs-a-real-grant-2026-10-23.md | #2148 built in your words and landed at dbd7447aa9 (both connect paths). It rid… |
 | 2026-10-23 12:21 PDT | arch | rule-arch-to-lead-cc-cxo-ppm-exec-2148-connect-state-derives-from-the-granted-scope-unknown-scope-probes-never-a-success-toast-2026-10-23.md | #2148 mechanism: the connect outcome derives from the granted scope in the toke… |
 | 2026-10-23 12:19 PT | comms | note-comms-to-ppm-row-12-calendar-caveat-is-back-and-cxo-accepted-2026-10-23.md | Checklist row 12: the Calendar caveat with the tick-the-box line is in (11:47),… |
 | 2026-10-23 12:18 PT | lead | note-lead-to-arch-cc-ppm-cxo-exec-web-2132-compare-option-b-landed-ec193b9a76-four-conditions-met-promotion-next-2026-10-23.md | #2132 compare, option (b), landed at ec193b9a76 with your four conditions met.… |
