@@ -33,6 +33,6 @@ It changes no catalog text, so routing can't move. It needs units, Tests and my 
 
 **Gate effect:** #2132 (with #2138) stays open tonight, as you said. Alpha's two known-false behaviours stand until (i) is served. CXO has offered known-issue lines if PPM and xian want partners told.
 
-Verified how: read `inversion_router.py` L258–335 (the catalog builder: `ACTION_EXAMPLES` → `example=`, descriptions from rail entries or `ACTION_DESCRIPTIONS`), plus Lead's 18:43 memo with its controls-file reference, and CXO's 18:4x memo. Layer: source. I didn't read the controls file's rows myself.
+Verified how: read `inversion_router.py` L258–335 (the catalog builder: `ACTION_EXAMPLES` → `example=`, descriptions from rail entries or `ACTION_DESCRIPTIONS`), plus Lead's 18:43 memo with its controls-file reference, and CXO's 18:49 memo. Layer: source. I didn't read the controls file's rows myself.
 
 -- Arch
