@@ -131,18 +131,37 @@ jobs:
               exit 1 ;;
           esac
 
-      - name: Guard 2, one restart per thirty minutes
+      - name: Guard 2, one restart per thirty minutes (and a second automatic restart in 24 hours stops)
+        id: guard2
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           THIS_RUN: ${{ github.run_id }}
+          # #2146 (Exec's condition): a run the health watch dispatched is triggered by the bot;
+          # no dispatch input can set this.
+          TRIGGER_ACTOR: ${{ github.triggering_actor }}
         run: |
           set -u
           # Arch (15:29): a restart that does not cure FAILS its run (the verify step), so a read
           # of successful runs would miss exactly the restart this guard exists to stop. Read
           # every recent run of this workflow and ask whether its restart step itself succeeded.
-          ids="$(gh run list --workflow restart-alpha-postgres.yml --limit 10 --json databaseId,updatedAt --jq '.[] | select((.databaseId|tostring) != "'"$THIS_RUN"'") | "\(.databaseId) \(.updatedAt)"')"
+          # #2146 (Arch, condition A): read by TIME, not by count. Under auto-dispatch most runs
+          # end at guard 1a/1b, so ten runs can span under an hour and a restart 40 minutes ago
+          # would fall out of a count window (fail open). Every run created in the last 24 hours
+          # is read; a full page means runs may be unseen, so it refuses (fail closed, #1778).
+          since="$(date -u -d '24 hours ago' +%Y-%m-%dT%H:%M:%SZ)"
+          limit=200
+          listing="$(gh run list --workflow restart-alpha-postgres.yml --created ">=$since" --limit "$limit" --json databaseId,updatedAt)" || { echo "::error title=Restart history unreadable::guard 2 could not list this workflow's runs; refusing rather than guessing. Nothing restarted."; exit 1; }
+          count="$(printf '%s' "$listing" | python3 -c 'import sys,json; print(len(json.load(sys.stdin)))')"
+          if [ "$count" -ge "$limit" ]; then
+            echo "::error title=Restart history page full::$count runs in 24 hours fills the page, so runs may be unseen; refusing rather than guessing. Nothing restarted."
+            exit 1
+          fi
+          ids="$(printf '%s' "$listing" | python3 -c 'import sys,json,os
+          for r in json.load(sys.stdin):
+              if str(r["databaseId"]) != os.environ["THIS_RUN"]:
+                  print(r["databaseId"], r["updatedAt"])')"
           runs="["; sep=""
           while read -r id at; do
             [ -z "$id" ] && continue
@@ -152,7 +171,7 @@ jobs:
             runs="$runs$sep{\"updatedAt\":\"$at\",\"jobs\":$jobs}"; sep=","
           done <<< "$ids"
           runs="$runs]"
-          decide="$(printf '%s' "$runs" | python3 -c 'import sys,json
+          decide="$(printf '%s' "$runs" | AUTO="$([ "$TRIGGER_ACTOR" = "github-actions[bot]" ] && echo 1 || echo 0)" python3 -c 'import sys,json,os
           from datetime import datetime,timezone
           now=datetime.now(timezone.utc)
           try:
@@ -168,13 +187,23 @@ jobs:
               # the restart step counts if it ran at all: a restart issued and then cancelled, or
               # one that errored after Fly accepted it, may still have restarted the machine
               restarted=any((s.get("name") or "").startswith("Restart the Postgres machine") and s.get("conclusion") in ("success","failure","cancelled") for j in (r.get("jobs") or []) for s in (j.get("steps") or []))
-              if restarted and age<1800:
+              if restarted:
                   hits.append(int(age))
-          print("block %d" % min(hits) if hits else "clear")')"
-          echo "guard 2 reads: $decide"
+          recent=[h for h in hits if h<1800]
+          if recent:
+              print("block %d" % min(recent))
+          elif hits and os.environ.get("AUTO")=="1" and min(hits)<86400:
+              print("stop24 %d" % min(hits))
+          else:
+              print("clear")')"
+          echo "guard 2 reads: $decide (triggered by: $TRIGGER_ACTOR)"
           case "$decide" in
             "block unreadable")
               echo "::error title=Restart history unreadable::guard 2 could not parse this workflow's recent runs; refusing rather than guessing. Nothing restarted."
+              exit 1 ;;
+            stop24*)
+              echo "stop24=${decide#stop24 }" >> "$GITHUB_OUTPUT"
+              echo "::error title=A second automatic restart within 24 hours::this workflow restarted the machine ${decide#stop24 }s ago and the database failed again. A recurring fault (out of memory, a bad config) must reach a person, not cycle. Nothing restarted; the alert issue gets a comment."
               exit 1 ;;
             block*)
               echo "::error title=A restart already ran in the last 30 minutes::this workflow restarted the machine ${decide#block }s ago (whatever that run's conclusion) and the database is still not healthy. A restart that does not cure must reach a person, not loop. Nothing restarted."
@@ -265,6 +294,21 @@ jobs:
             exit 1
           fi
           echo "alpha reads the database healthy after the restart"
+
+      - name: Comment on the open alert issue when the 24-hour stop refuses
+        if: failure() && steps.guard2.outputs.stop24 != ''
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          AGO: ${{ steps.guard2.outputs.stop24 }}
+        run: |
+          set -u
+          line="Automatic restart REFUSED: the database failed again ${AGO}s after an automatic restart (second within 24 hours). A person needs to look; the machine was not restarted. Run: $RUN_URL"
+          number=$(gh issue list --state open --search "in:title \"$ALERT_TITLE\"" --json number,title \
+            --jq '.[] | select(.title == env.ALERT_TITLE) | .number' | head -1)
+          if [ -n "$number" ]; then gh issue comment "$number" --body "$line"; echo "commented on #$number"; else echo "no open alert issue; the run's failure is the alert"; fi
 
       - name: Comment on the open alert issue
         if: always() && steps.restart.outcome == 'success'
