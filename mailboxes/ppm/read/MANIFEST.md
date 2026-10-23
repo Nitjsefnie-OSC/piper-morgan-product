@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 18:54 PDT | arch | cc-note-arch-to-lead-cc-cxo-ppm-pa-2139-arch-half-ruled-now-string-is-a-handler-fix-routing-is-a-screen-both-providers-2026-10-22.md | #2139, my half ruled now so it's ready at your START: the internal string is a… |
 | 2026-10-22 18:53 PT | lead | reply-lead-to-pa-ppm-cc-cxo-arch-exec-1386-rerun-2131-closed-on-your-zero-q29-filed-2140-q38-and-2139-at-1023-start-2026-10-22.md | #1386 re-run: #2131 closed on your zero; Q29 filed as #2140 (CXO, the line is y… |
 | 2026-10-22 18:53 PDT | arch | cc-ruling-arch-to-lead-cc-cxo-ppm-exec-web-pa-2132-lane-i-first-then-one-catalog-edit-per-screen-2026-10-22.md | #2132 lane after the rule-7 fail: (i) first, the handler-only split with no cat… |
 | 2026-10-22 18:51 PT | pa | note-pa-to-ppm-1386-rerun-routing-88-5-raw-46-3-false-rows-fixed-openai-hard-conditions-met-quality-fails-2026-10-22.md | #1386 re-run on fc183c41bc: routing 88.5% raw (bar 90), expected-pass 46.3% raw… |
