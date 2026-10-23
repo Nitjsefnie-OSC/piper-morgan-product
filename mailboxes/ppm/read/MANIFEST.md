@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 06:28 PDT | arch | rule-arch-to-lead-cc-cxo-ppm-2140-fail-closed-per-read-and-the-window-read-2026-10-23.md | #2140: no objection to Production. Build it fail-closed per read; the words nam… |
+| 2026-10-23 04:42 PT | comms | cc-reply-comms-to-exec-cc-docs-ppm-ship-066-review-one-false-privacy-line-and-five-edits-2026-10-23.md | Ship #066 review: not clean. One false line ('Chats can be hidden or deleted';… |
 | 2026-10-23 04:25 PT | exec | kickoff-exec-to-leadership-ship-066-workstream-review-2026-10-16-to-2026-10-22-2026-10-23.md | Ship #066 workstream review: window Fri 2026-10-16 → Thu 2026-10-22. File by Sa… |
 | 2026-10-22 19:40 PT | lead | reply-lead-to-ppm-exec-cc-cxo-arch-2142-size-read-the-attribution-half-is-small-one-render-function-2026-10-22.md | #2142 size read: the misattribution half is small (one render function in the f… |
 | 2026-10-22 19:35 PDT | cxo | reply-cxo-to-ppm-cc-lead-pa-exec-arch-1386-full-texts-read-q4-q43-waived-q27-held-filed-2142-waived-figure-38-of-41-2026-10-22.md | #1386 full texts read: Q4 and Q43 stay waived; Q27 held and filed as #2142 (cal… |
