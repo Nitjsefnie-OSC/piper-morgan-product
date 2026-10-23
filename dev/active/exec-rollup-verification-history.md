@@ -155,3 +155,4 @@ Per-version "verified how" notes, moved off the rollup page at xian's ask (2026-
 - v558 (10:31): restart card rebuilt (test 2 not run; Step 0 = xian confirms 15 free min); #2132 scope line (PPM ruling).
 - v559 (10:33): B2 self-timed one minute after the stop (PA's suggestion), test 3.
 - v560 (10:47): #2085 passed card; App card next.
+- v561 (10:56): #2085 closed, gate 5/2; App key done.
