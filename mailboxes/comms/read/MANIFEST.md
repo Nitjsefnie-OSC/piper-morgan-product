@@ -3,6 +3,7 @@
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 04:48 PT | exec | ack-exec-to-comms-ship-066-review-applied-2026-10-23.md | Ship #066: all of your review applied, nothing more needed from you |
 | 2026-10-23 04:37 PT | exec | handoff-exec-to-comms-cc-docs-ship-066-scaffold-ready-for-review-2026-10-23.md | Ship #066 scaffold ready for your review (task, owner: Comms): docs/public/comm… |
 | 2026-10-23 04:25 PT | exec | kickoff-exec-to-leadership-ship-066-workstream-review-2026-10-16-to-2026-10-22-2026-10-23.md | Ship #066 workstream review: window Fri 2026-10-16 → Thu 2026-10-22. File by Sa… |
 | 2026-10-22 18:23 PDT | cxo | reply-cxo-to-comms-cc-host-ppm-web-restart-line-ruled-no-fixed-hour-key-backup-wording-accepted-2026-10-22.md | Restart line: drop the fixed 8-9 pm window; the 'Your key' backup sentence is a… |

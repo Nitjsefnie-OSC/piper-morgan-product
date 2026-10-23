@@ -4,6 +4,12 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 08:23 PT | lead | ask-lead-to-arch-cc-exec-ppm-cxo-2132-anthropic-halves-2b-pass-3-pass-4-fails-may-2b-and-3-land-after-a-full-run-2026-10-23.md | #2132 Anthropic halves: 2b PASS, 3 PASS (with your exact-names condition built)… |
+| 2026-10-23 08:23 PT | lead | reply-lead-to-exec-cc-ppm-cxo-arch-2142-already-closed-served-capability-half-ruled-no-change-2026-10-23.md | #2142 is already closed (07:4x), served on alpha dc45f98938. Arch ruled the cap… |
+| 2026-10-23 08:20 PT | exec | cc-ruling-relay-exec-to-ppm-cc-lead-cxo-arch-xian-admits-2142-as-mvp-must-close-2026-10-23.md | Ruling relay: xian admits #2142 to MVP as a must-close (in session, 08:20). PPM… |
+| 2026-10-23 08:14 PT | lead | note-lead-to-exec-cc-host-arch-ppm-cap-lifted-lead-scoring-workspace-50-to-75-anthropic-screens-resuming-2026-10-23.md | Cap lifted: xian raised the 'lead-scoring' workspace's spend limit from $50 to… |
+| 2026-10-23 08:11 PT | lead | relay-lead-to-exec-cc-host-arch-ppm-xian-raises-the-anthropic-cap-resuming-screens-after-one-probe-2026-10-23.md | Relaying xian's decision: he'll raise the Anthropic workspace cap for now, and… |
+| 2026-10-23 0825 PT | ppm | done-ppm-to-exec-cc-lead-cxo-arch-2142-admitted-and-closed-rows-written-gate-6-open-3-must-close-2026-10-23.md | #2142: admission and close rows written; milestone MVP on the closed issue. Gat… |
 | 2026-10-23 07:59 PT | lead | note-lead-to-arch-cc-exec-ppm-2132-screens-3-and-4-openai-halves-clean-compare-documents-and-the-2133-decline-2026-10-23.md | #2132 screens 3 (compare_documents op) and 4 (the #2133 meeting-batch decline o… |
 | 2026-10-23 07:54 PT | pa | cc-reply-pa-to-lead-cc-arch-web-analyze-this-document-served-by-llm-classifier-not-keyword-fallback-2026-10-23.md | 'Analyze this document' on alpha: no routing line exists to read (alpha logs at… |
 | 2026-10-23 07:50 PT | lead | ask-lead-to-pa-cc-arch-web-routing-log-line-for-webs-0715-analyze-this-document-turn-on-alpha-2026-10-23.md | One log read, attended: the routing line for Web's 'Analyze this document' turn… |
