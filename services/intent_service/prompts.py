@@ -250,6 +250,7 @@ names are allowlisted there. Don't add examples with invented action names.)
 - "create a ticket for the login bug" → {{"category": "execution", "action": "create_ticket", "confidence": 0.9}}
 - "analyze the file I uploaded" → {{"category": "analysis", "action": "analyze_document", "confidence": 0.8}}
 - "what does this document say?" → {{"category": "analysis", "action": "analyze_document", "confidence": 0.8}}
+- "compare these two documents" → {{"category": "analysis", "action": "compare_documents", "confidence": 0.85}}
 - "summarize the document" → {{"category": "synthesis", "verb": "summarize", "source_type": "document", "action": "summarize_document", "confidence": 0.85}}
 - "summarize github issue #123" → {{"category": "synthesis", "verb": "summarize", "source_type": "github_issue", "action": "generate_summary", "confidence": 0.85}}
 - "list all projects" → {{"category": "query", "action": "manage_portfolio", "confidence": 0.95}}

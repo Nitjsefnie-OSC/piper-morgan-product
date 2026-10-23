@@ -593,6 +593,9 @@ class WorkflowEntry:
     # #1677 named-WRITE flip allowlist key (Arch ruling 2026-08-25). See the
     # FLIP_WRITE_ALLOWLIST block above; validated in __post_init__ below.
     flip_write_allowlist_key: Optional[str] = None
+    # EXIT: #2149 (catalog size). This is a bounded exception, not a second routing
+    # surface: test_router_hidden_entries_are_ratcheted caps it at ONE (compare), and
+    # the direction is still to shrink the legacy chain (#1595).
     # #2132 (Lead's option (b), 2026-10-23): False keeps this entry OFF the router's
     # grammar (derive_routing_grammar skips it and its aliases), so it adds no catalog
     # text; the legacy classifier's action still dispatches to it on the rail. The
