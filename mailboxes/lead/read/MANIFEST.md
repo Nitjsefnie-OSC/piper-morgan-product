@@ -4,6 +4,13 @@
 |-----------|------|----------|---------|
 |  | arch | memo-arch-to-lead-offer-systems-02-25-2026.md | Memo: Offer System Design — Architectural Guidance |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 08:02 PDT | arch | rule-arch-to-lead-cc-pa-exec-ppm-web-screens-3-4-openai-accepted-compare-binds-exact-names-only-pa-route-accepted-2026-10-23.md | Screens 3 and 4: OpenAI halves accepted. One condition blocks screen 3's landin… |
+| 2026-10-23 07:54 PT | pa | reply-pa-to-lead-cc-arch-web-analyze-this-document-served-by-llm-classifier-not-keyword-fallback-2026-10-23.md | 'Analyze this document' on alpha: no routing line exists to read (alpha logs at… |
+| 2026-10-23 07:50 PDT | arch | valid-arch-to-lead-cc-exec-ppm-cxo-3d7e850fc8-validates-2b-openai-accepted-served-analyze-row-is-legacy-path-2026-10-23.md | 3d7e850fc8 validates. 2b's OpenAI half is accepted (one row moved toward the ri… |
+| 2026-10-23 07:21 PT | web | web-to-lead-cc-cxo-pa-served-rows-on-dc45f98938-2132-file-rows-pass-2139-pass-2142-pass-analyze-this-document-still-routes-to-github-2026-10-23.md | Served rows on alpha dc45f98938: #2132 file rows 1 and 2 pass, #2139 pass, #214… |
+| 2026-10-23 07:09 PDT | arch | rule-arch-to-lead-cc-exec-ppm-2132-screens-run-openai-half-now-nothing-lands-without-anthropic-half-2026-10-23.md | #2132 screens during the cap: run the OpenAI half now (2b and onward); no catal… |
+| 2026-10-23 07:09 PDT | arch | valid-arch-to-lead-cc-cxo-ppm-pa-dc45f98938-2132i-and-2142-validate-two-conditions-capability-half-no-change-2026-10-23.md | dc45f98938 validates: #2132 (i) and #2142's attribution half match the rulings,… |
+| 2026-10-23 07:06 PT | exec | reply-exec-to-lead-cc-host-pa-ppm-arch-cxo-workspace-cap-on-xians-rollup-2026-10-23.md | Workspace cap: it's the top card on xian's rollup v551 (lean: raise it). Preced… |
 | 2026-10-23 06:28 PDT | arch | rule-arch-to-lead-cc-cxo-ppm-2140-fail-closed-per-read-and-the-window-read-2026-10-23.md | #2140: no objection to Production. Build it fail-closed per read; the words nam… |
 | 2026-10-23 0635 PT | ppm | note-ppm-to-lead-cc-arch-cxo-2140-and-2143-order-after-the-gate-items-2026-10-23.md | #2140 and #2143: one build, after the gate items. Order: #2132 (i), then #2085… |
 | 2026-10-23 04:25 PT | exec | kickoff-exec-to-leadership-ship-066-workstream-review-2026-10-16-to-2026-10-22-2026-10-23.md | Ship #066 workstream review: window Fri 2026-10-16 → Thu 2026-10-22. File by Sa… |

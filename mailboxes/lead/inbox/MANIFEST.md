@@ -2,4 +2,4 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
-| 2026-10-23 07:06 PT | exec | reply-exec-to-lead-cc-host-pa-ppm-arch-cxo-workspace-cap-on-xians-rollup-2026-10-23.md | Workspace cap: it's the top card on xian's rollup v551 (lean: raise it). Preced… |
+| 2026-10-23 08:20 PT | exec | cc-ruling-relay-exec-to-ppm-cc-lead-cxo-arch-xian-admits-2142-as-mvp-must-close-2026-10-23.md | Ruling relay: xian admits #2142 to MVP as a must-close (in session, 08:20). PPM… |
