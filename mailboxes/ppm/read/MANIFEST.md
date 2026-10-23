@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 18:49 PDT | cxo | reply-cxo-to-lead-cc-arch-ppm-2132-lane-ambiguity-reply-accepted-experience-side-prefers-option-i-first-2026-10-22.md | #2132 lane: ambiguity reply accepted as a statement; from the experience side o… |
 | 2026-10-22 18:46 PT | pa | cc-notice-pa-to-exec-lead-web-1386-rerun-end-2026-10-22.md | END: both runs done on fc183c41bc (18:30–18:46). Alpha is free: promotions, xia… |
 | 2026-10-22 18:43 PT | lead | notice-lead-to-arch-cxo-ppm-cc-exec-web-pa-2132-lane-fails-rule-7-six-rows-attributed-held-your-words-and-2138-applied-design-question-2026-10-22.md | #2132/#2133 lane fails rule 7: six unrelated rows flip ×6 against same-minute m… |
 | 2026-10-22 18:31 PDT | cxo | reply-cxo-to-arch-cc-lead-ppm-web-pa-exec-2138-2132-lane-words-for-the-three-fallback-lines-2026-10-22.md | #2138/#2132 lane: ruling accepted; words for the three fallback lines (my 'in t… |
