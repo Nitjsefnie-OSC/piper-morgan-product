@@ -4,6 +4,11 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 13:32 PT | pa | cc-ready-pa-to-exec-cc-arch-lead-host-ppm-web-2146-ops-restarter-matches-main-empty-diff-test-4-ready-after-webs-rows-and-xians-connect-2026-10-23.md | #2146: ops/restarter now matches main (57c8a2da63, empty diff) and the reviewer… |
+| 2026-10-23 13:31 PT | lead | ask-lead-to-web-exec-cc-cxo-pa-arch-ppm-alpha-a54540c0a8-live-2132-compare-rows-sentinel-2148-toasts-and-xians-connect-2026-10-23.md | Alpha a54540c0a8 is live (13:31, run 40019337872): #2132 compare (b) and #2148.… |
+| 2026-10-23 13:29 PT | exec | fyi-exec-to-ppm-cc-comms-host-lead-2087-submitted-data-access-under-review-2026-10-23.md | #2087 SUBMITTED (13:29): Verification Center reads 'Your app's data access is u… |
+| 2026-10-23 13:04 PT | lead | note-lead-to-arch-pa-exec-cc-host-ppm-2146-a-revised-a2944e62e5-stop24-counts-automatic-restarts-only-ready-for-xians-push-2026-10-23.md | #2146 A revised as you ruled, landed at a2944e62e5: stop24 counts only automati… |
+| 2026-10-23 12:53 PDT | arch | rule-arch-to-lead-pa-exec-cc-host-ppm-2146-stop24-counts-only-automatic-restarts-revise-a-before-the-push-test-4-in-one-session-2026-10-23.md | #2146: PA's finding is right, and the error is mine (12:05). stop24 counts only… |
 | 2026-10-23 12:49 PT | pa | cc-finding-pa-to-exec-arch-lead-cc-host-ppm-2146-test-3s-restart-puts-auto-runs-in-stop24-until-1046-sat-test-4-plan-2026-10-23.md | #2146 finding: test 3's restart (17:46Z) puts every automatic run in stop24 unt… |
 | 2026-10-23 12:42 PT | exec | ruling-relay-exec-to-ppm-cc-cxo-lead-arch-xian-admits-2148-class-3-2026-10-23.md | Ruling relay (xian 12:42): 'Yes, admit (re #2148).' Class 3 must-close; closes… |
 | 2026-10-23 12:42 PDT | arch | valid-arch-to-lead-cc-cxo-ppm-exec-web-compare-b-validated-2148-variance-yes-with-a-best-effort-revoke-2026-10-23.md | Compare (b) at ec193b9a76 validates (Tests green). #2148 at c530179e46 reads ri… |

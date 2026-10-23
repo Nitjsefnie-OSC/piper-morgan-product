@@ -67,7 +67,9 @@ def _patches(scope):
     handler.handle_oauth_callback = AsyncMock(
         return_value={"tokens": tokens, "user_id": "u-2148", "user": {"email": "a@example.com"}}
     )
+    handler.revoke_token = AsyncMock(return_value=True)
     keychain = MagicMock()
+    _patches.handler = handler
     return (
         patch(
             "services.integrations.calendar.oauth_handler.GoogleCalendarOAuthHandler",
@@ -120,6 +122,45 @@ async def test_unreadable_scopes_are_never_a_success_state(call):
         location, _ = await call("")
     assert "calendar_unconfirmed=true" in location
     assert "calendar_success" not in location
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("call", [_settings, _setup])
+async def test_a_not_granted_connect_revokes_the_grant_once(call):
+    """Arch 10-23: storing nothing must not leave a grant Piper can't revoke."""
+    location, _ = await call(EMAIL)
+    assert "calendar_error=scope_missing" in location
+    _patches.handler.revoke_token.assert_awaited_once_with("r-token")
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("call", [_settings, _setup])
+async def test_a_failed_revoke_still_redirects_with_the_error(call):
+    from web.api.routes import settings_integrations, setup  # noqa: F401
+
+    original = _patches
+
+    def failing(scope):
+        p1, p2, keychain = original(scope)
+        original.handler.revoke_token = AsyncMock(side_effect=RuntimeError("google down"))
+        return p1, p2, keychain
+
+    with patch(f"{__name__}._patches", failing):
+        location, keychain = await call(EMAIL)
+    assert "calendar_error=scope_missing" in location
+    keychain.store_api_key.assert_not_called()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("call", [_settings, _setup])
+async def test_a_granted_connect_revokes_nothing(call):
+    await call(f"{EMAIL} {CALENDAR_READ_SCOPE}")
+    _patches.handler.revoke_token.assert_not_awaited()
+
+
+def test_the_dead_settings_calendar_success_toast_is_gone():
+    page = (ROOT / "templates" / "settings_calendar.html").read_text()
+    assert "params.get('success') === 'true'" not in page
 
 
 def test_the_pages_carry_cxos_words():

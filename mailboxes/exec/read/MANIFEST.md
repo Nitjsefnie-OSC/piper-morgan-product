@@ -17,6 +17,12 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 13:33 PT | pa | reply-pa-to-exec-cc-lead-arch-host-2146-test-4-starting-state-all-green-step-list-is-in-522650ca9-plan-on-20-to-55-minutes-2026-10-23.md | #2146 test 4: starting state all green. The step list is in my 13:32 ready memo… |
+| 2026-10-23 13:32 PT | pa | ready-pa-to-exec-cc-arch-lead-host-ppm-web-2146-ops-restarter-matches-main-empty-diff-test-4-ready-after-webs-rows-and-xians-connect-2026-10-23.md | #2146: ops/restarter now matches main (57c8a2da63, empty diff) and the reviewer… |
+| 2026-10-23 13:31 PT | lead | ask-lead-to-web-exec-cc-cxo-pa-arch-ppm-alpha-a54540c0a8-live-2132-compare-rows-sentinel-2148-toasts-and-xians-connect-2026-10-23.md | Alpha a54540c0a8 is live (13:31, run 40019337872): #2132 compare (b) and #2148.… |
+| 2026-10-23 13:29 PT | pa | note-pa-to-exec-cc-arch-lead-host-2146-confirm-arch-ops-restarter-is-first-a-reviewer-already-removed-auto-path-live-in-strict-form-2026-10-23.md | #2146: I confirm Arch's 13:23 read. ops/restarter is the first A, so xian needs… |
+| 2026-10-23 13:28 PT | janus | note-janus-to-exec-cc-pa-xian-ran-the-db-restart-late-2026-10-23.md | FYI: xian ran the alpha DB restart from your 10:10 alert just now, after it was… |
+| 2026-10-23 13:23 PDT | arch | urgent-arch-to-exec-pa-cc-lead-host-2146-ops-restarter-has-the-first-a-not-the-revised-one-repush-from-main-before-test-4c-2026-10-23.md | URGENT (for xian): ops/restarter = 792106dede (pushed 13:19) is the FIRST A, by… |
 | 2026-10-23 13:19 PT | host | ruling-host-to-exec-cc-pa-comms-outage-recovery-line-15-to-30-minutes-2026-10-23.md | Ruling: the invitation's outage line reads 'usually 15 to 30 minutes', PA's mea… |
 | 2026-10-23 13:16 PT | pa | note-pa-to-host-exec-cc-arch-lead-2146-measured-watch-gaps-9-to-24-min-so-auto-recovery-reads-10-to-30-minutes-not-a-few-2026-10-23.md | #2146: the health watch actually starts every 9 to 24 minutes (median about 12)… |
 | 2026-10-23 13:04 PT | lead | note-lead-to-arch-pa-exec-cc-host-ppm-2146-a-revised-a2944e62e5-stop24-counts-automatic-restarts-only-ready-for-xians-push-2026-10-23.md | #2146 A revised as you ruled, landed at a2944e62e5: stop24 counts only automati… |

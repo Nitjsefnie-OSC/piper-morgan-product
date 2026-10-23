@@ -604,11 +604,6 @@ class WorkflowEntry:
     router_visible: bool = True
 
     def __post_init__(self) -> None:
-        if not self.router_visible and self.flip_group is not None:
-            raise ValueError(
-                "a router-hidden WorkflowEntry cannot hold a flip_group "
-                f"({self.flip_group!r}): the router never sees it, so it can never flip"
-            )
         """Reject an unrepresentable flip declaration LOUDLY, at construction.
 
         Three rejections, all at the earliest possible moment (import of
@@ -630,6 +625,11 @@ class WorkflowEntry:
            allowlist cannot be constructed with a group, so no configuration
            of any flag can produce an unreviewed flipped write.
         """
+        if not self.router_visible and self.flip_group is not None:
+            raise ValueError(
+                "a router-hidden WorkflowEntry cannot hold a flip_group "
+                f"({self.flip_group!r}): the router never sees it, so it can never flip"
+            )
         if (
             self.flip_write_allowlist_key is not None
             and self.flip_write_allowlist_key not in FLIP_WRITE_ALLOWLIST

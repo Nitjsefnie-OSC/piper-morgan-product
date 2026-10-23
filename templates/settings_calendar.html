@@ -657,11 +657,10 @@
       function checkOAuthCallback() {
         const params = new URLSearchParams(window.location.search);
 
-        if (params.get('success') === 'true') {
-          const email = params.get('email') || 'Calendar';
-          Toast.show('success', 'Calendar Connected', `Connected as ${decodeURIComponent(email)}`);
-          window.history.replaceState({}, document.title, '/settings/integrations/calendar');
-        } else if (params.get('error')) {
+        // #2148: the success=true branch was removed. No redirect ever produced it,
+        // and it showed "Calendar Connected" with no granted-scope check. Connects land
+        // on /settings/integrations (calendar_success / scope_missing / unconfirmed).
+        if (params.get('error')) {
           const error = params.get('error');
           Toast.show('error', 'Connection Failed', `Failed to connect: ${error}`);
           window.history.replaceState({}, document.title, '/settings/integrations/calendar');
