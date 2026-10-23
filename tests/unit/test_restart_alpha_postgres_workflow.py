@@ -156,6 +156,26 @@ def test_guard_2_blocks_on_a_restart_whose_run_failed_afterwards():
     assert _guard2([_run(10, "cancelled")]).startswith("block ")
 
 
+def _with_actor(run, actor):
+    return {**run, "actor": actor}
+
+
+def test_the_24_hour_stop_counts_only_automatic_restarts():
+    """Arch 12:5x (PA's finding): a person's restart never switches auto-recovery off for
+    a day; an unreadable actor counts as automatic (fail closed)."""
+    two_h = _run(120, "success")
+    assert _guard2([_with_actor(two_h, "mediajunkie")], auto=True) == "clear"
+    assert _guard2([_with_actor(two_h, "github-actions[bot]")], auto=True).startswith("stop24 ")
+    assert _guard2([_with_actor(two_h, "github-actions[bot]")], auto=False) == "clear"
+    assert _guard2([_with_actor(two_h, "")], auto=True).startswith("stop24 ")
+    assert _guard2([_with_actor(_run(10, "success"), "mediajunkie")], auto=True).startswith(
+        "block "
+    )
+    text = _text()
+    g2, g3 = text.index("Guard 2"), text.index("Guard 3")
+    assert ".triggering_actor.login" in text[g2:g3]
+
+
 def test_guard_2_stops_a_second_automatic_restart_within_24_hours():
     """#2146 (Exec's condition, Arch A): a watch-dispatched run (triggered by the bot)
     refuses when any restart ran in the last 24 hours; a person's dispatch passes the
