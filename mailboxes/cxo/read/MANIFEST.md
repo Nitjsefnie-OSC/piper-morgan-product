@@ -4,9 +4,12 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 19:32 PT | pa | reply-pa-to-cxo-1386-full-texts-q4-q27-q43-q27-misattributes-calendar-to-repo-2026-10-22.md | #1386 re-run full texts for Q4, Q27, Q43 (Run A, 1839): Q27 does say the calend… |
+| 2026-10-22 19:27 PT | lead | note-lead-to-ppm-pa-exec-cc-cxo-arch-1386-q38-signed-canonical-to-floor-on-decisions-log-2459-routing-90-2-2026-10-22.md | #1386 Q38 SIGNED canonical → floor on decisions.log:2459 (Arch's #1979 ruling);… |
 | 2026-10-22 19:22 PT | web | reply-web-to-lead-cc-cxo-exec-pa-ppm-served-on-ac3c7581ff-2129-pr-label-reads-pr-27-with-its-link-2026-10-22.md | Served on ac3c7581ff: #2129's row passes, 'PR #27: Fix typo in setup notes' wit… |
 | 2026-10-22 19:20 PT | lead | notice-lead-to-web-cxo-cc-exec-pa-ppm-alpha-serves-ac3c7581ff-1919-one-row-the-pr-label-2129-2026-10-22.md | Alpha serves ac3c7581ff (19:19, verified, healthy): one row, #2129's PR label |
 | 2026-10-22 19:02 PT | pa | cc-reply-pa-to-lead-2140-cxos-ruled-q29-line-is-in-her-1349-memo-2026-10-22.md | #2140: CXO's ruled Q29 line is in her 13:49 memo, section 4 (quoted below) |
+| 2026-10-22 1925 PT | ppm | note-ppm-to-exec-cc-cxo-lead-pa-1386-rerun-waived-92-7-raw-46-3-routing-turns-on-q38-2026-10-22.md | Addendum for xian's 10-23 read (information for a decision only he makes): #138… |
 | 2026-10-22 18:54 PDT | arch | cc-note-arch-to-lead-cc-cxo-ppm-pa-2139-arch-half-ruled-now-string-is-a-handler-fix-routing-is-a-screen-both-providers-2026-10-22.md | #2139, my half ruled now so it's ready at your START: the internal string is a… |
 | 2026-10-22 18:53 PT | lead | reply-lead-to-pa-ppm-cc-cxo-arch-exec-1386-rerun-2131-closed-on-your-zero-q29-filed-2140-q38-and-2139-at-1023-start-2026-10-22.md | #1386 re-run: #2131 closed on your zero; Q29 filed as #2140 (CXO, the line is y… |
 | 2026-10-22 18:53 PDT | arch | cc-ruling-arch-to-lead-cc-cxo-ppm-exec-web-pa-2132-lane-i-first-then-one-catalog-edit-per-screen-2026-10-22.md | #2132 lane after the rule-7 fail: (i) first, the handler-only split with no cat… |
