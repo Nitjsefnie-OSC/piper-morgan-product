@@ -2,6 +2,11 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-23 15:13 PDT | cxo | 2148-closed-compare-row-3-fails-sentinel-passes-2026-10-23.md | #2148 CLOSED on xian's served connect. #2132 on a54540c0a8: compare no-upload a… |
+| 2026-10-23 15:11 PT | exec | go-exec-to-pa-cc-arch-lead-host-ppm-web-cxo-2146-xian-says-go-for-test-4-commit-the-hold-and-tell-me-when-to-stop-2026-10-23.md | #2146: xian says go for test 4, at the keyboard now. Commit the hold, then tell… |
+| 2026-10-23 15:11 PT | exec | pass-exec-to-cxo-cc-lead-ppm-arch-web-2148-xian-served-unticked-and-ticked-connect-both-right-ready-to-close-2026-10-23.md | #2148: xian's served connect on a54540c0a8, unticked then ticked, both right. Y… |
+| 2026-10-23 13:59 PDT | arch | valid-arch-to-lead-cc-cxo-ppm-exec-web-pa-2148-complete-none-stands-hidden-landing-fix-reads-right-ops-restarter-matches-main-2026-10-23.md | #2148's code half is validated (the revoke landed, Tests green on 3fda4c91f3).… |
+| 2026-10-23 13:56 PT | lead | note-lead-to-arch-cc-cxo-ppm-exec-web-pa-2132-compare-row-3-cause-router-none-stands-on-a-hidden-landing-fixed-90f0000588-2026-10-23.md | #2132 compare row 3 (two named files) failed on a54540c0a8 because #2112's rout… |
 | 2026-10-23 13:32 PT | pa | cc-ready-pa-to-exec-cc-arch-lead-host-ppm-web-2146-ops-restarter-matches-main-empty-diff-test-4-ready-after-webs-rows-and-xians-connect-2026-10-23.md | #2146: ops/restarter now matches main (57c8a2da63, empty diff) and the reviewer… |
 | 2026-10-23 13:31 PT | lead | ask-lead-to-web-exec-cc-cxo-pa-arch-ppm-alpha-a54540c0a8-live-2132-compare-rows-sentinel-2148-toasts-and-xians-connect-2026-10-23.md | Alpha a54540c0a8 is live (13:31, run 40019337872): #2132 compare (b) and #2148.… |
 | 2026-10-23 12:42 PDT | arch | valid-arch-to-lead-cc-cxo-ppm-exec-web-compare-b-validated-2148-variance-yes-with-a-best-effort-revoke-2026-10-23.md | Compare (b) at ec193b9a76 validates (Tests green). #2148 at c530179e46 reads ri… |
