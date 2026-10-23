@@ -206,3 +206,69 @@ async def test_productivity_never_counts_zero_for_a_failed_read(intent_service):
         )
     assert "Issues/PRs Closed: 0" not in result.message
     assert "couldn't read this account's GitHub connection" in result.message
+
+
+# --- 2129 follow-up: a closed PR is labelled a PR (CXO's 2128 nit, served on fc183c41bc) -----
+
+
+@pytest.mark.asyncio
+async def test_the_adapter_keeps_githubs_pull_request_marker_and_url(adapter):
+    adapter.resolve_credential = AsyncMock(
+        return_value=GitHubCredential(
+            owner_id="u-1", mcp_server_ref="github", token=None, leg="oauth"
+        )
+    )
+    adapter._call_github_api_list = AsyncMock(
+        return_value=[
+            {
+                "number": 27,
+                "title": "Fix typo in setup notes",
+                "state": "closed",
+                "labels": [],
+                "user": {},
+                "html_url": "https://github.com/octo/seeded/pull/27",
+                "pull_request": {"url": "https://api.github.com/repos/octo/seeded/pulls/27"},
+            },
+            {"number": 26, "title": "A bug", "state": "closed", "labels": [], "user": {}},
+        ]
+    )
+    with (
+        patch(GRANT, new=AsyncMock(return_value="gho_test")),
+        patch(SESSION, return_value=_Scope()),
+    ):
+        out = await adapter.get_closed_issues("seeded", "octo", limit=50, user_id="u-1")
+    assert [(i["number"], i["is_pull_request"]) for i in out] == [(27, True), (26, False)]
+    assert out[0]["html_url"] == "https://github.com/octo/seeded/pull/27"
+
+
+@pytest.mark.asyncio
+async def test_shipped_this_week_labels_a_closed_pr_as_a_pr(intent_service):
+    closed = datetime.now(timezone.utc) - timedelta(days=1)
+    items = [
+        {
+            "number": 27,
+            "title": "Fix typo in setup notes",
+            "closed_at": closed.isoformat().replace("+00:00", "Z"),
+            "is_pull_request": True,
+            "html_url": "https://github.com/octo/seeded/pull/27",
+        },
+        {
+            "number": 26,
+            "title": "A bug",
+            "closed_at": closed.isoformat().replace("+00:00", "Z"),
+            "is_pull_request": False,
+        },
+    ]
+    with patch(
+        "services.integrations.github.github_integration_router.GitHubIntegrationRouter"
+    ) as MockRouter:
+        mock_router = MagicMock()
+        mock_router.is_available = AsyncMock(return_value=True)
+        mock_router.initialize = AsyncMock()
+        mock_router.get_closed_issues = AsyncMock(return_value=items)
+        MockRouter.return_value = mock_router
+        result = await intent_service._handle_shipped_this_week(_intent("shipped_this_week"), "wf")
+    assert "- PR #27: Fix typo in setup notes" in result.message
+    assert "Issue #27" not in result.message
+    assert "- Issue #26: A bug" in result.message
+    assert "https://github.com/octo/seeded/pull/27" in result.message

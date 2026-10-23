@@ -21,6 +21,10 @@ def _text() -> str:
     return WORKFLOW.read_text()
 
 
+# 2026-10-22, Arch's route 1: the one restart is the Machines API's single-machine restart.
+RESTART = "machines/$DB_MACHINE/restart"
+
+
 def test_dispatch_only_behind_the_alpha_db_environment_with_a_db_scoped_secret():
     doc = yaml.safe_load(_text())
     on = doc.get("on") or doc.get(True)  # PyYAML reads a bare `on:` key as True
@@ -42,9 +46,9 @@ def test_the_three_guards_come_before_the_one_restart_in_order():
     g1b = text.index("Guard 1b")
     g2 = text.index("Guard 2")
     g3 = text.index("Guard 3")
-    restart = text.index("flyctl machine restart")
+    restart = text.index(RESTART)
     assert g1a < g1b < g2 < g3 < restart
-    assert text.count("flyctl machine restart") == 1
+    assert text.count(RESTART) == 1
     # Guard 1: the fault must be the database's, read from both sides
     assert 'if [ "$db" = "healthy" ]' in text[g1a:g1b]
     assert "critical) ;;" in text[g1b:g2]  # Arch 15:29: only critical restarts
@@ -64,7 +68,7 @@ def test_the_three_guards_come_before_the_one_restart_in_order():
 def test_the_capture_filters_credential_looking_lines_and_echoes_no_environment():
     text = _text()
     g3 = text.index("Guard 3")
-    restart = text.index("flyctl machine restart")
+    restart = text.index(RESTART)
     capture = text[g3:restart]
     assert "filter()" in capture
     start = capture.index("filter()")
@@ -174,7 +178,7 @@ def test_guard_2_refuses_when_a_run_cannot_be_read():
 def test_the_capture_is_best_effort_and_cannot_block_the_restart():
     text = _text()
     g3 = text.index("Guard 3")
-    restart = text.index("flyctl machine restart")
+    restart = text.index(RESTART)
     capture = text[g3:restart]
     assert "set +o pipefail" in capture
     assert "(not captured:" in capture
@@ -275,3 +279,59 @@ def test_guard_1b_parser_reads_the_machine_get_shape():
     assert _guard1b(machine("critical")) == "critical"
     assert _guard1b(machine("passing")) == "passing"
     assert _guard1b("{}") == "absent"  # an unread or refused machine reads absent and refuses
+
+
+def _restart_step() -> str:
+    text = _text()
+    start = text.index("- name: Restart the Postgres machine")
+    end = text.index("- name: Verify alpha reads the database healthy")
+    return text[start:end]
+
+
+def test_the_restart_takes_no_lease_and_uses_the_one_machine_restart_url():
+    # 2026-10-22 attended test: flyctl's restart took a lease first and Fly refused the token
+    # that call. Arch's route 1: POST the single-machine restart, no lease, no new token.
+    step = _restart_step()
+    assert "flyctl machine restart" not in _text()
+    # Comments may name the lease; no command line may call it.
+    commands = [
+        ln.strip() for ln in step.splitlines() if ln.strip() and not ln.strip().startswith("#")
+    ]
+    assert not any("/lease" in ln for ln in commands)
+    assert not any("fly-machine-lease-nonce" in ln.lower() for ln in commands)
+    assert any(
+        'https://api.machines.dev/v1/apps/$DB_APP/machines/$DB_MACHINE/restart"' in ln
+        for ln in commands
+    )
+    assert any(ln.startswith('code="$(curl') and "-X POST" in ln for ln in commands)
+    assert not any("force_stop" in ln or "signal" in ln for ln in commands)
+
+
+def test_the_restart_header_is_added_once_never_echoed_and_unset():
+    step = _restart_step()
+    assert '"FlyV1 "*) auth="$FLY_API_TOKEN" ;;' in step
+    assert '*) auth="FlyV1 $FLY_API_TOKEN" ;;' in step
+    assert "unset auth" in step
+    for ln in step.splitlines():
+        if ln.strip().startswith("echo"):
+            assert "auth" not in ln and "FLY_API_TOKEN" not in ln
+
+
+def test_any_non_2xx_or_timeout_fails_the_step_without_retry_or_body():
+    step = _restart_step()
+    assert "--max-time 60" in step
+    assert "-o /dev/null" in step  # never print Fly's response body
+    assert "2??) " in step
+    assert "exit 1" in step
+    assert "retry" not in step.lower().replace("nothing retries", "")
+
+
+def test_the_reason_reaches_the_script_through_env_not_interpolation():
+    text = _text()
+    step = _restart_step()
+    assert "REASON: ${{ inputs.reason }}" in step
+    assert 'echo "reason: $REASON"' in step
+    run_blocks = text.split("run: |")[1:]
+    for block in run_blocks:
+        body = block.split("\n      - name:")[0]
+        assert "${{ inputs." not in body

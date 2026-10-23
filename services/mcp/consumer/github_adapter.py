@@ -2161,6 +2161,12 @@ class GitHubMCPSpatialAdapter(BaseSpatialAdapter):
                         "repository": repo,
                         "labels": [label["name"] for label in issue.get("labels", [])],
                         "user": issue.get("user", {}).get("login"),
+                        # 2129 follow-up (CXO's 2128 nit, served on fc183c41bc): GitHub's
+                        # /issues endpoint returns PRs as issues carrying a `pull_request`
+                        # object. Dropping it made "What did we ship?" label every PR
+                        # "Issue #N". Same normalization as list_github_issues_direct (#986).
+                        "is_pull_request": issue.get("pull_request") is not None,
+                        "html_url": issue.get("html_url"),
                     }
                 )
             return issues
