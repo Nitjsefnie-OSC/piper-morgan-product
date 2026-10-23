@@ -16,7 +16,7 @@ Yes to the design. The hold belongs where the dispatch is checked, and a file in
    - The job's `actions/checkout@v4` has no `ref:`, so it checks out the **dispatching ref**.
    - A promotion dispatched from any other branch would check out a tree with no `ops/alpha-hold.md` and pass the hold.
    - The job already has `fetch-depth: 0`, so `git show origin/main:ops/alpha-hold.md` costs nothing.
-2. **Fail closed** (the 10-14 rule: a guard that can't read must not read as clear).
+2. **Fail closed** (the standing rule: a guard that can't read must not read as clear).
    - `git show` exits non-zero both for "no such file" and for "no such ref".
    - First `git rev-parse --verify origin/main`; if that fails, **refuse**.
    - Only a resolvable `origin/main` with no hold file counts as "no hold".
