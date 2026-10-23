@@ -153,3 +153,4 @@ Per-version "verified how" notes, moved off the rollup page at xian's ask (2026-
 - v556 (08:33): decided cards removed (2138, 2136); checkpoint answered; Ship card now 'synthesis next, draft on hold'.
 - v557 (08:42): Ship card links the synthesis (QwwNgEVnZCD8TAEULTKiD2); process fix line.
 - v558 (10:31): restart card rebuilt (test 2 not run; Step 0 = xian confirms 15 free min); #2132 scope line (PPM ruling).
+- v559 (10:33): B2 self-timed one minute after the stop (PA's suggestion), test 3.

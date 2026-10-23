@@ -32,7 +32,7 @@
 </style>
 <div class="wrap">
 <h1>Attention rollup — Friday 23 October</h1>
-<p class="meta">Exec · v558, rebuilt 10:31 PDT Fri 10-23 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
+<p class="meta">Exec · v559, rebuilt 10:33 PDT Fri 10-23 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
 
 
 
@@ -56,11 +56,11 @@
 
 
 
-<div class="card hot"><b>Restart button (#2085): the second test still needs doing. Pick a time when you&rsquo;re free for 15 minutes.</b> This morning you pushed the fix (<code>ops/restarter</code> = <code>22e70f91bc</code>, matching main) and stopped the database at 09:44. The restart run never started, and your undo brought alpha back at 10:30. The fix is in place, so only the test remains.
+<div class="card hot"><b>Restart button (#2085): the test still needs doing (test 3). Pick a time when you&rsquo;re free for 15 minutes.</b> This morning you pushed the fix (<code>ops/restarter</code> = <code>22e70f91bc</code>, matching main) and stopped the database at 09:44. The restart run never started, and your undo brought alpha back at 10:30. The fix is in place, so only the test remains.
 <p style="margin:.4rem 0 .2rem"><b>Step 0: tell me &ldquo;I&rsquo;m free for 15 minutes&rdquo;.</b> Nothing gets stopped until you&rsquo;ve said it. I tell PA, PA sends a starting state, and I relay it.</p>
 <p style="margin:.2rem 0">B1. Stop Postgres (expect <code>server stopped</code>):</p>
 <pre style="white-space:pre-wrap;margin:.2rem 0">fly ssh console -a piper-morgan-db --machine 865105fe247158 -C "su postgres -c '/usr/lib/postgresql/18/bin/pg_ctl stop -D /data/postgresql -m fast'"</pre>
-<p style="margin:.2rem 0">B2. As soon as PA calls &ldquo;critical&rdquo; (about a minute later), start the run:</p>
+<p style="margin:.2rem 0">B2. <b>Wait one minute after <code>server stopped</code>, then start the run yourself.</b> Don&rsquo;t wait for a relayed call: this morning&rsquo;s relay is what failed. If you&rsquo;re early, the restarter&rsquo;s first check refuses safely, and you run B2 again.</p>
 <pre style="white-space:pre-wrap;margin:.2rem 0">gh workflow run restart-alpha-postgres.yml --repo mediajunkie/piper-morgan-product --ref ops/restarter -f reason="2085 close test 2"</pre>
 <p style="margin:.2rem 0">B3. Approve it right away: GitHub &rarr; Actions &rarr; &ldquo;Restart alpha Postgres&rdquo; &rarr; the new run &rarr; Review deployments &rarr; tick <code>alpha-db</code> &rarr; Approve and deploy.</p>
 <p style="margin:.2rem 0">B4. Undo, only on PA&rsquo;s or my call, or if you have to step away:</p>
