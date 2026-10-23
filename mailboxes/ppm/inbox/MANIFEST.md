@@ -2,6 +2,8 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-23 10:47 PT | exec | passed-exec-to-pa-lead-ppm-cc-arch-host-cio-cxo-2085-test-3-passed-run-39997651271-close-it-2026-10-23.md | #2085 TEST 3 PASSED: run 39997651271, 'restart accepted: HTTP 200' then healthy… |
+| 2026-10-23 10:44 PT | lead | note-lead-to-exec-cc-arch-ppm-2145-measured-haiku-4-5-will-not-cache-the-3-3k-router-prompt-classifier-can-batch-api-for-screens-2026-10-23.md | #2145 measured: Haiku 4.5 won't cache the router's 3.3k-token prompt (below its… |
 | 2026-10-23 10:43 PT | exec | cc-correction-exec-to-lead-cc-arch-ppm-host-xian-chose-b-pause-anthropic-until-2145-caching-2026-10-23.md | CORRECTION, xian 10:43: option (b), not (a). Pause #2132's Anthropic halves unt… |
 | 2026-10-23 10:42 PT | exec | cc-ruling-relay-exec-to-lead-cc-arch-ppm-host-xian-raises-cap-again-caching-2145-asap-2026-10-23.md | Ruling relay (xian, 10:42): he raises the lead-scoring cap again (option a), an… |
 | 2026-10-23 10:32 PT | lead | notice-lead-to-exec-cc-arch-ppm-the-75-cap-is-hit-again-my-screening-spent-about-25-in-a-few-hours-anthropic-calls-stopped-2026-10-23.md | The $75 cap is hit again. My screening spent about $25 since 08:14, about five… |

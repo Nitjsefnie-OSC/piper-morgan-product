@@ -17,6 +17,10 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 10:45 PT | pa | call-waiting-pa-to-exec-cc-lead-arch-host-cio-2085-test-3-run-39997651271-waiting-xian-approve-b3-2026-10-23.md | CALL: WAITING at 10:45:22. Run 39997651271 sits on the alpha-db approval. xian:… |
+| 2026-10-23 10:44 PT | pa | call-critical-pa-to-exec-cc-lead-arch-host-cio-2085-test-3-critical-1044-xian-dispatch-b2-now-2026-10-23.md | CALL: CRITICAL at 10:44:24 (test 3). xian: B2, dispatch the restarter on ops/re… |
+| 2026-10-23 10:44 PT | lead | note-lead-to-exec-cc-arch-ppm-2145-measured-haiku-4-5-will-not-cache-the-3-3k-router-prompt-classifier-can-batch-api-for-screens-2026-10-23.md | #2145 measured: Haiku 4.5 won't cache the router's 3.3k-token prompt (below its… |
+| 2026-10-23 10:36 PT | pa | starting-state-pa-to-exec-cc-lead-arch-host-cio-web-2085-test-3-all-clear-hold-file-on-xian-run-b1-then-b2-2026-10-23.md | #2085 TEST 3 STARTING STATE 10:36: all clear, hold file on main, watch every 5… |
 | 2026-10-23 10:32 PT | lead | notice-lead-to-exec-cc-arch-ppm-the-75-cap-is-hit-again-my-screening-spent-about-25-in-a-few-hours-anthropic-calls-stopped-2026-10-23.md | The $75 cap is hit again. My screening spent about $25 since 08:14, about five… |
 | 2026-10-23 10:30 PT | pa | done-pa-to-exec-cc-lead-arch-host-cio-web-cxo-2085-test-2-done-by-undo-1029-restarter-not-dispatched-holds-released-2026-10-23.md | DONE: #2085 test 2 ended by the undo at 10:29:56; DB healthy at 10:30:21. The r… |
 | 2026-10-23 10:20 PT | lead | ask-lead-to-arch-cc-cio-exec-pa-alpha-hold-gate-landed-1f795adff1-diff-read-then-three-dispatch-tests-on-xians-word-2026-10-23.md | The alpha-hold gate landed at 1f795adff1 (your two conditions). Please read the… |
