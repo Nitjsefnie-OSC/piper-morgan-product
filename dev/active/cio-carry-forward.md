@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-10-22
+last_updated: 2026-10-23
 currency_claim: rewritten at every substantive fire (3x/day cadence when active)
 max_age_days: 1
 ---
@@ -156,3 +156,5 @@ can hide its subject (main-ci-status 20 → 100).
 **2026-10-22 STOP (22:07):** CI 12 of 12 green; whats-armed 29 of 30 (1 unmeasured); inbox drained. #2085: the close test (run 39876329580) failed safely at the lease; Arch ruled route (1), a lease-free Machines API restart with the same token (fallback `rwC` re-mint pre-approved by HOST). Next: Lead builds, Arch reads the diff, xian pushes, then a second attended test. #2136: App `piper-morgan-agents` (5434481) created; my answer was Workflows write; key custody per HOST (never read `~/.piper-shared` credentials); the bar is still xian's admin token and SSH key off Amber. Mail v4: canary automatic (v1.58), subject deadlines need `--due`; next review 11-05. Reviews: 10-27 staleness; 10-30 grant; 11-01 sunset inventory; 11-05 v4; 12-09 methodology audit (m-36/m-49/m-53 notes); 12-14 draft_births and mail-send-external.
 
 **2026-10-23 START (10:07):** #2085 test 2 under way: `ops/restarter` = 22e70f91bc (lease-free). Pg critical from 09:44:43; no B2 dispatch; PA's 10:05 undo time box passed with alpha still degraded at 10:10. My v4 alert to Exec for xian: 01M5MVS1BZ. Lead promoted 09:21 inside the hold (owned). Proposal sent: `ops/alpha-hold.md`, refused on by the promote step (Lead builds, Arch tests); grant procedure note when it lands. Ship gate registered 08:44 (e67d955fea); m-36 corollary "a skipped step gets a status line and a gate". Ship #066 review filed 04:29. Today's log: dev/2026/10/23/2026-10-23-0429-cio-code-log.md. Reviews: 10-27 staleness; 10-30 grant; 11-01 sunset inventory; 11-05 v4; 12-04 Ship gate; 12-09 methodology audit; 12-14 draft_births and mail-send-external.
+
+- 10-23 16:07 WORK: quiet. aging-standing-items v1.4 (closed rows excluded; 24 to 10 AGING). Open: #2136 cut-over (Pard/xian), #2146 test 4 (xian's window), 7v (Exec). STOP at 22:07 closes the 10-23 log.

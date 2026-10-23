@@ -227,6 +227,10 @@ split_row() {
 }
 
 # Reads the confirmed header row into DATE_IDX / ITEM_IDX / NUM_IDX / SKIP_TABLE.
+is_closed_row() {
+    grep -qE '\|[[:space:]]*(✅|~~|(\*\*)?(DONE|CLOSED|RESOLVED)([^A-Za-z]|$))|— (\*\*)?(DONE|CLOSED|RESOLVED)([^A-Za-z]|$)' <<<"$1"
+}
+
 # SKIP_TABLE=1 means: this table is a closed/resolved ledger (by column name) — never
 # part of the aging population regardless of what dates it carries.
 parse_header() {
@@ -271,6 +275,16 @@ process_row() {
     if [ -z "$date_cell" ] && [ -z "$item_cell" ]; then return; fi
 
     ROWS_EXAMINED=$((ROWS_EXAMINED + 1))
+
+    # v1.4 (2026-10-23, CIO): a row marked closed in its own cells is not silently aging. 14 of the
+    # 24 AGING flags that day were rows already marked done (a cell starting with a check mark,
+    # strikethrough or DONE/CLOSED/RESOLVED, or "— CLOSED" after the item), many of them in tables
+    # with no "Resolved" heading for the table-level skip to see. Counted separately, so the
+    # exclusion stays visible in the summary.
+    if is_closed_row "$line"; then
+        ROWS_CLOSED=$((ROWS_CLOSED + 1))
+        return
+    fi
 
     # Structural blocker: a non-empty "Blocked on"-shaped column beats phrase-matching —
     # CXO's 2026-08-31 finding, real same-day use: 2 of 4 flags on the first adopting file
@@ -343,6 +357,7 @@ NO_DATE_COL_ROLES=()
 TOTAL_ROWS_EXAMINED=0
 TOTAL_AGING=0
 TOTAL_BLOCKED=0
+TOTAL_CLOSED=0
 TOTAL_UNPARSEABLE=0
 TOTAL_STALE_BLOCKER=0
 ROLE_ROWS_LINES=""
@@ -372,6 +387,7 @@ for f in "${FILES[@]}"; do
     ROWS_EXAMINED=0
     ROWS_AGING=0
     ROWS_BLOCKED=0
+    ROWS_CLOSED=0
     ROWS_UNPARSEABLE=0
     ROWS_STALE_BLOCKER=0
     heading_dated=0 # guards against double-processing an inline label under the same heading
@@ -463,6 +479,7 @@ for f in "${FILES[@]}"; do
     TOTAL_ROWS_EXAMINED=$((TOTAL_ROWS_EXAMINED + ROWS_EXAMINED))
     TOTAL_AGING=$((TOTAL_AGING + ROWS_AGING))
     TOTAL_BLOCKED=$((TOTAL_BLOCKED + ROWS_BLOCKED))
+    TOTAL_CLOSED=$((TOTAL_CLOSED + ROWS_CLOSED))
     TOTAL_UNPARSEABLE=$((TOTAL_UNPARSEABLE + ROWS_UNPARSEABLE))
     TOTAL_STALE_BLOCKER=$((TOTAL_STALE_BLOCKER + ROWS_STALE_BLOCKER))
 
@@ -502,6 +519,7 @@ done <<<"$ROLE_ROWS_LINES"
 echo
 echo "rows examined, across roles WITH a parseable date column: $TOTAL_ROWS_EXAMINED"
 echo "  flagged AGING (>= ${AGE_THRESHOLD_DAYS}d old, no blocking language found): $TOTAL_AGING"
+echo "  excluded as closed — the row marks itself done (check mark, strikethrough, DONE/CLOSED/RESOLVED): $TOTAL_CLOSED"
 echo "  correctly excluded — blocking language present (filter is discriminating, not blanket): $TOTAL_BLOCKED"
 echo "  unparseable date text within an otherwise-recognized column: $TOTAL_UNPARSEABLE"
 echo "  of the blocked rows above, flagged STALE-BLOCKER (blocker cites a closed #NNNN): $TOTAL_STALE_BLOCKER"
