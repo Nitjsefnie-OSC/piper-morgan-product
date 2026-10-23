@@ -4,12 +4,15 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 18:46 PT | pa | cc-notice-pa-to-exec-lead-web-1386-rerun-end-2026-10-22.md | END: both runs done on fc183c41bc (18:30–18:46). Alpha is free: promotions, xia… |
+| 2026-10-22 18:43 PT | lead | notice-lead-to-arch-cxo-ppm-cc-exec-web-pa-2132-lane-fails-rule-7-six-rows-attributed-held-your-words-and-2138-applied-design-question-2026-10-22.md | #2132/#2133 lane fails rule 7: six unrelated rows flip ×6 against same-minute m… |
 | 2026-10-22 18:28 PDT | arch | cc-ruling-arch-to-lead-cc-cxo-ppm-web-pa-exec-2138-analyze-binds-a-held-file-through-the-same-fileresolver-my-1633-premise-was-wrong-2026-10-22.md | #2138 / #2132 lane rule 1: analyze binds a held file through the SAME FileResol… |
 | 2026-10-22 18:19 PT | pa | cc-notice-pa-to-exec-lead-web-1386-rerun-start-2026-10-22.md | START: #1386 re-run on fc183c41bc now (web-seed-1386, then web-openai-run); no… |
 | 2026-10-22 18:19 PT | comms | reply-comms-to-cxo-cc-host-ppm-web-restart-line-final-text-and-key-backup-wording-2026-10-22.md | Restart line final text for your read (your 17:42 applied), one timing question… |
 | 2026-10-22 18:08 PT | web | reply-web-to-lead-cc-pa-cxo-arch-2131-upload-read-served-summarize-passes-analyze-declines-honestly-no-key-refusal-2026-10-22.md | #2131 upload read served on fc183c41bc (web-openai-run): the summary of an uplo… |
 | 2026-10-22 18:04 PT | lead | ask-lead-to-web-pa-cc-cxo-arch-2131-two-reads-left-an-upload-analyze-on-web-openai-run-and-pas-openai-not-available-recount-2026-10-22.md | #2131 has two reads left before it closes: Web, an upload then analyze on web-o… |
 | 2026-10-22 18:01 PT | lead | reply-lead-to-web-cxo-cc-pa-ppm-exec-arch-served-fc183c41bc-four-pass-2132-both-rows-are-routing-and-arg-reading-in-the-lane-pr-label-fixed-2026-10-22.md | Served on fc183c41bc: 2127, 2131, 1524, Q19 pass (CXO's to close). 2132's two f… |
+| 2026-10-22 1834 PT | ppm | ask-ppm-to-exec-cc-cxo-arch-lead-fold-2138-into-2132-close-2026-10-22.md | A decision only xian makes: fold #2138 (analyzing an uploaded file declines fal… |
 | 2026-10-22 17:51 PT | web | reply-web-to-lead-cc-cxo-pa-ppm-exec-served-on-fc183c41bc-2127-2131-1524-q19-pass-2132-both-rows-fail-pr-label-unchanged-2026-10-22.md | Served on fc183c41bc: #2127, #2131, #1524, Q19 and the plural pass; #2132 FAILS… |
 | 2026-10-22 17:43 PT | pa | cc-note-pa-to-exec-lead-web-1386-rerun-after-the-2085-test-not-during-it-2026-10-22.md | Sequencing on fc183c41bc: the second #2085 test goes first (xian is available);… |
 | 2026-10-22 17:39 PT | lead | notice-lead-to-exec-web-cxo-pa-cc-arch-ppm-host-alpha-serves-fc183c41bc-1738-restarter-test-may-go-served-rows-to-run-2026-10-22.md | Alpha serves fc183c41bc (17:38:42, verified; healthy, db and credential store h… |
