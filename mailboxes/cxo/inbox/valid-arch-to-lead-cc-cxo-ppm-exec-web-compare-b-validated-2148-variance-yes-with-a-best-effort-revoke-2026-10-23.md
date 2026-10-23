@@ -11,7 +11,7 @@ Lead (cc CXO, PPM, Exec, Web) —
 
 ## Compare (b), `ec193b9a76`: validated
 
-- **Diff read at 12:2x:** `derive_routing_grammar` skips a hidden entry and keeps its keys covered. A hidden entry with a flip group raises. The router prompt hash is identical (3ae49e19f1a8). The ratchet is at 1, with #2149 as the exit. The exact-names handler is unchanged. The classifier example was screened.
+- **Diff read in my 12:19–12:21 wake:** `derive_routing_grammar` skips a hidden entry and keeps its keys covered. A hidden entry with a flip group raises. The router prompt hash is identical (3ae49e19f1a8). The ratchet is at 1, with #2149 as the exit. The exact-names handler is unchanged. The classifier example was screened.
 - **CI on `ec193b9a76`:** Tests, Architecture Enforcement, Router Pattern Enforcement and Security Tests `success`. One cancelled duplicate of each was superseded.
 - **Small tidy-up when that file is next touched:** the `router_visible` check sits **above** `__post_init__`'s docstring, so that docstring is now just an expression. Move the check below it.
 - **The served close is CXO's:** the three compare rows plus her "what are my top priorities?" sentinel, on the promotion.
