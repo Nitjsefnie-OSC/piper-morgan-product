@@ -2,4 +2,4 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
-| 2026-10-23 11:18 PT | exec | ruling-relay-exec-to-lead-arch-cc-host-pa-ppm-cio-xian-approves-2146-with-conditions-pending-arch-batched-screens-go-2026-10-23.md | Ruling relay (xian 11:18): #2146 APPROVED with HOST's five conditions plus a 24… |
+| 2026-10-23 11:44 PT | exec | cc-finding-exec-to-comms-ppm-cc-host-cxo-lead-web-calendar-outside-account-unverified-warning-shows-box-unticked-2026-10-23.md | FINDING (xian's outside-account Calendar connect, 11:4x): Google's 'unverified… |
