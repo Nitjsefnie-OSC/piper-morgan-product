@@ -173,7 +173,9 @@ async def handle_analyze_document(file_id: str, user_id: str) -> Dict:
 HELD_FILE_MIN_CONFIDENCE = 0.0
 
 
-async def resolve_held_files(message: str, user_id: Optional[str], action: str) -> List[Dict]:
+async def resolve_held_files(
+    message: str, user_id: Optional[str], action: str, *, exact_only: bool = False
+) -> List[Dict]:
     """The user's files this turn names, via the SAME resolver summarize uses (#2132).
 
     Reuses ``FileResolver(FileRepository, artifact_repository=ArtifactRepository)
@@ -187,6 +189,11 @@ async def resolve_held_files(message: str, user_id: Optional[str], action: str) 
     files. Any pick the resolver makes binds, and any ambiguity returns its
     candidates (Arch 18:28: the summarize contract, no extra cutoff; Arch
     10-23: an unnamed "this document" therefore binds the pick, not nothing).
+
+    ``exact_only`` (compare, Arch 10-23): only files whose stored name the
+    message names verbatim bind (``FileResolver.exact_name_matches``); no
+    recency pick, no fuzzy candidate list. A read of several files must never
+    rest on a guess.
 
     Returns ``[{"file_id", "filename"}]`` (``filename`` None when the resolver
     returned only an id); empty when nothing is bound or there is no user.
@@ -214,6 +221,9 @@ async def resolve_held_files(message: str, user_id: Optional[str], action: str) 
                 FileRepository(session),
                 artifact_repository=ArtifactRepository(session),
             )
+            if exact_only:
+                named = await resolver.exact_name_matches(resolver_view, user_id)
+                return [{"file_id": str(f.id), "filename": f.filename} for f in named]
             file_id, confidence = await resolver.resolve_file_reference(resolver_view, user_id)
     except AmbiguousFileReferenceError as e:
         if e.scores and all(s >= HELD_FILE_MIN_CONFIDENCE for s in e.scores):

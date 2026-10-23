@@ -1432,12 +1432,13 @@ async def run_compare_documents_workflow(
     turn fell to the floor or, on other samples, to analyze_data's repository
     metrics (Q37). Referent rule (Arch 15:05): at least two bound files →
     ``document_handlers.handle_compare_documents`` (the REST compare path);
-    fewer → CXO's line. Binding reuses the summarize rail's FileResolver
-    (``resolve_held_files``): two or more stored filenames named in the
-    message come back as the resolver's exact-match set. There is no
-    chat-session file list, so a bare "these two documents" binds nothing and
-    gets the line (Arch 16:24). The compare handler reads upload storage, so
-    a named saved artifact surfaces as the honest could-not-read reply.
+    fewer → CXO's line. Binding is EXACT NAMES ONLY (Arch 10-23):
+    ``resolve_held_files(..., exact_only=True)`` returns only files whose
+    stored name the message names verbatim (the resolver's 0.98 tier). A
+    bare "these two documents", or one name plus a deictic, binds fewer than
+    two and gets the line; the resolver's recency pick or fuzzy candidates
+    never become a read. The compare handler reads upload storage, so a named
+    saved artifact surfaces as the honest could-not-read reply.
     """
     from services.intent.intent_service import IntentProcessingResult
 
@@ -1469,7 +1470,7 @@ async def run_compare_documents_workflow(
         from services.intent_service.document_handlers import resolve_held_files
 
         try:
-            bound = await resolve_held_files(message, user_id, "compare_documents")
+            bound = await resolve_held_files(message, user_id, "compare_documents", exact_only=True)
         except Exception as e:  # silent-ok: error-logged; a failed read is not "no documents" — honest degrade, success=False (#1425)
             logger.error("compare_documents_resolve_failed", error=str(e), user_id=user_id)
             return _result(
