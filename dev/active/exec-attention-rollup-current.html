@@ -32,7 +32,7 @@
 </style>
 <div class="wrap">
 <h1>Attention rollup — Friday 23 October</h1>
-<p class="meta">Exec · v554, rebuilt 08:20 PDT Fri 10-23 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
+<p class="meta">Exec · v555, rebuilt 08:24 PDT Fri 10-23 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
 
 
 
@@ -45,11 +45,11 @@
 <li><b>The week in one line:</b> the gate started and ended at 6, but 31 issues closed on alpha and 32 were admitted. Nearly every close was a place Piper told a user something false.</li>
 <li><b>Yours, after today&rsquo;s checkpoint:</b> the lines marked <code>[xian: ...]</code> in the draft. They are the checkpoint result, your #1386 call, plan usage and API spend. Then your first look. It publishes Wed 10-28.</li>
 </ul></div>
-<div class="card"><b>Anthropic spending limit: you raised it to $75 (08:11, in Lead&rsquo;s session). Recorded in decisions.log.</b> Lead resumes the Anthropic half of the #2132 checks after one test call goes through: about 900 small calls, a few dollars. You&rsquo;ll review spend at the end of the next billing period. If Lead&rsquo;s test call is still refused, I&rsquo;ll tell you.</div>
+<div class="card"><b>Anthropic spending limit: you raised it from $50 to $75 (08:11, in Lead&rsquo;s session). Recorded in decisions.log.</b> The test call went through at 08:14, and the Anthropic checks ran. Two of the #2132 changes pass. The third (#2133&rsquo;s decline) fails on Anthropic and is held. Lead asks Arch whether the two passing changes can land together after a full run. You&rsquo;ll review spend at the end of the next billing period. If Lead&rsquo;s test call is still refused, I&rsquo;ll tell you.</div>
 
 <div class="card hot"><b>Today: your alpha checkpoint.</b> State at 06:4x (gate, main and alpha read just now, unchanged overnight). Your 10-18 rule: if MVP looks on track to close by 10-30 (or close enough), approve inviting people.
 <ul style="margin:.3rem 0 .2rem 1.2rem;padding:0">
-<li><b>Gate: 7 open, 4 must-close</b> (you admitted #2142 at 08:20). #2085 (restart button): one built fix plus your second test. #2132 (wrong document): its fix is held after breaking six unrelated answers; Arch has ruled a route and Lead restarts it Friday morning. #2096: your read of <code>/api/v1/admin/feedback</code>. Closed Thursday on served checks: #2091, #2092, #2112, #2128, #1524.</li>
+<li><b>Gate: 6 open, 3 must-close.</b> You admitted #2142 at 08:20, and it had already closed at 07:49 on a served check, so it counts as closed. #2085 (restart button): one built fix plus your second test. #2132 (wrong document): its fix is held after breaking six unrelated answers; Arch has ruled a route and Lead restarts it Friday morning. #2096: your read of <code>/api/v1/admin/feedback</code>. Closed Thursday on served checks: #2091, #2092, #2112, #2128, #1524.</li>
 <li><b>#1386, the gate&rsquo;s own test, Thursday evening&rsquo;s rerun: both bars now met, but only after triage.</b> Routing 90.2% with Lead&rsquo;s signed relabel (88.5% raw; bar 90%). Quality 92.7% with CXO&rsquo;s 18 waivers, now confirmed on full text (46.3% raw; bar 75%). Every failure is filed: #2132, #2140, #2142. <b>Your question today:</b> is &ldquo;met after triage&rdquo; close enough? The raw figures are what the product scored before anyone&rsquo;s judgment.</li>
 <li><b>Invitation: Anthropic only.</b> The OpenAI run now passes every hard condition but is 21 points behind on quality and showed an internal error string (#2139). Settled Thursday: Calendar is a plain connect step, the restart line has no fixed hour and uses the conditional &ldquo;send it again&rdquo;, the key line names the 5-day backups, and Terms is covered by Option 2.</li>
 <li><b>Still open for the invitation:</b> the count of stored keys with no encrypted value (a production read for HOST or you), HOST&rsquo;s send-morning checks, and your rewrite. If partners start before #2132 closes, CXO offers a known-issue line for it; that would mean accepting a known Class 3 in writing, which isn&rsquo;t a close.</li>
@@ -120,7 +120,7 @@ rm ~/Downloads/piper-morgan-agents.*.private-key.pem</pre>
 <li>Mail v4 stays on three seats until the 11-05 review.</li>
 </ul></div>
 <h2>📊 Where things stand</h2>
-<div class="card">MVP gate: <b>7 open</b>, 4 must-close (#2132, #2142, #2085, #2096). Also open: #2018 and #1595 (known issues), #1386 (the gate&rsquo;s test). Main: 12 of 12 green. Alpha <code>ac3c7581ff</code> (Thu 19:19), healthy at 06:36 Fri.</div>
+<div class="card">MVP gate: <b>6 open</b>, 3 must-close (#2132, #2085, #2096). #2142: admitted and closed today. Also open: #2018 and #1595 (known issues), #1386 (the gate&rsquo;s test). Main: 12 of 12 green. Alpha <code>ac3c7581ff</code> (Thu 19:19), healthy at 06:36 Fri.</div>
 <p class="meta">How I checked each version: <code>dev/active/exec-rollup-verification-history.md</code> (not needed to read this page).</p>
 
 </div>
