@@ -122,6 +122,20 @@ def test_without_per_source_counts_each_heading_counts_its_own_items():
     assert "- Recent calendar events (2 in last 7 days):" in text
 
 
+def test_a_source_counted_but_not_listed_keeps_its_heading():
+    """Arch 10-23: GitHub filled the 10-item list; calendar had 4 events, none listed."""
+    text = _render(
+        {
+            "recent_activity": [_GITHUB, _PR],
+            "recent_activity_counts_by_source": {"github": 12, "calendar": 4},
+            "recent_activity_window_days": 7,
+        }
+    )
+    assert "- Recent calendar events (4 in last 7 days; not listed here):" in text
+    assert "- Recent GitHub activity (12 in last 7 days):" in text
+    assert "Recent Slack messages" not in text  # zero items, zero count: no heading
+
+
 def test_counts_by_source_counts_every_item_before_the_cap():
     assert _counts_by_source([_GITHUB, _PR, _MEETING, {"title": "x"}]) == {
         "github": 2,

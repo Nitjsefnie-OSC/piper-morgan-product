@@ -830,8 +830,12 @@ def _render_recent_activity(domain_context: Dict[str, Any]) -> List[str]:
 
     lines: List[str] = []
     for source, heading in (*_RECENT_ACTIVITY_HEADINGS, ("unknown", None)):
-        items = groups.get(source)
-        if not items:
+        items = groups.get(source) or []
+        counted = totals.get(source, 0) if source != "unknown" else 0
+        # Arch 10-23 (#2142 validation): counts are taken before the list cap, so
+        # a source can have items with none listed (GitHub filled the list). It
+        # still gets its heading and count, marked not listed, never silence.
+        if not items and not (isinstance(counted, int) and counted > 0):
             continue
         total: Any = totals.get(source, len(items)) if source != "unknown" else len(items)
         # #1778: floor, not total, when the source page was full (GitHub only).
@@ -839,6 +843,8 @@ def _render_recent_activity(domain_context: Dict[str, Any]) -> List[str]:
             total = f"{total}+"
         if heading is None:
             lines.append(f"- Other recent activity, source not recorded ({total} items):")
+        elif not items:
+            lines.append(f"- {heading} ({total} in last {window} days; not listed here):")
         else:
             lines.append(f"- {heading} ({total} in last {window} days):")
         for a in items:
