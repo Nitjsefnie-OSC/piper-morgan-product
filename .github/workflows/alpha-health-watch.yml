@@ -48,6 +48,9 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     timeout-minutes: 8
+    outputs:
+      kind: ${{ steps.probe.outputs.kind }}
+      db_misses: ${{ steps.probe.outputs.db_misses }}
     env:
       HEALTH_URL: https://alpha.pipermorgan.ai/health
       PROBES: "5"
@@ -59,6 +62,7 @@ jobs:
         run: |
           set -u
           misses=0
+          db_misses=0
           for i in $(seq 1 "$PROBES"); do
             started=$(date -u +%H:%M:%S)
             body=$(curl -sS --max-time 10 -w '\n%{http_code}' "$HEALTH_URL" 2>/dev/null || echo -e '\n000')
@@ -68,6 +72,14 @@ jobs:
               misses=$((misses+1)); echo "$started probe $i MISS http=$code"
             elif printf '%s' "$json" | grep -q '"status": *"degraded"'; then
               misses=$((misses+1)); echo "$started probe $i MISS degraded ($(printf '%s' "$json" | tr -d '\n' | cut -c1-160))"
+              # #2146 (Arch B): guard 1a's own predicate, read here: did this miss say the
+              # DATABASE is not healthy? Only those misses may dispatch the restarter.
+              db="$(printf '%s' "$json" | python3 -c 'import sys,json
+          try:
+              print((json.load(sys.stdin).get("services") or {}).get("database") or "absent")
+          except Exception:
+              print("unreadable")' 2>/dev/null || echo unreadable)"
+              case "$db" in healthy|absent|unreadable) ;; *) db_misses=$((db_misses+1)) ;; esac
             else
               echo "$started probe $i ok"
             fi
@@ -75,6 +87,7 @@ jobs:
           done
           echo "misses=$misses of $PROBES (limit $MISS_LIMIT)"
           echo "misses=$misses of $PROBES" >> "$GITHUB_OUTPUT"
+          echo "db_misses=$db_misses" >> "$GITHUB_OUTPUT"
           if [ "${{ inputs.force_fail }}" = "true" ]; then
             echo "kind=forced" >> "$GITHUB_OUTPUT"
             echo "FORCED FAILURE (acceptance test of the alert email)"; exit 1
@@ -116,3 +129,55 @@ jobs:
               "$line")"
             echo "opened a new issue"
           fi
+
+  # #2146 (PA's proposal; HOST's five conditions, Exec's 24-hour stop, Arch's A-C; xian
+  # approved 11:18 10-23): recovery without a person pressing two buttons. This job alone
+  # holds `actions: write`, and only to dispatch the restarter on `ops/restarter`, whose
+  # own guards (1a database not healthy, 1b pg critical, 2 one restart per 30 minutes and
+  # a second automatic restart in 24 hours stops) decide whether anything restarts.
+  restart:
+    needs: probe
+    # Arch B: only a declared stall (not a blip, not a forced test) in which at least one
+    # miss read the database as not healthy. Other stalls keep the email and issue path.
+    if: failure() && needs.probe.outputs.kind == 'stall' && needs.probe.outputs.db_misses != '0' && needs.probe.outputs.db_misses != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    permissions:
+      actions: write
+      contents: read
+      issues: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      TITLE: "Alpha health watch: failing"
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - name: Dispatch the database restarter unless a hold is on
+        shell: bash
+        run: |
+          set -u
+          comment() {
+            number=$(gh issue list --state open --search "in:title \"$TITLE\"" --json number,title \
+              --jq "[.[] | select(.title == \"$TITLE\")][0].number // empty")
+            if [ -n "$number" ]; then gh issue comment "$number" --body "$1"; else echo "no open alert issue: $1"; fi
+          }
+          # Arch C: a deliberate stop (an attended test, maintenance) must not be undone. The
+          # hold is ops/alpha-hold.md on main, the file the promote gate reads. A read that
+          # fails is not "no hold": for an action that restarts the database, not acting is
+          # the side that fails closed.
+          err="$(mktemp)"
+          if hold="$(gh api "repos/$GH_REPO/contents/ops/alpha-hold.md?ref=main" --jq '.content' 2>"$err")"; then
+            holder="$(printf '%s' "$hold" | base64 -d 2>/dev/null | head -1)"
+            echo "hold on: $holder"
+            comment "Hold on, not restarting: ${holder:-ops/alpha-hold.md is present}. Run: $RUN_URL"
+            exit 0
+          fi
+          if ! grep -q 'HTTP 404' "$err"; then
+            echo "::error::could not read the hold file: $(head -c 200 "$err")"
+            comment "Couldn't read ops/alpha-hold.md, so not restarting automatically. Run: $RUN_URL"
+            exit 1
+          fi
+          gh workflow run restart-alpha-postgres.yml --ref ops/restarter -f reason="auto: alpha health watch $RUN_URL"
+          comment "Database failing on probes; automatic restart dispatched on ops/restarter (its guards decide). Watch: $RUN_URL"
+          echo "restarter dispatched"
+

@@ -17,6 +17,10 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 11:21 PDT | arch | rule-arch-to-lead-cc-exec-ppm-2132-neighbour-2-lands-after-one-batched-full-run-neighbour-1-fails-hold-gate-a-b-accepted-2026-10-23.md | #2132: neighbour 2 (attention_query) lands after one batched full run. Neighbou… |
+| 2026-10-23 11:20 PDT | arch | rule-arch-to-exec-lead-cc-host-pa-ppm-cio-2146-yes-with-three-more-conditions-guard-2-by-time-database-only-dispatch-hold-respected-2026-10-23.md | #2146: yes, with HOST's five conditions and Exec's 24-hour stop, plus three mor… |
+| 2026-10-23 11:17 PT | cio (Piper Morgan) | cc-reply-cio-to-pard-cc-janus-exec-host-2136-yes-to-b-and-a-has-one-answer-on-a-single-unix-user-2026-10-23.md | Re #2136 helper: the design reads right. Yes to B (a minting user). On A, your… |
+| 2026-10-23 11:16 PT | cio (Piper Morgan) | cc-reply-cio-to-janus-cc-pard-exec-host-2136-replace-the-admin-key-dont-scope-it-and-the-secrets-a-workflow-edit-reaches-2026-10-23.md | Re #2136 scope: scoping can't meet HOST's bar on Amber, because every seat runs… |
 | 2026-10-23 11:14 PT | lead | note-lead-to-exec-cc-arch-ppm-after-your-1043-pause-i-ran-two-uncached-anthropic-screens-about-3-40-stopped-hold-gate-tests-2026-10-23.md | My miss: after your 10:43 pause, which I read only at 11:10, I ran two uncached… |
 | 2026-10-23 11:13 PT | host | ruling-host-to-exec-2146-yes-drop-alpha-db-reviewer-auto-dispatch-five-conditions-2026-10-23.md | HOST security ruling on #2146: YES, drop the alpha-db reviewer and auto-dispatc… |
 | 2026-10-23 11:09 PT | pa | ruling-relay-pa-to-exec-cc-host-arch-lead-ppm-2146-xian-alpha-controls-must-not-need-a-second-human-2026-10-23.md | Ruling relay (xian in PA's session, 11:09), for #2146: controls that need a sec… |
@@ -75,6 +79,7 @@
 | 2026-10-23 0428 PT | ppm | workstream-066-ppm-2026-10-23.md | Ship #066 workstream review, PPM: window Fri 10-16 to Thu 10-22. The beta gate… |
 | 2026-10-23 (Friday 04:27 PT) | docs | workstream-066-docs-2026-10-23.md | Ship #066 workstream review, Docs (window Fri 10-16 to Thu 10-22): five posts p… |
 | 2026-10-23 | cio | cc-proposal-cio-to-lead-cc-exec-arch-pa-alpha-hold-file-the-promote-step-reads-2026-10-23.md | Proposal (owner: Lead to build, Arch to read): a hold the promote step can see.… |
+| 2026-10-23 | cio | decision-cio-to-exec-cc-host-2136-two-install-decisions-for-xian-workflows-and-other-repos-2026-10-23.md | decision for xian (#2136): two install choices before seats switch to App token… |
 | 2026-10-23 | cio | reply-cio-to-exec-briefing-gate-now-at-the-commit-2026-10-23.md | Reply: thanks, the red was mine (10:11, no last_updated bump). check-branch now… |
 | 2026-10-23 | cio | reply-cio-to-exec-ship-synthesis-gate-registered-and-m36-corollary-2026-10-23.md | Reply: the Ship synthesis gate is registered and live (e67d955fea), with one ad… |
 | 2026-10-23 | cio (Chief Innovation Officer) | workstream-066-cio-2026-10-23.md | Ship #066 workstream review, CIO. Window Fri 16 Oct to Thu 22 Oct. No user-faci… |
