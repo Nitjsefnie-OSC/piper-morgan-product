@@ -15,7 +15,7 @@ import os
 import re
 import string
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional, Tuple, TypedDict
 from uuid import UUID
 
@@ -494,6 +494,44 @@ GENERATE_CONTENT_WHAT_I_CAN_DRAFT = (
     "I can draft a status report, a README section or an issue template. "
     "Tell me which one and what it's about, and I'll write it."
 )
+
+
+# #2140 (CXO 2026-10-22, Arch 10-23 06:28): the what-changed reply names the
+# Piper sources it read and the window it read, and says GitHub was not read.
+# Each read is fail-closed: the empty line only when all three read ok and all
+# three are empty; a failed read is named, never reported as "nothing new".
+CHANGES_SOURCES = ("tasks", "projects", "activity log")
+CHANGES_NOTHING_NEW = (
+    "I don't see anything new in your Piper tasks, projects or activity log {window}. "
+    "I haven't checked GitHub for this."
+)
+CHANGES_FOUND_OPENER = (
+    "Here's what changed in your Piper {sources} {window}. I haven't checked GitHub for this."
+)
+# CXO 10-23 09:27: all three failed (or no principal), the window named.
+CHANGES_READ_FAILED_ALL = (
+    "I couldn't read your Piper tasks, projects or activity log just now, so I can't say "
+    "what changed {window}. Try again in a moment; if it keeps failing, tell us."
+)
+# CXO 10-23 09:27: rows listed, one line per source that failed.
+CHANGES_READ_FAILED_BESIDE_ROWS = (
+    "I couldn't read your Piper {source} just now, so the list above doesn't include it. "
+    "Try again in a moment; if it keeps failing, tell us."
+)
+# CXO 10-23 09:27: the sources that read ok are empty and some failed; no opener.
+CHANGES_NOTHING_NEW_SOME_FAILED = (
+    "I don't see anything new in your Piper {ok_sources} {window}. I couldn't read your "
+    "Piper {failed_sources} just now, so I can't say what changed there. Try again in a "
+    "moment; if it keeps failing, tell us."
+)
+
+
+def _join_sources(names, conjunction: str = "and") -> str:
+    """'tasks', 'tasks and projects', 'tasks, projects and activity log'."""
+    names = list(names)
+    if len(names) <= 1:
+        return "".join(names)
+    return ", ".join(names[:-1]) + f" {conjunction} " + names[-1]
 
 
 # #2076 (CXO): the focus ("**Today:**") reply's opening sentence when GitHub
@@ -10259,11 +10297,42 @@ class IntentService:
             # Parse time expression from intent context
             original_message = intent.context.get("original_message", "").lower()
 
-            # Parse time range
+            # Parse time range. #2143: a sub-day window is a real window (the
+            # day parser alone made "past hour" 0 days, so since_time was now).
             time_range_days = self._parse_time_expression(original_message)
+            window, time_desc = self._parse_time_window(original_message)
 
             now = datetime.now(timezone.utc)
-            since_time = now - timedelta(days=time_range_days)
+            since_time = now - window
+
+            intent_data_base = {
+                "category": intent.category.value,
+                "action": intent.action,
+                "confidence": intent.confidence,
+                "time_range_days": time_range_days,
+                "time_window_hours": window.total_seconds() / 3600,
+            }
+
+            # #1985: every read here is scoped to the PRINCIPAL (audit log, todos,
+            # projects are all user-owned), not the session — the #1395 class.
+            # #2140 (Arch 10-23): computed once, before any read (it used to be
+            # assigned inside the first read, so that read failing made the other
+            # two raise NameError into a false "no activity"); and no principal is
+            # not readable (a session id matches no owner row: a false empty).
+            _owner_id = _principal_from_intent(intent)
+            if not _owner_id:
+                return IntentProcessingResult(
+                    success=False,
+                    message=CHANGES_READ_FAILED_ALL.format(window=time_desc),
+                    intent_data={
+                        **intent_data_base,
+                        "failed_sources": list(CHANGES_SOURCES),
+                        "reason": "no_principal",
+                    },
+                    workflow_id=workflow_id,
+                    requires_clarification=False,
+                )
+            failed_sources = set()
 
             # 1. Get audit log activity
             audit_activity = []
@@ -10271,9 +10340,6 @@ class IntentService:
                 async with AsyncSessionFactory.session_scope() as session:
                     from services.database.models import AuditLog
 
-                    # #1985: every read here is scoped to the PRINCIPAL (audit log, todos,
-                    # projects are all user-owned), not the session — the #1395 class.
-                    _owner_id = _principal_from_intent(intent) or session_id
                     result = await session.execute(
                         select(AuditLog)
                         .where(
@@ -10296,6 +10362,7 @@ class IntentService:
                         )
             except Exception as audit_error:
                 self.logger.warning(f"Failed to fetch audit logs: {audit_error}")
+                failed_sources.add("activity log")
 
             # 2. Get todo activity (created/updated/completed)
             todo_activity = []
@@ -10345,6 +10412,7 @@ class IntentService:
                         )
             except Exception as todo_error:
                 self.logger.warning(f"Failed to fetch todo activity: {todo_error}")
+                failed_sources.add("tasks")
 
             # 3. Get project activity (created/updated)
             project_activity = []
@@ -10382,15 +10450,42 @@ class IntentService:
                         )
             except Exception as project_error:
                 self.logger.warning(f"Failed to fetch project activity: {project_error}")
+                failed_sources.add("projects")
 
-            # Format response
-            time_desc = self._format_time_range(time_range_days)
+            # Format response (#2140: fail-closed per read)
             total_activities = len(audit_activity) + len(todo_activity) + len(project_activity)
+            failed = [name for name in CHANGES_SOURCES if name in failed_sources]
+            read_ok = [name for name in CHANGES_SOURCES if name not in failed_sources]
+
+            if not read_ok:
+                return IntentProcessingResult(
+                    success=False,
+                    message=CHANGES_READ_FAILED_ALL.format(window=time_desc),
+                    intent_data={
+                        **intent_data_base,
+                        "total_activities": 0,
+                        "failed_sources": failed,
+                        "reason": "all_reads_failed",
+                    },
+                    workflow_id=workflow_id,
+                    requires_clarification=False,
+                )
 
             if total_activities == 0:
-                message = f"No activity detected {time_desc}."
+                message = (
+                    CHANGES_NOTHING_NEW_SOME_FAILED.format(
+                        ok_sources=_join_sources(read_ok, "or"),
+                        window=time_desc,
+                        failed_sources=_join_sources(failed, "or"),
+                    )
+                    if failed
+                    else CHANGES_NOTHING_NEW.format(window=time_desc)
+                )
             else:
-                lines = [f"**Activity Summary {time_desc}** ({total_activities} items)\n"]
+                lines = [
+                    CHANGES_FOUND_OPENER.format(sources=_join_sources(read_ok), window=time_desc)
+                    + "\n"
+                ]
 
                 # Group and format by type
                 if todo_activity:
@@ -10431,16 +10526,16 @@ class IntentService:
                     )[:5]:
                         lines.append(f"  - {event_type}: {count}")
 
-                message = "\n".join(lines)
+                for name in failed:
+                    lines.append(CHANGES_READ_FAILED_BESIDE_ROWS.format(source=name))
+                message = "\n".join(lines).rstrip()
 
             return IntentProcessingResult(
                 success=True,
                 message=message,
                 intent_data={
-                    "category": intent.category.value,
-                    "action": intent.action,
-                    "confidence": intent.confidence,
-                    "time_range_days": time_range_days,
+                    **intent_data_base,
+                    "failed_sources": failed,
                     "total_activities": total_activities,
                     "todo_activity": todo_activity,
                     "project_activity": project_activity,
@@ -10881,18 +10976,9 @@ class IntentService:
         if "yesterday" in message_lower:
             return 1
 
-        # Hours
+        # Hours (whole days only here; _parse_time_window reads the hours, #2143)
         if "hour" in message_lower:
-            if "last hour" in message_lower or "past hour" in message_lower:
-                return 0  # Partial day
-            # Extract number of hours
-            import re
-
-            match = re.search(r"(\d+)\s*hours?", message_lower)
-            if match:
-                hours = int(match.group(1))
-                return max(0, hours // 24)  # Convert to days
-            return 0
+            return max(0, self._parse_hours(message_lower) // 24)
 
         # Days
         if "day" in message_lower:
@@ -10953,6 +11039,33 @@ class IntentService:
 
         # Default to 1 day if can't parse
         return 1
+
+    @staticmethod
+    def _parse_hours(message_lower: str) -> int:
+        """Hours named in an hour-window ask: "past hour" is 1, "last 3 hours" 3."""
+        if "last hour" in message_lower or "past hour" in message_lower:
+            return 1
+        match = re.search(r"(\d+)\s*hours?", message_lower)
+        return int(match.group(1)) if match else 1
+
+    def _parse_time_window(self, message: str) -> Tuple[timedelta, str]:
+        """#2143: the window a what-changed ask reads, and the words for it.
+
+        Hours are a real window ("past hour" is one hour, "last 3 hours" three),
+        not whole days rounded down to 0; every other form is
+        ``_parse_time_expression``'s days. The words always describe the window
+        actually read.
+        """
+        message_lower = message.lower()
+        if "hour" in message_lower and "yesterday" not in message_lower:
+            hours = self._parse_hours(message_lower)
+            if hours >= 1:
+                return (
+                    timedelta(hours=hours),
+                    "in the past hour" if hours == 1 else f"in the past {hours} hours",
+                )
+        days = self._parse_time_expression(message)
+        return timedelta(days=days), self._format_time_range(days)
 
     def _format_time_range(self, days: int) -> str:
         """
@@ -13598,18 +13711,20 @@ class IntentService:
             # 2. Validate content_type is supported
             valid_types = ["status_report", "readme_section", "issue_template"]
             if content_type not in valid_types:
+                # #2139 (CXO 10-23 09:27): the same line as a missing type; code
+                # vocabulary ("status_report") never reaches the user.
                 return IntentProcessingResult(
-                    success=False,
-                    message=f"Unsupported content type: {content_type}. Valid types: {', '.join(valid_types)}",
+                    success=True,
+                    message=GENERATE_CONTENT_WHAT_I_CAN_DRAFT,
                     intent_data={
                         "category": intent.category.value,
                         "action": intent.action,
                         "content_type": content_type,
                         "valid_types": valid_types,
+                        "reason": "unsupported_content_type",
                     },
                     workflow_id=workflow_id,
-                    requires_clarification=True,
-                    clarification_type="unsupported_content_type",
+                    requires_clarification=False,
                 )
 
             # 3. Route to appropriate helper method

@@ -33,6 +33,13 @@ from services.intent_service.intent_hooks import IntentProcessingHooks
 from services.intent_service.pre_classifier import MultiIntentResult, PreClassifier
 from services.intent_service.preference_handler import PreferenceDetectionHandler
 from services.intent_service.prompts import INTENT_CLASSIFICATION_PROMPT
+from services.llm.cacheable_prompt import CacheablePrompt
+
+# #2145: the template's text before its first placeholder ({user_message}) holds no
+# placeholders, only escaped braces, so .format() with no arguments renders it.
+_CLASSIFICATION_PROMPT_STATIC_HEAD = INTENT_CLASSIFICATION_PROMPT[
+    : INTENT_CLASSIFICATION_PROMPT.index("{user_message}")
+].format()
 
 # #1819 census correction: `from services.knowledge_graph import get_ingester` was a
 # DEAD import here (0 uses — AST-verified 2026-09-18). Removed so nobody re-derives
@@ -802,12 +809,21 @@ class IntentClassifier:
         # slot alongside the free-form action.
         from services.intent_service.action_registry import Verb
 
-        prompt = INTENT_CLASSIFICATION_PROMPT.format(
+        full_prompt = INTENT_CLASSIFICATION_PROMPT.format(
             user_message=message,
             context_info=context_info,
             file_context=file_context,
             spatial_context=spatial_context_info,
             verb_vocab=", ".join(v.value for v in Verb),
+        )
+        # #2145: everything before the user's message is identical on every call
+        # (with the system prompt, ~4.2k tokens: over Haiku 4.5's cache minimum),
+        # so it is marked cacheable. The text sent is unchanged.
+        static_head = _CLASSIFICATION_PROMPT_STATIC_HEAD
+        prompt = (
+            CacheablePrompt(static_head, full_prompt[len(static_head) :])
+            if full_prompt.startswith(static_head)
+            else full_prompt
         )
 
         try:

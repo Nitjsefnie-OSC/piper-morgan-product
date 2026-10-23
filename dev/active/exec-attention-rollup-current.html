@@ -32,7 +32,7 @@
 </style>
 <div class="wrap">
 <h1>Attention rollup — Friday 23 October</h1>
-<p class="meta">Exec · v557, rebuilt 08:42 PDT Fri 10-23 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
+<p class="meta">Exec · v564, rebuilt 11:30 PDT Fri 10-23 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
 
 
 
@@ -56,35 +56,11 @@
 
 
 
-<div class="card hot"><b>Restart button: your steps when you&rsquo;re at your Mac.</b> Background: the first test (17:05) passed every check, but Fly refused the restart&rsquo;s lock. Lead built a restart without the lock, Arch approved it, and the tests are green (f3751c4ee2, 17:3x).
-<p style="margin:.4rem 0 .2rem"><b>Step A: copy Lead&rsquo;s fixed job file onto the locked <code>ops/restarter</code> branch.</b> Only your account can push to that branch. Run this in a plain Terminal on your Mac. It makes a temporary copy of the repo in /tmp, so your own working folder isn&rsquo;t touched:</p>
-<pre style="white-space:pre-wrap;margin:.2rem 0">gh repo clone mediajunkie/piper-morgan-product /tmp/restarter-push -- --depth 1 --branch ops/restarter
-cd /tmp/restarter-push
-git fetch --depth 1 origin main
-git checkout FETCH_HEAD -- .github/workflows/restart-alpha-postgres.yml
-git diff --cached --stat</pre>
-<p style="margin:.2rem 0">The last line should print exactly one file: <code>.github/workflows/restart-alpha-postgres.yml | 33 ++++-</code> and <code>1 file changed, 30 insertions(+), 3 deletions(-)</code>. <b>If it shows anything else, stop and tell me.</b> If it matches:</p>
-<pre style="white-space:pre-wrap;margin:.2rem 0">git commit -m "restarter: restart without a lease (2085 route 1)"
-git push origin ops/restarter
-cd ~ &amp;&amp; rm -rf /tmp/restarter-push</pre>
-<p style="margin:.4rem 0 .2rem"><b>B. Second test</b>, after Step A, at a time you pick. Tell me first so PA starts the watch, and wait for PA&rsquo;s &ldquo;starting state&rdquo;. Then:</p>
-<p style="margin:.2rem 0">B1. Stop Postgres (expect <code>server stopped</code>):</p>
-<pre style="white-space:pre-wrap;margin:.2rem 0">fly ssh console -a piper-morgan-db --machine 865105fe247158 -C "su postgres -c '/usr/lib/postgresql/18/bin/pg_ctl stop -D /data/postgresql -m fast'"</pre>
-<p style="margin:.2rem 0">B2. When PA says the database reads down, start the run:</p>
-<pre style="white-space:pre-wrap;margin:.2rem 0">gh workflow run restart-alpha-postgres.yml --repo mediajunkie/piper-morgan-product --ref ops/restarter -f reason="2085 close test 2"</pre>
-<p style="margin:.2rem 0">B3. Approve it: GitHub &rarr; Actions &rarr; &ldquo;Restart alpha Postgres&rdquo; &rarr; the new run &rarr; Review deployments &rarr; tick <code>alpha-db</code> &rarr; Approve and deploy.</p>
-<p style="margin:.2rem 0">B4. Undo, only if PA, Lead or I tell you to:</p>
-<pre style="white-space:pre-wrap;margin:.2rem 0">fly machine restart 865105fe247158 -a piper-morgan-db</pre>
-<p style="margin:.2rem 0">Pass looks like: the run prints &ldquo;restart accepted: HTTP 200&rdquo;, then alpha reads healthy within 3 minutes. If it prints HTTP 401 or 403, the fallback is a new token with one more permission, already approved; I&rsquo;ll give you that block.</p></div>
-<div class="card hot"><b>GitHub App <code>piper-morgan-agents</code> (#2136): your steps.</b> App ID 5434481. You&rsquo;ve created it and generated the key.
-<p style="margin:.4rem 0 .2rem"><b>1. Permissions: done</b> (Actions fixed to Read and write at 17:4x; the rest checked from your screenshot).</p>
-<p style="margin:.4rem 0 .2rem"><b>2. Move the key to Amber</b> from your Mac&rsquo;s Terminal (replace <code>amber</code> with how you ssh to Amber):</p>
-<pre style="white-space:pre-wrap;margin:.2rem 0">scp ~/Downloads/piper-morgan-agents.*.private-key.pem amber:/Users/xian/.piper-shared/github-app-piper-morgan-agents-credential-2026-10-22.pem
-ssh amber chmod 600 /Users/xian/.piper-shared/github-app-piper-morgan-agents-credential-2026-10-22.pem
-rm ~/Downloads/piper-morgan-agents.*.private-key.pem</pre>
-<p style="margin:.2rem 0">Then tell HOST &ldquo;key stored&rdquo;. HOST checks only the name, mode and size. The SHA GitHub showed is the key&rsquo;s fingerprint: public, and fine to share.</p>
-<p style="margin:.4rem 0 .2rem"><b>3. Install it:</b> <a href="https://github.com/settings/apps/piper-morgan-agents/installations">Install App</a> &rarr; your account &rarr; <b>Only select repositories</b> &rarr; <code>piper-morgan-product</code> &rarr; Install. Nothing changes for the agents until Pard&rsquo;s helper hands out App tokens.</p>
-<p style="margin:.2rem 0">Later: Pard&rsquo;s token helper; adding the v4 mail repo; how agents reach Janus&rsquo;s and Pard&rsquo;s repos; then your admin token and SSH key leave Amber (the real fix).</p></div>
+<div class="card"><b>Restart button (#2085): passed today, 10:46.</b> You stopped the database, and the restarter brought it back on its own: &ldquo;restart accepted: HTTP 200&rdquo;, healthy 10 seconds later, about 2 minutes down in all. Closed at 10:50. <b>Gate: 5 open, 2 must-close</b> (#2132 with #2138, and #2096).</div>
+<div class="card"><b>GitHub App (#2136): installed, with Workflows granted.</b> It covers piper-morgan-product, piper-morgan-mail, designinproduct and mediajunkie. <b>Still to add (one minute):</b> piper-morgan-website, piper-morgan-plugin and dispatch. Install page &rarr; Repository access &rarr; add them &rarr; Save.
+<p style="margin:.3rem 0 0"><b>A later decision, for a conversational walk: your own setup&rsquo;s exposure.</b> All 24 agent sessions on Amber run as your Mac user, so any of them can reach your admin SSH key and <code>gh</code> login through a shell. Scoping can&rsquo;t fix that. CIO and Pard propose replacing your admin key on Amber with a non-admin push credential for every agent, plus a separate Mac user that alone holds the App key. Not blocking today.</p></div>
+
+
 <h2>Next time you&rsquo;re here</h2>
 <div class="card"><b>Spec&rsquo;s seven recommendations (R1&ndash;R7): the one-page status is ready.</b> <a href="https://github.com/mediajunkie/piper-morgan-product/blob/main/docs/internal/audits/spec-recommendations-status-2026-10-23.md">Read it here</a> (two minutes). Most of the cheap steps are done. Five decisions are yours, and several steps were never started. We'll walk them one at a time, between other work. <b>First, after today&rsquo;s checkpoint:</b> should the old mailboxes and <code>data/postgres</code> come out of the public repo (R5 item 5)? My lean: yes, after the beta invites go out, with CIO costing it at the 11-05 mail review.</div>
 <div class="card act"><ol style="margin:.2rem 0 .2rem 1.2rem;padding:0">
@@ -107,10 +83,11 @@ rm ~/Downloads/piper-morgan-agents.*.private-key.pem</pre>
 </ol></div>
 <h2>🚧 In motion, nothing for you</h2>
 <div class="card"><ul style="margin:.2rem 0 .2rem 1.2rem;padding:0">
-<li>Lead starts #2132&rsquo;s handler-only fix this morning (no catalog change), then routing changes one at a time. Web runs the four served checks after the next promotion.</li>
+<li><b>#2132 (now gating invitations):</b> part of the fix is on alpha. PPM ruled the close scope systematic, as you asked: Arch&rsquo;s table across all three layers of the documents feature, with no bad cell, plus CXO&rsquo;s checks on alpha. That&rsquo;s a longer path. Lead estimates the pace, and there&rsquo;s no date yet.</li>
 <li>Ship #066: all ten reviews are in, and Comms reviewed my draft and I applied every fix (one false privacy line, from a review, removed). File: <code>docs/public/comms/drafts/weekly-ship-066-draft-2026-10-23.md</code>. Your first look comes after today&rsquo;s checkpoint, since the opening depends on it. It publishes Wed 10-28.</li>
 <li>Comms finished the Oct 9&ndash;22 mining pass. The results are in your <a href="https://claude.ai/artifact/5vc7f1CTHhadvvPBB73h86">Editorial Calendar Planning doc</a>: 9 insight candidates for the empty 10-31/11-01 weekend, and the narrative beat waits for the second restart test.</li>
 <li>The three held alpha invites: cleared by you Thursday, waiting on Comms&rsquo; packet and Web&rsquo;s code checks (HOST).</li>
+<li><b>#2146, automatic database recovery:</b> you approved it, and HOST and Arch agree, with nine conditions in all. Lead builds it. Then two hands-on steps come to you together: a push to <code>ops/restarter</code> (like this morning&rsquo;s) and removing the required reviewer on <code>alpha-db</code>.</li>
 <li>Mail v4 stays on three seats until the 11-05 review.</li>
 </ul></div>
 <h2>📊 Where things stand</h2>

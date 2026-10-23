@@ -2926,8 +2926,10 @@ def register_default_workflows() -> None:
 
     # #1124 cohort 1 migration #3: changes-query — dispatch migration. The four
     # classifier aliases (verified live as stable) share one entry point.
-    # effect: READ — _handle_changes_query reads GitHub activity for a time
-    # window and formats it; no mutating router calls anywhere in its body.
+    # effect: READ — _handle_changes_query reads the user's Piper tasks,
+    # projects and audit log for a time window and formats them (no GitHub
+    # read; #2140 corrected this comment); no mutating router calls anywhere
+    # in its body.
     # flip_group (#1667/#1595 wave 2, 2026-09-25): read_temporal. "What
     # changed SINCE X" parses a user-supplied time expression
     # (_parse_time_expression, days-as-int, called out in this entry point's
@@ -4380,7 +4382,12 @@ def register_default_workflows() -> None:
                 # exactly the summarize family the decision named.
                 "read_referent",
             ),
-            ["analyze_document", "analyze_file"],
+            # #2132 (Arch 10-23, the classifier family change): the classifier
+            # normalizes "what_does"/"question_document" to qa_document, which had
+            # no rail key, so a question about one document fell through to the
+            # category path with nothing bound. A question about one document is
+            # the analyze op. Aliases are input-side only (never in the catalog).
+            ["analyze_document", "analyze_file", "qa_document"],
         ),
         (
             _qentry(

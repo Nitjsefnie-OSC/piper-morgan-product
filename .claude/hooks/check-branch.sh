@@ -26,6 +26,24 @@ fi
 TOP=$(git rev-parse --show-toplevel 2>/dev/null)
 [ -f "$TOP/scripts/stamp_check.py" ] && (cd "$TOP" && python3 scripts/stamp_check.py --log-staged 2>/dev/null)
 
+# Current-state page gate at the commit (CIO 2026-10-23, after a briefing edit without a last_updated bump
+# turned Code Quality red on main for three pushes): when the briefing is staged, run the same check CI runs
+# (scripts/check-current-state.py) on the staged copy, and block on a FAIL. CI still enforces it.
+BRIEF=docs/briefing/BRIEFING-CURRENT-STATE.md
+if [ -f "$TOP/scripts/check-current-state.py" ] && (cd "$TOP" && git diff --cached --name-only | grep -qx "$BRIEF"); then
+    TMPB=$(mktemp "${TMPDIR:-/tmp}/brief-staged.XXXXXX")
+    (cd "$TOP" && git show ":$BRIEF" > "$TMPB" 2>/dev/null)
+    OUT=$(cd "$TOP" && python3 scripts/check-current-state.py "$TMPB" 2>&1)
+    RC=$?
+    rm -f "$TMPB"
+    if [ "$RC" -eq 1 ]; then
+        echo "BLOCKED: the staged $BRIEF fails the current-state gate that Code Quality runs on main:" >&2
+        echo "$OUT" | sed 's/^/  /' >&2
+        echo "Fix it (usually: bump last_updated on line 5 to today), stage it again, then commit." >&2
+        exit 2
+    fi
+fi
+
 if [ "$CURRENT_BRANCH" = "main" ]; then
     exit 0
 fi

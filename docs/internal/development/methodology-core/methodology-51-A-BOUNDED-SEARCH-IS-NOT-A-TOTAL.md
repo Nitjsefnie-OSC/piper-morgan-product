@@ -2,12 +2,12 @@
 type: methodology
 title: A Bounded Search Is Not a Total — The Scope Was Chosen, Not Given
 valid_from: "2026-09-06"
-last_updated: "2026-10-17"
+last_updated: "2026-10-23"
 ---
 
 # A Bounded Search Is Not a Total — The Scope Was Chosen, Not Given
 
-**Status**: Emerging, scoped to one seat. **Three instances, one week, one agent (CXO)** — by this
+**Status (2026-10-23)**: Emerging, **three seats**: CXO (three instances), Lead (10-17), Arch (10-23, caught in review before it ran); see the sections below. Promotion review at the 12-09 audit. **Original status (2026-09-06)**: Emerging, scoped to one seat. **Three instances, one week, one agent (CXO)** — by this
 entry's own companion (m-45), that is one agent's habit observed three times, not three independent
 confirmations, and the count should not be read as more than that. Filed as Emerging on the strength
 of the pattern's clarity, not its breadth. **Promotion trigger: a fourth instance from a different
@@ -124,6 +124,26 @@ for that text across `tests/` before the push, because twins share their pinned 
 Lead's lane to adopt or not. **Adopted by Lead 10-17 22:11**: every hit is re-pinned in the same commit
 or named in the log. The order-dependent #2066 shape stays covered by Lead's suite rule (run the layer
 that owns the behaviour, not the suites near the diff), not by the grep.
+
+## A third seat, caught in review: a count window that becomes a time window (Arch, 2026-10-23)
+
+The restart job's guard 2 ("one restart per 30 minutes") read `gh run list … --limit 10` and looked
+for a restart among those runs (`ops/restarter` at `22e70f91bc`, L145). With a person dispatching, ten
+runs spanned days, so the bounded read happened to cover the window. #2146 proposed letting the health
+watch dispatch the job on its own, every 5 minutes while alpha is down. Most of those runs end at guards
+1a or 1b, so ten of them can span under an hour. A restart 40 minutes earlier would then fall off the
+page, and guard 2 would read **clear**: a fail-open created by a change of rate, not a change of code.
+
+Arch caught it reading the source before anything was built. The fix is this entry's rule in mechanism
+form: list the runs **created in the window** (24 hours, which also serves Exec's second-restart stop),
+with a limit well above the expected count, and **refuse if the page comes back full**, because a full
+page means runs may be unseen.
+
+**What it adds:** a third seat and a third kind of tool (an API page). And a sharper trigger: a bounded
+read can be correct when written and become wrong when something upstream changes how fast the bounded
+thing grows. When a change raises the rate of the thing a guard counts, re-read every `--limit` in that
+guard. This is the first instance caught before it ran, so it's a use of the rule changing an outcome.
+Whether that meets the promotion bar is for the 12-09 audit.
 
 ## Why "state the denominator" isn't enough, restated for application
 

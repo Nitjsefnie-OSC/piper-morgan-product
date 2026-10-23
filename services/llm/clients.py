@@ -583,6 +583,7 @@ class LLMClient:
         # — there is no server-key fallback (PM ruling, #1812; the operator seam is
         # gone since step 5). Always a fresh per-request client, billed to the acting
         # user. The key is never logged here.
+        from services.llm.cacheable_prompt import anthropic_user_content
         from services.llm.request_key import anthropic_client_for_request
 
         client = anthropic_client_for_request()
@@ -594,7 +595,8 @@ class LLMClient:
             "model": resolve_model_alias(config["model"].value),
             "max_tokens": config["max_tokens"],
             **_build_temperature_kwarg(config["model"].value, config["temperature"]),
-            "messages": [{"role": "user", "content": prompt}],
+            # #2145: a CacheablePrompt gets one cache breakpoint after its static prefix.
+            "messages": [{"role": "user", "content": anthropic_user_content(prompt)}],
         }
 
         # Add system prompt if provided
@@ -632,6 +634,13 @@ class LLMClient:
                 model=config["model"].value,
                 prompt_tokens=prompt_tokens,
                 completion_tokens=completion_tokens,
+                # #2145: cache effect, measured per call (None when not reported)
+                cache_write_tokens=getattr(
+                    getattr(response, "usage", None), "cache_creation_input_tokens", None
+                ),
+                cache_read_tokens=getattr(
+                    getattr(response, "usage", None), "cache_read_input_tokens", None
+                ),
             )
         except Exception as e:
             logger.warning(f"Failed to log usage: {e}")

@@ -927,6 +927,7 @@ async def run(
     source_prefix: Optional[str] = None,
     phrase: Optional[str] = None,
     provider: Optional[str] = None,
+    replay: Optional[tuple] = None,
 ) -> int:
     from services.intent_service.inversion_router import derive_routing_grammar, route
 
@@ -1025,6 +1026,13 @@ async def run(
     from services.llm.clients import LLMClient
 
     llm = LLMClient()  # #322 constructor-injection pattern; keys via app config path
+    if replay:
+        # 2026-10-23 (#2145 follow-up, Arch: batched screens share one batch): score a
+        # finished Message Batch with the same scorer code (scripts/router_batch.py).
+        from router_batch import ReplayLLM
+
+        llm = ReplayLLM(*replay)  # type: ignore[assignment]
+        provider = None
     if provider:
         # 2026-10-01: alpha's router runs on the USER's stored key — Anthropic
         # for PM, so `inversion_routing` resolves to the Haiku-class model —
@@ -1081,6 +1089,13 @@ if __name__ == "__main__":
         default=None,
         help="force the router's provider (anthropic = alpha's Haiku-class router; default = dev config, openai)",
     )
+    ap.add_argument(
+        "--replay",
+        nargs=2,
+        metavar=("REQUESTS", "RESULTS"),
+        default=None,
+        help="score a finished Message Batch (scripts/router_batch.py render/submit) instead of live calls",
+    )
     args = ap.parse_args()
     # #1812 aftermath: scripts must bind the developer's own keys — the
     # server-key fallback this instrument silently relied on is gone.
@@ -1097,6 +1112,7 @@ if __name__ == "__main__":
                     args.source_prefix,
                     args.phrase,
                     args.provider,
+                    tuple(args.replay) if args.replay else None,
                 )
             )
         )

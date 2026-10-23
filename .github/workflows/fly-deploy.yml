@@ -286,6 +286,28 @@ jobs:
         with:
           fetch-depth: 0   # parity check compares refs
 
+      # CIO 10-23 (Arch's conditions): a hold lives in a file on main, ops/alpha-hold.md, committed
+      # by whoever calls it (an attended test, an incident). It is read from origin/main, never the
+      # working tree: checkout takes the DISPATCHING ref, so a dispatch from another branch would
+      # see no file. Fail closed: if origin/main does not resolve, refuse; only a resolvable
+      # origin/main without the file is "no hold". No override input: clearing a hold is removing
+      # the file, a commit anyone can see. (10-23 09:21: a promotion went into #2085 test 2's
+      # hold, which then existed only in mail.)
+      - name: No hold may be on (ops/alpha-hold.md on origin/main)
+        run: |
+          git fetch --no-tags --quiet origin main || true
+          if ! git rev-parse --verify --quiet origin/main >/dev/null; then
+            echo "::error::Could not resolve origin/main, so the hold file could not be read. Refusing (fail closed)."
+            exit 1
+          fi
+          if git cat-file -e origin/main:ops/alpha-hold.md 2>/dev/null; then
+            echo "::error::A hold is on: ops/alpha-hold.md exists on origin/main. Promotion refused. Its holder removes it when the hold clears."
+            echo "----- ops/alpha-hold.md (origin/main) -----"
+            git show origin/main:ops/alpha-hold.md
+            exit 1
+          fi
+          echo "No hold: origin/main $(git rev-parse --short=10 origin/main) has no ops/alpha-hold.md"
+
       # Pinned to the commit behind release 1.5 (Arch review, 2026-09-29). Both jobs that load this
       # action also hold a deploy token, and @master is whatever that repo's tip happens to be on
       # the day it runs -- an unreviewed third party in the same job as a credential.

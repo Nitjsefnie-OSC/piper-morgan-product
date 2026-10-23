@@ -58,7 +58,11 @@ def test_the_three_guards_come_before_the_one_restart_in_order():
     assert "--status success" not in text[g2:g3]  # an uncured restart fails its run
     assert "--json jobs" in text[g2:g3]
     assert 'startswith("Restart the Postgres machine")' in text[g2:g3]
-    assert "age<1800" in text[g2:g3]
+    assert "h<1800" in text[g2:g3]
+    # #2146 (Arch A): read by time over 24 hours, never by a count of runs
+    assert '--created ">=$since"' in text[g2:g3] and "--limit 10" not in text[g2:g3]
+    assert "Restart history page full" in text[g2:g3]  # a full page refuses (fail closed)
+    assert "TRIGGER_ACTOR: ${{ github.triggering_actor }}" in text[g2:g3]
     # Guard 3: evidence first
     assert "flyctl machine status" in text[g3:restart]
     assert "flyctl logs" in text[g3:restart]
@@ -92,13 +96,15 @@ def _guard2_program() -> str:
     doc = yaml.safe_load(_text())
     steps = doc["jobs"]["restart"]["steps"]
     run = next(s["run"] for s in steps if s.get("name", "").startswith("Guard 2"))
-    start = run.index("python3 -c '") + len("python3 -c '")
+    decide = run.index('decide="$(')
+    start = run.index("python3 -c '", decide) + len("python3 -c '")
     end = run.index("')\"", start)
     return run[start:end]
 
 
-def _guard2(runs) -> str:
+def _guard2(runs, auto: bool = False) -> str:
     import json
+    import os
     import subprocess
     import sys
 
@@ -108,6 +114,7 @@ def _guard2(runs) -> str:
         capture_output=True,
         text=True,
         check=True,
+        env={**os.environ, "AUTO": "1" if auto else "0"},
     )
     return out.stdout.strip()
 
@@ -147,6 +154,18 @@ def test_guard_2_blocks_on_a_restart_whose_run_failed_afterwards():
     # a restart step that ran at all counts, success or not
     assert _guard2([_run(10, "failure")]).startswith("block ")
     assert _guard2([_run(10, "cancelled")]).startswith("block ")
+
+
+def test_guard_2_stops_a_second_automatic_restart_within_24_hours():
+    """#2146 (Exec's condition, Arch A): a watch-dispatched run (triggered by the bot)
+    refuses when any restart ran in the last 24 hours; a person's dispatch passes the
+    24-hour check (they are present) but never the 30-minute one."""
+    two_hours = [_run(120, "success")]
+    assert _guard2(two_hours, auto=True).startswith("stop24 ")
+    assert _guard2(two_hours, auto=False) == "clear"
+    assert _guard2([_run(25 * 60, "success")], auto=True) == "clear"
+    assert _guard2([_run(10, "success")], auto=True).startswith("block ")
+    assert _guard2([_run(120, "skipped")], auto=True) == "clear"
 
 
 def _guard2_raw(stdin_text: str) -> str:

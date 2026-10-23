@@ -53,7 +53,7 @@ class TestChangesQueryRouting:
         intent = Intent(
             category=IntentCategory.QUERY,
             action="changes_query",
-            context={"original_message": "what changed since yesterday"},
+            context={"original_message": "what changed since yesterday", "user_id": "u-2140"},
         )
 
         with patch.object(
@@ -234,7 +234,7 @@ class TestChangesQueryResults:
         intent = Intent(
             category=IntentCategory.QUERY,
             action="changes_query",
-            context={"original_message": "what changed since yesterday"},
+            context={"original_message": "what changed since yesterday", "user_id": "u-2140"},
         )
 
         # Mock database session and todo data
@@ -273,7 +273,10 @@ class TestChangesQueryResults:
             )
 
             assert result.success is True
-            assert "Activity Summary" in result.message
+            assert result.message.startswith(
+                "Here's what changed in your Piper tasks, projects and activity log since "
+                "yesterday. I haven't checked GitHub for this."
+            )  # #2140 (CXO)
             assert result.intent_data["time_range_days"] == 1
             assert result.intent_data["total_activities"] >= 0
 
@@ -283,7 +286,7 @@ class TestChangesQueryResults:
         intent = Intent(
             category=IntentCategory.QUERY,
             action="changes_query",
-            context={"original_message": "what changed since yesterday"},
+            context={"original_message": "what changed since yesterday", "user_id": "u-2140"},
         )
 
         # Mock empty results
@@ -305,7 +308,10 @@ class TestChangesQueryResults:
             )
 
             assert result.success is True
-            assert "No activity detected" in result.message
+            assert result.message == (
+                "I don't see anything new in your Piper tasks, projects or activity log since "
+                "yesterday. I haven't checked GitHub for this."
+            )  # #2140 (CXO): all three read ok and all three empty
             assert result.intent_data["total_activities"] == 0
 
 
@@ -461,11 +467,11 @@ class TestContextualQueryErrorHandling:
 
     @pytest.mark.asyncio
     async def test_changes_query_handles_database_error(self, intent_service):
-        """Test changes query gracefully handles database errors by continuing with empty results"""
+        """#2140 (Arch 10-23): every read failing is not "no activity"; it is a failed read."""
         intent = Intent(
             category=IntentCategory.QUERY,
             action="changes_query",
-            context={"original_message": "what changed since yesterday"},
+            context={"original_message": "what changed since yesterday", "user_id": "u-2140"},
         )
 
         # Mock database error for all queries
@@ -478,10 +484,15 @@ class TestContextualQueryErrorHandling:
                 intent, "workflow-id", "test-session"
             )
 
-            # Handler gracefully degrades by logging warnings and showing no activity
-            assert result.success is True
-            assert "No activity detected" in result.message
-            assert result.intent_data["total_activities"] == 0
+            # Fail-closed: all three reads failed, so success=False and the words
+            # name every source; never the empty line.
+            assert result.success is False
+            assert result.message == (
+                "I couldn't read your Piper tasks, projects or activity log just now, so I "
+                "can't say what changed since yesterday. Try again in a moment; if it keeps "
+                "failing, tell us."
+            )
+            assert result.intent_data["failed_sources"] == ["tasks", "projects", "activity log"]
 
     @pytest.mark.asyncio
     async def test_attention_query_handles_database_error(self, intent_service):
@@ -683,7 +694,7 @@ class TestPreClassifierRoutingIntegration:
         pre_intent = Intent(
             category=IntentCategory.QUERY,
             action="changes_query",
-            context={"original_message": "what changed since yesterday"},
+            context={"original_message": "what changed since yesterday", "user_id": "u-2140"},
         )
 
         # Step 2: the action-dispatch rail routes changes_query to its handler
