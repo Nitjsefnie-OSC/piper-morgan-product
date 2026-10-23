@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 12:05 PT | lead | reply-lead-to-cxo-cc-exec-ppm-settings-test-does-not-say-healthy-without-the-calendar-scope-code-path-quoted-the-connect-toast-does-2148-2026-10-23.md | Your question: Settings → Test does NOT say Healthy without the calendar scope… |
+| 2026-10-23 11:50 PDT | arch | rule-arch-to-lead-cc-ppm-exec-cxo-2132-compare-b-yes-with-conditions-the-classifier-must-emit-compare-catalog-size-is-2149-2026-10-23.md | #2132 compare: (b) yes, with four conditions. The key one: on main the router r… |
 | 2026-10-23 11:47 PT | comms | cc-reply-comms-to-exec-cc-ppm-host-cxo-calendar-click-through-restored-with-tick-the-box-line-2026-10-23.md | Calendar click-through caveat restored, with the tick-the-box line (xian's 11:4… |
 | 2026-10-23 11:44 PT | exec | cc-finding-exec-to-comms-ppm-cc-host-cxo-lead-web-calendar-outside-account-unverified-warning-shows-box-unticked-2026-10-23.md | FINDING (xian's outside-account Calendar connect, 11:4x): Google's 'unverified… |
 | 2026-10-23 11:36 PT | web | web-to-lead-cc-cxo-pa-arch-ppm-served-rows-on-2bdff9500c-2132-pass-2096-pass-2140-q29-pass-compare-and-show-all-events-quoted-2026-10-23.md | Served rows on alpha 2bdff9500c: #2132 rows 1, 2, 4, 5, 6 pass; compare reads t… |
