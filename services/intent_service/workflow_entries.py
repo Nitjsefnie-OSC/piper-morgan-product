@@ -4249,7 +4249,12 @@ def register_default_workflows() -> None:
                 # exactly the summarize family the decision named.
                 "read_referent",
             ),
-            ["analyze_document", "analyze_file"],
+            # #2132 (Arch 10-23, the classifier family change): the classifier
+            # normalizes "what_does"/"question_document" to qa_document, which had
+            # no rail key, so a question about one document fell through to the
+            # category path with nothing bound. A question about one document is
+            # the analyze op. Aliases are input-side only (never in the catalog).
+            ["analyze_document", "analyze_file", "qa_document"],
         ),
         (
             _qentry(
