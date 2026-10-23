@@ -1,5 +1,12 @@
 # Lead carry-forward — Fable 5.1 seat; Model A worktree ~/Development/piper-morgan-worktrees/lead
 
+## STATE @ 2026-10-23 08:00 PT — alpha dc45f98938 (promoted 07:10); main 3d7e850fc8+ green; #2142 CLOSED; ANTHROPIC CAP (keychain workspace, until 11-01) is on xian's rollup
+- **Served on dc45f98938 (Web 07:15):** 2132 file rows PASS; 2139 PASS (close left to CXO); 2142 PASS (closed). 2132 rows 3–4 ("Analyze this document" → repo metrics) FAIL: the legacy LLM classifier's prompt example (prompts.py L251, per PA) after the router's CLARIFY.
+- **2132 routing screens.** OpenAI halves done and clean: 2b (`claude/lead-2132s2b` 6bb0166264), 3 compare_documents (`…s3` c1c442f92a), 4 the 2133 decline (`…s4` bae8023dd8). Each Anthropic ×6 vs main gates landing; blocked on the cap. **Tell Exec before any Anthropic call.** If 2b's Anthropic half doesn't clear the served row, the next lever is a screened change to the classifier example (Arch). The title-arg ask is its own screened change, carrying Arch's exact-name condition and its pins. Screen 3 at landing also owes flip-group test expectations and the compare pins.
+- **2140 + 2143:** lane `claude/lead-2140` (2ac47d8b28), held for CXO's two word calls. Before landing: merge origin/main, rerun the services set, push.
+- **2085:** ops/restarter still 64d611798e; then the second attended test.
+- 3d7e850fc8 (the not-listed heading) waits for the next promotion.
+
 ## DAY CLOSED 2026-10-22 21:4x PT — alpha ac3c7581ff; main 12/12 green; inbox empty
 **10-23 START order:** (1) mail, then CI, then `git ls-remote origin refs/heads/ops/restarter`: if xian has pushed (not 64d611798e), confirm the file equals main's a1bda537c0 and offer the second #2085 test (PA calls the moments; xian dispatches and approves; undo only on a call). (2) The #2132 handler split (i) from lead-2132r 2669005231, with #2139's handler half (CXO's line on #2139). (3) The #2142 render-by-source fix (could ride with (i)). (4) #2140 (CXO's three lines). (5) Routing screens, one catalog edit at a time (the STATE block below has the order). (6) Cron e0bdd924 expires about 10-26: rotate at the 10-25 START.
 

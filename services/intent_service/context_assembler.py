@@ -213,6 +213,15 @@ def _todo_to_dict(todo: Any) -> Dict[str, Any]:
     }
 
 
+def _counts_by_source(items: List[Dict[str, Any]]) -> Dict[str, int]:
+    """#2142: how many items each source contributed to the merged feed."""
+    counts: Dict[str, int] = {}
+    for item in items:
+        source = item.get("source") or "unknown"
+        counts[source] = counts.get(source, 0) + 1
+    return counts
+
+
 class ContextAssembler:
     """Gathers structured context for the conversational floor."""
 
@@ -2026,6 +2035,7 @@ class ContextAssembler:
                 "recent_activity_count", len(cached["recent_activity"])
             ),
             "recent_activity_count_capped": cached.get("recent_activity_count_capped", False),
+            "recent_activity_counts_by_source": cached.get("recent_activity_counts_by_source"),
             "recent_activity_window_days": cached.get(
                 "recent_activity_window_days", _RECENT_ACTIVITY_WINDOW_DAYS
             ),
@@ -2072,6 +2082,9 @@ class ContextAssembler:
         return {
             "recent_activity": all_items[:_RECENT_ACTIVITY_CAP],
             "recent_activity_count": len(all_items),
+            # #2142 (Arch 10-22 21:28): the feed is merged, so its counts are per
+            # source; the floor renders each source under its own heading.
+            "recent_activity_counts_by_source": _counts_by_source(all_items),
             # #1778: the GitHub source reads ONE page — a full page makes the
             # aggregate count a floor (older-in-window items may be unseen).
             "recent_activity_count_capped": _github_page_capped,

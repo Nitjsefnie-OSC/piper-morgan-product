@@ -803,6 +803,68 @@ def _classify_llm_error(error: Exception) -> str:
 # ---- Conversational Floor ----
 
 
+# #2142 (Arch 10-22 21:28): the merged recent-activity feed, one heading per
+# source. An item with no recognised source tag is never placed under a
+# connector's name. Order is fixed so the rendered context is stable.
+_RECENT_ACTIVITY_HEADINGS = (
+    ("github", "Recent GitHub activity"),
+    ("calendar", "Recent calendar events"),
+    ("slack", "Recent Slack messages"),
+)
+
+
+def _render_recent_activity(domain_context: Dict[str, Any]) -> List[str]:
+    activity = domain_context.get("recent_activity")
+    if not isinstance(activity, list) or not activity:
+        return []
+    window = domain_context.get("recent_activity_window_days", 7)
+    known = {source for source, _ in _RECENT_ACTIVITY_HEADINGS}
+    groups: Dict[str, List[Dict[str, Any]]] = {}
+    for item in activity:
+        if isinstance(item, dict):
+            source = item.get("source")
+            groups.setdefault(source if source in known else "unknown", []).append(item)
+    totals = domain_context.get("recent_activity_counts_by_source")
+    if not isinstance(totals, dict):
+        totals = {}
+
+    lines: List[str] = []
+    for source, heading in (*_RECENT_ACTIVITY_HEADINGS, ("unknown", None)):
+        items = groups.get(source) or []
+        counted = totals.get(source, 0) if source != "unknown" else 0
+        # Arch 10-23 (#2142 validation): counts are taken before the list cap, so
+        # a source can have items with none listed (GitHub filled the list). It
+        # still gets its heading and count, marked not listed, never silence.
+        if not items and not (isinstance(counted, int) and counted > 0):
+            continue
+        total: Any = totals.get(source, len(items)) if source != "unknown" else len(items)
+        # #1778: floor, not total, when the source page was full (GitHub only).
+        if source == "github" and domain_context.get("recent_activity_count_capped"):
+            total = f"{total}+"
+        if heading is None:
+            lines.append(f"- Other recent activity, source not recorded ({total} items):")
+        elif not items:
+            lines.append(f"- {heading} ({total} in last {window} days; not listed here):")
+        else:
+            lines.append(f"- {heading} ({total} in last {window} days):")
+        for a in items:
+            title = a.get("title", "(untitled)")
+            if source == "github":
+                num = a.get("number", "?")
+                state = a.get("state", "?")
+                kind = "PR" if a.get("type") == "pr" else "issue"
+                updated = a.get("updated_at", "?")
+                lines.append(f"    • #{num} {kind} ({state}, updated {updated}): {title}")
+            elif source == "calendar":
+                lines.append(f"    • {title} (started {a.get('start_time') or '?'})")
+            elif source == "slack":
+                where = "mention" if a.get("channel_type") == "mention" else "message"
+                lines.append(f"    • {where} at {a.get('updated_at') or '?'}: {title}")
+            else:
+                lines.append(f"    • {title}")
+    return lines
+
+
 class ConversationalFloor:
     """
     Replaces dead-end deflections with contextual LLM conversations.
@@ -1535,26 +1597,12 @@ class ConversationalFloor:
                             f'    • "{title}" — due {due}; {open_n} open / {closed_n} closed'
                         )
 
-        # #986: Surface recent GitHub activity (issues + PRs touched in the
-        # last 7 days). Sorted by updated_at desc. Type-distinguished so
-        # floor can compose "3 PRs merged + 5 issues closed this week" answers.
+        # #986: Surface recent activity (GitHub issues + PRs, calendar events,
+        # Slack messages in the last 7 days). #2142 (Arch 10-22 21:28): the feed
+        # is merged, so each item renders under its OWN source's heading, counts
+        # are per source, and only the capped source (GitHub's one page) gets "+".
         if "recent_activity" in domain_context:
-            activity = domain_context["recent_activity"]
-            if isinstance(activity, list) and activity:
-                total = domain_context.get("recent_activity_count", len(activity))
-                # #1778: floor, not total, when the source page was full.
-                if domain_context.get("recent_activity_count_capped"):
-                    total = f"{total}+"
-                window = domain_context.get("recent_activity_window_days", 7)
-                lines.append(f"- Recent GitHub activity ({total} events in last {window} days):")
-                for a in activity:
-                    if isinstance(a, dict):
-                        num = a.get("number", "?")
-                        title = a.get("title", "(untitled)")
-                        state = a.get("state", "?")
-                        kind = "PR" if a.get("type") == "pr" else "issue"
-                        updated = a.get("updated_at", "?")
-                        lines.append(f"    • #{num} {kind} ({state}, updated {updated}): {title}")
+            lines.extend(_render_recent_activity(domain_context))
 
         # #1226 Phase 3 (honest degradation): no GitHub repo is configured — distinct
         # from "repo configured, zero open issues". Tell the user to set one rather than

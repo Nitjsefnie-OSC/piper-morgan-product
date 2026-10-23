@@ -4554,6 +4554,36 @@ HAND_ROWS = [
         "source": "issue-2112 PA canonical run on 54a5ba990f 2026-10-20 12:2x (Q33; served the date and time)",
         "notes": "Arch 2026-10-20: finding a slot with someone else is floor (twin of 'find time for a 1:1 with sarah'); the router's NONE now stands over the legacy TEMPORAL landing (#2112)",
     },
+    # 2026-10-23 (Lead) — #2132 screen 2b (Arch 10-22 18:5x / 10-23): deictic document asks
+    # are the analyze op; never analyze_data (repository activity).
+    {
+        "phrase": "Analyze this document",
+        "category": "ANALYSIS",
+        "expected": "action:analyze_document",
+        "source": "issue-2132 Q17 #1386 Run 1 alpha 76789a8988 2026-10-22 (served analyze_data repo metrics)",
+        "notes": "Arch 15:05: a document ask, not repository activity; the held-file binding or CXO's line answers it",
+    },
+    {
+        "phrase": "What does this document say?",
+        "category": "ANALYSIS",
+        "expected": "action:analyze_document",
+        "source": "issue-2132 deictic document ask (Arch 15:05)",
+        "notes": "a question about one document is the analyze op; never analyze_data",
+    },
+    {
+        "phrase": "Summarize this file",
+        "category": "SYNTHESIS",
+        "expected": "action:summarize_document",
+        "source": "issue-2132 deictic document ask (Arch 15:05)",
+        "notes": "the summarize family owns it (#1624)",
+    },
+    {
+        "phrase": "Analyze the document called PRD Writing Guidelines",
+        "category": "ANALYSIS",
+        "expected": "action:analyze_document",
+        "source": "issue-2132 Web served alpha fc183c41bc 2026-10-22",
+        "notes": "the title arg is a later screened change (Arch 10-23); this row checks the op only",
+    },
 ]
 
 
@@ -4614,6 +4644,12 @@ def bucket(expected: str, fallback: str = "QUERY") -> str:
 # fixture file is shared with its own tests). Applied in main() after the merge,
 # with the ruling cited; the original source citation is kept on the row.
 RULED_EXPECTATIONS: dict = {
+    # 2026-10-23 (Lead, per Arch 10-22 15:05 on #2132): a document ask is a document op;
+    # analyze_data is repository activity only. Router reads analyze_document x6 on main.
+    "analyze the file I uploaded": (
+        "action:analyze_document",
+        "RULED 2026-10-22 (Arch 15:05, #2132): a document ask is a document op, never analyze_data (repository activity only); was action:analyze_data",
+    ),
     # 2026-10-04 (Arch) — carried by hand in the fixture until #2073 moved it here (2026-10-17).
     "list my projects": (
         "action:list_projects",

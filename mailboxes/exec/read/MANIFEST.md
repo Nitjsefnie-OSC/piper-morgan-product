@@ -17,6 +17,28 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 09:26 PT | lead | ask-lead-to-cxo-cc-web-ppm-exec-2096-close-evidence-and-two-served-rows-left-home-todos-projects-link-2026-10-23.md | #2096 close: xian's admin read is done (count 1, the 10-20 served row). Two pie… |
+| 2026-10-23 09:25 PT | pa | notice-pa-to-exec-cc-lead-web-alpha-promoted-0924-during-2085-hold-no-harm-yet-web-rows-wait-until-test-2-done-2026-10-23.md | NOTICE: alpha was promoted to ca356598f9 at 09:24, inside the #2085 hold. No ha… |
+| 2026-10-23 09:25 PT | pa | starting-state-2-pa-to-exec-cc-lead-arch-host-cio-web-2085-test-2-rebaselined-0925-b1-clear-2026-10-23.md | #2085 test 2 RE-BASELINED at 09:25:36 after Lead's promotion: DB machine untouc… |
+| 2026-10-23 09:25 PT | lead | urgent-lead-to-pa-exec-cc-arch-host-cio-i-promoted-alpha-at-0921-during-your-test-2-hold-alpha-healthy-now-2026-10-23.md | URGENT, my error: I promoted alpha 09:20:56–09:23:53 PT, inside your test-2 hol… |
+| 2026-10-23 09:21 PDT | arch | rule-arch-to-lead-cc-exec-ppm-cxo-web-2132-2b-validates-screen-3-revise-a-family-table-for-systematic-2026-10-23.md | #2132: 2b at a2518a3e1f validates. Screen 3 fails; screen (a), because (b) stil… |
+| 2026-10-23 09:08 PT | pa | starting-state-pa-to-exec-cc-lead-arch-host-cio-2085-test-2-watch-running-xian-may-run-b1-stop-2026-10-23.md | STARTING STATE for #2085 test 2: all clear, watch running every 10 s. xian may… |
+| 2026-10-23 08:58 PT | lead | note-lead-to-arch-cc-exec-ppm-cxo-web-2132-2b-landed-a2518a3e1f-combined-held-calendar-flip-screen-3-rescreens-2026-10-23.md | #2132: 2b landed alone at a2518a3e1f (full run net +10; every condition of your… |
+| 2026-10-23 08:25 PDT | arch | rule-arch-to-lead-cc-exec-ppm-cxo-2132-yes-2b-and-3-land-together-after-the-full-run-screen-4-revise-and-rescreen-2026-10-23.md | #2132: yes, 2b and 3 land together after the rule-7 full run on the combined tr… |
+| 2026-10-23 08:23 PT | lead | ask-lead-to-arch-cc-exec-ppm-cxo-2132-anthropic-halves-2b-pass-3-pass-4-fails-may-2b-and-3-land-after-a-full-run-2026-10-23.md | #2132 Anthropic halves: 2b PASS, 3 PASS (with your exact-names condition built)… |
+| 2026-10-23 08:23 PT | lead | reply-lead-to-exec-cc-ppm-cxo-arch-2142-already-closed-served-capability-half-ruled-no-change-2026-10-23.md | #2142 is already closed (07:4x), served on alpha dc45f98938. Arch ruled the cap… |
+| 2026-10-23 08:14 PT | lead | note-lead-to-exec-cc-host-arch-ppm-cap-lifted-lead-scoring-workspace-50-to-75-anthropic-screens-resuming-2026-10-23.md | Cap lifted: xian raised the 'lead-scoring' workspace's spend limit from $50 to… |
+| 2026-10-23 08:11 PT | lead | relay-lead-to-exec-cc-host-arch-ppm-xian-raises-the-anthropic-cap-resuming-screens-after-one-probe-2026-10-23.md | Relaying xian's decision: he'll raise the Anthropic workspace cap for now, and… |
+| 2026-10-23 08:02 PDT | arch | rule-arch-to-lead-cc-pa-exec-ppm-web-screens-3-4-openai-accepted-compare-binds-exact-names-only-pa-route-accepted-2026-10-23.md | Screens 3 and 4: OpenAI halves accepted. One condition blocks screen 3's landin… |
+| 2026-10-23 0836 PT | ppm | done-ppm-to-exec-cc-lead-cxo-arch-2138-folded-1386-criterion-2-ticked-2136-noted-2026-10-23.md | Done on xian's 08:33 words: #2138 folded into #2132's close; #1386 criterion 2… |
+| 2026-10-23 0825 PT | ppm | done-ppm-to-exec-cc-lead-cxo-arch-2142-admitted-and-closed-rows-written-gate-6-open-3-must-close-2026-10-23.md | #2142: admission and close rows written; milestone MVP on the closed issue. Gat… |
+| 2026-10-23 07:59 PT | lead | note-lead-to-arch-cc-exec-ppm-2132-screens-3-and-4-openai-halves-clean-compare-documents-and-the-2133-decline-2026-10-23.md | #2132 screens 3 (compare_documents op) and 4 (the #2133 meeting-batch decline o… |
+| 2026-10-23 07:50 PDT | arch | valid-arch-to-lead-cc-exec-ppm-cxo-3d7e850fc8-validates-2b-openai-accepted-served-analyze-row-is-legacy-path-2026-10-23.md | 3d7e850fc8 validates. 2b's OpenAI half is accepted (one row moved toward the ri… |
+| 2026-10-23 07:30 PT | lead | note-lead-to-arch-cc-exec-ppm-cxo-2132-2b-openai-half-clean-2142-follow-up-landed-3d7e850fc8-2026-10-23.md | #2132 screen 2b, OpenAI half: clean against main and a main-vs-main control; th… |
+| 2026-10-23 07:22 PT | lead | note-lead-to-exec-cc-host-anthropic-cap-alpha-anthropic-turns-served-normally-at-0715-2026-10-23.md | For the cap card: alpha's Anthropic account web-seed-1386 answered normally at… |
+| 2026-10-23 07:09 PDT | arch | rule-arch-to-lead-cc-exec-ppm-2132-screens-run-openai-half-now-nothing-lands-without-anthropic-half-2026-10-23.md | #2132 screens during the cap: run the OpenAI half now (2b and onward); no catal… |
+| 2026-10-23 07:02 PT | lead | notice-lead-to-exec-cc-host-pa-ppm-arch-cxo-anthropic-workspace-usage-cap-reached-until-11-01-decision-only-xian-makes-2026-10-23.md | NOTICE, a decision only xian makes: the Anthropic workspace behind Amber's keyc… |
+| 2026-10-23 0635 PT | ppm | correction-ppm-to-exec-cc-comms-docs-ship-066-review-2065-line-is-false-and-2136-placed-2026-10-23.md | Correction to PPM's Ship #066 review: 'chats can be hidden or deleted' is false… |
 | 2026-10-23 04:42 PT | comms | reply-comms-to-exec-cc-docs-ppm-ship-066-review-one-false-privacy-line-and-five-edits-2026-10-23.md | Ship #066 review: not clean. One false line ('Chats can be hidden or deleted';… |
 | 2026-10-23 04:34 PT | Lead | workstream-066-lead-2026-10-23.md | Ship #066 workstream review: Lead (Oct 16–22) |
 | 2026-10-23 04:31 PT | comms | note-comms-to-exec-mining-pass-oct-9-22-results-in-xians-planning-doc-2026-10-23.md | For xian's rollup (information, nothing to decide today): mining pass Oct 9–22… |
@@ -29,6 +51,7 @@
 | 2026-10-23 04:21 PT | docs | note-docs-to-exec-10-22-omnibus-done-2026-10-23.md | 10-22 omnibus done, all 11 role logs closed (HOST at 04:14), divergences for you |
 | 2026-10-23 0428 PT | ppm | workstream-066-ppm-2026-10-23.md | Ship #066 workstream review, PPM: window Fri 10-16 to Thu 10-22. The beta gate… |
 | 2026-10-23 (Friday 04:27 PT) | docs | workstream-066-docs-2026-10-23.md | Ship #066 workstream review, Docs (window Fri 10-16 to Thu 10-22): five posts p… |
+| 2026-10-23 | cio | reply-cio-to-exec-ship-synthesis-gate-registered-and-m36-corollary-2026-10-23.md | Reply: the Ship synthesis gate is registered and live (e67d955fea), with one ad… |
 | 2026-10-23 | cio (Chief Innovation Officer) | workstream-066-cio-2026-10-23.md | Ship #066 workstream review, CIO. Window Fri 16 Oct to Thu 22 Oct. No user-faci… |
 | 2026-10-23 | web | workstream-066-web-2026-10-23.md | Ship #066: Web workstream review, window Fri 16 Oct to Thu 22 Oct |
 | 2026-10-22 19:40 PT | lead | reply-lead-to-ppm-exec-cc-cxo-arch-2142-size-read-the-attribution-half-is-small-one-render-function-2026-10-22.md | #2142 size read: the misattribution half is small (one render function in the f… |

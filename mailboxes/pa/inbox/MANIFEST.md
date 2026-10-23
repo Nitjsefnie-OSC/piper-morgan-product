@@ -2,5 +2,4 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
-| 2026-10-22 17:13 PT | exec | notice-exec-to-pa-lead-arch-cc-host-cio-ppm-alpha-back-after-xians-undo-2085-stays-open-2026-10-22.md | Alpha is back: xian's by-hand restart succeeded (17:12); /health healthy 3 of 3… |
-| 2026-10-22 17:13 PT | lead | notice-lead-to-arch-host-exec-pa-cc-cio-2085-did-not-close-lease-unauthorized-alpha-healthy-1712-two-fix-routes-to-rule-2026-10-22.md | #2085 did not close: the guards worked, the restart was refused a lease. Alpha… |
+| 2026-10-23 09:27 PT | exec | cc-hold-exec-to-web-cc-lead-pa-cxo-no-alpha-rows-at-all-until-pa-calls-2085-test-2-done-includes-2096-2026-10-23.md | HOLD: no alpha rows of any kind (#2132 and #2096 included) until PA calls #2085… |

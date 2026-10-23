@@ -6017,13 +6017,14 @@ class IntentService:
 
         try:
             # #2132 (Arch 15:05, step 1 of the referent order): a file of the
-            # user's that this turn binds comes before any Notion step. State
-            # only: an explicit file id, or a filename/title slot equal to one
-            # of the user's own file names (Arch's residual: a filename that
-            # names a held file must never fall into a Notion search). There is
-            # no chat-session file list to consult (uploads are owner-scoped,
-            # and chat turns carry no file context), so an unnamed "this
-            # document" binds nothing here and falls through to steps 2 and 3.
+            # user's that this turn binds comes before any Notion step. Binding
+            # is the summarize rail's FileResolver under its own contract (Arch
+            # 18:28, no extra cutoff): a filename named in the message, "the
+            # file I uploaded" with one file, or, for an unnamed "this
+            # document", the resolver's recency pick, which the reply names
+            # (Arch 10-23 validation: the pick binds; an unnamed ask does not
+            # fall through). A Notion title only wins once the router's title
+            # arg is asked for (the screened step-2 change).
             held_result = await self._analyze_bound_held_file(intent, workflow_id)
             if held_result is not None:
                 return held_result

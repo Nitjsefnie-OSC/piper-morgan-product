@@ -182,9 +182,11 @@ async def resolve_held_files(message: str, user_id: Optional[str], action: str) 
     no lookup of its own. There is no chat-session file list in the product,
     so "held" is what the resolver binds from the message: a stored filename
     named verbatim (several named → several returned, the resolver's
-    exact-match ambiguity), or "the file I uploaded" with exactly one file.
-    Any pick the resolver makes binds, and any ambiguity returns its candidates
-    (Arch 18:28: the summarize contract, no extra cutoff).
+    exact-match ambiguity), "the file I uploaded" with exactly one file, or,
+    with no name at all, the resolver's recency/type pick over the user's
+    files. Any pick the resolver makes binds, and any ambiguity returns its
+    candidates (Arch 18:28: the summarize contract, no extra cutoff; Arch
+    10-23: an unnamed "this document" therefore binds the pick, not nothing).
 
     Returns ``[{"file_id", "filename"}]`` (``filename`` None when the resolver
     returned only an id); empty when nothing is bound or there is no user.

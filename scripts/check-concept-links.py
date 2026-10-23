@@ -81,7 +81,7 @@ def declared(p: Path) -> list[str]:
         for path in MD_PATH.findall(m.group(1)):
             if "<" in path:  # a template placeholder such as <doc path>.md
                 continue
-            out.append(path.lstrip("./"))
+            out.append(path.removeprefix("./"))  # not lstrip: that ate the dot of .claude/
     return out
 
 
