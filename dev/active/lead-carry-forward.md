@@ -1,5 +1,12 @@
 # Lead carry-forward — Fable 5.1 seat; Model A worktree ~/Development/piper-morgan-worktrees/lead
 
+## STATE @ 2026-10-22 17:46 PT — alpha fc183c41bc (17:38; code = 546099ab44: 2127 both halves, 2132 handler half, 1524, 2131, 2134, 2129, Q19, 2125 later parts); main green (Tests f3751c4ee2 success 17:35)
+- **#2085:** the 17:04 attended test passed guards 1a/1b/2/3, then the lease was refused; xian undid it, database back at 17:12. Arch's route 1 (restart via the Machines API, no lease) was built at a1bda537c0 on main and Arch said yes. **Waiting on xian's push to ops/restarter** (block on card v102), then a second attended test at his word, after this promotion. Pass = "restart accepted: HTTP 2xx", verify healthy within 3 min, alert comment posted. A 401/403 means the pre-ruled re-mint (rwC on 865105fe247158, HOST-approved). Copy nit for the next restarter change: the 000 line should say the restart may or may not have happened.
+- **Served rows out (17:4x):** 2127, 2132 a/b, 1524, 2131, Q19, 2129. Close each on Web's quotes plus CXO's judgement.
+- **Next lane:** 2132/2133 rule-7 (held-file preference, deictic titles, compare_documents, 2133 corpus rows).
+- **Open small:** pool-size question after 2085; HOST's own-key read (an empty-ciphertext count needs a non-printing admin field, or HOST or xian); the remote branch claude/lead-2132 is left on origin (delete refused).
+- **STOP at the 21:17 fire.**
+
 ## STATE @ 2026-10-22 14:08 PT — alpha ded184e4ad (13:31); main green-pending; landed since: 1524 (5a81969c14), 2131 (1b0fad8b4c), restarter main copy + 2135 tripwire (620106a405). **16:30 PT: the attended restarter close test** (xian stops Postgres + approves; Lead dispatches `gh workflow run restart-alpha-postgres.yml --ref ops/restarter -f reason="2085 close test"`; PA watches; guard 1b must print critical). No promotion before it; after it, promote (1524, 2131) once Tests is green on main's head.
 - **NOW:** #1524 (Class 3 must-close). Then 2131 turn sites + ratchet, 2134, Q19 words, 2132, 2133, 2129.
 - **Restarter:** ruleset `restarter branch` ACTIVE (xian 12:35, picks A); token secret not yet set; on Exec's word: merge the job file onto main, then the attended injected-stop test with PA (`--ref ops/restarter`).
