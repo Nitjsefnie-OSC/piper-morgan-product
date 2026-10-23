@@ -44,22 +44,10 @@
 <li><b>The synthesis is ready for our discussion: <a href="https://claude.ai/artifact/QwwNgEVnZCD8TAEULTKiD2">Ship #066 week review</a></b>. It covers progress against last week&rsquo;s goal, what went wrong, each workstream, draft goals for next week, and five questions for you. The early draft is on hold, and the Ship will come from our discussion.</li>
 <li><b>Process fix (you approved it today):</b> my end-of-check-in script now prints the Ship cycle&rsquo;s state and next step from Friday to Wednesday. A commit gate will block a draft that comes before the synthesis (CIO reviews the gate first).</li>
 </ul></div>
-<div class="card"><b>#2148: admitted (12:42).</b> Built. After the next promotion, you do one unticked and one ticked Calendar connect, about 3 minutes; I&rsquo;ll tell you when. <b>Gate: 5 open, 2 must-close</b> (#2132, #2148).</div>
-
-<div class="card hot"><b>#2146, automatic database recovery: cleared by Arch. Your three steps, after #2087.</b>
-<p style="margin:.4rem 0 .2rem"><b>1. Push the restarter file to <code>ops/restarter</code></b> (the same steps as this morning, in a plain Terminal on your Mac):</p>
-<pre style="white-space:pre-wrap;margin:.2rem 0">gh repo clone mediajunkie/piper-morgan-product /tmp/restarter-push -- --depth 1 --branch ops/restarter
-cd /tmp/restarter-push
-git fetch --depth 1 origin main
-git checkout FETCH_HEAD -- .github/workflows/restart-alpha-postgres.yml
-git diff --cached --stat</pre>
-<p style="margin:.2rem 0">The last line should show <b>only</b> <code>.github/workflows/restart-alpha-postgres.yml</code>. Paste it to me before going on. Then:</p>
-<pre style="white-space:pre-wrap;margin:.2rem 0">git commit -m "restarter: guard 2 by time window, 24h stop for automatic runs (2146)"
-git push origin ops/restarter
-cd ~ &amp;&amp; rm -rf /tmp/restarter-push</pre>
-<p style="margin:.2rem 0">I confirm the branch matches main.</p>
-<p style="margin:.4rem 0 .2rem"><b>2. Remove the reviewer:</b> GitHub &rarr; the repo &rarr; Settings &rarr; Environments &rarr; <code>alpha-db</code> &rarr; untick <b>Required reviewers</b> &rarr; Save. <b>Leave &ldquo;Deployment branches&rdquo; as it is</b> (only <code>ops/restarter</code>).</p>
-<p style="margin:.4rem 0 .2rem"><b>3. Test 4, with PA watching:</b> you stop Postgres once (the same stop command as this morning), then <b>touch nothing</b>. The health watch should start the restarter by itself within about 10 minutes. PA will also check that a hold file blocks it. I&rsquo;ll bring the exact sequence when you&rsquo;re ready.</p></div>
+<div class="card hot"><b>Your next two steps, before Lead&rsquo;s test card (15:08).</b> Alpha <code>a54540c0a8</code>, healthy. <b>Gate: 5 open, 2 must-close</b> (#2132, #2148).
+<p style="margin:.4rem 0 .2rem"><b>1. #2148 Calendar check, about 3 minutes, same Gmail as this morning.</b> In alpha, go to Settings &rarr; Integrations &rarr; Google Calendar &rarr; <b>Connect</b>. On Google&rsquo;s page, <b>leave the calendar box unticked</b>, then screenshot Piper&rsquo;s message; it should <i>not</i> say Connected. Connect again, <b>tick the box</b>, and screenshot; it should say Connected. Then <b>Disconnect</b>. CXO closes it from your screenshots. Web&rsquo;s two Settings messages already pass, and Arch has signed off on the code.</p>
+<p style="margin:.4rem 0 .2rem"><b>2. #2146 test 4.</b> Say &ldquo;go&rdquo; when you have 15 free minutes at the keyboard, and I&rsquo;ll send you PA&rsquo;s sequence: PA turns on the hold, you stop Postgres once, and the watch must <i>not</i> restart it; PA removes the hold, and the restart should then happen with nobody touching it. Alpha is down 20&ndash;55 min, but your hands are needed only at the start. The restarter branch matches main (Arch, 13:59).</p>
+<p style="margin:.4rem 0 .2rem"><b>Then #2132.</b> On alpha, &ldquo;compare these two named files&rdquo; failed: Piper said it couldn&rsquo;t see the files. Lead&rsquo;s fix (<code>90f0000588</code>) is on main and Arch accepts it. It goes out in the promotion after test 4, and Web then runs the compare checks again. Nothing for you to do here; Lead&rsquo;s test card comes after it.</p></div>
 <div class="card"><b>Anthropic spending limit: you raised it from $50 to $75 (08:11, in Lead&rsquo;s session). Recorded in decisions.log.</b> The test call went through at 08:14, and the Anthropic checks ran. Two of the #2132 changes pass. The third (#2133&rsquo;s decline) fails on Anthropic and is held. Lead asks Arch whether the two passing changes can land together after a full run. You&rsquo;ll review spend at the end of the next billing period. If Lead&rsquo;s test call is still refused, I&rsquo;ll tell you.</div>
 
 <div class="card"><b>Today&rsquo;s checkpoint: answered (08:33).</b> You ruled that #1386 passing after triage is close enough (B+ or A&minus; is acceptable for now), on the condition that #2132 closes before invitations go out. #2138 is folded into #2132, #2136 stays separate, and your #2096 read is done (count 1). All are recorded and relayed. Background, as it stood this morning: State at 06:4x (gate, main and alpha read just now, unchanged overnight). Your 10-18 rule: if MVP looks on track to close by 10-30 (or close enough), approve inviting people.
