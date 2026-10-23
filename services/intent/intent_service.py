@@ -10958,18 +10958,9 @@ class IntentService:
         if "yesterday" in message_lower:
             return 1
 
-        # Hours
+        # Hours (whole days only here; _parse_time_window reads the hours, #2143)
         if "hour" in message_lower:
-            if "last hour" in message_lower or "past hour" in message_lower:
-                return 0  # Partial day
-            # Extract number of hours
-            import re
-
-            match = re.search(r"(\d+)\s*hours?", message_lower)
-            if match:
-                hours = int(match.group(1))
-                return max(0, hours // 24)  # Convert to days
-            return 0
+            return max(0, self._parse_hours(message_lower) // 24)
 
         # Days
         if "day" in message_lower:
@@ -11031,6 +11022,14 @@ class IntentService:
         # Default to 1 day if can't parse
         return 1
 
+    @staticmethod
+    def _parse_hours(message_lower: str) -> int:
+        """Hours named in an hour-window ask: "past hour" is 1, "last 3 hours" 3."""
+        if "last hour" in message_lower or "past hour" in message_lower:
+            return 1
+        match = re.search(r"(\d+)\s*hours?", message_lower)
+        return int(match.group(1)) if match else 1
+
     def _parse_time_window(self, message: str) -> Tuple[timedelta, str]:
         """#2143: the window a what-changed ask reads, and the words for it.
 
@@ -11041,8 +11040,7 @@ class IntentService:
         """
         message_lower = message.lower()
         if "hour" in message_lower and "yesterday" not in message_lower:
-            match = re.search(r"(\d+)\s*hours?", message_lower)
-            hours = int(match.group(1)) if match else 1
+            hours = self._parse_hours(message_lower)
             if hours >= 1:
                 return (
                     timedelta(hours=hours),
