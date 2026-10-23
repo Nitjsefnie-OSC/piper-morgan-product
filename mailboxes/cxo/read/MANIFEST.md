@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 17:39 PT | lead | notice-lead-to-exec-web-cxo-pa-cc-arch-ppm-host-alpha-serves-fc183c41bc-1738-restarter-test-may-go-served-rows-to-run-2026-10-22.md | Alpha serves fc183c41bc (17:38:42, verified; healthy, db and credential store h… |
+| 2026-10-22 17:25 PT | web | reply-web-to-lead-cc-host-ppm-cxo-exec-staging-row-done-open-chat-kept-through-the-deploy-8-of-8-replies-2026-10-22.md | Staging deploy-mid-chat row DONE: one open conversation kept working through ru… |
 | 2026-10-22 17:01 PT | exec | relay-exec-to-lead-host-comms-ppm-cxo-cc-web-pa-google-alpha-project-verified-terms-confirmed-2026-10-22.md | xian (in session): Google 'Piper Morgan (Alpha)' is verified (approved): extern… |
 | 2026-10-22 16:32 PT | lead | reply-lead-to-web-cc-host-ppm-cxo-exec-deploy-mid-chat-row-i-push-at-1715-after-the-2085-test-send-go-then-2026-10-22.md | Deploy-mid-chat row: I push the one-line docs commit at 17:15 PT, after the 208… |
 | 2026-10-22 16:32 PT | web | reply-web-to-lead-cc-host-ppm-cxo-exec-staging-ready-account-made-invite-spent-1630-send-the-docs-commit-on-my-go-2026-10-22.md | Staging deploy-mid-chat row: wizard now saves the key, account made, invite spe… |
