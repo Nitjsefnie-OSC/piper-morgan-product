@@ -508,18 +508,30 @@ CHANGES_NOTHING_NEW = (
 CHANGES_FOUND_OPENER = (
     "Here's what changed in your Piper {sources} {window}. I haven't checked GitHub for this."
 )
-CHANGES_READ_FAILED = (
-    "I couldn't read your Piper {sources} just now, so I can't say what changed. "
+# CXO 10-23 09:27: all three failed (or no principal), the window named.
+CHANGES_READ_FAILED_ALL = (
+    "I couldn't read your Piper tasks, projects or activity log just now, so I can't say "
+    "what changed {window}. Try again in a moment; if it keeps failing, tell us."
+)
+# CXO 10-23 09:27: rows listed, one line per source that failed.
+CHANGES_READ_FAILED_BESIDE_ROWS = (
+    "I couldn't read your Piper {source} just now, so the list above doesn't include it. "
     "Try again in a moment; if it keeps failing, tell us."
+)
+# CXO 10-23 09:27: the sources that read ok are empty and some failed; no opener.
+CHANGES_NOTHING_NEW_SOME_FAILED = (
+    "I don't see anything new in your Piper {ok_sources} {window}. I couldn't read your "
+    "Piper {failed_sources} just now, so I can't say what changed there. Try again in a "
+    "moment; if it keeps failing, tell us."
 )
 
 
-def _join_sources(names) -> str:
+def _join_sources(names, conjunction: str = "and") -> str:
     """'tasks', 'tasks and projects', 'tasks, projects and activity log'."""
     names = list(names)
     if len(names) <= 1:
         return "".join(names)
-    return ", ".join(names[:-1]) + " and " + names[-1]
+    return ", ".join(names[:-1]) + f" {conjunction} " + names[-1]
 
 
 # #2076 (CXO): the focus ("**Today:**") reply's opening sentence when GitHub
@@ -10311,7 +10323,7 @@ class IntentService:
             if not _owner_id:
                 return IntentProcessingResult(
                     success=False,
-                    message=CHANGES_READ_FAILED.format(sources=_join_sources(CHANGES_SOURCES)),
+                    message=CHANGES_READ_FAILED_ALL.format(window=time_desc),
                     intent_data={
                         **intent_data_base,
                         "failed_sources": list(CHANGES_SOURCES),
@@ -10444,14 +10456,11 @@ class IntentService:
             total_activities = len(audit_activity) + len(todo_activity) + len(project_activity)
             failed = [name for name in CHANGES_SOURCES if name in failed_sources]
             read_ok = [name for name in CHANGES_SOURCES if name not in failed_sources]
-            failed_line = (
-                CHANGES_READ_FAILED.format(sources=_join_sources(failed)) if failed else ""
-            )
 
             if not read_ok:
                 return IntentProcessingResult(
                     success=False,
-                    message=failed_line,
+                    message=CHANGES_READ_FAILED_ALL.format(window=time_desc),
                     intent_data={
                         **intent_data_base,
                         "total_activities": 0,
@@ -10463,7 +10472,15 @@ class IntentService:
                 )
 
             if total_activities == 0:
-                message = failed_line or CHANGES_NOTHING_NEW.format(window=time_desc)
+                message = (
+                    CHANGES_NOTHING_NEW_SOME_FAILED.format(
+                        ok_sources=_join_sources(read_ok, "or"),
+                        window=time_desc,
+                        failed_sources=_join_sources(failed, "or"),
+                    )
+                    if failed
+                    else CHANGES_NOTHING_NEW.format(window=time_desc)
+                )
             else:
                 lines = [
                     CHANGES_FOUND_OPENER.format(sources=_join_sources(read_ok), window=time_desc)
@@ -10509,8 +10526,8 @@ class IntentService:
                     )[:5]:
                         lines.append(f"  - {event_type}: {count}")
 
-                if failed_line:
-                    lines.append(failed_line)
+                for name in failed:
+                    lines.append(CHANGES_READ_FAILED_BESIDE_ROWS.format(source=name))
                 message = "\n".join(lines).rstrip()
 
             return IntentProcessingResult(
@@ -13694,18 +13711,20 @@ class IntentService:
             # 2. Validate content_type is supported
             valid_types = ["status_report", "readme_section", "issue_template"]
             if content_type not in valid_types:
+                # #2139 (CXO 10-23 09:27): the same line as a missing type; code
+                # vocabulary ("status_report") never reaches the user.
                 return IntentProcessingResult(
-                    success=False,
-                    message=f"Unsupported content type: {content_type}. Valid types: {', '.join(valid_types)}",
+                    success=True,
+                    message=GENERATE_CONTENT_WHAT_I_CAN_DRAFT,
                     intent_data={
                         "category": intent.category.value,
                         "action": intent.action,
                         "content_type": content_type,
                         "valid_types": valid_types,
+                        "reason": "unsupported_content_type",
                     },
                     workflow_id=workflow_id,
-                    requires_clarification=True,
-                    clarification_type="unsupported_content_type",
+                    requires_clarification=False,
                 )
 
             # 3. Route to appropriate helper method

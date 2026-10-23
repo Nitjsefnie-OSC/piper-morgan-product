@@ -104,12 +104,15 @@ class TestSynthesisHandlers:
 
         result = await intent_service._handle_generate_content(intent, workflow_id="test_wf")
 
-        # Should fail validation
-        assert result.success is False
-        assert result.requires_clarification is True
-        assert result.clarification_type == "unsupported_content_type"
-        assert "unsupported" in result.message.lower() or "unknown" in result.message.lower()
-        assert "content type" in result.message.lower() or "content_type" in result.message.lower()
+        # #2139 (CXO 10-23 09:27): the same line as a missing type, no code vocabulary
+        assert result.success is True
+        assert result.requires_clarification is False
+        assert result.message == (
+            "I can draft a status report, a README section or an issue template. "
+            "Tell me which one and what it's about, and I'll write it."
+        )
+        assert "unknown_type" not in result.message and "status_report" not in result.message
+        assert result.intent_data["reason"] == "unsupported_content_type"
 
     # =========================================================================
     # STATUS REPORT TESTS

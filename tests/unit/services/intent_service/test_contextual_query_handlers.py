@@ -488,8 +488,9 @@ class TestContextualQueryErrorHandling:
             # name every source; never the empty line.
             assert result.success is False
             assert result.message == (
-                "I couldn't read your Piper tasks, projects and activity log just now, so I "
-                "can't say what changed. Try again in a moment; if it keeps failing, tell us."
+                "I couldn't read your Piper tasks, projects or activity log just now, so I "
+                "can't say what changed since yesterday. Try again in a moment; if it keeps "
+                "failing, tell us."
             )
             assert result.intent_data["failed_sources"] == ["tasks", "projects", "activity log"]
 

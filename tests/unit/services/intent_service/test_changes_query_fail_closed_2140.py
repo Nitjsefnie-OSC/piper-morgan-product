@@ -26,9 +26,19 @@ NOTHING_NEW = (
     "I don't see anything new in your Piper tasks, projects or activity log {window}. "
     "I haven't checked GitHub for this."
 )
-FAILED = (
-    "I couldn't read your Piper {sources} just now, so I can't say what changed. "
+# CXO 10-23 09:27, verbatim shapes.
+FAILED_ALL = (
+    "I couldn't read your Piper tasks, projects or activity log just now, so I can't say "
+    "what changed since yesterday. Try again in a moment; if it keeps failing, tell us."
+)
+FAILED_BESIDE_ROWS = (
+    "I couldn't read your Piper {source} just now, so the list above doesn't include it. "
     "Try again in a moment; if it keeps failing, tell us."
+)
+NOTHING_NEW_SOME_FAILED = (
+    "I don't see anything new in your Piper {ok} since yesterday. I couldn't read your "
+    "Piper {failed} just now, so I can't say what changed there. Try again in a moment; "
+    "if it keeps failing, tell us."
 )
 
 
@@ -127,15 +137,16 @@ async def test_the_first_read_failing_does_not_empty_the_other_two(intent_servic
         "I haven't checked GitHub for this."
     )
     assert "Review the launch notes" in result.message
-    assert result.message.endswith(FAILED.format(sources="activity log"))
+    assert result.message.endswith(FAILED_BESIDE_ROWS.format(source="activity log"))
     assert result.intent_data["failed_sources"] == ["activity log"]
 
 
 @pytest.mark.asyncio
 async def test_a_failed_read_with_the_others_empty_is_not_nothing_new(intent_service):
     result, _ = await _run(intent_service, _intent(), [], RuntimeError("todo read"), [])
-    assert result.message == FAILED.format(sources="tasks")
-    assert "I don't see anything new" not in result.message
+    assert result.message == NOTHING_NEW_SOME_FAILED.format(
+        ok="projects or activity log", failed="tasks"
+    )
 
 
 @pytest.mark.asyncio
@@ -150,7 +161,7 @@ async def test_one_read_failing_while_another_has_rows_lists_rows_and_names_the_
     assert result.message.startswith(
         "Here's what changed in your Piper projects and activity log since yesterday."
     )
-    assert result.message.endswith(FAILED.format(sources="tasks"))
+    assert result.message.endswith(FAILED_BESIDE_ROWS.format(source="tasks"))
 
 
 @pytest.mark.asyncio
@@ -158,7 +169,7 @@ async def test_every_read_failing_is_success_false(intent_service):
     boom = RuntimeError("db down")
     result, _ = await _run(intent_service, _intent(), boom, boom, boom)
     assert result.success is False
-    assert result.message == FAILED.format(sources="tasks, projects and activity log")
+    assert result.message == FAILED_ALL
 
 
 @pytest.mark.asyncio
@@ -167,7 +178,7 @@ async def test_no_principal_is_a_failed_read_and_reads_nothing(intent_service):
     result, made = await _run(intent_service, _intent(user_id=None))
     assert made == []
     assert result.success is False
-    assert result.message == FAILED.format(sources="tasks, projects and activity log")
+    assert result.message == FAILED_ALL
     assert result.intent_data["reason"] == "no_principal"
 
 
