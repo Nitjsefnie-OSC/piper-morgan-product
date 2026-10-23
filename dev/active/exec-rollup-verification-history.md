@@ -152,3 +152,4 @@ Per-version "verified how" notes, moved off the rollup page at xian's ask (2026-
 - v555 (08:24): gate corrected to 6/3 (#2142 closed 07:49 before admission); cap $50→$75; #2132 Anthropic screens: 2b and 3 pass, 4 fails.
 - v556 (08:33): decided cards removed (2138, 2136); checkpoint answered; Ship card now 'synthesis next, draft on hold'.
 - v557 (08:42): Ship card links the synthesis (QwwNgEVnZCD8TAEULTKiD2); process fix line.
+- v558 (10:31): restart card rebuilt (test 2 not run; Step 0 = xian confirms 15 free min); #2132 scope line (PPM ruling).
