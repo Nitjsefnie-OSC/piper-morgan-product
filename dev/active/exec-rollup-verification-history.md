@@ -147,3 +147,4 @@ Per-version "verified how" notes, moved off the rollup page at xian's ask (2026-
 - v550 (06:42): R1–R7 card links the one-pager; first walk item named.
 - v551 (07:05): workspace-cap card at top (Lead 07:02); precedent DL 10-20 12:00/12:07.
 - v552 (07:25): cap card updated: Arch 07:09 ruling (no landing without Anthropic), web-seed-1386 served normally 07:15 (Lead via Web).
+- v553 (08:11): cap card → answered (xian 08:11 via Lead).
