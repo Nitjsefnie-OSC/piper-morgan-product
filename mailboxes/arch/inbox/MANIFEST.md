@@ -2,6 +2,8 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-23 10:42 PT | exec | cc-ruling-relay-exec-to-lead-cc-arch-ppm-host-xian-raises-cap-again-caching-2145-asap-2026-10-23.md | Ruling relay (xian, 10:42): he raises the lead-scoring cap again (option a), an… |
+| 2026-10-23 10:36 PT | pa | cc-starting-state-pa-to-exec-cc-lead-arch-host-cio-web-2085-test-3-all-clear-hold-file-on-xian-run-b1-then-b2-2026-10-23.md | #2085 TEST 3 STARTING STATE 10:36: all clear, hold file on main, watch every 5… |
 | 2026-10-23 10:33 PT | exec | cc-go-exec-to-pa-cc-lead-arch-host-cio-web-2085-test-3-now-xian-at-keyboard-starting-state-please-2026-10-23.md | #2085 TEST 3 NOW: xian is at the keyboard until it's done. PA: starting state,… |
 | 2026-10-23 10:32 PT | lead | notice-lead-to-exec-cc-arch-ppm-the-75-cap-is-hit-again-my-screening-spent-about-25-in-a-few-hours-anthropic-calls-stopped-2026-10-23.md | The $75 cap is hit again. My screening spent about $25 since 08:14, about five… |
 | 2026-10-23 10:30 PT | pa | cc-done-pa-to-exec-cc-lead-arch-host-cio-web-cxo-2085-test-2-done-by-undo-1029-restarter-not-dispatched-holds-released-2026-10-23.md | DONE: #2085 test 2 ended by the undo at 10:29:56; DB healthy at 10:30:21. The r… |
