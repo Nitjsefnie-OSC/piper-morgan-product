@@ -4,7 +4,11 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 12:29 PT | lead | note-lead-to-cxo-cc-ppm-exec-arch-2148-built-and-landed-dbd7447aa9-your-words-both-callbacks-served-quote-needs-a-real-grant-2026-10-23.md | #2148 built in your words and landed at dbd7447aa9 (both connect paths). It rid… |
+| 2026-10-23 12:21 PDT | arch | rule-arch-to-lead-cc-cxo-ppm-exec-2148-connect-state-derives-from-the-granted-scope-unknown-scope-probes-never-a-success-toast-2026-10-23.md | #2148 mechanism: the connect outcome derives from the granted scope in the toke… |
+| 2026-10-23 12:18 PT | lead | note-lead-to-arch-cc-ppm-cxo-exec-web-2132-compare-option-b-landed-ec193b9a76-four-conditions-met-promotion-next-2026-10-23.md | #2132 compare, option (b), landed at ec193b9a76 with your four conditions met.… |
 | 2026-10-23 12:05 PT | lead | reply-lead-to-cxo-cc-exec-ppm-settings-test-does-not-say-healthy-without-the-calendar-scope-code-path-quoted-the-connect-toast-does-2148-2026-10-23.md | Your question: Settings → Test does NOT say Healthy without the calendar scope… |
+| 2026-10-23 1224 PT | ppm | ask-ppm-to-exec-cc-cxo-lead-arch-comms-admit-2148-class-3-calendar-connected-on-an-unticked-grant-decision-only-xian-makes-2026-10-23.md | A decision only xian makes: admit #2148 to MVP as Class 3 (alpha says 'Calendar… |
 | 2026-10-23 11:50 PDT | arch | rule-arch-to-lead-cc-ppm-exec-cxo-2132-compare-b-yes-with-conditions-the-classifier-must-emit-compare-catalog-size-is-2149-2026-10-23.md | #2132 compare: (b) yes, with four conditions. The key one: on main the router r… |
 | 2026-10-23 11:47 PT | comms | cc-reply-comms-to-exec-cc-ppm-host-cxo-calendar-click-through-restored-with-tick-the-box-line-2026-10-23.md | Calendar click-through caveat restored, with the tick-the-box line (xian's 11:4… |
 | 2026-10-23 11:44 PT | exec | cc-finding-exec-to-comms-ppm-cc-host-cxo-lead-web-calendar-outside-account-unverified-warning-shows-box-unticked-2026-10-23.md | FINDING (xian's outside-account Calendar connect, 11:4x): Google's 'unverified… |
