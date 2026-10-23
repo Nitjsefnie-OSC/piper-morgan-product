@@ -113,3 +113,27 @@ class TestTheGuardStaysOut:
                 LiveRouteProvenance(routed_live=False, reason=reason, confidence=0.95)
             )
             assert router_none_stands("TEMPORAL", "get_current_time") is None
+
+
+ALPHA_LIVE = (
+    "add_project,complete_todo,create_reminder,create_todo,delete_todo,read_canonical,"
+    "read_floor,read_portfolio,read_referent,read_status,read_strategic,read_synthesis,"
+    "read_temporal"
+)
+
+
+class TestARouterHiddenLandingStands:
+    """#2132 option (b), served FAIL on a54540c0a8: "Compare launch-notes-tmp.txt with
+    rollout-plan-tmp.txt" scored router NONE, the classifier said compare_documents,
+    and this guard sent the turn to the floor, which denied the files existed. The
+    router never sees a hidden entry, so its NONE is no judgment about it."""
+
+    def test_a_router_hidden_landing_is_not_overridden_by_the_routers_none(self, monkeypatch):
+        monkeypatch.setenv("PIPER_INVERSION_LIVE_CATEGORIES", ALPHA_LIVE)
+        _none(0.95)
+        assert router_none_stands("ANALYSIS", "compare_documents") is None
+
+    def test_a_router_visible_analysis_landing_still_reaches_the_floor(self, monkeypatch):
+        monkeypatch.setenv("PIPER_INVERSION_LIVE_CATEGORIES", ALPHA_LIVE)
+        _none(0.95)
+        assert router_none_stands("ANALYSIS", "analyze_document") is not None

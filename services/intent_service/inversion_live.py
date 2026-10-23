@@ -657,6 +657,15 @@ def router_none_stands(category: Optional[str], action: Optional[str]) -> Option
 
     grammar = derive_routing_grammar()
     workflows = get_action_workflows()
+    # #2132 option (b) (Lead, 10-23; served FAIL on a54540c0a8): a router-HIDDEN entry
+    # is one the router can never choose, so its NONE is no judgment about that
+    # landing; the owner never saw it. The legacy chain's landing on a hidden entry
+    # stands. (Web: "Compare launch-notes-tmp.txt with rollout-plan-tmp.txt" scored
+    # router NONE, the classifier said compare_documents, and this guard sent it to
+    # the floor, which then denied the files existed.)
+    landing = workflows.get(action) if action else None
+    if landing is not None and not getattr(landing, "router_visible", True):
+        return None
     by_op = _category_by_operation(grammar)
     cat_upper = category.upper() if category else None
 
