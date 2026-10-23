@@ -32,7 +32,7 @@
 </style>
 <div class="wrap">
 <h1>Attention rollup — Friday 23 October</h1>
-<p class="meta">Exec · v559, rebuilt 10:33 PDT Fri 10-23 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
+<p class="meta">Exec · v560, rebuilt 10:47 PDT Fri 10-23 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
 
 
 
@@ -56,16 +56,7 @@
 
 
 
-<div class="card hot"><b>Restart button (#2085): the test still needs doing (test 3). Pick a time when you&rsquo;re free for 15 minutes.</b> This morning you pushed the fix (<code>ops/restarter</code> = <code>22e70f91bc</code>, matching main) and stopped the database at 09:44. The restart run never started, and your undo brought alpha back at 10:30. The fix is in place, so only the test remains.
-<p style="margin:.4rem 0 .2rem"><b>Step 0: tell me &ldquo;I&rsquo;m free for 15 minutes&rdquo;.</b> Nothing gets stopped until you&rsquo;ve said it. I tell PA, PA sends a starting state, and I relay it.</p>
-<p style="margin:.2rem 0">B1. Stop Postgres (expect <code>server stopped</code>):</p>
-<pre style="white-space:pre-wrap;margin:.2rem 0">fly ssh console -a piper-morgan-db --machine 865105fe247158 -C "su postgres -c '/usr/lib/postgresql/18/bin/pg_ctl stop -D /data/postgresql -m fast'"</pre>
-<p style="margin:.2rem 0">B2. <b>Wait one minute after <code>server stopped</code>, then start the run yourself.</b> Don&rsquo;t wait for a relayed call: this morning&rsquo;s relay is what failed. If you&rsquo;re early, the restarter&rsquo;s first check refuses safely, and you run B2 again.</p>
-<pre style="white-space:pre-wrap;margin:.2rem 0">gh workflow run restart-alpha-postgres.yml --repo mediajunkie/piper-morgan-product --ref ops/restarter -f reason="2085 close test 2"</pre>
-<p style="margin:.2rem 0">B3. Approve it right away: GitHub &rarr; Actions &rarr; &ldquo;Restart alpha Postgres&rdquo; &rarr; the new run &rarr; Review deployments &rarr; tick <code>alpha-db</code> &rarr; Approve and deploy.</p>
-<p style="margin:.2rem 0">B4. Undo, only on PA&rsquo;s or my call, or if you have to step away:</p>
-<pre style="white-space:pre-wrap;margin:.2rem 0">fly machine restart 865105fe247158 -a piper-morgan-db</pre>
-<p style="margin:.2rem 0">Pass looks like: the run prints &ldquo;restart accepted: HTTP 200&rdquo;, then alpha reads healthy within 3 minutes. If it prints HTTP 401 or 403, the fallback is a token with one more permission, already approved, and I&rsquo;ll give you that block.</p></div>
+<div class="card"><b>Restart button (#2085): passed today, 10:46.</b> You stopped the database, and the restarter brought it back on its own: &ldquo;restart accepted: HTTP 200&rdquo;, healthy 10 seconds later, about 2 minutes down in all. Lead and PPM close the issue. The gate goes to 5 open, with 2 must-close: #2132 and #2096.</div>
 <div class="card hot"><b>GitHub App <code>piper-morgan-agents</code> (#2136): your steps.</b> App ID 5434481. You&rsquo;ve created it and generated the key.
 <p style="margin:.4rem 0 .2rem"><b>1. Permissions: done</b> (Actions fixed to Read and write at 17:4x; the rest checked from your screenshot).</p>
 <p style="margin:.4rem 0 .2rem"><b>2. Move the key to Amber</b> from your Mac&rsquo;s Terminal (replace <code>amber</code> with how you ssh to Amber):</p>
@@ -74,7 +65,7 @@ ssh amber chmod 600 /Users/xian/.piper-shared/github-app-piper-morgan-agents-cre
 rm ~/Downloads/piper-morgan-agents.*.private-key.pem</pre>
 <p style="margin:.2rem 0">Then tell HOST &ldquo;key stored&rdquo;. HOST checks only the name, mode and size. The SHA GitHub showed is the key&rsquo;s fingerprint: public, and fine to share.</p>
 <p style="margin:.4rem 0 .2rem"><b>3. Install it:</b> <a href="https://github.com/settings/apps/piper-morgan-agents/installations">Install App</a> &rarr; your account &rarr; <b>Only select repositories</b> &rarr; <code>piper-morgan-product</code> &rarr; Install. Nothing changes for the agents until Pard&rsquo;s helper hands out App tokens.</p>
-<p style="margin:.2rem 0">Later: Pard&rsquo;s token helper; adding the v4 mail repo; how agents reach Janus&rsquo;s and Pard&rsquo;s repos; then your admin token and SSH key leave Amber (the real fix).</p></div>
+<p style="margin:.2rem 0"><b>This is next for you at your desk.</b> Later: Pard&rsquo;s token helper; adding the v4 mail repo; how agents reach Janus&rsquo;s and Pard&rsquo;s repos; then your admin token and SSH key leave Amber (the real fix).</p></div>
 <h2>Next time you&rsquo;re here</h2>
 <div class="card"><b>Spec&rsquo;s seven recommendations (R1&ndash;R7): the one-page status is ready.</b> <a href="https://github.com/mediajunkie/piper-morgan-product/blob/main/docs/internal/audits/spec-recommendations-status-2026-10-23.md">Read it here</a> (two minutes). Most of the cheap steps are done. Five decisions are yours, and several steps were never started. We'll walk them one at a time, between other work. <b>First, after today&rsquo;s checkpoint:</b> should the old mailboxes and <code>data/postgres</code> come out of the public repo (R5 item 5)? My lean: yes, after the beta invites go out, with CIO costing it at the 11-05 mail review.</div>
 <div class="card act"><ol style="margin:.2rem 0 .2rem 1.2rem;padding:0">
