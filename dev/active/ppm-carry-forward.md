@@ -378,3 +378,26 @@ Brake FIRED (second slip = #1965 admission, found and ledgered 10-09). Memo to E
   - the Ship #066 count (window ends 10-22): 3 PPM-judged admissions; the admissions on 10-20 and 10-21 were on xian's word;
   - the Terms map, once xian's answers return.
 - **Main CI:** 12 of 12 green at 21:33. Alpha `76789a8988`, healthy.
+
+## 2026-10-22 21:33 STOP: day-close (carry into 10-23, xian's checkpoint)
+
+- **Gate: 6 open MVP, 3 must-close.**
+  - **#2085:** route (1), a restart without the lease (Arch 17:14). Lead builds, Arch reads the diff, xian pushes, then a second attended test at xian's time.
+  - **#2132:** Arch ruled (i), the handler-only split, first; then single catalog edits screened ×6. Lead starts at the 10-23 START.
+  - **#2096:** xian's admin read.
+  - Also open: #2018 and #1595 (known issues) and #1386.
+- **Waiting on xian, via Exec:**
+  - admit #2142 (Class 3, calendar events as "activity from your repo"; Lead: small, rides with #2132's split);
+  - fold #2138 into #2132's close (my 18:34 ask);
+  - accept a triaged criterion 2.
+- **#1386 criterion 2, on the 18:30 re-run:** routing 90.2% after triage (raw 88.5%); expected-pass 92.7% after triage (raw 46.3%). Recorded on #1386, boxes **not** ticked; the raw figures are read first.
+- **Invitation:**
+  - **Anthropic only.** The OpenAI run met the hard conditions but scored −21.4 on matched rows, plus #2139.
+  - The Calendar line is the plain connect step (the Alpha project is verified).
+  - The restart line has no fixed hour.
+  - The key line names the 5-day backups.
+  - The Terms map is closed under Option 2.
+  - Open: the ciphertext count (HOST or xian), HOST's send-morning checks, and xian's rewrite.
+  - The Comms beta-form line goes on the invitation morning, after a recheck that no Class 1 or 2 is open.
+- **Placed today:** #2125, #2127, #2128, #2129, #2130, #2131, #2132 and #2133 to #2135, #2137 to #2140 and #2142 on Production (#2128 and #2132 later admitted); #2126 on Ongoing.
+- **Ship #066 count:** admissions this week on xian's word, as on 10-20 and 10-21. Today's three (#1524, #2128, #2132) were PPM proposals that xian admitted. The window ends today; whoever drafts Ship #066 counts from the ledger rows.
