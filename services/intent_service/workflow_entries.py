@@ -1411,6 +1411,106 @@ async def run_summarize_document_workflow(
         )
 
 
+# #2132 (Arch 2026-10-22 15:05; CXO's words 15:25): "compare these two
+# documents" resolves only to bound referents, the same rule analyze_document
+# follows. Kept as module constants so the pins quote the exact words.
+NO_TWO_DOCUMENTS_LINE = (
+    # #2138 (CXO 18:5x): names only what was checked, as an imperative.
+    "I need two documents to compare. Name two uploaded files, or paste the text of both here."
+)
+
+
+async def run_compare_documents_workflow(
+    session_id: str,
+    user_id: Optional[str] = None,
+    context: Optional[Dict[str, Any]] = None,
+) -> Any:
+    """#2132: compare two or more of the user's files the turn names, else CXO's line.
+
+    The classifier normalizes "compare" to ``compare_documents`` (classifier.py
+    action normalization) and, before this entry, no rail key caught it: the
+    turn fell to the floor or, on other samples, to analyze_data's repository
+    metrics (Q37). Referent rule (Arch 15:05): at least two bound files →
+    ``document_handlers.handle_compare_documents`` (the REST compare path);
+    fewer → CXO's line. Binding reuses the summarize rail's FileResolver
+    (``resolve_held_files``): two or more stored filenames named in the
+    message come back as the resolver's exact-match set. There is no
+    chat-session file list, so a bare "these two documents" binds nothing and
+    gets the line (Arch 16:24). The compare handler reads upload storage, so
+    a named saved artifact surfaces as the honest could-not-read reply.
+    """
+    from services.intent.intent_service import IntentProcessingResult
+
+    ctx = context or {}
+    intent = ctx.get("intent")
+    intent_context = dict(getattr(intent, "context", None) or {})
+
+    def _result(text, *, success=True, reason=None, extra=None):
+        payload = {"reason": reason} if reason else {}
+        if extra:
+            payload.update(extra)
+        return IntentProcessingResult(
+            success=success,
+            message=text,
+            intent_data={
+                "category": "analysis",
+                "action": "compare_documents",
+                "context": payload,
+            },
+            workflow_id=None,
+            requires_clarification=False,
+        )
+
+    message = (getattr(intent, "original_message", "") or "") or intent_context.get(
+        "original_message", ""
+    )
+    bound: list = []
+    if user_id and message:
+        from services.intent_service.document_handlers import resolve_held_files
+
+        try:
+            bound = await resolve_held_files(message, user_id, "compare_documents")
+        except Exception as e:  # silent-ok: error-logged; a failed read is not "no documents" — honest degrade, success=False (#1425)
+            logger.error("compare_documents_resolve_failed", error=str(e), user_id=user_id)
+            return _result(
+                "I had trouble reading your files just now. You can try again in a moment.",
+                success=False,
+                reason="resolve_failed",
+            )
+
+    if len(bound) < 2 or not user_id:
+        return _result(
+            NO_TWO_DOCUMENTS_LINE,
+            reason="fewer_than_two_bound_files",
+            extra={"bound_files": len(bound)},
+        )
+
+    from services.intent_service.document_handlers import handle_compare_documents
+
+    try:
+        compared = await handle_compare_documents([f["file_id"] for f in bound], user_id=user_id)
+    except FileNotFoundError:
+        return _result(
+            "I found those files but couldn't read the content of one of them. It "
+            "may have been removed. Try uploading it again.",
+            success=False,
+            reason="file_content_missing",
+        )
+    except Exception as e:  # silent-ok: error-logged with context and returns success=False — honest degrade, never fake success (#1425)
+        logger.error("compare_documents_workflow_failed", error=str(e), user_id=user_id)
+        return _result(
+            "I had trouble comparing those documents just now. You can try again in a moment.",
+            success=False,
+            reason="compare_failed",
+        )
+
+    names_read = ", ".join(f"'{n}'" for n in compared["filenames"])
+    return _result(
+        f"I compared {names_read} from your files.\n\n{compared['comparison']}",
+        extra={"file_ids": compared["file_ids"], "filenames": compared["filenames"]},
+    )
+
+
 # handler_attr → classifier aliases (mirror the migrated elif branches exactly).
 _READ_QUERY_COHORT: dict[str, list[str]] = {
     "_handle_shipped_this_week": [
@@ -3493,6 +3593,35 @@ def register_default_workflows() -> None:
         flip_group="read_synthesis",
     )
 
+    # #2132 (Arch 2026-10-22 15:05): compare_documents gets an entry under the
+    # analyze_document referent rule. The classifier already normalizes
+    # "compare" to this key (classifier.py action normalization); before this
+    # entry no rail key caught it (floor on some samples, analyze_data's repo
+    # metrics on others, Q37).
+    # effect: READ — owner-scoped SELECTs of upload rows + a read of their
+    # stored bytes + one LLM comparison rendered back; nothing is written
+    # (document_handlers.handle_compare_documents).
+    # outwardness: PRIVATE — rendered to the asking user in their own chat.
+    # flip_group: read_referent — by analogy with analyze_document (the
+    # neighbour it mirrors): grouped by what it must RESOLVE (two bound files),
+    # not by what it emits. ⚠️ read_referent is LIVE (CURRENT_LIVE_CATEGORIES in
+    # scripts/inversion_phase3_deletion_gate.py), so this widens a live group:
+    # the router can land this op on alpha from the deploy that carries it.
+    # The rule-7 full run and the Phase-2 gate for the widened group are the
+    # Lead's, before promotion.
+    compare_documents_entry = WorkflowEntry(
+        entry_point=run_compare_documents_workflow,
+        effect=EffectClass.READ,
+        outwardness=Outwardness.PRIVATE,
+        description=(
+            "Compare two or more documents the user names from their uploaded files; "
+            "with fewer than two named, it asks them to paste both texts"
+        ),
+        requires_context=["intent"],
+        action_triggered=True,
+        flip_group="read_referent",
+    )
+
     # RECONNECT #1327 build #2: conversational "what's my default repo" — the read
     # counterpart. Same 2-arg (intent, workflow_id) factory + action-dispatch rail.
     # effect: READ — _handle_get_default_repo reads the same preference key the
@@ -3914,6 +4043,7 @@ def register_default_workflows() -> None:
         "summarize_file": summarize_document_entry,
         "summarize_upload": summarize_document_entry,
         "summarize_uploaded_file": summarize_document_entry,
+        "compare_documents": compare_documents_entry,
     }
 
     # #1124 step 3 cohort 2: GitHub read-query cohort — one shared entry point per
