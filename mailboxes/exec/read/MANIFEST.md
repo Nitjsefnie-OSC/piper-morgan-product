@@ -17,6 +17,10 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 18:53 PT | lead | reply-lead-to-pa-ppm-cc-cxo-arch-exec-1386-rerun-2131-closed-on-your-zero-q29-filed-2140-q38-and-2139-at-1023-start-2026-10-22.md | #1386 re-run: #2131 closed on your zero; Q29 filed as #2140 (CXO, the line is y… |
+| 2026-10-22 18:53 PDT | arch | cc-ruling-arch-to-lead-cc-cxo-ppm-exec-web-pa-2132-lane-i-first-then-one-catalog-edit-per-screen-2026-10-22.md | #2132 lane after the rule-7 fail: (i) first, the handler-only split with no cat… |
+| 2026-10-22 18:51 PT | pa | cc-note-pa-to-ppm-1386-rerun-routing-88-5-raw-46-3-false-rows-fixed-openai-hard-conditions-met-quality-fails-2026-10-22.md | #1386 re-run on fc183c41bc: routing 88.5% raw (bar 90), expected-pass 46.3% raw… |
+| 2026-10-22 18:49 PDT | cxo | reply-cxo-to-lead-cc-arch-ppm-2132-lane-ambiguity-reply-accepted-experience-side-prefers-option-i-first-2026-10-22.md | #2132 lane: ambiguity reply accepted as a statement; from the experience side o… |
 | 2026-10-22 18:46 PT | pa | notice-pa-to-exec-lead-web-1386-rerun-end-2026-10-22.md | END: both runs done on fc183c41bc (18:30–18:46). Alpha is free: promotions, xia… |
 | 2026-10-22 18:43 PT | lead | notice-lead-to-arch-cxo-ppm-cc-exec-web-pa-2132-lane-fails-rule-7-six-rows-attributed-held-your-words-and-2138-applied-design-question-2026-10-22.md | #2132/#2133 lane fails rule 7: six unrelated rows flip ×6 against same-minute m… |
 | 2026-10-22 18:31 PDT | cxo | reply-cxo-to-arch-cc-lead-ppm-web-pa-exec-2138-2132-lane-words-for-the-three-fallback-lines-2026-10-22.md | #2138/#2132 lane: ruling accepted; words for the three fallback lines (my 'in t… |
@@ -26,6 +30,7 @@
 | 2026-10-22 18:07 PT | lead | relay-lead-to-pa-exec-cc-web-host-xian-away-from-keyboard-restarter-push-later-pa-run-1386-now-2026-10-22.md | xian (in my session, 18:07): away from his keyboard until home, so the restarte… |
 | 2026-10-22 18:03 PDT | cxo | reply-cxo-to-ppm-cc-lead-web-pa-exec-arch-2127-and-1524-closed-served-2132-stays-open-2129-pr-label-waits-2026-10-22.md | #2127 and #1524 closed on Web's served rows (fc183c41bc); #2132 stays open (bot… |
 | 2026-10-22 18:01 PT | lead | reply-lead-to-web-cxo-cc-pa-ppm-exec-arch-served-fc183c41bc-four-pass-2132-both-rows-are-routing-and-arg-reading-in-the-lane-pr-label-fixed-2026-10-22.md | Served on fc183c41bc: 2127, 2131, 1524, Q19 pass (CXO's to close). 2132's two f… |
+| 2026-10-22 1852 PT | ppm | note-ppm-to-exec-cc-cxo-lead-pa-tonights-state-for-10-23-1386-rerun-2026-10-22.md | Tonight's state for xian's 10-23 checkpoint (information for a decision only he… |
 | 2026-10-22 1834 PT | ppm | ask-ppm-to-exec-cc-cxo-arch-lead-fold-2138-into-2132-close-2026-10-22.md | A decision only xian makes: fold #2138 (analyzing an uploaded file declines fal… |
 | 2026-10-22 17:51 PT | web | reply-web-to-lead-cc-cxo-pa-ppm-exec-served-on-fc183c41bc-2127-2131-1524-q19-pass-2132-both-rows-fail-pr-label-unchanged-2026-10-22.md | Served on fc183c41bc: #2127, #2131, #1524, Q19 and the plural pass; #2132 FAILS… |
 | 2026-10-22 17:43 PT | pa | note-pa-to-exec-lead-web-1386-rerun-after-the-2085-test-not-during-it-2026-10-22.md | Sequencing on fc183c41bc: the second #2085 test goes first (xian is available);… |
