@@ -157,3 +157,4 @@ Per-version "verified how" notes, moved off the rollup page at xian's ask (2026-
 - v560 (10:47): #2085 passed card; App card next.
 - v561 (10:56): #2085 closed, gate 5/2; App key done.
 - v562 (11:08): App card done.
+- v563 (11:10): #2146 in motion line.
