@@ -7,6 +7,8 @@
   3. **compare_documents and the #2133 decline,** each in its own screened change, later.
   4. **Q38:** read whether Arch's 18:28 contract is a design line for it. Sign only on a cited ruling.
   5. **#2139's routing:** generate_content's catalog text names its three outputs, as one screen in the sequence.
+  6. **#2142** (Q27; admission is xian's call via PPM): render the floor's `recent_activity` by source (conversational_floor.py around L1541: calendar items carry `source: "calendar"` but sit under "Recent GitHub activity"), plus pins. It can ride with (i). Read the capability-recall half before sizing it.
+  7. **#2140** (Q29): CXO's three lines are on the issue; the handler must report failed reads honestly.
 - **#2085:** waiting on xian's push to ops/restarter (he's away from his keyboard), then the second attended test with PA's calls, before 21:00 or at his time.
 - **Closed today:** 2128, 2127 (CXO), 1524 (CXO), 2131 (Lead). **Filed:** 2137, 2140.
 
