@@ -32,7 +32,7 @@
 </style>
 <div class="wrap">
 <h1>Attention rollup — Thursday 22 October</h1>
-<p class="meta">Exec · v542, rebuilt 18:35 PDT Thu 10-22 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
+<p class="meta">Exec · v543, rebuilt 18:49 PDT Thu 10-22 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
 
 
 
@@ -40,13 +40,13 @@
 
 <div class="card hot"><b>Friday 10-23: your alpha checkpoint.</b> Your 10-18 rule: if MVP looks on track to close by 10-30 (or close enough), approve inviting people. PPM sends one updated read tonight.
 <ul style="margin:.3rem 0 .2rem 1.2rem;padding:0">
-<li><b>Gate: 6 open, 3 must-close: #2132, #2085, #2096.</b> CXO closed #1524 and #2127 on Web&rsquo;s served checks (18:0x). #2128 closed (15:25, Web&rsquo;s counts match GitHub); #2132&rsquo;s first fix failed both served rows; Lead&rsquo;s second fix is in review; #2085, the restart button (test ran 17:05; the restart step needs a fix); #2096, your admin read of <code>/api/v1/admin/feedback</code> (that a feedback note is stored).</li>
+<li><b>Gate: 6 open, 3 must-close: #2132, #2085, #2096.</b> CXO closed #1524 and #2127 on Web&rsquo;s served checks (18:0x). #2128 closed (15:25, Web&rsquo;s counts match GitHub); #2132&rsquo;s fix is held (it changed six unrelated answers in Lead&rsquo;s checks; Arch has a design question), so it won&rsquo;t reach alpha tonight; #2085, the restart button (test ran 17:05; the restart step needs a fix); #2096, your admin read of <code>/api/v1/admin/feedback</code> (that a feedback note is stored).</li>
 <li><b>#1386, the gate&rsquo;s own test:</b> quality 85.7% with CXO&rsquo;s waivers, 57.1% raw (bar 75%). Routing 90.2% with Lead&rsquo;s two signed relabels, 86.9% raw (bar 90%). It closes on a rerun after #2128 and #1524 land. <b>Your Friday question:</b> do waived figures count as &ldquo;close enough&rdquo;?</li>
 <li><b>The invitation names Anthropic only.</b> Lead&rsquo;s #2127 fix is live but not enough: an OpenAI-only account is still refused. Arch has ruled the second half of the fix.</li>
 <li>Invitation paperwork: Google is verified on alpha&rsquo;s project, so the Calendar line is a plain connect step. Terms Option 2 covers the three held names; you invite them to alpha now with a beta short-list line, and Comms drafts the letter. Still open: the &ldquo;Your key&rdquo; lines (backups keep about 4 days; the empty-key count needs a production read by HOST or you), and HOST&rsquo;s send-morning checks.</li>
 </ul></div>
 <div class="card hot"><b>Decision (one word): fold #2138 into #2132&rsquo;s must-close? (PPM 18:34; CXO and Arch agree) Lean: yes.</b> Live today: one turn after Piper summarized an uploaded file, &ldquo;Analyze launch-notes-2131.txt&rdquo; answered &ldquo;I can&rsquo;t analyze your documents from chat yet, and I can&rsquo;t read your Notion pages in chat yet.&rdquo; That&rsquo;s two false claims: it had just read the file, and the account has no Notion. It&rsquo;s the same handler and the same fix lane as #2132. <b>Yes:</b> #2132 closes only when CXO&rsquo;s four served checks pass, including &ldquo;Analyze &lt;filename&gt;&rdquo;; the gate count doesn&rsquo;t change. <b>No:</b> #2138 stays off the gate.</div>
-<div class="card hot"><b>Restart button: your steps when you&rsquo;re back at your Mac. Wait for PA&rsquo;s &ldquo;end&rdquo; mail on the #1386 rerun (running now); I&rsquo;ll tell you.</b> Background: the first test (17:05) passed every check, but Fly refused the restart&rsquo;s lock. Lead built a restart without the lock, Arch approved it, and the tests are green (f3751c4ee2, 17:3x).
+<div class="card hot"><b>Restart button: your steps when you&rsquo;re back at your Mac. Alpha is free now (PA finished at 18:46).</b> Background: the first test (17:05) passed every check, but Fly refused the restart&rsquo;s lock. Lead built a restart without the lock, Arch approved it, and the tests are green (f3751c4ee2, 17:3x).
 <p style="margin:.4rem 0 .2rem"><b>Step A: copy Lead&rsquo;s fixed job file onto the locked <code>ops/restarter</code> branch.</b> Only your account can push to that branch. Run this in a plain Terminal on your Mac. It makes a temporary copy of the repo in /tmp, so your own working folder isn&rsquo;t touched:</p>
 <pre style="white-space:pre-wrap;margin:.2rem 0">gh repo clone mediajunkie/piper-morgan-product /tmp/restarter-push -- --depth 1 --branch ops/restarter
 cd /tmp/restarter-push
