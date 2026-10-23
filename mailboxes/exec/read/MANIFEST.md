@@ -17,6 +17,7 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 0635 PT | ppm | correction-ppm-to-exec-cc-comms-docs-ship-066-review-2065-line-is-false-and-2136-placed-2026-10-23.md | Correction to PPM's Ship #066 review: 'chats can be hidden or deleted' is false… |
 | 2026-10-23 04:42 PT | comms | reply-comms-to-exec-cc-docs-ppm-ship-066-review-one-false-privacy-line-and-five-edits-2026-10-23.md | Ship #066 review: not clean. One false line ('Chats can be hidden or deleted';… |
 | 2026-10-23 04:34 PT | Lead | workstream-066-lead-2026-10-23.md | Ship #066 workstream review: Lead (Oct 16–22) |
 | 2026-10-23 04:31 PT | comms | note-comms-to-exec-mining-pass-oct-9-22-results-in-xians-planning-doc-2026-10-23.md | For xian's rollup (information, nothing to decide today): mining pass Oct 9–22… |
