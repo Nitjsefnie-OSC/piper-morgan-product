@@ -32,7 +32,7 @@
 </style>
 <div class="wrap">
 <h1>Attention rollup — Friday 23 October</h1>
-<p class="meta">Exec · v565, rebuilt 11:50 PDT Fri 10-23 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
+<p class="meta">Exec · v566, rebuilt 12:26 PDT Fri 10-23 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
 
 
 
@@ -44,6 +44,21 @@
 <li><b>The synthesis is ready for our discussion: <a href="https://claude.ai/artifact/QwwNgEVnZCD8TAEULTKiD2">Ship #066 week review</a></b>. It covers progress against last week&rsquo;s goal, what went wrong, each workstream, draft goals for next week, and five questions for you. The early draft is on hold, and the Ship will come from our discussion.</li>
 <li><b>Process fix (you approved it today):</b> my end-of-check-in script now prints the Ship cycle&rsquo;s state and next step from Friday to Wednesday. A commit gate will block a draft that comes before the synthesis (CIO reviews the gate first).</li>
 </ul></div>
+<div class="card hot"><b>Decision (one word): admit #2148 to MVP as a must-close? PPM and CXO recommend yes. My lean: yes.</b> When a partner leaves Google&rsquo;s calendar box unticked, alpha still says &ldquo;Calendar Connected&rdquo;, which is false, and it happens at the first step every partner takes. Arch has ruled the fix (read the granted scope; never a success message on unknown). <b>The cost:</b> closing it needs one connect with the box left unticked, on a real Google account, which only you can do. It&rsquo;s about 2 minutes after your #2087 recording. <b>If no:</b> it ships as a known issue behind the tick-the-box line. The gate would go to 5 open, 2 must-close.</div>
+<div class="card hot"><b>#2146, automatic database recovery: cleared by Arch. Your three steps, after #2087.</b>
+<p style="margin:.4rem 0 .2rem"><b>1. Push the restarter file to <code>ops/restarter</code></b> (the same steps as this morning, in a plain Terminal on your Mac):</p>
+<pre style="white-space:pre-wrap;margin:.2rem 0">gh repo clone mediajunkie/piper-morgan-product /tmp/restarter-push -- --depth 1 --branch ops/restarter
+cd /tmp/restarter-push
+git fetch --depth 1 origin main
+git checkout FETCH_HEAD -- .github/workflows/restart-alpha-postgres.yml
+git diff --cached --stat</pre>
+<p style="margin:.2rem 0">The last line should show <b>only</b> <code>.github/workflows/restart-alpha-postgres.yml</code>. Paste it to me before going on. Then:</p>
+<pre style="white-space:pre-wrap;margin:.2rem 0">git commit -m "restarter: guard 2 by time window, 24h stop for automatic runs (2146)"
+git push origin ops/restarter
+cd ~ &amp;&amp; rm -rf /tmp/restarter-push</pre>
+<p style="margin:.2rem 0">I confirm the branch matches main.</p>
+<p style="margin:.4rem 0 .2rem"><b>2. Remove the reviewer:</b> GitHub &rarr; the repo &rarr; Settings &rarr; Environments &rarr; <code>alpha-db</code> &rarr; untick <b>Required reviewers</b> &rarr; Save. <b>Leave &ldquo;Deployment branches&rdquo; as it is</b> (only <code>ops/restarter</code>).</p>
+<p style="margin:.4rem 0 .2rem"><b>3. Test 4, with PA watching:</b> you stop Postgres once (the same stop command as this morning), then <b>touch nothing</b>. The health watch should start the restarter by itself within about 10 minutes. PA will also check that a hold file blocks it. I&rsquo;ll bring the exact sequence when you&rsquo;re ready.</p></div>
 <div class="card"><b>Anthropic spending limit: you raised it from $50 to $75 (08:11, in Lead&rsquo;s session). Recorded in decisions.log.</b> The test call went through at 08:14, and the Anthropic checks ran. Two of the #2132 changes pass. The third (#2133&rsquo;s decline) fails on Anthropic and is held. Lead asks Arch whether the two passing changes can land together after a full run. You&rsquo;ll review spend at the end of the next billing period. If Lead&rsquo;s test call is still refused, I&rsquo;ll tell you.</div>
 
 <div class="card"><b>Today&rsquo;s checkpoint: answered (08:33).</b> You ruled that #1386 passing after triage is close enough (B+ or A&minus; is acceptable for now), on the condition that #2132 closes before invitations go out. #2138 is folded into #2132, #2136 stays separate, and your #2096 read is done (count 1). All are recorded and relayed. Background, as it stood this morning: State at 06:4x (gate, main and alpha read just now, unchanged overnight). Your 10-18 rule: if MVP looks on track to close by 10-30 (or close enough), approve inviting people.
@@ -87,7 +102,7 @@
 <li>Ship #066: all ten reviews are in, and Comms reviewed my draft and I applied every fix (one false privacy line, from a review, removed). File: <code>docs/public/comms/drafts/weekly-ship-066-draft-2026-10-23.md</code>. Your first look comes after today&rsquo;s checkpoint, since the opening depends on it. It publishes Wed 10-28.</li>
 <li>Comms finished the Oct 9&ndash;22 mining pass. The results are in your <a href="https://claude.ai/artifact/5vc7f1CTHhadvvPBB73h86">Editorial Calendar Planning doc</a>: 9 insight candidates for the empty 10-31/11-01 weekend, and the narrative beat waits for the second restart test.</li>
 <li>The three held alpha invites: cleared by you Thursday, waiting on Comms&rsquo; packet and Web&rsquo;s code checks (HOST).</li>
-<li><b>#2146, automatic database recovery:</b> built and on main (Lead, a1d5760806). Arch is reading it. Then three steps for you, together, about 15 minutes: (1) push the restarter file to <code>ops/restarter</code>, the same steps as this morning; (2) remove the required reviewer on <code>alpha-db</code>; (3) test 4: you stop Postgres and then <b>touch nothing</b>, and the watch should restart it within about 10 minutes. I&rsquo;ll bring the exact steps when Arch says yes.</li>
+
 <li>Mail v4 stays on three seats until the 11-05 review.</li>
 </ul></div>
 <h2>📊 Where things stand</h2>

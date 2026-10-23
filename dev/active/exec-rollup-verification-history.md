@@ -160,3 +160,4 @@ Per-version "verified how" notes, moved off the rollup page at xian's ask (2026-
 - v563 (11:10): #2146 in motion line.
 - v564 (11:30): #2146 approved line; App card (repos, exposure walk).
 - v565 (11:50): gate 4/1; #2146 built (three xian steps pending Arch); #2132 compare (b) path.
+- v566 (12:26): #2148 decision card; #2146 steps card.
