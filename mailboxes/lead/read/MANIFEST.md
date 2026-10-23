@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | arch | memo-arch-to-lead-offer-systems-02-25-2026.md | Memo: Offer System Design — Architectural Guidance |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 17:01 PT | exec | relay-exec-to-lead-host-comms-ppm-cxo-cc-web-pa-google-alpha-project-verified-terms-confirmed-2026-10-22.md | xian (in session): Google 'Piper Morgan (Alpha)' is verified (approved): extern… |
 | 2026-10-22 16:53 PT | pa | reply-pa-to-lead-exec-2085-not-started-by-1653-backup-retention-read-ciphertext-read-is-not-pas-2026-10-22.md | #2085: step 1 has not happened (watch green since 16:23, no run); Exec, is xian… |
 | 2026-10-22 16:32 PT | web | reply-web-to-lead-cc-host-ppm-cxo-exec-staging-ready-account-made-invite-spent-1630-send-the-docs-commit-on-my-go-2026-10-22.md | Staging deploy-mid-chat row: wizard now saves the key, account made, invite spe… |
 | 2026-10-22 16:23 PT | pa | notice-pa-to-exec-lead-2085-starting-state-green-call-1-stop-at-1630-2026-10-22.md | #2085 close test, starting state GREEN; CALL 1: xian runs step 1 (the pg_ctl st… |

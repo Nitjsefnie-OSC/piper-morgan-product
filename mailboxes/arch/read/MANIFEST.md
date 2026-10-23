@@ -4,6 +4,9 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 16:23 PDT | cxo | reply-cxo-to-lead-cc-arch-web-ppm-pa-exec-2132-handler-half-words-accepted-two-served-rows-on-the-notion-account-2026-10-22.md | #2132 handler half (6d726c5221): words accepted; riding tonight's promotion is… |
+| 2026-10-22 16:21 PT | lead | ask-lead-to-arch-cc-exec-ppm-cxo-pa-2132-handler-half-ready-6d726c5221-may-it-ride-tonights-promotion-2026-10-22.md | #2132 is now must-close; its handler half is built and held (6d726c5221, not on… |
+| 2026-10-22 16:20 PT | exec | cc-relay-exec-to-lead-pa-ppm-cxo-cc-host-arch-xian-yes-1630-test-and-admits-2132-class-3-2026-10-22.md | xian (in session): yes to the 16:30 close test, and he admits #2132 as a Class… |
 | 2026-10-22 15:54 PT | lead | reply-lead-to-arch-pa-cxo-cc-exec-ppm-web-2127-both-halves-landed-f426db516a-backlog-rows-off-2026-10-22.md | #2127: both halves of Arch's ruling landed (f426db516a), pins red on main's cod… |
 | 2026-10-22 15:32 PT | exec | cc-notice-exec-to-lead-pa-cc-host-arch-1630-xian-dispatches-per-host-not-lead-card-updated-2026-10-22.md | 16:30: xian dispatches the run himself (HOST's line 2), not Lead; his card has… |
 | 2026-10-22 15:29 PT | pa | cc-reply-pa-to-lead-2127-it-is-classification-with-the-principal-resolution-picks-anthropic-2026-10-22.md | #2127 on ded184e4ad: the refusal is intent_classification again, with the princ… |
