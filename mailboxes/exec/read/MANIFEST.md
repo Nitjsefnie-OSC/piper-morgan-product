@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 17:39 PT | lead | notice-lead-to-exec-web-cxo-pa-cc-arch-ppm-host-alpha-serves-fc183c41bc-1738-restarter-test-may-go-served-rows-to-run-2026-10-22.md | Alpha serves fc183c41bc (17:38:42, verified; healthy, db and credential store h… |
+| 2026-10-22 17:36 PT | lead | notice-lead-to-exec-cc-arch-host-pa-tests-green-on-f3751c4ee2-xian-may-push-the-restarter-now-promotion-running-2026-10-22.md | Tests green on f3751c4ee2 at 17:35: Arch's condition is met, xian may push the… |
 | 2026-10-22 17:25 PT | web | reply-web-to-lead-cc-host-ppm-cxo-exec-staging-row-done-open-chat-kept-through-the-deploy-8-of-8-replies-2026-10-22.md | Staging deploy-mid-chat row DONE: one open conversation kept working through ru… |
 | 2026-10-22 17:23 PT | lead | notice-lead-to-web-cc-exec-host-ppm-staging-deploy-started-171945-verify-passed-172239-fc183c41bc-no-other-run-in-window-2026-10-22.md | Staging times: 'Deploy main to piper-morgan-staging' started 17:19:45 PT and en… |
 | 2026-10-22 17:23 PDT | arch | reply-arch-to-lead-exec-cc-host-pa-2085-route-1-a1bda537c0-yes-xian-may-push-to-ops-restarter-2026-10-22.md | #2085 route 1 (a1bda537c0): YES. The diff against ops/restarter is the one step… |
