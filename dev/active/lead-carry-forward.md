@@ -1,5 +1,12 @@
 # Lead carry-forward — Fable 5.1 seat; Model A worktree ~/Development/piper-morgan-worktrees/lead
 
+## STATE @ 2026-10-23 07:05 PT — alpha ac3c7581ff; main dc45f98938 (2132 i + 2139 handler + 2142 attribution) Tests running; ANTHROPIC CAP: the keychain workspace refuses calls until 11-01 (tripped ~06:59 PT; notice to Exec 21fdb9d4e)
+- **Promote dc45f98938** once Tests is green on it (background watch b4xew8e2i) and the readiness conditions hold. Then send Web the served rows: 2132 held-file (Analyze launch-notes after an upload, no-title line), 2139 (Q36/Q38 on web-openai-run), 2142 (Q27 on web-seed-1386).
+- **2140 + 2143** on lane `claude/lead-2140` (2ac47d8b28), held for CXO's two word calls (memo b83e5ddfe). Before landing: merge origin/main into the lane, rerun the services set, then push.
+- **2132 routing screens:** screen 1 failed; screen 2 (description, uncommitted on lane lead-2132s2) moves the target but costs "what did we make earlier". 2b (no args sentence) is uncommitted on lane lead-2132s2b, NOT yet run on Anthropic. Blocked until the cap clears or Arch rules to finish on OpenAI. Reports in dev/2026/10/23/controls/.
+- **2085:** ops/restarter still 64d611798e (xian's push pending). Then the second attended test.
+- Waiting: Arch's diff read of dc45f98938 and a ruling on 2142's capability half; CXO's two 2140 word calls plus the unsupported-content-type string; xian on the Anthropic cap; HOST on the masked key.
+
 ## DAY CLOSED 2026-10-22 21:4x PT — alpha ac3c7581ff; main 12/12 green; inbox empty
 **10-23 START order:** (1) mail, then CI, then `git ls-remote origin refs/heads/ops/restarter`: if xian has pushed (not 64d611798e), confirm the file equals main's a1bda537c0 and offer the second #2085 test (PA calls the moments; xian dispatches and approves; undo only on a call). (2) The #2132 handler split (i) from lead-2132r 2669005231, with #2139's handler half (CXO's line on #2139). (3) The #2142 render-by-source fix (could ride with (i)). (4) #2140 (CXO's three lines). (5) Routing screens, one catalog edit at a time (the STATE block below has the order). (6) Cron e0bdd924 expires about 10-26: rotate at the 10-25 START.
 
