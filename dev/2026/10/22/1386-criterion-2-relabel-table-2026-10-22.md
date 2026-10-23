@@ -33,3 +33,11 @@ Verified how: Run 1 CSV rows for all 8 misses (python csv read: expected/actual 
 
 
 **Signed (Lead, 2026-10-22 13:32):** Q33 SIGNED, Q62 SIGNED, Q45 REJECTED. Routing reads **55 of 61 (90.2%)**; raw 53 of 61 (86.9%) is shown first in every report. Q19, Q25, Q31, Q37, Q44, Q45 stay fails.
+
+## Addendum, Lead, 2026-10-22 19:27 PT: Q38 on the 18:30 re-run (`...-20261022-1839-results.csv`, alpha fc183c41bc)
+
+| Q | Query | Label old → new | Actual cat/action | Design basis (file:line, quote) | Signature |
+|---|---|---|---|---|---|
+| 38 | Synthesize these sources into a summary | canonical → floor | SYNTHESIS / summarize_document → floor | decisions.log:2459 (Arch, 2026-10-11, #1979): "The summarize_document rail returns None (→ SYNTHESIS floor) when the classifier's own source_type slot is text or conversation, matching the entry's documented contract." "These sources" names no upload. This run's turn took exactly that path, and the reply was the honest floor answer ("…came through without the source documents attached…", judged PASS). | **SIGNED** (Lead). This **replaces my 10-20 signature** (floor → canonical under #1624). That signature's own caveat already said "these sources" names no upload and #1979 sends such asks to the floor. #1979 is the more specific ruling for this phrase. Caveat: the classifier's source_type slot decides which designed path serves, so the row should be re-read if a later run routes it canonical with an honest-empty reply. |
+
+**Routing on this run:** 54/61 → **55/61 (90.2%)** with Q38 signed.
