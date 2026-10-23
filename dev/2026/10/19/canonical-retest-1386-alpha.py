@@ -267,12 +267,12 @@ CANONICAL_QUERIES = [
     # Documents (4) — Q36-38/40 M2-pending (Documents handler not yet shipped)
     (36, "Create a doc from this conversation", "Documents", "floor", "M2", "M2-feature-pending"),
     (37, "Compare these two documents", "Documents", "floor", "M2", "M2-feature-pending"),
-    # #1386 (Lead-signed 10-20, 1386-criterion-2-relabel-table-2026-10-20.md): was "floor". summarize_document via the action-dispatch rail (#1624, PM 08-15).
+    # #1386 (Lead-signed 10-22 19:2x, 1386-criterion-2-relabel-table-2026-10-22.md addendum): was "canonical", replacing the 10-20 signature. No upload named, so summarize_document returns to the SYNTHESIS floor (Arch's #1979 ruling, decisions.log).
     (
         38,
         "Synthesize these sources into a summary",
         "Documents",
-        "canonical",
+        "floor",
         "M2",
         "M2-feature-pending",
     ),
