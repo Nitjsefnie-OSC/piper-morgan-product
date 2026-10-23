@@ -32,7 +32,7 @@
 </style>
 <div class="wrap">
 <h1>Attention rollup — Thursday 22 October</h1>
-<p class="meta">Exec · v534, rebuilt 17:13 PDT Thu 10-22 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
+<p class="meta">Exec · v535, rebuilt 17:16 PDT Thu 10-22 (<code>dev/active/exec-attention-rollup-current.html</code>), one published page (claude.ai/artifact/719UZ4h1NELjEwWZbDCceT). If the version number here differs from the one in my reply, you are reading a stale copy.</p>
 
 
 
@@ -45,7 +45,7 @@
 <li><b>The invitation names Anthropic only.</b> Lead&rsquo;s #2127 fix is live but not enough: an OpenAI-only account is still refused. Arch has ruled the second half of the fix.</li>
 <li>Invitation paperwork: Google is verified on alpha&rsquo;s project, so the Calendar line is a plain connect step. Terms Option 2 covers the three held names; you invite them to alpha now with a beta short-list line, and Comms drafts the letter. Still open: the &ldquo;Your key&rdquo; lines (backups keep about 4 days; the empty-key count needs a production read by HOST or you), and HOST&rsquo;s send-morning checks.</li>
 </ul></div>
-<div class="card"><b>Restart button test (17:05&ndash;17:12): the safety checks all passed, but the restart was refused.</b> Your token can read the database machine but can&rsquo;t take the lock (&ldquo;lease&rdquo;) flyctl needs before restarting it. You restarted it by hand; alpha has been healthy since 17:12. Arch decides the fix: one more permission on a new token (your hand, once) or a restart without the lease. #2085 stays open.</div>
+<div class="card"><b>Restart button test (17:05&ndash;17:12): the safety checks all passed, but the restart was refused.</b> Your token can read the database machine but can&rsquo;t take the lock (&ldquo;lease&rdquo;) flyctl needs before restarting it. You restarted it by hand; alpha has been healthy since 17:12. <b>Arch&rsquo;s fix (17:14): restart without the lease, same token, no new mint.</b> Lead builds it, and Arch reads it. Then you move the locked branch with the same one command as before (new SHA), and we run a second attended test at your time, with the same card and the same undo. If that restart call is also refused, the fallback is pre-ruled: a new token with one more permission on that one machine. #2085 stays open until then.</div>
 <h2>Next time you&rsquo;re here</h2>
 <div class="card act"><ol style="margin:.2rem 0 .2rem 1.2rem;padding:0">
 <li><b>Medium crosspost: &ldquo;The Tracker That Lost Track&rdquo;</b> (<a href="https://pipermorgan.ai/blog/the-tracker-that-lost-track/">live</a>). Medium only; send Docs the URL.</li>
