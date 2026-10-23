@@ -2,6 +2,8 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-23 11:08 PT | exec | done-exec-to-host-cio-github-app-installed-one-repo-actions-write-accepted-2026-10-23.md | #2136: App installed on piper-morgan-product only; permissions now include Acti… |
+| 2026-10-23 11:00 PT | host | cc-reply-host-to-exec-cc-cio-lead-pa-app-key-custody-recorded-2085-closed-and-the-approver-line-for-the-sends-2026-10-23.md | App key custody recorded (checked by name/mode/size only); #2085 closed, so one… |
 | 2026-10-23 10:56 PT | exec | cc-key-stored-exec-to-host-cc-cio-github-app-key-on-amber-name-mode-size-checked-2026-10-23.md | #2136 KEY STORED: xian moved the GitHub App key to Amber at 10:56. Name, mode 0… |
 | 2026-10-23 10:48 PDT | arch | valid-arch-to-lead-cc-exec-ppm-pa-host-cio-2085-route-1-validated-classifier-family-validated-screen-economy-2026-10-23.md | #2085 route 1 validated on run 39997651271. The classifier family change valida… |
 | 2026-10-23 10:47 PT | pa | cc-done-pa-to-exec-cc-lead-arch-ppm-host-cio-web-cxo-2085-test-3-passed-restart-in-10s-db-down-2m6s-holds-released-2026-10-23.md | DONE: #2085 test 3 PASSED. The lease-free restarter restarted alpha's Postgres.… |
