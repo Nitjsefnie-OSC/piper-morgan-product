@@ -23,6 +23,38 @@ ROOT = Path(__file__).resolve().parents[3]
 EMAIL = "openid https://www.googleapis.com/auth/userinfo.email"
 
 
+_PROBE = "services.integrations.calendar.oauth_handler.probe_calendar_read"
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "scope, probe, expected",
+    [
+        (f"{EMAIL} {CALENDAR_READ_SCOPE}", None, "granted"),  # Arch pin 1
+        (EMAIL, None, "not_granted"),  # pin 2: the box left unticked
+        ("", None, "granted"),  # pin 3: unknown scope, the read succeeds
+        ("", "insufficient_scope", "not_granted"),  # pin 4
+        ("", "error", "unconfirmed"),  # pin 5
+    ],
+)
+async def test_the_grant_resolves_from_the_scope_else_from_googles_own_read(scope, probe, expected):
+    from services.integrations.calendar.oauth_handler import resolve_calendar_grant
+
+    tokens = SimpleNamespace(scope=scope, access_token="a-token")
+    with patch(_PROBE, AsyncMock(return_value=probe)) as p:
+        assert await resolve_calendar_grant(tokens) == expected
+    assert p.await_count == (1 if not scope else 0)  # the scope decides when present
+
+
+@pytest.mark.asyncio
+async def test_a_probe_that_raises_is_unconfirmed_never_granted():
+    from services.integrations.calendar.oauth_handler import resolve_calendar_grant
+
+    tokens = SimpleNamespace(scope="", access_token="a-token")
+    with patch(_PROBE, AsyncMock(side_effect=TimeoutError())):
+        assert await resolve_calendar_grant(tokens) == "unconfirmed"
+
+
 def test_granted_scopes_are_read_from_the_token_response():
     assert calendar_access_granted(f"{EMAIL} {CALENDAR_READ_SCOPE}") is True
     assert calendar_access_granted(EMAIL) is False  # the unticked box
@@ -30,7 +62,7 @@ def test_granted_scopes_are_read_from_the_token_response():
 
 
 def _patches(scope):
-    tokens = SimpleNamespace(refresh_token="r-token", scope=scope)
+    tokens = SimpleNamespace(refresh_token="r-token", scope=scope, access_token="a-token")
     handler = MagicMock()
     handler.handle_oauth_callback = AsyncMock(
         return_value={"tokens": tokens, "user_id": "u-2148", "user": {"email": "a@example.com"}}
@@ -84,7 +116,8 @@ async def test_a_ticked_box_connects_as_before(call):
 @pytest.mark.asyncio
 @pytest.mark.parametrize("call", [_settings, _setup])
 async def test_unreadable_scopes_are_never_a_success_state(call):
-    location, _ = await call("")
+    with patch(_PROBE, AsyncMock(return_value="error")):
+        location, _ = await call("")
     assert "calendar_unconfirmed=true" in location
     assert "calendar_success" not in location
 
