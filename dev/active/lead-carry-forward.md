@@ -1,5 +1,15 @@
 # Lead carry-forward — Fable 5.1 seat; Model A worktree ~/Development/piper-morgan-worktrees/lead
 
+## STATE @ 2026-10-22 18:58 PT — alpha fc183c41bc; main 12/12 green; PR-label fix 07c6f2b43a waits for quiet (~19:17) then promote
+- **10-23 START order (Arch 18:5x ruling, CXO agrees):**
+  1. **#2132 (i), the handler-only split** from branch claude/lead-2132r (2669005231): intent_service.py handler changes (held file via FileResolver on summarize's contract; the `title` arg from inversion_args; CXO's three lines plus the ambiguity statement) and document_handlers.resolve_held_files. NO workflow_entries, corpus, prompts or scorer changes. Split the test file. Units, Tests, Arch's diff read, no rule 7. Fixes #2138's served row. Ride #2139's handler half once CXO gives its line (no content_type → CXO's words, makes nothing).
+  2. **Routing (a), one catalog edit per ×6 screen,** on the target row plus the six attributed flips (dev/2026/10/22/controls/rule7-2132-attribution-2026-10-22.md). Order: (a) one ACTION_EXAMPLES example on analyze_document; (b) the analyze_document description alone; (c) narrow analyze_data only if needed. Land the first edit that moves the target ×6 and flips none of the six. Report both providers (Arch on #2139).
+  3. **compare_documents and the #2133 decline,** each in its own screened change, later.
+  4. **Q38:** read whether Arch's 18:28 contract is a design line for it. Sign only on a cited ruling.
+  5. **#2139's routing:** generate_content's catalog text names its three outputs, as one screen in the sequence.
+- **#2085:** waiting on xian's push to ops/restarter (he's away from his keyboard), then the second attended test with PA's calls, before 21:00 or at his time.
+- **Closed today:** 2128, 2127 (CXO), 1524 (CXO), 2131 (Lead). **Filed:** 2137, 2140.
+
 ## STATE @ 2026-10-22 17:46 PT — alpha fc183c41bc (17:38; code = 546099ab44: 2127 both halves, 2132 handler half, 1524, 2131, 2134, 2129, Q19, 2125 later parts); main green (Tests f3751c4ee2 success 17:35)
 - **#2085:** the 17:04 attended test passed guards 1a/1b/2/3, then the lease was refused; xian undid it, database back at 17:12. Arch's route 1 (restart via the Machines API, no lease) was built at a1bda537c0 on main and Arch said yes. **Waiting on xian's push to ops/restarter** (block on card v102), then a second attended test at his word, after this promotion. Pass = "restart accepted: HTTP 2xx", verify healthy within 3 min, alert comment posted. A 401/403 means the pre-ruled re-mint (rwC on 865105fe247158, HOST-approved). Copy nit for the next restarter change: the 000 line should say the restart may or may not have happened.
 - **Served rows out (17:4x):** 2127, 2132 a/b, 1524, 2131, Q19, 2129. Close each on Web's quotes plus CXO's judgement.
