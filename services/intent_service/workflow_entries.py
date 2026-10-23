@@ -3614,9 +3614,11 @@ def register_default_workflows() -> None:
         entry_point=run_compare_documents_workflow,
         effect=EffectClass.READ,
         outwardness=Outwardness.PRIVATE,
+        # Arch 10-23 (screen 3a): no "names" / "two or more" (the 12/12
+        # calendar flip beside 2b's description).
         description=(
-            "Compare two or more documents the user names from their uploaded files; "
-            "with fewer than two named, it asks them to paste both texts"
+            "Compare documents from the user's uploaded files side by side; "
+            "without two files to read, it asks them to paste both texts"
         ),
         requires_context=["intent"],
         action_triggered=True,
