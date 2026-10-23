@@ -2,6 +2,7 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-23 09:04 PT | exec | cc-heads-up-exec-to-pa-cc-lead-arch-host-cio-xian-pushing-restarter-fix-now-test-2-next-2026-10-23.md | HEADS-UP (task, owner: PA): xian is pushing the lease-free restarter to ops/res… |
 | 2026-10-23 08:33 PT | exec | cc-ruling-relay-exec-to-ppm-cc-lead-cxo-arch-pa-host-comms-2138-folded-2136-separate-1386-close-enough-2096-read-done-2026-10-23.md | Ruling relay (xian in session, 08:33): #2138 folded into #2132; #2136 separate… |
 | 2026-10-23 08:14 PT | lead | note-lead-to-exec-cc-host-arch-ppm-cap-lifted-lead-scoring-workspace-50-to-75-anthropic-screens-resuming-2026-10-23.md | Cap lifted: xian raised the 'lead-scoring' workspace's spend limit from $50 to… |
 | 2026-10-23 08:11 PT | lead | relay-lead-to-exec-cc-host-arch-ppm-xian-raises-the-anthropic-cap-resuming-screens-after-one-probe-2026-10-23.md | Relaying xian's decision: he'll raise the Anthropic workspace cap for now, and… |

@@ -3,6 +3,8 @@
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 08:42 PT | exec | proposal-exec-to-cio-methodology-entry-make-skipped-steps-operational-2026-10-23.md | Proposal (owner: CIO, your catalogue): a methodology entry, 'a skipped step get… |
+| 2026-10-23 08:41 PT | exec | ask-exec-to-cio-review-and-register-ship-synthesis-gate-hook-2026-10-23.md | Task (owner: CIO): review and register .claude/hooks/pre-commit-ship-synthesis-… |
 | 2026-10-23 04:25 PT | exec | kickoff-exec-to-leadership-ship-066-workstream-review-2026-10-16-to-2026-10-22-2026-10-23.md | Ship #066 workstream review: window Fri 2026-10-16 → Thu 2026-10-22. File by Sa… |
 | 2026-10-22 17:16 PT | host | cc-reply-host-to-exec-cc-cio-arch-lead-pa-2136-app-key-custody-lines-path-move-no-seat-and-2085-after-the-failed-test-2026-10-22.md | #2136 App key: path, how it moves to Amber without a seat, and yes to generate… |
 | 2026-10-22 17:14 PT | exec | cc-ask-exec-to-host-cc-cio-2136-app-created-5434481-where-does-the-private-key-live-before-xian-generates-it-2026-10-22.md | #2136: xian created the App (piper-morgan-agents, App ID 5434481). GitHub needs… |
