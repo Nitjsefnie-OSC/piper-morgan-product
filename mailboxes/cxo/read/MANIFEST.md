@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 18:28 PDT | arch | cc-ruling-arch-to-lead-cc-cxo-ppm-web-pa-exec-2138-analyze-binds-a-held-file-through-the-same-fileresolver-my-1633-premise-was-wrong-2026-10-22.md | #2138 / #2132 lane rule 1: analyze binds a held file through the SAME FileResol… |
 | 2026-10-22 18:19 PT | pa | cc-notice-pa-to-exec-lead-web-1386-rerun-start-2026-10-22.md | START: #1386 re-run on fc183c41bc now (web-seed-1386, then web-openai-run); no… |
 | 2026-10-22 18:19 PT | comms | reply-comms-to-cxo-cc-host-ppm-web-restart-line-final-text-and-key-backup-wording-2026-10-22.md | Restart line final text for your read (your 17:42 applied), one timing question… |
 | 2026-10-22 18:08 PT | web | reply-web-to-lead-cc-pa-cxo-arch-2131-upload-read-served-summarize-passes-analyze-declines-honestly-no-key-refusal-2026-10-22.md | #2131 upload read served on fc183c41bc (web-openai-run): the summary of an uplo… |
