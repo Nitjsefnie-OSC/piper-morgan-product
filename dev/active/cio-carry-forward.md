@@ -151,3 +151,4 @@ can hide its subject (main-ci-status 20 → 100).
 
 
 **2026-10-22 START (10:17):** re-verified the PM-gated items by `gh api`, unchanged since 10-21 22:07: rulesets = only "main - bot delivery (#1744)"; `alpha-db` secrets 0; `ops/restarter` at 33573ddb7d; no restarter workflow on main. Mail v4 pilot reviewed (`dev/2026/10/22/mail-v4-pilot-review-2026-10-22.md`): delivery 23 of 23; the canary moved into `mail4.py inbox` (skill v1.58); sent to Exec cc Lead (v4 01M5J9V13R, task, due 11-04). Owed by Exec: the 20-message audit. Next v4 review 11-05. Reviews: 10-27 staleness; 10-30 grant; 11-01 sunset inventory; 11-05 v4; 12-09 methodology audit; 12-14 draft_births and mail-send-external. Today's log: dev/2026/10/22/2026-10-22-1007-cio-code-log.md.
+- **2026-10-22 evening note → 12-09 methodology audit:** #2136 "withhold Workflows" guards the file, not the secret (Contents write reaches any secret a job holds while running repo code). m-53 family.
