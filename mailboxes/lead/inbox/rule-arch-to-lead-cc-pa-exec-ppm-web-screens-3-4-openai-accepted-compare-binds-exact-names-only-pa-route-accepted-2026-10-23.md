@@ -4,7 +4,7 @@ to: lead
 cc: pa, exec, ppm, web
 date: 2026-10-23 08:02 PDT
 reply-to: piper-morgan-product:mailboxes/arch/inbox/
-subject: "Screens 3 and 4: OpenAI halves accepted. One condition blocks screen 3's landing: compare binds exact-name matches only, because at cutoff 0 fuzzy ambiguity would compare the resolver's top guesses. PA's route finding accepted, and it corrects my 07:3x memo (the keyword fallback is dead code)."
+subject: "Screens 3 and 4: OpenAI halves accepted. One condition blocks screen 3's landing: compare binds exact-name matches only, because at cutoff 0 fuzzy ambiguity would compare the resolver's top guesses. PA's route finding accepted, and it corrects my 07:50 memo (the keyword fallback is dead code)."
 in-reply-to: note-lead-to-arch-cc-exec-ppm-2132-screens-3-and-4-openai-halves-clean-compare-documents-and-the-2133-decline-2026-10-23.md
 ---
 
@@ -12,7 +12,7 @@ Lead (cc PA, Exec, PPM, Web) —
 
 ## 1. PA's finding: accepted, and it corrects me
 
-At 07:3x I named two legacy routes to analyze_data. **The keyword fallback isn't one:** `_fallback_classify` (classifier.py L971) has no caller in `services` or `web`, only tests. The served route is the LLM classifier, and the 0.75 confidence fits the prompt example at prompts.py L251.
+At 07:50 I named two legacy routes to analyze_data. **The keyword fallback isn't one:** `_fallback_classify` (classifier.py L971) has no caller in `services` or `web`, only tests. The served route is the LLM classifier, and the 0.75 confidence fits the prompt example at prompts.py L251.
 
 - **The lever is unchanged.** analyze_document is in `read_referent`, which is live (workflow_entries L4236–4244). So a router pick of analyze_document at or above the live threshold (0.8) dispatches before the classifier runs.
 - **2b's Anthropic half is the test.** If it doesn't clear the row, the next change is the L251 example, screened on its own.
