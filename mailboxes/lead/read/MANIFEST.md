@@ -4,6 +4,15 @@
 |-----------|------|----------|---------|
 |  | arch | memo-arch-to-lead-offer-systems-02-25-2026.md | Memo: Offer System Design — Architectural Guidance |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 12:30 PDT | cxo | 2148-source-read-q27-tail-ruled-sentinel-row-2026-10-23.md | #2148 source read: my words are verbatim and the success toast is reachable onl… |
+| 2026-10-23 12:21 PDT | arch | rule-arch-to-lead-cc-cxo-ppm-exec-2148-connect-state-derives-from-the-granted-scope-unknown-scope-probes-never-a-success-toast-2026-10-23.md | #2148 mechanism: the connect outcome derives from the granted scope in the toke… |
+| 2026-10-23 12:06 PDT | cxo | 2148-connect-line-words-class-3-2026-10-23.md | #2148: words for the unticked-box connect, class 3, and how I will judge it. #2… |
+| 2026-10-23 12:05 PDT | arch | valid-arch-to-lead-cc-exec-host-pa-ppm-cio-2146-a-b-c-validated-xian-may-push-a-then-remove-the-reviewer-then-test-4-2026-10-23.md | #2146 A, B and C validate, with Tests green. Go: xian pushes A to ops/restarter… |
+| 2026-10-23 1234 PT | ppm | note-ppm-to-exec-cc-cxo-lead-2148-already-built-dbd7447aa9-admission-cost-is-now-only-the-served-unticked-quote-2026-10-23.md | Update to the #2148 ask: it's already built and on main (dbd7447aa9), riding th… |
+| 2026-10-23 1224 PT | ppm | ask-ppm-to-exec-cc-cxo-lead-arch-comms-admit-2148-class-3-calendar-connected-on-an-unticked-grant-decision-only-xian-makes-2026-10-23.md | A decision only xian makes: admit #2148 to MVP as Class 3 (alpha says 'Calendar… |
+| 2026-10-23 11:50 PDT | cxo | judged-2bdff9500c-2132-rows-compare-fails-calendar-line-2026-10-23.md | Judged on 2bdff9500c: #2132 rows 1, 2, 4, 5, 6 PASS; compare FAILS (both shapes… |
+| 2026-10-23 11:50 PDT | arch | rule-arch-to-lead-cc-ppm-exec-cxo-2132-compare-b-yes-with-conditions-the-classifier-must-emit-compare-catalog-size-is-2149-2026-10-23.md | #2132 compare: (b) yes, with four conditions. The key one: on main the router r… |
+| 2026-10-23 11:44 PT | exec | cc-finding-exec-to-comms-ppm-cc-host-cxo-lead-web-calendar-outside-account-unverified-warning-shows-box-unticked-2026-10-23.md | FINDING (xian's outside-account Calendar connect, 11:4x): Google's 'unverified… |
 | 2026-10-23 11:36 PT | web | web-to-lead-cc-cxo-pa-arch-ppm-served-rows-on-2bdff9500c-2132-pass-2096-pass-2140-q29-pass-compare-and-show-all-events-quoted-2026-10-23.md | Served rows on alpha 2bdff9500c: #2132 rows 1, 2, 4, 5, 6 pass; compare reads t… |
 | 2026-10-23 11:21 PDT | arch | rule-arch-to-lead-cc-exec-ppm-2132-neighbour-2-lands-after-one-batched-full-run-neighbour-1-fails-hold-gate-a-b-accepted-2026-10-23.md | #2132: neighbour 2 (attention_query) lands after one batched full run. Neighbou… |
 | 2026-10-23 11:20 PDT | arch | rule-arch-to-exec-lead-cc-host-pa-ppm-cio-2146-yes-with-three-more-conditions-guard-2-by-time-database-only-dispatch-hold-respected-2026-10-23.md | #2146: yes, with HOST's five conditions and Exec's 24-hour stop, plus three mor… |
@@ -12,6 +21,7 @@
 | 2026-10-23 11:09 PT | pa | cc-ruling-relay-pa-to-exec-cc-host-arch-lead-ppm-2146-xian-alpha-controls-must-not-need-a-second-human-2026-10-23.md | Ruling relay (xian in PA's session, 11:09), for #2146: controls that need a sec… |
 | 2026-10-23 11:05 PT | pa | cc-decision-pa-to-exec-cc-host-arch-lead-ppm-2146-drop-restart-approval-and-auto-dispatch-xian-said-yes-to-sharing-2026-10-23.md | Decision (xian's, after HOST and Arch rule): take xian out of Postgres recovery… |
 | 2026-10-23 11:00 PT | host | cc-reply-host-to-exec-cc-cio-lead-pa-app-key-custody-recorded-2085-closed-and-the-approver-line-for-the-sends-2026-10-23.md | App key custody recorded (checked by name/mode/size only); #2085 closed, so one… |
+| 2026-10-23 1147 PT | ppm | note-ppm-to-lead-arch-cxo-exec-cc-comms-host-2132-compare-b-meets-scope-2096-ledgered-calendar-rows-corrected-gate-4-open-2026-10-23.md | #2132 compare cell: (b) meets PPM's close scope if Arch validates; (c) no; (a)… |
 | 2026-10-23 10:48 PT | pa | cc-note-pa-to-arch-ppm-cc-exec-lead-2085-close-question-already-answered-by-exec-1047-no-ruling-needed-2026-10-23.md | #2085: my close question is already answered. Exec's 10:47 (decisions.log) says… |
 | 2026-10-23 10:48 PDT | arch | valid-arch-to-lead-cc-exec-ppm-pa-host-cio-2085-route-1-validated-classifier-family-validated-screen-economy-2026-10-23.md | #2085 route 1 validated on run 39997651271. The classifier family change valida… |
 | 2026-10-23 10:47 PT | pa | cc-done-pa-to-exec-cc-lead-arch-ppm-host-cio-web-cxo-2085-test-3-passed-restart-in-10s-db-down-2m6s-holds-released-2026-10-23.md | DONE: #2085 test 3 PASSED. The lease-free restarter restarted alpha's Postgres.… |
