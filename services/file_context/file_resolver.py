@@ -137,6 +137,31 @@ class FileResolver:
                 return days
         return DEFAULT_TEMPORAL_WINDOW_DAYS
 
+    async def _candidate_files(self, original_message: str, session_id: str) -> list:
+        """The files a reference can resolve to (uploads + artifacts, owner-scoped)."""
+        if self.is_temporal_reference(original_message):
+            # For temporal references, search across sessions (but scoped to
+            # this user) within the stated — or default — window (#1661).
+            window_days = self.temporal_window_days(original_message)
+            files = await self.repo.get_recent_files_all_sessions(session_id, days=window_days)
+            return files + await self._artifact_candidates(session_id, days=window_days)
+        # Get all files for the current session
+        files = await self.repo.get_files_for_session(session_id, limit=20)
+        return files + await self._artifact_candidates(session_id)
+
+    async def exact_name_matches(self, intent: Intent, session_id: str) -> list:
+        """#2132 (Arch 10-23): only the files whose stored name the message names
+        verbatim: the resolver's own exact-match set (the 0.98 tier), never a
+        recency or type guess. Same candidates and predicate as
+        ``resolve_file_reference``'s explicit-filename step."""
+        original_message = intent.context.get("original_message", "").lower()
+        files = await self._candidate_files(original_message, session_id)
+        return [
+            f
+            for f in files
+            if f.filename and self._filename_in_message(f.filename, original_message)
+        ]
+
     async def resolve_file_reference(
         self, intent: Intent, session_id: str
     ) -> Tuple[Optional[str], float]:
@@ -146,18 +171,7 @@ class FileResolver:
         """
         original_message = intent.context.get("original_message", "").lower()
 
-        is_temporal_reference = self.is_temporal_reference(original_message)
-
-        if is_temporal_reference:
-            # For temporal references, search across sessions (but scoped to
-            # this user) within the stated — or default — window (#1661).
-            window_days = self.temporal_window_days(original_message)
-            files = await self.repo.get_recent_files_all_sessions(session_id, days=window_days)
-            files = files + await self._artifact_candidates(session_id, days=window_days)
-        else:
-            # Get all files for the current session
-            files = await self.repo.get_files_for_session(session_id, limit=20)
-            files = files + await self._artifact_candidates(session_id)
+        files = await self._candidate_files(original_message, session_id)
 
         if not files:
             return None, 0.0
