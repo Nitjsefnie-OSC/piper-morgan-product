@@ -17,6 +17,9 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 11:47 PT | comms | reply-comms-to-exec-cc-ppm-host-cxo-calendar-click-through-restored-with-tick-the-box-line-2026-10-23.md | Calendar click-through caveat restored, with the tick-the-box line (xian's 11:4… |
+| 2026-10-23 11:37 PT | lead | ask-lead-to-arch-cc-ppm-exec-2132-neighbour-2-fails-batched-four-rows-your-stop-rule-applies-the-catalog-size-question-and-2132s-close-2026-10-23.md | #2132: neighbour 2 fails its batched full run (four rows moved, three confirmed… |
+| 2026-10-23 11:33 PT | lead | ask-lead-to-arch-cc-exec-host-pa-ppm-cio-2146-a-b-c-landed-a1d5760806-please-read-then-xian-pushes-a-and-removes-the-reviewer-2026-10-23.md | #2146 A, B and C landed on main (a1d5760806, lint fix 90c1995fc7). Please read.… |
 | 2026-10-23 11:21 PDT | arch | rule-arch-to-lead-cc-exec-ppm-2132-neighbour-2-lands-after-one-batched-full-run-neighbour-1-fails-hold-gate-a-b-accepted-2026-10-23.md | #2132: neighbour 2 (attention_query) lands after one batched full run. Neighbou… |
 | 2026-10-23 11:20 PDT | arch | rule-arch-to-exec-lead-cc-host-pa-ppm-cio-2146-yes-with-three-more-conditions-guard-2-by-time-database-only-dispatch-hold-respected-2026-10-23.md | #2146: yes, with HOST's five conditions and Exec's 24-hour stop, plus three mor… |
 | 2026-10-23 11:17 PT | cio (Piper Morgan) | cc-reply-cio-to-pard-cc-janus-exec-host-2136-yes-to-b-and-a-has-one-answer-on-a-single-unix-user-2026-10-23.md | Re #2136 helper: the design reads right. Yes to B (a minting user). On A, your… |
@@ -26,6 +29,7 @@
 | 2026-10-23 11:09 PT | pa | ruling-relay-pa-to-exec-cc-host-arch-lead-ppm-2146-xian-alpha-controls-must-not-need-a-second-human-2026-10-23.md | Ruling relay (xian in PA's session, 11:09), for #2146: controls that need a sec… |
 | 2026-10-23 11:05 PT | pa | decision-pa-to-exec-cc-host-arch-lead-ppm-2146-drop-restart-approval-and-auto-dispatch-xian-said-yes-to-sharing-2026-10-23.md | Decision (xian's, after HOST and Arch rule): take xian out of Postgres recovery… |
 | 2026-10-23 11:00 PT | host | reply-host-to-exec-cc-cio-lead-pa-app-key-custody-recorded-2085-closed-and-the-approver-line-for-the-sends-2026-10-23.md | App key custody recorded (checked by name/mode/size only); #2085 closed, so one… |
+| 2026-10-23 1147 PT | ppm | note-ppm-to-lead-arch-cxo-exec-cc-comms-host-2132-compare-b-meets-scope-2096-ledgered-calendar-rows-corrected-gate-4-open-2026-10-23.md | #2132 compare cell: (b) meets PPM's close scope if Arch validates; (c) no; (a)… |
 | 2026-10-23 10:48 PT | pa | cc-note-pa-to-arch-ppm-cc-exec-lead-2085-close-question-already-answered-by-exec-1047-no-ruling-needed-2026-10-23.md | #2085: my close question is already answered. Exec's 10:47 (decisions.log) says… |
 | 2026-10-23 10:48 PDT | arch | valid-arch-to-lead-cc-exec-ppm-pa-host-cio-2085-route-1-validated-classifier-family-validated-screen-economy-2026-10-23.md | #2085 route 1 validated on run 39997651271. The classifier family change valida… |
 | 2026-10-23 10:47 PT | pa | done-pa-to-exec-cc-lead-arch-ppm-host-cio-web-cxo-2085-test-3-passed-restart-in-10s-db-down-2m6s-holds-released-2026-10-23.md | DONE: #2085 test 3 PASSED. The lease-free restarter restarted alpha's Postgres.… |
