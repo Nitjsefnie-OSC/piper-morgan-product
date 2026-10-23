@@ -3,15 +3,17 @@
 Arch (2026-10-22 15:05, 16:24): which handler owns an ask is meaning, routed by
 corpus rows and entry descriptions; a handler checks state only. A document
 ask resolves in order to (1) a file of the user's the turn binds, (2) a Notion
-title the classifier extracted, with the page named, (3) CXO's line. Never the
+title (the router's title arg, else a classifier slot), with the page named, (3) CXO's line. Never the
 top hit of a search on the bare message. compare_documents follows the same
 rule with two files. Creating several issues from a meeting is a READ decline
 in CXO's words; create stays single-issue.
 
 There is no chat-session file list in the product (uploads and artifacts are
-owner-scoped and carry no session id), so "bound" means an explicit id or a
-name equal to one of the user's file names. These pins run with no LLM and no
-database: the DB and analyzer boundaries are stubbed.
+owner-scoped and carry no session id), so a held file is what the summarize
+rail's FileResolver binds from the message at its confident tiers: a stored
+filename named verbatim, or "the file I uploaded" with exactly one file. These
+pins run with no LLM and no database: the DB, resolver and analyzer boundaries
+are stubbed.
 """
 
 from pathlib import Path
@@ -63,157 +65,119 @@ def _notion_router():
 
 
 # ---------------------------------------------------------------------------
-# 1. analyze_document: a held (bound) file comes before any Notion step
+# 1. analyze_document: a held file (the summarize rail's resolver) comes first
 # ---------------------------------------------------------------------------
+
+_HELD = "services.intent_service.document_handlers.resolve_held_files"
+_ANALYZE = "services.intent_service.document_handlers.handle_analyze_document"
+_NOTION = "services.integrations.notion.notion_integration_router.NotionIntegrationRouter"
+
+
+def _analyze_intent(message, **ctx):
+    return Intent(
+        category=IntentCategory.ANALYSIS,
+        action="analyze_document",
+        original_message=message,
+        context={"original_message": message, **ctx},
+    )
 
 
 class TestHeldFileFirst:
     @pytest.mark.asyncio
-    async def test_named_held_file_is_read_and_notion_is_not_searched(self, intent_service):
-        intent = Intent(
-            category=IntentCategory.ANALYSIS,
-            action="analyze_document",
-            context={
-                "original_message": "Analyze q3-plan.pdf",
-                "user_id": _USER,
-                "filename": "q3-plan.pdf",
-            },
-        )
+    async def test_owned_upload_named_with_notion_unavailable_is_analyzed(self, intent_service):
+        """Lead's served case (Web, alpha fc183c41bc, Notion NOT connected):
+        "Analyze launch-notes-2131.txt" after the upload got the
+        Notion-not-connected line. The file is read first; no Notion line."""
+        intent = _analyze_intent("Analyze launch-notes-2131.txt", user_id=_USER)
         router = _notion_router()
-        resolve = AsyncMock(return_value=[{"file_id": "f-1", "filename": "q3-plan.pdf"}])
+        router.is_available.return_value = False
+        held = AsyncMock(return_value=[{"file_id": "f-1", "filename": None}])
         analyze = AsyncMock(
             return_value={
                 "file_id": "f-1",
-                "filename": "q3-plan.pdf",
-                "summary": "A plan for Q3.",
-                "key_findings": ["Ship the beta"],
+                "filename": "launch-notes-2131.txt",
+                "summary": "Launch notes.",
+                "key_findings": ["Ship Friday"],
                 "recommendations": [],
             }
         )
         with (
-            patch(
-                "services.integrations.notion.notion_integration_router.NotionIntegrationRouter",
-                return_value=router,
-            ),
-            patch("services.intent_service.document_handlers.resolve_bound_files", resolve),
-            patch("services.intent_service.document_handlers.handle_analyze_document", analyze),
+            patch(_NOTION, return_value=router),
+            patch(_HELD, held),
+            patch(_ANALYZE, analyze),
         ):
             result = await intent_service._handle_analyze_document_notion(intent, "wf", "s")
 
-        router.search_notion.assert_not_called()
-        router.get_page.assert_not_called()
+        held.assert_awaited_once_with("Analyze launch-notes-2131.txt", _USER, "analyze_document")
         analyze.assert_awaited_once_with("f-1", _USER)
-        assert resolve.await_args.kwargs["names"] == ["q3-plan.pdf"]
-        assert result.message.startswith("I read 'q3-plan.pdf' from your files.")
-        assert "A plan for Q3." in result.message
+        router.search_notion.assert_not_called()
+        router.is_available.assert_not_called()
         assert "Notion" not in result.message
+        assert "can't read your Notion pages" not in result.message
+        assert result.message.startswith("I read 'launch-notes-2131.txt' from your files.")
+        assert "Launch notes." in result.message and "- Ship Friday" in result.message
 
     @pytest.mark.asyncio
-    async def test_held_file_wins_even_when_notion_is_not_connected(self, intent_service):
-        intent = Intent(
-            category=IntentCategory.ANALYSIS,
-            action="analyze_document",
-            context={"user_id": _USER, "file_id": "f-9"},
-        )
+    async def test_named_held_file_beats_a_connected_notion(self, intent_service):
+        intent = _analyze_intent("Analyze q3-plan.pdf", user_id=_USER)
+        router = _notion_router()
+        with (
+            patch(_NOTION, return_value=router),
+            patch(_HELD, AsyncMock(return_value=[{"file_id": "f-2", "filename": None}])),
+            patch(
+                _ANALYZE,
+                AsyncMock(
+                    return_value={"file_id": "f-2", "filename": "q3-plan.pdf", "summary": "S"}
+                ),
+            ),
+        ):
+            result = await intent_service._handle_analyze_document_notion(intent, "wf", "s")
+        router.search_notion.assert_not_called()
+        assert result.message.startswith("I read 'q3-plan.pdf' from your files.")
+
+    @pytest.mark.asyncio
+    async def test_nothing_held_and_notion_unavailable_gets_the_notion_line(self, intent_service):
+        intent = _analyze_intent("Analyze launch-notes-2131.txt", user_id=_USER)
         router = _notion_router()
         router.is_available.return_value = False
-        with (
-            patch(
-                "services.integrations.notion.notion_integration_router.NotionIntegrationRouter",
-                return_value=router,
-            ),
-            patch(
-                "services.intent_service.document_handlers.resolve_bound_files",
-                AsyncMock(return_value=[{"file_id": "f-9", "filename": "notes.md"}]),
-            ),
-            patch(
-                "services.intent_service.document_handlers.handle_analyze_document",
-                AsyncMock(return_value={"file_id": "f-9", "filename": "notes.md", "summary": "S"}),
-            ),
-        ):
-            result = await intent_service._handle_analyze_document_notion(intent, "wf", "s")
-        assert result.message.startswith("I read 'notes.md' from your files.")
-        router.is_available.assert_not_called()
-
-    @pytest.mark.asyncio
-    async def test_a_name_that_binds_no_held_file_still_goes_to_the_notion_title_search(
-        self, intent_service
-    ):
-        intent = Intent(
-            category=IntentCategory.ANALYSIS,
-            action="analyze_document",
-            context={"user_id": _USER, "document_title": "Q4 Roadmap"},
-        )
-        router = _notion_router()
         analyze = AsyncMock()
         with (
-            patch(
-                "services.integrations.notion.notion_integration_router.NotionIntegrationRouter",
-                return_value=router,
-            ),
-            patch(
-                "services.intent_service.document_handlers.resolve_bound_files",
-                AsyncMock(return_value=[]),
-            ),
-            patch("services.intent_service.document_handlers.handle_analyze_document", analyze),
+            patch(_NOTION, return_value=router),
+            patch(_HELD, AsyncMock(return_value=[])),
+            patch(_ANALYZE, analyze),
         ):
             result = await intent_service._handle_analyze_document_notion(intent, "wf", "s")
         analyze.assert_not_called()
-        assert router.search_notion.await_args.kwargs["query"] == "Q4 Roadmap"
-        assert result.message.startswith("I read 'Some Page' in Notion.")
+        assert "can't read your Notion pages in chat yet" in result.message
 
     @pytest.mark.asyncio
-    async def test_two_held_files_bearing_the_name_are_listed_and_neither_is_read(
-        self, intent_service
-    ):
-        intent = Intent(
-            category=IntentCategory.ANALYSIS,
-            action="analyze_document",
-            context={"user_id": _USER, "filename": "notes.md"},
-        )
+    async def test_several_named_files_are_listed_and_none_is_read(self, intent_service):
+        intent = _analyze_intent("Analyze notes.md", user_id=_USER)
         analyze = AsyncMock()
         with (
             patch(
-                "services.intent_service.document_handlers.resolve_bound_files",
+                _HELD,
                 AsyncMock(
                     return_value=[
                         {"file_id": "a", "filename": "notes.md"},
-                        {"file_id": "b", "filename": "Notes.md"},
+                        {"file_id": "b", "filename": "notes.md"},
                     ]
                 ),
             ),
-            patch("services.intent_service.document_handlers.handle_analyze_document", analyze),
+            patch(_ANALYZE, analyze),
         ):
             result = await intent_service._handle_analyze_document_notion(intent, "wf", "s")
         analyze.assert_not_called()
+        assert result.message.count("- notes.md") == 2
         assert "?" not in result.message  # stated, not asked (#1730)
-        assert "- notes.md" in result.message and "- Notes.md" in result.message
 
     @pytest.mark.asyncio
-    async def test_deictic_ask_with_nothing_bound_never_touches_the_file_store(
-        self, intent_service
-    ):
-        """No session file list exists, so an unnamed 'this document' binds
-        nothing: no file lookup runs, and with Notion connected the reply is
-        CXO's line with no search (the 6d726c5221 pin, re-run with a principal)."""
-        intent = Intent(
-            category=IntentCategory.ANALYSIS,
-            action="analyze_document",
-            context={"original_message": "Analyze this document", "user_id": _USER},
-        )
-        router = _notion_router()
-        resolve = AsyncMock(return_value=[])
-        with (
-            patch(
-                "services.integrations.notion.notion_integration_router.NotionIntegrationRouter",
-                return_value=router,
-            ),
-            patch("services.intent_service.document_handlers.resolve_bound_files", resolve),
-        ):
-            result = await intent_service._handle_analyze_document_notion(intent, "wf", "s")
-        resolve.assert_not_called()
-        router.search_notion.assert_not_called()
-        assert result.message == NO_DOC_LINE
+    async def test_a_bound_notion_page_id_skips_the_file_lookup(self, intent_service):
+        intent = _analyze_intent("Analyze it", user_id=_USER, document_id="page-x")
+        held = AsyncMock(return_value=[])
+        with patch(_NOTION, return_value=_notion_router()), patch(_HELD, held):
+            await intent_service._handle_analyze_document_notion(intent, "wf", "s")
+        held.assert_not_called()
 
 
 # ---------------------------------------------------------------------------
@@ -248,10 +212,7 @@ async def _run_with_router(intent_service, intent):
     router.get_page = AsyncMock(
         return_value={"title": "PRD Writing Guidelines", "url": "https://notion.so/prd"}
     )
-    with patch(
-        "services.integrations.notion.notion_integration_router.NotionIntegrationRouter",
-        return_value=router,
-    ):
+    with patch(_NOTION, return_value=router):
         result = await intent_service._handle_analyze_document_notion(intent, "wf", "s")
     return router, result
 
@@ -264,6 +225,18 @@ class TestRouterTitleArg:
             {"title": "PRD Writing Guidelines"},
         )
         router, result = await _run_with_router(intent_service, intent)
+        assert router.search_notion.await_args.kwargs["query"] == "PRD Writing Guidelines"
+        assert result.message.startswith("I read 'PRD Writing Guidelines' in Notion.")
+
+    @pytest.mark.asyncio
+    async def test_router_title_after_no_held_file_is_searched(self, intent_service):
+        intent = _router_intent(
+            "Analyze the document called PRD Writing Guidelines",
+            {"title": "PRD Writing Guidelines"},
+        )
+        intent.context["user_id"] = _USER
+        with patch(_HELD, AsyncMock(return_value=[])):
+            router, result = await _run_with_router(intent_service, intent)
         assert router.search_notion.await_args.kwargs["query"] == "PRD Writing Guidelines"
         assert result.message.startswith("I read 'PRD Writing Guidelines' in Notion.")
 
@@ -302,53 +275,106 @@ class TestRouterTitleArg:
         router.search_notion.assert_not_called()
         assert result.message == NO_DOC_LINE
 
-    @pytest.mark.asyncio
-    async def test_router_title_naming_a_held_file_reads_the_file_not_notion(self, intent_service):
-        intent = _router_intent("Analyze q3-plan.pdf", {"title": "q3-plan.pdf"})
-        intent.context["user_id"] = _USER
-        resolve = AsyncMock(return_value=[{"file_id": "f-1", "filename": "q3-plan.pdf"}])
+
+# ---------------------------------------------------------------------------
+# 2. resolve_held_files: the summarize rail's FileResolver, confident binds only
+# ---------------------------------------------------------------------------
+
+
+class _Scope:
+    async def __aenter__(self):
+        return MagicMock()
+
+    async def __aexit__(self, *exc):
+        return False
+
+
+def _resolver_returning(result=None, raises=None):
+    resolver = MagicMock()
+    if raises is not None:
+        resolver.resolve_file_reference = AsyncMock(side_effect=raises)
+    else:
+        resolver.resolve_file_reference = AsyncMock(return_value=result)
+    return resolver
+
+
+class TestResolveHeldFiles:
+    async def _run(self, resolver, message="Analyze launch-notes-2131.txt"):
+        from services.intent_service import document_handlers
+
         with (
-            patch("services.intent_service.document_handlers.resolve_bound_files", resolve),
-            patch(
-                "services.intent_service.document_handlers.handle_analyze_document",
-                AsyncMock(
-                    return_value={"file_id": "f-1", "filename": "q3-plan.pdf", "summary": "S"}
-                ),
+            patch.object(
+                document_handlers.AsyncSessionFactory, "session_scope", return_value=_Scope()
             ),
+            patch("services.file_context.file_resolver.FileResolver", return_value=resolver),
         ):
-            router, result = await _run_with_router(intent_service, intent)
-        router.search_notion.assert_not_called()
-        assert resolve.await_args.kwargs["names"] == ["q3-plan.pdf"]
-        assert result.message.startswith("I read 'q3-plan.pdf' from your files.")
+            return await document_handlers.resolve_held_files(message, _USER, "analyze_document")
 
-
-# ---------------------------------------------------------------------------
-# 2. resolve_bound_files: state only, nothing guessed
-# ---------------------------------------------------------------------------
-
-
-class TestResolveBoundFiles:
     @pytest.mark.asyncio
-    async def test_nothing_named_reads_nothing(self):
+    async def test_no_user_or_message_reads_nothing(self):
         from services.intent_service import document_handlers
 
         with patch.object(document_handlers, "AsyncSessionFactory") as factory:
-            assert await document_handlers.resolve_bound_files(_USER) == []
-            assert await document_handlers.resolve_bound_files(None, names=["a.md"]) == []
-            factory.session_scope_fresh.assert_not_called()
+            assert await document_handlers.resolve_held_files("Analyze x.txt", None, "a") == []
+            assert await document_handlers.resolve_held_files("", _USER, "a") == []
+            factory.session_scope.assert_not_called()
+
+    @pytest.mark.asyncio
+    async def test_a_named_file_binds(self):
+        resolver = _resolver_returning(("f-1", 0.98))
+        assert await self._run(resolver) == [{"file_id": "f-1", "filename": None}]
+        view = resolver.resolve_file_reference.await_args.args[0]
+        assert view.context["original_message"] == "Analyze launch-notes-2131.txt"
+        assert resolver.resolve_file_reference.await_args.args[1] == _USER
+
+    @pytest.mark.asyncio
+    async def test_a_scored_pick_binds_nothing(self):
+        """'Analyze this document' with uploads on the account: the resolver's
+        recency/type score would pick one. That is a guessed referent."""
+        assert await self._run(_resolver_returning(("f-1", 0.62)), "Analyze this document") == []
+
+    @pytest.mark.asyncio
+    async def test_nothing_resolved_binds_nothing(self):
+        assert await self._run(_resolver_returning((None, 0.0))) == []
+
+    @pytest.mark.asyncio
+    async def test_exact_name_ambiguity_returns_every_named_file(self):
+        from services.file_context.exceptions import AmbiguousFileReferenceError
+
+        files = [MagicMock(id="a", filename="a.md"), MagicMock(id="b", filename="b.md")]
+        got = await self._run(
+            _resolver_returning(raises=AmbiguousFileReferenceError(files, [0.98, 0.98])),
+            "Compare a.md and b.md",
+        )
+        assert got == [{"file_id": "a", "filename": "a.md"}, {"file_id": "b", "filename": "b.md"}]
+
+    @pytest.mark.asyncio
+    async def test_scored_ambiguity_binds_nothing(self):
+        from services.file_context.exceptions import AmbiguousFileReferenceError
+
+        files = [MagicMock(id="a", filename="a.md"), MagicMock(id="b", filename="b.md")]
+        got = await self._run(
+            _resolver_returning(raises=AmbiguousFileReferenceError(files, [0.6, 0.55])),
+            "Compare these two documents",
+        )
+        assert got == []
 
 
 # ---------------------------------------------------------------------------
-# 3. compare_documents: an entry, READ, two bound files or CXO's line
+# 3. compare_documents: an entry, READ, two named files or CXO's line
 # ---------------------------------------------------------------------------
 
 
-def _compare_intent(**ctx):
+def _compare_intent(message="Compare these two documents", **ctx):
     return Intent(
         category=IntentCategory.ANALYSIS,
         action="compare_documents",
-        context={"original_message": "Compare these two documents", **ctx},
+        original_message=message,
+        context={"original_message": message, **ctx},
     )
+
+
+_COMPARE = "services.intent_service.document_handlers.handle_compare_documents"
 
 
 class TestCompareDocuments:
@@ -367,7 +393,7 @@ class TestCompareDocuments:
     @pytest.mark.asyncio
     async def test_nothing_bound_gets_cxos_line_and_no_compare(self):
         compare = AsyncMock()
-        with patch("services.intent_service.document_handlers.handle_compare_documents", compare):
+        with patch(_HELD, AsyncMock(return_value=[])), patch(_COMPARE, compare):
             result = await run_compare_documents_workflow(
                 session_id="s", user_id=_USER, context={"intent": _compare_intent()}
             )
@@ -375,40 +401,23 @@ class TestCompareDocuments:
         compare.assert_not_called()
 
     @pytest.mark.asyncio
-    async def test_one_bound_file_is_fewer_than_two(self):
+    async def test_one_named_file_is_fewer_than_two(self):
         compare = AsyncMock()
         with (
-            patch(
-                "services.intent_service.document_handlers.resolve_bound_files",
-                AsyncMock(return_value=[{"file_id": "a", "filename": "a.md"}]),
-            ),
-            patch("services.intent_service.document_handlers.handle_compare_documents", compare),
+            patch(_HELD, AsyncMock(return_value=[{"file_id": "a", "filename": None}])),
+            patch(_COMPARE, compare),
         ):
             result = await run_compare_documents_workflow(
                 session_id="s",
                 user_id=_USER,
-                context={"intent": _compare_intent(filenames=["a.md", "b.md"])},
+                context={"intent": _compare_intent("Compare a.md with the other one")},
             )
         assert result.message == CXO_COMPARE_LINE
         compare.assert_not_called()
 
     @pytest.mark.asyncio
-    async def test_router_titles_bind_only_words_the_user_said(self):
-        resolve = AsyncMock(return_value=[])
-        intent = _compare_intent(
-            original_message="Compare spec-v1.md with the other one",
-            inversion_args={"titles": ["spec-v1.md", "invented.md"]},
-        )
-        with patch("services.intent_service.document_handlers.resolve_bound_files", resolve):
-            result = await run_compare_documents_workflow(
-                session_id="s", user_id=_USER, context={"intent": intent}
-            )
-        assert resolve.await_args.kwargs["names"] == ["spec-v1.md"]
-        assert result.message == CXO_COMPARE_LINE
-
-    @pytest.mark.asyncio
-    async def test_two_bound_files_are_compared_by_id_and_named(self):
-        resolve = AsyncMock(
+    async def test_two_named_files_are_compared_by_id_and_named(self):
+        held = AsyncMock(
             return_value=[
                 {"file_id": "a", "filename": "spec-v1.md"},
                 {"file_id": "b", "filename": "spec-v2.md"},
@@ -421,19 +430,27 @@ class TestCompareDocuments:
                 "comparison": "v2 adds search.",
             }
         )
-        with (
-            patch("services.intent_service.document_handlers.resolve_bound_files", resolve),
-            patch("services.intent_service.document_handlers.handle_compare_documents", compare),
-        ):
+        with patch(_HELD, held), patch(_COMPARE, compare):
             result = await run_compare_documents_workflow(
                 session_id="s",
                 user_id=_USER,
-                context={"intent": _compare_intent(file_ids=["a", "b"])},
+                context={"intent": _compare_intent("Compare spec-v1.md and spec-v2.md")},
             )
+        held.assert_awaited_once_with(
+            "Compare spec-v1.md and spec-v2.md", _USER, "compare_documents"
+        )
         compare.assert_awaited_once_with(["a", "b"], user_id=_USER)
-        assert resolve.await_args.kwargs["uploads_only"] is True
         assert result.message.startswith("I compared 'spec-v1.md', 'spec-v2.md' from your files.")
         assert "v2 adds search." in result.message
+
+    @pytest.mark.asyncio
+    async def test_a_failed_file_read_is_not_reported_as_no_documents(self):
+        with patch(_HELD, AsyncMock(side_effect=RuntimeError("db down"))):
+            result = await run_compare_documents_workflow(
+                session_id="s", user_id=_USER, context={"intent": _compare_intent()}
+            )
+        assert result.success is False
+        assert result.message != CXO_COMPARE_LINE
 
 
 # ---------------------------------------------------------------------------

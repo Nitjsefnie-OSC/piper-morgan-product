@@ -12,7 +12,7 @@ Each handler:
 """
 
 from pathlib import Path
-from typing import Dict, List, Optional, Sequence
+from typing import Dict, List, Optional
 from uuid import UUID
 
 import structlog
@@ -160,79 +160,61 @@ async def handle_analyze_document(file_id: str, user_id: str) -> Dict:
         }
 
 
-async def resolve_bound_files(
-    user_id: str,
-    *,
-    file_ids: Sequence[str] = (),
-    names: Sequence[str] = (),
-    uploads_only: bool = False,
-) -> List[Dict[str, str]]:
-    """The user's files that THIS turn binds by id or exact name (#2132).
+# #2132: the resolver confidence a held-file binding needs. FileResolver
+# returns 0.98 for a stored filename named verbatim in the message and 0.95
+# for "the file I uploaded" when the user has exactly one file; below that it
+# is a recency/type score over every file the user owns, which would bind an
+# unnamed "this document" to whatever scored best (Arch 15:05: never a guessed
+# referent). A state check on the resolver's own output, not on the message.
+HELD_FILE_MIN_CONFIDENCE = 0.95
 
-    Arch (2026-10-22 15:05): a document ask resolves only to a bound referent,
-    and a held file comes first. There is no chat-session-scoped file list in
-    this product: uploads and artifacts are owner-scoped (``owner_id``, #1312)
-    and carry no session or conversation id, and chat turns carry no file
-    context (Arch 16:24). So "held" here means what the turn itself names: an
-    explicit file id, or a name equal (case-insensitive) to the filename the
-    Files page shows for one of the user's uploads (or saved artifacts, the
-    /files view's other half, #1657). Nothing is guessed: no recency pick, no
-    fuzzy score, no "the only file you have". A name that matches nothing
-    binds nothing.
 
-    Returns ``[{"file_id", "filename"}]`` in request order, deduplicated.
-    ``uploads_only`` limits the view to uploads (handle_compare_documents reads
-    upload storage only).
+async def resolve_held_files(message: str, user_id: Optional[str], action: str) -> List[Dict]:
+    """The user's files this turn names, via the SAME resolver summarize uses (#2132).
+
+    Reuses ``FileResolver(FileRepository, artifact_repository=ArtifactRepository)
+    .resolve_file_reference`` exactly as ``run_summarize_document_workflow``
+    does (uploads ∪ artifacts, owner-scoped, #1312/#1657); this function adds
+    no lookup of its own. There is no chat-session file list in the product,
+    so "held" is what the resolver binds from the message: a stored filename
+    named verbatim (several named → several returned, the resolver's
+    exact-match ambiguity), or "the file I uploaded" with exactly one file.
+    A lower-confidence (scored) pick or a scored ambiguity binds nothing.
+
+    Returns ``[{"file_id", "filename"}]`` (``filename`` None when the resolver
+    returned only an id); empty when nothing is bound or there is no user.
     """
-    wanted_ids = [str(i) for i in file_ids if i]
-    wanted_names = [str(n).strip().lower() for n in names if n and str(n).strip()]
-    if not user_id or not (wanted_ids or wanted_names):
+    if not user_id or not message:
         return []
 
-    from sqlalchemy import func, or_
+    from services.database.repositories import ArtifactRepository
+    from services.domain.models import Intent
+    from services.file_context.exceptions import AmbiguousFileReferenceError
+    from services.file_context.file_resolver import FileResolver
+    from services.repositories.file_repository import FileRepository
+    from services.shared_types import IntentCategory
 
-    found: List[Dict[str, str]] = []
-    seen: set = set()
-
-    def _add(file_id: str, filename: str) -> None:
-        if file_id not in seen:
-            seen.add(file_id)
-            found.append({"file_id": file_id, "filename": filename})
-
-    async with AsyncSessionFactory.session_scope_fresh() as session:
-        clauses = []
-        if wanted_ids:
-            clauses.append(UploadedFileDB.id.in_(wanted_ids))
-        if wanted_names:
-            clauses.append(func.lower(UploadedFileDB.filename).in_(wanted_names))
-        stmt = select(UploadedFileDB).where(UploadedFileDB.owner_id == user_id, or_(*clauses))
-        uploads = (await session.execute(stmt)).scalars().all()
-        for row in uploads:
-            _add(str(row.id), str(row.filename))
-
-        if not uploads_only:
-            from services.database.repositories import ArtifactRepository
-            from services.file_context.artifact_view import artifact_filename
-
-            artifacts = ArtifactRepository(session)
-            for file_id in wanted_ids:
-                if file_id in seen:
-                    continue
-                artifact = await artifacts.get_by_id(file_id, owner_id=user_id)
-                if artifact is not None:
-                    _add(
-                        str(artifact.id),
-                        artifact_filename((artifact.payload or {}).get("title"), artifact.id),
-                    )
-            if wanted_names:
-                for artifact in await artifacts.list_for_owner(
-                    user_id, source_type="generated", limit=50
-                ):
-                    name = artifact_filename((artifact.payload or {}).get("title"), artifact.id)
-                    if name.lower() in wanted_names:
-                        _add(str(artifact.id), name)
-
-    return found
+    # A detached view, never the turn's own intent (the summarize convention).
+    resolver_view = Intent(
+        category=IntentCategory.ANALYSIS,
+        action=action,
+        original_message=message,
+        context={"original_message": message},
+    )
+    try:
+        async with AsyncSessionFactory.session_scope() as session:
+            resolver = FileResolver(
+                FileRepository(session),
+                artifact_repository=ArtifactRepository(session),
+            )
+            file_id, confidence = await resolver.resolve_file_reference(resolver_view, user_id)
+    except AmbiguousFileReferenceError as e:
+        if e.scores and all(s >= HELD_FILE_MIN_CONFIDENCE for s in e.scores):
+            return [{"file_id": str(f.id), "filename": f.filename} for f in e.files]
+        return []
+    if file_id and confidence >= HELD_FILE_MIN_CONFIDENCE:
+        return [{"file_id": str(file_id), "filename": None}]
+    return []
 
 
 async def handle_question_document(file_id: str, question: str, user_id: str) -> Dict:

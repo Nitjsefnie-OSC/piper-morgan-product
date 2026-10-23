@@ -1429,18 +1429,19 @@ async def run_compare_documents_workflow(
     user_id: Optional[str] = None,
     context: Optional[Dict[str, Any]] = None,
 ) -> Any:
-    """#2132: compare two or more of the user's files the turn binds, else CXO's line.
+    """#2132: compare two or more of the user's files the turn names, else CXO's line.
 
     The classifier normalizes "compare" to ``compare_documents`` (classifier.py
     action normalization) and, before this entry, no rail key caught it: the
     turn fell to the floor or, on other samples, to analyze_data's repository
     metrics (Q37). Referent rule (Arch 15:05): at least two bound files →
     ``document_handlers.handle_compare_documents`` (the REST compare path);
-    fewer → CXO's line. Binding is state (``resolve_bound_files``): explicit
-    ``file_ids`` or ``filenames`` slots equal to the user's own upload names.
-    There is no chat-session file list, so a bare "these two documents" binds
-    nothing and gets the line, true by construction (Arch 16:24). Uploads only:
-    the compare handler reads upload storage.
+    fewer → CXO's line. Binding reuses the summarize rail's FileResolver
+    (``resolve_held_files``): two or more stored filenames named in the
+    message come back as the resolver's exact-match set. There is no
+    chat-session file list, so a bare "these two documents" binds nothing and
+    gets the line (Arch 16:24). The compare handler reads upload storage, so
+    a named saved artifact surfaces as the honest could-not-read reply.
     """
     from services.intent.intent_service import IntentProcessingResult
 
@@ -1464,39 +1465,22 @@ async def run_compare_documents_workflow(
             requires_clarification=False,
         )
 
-    def _as_list(value) -> list:
-        if not value:
-            return []
-        if isinstance(value, (list, tuple)):
-            return [v for v in value if v]
-        return [value]
-
-    file_ids = _as_list(intent_context.get("file_ids"))
-    names = _as_list(intent_context.get("filenames"))
-    # The live router's ``titles`` arg (context["inversion_args"], the
-    # #1943/#2069 family), each element honesty-guarded: every word must
-    # occur in the user's message (#1976), so an LLM-written name never binds
-    # a file the user did not name. A failing element is dropped; binding
-    # then needs two real matches anyway.
-    router_args = intent_context.get("inversion_args")
-    if isinstance(router_args, dict):
-        from services.onboarding.portfolio_service import user_said_every_word
-
-        message = (getattr(intent, "original_message", "") or "") or intent_context.get(
-            "original_message", ""
-        )
-        for raw in _as_list(router_args.get("titles"))[:5]:
-            said = user_said_every_word(raw, message)
-            if said:
-                names.append(said)
-
+    message = (getattr(intent, "original_message", "") or "") or intent_context.get(
+        "original_message", ""
+    )
     bound: list = []
-    if user_id and (file_ids or names):
-        from services.intent_service.document_handlers import resolve_bound_files
+    if user_id and message:
+        from services.intent_service.document_handlers import resolve_held_files
 
-        bound = await resolve_bound_files(
-            user_id, file_ids=file_ids, names=names, uploads_only=True
-        )
+        try:
+            bound = await resolve_held_files(message, user_id, "compare_documents")
+        except Exception as e:  # silent-ok: error-logged; a failed read is not "no documents" — honest degrade, success=False (#1425)
+            logger.error("compare_documents_resolve_failed", error=str(e), user_id=user_id)
+            return _result(
+                "I had trouble reading your files just now. You can try again in a moment.",
+                success=False,
+                reason="resolve_failed",
+            )
 
     if len(bound) < 2 or not user_id:
         return _result(
@@ -3677,8 +3661,7 @@ def register_default_workflows() -> None:
         outwardness=Outwardness.PRIVATE,
         description=(
             "Compare two or more documents the user names from their uploaded files; "
-            "with fewer than two named, it asks them to paste both texts. "
-            "Put the names the user gave in args: titles = a list of strings"
+            "with fewer than two named, it asks them to paste both texts"
         ),
         requires_context=["intent"],
         action_triggered=True,

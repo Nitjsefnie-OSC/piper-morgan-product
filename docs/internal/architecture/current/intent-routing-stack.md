@@ -6136,20 +6136,24 @@ Paste the text here and I'll work with it." Never the top hit of a search on the
 
 - **There is no chat-session file list.** Uploads (`UploadedFileDB`) and artifacts are owner-scoped (`owner_id`,
   #1312) and carry no session id; `FileRepository.get_files_for_session` is legacy naming for an owner query, and
-  chat turns carry no file context. So "held" means what the turn binds by state:
-  `document_handlers.resolve_bound_files` matches an explicit `file_id`/`file_ids`, or a name equal
-  (case-insensitive) to one of the user's file names. No recency pick, no fuzzy score. An unnamed "this document"
-  binds nothing.
+  chat turns carry no file context. So "held" is what the summarize rail's own resolver binds from the message:
+  `document_handlers.resolve_held_files` runs `FileResolver(FileRepository, artifact_repository=ArtifactRepository)
+  .resolve_file_reference` exactly as `run_summarize_document_workflow` does, and keeps only its confident tiers
+  (`HELD_FILE_MIN_CONFIDENCE` 0.95: a stored filename named verbatim at 0.98, "the file I uploaded" with exactly one
+  file at 0.95; several named files come back as its exact-match ambiguity set). A scored recency/type pick (below
+  0.95) binds nothing, so an unnamed "this document" never lands on whatever file scored best. The analyze handler
+  runs it BEFORE every Notion step, the availability check included (Web, alpha fc183c41bc: "Analyze
+  launch-notes-2131.txt" after an upload got the Notion-not-connected line). Several files bearing the named name
+  are listed, not asked about (an ask must arm the #846 store, #1730).
 - **Title source on a served turn:** nothing sets `document_title` on the chat path (no classifier slot produces
   it). `_handle_analyze_document_notion` reads the live router's `title` arg from `context["inversion_args"]`
   (`intent_service._router_document_title`), guarded the #1976/#2069 way (`user_said_every_word`, bounded length)
   plus a value check that the arg is not only deictic/noun words ("this document", "it"), the add_project
-  bare-noun precedent. The classifier slots `document_title`/`filename` stay the fallback. The analyze_document
-  description declares the arg ("Put the name the user gave in args: title = their words for it");
-  `compare_documents` declares `titles` (a list). The shadow scorer's `args_match` now compares `title` (it was
+  bare-noun precedent; it runs only after no held file resolved. The classifier slots `document_title`/`filename` stay the fallback. The analyze_document
+  description declares the arg ("Put the name the user gave in args: title = their words for it"). The shadow scorer's `args_match` now compares `title` (it was
   asserted on the #2098 update_issue row but unscored).
-- **Entries:** `compare_documents` (READ, PRIVATE, `read_referent` by analogy with analyze_document; ≥2 bound
-  uploads → `handle_compare_documents`, else CXO's "I don't see two documents in this chat. Paste the text of both
+- **Entries:** `compare_documents` (READ, PRIVATE, `read_referent` by analogy with analyze_document; ≥2 files
+  the resolver binds → `handle_compare_documents`, else CXO's "I don't see two documents in this chat. Paste the text of both
   here and I'll compare them."). `decline_batch_issues_from_meeting` (READ, PRIVATE, **ungrouped**, flips by its own
   op token like `clear_todos`; CXO's "I can't create several issues from a meeting yet. Tell me the first action
   item and I'll create it."). The name avoids `create_issues_from_meeting`/`batch_create_issues`, which the #1426

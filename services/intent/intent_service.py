@@ -6185,39 +6185,31 @@ class IntentService:
     async def _analyze_bound_held_file(
         self, intent: Intent, workflow_id: str
     ) -> Optional[IntentProcessingResult]:
-        """#2132 step 1: analyze the user's file this turn binds, else None.
+        """#2132 step 1: analyze the user's file this turn names, else None.
 
-        Binding is by state (``document_handlers.resolve_bound_files``): an
-        explicit ``file_id``, or a ``document_title``/``filename`` slot equal to
-        one of the user's file names. A Notion page id (``document_id`` /
-        ``page_id``) means the turn bound a Notion page, so no held file is
-        looked up. Two files bearing the asked name → ask which, never pick.
+        Resolution is the SAME FileResolver the summarize rail uses
+        (``document_handlers.resolve_held_files``): a stored filename named in
+        the message, or "the file I uploaded" with exactly one file. It runs
+        before every Notion step, the availability check included (Web, alpha
+        fc183c41bc: "Analyze launch-notes-2131.txt" after an upload got the
+        Notion-not-connected line). A Notion page id (``document_id`` /
+        ``page_id``) means the turn bound a Notion page, so no file is looked
+        up. Several files bearing the named name → listed, none picked.
         """
         ctx = intent.context or {}
         if ctx.get("document_id") or ctx.get("page_id"):
             return None
         user_id = _principal_from_intent(intent)
-        file_id = ctx.get("file_id")
-        names = [
-            n
-            for n in (
-                _router_document_title(intent),
-                ctx.get("document_title"),
-                ctx.get("filename"),
-            )
-            if n
-        ]
-        if not user_id or not (file_id or names):
+        message = getattr(intent, "original_message", None) or ctx.get("original_message") or ""
+        if not user_id or not message:
             return None
 
         from services.intent_service.document_handlers import (
             handle_analyze_document,
-            resolve_bound_files,
+            resolve_held_files,
         )
 
-        bound = await resolve_bound_files(
-            user_id, file_ids=[file_id] if file_id else [], names=names
-        )
+        bound = await resolve_held_files(message, user_id, "analyze_document")
         if not bound:
             return None
 
@@ -6248,8 +6240,8 @@ class IntentService:
             return IntentProcessingResult(
                 success=False,
                 message=(
-                    f"I found '{held['filename']}' in your files but couldn't read its "
-                    "content. It may have been removed. Try uploading it again."
+                    f"I found '{held['filename'] or 'that file'}' in your files but couldn't "
+                    "read its content. It may have been removed. Try uploading it again."
                 ),
                 intent_data={**intent_data, "file_id": held["file_id"]},
                 workflow_id=workflow_id,
