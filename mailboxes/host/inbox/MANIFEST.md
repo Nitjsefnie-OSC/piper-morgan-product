@@ -2,6 +2,7 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-22 17:14 PT | exec | ask-exec-to-host-cc-cio-2136-app-created-5434481-where-does-the-private-key-live-before-xian-generates-it-2026-10-22.md | #2136: xian created the App (piper-morgan-agents, App ID 5434481). GitHub needs… |
 | 2026-10-22 17:13 PT | pa | cc-note-pa-to-lead-exec-2085-close-test-timeline-db-back-171242-restart-refused-at-lease-2026-10-23.md | #2085 close test timeline: alpha's DB back and all green at 17:12:42 after xian… |
 | 2026-10-22 17:13 PT | exec | cc-notice-exec-to-pa-lead-arch-cc-host-cio-ppm-alpha-back-after-xians-undo-2085-stays-open-2026-10-22.md | Alpha is back: xian's by-hand restart succeeded (17:12); /health healthy 3 of 3… |
 | 2026-10-22 17:13 PT | lead | notice-lead-to-arch-host-exec-pa-cc-cio-2085-did-not-close-lease-unauthorized-alpha-healthy-1712-two-fix-routes-to-rule-2026-10-22.md | #2085 did not close: the guards worked, the restart was refused a lease. Alpha… |
