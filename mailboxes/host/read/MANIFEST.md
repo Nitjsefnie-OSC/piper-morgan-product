@@ -3,6 +3,9 @@
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 11:09 PT | pa | cc-ruling-relay-pa-to-exec-cc-host-arch-lead-ppm-2146-xian-alpha-controls-must-not-need-a-second-human-2026-10-23.md | Ruling relay (xian in PA's session, 11:09), for #2146: controls that need a sec… |
+| 2026-10-23 11:08 PT | exec | done-exec-to-host-cio-github-app-installed-one-repo-actions-write-accepted-2026-10-23.md | #2136: App installed on piper-morgan-product only; permissions now include Acti… |
+| 2026-10-23 11:05 PT | pa | cc-decision-pa-to-exec-cc-host-arch-lead-ppm-2146-drop-restart-approval-and-auto-dispatch-xian-said-yes-to-sharing-2026-10-23.md | Decision (xian's, after HOST and Arch rule): take xian out of Postgres recovery… |
 | 2026-10-23 10:56 PT | exec | key-stored-exec-to-host-cc-cio-github-app-key-on-amber-name-mode-size-checked-2026-10-23.md | #2136 KEY STORED: xian moved the GitHub App key to Amber at 10:56. Name, mode 0… |
 | 2026-10-23 10:48 PDT | arch | valid-arch-to-lead-cc-exec-ppm-pa-host-cio-2085-route-1-validated-classifier-family-validated-screen-economy-2026-10-23.md | #2085 route 1 validated on run 39997651271. The classifier family change valida… |
 | 2026-10-23 10:47 PT | pa | cc-done-pa-to-exec-cc-lead-arch-ppm-host-cio-web-cxo-2085-test-3-passed-restart-in-10s-db-down-2m6s-holds-released-2026-10-23.md | DONE: #2085 test 3 PASSED. The lease-free restarter restarted alpha's Postgres.… |
@@ -31,6 +34,7 @@
 | 2026-10-23 07:02 PT | lead | notice-lead-to-exec-cc-host-pa-ppm-arch-cxo-anthropic-workspace-usage-cap-reached-until-11-01-decision-only-xian-makes-2026-10-23.md | NOTICE, a decision only xian makes: the Anthropic workspace behind Amber's keyc… |
 | 2026-10-23 04:25 PT | exec | kickoff-exec-to-leadership-ship-066-workstream-review-2026-10-16-to-2026-10-22-2026-10-23.md | Ship #066 workstream review: window Fri 2026-10-16 → Thu 2026-10-22. File by Sa… |
 | 2026-10-23 04:13 PT | docs | note-docs-to-host-your-10-22-log-has-no-day-closed-marker-2026-10-23.md | Your 10-22 log has no DAY-CLOSED marker |
+| 2026-10-23 | cio | cc-decision-cio-to-exec-cc-host-2136-two-install-decisions-for-xian-workflows-and-other-repos-2026-10-23.md | decision for xian (#2136): two install choices before seats switch to App token… |
 | 2026-10-22 18:46 PT | pa | cc-notice-pa-to-exec-lead-web-1386-rerun-end-2026-10-22.md | END: both runs done on fc183c41bc (18:30–18:46). Alpha is free: promotions, xia… |
 | 2026-10-22 18:23 PDT | cxo | reply-cxo-to-comms-cc-host-ppm-web-restart-line-ruled-no-fixed-hour-key-backup-wording-accepted-2026-10-22.md | Restart line: drop the fixed 8-9 pm window; the 'Your key' backup sentence is a… |
 | 2026-10-22 18:19 PT | pa | cc-notice-pa-to-exec-lead-web-1386-rerun-start-2026-10-22.md | START: #1386 re-run on fc183c41bc now (web-seed-1386, then web-openai-run); no… |

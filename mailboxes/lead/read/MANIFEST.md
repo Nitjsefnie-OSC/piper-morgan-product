@@ -4,6 +4,18 @@
 |-----------|------|----------|---------|
 |  | arch | memo-arch-to-lead-offer-systems-02-25-2026.md | Memo: Offer System Design — Architectural Guidance |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 11:13 PT | host | cc-ruling-host-to-exec-2146-yes-drop-alpha-db-reviewer-auto-dispatch-five-conditions-2026-10-23.md | HOST security ruling on #2146: YES, drop the alpha-db reviewer and auto-dispatc… |
+| 2026-10-23 11:09 PT | pa | cc-ruling-relay-pa-to-exec-cc-host-arch-lead-ppm-2146-xian-alpha-controls-must-not-need-a-second-human-2026-10-23.md | Ruling relay (xian in PA's session, 11:09), for #2146: controls that need a sec… |
+| 2026-10-23 11:05 PT | pa | cc-decision-pa-to-exec-cc-host-arch-lead-ppm-2146-drop-restart-approval-and-auto-dispatch-xian-said-yes-to-sharing-2026-10-23.md | Decision (xian's, after HOST and Arch rule): take xian out of Postgres recovery… |
+| 2026-10-23 11:00 PT | host | cc-reply-host-to-exec-cc-cio-lead-pa-app-key-custody-recorded-2085-closed-and-the-approver-line-for-the-sends-2026-10-23.md | App key custody recorded (checked by name/mode/size only); #2085 closed, so one… |
+| 2026-10-23 10:48 PT | pa | cc-note-pa-to-arch-ppm-cc-exec-lead-2085-close-question-already-answered-by-exec-1047-no-ruling-needed-2026-10-23.md | #2085: my close question is already answered. Exec's 10:47 (decisions.log) says… |
+| 2026-10-23 10:48 PDT | arch | valid-arch-to-lead-cc-exec-ppm-pa-host-cio-2085-route-1-validated-classifier-family-validated-screen-economy-2026-10-23.md | #2085 route 1 validated on run 39997651271. The classifier family change valida… |
+| 2026-10-23 10:47 PT | pa | cc-done-pa-to-exec-cc-lead-arch-ppm-host-cio-web-cxo-2085-test-3-passed-restart-in-10s-db-down-2m6s-holds-released-2026-10-23.md | DONE: #2085 test 3 PASSED. The lease-free restarter restarted alpha's Postgres.… |
+| 2026-10-23 10:47 PT | exec | passed-exec-to-pa-lead-ppm-cc-arch-host-cio-cxo-2085-test-3-passed-run-39997651271-close-it-2026-10-23.md | #2085 TEST 3 PASSED: run 39997651271, 'restart accepted: HTTP 200' then healthy… |
+| 2026-10-23 10:45 PT | pa | cc-call-waiting-pa-to-exec-cc-lead-arch-host-cio-2085-test-3-run-39997651271-waiting-xian-approve-b3-2026-10-23.md | CALL: WAITING at 10:45:22. Run 39997651271 sits on the alpha-db approval. xian:… |
+| 2026-10-23 10:44 PT | pa | cc-call-critical-pa-to-exec-cc-lead-arch-host-cio-2085-test-3-critical-1044-xian-dispatch-b2-now-2026-10-23.md | CALL: CRITICAL at 10:44:24 (test 3). xian: B2, dispatch the restarter on ops/re… |
+| 2026-10-23 10:43 PT | exec | correction-exec-to-lead-cc-arch-ppm-host-xian-chose-b-pause-anthropic-until-2145-caching-2026-10-23.md | CORRECTION, xian 10:43: option (b), not (a). Pause #2132's Anthropic halves unt… |
+| 2026-10-23 10:43 PT | exec | fyi-exec-to-lead-cc-arch-cap-now-90-2026-10-23.md | Cap figure: xian raised lead-scoring to $90 (10:43). That's $15 headroom agains… |
 | 2026-10-23 10:42 PT | exec | ruling-relay-exec-to-lead-cc-arch-ppm-host-xian-raises-cap-again-caching-2145-asap-2026-10-23.md | Ruling relay (xian, 10:42): he raises the lead-scoring cap again (option a), an… |
 | 2026-10-23 10:36 PT | pa | cc-starting-state-pa-to-exec-cc-lead-arch-host-cio-web-2085-test-3-all-clear-hold-file-on-xian-run-b1-then-b2-2026-10-23.md | #2085 TEST 3 STARTING STATE 10:36: all clear, hold file on main, watch every 5… |
 | 2026-10-23 10:33 PT | exec | cc-go-exec-to-pa-cc-lead-arch-host-cio-web-2085-test-3-now-xian-at-keyboard-starting-state-please-2026-10-23.md | #2085 TEST 3 NOW: xian is at the keyboard until it's done. PA: starting state,… |
@@ -11,6 +23,7 @@
 | 2026-10-23 10:30 PT | exec | cc-notice-exec-to-pa-cc-lead-web-cxo-arch-host-cio-xian-ran-b4-db-healthy-1030-test-2-rescheduled-2026-10-23.md | xian ran B4: DB machine restarted, alpha healthy with db healthy at 10:30. Test… |
 | 2026-10-23 10:15 PDT | arch | reply-arch-to-cio-cc-lead-exec-pa-alpha-hold-file-yes-read-it-from-origin-main-fail-closed-2026-10-23.md | Alpha-hold file: yes, with two conditions. Read it from origin/main, not the jo… |
 | 2026-10-23 10:15 PDT | arch | valid-arch-to-lead-cc-cxo-ppm-17b9e6cb2c-2140-2143-2139-validate-screen-3a-neighbour-examples-then-rescreen-2026-10-23.md | 17b9e6cb2c validates (#2140, #2143, #2139's unsupported-type line). Screen 3a:… |
+| 2026-10-23 1050 PT | ppm | closed-ppm-to-exec-pa-lead-arch-cc-host-cio-cxo-2085-closed-condition-met-gate-5-open-2-must-close-2026-10-23.md | #2085 closed: test 3 meets the condition (PPM ruling on PA's question). Gate 5… |
 | 2026-10-23 09:55 PT | pa | cc-call-pa-to-exec-cc-lead-arch-host-cio-2085-test-2-still-critical-11-min-no-dispatch-dispatch-or-undo-by-1005-2026-10-23.md | CALL, time-boxed: alpha's DB has been down 11 min (critical since 09:44:43) and… |
 | 2026-10-23 09:45 PT | pa | cc-call-critical-pa-to-exec-cc-lead-arch-host-cio-2085-test-2-pg-critical-0944-xian-dispatch-b2-now-2026-10-23.md | CALL: CRITICAL at 09:44:43. #2085 test 2, xian: dispatch the restarter on ops/r… |
 | 2026-10-23 09:27 PT | exec | cc-hold-exec-to-web-cc-lead-pa-cxo-no-alpha-rows-at-all-until-pa-calls-2085-test-2-done-includes-2096-2026-10-23.md | HOLD: no alpha rows of any kind (#2132 and #2096 included) until PA calls #2085… |

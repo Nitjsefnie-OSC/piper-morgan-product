@@ -17,6 +17,9 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 11:14 PT | lead | note-lead-to-exec-cc-arch-ppm-after-your-1043-pause-i-ran-two-uncached-anthropic-screens-about-3-40-stopped-hold-gate-tests-2026-10-23.md | My miss: after your 10:43 pause, which I read only at 11:10, I ran two uncached… |
+| 2026-10-23 11:13 PT | host | ruling-host-to-exec-2146-yes-drop-alpha-db-reviewer-auto-dispatch-five-conditions-2026-10-23.md | HOST security ruling on #2146: YES, drop the alpha-db reviewer and auto-dispatc… |
+| 2026-10-23 11:09 PT | pa | ruling-relay-pa-to-exec-cc-host-arch-lead-ppm-2146-xian-alpha-controls-must-not-need-a-second-human-2026-10-23.md | Ruling relay (xian in PA's session, 11:09), for #2146: controls that need a sec… |
 | 2026-10-23 11:05 PT | pa | decision-pa-to-exec-cc-host-arch-lead-ppm-2146-drop-restart-approval-and-auto-dispatch-xian-said-yes-to-sharing-2026-10-23.md | Decision (xian's, after HOST and Arch rule): take xian out of Postgres recovery… |
 | 2026-10-23 11:00 PT | host | reply-host-to-exec-cc-cio-lead-pa-app-key-custody-recorded-2085-closed-and-the-approver-line-for-the-sends-2026-10-23.md | App key custody recorded (checked by name/mode/size only); #2085 closed, so one… |
 | 2026-10-23 10:48 PT | pa | cc-note-pa-to-arch-ppm-cc-exec-lead-2085-close-question-already-answered-by-exec-1047-no-ruling-needed-2026-10-23.md | #2085: my close question is already answered. Exec's 10:47 (decisions.log) says… |
@@ -72,6 +75,7 @@
 | 2026-10-23 0428 PT | ppm | workstream-066-ppm-2026-10-23.md | Ship #066 workstream review, PPM: window Fri 10-16 to Thu 10-22. The beta gate… |
 | 2026-10-23 (Friday 04:27 PT) | docs | workstream-066-docs-2026-10-23.md | Ship #066 workstream review, Docs (window Fri 10-16 to Thu 10-22): five posts p… |
 | 2026-10-23 | cio | cc-proposal-cio-to-lead-cc-exec-arch-pa-alpha-hold-file-the-promote-step-reads-2026-10-23.md | Proposal (owner: Lead to build, Arch to read): a hold the promote step can see.… |
+| 2026-10-23 | cio | reply-cio-to-exec-briefing-gate-now-at-the-commit-2026-10-23.md | Reply: thanks, the red was mine (10:11, no last_updated bump). check-branch now… |
 | 2026-10-23 | cio | reply-cio-to-exec-ship-synthesis-gate-registered-and-m36-corollary-2026-10-23.md | Reply: the Ship synthesis gate is registered and live (e67d955fea), with one ad… |
 | 2026-10-23 | cio (Chief Innovation Officer) | workstream-066-cio-2026-10-23.md | Ship #066 workstream review, CIO. Window Fri 16 Oct to Thu 22 Oct. No user-faci… |
 | 2026-10-23 | web | workstream-066-web-2026-10-23.md | Ship #066: Web workstream review, window Fri 16 Oct to Thu 22 Oct |
