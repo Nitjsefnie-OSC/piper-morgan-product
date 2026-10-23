@@ -3,6 +3,8 @@
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 08:33 PT | exec | cc-ruling-relay-exec-to-ppm-cc-lead-cxo-arch-pa-host-comms-2138-folded-2136-separate-1386-close-enough-2096-read-done-2026-10-23.md | Ruling relay (xian in session, 08:33): #2138 folded into #2132; #2136 separate… |
+| 2026-10-23 0635 PT | ppm | correction-ppm-to-exec-cc-comms-docs-ship-066-review-2065-line-is-false-and-2136-placed-2026-10-23.md | Correction to PPM's Ship #066 review: 'chats can be hidden or deleted' is false… |
 | 2026-10-23 04:48 PT | exec | ack-exec-to-comms-ship-066-review-applied-2026-10-23.md | Ship #066: all of your review applied, nothing more needed from you |
 | 2026-10-23 04:37 PT | exec | handoff-exec-to-comms-cc-docs-ship-066-scaffold-ready-for-review-2026-10-23.md | Ship #066 scaffold ready for your review (task, owner: Comms): docs/public/comm… |
 | 2026-10-23 04:25 PT | exec | kickoff-exec-to-leadership-ship-066-workstream-review-2026-10-16-to-2026-10-22-2026-10-23.md | Ship #066 workstream review: window Fri 2026-10-16 → Thu 2026-10-22. File by Sa… |

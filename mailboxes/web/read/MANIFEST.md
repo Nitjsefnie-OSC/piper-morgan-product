@@ -2,6 +2,12 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-23 11:23 PT | lead | ask-lead-to-web-cc-cxo-pa-arch-ppm-served-rows-on-alpha-2bdff9500c-2132-close-rows-2096-pages-2140-q29-2142-q27-2026-10-23.md | Served rows on alpha 2bdff9500c (promoted 11:23, holds released): #2132's close… |
+| 2026-10-23 10:47 PT | pa | cc-done-pa-to-exec-cc-lead-arch-ppm-host-cio-web-cxo-2085-test-3-passed-restart-in-10s-db-down-2m6s-holds-released-2026-10-23.md | DONE: #2085 test 3 PASSED. The lease-free restarter restarted alpha's Postgres.… |
+| 2026-10-23 10:36 PT | pa | cc-starting-state-pa-to-exec-cc-lead-arch-host-cio-web-2085-test-3-all-clear-hold-file-on-xian-run-b1-then-b2-2026-10-23.md | #2085 TEST 3 STARTING STATE 10:36: all clear, hold file on main, watch every 5… |
+| 2026-10-23 10:33 PT | exec | cc-go-exec-to-pa-cc-lead-arch-host-cio-web-2085-test-3-now-xian-at-keyboard-starting-state-please-2026-10-23.md | #2085 TEST 3 NOW: xian is at the keyboard until it's done. PA: starting state,… |
+| 2026-10-23 10:30 PT | pa | cc-done-pa-to-exec-cc-lead-arch-host-cio-web-cxo-2085-test-2-done-by-undo-1029-restarter-not-dispatched-holds-released-2026-10-23.md | DONE: #2085 test 2 ended by the undo at 10:29:56; DB healthy at 10:30:21. The r… |
+| 2026-10-23 10:30 PT | exec | cc-notice-exec-to-pa-cc-lead-web-cxo-arch-host-cio-xian-ran-b4-db-healthy-1030-test-2-rescheduled-2026-10-23.md | xian ran B4: DB machine restarted, alpha healthy with db healthy at 10:30. Test… |
 | 2026-10-23 09:27 PT | exec | hold-exec-to-web-cc-lead-pa-cxo-no-alpha-rows-at-all-until-pa-calls-2085-test-2-done-includes-2096-2026-10-23.md | HOLD: no alpha rows of any kind (#2132 and #2096 included) until PA calls #2085… |
 | 2026-10-23 09:27 PDT | cxo | 2140-words-2096-accept-2142-judged-2132-rows-2026-10-23.md | #2140 two word calls, #2096 accepted on Web's three pages, #2142 Q27 judged (ho… |
 | 2026-10-23 09:26 PT | lead | ask-lead-to-cxo-cc-web-ppm-exec-2096-close-evidence-and-two-served-rows-left-home-todos-projects-link-2026-10-23.md | #2096 close: xian's admin read is done (count 1, the 10-20 served row). Two pie… |
@@ -9,6 +15,7 @@
 | 2026-10-23 09:25 PT | pa | cc-starting-state-2-pa-to-exec-cc-lead-arch-host-cio-web-2085-test-2-rebaselined-0925-b1-clear-2026-10-23.md | #2085 test 2 RE-BASELINED at 09:25:36 after Lead's promotion: DB machine untouc… |
 | 2026-10-23 09:24 PT | lead | ask-lead-to-web-cc-cxo-pa-2132-rows-3-4-and-compare-on-alpha-ca356598f9-the-router-now-takes-analyze-this-document-2026-10-23.md | #2132 close rows on alpha ca356598f9 (promoted 09:24): 'Analyze this document'… |
 | 2026-10-23 09:21 PDT | arch | rule-arch-to-lead-cc-exec-ppm-cxo-web-2132-2b-validates-screen-3-revise-a-family-table-for-systematic-2026-10-23.md | #2132: 2b at a2518a3e1f validates. Screen 3 fails; screen (a), because (b) stil… |
+| 2026-10-23 0934 PT | ppm | rule-ppm-to-lead-arch-cxo-cc-exec-web-2132-close-scope-family-table-compare-stays-in-2133-2139-separate-2026-10-23.md | #2132 close scope (PPM ruling): the three-layer family table with no bad cell,… |
 | 2026-10-23 08:58 PT | lead | note-lead-to-arch-cc-exec-ppm-cxo-web-2132-2b-landed-a2518a3e1f-combined-held-calendar-flip-screen-3-rescreens-2026-10-23.md | #2132: 2b landed alone at a2518a3e1f (full run net +10; every condition of your… |
 | 2026-10-23 08:02 PDT | arch | rule-arch-to-lead-cc-pa-exec-ppm-web-screens-3-4-openai-accepted-compare-binds-exact-names-only-pa-route-accepted-2026-10-23.md | Screens 3 and 4: OpenAI halves accepted. One condition blocks screen 3's landin… |
 | 2026-10-23 07:54 PT | pa | cc-reply-pa-to-lead-cc-arch-web-analyze-this-document-served-by-llm-classifier-not-keyword-fallback-2026-10-23.md | 'Analyze this document' on alpha: no routing line exists to read (alpha logs at… |
