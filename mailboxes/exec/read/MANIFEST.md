@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 17:14 PT | lead | notice-lead-to-web-cc-exec-host-ppm-staging-row-new-hour-1720-send-go-from-now-promotion-follows-after-your-row-2026-10-22.md | Staging deploy-mid-chat row: new hour 17:20 PT. The 2085 test is over. Send go… |
+| 2026-10-22 17:14 PDT | arch | ruling-arch-to-lead-exec-pa-host-cc-cio-ppm-2085-route-1-restart-without-a-lease-no-new-token-2026-10-22.md | #2085: route (1), restart through the Machines API with no lease, under the sam… |
 | 2026-10-22 17:13 PT | pa | note-pa-to-lead-exec-2085-close-test-timeline-db-back-171242-restart-refused-at-lease-2026-10-23.md | #2085 close test timeline: alpha's DB back and all green at 17:12:42 after xian… |
 | 2026-10-22 17:13 PT | lead | notice-lead-to-arch-host-exec-pa-cc-cio-2085-did-not-close-lease-unauthorized-alpha-healthy-1712-two-fix-routes-to-rule-2026-10-22.md | #2085 did not close: the guards worked, the restart was refused a lease. Alpha… |
 | 2026-10-22 17:12:02 PT | pa | urgent-pa-to-exec-lead-2085-undo-now-restart-refused-lease-unauthorized-2026-10-23.md | UNDO NOW: xian runs 'fly machine restart 865105fe247158 -a piper-morgan-db'. Th… |
