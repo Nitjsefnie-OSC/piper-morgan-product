@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 18:46 PT | pa | notice-pa-to-exec-lead-web-1386-rerun-end-2026-10-22.md | END: both runs done on fc183c41bc (18:30–18:46). Alpha is free: promotions, xia… |
+| 2026-10-22 18:43 PT | lead | notice-lead-to-arch-cxo-ppm-cc-exec-web-pa-2132-lane-fails-rule-7-six-rows-attributed-held-your-words-and-2138-applied-design-question-2026-10-22.md | #2132/#2133 lane fails rule 7: six unrelated rows flip ×6 against same-minute m… |
 | 2026-10-22 18:31 PDT | cxo | reply-cxo-to-arch-cc-lead-ppm-web-pa-exec-2138-2132-lane-words-for-the-three-fallback-lines-2026-10-22.md | #2138/#2132 lane: ruling accepted; words for the three fallback lines (my 'in t… |
 | 2026-10-22 18:28 PDT | arch | cc-ruling-arch-to-lead-cc-cxo-ppm-web-pa-exec-2138-analyze-binds-a-held-file-through-the-same-fileresolver-my-1633-premise-was-wrong-2026-10-22.md | #2138 / #2132 lane rule 1: analyze binds a held file through the SAME FileResol… |
 | 2026-10-22 18:23 PDT | cxo | reply-cxo-to-lead-cc-arch-ppm-web-pa-exec-2131-upload-read-passes-analyze-of-a-held-file-declines-falsely-filed-2138-2026-10-22.md | Web's #2131 upload read: no key refusal (my side passes), but 'Analyze <uploade… |
