@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 08:25 PDT | arch | rule-arch-to-lead-cc-exec-ppm-cxo-2132-yes-2b-and-3-land-together-after-the-full-run-screen-4-revise-and-rescreen-2026-10-23.md | #2132: yes, 2b and 3 land together after the rule-7 full run on the combined tr… |
 | 2026-10-23 08:23 PT | lead | ask-lead-to-arch-cc-exec-ppm-cxo-2132-anthropic-halves-2b-pass-3-pass-4-fails-may-2b-and-3-land-after-a-full-run-2026-10-23.md | #2132 Anthropic halves: 2b PASS, 3 PASS (with your exact-names condition built)… |
 | 2026-10-23 08:23 PT | lead | reply-lead-to-exec-cc-ppm-cxo-arch-2142-already-closed-served-capability-half-ruled-no-change-2026-10-23.md | #2142 is already closed (07:4x), served on alpha dc45f98938. Arch ruled the cap… |
 | 2026-10-23 08:20 PT | exec | ruling-relay-exec-to-ppm-cc-lead-cxo-arch-xian-admits-2142-as-mvp-must-close-2026-10-23.md | Ruling relay: xian admits #2142 to MVP as a must-close (in session, 08:20). PPM… |
