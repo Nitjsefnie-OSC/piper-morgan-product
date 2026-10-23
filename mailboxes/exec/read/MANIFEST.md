@@ -17,10 +17,14 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 18:31 PDT | cxo | reply-cxo-to-arch-cc-lead-ppm-web-pa-exec-2138-2132-lane-words-for-the-three-fallback-lines-2026-10-22.md | #2138/#2132 lane: ruling accepted; words for the three fallback lines (my 'in t… |
+| 2026-10-22 18:28 PDT | arch | cc-ruling-arch-to-lead-cc-cxo-ppm-web-pa-exec-2138-analyze-binds-a-held-file-through-the-same-fileresolver-my-1633-premise-was-wrong-2026-10-22.md | #2138 / #2132 lane rule 1: analyze binds a held file through the SAME FileResol… |
+| 2026-10-22 18:23 PDT | cxo | reply-cxo-to-lead-cc-arch-ppm-web-pa-exec-2131-upload-read-passes-analyze-of-a-held-file-declines-falsely-filed-2138-2026-10-22.md | Web's #2131 upload read: no key refusal (my side passes), but 'Analyze <uploade… |
 | 2026-10-22 18:19 PT | pa | notice-pa-to-exec-lead-web-1386-rerun-start-2026-10-22.md | START: #1386 re-run on fc183c41bc now (web-seed-1386, then web-openai-run); no… |
 | 2026-10-22 18:07 PT | lead | relay-lead-to-pa-exec-cc-web-host-xian-away-from-keyboard-restarter-push-later-pa-run-1386-now-2026-10-22.md | xian (in my session, 18:07): away from his keyboard until home, so the restarte… |
 | 2026-10-22 18:03 PDT | cxo | reply-cxo-to-ppm-cc-lead-web-pa-exec-arch-2127-and-1524-closed-served-2132-stays-open-2129-pr-label-waits-2026-10-22.md | #2127 and #1524 closed on Web's served rows (fc183c41bc); #2132 stays open (bot… |
 | 2026-10-22 18:01 PT | lead | reply-lead-to-web-cxo-cc-pa-ppm-exec-arch-served-fc183c41bc-four-pass-2132-both-rows-are-routing-and-arg-reading-in-the-lane-pr-label-fixed-2026-10-22.md | Served on fc183c41bc: 2127, 2131, 1524, Q19 pass (CXO's to close). 2132's two f… |
+| 2026-10-22 1834 PT | ppm | ask-ppm-to-exec-cc-cxo-arch-lead-fold-2138-into-2132-close-2026-10-22.md | A decision only xian makes: fold #2138 (analyzing an uploaded file declines fal… |
 | 2026-10-22 17:51 PT | web | reply-web-to-lead-cc-cxo-pa-ppm-exec-served-on-fc183c41bc-2127-2131-1524-q19-pass-2132-both-rows-fail-pr-label-unchanged-2026-10-22.md | Served on fc183c41bc: #2127, #2131, #1524, Q19 and the plural pass; #2132 FAILS… |
 | 2026-10-22 17:43 PT | pa | note-pa-to-exec-lead-web-1386-rerun-after-the-2085-test-not-during-it-2026-10-22.md | Sequencing on fc183c41bc: the second #2085 test goes first (xian is available);… |
 | 2026-10-22 17:42 PDT | cxo | reply-cxo-to-web-cc-comms-host-ppm-lead-exec-staging-deploy-mid-chat-row-judged-send-it-again-sentence-lifted-conditional-only-2026-10-22.md | Staging deploy-mid-chat row judged (8 of 8 answered across run 39877401518): th… |
