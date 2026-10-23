@@ -2,7 +2,7 @@
 type: methodology
 title: Mechanism Beats Vigilance — Promote Recurring Vigilance-Disciplines to Mechanisms
 valid_from: "2026-05-24"
-last_updated: "2026-10-22"
+last_updated: "2026-10-23"
 ---
 
 # Mechanism Beats Vigilance — Promote Recurring Vigilance-Disciplines to Mechanisms
@@ -116,6 +116,34 @@ Promotion has a side effect the diagnostic doesn't cover. Step 3 assumes the lap
 **Evidence (CIO, 2026-10-13, `docs/internal/research/role-duties-operational-vs-official-2026-10-13.md`):** across 11 roles, 13 of 164 written duties had moved into a script, skill step or hook, and **none of those 13 had lapsed**. Of the 37 not seen in 30 days of logs, nearly all were specialist judgement duties: CXO's scoring and voice work, PA's product-shadow moments, CIO's methodology audit (179 days against an 8-week maximum), Arch's ADR audits, PPM's PDR work. Where it was measurable, roles spent 20 to 35% of their entries on their own priorities. CIO spent 0%.
 
 **What to do:** give unmechanizable work a *trigger* with a visible miss, not a mechanism. The role card plus the daily `Drift:` line (duty-cycle-tick v1.51) is the first such trigger. It names priority 1 at every start and asks once a day whether yesterday served it. The check is whether the specialist share moves on a re-run (about 10-27). If it doesn't, the trigger is being written, not acted on, and it needs a cost when missed, such as a dated standing-items row per role. The role-level shape is catalogued as Pattern-075 (Load-Bearing Work Crowded Out by Commodity Work, Emerging, elevated from PP-002 the same day).
+
+## Corollary — a skipped step gets a status line and a gate, not stronger prose (2026-10-23)
+
+xian asked for this after Ship #066, "a little bit of a meta rule … how to make these kinds of instructions more directly operational". Exec drafted it; CIO placed it here, as the shape a Class 2 promotion takes when the lapse is a skipped step in a written procedure.
+
+**The rule.** When a step in a skill or procedure gets skipped, don't make the prose louder. Make the step operational, in two parts:
+
+1. **A next-step line computed from real state, printed where the agent already looks every time** (end-of-fire output, session start, the inbox read, mail-send). It reads the files that define each step and names the skill or command to run next.
+2. **A gate at the point of no return** (commit, send, publish). It refuses the shortcut and says what's missing and how to fix it. Put it on a chokepoint and list what bypasses it (methodology-53).
+
+The prose keeps the *why* and points at both.
+
+**The test.** Could an agent acting in good faith, from memory of last time, still skip it? If yes, the step isn't operational yet. "HARD GATE" written in a skill passed this test's opposite twice.
+
+**Keep the human out of the trigger where you can.** xian invoking the skill by hand each week was rejected because it ties the cycle to his mornings. Part 1 replaces the human reminder; it doesn't add a human step.
+
+**A warning is part 1 only if it's printed where the agent reads.** A warning in the output of a commit that succeeded is easy to miss. `pre-commit-reconcile-drafts.sh` warned that #066's draft had no calendar row, and nobody read it. Warn-only is right for a whole-repo check, which would otherwise block a commit on someone else's drift. The narrow case, a new Ship draft with no row of its own, moved into the gate.
+
+**Instances (2026-10-23):**
+
+| Step skipped | Prose before | Part 1 (status line) | Part 2 (gate) |
+|---|---|---|---|
+| draft-weekly-ship Step 2c (synthesis discussed with xian before any draft), skipped for #054 and #066 | "HARD GATE" in the skill | `scripts/ship-kickoff.sh` prints `ship-status #NNN … NEXT:` on every Exec fire, Friday to Wednesday | `.claude/hooks/pre-commit-ship-synthesis-gate.sh` refuses to add the draft without the discussed synthesis and a calendar row (CIO tested 8 of 8 scratch cases and 1 live block, 10-23) |
+| The Friday Ship kickoff, missed for #064 and #065 | a duty in Exec's briefing | `ship-kickoff.sh` sends it on Exec's first fire after the window closes (eliminates the step) | none needed |
+| The mail v4 daily canary, run on 15 of 41 seat-days (10-22, the Class 2 row above) | a START step | the canary runs inside `mail4.py inbox`, the read the seat already makes | none needed |
+| Guessed `HH:Mx` timestamps | "run `date`, never guess" | `stamp_check` in mail-send and check-branch | mail-send refuses; check-branch only warns. CIO's own guessed stamps continued on 5 of 7 days of Ship #066's window, each fixed before it was committed or sent. A prose rule plus a warning narrows the slip; it hasn't ended it |
+
+The ladder above still applies. The kickoff and the canary *eliminate* the step; the Ship gate *loudly detects* at the point of no return. Prefer elimination where the step has no judgment in it. A step that needs judgment, like the synthesis discussion with xian, can't be eliminated, only gated.
 
 ## Adoption signal — operating as a working cohort frame (2026-06-09)
 

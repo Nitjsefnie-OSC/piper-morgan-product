@@ -147,3 +147,8 @@ Per-version "verified how" notes, moved off the rollup page at xian's ask (2026-
 - v550 (06:42): R1–R7 card links the one-pager; first walk item named.
 - v551 (07:05): workspace-cap card at top (Lead 07:02); precedent DL 10-20 12:00/12:07.
 - v552 (07:25): cap card updated: Arch 07:09 ruling (no landing without Anthropic), web-seed-1386 served normally 07:15 (Lead via Web).
+- v553 (08:11): cap card → answered (xian 08:11 via Lead).
+- v554 (08:20): workstream-review status card at top (xian's Friday ask); #2142 card removed (admitted 08:20); gate 7/4; cap $75.
+- v555 (08:24): gate corrected to 6/3 (#2142 closed 07:49 before admission); cap $50→$75; #2132 Anthropic screens: 2b and 3 pass, 4 fails.
+- v556 (08:33): decided cards removed (2138, 2136); checkpoint answered; Ship card now 'synthesis next, draft on hold'.
+- v557 (08:42): Ship card links the synthesis (QwwNgEVnZCD8TAEULTKiD2); process fix line.

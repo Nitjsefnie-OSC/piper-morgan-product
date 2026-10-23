@@ -1,0 +1,127 @@
+<title>Ship 066 Week Review</title>
+<style>
+/* Layout: one reading column, bottom line first, a glance table, then short scannable sections; tables scroll in their own box. Same system as the Ship 065 review. */
+:root{
+  --bg:#f6f7f9; --fg:#1d232b; --muted:#5b6673; --rule:#d9dee5; --accent:#2b5d8a; --warn:#9a5a00; --ok:#2f6b3f; --card:#ffffff;
+  --display:"Source Serif 4",Georgia,serif; --body:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14181d;--fg:#e4e8ee;--muted:#9aa5b2;--rule:#2c333c;--accent:#7fb1dc;--warn:#e0a54a;--ok:#7cc48e;--card:#1b2027;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#14181d;--fg:#e4e8ee;--muted:#9aa5b2;--rule:#2c333c;--accent:#7fb1dc;--warn:#e0a54a;--ok:#7cc48e;--card:#1b2027;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:15px/1.6 var(--body)}
+.wrap{max-width:720px;margin:0 auto;padding-inline:16px;padding-block:28px 48px}
+h1{font:600 1.9rem/1.2 var(--display);margin:0 0 4px;text-wrap:balance}
+h2{font:600 1.25rem/1.3 var(--display);margin:32px 0 8px;padding-top:12px;border-top:1px solid var(--rule);text-wrap:balance}
+h3{font:600 1rem/1.3 var(--body);margin:18px 0 4px}
+.meta{color:var(--muted);font-size:.85rem;margin:0 0 20px}
+.bluf{background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--accent);padding:14px 16px;border-radius:4px}
+.bluf p{margin:.3em 0}
+ul{padding-left:1.2em;margin:.4em 0}
+li{margin:.3em 0}
+code{font:0.88em var(--mono)}
+.tag{font:600 .72rem var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:1px 6px;border-radius:3px;border:1px solid currentColor;margin-right:4px;white-space:nowrap}
+.ok{color:var(--ok)} .warn{color:var(--warn)}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{color:var(--muted);font-weight:600}
+footer{margin-top:36px;color:var(--muted);font-size:.82rem;border-top:1px solid var(--rule);padding-top:10px}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@400;600&family=Source+Serif+4:wght@600&display=swap">
+<div class="wrap">
+<h1>Ship #066: the week of Oct 16–22</h1>
+<p class="meta">Exec synthesis for our discussion, before any Ship draft. From the seven daily omnibus logs (10-16 to 10-22), all 10 workstream reviews and PA&rsquo;s correction. Draft 1, Fri 10-23. Things that happened after Thursday are marked &ldquo;since Thursday&rdquo;.</p>
+
+<div class="bluf">
+<p><b>Bottom line.</b> Last week&rsquo;s goal was to close what was left on the gate and get it checked on alpha, so that you could judge on 10-23 whether we&rsquo;re on track. <b>That goal was met</b>: you judged it this morning (passing after triage is close enough, with #2132 closed before invitations).</p>
+<p>The gate count started and ended the week at 6, which hides a lot. It peaked at 13 on Monday after your own test run. 31 issues closed on alpha and 32 were admitted, almost every one a place where Piper told a user something false. Alpha was updated 26 times.</p>
+<p>Two things went the wrong way. Alpha&rsquo;s database died twice (about 7&frac12; hours down in total), and the automatic restart isn&rsquo;t proven yet. Main went red from Lead&rsquo;s pushes on most days.</p>
+</div>
+
+<h2>At a glance</h2>
+<div class="tbl"><table>
+<tr><th>Measure</th><th>This week</th><th>Note</th></tr>
+<tr><td>Open MVP issues</td><td>6 &rarr; 6</td><td>Peak 13 (Mon 10-19). 31 closed, 32 admitted. 3 must-close at Thursday&rsquo;s close.</td></tr>
+<tr><td>Must-close now</td><td>3</td><td>#2132 (now with #2138), #2085, #2096. #2142 was admitted and closed today.</td></tr>
+<tr><td>Updates to alpha</td><td>26</td><td>Successful promote runs, 10-16 to 10-22 PT. 6 more dispatches failed or were refused, safely.</td></tr>
+<tr><td>Issues filed / closed</td><td>98 / 79</td><td><code>gh-week-counts.py</code>, Pacific week.</td></tr>
+<tr><td>Database outages</td><td>2</td><td>Mon 4h27m (Postgres stopped), Wed about 2h53m (out of memory at 256&nbsp;MB, now 512&nbsp;MB). Both restarted by your hand.</td></tr>
+<tr><td>#1386 routing</td><td>88.5% raw &rarr; 90.2%</td><td>Bar 90%. One signed relabel.</td></tr>
+<tr><td>#1386 answer quality</td><td>46.3% raw &rarr; 92.7%</td><td>Bar 75%. 18 waivers for terse-but-true answers.</td></tr>
+<tr><td>OpenAI-only accounts</td><td>work, but &minus;21.4 points</td><td>The invitation names Anthropic only.</td></tr>
+<tr><td>Main CI</td><td>red on 5 of 7 days</td><td>Each fixed the same day. None reached alpha.</td></tr>
+<tr><td>Published</td><td>5 posts</td><td>All distributed, including Ship #065.</td></tr>
+</table></div>
+
+<h2>What a user can do now that they couldn&rsquo;t on 10-15</h2>
+<ul>
+<li><span class="tag ok">served</span><b>Get invited and set up without help.</b> Before this week every invited tester ended on &ldquo;Setup Failed&rdquo; (#2078, found in your own run). The hosted wizard now opens on the invite code and skips the local install checks (#2088, #2089).</li>
+<li><span class="tag ok">served</span><b>Use Piper at length without stalls.</b> Every model call held the whole server (#2101). The closing run went 61 of 61 with no stall.</li>
+<li><span class="tag ok">served</span><b>Get true GitHub answers:</b> the next milestone, 20 closed items instead of 0, a PR labelled as a PR, and a revoked connection that says so (#1524, #2128, #2129, #2072, #2076).</li>
+<li><span class="tag ok">served</span><b>Get their real calendar.</b> Three faults were stacked: the Calendar API was off in the Alpha Google project, a refused read showed as &ldquo;no events&rdquo;, and a named weekday read today (#2092, #2091, #2112).</li>
+<li><span class="tag ok">served</span><b>Use only an OpenAI key</b> (#2127, #2131).</li>
+<li><span class="tag ok">served</span><b>Rely on the privacy promises.</b> An emailed delete request really erases the account (#2064). Logs keep no user text (#2059). Uploads never fall back to plaintext (#2061). No test result is shared between accounts (#2071). There is still no in-app delete or hide control. The page says so.</li>
+<li><span class="tag ok">served</span><b>Smaller:</b> a list of todos in one message (#2094), retitling a draft (#2098), the real issue number on create (#2097), and a sign-in modal on expiry (#2067).</li>
+<li><span class="tag warn">not yet</span><b>Analyze or compare a document.</b> #2132 failed its served rows. Since Thursday, two of Lead&rsquo;s three changes passed on both providers and land together after one full run.</li>
+<li><span class="tag warn">not yet</span><b>A database that restarts itself.</b> #2085&rsquo;s restarter passed every guard on Thursday&rsquo;s real stop, then Fly refused its lock. The fix waits on your push.</li>
+<li><b>On pipermorgan.ai:</b> /privacy says plainly what&rsquo;s encrypted and what connecting Google Calendar does, and the pages now carry their content in the served HTML.</li>
+</ul>
+
+<h2>What went wrong, and the patterns in it</h2>
+<h3>Four patterns, each seen several times</h3>
+<ul>
+<li><b>Passed its tests, wrong when served.</b> Four fixes passed unit tests and were still false on alpha (#2127, #2132 twice, the PR label). CXO closed nothing on a unit test, so each was caught.</li>
+<li><b>Safeguards judged by reading them.</b> Five instances across three seats (CIO&rsquo;s methodology-49). Fly&rsquo;s restart policy was already on and can&rsquo;t fire. Guard 1b parsed an output shape nobody had looked at. The token couldn&rsquo;t list or lock. Arch&rsquo;s rule now: test a check on the tool&rsquo;s real output.</li>
+<li><b>Diagnose first, measure later.</b> #2101&rsquo;s first two explanations were wrong (Lead, Arch). It was named only when Lead built a watchdog, on the second run. The same shape showed up in the 10-20 usage cap, first blamed on alpha&rsquo;s key (PA, me, Arch), and in Arch&rsquo;s &ldquo;chat carries no file context&rdquo;.</li>
+<li><b>Whack-a-mole risk.</b> Your test run on Monday turned an empty must-close list into 10 admissions. Each served round finds the next false answer in the same families: GitHub reads, calendar reads, document asks. Your &ldquo;systematic, not whack-a-mole&rdquo; this morning is the right push. See the discussion list.</li>
+</ul>
+<h3>Specific misses</h3>
+<ul>
+<li><b>Main red on 5 of 7 days, all from Lead&rsquo;s pushes</b>, every time from tests outside the set Lead re-ran (10-16 three times; 10-17 2h40m; 10-18 35&nbsp;min; 10-19 43&nbsp;min, mid-outage; 10-22). Spec&rsquo;s CI target (90% green over 14 days, due 10-24) is missed: 83%.</li>
+<li><b>#2088 and #2089 sat two days unbuilt</b> after you admitted them, because the admission came as a gate comment, not a memo to Lead.</li>
+<li><b>Every agent acts on GitHub as you</b> (CIO, 10-21). That&rsquo;s why the GitHub App exists (#2136).</li>
+<li><b>A Notion token connected a workspace with real-looking notes</b> for about two minutes on 10-21. Web disconnected at once, and Janus later said it was the test workspace.</li>
+<li><b>Guessed clock times</b> still turn up in several seats, though the stamp check now catches most before they land.</li>
+<li><b>Mine, today:</b> I went straight to a Ship draft without this synthesis or the full omnibus read. A review&rsquo;s false privacy line reached the draft, and Comms caught it. I also asked you to admit #2142 without checking it had already closed.</li>
+</ul>
+
+<h2>By workstream</h2>
+<div class="tbl"><table>
+<tr><th>Role</th><th>Progress this week</th><th>Next week / blocked</th></tr>
+<tr><td>Lead</td><td>26 promotions. The wizard, the stall fix, honest GitHub, calendar and OpenAI reads, the restarter, the quiet-count promote gate. 32 MVP issues closed.</td><td>#2132 (with #2138), screen 4 revised. Blocked on your push for #2085.</td></tr>
+<tr><td>PA</td><td>Built the hosted test harness and ran 5 full runs. Found the out-of-memory cause before anyone restarted. Traced the token from source. Filed 10 issues.</td><td>Second #2085 test with you.</td></tr>
+<tr><td>PPM</td><td>Kept the gate ledger for every change (31 admission rows, 31 closes) and wrote the #1386 rules (raw first, no waiver for false rows). No PDR or roadmap work, and PPM names that as drift.</td><td>Close rows as must-closes serve. The invitation checklist.</td></tr>
+<tr><td>Arch</td><td>98 rulings, each read from source. Key rulings: providers see only the user&rsquo;s own keys, every model call carries its user, a lease-free restart.</td><td>Validate #2132&rsquo;s landing and the #2085 route.</td></tr>
+<tr><td>CXO</td><td>40 issues ruled or closed, all on quoted served replies. The words for every honest-failure line.</td><td>Judge #2132&rsquo;s four rows. Read the final restart and Calendar lines.</td></tr>
+<tr><td>Web</td><td>Served checks on 11+ builds. Built the two #1386 accounts. The site now serves real HTML. Found the staging key fault.</td><td>#2132&rsquo;s rows. Blocked: an outside-account Calendar connect needs a person.</td></tr>
+<tr><td>HOST</td><td>Custody for the restarter token and the App key. Staging unblocked. Found the seat-identity risk. Three late day-closes.</td><td>&ldquo;Key stored&rdquo;, then the acceptance bar once your keys are off Amber.</td></tr>
+<tr><td>CIO</td><td>The standing grant, now enforced in code (partner window, health, uptime). Reviewed mail v4 and kept it. Methodology-49 and -52.</td><td>The 10-27 staleness review. The guards rollout.</td></tr>
+<tr><td>Comms</td><td>Four /privacy fixes. Fact-check ledgers before each rewrite, which caught 4 errors in Comms&rsquo; own drafts. The Phantom Feature corrected before publish.</td><td>Sat, Sun, Tue and Thu posts. Waiting on your rewrites.</td></tr>
+<tr><td>Docs</td><td>5 posts published and distributed, 7 omnibuses, a live footer fix.</td><td>Sat&rsquo;s post, the Mon audit.</td></tr>
+</table></div>
+
+<h2>Since Thursday (outside the window, for context)</h2>
+<ul>
+<li>The lead-scoring workspace hit its $50 limit at about 06:59, and you raised it to $75.</li>
+<li>You answered the checkpoint, admitted #2142 (already closed), folded #2138 into #2132, kept #2136 separate and read #2096&rsquo;s feedback.</li>
+</ul>
+
+<h2>Draft goals for 10-23 to 10-29</h2>
+<p>From the reviews&rsquo; &ldquo;Next week&rdquo; sections, for you to edit and ratify.</p>
+<ul>
+<li><b>Close the three must-closes on served checks:</b> #2132 with #2138 (landing, then CXO&rsquo;s four rows), #2085 (your push and the second test), #2096 (your read is in).</li>
+<li><b>Send the first design-partner invitations</b> once #2132 closes. That takes your Terms rewrite, HOST&rsquo;s send-morning checks, and the three held alpha invites.</li>
+<li><b>GitHub App:</b> the key and the install (your desk this morning), then Pard&rsquo;s token helper.</li>
+<li><b>Keep the 10-30 MVP target.</b></li>
+</ul>
+
+<h2>For our discussion</h2>
+<ul>
+<li><b>Invitation timing.</b> Do invites go the day #2132 closes, or on a date you pick before 10-30? Lean: the day it closes, if the restarter has passed or you&rsquo;ve named who restarts by hand.</li>
+<li><b>Systematic, not whack-a-mole.</b> Should Arch and Lead sweep for every handler that can turn a failed read into &ldquo;none&rdquo;, &ldquo;0&rdquo; or &ldquo;not connected&rdquo;, instead of waiting for the next served row? Arch already has the rule. Lean: yes, Arch scopes it as a list and Lead works it after #2132.</li>
+<li><b>Main red.</b> Spec&rsquo;s CI target is missed. Lean: Lead runs the full suite before any push touching <code>services/</code>, and we set a new date for 90%.</li>
+<li><b>Spend.</b> Do you want the week&rsquo;s Console numbers in each synthesis, as last week? This week I don&rsquo;t have them. Pard or a screenshot from you would supply them.</li>
+<li><b>The Ship&rsquo;s theme.</b> My candidate: &ldquo;Tested on the Real Thing&rdquo; (safeguards and fixes both proved only when run for real). Comms agrees.</li>
+</ul>
+
+<footer><b>Verified how:</b> I read the Executive Summary through Impact Measurement of all seven omnibus logs (10-16 to 10-22) and all 10 reviews in full. Counts I ran: <code>gh-week-counts.py 2026-10-16 2026-10-22</code> (98 opened, 79 closed), and 26 successful <code>fly-deploy.yml</code> dispatches in the Pacific window. Gate state is from <code>gh issue list --milestone MVP</code> this morning. Everything else is as the omnibus or the role reported it. Denominator: 7 of 7 days, 10 of 10 roles.</footer>
+</div>

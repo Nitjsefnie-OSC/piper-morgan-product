@@ -4360,7 +4360,13 @@ def register_default_workflows() -> None:
                 _make_query_dispatch_entry_point(
                     "_handle_analyze_document_notion", pass_session_id=True
                 ),
-                "analyze-document (Notion) via action dispatch",
+                # #2132 routing screen 2 (Arch 10-22 18:5x): says what it resolves,
+                # in the referent order Arch ruled (a named file of the user's,
+                # else a Notion page by title, else the ask to paste); was
+                # "analyze-document (Notion)".
+                "Analyze one document the user names: one of their uploaded files, or a "
+                "Notion page by its title; with no document named, it asks them to paste "
+                "the text.",
                 # effect: READ — fetches and analyzes a Notion document; unlike
                 # its update sibling, it never calls append_blocks/update_page.
                 EffectClass.READ,

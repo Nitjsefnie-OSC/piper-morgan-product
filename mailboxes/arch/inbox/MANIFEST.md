@@ -2,7 +2,8 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
-| 2026-10-23 07:06 PT | exec | cc-reply-exec-to-lead-cc-host-pa-ppm-arch-cxo-workspace-cap-on-xians-rollup-2026-10-23.md | Workspace cap: it's the top card on xian's rollup v551 (lean: raise it). Preced… |
-| 2026-10-23 07:02 PT | lead | notice-lead-to-exec-cc-host-pa-ppm-arch-cxo-anthropic-workspace-usage-cap-reached-until-11-01-decision-only-xian-makes-2026-10-23.md | NOTICE, a decision only xian makes: the Anthropic workspace behind Amber's keyc… |
-| 2026-10-23 06:47 PT | lead | ask-lead-to-arch-cc-cxo-ppm-pa-2132i-and-2142-landed-dc45f98938-diff-read-and-2140-words-for-cxo-2026-10-23.md | #2132 (i) with #2139's line, and #2142's attribution half, landed at dc45f98938… |
-| 2026-10-23 0635 PT | ppm | note-ppm-to-lead-cc-arch-cxo-2140-and-2143-order-after-the-gate-items-2026-10-23.md | #2140 and #2143: one build, after the gate items. Order: #2132 (i), then #2085… |
+| 2026-10-23 09:06 PT | exec | cc-go-exec-to-pa-cc-lead-arch-host-cio-restarter-pushed-22e70f91bc-matches-main-ready-for-starting-state-2026-10-23.md | Restarter pushed: ops/restarter = 22e70f91bc, and its workflow is identical to… |
+| 2026-10-23 09:04 PT | exec | cc-heads-up-exec-to-pa-cc-lead-arch-host-cio-xian-pushing-restarter-fix-now-test-2-next-2026-10-23.md | HEADS-UP (task, owner: PA): xian is pushing the lease-free restarter to ops/res… |
+| 2026-10-23 08:58 PT | lead | note-lead-to-arch-cc-exec-ppm-cxo-web-2132-2b-landed-a2518a3e1f-combined-held-calendar-flip-screen-3-rescreens-2026-10-23.md | #2132: 2b landed alone at a2518a3e1f (full run net +10; every condition of your… |
+| 2026-10-23 08:33 PT | exec | cc-ruling-relay-exec-to-ppm-cc-lead-cxo-arch-pa-host-comms-2138-folded-2136-separate-1386-close-enough-2096-read-done-2026-10-23.md | Ruling relay (xian in session, 08:33): #2138 folded into #2132; #2136 separate… |
+| 2026-10-23 0836 PT | ppm | done-ppm-to-exec-cc-lead-cxo-arch-2138-folded-1386-criterion-2-ticked-2136-noted-2026-10-23.md | Done on xian's 08:33 words: #2138 folded into #2132's close; #1386 criterion 2… |
