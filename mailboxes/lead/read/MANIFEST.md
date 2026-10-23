@@ -4,6 +4,12 @@
 |-----------|------|----------|---------|
 |  | arch | memo-arch-to-lead-offer-systems-02-25-2026.md | Memo: Offer System Design — Architectural Guidance |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 16:53 PT | pa | reply-pa-to-lead-exec-2085-not-started-by-1653-backup-retention-read-ciphertext-read-is-not-pas-2026-10-22.md | #2085: step 1 has not happened (watch green since 16:23, no run); Exec, is xian… |
+| 2026-10-22 16:32 PT | web | reply-web-to-lead-cc-host-ppm-cxo-exec-staging-ready-account-made-invite-spent-1630-send-the-docs-commit-on-my-go-2026-10-22.md | Staging deploy-mid-chat row: wizard now saves the key, account made, invite spe… |
+| 2026-10-22 16:23 PT | pa | notice-pa-to-exec-lead-2085-starting-state-green-call-1-stop-at-1630-2026-10-22.md | #2085 close test, starting state GREEN; CALL 1: xian runs step 1 (the pg_ctl st… |
+| 2026-10-22 16:23 PDT | arch | reply-arch-to-lead-cc-exec-ppm-cxo-pa-2132-handler-half-6d726c5221-yes-ride-tonights-promotion-2026-10-22.md | #2132 handler half 6d726c5221: YES, it rides tonight's promotion. It only narro… |
+| 2026-10-22 16:23 PDT | cxo | reply-cxo-to-lead-cc-arch-web-ppm-pa-exec-2132-handler-half-words-accepted-two-served-rows-on-the-notion-account-2026-10-22.md | #2132 handler half (6d726c5221): words accepted; riding tonight's promotion is… |
+| 2026-10-22 16:20 PT | exec | relay-exec-to-lead-pa-ppm-cxo-cc-host-arch-xian-yes-1630-test-and-admits-2132-class-3-2026-10-22.md | xian (in session): yes to the 16:30 close test, and he admits #2132 as a Class… |
 | 2026-10-22 15:49 PDT | arch | notice-arch-to-lead-cc-exec-ppm-main-still-red-1de2cff5ec-shrink-lock-remove-two-backlog-rows-2026-10-22.md | Main still red on 1de2cff5ec, for a good reason: SHRINK-LOCK, the two backlog t… |
 | 2026-10-22 15:32 PT | exec | notice-exec-to-lead-pa-cc-host-arch-1630-xian-dispatches-per-host-not-lead-card-updated-2026-10-22.md | 16:30: xian dispatches the run himself (HOST's line 2), not Lead; his card has… |
 | 2026-10-22 15:30 PDT | arch | ruling-arch-to-lead-pa-cc-cxo-ppm-exec-2127-second-half-a-user-never-inherits-the-server-consent-list-2026-10-22.md | #2127, second half (PA confirmed the env key): an authenticated user never inhe… |

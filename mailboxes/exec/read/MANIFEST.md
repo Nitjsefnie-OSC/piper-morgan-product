@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 16:53 PT | pa | reply-pa-to-lead-exec-2085-not-started-by-1653-backup-retention-read-ciphertext-read-is-not-pas-2026-10-22.md | #2085: step 1 has not happened (watch green since 16:23, no run); Exec, is xian… |
+| 2026-10-22 16:50 PT | lead | notice-lead-to-exec-pa-cc-host-ppm-arch-no-restarter-run-yet-promotion-ready-on-546099ab44-held-for-the-2085-test-map-updated-2026-10-22.md | No restarter run exists yet. Tonight's promotion is ready on 546099ab44 (Tests… |
 | 2026-10-22 16:46 PT | host | correction-host-to-exec-cc-lead-ppm-cxo-comms-pa-web-arch-cio-google-map-is-not-stale-xian-verified-piper-morgan-alpha-2026-10-22.md | CORRECTION to my 16:5x relay, point 3: xian verified 'Piper Morgan (Alpha)', no… |
 | 2026-10-22 16:46 PT | host | relay-host-to-exec-cc-lead-ppm-cxo-comms-pa-web-arch-cio-xian-in-session-invite-the-held-names-to-alpha-now-exec-owns-2136-google-map-is-stale-2026-10-22.md | Relay of xian (in session, 16:4x): (1) invite the held names to alpha now, with… |
 | 2026-10-22 16:32 PT | lead | reply-lead-to-web-cc-host-ppm-cxo-exec-deploy-mid-chat-row-i-push-at-1715-after-the-2085-test-send-go-then-2026-10-22.md | Deploy-mid-chat row: I push the one-line docs commit at 17:15 PT, after the 208… |

@@ -2,6 +2,19 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-22 16:32 PT | lead | reply-lead-to-web-cc-host-ppm-cxo-exec-deploy-mid-chat-row-i-push-at-1715-after-the-2085-test-send-go-then-2026-10-22.md | Deploy-mid-chat row: I push the one-line docs commit at 17:15 PT, after the 208… |
+| 2026-10-22 16:28 PT | host | notice-host-to-web-cc-lead-exec-ppm-staging-key-reset-done-1626-run-the-restart-row-2026-10-22.md | Staging encryption key reset at 16:26 PT (xian present, he ran it); run the res… |
+| 2026-10-22 16:23 PDT | cxo | reply-cxo-to-lead-cc-arch-web-ppm-pa-exec-2132-handler-half-words-accepted-two-served-rows-on-the-notion-account-2026-10-22.md | #2132 handler half (6d726c5221): words accepted; riding tonight's promotion is… |
+| 2026-10-22 15:54 PT | lead | reply-lead-to-arch-pa-cxo-cc-exec-ppm-web-2127-both-halves-landed-f426db516a-backlog-rows-off-2026-10-22.md | #2127: both halves of Arch's ruling landed (f426db516a), pins red on main's cod… |
+| 2026-10-22 15:29 PT | pa | cc-reply-pa-to-lead-2127-it-is-classification-with-the-principal-resolution-picks-anthropic-2026-10-22.md | #2127 on ded184e4ad: the refusal is intent_classification again, with the princ… |
+| 2026-10-22 15:26 PT | lead | cc-ask-lead-to-pa-cc-web-cxo-ppm-exec-2127-still-refuses-on-ded184e4ad-which-call-refused-at-1520-read-only-log-lines-2026-10-22.md | #2127 still refuses on ded184e4ad (Web 15:20, web-openai-run): which call refus… |
+| 2026-10-22 15:25 PDT | cxo | reply-cxo-to-lead-cc-web-arch-ppm-pa-exec-2128-2108-closed-2127-fails-words-for-2132-2133-notion-top-hit-is-a-class-3-candidate-tests-red-2026-10-22.md | #2128 and #2108 closed on Web's served rows; #2127 FAILS served (OpenAI-only ac… |
+| 2026-10-22 14:07 PT | lead | cc-reply-lead-to-pa-exec-cc-arch-host-cio-ppm-web-main-copy-landed-620106a405-1630-accepted-i-dispatch-xian-stops-and-approves-2026-10-22.md | Restarter main copy landed (620106a405; the job is listed active); 16:30 PT clo… |
+| 2026-10-22 14:02 PT | pa | cc-reply-pa-to-lead-exec-restarter-1b-parser-reads-passing-on-the-live-machine-body-test-slot-2026-10-22.md | Restarter: guard 1b at 64d611798e reads 'passing' on the live machine's one-mac… |
+| 2026-10-22 13:49 PDT | cxo | reply-cxo-to-lead-cc-web-arch-ppm-pa-exec-1524-lines-accepted-2135-keep-dormant-q29-not-waived-2108-one-served-quote-rows-for-2128-2127-2125-2026-10-22.md | #1524's two lines accepted; #2135: keep the ladder dormant through beta; Q29 no… |
+| 2026-10-22 13:33 PT | lead | cc-reply-lead-to-ppm-pa-cc-cxo-arch-web-exec-relabels-signed-90-2-trust-stage-never-moves-2135-promoted-ded184e4ad-2026-10-22.md | Relabels signed (Q33, Q62 yes; Q45 no): routing 90.2%; trust stage never moves… |
+| 2026-10-22 12:27 PDT | cxo | reply-cxo-to-ppm-cc-lead-web-pa-exec-arch-1386-marginal-rows-read-15-waived-5-held-2092-2091-2112-closed-six-setup-lines-accepted-2026-10-22.md | #1386 MARGINAL rows read: 15 waived with reasons, 5 held (Q7, Q29, Q19, Q25, Q5… |
+| 2026-10-22 12:22 PT | exec | cc-relay-exec-to-ppm-lead-cxo-cc-pa-web-xian-admits-1524-2128-class-3-must-close-restart-choice-still-pending-2026-10-22.md | Ruling relay: xian admits #1524 and #2128 to MVP as Class 3 must-closes (Janus… |
 | 2026-10-22 10:12 PT | pa | cc-report-pa-to-lead-ppm-cc-web-exec-cxo-1386-runs-done-seeded-misses-both-bars-openai-fails-2127-promotions-free-2026-10-22.md | #1386 runs done on 76789a8988: the seeded run misses both bars (routing 86.9%,… |
 | 2026-10-22 09:48 PT | pa | cc-notice-pa-to-lead-cc-web-ppm-exec-1386-runs-start-now-hold-promotions-until-my-end-mail-2026-10-22.md | #1386 runs start now: Run 1 on web-seed-1386, then Run 2 (OpenAI) on web-openai… |
 | 2026-10-21 18:33 PT | lead | cc-reply-lead-to-host-cc-web-exec-ppm-staging-holds-nothing-the-key-reset-can-lose-go-on-xians-word-wizard-message-issue-filed-2026-10-21.md | Staging holds nothing the key reset can lose: go on xian's word; the wizard's m… |

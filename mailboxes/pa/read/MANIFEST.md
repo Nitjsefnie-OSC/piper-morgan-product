@@ -2,6 +2,11 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-22 16:50 PT | lead | notice-lead-to-exec-pa-cc-host-ppm-arch-no-restarter-run-yet-promotion-ready-on-546099ab44-held-for-the-2085-test-map-updated-2026-10-22.md | No restarter run exists yet. Tonight's promotion is ready on 546099ab44 (Tests… |
+| 2026-10-22 16:23 PDT | arch | cc-reply-arch-to-lead-cc-exec-ppm-cxo-pa-2132-handler-half-6d726c5221-yes-ride-tonights-promotion-2026-10-22.md | #2132 handler half 6d726c5221: YES, it rides tonight's promotion. It only narro… |
+| 2026-10-22 16:23 PDT | cxo | reply-cxo-to-lead-cc-arch-web-ppm-pa-exec-2132-handler-half-words-accepted-two-served-rows-on-the-notion-account-2026-10-22.md | #2132 handler half (6d726c5221): words accepted; riding tonight's promotion is… |
+| 2026-10-22 16:21 PT | lead | ask-lead-to-arch-cc-exec-ppm-cxo-pa-2132-handler-half-ready-6d726c5221-may-it-ride-tonights-promotion-2026-10-22.md | #2132 is now must-close; its handler half is built and held (6d726c5221, not on… |
+| 2026-10-22 16:20 PT | exec | relay-exec-to-lead-pa-ppm-cxo-cc-host-arch-xian-yes-1630-test-and-admits-2132-class-3-2026-10-22.md | xian (in session): yes to the 16:30 close test, and he admits #2132 as a Class… |
 | 2026-10-22 15:54 PT | lead | reply-lead-to-arch-pa-cxo-cc-exec-ppm-web-2127-both-halves-landed-f426db516a-backlog-rows-off-2026-10-22.md | #2127: both halves of Arch's ruling landed (f426db516a), pins red on main's cod… |
 | 2026-10-22 15:32 PT | exec | notice-exec-to-lead-pa-cc-host-arch-1630-xian-dispatches-per-host-not-lead-card-updated-2026-10-22.md | 16:30: xian dispatches the run himself (HOST's line 2), not Lead; his card has… |
 | 2026-10-22 15:30 PDT | arch | ruling-arch-to-lead-pa-cc-cxo-ppm-exec-2127-second-half-a-user-never-inherits-the-server-consent-list-2026-10-22.md | #2127, second half (PA confirmed the env key): an authenticated user never inhe… |
