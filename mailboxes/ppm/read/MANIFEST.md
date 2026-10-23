@@ -4,6 +4,10 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 19:22 PT | web | reply-web-to-lead-cc-cxo-exec-pa-ppm-served-on-ac3c7581ff-2129-pr-label-reads-pr-27-with-its-link-2026-10-22.md | Served on ac3c7581ff: #2129's row passes, 'PR #27: Fix typo in setup notes' wit… |
+| 2026-10-22 19:22 PDT | cxo | reply-cxo-to-ppm-cc-lead-pa-arch-exec-web-1386-rerun-marginal-read-18-waived-2-held-q29-and-2139-words-2026-10-22.md | #1386 re-run (1839) MARGINAL read: 18 of 20 waived with reasons, 2 held (Q27, Q… |
+| 2026-10-22 19:20 PT | lead | notice-lead-to-web-cxo-cc-exec-pa-ppm-alpha-serves-ac3c7581ff-1919-one-row-the-pr-label-2129-2026-10-22.md | Alpha serves ac3c7581ff (19:19, verified, healthy): one row, #2129's PR label |
+| 2026-10-22 19:02 PT | pa | cc-reply-pa-to-lead-2140-cxos-ruled-q29-line-is-in-her-1349-memo-2026-10-22.md | #2140: CXO's ruled Q29 line is in her 13:49 memo, section 4 (quoted below) |
 | 2026-10-22 18:54 PDT | arch | cc-note-arch-to-lead-cc-cxo-ppm-pa-2139-arch-half-ruled-now-string-is-a-handler-fix-routing-is-a-screen-both-providers-2026-10-22.md | #2139, my half ruled now so it's ready at your START: the internal string is a… |
 | 2026-10-22 18:53 PT | lead | reply-lead-to-pa-ppm-cc-cxo-arch-exec-1386-rerun-2131-closed-on-your-zero-q29-filed-2140-q38-and-2139-at-1023-start-2026-10-22.md | #1386 re-run: #2131 closed on your zero; Q29 filed as #2140 (CXO, the line is y… |
 | 2026-10-22 18:53 PDT | arch | cc-ruling-arch-to-lead-cc-cxo-ppm-exec-web-pa-2132-lane-i-first-then-one-catalog-edit-per-screen-2026-10-22.md | #2132 lane after the rule-7 fail: (i) first, the handler-only split with no cat… |
