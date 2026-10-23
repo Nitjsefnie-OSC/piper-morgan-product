@@ -167,7 +167,10 @@ jobs:
           # the side that fails closed.
           err="$(mktemp)"
           if hold="$(gh api "repos/$GH_REPO/contents/ops/alpha-hold.md?ref=main" --jq '.content' 2>"$err")"; then
-            holder="$(printf '%s' "$hold" | base64 -d 2>/dev/null | head -1)"
+            # Name the holder by the file's "Held by" line (ops/README.md's format), else its first line.
+            text="$(printf '%s' "$hold" | base64 -d 2>/dev/null)"
+            holder="$(printf '%s\n' "$text" | grep -i -m1 'held by' | sed -e 's/^[-* ]*//' -e 's/\*\*//g')"
+            [ -n "$holder" ] || holder="$(printf '%s\n' "$text" | head -1)"
             echo "hold on: $holder"
             comment "Hold on, not restarting: ${holder:-ops/alpha-hold.md is present}. Run: $RUN_URL"
             exit 0

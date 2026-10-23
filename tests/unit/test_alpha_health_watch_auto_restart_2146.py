@@ -76,6 +76,7 @@ case "$1 $2" in
   "api repos/"*)
     case "{gh_behaviour}" in
       hold) echo "$(printf 'held by: PA\\nwhy: test' | base64)"; exit 0 ;;
+      hold_md) echo "$(printf '# Alpha promotion hold\\n\\n- **Held by:** PA, from 15:13.\\n- **Why:** test' | base64)"; exit 0 ;;
       none) echo "gh: Not Found (HTTP 404)" >&2; exit 1 ;;
       error) echo "gh: Server Error (HTTP 500)" >&2; exit 1 ;;
     esac ;;
@@ -102,6 +103,14 @@ def test_a_hold_on_main_means_no_dispatch_and_a_comment_naming_the_holder(tmp_pa
     assert r.returncode == 0
     assert "workflow run" not in calls
     assert "Hold on, not restarting: held by: PA" in calls
+
+
+def test_the_comment_names_the_held_by_line_not_the_heading(tmp_path):
+    r, calls = _run_hold_step(tmp_path, "hold_md")
+    assert r.returncode == 0
+    assert "workflow run" not in calls
+    assert "Hold on, not restarting: Held by: PA, from 15:13." in calls
+    assert "Alpha promotion hold" not in calls
 
 
 def test_no_hold_dispatches_the_restarter_once(tmp_path):
