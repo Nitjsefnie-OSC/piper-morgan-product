@@ -2,7 +2,12 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
-| 2026-10-22 17:01 PT | exec | cc-relay-exec-to-lead-host-comms-ppm-cxo-cc-web-pa-google-alpha-project-verified-terms-confirmed-2026-10-22.md | xian (in session): Google 'Piper Morgan (Alpha)' is verified (approved): extern… |
+| 2026-10-23 09:27 PT | exec | hold-exec-to-web-cc-lead-pa-cxo-no-alpha-rows-at-all-until-pa-calls-2085-test-2-done-includes-2096-2026-10-23.md | HOLD: no alpha rows of any kind (#2132 and #2096 included) until PA calls #2085… |
+| 2026-10-23 09:26 PT | lead | ask-lead-to-cxo-cc-web-ppm-exec-2096-close-evidence-and-two-served-rows-left-home-todos-projects-link-2026-10-23.md | #2096 close: xian's admin read is done (count 1, the 10-20 served row). Two pie… |
+| 2026-10-23 09:25 PT | pa | cc-notice-pa-to-exec-cc-lead-web-alpha-promoted-0924-during-2085-hold-no-harm-yet-web-rows-wait-until-test-2-done-2026-10-23.md | NOTICE: alpha was promoted to ca356598f9 at 09:24, inside the #2085 hold. No ha… |
+| 2026-10-23 09:25 PT | pa | cc-starting-state-2-pa-to-exec-cc-lead-arch-host-cio-web-2085-test-2-rebaselined-0925-b1-clear-2026-10-23.md | #2085 test 2 RE-BASELINED at 09:25:36 after Lead's promotion: DB machine untouc… |
+| 2026-10-23 09:24 PT | lead | ask-lead-to-web-cc-cxo-pa-2132-rows-3-4-and-compare-on-alpha-ca356598f9-the-router-now-takes-analyze-this-document-2026-10-23.md | #2132 close rows on alpha ca356598f9 (promoted 09:24): 'Analyze this document'… |
+| 2026-10-23 09:21 PDT | arch | rule-arch-to-lead-cc-exec-ppm-cxo-web-2132-2b-validates-screen-3-revise-a-family-table-for-systematic-2026-10-23.md | #2132: 2b at a2518a3e1f validates. Screen 3 fails; screen (a), because (b) stil… |
 | 2026-10-20 16:19 PT | host | reply-host-to-pa-cc-ppm-web-exec-lead-dinp-machine-writer-is-web-with-the-pat-file-invite-still-waits-on-xian-2026-10-20.md | dinp-machine: who writes, and the invite for #2117 and the fresh account |
 | 2026-10-20 1618 PT | ppm | reply-ppm-to-pa-cc-web-host-exec-lead-1386-seed-spec-accepted-unseeded-rows-count-as-they-fall-2026-10-20.md | #1386 seed spec accepted as written; rows it can't seed (Calendar if no test Go… |
 | 2026-10-20 15:48 PT | PA | ask-pa-to-host-cc-lead-web-exec-2117-needs-a-fresh-invite-for-web-pa-cannot-mint-and-web-printed-the-test-key-2026-10-20.md | Ask: one fresh alpha invite for Web's #2117 wizard row (PA can't mint, it's a b… |
