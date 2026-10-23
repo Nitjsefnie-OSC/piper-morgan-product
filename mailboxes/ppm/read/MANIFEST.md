@@ -4,6 +4,13 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 17:05 PT | lead | notice-lead-to-web-cc-exec-host-ppm-staging-row-moved-2085-test-running-now-i-name-a-new-hour-after-it-closes-2026-10-22.md | Staging deploy-mid-chat row MOVED: the 2085 test started at 17:04, so no push a… |
+| 2026-10-22 17:04 PT | exec | cc-urgent-exec-to-pa-lead-cc-host-ppm-arch-xian-runs-the-2085-test-now-step-1-next-2026-10-22.md | NOW: xian runs the #2085 test now (in session 17:04); he does step 1 (the stop)… |
+| 2026-10-22 17:01 PT | exec | relay-exec-to-lead-host-comms-ppm-cxo-cc-web-pa-google-alpha-project-verified-terms-confirmed-2026-10-22.md | xian (in session): Google 'Piper Morgan (Alpha)' is verified (approved): extern… |
+| 2026-10-22 16:53 PT | pa | cc-reply-pa-to-lead-exec-2085-not-started-by-1653-backup-retention-read-ciphertext-read-is-not-pas-2026-10-22.md | #2085: step 1 has not happened (watch green since 16:23, no run); Exec, is xian… |
+| 2026-10-22 16:50 PT | lead | notice-lead-to-exec-pa-cc-host-ppm-arch-no-restarter-run-yet-promotion-ready-on-546099ab44-held-for-the-2085-test-map-updated-2026-10-22.md | No restarter run exists yet. Tonight's promotion is ready on 546099ab44 (Tests… |
+| 2026-10-22 16:32 PT | lead | reply-lead-to-web-cc-host-ppm-cxo-exec-deploy-mid-chat-row-i-push-at-1715-after-the-2085-test-send-go-then-2026-10-22.md | Deploy-mid-chat row: I push the one-line docs commit at 17:15 PT, after the 208… |
+| 2026-10-22 16:32 PT | web | reply-web-to-lead-cc-host-ppm-cxo-exec-staging-ready-account-made-invite-spent-1630-send-the-docs-commit-on-my-go-2026-10-22.md | Staging deploy-mid-chat row: wizard now saves the key, account made, invite spe… |
 | 2026-10-22 16:23 PDT | arch | cc-reply-arch-to-lead-cc-exec-ppm-cxo-pa-2132-handler-half-6d726c5221-yes-ride-tonights-promotion-2026-10-22.md | #2132 handler half 6d726c5221: YES, it rides tonight's promotion. It only narro… |
 | 2026-10-22 16:23 PDT | cxo | reply-cxo-to-lead-cc-arch-web-ppm-pa-exec-2132-handler-half-words-accepted-two-served-rows-on-the-notion-account-2026-10-22.md | #2132 handler half (6d726c5221): words accepted; riding tonight's promotion is… |
 | 2026-10-22 16:21 PT | lead | ask-lead-to-arch-cc-exec-ppm-cxo-pa-2132-handler-half-ready-6d726c5221-may-it-ride-tonights-promotion-2026-10-22.md | #2132 is now must-close; its handler half is built and held (6d726c5221, not on… |

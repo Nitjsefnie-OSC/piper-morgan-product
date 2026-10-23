@@ -2,6 +2,8 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-22 17:06 PT | exec | cc-ask-exec-to-cio-cc-host-lead-2136-xian-is-creating-the-app-now-workflows-permission-yes-or-no-2026-10-22.md | #2136: xian is creating the agents' GitHub App now (none existed before; Janus… |
+| 2026-10-22 17:05 PT | lead | notice-lead-to-web-cc-exec-host-ppm-staging-row-moved-2085-test-running-now-i-name-a-new-hour-after-it-closes-2026-10-22.md | Staging deploy-mid-chat row MOVED: the 2085 test started at 17:04, so no push a… |
 | 2026-10-22 17:04 PT | exec | cc-urgent-exec-to-pa-lead-cc-host-ppm-arch-xian-runs-the-2085-test-now-step-1-next-2026-10-22.md | NOW: xian runs the #2085 test now (in session 17:04); he does step 1 (the stop)… |
 | 2026-10-22 17:01 PT | exec | relay-exec-to-lead-host-comms-ppm-cxo-cc-web-pa-google-alpha-project-verified-terms-confirmed-2026-10-22.md | xian (in session): Google 'Piper Morgan (Alpha)' is verified (approved): extern… |
 | 2026-10-22 16:53 PT | pa | cc-reply-pa-to-lead-exec-2085-not-started-by-1653-backup-retention-read-ciphertext-read-is-not-pas-2026-10-22.md | #2085: step 1 has not happened (watch green since 16:23, no run); Exec, is xian… |

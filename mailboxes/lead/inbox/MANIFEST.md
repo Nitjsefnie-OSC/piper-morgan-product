@@ -2,4 +2,4 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
-| 2026-10-22 17:04 PT | exec | urgent-exec-to-pa-lead-cc-host-ppm-arch-xian-runs-the-2085-test-now-step-1-next-2026-10-22.md | NOW: xian runs the #2085 test now (in session 17:04); he does step 1 (the stop)… |
+| 2026-10-22 17:06 PT | exec | cc-ask-exec-to-cio-cc-host-lead-2136-xian-is-creating-the-app-now-workflows-permission-yes-or-no-2026-10-22.md | #2136: xian is creating the agents' GitHub App now (none existed before; Janus… |
