@@ -12,11 +12,13 @@
 
 **Who sees it.** Piper sends your messages, and anything it adds from the tools you connect (such as calendar or GitHub items you ask about), to Anthropic under your own key. From there, Anthropic's own terms and privacy policy apply. Our admin tools don't display your conversations, and our server logs don't keep the text of what you send. The app has no analytics or ad tracking.
 
-**Your key.** Piper runs on your own Anthropic key. We store it on our server in encrypted form and use it only to make your own requests. Whoever runs the server could in principle decrypt it, so please use a key with a spending limit you're comfortable with. You can remove your key in Settings at any time, and that deletes it from our database. To cut off access completely, also revoke the key in Anthropic's console, so it stops working for Piper too.
+**Your key.** Piper runs on your own Anthropic key. We store it on our server in encrypted form and use it only to make your own requests. Whoever runs the server could in principle decrypt it, so please use a key with a spending limit you're comfortable with. You can remove your key in Settings at any time, and that deletes it from our live database. Our encrypted backups can keep it for up to about five days. To cut off access completely, also revoke the key in Anthropic's console, so it stops working for Piper too.
 
 **When Piper acts for you.** Piper checks with you before most changes. If you tell it plainly to do something, such as "Create a GitHub issue: …" on its own, it does it right away, so treat a plain instruction as the go. It asks before it deletes something of yours. There's no undo yet, so take that question seriously.
 
 **When something breaks.** You'll hit rough edges. We'll send you a short list of known issues with this invitation. When you find something new, use Send feedback in Piper, or email alpha@pipermorgan.ai. The team reads both, including me.
+
+**Brief restarts.** Piper may restart briefly once a day, usually between 8 and 9 pm Pacific. You'll stay signed in, and your conversation will still be there. If a message gets no reply during that window, send it again.
 
 **Leaving.** You can download your uploaded files, and what Piper has learned about how you work. Exporting your conversations and to-dos is the goal, and isn't built yet. There's no delete-account button yet either. Email support@pipermorgan.ai and we'll delete your account and everything in it within 14 days. Deleting a single conversation inside Piper isn't possible yet. A trash you can empty for good is the goal.
 
@@ -46,5 +48,9 @@ Before Production, we'll add [the list xian chooses from: deleting a conversatio
 | What this beta is | PPM's 12:50 memo: today's reading is the beta form, and PPM sends the one line on the morning invites go | PPM's line on the day decides |
 
 **Wizard note for the invitation's setup instructions** (separate from this section): **10-21 18:19:** CXO closed #2088 and #2089 at 15:32 on Web's served rows. The interim "code at step 3" line is gone. The setup instructions say the wizard asks for the invite code first, and name the first step "Invite" (the served strip: Invite, API Keys, Account, Projects, Complete). Not yet served: Create Account no longer asking for the code. That stays on Lead's pins, so recheck it on send morning.
+
+**Restart line (added 10-22 18:19):** CXO's 10-20 wording, with the second sentence lifted from draft by CXO 10-22 17:42 on Web's staging row (8 of 8 turns answered across a deploy, sign-in and history intact). It may say you stay signed in and your conversation is still there. It may not say a message sent mid-restart is saved or answered. **Timing, open for CXO and HOST:** CIO's condition 3 says that from 10-23 a promotion waits for no chat in the last 30 minutes, at any hour 07:00–21:00, and 20:00–21:00 is only the fallback. If that holds on send morning, "usually between 8 and 9 pm Pacific" isn't accurate. A possible alternative is "Piper may restart briefly from time to time, usually when no one has used it for half an hour." CXO decides the wording, and HOST checks the timing on send morning.
+
+**Key backups (added 10-22 18:19):** PA 16:53, Fly metadata: alpha's Postgres has daily encrypted snapshots with 5-day retention, so a removed key can stay in a backup for up to about five days. The "Your key" line now says "live database" and names the backups. Still open: the count of key rows with no ciphertext (HOST or xian).
 
 **Voice checks run on this draft:** no semicolons; no "honest", "quietly", "load-bearing" or "cohort"; no "never" promises except "can't be taken back" (a code fact).
