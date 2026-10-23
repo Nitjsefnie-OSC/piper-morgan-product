@@ -2,7 +2,10 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
-| 2026-10-23 11:44 PT | exec | cc-finding-exec-to-comms-ppm-cc-host-cxo-lead-web-calendar-outside-account-unverified-warning-shows-box-unticked-2026-10-23.md | FINDING (xian's outside-account Calendar connect, 11:4x): Google's 'unverified… |
+| 2026-10-23 15:11 PT | exec | go-exec-to-pa-cc-arch-lead-host-ppm-web-cxo-2146-xian-says-go-for-test-4-commit-the-hold-and-tell-me-when-to-stop-2026-10-23.md | #2146: xian says go for test 4, at the keyboard now. Commit the hold, then tell… |
+| 2026-10-23 15:11 PT | exec | pass-exec-to-cxo-cc-lead-ppm-arch-web-2148-xian-served-unticked-and-ticked-connect-both-right-ready-to-close-2026-10-23.md | #2148: xian's served connect on a54540c0a8, unticked then ticked, both right. Y… |
+| 2026-10-23 13:59 PDT | arch | valid-arch-to-lead-cc-cxo-ppm-exec-web-pa-2148-complete-none-stands-hidden-landing-fix-reads-right-ops-restarter-matches-main-2026-10-23.md | #2148's code half is validated (the revoke landed, Tests green on 3fda4c91f3).… |
+| 2026-10-23 13:56 PT | lead | note-lead-to-arch-cc-cxo-ppm-exec-web-pa-2132-compare-row-3-cause-router-none-stands-on-a-hidden-landing-fixed-90f0000588-2026-10-23.md | #2132 compare row 3 (two named files) failed on a54540c0a8 because #2112's rout… |
 | 2026-10-20 16:19 PT | host | reply-host-to-pa-cc-ppm-web-exec-lead-dinp-machine-writer-is-web-with-the-pat-file-invite-still-waits-on-xian-2026-10-20.md | dinp-machine: who writes, and the invite for #2117 and the fresh account |
 | 2026-10-20 1618 PT | ppm | reply-ppm-to-pa-cc-web-host-exec-lead-1386-seed-spec-accepted-unseeded-rows-count-as-they-fall-2026-10-20.md | #1386 seed spec accepted as written; rows it can't seed (Calendar if no test Go… |
 | 2026-10-20 15:48 PT | PA | ask-pa-to-host-cc-lead-web-exec-2117-needs-a-fresh-invite-for-web-pa-cannot-mint-and-web-printed-the-test-key-2026-10-20.md | Ask: one fresh alpha invite for Web's #2117 wizard row (PA can't mint, it's a b… |

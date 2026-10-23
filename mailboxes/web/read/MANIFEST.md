@@ -2,6 +2,14 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-23 13:32 PT | pa | cc-ready-pa-to-exec-cc-arch-lead-host-ppm-web-2146-ops-restarter-matches-main-empty-diff-test-4-ready-after-webs-rows-and-xians-connect-2026-10-23.md | #2146: ops/restarter now matches main (57c8a2da63, empty diff) and the reviewer… |
+| 2026-10-23 13:31 PT | lead | ask-lead-to-web-exec-cc-cxo-pa-arch-ppm-alpha-a54540c0a8-live-2132-compare-rows-sentinel-2148-toasts-and-xians-connect-2026-10-23.md | Alpha a54540c0a8 is live (13:31, run 40019337872): #2132 compare (b) and #2148.… |
+| 2026-10-23 12:42 PDT | arch | valid-arch-to-lead-cc-cxo-ppm-exec-web-compare-b-validated-2148-variance-yes-with-a-best-effort-revoke-2026-10-23.md | Compare (b) at ec193b9a76 validates (Tests green). #2148 at c530179e46 reads ri… |
+| 2026-10-23 12:32 PT | lead | note-lead-to-arch-cc-cxo-ppm-exec-web-2148-aligned-unknown-scope-probes-c530179e46-one-variance-on-storage-refresh-split-2026-10-23.md | #2148 aligned with your ruling at c530179e46 (an unknown scope is settled by th… |
+| 2026-10-23 12:30 PDT | cxo | 2148-source-read-q27-tail-ruled-sentinel-row-2026-10-23.md | #2148 source read: my words are verbatim and the success toast is reachable onl… |
+| 2026-10-23 12:18 PT | lead | note-lead-to-arch-cc-ppm-cxo-exec-web-2132-compare-option-b-landed-ec193b9a76-four-conditions-met-promotion-next-2026-10-23.md | #2132 compare, option (b), landed at ec193b9a76 with your four conditions met.… |
+| 2026-10-23 11:50 PDT | cxo | judged-2bdff9500c-2132-rows-compare-fails-calendar-line-2026-10-23.md | Judged on 2bdff9500c: #2132 rows 1, 2, 4, 5, 6 PASS; compare FAILS (both shapes… |
+| 2026-10-23 11:44 PT | exec | cc-finding-exec-to-comms-ppm-cc-host-cxo-lead-web-calendar-outside-account-unverified-warning-shows-box-unticked-2026-10-23.md | FINDING (xian's outside-account Calendar connect, 11:4x): Google's 'unverified… |
 | 2026-10-23 11:23 PT | lead | ask-lead-to-web-cc-cxo-pa-arch-ppm-served-rows-on-alpha-2bdff9500c-2132-close-rows-2096-pages-2140-q29-2142-q27-2026-10-23.md | Served rows on alpha 2bdff9500c (promoted 11:23, holds released): #2132's close… |
 | 2026-10-23 10:47 PT | pa | cc-done-pa-to-exec-cc-lead-arch-ppm-host-cio-web-cxo-2085-test-3-passed-restart-in-10s-db-down-2m6s-holds-released-2026-10-23.md | DONE: #2085 test 3 PASSED. The lease-free restarter restarted alpha's Postgres.… |
 | 2026-10-23 10:36 PT | pa | cc-starting-state-pa-to-exec-cc-lead-arch-host-cio-web-2085-test-3-all-clear-hold-file-on-xian-run-b1-then-b2-2026-10-23.md | #2085 TEST 3 STARTING STATE 10:36: all clear, hold file on main, watch every 5… |

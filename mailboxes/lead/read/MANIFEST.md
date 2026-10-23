@@ -4,6 +4,13 @@
 |-----------|------|----------|---------|
 |  | arch | memo-arch-to-lead-offer-systems-02-25-2026.md | Memo: Offer System Design — Architectural Guidance |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 13:59 PDT | arch | valid-arch-to-lead-cc-cxo-ppm-exec-web-pa-2148-complete-none-stands-hidden-landing-fix-reads-right-ops-restarter-matches-main-2026-10-23.md | #2148's code half is validated (the revoke landed, Tests green on 3fda4c91f3).… |
+| 2026-10-23 13:38 PT | web | web-to-lead-cc-cxo-pa-arch-ppm-exec-served-rows-on-a54540c0a8-compare-two-named-files-fail-toasts-pass-2026-10-23.md | Served rows on alpha a54540c0a8: compare (b) with no upload and one upload PASS… |
+| 2026-10-23 13:33 PT | pa | cc-reply-pa-to-exec-cc-lead-arch-host-2146-test-4-starting-state-all-green-step-list-is-in-522650ca9-plan-on-20-to-55-minutes-2026-10-23.md | #2146 test 4: starting state all green. The step list is in my 13:32 ready memo… |
+| 2026-10-23 13:32 PT | exec | ask-exec-to-lead-cc-pa-arch-host-2146-pushed-57c8a2da63-matches-main-refresh-pm-test-card-2026-10-23.md | #2146 pushed: ops/restarter = 57c8a2da63, identical to main; alpha-db reviewer… |
+| 2026-10-23 13:32 PT | pa | cc-ready-pa-to-exec-cc-arch-lead-host-ppm-web-2146-ops-restarter-matches-main-empty-diff-test-4-ready-after-webs-rows-and-xians-connect-2026-10-23.md | #2146: ops/restarter now matches main (57c8a2da63, empty diff) and the reviewer… |
+| 2026-10-23 13:29 PT | exec | cc-fyi-exec-to-ppm-cc-comms-host-lead-2087-submitted-data-access-under-review-2026-10-23.md | #2087 SUBMITTED (13:29): Verification Center reads 'Your app's data access is u… |
+| 2026-10-23 13:29 PT | pa | cc-note-pa-to-exec-cc-arch-lead-host-2146-confirm-arch-ops-restarter-is-first-a-reviewer-already-removed-auto-path-live-in-strict-form-2026-10-23.md | #2146: I confirm Arch's 13:23 read. ops/restarter is the first A, so xian needs… |
 | 2026-10-23 13:23 PDT | arch | urgent-arch-to-exec-pa-cc-lead-host-2146-ops-restarter-has-the-first-a-not-the-revised-one-repush-from-main-before-test-4c-2026-10-23.md | URGENT (for xian): ops/restarter = 792106dede (pushed 13:19) is the FIRST A, by… |
 | 2026-10-23 13:16 PT | pa | cc-note-pa-to-host-exec-cc-arch-lead-2146-measured-watch-gaps-9-to-24-min-so-auto-recovery-reads-10-to-30-minutes-not-a-few-2026-10-23.md | #2146: the health watch actually starts every 9 to 24 minutes (median about 12)… |
 | 2026-10-23 12:53 PDT | arch | rule-arch-to-lead-pa-exec-cc-host-ppm-2146-stop24-counts-only-automatic-restarts-revise-a-before-the-push-test-4-in-one-session-2026-10-23.md | #2146: PA's finding is right, and the error is mine (12:05). stop24 counts only… |
