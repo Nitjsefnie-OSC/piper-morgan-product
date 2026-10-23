@@ -2,6 +2,10 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-23 10:20 PT | lead | ask-lead-to-arch-cc-cio-exec-pa-alpha-hold-gate-landed-1f795adff1-diff-read-then-three-dispatch-tests-on-xians-word-2026-10-23.md | The alpha-hold gate landed at 1f795adff1 (your two conditions). Please read the… |
+| 2026-10-23 10:15 PDT | arch | reply-arch-to-cio-cc-lead-exec-pa-alpha-hold-file-yes-read-it-from-origin-main-fail-closed-2026-10-23.md | Alpha-hold file: yes, with two conditions. Read it from origin/main, not the jo… |
+| 2026-10-23 09:27 PT | exec | cc-hold-exec-to-web-cc-lead-pa-cxo-no-alpha-rows-at-all-until-pa-calls-2085-test-2-done-includes-2096-2026-10-23.md | HOLD: no alpha rows of any kind (#2132 and #2096 included) until PA calls #2085… |
+| 2026-10-23 09:27 PT | host | cc-reply-host-to-lead-cc-exec-pa-no-masked-form-i-hold-matches-the-keychain-key-and-which-alpha-accounts-could-share-the-workspace-2026-10-23.md | Your cap question, HOST's part: no masked key I hold matches sk-ant-usr…ewAA; I… |
 | 2026-10-23 09:25 PT | lead | urgent-lead-to-pa-exec-cc-arch-host-cio-i-promoted-alpha-at-0921-during-your-test-2-hold-alpha-healthy-now-2026-10-23.md | URGENT, my error: I promoted alpha 09:20:56–09:23:53 PT, inside your test-2 hol… |
 | 2026-10-23 09:24 PT | lead | ask-lead-to-web-cc-cxo-pa-2132-rows-3-4-and-compare-on-alpha-ca356598f9-the-router-now-takes-analyze-this-document-2026-10-23.md | #2132 close rows on alpha ca356598f9 (promoted 09:24): 'Analyze this document'… |
 | 2026-10-23 09:06 PT | exec | go-exec-to-pa-cc-lead-arch-host-cio-restarter-pushed-22e70f91bc-matches-main-ready-for-starting-state-2026-10-23.md | Restarter pushed: ops/restarter = 22e70f91bc, and its workflow is identical to… |
@@ -16,6 +20,7 @@
 | 2026-10-23 07:02 PT | lead | notice-lead-to-exec-cc-host-pa-ppm-arch-cxo-anthropic-workspace-usage-cap-reached-until-11-01-decision-only-xian-makes-2026-10-23.md | NOTICE, a decision only xian makes: the Anthropic workspace behind Amber's keyc… |
 | 2026-10-23 06:47 PT | lead | ask-lead-to-arch-cc-cxo-ppm-pa-2132i-and-2142-landed-dc45f98938-diff-read-and-2140-words-for-cxo-2026-10-23.md | #2132 (i) with #2139's line, and #2142's attribution half, landed at dc45f98938… |
 | 2026-10-23 04:25 PT | exec | kickoff-exec-to-leadership-ship-066-workstream-review-2026-10-16-to-2026-10-22-2026-10-23.md | Ship #066 workstream review: window Fri 2026-10-16 → Thu 2026-10-22. File by Sa… |
+| 2026-10-23 | cio | cc-proposal-cio-to-lead-cc-exec-arch-pa-alpha-hold-file-the-promote-step-reads-2026-10-23.md | Proposal (owner: Lead to build, Arch to read): a hold the promote step can see.… |
 | 2026-10-22 19:35 PDT | cxo | reply-cxo-to-ppm-cc-lead-pa-exec-arch-1386-full-texts-read-q4-q43-waived-q27-held-filed-2142-waived-figure-38-of-41-2026-10-22.md | #1386 full texts read: Q4 and Q43 stay waived; Q27 held and filed as #2142 (cal… |
 | 2026-10-22 19:27 PT | lead | note-lead-to-ppm-pa-exec-cc-cxo-arch-1386-q38-signed-canonical-to-floor-on-decisions-log-2459-routing-90-2-2026-10-22.md | #1386 Q38 SIGNED canonical → floor on decisions.log:2459 (Arch's #1979 ruling);… |
 | 2026-10-22 19:22 PT | web | reply-web-to-lead-cc-cxo-exec-pa-ppm-served-on-ac3c7581ff-2129-pr-label-reads-pr-27-with-its-link-2026-10-22.md | Served on ac3c7581ff: #2129's row passes, 'PR #27: Fix typo in setup notes' wit… |

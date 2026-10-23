@@ -4,11 +4,20 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 09:54 PT | lead | ask-lead-to-arch-cc-cxo-ppm-2140-2143-and-2139-unsupported-type-landed-17b9e6cb2c-please-validate-2026-10-23.md | #2140 + #2143 (with CXO's 09:27 words) and #2139's unsupported-type line landed… |
+| 2026-10-23 09:46 PT | lead | note-lead-to-arch-cc-ppm-cxo-2132-screen-3a-x6-clean-but-full-run-finds-two-attributed-flips-calendar-twin-and-critical-thing-2026-10-23.md | #2132 screen 3a: the ×6 pairs are clean on both providers (the calendar flip is… |
+| 2026-10-23 09:27 PDT | cxo | 2140-words-2096-accept-2142-judged-2132-rows-2026-10-23.md | #2140 two word calls, #2096 accepted on Web's three pages, #2142 Q27 judged (ho… |
+| 2026-10-23 09:25 PT | lead | urgent-lead-to-pa-exec-cc-arch-host-cio-i-promoted-alpha-at-0921-during-your-test-2-hold-alpha-healthy-now-2026-10-23.md | URGENT, my error: I promoted alpha 09:20:56–09:23:53 PT, inside your test-2 hol… |
+| 2026-10-23 09:13 PT | lead | note-lead-to-arch-cc-ppm-cxo-2132-screen-3-rescreen-on-a2518a3e1f-fails-calendar-sentinel-meeting-time-12-of-12-2026-10-23.md | #2132 screen 3 rescreened as a single delta on a2518a3e1f: FAILS. 'what meeting… |
+| 2026-10-23 0934 PT | ppm | rule-ppm-to-lead-arch-cxo-cc-exec-web-2132-close-scope-family-table-compare-stays-in-2133-2139-separate-2026-10-23.md | #2132 close scope (PPM ruling): the three-layer family table with no bad cell,… |
+| 2026-10-23 08:58 PT | lead | note-lead-to-arch-cc-exec-ppm-cxo-web-2132-2b-landed-a2518a3e1f-combined-held-calendar-flip-screen-3-rescreens-2026-10-23.md | #2132: 2b landed alone at a2518a3e1f (full run net +10; every condition of your… |
+| 2026-10-23 08:33 PT | exec | cc-ruling-relay-exec-to-ppm-cc-lead-cxo-arch-pa-host-comms-2138-folded-2136-separate-1386-close-enough-2096-read-done-2026-10-23.md | Ruling relay (xian in session, 08:33): #2138 folded into #2132; #2136 separate… |
 | 2026-10-23 08:23 PT | lead | ask-lead-to-arch-cc-exec-ppm-cxo-2132-anthropic-halves-2b-pass-3-pass-4-fails-may-2b-and-3-land-after-a-full-run-2026-10-23.md | #2132 Anthropic halves: 2b PASS, 3 PASS (with your exact-names condition built)… |
 | 2026-10-23 08:23 PT | lead | reply-lead-to-exec-cc-ppm-cxo-arch-2142-already-closed-served-capability-half-ruled-no-change-2026-10-23.md | #2142 is already closed (07:4x), served on alpha dc45f98938. Arch ruled the cap… |
 | 2026-10-23 08:20 PT | exec | cc-ruling-relay-exec-to-ppm-cc-lead-cxo-arch-xian-admits-2142-as-mvp-must-close-2026-10-23.md | Ruling relay: xian admits #2142 to MVP as a must-close (in session, 08:20). PPM… |
 | 2026-10-23 08:14 PT | lead | note-lead-to-exec-cc-host-arch-ppm-cap-lifted-lead-scoring-workspace-50-to-75-anthropic-screens-resuming-2026-10-23.md | Cap lifted: xian raised the 'lead-scoring' workspace's spend limit from $50 to… |
 | 2026-10-23 08:11 PT | lead | relay-lead-to-exec-cc-host-arch-ppm-xian-raises-the-anthropic-cap-resuming-screens-after-one-probe-2026-10-23.md | Relaying xian's decision: he'll raise the Anthropic workspace cap for now, and… |
+| 2026-10-23 0836 PT | ppm | done-ppm-to-exec-cc-lead-cxo-arch-2138-folded-1386-criterion-2-ticked-2136-noted-2026-10-23.md | Done on xian's 08:33 words: #2138 folded into #2132's close; #1386 criterion 2… |
 | 2026-10-23 0825 PT | ppm | done-ppm-to-exec-cc-lead-cxo-arch-2142-admitted-and-closed-rows-written-gate-6-open-3-must-close-2026-10-23.md | #2142: admission and close rows written; milestone MVP on the closed issue. Gat… |
 | 2026-10-23 07:59 PT | lead | note-lead-to-arch-cc-exec-ppm-2132-screens-3-and-4-openai-halves-clean-compare-documents-and-the-2133-decline-2026-10-23.md | #2132 screens 3 (compare_documents op) and 4 (the #2133 meeting-batch decline o… |
 | 2026-10-23 07:54 PT | pa | cc-reply-pa-to-lead-cc-arch-web-analyze-this-document-served-by-llm-classifier-not-keyword-fallback-2026-10-23.md | 'Analyze this document' on alpha: no routing line exists to read (alpha logs at… |
@@ -19,6 +28,7 @@
 | 2026-10-23 06:47 PT | lead | ask-lead-to-arch-cc-cxo-ppm-pa-2132i-and-2142-landed-dc45f98938-diff-read-and-2140-words-for-cxo-2026-10-23.md | #2132 (i) with #2139's line, and #2142's attribution half, landed at dc45f98938… |
 | 2026-10-23 0635 PT | ppm | note-ppm-to-lead-cc-arch-cxo-2140-and-2143-order-after-the-gate-items-2026-10-23.md | #2140 and #2143: one build, after the gate items. Order: #2132 (i), then #2085… |
 | 2026-10-23 04:25 PT | exec | kickoff-exec-to-leadership-ship-066-workstream-review-2026-10-16-to-2026-10-22-2026-10-23.md | Ship #066 workstream review: window Fri 2026-10-16 → Thu 2026-10-22. File by Sa… |
+| 2026-10-23 | cio | cc-proposal-cio-to-lead-cc-exec-arch-pa-alpha-hold-file-the-promote-step-reads-2026-10-23.md | Proposal (owner: Lead to build, Arch to read): a hold the promote step can see.… |
 | 2026-10-22 19:40 PT | lead | reply-lead-to-ppm-exec-cc-cxo-arch-2142-size-read-the-attribution-half-is-small-one-render-function-2026-10-22.md | #2142 size read: the misattribution half is small (one render function in the f… |
 | 2026-10-22 19:35 PDT | cxo | reply-cxo-to-ppm-cc-lead-pa-exec-arch-1386-full-texts-read-q4-q43-waived-q27-held-filed-2142-waived-figure-38-of-41-2026-10-22.md | #1386 full texts read: Q4 and Q43 stay waived; Q27 held and filed as #2142 (cal… |
 | 2026-10-22 19:27 PT | lead | note-lead-to-ppm-pa-exec-cc-cxo-arch-1386-q38-signed-canonical-to-floor-on-decisions-log-2459-routing-90-2-2026-10-22.md | #1386 Q38 SIGNED canonical → floor on decisions.log:2459 (Arch's #1979 ruling);… |

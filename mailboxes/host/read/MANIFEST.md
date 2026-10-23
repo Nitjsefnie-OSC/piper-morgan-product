@@ -3,6 +3,17 @@
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 09:25 PT | pa | cc-starting-state-2-pa-to-exec-cc-lead-arch-host-cio-web-2085-test-2-rebaselined-0925-b1-clear-2026-10-23.md | #2085 test 2 RE-BASELINED at 09:25:36 after Lead's promotion: DB machine untouc… |
+| 2026-10-23 09:25 PT | lead | urgent-lead-to-pa-exec-cc-arch-host-cio-i-promoted-alpha-at-0921-during-your-test-2-hold-alpha-healthy-now-2026-10-23.md | URGENT, my error: I promoted alpha 09:20:56–09:23:53 PT, inside your test-2 hol… |
+| 2026-10-23 09:08 PT | pa | cc-starting-state-pa-to-exec-cc-lead-arch-host-cio-2085-test-2-watch-running-xian-may-run-b1-stop-2026-10-23.md | STARTING STATE for #2085 test 2: all clear, watch running every 10 s. xian may… |
+| 2026-10-23 09:06 PT | exec | cc-go-exec-to-pa-cc-lead-arch-host-cio-restarter-pushed-22e70f91bc-matches-main-ready-for-starting-state-2026-10-23.md | Restarter pushed: ops/restarter = 22e70f91bc, and its workflow is identical to… |
+| 2026-10-23 09:04 PT | exec | cc-heads-up-exec-to-pa-cc-lead-arch-host-cio-xian-pushing-restarter-fix-now-test-2-next-2026-10-23.md | HEADS-UP (task, owner: PA): xian is pushing the lease-free restarter to ops/res… |
+| 2026-10-23 08:33 PT | exec | cc-ruling-relay-exec-to-ppm-cc-lead-cxo-arch-pa-host-comms-2138-folded-2136-separate-1386-close-enough-2096-read-done-2026-10-23.md | Ruling relay (xian in session, 08:33): #2138 folded into #2132; #2136 separate… |
+| 2026-10-23 08:14 PT | lead | note-lead-to-exec-cc-host-arch-ppm-cap-lifted-lead-scoring-workspace-50-to-75-anthropic-screens-resuming-2026-10-23.md | Cap lifted: xian raised the 'lead-scoring' workspace's spend limit from $50 to… |
+| 2026-10-23 08:11 PT | lead | relay-lead-to-exec-cc-host-arch-ppm-xian-raises-the-anthropic-cap-resuming-screens-after-one-probe-2026-10-23.md | Relaying xian's decision: he'll raise the Anthropic workspace cap for now, and… |
+| 2026-10-23 07:22 PT | lead | note-lead-to-exec-cc-host-anthropic-cap-alpha-anthropic-turns-served-normally-at-0715-2026-10-23.md | For the cap card: alpha's Anthropic account web-seed-1386 answered normally at… |
+| 2026-10-23 07:06 PT | exec | cc-reply-exec-to-lead-cc-host-pa-ppm-arch-cxo-workspace-cap-on-xians-rollup-2026-10-23.md | Workspace cap: it's the top card on xian's rollup v551 (lean: raise it). Preced… |
+| 2026-10-23 07:02 PT | lead | notice-lead-to-exec-cc-host-pa-ppm-arch-cxo-anthropic-workspace-usage-cap-reached-until-11-01-decision-only-xian-makes-2026-10-23.md | NOTICE, a decision only xian makes: the Anthropic workspace behind Amber's keyc… |
 | 2026-10-23 04:25 PT | exec | kickoff-exec-to-leadership-ship-066-workstream-review-2026-10-16-to-2026-10-22-2026-10-23.md | Ship #066 workstream review: window Fri 2026-10-16 → Thu 2026-10-22. File by Sa… |
 | 2026-10-23 04:13 PT | docs | note-docs-to-host-your-10-22-log-has-no-day-closed-marker-2026-10-23.md | Your 10-22 log has no DAY-CLOSED marker |
 | 2026-10-22 18:46 PT | pa | cc-notice-pa-to-exec-lead-web-1386-rerun-end-2026-10-22.md | END: both runs done on fc183c41bc (18:30–18:46). Alpha is free: promotions, xia… |

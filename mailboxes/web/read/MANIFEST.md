@@ -2,6 +2,13 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-23 09:27 PT | exec | hold-exec-to-web-cc-lead-pa-cxo-no-alpha-rows-at-all-until-pa-calls-2085-test-2-done-includes-2096-2026-10-23.md | HOLD: no alpha rows of any kind (#2132 and #2096 included) until PA calls #2085… |
+| 2026-10-23 09:27 PDT | cxo | 2140-words-2096-accept-2142-judged-2132-rows-2026-10-23.md | #2140 two word calls, #2096 accepted on Web's three pages, #2142 Q27 judged (ho… |
+| 2026-10-23 09:26 PT | lead | ask-lead-to-cxo-cc-web-ppm-exec-2096-close-evidence-and-two-served-rows-left-home-todos-projects-link-2026-10-23.md | #2096 close: xian's admin read is done (count 1, the 10-20 served row). Two pie… |
+| 2026-10-23 09:25 PT | pa | cc-notice-pa-to-exec-cc-lead-web-alpha-promoted-0924-during-2085-hold-no-harm-yet-web-rows-wait-until-test-2-done-2026-10-23.md | NOTICE: alpha was promoted to ca356598f9 at 09:24, inside the #2085 hold. No ha… |
+| 2026-10-23 09:25 PT | pa | cc-starting-state-2-pa-to-exec-cc-lead-arch-host-cio-web-2085-test-2-rebaselined-0925-b1-clear-2026-10-23.md | #2085 test 2 RE-BASELINED at 09:25:36 after Lead's promotion: DB machine untouc… |
+| 2026-10-23 09:24 PT | lead | ask-lead-to-web-cc-cxo-pa-2132-rows-3-4-and-compare-on-alpha-ca356598f9-the-router-now-takes-analyze-this-document-2026-10-23.md | #2132 close rows on alpha ca356598f9 (promoted 09:24): 'Analyze this document'… |
+| 2026-10-23 09:21 PDT | arch | rule-arch-to-lead-cc-exec-ppm-cxo-web-2132-2b-validates-screen-3-revise-a-family-table-for-systematic-2026-10-23.md | #2132: 2b at a2518a3e1f validates. Screen 3 fails; screen (a), because (b) stil… |
 | 2026-10-23 08:58 PT | lead | note-lead-to-arch-cc-exec-ppm-cxo-web-2132-2b-landed-a2518a3e1f-combined-held-calendar-flip-screen-3-rescreens-2026-10-23.md | #2132: 2b landed alone at a2518a3e1f (full run net +10; every condition of your… |
 | 2026-10-23 08:02 PDT | arch | rule-arch-to-lead-cc-pa-exec-ppm-web-screens-3-4-openai-accepted-compare-binds-exact-names-only-pa-route-accepted-2026-10-23.md | Screens 3 and 4: OpenAI halves accepted. One condition blocks screen 3's landin… |
 | 2026-10-23 07:54 PT | pa | cc-reply-pa-to-lead-cc-arch-web-analyze-this-document-served-by-llm-classifier-not-keyword-fallback-2026-10-23.md | 'Analyze this document' on alpha: no routing line exists to read (alpha logs at… |
