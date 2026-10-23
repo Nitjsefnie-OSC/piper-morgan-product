@@ -1,6 +1,31 @@
 # Comms carry-forward
 
-## ⭐ CURRENT STATE — 2026-10-21 21:19 PT. Read this first. It supersedes everything below.
+## ⭐ CURRENT STATE — 2026-10-22 21:19 PT. Read this first. It supersedes everything below.
+- **Log:** `dev/2026/10/22/2026-10-22-0619-comms-code-log.md`, DAY-CLOSED. Close every log with exactly `<!-- DAY-CLOSED: YYYY-MM-DD -->`.
+- **Published 10-22:** "The Tracker That Lost Track" (https://pipermorgan.ai/blog/the-tracker-that-lost-track/). Medium is xian's. The Sun 10-18 tease is fixed and live (to "The Phantom Feature"). Its Medium and LinkedIn copies are xian's.
+- **Sat 10-24 "Mistaking the Inset for the Map":**
+  - xian's admin edit plus Comms' approved mechanical fixes (64ed5ecdf6).
+  - **7 judgment calls are waiting for xian** (listed in the 10-22 log, 12:31 entry, and in chat): L32 "reporting the team healthy", L34 "went and checked directly", L36 "all-clear", L42 "the team wrote a fix" → CIO / principle, the "Four agents are healthy" example, "two Claude-isms", and the "both" referent.
+  - The illustration isn't in yet.
+  - Then: full template-audit, and publish-ready to Docs. The tease depends on the Sun title.
+  - xian said 17:2x he hadn't had time yet. That's normal, don't nudge.
+- **Planning doc:** https://claude.ai/artifact/5vc7f1CTHhadvvPBB73h86 (project 27e09d5b-b65c-42de-9b6b-71d9c9ea9eab, prose node 0b3ffad8-19f5, rev 7, unchanged at 12:19). Read with sinceRev before editing.
+  - Six decisions plus 14 beats.
+  - **Decision 1 (Sun 10-25 title) is the one with a clock: it's needed Fri for Saturday's tease.**
+- **Fact-check ledgers** for the Sun 10-25, Tue 10-27 and Thu 10-29 rewrites: `docs/internal/planning/comms/fact-check-*-2026-10-20.md`.
+- **Biweekly mining pass: Fri 10-23, Oct 9–22.** Do it at START. The narrative front is Sep 6.
+- **Invitation:**
+  - **Terms draft:**
+    - "Brief restarts" line per CXO 18:23 (no fixed hour). HOST checks the 30-quiet-minutes grant on send morning.
+    - "Your key" says "live database" plus "~5 days in encrypted backups" (CXO accepted).
+    - Anthropic only (OpenAI run failed).
+    - xian: "Terms assumptions are right" (17:01).
+  - **Known-issues doc:**
+    - The Calendar click-through paragraph is dropped, because the "Piper Morgan (Alpha)" project is verified (xian 17:01).
+    - The bracketed work-account sentence is open (cause unconfirmed).
+  - **Open read:** key rows with no ciphertext (HOST or xian). Recheck on send morning that Create Account no longer asks for the code.
+
+## OLDER STATE — 2026-10-21 21:19 PT
 - **Log:** `dev/2026/10/21/2026-10-21-0619-comms-code-log.md`, DAY-CLOSED. Close every log with exactly `<!-- DAY-CLOSED: YYYY-MM-DD -->`.
 - **Published 10-21:** Ship #065 "The Truth About State" (https://pipermorgan.ai/shipping-news/weekly-ship-065-the-truth-about-state/), after xian's edits and Comms' approved fixes. LinkedIn done, row distributed.
 - **xian's order (10-20), items left:**
