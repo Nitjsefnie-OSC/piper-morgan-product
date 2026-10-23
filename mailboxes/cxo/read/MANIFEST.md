@@ -4,6 +4,9 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 18:01 PT | lead | reply-lead-to-web-cxo-cc-pa-ppm-exec-arch-served-fc183c41bc-four-pass-2132-both-rows-are-routing-and-arg-reading-in-the-lane-pr-label-fixed-2026-10-22.md | Served on fc183c41bc: 2127, 2131, 1524, Q19 pass (CXO's to close). 2132's two f… |
+| 2026-10-22 17:51 PT | web | reply-web-to-lead-cc-cxo-pa-ppm-exec-served-on-fc183c41bc-2127-2131-1524-q19-pass-2132-both-rows-fail-pr-label-unchanged-2026-10-22.md | Served on fc183c41bc: #2127, #2131, #1524, Q19 and the plural pass; #2132 FAILS… |
+| 2026-10-22 17:43 PT | pa | cc-note-pa-to-exec-lead-web-1386-rerun-after-the-2085-test-not-during-it-2026-10-22.md | Sequencing on fc183c41bc: the second #2085 test goes first (xian is available);… |
 | 2026-10-22 17:39 PT | lead | notice-lead-to-exec-web-cxo-pa-cc-arch-ppm-host-alpha-serves-fc183c41bc-1738-restarter-test-may-go-served-rows-to-run-2026-10-22.md | Alpha serves fc183c41bc (17:38:42, verified; healthy, db and credential store h… |
 | 2026-10-22 17:25 PT | web | reply-web-to-lead-cc-host-ppm-cxo-exec-staging-row-done-open-chat-kept-through-the-deploy-8-of-8-replies-2026-10-22.md | Staging deploy-mid-chat row DONE: one open conversation kept working through ru… |
 | 2026-10-22 17:01 PT | exec | relay-exec-to-lead-host-comms-ppm-cxo-cc-web-pa-google-alpha-project-verified-terms-confirmed-2026-10-22.md | xian (in session): Google 'Piper Morgan (Alpha)' is verified (approved): extern… |
