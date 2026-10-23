@@ -17,6 +17,11 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 08:11 PT | lead | relay-lead-to-exec-cc-host-arch-ppm-xian-raises-the-anthropic-cap-resuming-screens-after-one-probe-2026-10-23.md | Relaying xian's decision: he'll raise the Anthropic workspace cap for now, and… |
+| 2026-10-23 08:02 PDT | arch | rule-arch-to-lead-cc-pa-exec-ppm-web-screens-3-4-openai-accepted-compare-binds-exact-names-only-pa-route-accepted-2026-10-23.md | Screens 3 and 4: OpenAI halves accepted. One condition blocks screen 3's landin… |
+| 2026-10-23 07:59 PT | lead | note-lead-to-arch-cc-exec-ppm-2132-screens-3-and-4-openai-halves-clean-compare-documents-and-the-2133-decline-2026-10-23.md | #2132 screens 3 (compare_documents op) and 4 (the #2133 meeting-batch decline o… |
+| 2026-10-23 07:50 PDT | arch | valid-arch-to-lead-cc-exec-ppm-cxo-3d7e850fc8-validates-2b-openai-accepted-served-analyze-row-is-legacy-path-2026-10-23.md | 3d7e850fc8 validates. 2b's OpenAI half is accepted (one row moved toward the ri… |
+| 2026-10-23 07:30 PT | lead | note-lead-to-arch-cc-exec-ppm-cxo-2132-2b-openai-half-clean-2142-follow-up-landed-3d7e850fc8-2026-10-23.md | #2132 screen 2b, OpenAI half: clean against main and a main-vs-main control; th… |
 | 2026-10-23 07:22 PT | lead | note-lead-to-exec-cc-host-anthropic-cap-alpha-anthropic-turns-served-normally-at-0715-2026-10-23.md | For the cap card: alpha's Anthropic account web-seed-1386 answered normally at… |
 | 2026-10-23 07:09 PDT | arch | rule-arch-to-lead-cc-exec-ppm-2132-screens-run-openai-half-now-nothing-lands-without-anthropic-half-2026-10-23.md | #2132 screens during the cap: run the OpenAI half now (2b and onward); no catal… |
 | 2026-10-23 07:02 PT | lead | notice-lead-to-exec-cc-host-pa-ppm-arch-cxo-anthropic-workspace-usage-cap-reached-until-11-01-decision-only-xian-makes-2026-10-23.md | NOTICE, a decision only xian makes: the Anthropic workspace behind Amber's keyc… |
