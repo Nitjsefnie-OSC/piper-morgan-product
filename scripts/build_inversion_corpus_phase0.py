@@ -4554,6 +4554,107 @@ HAND_ROWS = [
         "source": "issue-2112 PA canonical run on 54a5ba990f 2026-10-20 12:2x (Q33; served the date and time)",
         "notes": "Arch 2026-10-20: finding a slot with someone else is floor (twin of 'find time for a 1:1 with sarah'); the router's NONE now stands over the legacy TEMPORAL landing (#2112)",
     },
+    # 2026-10-22 (prog for Lead) — #2132 (Arch 15:05): a deictic document ask is a document op,
+    # never analyze_data (repository activity only). The op resolves the referent by state: a
+    # file the turn binds, else a classifier-extracted Notion title, else CXO's line. Q17/Q37
+    # are the served misses; the rest are the brief's deictic and compare shapes.
+    {
+        "phrase": "Analyze this document",
+        "category": "ANALYSIS",
+        "expected": "action:analyze_document",
+        "source": "issue-2132 Q17 #1386 Run 1 alpha 76789a8988 2026-10-22 (served analyze_data repo metrics)",
+        "notes": "Arch 15:05: a document ask, not repository activity; with nothing bound the op answers CXO's no-document line",
+    },
+    {
+        "phrase": "What does this document say?",
+        "category": "ANALYSIS",
+        "expected": "action:analyze_document",
+        "source": "issue-2132 deictic document ask (Arch 15:05)",
+        "notes": "a question about one document is the analyze op; never analyze_data",
+    },
+    {
+        "phrase": "Summarize this file",
+        "category": "SYNTHESIS",
+        "expected": "action:summarize_document",
+        "source": "issue-2132 deictic document ask (Arch 15:05)",
+        "notes": "the summarize family owns it (#1624); its upload resolver answers honestly when nothing resolves",
+    },
+    {
+        "phrase": "Compare these two documents",
+        "category": "ANALYSIS",
+        "expected": "action:compare_documents",
+        "source": "issue-2132 Q37 #1386 Run 1 alpha 76789a8988 2026-10-22 (served analyze_data repo metrics)",
+        "notes": "Arch 15:05: compare_documents entry, two bound files or CXO's no-two-documents line",
+    },
+    {
+        "phrase": "Compare the two files I uploaded",
+        "category": "ANALYSIS",
+        "expected": "action:compare_documents",
+        "source": "issue-2132 compare ask (Arch 15:05)",
+        "notes": "names no file, so nothing binds and the op answers CXO's line; never analyze_data",
+    },
+    # 2026-10-22 (prog for Lead) — #2132, Web served on alpha fc183c41bc (Notion AND GitHub
+    # connected): a named document reached analyze_document but nothing set its title. The
+    # handler now reads the router's `title` arg (inversion_args, honesty-guarded), so these
+    # rows assert the title too. The last is the contrast: repository activity stays analyze_data.
+    {
+        "phrase": "Analyze the document called PRD Writing Guidelines",
+        "category": "ANALYSIS",
+        "expected": "action:analyze_document",
+        "expected_args": {"title": "PRD Writing Guidelines"},
+        "source": "issue-2132 Web served alpha fc183c41bc 2026-10-22 (reached analyze_document, got the no-title line)",
+        "notes": "the title is the router's args.title; the handler searches only it and names the page",
+    },
+    {
+        "phrase": "Summarize my Q4 Roadmap doc in Notion",
+        "category": "ANALYSIS",
+        "expected": "action:analyze_document",
+        "expected_args": {"title": "Q4 Roadmap"},
+        "source": "issue-2132 Lead's brief 2026-10-22 (a named Notion page)",
+        "notes": "summarize_document reads uploads only; a named Notion page is analyze_document's read (Lead to confirm the op)",
+    },
+    {
+        "phrase": "Analyze our repo activity this week",
+        "category": "ANALYSIS",
+        "expected": "action:analyze_data",
+        "source": "issue-2132 contrast row (Arch 15:05: analyze_data is repository activity)",
+        "notes": "must STAY analyze_data after the description narrowing",
+    },
+    # 2026-10-22 (prog for Lead) — #2133 (Arch 15:05): creating SEVERAL issues from a meeting is
+    # the READ decline decline_batch_issues_from_meeting (CXO's words); create_issue stays single-issue
+    # and never splits one message into several writes. The last row is the contrast.
+    {
+        "phrase": "Create issues from this meeting's action items",
+        "category": "EXECUTION",
+        "expected": "action:decline_batch_issues_from_meeting",
+        "source": "issue-2133 Q44 #1386 Run 1 alpha 76789a8988 2026-10-22 (served create_issue's subject ask)",
+        "notes": "batch from a meeting: the READ decline, not create_issue (create_ticket alias, #1412)",
+    },
+    {
+        "phrase": "Create issues for all the action items from today's meeting",
+        "category": "EXECUTION",
+        "expected": "action:decline_batch_issues_from_meeting",
+        "source": "issue-2133 batch-from-meeting ask (Arch 15:05)",
+    },
+    {
+        "phrase": "Turn the meeting notes into GitHub issues",
+        "category": "EXECUTION",
+        "expected": "action:decline_batch_issues_from_meeting",
+        "source": "issue-2133 batch-from-meeting ask (Arch 15:05)",
+    },
+    {
+        "phrase": "Make tickets for each action item from the standup",
+        "category": "EXECUTION",
+        "expected": "action:decline_batch_issues_from_meeting",
+        "source": "issue-2133 batch-from-meeting ask (Arch 15:05)",
+    },
+    {
+        "phrase": "Create an issue about the login bug",
+        "category": "EXECUTION",
+        "expected": "action:create_issue",
+        "source": "issue-2133 contrast row (Arch 15:05: one issue about one thing stays create_issue)",
+        "notes": "must STAY a single create; a decline landing here is the regression",
+    },
 ]
 
 

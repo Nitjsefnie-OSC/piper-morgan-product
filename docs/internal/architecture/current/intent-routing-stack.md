@@ -6127,6 +6127,40 @@ later hit of that text, from any user. Rule (Arch, decisions.log 2026-10-16 08:3
 (`if user_id:` in `_process_intent_internal`) and never comes from the cache. B3 referent resolution sits above
 the cache and is unaffected. Pins: `tests/unit/services/intent_service/test_intent_cache_fresh_objects_2054.py`.
 
+## Document asks bind only real referents; batch-from-meeting declines (2026-10-22, #2132/#2133, Arch 15:05 + 16:24)
+
+**Rule (Arch):** which handler owns an ask is meaning, routed by corpus rows and entry descriptions; a handler
+checks state only. A document ask resolves in order to (1) a file of the user's that the turn binds, (2) a Notion
+title, with the page named ("I read '<title>' in Notion."), (3) CXO's line "I don't see a document in this chat.
+Paste the text here and I'll work with it." Never the top hit of a search on the bare message.
+
+- **There is no chat-session file list.** Uploads (`UploadedFileDB`) and artifacts are owner-scoped (`owner_id`,
+  #1312) and carry no session id; `FileRepository.get_files_for_session` is legacy naming for an owner query, and
+  chat turns carry no file context. So "held" means what the turn binds by state:
+  `document_handlers.resolve_bound_files` matches an explicit `file_id`/`file_ids`, or a name equal
+  (case-insensitive) to one of the user's file names. No recency pick, no fuzzy score. An unnamed "this document"
+  binds nothing.
+- **Title source on a served turn:** nothing sets `document_title` on the chat path (no classifier slot produces
+  it). `_handle_analyze_document_notion` reads the live router's `title` arg from `context["inversion_args"]`
+  (`intent_service._router_document_title`), guarded the #1976/#2069 way (`user_said_every_word`, bounded length)
+  plus a value check that the arg is not only deictic/noun words ("this document", "it"), the add_project
+  bare-noun precedent. The classifier slots `document_title`/`filename` stay the fallback. The analyze_document
+  description declares the arg ("Put the name the user gave in args: title = their words for it");
+  `compare_documents` declares `titles` (a list). The shadow scorer's `args_match` now compares `title` (it was
+  asserted on the #2098 update_issue row but unscored).
+- **Entries:** `compare_documents` (READ, PRIVATE, `read_referent` by analogy with analyze_document; ≥2 bound
+  uploads → `handle_compare_documents`, else CXO's "I don't see two documents in this chat. Paste the text of both
+  here and I'll compare them."). `decline_batch_issues_from_meeting` (READ, PRIVATE, **ungrouped**, flips by its own
+  op token like `clear_todos`; CXO's "I can't create several issues from a meeting yet. Tell me the first action
+  item and I'll create it."). The name avoids `create_issues_from_meeting`/`batch_create_issues`, which the #1426
+  denial-freshness ratchet reserves for the real capability. `create_issue`/`create_ticket` is unchanged and
+  single-issue. `analyze_data`'s description narrows to repository activity metrics.
+- **Live-ness:** `read_referent` is live, so `compare_documents` is router-reachable from the deploy that carries
+  it (and classifier-reachable regardless: the classifier already normalizes "compare" to it). The decline serves
+  only once its op token is set. Rule 7: these are catalog changes, so the full corpus run is owed in the lane.
+- Pins: `tests/unit/services/intent_service/test_document_referents_and_meeting_decline_2132_2133.py`,
+  `test_document_referent_is_bound_2132.py`.
+
 ## Pointers
 
 - Probe report + recalibration trace: `dev/2026/07/08/routing-probe-1283-run1.md`

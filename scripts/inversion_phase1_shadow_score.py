@@ -308,8 +308,10 @@ def args_match(expected_args: dict, got_args: dict) -> tuple[bool, str]:
     # #1976: a free-text arg (create_todo's task) — compared after
     # whitespace/case normalisation and with trailing punctuation shed,
     # verbatim otherwise (the handler stores it as the title). #2069 adds
-    # add_project's name / description / repo, compared the same way.
-    for key in ("text", "name", "description", "repo"):
+    # add_project's name / description / repo, compared the same way. #2132
+    # adds title (analyze_document's document name; update_issue's title rows
+    # already asserted it, unscored until now).
+    for key in ("text", "name", "description", "repo", "title"):
         if key not in expected_args:
             continue
         want = _norm_text(expected_args[key])

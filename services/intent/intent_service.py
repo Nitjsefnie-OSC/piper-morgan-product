@@ -13,6 +13,7 @@ import copy
 import json
 import os
 import re
+import string
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional, Tuple, TypedDict
@@ -417,6 +418,74 @@ def _principal_from_intent(intent) -> Optional[str]:
     """
     context = intent.context or {}
     return context.get("user_id")
+
+
+# #2132: words that carry no document name on their own. A router ``title``
+# arg made ONLY of these ("this document", "the file", "it") names nothing, the
+# same value check as add_project's "a bare 'project' is the noun, not a name"
+# (portfolio_service.is_plausible_project_name). It inspects the ARG's value,
+# never the user's message.
+_NOT_A_DOCUMENT_NAME_WORDS = frozenset(
+    {
+        "a",
+        "an",
+        "the",
+        "this",
+        "that",
+        "these",
+        "those",
+        "it",
+        "my",
+        "our",
+        "your",
+        "one",
+        "here",
+        "doc",
+        "docs",
+        "document",
+        "documents",
+        "file",
+        "files",
+        "page",
+        "notion",
+    }
+)
+_MAX_DOCUMENT_TITLE_WORDS = 12
+_MAX_DOCUMENT_TITLE_CHARS = 200
+
+
+def _router_document_title(intent) -> Optional[str]:
+    """#2132: the live router's ``title`` arg for a document op, or None.
+
+    Read from ``context["inversion_args"]`` (namespaced router args, consumed
+    the #1943/#1976/#2069 way: the router decides meaning, the handler only
+    checks the value). Guards, in the add_project ``name`` precedent's order:
+    a non-empty string; every word of it occurs in the user's message
+    (``user_said_every_word``, the #1976 honesty guard, so an LLM-written arg
+    never searches for words the user did not say); bounded length; and not
+    made only of words that name no document (``this document``, ``it``).
+    """
+    args = (intent.context or {}).get("inversion_args")
+    if not isinstance(args, dict):
+        return None
+    raw = args.get("title")
+    if not isinstance(raw, str) or not raw.strip():
+        return None
+    if len(raw) > _MAX_DOCUMENT_TITLE_CHARS:
+        return None
+    from services.onboarding.portfolio_service import user_said_every_word
+
+    message = getattr(intent, "original_message", None) or (intent.context or {}).get(
+        "original_message"
+    )
+    title = user_said_every_word(raw, message)
+    if title is None or len(title.split()) > _MAX_DOCUMENT_TITLE_WORDS:
+        return None
+    words = {w.strip(string.punctuation).lower() for w in title.split()}
+    words.discard("")
+    if not words or words <= _NOT_A_DOCUMENT_NAME_WORDS:
+        return None
+    return title
 
 
 # #2076 (CXO): the focus ("**Today:**") reply's opening sentence when GitHub
@@ -5913,6 +5982,18 @@ class IntentService:
         self.logger.info(f"Processing document analysis via Notion: {intent.action}")
 
         try:
+            # #2132 (Arch 15:05, step 1 of the referent order): a file of the
+            # user's that this turn binds comes before any Notion step. State
+            # only: an explicit file id, or a filename/title slot equal to one
+            # of the user's own file names (Arch's residual: a filename that
+            # names a held file must never fall into a Notion search). There is
+            # no chat-session file list to consult (uploads are owner-scoped,
+            # and chat turns carry no file context), so an unnamed "this
+            # document" binds nothing here and falls through to steps 2 and 3.
+            held_result = await self._analyze_bound_held_file(intent, workflow_id)
+            if held_result is not None:
+                return held_result
+
             # Import NotionIntegrationRouter
             from services.integrations.notion.notion_integration_router import (
                 NotionIntegrationRouter,
@@ -5945,7 +6026,17 @@ class IntentService:
 
             # Extract document reference from intent context
             document_id = intent.context.get("document_id") or intent.context.get("page_id")
-            document_title = intent.context.get("document_title") or intent.context.get("filename")
+            # #2132 (Lead, served alpha fc183c41bc: "Analyze the document called
+            # PRD Writing Guidelines" got the no-title line): nothing sets
+            # document_title on a served turn; the live router's extracted
+            # ``title`` arg (context["inversion_args"], the #1943/#2069 family)
+            # is the title, honesty-guarded. The classifier slots stay the
+            # fallback.
+            document_title = (
+                _router_document_title(intent)
+                or intent.context.get("document_title")
+                or intent.context.get("filename")
+            )
 
             # #2132 (Arch 15:05, CXO 15:25): a deictic ask ("analyze this
             # document") resolves only to a BOUND referent. Searching Notion with
@@ -6090,6 +6181,102 @@ class IntentService:
                 context="analyzing that document",
                 error_type="NotionAnalysisError",
             )
+
+    async def _analyze_bound_held_file(
+        self, intent: Intent, workflow_id: str
+    ) -> Optional[IntentProcessingResult]:
+        """#2132 step 1: analyze the user's file this turn binds, else None.
+
+        Binding is by state (``document_handlers.resolve_bound_files``): an
+        explicit ``file_id``, or a ``document_title``/``filename`` slot equal to
+        one of the user's file names. A Notion page id (``document_id`` /
+        ``page_id``) means the turn bound a Notion page, so no held file is
+        looked up. Two files bearing the asked name → ask which, never pick.
+        """
+        ctx = intent.context or {}
+        if ctx.get("document_id") or ctx.get("page_id"):
+            return None
+        user_id = _principal_from_intent(intent)
+        file_id = ctx.get("file_id")
+        names = [
+            n
+            for n in (
+                _router_document_title(intent),
+                ctx.get("document_title"),
+                ctx.get("filename"),
+            )
+            if n
+        ]
+        if not user_id or not (file_id or names):
+            return None
+
+        from services.intent_service.document_handlers import (
+            handle_analyze_document,
+            resolve_bound_files,
+        )
+
+        bound = await resolve_bound_files(
+            user_id, file_ids=[file_id] if file_id else [], names=names
+        )
+        if not bound:
+            return None
+
+        intent_data = {
+            "category": intent.category.value,
+            "action": intent.action,
+            "confidence": intent.confidence,
+        }
+        if len(bound) > 1:
+            listing = "\n".join(f"- {f['filename']}" for f in bound)
+            return IntentProcessingResult(
+                success=True,
+                # Stated, not asked (the #1730 rule: an ask arms the #846
+                # store or isn't made); the user answers with the exact name.
+                message=(
+                    "More than one of your files matches that name, so I didn't pick one:\n"
+                    f"{listing}\nTell me the exact file name, or paste the text here."
+                ),
+                intent_data={**intent_data, "candidates": [f["filename"] for f in bound]},
+                workflow_id=workflow_id,
+                requires_clarification=False,
+            )
+
+        held = bound[0]
+        try:
+            analysis = await handle_analyze_document(held["file_id"], user_id)
+        except FileNotFoundError:
+            return IntentProcessingResult(
+                success=False,
+                message=(
+                    f"I found '{held['filename']}' in your files but couldn't read its "
+                    "content. It may have been removed. Try uploading it again."
+                ),
+                intent_data={**intent_data, "file_id": held["file_id"]},
+                workflow_id=workflow_id,
+                error="Held file content missing",
+                error_type="DocumentNotFound",
+            )
+
+        parts = [f"I read '{analysis['filename']}' from your files."]
+        if analysis.get("summary"):
+            parts.append(f"**Summary:**\n{analysis['summary']}")
+        findings = analysis.get("key_findings") or []
+        if findings:
+            parts.append("**Key findings:**\n" + "\n".join(f"- {k}" for k in findings))
+        recommendations = analysis.get("recommendations") or []
+        if recommendations:
+            parts.append("\n".join(f"- {r}" for r in recommendations))
+        return IntentProcessingResult(
+            success=True,
+            message="\n\n".join(parts),
+            intent_data={
+                **intent_data,
+                "file_id": analysis["file_id"],
+                "filename": analysis["filename"],
+            },
+            workflow_id=workflow_id,
+            requires_clarification=False,
+        )
 
     async def _handle_update_document_notion(
         self, intent: Intent, workflow_id: str, session_id: str

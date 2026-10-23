@@ -12,7 +12,7 @@ Each handler:
 """
 
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Sequence
 from uuid import UUID
 
 import structlog
@@ -158,6 +158,81 @@ async def handle_analyze_document(file_id: str, user_id: str) -> Dict:
             "recommendations": analysis_result.recommendations or [],
             "analyzed_at": analysis_result.generated_at.isoformat(),
         }
+
+
+async def resolve_bound_files(
+    user_id: str,
+    *,
+    file_ids: Sequence[str] = (),
+    names: Sequence[str] = (),
+    uploads_only: bool = False,
+) -> List[Dict[str, str]]:
+    """The user's files that THIS turn binds by id or exact name (#2132).
+
+    Arch (2026-10-22 15:05): a document ask resolves only to a bound referent,
+    and a held file comes first. There is no chat-session-scoped file list in
+    this product: uploads and artifacts are owner-scoped (``owner_id``, #1312)
+    and carry no session or conversation id, and chat turns carry no file
+    context (Arch 16:24). So "held" here means what the turn itself names: an
+    explicit file id, or a name equal (case-insensitive) to the filename the
+    Files page shows for one of the user's uploads (or saved artifacts, the
+    /files view's other half, #1657). Nothing is guessed: no recency pick, no
+    fuzzy score, no "the only file you have". A name that matches nothing
+    binds nothing.
+
+    Returns ``[{"file_id", "filename"}]`` in request order, deduplicated.
+    ``uploads_only`` limits the view to uploads (handle_compare_documents reads
+    upload storage only).
+    """
+    wanted_ids = [str(i) for i in file_ids if i]
+    wanted_names = [str(n).strip().lower() for n in names if n and str(n).strip()]
+    if not user_id or not (wanted_ids or wanted_names):
+        return []
+
+    from sqlalchemy import func, or_
+
+    found: List[Dict[str, str]] = []
+    seen: set = set()
+
+    def _add(file_id: str, filename: str) -> None:
+        if file_id not in seen:
+            seen.add(file_id)
+            found.append({"file_id": file_id, "filename": filename})
+
+    async with AsyncSessionFactory.session_scope_fresh() as session:
+        clauses = []
+        if wanted_ids:
+            clauses.append(UploadedFileDB.id.in_(wanted_ids))
+        if wanted_names:
+            clauses.append(func.lower(UploadedFileDB.filename).in_(wanted_names))
+        stmt = select(UploadedFileDB).where(UploadedFileDB.owner_id == user_id, or_(*clauses))
+        uploads = (await session.execute(stmt)).scalars().all()
+        for row in uploads:
+            _add(str(row.id), str(row.filename))
+
+        if not uploads_only:
+            from services.database.repositories import ArtifactRepository
+            from services.file_context.artifact_view import artifact_filename
+
+            artifacts = ArtifactRepository(session)
+            for file_id in wanted_ids:
+                if file_id in seen:
+                    continue
+                artifact = await artifacts.get_by_id(file_id, owner_id=user_id)
+                if artifact is not None:
+                    _add(
+                        str(artifact.id),
+                        artifact_filename((artifact.payload or {}).get("title"), artifact.id),
+                    )
+            if wanted_names:
+                for artifact in await artifacts.list_for_owner(
+                    user_id, source_type="generated", limit=50
+                ):
+                    name = artifact_filename((artifact.payload or {}).get("title"), artifact.id)
+                    if name.lower() in wanted_names:
+                        _add(str(artifact.id), name)
+
+    return found
 
 
 async def handle_question_document(file_id: str, question: str, user_id: str) -> Dict:

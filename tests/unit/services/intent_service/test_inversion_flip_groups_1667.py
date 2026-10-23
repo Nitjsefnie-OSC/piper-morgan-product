@@ -337,7 +337,11 @@ class TestFlipGroupDeclaration:
         # sweep could silently make it live before the ops it resolves into
         # are. One named exception, not a weakened invariant: any OTHER
         # ungrouped READ op still fails this assertion.
-        expected_ungrouped = {"clear_todos"}
+        # ``decline_batch_issues_from_meeting`` (#2133, 2026-10-22) is the second
+        # named exception, same mechanism: a READ decline (fixed copy, no
+        # write) that flips by its own op token after the rule-7 run, because
+        # every group is live and any group would make it live on deploy.
+        expected_ungrouped = {"clear_todos", "decline_batch_issues_from_meeting"}
         ungrouped_reads = {
             k for k, e in rail.items() if e.effect == EffectClass.READ and e.flip_group is None
         }
@@ -628,11 +632,15 @@ class TestLiveConsultSurfaces:
         READ by behavior (it mutates nothing itself) but exists ONLY to
         gate a WRITE/DESTRUCTIVE re-entry — a group sweep could silently
         make it live before the ops it resolves into are, which is exactly
-        what this invariant exists to prevent for every OTHER READ op. One
-        named exception, stated denominator: 1 of 94 READ rail keys."""
+        what this invariant exists to prevent for every OTHER READ op.
+
+        ``decline_batch_issues_from_meeting`` (#2133, 2026-10-22) is the second named
+        exception: a READ decline in CXO's words that flips by its own op
+        token after the Lead's rule-7 run (every group is live, so a group
+        would make it live on deploy with no token)."""
         rail = get_action_workflows()
         read_keys = {k: e for k, e in rail.items() if e.effect == EffectClass.READ}
-        expected_ungrouped = {"clear_todos"}
+        expected_ungrouped = {"clear_todos", "decline_batch_issues_from_meeting"}
         ungrouped = {k for k, e in read_keys.items() if e.flip_group is None}
         assert ungrouped == expected_ungrouped, (
             f"{len(ungrouped)}/{len(read_keys)} READ keys ungrouped, expected only "
@@ -927,13 +935,18 @@ class TestFlipCoverageAudit:
         exception — Arch's ruling 2026-10-06: a resolver entry is READ by
         behavior but must flip only by its own operation token, never by a
         read-wave sweep — so the honest count is now 1, and the report must
-        SAY 1 and name it, not just omit it."""
+        SAY 1 and name it, not just omit it. ``decline_batch_issues_from_meeting``
+        (#2133, 2026-10-22) is the second, same mechanism (a READ decline that
+        flips by its own op token), so the honest count is 2."""
         rail = get_action_workflows()
-        unassigned = [
+        unassigned = sorted(
             k for k, e in rail.items() if e.effect == EffectClass.READ and e.flip_group is None
-        ]
-        assert unassigned == ["clear_todos"], f"expected only clear_todos, found: {unassigned}"
-        assert "UNASSIGNED — the 1 READ keys NO WAVE CAN FLIP, by name" in report
+        )
+        assert unassigned == [
+            "clear_todos",
+            "decline_batch_issues_from_meeting",
+        ], f"expected only clear_todos and decline_batch_issues_from_meeting, found: {unassigned}"
+        assert "UNASSIGNED — the 2 READ keys NO WAVE CAN FLIP, by name" in report
         for op in unassigned:
             assert op in report, f"unassigned op {op} missing from --audit output"
 

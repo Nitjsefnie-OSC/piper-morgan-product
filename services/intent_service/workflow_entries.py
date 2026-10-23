@@ -1411,6 +1411,155 @@ async def run_summarize_document_workflow(
         )
 
 
+# #2132 (Arch 2026-10-22 15:05; CXO's words 15:25): "compare these two
+# documents" resolves only to bound referents, the same rule analyze_document
+# follows. Kept as module constants so the pins quote the exact words.
+NO_TWO_DOCUMENTS_LINE = (
+    "I don't see two documents in this chat. Paste the text of both here and " "I'll compare them."
+)
+# #2133 (Arch 15:05: batch-from-meeting asks route to a READ decline; CXO's words).
+BATCH_FROM_MEETING_DECLINE = (
+    "I can't create several issues from a meeting yet. Tell me the first action "
+    "item and I'll create it."
+)
+
+
+async def run_compare_documents_workflow(
+    session_id: str,
+    user_id: Optional[str] = None,
+    context: Optional[Dict[str, Any]] = None,
+) -> Any:
+    """#2132: compare two or more of the user's files the turn binds, else CXO's line.
+
+    The classifier normalizes "compare" to ``compare_documents`` (classifier.py
+    action normalization) and, before this entry, no rail key caught it: the
+    turn fell to the floor or, on other samples, to analyze_data's repository
+    metrics (Q37). Referent rule (Arch 15:05): at least two bound files →
+    ``document_handlers.handle_compare_documents`` (the REST compare path);
+    fewer → CXO's line. Binding is state (``resolve_bound_files``): explicit
+    ``file_ids`` or ``filenames`` slots equal to the user's own upload names.
+    There is no chat-session file list, so a bare "these two documents" binds
+    nothing and gets the line, true by construction (Arch 16:24). Uploads only:
+    the compare handler reads upload storage.
+    """
+    from services.intent.intent_service import IntentProcessingResult
+
+    ctx = context or {}
+    intent = ctx.get("intent")
+    intent_context = dict(getattr(intent, "context", None) or {})
+
+    def _result(text, *, success=True, reason=None, extra=None):
+        payload = {"reason": reason} if reason else {}
+        if extra:
+            payload.update(extra)
+        return IntentProcessingResult(
+            success=success,
+            message=text,
+            intent_data={
+                "category": "analysis",
+                "action": "compare_documents",
+                "context": payload,
+            },
+            workflow_id=None,
+            requires_clarification=False,
+        )
+
+    def _as_list(value) -> list:
+        if not value:
+            return []
+        if isinstance(value, (list, tuple)):
+            return [v for v in value if v]
+        return [value]
+
+    file_ids = _as_list(intent_context.get("file_ids"))
+    names = _as_list(intent_context.get("filenames"))
+    # The live router's ``titles`` arg (context["inversion_args"], the
+    # #1943/#2069 family), each element honesty-guarded: every word must
+    # occur in the user's message (#1976), so an LLM-written name never binds
+    # a file the user did not name. A failing element is dropped; binding
+    # then needs two real matches anyway.
+    router_args = intent_context.get("inversion_args")
+    if isinstance(router_args, dict):
+        from services.onboarding.portfolio_service import user_said_every_word
+
+        message = (getattr(intent, "original_message", "") or "") or intent_context.get(
+            "original_message", ""
+        )
+        for raw in _as_list(router_args.get("titles"))[:5]:
+            said = user_said_every_word(raw, message)
+            if said:
+                names.append(said)
+
+    bound: list = []
+    if user_id and (file_ids or names):
+        from services.intent_service.document_handlers import resolve_bound_files
+
+        bound = await resolve_bound_files(
+            user_id, file_ids=file_ids, names=names, uploads_only=True
+        )
+
+    if len(bound) < 2 or not user_id:
+        return _result(
+            NO_TWO_DOCUMENTS_LINE,
+            reason="fewer_than_two_bound_files",
+            extra={"bound_files": len(bound)},
+        )
+
+    from services.intent_service.document_handlers import handle_compare_documents
+
+    try:
+        compared = await handle_compare_documents([f["file_id"] for f in bound], user_id=user_id)
+    except FileNotFoundError:
+        return _result(
+            "I found those files but couldn't read the content of one of them. It "
+            "may have been removed. Try uploading it again.",
+            success=False,
+            reason="file_content_missing",
+        )
+    except Exception as e:  # silent-ok: error-logged with context and returns success=False — honest degrade, never fake success (#1425)
+        logger.error("compare_documents_workflow_failed", error=str(e), user_id=user_id)
+        return _result(
+            "I had trouble comparing those documents just now. You can try again in a moment.",
+            success=False,
+            reason="compare_failed",
+        )
+
+    names_read = ", ".join(f"'{n}'" for n in compared["filenames"])
+    return _result(
+        f"I compared {names_read} from your files.\n\n{compared['comparison']}",
+        extra={"file_ids": compared["file_ids"], "filenames": compared["filenames"]},
+    )
+
+
+async def run_decline_batch_issues_from_meeting_workflow(
+    session_id: str,
+    user_id: Optional[str] = None,
+    context: Optional[Dict[str, Any]] = None,
+) -> Any:
+    """#2133: the READ decline for creating several issues from a meeting.
+
+    Arch (15:05): which handler owns the ask is meaning, so it is routed by
+    corpus rows and this entry's description, never by a phrasing check in the
+    create handler; create stays single-issue and never splits one message
+    into several writes. This entry writes nothing: it answers with CXO's
+    words and offers the single create the product can do.
+    """
+    from services.intent.intent_service import IntentProcessingResult
+
+    return IntentProcessingResult(
+        success=True,
+        message=BATCH_FROM_MEETING_DECLINE,
+        intent_data={
+            "category": "execution",
+            "action": "decline_batch_issues_from_meeting",
+            "context": {"reason": "batch_create_not_supported"},
+        },
+        workflow_id=None,
+        requires_clarification=False,
+        implemented=False,
+    )
+
+
 # handler_attr → classifier aliases (mirror the migrated elif branches exactly).
 _READ_QUERY_COHORT: dict[str, list[str]] = {
     "_handle_shipped_this_week": [
@@ -2790,6 +2939,19 @@ _ANALYSIS_QUERY_COHORT: dict[str, list[str]] = {
     "_handle_analyze_data": ["analyze_data", "evaluate_metrics"],
 }
 
+# #2132 (Arch 2026-10-22 15:05): analyze_data's description narrows to what the
+# handler reads — repository activity and metrics — so document asks ("analyze
+# this document", "compare these two documents", Q17/Q37) don't land on it and
+# get repository metrics presented as a document analysis. The other two keep
+# the generic factory text.
+_ANALYSIS_QUERY_DESCRIPTIONS: dict[str, str] = {
+    "_handle_analyze_data": (
+        "Repository activity metrics for a GitHub repository over a recent window: "
+        "counts of commits, pull requests, and issues opened and closed. Reads "
+        "repository activity only, never a document or file"
+    ),
+}
+
 
 def register_default_workflows() -> None:
     """
@@ -3493,6 +3655,69 @@ def register_default_workflows() -> None:
         flip_group="read_synthesis",
     )
 
+    # #2132 (Arch 2026-10-22 15:05): compare_documents gets an entry under the
+    # analyze_document referent rule. The classifier already normalizes
+    # "compare" to this key (classifier.py action normalization); before this
+    # entry no rail key caught it (floor on some samples, analyze_data's repo
+    # metrics on others, Q37).
+    # effect: READ — owner-scoped SELECTs of upload rows + a read of their
+    # stored bytes + one LLM comparison rendered back; nothing is written
+    # (document_handlers.handle_compare_documents).
+    # outwardness: PRIVATE — rendered to the asking user in their own chat.
+    # flip_group: read_referent — by analogy with analyze_document (the
+    # neighbour it mirrors): grouped by what it must RESOLVE (two bound files),
+    # not by what it emits. ⚠️ read_referent is LIVE (CURRENT_LIVE_CATEGORIES in
+    # scripts/inversion_phase3_deletion_gate.py), so this widens a live group:
+    # the router can land this op on alpha from the deploy that carries it.
+    # The rule-7 full run and the Phase-2 gate for the widened group are the
+    # Lead's, before promotion.
+    compare_documents_entry = WorkflowEntry(
+        entry_point=run_compare_documents_workflow,
+        effect=EffectClass.READ,
+        outwardness=Outwardness.PRIVATE,
+        description=(
+            "Compare two or more documents the user names from their uploaded files; "
+            "with fewer than two named, it asks them to paste both texts. "
+            "Put the names the user gave in args: titles = a list of strings"
+        ),
+        requires_context=["intent"],
+        action_triggered=True,
+        flip_group="read_referent",
+    )
+
+    # #2133 (Arch 2026-10-22 15:05): creating SEVERAL issues from a meeting is a
+    # READ decline in CXO's words, routed by corpus rows and this description,
+    # never by a phrasing check in the create handler (which stays single-issue
+    # and never splits one message into several writes). Chosen over #886's
+    # _get_contextual_fallback block: that copy sits on the floor, which the
+    # classifier's create_ticket landing never reaches (the #2133 strand), and
+    # reaching it would take a phrase check in a handler.
+    # Name: NOT create_issues_from_meeting / batch_create_issues — those are
+    # the action tokens the #1426 denial-freshness ratchet
+    # (CONTEXTUAL_FALLBACK_DENIALS in tests/test_architecture_enforcement.py)
+    # reserves for the real batch capability; this op is its decline.
+    # effect: READ — returns fixed copy; no router, store or connector call.
+    # outwardness: PRIVATE.
+    # flip_group: None — DELIBERATE, the clear_todos precedent (pinned in
+    # test_inversion_flip_groups_1667.py's expected_ungrouped). Every group is
+    # live today, so any group would make this op live on deploy with no token.
+    # It flips by its own op token, decline_batch_issues_from_meeting, in
+    # PIPER_INVERSION_LIVE_CATEGORIES (xian's hand, after the rule-7 run;
+    # mirror CURRENT_LIVE_CATEGORIES first). Until then the classifier's
+    # create_ticket landing still reaches the create handler's subject ask.
+    decline_batch_issues_from_meeting_entry = WorkflowEntry(
+        entry_point=run_decline_batch_issues_from_meeting_workflow,
+        effect=EffectClass.READ,
+        outwardness=Outwardness.PRIVATE,
+        description=(
+            "Create SEVERAL issues at once from a meeting, its notes or its action items "
+            "(a batch): not supported yet; says so and offers to create the first one. "
+            "One issue about one thing is create_issue"
+        ),
+        requires_context=[],
+        action_triggered=True,
+    )
+
     # RECONNECT #1327 build #2: conversational "what's my default repo" — the read
     # counterpart. Same 2-arg (intent, workflow_id) factory + action-dispatch rail.
     # effect: READ — _handle_get_default_repo reads the same preference key the
@@ -3914,6 +4139,8 @@ def register_default_workflows() -> None:
         "summarize_file": summarize_document_entry,
         "summarize_upload": summarize_document_entry,
         "summarize_uploaded_file": summarize_document_entry,
+        "compare_documents": compare_documents_entry,
+        "decline_batch_issues_from_meeting": decline_batch_issues_from_meeting_entry,
     }
 
     # #1124 step 3 cohort 2: GitHub read-query cohort — one shared entry point per
@@ -3989,7 +4216,9 @@ def register_default_workflows() -> None:
         entry = WorkflowEntry(
             entry_point=_make_query_dispatch_entry_point(handler_attr, pass_session_id=True),
             effect=EffectClass.READ,
-            description=f"{handler_attr} via action dispatch (#1124)",
+            description=_ANALYSIS_QUERY_DESCRIPTIONS.get(
+                handler_attr, f"{handler_attr} via action dispatch (#1124)"
+            ),
             requires_context=["intent", "intent_service"],
             action_triggered=True,
             flip_group="read_referent",
@@ -4229,7 +4458,12 @@ def register_default_workflows() -> None:
                 _make_query_dispatch_entry_point(
                     "_handle_analyze_document_notion", pass_session_id=True
                 ),
-                "analyze-document (Notion) via action dispatch",
+                # #2132: says what it resolves, in the referent order Arch
+                # ruled (a named file of the user's, else a Notion page by
+                # title, else the ask to paste); was "analyze-document (Notion)".
+                "Analyze one document the user names: one of their uploaded files, or a "
+                "Notion page by its title; with no document named, it asks them to paste "
+                "the text. Put the name the user gave in args: title = their words for it",
                 # effect: READ — fetches and analyzes a Notion document; unlike
                 # its update sibling, it never calls append_blocks/update_page.
                 EffectClass.READ,
