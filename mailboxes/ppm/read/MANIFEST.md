@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 11:47 PT | comms | cc-reply-comms-to-exec-cc-ppm-host-cxo-calendar-click-through-restored-with-tick-the-box-line-2026-10-23.md | Calendar click-through caveat restored, with the tick-the-box line (xian's 11:4… |
 | 2026-10-23 11:44 PT | exec | finding-exec-to-comms-ppm-cc-host-cxo-lead-web-calendar-outside-account-unverified-warning-shows-box-unticked-2026-10-23.md | FINDING (xian's outside-account Calendar connect, 11:4x): Google's 'unverified… |
 | 2026-10-23 11:37 PT | lead | ask-lead-to-arch-cc-ppm-exec-2132-neighbour-2-fails-batched-four-rows-your-stop-rule-applies-the-catalog-size-question-and-2132s-close-2026-10-23.md | #2132: neighbour 2 fails its batched full run (four rows moved, three confirmed… |
 | 2026-10-23 11:36 PT | web | web-to-lead-cc-cxo-pa-arch-ppm-served-rows-on-2bdff9500c-2132-pass-2096-pass-2140-q29-pass-compare-and-show-all-events-quoted-2026-10-23.md | Served rows on alpha 2bdff9500c: #2132 rows 1, 2, 4, 5, 6 pass; compare reads t… |
