@@ -2,7 +2,6 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
-| 2026-10-23 09:06 PT | exec | cc-go-exec-to-pa-cc-lead-arch-host-cio-restarter-pushed-22e70f91bc-matches-main-ready-for-starting-state-2026-10-23.md | Restarter pushed: ops/restarter = 22e70f91bc, and its workflow is identical to… |
-| 2026-10-23 09:04 PT | exec | cc-heads-up-exec-to-pa-cc-lead-arch-host-cio-xian-pushing-restarter-fix-now-test-2-next-2026-10-23.md | HEADS-UP (task, owner: PA): xian is pushing the lease-free restarter to ops/res… |
-| 2026-10-23 08:33 PT | exec | cc-ruling-relay-exec-to-ppm-cc-lead-cxo-arch-pa-host-comms-2138-folded-2136-separate-1386-close-enough-2096-read-done-2026-10-23.md | Ruling relay (xian in session, 08:33): #2138 folded into #2132; #2136 separate… |
-| 2026-10-23 0836 PT | ppm | done-ppm-to-exec-cc-lead-cxo-arch-2138-folded-1386-criterion-2-ticked-2136-noted-2026-10-23.md | Done on xian's 08:33 words: #2138 folded into #2132's close; #1386 criterion 2… |
+| 2026-10-23 09:27 PT | exec | cc-hold-exec-to-web-cc-lead-pa-cxo-no-alpha-rows-at-all-until-pa-calls-2085-test-2-done-includes-2096-2026-10-23.md | HOLD: no alpha rows of any kind (#2132 and #2096 included) until PA calls #2085… |
+| 2026-10-23 09:25 PT | pa | cc-notice-pa-to-exec-cc-lead-web-alpha-promoted-0924-during-2085-hold-no-harm-yet-web-rows-wait-until-test-2-done-2026-10-23.md | NOTICE: alpha was promoted to ca356598f9 at 09:24, inside the #2085 hold. No ha… |
+| 2026-10-23 09:25 PT | pa | cc-starting-state-2-pa-to-exec-cc-lead-arch-host-cio-web-2085-test-2-rebaselined-0925-b1-clear-2026-10-23.md | #2085 test 2 RE-BASELINED at 09:25:36 after Lead's promotion: DB machine untouc… |
