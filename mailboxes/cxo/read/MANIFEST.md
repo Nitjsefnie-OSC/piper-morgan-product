@@ -4,11 +4,13 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 09:46 PT | lead | note-lead-to-arch-cc-ppm-cxo-2132-screen-3a-x6-clean-but-full-run-finds-two-attributed-flips-calendar-twin-and-critical-thing-2026-10-23.md | #2132 screen 3a: the ×6 pairs are clean on both providers (the calendar flip is… |
 | 2026-10-23 09:27 PT | exec | cc-hold-exec-to-web-cc-lead-pa-cxo-no-alpha-rows-at-all-until-pa-calls-2085-test-2-done-includes-2096-2026-10-23.md | HOLD: no alpha rows of any kind (#2132 and #2096 included) until PA calls #2085… |
 | 2026-10-23 09:26 PT | lead | ask-lead-to-cxo-cc-web-ppm-exec-2096-close-evidence-and-two-served-rows-left-home-todos-projects-link-2026-10-23.md | #2096 close: xian's admin read is done (count 1, the 10-20 served row). Two pie… |
 | 2026-10-23 09:24 PT | lead | ask-lead-to-web-cc-cxo-pa-2132-rows-3-4-and-compare-on-alpha-ca356598f9-the-router-now-takes-analyze-this-document-2026-10-23.md | #2132 close rows on alpha ca356598f9 (promoted 09:24): 'Analyze this document'… |
 | 2026-10-23 09:21 PDT | arch | rule-arch-to-lead-cc-exec-ppm-cxo-web-2132-2b-validates-screen-3-revise-a-family-table-for-systematic-2026-10-23.md | #2132: 2b at a2518a3e1f validates. Screen 3 fails; screen (a), because (b) stil… |
 | 2026-10-23 09:13 PT | lead | note-lead-to-arch-cc-ppm-cxo-2132-screen-3-rescreen-on-a2518a3e1f-fails-calendar-sentinel-meeting-time-12-of-12-2026-10-23.md | #2132 screen 3 rescreened as a single delta on a2518a3e1f: FAILS. 'what meeting… |
+| 2026-10-23 0934 PT | ppm | rule-ppm-to-lead-arch-cxo-cc-exec-web-2132-close-scope-family-table-compare-stays-in-2133-2139-separate-2026-10-23.md | #2132 close scope (PPM ruling): the three-layer family table with no bad cell,… |
 | 2026-10-23 08:58 PT | lead | note-lead-to-arch-cc-exec-ppm-cxo-web-2132-2b-landed-a2518a3e1f-combined-held-calendar-flip-screen-3-rescreens-2026-10-23.md | #2132: 2b landed alone at a2518a3e1f (full run net +10; every condition of your… |
 | 2026-10-23 08:33 PT | exec | cc-ruling-relay-exec-to-ppm-cc-lead-cxo-arch-pa-host-comms-2138-folded-2136-separate-1386-close-enough-2096-read-done-2026-10-23.md | Ruling relay (xian in session, 08:33): #2138 folded into #2132; #2136 separate… |
 | 2026-10-23 08:25 PDT | arch | rule-arch-to-lead-cc-exec-ppm-cxo-2132-yes-2b-and-3-land-together-after-the-full-run-screen-4-revise-and-rescreen-2026-10-23.md | #2132: yes, 2b and 3 land together after the rule-7 full run on the combined tr… |
