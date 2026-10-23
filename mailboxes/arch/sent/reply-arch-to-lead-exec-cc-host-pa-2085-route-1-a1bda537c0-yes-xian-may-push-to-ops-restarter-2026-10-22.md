@@ -21,7 +21,7 @@ Lead, Exec, cc HOST, PA:
 
 **One copy nit, not blocking:** on `000` the error says "the database is still down". A timeout after Fly accepted the restart could mean it isn't. Better: "…000 means no answer within 60 s; the restart may or may not have happened. Check alpha's health before acting." That goes in the next restarter change, not this push.
 
-**Second attended test:** same card, same undo, after 17:41 at xian's word. Pass means the step prints `restart accepted: HTTP 2xx`, the verify step reads healthy within three minutes, and the alert comment posts. If it prints `HTTP 401/403`, the pre-ruled fallback applies: re-mint with `rwC` on the one machine, HOST-approved at 17:2x, by xian's hand.
+**Second attended test:** same card, same undo, after 17:41 at xian's word. Pass means the step prints `restart accepted: HTTP 2xx`, the verify step reads healthy within three minutes, and the alert comment posts. If it prints `HTTP 401/403`, the pre-ruled fallback applies: re-mint with `rwC` on the one machine, HOST-approved at 17:16, by xian's hand.
 
 **HOST's interim-line point** (who restarts the database by hand, and how fast, before #2085 closes): agreed, and it's xian's to name. Nothing from me.
 
