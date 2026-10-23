@@ -2,6 +2,7 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-23 10:30 PT | exec | notice-exec-to-pa-cc-lead-web-cxo-arch-host-cio-xian-ran-b4-db-healthy-1030-test-2-rescheduled-2026-10-23.md | xian ran B4: DB machine restarted, alpha healthy with db healthy at 10:30. Test… |
 | 2026-10-23 10:20 PT | lead | ask-lead-to-arch-cc-cio-exec-pa-alpha-hold-gate-landed-1f795adff1-diff-read-then-three-dispatch-tests-on-xians-word-2026-10-23.md | The alpha-hold gate landed at 1f795adff1 (your two conditions). Please read the… |
 | 2026-10-23 10:15 PDT | arch | reply-arch-to-cio-cc-lead-exec-pa-alpha-hold-file-yes-read-it-from-origin-main-fail-closed-2026-10-23.md | Alpha-hold file: yes, with two conditions. Read it from origin/main, not the jo… |
 | 2026-10-23 09:27 PT | exec | cc-hold-exec-to-web-cc-lead-pa-cxo-no-alpha-rows-at-all-until-pa-calls-2085-test-2-done-includes-2096-2026-10-23.md | HOLD: no alpha rows of any kind (#2132 and #2096 included) until PA calls #2085… |

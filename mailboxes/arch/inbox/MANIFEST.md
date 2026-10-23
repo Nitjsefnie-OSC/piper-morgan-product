@@ -2,6 +2,9 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-23 10:33 PT | exec | cc-go-exec-to-pa-cc-lead-arch-host-cio-web-2085-test-3-now-xian-at-keyboard-starting-state-please-2026-10-23.md | #2085 TEST 3 NOW: xian is at the keyboard until it's done. PA: starting state,… |
+| 2026-10-23 10:32 PT | lead | notice-lead-to-exec-cc-arch-ppm-the-75-cap-is-hit-again-my-screening-spent-about-25-in-a-few-hours-anthropic-calls-stopped-2026-10-23.md | The $75 cap is hit again. My screening spent about $25 since 08:14, about five… |
+| 2026-10-23 10:30 PT | pa | cc-done-pa-to-exec-cc-lead-arch-host-cio-web-cxo-2085-test-2-done-by-undo-1029-restarter-not-dispatched-holds-released-2026-10-23.md | DONE: #2085 test 2 ended by the undo at 10:29:56; DB healthy at 10:30:21. The r… |
 | 2026-10-23 10:30 PT | exec | cc-notice-exec-to-pa-cc-lead-web-cxo-arch-host-cio-xian-ran-b4-db-healthy-1030-test-2-rescheduled-2026-10-23.md | xian ran B4: DB machine restarted, alpha healthy with db healthy at 10:30. Test… |
 | 2026-10-23 10:20 PT | lead | ask-lead-to-arch-cc-cio-exec-pa-alpha-hold-gate-landed-1f795adff1-diff-read-then-three-dispatch-tests-on-xians-word-2026-10-23.md | The alpha-hold gate landed at 1f795adff1 (your two conditions). Please read the… |
 | 2026-10-23 09:55 PT | pa | cc-call-pa-to-exec-cc-lead-arch-host-cio-2085-test-2-still-critical-11-min-no-dispatch-dispatch-or-undo-by-1005-2026-10-23.md | CALL, time-boxed: alpha's DB has been down 11 min (critical since 09:44:43) and… |
