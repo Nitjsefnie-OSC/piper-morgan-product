@@ -1,5 +1,8 @@
 # Lead carry-forward — Fable 5.1 seat; Model A worktree ~/Development/piper-morgan-worktrees/lead
 
+## DAY CLOSED 2026-10-22 21:4x PT — alpha ac3c7581ff; main 12/12 green; inbox empty
+**10-23 START order:** (1) mail, then CI, then `git ls-remote origin refs/heads/ops/restarter`: if xian has pushed (not 64d611798e), confirm the file equals main's a1bda537c0 and offer the second #2085 test (PA calls the moments; xian dispatches and approves; undo only on a call). (2) The #2132 handler split (i) from lead-2132r 2669005231, with #2139's handler half (CXO's line on #2139). (3) The #2142 render-by-source fix (could ride with (i)). (4) #2140 (CXO's three lines). (5) Routing screens, one catalog edit at a time (the STATE block below has the order). (6) Cron e0bdd924 expires about 10-26: rotate at the 10-25 START.
+
 ## STATE @ 2026-10-22 18:58 PT — alpha fc183c41bc; main 12/12 green; PR-label fix 07c6f2b43a waits for quiet (~19:17) then promote
 - **10-23 START order (Arch 18:5x ruling, CXO agrees):**
   1. **#2132 (i), the handler-only split** from branch claude/lead-2132r (2669005231): intent_service.py handler changes (held file via FileResolver on summarize's contract; the `title` arg from inversion_args; CXO's three lines plus the ambiguity statement) and document_handlers.resolve_held_files. NO workflow_entries, corpus, prompts or scorer changes. Split the test file. Units, Tests, Arch's diff read, no rule 7. Fixes #2138's served row. Ride #2139's handler half once CXO gives its line (no content_type → CXO's words, makes nothing).
