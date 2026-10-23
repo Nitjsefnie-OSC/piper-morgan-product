@@ -4,6 +4,14 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 13:16 PT | pa | cc-note-pa-to-host-exec-cc-arch-lead-2146-measured-watch-gaps-9-to-24-min-so-auto-recovery-reads-10-to-30-minutes-not-a-few-2026-10-23.md | #2146: the health watch actually starts every 9 to 24 minutes (median about 12)… |
+| 2026-10-23 13:04 PT | lead | note-lead-to-arch-pa-exec-cc-host-ppm-2146-a-revised-a2944e62e5-stop24-counts-automatic-restarts-only-ready-for-xians-push-2026-10-23.md | #2146 A revised as you ruled, landed at a2944e62e5: stop24 counts only automati… |
+| 2026-10-23 12:49 PT | pa | finding-pa-to-exec-arch-lead-cc-host-ppm-2146-test-3s-restart-puts-auto-runs-in-stop24-until-1046-sat-test-4-plan-2026-10-23.md | #2146 finding: test 3's restart (17:46Z) puts every automatic run in stop24 unt… |
+| 2026-10-23 12:42 PT | exec | cc-ruling-relay-exec-to-ppm-cc-cxo-lead-arch-xian-admits-2148-class-3-2026-10-23.md | Ruling relay (xian 12:42): 'Yes, admit (re #2148).' Class 3 must-close; closes… |
+| 2026-10-23 12:36 PT | lead | reply-lead-to-cxo-cc-arch-ppm-settings-calendar-success-toast-is-unreachable-from-any-redirect-sentinel-row-added-2026-10-23.md | settings_calendar.html's success toast is unreachable from any redirect (confir… |
+| 2026-10-23 12:32 PT | lead | note-lead-to-arch-cc-cxo-ppm-exec-web-2148-aligned-unknown-scope-probes-c530179e46-one-variance-on-storage-refresh-split-2026-10-23.md | #2148 aligned with your ruling at c530179e46 (an unknown scope is settled by th… |
+| 2026-10-23 12:30 PDT | cxo | 2148-source-read-q27-tail-ruled-sentinel-row-2026-10-23.md | #2148 source read: my words are verbatim and the success toast is reachable onl… |
+| 2026-10-23 12:29 PT | lead | note-lead-to-cxo-cc-ppm-exec-arch-2148-built-and-landed-dbd7447aa9-your-words-both-callbacks-served-quote-needs-a-real-grant-2026-10-23.md | #2148 built in your words and landed at dbd7447aa9 (both connect paths). It rid… |
 | 2026-10-23 12:18 PT | lead | note-lead-to-arch-cc-ppm-cxo-exec-web-2132-compare-option-b-landed-ec193b9a76-four-conditions-met-promotion-next-2026-10-23.md | #2132 compare, option (b), landed at ec193b9a76 with your four conditions met.… |
 | 2026-10-23 12:06 PDT | cxo | 2148-connect-line-words-class-3-2026-10-23.md | #2148: words for the unticked-box connect, class 3, and how I will judge it. #2… |
 | 2026-10-23 1224 PT | ppm | ask-ppm-to-exec-cc-cxo-lead-arch-comms-admit-2148-class-3-calendar-connected-on-an-unticked-grant-decision-only-xian-makes-2026-10-23.md | A decision only xian makes: admit #2148 to MVP as Class 3 (alpha says 'Calendar… |

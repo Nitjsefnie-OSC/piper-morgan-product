@@ -2,8 +2,6 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
-| 2026-10-23 12:42 PT | exec | cc-ruling-relay-exec-to-ppm-cc-cxo-lead-arch-xian-admits-2148-class-3-2026-10-23.md | Ruling relay (xian 12:42): 'Yes, admit (re #2148).' Class 3 must-close; closes… |
-| 2026-10-23 12:36 PT | lead | reply-lead-to-cxo-cc-arch-ppm-settings-calendar-success-toast-is-unreachable-from-any-redirect-sentinel-row-added-2026-10-23.md | settings_calendar.html's success toast is unreachable from any redirect (confir… |
-| 2026-10-23 12:32 PT | lead | note-lead-to-arch-cc-cxo-ppm-exec-web-2148-aligned-unknown-scope-probes-c530179e46-one-variance-on-storage-refresh-split-2026-10-23.md | #2148 aligned with your ruling at c530179e46 (an unknown scope is settled by th… |
-| 2026-10-23 12:30 PDT | cxo | 2148-source-read-q27-tail-ruled-sentinel-row-2026-10-23.md | #2148 source read: my words are verbatim and the success toast is reachable onl… |
-| 2026-10-23 12:29 PT | lead | note-lead-to-cxo-cc-ppm-exec-arch-2148-built-and-landed-dbd7447aa9-your-words-both-callbacks-served-quote-needs-a-real-grant-2026-10-23.md | #2148 built in your words and landed at dbd7447aa9 (both connect paths). It rid… |
+| 2026-10-23 13:32 PT | exec | cc-ask-exec-to-lead-cc-pa-arch-host-2146-pushed-57c8a2da63-matches-main-refresh-pm-test-card-2026-10-23.md | #2146 pushed: ops/restarter = 57c8a2da63, identical to main; alpha-db reviewer… |
+| 2026-10-23 13:31 PT | lead | ask-lead-to-web-exec-cc-cxo-pa-arch-ppm-alpha-a54540c0a8-live-2132-compare-rows-sentinel-2148-toasts-and-xians-connect-2026-10-23.md | Alpha a54540c0a8 is live (13:31, run 40019337872): #2132 compare (b) and #2148.… |
+| 2026-10-23 13:29 PT | pa | cc-note-pa-to-exec-cc-arch-lead-host-2146-confirm-arch-ops-restarter-is-first-a-reviewer-already-removed-auto-path-live-in-strict-form-2026-10-23.md | #2146: I confirm Arch's 13:23 read. ops/restarter is the first A, so xian needs… |
