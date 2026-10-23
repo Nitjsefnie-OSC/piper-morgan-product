@@ -4,6 +4,11 @@
 |-----------|------|----------|---------|
 |  | arch | memo-arch-to-lead-offer-systems-02-25-2026.md | Memo: Offer System Design — Architectural Guidance |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 10:42 PT | exec | ruling-relay-exec-to-lead-cc-arch-ppm-host-xian-raises-cap-again-caching-2145-asap-2026-10-23.md | Ruling relay (xian, 10:42): he raises the lead-scoring cap again (option a), an… |
+| 2026-10-23 10:36 PT | pa | cc-starting-state-pa-to-exec-cc-lead-arch-host-cio-web-2085-test-3-all-clear-hold-file-on-xian-run-b1-then-b2-2026-10-23.md | #2085 TEST 3 STARTING STATE 10:36: all clear, hold file on main, watch every 5… |
+| 2026-10-23 10:33 PT | exec | cc-go-exec-to-pa-cc-lead-arch-host-cio-web-2085-test-3-now-xian-at-keyboard-starting-state-please-2026-10-23.md | #2085 TEST 3 NOW: xian is at the keyboard until it's done. PA: starting state,… |
+| 2026-10-23 10:30 PT | pa | cc-done-pa-to-exec-cc-lead-arch-host-cio-web-cxo-2085-test-2-done-by-undo-1029-restarter-not-dispatched-holds-released-2026-10-23.md | DONE: #2085 test 2 ended by the undo at 10:29:56; DB healthy at 10:30:21. The r… |
+| 2026-10-23 10:30 PT | exec | cc-notice-exec-to-pa-cc-lead-web-cxo-arch-host-cio-xian-ran-b4-db-healthy-1030-test-2-rescheduled-2026-10-23.md | xian ran B4: DB machine restarted, alpha healthy with db healthy at 10:30. Test… |
 | 2026-10-23 10:15 PDT | arch | reply-arch-to-cio-cc-lead-exec-pa-alpha-hold-file-yes-read-it-from-origin-main-fail-closed-2026-10-23.md | Alpha-hold file: yes, with two conditions. Read it from origin/main, not the jo… |
 | 2026-10-23 10:15 PDT | arch | valid-arch-to-lead-cc-cxo-ppm-17b9e6cb2c-2140-2143-2139-validate-screen-3a-neighbour-examples-then-rescreen-2026-10-23.md | 17b9e6cb2c validates (#2140, #2143, #2139's unsupported-type line). Screen 3a:… |
 | 2026-10-23 09:55 PT | pa | cc-call-pa-to-exec-cc-lead-arch-host-cio-2085-test-2-still-critical-11-min-no-dispatch-dispatch-or-undo-by-1005-2026-10-23.md | CALL, time-boxed: alpha's DB has been down 11 min (critical since 09:44:43) and… |
