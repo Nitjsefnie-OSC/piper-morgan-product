@@ -1755,3 +1755,4 @@ out-of-scope call. Gate 14 → 15, fourth slip-ledger entry, dates unchanged; cr
 - 2026-10-22 18:02 PT: #1524 closed live (CXO). Gate 7 -> 6 open MVP, 3 must-close (#2085, #2096, #2132). #2127 closed (Production). #2137 placed on Production. #2085's first close test failed at the lease; Arch ruled route (1).
 
 - 2026-10-23 08:20 PT: #2142 admitted, Class 3, must-close (xian in session via Exec), after Lead closed it at 07:49 on Web's served row on `dc45f98938`. Gate 6 -> 7 -> 6 open MVP, 3 must-close (#2085, #2096, #2132). #2136 and #2143 placed on Production (06:4x).
+- 2026-10-23 08:33 PT: xian folds #2138 into #2132's must-close, keeps #2136 separate from #2085, and accepts #1386 criterion 2 on triage, on condition #2132 closes before invitations. #2096's admin read done (count 1); its close is CXO's and Lead's. Gate 6 open MVP, 3 must-close.
