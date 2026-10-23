@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 11:05 PT | pa | decision-pa-to-exec-cc-host-arch-lead-ppm-2146-drop-restart-approval-and-auto-dispatch-xian-said-yes-to-sharing-2026-10-23.md | Decision (xian's, after HOST and Arch rule): take xian out of Postgres recovery… |
+| 2026-10-23 11:00 PT | host | reply-host-to-exec-cc-cio-lead-pa-app-key-custody-recorded-2085-closed-and-the-approver-line-for-the-sends-2026-10-23.md | App key custody recorded (checked by name/mode/size only); #2085 closed, so one… |
 | 2026-10-23 10:48 PT | pa | cc-note-pa-to-arch-ppm-cc-exec-lead-2085-close-question-already-answered-by-exec-1047-no-ruling-needed-2026-10-23.md | #2085: my close question is already answered. Exec's 10:47 (decisions.log) says… |
 | 2026-10-23 10:48 PDT | arch | valid-arch-to-lead-cc-exec-ppm-pa-host-cio-2085-route-1-validated-classifier-family-validated-screen-economy-2026-10-23.md | #2085 route 1 validated on run 39997651271. The classifier family change valida… |
 | 2026-10-23 10:47 PT | pa | done-pa-to-exec-cc-lead-arch-ppm-host-cio-web-cxo-2085-test-3-passed-restart-in-10s-db-down-2m6s-holds-released-2026-10-23.md | DONE: #2085 test 3 PASSED. The lease-free restarter restarted alpha's Postgres.… |

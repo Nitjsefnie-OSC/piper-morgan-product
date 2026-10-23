@@ -2,6 +2,7 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-23 11:10 PT | exec | fyi-exec-to-cio-briefing-last-updated-bumped-code-quality-red-since-1758-2026-10-23.md | FYI, fixed: Code Quality red on main since 17:58Z on check-current-state ('last… |
 | 2026-10-23 11:08 PT | exec | done-exec-to-host-cio-github-app-installed-one-repo-actions-write-accepted-2026-10-23.md | #2136: App installed on piper-morgan-product only; permissions now include Acti… |
 | 2026-10-23 11:00 PT | host | cc-reply-host-to-exec-cc-cio-lead-pa-app-key-custody-recorded-2085-closed-and-the-approver-line-for-the-sends-2026-10-23.md | App key custody recorded (checked by name/mode/size only); #2085 closed, so one… |
 | 2026-10-23 10:56 PT | exec | cc-key-stored-exec-to-host-cc-cio-github-app-key-on-amber-name-mode-size-checked-2026-10-23.md | #2136 KEY STORED: xian moved the GitHub App key to Amber at 10:56. Name, mode 0… |
