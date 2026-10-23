@@ -104,10 +104,9 @@ def _guard2_program() -> str:
 
 def _guard2(runs, auto: bool = False) -> str:
     import json
+    import os
     import subprocess
     import sys
-
-    import os
 
     out = subprocess.run(
         [sys.executable, "-c", _guard2_program()],
