@@ -473,6 +473,14 @@
       const email = params.get('calendar_email') || 'Calendar';
       Toast.show('success', 'Calendar Connected', `Connected as ${decodeURIComponent(email)}`);
       window.history.replaceState({}, document.title, '/settings/integrations');
+    } else if (params.get('calendar_error') === 'scope_missing') {
+      // #2148 (CXO): a grant without calendar access is not a connection.
+      Toast.show('error', 'Calendar not connected', "Google is connected, but you didn't allow calendar access, so I can't read your calendar yet. Connect again and tick the calendar box on Google's consent page.");
+      window.history.replaceState({}, document.title, '/settings/integrations');
+    } else if (params.get('calendar_unconfirmed') === 'true') {
+      // #2148 (CXO): the granted scopes couldn't be read; no success toast.
+      Toast.show('warning', 'Calendar', "I couldn't confirm what Google allowed. Open Settings and run the test.");
+      window.history.replaceState({}, document.title, '/settings/integrations');
     } else if (params.get('calendar_error')) {
       const error = params.get('calendar_error');
       Toast.show('error', 'Calendar Connection Failed', `Failed to connect: ${error}`);

@@ -1233,8 +1233,19 @@ async def handle_calendar_callback(
         # Issue #734: Extract user_id from callback result
         user_id = result.get("user_id")
 
-        # Store refresh token securely with user-scoped key
         tokens = result["tokens"]
+        # #2148: the consent page's calendar box starts unticked; a grant without
+        # calendar access is NOT a connection. Store nothing, say so (CXO's words).
+        from services.integrations.calendar.oauth_handler import calendar_access_granted
+
+        granted = calendar_access_granted(getattr(tokens, "scope", ""))
+        if granted is False:
+            logger.warning("calendar_settings_oauth_scope_missing", user_id=result.get("user_id"))
+            return RedirectResponse(
+                url="/settings/integrations?calendar_error=scope_missing", status_code=302
+            )
+
+        # Store refresh token securely with user-scoped key
         if tokens.refresh_token:
             keychain = KeychainService()
             # Issue #734: Use user-scoped key for per-user storage
@@ -1247,6 +1258,11 @@ async def handle_calendar_callback(
 
         logger.info("calendar_settings_oauth_success", user_id=user_id, email=user_email)
 
+        if granted is None:
+            # #2148: the granted scopes couldn't be read; never a success toast.
+            return RedirectResponse(
+                url="/settings/integrations?calendar_unconfirmed=true", status_code=302
+            )
         return RedirectResponse(
             url=f"/settings/integrations?calendar_success=true&calendar_email={email_encoded}",
             status_code=302,

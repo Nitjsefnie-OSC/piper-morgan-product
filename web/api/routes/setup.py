@@ -1753,6 +1753,15 @@ async def handle_calendar_oauth_callback(
 
         # Store refresh token securely with user-scoped key
         tokens = result["tokens"]
+        # #2148: a grant without calendar access is not a connection (CXO's words).
+        from services.integrations.calendar.oauth_handler import calendar_access_granted
+
+        granted = calendar_access_granted(getattr(tokens, "scope", ""))
+        if granted is False:
+            logger.warning("calendar_oauth_scope_missing", user_id=result.get("user_id"))
+            return RedirectResponse(
+                url="/setup?calendar_error=scope_missing#step-2", status_code=302
+            )
         if tokens.refresh_token:
             keychain = KeychainService()
             # Issue #734/#917: Use ONLY user-scoped key for per-user storage.
@@ -1778,6 +1787,9 @@ async def handle_calendar_oauth_callback(
 
         logger.info("calendar_oauth_success", user_id=user_id, email=user_email)
 
+        if granted is None:
+            # #2148: the granted scopes couldn't be read; never a success state.
+            return RedirectResponse(url="/setup?calendar_unconfirmed=true#step-2", status_code=302)
         # Redirect back to setup wizard with success
         return RedirectResponse(
             url=f"/setup?calendar_success=true&calendar_email={email_encoded}#step-2",

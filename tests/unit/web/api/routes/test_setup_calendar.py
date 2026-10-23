@@ -146,6 +146,8 @@ class TestCalendarOAuthCallback:
         ) as MockHandler:
             mock_instance = MagicMock()
             mock_tokens = MagicMock()
+            # #2148: Google returns the granted scopes; calendar access was allowed
+            mock_tokens.scope = "https://www.googleapis.com/auth/calendar.readonly"
             mock_tokens.refresh_token = "refresh_token_123"
             mock_instance.handle_oauth_callback = AsyncMock(
                 return_value={
@@ -242,6 +244,8 @@ class TestCalendarOAuthCallback:
         ) as MockHandler:
             mock_instance = MagicMock()
             mock_tokens = MagicMock()
+            # #2148: Google returns the granted scopes; calendar access was allowed
+            mock_tokens.scope = "https://www.googleapis.com/auth/calendar.readonly"
             mock_tokens.refresh_token = "refresh_token_to_store"
             mock_instance.handle_oauth_callback = AsyncMock(
                 return_value={
@@ -280,6 +284,8 @@ class TestCalendarOAuthCallback:
         ) as MockHandler:
             mock_instance = MagicMock()
             mock_tokens = MagicMock()
+            # #2148: Google returns the granted scopes; calendar access was allowed
+            mock_tokens.scope = "https://www.googleapis.com/auth/calendar.readonly"
             mock_tokens.refresh_token = "refresh_token_to_store"
             mock_instance.handle_oauth_callback = AsyncMock(
                 return_value={

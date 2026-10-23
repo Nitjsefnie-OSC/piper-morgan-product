@@ -399,6 +399,34 @@ class GoogleCalendarOAuthHandler:
                 )
 
 
+CALENDAR_READ_SCOPE = "https://www.googleapis.com/auth/calendar.readonly"
+
+# #2148 (CXO 10-23): the connect moment's words when the grant lacks calendar access,
+# and when the granted scopes can't be read from Google's token response.
+CALENDAR_SCOPE_MISSING_LINE = (
+    "Google is connected, but you didn't allow calendar access, so I can't read your "
+    "calendar yet. Connect again and tick the calendar box on Google's consent page."
+)
+CALENDAR_SCOPE_UNCONFIRMED_LINE = (
+    "I couldn't confirm what Google allowed. Open Settings and run the test."
+)
+
+
+def calendar_access_granted(scope: Optional[str]) -> Optional[bool]:
+    """#2148: whether Google's token response granted calendar read access.
+
+    Google returns the GRANTED scopes (space-separated) in the token response's
+    ``scope``; with the unverified app's consent page the calendar box starts
+    unticked, so a user can finish the flow without it. True/False when the
+    list is readable; None when it is empty or absent (unconfirmed, never
+    treated as granted).
+    """
+    if not isinstance(scope, str) or not scope.strip():
+        return None
+    granted = set(scope.split())
+    return CALENDAR_READ_SCOPE in granted or "https://www.googleapis.com/auth/calendar" in granted
+
+
 async def probe_calendar_read(access_token: str) -> Optional[str]:
     """#2092: one real, minimal calendar read with a fresh access token.
 

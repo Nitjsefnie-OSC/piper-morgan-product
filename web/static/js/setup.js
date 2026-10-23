@@ -1066,6 +1066,10 @@
             showCalendarConnected(decodeURIComponent(email));
             // Clean URL by removing OAuth params
             window.history.replaceState({}, document.title, '/setup#step-2');
+        } else if (params.get('calendar_unconfirmed') === 'true') {
+            // #2148 (CXO): the granted scopes couldn't be read; never a success state.
+            showCalendarError("I couldn't confirm what Google allowed. Open Settings and run the test.");
+            window.history.replaceState({}, document.title, '/setup#step-2');
         } else if (params.get('calendar_error')) {
             const error = params.get('calendar_error');
             showCalendarError(getCalendarErrorMessage(error));
@@ -1143,6 +1147,8 @@
             'access_denied': 'Authorization was denied. Please try again.',
             'missing_params': 'OAuth callback missing parameters.',
             'callback_failed': 'Failed to complete authorization.',
+            // #2148 (CXO): a grant without calendar access is not a connection.
+            'scope_missing': "Google is connected, but you didn't allow calendar access, so I can't read your calendar yet. Connect again and tick the calendar box on Google's consent page.",
         };
         return messages[error] || 'An error occurred. Please try again.';
     }
