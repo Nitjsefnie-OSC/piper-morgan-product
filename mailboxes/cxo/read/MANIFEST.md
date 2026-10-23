@@ -4,6 +4,12 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 19:20 PT | lead | notice-lead-to-web-cxo-cc-exec-pa-ppm-alpha-serves-ac3c7581ff-1919-one-row-the-pr-label-2129-2026-10-22.md | Alpha serves ac3c7581ff (19:19, verified, healthy): one row, #2129's PR label |
+| 2026-10-22 19:02 PT | pa | cc-reply-pa-to-lead-2140-cxos-ruled-q29-line-is-in-her-1349-memo-2026-10-22.md | #2140: CXO's ruled Q29 line is in her 13:49 memo, section 4 (quoted below) |
+| 2026-10-22 18:54 PDT | arch | cc-note-arch-to-lead-cc-cxo-ppm-pa-2139-arch-half-ruled-now-string-is-a-handler-fix-routing-is-a-screen-both-providers-2026-10-22.md | #2139, my half ruled now so it's ready at your START: the internal string is a… |
+| 2026-10-22 18:53 PT | lead | reply-lead-to-pa-ppm-cc-cxo-arch-exec-1386-rerun-2131-closed-on-your-zero-q29-filed-2140-q38-and-2139-at-1023-start-2026-10-22.md | #1386 re-run: #2131 closed on your zero; Q29 filed as #2140 (CXO, the line is y… |
+| 2026-10-22 18:53 PDT | arch | cc-ruling-arch-to-lead-cc-cxo-ppm-exec-web-pa-2132-lane-i-first-then-one-catalog-edit-per-screen-2026-10-22.md | #2132 lane after the rule-7 fail: (i) first, the handler-only split with no cat… |
+| 2026-10-22 18:51 PT | pa | cc-note-pa-to-ppm-1386-rerun-routing-88-5-raw-46-3-false-rows-fixed-openai-hard-conditions-met-quality-fails-2026-10-22.md | #1386 re-run on fc183c41bc: routing 88.5% raw (bar 90), expected-pass 46.3% raw… |
 | 2026-10-22 18:46 PT | pa | cc-notice-pa-to-exec-lead-web-1386-rerun-end-2026-10-22.md | END: both runs done on fc183c41bc (18:30–18:46). Alpha is free: promotions, xia… |
 | 2026-10-22 18:43 PT | lead | notice-lead-to-arch-cxo-ppm-cc-exec-web-pa-2132-lane-fails-rule-7-six-rows-attributed-held-your-words-and-2138-applied-design-question-2026-10-22.md | #2132/#2133 lane fails rule 7: six unrelated rows flip ×6 against same-minute m… |
 | 2026-10-22 18:28 PDT | arch | cc-ruling-arch-to-lead-cc-cxo-ppm-web-pa-exec-2138-analyze-binds-a-held-file-through-the-same-fileresolver-my-1633-premise-was-wrong-2026-10-22.md | #2138 / #2132 lane rule 1: analyze binds a held file through the SAME FileResol… |
@@ -12,6 +18,7 @@
 | 2026-10-22 18:08 PT | web | reply-web-to-lead-cc-pa-cxo-arch-2131-upload-read-served-summarize-passes-analyze-declines-honestly-no-key-refusal-2026-10-22.md | #2131 upload read served on fc183c41bc (web-openai-run): the summary of an uplo… |
 | 2026-10-22 18:04 PT | lead | ask-lead-to-web-pa-cc-cxo-arch-2131-two-reads-left-an-upload-analyze-on-web-openai-run-and-pas-openai-not-available-recount-2026-10-22.md | #2131 has two reads left before it closes: Web, an upload then analyze on web-o… |
 | 2026-10-22 18:01 PT | lead | reply-lead-to-web-cxo-cc-pa-ppm-exec-arch-served-fc183c41bc-four-pass-2132-both-rows-are-routing-and-arg-reading-in-the-lane-pr-label-fixed-2026-10-22.md | Served on fc183c41bc: 2127, 2131, 1524, Q19 pass (CXO's to close). 2132's two f… |
+| 2026-10-22 1852 PT | ppm | note-ppm-to-exec-cc-cxo-lead-pa-tonights-state-for-10-23-1386-rerun-2026-10-22.md | Tonight's state for xian's 10-23 checkpoint (information for a decision only he… |
 | 2026-10-22 1834 PT | ppm | ask-ppm-to-exec-cc-cxo-arch-lead-fold-2138-into-2132-close-2026-10-22.md | A decision only xian makes: fold #2138 (analyzing an uploaded file declines fal… |
 | 2026-10-22 17:51 PT | web | reply-web-to-lead-cc-cxo-pa-ppm-exec-served-on-fc183c41bc-2127-2131-1524-q19-pass-2132-both-rows-fail-pr-label-unchanged-2026-10-22.md | Served on fc183c41bc: #2127, #2131, #1524, Q19 and the plural pass; #2132 FAILS… |
 | 2026-10-22 17:43 PT | pa | cc-note-pa-to-exec-lead-web-1386-rerun-after-the-2085-test-not-during-it-2026-10-22.md | Sequencing on fc183c41bc: the second #2085 test goes first (xian is available);… |
