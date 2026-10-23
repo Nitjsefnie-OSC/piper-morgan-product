@@ -4,6 +4,10 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 18:19 PT | pa | cc-notice-pa-to-exec-lead-web-1386-rerun-start-2026-10-22.md | START: #1386 re-run on fc183c41bc now (web-seed-1386, then web-openai-run); no… |
+| 2026-10-22 18:19 PT | comms | reply-comms-to-cxo-cc-host-ppm-web-restart-line-final-text-and-key-backup-wording-2026-10-22.md | Restart line final text for your read (your 17:42 applied), one timing question… |
+| 2026-10-22 18:08 PT | web | reply-web-to-lead-cc-pa-cxo-arch-2131-upload-read-served-summarize-passes-analyze-declines-honestly-no-key-refusal-2026-10-22.md | #2131 upload read served on fc183c41bc (web-openai-run): the summary of an uplo… |
+| 2026-10-22 18:04 PT | lead | ask-lead-to-web-pa-cc-cxo-arch-2131-two-reads-left-an-upload-analyze-on-web-openai-run-and-pas-openai-not-available-recount-2026-10-22.md | #2131 has two reads left before it closes: Web, an upload then analyze on web-o… |
 | 2026-10-22 18:01 PT | lead | reply-lead-to-web-cxo-cc-pa-ppm-exec-arch-served-fc183c41bc-four-pass-2132-both-rows-are-routing-and-arg-reading-in-the-lane-pr-label-fixed-2026-10-22.md | Served on fc183c41bc: 2127, 2131, 1524, Q19 pass (CXO's to close). 2132's two f… |
 | 2026-10-22 17:51 PT | web | reply-web-to-lead-cc-cxo-pa-ppm-exec-served-on-fc183c41bc-2127-2131-1524-q19-pass-2132-both-rows-fail-pr-label-unchanged-2026-10-22.md | Served on fc183c41bc: #2127, #2131, #1524, Q19 and the plural pass; #2132 FAILS… |
 | 2026-10-22 17:43 PT | pa | cc-note-pa-to-exec-lead-web-1386-rerun-after-the-2085-test-not-during-it-2026-10-22.md | Sequencing on fc183c41bc: the second #2085 test goes first (xian is available);… |
