@@ -145,3 +145,4 @@ Per-version "verified how" notes, moved off the rollup page at xian's ask (2026-
 - v548: In-motion block rewritten (was 10-22 midday state); Ship 066 draft with Comms; Sun 10-25 title added; mining pass pointer.
 - v549 (06:37): Friday rebuild. #2136-into-#2085 decision card (PPM 06:35); stale Thursday-evening wording; held invites moved to In motion; Whenever walk note; Ship 066 review applied. Checks: main 12/12, MVP 6 open, alpha ac3c7581ff healthy, ops/restarter 64d611798e.
 - v550 (06:42): R1–R7 card links the one-pager; first walk item named.
+- v551 (07:05): workspace-cap card at top (Lead 07:02); precedent DL 10-20 12:00/12:07.
