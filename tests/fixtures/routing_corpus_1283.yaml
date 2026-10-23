@@ -59,7 +59,9 @@ corpus:
                                     # effect proxy). The four-mutations-under-QUERY registry pattern is
                                     # tracked separately regardless (see the follow-up issue).
   - phrase: "analyze the file I uploaded"
-    expected: action:analyze_data
+    expected: action:analyze_document   # 2026-10-22 re-expressed per Arch 15:05 (2132): a document
+                                        # ask is a document op; analyze_data is repository activity
+                                        # only (was action:analyze_data, Lead's 10-20 signature).
   - phrase: "summarize the document"
     expected: action:summarize_document   # 2026-08-16 re-expressed per #1624: uploaded-document
                                           # summarize now rail-dispatches (registry canonical

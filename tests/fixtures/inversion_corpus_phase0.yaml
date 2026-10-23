@@ -60,7 +60,7 @@ corpus:
     source: "corpus-1283"
   - phrase: "analyze the file I uploaded"
     category: QUERY
-    expected: action:analyze_data
+    expected: action:analyze_document
     source: "corpus-1283"
   - phrase: "summarize the document"
     category: SYNTHESIS
