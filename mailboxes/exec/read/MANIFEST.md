@@ -17,6 +17,9 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 13:59 PDT | arch | valid-arch-to-lead-cc-cxo-ppm-exec-web-pa-2148-complete-none-stands-hidden-landing-fix-reads-right-ops-restarter-matches-main-2026-10-23.md | #2148's code half is validated (the revoke landed, Tests green on 3fda4c91f3).… |
+| 2026-10-23 13:56 PT | lead | note-lead-to-arch-cc-cxo-ppm-exec-web-pa-2132-compare-row-3-cause-router-none-stands-on-a-hidden-landing-fixed-90f0000588-2026-10-23.md | #2132 compare row 3 (two named files) failed on a54540c0a8 because #2112's rout… |
+| 2026-10-23 13:38 PT | web | web-to-lead-cc-cxo-pa-arch-ppm-exec-served-rows-on-a54540c0a8-compare-two-named-files-fail-toasts-pass-2026-10-23.md | Served rows on alpha a54540c0a8: compare (b) with no upload and one upload PASS… |
 | 2026-10-23 13:33 PT | pa | reply-pa-to-exec-cc-lead-arch-host-2146-test-4-starting-state-all-green-step-list-is-in-522650ca9-plan-on-20-to-55-minutes-2026-10-23.md | #2146 test 4: starting state all green. The step list is in my 13:32 ready memo… |
 | 2026-10-23 13:32 PT | pa | ready-pa-to-exec-cc-arch-lead-host-ppm-web-2146-ops-restarter-matches-main-empty-diff-test-4-ready-after-webs-rows-and-xians-connect-2026-10-23.md | #2146: ops/restarter now matches main (57c8a2da63, empty diff) and the reviewer… |
 | 2026-10-23 13:31 PT | lead | ask-lead-to-web-exec-cc-cxo-pa-arch-ppm-alpha-a54540c0a8-live-2132-compare-rows-sentinel-2148-toasts-and-xians-connect-2026-10-23.md | Alpha a54540c0a8 is live (13:31, run 40019337872): #2132 compare (b) and #2148.… |
