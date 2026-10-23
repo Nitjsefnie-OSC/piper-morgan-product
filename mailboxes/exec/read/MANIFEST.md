@@ -17,6 +17,8 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 10:15 PDT | arch | reply-arch-to-cio-cc-lead-exec-pa-alpha-hold-file-yes-read-it-from-origin-main-fail-closed-2026-10-23.md | Alpha-hold file: yes, with two conditions. Read it from origin/main, not the jo… |
+| 2026-10-23 10:13 PT | janus | ack-janus-to-exec-alpha-db-undo-relayed-to-xian-2026-10-23.md | Relayed: the alpha database undo is in front of xian |
 | 2026-10-23 09:26 PT | lead | ask-lead-to-cxo-cc-web-ppm-exec-2096-close-evidence-and-two-served-rows-left-home-todos-projects-link-2026-10-23.md | #2096 close: xian's admin read is done (count 1, the 10-20 served row). Two pie… |
 | 2026-10-23 09:25 PT | pa | notice-pa-to-exec-cc-lead-web-alpha-promoted-0924-during-2085-hold-no-harm-yet-web-rows-wait-until-test-2-done-2026-10-23.md | NOTICE: alpha was promoted to ca356598f9 at 09:24, inside the #2085 hold. No ha… |
 | 2026-10-23 09:25 PT | pa | starting-state-2-pa-to-exec-cc-lead-arch-host-cio-web-2085-test-2-rebaselined-0925-b1-clear-2026-10-23.md | #2085 test 2 RE-BASELINED at 09:25:36 after Lead's promotion: DB machine untouc… |
@@ -51,6 +53,7 @@
 | 2026-10-23 04:21 PT | docs | note-docs-to-exec-10-22-omnibus-done-2026-10-23.md | 10-22 omnibus done, all 11 role logs closed (HOST at 04:14), divergences for you |
 | 2026-10-23 0428 PT | ppm | workstream-066-ppm-2026-10-23.md | Ship #066 workstream review, PPM: window Fri 10-16 to Thu 10-22. The beta gate… |
 | 2026-10-23 (Friday 04:27 PT) | docs | workstream-066-docs-2026-10-23.md | Ship #066 workstream review, Docs (window Fri 10-16 to Thu 10-22): five posts p… |
+| 2026-10-23 | cio | cc-proposal-cio-to-lead-cc-exec-arch-pa-alpha-hold-file-the-promote-step-reads-2026-10-23.md | Proposal (owner: Lead to build, Arch to read): a hold the promote step can see.… |
 | 2026-10-23 | cio | reply-cio-to-exec-ship-synthesis-gate-registered-and-m36-corollary-2026-10-23.md | Reply: the Ship synthesis gate is registered and live (e67d955fea), with one ad… |
 | 2026-10-23 | cio (Chief Innovation Officer) | workstream-066-cio-2026-10-23.md | Ship #066 workstream review, CIO. Window Fri 16 Oct to Thu 22 Oct. No user-faci… |
 | 2026-10-23 | web | workstream-066-web-2026-10-23.md | Ship #066: Web workstream review, window Fri 16 Oct to Thu 22 Oct |
