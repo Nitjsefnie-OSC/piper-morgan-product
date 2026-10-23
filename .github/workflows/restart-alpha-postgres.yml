@@ -168,7 +168,11 @@ jobs:
             # Arch (15:45): a run that cannot be read must never read as clear; "clear" licenses
             # a restart, and a wrong refusal costs one manual restart by the reviewer.
             jobs="$(gh run view "$id" --json jobs --jq '.jobs' 2>/dev/null)" || { echo "::error title=Cannot read run $id::guard 2 could not read run $id of this workflow; refusing rather than guessing that it did not restart the machine. Nothing restarted."; exit 1; }
-            runs="$runs$sep{\"updatedAt\":\"$at\",\"jobs\":$jobs}"; sep=","
+            # #2146 (Arch 12:5x): the 24-hour stop counts only AUTOMATIC earlier restarts, so a
+            # person's restart (an attended test, a hand recovery) never switches auto-recovery
+            # off for a day. An actor that can't be read counts as automatic (fail closed).
+            actor="$(gh api "repos/$GH_REPO/actions/runs/$id" --jq '.triggering_actor.login // ""' 2>/dev/null)" || actor=""
+            runs="$runs$sep{\"updatedAt\":\"$at\",\"actor\":\"$actor\",\"jobs\":$jobs}"; sep=","
           done <<< "$ids"
           runs="$runs]"
           decide="$(printf '%s' "$runs" | AUTO="$([ "$TRIGGER_ACTOR" = "github-actions[bot]" ] && echo 1 || echo 0)" python3 -c 'import sys,json,os
@@ -179,6 +183,7 @@ jobs:
           except Exception:
               print("block unreadable"); raise SystemExit
           hits=[]
+          auto_hits=[]
           for r in runs:
               try:
                   age=(now-datetime.strptime(r["updatedAt"],"%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)).total_seconds()
@@ -189,11 +194,13 @@ jobs:
               restarted=any((s.get("name") or "").startswith("Restart the Postgres machine") and s.get("conclusion") in ("success","failure","cancelled") for j in (r.get("jobs") or []) for s in (j.get("steps") or []))
               if restarted:
                   hits.append(int(age))
+                  if (r.get("actor") or "") in ("github-actions[bot]", ""):
+                      auto_hits.append(int(age))
           recent=[h for h in hits if h<1800]
           if recent:
               print("block %d" % min(recent))
-          elif hits and os.environ.get("AUTO")=="1" and min(hits)<86400:
-              print("stop24 %d" % min(hits))
+          elif auto_hits and os.environ.get("AUTO")=="1" and min(auto_hits)<86400:
+              print("stop24 %d" % min(auto_hits))
           else:
               print("clear")')"
           echo "guard 2 reads: $decide (triggered by: $TRIGGER_ACTOR)"
@@ -203,7 +210,7 @@ jobs:
               exit 1 ;;
             stop24*)
               echo "stop24=${decide#stop24 }" >> "$GITHUB_OUTPUT"
-              echo "::error title=A second automatic restart within 24 hours::this workflow restarted the machine ${decide#stop24 }s ago and the database failed again. A recurring fault (out of memory, a bad config) must reach a person, not cycle. Nothing restarted; the alert issue gets a comment."
+              echo "::error title=A second automatic restart within 24 hours::this workflow restarted the machine automatically ${decide#stop24 }s ago and the database failed again. A recurring fault (out of memory, a bad config) must reach a person, not cycle. Nothing restarted; the alert issue gets a comment."
               exit 1 ;;
             block*)
               echo "::error title=A restart already ran in the last 30 minutes::this workflow restarted the machine ${decide#block }s ago (whatever that run's conclusion) and the database is still not healthy. A restart that does not cure must reach a person, not loop. Nothing restarted."
