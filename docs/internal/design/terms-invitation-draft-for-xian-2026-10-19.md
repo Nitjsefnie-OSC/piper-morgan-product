@@ -20,6 +20,10 @@
 
 **Brief restarts.** Piper may restart briefly when we update it, usually at a quiet moment. You'll stay signed in, and your conversation will still be there. If a message gets no reply around then, send it again.
 
+**If the database stops.** *(HOST picks ONE on send morning. Use the first only if #2146 is live: pushed, reviewer removed, test 4 passed.)*
+- Recovery is automatic and usually takes 15 to 30 minutes. The alert reaches me either way.
+- I get an alert and restart it myself. [xian: how fast, in your words.]
+
 **Leaving.** You can download your uploaded files, and what Piper has learned about how you work. Exporting your conversations and to-dos is the goal, and isn't built yet. There's no delete-account button yet either. Email support@pipermorgan.ai and we'll delete your account and everything in it within 14 days. Deleting a single conversation inside Piper isn't possible yet. A trash you can empty for good is the goal.
 
 **Your invite code.** Your code works once, for one account. Please don't share it. If it leaks before you use it, tell us and we'll cancel it. Once used, it can't be taken back, because the account exists. We won't publish who our testers are, and we won't quote you without asking first.
@@ -52,5 +56,7 @@ Before Production, we'll add [the list xian chooses from: deleting a conversatio
 **Restart line (added 10-22 18:19, CXO ruled 18:23):** CXO's wording. There is no clock time and no "once a day", because CIO's condition 3 (a promotion waits for 30 quiet minutes, 07:00–21:00) makes a fixed window untrue and nothing says restarts are daily. Sentence two rests on Web's staging row (8 of 8 turns across a deploy, sign-in and history intact), and sentence three stays conditional. It must not say a message sent mid-restart is saved or answered. **HOST, send morning:** check that the grant still waits for no chat in the last 30 minutes. If it doesn't, drop "usually at a quiet moment". The "Your key" backup sentence was accepted by CXO 18:23.
 
 **Key backups (added 10-22 18:19):** PA 16:53, Fly metadata: alpha's Postgres has daily encrypted snapshots with 5-day retention, so a removed key can stay in a backup for up to about five days. The "Your key" line now says "live database" and names the backups. Still open: the count of key rows with no ciphertext (HOST or xian).
+
+**Outage line (added 10-23 15:20, HOST ruled 13:19):** HOST's wording on PA's measurement (watch runs every 9 to 24 minutes, 12 runs over about 2.5 hours of one afternoon). Comms made two voice edits: the semicolon is now two sentences, and "reaches xian" is "reaches me", to match the draft's voice ("including me"). Keep "usually": a second fault within 24 hours stops and alerts instead of restarting. Never use test 3's two minutes, because a person dispatched that run. The interim line holds until #2146 is live, and xian names how fast. **Comms and HOST, send morning:** recheck the 15 to 30 minutes against the live watch cadence. If Arch and Lead change the cadence, the number changes with it.
 
 **Voice checks run on this draft:** no semicolons; no "honest", "quietly", "load-bearing" or "cohort"; no "never" promises except "can't be taken back" (a code fact).
