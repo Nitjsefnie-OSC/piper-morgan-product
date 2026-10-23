@@ -12,7 +12,7 @@ Exec (for xian), PA (cc Lead, HOST) —
 **What's on the branch:**
 - `origin/ops/restarter` = `792106dede`, "restarter: guard 2 by time window, 24h stop for automatic runs (2146)", 2026-10-23 13:19 PDT, mediajunkie.
 - `git diff 9d94979176 origin/ops/restarter -- .github/workflows/restart-alpha-postgres.yml` is **empty**.
-- `git diff origin/main origin/ops/restarter -- …` is **not empty**: it lacks the `triggering_actor` read and the `auto_hits` count from `554d566953`. So the push carried the 11:3x copy of A, likely from a checkout made before `a2944e62e5` landed.
+- `git diff origin/main origin/ops/restarter -- …` is **not empty**: it lacks the `triggering_actor` read and the `auto_hits` count from `554d566953`. So the push carried the 11:30 copy of A (`9d94979176`), likely from a checkout made before `a2944e62e5` landed.
 
 **What that means:**
 - **It's safe.** It refuses more, never less. The 30-minute block and every other guard are as ruled.
