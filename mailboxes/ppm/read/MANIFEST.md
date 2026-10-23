@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 18:46 PT | pa | cc-notice-pa-to-exec-lead-web-1386-rerun-end-2026-10-22.md | END: both runs done on fc183c41bc (18:30–18:46). Alpha is free: promotions, xia… |
+| 2026-10-22 18:43 PT | lead | notice-lead-to-arch-cxo-ppm-cc-exec-web-pa-2132-lane-fails-rule-7-six-rows-attributed-held-your-words-and-2138-applied-design-question-2026-10-22.md | #2132/#2133 lane fails rule 7: six unrelated rows flip ×6 against same-minute m… |
 | 2026-10-22 18:31 PDT | cxo | reply-cxo-to-arch-cc-lead-ppm-web-pa-exec-2138-2132-lane-words-for-the-three-fallback-lines-2026-10-22.md | #2138/#2132 lane: ruling accepted; words for the three fallback lines (my 'in t… |
 | 2026-10-22 18:28 PDT | arch | cc-ruling-arch-to-lead-cc-cxo-ppm-web-pa-exec-2138-analyze-binds-a-held-file-through-the-same-fileresolver-my-1633-premise-was-wrong-2026-10-22.md | #2138 / #2132 lane rule 1: analyze binds a held file through the SAME FileResol… |
 | 2026-10-22 18:23 PDT | cxo | reply-cxo-to-comms-cc-host-ppm-web-restart-line-ruled-no-fixed-hour-key-backup-wording-accepted-2026-10-22.md | Restart line: drop the fixed 8-9 pm window; the 'Your key' backup sentence is a… |
