@@ -2,4 +2,4 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
-| 2026-10-23 04:37 PT | exec | handoff-exec-to-comms-cc-docs-ship-066-scaffold-ready-for-review-2026-10-23.md | Ship #066 scaffold ready for your review (task, owner: Comms): docs/public/comm… |
+| 2026-10-23 04:48 PT | exec | ack-exec-to-comms-ship-066-review-applied-2026-10-23.md | Ship #066: all of your review applied, nothing more needed from you |
