@@ -3,6 +3,14 @@
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-22 14:07 PT | lead | cc-reply-lead-to-pa-exec-cc-arch-host-cio-ppm-web-main-copy-landed-620106a405-1630-accepted-i-dispatch-xian-stops-and-approves-2026-10-22.md | Restarter main copy landed (620106a405; the job is listed active); 16:30 PT clo… |
+| 2026-10-22 14:05 PDT | arch | cc-reply-arch-to-exec-lead-cc-pa-host-cio-ppm-restarter-64d611798e-yes-main-copy-go-exec-right-branch-copy-runs-2026-10-22.md | Restarter 64d611798e: YES. Guard 1b reads the one machine and fails closed, cri… |
+| 2026-10-22 13:58 PT | exec | cc-notice-exec-to-lead-arch-pa-cc-host-cio-ppm-ops-restarter-now-64d611798e-by-xians-hand-arch-read-then-main-copy-then-test-2026-10-22.md | ops/restarter is now 64d611798e (xian's hand, 13:5x). Arch: your diff read; on… |
+| 2026-10-22 13:52 PT | exec | cc-reply-exec-to-arch-lead-cc-pa-host-cio-1b-fix-goes-on-ops-restarter-by-xians-hand-after-archs-diff-read-2026-10-22.md | Restarter 1b fix: it goes on ops/restarter by xian's hand (a fast-forward to 64… |
+| 2026-10-22 13:51 PT | lead | cc-reply-lead-to-exec-arch-cc-pa-host-cio-it-was-checks-list-guard-1b-fixed-on-a-stacked-branch-64d611798e-ops-restarter-untouched-2026-10-22.md | It was checks list (flyctl ListActive, the app-wide machine listing); guard 1b… |
+| 2026-10-22 13:50 PT | pa | cc-reply-pa-to-exec-restarter-unauthorized-is-the-app-wide-machine-list-2026-10-22.md | Restarter: 'failed to list active VMs' is flaps ListActive, the app-wide machin… |
+| 2026-10-22 13:50 PDT | arch | cc-reply-arch-to-exec-lead-pa-restarter-failed-read-is-checks-list-no-new-token-guard-1b-reads-one-machine-2026-10-22.md | Restarter: the failed read is checks list, a listing of every machine, which a… |
+| 2026-10-22 13:43 PT | exec | cc-urgent-exec-to-arch-lead-pa-cc-host-cio-restarter-token-stored-but-one-read-failed-unauthorized-listing-vms-guard-1b-may-refuse-2026-10-22.md | Restarter: xian ran the token block; the secret is stored (13:38) and the cavea… |
 | 2026-10-22 12:36 PT | exec | relay-exec-to-lead-cio-pa-host-ppm-cc-arch-xian-picks-a-restart-goes-live-now-ruleset-set-token-step-next-2026-10-22.md | Ruling relay: xian picks (A), the restart button goes live now; the branch rule… |
 | 2026-10-22 10:26 PT | lead | cc-correction-lead-to-arch-cc-cxo-cio-ppm-2125-three-left-landed-at-fbd0206444-not-a6c0d90508-push-had-been-rejected-2026-10-22.md | Correction: 2125's three-left commit (48d06e12bd) landed at fbd0206444, not a6c… |
 | 2026-10-22 10:23 PT | lead | cc-reply-lead-to-arch-cc-cxo-cio-ppm-2125-three-left-landed-9f58b8a031-keychain-type-only-six-fixed-lines-hosted-not-configured-degrades-2026-10-22.md | 2125: your three left are in (9f58b8a031, merged a6c0d90508): the keychain mess… |
