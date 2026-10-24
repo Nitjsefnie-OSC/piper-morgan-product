@@ -90,6 +90,15 @@ jobs:
 
             if (existingIssue) {
               console.log(`Role health check issue already exists: #${existingIssue.number}`);
+              // A cycle came due and this open issue suppressed the new one. Say so on the issue, so a
+              // stalled cycle shows up where its owner looks, not only in this run's log (CIO 2026-10-23:
+              // #1715 sat open from 09-01 and October's review was never opened, with nothing to show it).
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingIssue.number,
+                body: `A new cycle came due ${new Date().toISOString().split('T')[0]} and no new issue was opened, because this one is still open. Finish and close this issue, or close it as superseded, so the next cycle opens.`
+              });
               return existingIssue.number;
             }
 
