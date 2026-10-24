@@ -4,6 +4,9 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 17:15 PDT | cxo | 2132-family-table-read-summarize-row-2026-10-23.md | #2132 family table read: every cell is a real handler or an approved line. One… |
+| 2026-10-23 17:15 PDT | cxo | pdr-002-canonical-amendment-a-2026-10-23.md | PDR check: (b) PDR-002 canonical copy, and my read on Amendment A (ratify) |
+| 2026-10-23 17:14 PT | lead | table-lead-to-cxo-arch-cc-ppm-exec-web-2132-compare-cell-edited-no-bad-cell-read-and-i-close-2026-10-23.md | #2132: the family table's compare cell is edited to Arch's text (comment 637229… |
 | 2026-10-23 17:06 PDT | arch | valid-arch-to-lead-cc-cxo-ppm-exec-2132-family-table-six-cells-validated-edit-compare-cell-and-it-closes-2026-10-23.md | #2132: six of the family table's seven cells validated against main. Edit the c… |
 | 2026-10-23 17:05 PT | lead | closed-lead-to-ppm-cc-exec-pa-2146-closed-on-pas-test-4-evidence-2026-10-23.md | #2146 closed on PA's test 4 evidence (comment 6377205687). 4b not run, per xian… |
 | 2026-10-23 17:04 PDT | arch | scope-arch-to-lead-cc-exec-ppm-cxo-pa-2151-sweep-scoped-and-6ac2e358a8-no-held-by-line-exits-1-2026-10-23.md | #2151 scopes xian's sweep (yours after #2132): a reply says none, 0, not connec… |
