@@ -1,5 +1,9 @@
 """Calendar refreshes derive access from Google's grant, never token presence."""
 
+import json
+import shutil
+import subprocess
+from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import AsyncMock, MagicMock, patch
 
@@ -185,22 +189,21 @@ async def test_calendar_list_accepts_a_confirmed_grant(refresh, scope):
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
-    "read_error, success, error_type",
+    "scope, read_error, success, error_type",
     [
-        (None, True, None),
-        ("insufficient_scope", False, "insufficient_scope"),
-        ("api_not_enabled", False, "api_not_enabled"),
-        ("error", False, "error"),
-        ("auth_failed", False, "auth_failed"),
+        (CALENDAR_READ_SCOPE, None, True, None),
+        (CALENDAR_READ_SCOPE, "insufficient_scope", False, "insufficient_scope"),
+        (CALENDAR_READ_SCOPE, "api_not_enabled", False, "api_not_enabled"),
+        (CALENDAR_READ_SCOPE, "error", False, "error"),
+        (CALENDAR_READ_SCOPE, "auth_failed", False, "auth_failed"),
+        ("", "api_not_enabled", False, "api_not_enabled"),
     ],
 )
-async def test_the_test_button_still_checks_a_readable_scope(
-    refresh, read_error, success, error_type
+async def test_the_test_button_preserves_read_diagnostics(
+    refresh, scope, read_error, success, error_type
 ):
     handler, probe = refresh
-    handler.refresh_access_token.return_value = SimpleNamespace(
-        scope=CALENDAR_READ_SCOPE, access_token="access"
-    )
+    handler.refresh_access_token.return_value = SimpleNamespace(scope=scope, access_token="access")
     probe.return_value = read_error
 
     result = await integrations._test_calendar(user_id=USER.sub)
@@ -220,3 +223,61 @@ async def test_unreadable_scope_and_missing_access_token_are_unconfirmed(refresh
 
     assert result["valid"] is False
     assert result["error"] == CALENDAR_SCOPE_UNCONFIRMED_LINE
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="node not on PATH")
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "scope, read_error, detail",
+    [
+        (CALENDAR_READ_SCOPE, None, None),
+        ("openid email", None, CALENDAR_SCOPE_MISSING_LINE),
+        ("", "error", CALENDAR_SCOPE_UNCONFIRMED_LINE),
+    ],
+)
+async def test_settings_renderer_preserves_the_refreshed_grant_diagnosis(
+    refresh, scope, read_error, detail
+):
+    handler, probe = refresh
+    handler.refresh_access_token.return_value = SimpleNamespace(scope=scope, access_token="access")
+    probe.return_value = read_error
+    response = await settings_integrations.get_calendar_settings(current_user=USER)
+    page = (Path(__file__).resolve().parents[5] / "templates/settings_calendar.html").read_text()
+    renderer = page[
+        page.index("function updateStatusUI(data)") : page.index("async function connectCalendar()")
+    ]
+    script = (
+        "const elements = {};\n"
+        "const document = {getElementById(id) {return elements[id] ||= {style: {}};}};\n"
+        "function loadCalendarList() {}\n"
+        + renderer
+        + "\nupdateStatusUI(JSON.parse(process.argv[1]));\n"
+        "process.stdout.write(JSON.stringify({\n"
+        "  title: elements['status-title'].textContent,\n"
+        "  detail: elements['status-subtitle'].textContent,\n"
+        "  description: elements['oauth-description'].textContent,\n"
+        "  selection: elements['calendar-selection-card'].style.display\n"
+        "}));\n"
+    )
+    result = subprocess.run(
+        ["node", "-e", script, json.dumps(response)],
+        capture_output=True,
+        text=True,
+        timeout=30,
+    )
+    assert result.returncode == 0, result.stderr
+    rendered = json.loads(result.stdout)
+    if detail is None:
+        assert rendered == {
+            "title": "Connected",
+            "detail": "Google Calendar is connected",
+            "description": "You can reconnect to a different account or refresh your connection.",
+            "selection": "block",
+        }
+    else:
+        assert rendered == {
+            "title": "Connection Issue",
+            "detail": detail,
+            "description": "You can reconnect to review your Google Calendar access.",
+            "selection": "none",
+        }
