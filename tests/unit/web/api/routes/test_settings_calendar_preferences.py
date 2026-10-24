@@ -92,6 +92,7 @@ class TestGetCalendarList:
 
         mock_tokens = MagicMock()
         mock_tokens.access_token = "test_access_token"
+        mock_tokens.scope = "https://www.googleapis.com/auth/calendar.readonly"
 
         mock_handler = MagicMock()
         mock_handler.refresh_access_token = AsyncMock(return_value=mock_tokens)

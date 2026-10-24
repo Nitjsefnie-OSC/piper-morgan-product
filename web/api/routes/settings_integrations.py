@@ -1075,13 +1075,23 @@ async def get_calendar_settings(
     Issue #537: ALPHA-SETUP-MANAGE - Integration Management Post-Setup
     Issue #839: Use user-scoped keychain key
     """
+    return await _get_calendar_connection_status(current_user.sub)
+
+
+async def _get_calendar_connection_status(user_id: str):
+    """Derive connection status from the refreshed grant, including later revocations."""
     try:
         from services.infrastructure.keychain_service import KeychainService
-        from services.integrations.calendar.oauth_handler import GoogleCalendarOAuthHandler
+        from services.integrations.calendar.oauth_handler import (
+            CALENDAR_SCOPE_MISSING_LINE,
+            CALENDAR_SCOPE_UNCONFIRMED_LINE,
+            GoogleCalendarOAuthHandler,
+            resolve_calendar_grant,
+        )
 
         keychain = KeychainService()
         # Issue #839: Use user-scoped key to prevent cross-user leakage
-        key_name = f"google_calendar_{current_user.sub}"
+        key_name = f"google_calendar_{user_id}"
         refresh_token = keychain.get_api_key(key_name)
 
         if refresh_token:
@@ -1091,12 +1101,15 @@ async def get_calendar_settings(
                 tokens = await handler.refresh_access_token(refresh_token)
 
                 if tokens:
-                    # Token is valid - try to get user info if possible
+                    grant = await resolve_calendar_grant(tokens)
                     return {
                         "configured": True,
-                        "valid": True,
+                        "valid": grant == "granted",
                         "email": None,  # Would need additional API call to get email
-                        "error": None,
+                        "error": {
+                            "not_granted": CALENDAR_SCOPE_MISSING_LINE,
+                            "unconfirmed": CALENDAR_SCOPE_UNCONFIRMED_LINE,
+                        }.get(grant),
                     }
                 else:
                     return {
@@ -1511,6 +1524,21 @@ async def get_calendar_list(current_user: JWTClaims = Depends(get_current_user))
                 status_code=status.HTTP_409_CONFLICT, detail=CALENDAR_NEEDS_RECONNECT_LINE
             )
 
+        from services.integrations.calendar.oauth_handler import (
+            CALENDAR_SCOPE_MISSING_LINE,
+            CALENDAR_SCOPE_UNCONFIRMED_LINE,
+            resolve_calendar_grant,
+        )
+
+        grant = await resolve_calendar_grant(tokens)
+        if grant != "granted":
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=CALENDAR_SCOPE_MISSING_LINE
+                if grant == "not_granted"
+                else CALENDAR_SCOPE_UNCONFIRMED_LINE,
+            )
+
         # Fetch calendar list from Google API
         async with aiohttp.ClientSession() as session:
             async with session.get(
@@ -1648,16 +1676,12 @@ async def get_all_oauth_status(
     Returns connection status for Slack and Calendar.
     Issue #839: Use user-scoped keychain key for calendar
     """
-    from services.infrastructure.keychain_service import KeychainService
-
     status_result = {
         "slack": {"connected": False, "info": None},
         "calendar": {"connected": False, "info": None},
     }
 
     try:
-        keychain = KeychainService()
-
         # Check Slack
         try:
             from services.integrations.slack.config_service import SlackConfigService
@@ -1672,10 +1696,11 @@ async def get_all_oauth_status(
 
         # Check Calendar (Issue #839: user-scoped key)
         try:
-            key_name = f"google_calendar_{current_user.sub}"
-            refresh_token = keychain.get_api_key(key_name)
-            if refresh_token:
-                status_result["calendar"]["connected"] = True
+            calendar_status = await _get_calendar_connection_status(current_user.sub)
+            status_result["calendar"] = {
+                "connected": calendar_status["valid"],
+                "info": calendar_status["error"],
+            }
         except Exception:
             pass
 

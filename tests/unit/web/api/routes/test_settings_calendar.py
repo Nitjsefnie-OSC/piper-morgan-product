@@ -53,7 +53,10 @@ class TestGetCalendarSettings:
 
         mock_handler = MagicMock()
         mock_handler.refresh_access_token = AsyncMock(
-            return_value=MagicMock(access_token="new_access_token")
+            return_value=MagicMock(
+                access_token="new_access_token",
+                scope="https://www.googleapis.com/auth/calendar.readonly",
+            )
         )
 
         with (

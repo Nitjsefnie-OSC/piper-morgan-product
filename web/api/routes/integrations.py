@@ -538,7 +538,7 @@ async def _github_card(
 async def _check_integration_health(
     integration_id: str, metadata: Dict[str, Any], user_id: Optional[str] = None
 ) -> IntegrationStatus:
-    """Check health of a specific integration without active testing.
+    """Check integration health, revalidating the Calendar grant on refresh.
 
     Args:
         integration_id: integration name (e.g. "slack", "calendar")
@@ -548,10 +548,23 @@ async def _check_integration_health(
             visible — fine for non-user-scoped integrations).
     """
     try:
-        # #2031 (ADR-070 B4): GitHub's card derives from the one credential resolver.
-        # A mapped outcome is the card; ``None`` means the user's own token serves with
-        # nothing stale, so the configured path below (cached Test result) governs.
-        if integration_id == "github":
+        if integration_id == "calendar" and user_id:
+            from web.api.routes.settings_integrations import _get_calendar_connection_status
+
+            calendar_status = await _get_calendar_connection_status(user_id)
+            if not calendar_status["valid"]:
+                return IntegrationStatus(
+                    name=integration_id,
+                    display_name=metadata["display_name"],
+                    status="not_configured",
+                    status_message="Not connected",
+                    status_detail=calendar_status["error"],
+                    configure_url=metadata.get("configure_url"),
+                    can_test=calendar_status["configured"],
+                )
+            config_status = "configured"
+        elif integration_id == "github":
+            # #2031: a mapped resolver outcome is the card; None uses cached Test health.
             github_card = await _github_card(metadata, user_id)
             if github_card is not None:
                 return github_card
@@ -829,6 +842,19 @@ async def _test_calendar(user_id: Optional[str] = None) -> Dict[str, Any]:
                 "error_type": "token_invalid",
             }
 
+        from services.integrations.calendar.oauth_handler import (
+            CALENDAR_SCOPE_MISSING_LINE,
+            resolve_calendar_grant,
+        )
+
+        grant = await resolve_calendar_grant(tokens)
+        if grant == "not_granted":
+            return {
+                "success": False,
+                "error": CALENDAR_SCOPE_MISSING_LINE,
+                "error_type": "insufficient_scope",
+            }
+
         # #2092: a refresh succeeds with ANY scope; only a real read shows the grant
         # can see the calendar (xian's 10-19 grant was email-only and read "Healthy").
         from services.integrations.calendar.oauth_handler import probe_calendar_read
@@ -837,10 +863,7 @@ async def _test_calendar(user_id: Optional[str] = None) -> Dict[str, Any]:
         if read_error == "insufficient_scope":
             return {
                 "success": False,
-                "error": (
-                    "Google refused the calendar read: the connection doesn't include "
-                    "calendar access. Disconnect, connect again, and approve calendar access."
-                ),
+                "error": CALENDAR_SCOPE_MISSING_LINE,
                 "error_type": "insufficient_scope",
             }
         if read_error == "api_not_enabled":
