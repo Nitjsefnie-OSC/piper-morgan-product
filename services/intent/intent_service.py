@@ -602,6 +602,13 @@ _CREATE_ISSUE_ACTIONS = frozenset(
 )
 
 
+def _is_pr_item(item: Dict[str, Any]) -> bool:
+    """A mixed open-issues item is a PR. #2151: ``list_github_issues_direct`` and the
+    spatial read set ``is_pull_request``; a raw API item carries ``pull_request``.
+    Filtering on ``pull_request`` alone made the native path see zero PRs."""
+    return bool(item.get("is_pull_request") or item.get("pull_request"))
+
+
 class IntentService:
     """
     Service for processing user intents.
@@ -6765,7 +6772,7 @@ class IntentService:
                     number = item.get("number", "?")
                     # The adapter normalizes GitHub's `pull_request` object to
                     # `is_pull_request` (#986); read either shape.
-                    is_pr = bool(item.get("is_pull_request") or item.get("pull_request"))
+                    is_pr = _is_pr_item(item)
                     item_type = "PR" if is_pr else "Issue"
                     # #1628: degenerate GitHub titles (the literal "{" class) never render verbatim
                     title = display_title(item.get("title"), f"(untitled {item_type} #{number})")
@@ -6873,9 +6880,10 @@ class IntentService:
                         requires_clarification=False,
                         implemented=False,  # Graceful degradation
                     )
-                # Native path mixes issues + PRs → filter to PRs via the pull_request field.
+                # Native path mixes issues + PRs → filter to PRs. #2151: the direct and
+                # spatial reads set ``is_pull_request``; raw API items carry ``pull_request``.
                 open_items = await github_router.get_open_issues(limit=100)
-                pr_items = [item for item in open_items if item.get("pull_request")]
+                pr_items = [item for item in open_items if _is_pr_item(item)]
 
             # Filter to PRs older than 7 days
             now = datetime.now(timezone.utc)
@@ -8933,9 +8941,9 @@ class IntentService:
                             "context": {"configured": False},
                         },
                     )
-                # Native path mixes issues + PRs → filter to PRs via the pull_request field.
+                # Native path mixes issues + PRs → filter to PRs (#2151: see _is_pr_item).
                 open_items = await github_router.get_open_issues(limit=100)
-                prs = [item for item in open_items if item.get("pull_request")]
+                prs = [item for item in open_items if _is_pr_item(item)]
                 pr_count = len(prs)
                 # #1782: the census ran over ONE page of open ISSUES — a full
                 # page means pr_count is "PRs among the first 100 open issues",
