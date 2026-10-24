@@ -4,7 +4,7 @@
 
 This directory contains Product Decision Records (PDRs) that document significant product decisions, their context, rationale, and implications for design and implementation.
 
-**Total PDRs**: 6 records (001-004, 101)
+**Total PDRs**: 9 records (001-007, 101, plus the PDR-002 appendix). Index checked against the files 2026-10-23 (PPM); currency notes are in PPM's 10-23 PDR check memo to Exec.
 
 ## What is a PDR?
 
@@ -26,18 +26,20 @@ Core product decisions that shape everything else. These establish patterns, pri
 | PDR | Title | Status | Date |
 |-----|-------|--------|------|
 | [PDR-001](PDR-001-ftux-as-first-recognition-v3.md) | First Contact is First Recognition | Draft v3 | Jan 4, 2026 |
-| [PDR-002](PDR-002-conversational-glue.md) | Conversational Glue | Draft v1 | Jan 4, 2026 |
-| &nbsp; | [PDR-002 Appendix: Layer 2 Vision](PDR-002-appendix-layer-2-vision.md) | Appendix | Jan 2026 |
-| [PDR-003](PDR-003-entity-concept-model.md) | Entity Concept Model | Approved | Mar 8, 2026 |
-| [PDR-004](PDR-004-experience-philosophy.md) | Experience Philosophy | Approved | Mar 22, 2026 |
+| [PDR-002](PDR-002-conversational-glue.md) | Conversational Glue | Draft v2 (a Draft v3.1 copy also sits at `docs/internal/planning/conversational-glue/`; which is canonical is open) | Jan 4, 2026 |
+| &nbsp; | [PDR-002 Appendix: Layer 2 Vision](PDR-002-appendix-layer-2-vision.md) | Appendix | Feb 6, 2026 |
+| [PDR-003](PDR-003-entity-concept-model.md) | Entity Concept Model | Draft (the file says DRAFT; this index said Approved, Mar 8, and no ratification is recorded) | Feb 26, 2026 |
+| [PDR-004](PDR-004-experience-philosophy.md) | Experience Philosophy | Approved (Amendment A proposed 2026-07-30, not ratified) | Mar 22, 2026 |
 | [PDR-005](PDR-005-bring-your-own-chat.md) | Bring Your Own Chat — Distribution Model | Approved (v1.0) | Jun 5, 2026 |
+| [PDR-006](PDR-006-hosted-mcp-plugin-distribution.md) | Hosted MCP Endpoint + Plugin Distribution Model | Ratified | Jul 31, 2026 |
+| [PDR-007](PDR-007-editorial-data-single-source-of-truth.md) | Editorial Data — Single Source of Truth | Ratified (Option A) | Aug 28, 2026 |
 
 ### Tier 1xx: Feature/Capability
 Major feature decisions that build on foundational PDRs. These define significant capabilities Piper should offer.
 
 | PDR | Title | Status | Date |
 |-----|-------|--------|------|
-| [PDR-101](PDR-101-multi-entity-conversation.md) | Multi-Entity Conversation Support | Draft v1 | Jan 4, 2026 |
+| [PDR-101](PDR-101-multi-entity-conversation.md) | Multi-Entity Conversation Support | Draft v2 | Jan 4, 2026 |
 
 ### Tier 2xx: Integration Patterns
 *(Reserved for future use)*
@@ -174,6 +176,6 @@ PDRs may reference and build on each other:
 
 ---
 
-**Last Updated**: March 23, 2026
+**Last Updated**: October 23, 2026 (index rows checked against the files, PPM)
 **Maintained By**: Principal Product Manager
 **Purpose**: Directory navigation, PDR index, and creation guidance
