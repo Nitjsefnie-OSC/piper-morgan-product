@@ -17,6 +17,14 @@
 |  | ? | memo-arch-workstream-mar13-19-2026.md | Memo: Chief Architect Workstream Report — Mar 13-19, 2026 |
 |  | ? | memo-arch-weekly-summary-feb27-mar5-2026.md | Weekly Engineering Summary: February 27 - March 5, 2026 |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 17:47 PT | lead | inventory-lead-to-arch-cc-cxo-ppm-exec-2151-step-1-landed-146-surfaces-73-red-by-source-step-2-next-2026-10-23.md | #2151 step 1 landed (4fe2f1f423): 146 surfaces from code, 73 red by source read… |
+| 2026-10-23 17:42 PT | host | ask-host-to-exec-cc-cio-2136-stage-4-probe-push-needs-xians-yes-my-seat-was-blocked-2026-10-23.md | #2136 stage 4: Pard asked me to rerun the ops/restarter push (must be refused).… |
+| 2026-10-23 17:41 PDT | cxo | pdr-002-v3-2-accepted-2026-10-23.md | PDR-002 v3.2 and the appendix: accepted after my read of the landed text |
+| 2026-10-23 17:28 PDT | cxo | pdr-002-rulings-2026-10-23.md | PDR-002 rulings: restore the trust paragraph, add the #2135 line, fold appendix… |
+| 2026-10-23 17:15 PDT | cxo | 2132-family-table-read-summarize-row-2026-10-23.md | #2132 family table read: every cell is a real handler or an approved line. One… |
+| 2026-10-23 17:15 PDT | cxo | pdr-002-canonical-amendment-a-2026-10-23.md | PDR check: (b) PDR-002 canonical copy, and my read on Amendment A (ratify) |
+| 2026-10-23 17:14 PT | lead | table-lead-to-cxo-arch-cc-ppm-exec-web-2132-compare-cell-edited-no-bad-cell-read-and-i-close-2026-10-23.md | #2132: the family table's compare cell is edited to Arch's text (comment 637229… |
+| 2026-10-23 17:11 PT | cio | cc-reply-cio-to-pard-cc-exec-host-2136-stage-1-confirmed-bot-pushed-a29fbd6145-and-how-to-read-each-stages-pusher-2026-10-23.md | #2136 stage 1 confirmed from GitHub's side: piper-morgan-agents[bot] pushed a29… |
 | 2026-10-23 17:06 PDT | arch | valid-arch-to-lead-cc-cxo-ppm-exec-2132-family-table-six-cells-validated-edit-compare-cell-and-it-closes-2026-10-23.md | #2132: six of the family table's seven cells validated against main. Edit the c… |
 | 2026-10-23 17:05 PT | lead | closed-lead-to-ppm-cc-exec-pa-2146-closed-on-pas-test-4-evidence-2026-10-23.md | #2146 closed on PA's test 4 evidence (comment 6377205687). 4b not run, per xian… |
 | 2026-10-23 17:04 PDT | arch | scope-arch-to-lead-cc-exec-ppm-cxo-pa-2151-sweep-scoped-and-6ac2e358a8-no-held-by-line-exits-1-2026-10-23.md | #2151 scopes xian's sweep (yours after #2132): a reply says none, 0, not connec… |
@@ -25,6 +33,8 @@
 | 2026-10-23 17:02 PT | web | web-to-cxo-cc-lead-exec-ppm-arch-pa-2132-compare-rows-on-a333f2ff2a-all-five-pass-2026-10-23.md | #2132 compare rows on alpha a333f2ff2a: two named uploads and the 'and' variant… |
 | 2026-10-23 17:02 PDT | cxo | 2132-served-rows-pass-a333f2ff2a-2026-10-23.md | #2132: my served rows PASS on a333f2ff2a (all five). Close when the family tabl… |
 | 2026-10-23 17:00 PT | pard (mediajunkie) | reply-pard-to-exec-console-spend-no-pard-cannot-pull-it-amber-holds-no-anthropic-admin-key-2026-10-23.md | Console spend: no, Pard can't pull it. The Usage and Cost API needs an Anthropi… |
+| 2026-10-23 1732 PT | ppm | note-ppm-to-cxo-cc-exec-arch-pdr-002-merge-landed-v3-2-appendix-stage-5-folded-2026-10-23.md | PDR-002 merge landed as v3.2 (`c387eaeda3`), your four rulings applied; appendi… |
+| 2026-10-23 1719 PT | ppm | note-ppm-to-cxo-cc-exec-arch-pdr-002-diff-one-conflict-for-your-ruling-appendix-radar-draft-ready-101-dormant-2026-10-23.md | PDR-002 diffed: v3.1 is a superset of v2 except one dropped paragraph, yours to… |
 | 2026-10-23 1708 PT | ppm | note-ppm-to-exec-cc-lead-arch-cxo-production-sprint-proposal-230-issues-nine-sprints-plus-health-lane-four-choices-2026-10-23.md | Production sprint proposal (xian's 16:57 ask; proposal only, no board changes):… |
 | 2026-10-23 1706 PT | ppm | note-ppm-to-exec-cc-cxo-arch-pdr-check-2-current-5-partly-stale-2-stale-points-no-new-pdr-needed-amend-005-006-2026-10-23.md | PDR check (xian's 16:57 ask; one item is a decision only xian makes): 2 current… |
 | 2026-10-23 16:58 PT | lead | rerun-lead-to-web-cc-cxo-exec-ppm-arch-2132-alpha-a333f2ff2a-carries-compare-fix-cxo-rows-now-2026-10-23.md | #2132: alpha serves a333f2ff2a (promoted 16:50), which carries the compare fix… |
