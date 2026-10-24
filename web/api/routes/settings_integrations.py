@@ -1519,24 +1519,20 @@ async def get_calendar_list(current_user: JWTClaims = Depends(get_current_user))
         handler = GoogleCalendarOAuthHandler()
         tokens = await handler.refresh_access_token(refresh_token)
 
-        if not tokens:
-            raise HTTPException(
-                status_code=status.HTTP_409_CONFLICT, detail=CALENDAR_NEEDS_RECONNECT_LINE
-            )
-
         from services.integrations.calendar.oauth_handler import (
             CALENDAR_SCOPE_MISSING_LINE,
             CALENDAR_SCOPE_UNCONFIRMED_LINE,
             resolve_calendar_grant,
         )
 
-        grant = await resolve_calendar_grant(tokens)
+        grant = await resolve_calendar_grant(tokens) if tokens else None
         if grant != "granted":
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
-                detail=CALENDAR_SCOPE_MISSING_LINE
-                if grant == "not_granted"
-                else CALENDAR_SCOPE_UNCONFIRMED_LINE,
+                detail={
+                    None: CALENDAR_NEEDS_RECONNECT_LINE,
+                    "not_granted": CALENDAR_SCOPE_MISSING_LINE,
+                }.get(grant, CALENDAR_SCOPE_UNCONFIRMED_LINE),
             )
 
         # Fetch calendar list from Google API

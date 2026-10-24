@@ -548,22 +548,7 @@ async def _check_integration_health(
             visible — fine for non-user-scoped integrations).
     """
     try:
-        if integration_id == "calendar" and user_id:
-            from web.api.routes.settings_integrations import _get_calendar_connection_status
-
-            calendar_status = await _get_calendar_connection_status(user_id)
-            if not calendar_status["valid"]:
-                return IntegrationStatus(
-                    name=integration_id,
-                    display_name=metadata["display_name"],
-                    status="not_configured",
-                    status_message="Not connected",
-                    status_detail=calendar_status["error"],
-                    configure_url=metadata.get("configure_url"),
-                    can_test=calendar_status["configured"],
-                )
-            config_status = "configured"
-        elif integration_id == "github":
+        if integration_id == "github":
             # #2031: a mapped resolver outcome is the card; None uses cached Test health.
             github_card = await _github_card(metadata, user_id)
             if github_card is not None:
@@ -571,6 +556,17 @@ async def _check_integration_health(
             config_status = "configured"
         else:
             config_status = await _get_integration_config_status(integration_id, user_id=user_id)
+
+        if isinstance(config_status, dict):
+            return IntegrationStatus(
+                name=integration_id,
+                display_name=metadata["display_name"],
+                status="not_configured",
+                status_message="Not connected",
+                status_detail=config_status["error"],
+                configure_url=metadata.get("configure_url"),
+                can_test=config_status["configured"],
+            )
 
         if config_status == "not_configured":
             return IntegrationStatus(
@@ -620,15 +616,20 @@ async def _check_integration_health(
         )
 
 
-async def _get_integration_config_status(integration_id: str, user_id: Optional[str] = None) -> str:
-    """Check if an integration is configured (user-scoped stores + env).
+async def _get_integration_config_status(
+    integration_id: str, user_id: Optional[str] = None
+) -> str | Dict[str, Any]:
+    """Return configuration state, or Calendar's unusable-grant details for its card.
 
-    #1547: canonical logic hoisted to
-    services/integrations/integration_status_service.py — the #1513 (github
-    keychain) / #1337 (notion user-secret store) / #839 (calendar user-scoped
-    key) / ADR-058 (slack keychain) composition lives there now. This thin
-    delegate preserves the route's historical name and status-string contract.
+    Calendar revalidates the user's grant before cached Test health is considered.
+    Other checks delegate to #1547's canonical user-scoped stores + env composition.
     """
+    if integration_id == "calendar" and user_id:
+        from web.api.routes.settings_integrations import _get_calendar_connection_status
+
+        calendar_status = await _get_calendar_connection_status(user_id)
+        return "configured" if calendar_status["valid"] else calendar_status
+
     from services.integrations.integration_status_service import get_config_status
 
     status, _via = await get_config_status(integration_id, user_id=user_id)
