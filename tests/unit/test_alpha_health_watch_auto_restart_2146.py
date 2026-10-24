@@ -76,6 +76,7 @@ case "$1 $2" in
   "api repos/"*)
     case "{gh_behaviour}" in
       hold) echo "$(printf 'held by: PA\\nwhy: test' | base64)"; exit 0 ;;
+      hold_bare) echo "$(printf 'holding for maintenance\\n' | base64)"; exit 0 ;;
       hold_md) echo "$(printf '# Alpha promotion hold\\n\\n- **Held by:** PA, from 15:13.\\n- **Why:** test' | base64)"; exit 0 ;;
       none) echo "gh: Not Found (HTTP 404)" >&2; exit 1 ;;
       error) echo "gh: Server Error (HTTP 500)" >&2; exit 1 ;;
@@ -94,7 +95,13 @@ esac
         "TITLE": "Alpha health watch: failing",
         "RUN_URL": "https://x/run/1",
     }
-    r = subprocess.run(["bash", "-c", run], env=env, capture_output=True, text=True)
+    # `shell: bash` in Actions runs bash --noprofile --norc -eo pipefail.
+    r = subprocess.run(
+        ["bash", "--noprofile", "--norc", "-e", "-o", "pipefail", "-c", run],
+        env=env,
+        capture_output=True,
+        text=True,
+    )
     return r, (log.read_text() if log.exists() else "")
 
 
@@ -111,6 +118,14 @@ def test_the_comment_names_the_held_by_line_not_the_heading(tmp_path):
     assert "workflow run" not in calls
     assert "Hold on, not restarting: Held by: PA, from 15:13." in calls
     assert "Alpha promotion hold" not in calls
+
+
+def test_a_hold_with_no_held_by_line_names_its_first_line(tmp_path):
+    # Arch 10-23: under bash -e -o pipefail a grep miss used to exit the step before the comment.
+    r, calls = _run_hold_step(tmp_path, "hold_bare")
+    assert r.returncode == 0, r.stderr
+    assert "workflow run" not in calls
+    assert "Hold on, not restarting: holding for maintenance" in calls
 
 
 def test_no_hold_dispatches_the_restarter_once(tmp_path):
