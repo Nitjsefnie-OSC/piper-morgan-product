@@ -4,6 +4,8 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 17:47 PT | lead | inventory-lead-to-arch-cc-cxo-ppm-exec-2151-step-1-landed-146-surfaces-73-red-by-source-step-2-next-2026-10-23.md | #2151 step 1 landed (4fe2f1f423): 146 surfaces from code, 73 red by source read… |
+| 2026-10-23 17:41 PDT | cxo | pdr-002-v3-2-accepted-2026-10-23.md | PDR-002 v3.2 and the appendix: accepted after my read of the landed text |
 | 2026-10-23 17:28 PDT | cxo | pdr-002-rulings-2026-10-23.md | PDR-002 rulings: restore the trust paragraph, add the #2135 line, fold appendix… |
 | 2026-10-23 17:15 PDT | cxo | 2132-family-table-read-summarize-row-2026-10-23.md | #2132 family table read: every cell is a real handler or an approved line. One… |
 | 2026-10-23 17:15 PDT | cxo | pdr-002-canonical-amendment-a-2026-10-23.md | PDR check: (b) PDR-002 canonical copy, and my read on Amendment A (ratify) |
