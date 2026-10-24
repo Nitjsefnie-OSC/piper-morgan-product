@@ -1,6 +1,6 @@
 # PDR-101: Multi-Entity Conversation Support
 
-**Status**: Draft v2
+**Status**: Draft v2, **DORMANT** (PPM, 2026-10-23). Its Phase 1 is Slack participant mode, and Slack is parked on Fast Follow (ratified 08-28; `slack_adapter` parked 08-30, decisions.log). Under PDR-006, Piper as a tool inside someone else's Claude or ChatGPT chat is participant mode in practice, but this PDR doesn't cover it. Revisit when Slack leaves Fast Follow, or when a multi-party surface is proposed. Not withdrawn; nothing here is built on.
 **Date**: January 4, 2026
 **Author**: Principal Product Manager
 **Input**: Ted Nadeau, "NewApp – Multi-Party, Multi-Agent Conversational Modeling Platform" PRD v0.3

@@ -1,9 +1,11 @@
-# PDR-002 Appendix: Layer 2 Vision (History Sidebar)
+# PDR-002 Appendix: Layer 2 Vision (Radar)
 
-**Parent PDR**: [PDR-002: Conversational Glue](../../planning/conversational-glue/PDR-002-conversational-glue-v3.md)
-**Version**: 1.0
+**Parent PDR**: [PDR-002: Conversational Glue](PDR-002-conversational-glue.md) (the `pdr/` path is canonical, CXO 2026-10-23)
+**Version**: 1.1 (draft edit by PPM for CXO's review, 2026-10-23)
 **Created**: February 6, 2026
 **Owner**: CXO
+
+> **Home moved: Layer 2 = Radar** (PM ratified 2026-06-13; CXO's memo "Layer 2 IS Radar"). The history sidebar consolidated into the Radar ambient surface. Layer 1 (chat navigation) stays in the left nav, and the right-sidebar chat list is retired. The vision below is unchanged; where it says "sidebar", read Radar. The entity types Radar surfaces are scoped in `ppm-spec-radar-layer2-entity-model-2026-06-15.md`.
 
 ---
 
@@ -57,6 +59,8 @@ Entities are the primary content; conversations are navigation aids to entities.
 | Stage 4 | Cross-entity relationships, stakeholder mapping |
 | Stage 5 | Full lifecycle management, pattern insights |
 
+> ⚠️ **Open for CXO (PPM, 2026-10-23):** PDR-002 defines four trust stages, so this table's "Stage 5" has no counterpart. Fold it into Stage 4, or say what Stage 5 means. Separately, #2135: no turn path records an interaction today, so every account stays at Stage 1 and nothing in this table unlocks yet.
+
 **Visibility principle**: Features are visible but may show as locked with explanation ("Available after Piper knows your work better"). Hidden features create "Piper can't do X" impressions; visible-but-locked features create "Piper is learning to do X" impressions.
 
 ---
@@ -68,7 +72,7 @@ Entities are the primary content; conversations are navigation aids to entities.
 | Layer | Orientation | User Question | Feel |
 |-------|-------------|---------------|------|
 | Layer 1 (Conversation List) | Present/Future | "What am I working on?" | Active, ephemeral |
-| Layer 2 (History Sidebar) | Past/Accumulated | "What have I learned/done?" | Archive, substantial |
+| Layer 2 (Radar) | Past/Accumulated | "What have I learned/done?" | Archive, substantial |
 
 This distinction must be felt, not just labeled. Different sort orders, groupings, and visual density reinforce the orientation.
 
@@ -83,7 +87,7 @@ Conversations are how knowledge enters the system. Entities are what the system 
 
 Piper is an "assistant proving themselves." Users should see Piper's knowledge growing over time. This means:
 - New entity types unlock visibly (with subtle celebration)
-- The sidebar becomes richer as trust increases
+- Radar becomes richer as trust increases
 - "Coming soon" indicators hint at future capabilities
 - Users can see the trajectory, not just the current state
 
@@ -127,9 +131,10 @@ Agents working on these issues should read this document first.
 | Issue | Title | Phase |
 |-------|-------|-------|
 | #425 | MUX-IMPLEMENT-MEMORY-SYNC | Origin |
-| #706 | MUX-OBJECTS-VIEWS | Phase 2 |
-| #785 | History Sidebar differentiation | Phase 1 |
-| #735 | History sidebar mounting | Phase 1 (complete) |
+| #706 | MUX-OBJECTS-VIEWS | Phase 2 (closed) |
+| #785 | History Sidebar differentiation | Phase 1 (closed) |
+| #735 | History sidebar mounting | Phase 1 (closed) |
+| #1090 | UI-1.0 history epic (tracking home for the Radar slot-swap work) | Production |
 | TBD | GLUE-HISTORY-DIFF (if created) | Phase 1 |
 
 **For implementers**: Before starting work on any issue above, ensure you can answer:
@@ -160,6 +165,7 @@ Architecture and implementation details live elsewhere.
 | Version | Date | Author | Change |
 |---------|------|--------|--------|
 | 1.0 | 2026-02-06 | CXO | Initial draft based on Lead Dev memo and CIO methodology guidance |
+| 1.1 | 2026-10-23 | PPM (draft for CXO's review) | Retitled to Radar per PM's 06-13 ratification; parent link moved to the canonical `pdr/` path; implementing-issue states updated; Stage 5 flagged |
 
 ---
 
