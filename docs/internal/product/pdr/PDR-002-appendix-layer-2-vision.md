@@ -1,7 +1,7 @@
 # PDR-002 Appendix: Layer 2 Vision (Radar)
 
 **Parent PDR**: [PDR-002: Conversational Glue](PDR-002-conversational-glue.md) (the `pdr/` path is canonical, CXO 2026-10-23)
-**Version**: 1.1 (draft edit by PPM for CXO's review, 2026-10-23)
+**Version**: 1.1 (PPM edit, accepted by CXO 2026-10-23)
 **Created**: February 6, 2026
 **Owner**: CXO
 
@@ -56,10 +56,9 @@ Entities are the primary content; conversations are navigation aids to entities.
 |-------------|------------------|
 | Stage 1-2 | Conversation archive, basic search |
 | Stage 3 | WorkItem surfacing, document tracking |
-| Stage 4 | Cross-entity relationships, stakeholder mapping |
-| Stage 5 | Full lifecycle management, pattern insights |
+| Stage 4 | Cross-entity relationships, stakeholder mapping, full lifecycle management, pattern insights |
 
-> ⚠️ **Open for CXO (PPM, 2026-10-23):** PDR-002 defines four trust stages, so this table's "Stage 5" has no counterpart. Fold it into Stage 4, or say what Stage 5 means. Separately, #2135: no turn path records an interaction today, so every account stays at Stage 1 and nothing in this table unlocks yet.
+> Stage 5 folded into Stage 4 (CXO, 2026-10-23): PDR-002's ladder ends at Stage 4 (Trusted). #2135: no turn path records an interaction today, so every account stays at Stage 1 and nothing in this table unlocks yet.
 
 **Visibility principle**: Features are visible but may show as locked with explanation ("Available after Piper knows your work better"). Hidden features create "Piper can't do X" impressions; visible-but-locked features create "Piper is learning to do X" impressions.
 
@@ -165,7 +164,7 @@ Architecture and implementation details live elsewhere.
 | Version | Date | Author | Change |
 |---------|------|--------|--------|
 | 1.0 | 2026-02-06 | CXO | Initial draft based on Lead Dev memo and CIO methodology guidance |
-| 1.1 | 2026-10-23 | PPM (draft for CXO's review) | Retitled to Radar per PM's 06-13 ratification; parent link moved to the canonical `pdr/` path; implementing-issue states updated; Stage 5 flagged |
+| 1.1 | 2026-10-23 | PPM (accepted by CXO) | Retitled to Radar per PM's 06-13 ratification; parent link moved to the canonical `pdr/` path; implementing-issue states updated; Stage 5 folded into Stage 4 (CXO) |
 
 ---
 

@@ -1,9 +1,11 @@
 # PDR-002: Conversational Glue
 
-**Status**: Draft v2
-**Date**: January 4, 2026
+**Status**: Draft v3.2 (v3.1 approved by CXO and Architect; v3.2 is a merge, no decision changed)
+**Date**: February 1, 2026
 **Author**: Principal Product Manager
 **Stakeholders**: PM (xian), CXO, Chief Architect
+**Review Status**: ✅ CXO Approved | ✅ Architect Approved
+**Canonical location**: this file (`docs/internal/product/pdr/`), CXO 2026-10-23. Merged 2026-10-23 by PPM: the v3.1 body, plus the 08-01 addenda, the restored visibility paragraph and the #2135 status line (CXO's rulings). The old `planning/conversational-glue/` copy is now a pointer.
 
 ---
 
@@ -12,6 +14,8 @@
 Conversational continuity is a **first-class product feature**, not an infrastructure detail. The connective tissue between Piper's capabilities—how conversations flow, how context persists, how discovery happens—is as important as the capabilities themselves.
 
 Piper's value proposition depends on this glue working seamlessly. A feature that exists but cannot be discovered, or that breaks conversational flow to be invoked, fails the colleague test.
+
+**Core Vision** (v3): Users should be able to start a chat with Piper and converse naturally. Piper should carry on a general conversation—especially one relevant to product management—and workflows should emerge naturally from that conversation. Commands and skill invocations are shortcuts, not requirements.
 
 ---
 
@@ -26,6 +30,8 @@ This manifests as:
 - Proactive suggestions feel random rather than situationally appropriate
 
 Traditional product thinking treats these as UX polish—nice to have after core features work. This PDR establishes the opposite: **conversational glue is core functionality**.
+
+**February 2026 Update**: External research validates this positioning. Modern conversational AI best practices emphasize "conversation as collaboration, not interface" — the paradigm shift from command-driven to LLM-native dialogue patterns. See `conversational-glue-implementation-guide.md` for comprehensive research findings and implementation guidance.
 
 ---
 
@@ -52,6 +58,15 @@ Unsolicited suggestions can be helpful or annoying depending on:
 
 Piper must earn the right to be proactive. This requires a trust model that governs when and how suggestions surface.
 
+### Scripted Interactions Break the Illusion (v3)
+
+Research confirms that users are "conditioned to expect human-like interaction" from conversational systems. When assistants violate conversational norms—parrot confirmations, interrogation-style slot filling, rigid scripted sequences—users notice immediately and "the illusion is broken by a faulty script."
+
+Specific anti-patterns identified in current Piper implementation:
+- "Is that your main project?" asked repeatedly during setup (they can't all be "main")
+- Explicit confirmation dialogs for low-stakes actions
+- Sequential slot-filling that ignores information already provided
+
 ---
 
 ## Decision Rationale
@@ -63,6 +78,18 @@ Piper must earn the right to be proactive. This requires a trust model that gove
 **3. Proactivity Glue**: How Piper offers help without being asked
 
 Each component requires explicit product design, not just technical implementation.
+
+### Five Foundational Principles (v3)
+
+Based on research synthesis, all conversational design should follow these principles:
+
+| Principle | What It Means | What It Forbids |
+|-----------|---------------|-----------------|
+| **Conversation as Collaboration** | Piper is a colleague, not a command line | "I don't understand" without alternatives |
+| **Implicit Over Explicit** | Default to implicit confirmation | Parrot confirmations, multi-step dialogs |
+| **Information Flows Forward** | Never ask for already-provided info | Re-asking for project name mid-workflow |
+| **Graceful Over Rigid** | Handle the unexpected gracefully | "Complete current workflow first" |
+| **Trust Governs Autonomy** | Proactivity increases with demonstrated competence | Maximum proactivity from day one |
 
 ---
 
@@ -99,6 +126,8 @@ When users explicitly ask what Piper can do, the response must be:
 - **Actionable**: Each capability includes "want to try it?" option
 
 **Anti-pattern**: Generic feature list that reads like marketing copy
+
+**Implementation status**: #488 MUX-INTERACT-DISCOVERY implemented explicit "what can you do?" handling. Gap remains in contextual capability surfacing based on conversation state.
 
 ### Dead-End Recovery
 
@@ -142,6 +171,8 @@ Between sessions, Piper maintains relevant context:
 
 **Key principle**: Always offer the pivot. Never trap users in previous context.
 
+**Implementation status**: #102 CONV-UX-GREET implemented calendar-aware greetings. ADR-054 designed cross-session memory architecture. Gap remains in full ADR-054 implementation.
+
 ### Entity Continuity
 
 When users reference entities (projects, issues, people, documents), Piper resolves references across the conversation:
@@ -151,6 +182,15 @@ When users reference entities (projects, issues, people, documents), Piper resol
 - "That document" → resolves to most recently referenced document
 
 This requires anaphoric reference resolution—understanding what "it," "that," and "the thing" refer to.
+
+### Follow-Up Recognition (v3)
+
+Beyond simple reference resolution, Piper must handle:
+- **Lens inheritance**: "What about Thursday?" inherits the calendar lens from previous query
+- **Elliptical phrases**: "And Sarah?" expands to "What about Sarah's availability?"
+- **Comparative queries**: "How about tomorrow instead?" compares to previously discussed time
+
+**Implementation status**: Pattern-011 (Context Resolution) provides foundation. Gap remains in lens tracking and ellipsis expansion.
 
 ---
 
@@ -199,7 +239,9 @@ Piper's proactivity is governed by earned trust, not user preference. Users cann
 
 ### Trust Computation Framework
 
-*Added v2 from CXO feedback—this needs architectural implementation (flag for ADR).*
+**Implementation status**: ADR-053 implemented trust computation (453 tests). Gap remains in wiring trust level to response generation.
+
+**Status (2026-10-23):** no turn path records an interaction today, so every account stays at Stage 1 until the wiring lands (#2135, ruled dormant through beta by Arch and CXO). The decision below is unchanged.
 
 **Interaction Outcomes**:
 
@@ -223,7 +265,7 @@ Piper's proactivity is governed by earned trust, not user preference. Users cann
 
 This makes trust *discussable* without being *displayed*. Colleagues don't announce trust scores, but they do explain their assumptions when questioned.
 
-**Architectural implication**: Trust needs to be computed, stored, and queryable—but not surfaced in UI. Flag for Chief Architect ADR.
+**Architectural implication**: Trust needs to be computed, stored, and queryable—but not surfaced in UI.
 
 ### Proactivity Triggers
 
@@ -268,6 +310,7 @@ At Trust Stage 3+, Piper may initiate based on:
 | Cross-session reference accuracy | >90% | When user references "what we discussed," Piper resolves correctly |
 | Anaphoric resolution success | >85% | "It," "that," "the thing" resolved correctly |
 | Context-aware greeting relevance | >80% user acceptance | Users don't immediately redirect after greeting |
+| **Follow-up resolution accuracy (v3)** | >90% | "What about Thursday?" type queries resolve correctly |
 
 ### Proactivity Glue Metrics
 
@@ -276,6 +319,15 @@ At Trust Stage 3+, Piper may initiate based on:
 | Proactive suggestion acceptance | >30% at Stage 2, >50% at Stage 3 | Suggestions are relevant enough to act on |
 | Proactive suggestion annoyance | <10% "don't show again" | Not annoying users |
 | Trust progression | 50% reach Stage 2 within 30 days | Users earning trust through natural use |
+
+### Dialogue Quality Metrics (v3)
+
+| Metric | Target | Rationale |
+|--------|--------|-----------|
+| Multi-intent handling | >85% | Compound queries get coherent single response |
+| Parrot confirmation rate | 0% | No verbatim repeating of user input |
+| Explicit confirmation rate | <20% | Most interactions use implicit confirmation |
+| Dead-end rate | <5% | Conversations rarely end in confusion |
 
 ---
 
@@ -290,6 +342,47 @@ B2 is not a feature checklist. B2 is a qualitative assessment:
 - Can users discover capabilities without reading documentation?
 
 **B2 is a release criterion**: Features that work technically but fail the B2 conversational test are not ready for users.
+
+### B2 Assessment Criteria (v3.1)
+
+| Criterion | Test | Pass Condition |
+|-----------|------|----------------|
+| **Naturalness** | "Does this feel like talking to a colleague?" | Alpha testers agree ≥4/5 |
+| **Memory** | "Does Piper remember what matters?" | Context references resolve >85% |
+| **Proactivity** | "Are suggestions helpful or annoying?" | Acceptance >30%, annoyance <10% |
+| **Discovery** | "Can I discover capabilities without docs?" | ≥3 features discovered/30 days |
+| **Recovery** | "When I hit a wall, does Piper help me get unstuck?" | >60% continue after failure |
+| **Flow** | "Can I accomplish goals naturally?" | No explicit command required for core tasks |
+
+*Note: Recovery added per CXO feedback (Feb 1, 2026) — this is where colleague and chatbot most visibly diverge.*
+
+### The Colleague Test (v3)
+
+For any conversational interaction, ask:
+
+> "If a human colleague responded this way, would it feel natural or weird?"
+
+If weird, redesign.
+
+### The Assistant Persona (v3.1)
+
+*Added per CXO feedback — critical framing for voice design.*
+
+**Piper is an assistant proving themselves — a junior peer earning expanded responsibility.**
+
+This isn't a statement about capability; it's about role. An assistant:
+- **Suggests**, doesn't instruct
+- **Observes**, doesn't evaluate
+- **Supports decisions**, doesn't make them
+- Is appropriately **deferential** to the user they assist
+
+| Manager Voice (wrong) | Assistant Voice (right) |
+|----------------------|------------------------|
+| "You should prioritize the API work." | "The API work blocks three other items — want me to move it up?" |
+| "That's not the best approach." | "That could work. I noticed another option that might be simpler..." |
+| "Remember to update the stakeholders." | "Should I draft a stakeholder update for you to review?" |
+
+**The longer-term vision**: Piper aspires to be "promoted" to full product manager — given more responsibility and strategic work. But like any human assistant, that comes with time, proven expertise, and trust earned through consistent good judgment.
 
 ---
 
@@ -307,6 +400,45 @@ B2 is not a feature checklist. B2 is a qualitative assessment:
 ### Maximum Context Retention (Remember Everything)
 **Rejected because**: Creepy. Users should feel Piper remembers what's relevant, not that Piper is surveillance. Selective memory is more human.
 
+### Confidence Thresholds Without Tiering (v3)
+**Rejected because**: Binary "understood/not understood" creates either over-confirmation or over-assumption. Tiered confidence (reject/explicit/implicit/proceed) matches natural conversation better.
+
+---
+
+## Implementation Requirements (v3)
+
+Based on gap analysis against implementation guide, the following work is required:
+
+### P0 — MVP Critical
+
+| Requirement | Gap | Effort | Issue |
+|-------------|-----|--------|-------|
+| Follow-up recognition (lens inheritance) | Major | 3-5d | #427 Phase 2 |
+| Multi-intent handling | Major | 5-8d | #595 |
+| Natural slot filling | Moderate | 3-5d | TBD |
+| "Main project" fix | Major | 1-2d | TBD |
+| Soft workflow invocation | Moderate | 3-5d | TBD |
+
+### P1 — MVP Important
+
+| Requirement | Gap | Effort | Issue |
+|-------------|-----|--------|-------|
+| Confidence-tiered responses | Major | 3-5d | TBD |
+| Repair strategy hierarchy | Major | 5-8d | TBD |
+| Error-specific recovery | Major | 5-8d | TBD |
+| Anti-parrot audit + fixes | Audit needed | 2-3d | TBD |
+| Acknowledgment variation | Moderate | 2-3d | TBD |
+
+### P2 — MVP Nice to Have
+
+| Requirement | Gap | Effort | Issue |
+|-------------|-----|--------|-------|
+| Trust-proactivity wiring | Major | 3-5d | TBD |
+| Context-aware tool surfacing | Major | 5-8d | TBD |
+| Progressive disclosure | Major | 5-8d/workflow | TBD |
+
+See `conversational-glue-implementation-guide.md` for complete requirements and `conversational-glue-gap-analysis.md` for detailed gap mapping.
+
 ---
 
 ## Implications
@@ -316,17 +448,21 @@ B2 is not a feature checklist. B2 is a qualitative assessment:
 - Specify contextual capability hint UX (when, where, how to dismiss)
 - Design cross-session greeting variations
 - Define "B2 quality" assessment criteria
+- **Review implementation guide for UX requirements (v3)**
 
 **For Chief Architect**:
-- Cross-session memory architecture (what persists, how long, how retrieved)
-- Trust level computation and persistence
-- Anaphoric reference resolution system
+- Cross-session memory architecture (what persists, how long, how retrieved) — ADR-054
+- Trust level computation and persistence — ADR-053 ✓
+- Anaphoric reference resolution system — Pattern-011
 - Proactivity trigger infrastructure
+- **Review implementation guide for architecture requirements (v3)**
+- **Confidence scoring integration into intent classification (v3)**
 
 **For Implementation**:
 - Discovery glue is not separate from features—each feature needs discovery design
 - Context glue requires UserContextService enhancements
 - Proactivity glue requires trust computation (may be new system)
+- **See M0 (Glue Sprint) for prioritized implementation plan (v3)**
 
 ---
 
@@ -342,11 +478,13 @@ B2 is not a feature checklist. B2 is a qualitative assessment:
 
 1. **Memory boundaries**: How much cross-session context is helpful vs. creepy? What's the retention policy? CXO "thoughtful colleague" test: remember work context and stated preferences; don't remember casual asides or inferred personal details.
 
-2. ~~**Trust computation specifics**~~: **Resolved v2** — Framework established above (interaction outcomes, stage thresholds, regression rules). Needs architectural ADR for implementation.
+2. ~~**Trust computation specifics**~~: **Resolved v2** — Framework established above (interaction outcomes, stage thresholds, regression rules). ADR-053 implemented.
 
 3. **Privacy mode**: Should there be an explicit "don't remember this session" option? How does it interact with trust levels?
 
 4. **Multi-device continuity**: If a user switches from desktop to mobile mid-task, how does context transfer?
+
+5. ~~**Natural conversation patterns**~~: **Resolved v3** — External research conducted; implementation guide created with specific patterns for dialogue management, state architecture, workflow transitions, and anti-robotics.
 
 ---
 
@@ -358,10 +496,38 @@ B2 is not a feature checklist. B2 is a qualitative assessment:
 - Nielsen research on articulation barrier (2024)
 - Ethics-First Architecture — Trust gradient foundations
 - Personalization Technical Assessment (Jan 4, 2026) — Adaptive detection infrastructure
+- **Conversational Glue Implementation Guide (Feb 1, 2026)** — Research synthesis and implementation patterns (v3)
+- **Conversational Glue Gap Analysis (Feb 1, 2026)** — Current state mapping and prioritization (v3)
+- **External research sources** (v3): Stanford SLP, Google Conversation Design, Amazon Alexa, Microsoft Copilot Studio, Rasa CALM, CHI 2019/2025 papers
 
 ---
 
 ## Changelog
+
+**v3.2 (October 23, 2026, PPM merge on CXO's rulings)**:
+- Moved the canonical copy to `docs/internal/product/pdr/`
+- Carried over the 2026-08-01 addenda (the plugin-surface interaction-denominator open question; first contact after authorization is Stage-1 legal)
+- Restored the "discussable without being displayed" paragraph that v3 dropped (its "flag for ADR" tail removed; ADR-053 exists)
+- Added the #2135 status line under Trust Computation Framework
+
+**v3.1 (February 1, 2026 — CXO/Architect Review)**:
+- Added "Recovery" dimension to B2 Assessment Criteria (CXO feedback)
+- Added "The Assistant Persona" section with role framing (CXO feedback)
+- Clarified B2 Recovery test language
+- Architect review confirmed architectural soundness
+
+**v3 (February 1, 2026)**:
+- Added "Core Vision" statement emphasizing natural conversation
+- Added Five Foundational Principles section
+- Added Follow-Up Recognition requirements (lens inheritance, ellipsis)
+- Added Dialogue Quality Metrics (multi-intent, parrot rate, confirmation rate)
+- Added B2 Assessment Criteria table with testable conditions
+- Added "The Colleague Test" heuristic
+- Added Implementation Requirements section with P0/P1/P2 prioritization
+- Added references to implementation guide and gap analysis
+- Resolved "natural conversation patterns" open question via external research
+- Updated implementation status notes throughout
+- Added "Scripted Interactions Break the Illusion" to problem statement
 
 **v2 (January 4, 2026)**:
 - Added Trust Computation Framework (CXO feedback)
@@ -381,4 +547,4 @@ B2 is not a feature checklist. B2 is a qualitative assessment:
 
 ---
 
-*PDR-002 | Draft v2 | January 4, 2026*
+*PDR-002 | Draft v3.2 (merge of v3.1, CXO ✅ Architect ✅) | October 23, 2026*

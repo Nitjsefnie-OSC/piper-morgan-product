@@ -26,8 +26,8 @@ Core product decisions that shape everything else. These establish patterns, pri
 | PDR | Title | Status | Date |
 |-----|-------|--------|------|
 | [PDR-001](PDR-001-ftux-as-first-recognition-v3.md) | First Contact is First Recognition | Draft v3 | Jan 4, 2026 |
-| [PDR-002](PDR-002-conversational-glue.md) | Conversational Glue | Draft v2 (a Draft v3.1 copy also sits at `docs/internal/planning/conversational-glue/`; which is canonical is open) | Jan 4, 2026 |
-| &nbsp; | [PDR-002 Appendix: Layer 2 Vision (Radar)](PDR-002-appendix-layer-2-vision.md) | Appendix (v1.1 draft, CXO reviewing) | Feb 6, 2026 |
+| [PDR-002](PDR-002-conversational-glue.md) | Conversational Glue | Draft v3.2 (v3.1 CXO and Arch approved; merged here 10-23, the `planning/` copy is a pointer) | Feb 1, 2026 |
+| &nbsp; | [PDR-002 Appendix: Layer 2 Vision (Radar)](PDR-002-appendix-layer-2-vision.md) | Appendix (v1.1) | Feb 6, 2026 |
 | [PDR-003](PDR-003-entity-concept-model.md) | Entity Concept Model | Draft (the file says DRAFT; this index said Approved, Mar 8, and no ratification is recorded) | Feb 26, 2026 |
 | [PDR-004](PDR-004-experience-philosophy.md) | Experience Philosophy | Approved (Amendment A proposed 2026-07-30, not ratified) | Mar 22, 2026 |
 | [PDR-005](PDR-005-bring-your-own-chat.md) | Bring Your Own Chat — Distribution Model | Approved (v1.0) | Jun 5, 2026 |
