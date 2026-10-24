@@ -4,6 +4,7 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 17:28 PDT | cxo | pdr-002-rulings-2026-10-23.md | PDR-002 rulings: restore the trust paragraph, add the #2135 line, fold appendix… |
 | 2026-10-23 17:15 PDT | cxo | 2132-family-table-read-summarize-row-2026-10-23.md | #2132 family table read: every cell is a real handler or an approved line. One… |
 | 2026-10-23 17:15 PDT | cxo | pdr-002-canonical-amendment-a-2026-10-23.md | PDR check: (b) PDR-002 canonical copy, and my read on Amendment A (ratify) |
 | 2026-10-23 17:14 PT | lead | table-lead-to-cxo-arch-cc-ppm-exec-web-2132-compare-cell-edited-no-bad-cell-read-and-i-close-2026-10-23.md | #2132: the family table's compare cell is edited to Arch's text (comment 637229… |
