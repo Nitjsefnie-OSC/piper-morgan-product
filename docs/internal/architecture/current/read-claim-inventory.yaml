@@ -1,0 +1,1775 @@
+# Read-claim inventory (#2151 step 1)
+#
+# One row per surface that can tell a user something about their own data.
+# The ROW SET is derived from code by scripts/read_claim_inventory.py (it exits 1
+# on a missing or stale row and 2 on a zero count); this file holds only the
+# classification. See the script's docstring for the four sources (rail, legacy,
+# floor, route).
+#
+# states: for each of the five states, one of
+#   distinct          the reply path tells this state apart with its own honest wording
+#   conflated:<s>     it renders as state <s> (failed shown as verified-empty = conflated:verified)
+#   n/a               cannot occur on this surface (reason in notes)
+#   unknown           not used here: an unclassifiable row is red with "unverified: ..."
+# verdict: green (no conflation) | red (a conflation that can mislead the user about
+#   their own data) | exempt (with reason)
+#
+# Cross-cutting facts the rows cite (all source reads, 2026-10-23):
+#   RAIL-FALLTHROUGH  workflow_dispatcher.dispatch_workflow catches any exception
+#                     from an entry point and returns None; _dispatch_action_rail then
+#                     returns _RailOutcome(on_rail=True) with no result and the turn
+#                     falls through to category routing (QUERY -> _handle_generic_query
+#                     -> the floor). A handler with no try of its own therefore turns a
+#                     failed read into a floor answer that never saw the read.
+#   ISS-STATUS        IntegrationStatusService.get_status -> get_config_status: each
+#                     per-integration credential lookup is wrapped in `except Exception:
+#                     pass`, so a keychain/DB failure reads "not_configured"; the outer
+#                     "unknown" status also maps to configured=False. Env credentials
+#                     (GITHUB_TOKEN, SLACK_BOT_TOKEN, NOTION_API_KEY, GOOGLE_CALENDAR_
+#                     CREDENTIALS / MCP_ENABLED) count as THIS user's connection (via=env).
+#   ENV-REPO          repo_resolver.resolve_repo path 3: PIPER_DEFAULT_REPO (a host-wide
+#                     env var) resolves when the user has no default; replies built on it
+#                     do not name the repo. Whether the alpha host sets it: unverified.
+#   GH-NONSTRICT      GitHubIntegrationRouter.get_open_issues / get_recent_issues and
+#                     GitHubMCPSpatialAdapter.list_github_issues_direct (non-strict) return
+#                     [] on any error and on an unresolved repo.
+#   NOTION-SEARCH     NotionMCPAdapter.search_notion returns [] on any exception.
+#   TODO-CAP          TodoManagementService.list_todos reads TodoRepository.get_todos_by_
+#                     owner (LIMIT 100, completed rows included, ordered priority/due/
+#                     created) and only then drops completed rows.
+#   FLOOR-ABSENT      ContextAssembler sources outside SOURCE_FAILED_FLAGS return {} / None
+#                     on error, the same as a verified empty; the floor renderer omits
+#                     the line, and the aggregate "DATA CHECKS FAILED" directive only
+#                     rides when a registered flag is armed. What the model says over
+#                     the gap is LLM-mediated and was not served for this inventory.
+
+surfaces:
+
+# ----------------------------------------------------------------------------
+# rail: action-triggered WorkflowEntry, one canonical name per unique entry
+# ----------------------------------------------------------------------------
+
+- id: update_document
+  kind: rail
+  effect: WRITE
+  reads: Notion page search by title, before appending
+  handler: services/intent/intent_service.py:IntentService._handle_update_document_notion
+  states: {verified: distinct, failed: conflated:verified, narrowed: distinct, not_performed: distinct, substituted: conflated:verified}
+  texts:
+    verified: "No document found matching '{doc_name}'. Please try a different name or ..."
+    failed: same as verified-empty (NOTION-SEARCH)
+    not_performed: is_available gate has its own not-connected text
+  verdict: red
+  notes: >-
+    A WRITE that first reads. A failed Notion search returns [] (NOTION-SEARCH) and the
+    reply says no document matches. NotionIntegrationRouter.connect_for_user falls back to
+    connect()'s legacy static/env resolution when the user's key lookup raises, so the
+    search can run against the deployment's workspace (substituted). Read: handler message
+    sites, connect_for_user, adapter search_notion; not the append path.
+
+- id: changes_query
+  kind: rail
+  effect: READ
+  reads: Piper's own audit log, todos and projects for the principal in a time window
+  handler: services/intent/intent_service.py:IntentService._handle_changes_query
+  states: {verified: distinct, failed: distinct, narrowed: distinct, not_performed: distinct, substituted: n/a}
+  texts:
+    verified: CHANGES_NOTHING_NEW / CHANGES_FOUND_OPENER (name the three sources and that GitHub was not checked)
+    failed: CHANGES_READ_FAILED_ALL, CHANGES_READ_FAILED_BESIDE_ROWS, CHANGES_NOTHING_NEW_SOME_FAILED
+  verdict: green
+  notes: >-
+    The #2143/#2140 fail-closed shape: each of the three reads tracks its own failure. The
+    window is named in every reply. Owner-scoped DB reads, no global fallback.
+
+- id: get_current_time
+  kind: rail
+  effect: READ
+  reads: the user's timezone preference, plus today's calendar for meeting context
+  handler: services/intent_service/canonical_handlers.py:CanonicalHandlers._handle_temporal_query
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: distinct, substituted: distinct}
+  texts:
+    substituted: "That's on the default zone ({user_tz}) — set yours under Settings → Preferences ..."
+    failed: "⚠️ Note: Calendar data unavailable right now."
+  verdict: green
+  notes: >-
+    The default zone is named when it is used. Shallow below the handler:
+    user_timezone_name and the calendar router were not traced.
+
+- id: get_capabilities
+  kind: rail
+  effect: READ
+  reads: floor DISCOVERY context (capability ledger plus per-user integration status)
+  handler: services/intent/intent_service.py:IntentService._handle_floor_with_context
+  states: {verified: distinct, failed: conflated:verified, narrowed: n/a, not_performed: conflated:verified, substituted: conflated:verified}
+  texts:
+    verified: '"- Connected integrations: {names or ''none''}" (floor context line)'
+  verdict: red
+  notes: >-
+    Rides floor:assembler._gather_identity_context. ISS-STATUS: a failed credential
+    lookup renders the integration as not connected ("Connected integrations: none"); an
+    env credential renders as this user's connection. If get_all raises, the line is
+    absent and the model answers capability questions without integration state.
+
+- id: explain_trust
+  kind: rail
+  effect: READ
+  reads: floor TRUST context (the user's trust profile)
+  handler: services/intent/intent_service.py:IntentService._handle_floor_with_context
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: distinct, substituted: n/a}
+  texts:
+    failed: 'trust_profile {"stage": "unknown", "note": "Could not load trust profile"}'
+  verdict: green
+  notes: Rides floor:assembler._gather_trust_context; a failed read is marked unknown, never "new".
+
+- id: get_memory
+  kind: rail
+  effect: READ
+  reads: floor MEMORY context (this session's turns plus persistent conversation history)
+  handler: services/intent/intent_service.py:IntentService._handle_floor_with_context
+  states: {verified: distinct, failed: conflated:not_performed, narrowed: distinct, not_performed: conflated:verified, substituted: n/a}
+  verdict: red
+  notes: >-
+    Rides floor:assembler._gather_memory_context. A failed UserHistoryService read leaves
+    persistent_memory absent, the same as having no history (FLOOR-ABSENT), so "do you
+    remember X?" can be answered as no memory. unverified: the model's served wording over
+    the gap.
+
+- id: pull_insights
+  kind: rail
+  effect: READ
+  reads: floor MEMORY/pull_insights context (the user's composted insights)
+  handler: services/intent/intent_service.py:IntentService._handle_floor_with_context
+  states: {verified: distinct, failed: conflated:verified, narrowed: distinct, not_performed: n/a, substituted: n/a}
+  texts:
+    verified: "- Composted insights about this user: NONE YET. Respond honestly: you have not yet learned patterns ..."
+    failed: same NONE YET line (the except branch writes is_empty=True)
+  verdict: red
+  notes: >-
+    Rides floor:assembler._gather_insight_pull_context, whose except branch writes the
+    same empty dict as a verified empty, and the floor renders the binding NONE YET line.
+    The 50-row cap carries a true total_count (narrowed distinct).
+
+- id: analyze_blockers
+  kind: rail
+  effect: READ
+  reads: floor ANALYSIS context (falls to the status/priority gather; blocked issues of the default repo)
+  handler: services/intent/intent_service.py:IntentService._handle_floor_with_context
+  states: {verified: conflated:not_performed, failed: conflated:verified, narrowed: distinct, not_performed: conflated:verified, substituted: conflated:verified}
+  verdict: red
+  notes: >-
+    ANALYSIS is not a gather_context branch, so it takes the else baseline
+    (_gather_status_priority_context). A failed blocked-items read returns None
+    (FLOOR-ABSENT) beside "- GitHub: connected", so "what's blocking X?" can be answered
+    as nothing blocked; a GitHub status failure renders "GitHub: not connected"
+    (ISS-STATUS); the repo can be ENV-REPO. unverified: served wording.
+
+- id: get_feature_info
+  kind: rail
+  effect: READ
+  reads: floor QUERY context (status/priority baseline) to answer about a Piper feature
+  handler: services/intent/intent_service.py:IntentService._handle_floor_with_context
+  states: {verified: distinct, failed: conflated:verified, narrowed: n/a, not_performed: n/a, substituted: conflated:verified}
+  verdict: red
+  notes: >-
+    The question is about Piper, but the reply can name the user's connection state, which
+    comes from the status/priority gather: a failed GitHub status reads "GitHub: not
+    connected" (ISS-STATUS) and env credentials read as connected. Lower risk than the
+    data questions.
+
+- id: check_completion_status
+  kind: rail
+  effect: READ
+  reads: floor STATUS context, asked about when past work was completed
+  handler: services/intent/intent_service.py:IntentService._handle_floor_with_context
+  states: {verified: conflated:not_performed, failed: conflated:not_performed, narrowed: n/a, not_performed: conflated:verified, substituted: n/a}
+  verdict: red
+  notes: >-
+    STATUS routes to _gather_status_priority_context, which gathers pending todos but no
+    completed todos and no closed issues, so a completion-history question reaches the
+    floor without the data it asks about (not performed). Nothing in the context tells the
+    model that completion history was not read. unverified: served wording.
+
+- id: write_stakeholder_update
+  kind: rail
+  effect: READ
+  reads: floor QUERY context (status/priority baseline) to draft an update
+  handler: services/intent/intent_service.py:IntentService._handle_floor_with_context
+  states: {verified: distinct, failed: conflated:not_performed, narrowed: distinct, not_performed: conflated:verified, substituted: conflated:verified}
+  verdict: red
+  notes: >-
+    The draft is built from whatever the status/priority gather returned. Failed
+    milestones, blocked items, recent activity or high-priority issues are absent
+    (FLOOR-ABSENT), so the draft can understate progress or risk with no caveat.
+    unverified: served wording.
+
+- id: get_identity
+  kind: rail
+  effect: READ
+  reads: floor IDENTITY context (capabilities, integration status, user projects, recent topics)
+  handler: services/intent/intent_service.py:IntentService._handle_floor_with_context
+  states: {verified: distinct, failed: conflated:verified, narrowed: distinct, not_performed: n/a, substituted: conflated:verified}
+  verdict: red
+  notes: >-
+    Same gather as get_capabilities (ISS-STATUS). The question is about the assistant, so
+    the exposure is the integration line it may repeat. user_project_count rides the
+    5-row slice (narrowed distinct).
+
+- id: explain_suggestion
+  kind: rail
+  effect: READ
+  reads: provenance of a prior suggestion (the assembler's last provenance map)
+  handler: services/intent_service/canonical_handlers.py:CanonicalHandlers._handle_provenance_query
+  states: {verified: distinct, failed: n/a, narrowed: n/a, not_performed: distinct, substituted: n/a}
+  verdict: green
+  notes: >-
+    Shallow: the handler was not read line by line. It reads in-process provenance, not a
+    remote or DB source, so a failed read has no remote leg.
+
+- id: get_contextual_guidance
+  kind: rail
+  effect: READ
+  reads: contextual guidance (how-do-I / what next), answered through the floor
+  handler: services/intent_service/canonical_handlers.py:CanonicalHandlers._handle_guidance_query
+  states: {verified: distinct, failed: n/a, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: exempt
+  reason: advice over the conversation, no claim about the user's stored data
+  notes: Shallow; the guidance path's floor context was not traced.
+
+- id: list_repos
+  kind: rail
+  effect: READ
+  reads: repositories registered in Piper for the user, optionally for one project
+  handler: services/intent_service/canonical_handlers.py:CanonicalHandlers._handle_list_repos
+  states: {verified: distinct, failed: conflated:not_performed, narrowed: distinct, not_performed: conflated:verified, substituted: n/a}
+  texts:
+    verified: "You don't have any registered repositories yet. ..."
+  verdict: red
+  notes: >-
+    The handler has no try: a DB error raises out of the entry point and the turn falls
+    through to category routing and the floor (RAIL-FALLTHROUGH), which never saw the
+    repo list. unverified: what the floor then says. The empty text names its scope
+    ("registered").
+
+- id: search_projects
+  kind: rail
+  effect: READ
+  reads: the user's projects by name substring
+  handler: services/intent_service/canonical_handlers.py:CanonicalHandlers._handle_search_projects
+  states: {verified: distinct, failed: conflated:not_performed, narrowed: distinct, not_performed: conflated:verified, substituted: n/a}
+  texts:
+    verified: "I couldn't find any projects matching '{search_terms}'. Say 'list my projects' ..."
+  verdict: red
+  notes: >-
+    No try around the DB read (RAIL-FALLTHROUGH). The no-match reply echoes the search
+    string actually used, which names the scope even when prefix stripping left the whole
+    message in it.
+
+- id: archive_project
+  kind: rail
+  effect: WRITE
+  reads: the user's project by name (resolve target)
+  handler: services/intent_service/canonical_handlers.py:CanonicalHandlers._handle_archive_project
+  states: {verified: distinct, failed: conflated:not_performed, narrowed: n/a, not_performed: distinct, substituted: n/a}
+  verdict: green
+  notes: >-
+    Resolves the target with an owner-scoped DB lookup; not-found names the project. A
+    raise falls through (RAIL-FALLTHROUGH) and nothing is claimed archived. Shallow: the
+    message sites were scanned, not every branch.
+
+- id: restore_project
+  kind: rail
+  effect: WRITE
+  reads: the user's archived project by name (resolve target)
+  handler: services/intent_service/canonical_handlers.py:CanonicalHandlers._handle_restore_project
+  states: {verified: distinct, failed: conflated:not_performed, narrowed: n/a, not_performed: distinct, substituted: n/a}
+  verdict: green
+  notes: Same shape as archive_project. Shallow.
+
+- id: add_project
+  kind: rail
+  effect: WRITE
+  reads: the user's projects (duplicate check) and an optional named repo
+  handler: services/intent_service/canonical_handlers.py:CanonicalHandlers._handle_add_project
+  states: {verified: distinct, failed: conflated:not_performed, narrowed: n/a, not_performed: distinct, substituted: n/a}
+  verdict: green
+  notes: Write path; no absence claim found on a failed read. Shallow.
+
+- id: link_repo
+  kind: rail
+  effect: WRITE
+  reads: the user's project by name and the repository record
+  handler: services/intent_service/canonical_handlers.py:CanonicalHandlers._handle_link_repo
+  states: {verified: distinct, failed: conflated:not_performed, narrowed: n/a, not_performed: distinct, substituted: n/a}
+  verdict: green
+  notes: Write path; target resolution is an owner-scoped DB read. Shallow.
+
+- id: unlink_repo
+  kind: rail
+  effect: DESTRUCTIVE
+  reads: the project's linked repositories (resolve target)
+  handler: services/intent_service/canonical_handlers.py:CanonicalHandlers._handle_unlink_repo
+  states: {verified: distinct, failed: conflated:not_performed, narrowed: n/a, not_performed: distinct, substituted: n/a}
+  verdict: green
+  notes: Confirms first; owner-scoped DB read. Shallow.
+
+- id: close_issue
+  kind: rail
+  effect: DESTRUCTIVE
+  reads: open issues of the default repo (fuzzy title match) when no number is given
+  handler: services/intent/intent_service.py:IntentService._handle_close_issue_query
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: distinct, substituted: conflated:verified}
+  texts:
+    failed: 'no match or failed search -> "I can close a particular issue if you give me its number, like "close #123". ..."'
+  verdict: green
+  notes: >-
+    _fuzzy_find_issues returns [] on error (GH-NONSTRICT), but the no-match reply makes no
+    absence claim; it asks for a number. ENV-REPO can pick the repo, and the reply names
+    the matched issue for confirmation before any close, so no data claim rests on it.
+
+- id: reopen_issue
+  kind: rail
+  effect: DESTRUCTIVE
+  reads: closed issues of the default repo (fuzzy match) when no number is given
+  handler: services/intent/intent_service.py:IntentService._handle_reopen_issue_query
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: distinct, substituted: conflated:verified}
+  verdict: green
+  notes: Same shape as close_issue (no absence claim on a failed search). Shallow.
+
+- id: comment_issue
+  kind: rail
+  effect: WRITE
+  reads: the target issue
+  handler: services/intent/intent_service.py:IntentService._handle_comment_issue_query
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: distinct, substituted: n/a}
+  verdict: green
+  notes: The "couldn't find" texts are about parsing the request, not the user's data. Shallow.
+
+- id: update_issue
+  kind: rail
+  effect: WRITE
+  reads: the default repository and the target issue
+  handler: services/intent/intent_service.py:IntentService._handle_update_issue
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: distinct, substituted: distinct}
+  verdict: green
+  notes: >-
+    _resolve_default_repository fails safe to the which-repo ask; write outcomes go through
+    _unverified_write_result. Shallow: the full handler was not read.
+
+- id: create_issue
+  kind: rail
+  effect: WRITE
+  reads: the default repository and an open-issue duplicate check by title
+  handler: services/intent/intent_service.py:IntentService._handle_create_issue
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: distinct, substituted: distinct}
+  verdict: green
+  notes: >-
+    find_open_issue_by_title failure lets the create proceed (logged); the reply claims the
+    created issue, not the absence of a duplicate. Shallow.
+
+- id: prioritize
+  kind: rail
+  effect: READ
+  reads: nothing stored; scores the items passed in the request
+  handler: services/intent/intent_service.py:IntentService._handle_prioritization
+  states: {verified: n/a, failed: n/a, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: exempt
+  reason: computes over the items in the request; no read of the user's data
+  notes: Validation messages ask for the missing items; no data claim.
+
+- id: generate_content
+  kind: rail
+  effect: READ
+  reads: repository metrics via _handle_analyze_data for a status report (other content types read nothing)
+  handler: services/intent/intent_service.py:IntentService._handle_generate_content
+  states: {verified: distinct, failed: conflated:verified, narrowed: distinct, not_performed: distinct, substituted: n/a}
+  verdict: red
+  notes: >-
+    The status-report path calls _handle_analyze_data and inherits its conflation (the
+    activity read's read_failed is not checked, so a failed read becomes zero metrics in
+    the report). _get_default_repository returns None, so a repo must be named.
+
+- id: create_reminder
+  kind: rail
+  effect: WRITE
+  reads: nothing before writing
+  handler: services/intent_service/todo_handlers.py:TodoIntentHandlers.handle_create_reminder
+  states: {verified: n/a, failed: n/a, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: exempt
+  reason: write-only, no read claim
+
+- id: create_todo
+  kind: rail
+  effect: WRITE
+  reads: nothing before writing
+  handler: services/intent_service/todo_handlers.py:TodoIntentHandlers.handle_create_todo
+  states: {verified: n/a, failed: n/a, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: exempt
+  reason: write-only, no read claim
+
+- id: delete_todo
+  kind: rail
+  effect: DESTRUCTIVE
+  reads: the user's active todos (resolve targets by name or number)
+  handler: services/intent_service/todo_handlers.py:TodoIntentHandlers.handle_delete_todo_targets
+  states: {verified: distinct, failed: conflated:not_performed, narrowed: conflated:verified, not_performed: distinct, substituted: n/a}
+  verdict: red
+  notes: >-
+    The name pool is TodoManagementService.list_todos (TODO-CAP): an active todo past the
+    100-row window can be reported as not matching. A raise in the pool read falls through
+    (RAIL-FALLTHROUGH) to the generic EXECUTION fallback, which claims nothing about data.
+    Blast radius small (accounts with 100+ todos).
+
+- id: complete_todo
+  kind: rail
+  effect: WRITE
+  reads: the user's active todos (resolve targets by name or number)
+  handler: services/intent_service/todo_handlers.py:TodoIntentHandlers.handle_complete_todo_targets
+  states: {verified: distinct, failed: conflated:not_performed, narrowed: conflated:verified, not_performed: distinct, substituted: n/a}
+  verdict: red
+  notes: Same pool and cap as delete_todo (TODO-CAP).
+
+- id: clear_todos
+  kind: rail
+  effect: READ
+  reads: the user's reminders/todos for the clear family (asks mark-done or delete)
+  handler: services/intent_service/reminder_clear.py:run_clear_todos
+  states: {verified: distinct, failed: conflated:not_performed, narrowed: conflated:verified, not_performed: distinct, substituted: n/a}
+  verdict: red
+  notes: >-
+    Shallow: run_clear_todos was not read in full. It resolves over the same todo service
+    (TODO-CAP), and the entry has no try (RAIL-FALLTHROUGH).
+
+- id: set_default_repo
+  kind: rail
+  effect: WRITE
+  reads: the user's registered repos and connector repo search for a bare name
+  handler: services/intent/intent_service.py:IntentService._handle_set_default_repo
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: distinct, substituted: n/a}
+  verdict: green
+  notes: >-
+    _resolve_bare_repo_name swallows lookup failures to None, and the caller asks for the
+    owner/name form; it never says the repo doesn't exist.
+
+- id: get_default_repo
+  kind: rail
+  effect: READ
+  reads: the user's stored default repo preference
+  handler: services/intent/intent_service.py:IntentService._handle_get_default_repo
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: distinct, substituted: n/a}
+  texts:
+    verified: "You haven't set a default repo yet — tell me `set my default repo to owner/name` ..."
+    failed: "I wasn't able to look up your default repo just now. Please try again in a moment."
+  verdict: green
+  notes: >-
+    Reads the stored preference only. Note for ENV-REPO: "You haven't set a default repo"
+    is true while GitHub reads may still resolve PIPER_DEFAULT_REPO.
+
+- id: set_timezone
+  kind: rail
+  effect: WRITE
+  reads: nothing before writing
+  handler: services/intent/intent_service.py:IntentService._handle_set_timezone
+  states: {verified: n/a, failed: n/a, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: exempt
+  reason: write-only, no read claim
+
+- id: list_archived_projects
+  kind: rail
+  effect: READ
+  reads: the user's archived projects
+  handler: services/intent_service/workflow_entries.py:run_archived_projects_query_workflow
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: distinct, substituted: n/a}
+  texts:
+    verified: "You don't have any archived projects."
+    failed: "I had trouble loading your archived projects right now. You can try again in a moment."
+  verdict: green
+  notes: Owner-scoped PortfolioService read with its own except.
+
+- id: summarize_document
+  kind: rail
+  effect: READ
+  reads: the user's uploads and artifacts, resolved from the message (FileResolver)
+  handler: services/intent_service/workflow_entries.py:run_summarize_document_workflow
+  states: {verified: distinct, failed: distinct, narrowed: conflated:verified, not_performed: distinct, substituted: n/a}
+  texts:
+    verified: "I don't see any uploaded documents I can summarize. Upload the file on the Files page ..."
+    narrowed: same line
+    failed: an honest-degrade success=False line from the outer except
+  verdict: red
+  notes: >-
+    FileResolver._candidate_files reads get_files_for_session(owner, limit=20) plus
+    artifacts for a non-temporal reference. A named file outside the 20 most recent, or a
+    filename-shaped token that matches no candidate, returns (None, 0.0), and the reply
+    says the account has no uploaded documents at all. The temporal path (#1661) already
+    names what exists outside its window; the non-temporal path doesn't.
+
+- id: compare_documents
+  kind: rail
+  effect: READ
+  reads: the user's uploaded files named verbatim in the message (exact match only)
+  handler: services/intent_service/workflow_entries.py:run_compare_documents_workflow
+  states: {verified: distinct, failed: distinct, narrowed: distinct, not_performed: distinct, substituted: n/a}
+  texts:
+    verified: NO_TWO_DOCUMENTS_LINE "I need two documents to compare. Name two uploaded files, or paste the text of both here."
+    failed: "I had trouble reading your files just now. You can try again in a moment."
+  verdict: green
+  notes: >-
+    #2132's fix: no absence claim when fewer than two bind. The resolver's 20-file window
+    applies, but the reply asks rather than asserting absence.
+
+- id: shipped_this_week
+  kind: rail
+  effect: READ
+  reads: the default repo's 50 most recent closed issues/PRs, filtered to 7 days
+  handler: services/intent/intent_service.py:IntentService._handle_shipped_this_week
+  states: {verified: distinct, failed: distinct, narrowed: distinct, not_performed: distinct, substituted: conflated:verified}
+  texts:
+    verified: "No closures in the past 7 days among the {N} most-recent closed items I checked."
+    failed: "I couldn't read {repo} with this account's GitHub connection, so there's nothing to report yet."
+  verdict: red
+  notes: >-
+    Failed and narrowed are honest (#2128). Substituted: get_closed_issues resolves the
+    repo through resolve_repo, so ENV-REPO can supply a host-wide repo, and the success and
+    empty replies don't name it ("for this repo"). Latent unless the host sets
+    PIPER_DEFAULT_REPO (unverified).
+
+- id: stale_prs
+  kind: rail
+  effect: READ
+  reads: the user's open PRs (connector search, or the native-PAT default-repo list) older than 7 days
+  handler: services/intent/intent_service.py:IntentService._handle_stale_prs
+  states: {verified: distinct, failed: distinct, narrowed: conflated:verified, not_performed: distinct, substituted: conflated:verified}
+  texts:
+    failed: "No open PRs returned from GitHub. This could mean you have none open, or there's a connection/auth issue worth checking."
+  verdict: red
+  notes: >-
+    Native-PAT path (no OAuth binding): it filters get_open_issues(limit=100) on
+    item.get("pull_request"), but list_github_issues_direct emits "is_pull_request", never
+    "pull_request", so that path never sees a PR and always takes the empty branch. That
+    branch's text hedges both ways, so no flat absence claim, but real stale PRs are never
+    shown. GH-NONSTRICT and ENV-REPO apply on that path.
+
+- id: review_issue
+  kind: rail
+  effect: READ
+  reads: one GitHub issue by number (connector first, native PAT fallback)
+  handler: services/intent/intent_service.py:IntentService._handle_review_issue_query
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: distinct, substituted: conflated:verified}
+  texts:
+    verified: "I couldn't find issue #{n} in {repo}."
+    failed: "I couldn't find issue #{n} — it may not exist in this repository, or GitHub may not be fully connected. ..."
+  verdict: green
+  notes: >-
+    The PAT-path None reply hedges between not-found and not-connected; it asserts
+    neither. The connector not-found names the repo it looked in. ENV-REPO on the PAT path
+    is unnamed, but the reply shows the fetched issue itself.
+
+- id: list_issues
+  kind: rail
+  effect: READ
+  reads: the user's open issues (connector assignee:@me, a named repo, or the native-PAT default repo)
+  handler: services/intent/intent_service.py:IntentService._handle_list_issues_query
+  states: {verified: distinct, failed: conflated:verified, narrowed: distinct, not_performed: conflated:verified, substituted: conflated:verified}
+  texts:
+    verified: '"You have no open issues assigned to you." (connector) / "No open issues in {repo} right now." (named)'
+    failed: '"You don''t have any open issues right now." (native-PAT path)'
+    failed_connector: degradation.user_message
+  verdict: red
+  notes: >-
+    Connector path is honest (#2040 names the scope; degrades say so). The CONNECT_REQUIRED
+    fallback calls GitHubIntegrationRouter.get_open_issues (GH-NONSTRICT): a failed read
+    or an unresolved repo returns [] and the reply is the unscoped "You don't have any open
+    issues right now." That path is taken by any account without an OAuth binding,
+    including one with no GitHub at all; ENV-REPO can supply the repo.
+
+- id: list_prs
+  kind: rail
+  effect: READ
+  reads: the user's open PRs (connector search, or the native-PAT default-repo list)
+  handler: services/intent/intent_service.py:IntentService._handle_list_prs_query
+  states: {verified: distinct, failed: conflated:verified, narrowed: conflated:verified, not_performed: distinct, substituted: conflated:verified}
+  texts:
+    verified: "You don't have any open pull requests right now."
+    failed: same line on the native-PAT path
+  verdict: red
+  notes: >-
+    Native-PAT path (no OAuth binding, is_available true): filters get_open_issues on
+    item.get("pull_request"), a key list_github_issues_direct never sets (it sets
+    "is_pull_request"), so it always reports no open PRs; it also returns [] on a failed
+    read (GH-NONSTRICT). Connector path degrades honestly.
+
+- id: list_milestones
+  kind: rail
+  effect: READ
+  reads: open milestones of the resolved default repo
+  handler: services/intent/intent_service.py:IntentService._handle_list_milestones_query
+  states: {verified: distinct, failed: distinct, narrowed: conflated:verified, not_performed: distinct, substituted: conflated:verified}
+  texts:
+    verified: "You don't have any open milestones right now."
+    failed: _github_list_read_failed "I couldn't read {repo} with this account's GitHub connection, so I can't list its milestones yet."
+  verdict: red
+  notes: >-
+    #1524 fixed the failed state. The empty line speaks for the whole account while the
+    read covered one repo, unnamed (narrowed), and the repo can be ENV-REPO (substituted).
+
+- id: list_releases
+  kind: rail
+  effect: READ
+  reads: releases of the resolved repo (connector first, native PAT fallback)
+  handler: services/intent/intent_service.py:IntentService._handle_list_releases_query
+  states: {verified: distinct, failed: distinct, narrowed: conflated:verified, not_performed: distinct, substituted: conflated:verified}
+  texts:
+    verified: "You don't have any releases yet."
+  verdict: red
+  notes: Same shape as list_milestones; the empty line doesn't name the repo read.
+
+- id: list_labels
+  kind: rail
+  effect: READ
+  reads: labels of the resolved repo
+  handler: services/intent/intent_service.py:IntentService._handle_list_labels_query
+  states: {verified: distinct, failed: distinct, narrowed: conflated:verified, not_performed: distinct, substituted: conflated:verified}
+  texts:
+    verified: "I don't see any labels for this repository."
+  verdict: red
+  notes: '"this repository" is not named; ENV-REPO can supply it. Failed is distinct (#1524).'
+
+- id: list_branches
+  kind: rail
+  effect: READ
+  reads: branches of the resolved repo (connector first, native PAT fallback)
+  handler: services/intent/intent_service.py:IntentService._handle_list_branches_query
+  states: {verified: distinct, failed: distinct, narrowed: conflated:verified, not_performed: distinct, substituted: conflated:verified}
+  texts:
+    verified: "I don't see any branches for this repository."
+  verdict: red
+  notes: Same as list_labels.
+
+- id: meeting_time
+  kind: rail
+  effect: READ
+  reads: Google Calendar events for one day
+  handler: services/intent/intent_service.py:IntentService._handle_meeting_time_query
+  states: {verified: distinct, failed: distinct, narrowed: distinct, not_performed: distinct, substituted: n/a}
+  texts:
+    verified: "You have no meetings scheduled for {date_label}."
+    failed: calendar_read_failed_line(last_read_error)
+  verdict: green
+  notes: >-
+    The #2092 last_read_error check covers the adapter's except path; a circuit-open []
+    keeps the previous error until a success resets it. Substituted n/a on hosted: the
+    file-token fallback in GoogleCalendarMCPAdapter.authenticate needs a server
+    token file (local single-tenant only).
+
+- id: recurring_meetings
+  kind: rail
+  effect: READ
+  reads: Google Calendar recurring events in the next 30 days
+  handler: services/intent/intent_service.py:IntentService._handle_recurring_meetings_query
+  states: {verified: distinct, failed: conflated:verified, narrowed: distinct, not_performed: distinct, substituted: n/a}
+  texts:
+    verified: "I didn't find any recurring meetings in the calendar events I checked for the next 30 days."
+    failed: same line
+  verdict: red
+  notes: >-
+    GoogleCalendarMCPAdapter.get_recurring_events returns [] on any exception and on an
+    open circuit without setting last_read_error, and the handler (unlike meeting_time and
+    week_calendar) never checks last_read_error.
+
+- id: week_calendar
+  kind: rail
+  effect: READ
+  reads: Google Calendar events for the week ahead
+  handler: services/intent/intent_service.py:IntentService._handle_week_calendar_query
+  states: {verified: distinct, failed: distinct, narrowed: distinct, not_performed: distinct, substituted: n/a}
+  texts:
+    failed: calendar_read_failed_line(last_read_error)
+  verdict: green
+  notes: 'Same #2092 guard as meeting_time.'
+
+- id: analyze_commits
+  kind: rail
+  effect: READ
+  reads: recent commits of the resolved repository
+  handler: services/intent/intent_service.py:IntentService._handle_analyze_commits
+  states: {verified: distinct, failed: conflated:verified, narrowed: distinct, not_performed: distinct, substituted: distinct}
+  texts:
+    verified: "No commits found in {repository} over the {timeframe}."
+    failed: same line
+  verdict: red
+  notes: >-
+    GitHubMCPSpatialAdapter.get_recent_activity marks a read that did not happen with
+    read_failed ("no_credential" / "no_response"); _handle_generate_report checks it,
+    _handle_analyze_commits does not, so a failed read is "No commits found". The
+    repository is named (substituted distinct).
+
+- id: generate_report
+  kind: rail
+  effect: READ
+  reads: recent activity of the resolved repository
+  handler: services/intent/intent_service.py:IntentService._handle_generate_report
+  states: {verified: distinct, failed: distinct, narrowed: distinct, not_performed: distinct, substituted: distinct}
+  texts:
+    failed: "I couldn't read {repository} with this account's GitHub connection, so there's nothing to report yet."
+  verdict: green
+  notes: Checks activity.read_failed. Repository named in every reply.
+
+- id: analyze_data
+  kind: rail
+  effect: READ
+  reads: recent activity of the resolved repository, reduced to metrics
+  handler: services/intent/intent_service.py:IntentService._handle_analyze_data
+  states: {verified: distinct, failed: conflated:verified, narrowed: distinct, not_performed: distinct, substituted: distinct}
+  verdict: red
+  notes: >-
+    Same activity read as analyze_commits, and read_failed is not checked, so a failed
+    read is computed as zero activity in the metrics templates. Shallow on the template
+    wording.
+
+- id: local_git_status_query
+  kind: rail
+  effect: READ
+  reads: the SERVER process's working tree (LocalGitInspector)
+  handler: services/intent/intent_service.py:IntentService._handle_local_git_status_query
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: n/a, substituted: conflated:verified}
+  texts:
+    verified: "You're on **`{branch}`**, tracking `{upstream}` ..."
+    failed: "I couldn't read the local git state: {error}. This query inspects the server's working directory ..."
+  verdict: red
+  notes: >-
+    The success reply presents the server checkout's branch and dirty state as the user's
+    ("You're on main"). Only the error branch says it is the server's working directory.
+    On a hosted deploy this is never the user's repo.
+
+- id: search_documents
+  kind: rail
+  effect: READ
+  reads: Notion pages matching a query
+  handler: services/intent/intent_service.py:IntentService._handle_search_documents_notion
+  states: {verified: distinct, failed: conflated:verified, narrowed: distinct, not_performed: distinct, substituted: conflated:verified}
+  texts:
+    verified: format_no_results_conscious "I searched but didn't find any documents matching '{query}'. ..."
+    failed: same line (NOTION-SEARCH)
+  verdict: red
+  notes: >-
+    search_notion returns [] on any exception. connect_for_user's legacy fallback can
+    connect with the deployment's static/env Notion token when the user's key lookup
+    raises (substituted).
+
+- id: productivity
+  kind: rail
+  effect: READ
+  reads: the user's todo completion stats (7 days) and the default repo's closed issues
+  handler: services/intent/intent_service.py:IntentService._handle_productivity_query
+  states: {verified: distinct, failed: conflated:verified, narrowed: distinct, not_performed: distinct, substituted: conflated:verified}
+  texts:
+    failed: '"- I couldn''t read this account''s GitHub connection, so nothing is counted here." (GitHubReadFailed only)'
+    verified: "No completed items this week. Consider setting some achievable goals!"
+  verdict: red
+  notes: >-
+    GitHubReadFailed is disclosed (#2128), but any other exception in the GitHub block is
+    logged and drops the section entirely, and the assessment line then counts tasks only
+    ("No completed items this week") with nothing said about GitHub. ENV-REPO can supply
+    the repo.
+
+- id: session_activity_query
+  kind: rail
+  effect: READ
+  reads: the session_activity ledger for this conversation
+  handler: services/intent/intent_service.py:IntentService._handle_session_activity_query
+  states: {verified: distinct, failed: conflated:not_performed, narrowed: conflated:verified, not_performed: conflated:verified, substituted: n/a}
+  texts:
+    verified: "We haven't created anything in this session yet."
+  verdict: red
+  notes: >-
+    The ledger is written best-effort by _record_session_activity (a failed write is a
+    warning), and only for handlers that declare created_activity, so an item created
+    this session can be missing and the reply says nothing was created. The read has no
+    try (RAIL-FALLTHROUGH).
+
+- id: show_standup
+  kind: rail
+  effect: READ
+  reads: Radar entity sources (GitHub work items, documents) plus today's calendar
+  handler: services/intent/intent_service.py:IntentService._handle_standup_query
+  states: {verified: distinct, failed: conflated:verified, narrowed: distinct, not_performed: distinct, substituted: n/a}
+  texts:
+    verified: INVITE_EMPTY_LEAD / EMPTY_STANDALONE "I don't have anything to build your standup from yet — no observed activity in your connected tools. ..."
+    failed: same line unless GitHub needs reconnecting (INVITE_EMPTY_LEAD_GITHUB_STALE)
+  verdict: red
+  notes: >-
+    StandupAssembler.assemble records EntitySourceReadFailed in degraded_sources, but the
+    empty branch only consults github_needs_reconnecting: an UNREACHABLE or other degraded
+    source, any generic exception (swallowed without a record), or a calendar failure
+    (_append_calendar_events returns silently) all yield "no observed activity in your
+    connected tools". Non-empty reports disclose via to_prose (not traced line by line).
+
+- id: list_projects
+  kind: rail
+  effect: READ
+  reads: the user's active projects
+  handler: services/intent/intent_service.py:IntentService._handle_projects_query
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: distinct, substituted: n/a}
+  texts:
+    verified: empty_projects_message()
+    failed: "I had trouble loading your projects right now. You can try again in a moment."
+  verdict: green
+  notes: Owner-scoped PortfolioService read with its own except. Shallow on PortfolioService internals.
+
+- id: attention_query
+  kind: rail
+  effect: READ
+  reads: the user's flagged, due-today and overdue todos, today's calendar (next 2h), stale projects
+  handler: services/intent/intent_service.py:IntentService._handle_attention_query
+  states: {verified: distinct, failed: conflated:verified, narrowed: distinct, not_performed: conflated:verified, substituted: n/a}
+  texts:
+    verified: '"Nothing due today and nothing overdue." + "Nothing from your flagged todos, upcoming meetings or stale projects either."'
+    failed: same second line when the calendar or stale-projects read failed
+    not_performed: same second line when the calendar is not connected
+  verdict: red
+  notes: >-
+    todo_reads_failed covers the three todo reads (#1069). The calendar block catches its
+    exception and only logs; an unconfigured calendar skips the read; the adapter's
+    get_todays_events returns [] on error; the stale-projects read only logs. None of these
+    is tracked, and the closing line names "upcoming meetings or stale projects" as
+    checked and empty.
+
+- id: list_todos_query
+  kind: rail
+  effect: READ
+  reads: the user's active (or all) todos
+  handler: services/intent_service/todo_handlers.py:TodoIntentHandlers.handle_list_todos
+  states: {verified: distinct, failed: distinct, narrowed: conflated:verified, not_performed: distinct, substituted: n/a}
+  texts:
+    failed: "I had trouble loading your todos right now. ..."
+  verdict: red
+  notes: >-
+    Failed is distinct for SQLAlchemyError/OSError (others propagate to the outer
+    handler). TODO-CAP: an account past 100 rows can see a short or empty active list
+    with no scope named. Small blast radius.
+
+- id: list_reminders_query
+  kind: rail
+  effect: READ
+  reads: the user's active todos that carry a reminder_date
+  handler: services/intent_service/todo_handlers.py:TodoIntentHandlers.handle_list_reminders
+  states: {verified: distinct, failed: distinct, narrowed: conflated:verified, not_performed: distinct, substituted: n/a}
+  texts:
+    verified: "I checked your saved reminders and there are none right now. ..."
+    failed: "I had trouble loading your reminders right now. ..."
+  verdict: red
+  notes: TODO-CAP applies; otherwise honest (#1425).
+
+- id: analyze_document
+  kind: rail
+  effect: READ
+  reads: the user's uploaded file bound from the message, else a Notion page by title
+  handler: services/intent/intent_service.py:IntentService._handle_analyze_document_notion
+  states: {verified: distinct, failed: conflated:verified, narrowed: distinct, not_performed: distinct, substituted: conflated:verified}
+  texts:
+    verified: "I don't see that document among your uploads. Paste the text here and I'll work with it."
+    failed: '"I couldn''t find a specific document to analyze. Please specify which ..." after a failed Notion search'
+  verdict: red
+  notes: >-
+    The held-file step (#2132) is honest. On the Notion step, search_notion returns [] on
+    error (NOTION-SEARCH) and the reply reads as nothing found; connect_for_user can fall
+    back to the deployment's token (substituted). Notion-only accounts.
+
+- id: strategic_planning
+  kind: rail
+  effect: READ
+  reads: nothing stored; builds a plan from the request
+  handler: services/intent/intent_service.py:IntentService._handle_strategic_planning
+  states: {verified: n/a, failed: n/a, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: exempt
+  reason: builds a plan from the request's own goal and timeframe; no read of the user's data
+
+- id: learn_pattern
+  kind: rail
+  effect: READ
+  reads: up to 100 recent issues of a resolved repo (GitHubIntegrationRouter.get_recent_issues)
+  handler: services/intent/intent_service.py:IntentService._handle_learn_pattern
+  states: {verified: distinct, failed: conflated:verified, narrowed: distinct, not_performed: distinct, substituted: conflated:verified}
+  texts:
+    verified: "No historical data available for pattern learning."
+    failed: same line
+  verdict: red
+  notes: >-
+    _fetch_learning_data returns [] on any exception, and get_recent_issues returns [] on
+    error (GH-NONSTRICT). The router is never initialize()d with the user, so its lazy
+    init runs with no principal: the token lookup is for "system" (the env token) and
+    resolve_repo gets no user, so only ENV-REPO can resolve; the reply never names it.
+
+# ----------------------------------------------------------------------------
+# legacy: ActionMapper chain targets not on the rail
+# ----------------------------------------------------------------------------
+
+- id: legacy:list_todos
+  kind: legacy
+  effect: EXECUTION
+  reads: the user's active (or all) todos
+  handler: services/intent_service/todo_handlers.py:TodoIntentHandlers.handle_list_todos
+  states: {verified: distinct, failed: distinct, narrowed: conflated:verified, not_performed: distinct, substituted: n/a}
+  verdict: red
+  notes: Same handler as list_todos_query (TODO-CAP).
+
+- id: legacy:next_todo
+  kind: legacy
+  effect: EXECUTION
+  reads: the user's active todos, first by priority
+  handler: services/intent_service/todo_handlers.py:TodoIntentHandlers.handle_next_todo
+  states: {verified: distinct, failed: distinct, narrowed: conflated:verified, not_performed: distinct, substituted: n/a}
+  texts:
+    verified: "I checked your active todos and there are none. ..."
+    failed: "I had trouble finding your next todo right now. ..."
+  verdict: red
+  notes: TODO-CAP applies to the "none" line.
+
+# ----------------------------------------------------------------------------
+# floor: SOURCE_FAILED_FLAGS and every ContextAssembler._gather_* source
+# ----------------------------------------------------------------------------
+
+- id: floor:source_failed
+  kind: floor
+  effect: READ
+  reads: due reminders (TodoIntentHandlers.get_due_reminders)
+  handler: services/intent_service/context_assembler.py:ContextAssembler._compute_reminder_context
+  states: {verified: distinct, failed: distinct, narrowed: conflated:verified, not_performed: distinct, substituted: n/a}
+  texts:
+    failed: '"- DATA CHECKS FAILED this turn — could not check: reminders. ..." (the 1717 aggregate)'
+  verdict: red
+  notes: >-
+    The registered tri-state works (None sentinel -> source_failed). Narrowed: shallow;
+    get_due_reminders reads _due_reminder_todos, not traced for TODO-CAP.
+
+- id: floor:first_contact_source_failed
+  kind: floor
+  effect: READ
+  reads: a recent slice of the user's GitHub data on the first exchange
+  handler: services/intent_service/first_contact.py:gather_first_contact_demo
+  states: {verified: distinct, failed: distinct, narrowed: distinct, not_performed: distinct, substituted: distinct}
+  verdict: green
+  notes: 'Registered flag (#1536). Shallow: gather_first_contact_demo was not read in full.'
+
+- id: floor:projects_source_failed
+  kind: floor
+  effect: READ
+  reads: the user's projects table rows (5, with a true total)
+  handler: services/intent_service/context_assembler.py:ContextAssembler._compute_projects
+  states: {verified: distinct, failed: distinct, narrowed: distinct, not_performed: distinct, substituted: n/a}
+  texts:
+    verified: "- PROJECTS: none — the user's project list was checked ..."
+  verdict: green
+  notes: >-
+    Armed only on the TEMPORAL gather (_get_projects_cached). The STATUS/PRIORITY gather
+    reads projects through user_context_service instead, with no flag (see
+    floor:assembler._gather_status_priority_context).
+
+- id: floor:pending_todos_source_failed
+  kind: floor
+  effect: READ
+  reads: the user's pending todos (10 stored, true count)
+  handler: services/intent_service/context_assembler.py:ContextAssembler._compute_pending_todos
+  states: {verified: distinct, failed: distinct, narrowed: conflated:verified, not_performed: distinct, substituted: n/a}
+  texts:
+    verified: "- PENDING TODOS: none — the user's todo list was checked ..."
+  verdict: red
+  notes: TODO-CAP sits under the count and the "none" line. Small blast radius.
+
+- id: floor:completed_todos_source_failed
+  kind: floor
+  effect: READ
+  reads: the user's completed todos
+  handler: services/intent_service/context_assembler.py:ContextAssembler._compute_completed_todos
+  states: {verified: distinct, failed: distinct, narrowed: conflated:verified, not_performed: distinct, substituted: n/a}
+  texts:
+    verified: "- COMPLETED TODOS: none — the user's todo list was checked ..."
+  verdict: red
+  notes: >-
+    TODO-CAP: completed rows compete for the same 100-row window, so "none" can be wrong
+    for a heavy account. Gathered on TEMPORAL only.
+
+- id: floor:assembler._gather_active_milestones_context
+  kind: floor
+  effect: READ
+  reads: open milestones of the default repo
+  handler: services/intent_service/context_assembler.py:ContextAssembler._compute_active_milestones
+  states: {verified: conflated:not_performed, failed: conflated:not_performed, narrowed: conflated:verified, not_performed: distinct, substituted: conflated:verified}
+  verdict: red
+  notes: >-
+    FLOOR-ABSENT: GitHubReadFailed and any exception return None, and so does a verified
+    empty. Nothing tells the floor milestones were unreadable. ENV-REPO applies. Not a
+    registered flag.
+
+- id: floor:assembler._gather_blocked_items_context
+  kind: floor
+  effect: READ
+  reads: open issues labeled status:blocked in the default repo (one 100-item page)
+  handler: services/intent_service/context_assembler.py:ContextAssembler._compute_blocked_items
+  states: {verified: conflated:not_performed, failed: conflated:not_performed, narrowed: distinct, not_performed: distinct, substituted: conflated:verified}
+  verdict: red
+  notes: >-
+    FLOOR-ABSENT: get_open_issues is non-strict (GH-NONSTRICT); failure, unresolved repo
+    and no blocked items all return None, beside a "GitHub: connected" line. The capped
+    count is marked (narrowed distinct).
+
+- id: floor:assembler._gather_calendar_connection
+  kind: floor
+  effect: READ
+  reads: the user's Google Calendar connection state (IntegrationStatusService)
+  handler: services/intent_service/context_assembler.py:ContextAssembler._gather_calendar_connection
+  states: {verified: distinct, failed: conflated:verified, narrowed: n/a, not_performed: distinct, substituted: distinct}
+  texts:
+    verified: "- Google Calendar is not connected: say \"{not_connected_line}\""
+  verdict: red
+  notes: >-
+    A raise from get_status returns {} (no line, honest), and via=env is excluded
+    (#2112). But ISS-STATUS's inner swallow means a failed keychain lookup returns
+    configured=False without raising, which renders as the binding not-connected sentence.
+
+- id: floor:assembler._gather_calendar_context
+  kind: floor
+  effect: READ
+  reads: today's next meeting and free blocks (CalendarIntegrationRouter.get_temporal_summary)
+  handler: services/intent_service/context_assembler.py:ContextAssembler._compute_calendar_context
+  states: {verified: conflated:not_performed, failed: conflated:not_performed, narrowed: distinct, not_performed: distinct, substituted: n/a}
+  verdict: red
+  notes: >-
+    FLOOR-ABSENT: any exception or an empty summary returns {}. Beside "Google Calendar is
+    connected: '...", a failed read reads the same as a free day. unverified: served'
+    wording.
+
+- id: floor:assembler._gather_discovery_context
+  kind: floor
+  effect: READ
+  reads: same as the identity gather (delegates to it)
+  handler: services/intent_service/context_assembler.py:ContextAssembler._gather_identity_context
+  states: {verified: distinct, failed: conflated:verified, narrowed: distinct, not_performed: n/a, substituted: conflated:verified}
+  verdict: red
+  notes: Delegates to _gather_identity_context; same ISS-STATUS conflations.
+
+- id: floor:assembler._gather_high_priority_issues_context
+  kind: floor
+  effect: READ
+  reads: up to 100 open issues of the default repo, ranked by priority label
+  handler: services/intent_service/context_assembler.py:ContextAssembler._compute_high_priority_issues
+  states: {verified: conflated:not_performed, failed: conflated:not_performed, narrowed: distinct, not_performed: distinct, substituted: conflated:verified}
+  verdict: red
+  notes: >-
+    #1226 tells an unresolved repo apart (github_repo_unconfigured). A failed read
+    (GH-NONSTRICT returns []) with a resolvable repo returns None, the same as zero open
+    issues, beside "GitHub: connected". ENV-REPO applies.
+
+- id: floor:assembler._gather_identity_context
+  kind: floor
+  effect: READ
+  reads: per-user integration status, user projects/organization, recent session topics
+  handler: services/intent_service/context_assembler.py:ContextAssembler._gather_identity_context
+  states: {verified: distinct, failed: conflated:verified, narrowed: distinct, not_performed: n/a, substituted: conflated:verified}
+  texts:
+    verified: '"- Connected integrations: {names or ''none''}" and a not-connected list'
+  verdict: red
+  notes: >-
+    ISS-STATUS: an inner credential-lookup failure renders the integration under "not
+    connected"; via=env renders "active" (connected) for every user. user_projects come
+    from user_context_service, whose fallback is the shared PIPER.md (substituted, latent:
+    today's config/PIPER.md yields 0 projects, executed offline 2026-10-23; a PIPER.user.md
+    overlay on the host would be read as every user's).
+
+- id: floor:assembler._gather_insight_pull_context
+  kind: floor
+  effect: READ
+  reads: the user's composted insights (InsightRepository, 50 rows, true total)
+  handler: services/intent_service/context_assembler.py:ContextAssembler._gather_insight_pull_context
+  states: {verified: distinct, failed: conflated:verified, narrowed: distinct, not_performed: n/a, substituted: n/a}
+  texts:
+    verified: "- Composted insights about this user: NONE YET. ..."
+    failed: same line
+  verdict: red
+  notes: The except branch writes is_empty=True, which renders the binding NONE YET directive.
+
+- id: floor:assembler._gather_memory_context
+  kind: floor
+  effect: READ
+  reads: this session's turns and persistent conversation history (UserHistoryService)
+  handler: services/intent_service/context_assembler.py:ContextAssembler._gather_memory_context
+  states: {verified: distinct, failed: conflated:not_performed, narrowed: distinct, not_performed: conflated:verified, substituted: n/a}
+  verdict: red
+  notes: 'FLOOR-ABSENT for the persistent-history read. unverified: served wording.'
+
+- id: floor:assembler._gather_recent_activity_context
+  kind: floor
+  effect: READ
+  reads: 7 days of GitHub issues/PRs, past calendar events, Slack DMs and mentions
+  handler: services/intent_service/context_assembler.py:ContextAssembler._compute_recent_activity
+  states: {verified: distinct, failed: conflated:verified, narrowed: distinct, not_performed: conflated:verified, substituted: conflated:verified}
+  verdict: red
+  notes: >-
+    Each per-source helper returns [] on error, the same as no activity. Since #2142 the
+    feed renders per-source headings, so with Slack working and GitHub failed the context
+    shows Slack only and nothing says GitHub wasn't read. If every source fails, the whole
+    key is absent. ENV-REPO applies to the GitHub leg.
+
+- id: floor:assembler._gather_reminder_context
+  kind: floor
+  effect: READ
+  reads: due reminders (cached), gated per session
+  handler: services/intent_service/context_assembler.py:ContextAssembler._gather_reminder_context
+  states: {verified: distinct, failed: distinct, narrowed: distinct, not_performed: distinct, substituted: n/a}
+  verdict: green
+  notes: The registered source_failed flag path (see floor:source_failed); the mention gate fails open.
+
+- id: floor:assembler._gather_status_priority_context
+  kind: floor
+  effect: READ
+  reads: calendar, user context (projects/priorities/org), pending todos, GitHub status, blocked, milestones, activity, high-priority issues
+  handler: services/intent_service/context_assembler.py:ContextAssembler._gather_status_priority_context
+  states: {verified: distinct, failed: conflated:verified, narrowed: distinct, not_performed: conflated:verified, substituted: conflated:verified}
+  texts:
+    failed: '"- GitHub: not connected (issue/PR data unavailable until connected)" when get_status raises'
+  verdict: red
+  notes: >-
+    The baseline for STATUS, PRIORITY, ANALYSIS, QUERY, UNKNOWN and CONVERSATION floor
+    turns, so the widest floor exposure. (1) get_status raising sets github_connected=False,
+    rendered as "GitHub: not connected" (failed as a negative verdict); ISS-STATUS's inner
+    swallow does the same without raising. (2) Projects come from user_context_service with
+    no source-failed flag: a failed read returns None and the projects line is absent. (3)
+    Its fallback to the shared PIPER.md is substituted, latent today (0 projects from
+    config/PIPER.md, executed offline). (4) The GitHub sub-sources are FLOOR-ABSENT.
+
+- id: floor:assembler._gather_temporal_context
+  kind: floor
+  effect: READ
+  reads: calendar summary and connection, pending/completed todos, projects, milestones, recent activity, session history
+  handler: services/intent_service/context_assembler.py:ContextAssembler._gather_temporal_context
+  states: {verified: distinct, failed: conflated:not_performed, narrowed: distinct, not_performed: distinct, substituted: conflated:verified}
+  verdict: red
+  notes: >-
+    Todos and projects carry registered flags here. The calendar summary, milestones and
+    recent activity are FLOOR-ABSENT. current_date uses the server clock, datetime.now()
+    with no zone (substituted: a server-local date can differ from the user's around
+    midnight); current_time uses the user's zone.
+
+- id: floor:assembler._gather_trust_context
+  kind: floor
+  effect: READ
+  reads: the user's trust profile
+  handler: services/intent_service/context_assembler.py:ContextAssembler._compute_trust_context
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: distinct, substituted: n/a}
+  verdict: green
+  notes: Failure writes stage "unknown" with a note, never "new".
+
+# ----------------------------------------------------------------------------
+# route: settings integrations, setup wizard, integration test/health
+# ----------------------------------------------------------------------------
+
+- id: route:GET /api/v1/settings/integrations/slack/connect
+  kind: route
+  effect: READ
+  reads: Slack OAuth app config, then builds the authorize URL
+  handler: web/api/routes/settings_integrations.py:connect_slack
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: exempt
+  reason: OAuth start; returns a URL, no claim about the user's connection
+  notes: Shallow.
+
+- id: route:GET /api/v1/settings/integrations/slack/callback
+  kind: route
+  effect: READ
+  reads: the Slack OAuth exchange result
+  handler: web/api/routes/settings_integrations.py:handle_slack_callback
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: green
+  notes: Success redirect only after the exchange; errors redirect with slack_error. Scopes not checked (shallow).
+
+- id: route:POST /api/v1/settings/integrations/slack/disconnect
+  kind: route
+  effect: READ
+  reads: nothing before removing the token
+  handler: web/api/routes/settings_integrations.py:disconnect_slack
+  states: {verified: n/a, failed: n/a, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: exempt
+  reason: write-only, no read claim
+
+- id: route:GET /api/v1/settings/integrations/slack/channels
+  kind: route
+  effect: READ
+  reads: the user's Slack channels, plus saved channel preferences for the selected flags
+  handler: web/api/routes/settings_integrations.py:get_slack_channels
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: green
+  notes: The list read raises an HTTP error on failure. Shallow on pagination.
+
+- id: route:GET /api/v1/settings/integrations/slack/preferences
+  kind: route
+  effect: READ
+  reads: the user's saved Slack preferences (connector config store)
+  handler: web/api/routes/settings_integrations.py:get_slack_preferences
+  states: {verified: distinct, failed: conflated:verified, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: red
+  notes: >-
+    _load_prefs_db returns {} on a DB error, so the page shows default (empty) preferences
+    as if none were saved. Settings page only.
+
+- id: route:POST /api/v1/settings/integrations/slack/preferences
+  kind: route
+  effect: READ
+  reads: nothing before writing (the merge read raises on failure)
+  handler: web/api/routes/settings_integrations.py:save_slack_preferences
+  states: {verified: n/a, failed: n/a, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: exempt
+  reason: write-only, no read claim
+
+- id: route:POST /api/v1/settings/integrations/slack/app-credentials
+  kind: route
+  effect: READ
+  reads: nothing before storing the app credentials
+  handler: web/api/routes/settings_integrations.py:save_slack_app_credentials
+  states: {verified: n/a, failed: n/a, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: exempt
+  reason: write-only, no read claim
+
+- id: route:POST /api/v1/settings/integrations/slack/app-token
+  kind: route
+  effect: READ
+  reads: the Socket Mode runner state after saving
+  handler: web/api/routes/settings_integrations.py:save_slack_app_token
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: green
+  notes: Returns the runner's connected/state; failures raise. Shallow.
+
+- id: route:GET /api/v1/settings/integrations/slack/inbound/status
+  kind: route
+  effect: READ
+  reads: the app-wide Slack Socket Mode runner (request.app.state)
+  handler: web/api/routes/settings_integrations.py:get_slack_inbound_status
+  states: {verified: distinct, failed: n/a, narrowed: n/a, not_performed: distinct, substituted: n/a}
+  verdict: green
+  notes: Global by design (one app-level socket); it reports the app's inbound state, not a per-user connection.
+
+- id: route:GET /api/v1/settings/integrations/slack/app-credentials/status
+  kind: route
+  effect: READ
+  reads: whether Slack app client id/secret are configured (deployment-level)
+  handler: web/api/routes/settings_integrations.py:get_slack_app_credentials_status
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: green
+  notes: App credentials are deployment-level by design; failure raises an HTTP error.
+
+- id: route:POST /api/v1/settings/integrations/slack/link/code
+  kind: route
+  effect: READ
+  reads: nothing before minting a link code
+  handler: web/api/routes/settings_integrations.py:mint_slack_link_code
+  states: {verified: n/a, failed: n/a, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: exempt
+  reason: write-only, no read claim
+
+- id: route:GET /api/v1/settings/integrations/slack/link/status
+  kind: route
+  effect: READ
+  reads: the user's linked Slack identities
+  handler: web/api/routes/settings_integrations.py:get_slack_link_status
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: green
+  notes: Owner-scoped; failure raises an HTTP error.
+
+- id: route:POST /api/v1/settings/integrations/slack/link/unlink
+  kind: route
+  effect: READ
+  reads: the user's linked Slack identity to remove
+  handler: web/api/routes/settings_integrations.py:unlink_slack_account
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  texts:
+    verified: "No matching linked Slack account found for your user."
+  verdict: green
+  notes: The not-found line follows a successful owner-scoped read; failure raises.
+
+- id: route:POST /api/v1/settings/integrations/calendar/app-credentials
+  kind: route
+  effect: READ
+  reads: nothing before storing the app credentials
+  handler: web/api/routes/settings_integrations.py:save_calendar_app_credentials
+  states: {verified: n/a, failed: n/a, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: exempt
+  reason: write-only, no read claim
+
+- id: route:GET /api/v1/settings/integrations/calendar/app-credentials/status
+  kind: route
+  effect: READ
+  reads: whether Google OAuth app credentials are configured (deployment-level)
+  handler: web/api/routes/settings_integrations.py:get_calendar_app_credentials_status
+  states: {verified: distinct, failed: conflated:verified, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: green
+  notes: >-
+    A DB hiccup reads as not configured and hides the card ("silent-ok" by design); this is
+    deployment app config, not the user's data, so it is green with that note.
+
+- id: route:GET /api/v1/settings/integrations/calendar
+  kind: route
+  effect: READ
+  reads: the user's stored calendar refresh token, validated by a token refresh
+  handler: web/api/routes/settings_integrations.py:get_calendar_settings
+  states: {verified: conflated:failed, failed: conflated:verified, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  texts:
+    failed: '{"configured": true, "valid": false, "error": "Token expired or revoked"}'
+  verdict: red
+  notes: >-
+    GoogleCalendarOAuthHandler.refresh_access_token returns None on ANY non-200 (a Google
+    5xx, a server-side client-secret problem), so a check that couldn't run is reported as
+    a revoked token (the #2125 shape, a negative verdict). And valid=true only proves the
+    refresh worked, not the calendar scope (the #2148/#2092 shape, a positive verdict):
+    the Test route probes a real read, this card does not.
+
+- id: route:GET /api/v1/settings/integrations/calendar/connect
+  kind: route
+  effect: READ
+  reads: Google OAuth app config, then builds the authorize URL
+  handler: web/api/routes/settings_integrations.py:connect_calendar
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: exempt
+  reason: OAuth start; returns a URL, no claim about the user's connection
+
+- id: route:GET /api/v1/settings/integrations/calendar/callback
+  kind: route
+  effect: READ
+  reads: the OAuth exchange and the granted scope (resolve_calendar_grant)
+  handler: web/api/routes/settings_integrations.py:handle_calendar_callback
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: distinct, substituted: n/a}
+  verdict: green
+  notes: '#2148 fixed: scope missing -> scope_missing; unconfirmed grant -> its own redirect.'
+
+- id: route:GET /api/v1/settings/integrations/github/connect
+  kind: route
+  effect: READ
+  reads: GitHub OAuth app config, then builds the authorize URL
+  handler: web/api/routes/settings_integrations.py:connect_github
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: exempt
+  reason: OAuth start; returns a URL, no claim about the user's connection
+
+- id: route:GET /api/v1/settings/integrations/github/callback
+  kind: route
+  effect: READ
+  reads: the GitHub OAuth exchange; then a best-effort default-repo pick
+  handler: web/api/routes/settings_integrations.py:handle_github_callback
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: distinct, substituted: n/a}
+  verdict: green
+  notes: The best-effort default-repo apply is logged on failure; the success redirect claims only the connection.
+
+- id: route:GET /api/v1/settings/integrations/github/oauth-status
+  kind: route
+  effect: READ
+  reads: the user's GitHub connector binding, plus a one-call PAT probe when stale
+  handler: web/api/routes/settings_integrations.py:github_oauth_status
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: green
+  notes: A DB error raises (500). serving="pat" only on a successful probe (#2029).
+
+- id: route:POST /api/v1/settings/integrations/calendar/disconnect
+  kind: route
+  effect: READ
+  reads: nothing before removing the token
+  handler: web/api/routes/settings_integrations.py:disconnect_calendar
+  states: {verified: n/a, failed: n/a, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: exempt
+  reason: write-only, no read claim
+
+- id: route:GET /api/v1/settings/integrations/calendar/calendars
+  kind: route
+  effect: READ
+  reads: the user's Google calendar list, plus saved selection preferences
+  handler: web/api/routes/settings_integrations.py:get_calendar_list
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: green
+  notes: Non-200 raises an HTTP error. The selected flags come from _load_prefs_db ({} on a DB error, minor).
+
+- id: route:GET /api/v1/settings/integrations/calendar/preferences
+  kind: route
+  effect: READ
+  reads: the user's saved calendar preferences
+  handler: web/api/routes/settings_integrations.py:get_calendar_preferences
+  states: {verified: distinct, failed: conflated:verified, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: red
+  notes: Same _load_prefs_db {}-on-error shape as the Slack preferences GET. Shallow.
+
+- id: route:POST /api/v1/settings/integrations/calendar/preferences
+  kind: route
+  effect: READ
+  reads: nothing before writing
+  handler: web/api/routes/settings_integrations.py:save_calendar_preferences
+  states: {verified: n/a, failed: n/a, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: exempt
+  reason: write-only, no read claim
+
+- id: route:GET /api/v1/settings/integrations/status
+  kind: route
+  effect: READ
+  reads: whether Slack (bot token) and Calendar (refresh token) are connected
+  handler: web/api/routes/settings_integrations.py:get_all_oauth_status
+  states: {verified: distinct, failed: conflated:verified, narrowed: n/a, not_performed: n/a, substituted: conflated:verified}
+  texts:
+    failed: '{"connected": false} for each integration'
+  verdict: red
+  notes: >-
+    Both lookups sit in `except Exception: pass` and the result starts as
+    connected=false, so a failed check reports not connected. SlackConfigService loads
+    env vars, then PIPER.user.md, ahead of the user's keychain token, so SLACK_BOT_TOKEN
+    on the host reports every user's Slack as connected.
+
+- id: route:GET /api/v1/settings/integrations/notion
+  kind: route
+  effect: READ
+  reads: the user's Notion key, validated with users.me()
+  handler: web/api/routes/settings_integrations.py:get_notion_settings
+  states: {verified: distinct, failed: conflated:failed, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  texts:
+    failed: '"Invalid API key or insufficient permissions" for a non-auth APIResponseError'
+  verdict: red
+  notes: >-
+    validate_notion_key_and_get_workspace maps any APIResponseError that is not
+    unauthorized, forbidden or rate-limited (a Notion 5xx) to "Invalid API key or
+    insufficient permissions", a check that couldn't run reported as a rejected key (the
+    #2125 shape). Network errors get their own message. An outer exception returns
+    configured=false with the error text.
+
+- id: route:POST /api/v1/settings/integrations/notion/save
+  kind: route
+  effect: READ
+  reads: validates the submitted Notion key before storing
+  handler: web/api/routes/settings_integrations.py:save_notion_key
+  states: {verified: distinct, failed: conflated:failed, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: red
+  notes: Same validator as GET /notion, so a Notion 5xx refuses the save as an invalid key.
+
+- id: route:POST /api/v1/settings/integrations/notion/disconnect
+  kind: route
+  effect: READ
+  reads: nothing before removing the key
+  handler: web/api/routes/settings_integrations.py:disconnect_notion
+  states: {verified: n/a, failed: n/a, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: exempt
+  reason: write-only, no read claim
+
+- id: route:GET /api/v1/settings/integrations/notion/databases
+  kind: route
+  effect: READ
+  reads: the user's Notion databases, plus saved selection preferences
+  handler: web/api/routes/settings_integrations.py:get_notion_databases
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: green
+  notes: Non-200 raises. First page only (shallow on paging).
+
+- id: route:GET /api/v1/settings/integrations/notion/preferences
+  kind: route
+  effect: READ
+  reads: the user's saved Notion preferences
+  handler: web/api/routes/settings_integrations.py:get_notion_preferences
+  states: {verified: distinct, failed: conflated:verified, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: red
+  notes: _load_prefs_db {}-on-error shape. Shallow.
+
+- id: route:POST /api/v1/settings/integrations/notion/preferences
+  kind: route
+  effect: READ
+  reads: nothing before writing
+  handler: web/api/routes/settings_integrations.py:save_notion_preferences
+  states: {verified: n/a, failed: n/a, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: exempt
+  reason: write-only, no read claim
+
+- id: route:GET /api/v1/settings/integrations/github
+  kind: route
+  effect: READ
+  reads: the user's GitHub status (binding first), else the SYSTEM env token, validated
+  handler: web/api/routes/settings_integrations.py:get_github_settings
+  states: {verified: distinct, failed: conflated:verified, narrowed: n/a, not_performed: n/a, substituted: conflated:verified}
+  verdict: red
+  notes: >-
+    When the user's own status reads not configured (including ISS-STATUS's swallowed
+    lookup failures), the route validates get_authentication_token(user_id="system"), the
+    host's env token, and returns configured/valid with that account's username on the
+    user's card (the #2127 shape). An outer exception returns configured=false.
+
+- id: route:POST /api/v1/settings/integrations/github/save
+  kind: route
+  effect: READ
+  reads: validates the submitted token with GitHub before storing
+  handler: web/api/routes/settings_integrations.py:save_github_token
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: green
+  notes: verify_github_token tells connection errors, 401 and 403 apart in its error text.
+
+- id: route:POST /api/v1/settings/integrations/github/disconnect
+  kind: route
+  effect: READ
+  reads: nothing before removing the token
+  handler: web/api/routes/settings_integrations.py:disconnect_github
+  states: {verified: n/a, failed: n/a, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: exempt
+  reason: write-only, no read claim
+
+- id: route:GET /api/v1/settings/integrations/github/repositories
+  kind: route
+  effect: READ
+  reads: the user's GitHub repositories (connector, or native PAT), plus saved selection
+  handler: web/api/routes/settings_integrations.py:get_github_repositories
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: green
+  notes: Degrades raise with the connector's message. Native-PAT list paging not traced (shallow).
+
+- id: route:GET /api/v1/settings/integrations/github/preferences
+  kind: route
+  effect: READ
+  reads: the user's saved GitHub preferences
+  handler: web/api/routes/settings_integrations.py:get_github_preferences
+  states: {verified: distinct, failed: conflated:verified, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: red
+  notes: _load_github_prefs_db returns {} on a DB error. Shallow on the response shape.
+
+- id: route:POST /api/v1/settings/integrations/github/preferences
+  kind: route
+  effect: READ
+  reads: nothing before writing
+  handler: web/api/routes/settings_integrations.py:save_github_preferences
+  states: {verified: n/a, failed: n/a, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: exempt
+  reason: write-only, no read claim
+
+- id: route:GET /api/v1/settings/integrations/slack
+  kind: route
+  effect: READ
+  reads: the HOST's SLACK_BOT_TOKEN and SLACK_CONNECTOR_USER_ID env vars, then auth.test
+  handler: web/api/routes/settings_integrations.py:get_slack_settings
+  states: {verified: conflated:substituted, failed: conflated:verified, narrowed: n/a, not_performed: n/a, substituted: conflated:verified}
+  verdict: red
+  notes: >-
+    Unauthenticated, and reads only env: a user who connected Slack by OAuth (keychain
+    token) is reported configured=false, and the host's bot is reported as "the"
+    workspace for everyone. An exception returns configured=false.
+
+- id: route:GET /api/v1/settings/integrations/slack/authorize
+  kind: route
+  effect: READ
+  reads: delegates to connect_slack
+  handler: web/api/routes/settings_integrations.py:get_slack_oauth_url
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: exempt
+  reason: OAuth start; returns a URL, no claim about the user's connection
+
+- id: route:GET /api/v1/setup/status
+  kind: route
+  effect: READ
+  reads: instance-wide counts (setup-complete users, users, active LLM keys)
+  handler: web/api/routes/setup.py:get_setup_status
+  states: {verified: distinct, failed: conflated:verified, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  texts:
+    failed: setup_complete=false, has_user=false, has_api_keys=false
+  verdict: red
+  notes: >-
+    A DB failure answers "no users, nothing set up", the verified-negative shape, so the
+    front end can route to the wizard. The subject is the instance by design.
+
+- id: route:POST /api/v1/setup/check-system
+  kind: route
+  effect: READ
+  reads: reachability of Docker, Postgres, Redis, ChromaDB, Temporal; pending migrations
+  handler: web/api/routes/setup.py:check_system
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  texts:
+    failed: SYSTEM_CHECK_COULD_NOT_RUN_MESSAGE (HTTP 500)
+  verdict: green
+  notes: An unreachable service IS the verified "not ready" answer; a check that raises is a 500 with its own message.
+
+- id: route:POST /api/v1/setup/check-invite
+  kind: route
+  effect: READ
+  reads: the invite token (checked, not spent)
+  handler: web/api/routes/setup.py:check_invite
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: green
+  notes: Shallow; INVITE_REFUSED_MESSAGE on an invalid code.
+
+- id: route:POST /api/v1/setup/validate-key
+  kind: route
+  effect: READ
+  reads: validates an LLM, Notion or GitHub key with the provider
+  handler: web/api/routes/setup.py:validate_api_key
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: conflated:verified, substituted: n/a}
+  texts:
+    not_performed: '{"valid": true, "message": "GitHub token saved (validation on first use)"}'
+  verdict: red
+  notes: >-
+    #2125 fixed the LLM leg (KeyCheckUnavailable gets KEY_CHECK_COULD_NOT_RUN_MESSAGE).
+    GitHub returns valid=true without checking anything; the message is honest, the
+    boolean is a positive verdict nothing earned. The Notion leg has GET /notion's
+    5xx-as-invalid mapping.
+
+- id: route:GET /api/v1/setup/check-keychain/{provider}
+  kind: route
+  effect: READ
+  reads: the process keychain entry for the provider, no user scope
+  handler: web/api/routes/setup.py:check_keychain
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: n/a, substituted: conflated:verified}
+  texts:
+    verified: '"{Provider} key found in keychain" / "No {provider} key in keychain"'
+  verdict: red
+  notes: >-
+    KeychainService().get_api_key(provider) with no username reads the host's keychain.
+    On a local install that is the user's own machine (correct); on a hosted deploy it is
+    the operator's store presented in the user's wizard. Whether the hosted wizard
+    reaches this button is unverified (wizard_is_hosted gating not traced).
+
+- id: route:POST /api/v1/setup/use-keychain
+  kind: route
+  effect: READ
+  reads: the process keychain entry for the provider, no user scope
+  handler: web/api/routes/setup.py:use_keychain
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: n/a, substituted: conflated:verified}
+  texts:
+    verified: "Using the {Provider} key from your keychain."
+  verdict: red
+  notes: Same global read as check-keychain, and it reports valid=true without re-validating.
+
+- id: route:POST /api/v1/setup/slack-credentials
+  kind: route
+  effect: READ
+  reads: nothing before storing the Slack app credentials
+  handler: web/api/routes/setup.py:save_slack_credentials_setup
+  states: {verified: n/a, failed: n/a, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: exempt
+  reason: write-only, no read claim
+
+- id: route:POST /api/v1/setup/create-user
+  kind: route
+  effect: READ
+  reads: the invite and existing users before creating the account
+  handler: web/api/routes/setup.py:create_user_route
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: exempt
+  reason: account creation; its reads gate the write and claim nothing about stored data
+  notes: Shallow.
+
+- id: route:POST /api/v1/setup/complete
+  kind: route
+  effect: READ
+  reads: the user's saved setup state before marking setup complete
+  handler: web/api/routes/setup.py:complete_setup
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: exempt
+  reason: completion write; no claim about the user's data back to them
+  notes: Shallow; 220 lines not read in full.
+
+- id: route:POST /api/v1/setup/projects
+  kind: route
+  effect: READ
+  reads: nothing before creating the project
+  handler: web/api/routes/setup.py:create_setup_project
+  states: {verified: n/a, failed: n/a, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: exempt
+  reason: write-only, no read claim
+  notes: Shallow.
+
+- id: route:GET /api/v1/setup/slack/oauth/start
+  kind: route
+  effect: READ
+  reads: Slack OAuth app config, then builds the authorize URL
+  handler: web/api/routes/setup.py:start_slack_oauth
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: exempt
+  reason: OAuth start; returns a URL, no claim about the user's connection
+
+- id: route:GET /api/v1/setup/slack/oauth/callback
+  kind: route
+  effect: READ
+  reads: the Slack OAuth exchange result
+  handler: web/api/routes/setup.py:handle_slack_oauth_callback
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: green
+  notes: Errors redirect with slack_error. Granted scopes not checked (shallow).
+
+- id: route:GET /api/v1/setup/slack/status
+  kind: route
+  effect: READ
+  reads: Slack bot token via SlackConfigService for the request's user, else "system"
+  handler: web/api/routes/setup.py:get_slack_status
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: n/a, substituted: conflated:verified}
+  texts:
+    verified: '"Slack connected" / "Not connected"'
+    failed: '"Status check failed"'
+  verdict: red
+  notes: >-
+    SlackConfigService loads env vars and PIPER.user.md ahead of the user's keychain
+    token, so a host SLACK_BOT_TOKEN reads "Slack connected" for every user; with no
+    request.state.user_id it reads the "system" principal.
+
+- id: route:GET /api/v1/setup/calendar/oauth/start
+  kind: route
+  effect: READ
+  reads: Google OAuth app config, then builds the authorize URL
+  handler: web/api/routes/setup.py:start_calendar_oauth
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: n/a, substituted: n/a}
+  verdict: exempt
+  reason: OAuth start; returns a URL, no claim about the user's connection
+
+- id: route:GET /api/v1/setup/calendar/oauth/callback
+  kind: route
+  effect: READ
+  reads: the OAuth exchange and the granted scope
+  handler: web/api/routes/setup.py:handle_calendar_oauth_callback
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: distinct, substituted: n/a}
+  verdict: green
+  notes: '#2148 fixed: scope_missing and calendar_unconfirmed redirects.'
+
+- id: route:GET /api/v1/setup/calendar/status
+  kind: route
+  effect: READ
+  reads: the calendar refresh token keyed by the cookie's user, else the GLOBAL key
+  handler: web/api/routes/setup.py:get_calendar_status
+  states: {verified: distinct, failed: distinct, narrowed: n/a, not_performed: n/a, substituted: conflated:verified}
+  texts:
+    verified: '"Calendar connected" / "Not connected"'
+    failed: '"Status check failed"'
+  verdict: red
+  notes: >-
+    If the auth cookie is missing or its validation raises (swallowed), user_id stays None
+    and the route reads the unscoped "google_calendar" key, the host's entry, and reports
+    it as this user's calendar (the #2127 shape).
+
+- id: route:GET /api/v1/integrations/health
+  kind: route
+  effect: READ
+  reads: per-user integration config status (get_config_status) plus cached test results
+  handler: web/api/routes/integrations.py:get_integrations_health
+  states: {verified: distinct, failed: conflated:verified, narrowed: n/a, not_performed: n/a, substituted: conflated:verified}
+  texts:
+    verified: '"Not configured"'
+    failed: CHECK_FAILED_MESSAGE (status "unknown") only when the whole check raises
+  verdict: red
+  notes: >-
+    ISS-STATUS: an inner credential-lookup failure returns "not_configured" and renders
+    "Not configured"; env credentials count as the user's configuration.
+
+- id: route:POST /api/v1/integrations/test/{integration_name}
+  kind: route
+  effect: READ
+  reads: an active probe of one integration with the user's credential
+  handler: web/api/routes/integrations.py:check_integration_connection
+  states: {verified: distinct, failed: conflated:failed, narrowed: n/a, not_performed: distinct, substituted: conflated:verified}
+  texts:
+    failed: '_test_calendar "Token expired or revoked. Please reconnect." for any non-200 refresh; _test_notion "API key invalid or expired" for any non-200'
+  verdict: red
+  notes: >-
+    _test_calendar trusts refresh_access_token's None (any non-200, including Google 5xx)
+    as a revoked token, and _test_notion maps any non-200 to an invalid key: a check that
+    couldn't run reported as a rejected credential (#2125 shape). The #2092 real-read
+    probe is correct. _test_notion uses the "system" principal when there is no user.
+
+- id: route:POST /api/v1/integrations/test-all
+  kind: route
+  effect: READ
+  reads: the single-integration test for every integration
+  handler: web/api/routes/integrations.py:check_all_connections
+  states: {verified: distinct, failed: conflated:failed, narrowed: n/a, not_performed: distinct, substituted: conflated:verified}
+  verdict: red
+  notes: Delegates to check_integration_connection and inherits its conflations.
