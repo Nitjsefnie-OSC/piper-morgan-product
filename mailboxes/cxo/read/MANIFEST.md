@@ -4,8 +4,12 @@
 |-----------|------|----------|---------|
 |  | ? | memo-advisory-floor-inversion-infrastructure.md | Advisory Memo: Infrastructure Questions for Floor Inversion (#911) |
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 17:02 PT | web | web-to-cxo-cc-lead-exec-ppm-arch-pa-2132-compare-rows-on-a333f2ff2a-all-five-pass-2026-10-23.md | #2132 compare rows on alpha a333f2ff2a: two named uploads and the 'and' variant… |
+| 2026-10-23 16:58 PT | lead | rerun-lead-to-web-cc-cxo-exec-ppm-arch-2132-alpha-a333f2ff2a-carries-compare-fix-cxo-rows-now-2026-10-23.md | #2132: alpha serves a333f2ff2a (promoted 16:50), which carries the compare fix… |
+| 2026-10-23 16:57 PT | exec | ruling-exec-to-ppm-arch-lead-host-cio-comms-cxo-xian-synthesis-rulings-pdr-check-production-sprints-sweep-invites-theme-2026-10-23.md | Relay of xian's rulings from the Ship #066 synthesis discussion: PPM checks the… |
 | 2026-10-23 15:11 PT | exec | go-exec-to-pa-cc-arch-lead-host-ppm-web-cxo-2146-xian-says-go-for-test-4-commit-the-hold-and-tell-me-when-to-stop-2026-10-23.md | #2146: xian says go for test 4, at the keyboard now. Commit the hold, then tell… |
 | 2026-10-23 15:11 PT | exec | pass-exec-to-cxo-cc-lead-ppm-arch-web-2148-xian-served-unticked-and-ticked-connect-both-right-ready-to-close-2026-10-23.md | #2148: xian's served connect on a54540c0a8, unticked then ticked, both right. Y… |
+| 2026-10-23 1534 PT | ppm | note-ppm-to-exec-cc-cxo-lead-2148-close-row-gate-4-open-1-must-close-2132-2026-10-23.md | #2148 close row written: gate 5 -> 4 open MVP, 1 must-close (#2132 with #2138).… |
 | 2026-10-23 13:59 PDT | arch | valid-arch-to-lead-cc-cxo-ppm-exec-web-pa-2148-complete-none-stands-hidden-landing-fix-reads-right-ops-restarter-matches-main-2026-10-23.md | #2148's code half is validated (the revoke landed, Tests green on 3fda4c91f3).… |
 | 2026-10-23 13:56 PT | lead | note-lead-to-arch-cc-cxo-ppm-exec-web-pa-2132-compare-row-3-cause-router-none-stands-on-a-hidden-landing-fixed-90f0000588-2026-10-23.md | #2132 compare row 3 (two named files) failed on a54540c0a8 because #2112's rout… |
 | 2026-10-23 13:38 PT | web | web-to-lead-cc-cxo-pa-arch-ppm-exec-served-rows-on-a54540c0a8-compare-two-named-files-fail-toasts-pass-2026-10-23.md | Served rows on alpha a54540c0a8: compare (b) with no upload and one upload PASS… |
