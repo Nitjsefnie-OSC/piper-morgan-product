@@ -141,19 +141,31 @@ async def test_calendar_card_checks_the_grant_before_cached_health(
         )
 
     assert (card.status != "not_configured") is connected
-    if not connected:
+    if connected:
+        assert (
+            card.status == {None: "connected", True: "healthy", False: "failed"}[previous_test_ok]
+        )
+    else:
         assert card.status_message == "Not connected"
         assert card.status_detail == error
 
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
-    "scope, connected, info",
-    [(CALENDAR_READ_SCOPE, True, None), ("openid email", False, CALENDAR_SCOPE_MISSING_LINE)],
+    "scope, read_error, connected, info",
+    [
+        (CALENDAR_READ_SCOPE, None, True, None),
+        ("openid email", None, False, CALENDAR_SCOPE_MISSING_LINE),
+        ("", "error", False, CALENDAR_SCOPE_UNCONFIRMED_LINE),
+        ("", None, True, None),
+    ],
 )
-async def test_combined_oauth_status_uses_the_refreshed_grant(refresh, scope, connected, info):
-    handler, _ = refresh
+async def test_combined_oauth_status_uses_the_refreshed_grant(
+    refresh, scope, read_error, connected, info
+):
+    handler, probe = refresh
     handler.refresh_access_token.return_value = SimpleNamespace(scope=scope, access_token="access")
+    probe.return_value = read_error
 
     result = await settings_integrations.get_all_oauth_status(current_user=USER)
 
