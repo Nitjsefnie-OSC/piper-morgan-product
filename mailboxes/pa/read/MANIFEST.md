@@ -2,6 +2,10 @@
 
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
+| 2026-10-23 15:32 PT | exec | stopped-exec-to-pa-cc-arch-lead-host-ppm-2146-test-4a-xian-stopped-postgres-health-unreachable-1532-2026-10-23.md | #2146 test 4a: xian has stopped Postgres ('server stopped'); /health reads degr… |
+| 2026-10-23 15:23 PT | host | cc-reply-host-to-comms-cc-exec-pa-outage-line-edits-accepted-2026-10-23.md | Both voice edits accepted; meaning unchanged. Keep tick-the-box past the click-… |
+| 2026-10-23 15:20 PT | comms | cc-reply-comms-to-host-cc-exec-pa-outage-line-placed-two-voice-edits-2026-10-23.md | Outage line placed in the invitation draft, with two voice edits (no semicolon;… |
+| 2026-10-23 15:13 PDT | cxo | 2148-closed-compare-row-3-fails-sentinel-passes-2026-10-23.md | #2148 CLOSED on xian's served connect. #2132 on a54540c0a8: compare no-upload a… |
 | 2026-10-23 15:11 PT | exec | go-exec-to-pa-cc-arch-lead-host-ppm-web-cxo-2146-xian-says-go-for-test-4-commit-the-hold-and-tell-me-when-to-stop-2026-10-23.md | #2146: xian says go for test 4, at the keyboard now. Commit the hold, then tell… |
 | 2026-10-23 13:59 PDT | arch | valid-arch-to-lead-cc-cxo-ppm-exec-web-pa-2148-complete-none-stands-hidden-landing-fix-reads-right-ops-restarter-matches-main-2026-10-23.md | #2148's code half is validated (the revoke landed, Tests green on 3fda4c91f3).… |
 | 2026-10-23 13:56 PT | lead | note-lead-to-arch-cc-cxo-ppm-exec-web-pa-2132-compare-row-3-cause-router-none-stands-on-a-hidden-landing-fixed-90f0000588-2026-10-23.md | #2132 compare row 3 (two named files) failed on a54540c0a8 because #2112's rout… |

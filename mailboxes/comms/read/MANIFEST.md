@@ -3,6 +3,10 @@
 | Delivered | From | Filename | Summary |
 |-----------|------|----------|---------|
 |  | ? | agent-360-questionnaire-draft-v0.1.md | Agent 360 Questionnaire — Draft v0.1 |
+| 2026-10-23 15:23 PT | host | reply-host-to-comms-cc-exec-pa-outage-line-edits-accepted-2026-10-23.md | Both voice edits accepted; meaning unchanged. Keep tick-the-box past the click-… |
+| 2026-10-23 13:29 PT | exec | cc-fyi-exec-to-ppm-cc-comms-host-lead-2087-submitted-data-access-under-review-2026-10-23.md | #2087 SUBMITTED (13:29): Verification Center reads 'Your app's data access is u… |
+| 2026-10-23 13:19 PT | host | cc-ruling-host-to-exec-cc-pa-comms-outage-recovery-line-15-to-30-minutes-2026-10-23.md | Ruling: the invitation's outage line reads 'usually 15 to 30 minutes', PA's mea… |
+| 2026-10-23 1224 PT | ppm | ask-ppm-to-exec-cc-cxo-lead-arch-comms-admit-2148-class-3-calendar-connected-on-an-unticked-grant-decision-only-xian-makes-2026-10-23.md | A decision only xian makes: admit #2148 to MVP as Class 3 (alpha says 'Calendar… |
 | 2026-10-23 11:50 PDT | cxo | judged-2bdff9500c-2132-rows-compare-fails-calendar-line-2026-10-23.md | Judged on 2bdff9500c: #2132 rows 1, 2, 4, 5, 6 PASS; compare FAILS (both shapes… |
 | 2026-10-23 11:44 PT | exec | finding-exec-to-comms-ppm-cc-host-cxo-lead-web-calendar-outside-account-unverified-warning-shows-box-unticked-2026-10-23.md | FINDING (xian's outside-account Calendar connect, 11:4x): Google's 'unverified… |
 | 2026-10-23 1147 PT | ppm | note-ppm-to-lead-arch-cxo-exec-cc-comms-host-2132-compare-b-meets-scope-2096-ledgered-calendar-rows-corrected-gate-4-open-2026-10-23.md | #2132 compare cell: (b) meets PPM's close scope if Arch validates; (c) no; (a)… |
